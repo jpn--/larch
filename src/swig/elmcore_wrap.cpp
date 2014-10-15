@@ -2939,89 +2939,85 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 #define SWIGTYPE_p__object swig_types[0]
 #define SWIGTYPE_p_allocator_type swig_types[1]
-#define SWIGTYPE_p_caseindex swig_types[2]
-#define SWIGTYPE_p_char swig_types[3]
-#define SWIGTYPE_p_datamatrix swig_types[4]
-#define SWIGTYPE_p_difference_type swig_types[5]
-#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[6]
-#define SWIGTYPE_p_elm__ComponentEdgeMap swig_types[7]
-#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[8]
-#define SWIGTYPE_p_elm__ComponentList swig_types[9]
-#define SWIGTYPE_p_elm__ComponentListPair swig_types[10]
-#define SWIGTYPE_p_elm__Facet swig_types[11]
-#define SWIGTYPE_p_elm__Fountain swig_types[12]
-#define SWIGTYPE_p_elm__InputStorage swig_types[13]
-#define SWIGTYPE_p_elm__Model2 swig_types[14]
-#define SWIGTYPE_p_elm__ParameterList swig_types[15]
-#define SWIGTYPE_p_elm__QuerySet swig_types[16]
-#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[17]
-#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[18]
-#define SWIGTYPE_p_elm__SQLiteDB swig_types[19]
-#define SWIGTYPE_p_elm__VAS_dna swig_types[20]
-#define SWIGTYPE_p_elm__VAS_dna_info swig_types[21]
-#define SWIGTYPE_p_elm__caseindex swig_types[22]
-#define SWIGTYPE_p_elm__caseindex_t swig_types[23]
-#define SWIGTYPE_p_elm__cellcodepair swig_types[24]
-#define SWIGTYPE_p_elm__cellcodeset swig_types[25]
-#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[26]
-#define SWIGTYPE_p_elm__datamatrix swig_types[27]
-#define SWIGTYPE_p_elm__datamatrix_t swig_types[28]
-#define SWIGTYPE_p_elm__model_options_t swig_types[29]
-#define SWIGTYPE_p_elm__paramArray swig_types[30]
-#define SWIGTYPE_p_elm__runstats swig_types[31]
-#define SWIGTYPE_p_elm__string_and_cellcode swig_types[32]
-#define SWIGTYPE_p_etk__exception_t swig_types[33]
-#define SWIGTYPE_p_etk__ostream_c swig_types[34]
-#define SWIGTYPE_p_etk__refcounted swig_types[35]
-#define SWIGTYPE_p_etk__string_sender swig_types[36]
-#define SWIGTYPE_p_etk__three_dim swig_types[37]
-#define SWIGTYPE_p_freedom_info swig_types[38]
-#define SWIGTYPE_p_key_type swig_types[39]
-#define SWIGTYPE_p_long_long swig_types[40]
-#define SWIGTYPE_p_mapped_type swig_types[41]
-#define SWIGTYPE_p_p__object swig_types[42]
-#define SWIGTYPE_p_sherpa swig_types[43]
-#define SWIGTYPE_p_sherpa_pack swig_types[44]
-#define SWIGTYPE_p_sherpa_result swig_types[45]
-#define SWIGTYPE_p_size_type swig_types[46]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[47]
-#define SWIGTYPE_p_std__allocatorT_elm__InputStorage_t swig_types[48]
-#define SWIGTYPE_p_std__allocatorT_int_t swig_types[49]
-#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[50]
-#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[51]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[52]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[53]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[54]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[55]
-#define SWIGTYPE_p_std__invalid_argument swig_types[56]
-#define SWIGTYPE_p_std__lessT_long_long_t swig_types[57]
-#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[58]
-#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[59]
-#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[60]
-#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[61]
-#define SWIGTYPE_p_std__ostream swig_types[62]
-#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[63]
-#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[64]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[65]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[66]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[67]
-#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[68]
-#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[69]
-#define SWIGTYPE_p_std__string swig_types[70]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[71]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[72]
-#define SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t swig_types[73]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[74]
-#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[75]
-#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[76]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[77]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[78]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[79]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[80]
-#define SWIGTYPE_p_timeval swig_types[81]
-#define SWIGTYPE_p_value_type swig_types[82]
-static swig_type_info *swig_types[84];
-static swig_module_info swig_module = {swig_types, 83, 0, 0, 0, 0};
+#define SWIGTYPE_p_char swig_types[2]
+#define SWIGTYPE_p_difference_type swig_types[3]
+#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[4]
+#define SWIGTYPE_p_elm__ComponentEdgeMap swig_types[5]
+#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[6]
+#define SWIGTYPE_p_elm__ComponentList swig_types[7]
+#define SWIGTYPE_p_elm__ComponentListPair swig_types[8]
+#define SWIGTYPE_p_elm__Facet swig_types[9]
+#define SWIGTYPE_p_elm__Fountain swig_types[10]
+#define SWIGTYPE_p_elm__InputStorage swig_types[11]
+#define SWIGTYPE_p_elm__Model2 swig_types[12]
+#define SWIGTYPE_p_elm__ParameterList swig_types[13]
+#define SWIGTYPE_p_elm__QuerySet swig_types[14]
+#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[15]
+#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[16]
+#define SWIGTYPE_p_elm__SQLiteDB swig_types[17]
+#define SWIGTYPE_p_elm__VAS_dna swig_types[18]
+#define SWIGTYPE_p_elm__VAS_dna_info swig_types[19]
+#define SWIGTYPE_p_elm__caseindex_t swig_types[20]
+#define SWIGTYPE_p_elm__cellcodepair swig_types[21]
+#define SWIGTYPE_p_elm__cellcodeset swig_types[22]
+#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[23]
+#define SWIGTYPE_p_elm__datamatrix_t swig_types[24]
+#define SWIGTYPE_p_elm__model_options_t swig_types[25]
+#define SWIGTYPE_p_elm__paramArray swig_types[26]
+#define SWIGTYPE_p_elm__runstats swig_types[27]
+#define SWIGTYPE_p_elm__string_and_cellcode swig_types[28]
+#define SWIGTYPE_p_etk__exception_t swig_types[29]
+#define SWIGTYPE_p_etk__ostream_c swig_types[30]
+#define SWIGTYPE_p_etk__refcounted swig_types[31]
+#define SWIGTYPE_p_etk__string_sender swig_types[32]
+#define SWIGTYPE_p_etk__three_dim swig_types[33]
+#define SWIGTYPE_p_freedom_info swig_types[34]
+#define SWIGTYPE_p_key_type swig_types[35]
+#define SWIGTYPE_p_long_long swig_types[36]
+#define SWIGTYPE_p_mapped_type swig_types[37]
+#define SWIGTYPE_p_p__object swig_types[38]
+#define SWIGTYPE_p_sherpa swig_types[39]
+#define SWIGTYPE_p_sherpa_pack swig_types[40]
+#define SWIGTYPE_p_sherpa_result swig_types[41]
+#define SWIGTYPE_p_size_type swig_types[42]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[43]
+#define SWIGTYPE_p_std__allocatorT_elm__InputStorage_t swig_types[44]
+#define SWIGTYPE_p_std__allocatorT_int_t swig_types[45]
+#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[46]
+#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[47]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[48]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[49]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[50]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[51]
+#define SWIGTYPE_p_std__invalid_argument swig_types[52]
+#define SWIGTYPE_p_std__lessT_long_long_t swig_types[53]
+#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[54]
+#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[55]
+#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[56]
+#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[57]
+#define SWIGTYPE_p_std__ostream swig_types[58]
+#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[59]
+#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[60]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[61]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[62]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[63]
+#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[64]
+#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[65]
+#define SWIGTYPE_p_std__string swig_types[66]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[67]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[68]
+#define SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t swig_types[69]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[70]
+#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[71]
+#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[72]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[73]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[74]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[75]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[76]
+#define SWIGTYPE_p_timeval swig_types[77]
+#define SWIGTYPE_p_value_type swig_types[78]
+static swig_type_info *swig_types[80];
+static swig_module_info swig_module = {swig_types, 79, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6619,11 +6615,6 @@ SWIGINTERN void elm_ComponentEdgeMap___call__(elm::ComponentEdgeMap *self,elm::c
 #include <vector>
 
 
-	using elm::caseindex;
-	using elm::caseindex_;
-	using elm::caseindex_t;
-	
-
 
 	// In SWIG, these headers are available to the c++ wrapper,
 	// but are not themselves wrapped
@@ -6635,11 +6626,6 @@ SWIGINTERN void elm_ComponentEdgeMap___call__(elm::ComponentEdgeMap *self,elm::c
 	#include "elm_datamatrix.h"
 
 
-
-	using elm::datamatrix;
-	using elm::datamatrix_;
-	using elm::datamatrix_t;
-	
 
 #include "elm_parameterlist.h"
 
@@ -27743,7 +27729,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_caseids__SWIG_0(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::caseindex(static_cast< const elm::caseindex& >(result))), SWIGTYPE_p_elm__caseindex, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::caseindex_t > *smartresult = result ? new std::shared_ptr<  elm::caseindex_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -27879,7 +27868,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -27928,7 +27920,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -27966,7 +27961,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28004,7 +28002,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28042,7 +28043,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28080,7 +28084,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_caseids__SWIG_1(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::caseindex(static_cast< const elm::caseindex& >(result))), SWIGTYPE_p_elm__caseindex, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::caseindex_t > *smartresult = result ? new std::shared_ptr<  elm::caseindex_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28324,7 +28331,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28419,7 +28429,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28503,7 +28516,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_choice__SWIG_1(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28579,7 +28595,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_weight__SWIG_1(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -28655,7 +28674,10 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_avail__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -35620,7 +35642,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_caseids(PyObject *SWIGUNUSEDPARM(self), PyO
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::caseindex(static_cast< const elm::caseindex& >(result))), SWIGTYPE_p_elm__caseindex, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::caseindex_t > *smartresult = result ? new std::shared_ptr<  elm::caseindex_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -35810,7 +35835,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -35864,7 +35892,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -35976,7 +36007,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -36030,7 +36064,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -36128,7 +36165,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -36166,7 +36206,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_choice__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -36254,7 +36297,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -36292,7 +36338,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_weight__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -36380,7 +36429,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -36418,7 +36470,10 @@ SWIGINTERN PyObject *_wrap_Facet_ask_avail__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -39614,7 +39669,10 @@ SWIGINTERN PyObject *_wrap_Facet_matrix_library(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -59414,7 +59472,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_caseindex_t_create(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  caseindex result;
+  elm::caseindex result;
   
   if(!PyArg_UnpackTuple(args,(char *)"caseindex_t_create",0,0)) SWIG_fail;
   {
@@ -59434,7 +59492,10 @@ SWIGINTERN PyObject *_wrap_caseindex_t_create(PyObject *SWIGUNUSEDPARM(self), Py
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new caseindex(static_cast< const caseindex& >(result))), SWIGTYPE_p_caseindex, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::caseindex_t > *smartresult = result ? new std::shared_ptr<  elm::caseindex_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -59529,55 +59590,6 @@ SWIGINTERN PyObject *caseindex_t_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_delete_datamatrix_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::datamatrix_t *arg1 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared1 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"delete_datamatrix_t",1,1,&obj0)) SWIG_fail;
-  {
-    int newmem = 0;
-    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_datamatrix_t" "', argument " "1"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
-      arg1 = const_cast< elm::datamatrix_t * >(tempshared1.get());
-    } else {
-      smartarg1 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
-      arg1 = const_cast< elm::datamatrix_t * >((smartarg1 ? smartarg1->get() : 0));
-    }
-  }
-  {
-    try {
-      (void)arg1; delete smartarg1;
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_datamatrix_t_pointer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::datamatrix_t *arg1 = (elm::datamatrix_t *) 0 ;
@@ -59586,7 +59598,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_pointer(PyObject *SWIGUNUSEDPARM(self), 
   std::shared_ptr< elm::datamatrix_t > tempshared1 ;
   std::shared_ptr< elm::datamatrix_t > *smartarg1 = 0 ;
   PyObject * obj0 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_pointer",1,1,&obj0)) SWIG_fail;
   {
@@ -59621,7 +59633,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_pointer(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -59642,7 +59657,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_0(PyObject *SWIGUNUSEDPARM(
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_create",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
@@ -59677,7 +59692,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_0(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -59694,7 +59712,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_1(PyObject *SWIGUNUSEDPARM(
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_create",2,2,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
@@ -59724,7 +59742,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_1(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -59797,7 +59818,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_copy(PyObject *SWIGUNUSEDPARM(self), PyO
   std::shared_ptr< elm::datamatrix_t const > tempshared1 ;
   std::shared_ptr< elm::datamatrix_t const > *smartarg1 = 0 ;
   PyObject * obj0 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_copy",1,1,&obj0)) SWIG_fail;
   {
@@ -59832,7 +59853,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_copy(PyObject *SWIGUNUSEDPARM(self), PyO
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60165,7 +60189,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_idca",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60205,7 +60229,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -60223,7 +60250,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_1(PyObject *SWIGUNUSEDPA
   int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_idca",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60259,7 +60286,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_1(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -60331,7 +60361,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_idco",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60371,7 +60401,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -60389,7 +60422,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_1(PyObject *SWIGUNUSEDPA
   int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_idco",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60425,7 +60458,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_1(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -60494,7 +60530,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_0(PyObject *SWIGUNUSEDPA
   boosted::shared_ptr< long long > temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_choo",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60523,7 +60559,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60536,7 +60575,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_1(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_choo",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60561,7 +60600,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_1(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60620,7 +60662,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_0(PyObject *SWIGUNUSEDPA
   boosted::shared_ptr< long long > temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_wght",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60649,7 +60691,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60662,7 +60707,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_1(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_wght",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60687,7 +60732,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_1(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60746,7 +60794,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_0(PyObject *SWIGUNUSEDPA
   boosted::shared_ptr< long long > temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_aval",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60775,7 +60823,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -60788,7 +60839,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_1(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  datamatrix result;
+  elm::datamatrix result;
   
   if(!PyArg_UnpackTuple(args,(char *)"datamatrix_t_read_aval",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
@@ -60813,7 +60864,10 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_1(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new datamatrix(static_cast< const datamatrix& >(result))), SWIGTYPE_p_datamatrix, SWIG_POINTER_OWN |  0 );
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -61631,6 +61685,55 @@ SWIGINTERN PyObject *_wrap_new_datamatrix_t(PyObject *SWIGUNUSEDPARM(self), PyOb
     std::shared_ptr<  elm::datamatrix_t > *smartresult = result ? new std::shared_ptr<  elm::datamatrix_t >(result SWIG_NO_NULL_DELETER_SWIG_POINTER_NEW) : 0;
     resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_NEW | SWIG_POINTER_OWN);
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_datamatrix_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_t *arg1 = (elm::datamatrix_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared1 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_datamatrix_t",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_datamatrix_t" "', argument " "1"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
+      arg1 = const_cast< elm::datamatrix_t * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp1);
+      arg1 = const_cast< elm::datamatrix_t * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      (void)arg1; delete smartarg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -67503,11 +67606,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67518,19 +67622,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_set(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCA_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_UtilityCA_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_UtilityCA = arg2;
+  if (arg1) (arg1)->Data_UtilityCA = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67544,7 +67649,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_get(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCA_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67552,8 +67657,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_get(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_UtilityCA);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_UtilityCA);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67563,11 +67671,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67578,19 +67687,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_set(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCO_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_UtilityCO_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCO_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_UtilityCO = arg2;
+  if (arg1) (arg1)->Data_UtilityCO = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67604,7 +67714,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_get(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCO_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67612,8 +67722,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_get(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCO_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_UtilityCO);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_UtilityCO);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67623,11 +67736,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67638,19 +67752,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCA_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_SamplingCA_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_SamplingCA = arg2;
+  if (arg1) (arg1)->Data_SamplingCA = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67664,7 +67779,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCA_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67672,8 +67787,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_get(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_SamplingCA);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_SamplingCA);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67683,11 +67801,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67698,19 +67817,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCO_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_SamplingCO_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCO_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_SamplingCO = arg2;
+  if (arg1) (arg1)->Data_SamplingCO = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67724,7 +67844,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCO_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67732,8 +67852,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_get(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCO_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_SamplingCO);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_SamplingCO);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67743,11 +67866,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67758,19 +67882,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantityCA_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_QuantityCA_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantityCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_QuantityCA = arg2;
+  if (arg1) (arg1)->Data_QuantityCA = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67784,7 +67909,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantityCA_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67792,8 +67917,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_get(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_QuantityCA);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_QuantityCA);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67803,11 +67931,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67818,19 +67947,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantLogSum_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_QuantLogSum_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantLogSum_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_QuantLogSum = arg2;
+  if (arg1) (arg1)->Data_QuantLogSum = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67844,7 +67974,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantLogSum_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67852,8 +67982,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantLogSum_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_QuantLogSum);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_QuantLogSum);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67863,11 +67996,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67878,19 +68012,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_set(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_LogSum_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_LogSum_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_LogSum_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_LogSum = arg2;
+  if (arg1) (arg1)->Data_LogSum = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67904,7 +68039,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_get(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_LogSum_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67912,8 +68047,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_get(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_LogSum_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_LogSum);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_LogSum);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67923,11 +68061,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_Choice_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67938,19 +68077,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Choice_set(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Choice_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_Choice_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Choice_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_Choice = arg2;
+  if (arg1) (arg1)->Data_Choice = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -67964,7 +68104,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Choice_get(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Choice_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -67972,8 +68112,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Choice_get(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Choice_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_Choice);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_Choice);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -67983,11 +68126,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_Weight_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -67998,19 +68142,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Weight_set(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Weight_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_Weight_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Weight_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_Weight = arg2;
+  if (arg1) (arg1)->Data_Weight = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -68024,7 +68169,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Weight_get(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Weight_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -68032,8 +68177,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Weight_get(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Weight_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_Weight);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_Weight);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -68043,11 +68191,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Data_Avail_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix arg2 ;
+  elm::datamatrix *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
+  elm::datamatrix tempshared2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
@@ -68058,19 +68207,20 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Avail_set(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__datamatrix,  0  | 0);
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Avail_set" "', argument " "2"" of type '" "elm::datamatrix""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data_Avail_set" "', argument " "2"" of type '" "elm::datamatrix""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Avail_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
+      delete reinterpret_cast< elm::datamatrix * >(argp2);
+      arg2 = &tempshared2;
     } else {
-      elm::datamatrix * temp = reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
+      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
     }
   }
-  if (arg1) (arg1)->Data_Avail = arg2;
+  if (arg1) (arg1)->Data_Avail = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -68084,7 +68234,7 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Avail_get(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::datamatrix result;
+  elm::datamatrix *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Avail_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -68092,8 +68242,11 @@ SWIGINTERN PyObject *_wrap_Model2_Data_Avail_get(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Avail_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result =  ((arg1)->Data_Avail);
-  resultobj = SWIG_NewPointerObj((new elm::datamatrix(static_cast< const elm::datamatrix& >(result))), SWIGTYPE_p_elm__datamatrix, SWIG_POINTER_OWN |  0 );
+  result = (elm::datamatrix *) & ((arg1)->Data_Avail);
+  {
+    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -77339,7 +77492,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_caseindex_t", _wrap_delete_caseindex_t, METH_VARARGS, NULL},
 	 { (char *)"new_caseindex_t", _wrap_new_caseindex_t, METH_VARARGS, NULL},
 	 { (char *)"caseindex_t_swigregister", caseindex_t_swigregister, METH_VARARGS, NULL},
-	 { (char *)"delete_datamatrix_t", _wrap_delete_datamatrix_t, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t_pointer", _wrap_datamatrix_t_pointer, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t_create", _wrap_datamatrix_t_create, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t_copy", _wrap_datamatrix_t_copy, METH_VARARGS, NULL},
@@ -77361,6 +77513,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"datamatrix_t___str__", _wrap_datamatrix_t___str__, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t___repr__", _wrap_datamatrix_t___repr__, METH_VARARGS, NULL},
 	 { (char *)"new_datamatrix_t", _wrap_new_datamatrix_t, METH_VARARGS, NULL},
+	 { (char *)"delete_datamatrix_t", _wrap_delete_datamatrix_t, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t_swigregister", datamatrix_t_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ParameterList", _wrap_new_ParameterList, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_parameter", (PyCFunction) _wrap_ParameterList_parameter, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -77575,9 +77728,7 @@ static void *_p_elm__VAS_dnaTo_p_std__mapT_long_long_elm__VAS_dna_info_std__less
 }
 static swig_type_info _swigt__p__object = {"_p__object", "_object *|PyObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_caseindex = {"_p_caseindex", "caseindex *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_datamatrix = {"_p_datamatrix", "datamatrix *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentCellcodeMap = {"_p_elm__ComponentCellcodeMap", "elm::ComponentCellcodeMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentEdgeMap = {"_p_elm__ComponentEdgeMap", "elm::ComponentEdgeMap *", 0, 0, (void*)0, 0};
@@ -77595,12 +77746,10 @@ static swig_type_info _swigt__p_elm__QuerySetTwoTable = {"_p_elm__QuerySetTwoTab
 static swig_type_info _swigt__p_elm__SQLiteDB = {"_p_elm__SQLiteDB", "elm::SQLiteDB *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__VAS_dna = {"_p_elm__VAS_dna", "elm::VAS_dna *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__VAS_dna_info = {"_p_elm__VAS_dna_info", "elm::VAS_dna_info *|std::map< long long,elm::VAS_dna_info >::mapped_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__caseindex = {"_p_elm__caseindex", "elm::caseindex *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__caseindex_t = {"_p_elm__caseindex_t", "elm::caseindex_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__cellcodepair = {"_p_elm__cellcodepair", "elm::cellcodepair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__cellcodeset = {"_p_elm__cellcodeset", "elm::cellcodeset *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__cellcodeset_iterator = {"_p_elm__cellcodeset_iterator", "elm::cellcodeset_iterator *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__datamatrix = {"_p_elm__datamatrix", "elm::datamatrix *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__datamatrix_t = {"_p_elm__datamatrix_t", "elm::datamatrix_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__model_options_t = {"_p_elm__model_options_t", "elm::model_options_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__paramArray = {"_p_elm__paramArray", "elm::paramArray *", 0, 0, (void*)0, 0};
@@ -77641,8 +77790,8 @@ static swig_type_info _swigt__p_std__setT_long_long_t__iterator = {"_p_std__setT
 static swig_type_info _swigt__p_std__shared_ptrT_elm__QuerySetSimpleCO_t = {"_p_std__shared_ptrT_elm__QuerySetSimpleCO_t", "std::shared_ptr< elm::QuerySetSimpleCO > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_elm__QuerySetTwoTable_t = {"_p_std__shared_ptrT_elm__QuerySetTwoTable_t", "std::shared_ptr< elm::QuerySetTwoTable > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_elm__QuerySet_t = {"_p_std__shared_ptrT_elm__QuerySet_t", "std::shared_ptr< elm::QuerySet > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_elm__caseindex_t_t = {"_p_std__shared_ptrT_elm__caseindex_t_t", "std::shared_ptr< elm::caseindex_t > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__shared_ptrT_elm__datamatrix_t_t = {"_p_std__shared_ptrT_elm__datamatrix_t_t", "std::shared_ptr< elm::datamatrix_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_elm__caseindex_t_t = {"_p_std__shared_ptrT_elm__caseindex_t_t", "elm::caseindex *|std::shared_ptr< elm::caseindex_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_elm__datamatrix_t_t = {"_p_std__shared_ptrT_elm__datamatrix_t_t", "elm::datamatrix *|std::shared_ptr< elm::datamatrix_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT__Tp__Alloc_t = {"_p_std__vectorT__Tp__Alloc_t", "std::vector< _Tp,_Alloc > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t = {"_p_std__vectorT_double_std__allocatorT_double_t_t", "std::vector< double,std::allocator< double > > *|std::vector< double > *", 0, 0, (void*)0, 0};
@@ -77660,9 +77809,7 @@ static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p__object,
   &_swigt__p_allocator_type,
-  &_swigt__p_caseindex,
   &_swigt__p_char,
-  &_swigt__p_datamatrix,
   &_swigt__p_difference_type,
   &_swigt__p_elm__ComponentCellcodeMap,
   &_swigt__p_elm__ComponentEdgeMap,
@@ -77680,12 +77827,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_elm__SQLiteDB,
   &_swigt__p_elm__VAS_dna,
   &_swigt__p_elm__VAS_dna_info,
-  &_swigt__p_elm__caseindex,
   &_swigt__p_elm__caseindex_t,
   &_swigt__p_elm__cellcodepair,
   &_swigt__p_elm__cellcodeset,
   &_swigt__p_elm__cellcodeset_iterator,
-  &_swigt__p_elm__datamatrix,
   &_swigt__p_elm__datamatrix_t,
   &_swigt__p_elm__model_options_t,
   &_swigt__p_elm__paramArray,
@@ -77745,9 +77890,7 @@ static swig_type_info *swig_type_initial[] = {
 
 static swig_cast_info _swigc__p__object[] = {  {&_swigt__p__object, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_caseindex[] = {  {&_swigt__p_caseindex, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_datamatrix[] = {  {&_swigt__p_datamatrix, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentCellcodeMap[] = {  {&_swigt__p_elm__ComponentCellcodeMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentEdgeMap[] = {  {&_swigt__p_elm__ComponentEdgeMap, 0, 0, 0},{0, 0, 0, 0}};
@@ -77765,12 +77908,10 @@ static swig_cast_info _swigc__p_elm__QuerySetTwoTable[] = {  {&_swigt__p_elm__Qu
 static swig_cast_info _swigc__p_elm__SQLiteDB[] = {  {&_swigt__p_elm__Facet, _p_elm__FacetTo_p_elm__SQLiteDB, 0, 0},  {&_swigt__p_elm__SQLiteDB, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__VAS_dna[] = {  {&_swigt__p_elm__VAS_dna, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__VAS_dna_info[] = {  {&_swigt__p_elm__VAS_dna_info, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_elm__caseindex[] = {  {&_swigt__p_elm__caseindex, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__caseindex_t[] = {  {&_swigt__p_elm__caseindex_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__cellcodepair[] = {  {&_swigt__p_elm__cellcodepair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__cellcodeset[] = {  {&_swigt__p_elm__cellcodeset, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__cellcodeset_iterator[] = {  {&_swigt__p_elm__cellcodeset_iterator, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_elm__datamatrix[] = {  {&_swigt__p_elm__datamatrix, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__datamatrix_t[] = {  {&_swigt__p_elm__datamatrix_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__model_options_t[] = {  {&_swigt__p_elm__model_options_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__paramArray[] = {  {&_swigt__p_elm__paramArray, 0, 0, 0},{0, 0, 0, 0}};
@@ -77830,9 +77971,7 @@ static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p__object,
   _swigc__p_allocator_type,
-  _swigc__p_caseindex,
   _swigc__p_char,
-  _swigc__p_datamatrix,
   _swigc__p_difference_type,
   _swigc__p_elm__ComponentCellcodeMap,
   _swigc__p_elm__ComponentEdgeMap,
@@ -77850,12 +77989,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_elm__SQLiteDB,
   _swigc__p_elm__VAS_dna,
   _swigc__p_elm__VAS_dna_info,
-  _swigc__p_elm__caseindex,
   _swigc__p_elm__caseindex_t,
   _swigc__p_elm__cellcodepair,
   _swigc__p_elm__cellcodeset,
   _swigc__p_elm__cellcodeset_iterator,
-  _swigc__p_elm__datamatrix,
   _swigc__p_elm__datamatrix_t,
   _swigc__p_elm__model_options_t,
   _swigc__p_elm__paramArray,

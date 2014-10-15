@@ -1487,7 +1487,7 @@ class caseindex_t(object):
 caseindex_t_swigregister = _core.caseindex_t_swigregister
 caseindex_t_swigregister(caseindex_t)
 
-def caseindex_t_create() -> "caseindex" :
+def caseindex_t_create() -> "elm::caseindex" :
   return _core.caseindex_t_create()
 caseindex_t_create = _core.caseindex_t_create
 
@@ -1502,11 +1502,9 @@ purp_avail = _core.purp_avail
 purp_weight = _core.purp_weight
 class datamatrix_t(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __swig_destroy__ = _core.delete_datamatrix_t
-    __del__ = lambda self : None;
-    def pointer(self) -> "datamatrix" : return _core.datamatrix_t_pointer(self)
+    def pointer(self) -> "elm::datamatrix" : return _core.datamatrix_t_pointer(self)
     create = staticmethod(_core.datamatrix_t_create)
-    def copy(self) -> "datamatrix" : return _core.datamatrix_t_copy(self)
+    def copy(self) -> "elm::datamatrix" : return _core.datamatrix_t_copy(self)
     def refcount(self) -> "long" : return _core.datamatrix_t_refcount(self)
     def set_variables(self, *args) -> "void" : return _core.datamatrix_t_set_variables(self, *args)
     def get_variables(self) -> "std::vector< std::string,std::allocator< std::string > > const &" : return _core.datamatrix_t_get_variables(self)
@@ -1528,30 +1526,32 @@ class datamatrix_t(object):
         this = _core.new_datamatrix_t()
         try: self.this.append(this)
         except: self.this = this
+    __swig_destroy__ = _core.delete_datamatrix_t
+    __del__ = lambda self : None;
 datamatrix_t_swigregister = _core.datamatrix_t_swigregister
 datamatrix_t_swigregister(datamatrix_t)
 
-def datamatrix_t_create(*args) -> "datamatrix" :
+def datamatrix_t_create(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_create(*args)
 datamatrix_t_create = _core.datamatrix_t_create
 
-def datamatrix_t_read_idca(*args) -> "datamatrix" :
+def datamatrix_t_read_idca(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_idca(*args)
 datamatrix_t_read_idca = _core.datamatrix_t_read_idca
 
-def datamatrix_t_read_idco(*args) -> "datamatrix" :
+def datamatrix_t_read_idco(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_idco(*args)
 datamatrix_t_read_idco = _core.datamatrix_t_read_idco
 
-def datamatrix_t_read_choo(*args) -> "datamatrix" :
+def datamatrix_t_read_choo(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_choo(*args)
 datamatrix_t_read_choo = _core.datamatrix_t_read_choo
 
-def datamatrix_t_read_wght(*args) -> "datamatrix" :
+def datamatrix_t_read_wght(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_wght(*args)
 datamatrix_t_read_wght = _core.datamatrix_t_read_wght
 
-def datamatrix_t_read_aval(*args) -> "datamatrix" :
+def datamatrix_t_read_aval(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_aval(*args)
 datamatrix_t_read_aval = _core.datamatrix_t_read_aval
 

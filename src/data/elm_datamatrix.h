@@ -65,15 +65,6 @@ namespace elm {
 	typedef boosted::weak_ptr<datamatrix_t>   datamatrix_;
 	#endif // ndef SWIG
 
-	#ifdef SWIG
-	%{
-	using elm::datamatrix;
-	using elm::datamatrix_;
-	using elm::datamatrix_t;
-	%}
-	#endif // def SWIG
-
-
 	enum dimensionality {
 		case_var = 0x1,
 		case_alt_var = 0x2,
@@ -123,11 +114,11 @@ namespace elm {
 		datamatrix_t();
 		//default constructor is public, but raises an exception
 		
+	public:
+		virtual ~datamatrix_t();
 
 	#endif // ndef SWIG
 
-	public:
-		virtual ~datamatrix_t();
 		
 
 	public:

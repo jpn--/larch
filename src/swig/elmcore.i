@@ -156,27 +156,13 @@ static PyObject* ptrToFacetError;  /* add this! */
 %shared_ptr(elm::QuerySetSimpleCO);
 %shared_ptr(elm::QuerySetTwoTable);
 
-
-
-#ifdef I_AM_WIN
-%inline %{
-#define boosted boost
-typedef boost::shared_ptr<elm::datamatrix_t> vdatamatrix;
-typedef boost::shared_ptr<elm::caseindex_t> elm::caseindex;
-%}
-#endif
-
-#ifdef __APPLE__
-%inline %{
-#define boosted std
-typedef std::shared_ptr<elm::datamatrix_t> elm::datamatrix;
-typedef std::shared_ptr<elm::caseindex_t> elm::caseindex;
-%}
-#endif
-
-
-
-
+namespace elm {
+	typedef std::shared_ptr<elm::datamatrix_t> datamatrix;
+	typedef std::shared_ptr<elm::caseindex_t> caseindex;
+//	typedef std::shared_ptr<elm::QuerySet> queries;
+//	typedef std::shared_ptr<elm::QuerySetSimpleCO> queries1;
+//	typedef std::shared_ptr<elm::QuerySetTwoTable> queries2;
+};
 
 %{
 #define PY_ARRAY_UNIQUE_SYMBOL _ETK_PY_ARRAY_UNIQUE_SYMBOL_ 

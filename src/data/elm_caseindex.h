@@ -35,14 +35,6 @@ namespace elm {
 	typedef boosted::weak_ptr<caseindex_t>   caseindex_;
 	#endif // ndef SWIG
 
-	#ifdef SWIG
-	%{
-	using elm::caseindex;
-	using elm::caseindex_;
-	using elm::caseindex_t;
-	%}
-	#endif // def SWIG
-	
 	
 	class caseindex_t
 	{

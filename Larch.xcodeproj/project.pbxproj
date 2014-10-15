@@ -467,7 +467,7 @@
 		DC5FB05719EC542B006F19A0 /* elm_version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_version.h; sourceTree = "<group>"; };
 		DC5FB09919EC55C4006F19A0 /* Python */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Python; path = ../../../../Library/Frameworks/Python.framework/Versions/3.4/Python; sourceTree = "<group>"; };
 		DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
-		DC5FB0A119EC5671006F19A0 /* sapling */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = sapling; path = sandbox; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC5FB0A119EC5671006F19A0 /* sandbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sandbox; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5FB0BB19EC671E006F19A0 /* _core.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = _core.so; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC739FF619EF029A003F4597 /* larch */ = {isa = PBXFileReference; lastKnownFileType = text; path = larch; sourceTree = "<group>"; };
 		DC95D35519EC83180042F408 /* setup_apsw.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = setup_apsw.py; sourceTree = "<group>"; };
@@ -796,7 +796,7 @@
 			isa = PBXGroup;
 			children = (
 				DCECBCA819CB4F5F001B673E /* _core */,
-				DC5FB0A119EC5671006F19A0 /* sapling */,
+				DC5FB0A119EC5671006F19A0 /* sandbox */,
 				DC5FB0BB19EC671E006F19A0 /* _core.so */,
 			);
 			name = Products;
@@ -889,7 +889,7 @@
 			);
 			name = sandbox;
 			productName = sapling;
-			productReference = DC5FB0A119EC5671006F19A0 /* sapling */;
+			productReference = DC5FB0A119EC5671006F19A0 /* sandbox */;
 			productType = "com.apple.product-type.tool";
 		};
 		DC5FB0BA19EC671E006F19A0 /* core */ = {
