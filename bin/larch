@@ -1,0 +1,79 @@
+#!/usr/bin/env python3 -i
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("file", nargs='?')
+parser.add_argument("-t", "--test", help="run unit tests", action="store_true")
+#parser.add_argument("-f", "--face", help="run new gui", action="store_true")
+parser.add_argument("-s", "--spool", help="spool into a new working directory", type=str)
+parser.add_argument("-p", "--package", help="copy and load the package", type=str)
+args = parser.parse_args()
+
+try:
+	import os
+	import readline
+	histfile = os.path.join(os.path.expanduser("~"), ".py3hist")
+	try:
+		readline.read_history_file(histfile)
+	except IOError:
+		pass
+	import atexit
+	atexit.register(readline.write_history_file, histfile)
+	del os, histfile
+except:	
+	pass
+
+import larch
+elm = larch
+
+print("<"*36, "LARCH", ">"*36 )
+print(larch.status)
+print(larch.info)
+print("<"*39 +"="+ ">"*39)
+
+
+def execfile(filename):
+	import __main__
+	with open(filename) as f:
+		code = compile(f.read(), filename, 'exec')
+		exec(code, globals(), __main__.__dict__)
+
+
+if args.file:
+	execfile(args.file)
+
+if args.test:
+	import larch.test
+	try:
+		larch.test.run()
+	except SystemExit as se:
+		if se.code: raise
+
+#if args.face:
+#	import larch.face
+
+if args.spool:
+	print("Spool into",args.spool)
+	import larch.spool
+	import os
+	local_dir = larch.spool.new_dir(args.spool)
+	if args.package:
+		larch.spool.populate(args.package, local_dir)
+else:
+	local_dir = None
+	
+if args.package:
+	import importlib
+	run_module = importlib.import_module(args.package)
+	if hasattr(run_module,'go') and callable(run_module.go):
+		import os
+		os.system('say Go for %s'%args.package)
+		try:
+			result = run_module.go(local_dir)
+		except Exception as inst:
+			os.system('say Error')
+			raise
+		else:
+			os.system('say finished')
+
+del args
