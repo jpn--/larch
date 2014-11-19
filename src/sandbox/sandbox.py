@@ -293,15 +293,16 @@ def test_swissmetro_09nested():
 
 #larch.logging.setLevel(30)
 #test_swissmetro_09nested()
-
-import larch.test
-larch.test.run()
+#
+#import larch.test
+#larch.test.run()
 
 #import gc
 #gc.collect()#
 
-
-
+sys.path.append("/Users/jpn/Dropbox/CamSys/Memphis/")
+os.chdir("/Users/jpn/Dropbox/CamSys/Memphis/")
+import destchoice
 
 
 

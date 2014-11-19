@@ -104,3 +104,42 @@ class SymmetricArray(Array):
 	def use_upper_triangle(self):
 		from .core import SymmetricArray_use_upper_triangle
 		SymmetricArray_use_upper_triangle(self)
+
+
+
+
+class ldarray(Array):
+	def __new__(subtype, shape=[0,], initialize=True, vars=[], *args, **kwargs):
+		if isinstance(shape, numpy.ndarray):
+			if (2<=len(shape.shape)<=3):
+				if len(vars) != shape.shape[-1]:
+					raise ArrayError("vars must give names for all vars, have %i vars but name %i vars"%(shape.shape[-1],len(vars)))
+				obj = numpy.asarray(shape).view(ldarray)
+				obj.vars = vars
+				return obj
+		if not (2<=len(shape)<=3): raise ArrayError("shape of ldarray must be 2 or 3 dimensions, asking %i"%len(shape))
+		if len(vars) != shape[-1]: raise ArrayError("vars must give names for all vars, have %i vars but name %i vars"%(shape[-1],len(vars)))
+		if 'dtype' not in kwargs:
+			kwargs['dtype']=numpy.float64
+		obj = numpy.ndarray.__new__(subtype, shape, *args, **kwargs)
+		# initialize stuff here...
+		if initialize:
+			obj.initialize()
+		obj.vars = vars
+		return obj
+
+	def __array_finalize__(self, obj):
+		if obj is None:
+			# Explicit constructor
+			return
+		if type(obj) is ldarray:
+			# View or template of self
+			# set vars here?
+			self.vars = None
+			# self.vars = getattr(obj, 'vars', [])
+			# if len(self.shape) != len(obj.shape):
+			#	raise ArrayError("ldarray does not support slicing that changes dimensions (%i to %i)"%(len(obj.shape), len(self.shape),))
+			# if self.shape[-1] != obj.shape[-1]:
+			#	raise ArrayError("ldarray does not support slicing that changes number of vars (%i to %i)"%(obj.shape[-1], self.shape[-1],))
+			return
+	

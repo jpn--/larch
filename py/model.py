@@ -1,5 +1,5 @@
 
-from .core import Model2, ELM_Error, _core
+from .core import Model2, LarchError, _core
 from .array import SymmetricArray
 from .utilities import category, pmath, rename
 import numpy
@@ -8,7 +8,11 @@ from .xhtml import XHTML, XML
 import math
 
 class Model(Model2):
-	
+
+	def dir(self):
+		for f in dir(self):
+			print(" ",f)
+
 	def param_sum(self,*arg):
 		value = 0
 		found_any = False
@@ -19,7 +23,7 @@ class Model(Model2):
 			elif isinstance(p,(int,float)):
 				value += p
 		if not found_any:
-			raise ELM_Error("no parameters with any of these names: {}".format(str(arg)))
+			raise LarchError("no parameters with any of these names: {}".format(str(arg)))
 		return value
 
 	def param_product(self,*arg):
@@ -32,7 +36,7 @@ class Model(Model2):
 			elif isinstance(p,(int,float)):
 				value *= p
 		if not found_any:
-			raise ELM_Error("no parameters with any of these names: {}".format(str(arg)))
+			raise LarchError("no parameters with any of these names: {}".format(str(arg)))
 		return value
 
 	def param_ratio(self, numerator, denominator):
@@ -40,14 +44,14 @@ class Model(Model2):
 			if numerator in self:
 				value = self[numerator].value
 			else:
-				raise ELM_Error("numerator {} not found".format(numerator))
+				raise LarchError("numerator {} not found".format(numerator))
 		elif isinstance(numerator,(int,float)):
 			value = numerator
 		if isinstance(denominator,str):
 			if denominator in self:
 				value /= self[denominator].value
 			else:
-				raise ELM_Error("denominator {} not found".format(denominator))
+				raise LarchError("denominator {} not found".format(denominator))
 		elif isinstance(denominator,(int,float)):
 			value /= denominator
 		return value
@@ -101,10 +105,10 @@ class Model(Model2):
 			code = compile(content, "<string>", 'exec')
 			exec(code)
 		else:
-			raise ELM_Error("error in loading")
+			raise LarchError("error in loading")
 		return self
 
-	def save(self, filename, overwrite=False, spool=True, report=False):
+	def save(self, filename, overwrite=False, spool=True, report=False, report_cats=['title','params','LL','latest','utilitydata','data','notes']):
 		if filename is None:
 			import io
 			filemaker = lambda: io.StringIO()
@@ -124,7 +128,7 @@ class Model(Model2):
 			filemaker = lambda: open(filename, 'w')
 		with filemaker() as f:
 			if report:
-				f.write(self.report(lineprefix="#\t", cats=['title','params','LL','latest','utilitydata','data','notes']))
+				f.write(self.report(lineprefix="#\t", cats=report_cats))
 				f.write("\n\n\n")
 			import time
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
@@ -204,7 +208,7 @@ class Model(Model2):
 		x.h2("Computed Factors")
 		def write_factor_row(p):
 				if not isinstance(p,category) and not (p in self) and not ignore_na:
-					raise ELM_Error("factor contains bad components")
+					raise LarchError("factor contains bad components")
 				if p in self:
 					if isinstance(p,category):
 						with x.block("tr"):
@@ -272,7 +276,7 @@ class Model(Model2):
 				x.tfoot
 				x.tr
 				if 'H' in footer:
-					x.td("H: Parameters held fixed at their initial values (not estimated)", colspan=7)
+					x.td("H: Parameters held fixed at their initial values (not estimated)", colspan=str(7))
 				x.end_tr
 				x.end_tfoot
 			x.end_table()
@@ -352,18 +356,30 @@ class Model(Model2):
 			x.td("Log Likelihood at Null Parameters")
 			x.td("{0:{LL}}".format(llz,**format))
 			x.end_tr
-		if (not math.isnan(llz) or not math.isnan(llc)) and not math.isnan(ll):
+		ll0 = es[0]['log_like_nil']
+		if not math.isnan(ll0):
+			x.tr
+			x.td("Log Likelihood with No Model")
+			x.td("{0:{LL}}".format(ll0,**format))
+			x.end_tr
+		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
 			x.tr({'class':"top_rho_sq"})
 			if not math.isnan(llc):
 				rsc = 1.0-(ll/llc)
 				x.td("Rho Squared w.r.t. Constants")
 				x.td("{0:{RHOSQ}}".format(rsc,**format))
 				x.end_tr
-				if not math.isnan(llz): x.tr
+				if not math.isnan(llz) or not math.isnan(ll0): x.tr
 			if not math.isnan(llz):
 				rsz = 1.0-(ll/llz)
 				x.td("Rho Squared w.r.t. Null Parameters")
 				x.td("{0:{RHOSQ}}".format(rsz,**format))
+				x.end_tr
+				if not math.isnan(ll0): x.tr
+			if not math.isnan(ll0):
+				rs0 = 1.0-(ll/ll0)
+				x.td("Rho Squared w.r.t. No Model")
+				x.td("{0:{RHOSQ}}".format(rs0,**format))
 				x.end_tr
 		x.end_table
 		return x.close()
@@ -686,7 +702,10 @@ class Model(Model2):
 				llz = es[0]['log_like_null']
 				if not math.isnan(llz):
 					x += ["Log Likelihood at Null Parameters \t{0:{LL}}".format(llz,**format)]
-				if (not math.isnan(llz) or not math.isnan(llc)) and not math.isnan(ll):
+				ll0 = es[0]['log_like_nil']
+				if not math.isnan(ll0):
+					x += ["Log Likelihood with No Model      \t{0:{LL}}".format(ll0,**format)]
+				if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
 					x += ["-"]
 					if not math.isnan(llc):
 						rsc = 1.0-(ll/llc)
@@ -694,6 +713,9 @@ class Model(Model2):
 					if not math.isnan(llz):
 						rsz = 1.0-(ll/llz)
 						x += ["Rho Squared w.r.t. Null Parameters\t{0:{RHOSQ}}".format(rsz,**format)]
+					if not math.isnan(ll0):
+						rs0 = 1.0-(ll/ll0)
+						x += ["Rho Squared w.r.t. No Model       \t{0:{RHOSQ}}".format(rs0,**format)]
 
 				return x
 
@@ -854,7 +876,7 @@ class Model(Model2):
 			return format['LINEPREFIX'] + s.replace("\n", "\n"+format['LINEPREFIX'])
 
 		# otherwise, the format style is not known
-		raise ELM_Error("Format style '{}' is not known".format(format['STYLE']))
+		raise LarchError("Format style '{}' is not known".format(format['STYLE']))
 
 	def __str__(self):
 		return self.report()
@@ -1007,6 +1029,15 @@ class Model(Model2):
 		m.estimate()
 		self._set_estimation_statistics(log_like_constants=m.LL())
 
+	def estimate_nil_model(self):
+		db = self._ref_to_db
+		alts = db.alternatives()
+		m = Model(db)
+		for a in alts[1:]:
+			m.utility.co('0',a[0],a[1])
+		m.estimate()
+		self._set_estimation_statistics(log_like_nil=m.LL())
+
 	def negative_loglike_(self, x):
 		y = self.negative_loglike(x)
 		if numpy.isnan(y):
@@ -1063,7 +1094,7 @@ class Model(Model2):
 			elif len(found)==1:
 				return True
 			else:
-				raise ELM_Error("model contains "+(" and ".join(found)))
+				raise LarchError("model contains "+(" and ".join(found)))
 		return super().__contains__(x)
 
 	def __getitem__(self, x):
@@ -1138,7 +1169,7 @@ class ModelFamily(list):
 		if isinstance(arg, (str,bytes)):
 			try:
 				self.append(Model.loads(arg))
-			except ELM_Error:
+			except LarchError:
 				raise TypeError("family members must be Model objects (or loadable string or bytes)")
 		elif isinstance(arg, Model):
 			self.append(arg)

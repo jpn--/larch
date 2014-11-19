@@ -413,18 +413,43 @@ void elm::QuerySetTwoTable::set_avail_ca_column(const std::string& col)
 		return;
 	}
 	
+	// save current values to restore in case of failure
 	auto t1 = _alt_avail_columns;
 	auto t2 = _alt_avail_ca_column;
+	
+	// set new values
 	_alt_avail_columns.clear();
 	_alt_avail_ca_column = col;
+	
+	// test new value
 	try {
 		qry_avail();
 	} catch (etk::SQLiteError) {
+		// restore prior values if error
 		_alt_avail_columns = t1;
 		_alt_avail_ca_column = t2;
 		throw;
 	}
+	
+	// Notify the validator that the value has been changed
 	if (validator) validator->change_in_sql_avail();
+}
+
+void elm::QuerySetTwoTable::set_avail_all()
+{
+	bool reload = false;
+	
+	if (!_alt_avail_columns.empty()) {
+		reload = true;
+	}
+	
+	_alt_avail_columns.clear();
+	
+	if (reload) {
+		if (validator) {
+			validator->change_in_sql_avail();
+		}
+	}
 }
 
 
@@ -501,6 +526,9 @@ bool elm::QuerySetTwoTable::unweighted() const
 }
 bool elm::QuerySetTwoTable::all_alts_always_available() const
 {
+	if (_alt_avail_columns.empty() && _alt_avail_ca_column=="") {
+		return true;
+	}
 	return false;
 }
 

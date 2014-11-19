@@ -52,8 +52,8 @@ def load_example(n):
 	try:
 		module_name = examplefiles[n]
 	except KeyError:
-		from ..core import ELM_Error
-		raise ELM_Error("Example no. %i not found"%n)
+		from ..core import LarchError
+		raise LarchError("Example no. %i not found"%n)
 	filename = module_name+".py"
 	with open(os.path.join(exampledir,filename)) as f:
 		code = compile(f.read(), filename, 'exec')
@@ -71,8 +71,8 @@ def tell(n):
 	try:
 		module_name = examplefiles[n]
 	except KeyError:
-		from ..core import ELM_Error
-		raise ELM_Error("Example no. %i not found"%n)
+		from ..core import LarchError
+		raise LarchError("Example no. %i not found"%n)
 	filename = module_name+".py"
 	with open(os.path.join(exampledir,filename)) as f:
 		print(f.read())

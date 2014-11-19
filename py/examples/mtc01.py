@@ -24,7 +24,7 @@
 #
 ################################################################################
 
-import larch
+from .. import larch
 
 def data():
 	# Define which data set to use with this example.

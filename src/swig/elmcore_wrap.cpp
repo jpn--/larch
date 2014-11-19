@@ -2961,63 +2961,69 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_elm__cellcodepair swig_types[21]
 #define SWIGTYPE_p_elm__cellcodeset swig_types[22]
 #define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[23]
-#define SWIGTYPE_p_elm__datamatrix_t swig_types[24]
-#define SWIGTYPE_p_elm__model_options_t swig_types[25]
-#define SWIGTYPE_p_elm__paramArray swig_types[26]
-#define SWIGTYPE_p_elm__runstats swig_types[27]
-#define SWIGTYPE_p_elm__string_and_cellcode swig_types[28]
-#define SWIGTYPE_p_etk__exception_t swig_types[29]
-#define SWIGTYPE_p_etk__ostream_c swig_types[30]
-#define SWIGTYPE_p_etk__refcounted swig_types[31]
-#define SWIGTYPE_p_etk__string_sender swig_types[32]
-#define SWIGTYPE_p_etk__three_dim swig_types[33]
-#define SWIGTYPE_p_freedom_info swig_types[34]
-#define SWIGTYPE_p_key_type swig_types[35]
-#define SWIGTYPE_p_long_long swig_types[36]
-#define SWIGTYPE_p_mapped_type swig_types[37]
-#define SWIGTYPE_p_p__object swig_types[38]
-#define SWIGTYPE_p_sherpa swig_types[39]
-#define SWIGTYPE_p_sherpa_pack swig_types[40]
-#define SWIGTYPE_p_sherpa_result swig_types[41]
-#define SWIGTYPE_p_size_type swig_types[42]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[43]
-#define SWIGTYPE_p_std__allocatorT_elm__InputStorage_t swig_types[44]
-#define SWIGTYPE_p_std__allocatorT_int_t swig_types[45]
-#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[46]
-#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[47]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[48]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[49]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[50]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[51]
-#define SWIGTYPE_p_std__invalid_argument swig_types[52]
-#define SWIGTYPE_p_std__lessT_long_long_t swig_types[53]
-#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[54]
-#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[55]
-#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[56]
-#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[57]
-#define SWIGTYPE_p_std__ostream swig_types[58]
-#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[59]
-#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[60]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[61]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[62]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[63]
-#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[64]
-#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[65]
-#define SWIGTYPE_p_std__string swig_types[66]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[67]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[68]
-#define SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t swig_types[69]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[70]
-#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[71]
-#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[72]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[73]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[74]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[75]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[76]
-#define SWIGTYPE_p_timeval swig_types[77]
-#define SWIGTYPE_p_value_type swig_types[78]
-static swig_type_info *swig_types[80];
-static swig_module_info swig_module = {swig_types, 79, 0, 0, 0, 0};
+#define SWIGTYPE_p_elm__darray_req swig_types[24]
+#define SWIGTYPE_p_elm__datamatrix_req swig_types[25]
+#define SWIGTYPE_p_elm__datamatrix_t swig_types[26]
+#define SWIGTYPE_p_elm__model_options_t swig_types[27]
+#define SWIGTYPE_p_elm__paramArray swig_types[28]
+#define SWIGTYPE_p_elm__runstats swig_types[29]
+#define SWIGTYPE_p_elm__string_and_cellcode swig_types[30]
+#define SWIGTYPE_p_etk__exception_t swig_types[31]
+#define SWIGTYPE_p_etk__ostream_c swig_types[32]
+#define SWIGTYPE_p_etk__refcounted swig_types[33]
+#define SWIGTYPE_p_etk__string_sender swig_types[34]
+#define SWIGTYPE_p_etk__strvec swig_types[35]
+#define SWIGTYPE_p_etk__three_dim swig_types[36]
+#define SWIGTYPE_p_freedom_info swig_types[37]
+#define SWIGTYPE_p_key_type swig_types[38]
+#define SWIGTYPE_p_long_long swig_types[39]
+#define SWIGTYPE_p_mapped_type swig_types[40]
+#define SWIGTYPE_p_p__object swig_types[41]
+#define SWIGTYPE_p_sherpa swig_types[42]
+#define SWIGTYPE_p_sherpa_pack swig_types[43]
+#define SWIGTYPE_p_sherpa_result swig_types[44]
+#define SWIGTYPE_p_size_type swig_types[45]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[46]
+#define SWIGTYPE_p_std__allocatorT_elm__InputStorage_t swig_types[47]
+#define SWIGTYPE_p_std__allocatorT_int_t swig_types[48]
+#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[49]
+#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[50]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[51]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[52]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t swig_types[53]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[54]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[55]
+#define SWIGTYPE_p_std__invalid_argument swig_types[56]
+#define SWIGTYPE_p_std__lessT_long_long_t swig_types[57]
+#define SWIGTYPE_p_std__lessT_std__string_t swig_types[58]
+#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[59]
+#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[60]
+#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[61]
+#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[62]
+#define SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t swig_types[63]
+#define SWIGTYPE_p_std__ostream swig_types[64]
+#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[65]
+#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[66]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[67]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[68]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[69]
+#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[70]
+#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[71]
+#define SWIGTYPE_p_std__string swig_types[72]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[73]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[74]
+#define SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t swig_types[75]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[76]
+#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[77]
+#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[78]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[79]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[80]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[81]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[82]
+#define SWIGTYPE_p_timeval swig_types[83]
+#define SWIGTYPE_p_value_type swig_types[84]
+static swig_type_info *swig_types[86];
+static swig_module_info swig_module = {swig_types, 85, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3127,7 +3133,7 @@ namespace swig {
 #include "etk_test_swig.h"
 
 
-static PyObject* ptrToElmError;  /* add this! */
+static PyObject* ptrToLarchError;  /* add this! */
 static PyObject* ptrToSQLError;  /* add this! */
 static PyObject* ptrToFacetError;  /* add this! */
 
@@ -6627,6 +6633,153 @@ SWIGINTERN void elm_ComponentEdgeMap___call__(elm::ComponentEdgeMap *self,elm::c
 
 
 
+  namespace swig {
+    template <>  struct traits<elm::darray_req > {
+      typedef pointer_category category;
+      static const char* type_name() { return"elm::darray_req"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::pair< std::string, elm::darray_req > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::pair<" "std::string" "," "elm::darray_req" " >";
+	  }
+	};
+      }
+    
+
+      namespace swig {
+	template <>  struct traits<std::map<std::string, elm::darray_req, std::less< std::string >, std::allocator< std::pair< std::string const,elm::darray_req > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::map<" "std::string" "," "elm::darray_req" "," "std::less< std::string >" "," "std::allocator< std::pair< std::string const,elm::darray_req > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_std_string_Sc_elm_darray_req_Sg__iterator(std::map< std::string,elm::darray_req > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_map_Sl_std_string_Sc_elm_darray_req_Sg____nonzero__(std::map< std::string,elm::darray_req > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_map_Sl_std_string_Sc_elm_darray_req_Sg____bool__(std::map< std::string,elm::darray_req > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::map< std::string,elm::darray_req >::size_type std_map_Sl_std_string_Sc_elm_darray_req_Sg____len__(std::map< std::string,elm::darray_req > const *self){
+      return self->size();
+    }
+SWIGINTERN std::map< std::string,elm::darray_req >::mapped_type const &std_map_Sl_std_string_Sc_elm_darray_req_Sg____getitem__(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::key_type const &key){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::const_iterator i = self->find(key);
+      if (i != self->end())
+	return i->second;
+      else
+	throw std::out_of_range("key not found");
+    }
+SWIGINTERN void std_map_Sl_std_string_Sc_elm_darray_req_Sg____delitem__(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::key_type const &key){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::iterator i = self->find(key);
+      if (i != self->end())
+	self->erase(i);
+      else
+	throw std::out_of_range("key not found");
+    }
+SWIGINTERN bool std_map_Sl_std_string_Sc_elm_darray_req_Sg__has_key(std::map< std::string,elm::darray_req > const *self,std::map< std::string,elm::darray_req >::key_type const &key){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::const_iterator i = self->find(key);
+      return i != self->end();
+    }
+SWIGINTERN PyObject *std_map_Sl_std_string_Sc_elm_darray_req_Sg__keys(std::map< std::string,elm::darray_req > *self){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }
+      PyObject* keyList = PyList_New(pysize);
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(keyList, j, swig::from(i->first));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return keyList;
+    }
+SWIGINTERN PyObject *std_map_Sl_std_string_Sc_elm_darray_req_Sg__values(std::map< std::string,elm::darray_req > *self){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }
+      PyObject* valList = PyList_New(pysize);
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(valList, j, swig::from(i->second));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return valList;
+    }
+SWIGINTERN PyObject *std_map_Sl_std_string_Sc_elm_darray_req_Sg__items(std::map< std::string,elm::darray_req > *self){
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }    
+      PyObject* itemList = PyList_New(pysize);
+      std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(itemList, j, swig::from(*i));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return itemList;
+    }
+SWIGINTERN bool std_map_Sl_std_string_Sc_elm_darray_req_Sg____contains__(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::key_type const &key){
+      return self->find(key) != self->end();
+    }
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_std_string_Sc_elm_darray_req_Sg__key_iterator(std::map< std::string,elm::darray_req > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_key_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_std_string_Sc_elm_darray_req_Sg__value_iterator(std::map< std::string,elm::darray_req > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_value_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN void std_map_Sl_std_string_Sc_elm_darray_req_Sg____setitem____SWIG_0(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::key_type const &key){
+      self->erase(key);
+    }
+SWIGINTERN void std_map_Sl_std_string_Sc_elm_darray_req_Sg____setitem____SWIG_1(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::key_type const &key,std::map< std::string,elm::darray_req >::mapped_type const &x){
+      (*self)[key] = x;
+    }
+SWIGINTERN PyObject *std_map_Sl_std_string_Sc_elm_darray_req_Sg__asdict(std::map< std::string,elm::darray_req > *self){
+      return swig::traits_from< std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > >::asdict(*self);
+    }
+SWIGINTERN void std_map_Sl_std_string_Sc_elm_darray_req_Sg__erase__SWIG_1(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::iterator position){ self->erase(position); }
+SWIGINTERN void std_map_Sl_std_string_Sc_elm_darray_req_Sg__erase__SWIG_2(std::map< std::string,elm::darray_req > *self,std::map< std::string,elm::darray_req >::iterator first,std::map< std::string,elm::darray_req >::iterator last){ self->erase(first, last); }
+
+
+	// In SWIG, these headers are available to the c++ wrapper,
+	// but are not themselves wrapped
+
+	#include "elm_sql_facet.h"
+	#include "etk_thread.h"
+	#include "elm_darray.h"
+
+
+
+namespace elm {
+	class darray;
+};
+
+
 #include "elm_parameterlist.h"
 
 SWIGINTERN std::string freedom_info___str____SWIG_0(freedom_info const *self,void *z=nullptr){
@@ -6777,7 +6930,7 @@ SWIGINTERN PyObject *_wrap_delete_SwigPyIterator(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -6825,7 +6978,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_value(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -6882,7 +7035,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -6930,7 +7083,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7031,7 +7184,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7079,7 +7232,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7179,7 +7332,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_distance(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7235,7 +7388,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_equal(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7273,7 +7426,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_copy(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7321,7 +7474,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_next(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7369,7 +7522,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___next__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7417,7 +7570,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_previous(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7474,7 +7627,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_advance(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7524,7 +7677,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___eq__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7574,7 +7727,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___ne__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7631,7 +7784,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___iadd__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7688,7 +7841,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___isub__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7745,7 +7898,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___add__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7802,7 +7955,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7852,7 +8005,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7944,7 +8097,7 @@ SWIGINTERN PyObject *_wrap_IntVector_iterator(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -7982,7 +8135,7 @@ SWIGINTERN PyObject *_wrap_IntVector___nonzero__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8020,7 +8173,7 @@ SWIGINTERN PyObject *_wrap_IntVector___bool__(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8058,7 +8211,7 @@ SWIGINTERN PyObject *_wrap_IntVector___len__(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8102,7 +8255,7 @@ SWIGINTERN PyObject *_wrap_IntVector_pop(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8167,7 +8320,7 @@ SWIGINTERN PyObject *_wrap_IntVector___getslice__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8245,7 +8398,7 @@ SWIGINTERN PyObject *_wrap_IntVector___setslice____SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8311,7 +8464,7 @@ SWIGINTERN PyObject *_wrap_IntVector___setslice____SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8439,7 +8592,7 @@ SWIGINTERN PyObject *_wrap_IntVector___delslice__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8491,7 +8644,7 @@ SWIGINTERN PyObject *_wrap_IntVector___delitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8546,7 +8699,7 @@ SWIGINTERN PyObject *_wrap_IntVector___getitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8614,7 +8767,7 @@ SWIGINTERN PyObject *_wrap_IntVector___setitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8670,7 +8823,7 @@ SWIGINTERN PyObject *_wrap_IntVector___setitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8724,7 +8877,7 @@ SWIGINTERN PyObject *_wrap_IntVector___delitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8824,7 +8977,7 @@ SWIGINTERN PyObject *_wrap_IntVector___getitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -8934,7 +9087,7 @@ SWIGINTERN PyObject *_wrap_IntVector___setitem____SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9053,7 +9206,7 @@ SWIGINTERN PyObject *_wrap_IntVector_append(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9082,7 +9235,7 @@ SWIGINTERN PyObject *_wrap_new_IntVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9125,7 +9278,7 @@ SWIGINTERN PyObject *_wrap_new_IntVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9165,7 +9318,7 @@ SWIGINTERN PyObject *_wrap_IntVector_empty(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9203,7 +9356,7 @@ SWIGINTERN PyObject *_wrap_IntVector_size(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9240,7 +9393,7 @@ SWIGINTERN PyObject *_wrap_IntVector_clear(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9289,7 +9442,7 @@ SWIGINTERN PyObject *_wrap_IntVector_swap(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9327,7 +9480,7 @@ SWIGINTERN PyObject *_wrap_IntVector_get_allocator(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9365,7 +9518,7 @@ SWIGINTERN PyObject *_wrap_IntVector_begin(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9404,7 +9557,7 @@ SWIGINTERN PyObject *_wrap_IntVector_end(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9443,7 +9596,7 @@ SWIGINTERN PyObject *_wrap_IntVector_rbegin(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9482,7 +9635,7 @@ SWIGINTERN PyObject *_wrap_IntVector_rend(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9521,7 +9674,7 @@ SWIGINTERN PyObject *_wrap_new_IntVector__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9558,7 +9711,7 @@ SWIGINTERN PyObject *_wrap_IntVector_pop_back(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9604,7 +9757,7 @@ SWIGINTERN PyObject *_wrap_IntVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9657,7 +9810,7 @@ SWIGINTERN PyObject *_wrap_IntVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9726,7 +9879,7 @@ SWIGINTERN PyObject *_wrap_IntVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9827,7 +9980,7 @@ SWIGINTERN PyObject *_wrap_new_IntVector__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9934,7 +10087,7 @@ SWIGINTERN PyObject *_wrap_IntVector_push_back(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -9972,7 +10125,7 @@ SWIGINTERN PyObject *_wrap_IntVector_front(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10010,7 +10163,7 @@ SWIGINTERN PyObject *_wrap_IntVector_back(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10067,7 +10220,7 @@ SWIGINTERN PyObject *_wrap_IntVector_assign(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10124,7 +10277,7 @@ SWIGINTERN PyObject *_wrap_IntVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10242,7 +10395,7 @@ SWIGINTERN PyObject *_wrap_IntVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10315,7 +10468,7 @@ SWIGINTERN PyObject *_wrap_IntVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10425,7 +10578,7 @@ SWIGINTERN PyObject *_wrap_IntVector_reserve(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10463,7 +10616,7 @@ SWIGINTERN PyObject *_wrap_IntVector_capacity(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10500,7 +10653,7 @@ SWIGINTERN PyObject *_wrap_delete_IntVector(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10547,7 +10700,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_iterator(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10585,7 +10738,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___nonzero__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10623,7 +10776,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___bool__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10661,7 +10814,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___len__(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10705,7 +10858,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_pop(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10770,7 +10923,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___getslice__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10848,7 +11001,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___setslice____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -10914,7 +11067,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___setslice____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11042,7 +11195,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___delslice__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11094,7 +11247,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___delitem____SWIG_0(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11149,7 +11302,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___getitem____SWIG_0(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11217,7 +11370,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___setitem____SWIG_0(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11273,7 +11426,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___setitem____SWIG_1(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11327,7 +11480,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___delitem____SWIG_1(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11427,7 +11580,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___getitem____SWIG_1(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11537,7 +11690,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector___setitem____SWIG_2(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11656,7 +11809,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_append(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11685,7 +11838,7 @@ SWIGINTERN PyObject *_wrap_new_DoubleVector__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11728,7 +11881,7 @@ SWIGINTERN PyObject *_wrap_new_DoubleVector__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11768,7 +11921,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_empty(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11806,7 +11959,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_size(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11843,7 +11996,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_clear(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11892,7 +12045,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_swap(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11930,7 +12083,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_get_allocator(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -11968,7 +12121,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_begin(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12007,7 +12160,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_end(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12046,7 +12199,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_rbegin(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12085,7 +12238,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_rend(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12124,7 +12277,7 @@ SWIGINTERN PyObject *_wrap_new_DoubleVector__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12161,7 +12314,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_pop_back(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12207,7 +12360,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12260,7 +12413,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12329,7 +12482,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12430,7 +12583,7 @@ SWIGINTERN PyObject *_wrap_new_DoubleVector__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12537,7 +12690,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_push_back(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12575,7 +12728,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_front(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12613,7 +12766,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_back(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12670,7 +12823,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_assign(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12727,7 +12880,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12845,7 +12998,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -12918,7 +13071,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13028,7 +13181,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_reserve(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13066,7 +13219,7 @@ SWIGINTERN PyObject *_wrap_DoubleVector_capacity(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13103,7 +13256,7 @@ SWIGINTERN PyObject *_wrap_delete_DoubleVector(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13150,7 +13303,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_iterator(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13188,7 +13341,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___nonzero__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13226,7 +13379,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___bool__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13264,7 +13417,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___len__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13308,7 +13461,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_pop(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13373,7 +13526,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___getslice__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13451,7 +13604,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___setslice____SWIG_0(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13517,7 +13670,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___setslice____SWIG_1(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13645,7 +13798,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___delslice__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13697,7 +13850,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___delitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13752,7 +13905,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___getitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13820,7 +13973,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___setitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13876,7 +14029,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___setitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -13930,7 +14083,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___delitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14030,7 +14183,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___getitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14140,7 +14293,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector___setitem____SWIG_2(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14259,7 +14412,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_append(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14288,7 +14441,7 @@ SWIGINTERN PyObject *_wrap_new_ULongLongVector__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14331,7 +14484,7 @@ SWIGINTERN PyObject *_wrap_new_ULongLongVector__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14371,7 +14524,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_empty(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14409,7 +14562,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_size(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14446,7 +14599,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_clear(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14495,7 +14648,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_swap(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14533,7 +14686,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_get_allocator(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14571,7 +14724,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_begin(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14610,7 +14763,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_end(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14649,7 +14802,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_rbegin(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14688,7 +14841,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_rend(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14727,7 +14880,7 @@ SWIGINTERN PyObject *_wrap_new_ULongLongVector__SWIG_2(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14764,7 +14917,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_pop_back(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14810,7 +14963,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_resize__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14863,7 +15016,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -14932,7 +15085,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15033,7 +15186,7 @@ SWIGINTERN PyObject *_wrap_new_ULongLongVector__SWIG_3(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15140,7 +15293,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_push_back(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15178,7 +15331,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_front(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15216,7 +15369,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_back(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15273,7 +15426,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_assign(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15330,7 +15483,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_resize__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15448,7 +15601,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15521,7 +15674,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_insert__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15631,7 +15784,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_reserve(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15669,7 +15822,7 @@ SWIGINTERN PyObject *_wrap_ULongLongVector_capacity(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15706,7 +15859,7 @@ SWIGINTERN PyObject *_wrap_delete_ULongLongVector(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15753,7 +15906,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_iterator(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15791,7 +15944,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___nonzero__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15829,7 +15982,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___bool__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15867,7 +16020,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___len__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15911,7 +16064,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_pop(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -15976,7 +16129,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___getslice__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16054,7 +16207,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___setslice____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16120,7 +16273,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___setslice____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16248,7 +16401,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___delslice__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16300,7 +16453,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___delitem____SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16355,7 +16508,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___getitem____SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16423,7 +16576,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___setitem____SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16479,7 +16632,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___setitem____SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16533,7 +16686,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___delitem____SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16633,7 +16786,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___getitem____SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16743,7 +16896,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector___setitem____SWIG_2(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16862,7 +17015,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_append(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16891,7 +17044,7 @@ SWIGINTERN PyObject *_wrap_new_LongLongVector__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16934,7 +17087,7 @@ SWIGINTERN PyObject *_wrap_new_LongLongVector__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -16974,7 +17127,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_empty(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17012,7 +17165,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_size(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17049,7 +17202,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_clear(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17098,7 +17251,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_swap(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17136,7 +17289,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_get_allocator(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17174,7 +17327,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_begin(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17213,7 +17366,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_end(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17252,7 +17405,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_rbegin(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17291,7 +17444,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_rend(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17330,7 +17483,7 @@ SWIGINTERN PyObject *_wrap_new_LongLongVector__SWIG_2(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17367,7 +17520,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_pop_back(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17413,7 +17566,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_resize__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17466,7 +17619,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17535,7 +17688,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17636,7 +17789,7 @@ SWIGINTERN PyObject *_wrap_new_LongLongVector__SWIG_3(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17743,7 +17896,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_push_back(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17781,7 +17934,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_front(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17819,7 +17972,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_back(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17876,7 +18029,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_assign(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -17933,7 +18086,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_resize__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18051,7 +18204,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_insert__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18124,7 +18277,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_insert__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18234,7 +18387,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_reserve(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18272,7 +18425,7 @@ SWIGINTERN PyObject *_wrap_LongLongVector_capacity(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18309,7 +18462,7 @@ SWIGINTERN PyObject *_wrap_delete_LongLongVector(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18356,7 +18509,7 @@ SWIGINTERN PyObject *_wrap_StrVector_iterator(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18394,7 +18547,7 @@ SWIGINTERN PyObject *_wrap_StrVector___nonzero__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18432,7 +18585,7 @@ SWIGINTERN PyObject *_wrap_StrVector___bool__(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18470,7 +18623,7 @@ SWIGINTERN PyObject *_wrap_StrVector___len__(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18514,7 +18667,7 @@ SWIGINTERN PyObject *_wrap_StrVector_pop(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18579,7 +18732,7 @@ SWIGINTERN PyObject *_wrap_StrVector___getslice__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18657,7 +18810,7 @@ SWIGINTERN PyObject *_wrap_StrVector___setslice____SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18723,7 +18876,7 @@ SWIGINTERN PyObject *_wrap_StrVector___setslice____SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18851,7 +19004,7 @@ SWIGINTERN PyObject *_wrap_StrVector___delslice__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18903,7 +19056,7 @@ SWIGINTERN PyObject *_wrap_StrVector___delitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -18958,7 +19111,7 @@ SWIGINTERN PyObject *_wrap_StrVector___getitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19026,7 +19179,7 @@ SWIGINTERN PyObject *_wrap_StrVector___setitem____SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19082,7 +19235,7 @@ SWIGINTERN PyObject *_wrap_StrVector___setitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19136,7 +19289,7 @@ SWIGINTERN PyObject *_wrap_StrVector___delitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19236,7 +19389,7 @@ SWIGINTERN PyObject *_wrap_StrVector___getitem____SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19349,7 +19502,7 @@ SWIGINTERN PyObject *_wrap_StrVector___setitem____SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19471,7 +19624,7 @@ SWIGINTERN PyObject *_wrap_StrVector_append(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19502,7 +19655,7 @@ SWIGINTERN PyObject *_wrap_new_StrVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19545,7 +19698,7 @@ SWIGINTERN PyObject *_wrap_new_StrVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19585,7 +19738,7 @@ SWIGINTERN PyObject *_wrap_StrVector_empty(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19623,7 +19776,7 @@ SWIGINTERN PyObject *_wrap_StrVector_size(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19660,7 +19813,7 @@ SWIGINTERN PyObject *_wrap_StrVector_clear(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19709,7 +19862,7 @@ SWIGINTERN PyObject *_wrap_StrVector_swap(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19747,7 +19900,7 @@ SWIGINTERN PyObject *_wrap_StrVector_get_allocator(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19785,7 +19938,7 @@ SWIGINTERN PyObject *_wrap_StrVector_begin(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19824,7 +19977,7 @@ SWIGINTERN PyObject *_wrap_StrVector_end(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19863,7 +20016,7 @@ SWIGINTERN PyObject *_wrap_StrVector_rbegin(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19902,7 +20055,7 @@ SWIGINTERN PyObject *_wrap_StrVector_rend(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19941,7 +20094,7 @@ SWIGINTERN PyObject *_wrap_new_StrVector__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -19978,7 +20131,7 @@ SWIGINTERN PyObject *_wrap_StrVector_pop_back(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20024,7 +20177,7 @@ SWIGINTERN PyObject *_wrap_StrVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20077,7 +20230,7 @@ SWIGINTERN PyObject *_wrap_StrVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20146,7 +20299,7 @@ SWIGINTERN PyObject *_wrap_StrVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20250,7 +20403,7 @@ SWIGINTERN PyObject *_wrap_new_StrVector__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20360,7 +20513,7 @@ SWIGINTERN PyObject *_wrap_StrVector_push_back(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20400,7 +20553,7 @@ SWIGINTERN PyObject *_wrap_StrVector_front(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20438,7 +20591,7 @@ SWIGINTERN PyObject *_wrap_StrVector_back(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20498,7 +20651,7 @@ SWIGINTERN PyObject *_wrap_StrVector_assign(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20560,7 +20713,7 @@ SWIGINTERN PyObject *_wrap_StrVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20681,7 +20834,7 @@ SWIGINTERN PyObject *_wrap_StrVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20759,7 +20912,7 @@ SWIGINTERN PyObject *_wrap_StrVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20867,7 +21020,7 @@ SWIGINTERN PyObject *_wrap_StrVector_reserve(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20905,7 +21058,7 @@ SWIGINTERN PyObject *_wrap_StrVector_capacity(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20942,7 +21095,7 @@ SWIGINTERN PyObject *_wrap_delete_StrVector(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -20990,7 +21143,7 @@ SWIGINTERN PyObject *_wrap_new_IntStringDict__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21030,7 +21183,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_iterator(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21068,7 +21221,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___nonzero__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21106,7 +21259,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___bool__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21144,7 +21297,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___len__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21199,7 +21352,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___getitem__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21253,7 +21406,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___delitem__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21302,7 +21455,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_has_key(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21340,7 +21493,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_keys(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21378,7 +21531,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_values(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21416,7 +21569,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_items(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21465,7 +21618,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___contains__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21505,7 +21658,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_key_iterator(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21545,7 +21698,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_value_iterator(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21593,7 +21746,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___setitem____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21661,7 +21814,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict___setitem____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21753,7 +21906,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_asdict(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21782,7 +21935,7 @@ SWIGINTERN PyObject *_wrap_new_IntStringDict__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21825,7 +21978,7 @@ SWIGINTERN PyObject *_wrap_new_IntStringDict__SWIG_2(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21905,7 +22058,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_empty(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21943,7 +22096,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_size(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -21980,7 +22133,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_clear(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22029,7 +22182,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_swap(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22067,7 +22220,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_get_allocator(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22105,7 +22258,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_begin(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22144,7 +22297,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_end(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22183,7 +22336,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_rbegin(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22222,7 +22375,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_rend(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22272,7 +22425,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22321,7 +22474,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_count(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22373,7 +22526,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22440,7 +22593,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_erase__SWIG_2(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22555,7 +22708,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_find(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22605,7 +22758,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_lower_bound(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22655,7 +22808,7 @@ SWIGINTERN PyObject *_wrap_IntStringDict_upper_bound(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22693,7 +22846,7 @@ SWIGINTERN PyObject *_wrap_delete_IntStringDict(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22731,7 +22884,7 @@ SWIGINTERN PyObject *_wrap_set_linalg(PyObject *SWIGUNUSEDPARM(self), PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22760,7 +22913,7 @@ SWIGINTERN PyObject *_wrap__swigtest_empty_dict(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22789,7 +22942,7 @@ SWIGINTERN PyObject *_wrap__swigtest_alpha_dict(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22827,7 +22980,7 @@ SWIGINTERN PyObject *_wrap_new_ostream_c__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22856,7 +23009,7 @@ SWIGINTERN PyObject *_wrap_new_ostream_c__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22894,7 +23047,7 @@ SWIGINTERN PyObject *_wrap_new_ostream_c__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -22974,7 +23127,7 @@ SWIGINTERN PyObject *_wrap_delete_ostream_c(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23011,7 +23164,7 @@ SWIGINTERN PyObject *_wrap_ostream_c_flush(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23060,7 +23213,7 @@ SWIGINTERN PyObject *_wrap_ostream_c_write(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23098,7 +23251,7 @@ SWIGINTERN PyObject *_wrap_ostream_c_mode(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23136,7 +23289,7 @@ SWIGINTERN PyObject *_wrap_ostream_c___repr__(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23191,7 +23344,7 @@ SWIGINTERN PyObject *_wrap_string_sender_write(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23228,7 +23381,7 @@ SWIGINTERN PyObject *_wrap_delete_string_sender(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23264,7 +23417,7 @@ SWIGINTERN PyObject *_wrap_new_refcounted(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23302,7 +23455,7 @@ SWIGINTERN PyObject *_wrap_delete_refcounted(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23340,7 +23493,7 @@ SWIGINTERN PyObject *_wrap_refcounted_incref(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23378,7 +23531,7 @@ SWIGINTERN PyObject *_wrap_refcounted_decref(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23416,7 +23569,7 @@ SWIGINTERN PyObject *_wrap_refcounted_ref_count(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23453,7 +23606,7 @@ SWIGINTERN PyObject *_wrap_refcounted_lifeboat(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23500,7 +23653,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_iterator(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23538,7 +23691,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___nonzero__(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23576,7 +23729,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___bool__(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23614,7 +23767,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___len__(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23658,7 +23811,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_pop(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23723,7 +23876,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___getslice__(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23801,7 +23954,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___setslice____SWIG_0(PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23867,7 +24020,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___setslice____SWIG_1(PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -23995,7 +24148,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___delslice__(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24047,7 +24200,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___delitem____SWIG_0(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24102,7 +24255,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___getitem____SWIG_0(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24170,7 +24323,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___setitem____SWIG_0(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24226,7 +24379,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___setitem____SWIG_1(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24280,7 +24433,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___delitem____SWIG_1(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24380,7 +24533,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___getitem____SWIG_1(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24491,7 +24644,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList___setitem____SWIG_2(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24609,7 +24762,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_append(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24638,7 +24791,7 @@ SWIGINTERN PyObject *_wrap_new_OptimizationMethodList__SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24681,7 +24834,7 @@ SWIGINTERN PyObject *_wrap_new_OptimizationMethodList__SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24721,7 +24874,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_empty(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24759,7 +24912,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_size(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24796,7 +24949,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_clear(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24845,7 +24998,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_swap(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24883,7 +25036,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_get_allocator(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24921,7 +25074,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_begin(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24960,7 +25113,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_end(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -24999,7 +25152,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_rbegin(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25038,7 +25191,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_rend(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25077,7 +25230,7 @@ SWIGINTERN PyObject *_wrap_new_OptimizationMethodList__SWIG_2(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25114,7 +25267,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_pop_back(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25160,7 +25313,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_resize__SWIG_0(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25213,7 +25366,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_erase__SWIG_0(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25282,7 +25435,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_erase__SWIG_1(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25384,7 +25537,7 @@ SWIGINTERN PyObject *_wrap_new_OptimizationMethodList__SWIG_3(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25490,7 +25643,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_push_back(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25528,7 +25681,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_front(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25566,7 +25719,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_back(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25624,7 +25777,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_assign(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25682,7 +25835,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_resize__SWIG_1(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25799,7 +25952,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_insert__SWIG_0(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25873,7 +26026,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_insert__SWIG_1(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -25979,7 +26132,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_reserve(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26017,7 +26170,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethodList_capacity(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26054,7 +26207,7 @@ SWIGINTERN PyObject *_wrap_delete_OptimizationMethodList(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26225,7 +26378,7 @@ SWIGINTERN PyObject *_wrap_new_OptimizationMethod(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26262,7 +26415,7 @@ SWIGINTERN PyObject *_wrap_delete_OptimizationMethod(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26924,7 +27077,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod_get_step(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -26972,7 +27125,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod_tell_step(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27055,7 +27208,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod_tell_turn(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27093,7 +27246,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod_print_pack(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27131,7 +27284,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod_AlgorithmName(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27169,7 +27322,7 @@ SWIGINTERN PyObject *_wrap_OptimizationMethod___repr__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27205,7 +27358,7 @@ SWIGINTERN PyObject *_wrap_default_optimization_recipe(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27234,7 +27387,7 @@ SWIGINTERN PyObject *_wrap_bfgs_optimization_recipe(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27265,7 +27418,7 @@ SWIGINTERN PyObject *_wrap__set_array_module(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27303,7 +27456,7 @@ SWIGINTERN PyObject *_wrap_three_dim_size1(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27341,7 +27494,7 @@ SWIGINTERN PyObject *_wrap_three_dim_size2(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27379,7 +27532,7 @@ SWIGINTERN PyObject *_wrap_three_dim_size3(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27441,7 +27594,7 @@ SWIGINTERN PyObject *_wrap_new_three_dim(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27478,7 +27631,7 @@ SWIGINTERN PyObject *_wrap_delete_three_dim(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27514,7 +27667,7 @@ SWIGINTERN PyObject *_wrap_ndarray_make(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27536,8 +27689,8 @@ SWIGINTERN PyObject *_wrap_ndarray_exp(PyObject *SWIGUNUSEDPARM(self), PyObject 
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_exp",1,1,&obj0)) SWIG_fail;
   {
     if (PyArray_Check(obj0)) {
-      if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp1 = boosted::make_shared<etk::ndarray>(obj0);
@@ -27560,7 +27713,7 @@ SWIGINTERN PyObject *_wrap_ndarray_exp(PyObject *SWIGUNUSEDPARM(self), PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27580,8 +27733,8 @@ SWIGINTERN PyObject *_wrap_ndarray_log(PyObject *SWIGUNUSEDPARM(self), PyObject 
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_log",1,1,&obj0)) SWIG_fail;
   {
     if (PyArray_Check(obj0)) {
-      if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp1 = boosted::make_shared<etk::ndarray>(obj0);
@@ -27604,7 +27757,7 @@ SWIGINTERN PyObject *_wrap_ndarray_log(PyObject *SWIGUNUSEDPARM(self), PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27624,8 +27777,8 @@ SWIGINTERN PyObject *_wrap_ndarray_init(PyObject *SWIGUNUSEDPARM(self), PyObject
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_init",1,1,&obj0)) SWIG_fail;
   {
     if (PyArray_Check(obj0)) {
-      if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp1 = boosted::make_shared<etk::ndarray>(obj0);
@@ -27648,7 +27801,7 @@ SWIGINTERN PyObject *_wrap_ndarray_init(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27668,7 +27821,7 @@ SWIGINTERN PyObject *_wrap_SymmetricArray_use_upper_triangle(PyObject *SWIGUNUSE
   if(!PyArg_UnpackTuple(args,(char *)"SymmetricArray_use_upper_triangle",1,1,&obj0)) SWIG_fail;
   {
     if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
       SWIG_fail;
     }
     temp1 = boosted::make_shared<etk::symmetric_matrix>(obj0);
@@ -27687,7 +27840,7 @@ SWIGINTERN PyObject *_wrap_SymmetricArray_use_upper_triangle(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27725,7 +27878,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_caseids__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27777,7 +27930,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_dna__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27815,7 +27968,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_dna__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27864,7 +28017,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27916,7 +28069,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27957,7 +28110,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -27998,7 +28151,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28039,7 +28192,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28080,7 +28233,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_caseids__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28170,7 +28323,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_dna__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28208,7 +28361,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_dna__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28327,7 +28480,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28425,7 +28578,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28512,7 +28665,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_choice__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28591,7 +28744,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_weight__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28670,7 +28823,7 @@ SWIGINTERN PyObject *_wrap_Fountain_ask_avail__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28749,7 +28902,7 @@ SWIGINTERN PyObject *_wrap_Fountain_nCases(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28787,7 +28940,7 @@ SWIGINTERN PyObject *_wrap_Fountain_nAlts(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28816,7 +28969,7 @@ SWIGINTERN PyObject *_wrap_new_Fountain(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28853,7 +29006,7 @@ SWIGINTERN PyObject *_wrap_delete_Fountain(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28910,7 +29063,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -28960,7 +29113,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idco_(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29010,7 +29163,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29060,7 +29213,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idca_(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29110,7 +29263,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_alts(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29160,7 +29313,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_caseids(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29210,7 +29363,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_choice(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29260,7 +29413,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_weight(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29310,7 +29463,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_avail(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29360,7 +29513,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_idco(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29410,7 +29563,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29460,7 +29613,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_alts(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29510,7 +29663,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_caseids(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29560,7 +29713,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_choice(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29610,7 +29763,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_weight(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29660,7 +29813,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_avail(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29710,7 +29863,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_unweighted(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29760,7 +29913,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_all_alts_always_available(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29809,7 +29962,7 @@ SWIGINTERN PyObject *_wrap_delete_QuerySet(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29847,7 +30000,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29879,7 +30032,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -29972,7 +30125,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_set_validator(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30022,7 +30175,7 @@ SWIGINTERN PyObject *_wrap_QuerySet___repr__(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30072,7 +30225,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_actual_type(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30122,7 +30275,7 @@ SWIGINTERN PyObject *_wrap_QuerySet_pickled(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30179,7 +30332,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30229,7 +30382,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco_(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30279,7 +30432,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30329,7 +30482,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca_(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30379,7 +30532,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_alts(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30429,7 +30582,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_caseids(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30479,7 +30632,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_choice(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30529,7 +30682,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_weight(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30579,7 +30732,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_avail(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30629,7 +30782,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_unweighted(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30679,7 +30832,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_all_alts_always_available(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30728,7 +30881,7 @@ SWIGINTERN PyObject *_wrap_delete_QuerySetSimpleCO(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30778,7 +30931,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO___repr__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30828,7 +30981,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_actual_type(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30866,7 +31019,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySetSimpleCO__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30898,7 +31051,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySetSimpleCO__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -30991,7 +31144,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_validator__SWIG_0(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31040,7 +31193,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_validator__SWIG_1(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31144,7 +31297,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_idco_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31209,7 +31362,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_choice_column(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31274,7 +31427,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_choice_column_map(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31339,7 +31492,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_avail_column_map(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31390,7 +31543,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_avail_all(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31453,7 +31606,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_weight_column(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31518,7 +31671,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_alts_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31583,7 +31736,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_alts_values(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31635,7 +31788,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_idco_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31685,7 +31838,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_choice_column(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31735,7 +31888,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_choice_column_map(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31785,7 +31938,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_avail_column_map(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31835,7 +31988,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_weight_column(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31885,7 +32038,7 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_alts_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31942,7 +32095,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -31992,7 +32145,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco_(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32042,7 +32195,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32092,7 +32245,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca_(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32142,7 +32295,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_alts(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32192,7 +32345,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_caseids(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32242,7 +32395,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_choice(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32292,7 +32445,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_weight(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32342,7 +32495,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_avail(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32392,7 +32545,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_unweighted(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32442,7 +32595,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_all_alts_always_available(PyObject *
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32491,7 +32644,7 @@ SWIGINTERN PyObject *_wrap_delete_QuerySetTwoTable(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32541,7 +32694,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable___repr__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32591,7 +32744,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_actual_type(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32641,7 +32794,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_pickled(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32679,7 +32832,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySetTwoTable__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32711,7 +32864,7 @@ SWIGINTERN PyObject *_wrap_new_QuerySetTwoTable__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32804,7 +32957,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_validator__SWIG_0(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32853,7 +33006,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_validator__SWIG_1(PyObject *SWIG
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -32957,7 +33110,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_idco_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33022,7 +33175,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_idca_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33087,7 +33240,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33152,7 +33305,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column_map(PyObject *S
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33217,7 +33370,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_ca_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33282,7 +33435,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_avail_co_column_map(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33347,7 +33500,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_avail_ca_column(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33356,6 +33509,55 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_avail_ca_column(PyObject *SWIGUN
   return resultobj;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_avail_all(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetTwoTable > tempshared1 ;
+  std::shared_ptr< elm::QuerySetTwoTable > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_avail_all",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_avail_all" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      (arg1)->set_avail_all();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -33412,7 +33614,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_weight_co_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33477,7 +33679,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_alts_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33542,7 +33744,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_alts_values(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33594,7 +33796,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_idco_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33644,7 +33846,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_idca_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33694,7 +33896,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33744,7 +33946,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column_map(PyObject *S
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33794,7 +33996,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_ca_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33844,7 +34046,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_avail_co_column_map(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33894,7 +34096,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_avail_ca_column(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33944,7 +34146,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_weight_co_column(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -33994,7 +34196,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_alts_query(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34033,7 +34235,7 @@ SWIGINTERN PyObject *_wrap_new_SQLiteDB(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34070,7 +34272,7 @@ SWIGINTERN PyObject *_wrap_delete_SQLiteDB(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34107,7 +34309,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_close(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34158,7 +34360,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_copy_from_db(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34211,7 +34413,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_backup(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34259,7 +34461,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_commit__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34296,7 +34498,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_commit__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34388,7 +34590,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_drop(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34426,7 +34628,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_all_table_names(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34475,7 +34677,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_column_names(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34533,7 +34735,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_column_name(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34581,7 +34783,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34618,7 +34820,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34664,7 +34866,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_2(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34760,7 +34962,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_error_code(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34798,7 +35000,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_error_msg(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34861,7 +35063,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_integer__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34926,7 +35128,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_int64__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -34991,7 +35193,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_float__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35059,7 +35261,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_text__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35115,7 +35317,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_integer__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35221,7 +35423,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_int64__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35327,7 +35529,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_float__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35433,7 +35635,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_text__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35537,7 +35739,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_int64_tuple(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35591,7 +35793,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_eval_string_tuple(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35638,7 +35840,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_caseids(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35690,7 +35892,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_dna__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35728,7 +35930,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_dna__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35831,7 +36033,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -35888,7 +36090,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36003,7 +36205,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36060,7 +36262,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36161,7 +36363,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36202,7 +36404,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_choice__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36293,7 +36495,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36334,7 +36536,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_weight__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36425,7 +36627,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36466,7 +36668,7 @@ SWIGINTERN PyObject *_wrap_Facet_ask_avail__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36549,7 +36751,7 @@ SWIGINTERN PyObject *_wrap_delete_Facet(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36823,7 +37025,7 @@ SWIGINTERN PyObject *_wrap_Facet__get_queries(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36884,7 +37086,7 @@ SWIGINTERN PyObject *_wrap_Facet__set_queries(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36921,7 +37123,7 @@ SWIGINTERN PyObject *_wrap_Facet_refresh_queries(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -36953,7 +37155,7 @@ SWIGINTERN PyObject *_wrap_new_Facet(PyObject *SWIGUNUSEDPARM(self), PyObject *a
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37001,7 +37203,7 @@ SWIGINTERN PyObject *_wrap_Facet_save_facet(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37049,7 +37251,7 @@ SWIGINTERN PyObject *_wrap_Facet_load_facet__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37086,7 +37288,7 @@ SWIGINTERN PyObject *_wrap_Facet_load_facet__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37165,7 +37367,7 @@ SWIGINTERN PyObject *_wrap_Facet_clear_facet(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37203,7 +37405,7 @@ SWIGINTERN PyObject *_wrap_Facet_list_facets(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37241,7 +37443,7 @@ SWIGINTERN PyObject *_wrap_Facet_nCases(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37279,7 +37481,7 @@ SWIGINTERN PyObject *_wrap_Facet_nAlts(PyObject *SWIGUNUSEDPARM(self), PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37348,7 +37550,7 @@ SWIGINTERN PyObject *_wrap_Facet_caseids__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37408,7 +37610,7 @@ SWIGINTERN PyObject *_wrap_Facet_caseids__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37457,7 +37659,7 @@ SWIGINTERN PyObject *_wrap_Facet_caseids__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37495,7 +37697,7 @@ SWIGINTERN PyObject *_wrap_Facet_caseids__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37627,7 +37829,7 @@ SWIGINTERN PyObject *_wrap_Facet_altids(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37665,7 +37867,7 @@ SWIGINTERN PyObject *_wrap_Facet_alternative_names(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37703,7 +37905,7 @@ SWIGINTERN PyObject *_wrap_Facet_alternative_codes(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37750,7 +37952,7 @@ SWIGINTERN PyObject *_wrap_Facet_alternative_name(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37799,7 +38001,7 @@ SWIGINTERN PyObject *_wrap_Facet_alternative_code(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37851,7 +38053,7 @@ SWIGINTERN PyObject *_wrap_Facet_check_ca(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37905,7 +38107,7 @@ SWIGINTERN PyObject *_wrap_Facet_check_co(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37945,7 +38147,7 @@ SWIGINTERN PyObject *_wrap_Facet_variables_ca(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -37983,7 +38185,7 @@ SWIGINTERN PyObject *_wrap_Facet_variables_co(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38051,7 +38253,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38114,7 +38316,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38168,7 +38370,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idca__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38315,7 +38517,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38378,7 +38580,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38432,7 +38634,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_idco__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38556,7 +38758,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_alts(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38601,7 +38803,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38639,7 +38841,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_choice__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38727,7 +38929,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38765,7 +38967,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_avail__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38853,7 +39055,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38891,7 +39093,7 @@ SWIGINTERN PyObject *_wrap_Facet_query_weight__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -38972,7 +39174,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39010,7 +39212,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39048,7 +39250,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_idca_(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39086,7 +39288,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_idco_(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39124,7 +39326,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_alts(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39162,7 +39364,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_choice(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39200,7 +39402,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_avail(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39238,7 +39440,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_weight(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39276,7 +39478,7 @@ SWIGINTERN PyObject *_wrap_Facet_qry_caseids(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39314,7 +39516,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_idca(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39352,7 +39554,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_idco(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39390,7 +39592,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_alts(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39428,7 +39630,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_choice(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39466,7 +39668,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_avail(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39504,7 +39706,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_weight(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39542,7 +39744,7 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_caseids(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39580,7 +39782,7 @@ SWIGINTERN PyObject *_wrap_Facet_unweighted(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39618,7 +39820,7 @@ SWIGINTERN PyObject *_wrap_Facet_all_alts_always_available(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39665,7 +39867,7 @@ SWIGINTERN PyObject *_wrap_Facet_matrix_library(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39704,7 +39906,7 @@ SWIGINTERN PyObject *_wrap_new_ParameterLinkArray(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39741,7 +39943,7 @@ SWIGINTERN PyObject *_wrap_delete_ParameterLinkArray(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39779,7 +39981,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray___str__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39817,7 +40019,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray___repr__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39850,7 +40052,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull(PyObject *SWIGUNUSEDPARM(self
   {
     if (PyArray_Check(obj1)) {
       if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<const etk::ndarray>(obj1);
@@ -39862,8 +40064,8 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull(PyObject *SWIGUNUSEDPARM(self
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -39886,7 +40088,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39918,8 +40120,8 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< elm::paramArray * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -39932,7 +40134,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push(PyObject *SWIGUNUSEDPARM(self
   {
     if (PyArray_Check(obj2)) {
       if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<const etk::ndarray>(obj2);
@@ -39955,7 +40157,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -39998,8 +40200,8 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull_field(PyObject *SWIGUNUSEDPAR
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -40022,7 +40224,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull_field(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40068,7 +40270,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push_field(PyObject *SWIGUNUSEDPAR
   {
     if (PyArray_Check(obj2)) {
       if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<const etk::ndarray>(obj2);
@@ -40091,7 +40293,7 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push_field(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40138,7 +40340,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_iterator___iter__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40176,7 +40378,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_iterator_next(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40214,7 +40416,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_iterator___next__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40252,7 +40454,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodeset_iterator(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40289,7 +40491,7 @@ SWIGINTERN PyObject *_wrap_delete_cellcodeset_iterator(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40325,7 +40527,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodeset__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40365,7 +40567,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodeset__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40406,7 +40608,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodeset__SWIG_2(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40497,7 +40699,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_contains(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40546,7 +40748,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_insert_set(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40594,7 +40796,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_append(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40643,7 +40845,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_remove(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40680,7 +40882,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset_noop(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40730,7 +40932,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___iadd____SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40780,7 +40982,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___isub____SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40829,7 +41031,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___iadd____SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -40926,7 +41128,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___isub____SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41012,7 +41214,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___len__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41050,7 +41252,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___repr__(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41088,7 +41290,7 @@ SWIGINTERN PyObject *_wrap_cellcodeset___iter__(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41125,7 +41327,7 @@ SWIGINTERN PyObject *_wrap_delete_cellcodeset(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41161,7 +41363,7 @@ SWIGINTERN PyObject *_wrap_max_cellcode(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41301,7 +41503,7 @@ SWIGINTERN PyObject *_wrap_new_string_and_cellcode(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41338,7 +41540,7 @@ SWIGINTERN PyObject *_wrap_delete_string_and_cellcode(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41496,7 +41698,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodepair__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41534,7 +41736,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodepair__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41563,7 +41765,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodepair__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41604,7 +41806,7 @@ SWIGINTERN PyObject *_wrap_new_cellcodepair__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41713,7 +41915,7 @@ SWIGINTERN PyObject *_wrap_cellcodepair___lt__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41763,7 +41965,7 @@ SWIGINTERN PyObject *_wrap_cellcodepair___eq__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41813,7 +42015,7 @@ SWIGINTERN PyObject *_wrap_cellcodepair___gt__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41863,7 +42065,7 @@ SWIGINTERN PyObject *_wrap_cellcodepair___ge__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41913,7 +42115,7 @@ SWIGINTERN PyObject *_wrap_cellcodepair___le__(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41950,7 +42152,7 @@ SWIGINTERN PyObject *_wrap_delete_cellcodepair(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -41998,7 +42200,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_infodict__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42038,7 +42240,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_iterator(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42076,7 +42278,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___nonzero__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42114,7 +42316,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___bool__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42152,7 +42354,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___len__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42207,7 +42409,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___getitem__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42261,7 +42463,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___delitem__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42310,7 +42512,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_has_key(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42348,7 +42550,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_keys(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42386,7 +42588,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_values(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42424,7 +42626,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_items(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42473,7 +42675,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___contains__(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42513,7 +42715,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_key_iterator(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42553,7 +42755,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_value_iterator(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42601,7 +42803,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___setitem____SWIG_0(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42667,7 +42869,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict___setitem____SWIG_1(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42757,7 +42959,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_asdict(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42786,7 +42988,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_infodict__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42829,7 +43031,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_infodict__SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42909,7 +43111,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_empty(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42947,7 +43149,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_size(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -42984,7 +43186,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_clear(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43033,7 +43235,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_swap(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43071,7 +43273,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_get_allocator(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43109,7 +43311,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_begin(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43148,7 +43350,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_end(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43187,7 +43389,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_rbegin(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43226,7 +43428,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_rend(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43276,7 +43478,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_erase__SWIG_0(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43325,7 +43527,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_count(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43377,7 +43579,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_erase__SWIG_1(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43444,7 +43646,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_erase__SWIG_2(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43559,7 +43761,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_find(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43609,7 +43811,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_lower_bound(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43659,7 +43861,7 @@ SWIGINTERN PyObject *_wrap_cellcode_infodict_upper_bound(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43697,7 +43899,7 @@ SWIGINTERN PyObject *_wrap_delete_cellcode_infodict(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43744,7 +43946,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_iterator(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43782,7 +43984,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___nonzero__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43820,7 +44022,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___bool__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43858,7 +44060,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___len__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43902,7 +44104,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_pop(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -43967,7 +44169,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___getslice__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44045,7 +44247,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___setslice____SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44111,7 +44313,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___setslice____SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44239,7 +44441,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___delslice__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44291,7 +44493,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___delitem____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44346,7 +44548,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___getitem____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44414,7 +44616,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___setitem____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44470,7 +44672,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___setitem____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44524,7 +44726,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___delitem____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44624,7 +44826,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___getitem____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44734,7 +44936,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list___setitem____SWIG_2(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44853,7 +45055,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_append(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44882,7 +45084,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_list__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44925,7 +45127,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_list__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -44965,7 +45167,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_empty(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45003,7 +45205,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_size(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45040,7 +45242,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_clear(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45089,7 +45291,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_swap(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45127,7 +45329,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_get_allocator(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45165,7 +45367,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_begin(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45204,7 +45406,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_end(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45243,7 +45445,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_rbegin(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45282,7 +45484,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_rend(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45321,7 +45523,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_list__SWIG_2(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45358,7 +45560,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_pop_back(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45404,7 +45606,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_resize__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45457,7 +45659,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45526,7 +45728,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45627,7 +45829,7 @@ SWIGINTERN PyObject *_wrap_new_cellcode_list__SWIG_3(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45734,7 +45936,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_push_back(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45772,7 +45974,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_front(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45810,7 +46012,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_back(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45867,7 +46069,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_assign(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -45924,7 +46126,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_resize__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46042,7 +46244,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_insert__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46115,7 +46317,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_insert__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46216,7 +46418,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_pop_front(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46264,7 +46466,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_push_front(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46301,7 +46503,7 @@ SWIGINTERN PyObject *_wrap_cellcode_list_reverse(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46338,7 +46540,7 @@ SWIGINTERN PyObject *_wrap_delete_cellcode_list(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46551,7 +46753,7 @@ SWIGINTERN PyObject *_wrap_new_VAS_dna_info__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46582,7 +46784,7 @@ SWIGINTERN PyObject *_wrap_new_VAS_dna_info__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46651,7 +46853,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_info_is_elemental(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46688,7 +46890,7 @@ SWIGINTERN PyObject *_wrap_delete_VAS_dna_info(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46746,7 +46948,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_read_sequence(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46799,7 +47001,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_sequence__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46850,7 +47052,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_sequence__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46934,7 +47136,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_generate_sequence(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -46972,7 +47174,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_generate_phenotype(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47032,7 +47234,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_edge(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47092,7 +47294,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_remove_edge(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47166,7 +47368,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_cell__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47231,7 +47433,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_cell__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47282,7 +47484,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_add_cell__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47399,7 +47601,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_clear(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47437,7 +47639,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_elemental_codes(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47475,7 +47677,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_all_known_codes(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47513,7 +47715,7 @@ SWIGINTERN PyObject *_wrap_VAS_dna_branches_in_ascending_order(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47542,7 +47744,7 @@ SWIGINTERN PyObject *_wrap_new_VAS_dna(PyObject *SWIGUNUSEDPARM(self), PyObject 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47579,7 +47781,7 @@ SWIGINTERN PyObject *_wrap_delete_VAS_dna(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47905,7 +48107,7 @@ SWIGINTERN PyObject *_wrap_Component___repr__(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -47998,7 +48200,7 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48030,7 +48232,7 @@ SWIGINTERN PyObject *_wrap_Component_Create(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48067,7 +48269,7 @@ SWIGINTERN PyObject *_wrap_delete_Component(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48114,7 +48316,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_iterator(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48152,7 +48354,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___nonzero__(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48190,7 +48392,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___bool__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48228,7 +48430,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___len__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48272,7 +48474,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_pop(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48337,7 +48539,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48415,7 +48617,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_0(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48481,7 +48683,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_1(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48609,7 +48811,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delslice__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48661,7 +48863,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48716,7 +48918,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48784,7 +48986,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48840,7 +49042,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48894,7 +49096,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -48994,7 +49196,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49105,7 +49307,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_2(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49223,7 +49425,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_append(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49252,7 +49454,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49295,7 +49497,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49335,7 +49537,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_empty(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49373,7 +49575,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_size(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49410,7 +49612,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_clear(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49459,7 +49661,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_swap(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49497,7 +49699,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_get_allocator(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49535,7 +49737,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_begin(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49574,7 +49776,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_end(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49613,7 +49815,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rbegin(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49652,7 +49854,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rend(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49691,7 +49893,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_2(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49728,7 +49930,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_pop_back(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49774,7 +49976,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49827,7 +50029,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49896,7 +50098,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -49998,7 +50200,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_3(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50104,7 +50306,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_push_back(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50142,7 +50344,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_front(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50180,7 +50382,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_back(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50238,7 +50440,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_assign(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50296,7 +50498,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50413,7 +50615,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50487,7 +50689,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50593,7 +50795,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_reserve(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50631,7 +50833,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_capacity(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50668,7 +50870,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentVector(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50826,7 +51028,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50864,7 +51066,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -50893,7 +51095,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_2(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51023,7 +51225,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51112,7 +51314,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_0(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51192,7 +51394,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_1(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51261,7 +51463,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_2(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51349,7 +51551,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_3(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51424,7 +51626,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_4(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51488,7 +51690,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_5(PyObject *SW
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51765,7 +51967,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51807,7 +52009,7 @@ SWIGINTERN PyObject *_wrap_ComponentList___repr__(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51845,7 +52047,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_needs(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -51882,7 +52084,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentList(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52040,7 +52242,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentCellcodeMap__SWIG_0(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52078,7 +52280,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentCellcodeMap__SWIG_1(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52107,7 +52309,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentCellcodeMap__SWIG_2(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52194,7 +52396,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___repr__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52232,7 +52434,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_size(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52270,7 +52472,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_empty(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52307,7 +52509,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_clear(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52362,7 +52564,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52422,7 +52624,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___setitem__(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52476,7 +52678,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___delitem__(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52525,7 +52727,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___contains__(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52563,7 +52765,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___len__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52653,7 +52855,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__create__SWIG_0(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52734,7 +52936,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__create__SWIG_1(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52804,7 +53006,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__create__SWIG_2(PyObject *SWIGUN
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52957,7 +53159,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__link(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -52994,7 +53196,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentCellcodeMap(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53231,7 +53433,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentListPair__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53289,7 +53491,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentListPair__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53336,7 +53538,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentListPair__SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53374,7 +53576,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentListPair__SWIG_3(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53403,7 +53605,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentListPair__SWIG_4(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53570,7 +53772,7 @@ SWIGINTERN PyObject *_wrap_ComponentListPair___call____SWIG_0(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53629,7 +53831,7 @@ SWIGINTERN PyObject *_wrap_ComponentListPair___call____SWIG_1(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53677,7 +53879,7 @@ SWIGINTERN PyObject *_wrap_ComponentListPair___call____SWIG_2(PyObject *SWIGUNUS
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53806,7 +54008,7 @@ SWIGINTERN PyObject *_wrap_ComponentListPair_clean(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53843,7 +54045,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentListPair(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -53992,7 +54194,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54021,7 +54223,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54091,7 +54293,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___repr__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54129,7 +54331,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap_size(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54167,7 +54369,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap_empty(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54204,7 +54406,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap_clear(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54234,7 +54436,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___getitem__(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -54258,7 +54460,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___getitem__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54291,7 +54493,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___setitem__(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -54317,7 +54519,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___setitem__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54346,7 +54548,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___delitem__(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -54370,7 +54572,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___delitem__(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54400,7 +54602,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___contains__(PyObject *SWIGUNUSEDPAR
   arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -54418,7 +54620,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___contains__(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54456,7 +54658,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___len__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54511,7 +54713,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___call__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54548,7 +54750,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentEdgeMap(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54767,7 +54969,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54814,7 +55016,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54852,7 +55054,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54881,7 +55083,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_3(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -54922,7 +55124,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_4(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55048,7 +55250,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA___eq__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55086,7 +55288,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_valid(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55135,7 +55337,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_node_name(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55187,7 +55389,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_node_code(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55227,7 +55429,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA___repr__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55265,7 +55467,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_elemental_codes(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55303,7 +55505,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_all_node_codes(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55341,7 +55543,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_nest_node_codes(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55379,7 +55581,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_elemental_names(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55417,7 +55619,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_all_node_names(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55455,7 +55657,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_nest_node_names(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55504,7 +55706,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_dn_node_codes(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55562,7 +55764,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_up_node_codes__SWIG_0(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55611,7 +55813,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_up_node_codes__SWIG_1(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55716,7 +55918,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_chain_dn_node_codes(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55765,7 +55967,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_chain_up_node_codes(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -55802,7 +56004,7 @@ SWIGINTERN PyObject *_wrap_delete_ComponentGraphDNA(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56606,7 +56808,7 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56780,7 +56982,7 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56829,7 +57031,7 @@ SWIGINTERN PyObject *_wrap_model_options_t_copy(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56867,7 +57069,7 @@ SWIGINTERN PyObject *_wrap_model_options_t___repr__(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56905,7 +57107,7 @@ SWIGINTERN PyObject *_wrap_model_options_t___str__(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56943,7 +57145,7 @@ SWIGINTERN PyObject *_wrap_model_options_t__save_buffer(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -56980,7 +57182,7 @@ SWIGINTERN PyObject *_wrap_delete_model_options_t(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57315,7 +57517,7 @@ SWIGINTERN PyObject *_wrap_runstats_elapsed_time(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57353,7 +57555,7 @@ SWIGINTERN PyObject *_wrap_runstats_runtime_seconds(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57391,7 +57593,7 @@ SWIGINTERN PyObject *_wrap_runstats_runtime(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57498,7 +57700,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57594,7 +57796,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57679,7 +57881,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57753,7 +57955,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_3(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57818,7 +58020,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_4(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57874,7 +58076,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_5(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57921,7 +58123,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_6(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57959,7 +58161,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_7(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -57988,7 +58190,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_8(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58029,7 +58231,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_9(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58061,7 +58263,7 @@ SWIGINTERN PyObject *_wrap_new_runstats__SWIG_10(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58382,7 +58584,7 @@ SWIGINTERN PyObject *_wrap_runstats_notes(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58430,7 +58632,7 @@ SWIGINTERN PyObject *_wrap_runstats_write__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58477,7 +58679,7 @@ SWIGINTERN PyObject *_wrap_runstats_write__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58562,7 +58764,7 @@ SWIGINTERN PyObject *_wrap_runstats_flush(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58641,7 +58843,7 @@ SWIGINTERN PyObject *_wrap_runstats_write_result__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58712,7 +58914,7 @@ SWIGINTERN PyObject *_wrap_runstats_write_result__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58767,7 +58969,7 @@ SWIGINTERN PyObject *_wrap_runstats_write_result__SWIG_2(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58879,7 +59081,7 @@ SWIGINTERN PyObject *_wrap_runstats___repr__(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58917,7 +59119,7 @@ SWIGINTERN PyObject *_wrap_runstats_dictionary(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58957,7 +59159,7 @@ SWIGINTERN PyObject *_wrap_runstats_read_from_dictionary(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -58994,7 +59196,7 @@ SWIGINTERN PyObject *_wrap_delete_runstats(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59062,7 +59264,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_casenum_from_id(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59123,7 +59325,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_caseid_from_num(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59173,7 +59375,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_size(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59223,7 +59425,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_caseids(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59284,7 +59486,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_contains(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59333,7 +59535,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_clear(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59394,7 +59596,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_add_caseid(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59457,7 +59659,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_add_caseids(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59488,7 +59690,7 @@ SWIGINTERN PyObject *_wrap_caseindex_t_create(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59540,7 +59742,7 @@ SWIGINTERN PyObject *_wrap_delete_caseindex_t(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59569,7 +59771,7 @@ SWIGINTERN PyObject *_wrap_new_caseindex_t(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59629,7 +59831,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_pointer(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59688,7 +59890,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59738,7 +59940,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_create__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59849,7 +60051,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_copy(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59902,7 +60104,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_refcount(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -59965,7 +60167,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_set_variables(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60017,7 +60219,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_get_variables(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60075,7 +60277,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_tearDown__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60124,7 +60326,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_tearDown__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60225,7 +60427,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60282,7 +60484,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60397,7 +60599,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60454,7 +60656,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60555,7 +60757,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60596,7 +60798,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60687,7 +60889,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60728,7 +60930,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60819,7 +61021,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60860,7 +61062,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -60989,7 +61191,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_value__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61061,7 +61263,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_value__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61210,7 +61412,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_boolvalue__SWIG_0(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61282,7 +61484,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_boolvalue__SWIG_1(PyObject *SWIGUNUSEDPA
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61398,7 +61600,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_nCases(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61448,7 +61650,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_nAlts(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61498,7 +61700,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_nVars(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61548,7 +61750,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_getArray(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61598,7 +61800,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t___str__(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61648,7 +61850,7 @@ SWIGINTERN PyObject *_wrap_datamatrix_t___repr__(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61677,7 +61879,7 @@ SWIGINTERN PyObject *_wrap_new_datamatrix_t(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61729,7 +61931,7 @@ SWIGINTERN PyObject *_wrap_delete_datamatrix_t(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61746,6 +61948,3036 @@ SWIGINTERN PyObject *datamatrix_t_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   SWIG_TypeNewClientData(SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap_datamatrix_req_nVars(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req_nVars",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req_nVars" "', argument " "1"" of type '" "elm::datamatrix_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    try {
+      result = ((elm::datamatrix_req const *)arg1)->nVars();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req_nAlts(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req_nAlts",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req_nAlts" "', argument " "1"" of type '" "elm::datamatrix_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    try {
+      result = ((elm::datamatrix_req const *)arg1)->nAlts();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req_variables_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  etk::strvec arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req_variables_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req_variables_set" "', argument " "1"" of type '" "elm::datamatrix_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_etk__strvec,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "datamatrix_req_variables_set" "', argument " "2"" of type '" "etk::strvec""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "datamatrix_req_variables_set" "', argument " "2"" of type '" "etk::strvec""'");
+    } else {
+      etk::strvec * temp = reinterpret_cast< etk::strvec * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  if (arg1) (arg1)->variables = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req_variables_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  etk::strvec result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req_variables_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req_variables_get" "', argument " "1"" of type '" "elm::datamatrix_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  result =  ((arg1)->variables);
+  resultobj = SWIG_NewPointerObj((new etk::strvec(static_cast< const etk::strvec& >(result))), SWIGTYPE_p_etk__strvec, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req___str__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req___str__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req___str__" "', argument " "1"" of type '" "elm::datamatrix_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    try {
+      result = ((elm::datamatrix_req const *)arg1)->__str__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req___repr__" "', argument " "1"" of type '" "elm::datamatrix_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    try {
+      result = ((elm::datamatrix_req const *)arg1)->__repr__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_datamatrix_req_satisfied(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  elm::datamatrix_t *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  std::shared_ptr< elm::datamatrix_t const > tempshared2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"datamatrix_req_satisfied",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "datamatrix_req_satisfied" "', argument " "1"" of type '" "elm::datamatrix_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "datamatrix_req_satisfied" "', argument " "2"" of type '" "elm::datamatrix_t const &""'"); 
+    }
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "datamatrix_req_satisfied" "', argument " "2"" of type '" "elm::datamatrix_t const &""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared2 = *reinterpret_cast< std::shared_ptr< const elm::datamatrix_t > * >(argp2);
+      delete reinterpret_cast< std::shared_ptr< const elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
+    } else {
+      arg2 = const_cast< elm::datamatrix_t * >(reinterpret_cast< std::shared_ptr< const elm::datamatrix_t > * >(argp2)->get());
+    }
+  }
+  {
+    try {
+      result = (bool)((elm::datamatrix_req const *)arg1)->satisfied((elm::datamatrix_t const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_datamatrix_req(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_datamatrix_req",0,0)) SWIG_fail;
+  {
+    try {
+      result = (elm::datamatrix_req *)new elm::datamatrix_req();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__datamatrix_req, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_datamatrix_req(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::datamatrix_req *arg1 = (elm::datamatrix_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_datamatrix_req",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__datamatrix_req, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_datamatrix_req" "', argument " "1"" of type '" "elm::datamatrix_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::datamatrix_req * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *datamatrix_req_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__datamatrix_req, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_Needs__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::less< std::string > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_Needs",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__lessT_std__string_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Needs" "', argument " "1"" of type '" "std::less< std::string > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Needs" "', argument " "1"" of type '" "std::less< std::string > const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::less< std::string > * >(argp1);
+  {
+    try {
+      result = (std::map< std::string,elm::darray_req > *)new std::map< std::string,elm::darray_req >((std::less< std::string > const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_iterator" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___nonzero__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___nonzero__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (bool)std_map_Sl_std_string_Sc_elm_darray_req_Sg____nonzero__((std::map< std::string,elm::darray_req > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___bool__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___bool__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (bool)std_map_Sl_std_string_Sc_elm_darray_req_Sg____bool__((std::map< std::string,elm::darray_req > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___len__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___len__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = std_map_Sl_std_string_Sc_elm_darray_req_Sg____len__((std::map< std::string,elm::darray_req > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::mapped_type *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___getitem__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs___getitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___getitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      try {
+        result = (std::map< std::string,elm::darray_req >::mapped_type *) &std_map_Sl_std_string_Sc_elm_darray_req_Sg____getitem__(arg1,(std::string const &)*arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___delitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___delitem__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs___delitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___delitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      try {
+        std_map_Sl_std_string_Sc_elm_darray_req_Sg____delitem__(arg1,(std::string const &)*arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_has_key(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_has_key",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_has_key" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_has_key" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_has_key" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (bool)std_map_Sl_std_string_Sc_elm_darray_req_Sg__has_key((std::map< std::string,elm::darray_req > const *)arg1,(std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_keys(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_keys",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_keys" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__keys(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_values(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_values",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_values" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__values(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_items(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_items",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_items" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__items(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___contains__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___contains__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___contains__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs___contains__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___contains__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (bool)std_map_Sl_std_string_Sc_elm_darray_req_Sg____contains__(arg1,(std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_key_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_key_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_key_iterator" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__key_iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_value_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_value_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_value_iterator" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__value_iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___setitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___setitem__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs___setitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___setitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      std_map_Sl_std_string_Sc_elm_darray_req_Sg____setitem____SWIG_0(arg1,(std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  std::map< std::string,elm::darray_req >::mapped_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs___setitem__" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs___setitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___setitem__" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__darray_req,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Needs___setitem__" "', argument " "3"" of type '" "std::map< std::string,elm::darray_req >::mapped_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs___setitem__" "', argument " "3"" of type '" "std::map< std::string,elm::darray_req >::mapped_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::map< std::string,elm::darray_req >::mapped_type * >(argp3);
+  {
+    try {
+      try {
+        std_map_Sl_std_string_Sc_elm_darray_req_Sg____setitem____SWIG_1(arg1,(std::string const &)*arg2,(elm::darray_req const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Needs___setitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__darray_req, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Needs___setitem____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Needs___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< std::string,elm::darray_req >::__setitem__(std::map< std::string,elm::darray_req >::key_type const &)\n"
+    "    std::map< std::string,elm::darray_req >::__setitem__(std::map< std::string,elm::darray_req >::key_type const &,std::map< std::string,elm::darray_req >::mapped_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_asdict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_asdict",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_asdict" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_std_string_Sc_elm_darray_req_Sg__asdict(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Needs__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_Needs",0,0)) SWIG_fail;
+  {
+    try {
+      result = (std::map< std::string,elm::darray_req > *)new std::map< std::string,elm::darray_req >();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Needs__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_Needs",1,1,&obj0)) SWIG_fail;
+  {
+    std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > *ptr = (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Needs" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Needs" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try {
+      result = (std::map< std::string,elm::darray_req > *)new std::map< std::string,elm::darray_req >((std::map< std::string,elm::darray_req > const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_Needs(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_Needs__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__lessT_std__string_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Needs__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Needs__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Needs'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< std::string,elm::darray_req >::map(std::less< std::string > const &)\n"
+    "    std::map< std::string,elm::darray_req >::map()\n"
+    "    std::map< std::string,elm::darray_req >::map(std::map< std::string,elm::darray_req > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_empty",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_empty" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (bool)((std::map< std::string,elm::darray_req > const *)arg1)->empty();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_size",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_size" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = ((std::map< std::string,elm::darray_req > const *)arg1)->size();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_clear",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_clear" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      (arg1)->clear();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_swap",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_swap" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_swap" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_swap" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp2);
+  {
+    try {
+      (arg1)->swap(*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< std::pair< std::string const,elm::darray_req > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_get_allocator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_get_allocator" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = ((std::map< std::string,elm::darray_req > const *)arg1)->get_allocator();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::map< std::string,elm::darray_req >::allocator_type(static_cast< const std::map< std::string,elm::darray_req >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_begin",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_begin" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (arg1)->begin();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_end",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_end" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (arg1)->end();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::reverse_iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_rbegin",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_rbegin" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (arg1)->rbegin();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req >::reverse_iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_rend",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_rend" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      result = (arg1)->rend();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_erase",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_erase" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (arg1)->erase((std::map< std::string,elm::darray_req >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_count(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_count",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_count" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_count" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_count" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = ((std::map< std::string,elm::darray_req > const *)arg1)->count((std::map< std::string,elm::darray_req >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::iterator arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_erase",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_erase" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+    }
+  }
+  {
+    try {
+      std_map_Sl_std_string_Sc_elm_darray_req_Sg__erase__SWIG_1(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_erase__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::iterator arg2 ;
+  std::map< std::string,elm::darray_req >::iterator arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_erase",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_erase" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "3"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "Needs_erase" "', argument " "3"" of type '" "std::map< std::string,elm::darray_req >::iterator""'");
+    }
+  }
+  {
+    try {
+      std_map_Sl_std_string_Sc_elm_darray_req_Sg__erase__SWIG_2(arg1,arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap_Needs_erase__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Needs_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< std::string,elm::darray_req >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap_Needs_erase__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Needs_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< std::string,elm::darray_req >::erase(std::map< std::string,elm::darray_req >::key_type const &)\n"
+    "    std::map< std::string,elm::darray_req >::erase(std::map< std::string,elm::darray_req >::iterator)\n"
+    "    std::map< std::string,elm::darray_req >::erase(std::map< std::string,elm::darray_req >::iterator,std::map< std::string,elm::darray_req >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_find(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_find",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_find" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_find" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_find" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (arg1)->find((std::map< std::string,elm::darray_req >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_lower_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_lower_bound",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_lower_bound" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_lower_bound" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_lower_bound" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (arg1)->lower_bound((std::map< std::string,elm::darray_req >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Needs_upper_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  std::map< std::string,elm::darray_req >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< std::string,elm::darray_req >::iterator result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Needs_upper_bound",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Needs_upper_bound" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Needs_upper_bound" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Needs_upper_bound" "', argument " "2"" of type '" "std::map< std::string,elm::darray_req >::key_type const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (arg1)->upper_bound((std::map< std::string,elm::darray_req >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< std::string,elm::darray_req >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< std::string,elm::darray_req > *arg1 = (std::map< std::string,elm::darray_req > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_Needs",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Needs" "', argument " "1"" of type '" "std::map< std::string,elm::darray_req > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< std::string,elm::darray_req > * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *Needs_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_darray_req_dtype_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_dtype_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_dtype_set" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    if (PyLong_Check(obj1)) {
+      arg2 = PyLong_AsLong(obj1);
+    } else {
+      if (PyObject_HasAttrString(obj1, "num")) {
+        PyObject* num = PyObject_GetAttrString(obj1, "num");
+        arg2 = PyLong_AsLong(num);
+        Py_CLEAR(num);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a type number or a numpy.dtype"));
+        SWIG_fail;
+      }
+    }
+  }
+  if (arg1) (arg1)->dtype = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_dtype_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_dtype_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_dtype_get" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  result = (int) ((arg1)->dtype);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_dimty_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_dimty_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_dimty_set" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "darray_req_dimty_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->dimty = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_dimty_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_dimty_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_dimty_get" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  result = (int) ((arg1)->dimty);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_n_alts_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_n_alts_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_n_alts_set" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "darray_req_n_alts_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->n_alts = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_n_alts_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_n_alts_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_n_alts_get" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  result = (int) ((arg1)->n_alts);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_contig_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_contig_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_contig_set" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "darray_req_contig_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->contig = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_contig_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_contig_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_contig_get" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  result = (bool) ((arg1)->contig);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_darray_req__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  elm::darray_req *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_darray_req",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_darray_req" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    if (PyLong_Check(obj1)) {
+      arg2 = PyLong_AsLong(obj1);
+    } else {
+      if (PyObject_HasAttrString(obj1, "num")) {
+        PyObject* num = PyObject_GetAttrString(obj1, "num");
+        arg2 = PyLong_AsLong(num);
+        Py_CLEAR(num);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a type number or a numpy.dtype"));
+        SWIG_fail;
+      }
+    }
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_darray_req" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    try {
+      result = (elm::darray_req *)new elm::darray_req(arg1,arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__darray_req, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_darray_req__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::darray_req *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_darray_req",2,2,&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_darray_req" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    if (PyLong_Check(obj1)) {
+      arg2 = PyLong_AsLong(obj1);
+    } else {
+      if (PyObject_HasAttrString(obj1, "num")) {
+        PyObject* num = PyObject_GetAttrString(obj1, "num");
+        arg2 = PyLong_AsLong(num);
+        Py_CLEAR(num);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a type number or a numpy.dtype"));
+        SWIG_fail;
+      }
+    }
+  }
+  {
+    try {
+      result = (elm::darray_req *)new elm::darray_req(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__darray_req, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_darray_req__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::darray_req *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_darray_req",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_elm__darray_req,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_darray_req" "', argument " "1"" of type '" "elm::darray_req const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_darray_req" "', argument " "1"" of type '" "elm::darray_req const &""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = (elm::darray_req *)new elm::darray_req((elm::darray_req const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__darray_req, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_darray_req__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_darray_req",0,0)) SWIG_fail;
+  {
+    try {
+      result = (elm::darray_req *)new elm::darray_req();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__darray_req, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_darray_req(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_darray_req__SWIG_3(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_elm__darray_req, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_darray_req__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        if (PyLong_Check(argv[1])) {
+          _v = 1;
+        } else {
+          if (PyObject_HasAttrString(argv[1], "num")) {
+            _v = 1;
+          } else {
+            _v = 0;
+          }
+        }
+      }
+      if (_v) {
+        return _wrap_new_darray_req__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        if (PyLong_Check(argv[1])) {
+          _v = 1;
+        } else {
+          if (PyObject_HasAttrString(argv[1], "num")) {
+            _v = 1;
+          } else {
+            _v = 0;
+          }
+        }
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_darray_req__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_darray_req'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::darray_req::darray_req(int,int,int)\n"
+    "    elm::darray_req::darray_req(int,int)\n"
+    "    elm::darray_req::darray_req(elm::darray_req const &)\n"
+    "    elm::darray_req::darray_req()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_darray_req(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_darray_req",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_darray_req" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_nVars(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_nVars",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_nVars" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = ((elm::darray_req const *)arg1)->nVars();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_nAlts(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_nAlts",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_nAlts" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = ((elm::darray_req const *)arg1)->nAlts();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_get_variables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_get_variables",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_get_variables" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = (std::vector< std::string,std::allocator< std::string > > *) &((elm::darray_req const *)arg1)->get_variables();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::vector<std::string,std::allocator< std::string > > >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_set_variables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_set_variables",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_set_variables" "', argument " "1"" of type '" "elm::darray_req *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    std::vector<std::string,std::allocator< std::string > > *ptr = (std::vector<std::string,std::allocator< std::string > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "darray_req_set_variables" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "darray_req_set_variables" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      (arg1)->set_variables((std::vector< std::string,std::allocator< std::string > > const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req___str__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req___str__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req___str__" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = ((elm::darray_req const *)arg1)->__str__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req___repr__" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    try {
+      result = ((elm::darray_req const *)arg1)->__repr__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_darray_req_satisfied_by(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray_req *arg1 = (elm::darray_req *) 0 ;
+  elm::darray *arg2 = (elm::darray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< elm::darray const > temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"darray_req_satisfied_by",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "darray_req_satisfied_by" "', argument " "1"" of type '" "elm::darray_req const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::darray_req * >(argp1);
+  {
+    if (PyArray_Check(obj1)) {
+      if (  (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)
+        &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL  )
+        &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_INT64 )
+        ) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+        SWIG_fail;
+      }
+      try {
+        temp2 = boosted::make_shared<const elm::darray>(obj1);
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg2 = const_cast<elm::darray*>( &(*temp2) );
+    } else {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+      SWIG_fail;
+    }
+  }
+  {
+    try {
+      result = (bool)((elm::darray_req const *)arg1)->satisfied_by((elm::darray const *)arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *darray_req_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__darray_req, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_check_darray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::darray *arg1 = (elm::darray *) 0 ;
+  boosted::shared_ptr< elm::darray const > temp1 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"check_darray",1,1,&obj0)) SWIG_fail;
+  {
+    if (PyArray_Check(obj0)) {
+      if (  (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)
+        &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL  )
+        &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_INT64 )
+        ) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+        SWIG_fail;
+      }
+      try {
+        temp1 = boosted::make_shared<const elm::darray>(obj0);
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg1 = const_cast<elm::darray*>( &(*temp1) );
+    } else {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+      SWIG_fail;
+    }
+  }
+  {
+    try {
+      result = elm::check_darray((elm::darray const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_new_ParameterList__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -61765,7 +64997,7 @@ SWIGINTERN PyObject *_wrap_new_ParameterList__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -61806,7 +65038,7 @@ SWIGINTERN PyObject *_wrap_new_ParameterList__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62014,7 +65246,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_parameter(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62068,7 +65300,7 @@ SWIGINTERN PyObject *_wrap_ParameterList___getitem____SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62119,7 +65351,7 @@ SWIGINTERN PyObject *_wrap_ParameterList___getitem____SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62230,7 +65462,7 @@ SWIGINTERN PyObject *_wrap_ParameterList___setitem__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62283,7 +65515,7 @@ SWIGINTERN PyObject *_wrap_ParameterList___delitem__(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62337,7 +65569,7 @@ SWIGINTERN PyObject *_wrap_ParameterList___contains__(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62377,7 +65609,7 @@ SWIGINTERN PyObject *_wrap_ParameterList__len(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62415,7 +65647,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_values__SWIG_0(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62455,7 +65687,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_values__SWIG_1(PyObject *SWIGUNUSEDPARM
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62534,7 +65766,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_zeros(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62572,7 +65804,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_constraints(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62609,7 +65841,7 @@ SWIGINTERN PyObject *_wrap_ParameterList_freshen(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -62646,7 +65878,7 @@ SWIGINTERN PyObject *_wrap_delete_ParameterList(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63258,7 +66490,7 @@ SWIGINTERN PyObject *_wrap_Parameter_getCovariance(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63298,7 +66530,7 @@ SWIGINTERN PyObject *_wrap_Parameter_setCovariance(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63336,7 +66568,7 @@ SWIGINTERN PyObject *_wrap_Parameter_getRobustCovariance(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63376,7 +66608,7 @@ SWIGINTERN PyObject *_wrap_Parameter_setRobustCovariance(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63414,7 +66646,7 @@ SWIGINTERN PyObject *_wrap_Parameter_t_stat(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63461,7 +66693,7 @@ SWIGINTERN PyObject *_wrap_Parameter_representation__SWIG_0(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63499,7 +66731,7 @@ SWIGINTERN PyObject *_wrap_Parameter_representation__SWIG_1(PyObject *SWIGUNUSED
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63680,7 +66912,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63816,7 +67048,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -63949,7 +67181,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64071,7 +67303,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64182,7 +67414,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64282,7 +67514,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_5(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64371,7 +67603,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_6(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64449,7 +67681,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_7(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64516,7 +67748,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_8(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64572,7 +67804,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_9(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64617,7 +67849,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_10(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64648,7 +67880,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_11(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -64689,7 +67921,7 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_12(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65177,7 +68409,7 @@ SWIGINTERN PyObject *_wrap_delete_Parameter(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65308,7 +68540,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65436,7 +68668,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65561,7 +68793,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65675,7 +68907,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65778,7 +69010,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65870,7 +69102,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -65951,7 +69183,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66021,7 +69253,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_7(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66080,7 +69312,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_8(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66128,7 +69360,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_9(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66165,7 +69397,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_10(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66659,7 +69891,7 @@ SWIGINTERN PyObject *_wrap_Parameter___str____SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66697,7 +69929,7 @@ SWIGINTERN PyObject *_wrap_Parameter___str____SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66785,7 +70017,7 @@ SWIGINTERN PyObject *_wrap_Parameter___repr____SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66823,7 +70055,7 @@ SWIGINTERN PyObject *_wrap_Parameter___repr____SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -66913,7 +70145,7 @@ SWIGINTERN PyObject *_wrap_algorithm_name(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67157,7 +70389,7 @@ SWIGINTERN PyObject *_wrap_new_sherpa_result(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67194,7 +70426,7 @@ SWIGINTERN PyObject *_wrap_delete_sherpa_result(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67239,7 +70471,7 @@ SWIGINTERN PyObject *_wrap_sherpa_LL(PyObject *SWIGUNUSEDPARM(self), PyObject *a
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67329,7 +70561,7 @@ SWIGINTERN PyObject *_wrap_sherpa_covariance_matrix(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67369,7 +70601,7 @@ SWIGINTERN PyObject *_wrap_sherpa_robust_covariance_matrix(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67400,7 +70632,7 @@ SWIGINTERN PyObject *_wrap_new_sherpa__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67441,7 +70673,7 @@ SWIGINTERN PyObject *_wrap_new_sherpa__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67509,7 +70741,7 @@ SWIGINTERN PyObject *_wrap_delete_sherpa(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67554,7 +70786,7 @@ SWIGINTERN PyObject *_wrap_Model2_CoefUtilityCA(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -67592,11 +70824,49 @@ SWIGINTERN PyObject *_wrap_Model2_CoefUtilityCO(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
   resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_needs",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_needs" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->needs();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > >(result));
   return resultobj;
 fail:
   return NULL;
@@ -68343,7 +71613,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_0(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68425,7 +71695,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_1(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68486,7 +71756,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_2(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68524,8 +71794,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -68537,8 +71807,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -68550,8 +71820,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
   }
   {
     if (PyArray_Check(obj3)) {
-      if (PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp4 = boosted::make_shared<etk::ndarray>(obj3);
@@ -68574,7 +71844,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68609,8 +71879,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -68622,8 +71892,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -68646,7 +71916,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68678,8 +71948,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_5(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -68702,7 +71972,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_5(PyObject *SWIGUNUSEDPARM(
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -68956,8 +72226,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_probability(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -68980,7 +72250,63 @@ SWIGINTERN PyObject *_wrap_Model2_calc_probability(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_logsums(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  etk::ndarray *arg2 = (etk::ndarray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::ndarray > temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_logsums",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (PyArray_Check(obj1)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp2 = boosted::make_shared<etk::ndarray>(obj1);
+      arg2 = &(*temp2);
+    } else {
+      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+      arg2 = &(*temp2);		
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_logsums(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69083,7 +72409,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_0(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69165,7 +72491,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_1(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69226,7 +72552,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_2(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69264,8 +72590,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -69277,8 +72603,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -69290,8 +72616,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
   }
   {
     if (PyArray_Check(obj3)) {
-      if (PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp4 = boosted::make_shared<etk::ndarray>(obj3);
@@ -69314,7 +72640,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69349,8 +72675,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWI
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -69362,8 +72688,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWI
   }
   {
     if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp3 = boosted::make_shared<etk::ndarray>(obj2);
@@ -69386,7 +72712,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69418,8 +72744,8 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_5(PyObject *SWI
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -69442,7 +72768,7 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_5(PyObject *SWI
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69677,6 +73003,690 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
+  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
+  elm::datamatrix_t *arg4 = (elm::datamatrix_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared4 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
+    } else {
+      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
+    }
+  }
+  {
+    int newmem = 0;
+    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_logsums" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
+    } else {
+      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
+    }
+  }
+  {
+    int newmem = 0;
+    res4 = SWIG_ConvertPtrAndOwn(obj3, &argp4, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Model2_calc_utility_logsums" "', argument " "4"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared4 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
+      arg4 = const_cast< elm::datamatrix_t * >(tempshared4.get());
+    } else {
+      smartarg4 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
+      arg4 = const_cast< elm::datamatrix_t * >((smartarg4 ? smartarg4->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3,arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
+  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
+    } else {
+      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
+    }
+  }
+  {
+    int newmem = 0;
+    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_logsums" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
+    } else {
+      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
+      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
+  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    int newmem = 0;
+    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
+    } else {
+      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
+      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  etk::ndarray *arg2 = (etk::ndarray *) 0 ;
+  etk::ndarray *arg3 = (etk::ndarray *) 0 ;
+  etk::ndarray *arg4 = (etk::ndarray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::ndarray > temp2 ;
+  boosted::shared_ptr< etk::ndarray > temp3 ;
+  boosted::shared_ptr< etk::ndarray > temp4 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (PyArray_Check(obj1)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp2 = boosted::make_shared<etk::ndarray>(obj1);
+      arg2 = &(*temp2);
+    } else {
+      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+      arg2 = &(*temp2);		
+    }
+  }
+  {
+    if (PyArray_Check(obj2)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp3 = boosted::make_shared<etk::ndarray>(obj2);
+      arg3 = &(*temp3);
+    } else {
+      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+      arg3 = &(*temp3);		
+    }
+  }
+  {
+    if (PyArray_Check(obj3)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp4 = boosted::make_shared<etk::ndarray>(obj3);
+      arg4 = &(*temp4);
+    } else {
+      temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
+      arg4 = &(*temp4);		
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3,arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  etk::ndarray *arg2 = (etk::ndarray *) 0 ;
+  etk::ndarray *arg3 = (etk::ndarray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::ndarray > temp2 ;
+  boosted::shared_ptr< etk::ndarray > temp3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (PyArray_Check(obj1)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp2 = boosted::make_shared<etk::ndarray>(obj1);
+      arg2 = &(*temp2);
+    } else {
+      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+      arg2 = &(*temp2);		
+    }
+  }
+  {
+    if (PyArray_Check(obj2)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp3 = boosted::make_shared<etk::ndarray>(obj2);
+      arg3 = &(*temp3);
+    } else {
+      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+      arg3 = &(*temp3);		
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  etk::ndarray *arg2 = (etk::ndarray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::ndarray > temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (PyArray_Check(obj1)) {
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+        SWIG_fail;
+      }
+      temp2 = boosted::make_shared<etk::ndarray>(obj1);
+      arg2 = &(*temp2);
+    } else {
+      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+      arg2 = &(*temp2);		
+    }
+  }
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = (*(&(result)))->get_object();
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Model2_calc_utility_logsums__SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            _v = 0;
+          }
+        }
+      }
+      if (_v) {
+        return _wrap_Model2_calc_utility_logsums__SWIG_5(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Model2_calc_utility_logsums__SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            _v = 0;
+          }
+        }
+      }
+      if (_v) {
+        {
+          if (PyArray_Check(argv[2])) {
+            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
+          } else {
+            if (PySequence_Check(argv[2])) {
+              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
+                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
+                PyObject* floattest = PyNumber_Float(seqitem);
+                if (!floattest) _v = 0; else _v = 1;
+                Py_CLEAR(floattest);
+                Py_CLEAR(seqitem);
+                if (_v == 0) break;
+              }
+            } else {
+              _v = 0;
+            }
+          }
+        }
+        if (_v) {
+          return _wrap_Model2_calc_utility_logsums__SWIG_4(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Model2_calc_utility_logsums__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            _v = 0;
+          }
+        }
+      }
+      if (_v) {
+        {
+          if (PyArray_Check(argv[2])) {
+            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
+          } else {
+            if (PySequence_Check(argv[2])) {
+              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
+                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
+                PyObject* floattest = PyNumber_Float(seqitem);
+                if (!floattest) _v = 0; else _v = 1;
+                Py_CLEAR(floattest);
+                Py_CLEAR(seqitem);
+                if (_v == 0) break;
+              }
+            } else {
+              _v = 0;
+            }
+          }
+        }
+        if (_v) {
+          {
+            if (PyArray_Check(argv[3])) {
+              _v = ((PyArray_TYPE((PyArrayObject*)argv[3])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[3])== NPY_BOOL)) ? 1 : 0;
+            } else {
+              if (PySequence_Check(argv[3])) {
+                for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[3]); seqi++) {
+                  PyObject* seqitem = PySequence_GetItem(argv[3], seqi);
+                  PyObject* floattest = PyNumber_Float(seqitem);
+                  if (!floattest) _v = 0; else _v = 1;
+                  Py_CLEAR(floattest);
+                  Py_CLEAR(seqitem);
+                  if (_v == 0) break;
+                }
+              } else {
+                _v = 0;
+              }
+            }
+          }
+          if (_v) {
+            return _wrap_Model2_calc_utility_logsums__SWIG_3(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_calc_utility_logsums'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *,elm::datamatrix_t *,elm::datamatrix_t *) const\n"
+    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *,elm::datamatrix_t *) const\n"
+    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *) const\n"
+    "    elm::Model2::calc_utility_logsums(etk::ndarray *,etk::ndarray *,etk::ndarray *) const\n"
+    "    elm::Model2::calc_utility_logsums(etk::ndarray *,etk::ndarray *) const\n"
+    "    elm::Model2::calc_utility_logsums(etk::ndarray *) const\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -69696,8 +73706,8 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
         SWIG_fail;
       }
       temp2 = boosted::make_shared<etk::ndarray>(obj1);
@@ -69720,7 +73730,7 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69760,7 +73770,7 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69849,7 +73859,7 @@ SWIGINTERN PyObject *_wrap_Model2_hessian_matrix_set(PyObject *SWIGUNUSEDPARM(se
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
       SWIG_fail;
     }
     temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
@@ -69914,7 +73924,7 @@ SWIGINTERN PyObject *_wrap_Model2_parameter_values__SWIG_0(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -69987,7 +73997,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityca__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70051,7 +74061,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityca__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70104,7 +74114,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityca__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70267,7 +74277,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70347,7 +74357,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70416,7 +74426,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70504,7 +74514,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70579,7 +74589,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -70643,7 +74653,7 @@ SWIGINTERN PyObject *_wrap_Model2_utilityco__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71103,7 +75113,7 @@ SWIGINTERN PyObject *_wrap_Model2_Input_Graph(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71154,7 +75164,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71193,7 +75203,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71239,7 +75249,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71285,7 +75295,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71501,7 +75511,7 @@ SWIGINTERN PyObject *_wrap_Model2_tally_chosen(PyObject *SWIGUNUSEDPARM(self), P
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71541,7 +75551,7 @@ SWIGINTERN PyObject *_wrap_Model2_tally_avail(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71581,7 +75591,7 @@ SWIGINTERN PyObject *_wrap_Model2_estimate__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71630,7 +75640,7 @@ SWIGINTERN PyObject *_wrap_Model2_estimate__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71719,7 +75729,7 @@ SWIGINTERN PyObject *_wrap_Model2_estimate_tight__SWIG_0(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71757,7 +75767,7 @@ SWIGINTERN PyObject *_wrap_Model2_estimate_tight__SWIG_1(PyObject *SWIGUNUSEDPAR
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71839,7 +75849,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_parameter(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71877,7 +75887,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_nest(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71915,7 +75925,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_link(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71953,7 +75963,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_utilityca(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -71991,7 +76001,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_utilityco(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72029,7 +76039,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_samplingbiasca(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72067,7 +76077,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_samplingbiasco(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72105,7 +76115,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_logger(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72143,7 +76153,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_estimation_statistics(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72181,7 +76191,7 @@ SWIGINTERN PyObject *_wrap_Model2__get_estimation_run_statistics(PyObject *SWIGU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72203,6 +76213,8 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_statistics(PyObject *SWIGUNUSE
   double *arg4 = (double *) &arg4_defvalue ;
   double arg5_defvalue = NAN ;
   double *arg5 = (double *) &arg5_defvalue ;
+  double arg6_defvalue = NAN ;
+  double *arg6 = (double *) &arg6_defvalue ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double temp2 ;
@@ -72217,16 +76229,20 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_statistics(PyObject *SWIGUNUSE
   double temp5 ;
   double val5 ;
   int ecode5 = 0 ;
+  double temp6 ;
+  double val6 ;
+  int ecode6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "log_like",(char *) "log_like_null",(char *) "log_like_constants",(char *) "log_like_best", NULL 
+    (char *) "self",(char *) "log_like",(char *) "log_like_null",(char *) "log_like_nil",(char *) "log_like_constants",(char *) "log_like_best", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOO:Model2__set_estimation_statistics",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:Model2__set_estimation_statistics",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2__set_estimation_statistics" "', argument " "1"" of type '" "elm::Model2 *""'"); 
@@ -72264,9 +76280,17 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_statistics(PyObject *SWIGUNUSE
     temp5 = static_cast< double >(val5);
     arg5 = &temp5;
   }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_double(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "Model2__set_estimation_statistics" "', argument " "6"" of type '" "double""'");
+    } 
+    temp6 = static_cast< double >(val6);
+    arg6 = &temp6;
+  }
   {
     try {
-      (arg1)->_set_estimation_statistics((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5);
+      (arg1)->_set_estimation_statistics((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -72277,7 +76301,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_statistics(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72397,7 +76421,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_0(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72507,7 +76531,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_1(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72601,7 +76625,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_2(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72682,7 +76706,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_3(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72752,7 +76776,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_4(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72811,7 +76835,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_5(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72859,7 +76883,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_6(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -72896,7 +76920,7 @@ SWIGINTERN PyObject *_wrap_Model2__set_estimation_run_statistics__SWIG_7(PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73216,7 +77240,7 @@ SWIGINTERN PyObject *_wrap_Model2_prints__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73265,7 +77289,7 @@ SWIGINTERN PyObject *_wrap_Model2_prints__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73303,7 +77327,7 @@ SWIGINTERN PyObject *_wrap_Model2_prints__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73429,7 +77453,7 @@ SWIGINTERN PyObject *_wrap_Model2_full_report__SWIG_0(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73478,7 +77502,7 @@ SWIGINTERN PyObject *_wrap_Model2_full_report__SWIG_1(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73516,7 +77540,7 @@ SWIGINTERN PyObject *_wrap_Model2_full_report__SWIG_2(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73620,7 +77644,7 @@ SWIGINTERN PyObject *_wrap_Model2___repr__(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73649,7 +77673,7 @@ SWIGINTERN PyObject *_wrap_new_Model2__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73690,7 +77714,7 @@ SWIGINTERN PyObject *_wrap_new_Model2__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73759,7 +77783,7 @@ SWIGINTERN PyObject *_wrap_delete_Model2(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73808,7 +77832,7 @@ SWIGINTERN PyObject *_wrap_Model2_change_data_pointer(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73845,7 +77869,7 @@ SWIGINTERN PyObject *_wrap_Model2_delete_data_pointer(PyObject *SWIGUNUSEDPARM(s
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73891,7 +77915,7 @@ SWIGINTERN PyObject *_wrap_Model2_setUp__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -73928,7 +77952,7 @@ SWIGINTERN PyObject *_wrap_Model2_setUp__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74009,7 +78033,7 @@ SWIGINTERN PyObject *_wrap_Model2_tearDown(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74106,7 +78130,7 @@ SWIGINTERN PyObject *_wrap_Model2_save_buffer(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74203,7 +78227,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_probability__SWIG_0(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74297,7 +78321,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_probability__SWIG_1(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74382,7 +78406,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_probability__SWIG_2(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74453,7 +78477,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_probability__SWIG_3(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74508,7 +78532,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_probability__SWIG_4(PyObject *SWIGUNU
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74760,7 +78784,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_0(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74877,7 +78901,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_1(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -74980,7 +79004,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_2(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75067,7 +79091,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_3(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75138,7 +79162,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_4(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75193,7 +79217,7 @@ SWIGINTERN PyObject *_wrap_Model2_simulate_choices__SWIG_5(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75408,7 +79432,7 @@ SWIGINTERN PyObject *_wrap_Model2_d_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75457,7 +79481,7 @@ SWIGINTERN PyObject *_wrap_Model2_negative_d_loglike__SWIG_0(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75495,7 +79519,7 @@ SWIGINTERN PyObject *_wrap_Model2_Utility(PyObject *SWIGUNUSEDPARM(self), PyObje
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75535,7 +79559,7 @@ SWIGINTERN PyObject *_wrap_Model2_Probability(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75575,7 +79599,7 @@ SWIGINTERN PyObject *_wrap_Model2_Cond_Prob(PyObject *SWIGUNUSEDPARM(self), PyOb
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75615,7 +79639,7 @@ SWIGINTERN PyObject *_wrap_Model2_Allocation(PyObject *SWIGUNUSEDPARM(self), PyO
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75655,7 +79679,7 @@ SWIGINTERN PyObject *_wrap_Model2_GammaZ(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75695,7 +79719,7 @@ SWIGINTERN PyObject *_wrap_Model2_CaseLogLike(PyObject *SWIGUNUSEDPARM(self), Py
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75735,7 +79759,7 @@ SWIGINTERN PyObject *_wrap_Model2_SamplingWeight(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75775,7 +79799,7 @@ SWIGINTERN PyObject *_wrap_Model2_AdjProbability(PyObject *SWIGUNUSEDPARM(self),
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75815,7 +79839,7 @@ SWIGINTERN PyObject *_wrap_Model2_nAlts(PyObject *SWIGUNUSEDPARM(self), PyObject
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75853,7 +79877,7 @@ SWIGINTERN PyObject *_wrap_Model2_nCases(PyObject *SWIGUNUSEDPARM(self), PyObjec
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75891,7 +79915,7 @@ SWIGINTERN PyObject *_wrap_Model2_alternative_names(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75929,7 +79953,7 @@ SWIGINTERN PyObject *_wrap_Model2_alternative_codes(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -75967,7 +79991,7 @@ SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76015,7 +80039,7 @@ SWIGINTERN PyObject *_wrap_Model2_parameter_values__SWIG_1(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76106,7 +80130,7 @@ SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76186,7 +80210,7 @@ SWIGINTERN PyObject *_wrap_Model2_d_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76265,7 +80289,7 @@ SWIGINTERN PyObject *_wrap_Model2_d2_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76313,7 +80337,7 @@ SWIGINTERN PyObject *_wrap_Model2_d2_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(se
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76393,7 +80417,7 @@ SWIGINTERN PyObject *_wrap_Model2_negative_loglike__SWIG_0(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76442,7 +80466,7 @@ SWIGINTERN PyObject *_wrap_Model2_negative_loglike__SWIG_1(PyObject *SWIGUNUSEDP
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76522,7 +80546,7 @@ SWIGINTERN PyObject *_wrap_Model2_negative_d_loglike__SWIG_1(PyObject *SWIGUNUSE
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -76601,7 +80625,7 @@ SWIGINTERN PyObject *_wrap_Model2_teardown(PyObject *SWIGUNUSEDPARM(self), PyObj
       PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
       return NULL;
     } catch (const std::exception& e) {
-      PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
       return NULL;
     }
   }
@@ -77034,6 +81058,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetTwoTable_set_choice_ca_column", _wrap_QuerySetTwoTable_set_choice_ca_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_avail_co_column_map", _wrap_QuerySetTwoTable_set_avail_co_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_avail_ca_column", _wrap_QuerySetTwoTable_set_avail_ca_column, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_set_avail_all", _wrap_QuerySetTwoTable_set_avail_all, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_weight_co_column", _wrap_QuerySetTwoTable_set_weight_co_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_alts_query", _wrap_QuerySetTwoTable_set_alts_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_alts_values", _wrap_QuerySetTwoTable_set_alts_values, METH_VARARGS, NULL},
@@ -77515,6 +81540,67 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_datamatrix_t", _wrap_new_datamatrix_t, METH_VARARGS, NULL},
 	 { (char *)"delete_datamatrix_t", _wrap_delete_datamatrix_t, METH_VARARGS, NULL},
 	 { (char *)"datamatrix_t_swigregister", datamatrix_t_swigregister, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_nVars", _wrap_datamatrix_req_nVars, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_nAlts", _wrap_datamatrix_req_nAlts, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_variables_set", _wrap_datamatrix_req_variables_set, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_variables_get", _wrap_datamatrix_req_variables_get, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req___str__", _wrap_datamatrix_req___str__, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req___repr__", _wrap_datamatrix_req___repr__, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_satisfied", _wrap_datamatrix_req_satisfied, METH_VARARGS, NULL},
+	 { (char *)"new_datamatrix_req", _wrap_new_datamatrix_req, METH_VARARGS, NULL},
+	 { (char *)"delete_datamatrix_req", _wrap_delete_datamatrix_req, METH_VARARGS, NULL},
+	 { (char *)"datamatrix_req_swigregister", datamatrix_req_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Needs_iterator", _wrap_Needs_iterator, METH_VARARGS, NULL},
+	 { (char *)"Needs___nonzero__", _wrap_Needs___nonzero__, METH_VARARGS, NULL},
+	 { (char *)"Needs___bool__", _wrap_Needs___bool__, METH_VARARGS, NULL},
+	 { (char *)"Needs___len__", _wrap_Needs___len__, METH_VARARGS, NULL},
+	 { (char *)"Needs___getitem__", _wrap_Needs___getitem__, METH_VARARGS, NULL},
+	 { (char *)"Needs___delitem__", _wrap_Needs___delitem__, METH_VARARGS, NULL},
+	 { (char *)"Needs_has_key", _wrap_Needs_has_key, METH_VARARGS, NULL},
+	 { (char *)"Needs_keys", _wrap_Needs_keys, METH_VARARGS, NULL},
+	 { (char *)"Needs_values", _wrap_Needs_values, METH_VARARGS, NULL},
+	 { (char *)"Needs_items", _wrap_Needs_items, METH_VARARGS, NULL},
+	 { (char *)"Needs___contains__", _wrap_Needs___contains__, METH_VARARGS, NULL},
+	 { (char *)"Needs_key_iterator", _wrap_Needs_key_iterator, METH_VARARGS, NULL},
+	 { (char *)"Needs_value_iterator", _wrap_Needs_value_iterator, METH_VARARGS, NULL},
+	 { (char *)"Needs___setitem__", _wrap_Needs___setitem__, METH_VARARGS, NULL},
+	 { (char *)"Needs_asdict", _wrap_Needs_asdict, METH_VARARGS, NULL},
+	 { (char *)"new_Needs", _wrap_new_Needs, METH_VARARGS, NULL},
+	 { (char *)"Needs_empty", _wrap_Needs_empty, METH_VARARGS, NULL},
+	 { (char *)"Needs_size", _wrap_Needs_size, METH_VARARGS, NULL},
+	 { (char *)"Needs_clear", _wrap_Needs_clear, METH_VARARGS, NULL},
+	 { (char *)"Needs_swap", _wrap_Needs_swap, METH_VARARGS, NULL},
+	 { (char *)"Needs_get_allocator", _wrap_Needs_get_allocator, METH_VARARGS, NULL},
+	 { (char *)"Needs_begin", _wrap_Needs_begin, METH_VARARGS, NULL},
+	 { (char *)"Needs_end", _wrap_Needs_end, METH_VARARGS, NULL},
+	 { (char *)"Needs_rbegin", _wrap_Needs_rbegin, METH_VARARGS, NULL},
+	 { (char *)"Needs_rend", _wrap_Needs_rend, METH_VARARGS, NULL},
+	 { (char *)"Needs_count", _wrap_Needs_count, METH_VARARGS, NULL},
+	 { (char *)"Needs_erase", _wrap_Needs_erase, METH_VARARGS, NULL},
+	 { (char *)"Needs_find", _wrap_Needs_find, METH_VARARGS, NULL},
+	 { (char *)"Needs_lower_bound", _wrap_Needs_lower_bound, METH_VARARGS, NULL},
+	 { (char *)"Needs_upper_bound", _wrap_Needs_upper_bound, METH_VARARGS, NULL},
+	 { (char *)"delete_Needs", _wrap_delete_Needs, METH_VARARGS, NULL},
+	 { (char *)"Needs_swigregister", Needs_swigregister, METH_VARARGS, NULL},
+	 { (char *)"darray_req_dtype_set", _wrap_darray_req_dtype_set, METH_VARARGS, NULL},
+	 { (char *)"darray_req_dtype_get", _wrap_darray_req_dtype_get, METH_VARARGS, NULL},
+	 { (char *)"darray_req_dimty_set", _wrap_darray_req_dimty_set, METH_VARARGS, NULL},
+	 { (char *)"darray_req_dimty_get", _wrap_darray_req_dimty_get, METH_VARARGS, NULL},
+	 { (char *)"darray_req_n_alts_set", _wrap_darray_req_n_alts_set, METH_VARARGS, NULL},
+	 { (char *)"darray_req_n_alts_get", _wrap_darray_req_n_alts_get, METH_VARARGS, NULL},
+	 { (char *)"darray_req_contig_set", _wrap_darray_req_contig_set, METH_VARARGS, NULL},
+	 { (char *)"darray_req_contig_get", _wrap_darray_req_contig_get, METH_VARARGS, NULL},
+	 { (char *)"new_darray_req", _wrap_new_darray_req, METH_VARARGS, NULL},
+	 { (char *)"delete_darray_req", _wrap_delete_darray_req, METH_VARARGS, NULL},
+	 { (char *)"darray_req_nVars", _wrap_darray_req_nVars, METH_VARARGS, NULL},
+	 { (char *)"darray_req_nAlts", _wrap_darray_req_nAlts, METH_VARARGS, NULL},
+	 { (char *)"darray_req_get_variables", _wrap_darray_req_get_variables, METH_VARARGS, NULL},
+	 { (char *)"darray_req_set_variables", _wrap_darray_req_set_variables, METH_VARARGS, NULL},
+	 { (char *)"darray_req___str__", _wrap_darray_req___str__, METH_VARARGS, NULL},
+	 { (char *)"darray_req___repr__", _wrap_darray_req___repr__, METH_VARARGS, NULL},
+	 { (char *)"darray_req_satisfied_by", _wrap_darray_req_satisfied_by, METH_VARARGS, NULL},
+	 { (char *)"darray_req_swigregister", darray_req_swigregister, METH_VARARGS, NULL},
+	 { (char *)"check_darray", _wrap_check_darray, METH_VARARGS, NULL},
 	 { (char *)"new_ParameterList", _wrap_new_ParameterList, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_parameter", (PyCFunction) _wrap_ParameterList_parameter, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ParameterList___getitem__", _wrap_ParameterList___getitem__, METH_VARARGS, NULL},
@@ -77588,6 +81674,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"sherpa_swigregister", sherpa_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCA", _wrap_Model2_CoefUtilityCA, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCO", _wrap_Model2_CoefUtilityCO, METH_VARARGS, NULL},
+	 { (char *)"Model2_needs", _wrap_Model2_needs, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCA_set", _wrap_Model2_Data_UtilityCA_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCA_get", _wrap_Model2_Data_UtilityCA_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCO_set", _wrap_Model2_Data_UtilityCO_set, METH_VARARGS, NULL},
@@ -77610,7 +81697,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_Data_Avail_get", _wrap_Model2_Data_Avail_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility", _wrap_Model2_calc_utility, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_probability", _wrap_Model2_calc_probability, METH_VARARGS, NULL},
+	 { (char *)"Model2_calc_logsums", _wrap_Model2_calc_logsums, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility_probability", _wrap_Model2_calc_utility_probability, METH_VARARGS, NULL},
+	 { (char *)"Model2_calc_utility_logsums", _wrap_Model2_calc_utility_logsums, METH_VARARGS, NULL},
 	 { (char *)"Model2_probability", _wrap_Model2_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_set", _wrap_Model2_hessian_matrix_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_get", _wrap_Model2_hessian_matrix_get, METH_VARARGS, NULL},
@@ -77750,6 +81839,8 @@ static swig_type_info _swigt__p_elm__caseindex_t = {"_p_elm__caseindex_t", "elm:
 static swig_type_info _swigt__p_elm__cellcodepair = {"_p_elm__cellcodepair", "elm::cellcodepair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__cellcodeset = {"_p_elm__cellcodeset", "elm::cellcodeset *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__cellcodeset_iterator = {"_p_elm__cellcodeset_iterator", "elm::cellcodeset_iterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__darray_req = {"_p_elm__darray_req", "std::map< std::string,elm::darray_req >::mapped_type *|elm::darray_req *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__datamatrix_req = {"_p_elm__datamatrix_req", "elm::datamatrix_req *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__datamatrix_t = {"_p_elm__datamatrix_t", "elm::datamatrix_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__model_options_t = {"_p_elm__model_options_t", "elm::model_options_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__paramArray = {"_p_elm__paramArray", "elm::paramArray *", 0, 0, (void*)0, 0};
@@ -77759,6 +81850,7 @@ static swig_type_info _swigt__p_etk__exception_t = {"_p_etk__exception_t", "etk:
 static swig_type_info _swigt__p_etk__ostream_c = {"_p_etk__ostream_c", "etk::ostream_c *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_etk__refcounted = {"_p_etk__refcounted", "etk::refcounted *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_etk__string_sender = {"_p_etk__string_sender", "etk::string_sender *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_etk__strvec = {"_p_etk__strvec", "etk::strvec *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_etk__three_dim = {"_p_etk__three_dim", "etk::three_dim *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_freedom_info = {"_p_freedom_info", "freedom_info *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_key_type = {"_p_key_type", "key_type *", 0, 0, (void*)0, 0};
@@ -77776,14 +81868,17 @@ static swig_type_info _swigt__p_std__allocatorT_long_long_t = {"_p_std__allocato
 static swig_type_info _swigt__p_std__allocatorT_sherpa_pack_t = {"_p_std__allocatorT_sherpa_pack_t", "std::vector< sherpa_pack >::allocator_type *|std::allocator< sherpa_pack > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t = {"_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t", "std::allocator< std::pair< long long const,elm::VAS_dna_info > > *|std::map< long long,elm::VAS_dna_info >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t = {"_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t", "std::allocator< std::pair< long long const,std::string > > *|std::map< long long,std::string >::allocator_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t = {"_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t", "std::allocator< std::pair< std::string const,elm::darray_req > > *|std::map< std::string,elm::darray_req >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_unsigned_long_long_t = {"_p_std__allocatorT_unsigned_long_long_t", "std::allocator< unsigned long long > *|std::vector< unsigned long long >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__lessT_long_long_t = {"_p_std__lessT_long_long_t", "std::less< long long > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__lessT_std__string_t = {"_p_std__lessT_std__string_t", "std::less< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__listT__Tp__Alloc_t = {"_p_std__listT__Tp__Alloc_t", "std::list< _Tp,_Alloc > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t = {"_p_std__listT_long_long_std__allocatorT_long_long_t_t", "std::list< long long,std::allocator< long long > > *|std::list< long long > *|std::list< elm::cellcode > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t = {"_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t", "std::map< long long,elm::VAS_dna_info,std::less< long long >,std::allocator< std::pair< long long const,elm::VAS_dna_info > > > *|std::map< long long,elm::VAS_dna_info > *|std::map< elm::cellcode,elm::VAS_dna_info > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t = {"_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t", "std::map< long long,std::string > *|std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t = {"_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t", "std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > *|std::map< std::string,elm::darray_req > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_long_long_t__const_iterator = {"_p_std__setT_long_long_t__const_iterator", "elm::cellcode_set_citer *|std::set< long long >::const_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_long_long_t__iterator = {"_p_std__setT_long_long_t__iterator", "elm::cellcode_set_iter *|std::set< long long >::iterator *", 0, 0, (void*)0, 0};
@@ -77831,6 +81926,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_elm__cellcodepair,
   &_swigt__p_elm__cellcodeset,
   &_swigt__p_elm__cellcodeset_iterator,
+  &_swigt__p_elm__darray_req,
+  &_swigt__p_elm__datamatrix_req,
   &_swigt__p_elm__datamatrix_t,
   &_swigt__p_elm__model_options_t,
   &_swigt__p_elm__paramArray,
@@ -77840,6 +81937,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_etk__ostream_c,
   &_swigt__p_etk__refcounted,
   &_swigt__p_etk__string_sender,
+  &_swigt__p_etk__strvec,
   &_swigt__p_etk__three_dim,
   &_swigt__p_freedom_info,
   &_swigt__p_key_type,
@@ -77857,14 +81955,17 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_sherpa_pack_t,
   &_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t,
   &_swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t,
+  &_swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_unsigned_long_long_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__lessT_long_long_t,
+  &_swigt__p_std__lessT_std__string_t,
   &_swigt__p_std__listT__Tp__Alloc_t,
   &_swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t,
   &_swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t,
   &_swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t,
+  &_swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t,
   &_swigt__p_std__ostream,
   &_swigt__p_std__setT_long_long_t__const_iterator,
   &_swigt__p_std__setT_long_long_t__iterator,
@@ -77912,6 +82013,8 @@ static swig_cast_info _swigc__p_elm__caseindex_t[] = {  {&_swigt__p_elm__caseind
 static swig_cast_info _swigc__p_elm__cellcodepair[] = {  {&_swigt__p_elm__cellcodepair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__cellcodeset[] = {  {&_swigt__p_elm__cellcodeset, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__cellcodeset_iterator[] = {  {&_swigt__p_elm__cellcodeset_iterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__darray_req[] = {  {&_swigt__p_elm__darray_req, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__datamatrix_req[] = {  {&_swigt__p_elm__datamatrix_req, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__datamatrix_t[] = {  {&_swigt__p_elm__datamatrix_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__model_options_t[] = {  {&_swigt__p_elm__model_options_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__paramArray[] = {  {&_swigt__p_elm__paramArray, 0, 0, 0},{0, 0, 0, 0}};
@@ -77921,6 +82024,7 @@ static swig_cast_info _swigc__p_etk__exception_t[] = {  {&_swigt__p_etk__excepti
 static swig_cast_info _swigc__p_etk__ostream_c[] = {  {&_swigt__p_etk__ostream_c, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_etk__refcounted[] = {  {&_swigt__p_etk__refcounted, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_etk__string_sender[] = {  {&_swigt__p_etk__string_sender, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_etk__strvec[] = {  {&_swigt__p_etk__strvec, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_etk__three_dim[] = {  {&_swigt__p_etk__three_dim, 0, 0, 0},  {&_swigt__p_elm__paramArray, _p_elm__paramArrayTo_p_etk__three_dim, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_freedom_info[] = {  {&_swigt__p_freedom_info, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_key_type[] = {  {&_swigt__p_key_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -77938,14 +82042,17 @@ static swig_cast_info _swigc__p_std__allocatorT_long_long_t[] = {  {&_swigt__p_s
 static swig_cast_info _swigc__p_std__allocatorT_sherpa_pack_t[] = {  {&_swigt__p_std__allocatorT_sherpa_pack_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_unsigned_long_long_t[] = {  {&_swigt__p_std__allocatorT_unsigned_long_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__lessT_long_long_t[] = {  {&_swigt__p_std__lessT_long_long_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__lessT_std__string_t[] = {  {&_swigt__p_std__lessT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__listT__Tp__Alloc_t[] = {  {&_swigt__p_std__listT__Tp__Alloc_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__listT_long_long_std__allocatorT_long_long_t_t[] = {  {&_swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t[] = {  {&_swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t, 0, 0, 0},  {&_swigt__p_elm__VAS_dna, _p_elm__VAS_dnaTo_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_long_long_t__const_iterator[] = {  {&_swigt__p_std__setT_long_long_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_long_long_t__iterator[] = {  {&_swigt__p_std__setT_long_long_t__iterator, 0, 0, 0},{0, 0, 0, 0}};
@@ -77993,6 +82100,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_elm__cellcodepair,
   _swigc__p_elm__cellcodeset,
   _swigc__p_elm__cellcodeset_iterator,
+  _swigc__p_elm__darray_req,
+  _swigc__p_elm__datamatrix_req,
   _swigc__p_elm__datamatrix_t,
   _swigc__p_elm__model_options_t,
   _swigc__p_elm__paramArray,
@@ -78002,6 +82111,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_etk__ostream_c,
   _swigc__p_etk__refcounted,
   _swigc__p_etk__string_sender,
+  _swigc__p_etk__strvec,
   _swigc__p_etk__three_dim,
   _swigc__p_freedom_info,
   _swigc__p_key_type,
@@ -78019,14 +82129,17 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_sherpa_pack_t,
   _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t,
   _swigc__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t,
+  _swigc__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_unsigned_long_long_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__lessT_long_long_t,
+  _swigc__p_std__lessT_std__string_t,
   _swigc__p_std__listT__Tp__Alloc_t,
   _swigc__p_std__listT_long_long_std__allocatorT_long_long_t_t,
   _swigc__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t,
   _swigc__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t,
+  _swigc__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t,
   _swigc__p_std__ostream,
   _swigc__p_std__setT_long_long_t__const_iterator,
   _swigc__p_std__setT_long_long_t__iterator,
@@ -78733,13 +82846,13 @@ SWIG_init(void) {
   SWIG_InstallConstants(d,swig_const_table);
   
   
-  ptrToElmError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
-  Py_INCREF(ptrToElmError);
-  PyModule_AddObject(m, "ELM_Error", ptrToElmError);
-  ptrToSQLError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
+  ptrToLarchError = PyErr_NewException("larch.LarchError", NULL, NULL);
+  Py_INCREF(ptrToLarchError);
+  PyModule_AddObject(m, "LarchError", ptrToLarchError);
+  ptrToSQLError = PyErr_NewException("larch.SQLiteError", NULL, NULL);
   Py_INCREF(ptrToSQLError);
   PyModule_AddObject(m, "SQLiteError", ptrToSQLError);
-  ptrToFacetError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
+  ptrToFacetError = PyErr_NewException("larch.FacetError", NULL, NULL);
   Py_INCREF(ptrToFacetError);
   PyModule_AddObject(m, "FacetError", ptrToFacetError);
   

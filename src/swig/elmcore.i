@@ -37,7 +37,7 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
 
 
 %pythoncode %{
-class ELM_Error(Exception):
+class LarchError(Exception):
 	def __str__(self):
 		return "ELM has encountered an error:" + Exception.__str__(self)
 class SQLiteError(Exception):
@@ -101,25 +101,25 @@ pass
 
 
 %{
-static PyObject* ptrToElmError;  /* add this! */
+static PyObject* ptrToLarchError;  /* add this! */
 static PyObject* ptrToSQLError;  /* add this! */
 static PyObject* ptrToFacetError;  /* add this! */
 %}
 
 %init %{
-    ptrToElmError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
-    Py_INCREF(ptrToElmError);
-    PyModule_AddObject(m, "ELM_Error", ptrToElmError);
-    ptrToSQLError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
+    ptrToLarchError = PyErr_NewException("larch.LarchError", NULL, NULL);
+    Py_INCREF(ptrToLarchError);
+    PyModule_AddObject(m, "LarchError", ptrToLarchError);
+    ptrToSQLError = PyErr_NewException("larch.SQLiteError", NULL, NULL);
     Py_INCREF(ptrToSQLError);
     PyModule_AddObject(m, "SQLiteError", ptrToSQLError);
-    ptrToFacetError = PyErr_NewException("larch.core.ELM_Error", NULL, NULL);
+    ptrToFacetError = PyErr_NewException("larch.FacetError", NULL, NULL);
     Py_INCREF(ptrToFacetError);
     PyModule_AddObject(m, "FacetError", ptrToFacetError);
 %}
 
 %pythoncode %{
-	ELM_Error = _core.ELM_Error
+	LarchError = _core.LarchError
 	SQLiteError = _core.SQLiteError
 	FacetError = _core.FacetError
 %}
@@ -138,7 +138,7 @@ static PyObject* ptrToFacetError;  /* add this! */
 		PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
 		return NULL;
 	} catch (const std::exception& e) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>(e.what()));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
 		return NULL;
 	}
 }
@@ -203,7 +203,6 @@ namespace std {
 %template(StrVector) std::vector<std::string>;
 %template(IntStringDict) std::map<long long, std::string>;
 
-
 %extend std::map<long long, std::string> {
 	%pythoncode {
 		def __reduce__(self):
@@ -257,6 +256,15 @@ from .db import DB
 %include "elm_caseindex.h"
 %include "elm_datamatrix.h"
 
+%template(Needs) std::map<std::string, elm::darray_req>;
+%extend std::map<std::string, elm::darray_req> {
+	%pythoncode {
+		def __repr__(self):
+			return "<Needs:" + ",".join(["{}({})".format(i,len(j.get_variables())) for i,j in self.items()]) + ">"
+	}
+}
+%include "elm_darray.h"
+
 %include "elm_parameterlist.h"
 %include "sherpa_freedom.h"
 %include "sherpa.h"
@@ -264,6 +272,6 @@ from .db import DB
 %pythoncode %{
 from .model import Model
 %}
+ 
 
-
-
+ 

@@ -63,6 +63,7 @@ namespace elm {
 		
 		void set_avail_co_column_map(const std::map<long long, std::string>& cols);
 		void set_avail_ca_column(const std::string& col);
+		void set_avail_all();
 		
 		void set_weight_co_column(const std::string& col);
 		

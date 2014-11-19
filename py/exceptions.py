@@ -1,7 +1,7 @@
-from ._core import ELM_Error
+from ._core import LarchError
 
-class NoResultsError(ELM_Error):
+class NoResultsError(LarchError):
 	pass
 
-class TooManyResultsError(ELM_Error):
+class TooManyResultsError(LarchError):
 	pass

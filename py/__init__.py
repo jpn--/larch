@@ -65,7 +65,7 @@ try:
 	larch = sys.modules[__name__]
 
 except:
-	print ("Exception in initializing ELM")
+	print ("Exception in initializing Larch")
 	print (status)
 	raise
 

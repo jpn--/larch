@@ -22,7 +22,7 @@
 /* Convert cellcodepair from Python --> C */
 %typemap(in) const elm::cellcodepair& (elm::cellcodepair temp) {
 	if (!PyArg_ParseTuple($input, "KK", &(temp.up), &(temp.dn))) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
 		SWIG_fail;
 	};
 	$1 = &temp;
@@ -289,7 +289,7 @@ namespace elm {
 		def node_callsign(self, altcode):
 			try:
 				return "%i: %s"%(altcode, self.node_name(altcode))
-			except ELM_Error:
+			except LarchError:
 				return "%i: %s"%(altcode, "alt_%i"%(altcode))
 		def elemental_callsigns(self):
 			return [self.node_callsign(j) for j in self.elemental_codes()]
@@ -330,19 +330,19 @@ namespace elm {
 %pythoncode %{
 def __ComponentList__call(self, *args, **kwargs):
 	if (self._receiver_type==0):
-		raise ELM_Error("ComponentList improperly initialized")
+		raise LarchError("ComponentList improperly initialized")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
 		self.receive_utility_ca(*args, **kwargs)
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
 		if len(kwargs)>0 and len(args)==0:
 			self.receive_utility_co_kwd(**kwargs)
 		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise ELM_Error("ComponentList for co type requires at least two arguments: data and alt")
+			if len(args)<2: raise LarchError("ComponentList for co type requires at least two arguments: data and alt")
 			self.receive_utility_co(*args)
 		else:
-			raise ELM_Error("ComponentList for co type requires all-or-none use of keyword arguments")
+			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
 	else:
-		raise ELM_Error("ComponentList Not Implemented for type %i list"%self._receiver_type)
+		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:
 	####	self.parentmodel.freshen()
 ComponentList.__call__ = __ComponentList__call

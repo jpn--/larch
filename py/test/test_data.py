@@ -24,8 +24,9 @@ if __name__ == "__main__" and __package__ is None:
 import nose, unittest
 from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import DB, ELM_Error, SQLiteError, FacetError
+from ..core import DB, LarchError, SQLiteError, FacetError, darray_req
 from ..exceptions import *
+from ..array import ldarray, ArrayError
 import shutil, os
 import numpy, pandas
 
@@ -110,3 +111,16 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( 4979, db.value("SELECT percentile(casenum, 0.99) FROM "+db.tbl_idco()))
 		self.assertEqual( 4979, db.value("SELECT percentile(casenum, 99) FROM "+db.tbl_idco()))
 
+	def test_ldarray(self):
+		import numpy
+		z = numpy.ones([3,3])
+		with self.assertRaises(ArrayError):
+			q = ldarray(z, vars=['a','b'])
+		q = ldarray(z, vars=['a','b','c'])
+		w = ldarray(z, vars=['x','b','c'])
+		req = darray_req(2,numpy.dtype('float64'))
+		req.set_variables(['a','b','c'])
+		self.assertTrue(req.satisfied_by(q))
+		self.assertFalse(req.satisfied_by(w))
+		with self.assertRaises(LarchError):
+			req.satisfied_by(z)

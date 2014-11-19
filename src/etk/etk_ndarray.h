@@ -164,6 +164,7 @@ namespace etk {
 		double scale_so_total_is(const double& tot);
 		double scale_so_mean_is(const double& mean);
 		void prob_scale_2 (ndarray* out=nullptr);
+		void logsums_2 (ndarray* out);
 		void operator+=(const ndarray& that);
 		void operator-=(const ndarray& that);
 		void operator+=(const memarray_raw& that);

@@ -51,12 +51,37 @@
 	$1 = PyLong_Check($input) ? 1 : 0 ;
 }
 
+%typecheck(5) elm::darray*,  const elm::darray*
+{
+  if (PyArray_Check($input)) {
+	$1 = ( (PyArray_TYPE((PyArrayObject*)$input)== NPY_DOUBLE)
+		 ||(PyArray_TYPE((PyArrayObject*)$input)== NPY_BOOL  )
+		 ||(PyArray_TYPE((PyArrayObject*)$input)== NPY_INT64 )
+		 ) ? 1 : 0;
+  } else {
+    $1 = 0;
+  }
+}
+
+%typecheck(6) int dtype {
+	if (PyLong_Check($input)) {
+		$1 = 1;
+	} else {
+		if (PyObject_HasAttrString($input, "num")) {
+			$1 = 1;
+		} else {
+			$1 = 0;
+		}
+	}
+}
+
+
 
 /* Convert from Python --> C */
 %typemap(in) etk::ndarray* (boosted::shared_ptr<etk::ndarray> temp) {
     if (PyArray_Check($input)) {
-	if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+	if ((PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
 		SWIG_fail;
 	}
     temp = boosted::make_shared<etk::ndarray>($input);
@@ -70,7 +95,7 @@
 %typemap(in) const etk::ndarray* (boosted::shared_ptr<const etk::ndarray> temp) {
     if (PyArray_Check($input)) {
     if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
 		SWIG_fail;
 	}
     temp = boosted::make_shared<const etk::ndarray>($input);
@@ -97,7 +122,7 @@
 /* Convert from Python --> C */
 %typemap(in) etk::symmetric_matrix* (boosted::shared_ptr<etk::symmetric_matrix> temp) {
     if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
 		SWIG_fail;
 	}
     temp = boosted::make_shared<etk::symmetric_matrix>($input);
@@ -106,7 +131,7 @@
 
 %typemap(in) const etk::symmetric_matrix* (boosted::shared_ptr<const etk::symmetric_matrix> temp) {
     if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
 		SWIG_fail;
 	}
     temp = boosted::make_shared<const etk::symmetric_matrix>($input);
@@ -126,7 +151,7 @@
 /* Convert from Python --> C */
 %typemap(in) etk::ndarray_bool* (boosted::shared_ptr<etk::ndarray_bool> temp) {
     if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type BOOL"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type BOOL"));
 		SWIG_fail;
 	}
 	temp = boosted::make_shared<etk::ndarray_bool>($input);
@@ -144,7 +169,7 @@
 /* Convert from Python --> C */
 %typemap(in) etk::symmetric_matrix* (boosted::shared_ptr<etk::symmetric_matrix> temp) {
     if (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE) {
-		PyErr_SetString(ptrToElmError, const_cast<char*>("function requires array type DOUBLE"));
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
 		SWIG_fail;
 	}
 	temp = boosted::make_shared<etk::symmetric_matrix>($input);
@@ -180,5 +205,128 @@
 
 
 
+
+
+
+
+
+
 %include "etk_ndarray.h"
 %include "etk_ndarray_func.h"
+
+
+
+
+
+
+
+%typemap(in) int dtype {
+	if (PyLong_Check($input)) {
+		$1 = PyLong_AsLong($input);
+	} else {
+		if (PyObject_HasAttrString($input, "num")) {
+			PyObject* num = PyObject_GetAttrString($input, "num");
+			$1 = PyLong_AsLong(num);
+			Py_CLEAR(num);
+		} else {
+			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a type number or a numpy.dtype"));
+			SWIG_fail;
+		}
+	}
+}
+
+
+
+
+/* Convert from Python --> C */
+%typemap(in) elm::darray* (boosted::shared_ptr<elm::darray> temp) {
+    if (PyArray_Check($input)) {
+	if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
+		&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL  )
+		&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64 )
+		) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+		SWIG_fail;
+	}
+	try {
+		temp = boosted::make_shared<elm::darray>($input);
+    } catch (const std::exception& e) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+		SWIG_fail;
+    }
+	$1 = &(*temp);
+	} else {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+		SWIG_fail;
+	}
+}
+
+%typemap(in) const elm::darray* (boosted::shared_ptr<const elm::darray> temp) {
+    if (PyArray_Check($input)) {
+    if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
+		&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL  )
+		&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64 )
+		) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+		SWIG_fail;
+	}
+	try {
+		temp = boosted::make_shared<const elm::darray>($input);
+    } catch (const std::exception& e) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+		SWIG_fail;
+    }
+	$1 = const_cast<elm::darray*>( &(*temp) );
+	} else {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+		SWIG_fail;
+	}
+}
+
+/* Convert from C --> Python */
+
+%typemap(out) std::shared_ptr<elm::darray> {
+    $result = (*(&($1)))->get_array();
+	
+	
+	if (PyObject_HasAttrString($result, "vars")) {
+		PyObject_DelAttrString($result, "vars");
+	}
+	
+	PyObject* py_vars = PyTuple_New(($1)->get_variables().size());
+	
+	for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+		PyObject* item = PyString_FromString((($1)->get_variables()[i]).c_str());
+		PyTuple_SetItem(py_vars, i, item);
+	}
+	
+	PyObject_SetAttrString($result, "vars", py_vars);
+	
+	Py_CLEAR(py_vars);
+
+	PyRun_SimpleString("print('%typemap(out) std::shared_ptr<elm::darray>')");
+	
+}
+
+%typemap(out) elm::darray* {
+    $result = $1->get_array();
+
+	
+	
+	if (PyObject_HasAttrString($result, "vars")) {
+		PyObject_DelAttrString($result, "vars");
+	}
+	
+	PyObject* py_vars = PyTuple_New(($1)->get_variables().size());
+	
+	for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+		PyObject* item = PyString_FromString((($1)->get_variables()[i]).c_str());
+		PyTuple_SetItem(py_vars, i, item);
+	}
+	
+	PyObject_SetAttrString($result, "vars", py_vars);
+	
+	Py_CLEAR(py_vars);
+
+	PyRun_SimpleString("print('%typemap(out) elm::darray*')");
+}

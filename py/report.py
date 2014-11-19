@@ -6,7 +6,7 @@ import os
 from contextlib import contextmanager
 import numpy
 import math
-from .core import ELM_Error
+from .core import LarchError
 
 
 class HTML():
@@ -238,6 +238,18 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 						else:
 							f.write('<td colspan="2" class="{0}">n/a</td>'.format(shades[shade],))
 				with f.tr():
+					f.write('<td>Log Likelihood with No Model</td>')
+					shade = 0
+					for m in models:
+						shade ^= 1
+						es = m._get_estimation_statistics()
+						ll = es[0]['log_like']
+						llz = es[0]['log_like_nil']
+						if not math.isnan(llz):
+							f.write('<td colspan="2" class="{0}">{1:0.6g}</td>'.format(shades[shade],llz))
+						else:
+							f.write('<td colspan="2" class="{0}">n/a</td>'.format(shades[shade],))
+				with f.tr():
 					f.write('<td>Rho Squared vs. Constants</td>')
 					shade = 0
 					for m in models:
@@ -258,6 +270,19 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
 						llz = es[0]['log_like_null']
+						if not math.isnan(llz):
+							rsz = 1.0-(ll/llz)
+							f.write('<td colspan="2" class="{0}">{1:0.4g}</td>'.format(shades[shade],rsz))
+						else:
+							f.write('<td colspan="2" class="{0}">n/a</td>'.format(shades[shade],))
+				with f.tr():
+					f.write('<td>Rho Squared vs. No Model</td>')
+					shade = 0
+					for m in models:
+						shade ^= 1
+						es = m._get_estimation_statistics()
+						ll = es[0]['log_like']
+						llz = es[0]['log_like_nil']
 						if not math.isnan(llz):
 							rsz = 1.0-(ll/llz)
 							f.write('<td colspan="2" class="{0}">{1:0.4g}</td>'.format(shades[shade],rsz))
@@ -285,15 +310,15 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 #									enumerator = m.param_sum(*numerator)
 #								elif numerator in m:
 #									enumerator = m[numerator].value
-#								else: raise ELM_Error
+#								else: raise LarchError
 #								if isinstance(denominator, tuple):
 #									edenominator = m.param_sum(*denominator)
 #								elif denominator in m:
 #									edenominator = m[denominator].value
-#								else: raise ELM_Error
+#								else: raise LarchError
 #								i = format.format(numpy.float64(factor)*enumerator/edenominator)
 #								f.write('<td colspan="2" class="{0}">{1}</td>'.format(shades[shade],i))
-#							except ELM_Error:
+#							except LarchError:
 #								f.write('<td colspan="2" class="{0}">---</td>'.format(shades[shade]))
 		return f.dump()
 

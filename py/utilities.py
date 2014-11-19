@@ -124,8 +124,8 @@ def rotate_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
 			n -= 1
 		os.rename(filename,fn(1))
 	else:
-		from .core import ELM_Error
-		raise ELM_Error("File %s does not exist"%filename)
+		from .core import LarchError
+		raise LarchError("File %s does not exist"%filename)
 
 def new_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
 	import os.path
@@ -151,8 +151,8 @@ def top_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
 			n += 1
 		return fn(n-1)
 	else:
-		from .core import ELM_Error
-		raise ELM_Error("File %s does not exist"%filename)
+		from .core import LarchError
+		raise LarchError("File %s does not exist"%filename)
 
 def priority_iterator(unsorted, priorities=[]):
 	for key in priorities:
@@ -613,7 +613,7 @@ class rename():
 			self.members = members
 	def find_in(self, m):
 		if self not in m:
-			raise ELM_Error("%s not in model",self.name)
+			raise LarchError("%s not in model",self.name)
 		if self.name in m:
 			return self.name
 		for i in self.members:
@@ -627,6 +627,8 @@ class rename():
 			else:
 				x += [p,]
 		return x
+	def __str__(self):
+		return self.name
 
 
 class pmath():
@@ -637,7 +639,7 @@ class pmath():
 	def value(self,m):
 		if self._p in m:
 			return m[self._p].value
-		raise ELM_Error("parameter {} not in model".format(self._p))
+		raise LarchError("parameter {} not in model".format(self._p))
 	def name(self, n):
 		self._name = n
 		return self

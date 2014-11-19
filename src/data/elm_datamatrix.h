@@ -83,6 +83,10 @@ namespace elm {
 		purp_weight,
 	};
 
+
+
+
+
 	class datamatrix_t
 	{
 
@@ -236,6 +240,49 @@ namespace elm {
 
 
 
+
+
+
+
+	class datamatrix_req
+	{
+	
+	#ifndef SWIG
+	
+	public:
+		matrix_dtype    dtype;
+		dimensionality  dimty;
+		size_t			n_alts;
+		bool            contig;
+
+	public:
+		datamatrix_req(dimensionality dim, matrix_dtype tp, size_t nalts=0);
+		// This constructor initializes the datamatrix_t object.
+		//  The constructor should only be called from the create method
+		//  if created independently, will not have smart pointer functionality.
+		
+		datamatrix_req(const datamatrix_req&);
+		//copy constructor is public
+		
+		datamatrix_req();
+		//default constructor is public, but raises an exception
+		
+	public:
+		virtual ~datamatrix_req();
+
+	#endif // ndef SWIG
+
+
+	public:
+		size_t      nVars()    const;
+		size_t      nAlts()    const;
+		etk::strvec variables  ;
+		
+		std::string __str__()  const;
+		std::string __repr__() const;
+		
+		bool satisfied(const datamatrix_t& x) const;
+	};
 
 
 

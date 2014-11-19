@@ -391,7 +391,7 @@ void elm::datamatrix_t::read_from_facet(elm::Facet* db, int style, const std::ve
 	
 	_stmt->execute();
 	if (_stmt->status()==SQLITE_ROW) {
-		current_caseid = _stmt->getInt(0);
+		current_caseid = _stmt->getInt64(0);
 	}
 	while (_stmt->status()==SQLITE_ROW) {
 		try {
@@ -844,6 +844,141 @@ std::string elm::datamatrix_t::__repr__() const
 	
 	s << ">";
 	return s.str();
+}
+
+
+
+
+
+
+
+
+std::string elm::datamatrix_req::__str__() const
+{
+	std::ostringstream s;
+	s << "larch.datamatrix_req";
+	
+	if (dimty==case_alt_var) {
+		s << " [cav]";
+	} else if (dimty==case_var) {
+		s << " [cv]";
+	} else {
+		s << " [?dimty?]";
+	}
+	
+	if (dtype==mtrx_double) {
+		s << " dtype=double";
+	} else if (dtype==mtrx_int64) {
+		s << " dtype=int64";
+	} else if (dtype==mtrx_bool) {
+		s << " dtype=bool";
+	} else {
+		s << " dtype=?";
+	}
+
+	auto v=variables.begin();
+	if (v!=variables.end()) {
+		s << " {";
+		s << *v;
+		v++;
+		while (v!=variables.end()) {
+			s << ","<<*v;
+			v++;
+		}
+		s << "}";
+	}
+	
+	s << "";
+	return s.str();
+}
+
+std::string elm::datamatrix_req::__repr__() const
+{
+	std::ostringstream s;
+	s << "<larch.datamatrix_req";
+	
+	if (dimty==case_alt_var) {
+		s << "[cav]";
+	} else if (dimty==case_var) {
+		s << "[cv]";
+	} else {
+		s << "[?dimty?]";
+	}
+	
+	if (dtype==mtrx_double) {
+		s << " dtype=double";
+	} else if (dtype==mtrx_int64) {
+		s << " dtype=int64";
+	} else if (dtype==mtrx_bool) {
+		s << " dtype=bool";
+	} else {
+		s << " dtype=?";
+	}
+	
+	s << " (";
+	try {
+		s << nVars();
+	} SPOO {
+		s << "?";
+	}
+	s << " vars)";
+	
+	s << ">";
+	return s.str();
+}
+
+
+
+
+elm::datamatrix_req::datamatrix_req(dimensionality dim, matrix_dtype tp, size_t nalts)
+: dimty          (dim)
+, dtype          (tp)
+, variables      ()
+, n_alts         (nalts)
+, contig         (true)
+{
+}
+
+elm::datamatrix_req::datamatrix_req(const elm::datamatrix_req& x)
+: dimty          (x.dimty)
+, dtype          (x.dtype)
+, variables      (x.variables)
+, n_alts         (x.n_alts)
+, contig         (x.contig)
+{
+}
+
+elm::datamatrix_req::datamatrix_req()
+: dimty          ()
+, dtype          ()
+, variables      ()
+, n_alts         (0)
+, contig         (true)
+{
+	//OOPS("do not create datamatrix_req directly, use create() ");
+}
+
+
+elm::datamatrix_req::~datamatrix_req()
+{
+}
+
+bool elm::datamatrix_req::satisfied(const elm::datamatrix_t& x) const
+{
+	if (x.dimty != dimty) return false;
+	if (x.dtype != dtype) return false;
+	if (x.get_variables() != variables) return false;
+	return true;
+}
+
+size_t elm::datamatrix_req::nVars() const
+{
+	return variables.size();
+}
+
+size_t elm::datamatrix_req::nAlts() const
+{
+	return n_alts;
 }
 
 

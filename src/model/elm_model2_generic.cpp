@@ -46,6 +46,7 @@ elm::Model2::Model2()
 , Data_Weight     (nullptr)
 , Data_Avail      (nullptr)
 , _LL_null (NAN)
+, _LL_nil (NAN)
 , _LL_constants (NAN)
 , weight_scale_factor (1.0)
 , nCases (0)
@@ -82,6 +83,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , Data_Weight     (nullptr)
 , Data_Avail      (nullptr)
 , _LL_null (NAN)
+, _LL_nil (NAN)
 , _LL_constants (NAN)
 , weight_scale_factor (1.0)
 , nCases (0)
@@ -111,6 +113,30 @@ elm::ParameterList* elm::Model2::_self_as_ParameterListPtr()
 {
 	return this;
 }
+
+
+std::map<std::string, darray_req> elm::Model2::needs() const
+{
+	std::map<std::string, darray_req> requires;
+	
+	etk::strvec u_ca = __identify_needs(Input_Utility.ca);
+	if (u_ca.size()) {
+		requires["UtilityCA"] = darray_req (3,NPY_DOUBLE,Xylem.n_elemental());
+		requires["UtilityCA"].set_variables(u_ca);
+	}
+	
+	etk::strvec u_co = __identify_needs(Input_Utility.co);
+	if (u_co.size()) {
+		requires["UtilityCO"] = darray_req (2,NPY_DOUBLE);
+		requires["UtilityCO"].set_variables(u_co);
+	}
+	
+	
+	return requires;
+}
+
+
+
 
 elm::ca_co_packet elm::Model2::utility_packet()
 {
@@ -439,45 +465,173 @@ void elm::Model2::calculate_hessian_and_save()
 }
 
 
+
+bool elm::Model2::any_holdfast()
+{
+	for (size_t hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			return true;
+		}
+	}
+	return false;
+}
+
+size_t elm::Model2::count_holdfast()
+{
+	size_t n=0;
+	for (size_t hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			n++;
+		}
+	}
+	return n;
+}
+
+
+void elm::Model2::hessfull_to_hessfree(const symmetric_matrix* full_matrix, symmetric_matrix* free_matrix)
+{
+	size_t hi, hj, fi, fj;
+	fi=0;
+	fj=0;
+	for (hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			// do not copy, this row is holdfast
+		} else {
+			fj=0;
+			for (hj=0; hj<dF(); hj++) {
+				if (FInfo[ FNames[hj] ].holdfast) {
+					// do not copy, this column is holdfast
+				} else {
+					(*free_matrix)(fi,fj) = (*full_matrix)(hi,hj);
+					fj++;
+				}
+			}
+			fi++;
+		}
+	}
+}
+
+
+void elm::Model2::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric_matrix* free_matrix)
+{
+	size_t hi, hj, fi, fj;
+	fi=0;
+	fj=0;
+	for (hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			// do not copy, this row is holdfast
+			for (hj=0; hj<dF(); hj++) {
+				(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
+			}
+		} else {
+			fj=0;
+			for (hj=0; hj<dF(); hj++) {
+				if (FInfo[ FNames[hj] ].holdfast) {
+					// do not copy, this column is holdfast
+					(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
+				} else {
+					(*full_matrix)(hi,hj) = (*free_matrix)(fi,fj);
+					fj++;
+				}
+			}
+			fi++;
+		}
+	}
+}
+
+
+
 void elm::Model2::calculate_parameter_covariance()
 {
-	calculate_hessian_and_save();
+
+	if (any_holdfast()) {
+
+		WARN(msg) << "Calculating inverse hessian without holdfast parameters";
+
+		calculate_hessian_and_save();
 		
-	// invert hessian
-	MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
-	invHess = Hess;
-	invHess.inv();
-	MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
+		symmetric_matrix temp_free_hess (Hess.size1()-count_holdfast());
+		
+		// invert hessian
+		MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
+		hessfull_to_hessfree(&Hess, &temp_free_hess) ;
+		MONITOR(msg) << "HESSIAN squeezed\n" << temp_free_hess.printSquare() ;
+		temp_free_hess.inv();
+		MONITOR(msg) << "invHESSIAN squeezed\n" << temp_free_hess.printSquare() ;
+		hessfree_to_hessfull(&invHess, &temp_free_hess) ;
+		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 
-	memarray_symmetric unpacked_bhhh;
-	memarray_symmetric unpacked_invhess;
-	MONITOR(msg) << "Bhhh\n" << Bhhh.printSquare() ;
+		memarray_symmetric unpacked_bhhh;
+		memarray_symmetric unpacked_invhess;
+		MONITOR(msg) << "Bhhh\n" << Bhhh.printSquare() ;
 
-	// unpack bhhh and inverse hessian for analysis
-	unpacked_bhhh = Bhhh;
-	unpacked_invhess = invHess;
-	unsigned s = unpacked_bhhh.size1();
-	unpacked_bhhh.copy_uppertriangle_to_lowertriangle();
+		// unpack bhhh and inverse hessian for analysis
+		unpacked_bhhh = Bhhh;
+		unpacked_invhess = invHess;
+		unsigned s = unpacked_bhhh.size1();
+		unpacked_bhhh.copy_uppertriangle_to_lowertriangle();
 
-	MONITOR(msg) << "unpacked_bhhh\n" << unpacked_bhhh.printall() ;
-	MONITOR(msg) << "unpacked_invhess\n" << unpacked_invhess.printall() ;
-	
-	memarray_symmetric BtimeH (s,s);
-	
-	cblas_dsymm(CblasRowMajor, CblasRight, CblasUpper, s, s,
-	            1, *unpacked_invhess, s, 
-				*unpacked_bhhh, s, 
-				0, *BtimeH, s); 
-	MONITOR(msg) << "BtimeH\n" << BtimeH.printall() ;
-	cblas_dsymm(CblasRowMajor, CblasLeft, CblasUpper, s, s, 
-	            1, *unpacked_invhess, s, 
-				*BtimeH, s, 
-				0, *unpacked_bhhh, s);
-	
-	MONITOR(msg) << "unpacked_bhhh.2\n" << unpacked_bhhh.printall() ;
-	robustCovariance = unpacked_bhhh;
-	MONITOR(msg) << "robustCovariance\n" << robustCovariance.printSquare() ;
+		MONITOR(msg) << "unpacked_bhhh\n" << unpacked_bhhh.printall() ;
+		MONITOR(msg) << "unpacked_invhess\n" << unpacked_invhess.printall() ;
+		
+		memarray_symmetric BtimeH (s,s);
+		
+		cblas_dsymm(CblasRowMajor, CblasRight, CblasUpper, s, s,
+					1, *unpacked_invhess, s, 
+					*unpacked_bhhh, s, 
+					0, *BtimeH, s); 
+		MONITOR(msg) << "BtimeH\n" << BtimeH.printall() ;
+		cblas_dsymm(CblasRowMajor, CblasLeft, CblasUpper, s, s, 
+					1, *unpacked_invhess, s, 
+					*BtimeH, s, 
+					0, *unpacked_bhhh, s);
+		
+		MONITOR(msg) << "unpacked_bhhh.2\n" << unpacked_bhhh.printall() ;
+		robustCovariance = unpacked_bhhh;
+		MONITOR(msg) << "robustCovariance\n" << robustCovariance.printSquare() ;
 
+
+
+	} else {
+
+		calculate_hessian_and_save();
+			
+		// invert hessian
+		MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
+		invHess = Hess;
+		invHess.inv();
+		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
+
+		memarray_symmetric unpacked_bhhh;
+		memarray_symmetric unpacked_invhess;
+		MONITOR(msg) << "Bhhh\n" << Bhhh.printSquare() ;
+
+		// unpack bhhh and inverse hessian for analysis
+		unpacked_bhhh = Bhhh;
+		unpacked_invhess = invHess;
+		unsigned s = unpacked_bhhh.size1();
+		unpacked_bhhh.copy_uppertriangle_to_lowertriangle();
+
+		MONITOR(msg) << "unpacked_bhhh\n" << unpacked_bhhh.printall() ;
+		MONITOR(msg) << "unpacked_invhess\n" << unpacked_invhess.printall() ;
+		
+		memarray_symmetric BtimeH (s,s);
+		
+		cblas_dsymm(CblasRowMajor, CblasRight, CblasUpper, s, s,
+					1, *unpacked_invhess, s, 
+					*unpacked_bhhh, s, 
+					0, *BtimeH, s); 
+		MONITOR(msg) << "BtimeH\n" << BtimeH.printall() ;
+		cblas_dsymm(CblasRowMajor, CblasLeft, CblasUpper, s, s, 
+					1, *unpacked_invhess, s, 
+					*BtimeH, s, 
+					0, *unpacked_bhhh, s);
+		
+		MONITOR(msg) << "unpacked_bhhh.2\n" << unpacked_bhhh.printall() ;
+		robustCovariance = unpacked_bhhh;
+		MONITOR(msg) << "robustCovariance\n" << robustCovariance.printSquare() ;
+
+	}
 }
 
 
@@ -616,6 +770,7 @@ PyObject* elm::Model2::_get_estimation_statistics () const
 	PyObject* P = PyDict_New();
 	etk::py_add_to_dict(P, "log_like", ZCurrent);
 	etk::py_add_to_dict(P, "log_like_null", _LL_null);
+	etk::py_add_to_dict(P, "log_like_nil", _LL_nil);
 	etk::py_add_to_dict(P, "log_like_constants", _LL_constants);
 	etk::py_add_to_dict(P, "log_like_best", ZBest);
 	
@@ -630,6 +785,7 @@ PyObject* elm::Model2::_get_estimation_run_statistics () const
 void elm::Model2::_set_estimation_statistics
 (	const double& log_like
 ,	const double& log_like_null
+,	const double& log_like_nil
 ,	const double& log_like_constants
 ,	const double& log_like_best
 )
@@ -640,6 +796,9 @@ void elm::Model2::_set_estimation_statistics
 	}
 	if (!isNan(log_like_null)) {
 		_LL_null = log_like_null;
+	}
+	if (!isNan(log_like_nil)) {
+		_LL_nil = log_like_nil;
 	}
 	if (!isNan(log_like_constants)) {
 		_LL_constants = log_like_constants;
@@ -817,6 +976,7 @@ std::string elm::Model2::save_buffer() const
 	sv << "self._set_estimation_statistics("<<
 		AsPyFloat(ZCurrent)<<","<<
 		AsPyFloat(_LL_null) <<","<<
+		AsPyFloat(_LL_nil) <<","<<
 		AsPyFloat(_LL_constants) <<","<<
 		AsPyFloat(ZBest) <<
 		")\n";

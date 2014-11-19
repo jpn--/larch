@@ -1,7 +1,7 @@
 
 from . import apsw
 from . import utilities
-from .core import SQLiteDB, Facet, FacetError, ELM_Error, QuerySetSimpleCO
+from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO
 from .exceptions import NoResultsError, TooManyResultsError
 from . import logging
 import time
@@ -236,7 +236,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				TEST_DIR = os.path.join(os.path.split(__file__)[0],uppath+"data_warehouse")
 		if os.path.exists(TEST_DIR):
 			return TEST_DIR	
-		raise ELM_Error("cannot locate 'data_warehouse' examples directory")
+		raise LarchError("cannot locate 'data_warehouse' examples directory")
 	
 	@staticmethod
 	def Example(dataset='MTC'):
@@ -255,7 +255,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.elmdata"),
 		  }
 		if dataset.upper() not in TEST_DATA:
-			raise ELM_Error("Example data set %s not found"%dataset)
+			raise LarchError("Example data set %s not found"%dataset)
 		return DB.Copy(TEST_DATA[dataset.upper()])
 
 
@@ -287,7 +287,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		heads = d.import_csv(filename, table=tablename)
 		if caseid not in heads: caseid = "_rowid_"
 		if "caseid" in heads and caseid!="caseid":
-			raise ELM_Error("If the imported file has a column called caseid, it must be the case identifier")
+			raise LarchError("If the imported file has a column called caseid, it must be the case identifier")
 		d.execute("CREATE TABLE csv_alternatives (id PRIMARY KEY, name TEXT);")
 		d.execute("BEGIN TRANSACTION;")
 		for code,info in alts.items():
@@ -536,7 +536,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		'''A convenience function for extracting a single row from an SQL query.
 			
 		:param command: A SQLite query. If the returned result is other than 1 row, 
-		               an ELM_Error is raised.
+		               an LarchError is raised.
 		:param arguments: Values to bind to the SQLite command.
 		'''
 		try:
@@ -564,7 +564,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		
 		:param command: A SQLite query.  If there is more than one result column
 		                on the query, only the first column will be returned. If
-						the returned result is other than 1 row, an ELM_Error is 
+						the returned result is other than 1 row, an LarchError is 
 						raised.
 		:param arguments: Values to bind to the SQLite command.
 		'''
@@ -594,7 +594,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 			
 			:param command:   A SQLite query.  If there is more than one result row
 			                  on the query, only the first row will be returned. If
-			                  the returned result is other than 1 row, an ELM_Error is
+			                  the returned result is other than 1 row, an LarchError is
 			                  raised.
 			:param arguments: Values to bind to the SQLite command.
 			:param fail_silently: If False, a summary of any failure is logged to the db logger
@@ -649,7 +649,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 					l.critical(str(arguments))
 			raise
 
-	def array(self, command, arguments=(), *, n_rows=1, n_cols=None, fail_silently=False):
+	def array(self, command, arguments=(), *, n_rows=None, n_cols=None, fail_silently=False):
 		'''A convenience function for extracting an array from an SQL query.
 			
 			:param command: A SQLite query.
@@ -665,12 +665,17 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 					n_cols = len(cur.description)
 				except apsw.ExecutionCompleteError:
 					return numpy.zeros([n_rows, 0])
+			if n_rows is None:
+				n_rows = self.value("SELECT count(*) FROM ({})".format(command),arguments)
 			ret = numpy.zeros([n_rows, n_cols])
 			n = 0
 			for row in cur:
 				if n>=n_rows:
 					return ret
-				ret[n,:] = row[:n_cols]
+				try:
+					ret[n,:] = row[:n_cols]
+				except ValueError:
+					ret[n,:] = [(None if isinstance(i,str) else i) for i in row[:n_cols]]
 				n += 1
 			return ret
 		except apsw.SQLError as apswerr:
@@ -833,7 +838,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		try:
 			import pandas
 		except ImportError:
-			raise ELM_Error("creating a dataframe requires the pandas module")
+			raise LarchError("creating a dataframe requires the pandas module")
 		cur = self.cursor()
 		try:
 			cur.execute(stmt, arguments)
@@ -882,7 +887,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 #		try:
 #			import pandas
 #		except ImportError:
-#			raise ELM_Error("creating a dataframe requires the pandas module")
+#			raise LarchError("creating a dataframe requires the pandas module")
 #		keys = set()
 #		stats = None
 #		for u in columns:

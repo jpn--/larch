@@ -35,7 +35,7 @@ using namespace std;
 
 
 
-etk::strvec __identify_needs(ComponentList& Input_List)
+etk::strvec elm::__identify_needs(const ComponentList& Input_List)
 {
 	etk::strvec u_ca;
 	
@@ -110,6 +110,7 @@ void _setUp_linear_data_and_params
 	
 	// Third, populate the paramArray
 	for (unsigned b=0; b<Input_UtilityCO.size(); b++) {
+		BUGGER_(msg, "setting Params_?CO b="<<b);
 		slot = u_co.push_back_if_unique(Input_UtilityCO[b].apply_name);
 		if (!Input_UtilityCO[b].altname.empty()) {
 			slot2 = Xylem.slot_from_name(Input_UtilityCO[b].altname);
@@ -124,14 +125,22 @@ void _setUp_linear_data_and_params
 	}
 	
 	if (Data_UtilityCA_) {
+		BUGGER_(msg, "asking for idca data");
 		if (!_Data) OOPS("A database must be linked to this model to do this.");
 		*Data_UtilityCA_ = _Data->ask_idca(u_ca);
+	} else {
+		BUGGER_(msg, "not asking for idca data");
 	}
 	
 	if (Data_UtilityCO_) {
+		BUGGER_(msg, "asking for idco data");
 		if (!_Data) OOPS("A database must be linked to this model to do this.");
 		*Data_UtilityCO_ = _Data->ask_idco(u_co);
+	} else {
+		BUGGER_(msg, "not asking for idco data");
 	}
+
+	BUGGER_(msg, "_setUp_linear_data_and_params complete");
 	
 }
 

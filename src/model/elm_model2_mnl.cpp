@@ -31,6 +31,7 @@
 #include "elm_workshop_mnl_gradient.h"
 #include "elm_workshop_mnl_prob.h"
 #include "elm_workshop_loglike.h"
+#include "elm_workshop_nl_probability.h"
 
 using namespace etk;
 using namespace elm;
@@ -286,6 +287,40 @@ std::shared_ptr<ndarray> elm::Model2::calc_probability(ndarray* u) const
 	}
 }
 
+
+
+std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
+{
+	std::shared_ptr<ndarray> LogSum = std::make_shared<ndarray>(u->size1());
+	if ((features & MODELFEATURES_NESTING)) {
+		
+		std::cerr << "Calculate NL Logsums, size="<< u->size1() <<"\n";
+		
+		std::shared_ptr<ndarray> utility_workspace = std::make_shared<ndarray>(nNodes);
+		std::shared_ptr<ndarray> utility_savespace = std::make_shared<ndarray>(nNodes);
+
+		for (int c=0; c<u->size1(); c++) {
+			cblas_dcopy(nElementals, u->ptr(c), 1, utility_savespace->ptr(), 1	);
+			__casewise_nl_utility(utility_savespace->ptr(), Xylem, utility_workspace->ptr());
+			LogSum->at(c) = *(utility_savespace->ptr(nNodes-1));
+		}
+
+	} else {
+		
+		if (!u) {
+			OOPS("no utility given");
+		}
+		
+		std::shared_ptr<ndarray> PR = std::make_shared<ndarray>(u->size1(), u->size2());
+		*PR = *u;
+		PR->exp();
+		PR->logsums_2(&*LogSum);
+		
+	}
+	
+	return LogSum;
+}
+
 std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
 {
 	return calc_probability( &*calc_utility(dco,dca,av) );
@@ -294,6 +329,16 @@ std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(datamatrix_t* dco
 std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(ndarray* dco, ndarray* dca, ndarray* av) const
 {
 	return calc_probability( &*calc_utility(dco,dca,av) );
+}
+
+std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
+{
+	return calc_logsums( &*calc_utility(dco,dca,av) );
+}
+
+std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray* dca, ndarray* av) const
+{
+	return calc_logsums( &*calc_utility(dco,dca,av) );
 }
 
 #include "etk_workshop.h"
@@ -1256,6 +1301,9 @@ string elm::Model2::prints(const unsigned& precision, const unsigned& cell_width
 	}
 	if (!isNan(_LL_null) && !isInf(_LL_null)) {
 		ret << "Log Likelihood at Null Parameters \t" << _LL_null << "\n";
+	}
+	if (!isNan(_LL_nil) && !isInf(_LL_nil)) {
+		ret << "Log Likelihood with No Model \t" << _LL_nil << "\n";
 	}
 	if (!isNan(_LL_constants) && !isInf(_LL_constants)) {
 		ret << "Log Likelihood at Constants       \t" << _LL_constants << "\n";

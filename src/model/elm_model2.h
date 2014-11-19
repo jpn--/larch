@@ -44,6 +44,7 @@
 #include "elm_inputstorage.h"
 #include "elm_model2_options.h"
 #include "elm_packets.h"
+#include "elm_darray.h"
 
 namespace etk {
   class dispatcher;
@@ -166,6 +167,16 @@ namespace elm {
 #endif // ndef SWIG
 
 	public:
+		#ifdef SWIG
+		%feature("pythonappend") needs() const %{
+			temp = {}
+			for i,j in val.items(): temp[i] = j
+			val = temp
+		%}
+		#endif // def SWIG
+		std::map<std::string, elm::darray_req> needs() const;
+
+	public:
 		elm::datamatrix  Data_UtilityCA;
 		elm::datamatrix  Data_UtilityCO;
 		elm::datamatrix  Data_SamplingCA;
@@ -182,7 +193,20 @@ namespace elm {
 		
 		etk::bitarray Data_MultiChoice; // For each observations, is the choice unique and binary?
 		
-			
+
+
+		boosted::shared_ptr<darray> Darray_UtilityCA;
+		boosted::shared_ptr<darray> Darray_UtilityCO;
+		boosted::shared_ptr<darray> Darray_SamplingCA;
+		boosted::shared_ptr<darray> Darray_SamplingCO;
+		boosted::shared_ptr<darray> Darray_QuantityCA;
+		boosted::shared_ptr<darray> Darray_QuantLogSum;
+		boosted::shared_ptr<darray> Darray_LogSum;
+		
+		boosted::shared_ptr<darray> Darray_Choice;
+		boosted::shared_ptr<darray> Darray_Weight;
+		boosted::shared_ptr<darray> Darray_Avail;
+		
 	
 	public:
 		
@@ -237,8 +261,11 @@ namespace elm {
 		std::shared_ptr<etk::ndarray> calc_utility(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_probability(etk::ndarray* u) const;
+		std::shared_ptr<etk::ndarray> calc_logsums(etk::ndarray* u) const;
 		std::shared_ptr<etk::ndarray> calc_utility_probability(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility_probability(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
+		std::shared_ptr<etk::ndarray> calc_utility_logsums(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
+		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 		
 
 #ifndef SWIG
@@ -253,6 +280,11 @@ namespace elm {
 		void nl_gradient   ();
 
 		void calculate_hessian_and_save();
+		
+		bool any_holdfast() ;
+		size_t count_holdfast() ;
+		void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
+		void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
 	
 		void calculate_parameter_covariance();
 		
@@ -350,6 +382,7 @@ namespace elm {
 
 	protected:
 		double _LL_null;
+		double _LL_nil;
 		double _LL_constants;
 		runstats _latest_run;
 		
@@ -497,7 +530,7 @@ namespace elm {
 		#ifdef SWIG
 		%feature("shadow") Model2::Input_Graph() %{
 		def _Model2_Input_Graph_NoSet(self, value):
-			raise ELM_Error("cannot change model.graph directly, edit model.nest or model.link")
+			raise LarchError("cannot change model.graph directly, edit model.nest or model.link")
 		__swig_setmethods__["graph"] = _Model2_Input_Graph_NoSet
 		__swig_getmethods__["graph"] = _core.Model2_Input_Graph
 		@property
@@ -550,7 +583,7 @@ NOSWIG(	runstats estimate(std::vector<sherpa_pack>* opts); )
 
 		PyObject* _get_estimation_statistics () const;
 		PyObject* _get_estimation_run_statistics () const;
-		void _set_estimation_statistics(const double& log_like=NAN,	const double& log_like_null=NAN,
+		void _set_estimation_statistics(const double& log_like=NAN,	const double& log_like_null=NAN, const double& log_like_nil=NAN,
 										const double& log_like_constants=NAN,	const double& log_like_best=NAN
 										);
 		void _set_estimation_run_statistics(const long& startTimeSec=0, const long& startTimeUSec=0,
@@ -643,6 +676,11 @@ FOSWIG(	%rename(__repr__) representation; )
 
 
 	};
+
+	#ifndef SWIG
+	etk::strvec __identify_needs(const ComponentList& Input_List);
+	#endif // ndef SWIG
+
 		
 } // end namespace elm
 

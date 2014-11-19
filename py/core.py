@@ -97,7 +97,7 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
         raise AttributeError("You cannot add attributes to %s" % self)
 
 
-class ELM_Error(Exception):
+class LarchError(Exception):
 	def __str__(self):
 		return "ELM has encountered an error:" + Exception.__str__(self)
 class SQLiteError(Exception):
@@ -108,7 +108,7 @@ class FacetError(Exception):
 		return "ELM has encountered an error in the data facet:" + Exception.__str__(self)
 pass	
 
-ELM_Error = _core.ELM_Error
+LarchError = _core.LarchError
 SQLiteError = _core.SQLiteError
 FacetError = _core.FacetError
 
@@ -728,6 +728,7 @@ class QuerySetTwoTable(QuerySet):
     def set_choice_ca_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_choice_ca_column(self, *args)
     def set_avail_co_column_map(self, *args) -> "void" : return _core.QuerySetTwoTable_set_avail_co_column_map(self, *args)
     def set_avail_ca_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_avail_ca_column(self, *args)
+    def set_avail_all(self) -> "void" : return _core.QuerySetTwoTable_set_avail_all(self)
     def set_weight_co_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_weight_co_column(self, *args)
     def set_alts_query(self, *args) -> "void" : return _core.QuerySetTwoTable_set_alts_query(self, *args)
     def set_alts_values(self, *args) -> "void" : return _core.QuerySetTwoTable_set_alts_values(self, *args)
@@ -1324,7 +1325,7 @@ class ComponentGraphDNA(object):
     def node_callsign(self, altcode):
     	try:
     		return "%i: %s"%(altcode, self.node_name(altcode))
-    	except ELM_Error:
+    	except LarchError:
     		return "%i: %s"%(altcode, "alt_%i"%(altcode))
     def elemental_callsigns(self):
     	return [self.node_callsign(j) for j in self.elemental_codes()]
@@ -1356,19 +1357,19 @@ ComponentGraphDNA_swigregister(ComponentGraphDNA)
 
 def __ComponentList__call(self, *args, **kwargs):
 	if (self._receiver_type==0):
-		raise ELM_Error("ComponentList improperly initialized")
+		raise LarchError("ComponentList improperly initialized")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
 		self.receive_utility_ca(*args, **kwargs)
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
 		if len(kwargs)>0 and len(args)==0:
 			self.receive_utility_co_kwd(**kwargs)
 		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise ELM_Error("ComponentList for co type requires at least two arguments: data and alt")
+			if len(args)<2: raise LarchError("ComponentList for co type requires at least two arguments: data and alt")
 			self.receive_utility_co(*args)
 		else:
-			raise ELM_Error("ComponentList for co type requires all-or-none use of keyword arguments")
+			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
 	else:
-		raise ELM_Error("ComponentList Not Implemented for type %i list"%self._receiver_type)
+		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:
 	####	self.parentmodel.freshen()
 ComponentList.__call__ = __ComponentList__call
@@ -1555,6 +1556,98 @@ def datamatrix_t_read_aval(*args) -> "elm::datamatrix" :
   return _core.datamatrix_t_read_aval(*args)
 datamatrix_t_read_aval = _core.datamatrix_t_read_aval
 
+class datamatrix_req(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def nVars(self) -> "size_t" : return _core.datamatrix_req_nVars(self)
+    def nAlts(self) -> "size_t" : return _core.datamatrix_req_nAlts(self)
+    variables = _swig_property(_core.datamatrix_req_variables_get, _core.datamatrix_req_variables_set)
+    def __str__(self) -> "std::string" : return _core.datamatrix_req___str__(self)
+    def __repr__(self) -> "std::string" : return _core.datamatrix_req___repr__(self)
+    def satisfied(self, *args) -> "bool" : return _core.datamatrix_req_satisfied(self, *args)
+    def __init__(self): 
+        this = _core.new_datamatrix_req()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_datamatrix_req
+    __del__ = lambda self : None;
+datamatrix_req_swigregister = _core.datamatrix_req_swigregister
+datamatrix_req_swigregister(datamatrix_req)
+
+class Needs(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" : return _core.Needs_iterator(self)
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" : return _core.Needs___nonzero__(self)
+    def __bool__(self) -> "bool" : return _core.Needs___bool__(self)
+    def __len__(self) -> "std::map< std::string,elm::darray_req >::size_type" : return _core.Needs___len__(self)
+    def __iter__(self): return self.key_iterator()
+    def iterkeys(self): return self.key_iterator()
+    def itervalues(self): return self.value_iterator()
+    def iteritems(self): return self.iterator()
+    def __getitem__(self, *args) -> "std::map< std::string,elm::darray_req >::mapped_type const &" : return _core.Needs___getitem__(self, *args)
+    def __delitem__(self, *args) -> "void" : return _core.Needs___delitem__(self, *args)
+    def has_key(self, *args) -> "bool" : return _core.Needs_has_key(self, *args)
+    def keys(self) -> "PyObject *" : return _core.Needs_keys(self)
+    def values(self) -> "PyObject *" : return _core.Needs_values(self)
+    def items(self) -> "PyObject *" : return _core.Needs_items(self)
+    def __contains__(self, *args) -> "bool" : return _core.Needs___contains__(self, *args)
+    def key_iterator(self) -> "swig::SwigPyIterator *" : return _core.Needs_key_iterator(self)
+    def value_iterator(self) -> "swig::SwigPyIterator *" : return _core.Needs_value_iterator(self)
+    def __setitem__(self, *args) -> "void" : return _core.Needs___setitem__(self, *args)
+    def asdict(self) -> "PyObject *" : return _core.Needs_asdict(self)
+    def __init__(self, *args): 
+        this = _core.new_Needs(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def empty(self) -> "bool" : return _core.Needs_empty(self)
+    def size(self) -> "std::map< std::string,elm::darray_req >::size_type" : return _core.Needs_size(self)
+    def clear(self) -> "void" : return _core.Needs_clear(self)
+    def swap(self, *args) -> "void" : return _core.Needs_swap(self, *args)
+    def get_allocator(self) -> "std::map< std::string,elm::darray_req >::allocator_type" : return _core.Needs_get_allocator(self)
+    def begin(self) -> "std::map< std::string,elm::darray_req >::iterator" : return _core.Needs_begin(self)
+    def end(self) -> "std::map< std::string,elm::darray_req >::iterator" : return _core.Needs_end(self)
+    def rbegin(self) -> "std::map< std::string,elm::darray_req >::reverse_iterator" : return _core.Needs_rbegin(self)
+    def rend(self) -> "std::map< std::string,elm::darray_req >::reverse_iterator" : return _core.Needs_rend(self)
+    def count(self, *args) -> "std::map< std::string,elm::darray_req >::size_type" : return _core.Needs_count(self, *args)
+    def erase(self, *args) -> "void" : return _core.Needs_erase(self, *args)
+    def find(self, *args) -> "std::map< std::string,elm::darray_req >::iterator" : return _core.Needs_find(self, *args)
+    def lower_bound(self, *args) -> "std::map< std::string,elm::darray_req >::iterator" : return _core.Needs_lower_bound(self, *args)
+    def upper_bound(self, *args) -> "std::map< std::string,elm::darray_req >::iterator" : return _core.Needs_upper_bound(self, *args)
+    def __repr__(self):
+    	return "<Needs:" + ",".join(["{}({})".format(i,len(j.get_variables())) for i,j in self.items()]) + ">"
+
+    __swig_destroy__ = _core.delete_Needs
+    __del__ = lambda self : None;
+Needs_swigregister = _core.Needs_swigregister
+Needs_swigregister(Needs)
+
+class darray_req(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    dtype = _swig_property(_core.darray_req_dtype_get, _core.darray_req_dtype_set)
+    dimty = _swig_property(_core.darray_req_dimty_get, _core.darray_req_dimty_set)
+    n_alts = _swig_property(_core.darray_req_n_alts_get, _core.darray_req_n_alts_set)
+    contig = _swig_property(_core.darray_req_contig_get, _core.darray_req_contig_set)
+    def __init__(self, *args): 
+        this = _core.new_darray_req(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_darray_req
+    __del__ = lambda self : None;
+    def nVars(self) -> "size_t" : return _core.darray_req_nVars(self)
+    def nAlts(self) -> "size_t" : return _core.darray_req_nAlts(self)
+    def get_variables(self) -> "std::vector< std::string,std::allocator< std::string > > const &" : return _core.darray_req_get_variables(self)
+    def set_variables(self, *args) -> "void" : return _core.darray_req_set_variables(self, *args)
+    def __str__(self) -> "std::string" : return _core.darray_req___str__(self)
+    def __repr__(self) -> "std::string" : return _core.darray_req___repr__(self)
+    def satisfied_by(self, *args) -> "bool" : return _core.darray_req_satisfied_by(self, *args)
+darray_req_swigregister = _core.darray_req_swigregister
+darray_req_swigregister(darray_req)
+
+
+def check_darray(*args) -> "std::string" :
+  return _core.check_darray(*args)
+check_darray = _core.check_darray
 class ParameterList(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -1679,6 +1772,15 @@ class Model2(sherpa):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def CoefUtilityCA(self) -> "PyObject *" : return _core.Model2_CoefUtilityCA(self)
     def CoefUtilityCO(self) -> "PyObject *" : return _core.Model2_CoefUtilityCO(self)
+    def needs(self) -> "std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >" :
+        val = _core.Model2_needs(self)
+        temp = {}
+        for i,j in val.items(): temp[i] = j
+        val = temp
+
+
+        return val
+
     Data_UtilityCA = _swig_property(_core.Model2_Data_UtilityCA_get, _core.Model2_Data_UtilityCA_set)
     Data_UtilityCO = _swig_property(_core.Model2_Data_UtilityCO_get, _core.Model2_Data_UtilityCO_set)
     Data_SamplingCA = _swig_property(_core.Model2_Data_SamplingCA_get, _core.Model2_Data_SamplingCA_set)
@@ -1691,7 +1793,9 @@ class Model2(sherpa):
     Data_Avail = _swig_property(_core.Model2_Data_Avail_get, _core.Model2_Data_Avail_set)
     def calc_utility(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility(self, *args)
     def calc_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_probability(self, *args)
+    def calc_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_logsums(self, *args)
     def calc_utility_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility_probability(self, *args)
+    def calc_utility_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility_logsums(self, *args)
     def probability(self, params : 'etk::ndarray *'=None) -> "etk::ndarray *" : return _core.Model2_probability(self, params)
     hessian_matrix = _swig_property(_core.Model2_hessian_matrix_get, _core.Model2_hessian_matrix_set)
     def utilityca(self, *args) -> "void" : return _core.Model2_utilityca(self, *args)

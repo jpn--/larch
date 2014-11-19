@@ -598,6 +598,33 @@ void ndarray::prob_scale_2 (ndarray* out) {
 	}
 }
 
+void ndarray::logsums_2 (ndarray* out) {
+	ASSERT_ARRAY_DOUBLE;
+	if (!out || out==this) {
+		OOPS("cannot calculate logsums in place");
+	}
+	if ( !out->pool || PyArray_NDIM(out->pool)!=1 || PyArray_DIM(out->pool, 0)!=ROWS ) {
+		Py_CLEAR(out->pool);
+		npy_intp dims [1] = {ROWS};
+
+		out->pool = (PyArrayObject*)PyArray_New((PyTypeObject*)get_array_type("Array"), 1, &dims[0], NPY_DOUBLE, nullptr, nullptr, 0, 0, nullptr);
+		Py_INCREF(out->pool);
+	}
+	unsigned x1, x2; double temp;
+	if (PyArray_NDIM(pool)!=2) {
+		OOPS("can only calculate logsums on a 2d array");
+	} else {
+		for ( x1=0; x1<ROWS; x1++ ) {
+			{
+				temp = 0;
+				for ( x2=0; x2<COLS; x2++ ) { temp += this->operator()(x1,x2); }
+				out->operator()(x1) = ::log(temp);
+			}
+		}
+	}
+}
+
+
 void ndarray::exp () {
 	ASSERT_ARRAY_DOUBLE;
 	double* i;

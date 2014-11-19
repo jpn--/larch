@@ -150,7 +150,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 		CaseLogLike->at(c) = 0.0;
 		for (unsigned a=0;a<nElementals;a++) {
 			if (!Data_AV->boolvalue(c,a)) {
-				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is NO");
+//				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is NO");
 				Probability->at(c,a) = 0.0;
 			} else {
 				double* p = Probability->ptr(c,a);
@@ -160,7 +160,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 				}
 				*p = exp(*p);
 				sum_prob += *p;
-				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p);
+//				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p);
 			}
 		}
 		if (c==0) BUGGER_(msg_, "Data_AV[0]="<<Data_AV->boolvalue(0,0)<<Data_AV->boolvalue(0,1)<<Data_AV->boolvalue(0,2));

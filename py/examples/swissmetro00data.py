@@ -25,7 +25,7 @@
 #
 ################################################################################
 
-import larch
+from .. import larch
 
 def data(): # Define a function to create a data object.
 	# Data object

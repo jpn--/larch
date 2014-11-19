@@ -25,7 +25,7 @@
 #
 ################################################################################
 
-import larch
+from .. import larch
 import os
 
 # Set example data for this model
