@@ -115,27 +115,6 @@ elm::ParameterList* elm::Model2::_self_as_ParameterListPtr()
 }
 
 
-std::map<std::string, darray_req> elm::Model2::needs() const
-{
-	std::map<std::string, darray_req> requires;
-	
-	etk::strvec u_ca = __identify_needs(Input_Utility.ca);
-	if (u_ca.size()) {
-		requires["UtilityCA"] = darray_req (3,NPY_DOUBLE,Xylem.n_elemental());
-		requires["UtilityCA"].set_variables(u_ca);
-	}
-	
-	etk::strvec u_co = __identify_needs(Input_Utility.co);
-	if (u_co.size()) {
-		requires["UtilityCO"] = darray_req (2,NPY_DOUBLE);
-		requires["UtilityCO"].set_variables(u_co);
-	}
-	
-	
-	return requires;
-}
-
-
 
 
 elm::ca_co_packet elm::Model2::utility_packet()
@@ -276,49 +255,6 @@ elm::Model2::~Model2()
 { 
 	tearDown();
 	
-//	if (Data_UtilityCA) {
-//		Data_UtilityCA->decref();
-//		Data_UtilityCA = nullptr;
-//	}
-//
-//	if (Data_UtilityCO) {
-//		Data_UtilityCO->decref();
-//		Data_UtilityCO = nullptr;
-//	}
-//
-//	if (Data_SamplingCA) {
-//		Data_SamplingCA->decref();
-//		Data_SamplingCA = nullptr;
-//	}
-//
-//	if (Data_SamplingCO) {
-//		Data_SamplingCO->decref();
-//		Data_SamplingCO = nullptr;
-//	}
-//
-//	if (Data_Avail) {
-//		Data_Avail->decref();
-//		Data_Avail = nullptr;
-//	}
-//
-//	if (Data_Choice) {
-//		Data_Choice->decref();
-//		Data_Choice = nullptr;
-//	}
-//
-//	if (Data_LogSum) {
-//		Data_LogSum->decref();
-//		Data_LogSum = nullptr;
-//	}
-//	if (Data_QuantityCA) {
-//		Data_QuantityCA->decref();
-//		Data_QuantityCA = nullptr;
-//	}
-//	if (Data_Weight) {
-//		Data_Weight->decref();
-//		Data_Weight = nullptr;
-//	}
-
 }
 
 
@@ -466,79 +402,26 @@ void elm::Model2::calculate_hessian_and_save()
 
 
 
-bool elm::Model2::any_holdfast()
-{
-	for (size_t hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
-			return true;
-		}
-	}
-	return false;
-}
-
-size_t elm::Model2::count_holdfast()
-{
-	size_t n=0;
-	for (size_t hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
-			n++;
-		}
-	}
-	return n;
-}
-
-
-void elm::Model2::hessfull_to_hessfree(const symmetric_matrix* full_matrix, symmetric_matrix* free_matrix)
-{
-	size_t hi, hj, fi, fj;
-	fi=0;
-	fj=0;
-	for (hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
-			// do not copy, this row is holdfast
-		} else {
-			fj=0;
-			for (hj=0; hj<dF(); hj++) {
-				if (FInfo[ FNames[hj] ].holdfast) {
-					// do not copy, this column is holdfast
-				} else {
-					(*free_matrix)(fi,fj) = (*full_matrix)(hi,hj);
-					fj++;
-				}
-			}
-			fi++;
-		}
-	}
-}
-
-
-void elm::Model2::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric_matrix* free_matrix)
-{
-	size_t hi, hj, fi, fj;
-	fi=0;
-	fj=0;
-	for (hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
-			// do not copy, this row is holdfast
-			for (hj=0; hj<dF(); hj++) {
-				(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
-			}
-		} else {
-			fj=0;
-			for (hj=0; hj<dF(); hj++) {
-				if (FInfo[ FNames[hj] ].holdfast) {
-					// do not copy, this column is holdfast
-					(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
-				} else {
-					(*full_matrix)(hi,hj) = (*free_matrix)(fi,fj);
-					fj++;
-				}
-			}
-			fi++;
-		}
-	}
-}
-
+//bool elm::Model2::any_holdfast()
+//{
+//	for (size_t hi=0; hi<dF(); hi++) {
+//		if (FInfo[ FNames[hi] ].holdfast) {
+//			return true;
+//		}
+//	}
+//	return false;
+//}
+//
+//size_t elm::Model2::count_holdfast()
+//{
+//	size_t n=0;
+//	for (size_t hi=0; hi<dF(); hi++) {
+//		if (FInfo[ FNames[hi] ].holdfast) {
+//			n++;
+//		}
+//	}
+//	return n;
+//}
 
 
 void elm::Model2::calculate_parameter_covariance()

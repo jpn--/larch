@@ -687,6 +687,269 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 					l.critical(str(arguments))
 			raise
 
+	def array_idca(self, vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64'):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_idca()
+		if altcodes is None:
+			altcodes = self.alternative_codes()
+		ca_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in ca_cols:
+				caseid = 'caseid'
+			else:
+				caseid = ca_cols[0]
+		if altid is None:
+			if 'altid' in ca_cols:
+				altid = 'altid'
+			elif ca_cols[1]!=caseid:
+				altid = ca_cols[1]
+			else:
+				altid = ca_cols[0]
+		cols = "{} AS caseid, {} AS altid, ".format(caseid,altid) + ", ".join(vars)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		n_alts = len(altcodes)
+		n_vars = len(vars)
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		alt_slots = {a:n for n,a in enumerate(altcodes)}
+		n = 0	
+		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
+		for row in self.execute(qry):
+			if row[0] not in case_slots:
+				c = case_slots[row[0]] = n
+				caseids[c] = row[0]
+				n +=1
+			else:
+				c = case_slots[row[0]]
+			try:
+				a = alt_slots[row[1]]
+			except KeyError:
+				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+			result[c,a,:] = row[2:]
+		from .array import ldarray
+		result = result.view(ldarray)
+		result.vars = vars
+		return result, caseids
+
+	def array_idco(self, vars, table=None, caseid=None, dtype='float64'):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_idco()
+		co_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in co_cols:
+				caseid = 'caseid'
+			else:
+				caseid = co_cols[0]
+		cols = "{} AS caseid, ".format(caseid) + ", ".join(vars)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		n_cases = self.value("SELECT count(*) FROM {}".format(table))
+		n_vars = len(vars)
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		n = 0
+		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
+		for row in self.execute(qry):
+			if row[0] not in case_slots:
+				c = case_slots[row[0]] = n
+				caseids[c] = row[0]
+				n +=1
+			else:
+				c = case_slots[row[0]]
+			result[c,:] = row[1:]
+		from .array import ldarray
+		result = result.view(ldarray)
+		result.vars = vars
+		return result, caseids
+
+	def array_weight(self, table=None, caseid=None, var=None, dtype='float64'):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_weight()
+		co_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in co_cols:
+				caseid = 'caseid'
+			else:
+				caseid = co_cols[0]
+		if var is None:
+			if 'weight' in co_cols:
+				var = 'weight'
+			elif 'wgt' in co_cols:
+				var = 'wgt'
+			elif co_cols[1]!=caseid:
+				var = co_cols[1]
+			else:
+				var = co_cols[0]
+		cols = "{} AS caseid, {} AS weight".format(caseid,var)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		n_cases = self.value("SELECT count(*) FROM {}".format(table))
+		n_vars = 1
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		n = 0
+		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
+		for row in self.execute(qry):
+			if row[0] not in case_slots:
+				c = case_slots[row[0]] = n
+				caseids[c] = row[0]
+				n +=1
+			else:
+				c = case_slots[row[0]]
+			result[c,:] = row[1:]
+		from .array import ldarray
+		result = result.view(ldarray)
+		result.vars = [var,]
+		return result, caseids
+
+	def array_choice(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='float64'):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_choice()
+		if altcodes is None:
+			altcodes = self.alternative_codes()
+		ca_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in ca_cols:
+				caseid = 'caseid'
+			else:
+				caseid = ca_cols[0]
+		if altid is None:
+			if 'altid' in ca_cols:
+				altid = 'altid'
+			elif ca_cols[1]!=caseid:
+				altid = ca_cols[1]
+			else:
+				altid = ca_cols[0]
+		if var is None:
+			if 'choice' in ca_cols:
+				var = 'choice'
+			elif 'chosen' in ca_cols:
+				var = 'chosen'
+			elif ca_cols[2]!=caseid and ca_cols[2]!=altid:
+				var = ca_cols[2]
+			elif ca_cols[1]!=caseid and ca_cols[1]!=altid:
+				var = ca_cols[1]
+			else:
+				var = ca_cols[0]
+		cols = "{} AS caseid, {} AS altid, {} AS choice".format(caseid,altid,var)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		n_alts = len(altcodes)
+		n_vars = 1
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		alt_slots = {a:n for n,a in enumerate(altcodes)}
+		n = 0	
+		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
+		for row in self.execute(qry):
+			if row[0] not in case_slots:
+				c = case_slots[row[0]] = n
+				caseids[c] = row[0]
+				n +=1
+			else:
+				c = case_slots[row[0]]
+			try:
+				a = alt_slots[row[1]]
+			except KeyError:
+				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+			result[c,a,:] = row[2:]
+		from .array import ldarray
+		result = result.view(ldarray)
+		result.vars = [var,]
+		return result, caseids
+
+	def array_avail(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool'):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_avail()
+		if altcodes is None:
+			altcodes = self.alternative_codes()
+		ca_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in ca_cols:
+				caseid = 'caseid'
+			else:
+				caseid = ca_cols[0]
+		if altid is None:
+			if 'altid' in ca_cols:
+				altid = 'altid'
+			elif ca_cols[1]!=caseid:
+				altid = ca_cols[1]
+			else:
+				altid = ca_cols[0]
+		if var is None:
+			if 'avail' in ca_cols:
+				var = 'avail'
+			elif 'available' in ca_cols:
+				var = 'available'
+			elif ca_cols[2]!=caseid and ca_cols[2]!=altid:
+				var = ca_cols[2]
+			elif ca_cols[1]!=caseid and ca_cols[1]!=altid:
+				var = ca_cols[1]
+			else:
+				var = ca_cols[0]
+		cols = "{} AS caseid, {} AS altid, {} AS avail".format(caseid,altid,var)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		n_alts = len(altcodes)
+		n_vars = 1
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		alt_slots = {a:n for n,a in enumerate(altcodes)}
+		n = 0	
+		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
+		for row in self.execute(qry):
+			if row[0] not in case_slots:
+				c = case_slots[row[0]] = n
+				caseids[c] = row[0]
+				n +=1
+			else:
+				c = case_slots[row[0]]
+			try:
+				a = alt_slots[row[1]]
+			except KeyError:
+				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+			result[c,a,:] = row[2:]
+		from .array import ldarray
+		result = result.view(ldarray)
+		result.vars = [var,]
+		return result, caseids
+
+	def provision(self, needs):
+		from . import Model
+		if isinstance(needs,Model):
+			m = needs
+			needs = m.needs()
+		else:
+			m = None
+		import numpy
+		provide = {}
+		cases = None
+		for key, req in needs.items():
+			if key=="Avail":
+				provide[key], c = self.array_avail()
+			elif key=="Weight":
+				provide[key], c = self.array_weight()
+			elif key=="Choice":
+				provide[key], c = self.array_choice()
+			elif key[-2:]=="CA":
+				provide[key], c = self.array_idca(vars=req.get_variables())
+			elif key[-2:]=="CO":
+				provide[key], c = self.array_idco(vars=req.get_variables())
+			if cases is None:
+				cases = c
+			elif not numpy.all(cases==c):
+				raise LarchError("mismatched caseids in provisioning")
+		provide['caseids'] = cases
+		if m is not None:
+			return m.provision(provide)
+		else:
+			return provide
+
+
 	def all_index_names(self):
 		z = set()
 		qry = "SELECT name FROM (SELECT * FROM sqlite_master UNION ALL SELECT * FROM sqlite_temp_master) WHERE type='index' ORDER BY name"

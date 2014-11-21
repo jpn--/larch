@@ -530,7 +530,20 @@ int sherpa::_find_ascent_direction (char& Method)
 			BUGGER(msg) << "bhhh=\n" << Bhhh.printSquare() ;
 			invHessTemp = Bhhh;
 			BUGGER(msg) << "invHessTemp1=\n" << invHessTemp.printSquare() ;
-			invHessTemp.inv(&msg);
+			
+			if (any_holdfast()) {
+				symmetric_matrix temp_free_hess (invHessTemp.size1()-count_holdfast());
+				
+				// invert hessian
+				hessfull_to_hessfree(&invHessTemp, &temp_free_hess) ;
+				temp_free_hess.inv();
+				hessfree_to_hessfull(&invHessTemp, &temp_free_hess) ;
+
+			} else {
+				invHessTemp.inv(&msg);
+			}
+			
+			
 			BUGGER(msg) << "invHessTemp=\n" << invHessTemp.printSquare() ;
 			break;
 	}
@@ -1073,4 +1086,83 @@ etk::symmetric_matrix* sherpa::robust_covariance_matrix()
 {
 	return &robustCovariance;
 }
+
+
+
+
+bool sherpa::any_holdfast()
+{
+	for (size_t hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			return true;
+		}
+	}
+	return false;
+}
+
+size_t sherpa::count_holdfast()
+{
+	size_t n=0;
+	for (size_t hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			n++;
+		}
+	}
+	return n;
+}
+
+
+void sherpa::hessfull_to_hessfree(const symmetric_matrix* full_matrix, symmetric_matrix* free_matrix)
+{
+	size_t hi, hj, fi, fj;
+	fi=0;
+	fj=0;
+	for (hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			// do not copy, this row is holdfast
+		} else {
+			fj=0;
+			for (hj=0; hj<dF(); hj++) {
+				if (FInfo[ FNames[hj] ].holdfast) {
+					// do not copy, this column is holdfast
+				} else {
+					(*free_matrix)(fi,fj) = (*full_matrix)(hi,hj);
+					fj++;
+				}
+			}
+			fi++;
+		}
+	}
+}
+
+
+void sherpa::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric_matrix* free_matrix)
+{
+	size_t hi, hj, fi, fj;
+	fi=0;
+	fj=0;
+	for (hi=0; hi<dF(); hi++) {
+		if (FInfo[ FNames[hi] ].holdfast) {
+			// do not copy, this row is holdfast
+			for (hj=0; hj<dF(); hj++) {
+				(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
+			}
+		} else {
+			fj=0;
+			for (hj=0; hj<dF(); hj++) {
+				if (FInfo[ FNames[hj] ].holdfast) {
+					// do not copy, this column is holdfast
+					(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
+				} else {
+					(*full_matrix)(hi,hj) = (*free_matrix)(fi,fj);
+					fj++;
+				}
+			}
+			fi++;
+		}
+	}
+}
+
+
+
 

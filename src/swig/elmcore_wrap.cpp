@@ -64866,7 +64866,7 @@ SWIGINTERN PyObject *_wrap_darray_req_satisfied_by(PyObject *SWIGUNUSEDPARM(self
   boosted::shared_ptr< elm::darray const > temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  bool result;
+  int result;
   
   if(!PyArg_UnpackTuple(args,(char *)"darray_req_satisfied_by",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__darray_req, 0 |  0 );
@@ -64897,7 +64897,7 @@ SWIGINTERN PyObject *_wrap_darray_req_satisfied_by(PyObject *SWIGUNUSEDPARM(self
   }
   {
     try {
-      result = (bool)((elm::darray_req const *)arg1)->satisfied_by((elm::darray const *)arg2);
+      result = (int)((elm::darray_req const *)arg1)->satisfied_by((elm::darray const *)arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64912,7 +64912,7 @@ SWIGINTERN PyObject *_wrap_darray_req_satisfied_by(PyObject *SWIGUNUSEDPARM(self
       return NULL;
     }
   }
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -70715,6 +70715,200 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_sherpa_any_holdfast(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  sherpa *arg1 = (sherpa *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"sherpa_any_holdfast",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sherpa, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "sherpa_any_holdfast" "', argument " "1"" of type '" "sherpa *""'"); 
+  }
+  arg1 = reinterpret_cast< sherpa * >(argp1);
+  {
+    try {
+      result = (bool)(arg1)->any_holdfast();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_sherpa_count_holdfast(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  sherpa *arg1 = (sherpa *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"sherpa_count_holdfast",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sherpa, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "sherpa_count_holdfast" "', argument " "1"" of type '" "sherpa *""'"); 
+  }
+  arg1 = reinterpret_cast< sherpa * >(argp1);
+  {
+    try {
+      result = (arg1)->count_holdfast();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_sherpa_hessfull_to_hessfree(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  sherpa *arg1 = (sherpa *) 0 ;
+  etk::symmetric_matrix *arg2 = (etk::symmetric_matrix *) 0 ;
+  etk::symmetric_matrix *arg3 = (etk::symmetric_matrix *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::symmetric_matrix const > temp2 ;
+  boosted::shared_ptr< etk::symmetric_matrix > temp3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"sherpa_hessfull_to_hessfree",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sherpa, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "sherpa_hessfull_to_hessfree" "', argument " "1"" of type '" "sherpa *""'"); 
+  }
+  arg1 = reinterpret_cast< sherpa * >(argp1);
+  {
+    if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+      SWIG_fail;
+    }
+    temp2 = boosted::make_shared<const etk::symmetric_matrix>(obj1);
+    arg2 = const_cast<etk::symmetric_matrix*>( &(*temp2) );
+  }
+  {
+    if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+      SWIG_fail;
+    }
+    temp3 = boosted::make_shared<etk::symmetric_matrix>(obj2);
+    arg3 = &(*temp3);
+  }
+  {
+    try {
+      (arg1)->hessfull_to_hessfree((etk::symmetric_matrix const *)arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_sherpa_hessfree_to_hessfull(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  sherpa *arg1 = (sherpa *) 0 ;
+  etk::symmetric_matrix *arg2 = (etk::symmetric_matrix *) 0 ;
+  etk::symmetric_matrix *arg3 = (etk::symmetric_matrix *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boosted::shared_ptr< etk::symmetric_matrix > temp2 ;
+  boosted::shared_ptr< etk::symmetric_matrix const > temp3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"sherpa_hessfree_to_hessfull",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sherpa, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "sherpa_hessfree_to_hessfull" "', argument " "1"" of type '" "sherpa *""'"); 
+  }
+  arg1 = reinterpret_cast< sherpa * >(argp1);
+  {
+    if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+      SWIG_fail;
+    }
+    temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
+    arg2 = &(*temp2);
+  }
+  {
+    if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+      SWIG_fail;
+    }
+    temp3 = boosted::make_shared<const etk::symmetric_matrix>(obj2);
+    arg3 = const_cast<etk::symmetric_matrix*>( &(*temp3) );
+  }
+  {
+    try {
+      (arg1)->hessfree_to_hessfull(arg2,(etk::symmetric_matrix const *)arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_sherpa(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   sherpa *arg1 = (sherpa *) 0 ;
@@ -70867,6 +71061,116 @@ SWIGINTERN PyObject *_wrap_Model2_needs(PyObject *SWIGUNUSEDPARM(self), PyObject
     }
   }
   resultobj = swig::from(static_cast< std::map<std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_provision(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::map< std::string,boosted::shared_ptr< elm::darray const >,std::less< std::string >,std::allocator< std::pair< std::string const,boosted::shared_ptr< elm::darray const > > > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< std::string,boosted::shared_ptr< elm::darray const > > temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_provision",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_provision" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (!PyDict_Check(obj1)) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a dict"));
+      SWIG_fail;
+    }
+    PyObject *thekey, *thearray;
+    Py_ssize_t pos = 0;
+    while (PyDict_Next(obj1, &pos, &thekey, &thearray)) {
+      if (PyArray_Check(thearray)) {
+        if (  (PyArray_TYPE((PyArrayObject*)thearray)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires all array types to be DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp2[PyString_ExtractCppString(thekey)] = boosted::make_shared<const elm::darray>(thearray);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &temp2;
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+      
+      
+    }
+    
+  }
+  {
+    try {
+      (arg1)->provision((std::map< std::string,boosted::shared_ptr< elm::darray const >,std::less< std::string >,std::allocator< std::pair< std::string const,boosted::shared_ptr< elm::darray const > > > > const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_is_provisioned(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_is_provisioned",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_is_provisioned" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = (int)((elm::Model2 const *)arg1)->is_provisioned();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -81670,11 +81974,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"sherpa_covariance_matrix", _wrap_sherpa_covariance_matrix, METH_VARARGS, NULL},
 	 { (char *)"sherpa_robust_covariance_matrix", _wrap_sherpa_robust_covariance_matrix, METH_VARARGS, NULL},
 	 { (char *)"new_sherpa", _wrap_new_sherpa, METH_VARARGS, NULL},
+	 { (char *)"sherpa_any_holdfast", _wrap_sherpa_any_holdfast, METH_VARARGS, NULL},
+	 { (char *)"sherpa_count_holdfast", _wrap_sherpa_count_holdfast, METH_VARARGS, NULL},
+	 { (char *)"sherpa_hessfull_to_hessfree", _wrap_sherpa_hessfull_to_hessfree, METH_VARARGS, NULL},
+	 { (char *)"sherpa_hessfree_to_hessfull", _wrap_sherpa_hessfree_to_hessfull, METH_VARARGS, NULL},
 	 { (char *)"delete_sherpa", _wrap_delete_sherpa, METH_VARARGS, NULL},
 	 { (char *)"sherpa_swigregister", sherpa_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCA", _wrap_Model2_CoefUtilityCA, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCO", _wrap_Model2_CoefUtilityCO, METH_VARARGS, NULL},
 	 { (char *)"Model2_needs", _wrap_Model2_needs, METH_VARARGS, NULL},
+	 { (char *)"Model2_provision", _wrap_Model2_provision, METH_VARARGS, NULL},
+	 { (char *)"Model2_is_provisioned", _wrap_Model2_is_provisioned, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCA_set", _wrap_Model2_Data_UtilityCA_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCA_get", _wrap_Model2_Data_UtilityCA_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data_UtilityCO_set", _wrap_Model2_Data_UtilityCO_set, METH_VARARGS, NULL},

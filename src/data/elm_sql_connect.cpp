@@ -79,8 +79,13 @@ std::vector<std::string> elm::SQLiteDB::all_table_names() const
 std::vector<std::string> elm::SQLiteDB::column_names(std::string query) const
 {
 	std::vector<std::string> x;
+	try {
 	SQLiteStmtPtr s = sql_statement(query);
 	x = s->column_names();
+	} catch(etk::SQLiteError& err) {
+	SQLiteStmtPtr s = sql_statement("select * from "+query);
+	x = s->column_names();
+	}
 	return x;
 }
 

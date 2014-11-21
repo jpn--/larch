@@ -259,7 +259,7 @@
 		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
 		SWIG_fail;
 	}
-}
+} 
 
 %typemap(in) const elm::darray* (boosted::shared_ptr<const elm::darray> temp) {
     if (PyArray_Check($input)) {
@@ -282,6 +282,71 @@
 		SWIG_fail;
 	}
 }
+
+
+
+%typecheck(7) const std::map< std::string, boosted::shared_ptr<const elm::darray> >&
+{
+	if (!PyDict_Check($input)) {
+		$1 = 0;
+	} else {
+		$1 = 1;
+		PyObject *thekey, *thearray;
+		Py_ssize_t pos = 0;
+		while (PyDict_Next($input, &pos, &thekey, &thearray)) {
+			if (PyArray_Check(thearray)) {
+				if (  (PyArray_TYPE((PyArrayObject*)thearray)!= NPY_DOUBLE)
+					&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
+					&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
+					) {
+					$1 = 0;
+				}
+			} else {$1 = 0;}
+			if (!PyUnicode_Check(thekey)) { $1 = 0; }
+		}
+	}
+}
+
+
+%typemap(in) const std::map< std::string, boosted::shared_ptr<const elm::darray> >& ( std::map< std::string, boosted::shared_ptr<const elm::darray> > temp)
+{
+	if (!PyDict_Check($input)) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a dict"));
+		SWIG_fail;
+	}
+	PyObject *thekey, *thearray;
+	Py_ssize_t pos = 0;
+	while (PyDict_Next($input, &pos, &thekey, &thearray)) {
+
+		if (PyArray_Check(thearray)) {
+		if (  (PyArray_TYPE((PyArrayObject*)thearray)!= NPY_DOUBLE)
+			&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
+			&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
+			) {
+			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires all array types to be DOUBLE or BOOL or INT64"));
+			SWIG_fail;
+		}
+		try {
+			temp[PyString_ExtractCppString(thekey)] = boosted::make_shared<const elm::darray>(thearray);
+		} catch (const std::exception& e) {
+			PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+			SWIG_fail;
+		}
+		$1 = &temp;
+		} else {
+			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+			SWIG_fail;
+		}
+
+
+	}
+	
+}
+
+
+
+
+
 
 /* Convert from C --> Python */
 

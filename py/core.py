@@ -1640,7 +1640,7 @@ class darray_req(object):
     def set_variables(self, *args) -> "void" : return _core.darray_req_set_variables(self, *args)
     def __str__(self) -> "std::string" : return _core.darray_req___str__(self)
     def __repr__(self) -> "std::string" : return _core.darray_req___repr__(self)
-    def satisfied_by(self, *args) -> "bool" : return _core.darray_req_satisfied_by(self, *args)
+    def satisfied_by(self, *args) -> "int" : return _core.darray_req_satisfied_by(self, *args)
 darray_req_swigregister = _core.darray_req_swigregister
 darray_req_swigregister(darray_req)
 
@@ -1763,6 +1763,10 @@ class sherpa(ParameterList):
         this = _core.new_sherpa(*args)
         try: self.this.append(this)
         except: self.this = this
+    def any_holdfast(self) -> "bool" : return _core.sherpa_any_holdfast(self)
+    def count_holdfast(self) -> "size_t" : return _core.sherpa_count_holdfast(self)
+    def hessfull_to_hessfree(self, *args) -> "void" : return _core.sherpa_hessfull_to_hessfree(self, *args)
+    def hessfree_to_hessfull(self, *args) -> "void" : return _core.sherpa_hessfree_to_hessfull(self, *args)
     __swig_destroy__ = _core.delete_sherpa
     __del__ = lambda self : None;
 sherpa_swigregister = _core.sherpa_swigregister
@@ -1781,6 +1785,14 @@ class Model2(sherpa):
 
         return val
 
+    def provision(self, *args) -> "void" :
+        if len(args)==0 and hasattr(self,'db') and isinstance(self.db,DB):
+        	args = (self.db.provision(self.needs()), )
+
+
+        return _core.Model2_provision(self, *args)
+
+    def is_provisioned(self) -> "int" : return _core.Model2_is_provisioned(self)
     Data_UtilityCA = _swig_property(_core.Model2_Data_UtilityCA_get, _core.Model2_Data_UtilityCA_set)
     Data_UtilityCO = _swig_property(_core.Model2_Data_UtilityCO_get, _core.Model2_Data_UtilityCO_set)
     Data_SamplingCA = _swig_property(_core.Model2_Data_SamplingCA_get, _core.Model2_Data_SamplingCA_set)

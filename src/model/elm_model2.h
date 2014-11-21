@@ -173,8 +173,22 @@ namespace elm {
 			for i,j in val.items(): temp[i] = j
 			val = temp
 		%}
+		%feature("pythonprepend") provision %{
+			if len(args)==0 and hasattr(self,'db') and isinstance(self.db,DB):
+				args = (self.db.provision(self.needs()), )
+		%}
 		#endif // def SWIG
 		std::map<std::string, elm::darray_req> needs() const;
+		void provision(const std::map< std::string, boosted::shared_ptr<const elm::darray> >&);
+		int is_provisioned() const;
+	private:
+		std::string _subprovision(const std::string& name, boosted::shared_ptr<const darray>& storage,
+							 	  const std::map< std::string, boosted::shared_ptr<const darray> >& input,
+								  const std::map<std::string, darray_req>& need,
+								  std::map<std::string, size_t>& ncases);
+		int _is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires) const;
+
+
 
 	public:
 		elm::datamatrix  Data_UtilityCA;
@@ -195,17 +209,17 @@ namespace elm {
 		
 
 
-		boosted::shared_ptr<darray> Darray_UtilityCA;
-		boosted::shared_ptr<darray> Darray_UtilityCO;
-		boosted::shared_ptr<darray> Darray_SamplingCA;
-		boosted::shared_ptr<darray> Darray_SamplingCO;
-		boosted::shared_ptr<darray> Darray_QuantityCA;
-		boosted::shared_ptr<darray> Darray_QuantLogSum;
-		boosted::shared_ptr<darray> Darray_LogSum;
+		elm::darray_ptr Darray_UtilityCA;
+		elm::darray_ptr Darray_UtilityCO;
+		elm::darray_ptr Darray_SamplingCA;
+		elm::darray_ptr Darray_SamplingCO;
+		//elm::darray_ptr Darray_QuantityCA;
+		//elm::darray_ptr Darray_QuantLogSum;
+		//elm::darray_ptr Darray_LogSum;
 		
-		boosted::shared_ptr<darray> Darray_Choice;
-		boosted::shared_ptr<darray> Darray_Weight;
-		boosted::shared_ptr<darray> Darray_Avail;
+		elm::darray_ptr Darray_Choice;
+		elm::darray_ptr Darray_Weight;
+		elm::darray_ptr Darray_Avail;
 		
 	
 	public:
@@ -281,10 +295,10 @@ namespace elm {
 
 		void calculate_hessian_and_save();
 		
-		bool any_holdfast() ;
-		size_t count_holdfast() ;
-		void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
-		void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
+		//bool any_holdfast() ;
+		//size_t count_holdfast() ;
+		//void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
+		//void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
 	
 		void calculate_parameter_covariance();
 		

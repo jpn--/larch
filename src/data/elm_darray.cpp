@@ -145,7 +145,6 @@ elm::darray_req::darray_req(int dim, int tp, int nalts)
 , n_alts         (nalts)
 , contig         (true)
 {
-	std::cerr << "elm::darray_req::darray_req(3)\n";
 }
 
 elm::darray_req::darray_req(const elm::darray_req& x)
@@ -155,7 +154,6 @@ elm::darray_req::darray_req(const elm::darray_req& x)
 , n_alts         (x.n_alts)
 , contig         (x.contig)
 {
-	std::cerr << "elm::darray_req::darray_req(1)\n";
 }
 
 elm::darray_req::darray_req()
@@ -165,23 +163,21 @@ elm::darray_req::darray_req()
 , n_alts         (0)
 , contig         (true)
 {
-	std::cerr << "elm::darray_req::darray_req()\n";
 }
 
 
 elm::darray_req::~darray_req()
 {
-	std::cerr << "elm::darray_req::~darray_req()\n";
 }
 
-bool elm::darray_req::satisfied_by(const elm::darray* x) const
+int elm::darray_req::satisfied_by(const elm::darray* x) const
 {
-	if (x->dimty != dimty) return false;
-	if (x->dtype != dtype) return false;
-	if (x->get_variables() != variables) return false;
-	if (!contig) return true;
-	if (contig && x->contig) return true;
-	return false;
+	if (x->dimty != dimty) return -1;
+	if (x->dtype != dtype) return -2;
+	if ((x->get_variables().size()>0) && (variables.size()>0) && (x->get_variables() != variables)) return -3;
+	if (!contig) return 0;
+	if (contig && x->contig) return 0;
+	return -4;
 }
 
 size_t elm::darray_req::nVars() const
@@ -216,31 +212,38 @@ elm::darray::darray(PyObject* source_arr)
 : elm::darray_req::darray_req()
 , _repository(source_arr)
 {
-	if (!PyObject_HasAttrString(source_arr, "vars")) {
-		OOPS("input array does not have vars defined");
+	if (!PyArray_Check(source_arr)) {
+		OOPS("input must be an array");
 	}
-	PyObject* py_vars = PyObject_GetAttrString(source_arr, "vars");
+
 	etk::strvec vs;
-	
-	for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
-		PyObject* item = PySequence_GetItem(py_vars, i);
-		if (!item) {
-			OOPS("failed reading var name");
+	if (PyObject_HasAttrString(source_arr, "vars")) {
+		PyObject* py_vars = PyObject_GetAttrString(source_arr, "vars");
+		
+		for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+			PyObject* item = PySequence_GetItem(py_vars, i);
+			if (!item) {
+				OOPS("failed reading var name");
+			}
+			vs.push_back(PyString_ExtractCppString(item));
+			Py_CLEAR(item);
 		}
-		vs.push_back(PyString_ExtractCppString(item));
-		Py_CLEAR(item);
+		
+		Py_CLEAR(py_vars);
 	}
-	
-	Py_CLEAR(py_vars);
 	
 	int dim = PyArray_NDIM((PyArrayObject*) source_arr);
+	dimty = dim;
+	dtype = PyArray_TYPE((PyArrayObject*) source_arr);
+	contig = PyArray_ISCARRAY((PyArrayObject*) source_arr);
 	
 	if (dim==3) {
-		if (vs.size()!=_repository.size3()) {
+		if (vs.size()>0 && vs.size()!=_repository.size3()) {
 			OOPS("input array does not have correct number of vars defined (",vs.size()," names for ",_repository.size3()," numbers)");
 		}
+		n_alts = PyArray_DIMS((PyArrayObject*) source_arr)[1];
 	} else if (dim==2) {
-		if (vs.size()!=_repository.size2()) {
+		if (vs.size()>0 && vs.size()!=_repository.size2()) {
 			OOPS("input array does not have correct number of vars defined (",vs.size()," names for ",_repository.size2()," numbers)");
 		}
 	} else {

@@ -99,7 +99,7 @@ namespace elm {
 		virtual std::string __str__()  const;
 		virtual std::string __repr__() const;
 		
-		bool satisfied_by(const elm::darray* x) const;
+		int satisfied_by(const elm::darray* x) const;
 	};
 
 
@@ -193,6 +193,7 @@ namespace elm {
 
 
 	
+	typedef boosted::shared_ptr<const elm::darray> darray_ptr;
 
 
 	#endif // ndef SWIG

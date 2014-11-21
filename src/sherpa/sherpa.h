@@ -208,6 +208,12 @@ public:
 public:
 	sherpa();
 	sherpa(const sherpa& dupe);
+	
+	bool any_holdfast();
+	size_t count_holdfast();
+	void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
+	void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
+
 };
 
 

@@ -120,7 +120,6 @@ class TestData1(unittest.TestCase):
 		w = ldarray(z, vars=['x','b','c'])
 		req = darray_req(2,numpy.dtype('float64'))
 		req.set_variables(['a','b','c'])
-		self.assertTrue(req.satisfied_by(q))
-		self.assertFalse(req.satisfied_by(w))
-		with self.assertRaises(LarchError):
-			req.satisfied_by(z)
+		self.assertTrue(req.satisfied_by(q)==0)
+		self.assertFalse(req.satisfied_by(w)==0)
+		self.assertTrue(req.satisfied_by(z)==0)

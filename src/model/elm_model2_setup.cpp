@@ -332,3 +332,149 @@ void elm::Model2::tearDown()
 	loglike_dispatcher.reset();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+std::string elm::Model2::_subprovision(const std::string& name, boosted::shared_ptr<const darray>& storage,
+								const std::map< std::string, boosted::shared_ptr<const darray> >& input,
+								const std::map<std::string, darray_req>& need,
+								std::map<std::string, size_t>& ncases)
+{
+	auto i = input.find(name);
+	auto n = need.find(name);
+	if (i!=input.end()) {
+		// This pointer is provisioned
+		if (n->second.satisfied_by(&*i->second)<0) {
+			// if it does not satisty the need, add to the exception
+			storage = nullptr;
+			return cat("\ndata for ",name," is provisioned by an array that does not satisfy the need");
+		}
+		storage = i->second;
+		ncases[name] = storage->nCases();
+	} else {
+		// This pointer is not provisioned
+		storage = nullptr;
+		if (n != need.end()) {
+			// if it is needed, add to the exception
+			return cat("\ndata for ",name," is needed but not provisioned");
+		}
+	}
+	return "";
+}
+
+
+
+
+void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<const darray> >& input)
+{
+	std::string ret = "";
+	
+	std::map<std::string, darray_req> need = needs();
+	std::map<std::string, size_t> ncases;
+	
+	ret += _subprovision("UtilityCA", Darray_UtilityCA, input, need, ncases);
+	ret += _subprovision("UtilityCO", Darray_UtilityCO, input, need, ncases);
+	
+	if (!ret.empty()) {
+		OOPS("provisioning error:",ret);
+	}
+	
+	auto caseiter = ncases.begin();
+	size_t nc = caseiter->second;
+	for (; caseiter!=ncases.end(); caseiter++) {
+		if (nc != caseiter->second) {
+			OOPS("provisioning error: inconsistent numbers or cases");
+		}
+	}
+}
+
+std::map<std::string, darray_req> elm::Model2::needs() const
+{
+	std::map<std::string, darray_req> requires;
+	
+	etk::strvec u_ca = __identify_needs(Input_Utility.ca);
+	if (u_ca.size()) {
+		requires["UtilityCA"] = darray_req (3,NPY_DOUBLE,Xylem.n_elemental());
+		requires["UtilityCA"].set_variables(u_ca);
+	}
+	
+	etk::strvec u_co = __identify_needs(Input_Utility.co);
+	if (u_co.size()) {
+		requires["UtilityCO"] = darray_req (2,NPY_DOUBLE);
+		requires["UtilityCO"].set_variables(u_co);
+	}
+
+
+	etk::strvec s_ca = __identify_needs(Input_Sampling.ca);
+	if (s_ca.size()) {
+		requires["SamplingCA"] = darray_req (3,NPY_DOUBLE,Xylem.n_elemental());
+		requires["SamplingCA"].set_variables(s_ca);
+	}
+	
+	etk::strvec s_co = __identify_needs(Input_Sampling.co);
+	if (s_co.size()) {
+		requires["SamplingCO"] = darray_req (2,NPY_DOUBLE);
+		requires["SamplingCO"].set_variables(s_co);
+	}
+	
+	
+	requires["Avail"] = darray_req (3,NPY_BOOL);
+	requires["Weight"] = darray_req (2,NPY_DOUBLE);
+	requires["Choice"] = darray_req (3,NPY_DOUBLE);
+	
+	return requires;
+}
+
+
+
+#define MISSING_BUT_NEEDED 0x1
+#define GIVEN_BUT_WRONG    0x2
+#define NOT_NEEDED         0x0
+#define GIVEN_CORRECTLY    0x0
+
+
+int elm::Model2::_is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires) const
+{
+	auto i = requires.find(name);
+	if (i!=requires.end()) {
+		if (!arr) {
+			return MISSING_BUT_NEEDED;
+		}
+		if (i->second.satisfied_by(&*arr)==0) {
+			return GIVEN_CORRECTLY;
+		} else {
+			OOPS(name," is provisioned incorrectly, needs <",i->second.__str__(),"> but provides <",arr->__str__(),">");
+			//return GIVEN_BUT_WRONG;
+		}
+	} else {
+		return NOT_NEEDED;
+	}
+}
+
+int elm::Model2::is_provisioned() const
+{
+	std::map<std::string, darray_req> requires = needs();
+	
+	int i = 0;
+	i |= _is_subprovisioned("UtilityCA", Darray_UtilityCA, requires);
+	i |= _is_subprovisioned("UtilityCO", Darray_UtilityCO, requires);
+	i |= _is_subprovisioned("SamplingCA", Darray_SamplingCA, requires);
+	i |= _is_subprovisioned("SamplingCO", Darray_SamplingCO, requires);
+	
+	if (i & GIVEN_BUT_WRONG) {
+		return -1;
+	}
+	if (i & MISSING_BUT_NEEDED) {
+		return 0;
+	}
+	return 1;
+}
+
