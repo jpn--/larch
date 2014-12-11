@@ -784,14 +784,14 @@ class SQLiteDB(object):
 
     def column_names(self, *args) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.SQLiteDB_column_names(self, *args)
     def column_name(self, *args) -> "std::string" : return _core.SQLiteDB_column_name(self, *args)
-    def logger(self, *args) -> "void" :
+    def logger(self, log : 'PyObject *'=None) -> "PyObject *" :
         """
         The SQLiteDB object contains a link to the standard python logging service. By default,
         no logger is connected. Use this function to assign a logger, and then use the usual
         python logging controls to set the quantity/destination of output. To stop logging,
         call this function without any arguments.
         """
-        return _core.SQLiteDB_logger(self, *args)
+        return _core.SQLiteDB_logger(self, log)
 
     def error_code(self) -> "int" : return _core.SQLiteDB_error_code(self)
     def error_msg(self) -> "std::string" : return _core.SQLiteDB_error_msg(self)
@@ -901,6 +901,8 @@ class Facet(SQLiteDB,Fountain):
     def unweighted(self) -> "bool" : return _core.Facet_unweighted(self)
     def all_alts_always_available(self) -> "bool" : return _core.Facet_all_alts_always_available(self)
     def matrix_library(self, *args) -> "elm::datamatrix" : return _core.Facet_matrix_library(self, *args)
+    def _array_idco_reader(self, *args) -> "void" : return _core.Facet__array_idco_reader(self, *args)
+    def _array_idca_reader(self, *args) -> "void" : return _core.Facet__array_idca_reader(self, *args)
     def sql(self):
     	print("sql_idco:   %s"%(self.sql_idco   if self.sql_idco   else "<blank>"))
     	print("sql_idca:   %s"%(self.sql_idca   if self.sql_idca   else "<blank>"))
@@ -1401,6 +1403,7 @@ class model_options_t(object):
     hessian_diagnostic = _swig_property(_core.model_options_t_hessian_diagnostic_get, _core.model_options_t_hessian_diagnostic_set)
     threads = _swig_property(_core.model_options_t_threads_get, _core.model_options_t_threads_set)
     calc_null_likelihood = _swig_property(_core.model_options_t_calc_null_likelihood_get, _core.model_options_t_calc_null_likelihood_set)
+    null_disregards_holdfast = _swig_property(_core.model_options_t_null_disregards_holdfast_get, _core.model_options_t_null_disregards_holdfast_set)
     calc_std_errors = _swig_property(_core.model_options_t_calc_std_errors_get, _core.model_options_t_calc_std_errors_set)
     mute_nan_warnings = _swig_property(_core.model_options_t_mute_nan_warnings_get, _core.model_options_t_mute_nan_warnings_set)
     force_finite_diff_grad = _swig_property(_core.model_options_t_force_finite_diff_grad_get, _core.model_options_t_force_finite_diff_grad_set)
@@ -1409,14 +1412,15 @@ class model_options_t(object):
     teardown_after_estimate = _swig_property(_core.model_options_t_teardown_after_estimate_get, _core.model_options_t_teardown_after_estimate_set)
     weight_autorescale = _swig_property(_core.model_options_t_weight_autorescale_get, _core.model_options_t_weight_autorescale_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
-    def __init__(self, threads : 'int'=1, calc_null_likelihood : 'bool'=True, calc_std_errors : 'bool'=True, 
-    gradient_diagnostic : 'int'=0, hessian_diagnostic : 'int'=0, mute_nan_warnings : 'bool'=True, 
-    force_finite_diff_grad : 'bool'=False, save_db_hash : 'bool'=False, 
-    force_recalculate : 'bool'=False, author : 'std::string'="Chuck Finley", 
-    teardown_after_estimate : 'bool'=True, weight_autorescale : 'bool'=True): 
-        this = _core.new_model_options_t(threads, calc_null_likelihood, calc_std_errors, gradient_diagnostic, hessian_diagnostic, 
-    mute_nan_warnings, force_finite_diff_grad, save_db_hash, force_recalculate, 
-    author, teardown_after_estimate, weight_autorescale)
+    def __init__(self, threads : 'int'=1, calc_null_likelihood : 'bool'=True, null_disregards_holdfast : 'bool'=True, 
+    calc_std_errors : 'bool'=True, gradient_diagnostic : 'int'=0, 
+    hessian_diagnostic : 'int'=0, mute_nan_warnings : 'bool'=True, force_finite_diff_grad : 'bool'=False, 
+    save_db_hash : 'bool'=False, force_recalculate : 'bool'=False, 
+    author : 'std::string'="Chuck Finley", teardown_after_estimate : 'bool'=True, 
+    weight_autorescale : 'bool'=True): 
+        this = _core.new_model_options_t(threads, calc_null_likelihood, null_disregards_holdfast, calc_std_errors, gradient_diagnostic, 
+    hessian_diagnostic, mute_nan_warnings, force_finite_diff_grad, 
+    save_db_hash, force_recalculate, author, teardown_after_estimate, weight_autorescale)
         try: self.this.append(this)
         except: self.this = this
     def __call__(self, *args, **kwargs) -> "void" : return _core.model_options_t___call__(self, *args, **kwargs)
@@ -1792,17 +1796,8 @@ class Model2(sherpa):
 
         return _core.Model2_provision(self, *args)
 
-    def is_provisioned(self) -> "int" : return _core.Model2_is_provisioned(self)
-    Data_UtilityCA = _swig_property(_core.Model2_Data_UtilityCA_get, _core.Model2_Data_UtilityCA_set)
-    Data_UtilityCO = _swig_property(_core.Model2_Data_UtilityCO_get, _core.Model2_Data_UtilityCO_set)
-    Data_SamplingCA = _swig_property(_core.Model2_Data_SamplingCA_get, _core.Model2_Data_SamplingCA_set)
-    Data_SamplingCO = _swig_property(_core.Model2_Data_SamplingCO_get, _core.Model2_Data_SamplingCO_set)
-    Data_QuantityCA = _swig_property(_core.Model2_Data_QuantityCA_get, _core.Model2_Data_QuantityCA_set)
-    Data_QuantLogSum = _swig_property(_core.Model2_Data_QuantLogSum_get, _core.Model2_Data_QuantLogSum_set)
-    Data_LogSum = _swig_property(_core.Model2_Data_LogSum_get, _core.Model2_Data_LogSum_set)
-    Data_Choice = _swig_property(_core.Model2_Data_Choice_get, _core.Model2_Data_Choice_set)
-    Data_Weight = _swig_property(_core.Model2_Data_Weight_get, _core.Model2_Data_Weight_set)
-    Data_Avail = _swig_property(_core.Model2_Data_Avail_get, _core.Model2_Data_Avail_set)
+    def is_provisioned(self, ex : 'bool'=True) -> "int" : return _core.Model2_is_provisioned(self, ex)
+    def Data(self, *args) -> "elm::darray const *" : return _core.Model2_Data(self, *args)
     def calc_utility(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility(self, *args)
     def calc_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_probability(self, *args)
     def calc_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_logsums(self, *args)
@@ -1818,12 +1813,18 @@ class Model2(sherpa):
     link = _swig_property(_core.Model2_link_get, _core.Model2_link_set)
     samplingbias = _swig_property(_core.Model2_samplingbias_get, _core.Model2_samplingbias_set)
     def Input_Graph(self) -> "elm::ComponentGraphDNA" : return _core.Model2_Input_Graph(self)
-    def logger(self, *args) -> "void" : return _core.Model2_logger(self, *args)
+    def logger(self, l : 'PyObject *'=None) -> "PyObject *" : return _core.Model2_logger(self, l)
     _string_sender_ptr = _swig_property(_core.Model2__string_sender_ptr_get, _core.Model2__string_sender_ptr_set)
     option = _swig_property(_core.Model2_option_get, _core.Model2_option_set)
-    def tally_chosen(self) -> "etk::ndarray *" : return _core.Model2_tally_chosen(self)
-    def tally_avail(self) -> "etk::ndarray *" : return _core.Model2_tally_avail(self)
-    def estimate(self, *args) -> "elm::runstats" : return _core.Model2_estimate(self, *args)
+    def estimate(self, *args) -> "elm::runstats" :
+        if self._ref_to_db is not None and self.is_provisioned(False)==0:
+        	self.provision()
+        	self.setUpMessage = "autoprovision yes (estimate)"
+        	if self.logger(): self.logger().info("autoprovisioned data from database")
+
+
+        return _core.Model2_estimate(self, *args)
+
     def estimate_tight(self, magnitude : 'double'=8) -> "elm::runstats" : return _core.Model2_estimate_tight(self, magnitude)
     def _get_parameter(self) -> "PyObject *" : return _core.Model2__get_parameter(self)
     def _get_nest(self) -> "PyObject *" : return _core.Model2__get_nest(self)
@@ -1872,7 +1873,16 @@ class Model2(sherpa):
 
         return val
 
-    def setUp(self, and_load_data : 'bool'=True) -> "void" : return _core.Model2_setUp(self, and_load_data)
+    def setUp(self, and_load_data : 'bool'=True) -> "void" :
+        if self._ref_to_db is not None and self.is_provisioned(False)==0:
+        	self.provision()
+        	self.setUpMessage = "autoprovision yes (setUp)"
+        	if self.logger(): self.logger().info("autoprovisioned data from database")
+
+
+        return _core.Model2_setUp(self, and_load_data)
+
+    setUpMessage = _swig_property(_core.Model2_setUpMessage_get, _core.Model2_setUpMessage_set)
     def tearDown(self) -> "void" : return _core.Model2_tearDown(self)
     title = _swig_property(_core.Model2_title_get, _core.Model2_title_set)
     def save_buffer(self) -> "std::string" : return _core.Model2_save_buffer(self)

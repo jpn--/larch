@@ -98,25 +98,57 @@ std::string elm::SQLiteDB::column_name(std::string query, int n) const
 }
 
 
-void elm::SQLiteDB::logger(std::string log_name)
+PyObject* elm::SQLiteDB::logger(std::string log_name)
 {
 	if (log_name=="") {
 		msg.change_logger_name("");
 	} else {
 		msg.change_logger_name("larch."+log_name);
 	}
+	
+	return msg.get_logger();
 }
 
-void elm::SQLiteDB::logger(bool z)
+PyObject* elm::SQLiteDB::logger(bool z)
 {
 	if (!z) {
 		msg.change_logger_name("");
 	} else {
 		msg.change_logger_name("larch.Data");
 	}
+	return msg.get_logger();
 }
 
+PyObject* elm::SQLiteDB::logger(int z)
+{
+	if (z <=0 ) {
+		msg.change_logger_name("");
+	} else {
+		msg.change_logger_name("larch.Data");
+	}
+	return msg.get_logger();
+}
 
+PyObject* elm::SQLiteDB::logger(PyObject* z)
+{
+	if (PyLong_Check(z)) {
+		return logger((int)PyLong_AS_LONG(z));
+	}
+
+	if (PyUnicode_Check(z)) {
+		return logger(PyString_ExtractCppString(z));
+	}
+
+	if (PyBool_Check(z)) {
+		return logger(Py_True==z);
+	}
+
+	if ( z && z!=Py_None ) {
+		msg.set_logger(z);
+	} 
+	
+	return msg.get_logger();
+}
 
 
 
@@ -590,6 +622,9 @@ long long elm::SQLiteStmt::getInt64 (int column)
 
 double elm::SQLiteStmt::getDouble(int column)
 { return sqlite3_column_double(_statement, column); }
+
+bool elm::SQLiteStmt::getBool(int column)
+{ return (bool)sqlite3_column_int(_statement, column); }
 
 void elm::SQLiteStmt::getDoubles (int startColumn, const int& endColumn,
 						double* pushLocation, const unsigned& pushIncrement)

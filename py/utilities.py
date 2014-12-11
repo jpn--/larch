@@ -678,6 +678,8 @@ class _param_add(pmath):
 		self._p = None
 		self._left = left
 		self._right = right
+		self._fmt = "{}"
+		self._name = ""
 	def value(self,m):
 		if isinstance(self._left, pmath):
 			x = self._left.value(m)
@@ -702,6 +704,8 @@ class _param_subtract(pmath):
 		self._p = None
 		self._left = left
 		self._right = right
+		self._fmt = "{}"
+		self._name = ""
 	def value(self,m):
 		if isinstance(self._left, pmath):
 			x = self._left.value(m)
@@ -727,6 +731,8 @@ class _param_multiply(pmath):
 		self._p = None
 		self._left = left
 		self._right = right
+		self._fmt = "{}"
+		self._name = ""
 	def value(self,m):
 		if isinstance(self._left, pmath):
 			x = self._left.value(m)
@@ -752,6 +758,8 @@ class _param_divide(pmath):
 		self._p = None
 		self._left = left
 		self._right = right
+		self._fmt = "{}"
+		self._name = ""
 	def value(self,m):
 		if isinstance(self._left, pmath):
 			x = self._left.value(m)
@@ -779,6 +787,8 @@ class _param_negate(pmath):
 	def __init__(self,orig):
 		self._p = None
 		self._orig = orig
+		self._fmt = "{}"
+		self._name = ""
 	def value(self,m):
 		if isinstance(self._orig, pmath):
 			return -self._orig.value(m)

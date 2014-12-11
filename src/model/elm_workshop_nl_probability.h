@@ -62,7 +62,7 @@ public:
 	
 	const paramArray* Params_LogSum;
 	
-	datamatrix Data_Avail;
+	elm::darray_ptr Data_Avail;
 
 	etk::memarray_raw Workspace;
 	unsigned nNodes;
@@ -80,7 +80,7 @@ public:
 	 , elm::ca_co_packet UtilPacket
 	 , elm::ca_co_packet SampPacket
 	 , const paramArray& Params_LogSum
-	 , datamatrix     Data_Avail
+	 , elm::darray_ptr     Data_Avail
 	 ,  etk::ndarray* Probability
 	 ,  etk::ndarray* Cond_Prob
 	 ,	etk::ndarray* AdjProbability

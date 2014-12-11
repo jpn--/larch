@@ -185,6 +185,17 @@ size_t elm::darray_req::nVars() const
 	return variables.size();
 }
 
+size_t elm::darray::nVars() const
+{
+	if (dimty==2) {
+		return _repository.size2();
+	}
+	if (dimty==3) {
+		return _repository.size3();
+	}
+	return 1;
+}
+
 size_t elm::darray_req::nAlts() const
 {
 	return n_alts;
@@ -206,6 +217,13 @@ elm::darray::darray(const elm::darray::darray& source_arr)
 : elm::darray_req::darray_req()
 , _repository(source_arr._repository)
 {
+}
+
+elm::darray::darray(const elm::darray::darray& source_arr, double scale)
+: elm::darray_req::darray_req()
+, _repository(source_arr._repository.size1(),source_arr._repository.size2(),source_arr._repository.size3())
+{
+	cblas_daxpy(_repository.size(), scale, source_arr._repository.ptr(), 1, _repository.ptr(), 1);
 }
 
 elm::darray::darray(PyObject* source_arr)
@@ -302,6 +320,31 @@ bool elm::darray::boolvalue(const unsigned& c, const unsigned& v) const
 	return *(boolvalues(c,1)+v);
 }
 
+double& elm::darray::value_double    (const size_t& c, const size_t& a, const size_t& v)
+{
+	return *_repository.ptr(c,a,v);
+}
+double& elm::darray::value_double    (const size_t& c, const size_t& v)
+{
+	return *_repository.ptr(c,v);
+}
+long long& elm::darray::value_int64    (const size_t& c, const size_t& a, const size_t& v)
+{
+	return *(long long*)_repository.voidptr(c,a,v);
+}
+long long& elm::darray::value_int64    (const size_t& c, const size_t& v)
+{
+	return *(long long*)_repository.voidptr(c,v);
+}
+
+bool& elm::darray::value_bool    (const size_t& c, const size_t& a, const size_t& v)
+{
+	return *(bool*)_repository.voidptr(c,a,v);
+}
+bool& elm::darray::value_bool    (const size_t& c, const size_t& v)
+{
+	return *(bool*)_repository.voidptr(c,v);
+}
 
 
 
@@ -310,6 +353,7 @@ std::string elm::darray::printcase(const unsigned& r) const
 	std::ostringstream ret;
 	unsigned x2, x3;
 	char depMarker, colMarker, rowMarker;
+	ret << "["<< nVars() <<" vars, "<<dimty<<" dims]";
 	if (dimty==2 && dtype==NPY_DOUBLE) {
 		depMarker = ' ';
 		colMarker = '\t';

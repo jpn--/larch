@@ -46,7 +46,7 @@ void elm::Model2::_setUp_MNL()
 	if (!_Data) OOPS("A database must be linked to this model to do this.");
 	
 	// COUNTING
-	nCases = _Data->nCases();
+//	nCases = _Data->nCases();  // instead set this value when provisioning
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
@@ -57,15 +57,15 @@ void elm::Model2::_setUp_MNL()
 	
 		
 	// Allocate Memory	
-	Probability.resize(_Data->nCases(),_Data->nAlts());
-	CaseLogLike.resize(_Data->nCases());
+	Probability.resize(nCases,_Data->nAlts());
+	CaseLogLike.resize(nCases);
 	
 	Workspace.resize(_Data->nAlts());
 	
 		
 	sherpa::allocate_memory();
 	
-	Data_MultiChoice.resize(_Data->nCases());
+	Data_MultiChoice.resize(nCases);
 	Data_MultiChoice.initialize(true);
 	
 	INFO(msg)<< "Set up MNL model complete." ;
@@ -172,7 +172,7 @@ void elm::Model2::calculate_utility_only()
 		// MNL
 		pull_coefficients_from_freedoms();
 		
-		Utility.resize(_Data->nCases(),_Data->nAlts());
+		Utility.resize(nCases,_Data->nAlts());
 		
 		__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, Coef_UtilityCA, Coef_UtilityCO, 0);
 		
@@ -188,23 +188,45 @@ void elm::Model2::calculate_utility_only()
 	
 }
 
-std::shared_ptr<ndarray> elm::Model2::calc_utility(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
+
+std::shared_ptr<etk::ndarray> elm::Model2::calc_utility() const
 {
-	if (dco && dca) {
-		if (dco->dimty==case_alt_var && dca->dimty==case_var) {
-			std::swap(dco,dca);
-		}
-	} else if (dco && dco->dimty==case_alt_var) {
-		std::swap(dco,dca);
-	} else if (dca && dca->dimty==case_var) {
-		std::swap(dco,dca);
-	} else {
-		OOPS("no input data");
-	}
-	return calc_utility(dco ? &dco->_repository : nullptr, dca ? &dca->_repository : nullptr, av ? &av->_repository : nullptr);
+	return _calc_utility(Data_UtilityCO ? (&Data_UtilityCO->_repository) : nullptr,
+						 Data_UtilityCA ? (&Data_UtilityCA->_repository) : nullptr,
+						 Data_Avail ? &Data_Avail->_repository : nullptr);
 }
 
+
+std::shared_ptr<etk::ndarray> elm::Model2::calc_utility(const std::map< std::string, boosted::shared_ptr<const elm::darray> >& prov)
+{
+	provision(prov);
+	return calc_utility();
+}
+
+
+
+//std::shared_ptr<ndarray> elm::Model2::calc_utility(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
+//{
+//	if (dco && dca) {
+//		if (dco->dimty==case_alt_var && dca->dimty==case_var) {
+//			std::swap(dco,dca);
+//		}
+//	} else if (dco && dco->dimty==case_alt_var) {
+//		std::swap(dco,dca);
+//	} else if (dca && dca->dimty==case_var) {
+//		std::swap(dco,dca);
+//	} else {
+//		OOPS("no input data");
+//	}
+//	return calc_utility(dco ? &dco->_repository : nullptr, dca ? &dca->_repository : nullptr, av ? &av->_repository : nullptr);
+//}
+
 std::shared_ptr<ndarray> elm::Model2::calc_utility(ndarray* dco, ndarray* dca, ndarray* av) const
+{
+	return _calc_utility( dco, dca, av);
+}
+
+std::shared_ptr<ndarray> elm::Model2::_calc_utility(const ndarray* dco, const ndarray* dca, const ndarray* av) const
 {
 	if (nElementals==0) {
 		OOPS("Model is not setUp (it has no alternatives defined)");
@@ -291,6 +313,11 @@ std::shared_ptr<ndarray> elm::Model2::calc_probability(ndarray* u) const
 
 std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 {
+	if (!u) {
+		OOPS("no utility given");
+	}
+
+
 	std::shared_ptr<ndarray> LogSum = std::make_shared<ndarray>(u->size1());
 	if ((features & MODELFEATURES_NESTING)) {
 		
@@ -307,9 +334,6 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 
 	} else {
 		
-		if (!u) {
-			OOPS("no utility given");
-		}
 		
 		std::shared_ptr<ndarray> PR = std::make_shared<ndarray>(u->size1(), u->size2());
 		*PR = *u;
@@ -321,20 +345,20 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 	return LogSum;
 }
 
-std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
-{
-	return calc_probability( &*calc_utility(dco,dca,av) );
-}
+//std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
+//{
+//	return calc_probability( &*calc_utility(dco,dca,av) );
+//}
 
 std::shared_ptr<ndarray> elm::Model2::calc_utility_probability(ndarray* dco, ndarray* dca, ndarray* av) const
 {
 	return calc_probability( &*calc_utility(dco,dca,av) );
 }
 
-std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
-{
-	return calc_logsums( &*calc_utility(dco,dca,av) );
-}
+//std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(datamatrix_t* dco, datamatrix_t* dca, datamatrix_t* av) const
+//{
+//	return calc_logsums( &*calc_utility(dco,dca,av) );
+//}
 
 std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray* dca, ndarray* av) const
 {
@@ -709,7 +733,7 @@ etk::ndarray* elm::Model2::utility(etk::ndarray* params)
 
 boosted::shared_ptr<etk::workshop> elm::Model2::make_shared_workshop_accumulate_loglike ()
 {return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
-		Data_Choice, Data_Weight, &accumulate_LogL, option.mute_nan_warnings, &msg);}
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);}
 
 double elm::Model2::accumulate_log_likelihood() /*const*/
 {
@@ -717,8 +741,8 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 	accumulate_LogL = 0.0;
 
 	if (CaseLogLike.size()) {
-		if (Data_Weight) {
-			accumulate_LogL = cblas_ddot(nCases, *CaseLogLike, 1, Data_Weight->values(0,0), 1);
+		if (Data_Weight_active()) {
+			accumulate_LogL = cblas_ddot(nCases, *CaseLogLike, 1, Data_Weight_active()->values(0,0), 1);
 			if (accumulate_LogL) {
 				return accumulate_LogL;
 			}
@@ -737,7 +761,7 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 	#ifdef __APPLE__
 	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 		[&](){return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
-		Data_Choice, Data_Weight, &accumulate_LogL, option.mute_nan_warnings, &msg);};
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);};
 	#else
 	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_accumulate_loglike, this);
@@ -751,8 +775,8 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 		for (unsigned a=0;a<nElementals;a++) {
 			choice_value = Data_Choice->value(c,a);
 			if (choice_value) {
-				if (Data_Weight) {
-					accumulate_LogL += (log((*PrToAccum)(c,a)) * choice_value * Data_Weight->value(c,0));
+				if (Data_Weight_active()) {
+					accumulate_LogL += (log((*PrToAccum)(c,a)) * choice_value * Data_Weight_active()->value(c,0));
 				} else {
 					accumulate_LogL += (log((*PrToAccum)(c,a)) * choice_value);
 				}
@@ -815,7 +839,7 @@ void elm::Model2::mnl_gradient_v2()
 			 , nElementals
 			 , utility_packet()
 			 , Data_Choice
-			 , Data_Weight
+			 , Data_Weight_active()
 			 , &Probability
 			 , &GCurrent
 			 , &Bhhh
@@ -842,7 +866,7 @@ void elm::Model2::mnl_gradient_v2()
 	 , Data_UtilityCA
 	 , Data_UtilityCO
 	 , Data_Choice
-	 , Data_Weight
+	 , Data_Weight_active()
 	 , 0
 	 , nCases
 	 );
@@ -1175,7 +1199,7 @@ PyObject* elm::Model2::_get_samplingbiasco() const
 
 double elm::Model2::objective () 
 {
-	if (_Data->nCases()==0) {
+	if (nCases==0) {
 		return 0;
 		OOPS("There are no cases in the current data sample.");
 	}

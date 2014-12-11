@@ -26,7 +26,7 @@ from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
 from ..core import DB, LarchError, SQLiteError, FacetError, darray_req
 from ..exceptions import *
-from ..array import ldarray, ArrayError
+from ..array import Array, ArrayError
 import shutil, os
 import numpy, pandas
 
@@ -115,9 +115,9 @@ class TestData1(unittest.TestCase):
 		import numpy
 		z = numpy.ones([3,3])
 		with self.assertRaises(ArrayError):
-			q = ldarray(z, vars=['a','b'])
-		q = ldarray(z, vars=['a','b','c'])
-		w = ldarray(z, vars=['x','b','c'])
+			q = Array(z, vars=['a','b'])
+		q = Array(z, vars=['a','b','c'])
+		w = Array(z, vars=['x','b','c'])
 		req = darray_req(2,numpy.dtype('float64'))
 		req.set_variables(['a','b','c'])
 		self.assertTrue(req.satisfied_by(q)==0)

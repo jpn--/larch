@@ -42,8 +42,8 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 (  const unsigned&   dF
  , const unsigned&   nElementals
  , elm::ca_co_packet UtilPK
- , datamatrix     Data_Choice
- , datamatrix     Data_Weight
+ , elm::darray_ptr     Data_Choice
+ , elm::darray_ptr     Data_Weight
  , const etk::memarray* Probability
  , etk::memarray* GCurrent
  , etk::memarray_symmetric* Bhhh
@@ -154,12 +154,12 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl_multichoice
 		cblas_daxpy(nElementals,-1/*thisWgt*/,Probability.ptr(c),1,*Workspace,1);
 		// idCA
 		//ModelCaseGrad.initialize();
-		if (UtilPacket.Data_CA->nVars()) {
+		if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()) {
 			cblas_dgemv(CblasRowMajor,CblasTrans,nElementals,UtilPacket.Data_CA->nVars(),
 						-1,UtilPacket.Data_CA->values(c,1),UtilPacket.Data_CA->nVars(),*Workspace,1,0,*Grad_UtilityCA,1);
 		}
 		// idCO
-		if (UtilPacket.Data_CO->nVars()) {
+		if (UtilPacket.Data_CO && UtilPacket.Data_CO->nVars()) {
 			double* point = *Grad_UtilityCO;
 			Grad_UtilityCO.initialize();
 			//memset(point, 0, nElementals*UtilPacket.Data_CO->nVars()*sizeof(double));

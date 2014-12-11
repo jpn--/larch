@@ -65,7 +65,7 @@ namespace etk {
 		void exp ();
 		void is_exponential_of (const puddle& that);
 		void log ();
-		double sum();
+		double sum() const;
 		
 		double operator*(const puddle& that) const; // dot product
 		

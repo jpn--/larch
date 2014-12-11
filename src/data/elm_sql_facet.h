@@ -117,6 +117,7 @@ If no weights are given, they are assumed to be all equal.";
 #include "elm_caseindex.h"
 #include "elm_datamatrix.h"
 #include "elm_fountain.h"
+#include "elm_darray.h"
 
 #define SQL_ALTS_BLANK "SELECT NULL AS id, NULL AS name, NULL AS upcodes, NULL AS dncodes LIMIT 0;"
 #define SQL_IDCO_BLANK "SELECT NULL AS caseid LIMIT 0;"
@@ -377,6 +378,10 @@ namespace elm {
 	public:
 		elm::datamatrix matrix_library(size_t n);
 		
+		
+		
+		void _array_idco_reader(const std::string& qry, elm::darray* array, elm::darray* caseids);
+		void _array_idca_reader(const std::string& qry, elm::darray* array, elm::darray* caseids, const std::vector<long long>& altids);
 	};
 
 

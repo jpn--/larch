@@ -45,10 +45,10 @@ elm::workshop_mnl_gradient::workshop_mnl_gradient
 , const paramArray& Params_UtilityCA
 , const paramArray& Params_UtilityCO
 , const paramArray& Params_LogSum
-, datamatrix     Data_UtilityCA
-, datamatrix     Data_UtilityCO
-, datamatrix     Data_Choice
-, datamatrix     Data_Weight
+, elm::darray_ptr     Data_UtilityCA
+, elm::darray_ptr     Data_UtilityCO
+, elm::darray_ptr     Data_Choice
+, elm::darray_ptr     Data_Weight
 , const unsigned&   firstcase
 , const unsigned&   numberofcases
 )

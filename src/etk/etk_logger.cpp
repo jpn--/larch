@@ -149,6 +149,41 @@ void etk::logging_service::_get_python_object()
 	}
 }
 
+PyObject* etk::logging_service::get_logger()
+{
+	if (!logObj) {
+		Py_RETURN_NONE;
+	} else {
+		Py_INCREF( logObj );
+		return logObj;
+	}
+}
+
+PyObject* etk::logging_service::set_logger(PyObject* z)
+{
+	if (z == Py_None) {
+    	Py_CLEAR(logObj);
+		py_logger_name = "";
+		Py_RETURN_NONE;
+	}
+
+	PyObject* name = PyObject_GetAttrString(z, "name");
+	py_logger_name = PyString_ExtractCppString(name);
+	Py_CLEAR(name);
+	
+	Py_CLEAR(logObj);
+	Py_XINCREF( z );
+	logObj = z;
+
+	if (!logObj) {
+		Py_RETURN_NONE;
+	} else {
+		Py_INCREF( logObj );
+		return logObj;
+	}
+}
+
+
 void etk::logging_service::change_logger_name(const std::string& new_name)
 {
 	py_logger_name = new_name;

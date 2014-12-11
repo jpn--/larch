@@ -75,6 +75,7 @@ namespace elm {
 		int threads;
 		
 		bool calc_null_likelihood;
+		bool null_disregards_holdfast;
 		bool calc_std_errors;
 		bool mute_nan_warnings;
 		bool force_finite_diff_grad;
@@ -89,6 +90,7 @@ namespace elm {
 		model_options_t(
 			int threads=1,
 			bool calc_null_likelihood=true,
+			bool null_disregards_holdfast=true,
 			bool calc_std_errors=true,
 			int gradient_diagnostic=0,
 			int hessian_diagnostic=0,
@@ -105,6 +107,7 @@ namespace elm {
 		void __call__(
 			int threads=-9,
 			int calc_null_likelihood=-9,
+			int null_disregards_holdfast=-9,
 			int calc_std_errors=-9,
 			int gradient_diagnostic=-9,
 			int hessian_diagnostic=-9,

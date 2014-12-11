@@ -26,15 +26,15 @@
 
 #include "etk_ndarray.h"
 #include "elm_sql_scrape.h"
-
+#include "elm_darray.h"
 
 
 namespace elm {
 		
 	void __logit_utility
 	( etk::memarray&       U
-	, datamatrix        Data_CA
-	, datamatrix        Data_CO
+	, elm::darray_ptr        Data_CA
+	, elm::darray_ptr        Data_CO
 	, const etk::memarray& Coef_CA
 	, const etk::memarray& Coef_CO
 	, const double&        U_premultiplier
@@ -42,8 +42,8 @@ namespace elm {
 
 	void __logit_utility_arrays
 	( etk::memarray&  U
-	 , etk::ndarray*   Data_CA
-	 , etk::ndarray*   Data_CO
+	 , const etk::ndarray*   Data_CA
+	 , const etk::ndarray*   Data_CO
 	 , const etk::memarray& Coef_CA
 	 , const etk::memarray& Coef_CO
 	 , const double&   U_premultiplier

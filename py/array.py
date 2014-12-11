@@ -6,13 +6,28 @@ class ArrayError(Exception): pass
 
 class Array(numpy.ndarray):
 
-	def __new__(subtype, shape=[0,], initialize=True, *args, **kwargs):
+	def __new__(subtype, shape=[0,], initialize=True, vars=None, *args, **kwargs):
 		if 'dtype' not in kwargs:
 			kwargs['dtype']=numpy.float64
+		if isinstance(shape, numpy.ndarray):
+			if vars is not None:
+				if (len(shape.shape)==1 and len(vars)!=1):
+					raise ArrayError("Array is vector but length of name vector is not 1 (it is {})".format(len(vars)))
+				if (2<=len(shape.shape)<=3) and len(vars) != shape.shape[-1]:
+					raise ArrayError("Array has {} vars but names {} vars".format(shape.shape[-1], len(vars)))
+			obj = numpy.asarray(shape).view(Array)
+			obj.vars = vars
+			return obj
 		obj = numpy.ndarray.__new__(subtype, shape, *args, **kwargs)
 		# initialize stuff here...
 		if initialize:
 			obj.initialize()
+		if vars is not None:
+			if len(obj.shape) == 1 and len(vars)!=1:
+				raise ArrayError("Array is vector but length of name vector is not 1")
+			if len(obj.shape) > 1 and len(vars)!=obj.shape[-1]:
+				raise ArrayError("Array has {} vars but names {} vars".format(obj.shape[-1], len(vars)))
+			obj.vars = vars
 		return obj
 
 	def __array_finalize__(self, obj):
@@ -108,38 +123,4 @@ class SymmetricArray(Array):
 
 
 
-class ldarray(Array):
-	def __new__(subtype, shape=[0,], initialize=True, vars=[], *args, **kwargs):
-		if isinstance(shape, numpy.ndarray):
-			if (2<=len(shape.shape)<=3):
-				if len(vars) != shape.shape[-1]:
-					raise ArrayError("vars must give names for all vars, have %i vars but name %i vars"%(shape.shape[-1],len(vars)))
-				obj = numpy.asarray(shape).view(ldarray)
-				obj.vars = vars
-				return obj
-		if not (2<=len(shape)<=3): raise ArrayError("shape of ldarray must be 2 or 3 dimensions, asking %i"%len(shape))
-		if len(vars) != shape[-1]: raise ArrayError("vars must give names for all vars, have %i vars but name %i vars"%(shape[-1],len(vars)))
-		if 'dtype' not in kwargs:
-			kwargs['dtype']=numpy.float64
-		obj = numpy.ndarray.__new__(subtype, shape, *args, **kwargs)
-		# initialize stuff here...
-		if initialize:
-			obj.initialize()
-		obj.vars = vars
-		return obj
-
-	def __array_finalize__(self, obj):
-		if obj is None:
-			# Explicit constructor
-			return
-		if type(obj) is ldarray:
-			# View or template of self
-			# set vars here?
-			self.vars = None
-			# self.vars = getattr(obj, 'vars', [])
-			# if len(self.shape) != len(obj.shape):
-			#	raise ArrayError("ldarray does not support slicing that changes dimensions (%i to %i)"%(len(obj.shape), len(self.shape),))
-			# if self.shape[-1] != obj.shape[-1]:
-			#	raise ArrayError("ldarray does not support slicing that changes number of vars (%i to %i)"%(obj.shape[-1], self.shape[-1],))
-			return
 	

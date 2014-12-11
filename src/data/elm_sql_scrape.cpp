@@ -152,8 +152,8 @@ elm::Scrape::~Scrape()
 void elm::Scrape::tearDown(bool force)
 {
 	if (!force) {
-		if (_repo_lock->check()) OOPS("There is a repository read lock active, it is not safe to tearDown");
-		if (_bool_lock->check()) OOPS("There is a bool read lock active, it is not safe to tearDown");
+		if (_repo_lock->check_use_count()) OOPS("There is a repository read lock active, it is not safe to tearDown");
+		if (_bool_lock->check_use_count()) OOPS("There is a bool read lock active, it is not safe to tearDown");
 	}
 	_repository.destroy();
 	_bools.destroy();
@@ -318,11 +318,11 @@ void elm::Scrape::load_values(const size_t& firstcasenum, const size_t& numberof
 		if (cs==0 || nVars()==0) return;
 	}
 
-	if (_repo_lock->check()) {
+	if (_repo_lock->check_use_count()) {
 		OOPS("There is a repository read lock active, cannot load new data now\n", describe_loaded_range(),
 			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
 	}
-	if (_bool_lock->check()) {
+	if (_bool_lock->check_use_count()) {
 		OOPS("There is a bool read lock active, cannot load new data now\n", describe_loaded_range(),
 			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
 	}

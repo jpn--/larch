@@ -149,8 +149,8 @@ void elm::workshop_nl_gradient::case_dSamplingFactor_dFusedParameters( const uns
 	
 	size_t nalt = _Xylem->n_elemental();
 	const double*	   Pr = _Probability->ptr(c);
-	datamatrix      Data_CA = SampPacket.Data_CA;
-	datamatrix      Data_CO = SampPacket.Data_CO;
+	elm::darray_ptr      Data_CA = SampPacket.Data_CA;
+	elm::darray_ptr      Data_CO = SampPacket.Data_CO;
 
 	for (int a=0; a<nalt; a++) {
 		if (!Pr[a]) continue;
@@ -240,8 +240,8 @@ void elm::__casewise_nl_dUtility_dParameters
 , const double*	     Util 	 // scale-free utility, in [N_Nodes] space 
 , const unsigned&    c 		 // Case Index Number
 , const VAS_System&  Xylem
-, datamatrix      Data_UtilityCA
-, datamatrix      Data_UtilityCO
+, elm::darray_ptr      Data_UtilityCA
+, elm::darray_ptr      Data_UtilityCO
 , memarray_raw&          dUtilCA
 , memarray_raw&          dUtilCO
 , memarray_raw&          dUtilMU
@@ -413,9 +413,9 @@ void elm::__casewise_nl_gradient
 , const memarray* Cond_Prob
 , const memarray* Utility
 , const VAS_System* Xylem
-, datamatrix  Data_UtilityCA
-, datamatrix  Data_UtilityCO
-, datamatrix  Data_Choice
+, elm::darray_ptr  Data_UtilityCA
+, elm::darray_ptr  Data_UtilityCO
+, elm::darray_ptr  Data_Choice
 , memarray_raw& dUtilCA
 , memarray_raw& dUtilCO
 , memarray_raw& dUtilMU
@@ -531,9 +531,9 @@ void __casewise_nl_gradient_with_samp
 , const memarray* Cond_Prob
 , const memarray* Utility
 , const VAS_System* Xylem
-, datamatrix  Data_UtilityCA
-, datamatrix  Data_UtilityCO
-, datamatrix  Data_Choice
+, elm::darray_ptr  Data_UtilityCA
+, elm::darray_ptr  Data_UtilityCO
+, elm::darray_ptr  Data_Choice
 , memarray_raw& dUtilCA
 , memarray_raw& dUtilCO
 , memarray_raw& dUtilMU
@@ -742,8 +742,8 @@ elm::workshop_nl_gradient::workshop_nl_gradient
  , elm::ca_co_packet UtilPK
  , elm::ca_co_packet SampPK
  , const paramArray& Params_LogSum
- , datamatrix     Data_Choice
- , datamatrix     Data_Weight
+ , elm::darray_ptr     Data_Choice
+ , elm::darray_ptr     Data_Weight
  , const etk::memarray* AdjProbability
  , const etk::memarray* Probability
  , const etk::memarray* Cond_Prob

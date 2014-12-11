@@ -24,6 +24,13 @@ print ("="*80)
 
 import larch
 
+def execfile(filename):
+	import __main__
+	with open(filename) as f:
+		code = compile(f.read(), filename, 'exec')
+		exec(code, globals(), __main__.__dict__)
+
+
 print ("-"*80)
 print ("larch.__file__")
 print(larch.__file__)
@@ -150,7 +157,7 @@ def test_swissmetro_1():
 def test_nl2_single_cycle():
 	print("test_nl2_single_cycle")
 	d = DB.Example('MTC');
-	d.logger(1)
+	d.logger(True)
 	m = Model(d)
 	m.logger(True)
 	m.parameter ("cost",0)
@@ -185,6 +192,10 @@ def test_nl2_single_cycle():
 	m.link(8, 4)
 	m.option.gradient_diagnostic = 2
 	print("test_nl2_single_cycle:model setUp")
+	prv = m.db.provision(m.needs())
+	for k,v in prv.items():
+		print("  ---",k)
+	m.provision()
 	m.setUp()
 	print("test_nl2_single_cycle:model loglike")
 	assertAlmostEqual( -7309.600971749863, m.loglike(), delta=0.00000001 )
@@ -265,7 +276,7 @@ def test_swissmetro_09nested():
 	m.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
 	m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST")
 	m.utility.co("CAR_CO",        3,"B_COST")
-	m.option.gradient_diagnostic = 0
+	m.option.gradient_diagnostic = 10
 	m.option.calculate_std_err = 1
 	m.option.threads = 4
 	m.nest("existing", 4, "existing")
@@ -300,9 +311,11 @@ def test_swissmetro_09nested():
 #import gc
 #gc.collect()#
 
+larch.logging.setLevel(1)
 sys.path.append("/Users/jpn/Dropbox/CamSys/Memphis/")
 os.chdir("/Users/jpn/Dropbox/CamSys/Memphis/")
-import destchoice
+execfile("/Users/jpn/Dropbox/CamSys/Memphis/dest_main.py")
 
-
+larch.logging.setLevel(1)
+dcm.loglike()
 

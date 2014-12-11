@@ -71,8 +71,8 @@ void _setUp_linear_data_and_params
  ,	VAS_System&				Xylem
  ,	ComponentList&			Input_UtilityCA
  ,	ComponentList&			Input_UtilityCO
- ,	datamatrix*			Data_UtilityCA_
- ,	datamatrix*			Data_UtilityCO_
+// ,	datamatrix*			Data_UtilityCA_
+// ,	datamatrix*			Data_UtilityCO_
  ,	paramArray&				Params_UtilityCA
  ,	paramArray&				Params_UtilityCO
  ,	etk::logging_service*	msg
@@ -124,21 +124,21 @@ void _setUp_linear_data_and_params
 		Params_UtilityCO(slot,slot2) = self._generate_parameter(Input_UtilityCO[b].param_name, Input_UtilityCO[b].multiplier);
 	}
 	
-	if (Data_UtilityCA_) {
-		BUGGER_(msg, "asking for idca data");
-		if (!_Data) OOPS("A database must be linked to this model to do this.");
-		*Data_UtilityCA_ = _Data->ask_idca(u_ca);
-	} else {
-		BUGGER_(msg, "not asking for idca data");
-	}
-	
-	if (Data_UtilityCO_) {
-		BUGGER_(msg, "asking for idco data");
-		if (!_Data) OOPS("A database must be linked to this model to do this.");
-		*Data_UtilityCO_ = _Data->ask_idco(u_co);
-	} else {
-		BUGGER_(msg, "not asking for idco data");
-	}
+//	if (Data_UtilityCA_) {
+//		BUGGER_(msg, "asking for idca data");
+//		if (!_Data) OOPS("A database must be linked to this model to do this.");
+//		*Data_UtilityCA_ = _Data->ask_idca(u_ca);
+//	} else {
+//		BUGGER_(msg, "not asking for idca data");
+//	}
+//	
+//	if (Data_UtilityCO_) {
+//		BUGGER_(msg, "asking for idco data");
+//		if (!_Data) OOPS("A database must be linked to this model to do this.");
+//		*Data_UtilityCO_ = _Data->ask_idco(u_co);
+//	} else {
+//		BUGGER_(msg, "not asking for idco data");
+//	}
 
 	BUGGER_(msg, "_setUp_linear_data_and_params complete");
 	
@@ -157,8 +157,6 @@ void elm::Model2::_setUp_utility_data_and_params(bool and_load_data)
 	 ,	Xylem
 	 ,	Input_Utility.ca
 	 ,	Input_Utility.co
-	 ,	and_load_data ? &Data_UtilityCA : nullptr
-	 ,	and_load_data ? &Data_UtilityCO : nullptr
 	 ,	Params_UtilityCA
 	 ,	Params_UtilityCO
 	 ,	&msg
@@ -179,8 +177,6 @@ void elm::Model2::_setUp_samplefactor_data_and_params(bool and_load_data)
 	 ,	Xylem
 	 ,	Input_Sampling.ca
 	 ,	Input_Sampling.co
-	 ,	and_load_data ? &Data_SamplingCA : nullptr
-	 ,	and_load_data ? &Data_SamplingCO : nullptr
 	 ,	Params_SamplingCA
 	 ,	Params_SamplingCO
 	 ,	&msg
@@ -211,26 +207,28 @@ std::string __GetWeight(const std::string& varname, bool reweight, Facet* _Data)
 	return w;
 }
 
-void elm::Model2::_setUp_weight_data()
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-
-	if (_Data->unweighted()) {
-		WARN(msg) << "No weights specified, defaulting to weight=1 for all cases.";
-	} else {
-		Data_Weight = _Data->ask_weight();
-		weight_scale_factor = 1.0;
-	}
-
-}
+//void elm::Model2::_setUp_weight_data()
+//{
+//	if (!_Data) OOPS("A database must be linked to this model to do this.");
+//
+//	if (_Data->unweighted()) {
+//		WARN(msg) << "No weights specified, defaulting to weight=1 for all cases.";
+//	} else {
+//		Data_Weight = _Data->ask_weight();
+//		weight_scale_factor = 1.0;
+//	}
+//
+//}
 
 void elm::Model2::auto_rescale_weights(const double& mean_weight)
 {
 	if (Data_Weight) {
-		double total_weight = Data_Weight->_repository.sum();
-		double factor = Data_Weight->_repository.scale_so_mean_is(mean_weight);
-		weight_scale_factor *= factor;
-		INFO(msg) << "automatically rescaled weights (total initial weight "<<total_weight
+
+		double current_total = Data_Weight->_repository.sum();
+		double needed_scale_factor = (mean_weight*Data_Weight->_repository.size())/current_total;
+		Data_Weight_rescaled = boosted::make_shared<elm::darray>(*Data_Weight,needed_scale_factor);
+		weight_scale_factor = needed_scale_factor;
+		INFO(msg) << "automatically rescaled weights (total initial weight "<<current_total
 					<<" scaled by "<<weight_scale_factor<<" across "<<Data_Weight->nCases()
 					<<" cases)";
 	}
@@ -238,17 +236,48 @@ void elm::Model2::auto_rescale_weights(const double& mean_weight)
 
 void elm::Model2::restore_scale_weights()
 {
-	if (Data_Weight && weight_scale_factor!=1.0) {
-		Data_Weight->_repository.scale(1.0/weight_scale_factor);
-		weight_scale_factor = 1.0;
-	}
+	Data_Weight_rescaled.reset();
 }
 
 
 
+void elm::Model2::scan_for_multiple_choices()
+{
+	BUGGER(msg) << "Scanning choice data for instances of multiple or non-unit choice....";
+	
+	// multichoice
+	if (Data_MultiChoice.size() != Data_Choice->nCases()) {
+		Data_MultiChoice.resize(Data_Choice->nCases());
+	}
+	
+	for (unsigned c=0;c<Data_Choice->nCases();c++) {
+		size_t m=c;
+		int found=0;
+		double sum = 0;
+		for (size_t a=0;a<nElementals;a++) {
+			if (Data_Choice->value(c,a,0)) {
+				found++;
+				sum += Data_Choice->value(c,a,0);
+			}
+		}
+		if (found>1 || sum != 1.0) {
+			Data_MultiChoice.input(true,m);
+		} else {
+			Data_MultiChoice.input(false,m);
+		}
+	}
+}
+
+
 void elm::Model2::setUp(bool and_load_data)
 {
-	BUGGER(msg) << "Setting up the model...";
+	INFO(msg) << "Setting up the model...";
+	
+	if (is_provisioned()!=1) {
+		OOPS("data not provisioned");
+	}
+
+//	BUGGER(msg) << "Setting up the model...";
 	if (_is_setUp>=2 || (_is_setUp>=1 && !and_load_data)) {
 		BUGGER(msg) << "The model is already set up.";
 		return;
@@ -269,32 +298,7 @@ void elm::Model2::setUp(bool and_load_data)
 	} else {
 		_setUp_MNL();
 	}
-	if (and_load_data) {
-		BUGGER(msg) << "Setting up weight data....";
-		_setUp_weight_data();
-		_setUp_choice_data();
-		_setUp_availability_data();
-		
-		// multichoice
-		if (Data_MultiChoice.size()<_Data->nCases()) {
-			Data_MultiChoice.resize(_Data->nCases());
-		}
-		for (unsigned c=0;c<_Data->nCases();c++) {
-			size_t m=c;
-			Data_MultiChoice.input(false,m);
-			int found=0;
-			double sum = 0;
-			for (size_t a=0;a<nElementals;a++) {
-				if (Data_Choice->value(c,a,0)) {
-					found++;
-					sum += Data_Choice->value(c,a,0);
-				}
-			}
-			if (found>1 || sum != 1.0) {
-				Data_MultiChoice.input(true,m);
-			}
-		}
-	}
+	if (and_load_data) scan_for_multiple_choices();
 
 	
 	if (Input_Sampling.ca.size() || Input_Sampling.co.size()) {
@@ -314,6 +318,8 @@ void elm::Model2::setUp(bool and_load_data)
 	
 	_is_setUp = 1;
 	if (and_load_data) _is_setUp = 2;
+
+	
 }
 
 
@@ -348,6 +354,7 @@ std::string elm::Model2::_subprovision(const std::string& name, boosted::shared_
 								const std::map<std::string, darray_req>& need,
 								std::map<std::string, size_t>& ncases)
 {
+
 	auto i = input.find(name);
 	auto n = need.find(name);
 	if (i!=input.end()) {
@@ -375,14 +382,23 @@ std::string elm::Model2::_subprovision(const std::string& name, boosted::shared_
 
 void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<const darray> >& input)
 {
+	BUGGER(msg) << "Provisioning model data...";
+	
 	std::string ret = "";
 	
 	std::map<std::string, darray_req> need = needs();
 	std::map<std::string, size_t> ncases;
 	
-	ret += _subprovision("UtilityCA", Darray_UtilityCA, input, need, ncases);
-	ret += _subprovision("UtilityCO", Darray_UtilityCO, input, need, ncases);
-	
+	ret += _subprovision("UtilityCA", Data_UtilityCA, input, need, ncases);
+	ret += _subprovision("UtilityCO", Data_UtilityCO, input, need, ncases);
+	ret += _subprovision("SamplingCA", Data_SamplingCA, input, need, ncases);
+	ret += _subprovision("SamplingCO", Data_SamplingCO, input, need, ncases);
+
+	ret += _subprovision("Avail",  Data_Avail , input, need, ncases);
+	ret += _subprovision("Choice", Data_Choice, input, need, ncases);
+	if (Data_Choice) scan_for_multiple_choices();
+	ret += _subprovision("Weight", Data_Weight, input, need, ncases);
+
 	if (!ret.empty()) {
 		OOPS("provisioning error:",ret);
 	}
@@ -394,6 +410,8 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 			OOPS("provisioning error: inconsistent numbers or cases");
 		}
 	}
+	
+	nCases = nc;
 }
 
 std::map<std::string, darray_req> elm::Model2::needs() const
@@ -441,33 +459,44 @@ std::map<std::string, darray_req> elm::Model2::needs() const
 #define GIVEN_CORRECTLY    0x0
 
 
-int elm::Model2::_is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires) const
+int elm::Model2::_is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires, const bool& ex) const
 {
 	auto i = requires.find(name);
 	if (i!=requires.end()) {
 		if (!arr) {
-			return MISSING_BUT_NEEDED;
+			if (ex) {
+				OOPS(name," is provisioned incorrectly, needs <",i->second.__str__(),"> but not provided");
+			} else {
+				return MISSING_BUT_NEEDED;
+			}
 		}
 		if (i->second.satisfied_by(&*arr)==0) {
 			return GIVEN_CORRECTLY;
 		} else {
-			OOPS(name," is provisioned incorrectly, needs <",i->second.__str__(),"> but provides <",arr->__str__(),">");
-			//return GIVEN_BUT_WRONG;
+			if (ex) {
+				OOPS(name," is provisioned incorrectly, needs <",i->second.__str__(),"> but provides <",arr->__str__(),">");
+			} else {
+				return GIVEN_BUT_WRONG;
+			}
 		}
 	} else {
 		return NOT_NEEDED;
 	}
 }
 
-int elm::Model2::is_provisioned() const
+int elm::Model2::is_provisioned(bool ex) const
 {
 	std::map<std::string, darray_req> requires = needs();
 	
 	int i = 0;
-	i |= _is_subprovisioned("UtilityCA", Darray_UtilityCA, requires);
-	i |= _is_subprovisioned("UtilityCO", Darray_UtilityCO, requires);
-	i |= _is_subprovisioned("SamplingCA", Darray_SamplingCA, requires);
-	i |= _is_subprovisioned("SamplingCO", Darray_SamplingCO, requires);
+	i |= _is_subprovisioned("UtilityCA", Data_UtilityCA, requires, ex);
+	i |= _is_subprovisioned("UtilityCO", Data_UtilityCO, requires, ex);
+	i |= _is_subprovisioned("SamplingCA", Data_SamplingCA, requires, ex);
+	i |= _is_subprovisioned("SamplingCO", Data_SamplingCO, requires, ex);
+	
+	i |= _is_subprovisioned("Avail", Data_Avail, requires, ex);
+	i |= _is_subprovisioned("Weight", Data_Weight, requires, ex);
+	i |= _is_subprovisioned("Choice", Data_Choice, requires, ex);
 	
 	if (i & GIVEN_BUT_WRONG) {
 		return -1;
@@ -476,5 +505,20 @@ int elm::Model2::is_provisioned() const
 		return 0;
 	}
 	return 1;
+}
+
+const elm::darray* elm::Model2::Data(const std::string& label)
+{
+	if (label=="UtilityCA") return Data_UtilityCA ?   (&*Data_UtilityCA) : nullptr;
+	if (label=="UtilityCO") return Data_UtilityCO ?   (&*Data_UtilityCO) : nullptr;
+	if (label=="SamplingCA") return Data_SamplingCA ? (&*Data_SamplingCA) : nullptr;
+	if (label=="SamplingCO") return Data_SamplingCO ? (&*Data_SamplingCO) : nullptr;
+
+	if (label=="Avail" ) return Data_Avail ?  (&*Data_Avail ) : nullptr;
+	if (label=="Choice") return Data_Choice ? (&*Data_Choice) : nullptr;
+	if (label=="Weight") return Data_Weight ? (&*Data_Weight) : nullptr;
+
+	OOPS(label, " is not a valid label for model data");
+	
 }
 

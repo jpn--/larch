@@ -77,6 +77,41 @@ namespace elm {
 	{
 
 
+
+		#ifdef SWIG
+		%feature("pythonappend") Model2(elm::Facet& datafile) %{
+			try:
+				self._ref_to_db = args[0]
+			except IndexError:
+				self._ref_to_db = None
+		%}
+		%feature("pythonappend") Model2() %{
+			self._ref_to_db = None
+		%}
+		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
+			try:
+				self._ref_to_db = args[0]
+			except IndexError:
+				self._ref_to_db = None
+		%}
+		%feature("pythonappend") delete_data_pointer() %{
+			self._ref_to_db = None
+		%}
+		%feature("pythonprepend") setUp %{
+			if self._ref_to_db is not None and self.is_provisioned(False)==0:
+				self.provision()
+				self.setUpMessage = "autoprovision yes (setUp)"
+				if self.logger(): self.logger().info("autoprovisioned data from database")
+		%}
+		%feature("pythonprepend") estimate %{
+			if self._ref_to_db is not None and self.is_provisioned(False)==0:
+				self.provision()
+				self.setUpMessage = "autoprovision yes (estimate)"
+				if self.logger(): self.logger().info("autoprovisioned data from database")
+		%}
+		#endif // def SWIG
+
+
 #ifndef SWIG
 	
 		friend class elm::ComponentList;
@@ -180,46 +215,52 @@ namespace elm {
 		#endif // def SWIG
 		std::map<std::string, elm::darray_req> needs() const;
 		void provision(const std::map< std::string, boosted::shared_ptr<const elm::darray> >&);
-		int is_provisioned() const;
+		int is_provisioned(bool ex=true) const;
 	private:
 		std::string _subprovision(const std::string& name, boosted::shared_ptr<const darray>& storage,
 							 	  const std::map< std::string, boosted::shared_ptr<const darray> >& input,
 								  const std::map<std::string, darray_req>& need,
 								  std::map<std::string, size_t>& ncases);
-		int _is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires) const;
-
-
+		int _is_subprovisioned(const std::string& name, const elm::darray_ptr& arr, const std::map<std::string, darray_req>& requires, const bool& ex) const;
 
 	public:
-		elm::datamatrix  Data_UtilityCA;
-		elm::datamatrix  Data_UtilityCO;
-		elm::datamatrix  Data_SamplingCA;
-		elm::datamatrix  Data_SamplingCO;
-		elm::datamatrix  Data_QuantityCA;
-		elm::datamatrix  Data_QuantLogSum;
-		elm::datamatrix  Data_LogSum;
-		
-		elm::datamatrix  Data_Choice;
-		elm::datamatrix  Data_Weight;
-		elm::datamatrix  Data_Avail;
+		const elm::darray* Data(const std::string& label);
 
 #ifndef SWIG
+
+	public:
+		elm::darray_ptr  Data_UtilityCA;
+		elm::darray_ptr  Data_UtilityCO;
+		elm::darray_ptr  Data_SamplingCA;
+		elm::darray_ptr  Data_SamplingCO;
+//		elm::datamatrix  Data_QuantityCA;
+//		elm::datamatrix  Data_QuantLogSum;
+//		elm::datamatrix  Data_LogSum;
 		
+		elm::darray_ptr  Data_Choice;
+		elm::darray_ptr  Data_Weight;
+		elm::darray_ptr  Data_Avail;
+
+	private:
+		void scan_for_multiple_choices();
+		
+		
+	
+	public:
 		etk::bitarray Data_MultiChoice; // For each observations, is the choice unique and binary?
 		
+		boosted::shared_ptr<elm::darray>  Data_Weight_rescaled;
+		inline elm::darray_ptr Data_Weight_active() {return (Data_Weight_rescaled ? Data_Weight_rescaled : Data_Weight);}
 
 
-		elm::darray_ptr Darray_UtilityCA;
-		elm::darray_ptr Darray_UtilityCO;
-		elm::darray_ptr Darray_SamplingCA;
-		elm::darray_ptr Darray_SamplingCO;
-		//elm::darray_ptr Darray_QuantityCA;
-		//elm::darray_ptr Darray_QuantLogSum;
-		//elm::darray_ptr Darray_LogSum;
-		
-		elm::darray_ptr Darray_Choice;
-		elm::darray_ptr Darray_Weight;
-		elm::darray_ptr Darray_Avail;
+//		elm::darray_ptr Darray_UtilityCA;
+//		elm::darray_ptr Darray_UtilityCO;
+//		elm::darray_ptr Darray_SamplingCA;
+//		elm::darray_ptr Darray_SamplingCO;
+//		
+//		elm::darray_ptr Darray_Choice;
+//		elm::darray_ptr Darray_Weight;
+//		elm::darray_ptr Darray_Avail;
 		
 	
 	public:
@@ -229,8 +270,8 @@ namespace elm {
 		void restore_scale_weights();
 
 		
-		std::string weight_CO_variable;
-		bool weight_autorescale;
+//		std::string weight_CO_variable;
+//		bool weight_autorescale;
 		
 		
 		// KEEP
@@ -272,13 +313,22 @@ namespace elm {
 
 #endif // ndef SWIG
 
-		std::shared_ptr<etk::ndarray> calc_utility(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
+//		std::shared_ptr<etk::ndarray> calc_utility(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
+
+	private:
+		std::shared_ptr<etk::ndarray> _calc_utility(const etk::ndarray* utilitydataco, const etk::ndarray* utilitydataca, const etk::ndarray* availability) const;
+
+	public:
+		std::shared_ptr<etk::ndarray> calc_utility() const;
+		std::shared_ptr<etk::ndarray> calc_utility(const std::map< std::string, boosted::shared_ptr<const elm::darray> >&);
+		
 		std::shared_ptr<etk::ndarray> calc_probability(etk::ndarray* u) const;
 		std::shared_ptr<etk::ndarray> calc_logsums(etk::ndarray* u) const;
-		std::shared_ptr<etk::ndarray> calc_utility_probability(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
+		
+//		std::shared_ptr<etk::ndarray> calc_utility_probability(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility_probability(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
-		std::shared_ptr<etk::ndarray> calc_utility_logsums(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
+//		std::shared_ptr<etk::ndarray> calc_utility_logsums(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 		
 
@@ -376,9 +426,9 @@ namespace elm {
 //////// MARK: SETUP /////////////////////////////////////////////////////////////////
 
 	protected:
-		void _setUp_availability_data();
-		void _setUp_choice_data();
-		void _setUp_weight_data();
+//		void _setUp_availability_data();
+//		void _setUp_choice_data();
+//		void _setUp_weight_data();
 		void _setUp_utility_data_and_params(bool and_load_data=true);
 		void _setUp_samplefactor_data_and_params(bool and_load_data=true);
 		
@@ -446,9 +496,9 @@ namespace elm {
 
 		
 	public:
-		std::string weight(const std::string& varname, bool reweight=false);
-		std::string choice(const std::string& varname); // idca
-		void avail(const std::string& varname);
+//		std::string weight(const std::string& varname, bool reweight=false);
+//		std::string choice(const std::string& varname); // idca
+//		void avail(const std::string& varname);
 
 		PyObject*	_get_choice() const;
 		PyObject*	_get_weight() const;
@@ -565,9 +615,10 @@ namespace elm {
 		ComponentGraphDNA           Input_Graph();
 
 	public:
-		void        logger (const std::string& logname="");
-		void        logger (bool z);
-		void        logger (int z);
+NOSWIG(	PyObject*         logger (const std::string& logname);)
+NOSWIG(	PyObject*         logger (bool z);)
+NOSWIG(	PyObject*         logger (int z);)
+		PyObject*         logger (PyObject* l=nullptr);
 		
 		etk::string_sender* _string_sender_ptr;
 
@@ -576,8 +627,8 @@ namespace elm {
 
 	//	etk::ndarray* tally_chosen() const;
 	//	etk::ndarray* tally_avail() const;
-		etk::ndarray* tally_chosen();
-		etk::ndarray* tally_avail();
+	//	etk::ndarray* tally_chosen();
+	//	etk::ndarray* tally_avail();
 
 
 		runstats estimate();
@@ -618,26 +669,6 @@ FOSWIG(	%rename(__repr__) representation; )
 		
 	public:
 		Model2();
-		#ifdef SWIG
-		%feature("pythonappend") Model2(elm::Facet& datafile) %{
-			try:
-				self._ref_to_db = args[0]
-			except IndexError:
-				self._ref_to_db = None
-		%}
-		%feature("pythonappend") Model2() %{
-			self._ref_to_db = None
-		%}
-		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
-			try:
-				self._ref_to_db = args[0]
-			except IndexError:
-				self._ref_to_db = None
-		%}
-		%feature("pythonappend") delete_data_pointer() %{
-			self._ref_to_db = None
-		%}
-		#endif // def SWIG
 		Model2(elm::Facet& datafile);
 		~Model2();
 
@@ -646,6 +677,9 @@ FOSWIG(	%rename(__repr__) representation; )
 
 	public:
 		void setUp(bool and_load_data=true);
+		
+		std::string setUpMessage;
+		
 		void tearDown();
 
 		std::string title;

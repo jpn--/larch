@@ -217,7 +217,7 @@ namespace std {
 #include "elm_queryset.h"
 #include "elm_queryset_simpleco.h"
 #include "elm_queryset_twotable.h"
-%}
+%} 
  
 namespace elm {
 	void set_linalg(PyObject* mod);
@@ -242,7 +242,7 @@ namespace elm {
 %include "elm_sql_facet.h"
 %pythoncode %{
 from .db import DB
-%}
+%} 
 
 %include "etk_resultcodes.h"
 

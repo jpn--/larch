@@ -31,7 +31,7 @@
 #include "elm_names.h"
 #include <iostream>
 #include "etk_workshop.h"
-
+#include "elm_darray.h"
 
 namespace elm {
 
@@ -85,8 +85,8 @@ namespace elm {
 		// These are data arrays. If fully loaded, they should not need to be written to
 		//  by this workshop. If not fully loaded, they will need to be updated for each
 		//  call for a new case, but ScrapePtr's are designed (hopefully) to be thread safe
-		datamatrix Data_Choice;
-		datamatrix Data_Weight;
+		elm::darray_ptr Data_Choice;
+		elm::darray_ptr Data_Weight;
 		
 		etk::logging_service* msg_;
 
@@ -94,8 +94,8 @@ namespace elm {
 		(  const unsigned&   dF
 		 , const unsigned&   nElementals
 		 , elm::ca_co_packet UtilPK
-		 , datamatrix     Data_Choice
-		 , datamatrix     Data_Weight
+		 , elm::darray_ptr     Data_Choice
+		 , elm::darray_ptr     Data_Weight
 		 , const etk::memarray* Probability
 		 , etk::memarray* GCurrent
 		 , etk::memarray_symmetric* Bhhh
@@ -153,10 +153,10 @@ public:
 	const paramArray* Params_UtilityCO;
 	const paramArray* Params_LogSum;
 	
-	datamatrix Data_UtilityCA;
-	datamatrix Data_UtilityCO;
-	datamatrix Data_Choice;
-	datamatrix Data_Weight;
+	elm::darray_ptr Data_UtilityCA;
+	elm::darray_ptr Data_UtilityCO;
+	elm::darray_ptr Data_Choice;
+	elm::darray_ptr Data_Weight;
 
 
 
@@ -167,10 +167,10 @@ public:
 	 , const paramArray& Params_UtilityCA
 	 , const paramArray& Params_UtilityCO
 	 , const paramArray& Params_LogSum
-	 , datamatrix     Data_UtilityCA
-	 , datamatrix     Data_UtilityCO
-	 , datamatrix     Data_Choice
-	 , datamatrix     Data_Weight
+	 , elm::darray_ptr     Data_UtilityCA
+	 , elm::darray_ptr     Data_UtilityCO
+	 , elm::darray_ptr     Data_Choice
+	 , elm::darray_ptr     Data_Weight
 	 , const unsigned&   firstcase
 	 , const unsigned&   numberofcases
 	 );

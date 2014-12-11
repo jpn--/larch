@@ -51,7 +51,7 @@ void elm::Model2::_setUp_NL()
 	INFO(msg)<< "Setting up NL model..." ;
 	
 	// COUNTING
-	nCases = _Data->nCases();
+//	nCases = _Data->nCases(); // set in provisioning
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
@@ -84,13 +84,13 @@ void elm::Model2::_setUp_NL()
 	
 		
 	// Allocate Memory	
-	Cond_Prob.resize(_Data->nCases(),Xylem.n_edges());
-	Probability.resize(_Data->nCases(),nNodes);
-	Utility.resize(_Data->nCases(),nNodes);
+	Cond_Prob.resize(nCases,Xylem.n_edges());
+	Probability.resize(nCases,nNodes);
+	Utility.resize(nCases,nNodes);
 	
 	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.size()>0 ) {
-		AdjProbability.resize(_Data->nCases(),_Data->nAlts());
-		SamplingWeight.resize(_Data->nCases(),_Data->nAlts());
+		AdjProbability.resize(nCases,_Data->nAlts());
+		SamplingWeight.resize(nCases,_Data->nAlts());
 	} else {
 		AdjProbability.same_memory_as(Probability);
 		SamplingWeight.resize(0);
@@ -124,7 +124,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_gradient ()
 									 , sampling_packet()
 									 , Params_LogSum
 									 , Data_Choice
-									 , Data_Weight
+									 , Data_Weight_active()
 									 , &AdjProbability
 									 , &Probability
 									 , &Cond_Prob
@@ -255,7 +255,7 @@ void elm::Model2::nl_gradient()
 									 , sampling_packet()
 									 , Params_LogSum
 									 , Data_Choice
-									 , Data_Weight
+									 , Data_Weight_active()
 									 , &AdjProbability
 									 , &Probability
 									 , &Cond_Prob
@@ -310,10 +310,10 @@ void elm::Model2::nl_gradient()
 			 , Grad_UtilityCO
 			 , Grad_LogSum);		
 
-		if (Data_Weight) {
-			Grad_UtilityCA.scale(Data_Weight->value(c, 0));
-			Grad_UtilityCO.scale(Data_Weight->value(c, 0));
-			Grad_LogSum.scale(Data_Weight->value(c, 0));
+		if (Data_Weight_active()) {
+			Grad_UtilityCA.scale(Data_Weight_active()->value(c, 0));
+			Grad_UtilityCO.scale(Data_Weight_active()->value(c, 0));
+			Grad_LogSum.scale(Data_Weight_active()->value(c, 0));
 		}
 
 			push_to_freedoms(Params_UtilityCA  , *Grad_UtilityCA  , *CaseGrad);

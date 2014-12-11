@@ -44,8 +44,8 @@ void __casewise_nl_dUtility_dParameters
 , const double*	     Util 	 // scale-free utility, in [N_Nodes] space 
 , const unsigned&    c 		 // Case Index Number
 , const VAS_System&  Xylem
-, datamatrix      Data_UtilityCA
-, datamatrix      Data_UtilityCO
+, elm::darray_ptr      Data_UtilityCA
+, elm::darray_ptr      Data_UtilityCO
 , etk::memarray_raw&     dUtilCA
 , etk::memarray_raw&     dUtilCO
 , etk::memarray_raw&     dUtilMU
@@ -86,9 +86,9 @@ void __casewise_nl_gradient
 , const etk::memarray* Cond_Prob
 , const etk::memarray* Utility
 , const VAS_System*    Xylem
-, datamatrix        Data_UtilityCA
-, datamatrix        Data_UtilityCO
-, datamatrix        Data_Choice
+, elm::darray_ptr        Data_UtilityCA
+, elm::darray_ptr        Data_UtilityCO
+, elm::darray_ptr        Data_Choice
 , etk::memarray_raw& dUtilCA
 , etk::memarray_raw& dUtilCO
 , etk::memarray_raw& dUtilMU
@@ -140,8 +140,8 @@ public:
 
 	const paramArray* Params_LogSum;
 	
-	datamatrix Data_Choice;
-	datamatrix Data_Weight;
+	elm::darray_ptr Data_Choice;
+	elm::darray_ptr Data_Weight;
 
 	const etk::memarray* _Probability;
 	const etk::memarray* _AdjProbability;
@@ -165,8 +165,8 @@ public:
 	 , elm::ca_co_packet UtilPacket
 	 , elm::ca_co_packet SampPacket
 	 , const paramArray& Params_LogSum
-	 , datamatrix     Data_Choice
-	 , datamatrix     Data_Weight
+	 , elm::darray_ptr     Data_Choice
+	 , elm::darray_ptr     Data_Weight
 	 , const etk::memarray* AdjProbability
 	 , const etk::memarray* Probability
 	 , const etk::memarray* Cond_Prob

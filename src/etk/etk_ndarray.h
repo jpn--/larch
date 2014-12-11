@@ -100,6 +100,9 @@ namespace etk {
 		double& operator()(const int& i) ;
 		double& operator()(const int& i, const int& j) ;
 		double& operator()(const int& i, const int& j, const int& k) ;
+		void* voidptr(const int& i) ;
+		void* voidptr(const int& i, const int& j) ;
+		void* voidptr(const int& i, const int& j, const int& k) ;
 		inline const double& at(const int& i) const { return operator()(i); }
 		inline const double& at(const int& i, const int& j) const { return operator()(i,j); }
 		inline const double& at(const int& i, const int& j, const int& k) const { return operator()(i,j,k); }
@@ -159,7 +162,7 @@ namespace etk {
 		void is_exponential_of (const ndarray& that);
 		void log ();
 		void neg ();
-		double sum();
+		double sum() const;
 		void scale(const double& scal);
 		double scale_so_total_is(const double& tot);
 		double scale_so_mean_is(const double& mean);

@@ -30,10 +30,10 @@
 
 elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 							, etk::ndarray* CLL
-							, datamatrix Data_CA
-							, datamatrix Data_CO
-							, datamatrix Data_AV
-							, datamatrix Data_Ch
+							, elm::darray_ptr Data_CA
+							, elm::darray_ptr Data_CO
+							, elm::darray_ptr Data_AV
+							, elm::darray_ptr Data_Ch
 							, etk::ndarray* Coef_CA
 							, etk::ndarray* Coef_CO
 							, const double& U_premultiplier

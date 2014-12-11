@@ -287,7 +287,7 @@ elif platform.system() == 'Windows':
 	local_data_files = []
 	local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'elmsqlite.lib'),]
 	dylib_name_style = "{}.dll"
-	raise Exception("TURN OFF multithreading in OpenBLAS")
+#	raise Exception("TURN OFF multithreading in OpenBLAS")
 
 
 #lib_sqlite = ('elmsqlite',           {'sources': ['sqlite/sqlite3.c']})

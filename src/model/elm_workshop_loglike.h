@@ -26,6 +26,7 @@
 #include "etk.h"
 #include "elm_sql_scrape.h"
 #include "etk_workshop.h"
+#include "elm_darray.h"
 
 namespace elm {
 
@@ -34,8 +35,8 @@ namespace elm {
 	{
 		etk::ndarray** Probability;
 		size_t        nAlts;
-		datamatrix Data_CH;
-		datamatrix Data_WT;
+		elm::darray_ptr Data_CH;
+		elm::darray_ptr Data_WT;
 		double*       LogL;
 		
 		etk::logging_service* msg_;
@@ -46,8 +47,8 @@ namespace elm {
 		virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);
 		loglike_w(   etk::ndarray** Pr
 				   , const size_t& nAlts
-				   , datamatrix Data_CH
-				   , datamatrix Data_WT
+				   , elm::darray_ptr Data_CH
+				   , elm::darray_ptr Data_WT
 				   , double*       LogL
 				   , bool          mute_warnings
 				   , etk::logging_service* msgr=nullptr

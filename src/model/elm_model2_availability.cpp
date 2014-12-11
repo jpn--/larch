@@ -28,86 +28,63 @@
 
 
 
-void elm::Model2::avail(const std::string& varname)
-{
-	std::ostringstream ret;
-	if (varname.empty() && !availability_ca_variable.empty()) {
-		OOPS("you can't delete the availability designator (this feature will come in the future)");
-	} else {
-		availability_ca_variable = varname;
-	}
-}
-
-
-
-
-PyObject*	elm::Model2::_get_avail()  const
-{
-	return etk::py_one_item_list(PyString_FromString(availability_ca_variable.c_str())); 
-
-}
-
-etk::ndarray* elm::Model2::tally_avail()
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-	setUp();
-	etk::ndarray* tally = new etk::ndarray(_Data->nAlts());
-	for (size_t c=0; c<_Data->nCases(); c++) {
-		for (size_t a=0; a<_Data->nAlts(); a++) {
-			if (Data_Avail->boolvalue(c, a)) tally->at(a) += 1;
-		}
-	}
-	return tally;
-}
-
-/*
-etk::ndarray* elm::Model2::tally_avail() const
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-	ScrapePtr Data_Avail_;
-
-	
-	Data_Avail_ = _Data->get_scrape_aval();
-	try {
-		Data_Avail_->load_values();
-	} SPOO {
-		Data_Avail_->load_values(0,1);
-	}
-
-
-	etk::ndarray* tally = new etk::ndarray(_Data->nAlts());
-	for (size_t c=0; c<_Data->nCases(); c++) {
-		for (size_t a=0; a<_Data->nAlts(); a++) {
-			if (Data_Avail_->boolvalue(c, a)) tally->at(a) += 1;
-		}
-	}
-	return tally;
-}*/
-
-
-void elm::Model2::_setUp_availability_data()
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-
-	// By default, if a row exists in the idca table, it is available, otherwise not
-	// The use can override by naming a column in the idca table, which is 1 or 0
-	std::string av_col ("1");
-	if (availability_ca_variable != "") av_col = availability_ca_variable;
-	
-//	if (Data_Avail) {
-//		Data_Avail->decref();
-//		Data_Avail = nullptr;
+//void elm::Model2::avail(const std::string& varname)
+//{
+//	std::ostringstream ret;
+//	if (varname.empty() && !availability_ca_variable.empty()) {
+//		OOPS("you can't delete the availability designator (this feature will come in the future)");
+//	} else {
+//		availability_ca_variable = varname;
 //	}
-	
-	Data_Avail = _Data->ask_avail();
-	
-//	Data_Avail = _Data->get_scrape_aval();
-//	try {
-//		Data_Avail->load_values();
-//	} SPOO {
-//		WARN(msg) << "error in preloading availability of alternatives";
-//		Data_Avail->load_values(0,1);
+//}
+
+
+
+
+//PyObject*	elm::Model2::_get_avail()  const
+//{
+//	return etk::py_one_item_list(PyString_FromString(availability_ca_variable.c_str())); 
+//
+//}
+
+//etk::ndarray* elm::Model2::tally_avail()
+//{
+//	if (!_Data) OOPS("A database must be linked to this model to do this.");
+//	setUp();
+//	etk::ndarray* tally = new etk::ndarray(_Data->nAlts());
+//	for (size_t c=0; c<_Data->nCases(); c++) {
+//		for (size_t a=0; a<_Data->nAlts(); a++) {
+//			if (Data_Avail->boolvalue(c, a)) tally->at(a) += 1;
+//		}
 //	}
-}
+//	return tally;
+//}
+
+
+
+//void elm::Model2::_setUp_availability_data()
+//{
+//	if (!_Data) OOPS("A database must be linked to this model to do this.");
+//
+//	// By default, if a row exists in the idca table, it is available, otherwise not
+//	// The use can override by naming a column in the idca table, which is 1 or 0
+//	std::string av_col ("1");
+//	if (availability_ca_variable != "") av_col = availability_ca_variable;
+//	
+////	if (Data_Avail) {
+////		Data_Avail->decref();
+////		Data_Avail = nullptr;
+////	}
+//	
+//	Data_Avail = _Data->ask_avail();
+//	
+////	Data_Avail = _Data->get_scrape_aval();
+////	try {
+////		Data_Avail->load_values();
+////	} SPOO {
+////		WARN(msg) << "error in preloading availability of alternatives";
+////		Data_Avail->load_values(0,1);
+////	}
+//}
 
 

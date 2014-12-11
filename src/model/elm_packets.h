@@ -26,6 +26,7 @@
 #include "elm_sql_scrape.h"
 #include "etk_ndarray.h"
 #include "elm_parameter2.h"
+#include "elm_darray.h"
 
 namespace elm {
 
@@ -35,8 +36,8 @@ namespace elm {
 		const paramArray*	Params_CO	;
 		const etk::ndarray*	Coef_CA		;
 		const etk::ndarray*	Coef_CO		;
-		datamatrix		Data_CA		;
-		datamatrix		Data_CO		;
+		elm::darray_ptr		Data_CA		;
+		elm::darray_ptr		Data_CO		;
 		etk::ndarray*		Outcome		;
 		
 		// Constructor
@@ -44,8 +45,8 @@ namespace elm {
 					 const paramArray*	Params_CO	,
 					 const etk::ndarray*	Coef_CA		,
 					 const etk::ndarray*	Coef_CO		,
-					 datamatrix		Data_CA		,
-					 datamatrix		Data_CO		,
+					 elm::darray_ptr		Data_CA		,
+					 elm::darray_ptr		Data_CO		,
 					 etk::ndarray*		Outcome		);
 		~ca_co_packet();
 		

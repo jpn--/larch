@@ -245,11 +245,12 @@ class Model(Model2):
 			# Write headers
 			x.thead
 			x.th("Parameter")
-			x.th("Initial Value")
-			x.th("Final Value")
-			x.th("Std Error")
-			x.th("t-Stat")
-			x.th("Null Value")
+			x.th("Initial Value", {'class':'initial_value'})
+			x.th("Estimated Value", {'class':'estimated_value'})
+			x.th("Std Error", {'class':'std_err'})
+			x.th("t-Stat", {'class':'tstat'})
+			x.th("Null Value", {'class':'null_value'})
+			x.th("", {'class':'footnote_mark'}) # footnote markers
 			x.end_thead
 			
 			x.tbody
@@ -261,14 +262,16 @@ class Model(Model2):
 				except ZeroDivisionError:
 					tstat = float('nan')
 				x.td(str(p['name']))
-				x.td("{:{PARAM}}".format(p['initial_value'],**format))
-				x.td("{:{PARAM}}".format(p['value'],**format))
-				x.td("{:{PARAM}}".format(p['std_err'],**format))
-				x.td("{:{TSTAT}}".format(tstat,**format))
-				x.td("{:{PARAM}}".format(p['null_value'],**format))
+				x.td("{:{PARAM}}".format(p['initial_value'],**format), {'class':'initial_value'})
+				x.td("{:{PARAM}}".format(p['value'],**format), {'class':'estimated_value'})
+				x.td("{:{PARAM}}".format(p['std_err'],**format), {'class':'std_err'})
+				x.td("{:{TSTAT}}".format(tstat,**format), {'class':'tstat'})
+				x.td("{:{PARAM}}".format(p['null_value'],**format), {'class':'null_value'})
 				if p['holdfast']:
-					x.td("H")
+					x.td("H", {'class':'footnote_mark'})
 					footer.add("H")
+				else:
+					x.td("", {'class':'footnote_mark'})
 				x.end_tr
 			x.end_tbody
 			
@@ -301,11 +304,13 @@ class Model(Model2):
 							with x.block("tr"):
 								x.td('{}'.format(p.name))
 								x.td("{:{PARAM}}".format(self[p].value, **format), {'class':'estimated_value'})
+								x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
 								x.td("{:{TSTAT}}".format(self[p].t_stat(), **format), {'class':'tstat'})
 						else:
 							with x.block("tr"):
 								x.td('{}'.format(p))
 								x.td("{:{PARAM}}".format(self[p].value, **format), {'class':'estimated_value'})
+								x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
 								x.td("{:{TSTAT}}".format(self[p].t_stat(), **format), {'class':'tstat'})
 			with x.block("table"):
 				with x.block("thead"):
@@ -991,6 +996,14 @@ class Model(Model2):
 			if p['holdfast']:
 				mask[n] = 0
 		return mask
+
+	def parameter_holdfast_release(self):
+		for n,p in enumerate(self._get_parameter()):
+			p['holdfast'] = False
+	
+	def parameter_holdfast_mask_restore(self, mask):
+		for n,p in enumerate(self._get_parameter()):
+			p['holdfast'] = mask[n]
 
 	def rank_check(self, apply_correction=True, zero_correction=False):
 		"""

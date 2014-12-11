@@ -139,7 +139,7 @@ namespace etk {
 			return shared_from_this();
 		}
 		
-		bool check() {
+		inline bool check_use_count() {
 			return ((shared_from_this().use_count()-2)>0);
 		}
 		

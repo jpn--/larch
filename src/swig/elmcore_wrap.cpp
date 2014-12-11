@@ -27672,7 +27672,11 @@ SWIGINTERN PyObject *_wrap_ndarray_make(PyObject *SWIGUNUSEDPARM(self), PyObject
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -27688,16 +27692,32 @@ SWIGINTERN PyObject *_wrap_ndarray_exp(PyObject *SWIGUNUSEDPARM(self), PyObject 
   
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_exp",1,1,&obj0)) SWIG_fail;
   {
-    if (PyArray_Check(obj0)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp1 = boosted::make_shared<etk::ndarray>(obj0);
-      arg1 = &(*temp1);
+    if (obj0 == Py_None) {
+      arg1 = nullptr;
     } else {
-      temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
-      arg1 = &(*temp1);		
+      if (PyArray_Check(obj0)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp1 = boosted::make_shared<etk::ndarray>(obj0);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg1 = &(*temp1);
+      } else {
+        temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
+        arg1 = &(*temp1);
+      }
     }
   }
   {
@@ -27732,16 +27752,32 @@ SWIGINTERN PyObject *_wrap_ndarray_log(PyObject *SWIGUNUSEDPARM(self), PyObject 
   
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_log",1,1,&obj0)) SWIG_fail;
   {
-    if (PyArray_Check(obj0)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp1 = boosted::make_shared<etk::ndarray>(obj0);
-      arg1 = &(*temp1);
+    if (obj0 == Py_None) {
+      arg1 = nullptr;
     } else {
-      temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
-      arg1 = &(*temp1);		
+      if (PyArray_Check(obj0)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp1 = boosted::make_shared<etk::ndarray>(obj0);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg1 = &(*temp1);
+      } else {
+        temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
+        arg1 = &(*temp1);
+      }
     }
   }
   {
@@ -27776,16 +27812,32 @@ SWIGINTERN PyObject *_wrap_ndarray_init(PyObject *SWIGUNUSEDPARM(self), PyObject
   
   if(!PyArg_UnpackTuple(args,(char *)"ndarray_init",1,1,&obj0)) SWIG_fail;
   {
-    if (PyArray_Check(obj0)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp1 = boosted::make_shared<etk::ndarray>(obj0);
-      arg1 = &(*temp1);
+    if (obj0 == Py_None) {
+      arg1 = nullptr;
     } else {
-      temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
-      arg1 = &(*temp1);		
+      if (PyArray_Check(obj0)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp1 = boosted::make_shared<etk::ndarray>(obj0);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg1 = &(*temp1);
+      } else {
+        temp1 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj0, NPY_DOUBLE, 0, 0));
+        arg1 = &(*temp1);
+      }
     }
   }
   {
@@ -27820,12 +27872,28 @@ SWIGINTERN PyObject *_wrap_SymmetricArray_use_upper_triangle(PyObject *SWIGUNUSE
   
   if(!PyArg_UnpackTuple(args,(char *)"SymmetricArray_use_upper_triangle",1,1,&obj0)) SWIG_fail;
   {
-    if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj0 == Py_None) {
+      arg1 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp1 = boosted::make_shared<etk::symmetric_matrix>(obj0);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg1 = &(*temp1);
     }
-    temp1 = boosted::make_shared<etk::symmetric_matrix>(obj0);
-    arg1 = &(*temp1);
   }
   {
     try {
@@ -34749,11 +34817,12 @@ fail:
 SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::SQLiteDB *arg1 = (elm::SQLiteDB *) 0 ;
-  std::string arg2 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"SQLiteDB_logger",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__SQLiteDB, 0 |  0 );
@@ -34761,18 +34830,10 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SQLiteDB_logger" "', argument " "1"" of type '" "elm::SQLiteDB *""'"); 
   }
   arg1 = reinterpret_cast< elm::SQLiteDB * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "SQLiteDB_logger" "', argument " "2"" of type '" "std::string""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
+  arg2 = obj1;
   {
     try {
-      (arg1)->logger(arg2);
+      result = (PyObject *)(arg1)->logger(arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -34787,7 +34848,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self
       return NULL;
     }
   }
-  resultobj = SWIG_Py_Void();
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -34800,6 +34861,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"SQLiteDB_logger",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__SQLiteDB, 0 |  0 );
@@ -34809,7 +34871,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< elm::SQLiteDB * >(argp1);
   {
     try {
-      (arg1)->logger();
+      result = (PyObject *)(arg1)->logger();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -34824,53 +34886,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       return NULL;
     }
   }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SQLiteDB_logger__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::SQLiteDB *arg1 = (elm::SQLiteDB *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"SQLiteDB_logger",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__SQLiteDB, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SQLiteDB_logger" "', argument " "1"" of type '" "elm::SQLiteDB *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::SQLiteDB * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SQLiteDB_logger" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  {
-    try {
-      (arg1)->logger(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_Py_Void();
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -34902,23 +34918,7 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__SQLiteDB, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_bool(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_SQLiteDB_logger__SWIG_2(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__SQLiteDB, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
+      _v = (argv[1] != 0);
       if (_v) {
         return _wrap_SQLiteDB_logger__SWIG_0(self, args);
       }
@@ -34928,9 +34928,8 @@ SWIGINTERN PyObject *_wrap_SQLiteDB_logger(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SQLiteDB_logger'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::SQLiteDB::logger(std::string)\n"
-    "    elm::SQLiteDB::logger()\n"
-    "    elm::SQLiteDB::logger(bool)\n");
+    "    elm::SQLiteDB::logger(PyObject *)\n"
+    "    elm::SQLiteDB::logger()\n");
   return 0;
 }
 
@@ -36017,7 +36016,18 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     arg2 = ptr;
   }
   {
-    temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    try {
+      temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg3 = &(*temp3);
   }
   {
@@ -36189,7 +36199,18 @@ SWIGINTERN PyObject *_wrap_Facet_ask_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     arg2 = ptr;
   }
   {
-    temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    try {
+      temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg3 = &(*temp3);
   }
   {
@@ -36347,7 +36368,18 @@ SWIGINTERN PyObject *_wrap_Facet_ask_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -36479,7 +36511,18 @@ SWIGINTERN PyObject *_wrap_Facet_ask_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -36611,7 +36654,18 @@ SWIGINTERN PyObject *_wrap_Facet_ask_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -38237,7 +38291,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   } 
   arg3 = static_cast< bool >(val3);
   {
-    temp4 = boosted::make_shared<long long>(PyLong_AsLongLong(obj3));
+    try {
+      temp4 = boosted::make_shared<long long>(PyLong_AsLongLong(obj3));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg4 = &(*temp4);
   }
   {
@@ -38501,7 +38566,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   } 
   arg3 = static_cast< bool >(val3);
   {
-    temp4 = boosted::make_shared<long long>(PyLong_AsLongLong(obj3));
+    try {
+      temp4 = boosted::make_shared<long long>(PyLong_AsLongLong(obj3));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg4 = &(*temp4);
   }
   {
@@ -38742,7 +38818,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_alts(PyObject *SWIGUNUSEDPARM(self), PyOb
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -38787,7 +38874,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_choice__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -38913,7 +39011,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_avail__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -39039,7 +39148,18 @@ SWIGINTERN PyObject *_wrap_Facet_query_weight__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -39881,6 +40001,240 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Facet__array_idco_reader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  std::string *arg2 = 0 ;
+  elm::darray *arg3 = (elm::darray *) 0 ;
+  elm::darray *arg4 = (elm::darray *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  boosted::shared_ptr< elm::darray > temp3 ;
+  boosted::shared_ptr< elm::darray > temp4 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet__array_idco_reader",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet__array_idco_reader" "', argument " "1"" of type '" "elm::Facet *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Facet__array_idco_reader" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Facet__array_idco_reader" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
+    } else {
+      if (PyArray_Check(obj2)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp3 = boosted::make_shared<elm::darray>(obj2);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+    }
+  }
+  {
+    if (obj3 == Py_None) {
+      arg4 = nullptr;
+    } else {
+      if (PyArray_Check(obj3)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp4 = boosted::make_shared<elm::darray>(obj3);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg4 = &(*temp4);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+    }
+  }
+  {
+    try {
+      (arg1)->_array_idco_reader((std::string const &)*arg2,arg3,arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet__array_idca_reader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  std::string *arg2 = 0 ;
+  elm::darray *arg3 = (elm::darray *) 0 ;
+  elm::darray *arg4 = (elm::darray *) 0 ;
+  std::vector< long long,std::allocator< long long > > *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  boosted::shared_ptr< elm::darray > temp3 ;
+  boosted::shared_ptr< elm::darray > temp4 ;
+  int res5 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet__array_idca_reader",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet__array_idca_reader" "', argument " "1"" of type '" "elm::Facet *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Facet__array_idca_reader" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Facet__array_idca_reader" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
+    } else {
+      if (PyArray_Check(obj2)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp3 = boosted::make_shared<elm::darray>(obj2);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+    }
+  }
+  {
+    if (obj3 == Py_None) {
+      arg4 = nullptr;
+    } else {
+      if (PyArray_Check(obj3)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp4 = boosted::make_shared<elm::darray>(obj3);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg4 = &(*temp4);
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+    }
+  }
+  {
+    std::vector<long long,std::allocator< long long > > *ptr = (std::vector<long long,std::allocator< long long > > *)0;
+    res5 = swig::asptr(obj4, &ptr);
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Facet__array_idca_reader" "', argument " "5"" of type '" "std::vector< long long,std::allocator< long long > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Facet__array_idca_reader" "', argument " "5"" of type '" "std::vector< long long,std::allocator< long long > > const &""'"); 
+    }
+    arg5 = ptr;
+  }
+  {
+    try {
+      (arg1)->_array_idca_reader((std::string const &)*arg2,arg3,arg4,(std::vector< long long,std::allocator< long long > > const &)*arg5);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res5)) delete arg5;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *Facet_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -40050,29 +40404,61 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< elm::paramArray * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<const etk::ndarray>(obj1);
-      arg2 = const_cast<etk::ndarray*>( &(*temp2) );
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = const_cast<etk::ndarray*>( &(*temp2) );
+      if (PyArray_Check(obj1)) {
+        if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<const etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = const_cast<etk::ndarray*>( &(*temp2) );
+      } else {
+        temp2 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = const_cast<etk::ndarray*>( &(*temp2) );
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
@@ -40119,29 +40505,61 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< elm::paramArray * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<const etk::ndarray>(obj2);
-      arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      if (PyArray_Check(obj2)) {
+        if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<const etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      } else {
+        temp3 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      }
     }
   }
   {
@@ -40199,16 +40617,32 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_pull_field(PyObject *SWIGUNUSEDPAR
     arg2 = ptr;
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
@@ -40268,16 +40702,32 @@ SWIGINTERN PyObject *_wrap_ParameterLinkArray_push_field(PyObject *SWIGUNUSEDPAR
     arg2 = ptr;
   }
   {
-    if (PyArray_Check(obj2)) {
-      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<const etk::ndarray>(obj2);
-      arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      if (PyArray_Check(obj2)) {
+        if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<const etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      } else {
+        temp3 = boosted::make_shared<const etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = const_cast<etk::ndarray*>( &(*temp3) );
+      }
     }
   }
   {
@@ -56230,6 +56680,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_model_options_t_null_disregards_holdfast_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_null_disregards_holdfast_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_null_disregards_holdfast_set" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "model_options_t_null_disregards_holdfast_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->null_disregards_holdfast = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_model_options_t_null_disregards_holdfast_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_null_disregards_holdfast_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_null_disregards_holdfast_get" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  result = (bool) ((arg1)->null_disregards_holdfast);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_model_options_t_calc_std_errors_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
@@ -56658,26 +57160,27 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   int arg1 = (int) 1 ;
   bool arg2 = (bool) true ;
   bool arg3 = (bool) true ;
-  int arg4 = (int) 0 ;
+  bool arg4 = (bool) true ;
   int arg5 = (int) 0 ;
-  bool arg6 = (bool) true ;
-  bool arg7 = (bool) false ;
+  int arg6 = (int) 0 ;
+  bool arg7 = (bool) true ;
   bool arg8 = (bool) false ;
   bool arg9 = (bool) false ;
-  std::string arg10 = (std::string) "Chuck Finley" ;
-  bool arg11 = (bool) true ;
+  bool arg10 = (bool) false ;
+  std::string arg11 = (std::string) "Chuck Finley" ;
   bool arg12 = (bool) true ;
+  bool arg13 = (bool) true ;
   int val1 ;
   int ecode1 = 0 ;
   bool val2 ;
   int ecode2 = 0 ;
   bool val3 ;
   int ecode3 = 0 ;
-  int val4 ;
+  bool val4 ;
   int ecode4 = 0 ;
   int val5 ;
   int ecode5 = 0 ;
-  bool val6 ;
+  int val6 ;
   int ecode6 = 0 ;
   bool val7 ;
   int ecode7 = 0 ;
@@ -56685,10 +57188,12 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   int ecode8 = 0 ;
   bool val9 ;
   int ecode9 = 0 ;
-  bool val11 ;
-  int ecode11 = 0 ;
+  bool val10 ;
+  int ecode10 = 0 ;
   bool val12 ;
   int ecode12 = 0 ;
+  bool val13 ;
+  int ecode13 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -56701,12 +57206,13 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj9 = 0 ;
   PyObject * obj10 = 0 ;
   PyObject * obj11 = 0 ;
+  PyObject * obj12 = 0 ;
   char *  kwnames[] = {
-    (char *) "threads",(char *) "calc_null_likelihood",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
+    (char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
   };
   elm::model_options_t *result = 0 ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOOOOO:new_model_options_t",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOOOOOO:new_model_options_t",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12)) SWIG_fail;
   if (obj0) {
     ecode1 = SWIG_AsVal_int(obj0, &val1);
     if (!SWIG_IsOK(ecode1)) {
@@ -56729,11 +57235,11 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
     arg3 = static_cast< bool >(val3);
   }
   if (obj3) {
-    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    ecode4 = SWIG_AsVal_bool(obj3, &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_model_options_t" "', argument " "4"" of type '" "int""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_model_options_t" "', argument " "4"" of type '" "bool""'");
     } 
-    arg4 = static_cast< int >(val4);
+    arg4 = static_cast< bool >(val4);
   }
   if (obj4) {
     ecode5 = SWIG_AsVal_int(obj4, &val5);
@@ -56743,11 +57249,11 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
     arg5 = static_cast< int >(val5);
   }
   if (obj5) {
-    ecode6 = SWIG_AsVal_bool(obj5, &val6);
+    ecode6 = SWIG_AsVal_int(obj5, &val6);
     if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_model_options_t" "', argument " "6"" of type '" "bool""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_model_options_t" "', argument " "6"" of type '" "int""'");
     } 
-    arg6 = static_cast< bool >(val6);
+    arg6 = static_cast< int >(val6);
   }
   if (obj6) {
     ecode7 = SWIG_AsVal_bool(obj6, &val7);
@@ -56771,22 +57277,22 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
     arg9 = static_cast< bool >(val9);
   }
   if (obj9) {
-    {
-      std::string *ptr = (std::string *)0;
-      int res = SWIG_AsPtr_std_string(obj9, &ptr);
-      if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_model_options_t" "', argument " "10"" of type '" "std::string""'"); 
-      }
-      arg10 = *ptr;
-      if (SWIG_IsNewObj(res)) delete ptr;
-    }
+    ecode10 = SWIG_AsVal_bool(obj9, &val10);
+    if (!SWIG_IsOK(ecode10)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode10), "in method '" "new_model_options_t" "', argument " "10"" of type '" "bool""'");
+    } 
+    arg10 = static_cast< bool >(val10);
   }
   if (obj10) {
-    ecode11 = SWIG_AsVal_bool(obj10, &val11);
-    if (!SWIG_IsOK(ecode11)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "new_model_options_t" "', argument " "11"" of type '" "bool""'");
-    } 
-    arg11 = static_cast< bool >(val11);
+    {
+      std::string *ptr = (std::string *)0;
+      int res = SWIG_AsPtr_std_string(obj10, &ptr);
+      if (!SWIG_IsOK(res) || !ptr) {
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_model_options_t" "', argument " "11"" of type '" "std::string""'"); 
+      }
+      arg11 = *ptr;
+      if (SWIG_IsNewObj(res)) delete ptr;
+    }
   }
   if (obj11) {
     ecode12 = SWIG_AsVal_bool(obj11, &val12);
@@ -56795,9 +57301,16 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
     } 
     arg12 = static_cast< bool >(val12);
   }
+  if (obj12) {
+    ecode13 = SWIG_AsVal_bool(obj12, &val13);
+    if (!SWIG_IsOK(ecode13)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode13), "in method '" "new_model_options_t" "', argument " "13"" of type '" "bool""'");
+    } 
+    arg13 = static_cast< bool >(val13);
+  }
   {
     try {
-      result = (elm::model_options_t *)new elm::model_options_t(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+      result = (elm::model_options_t *)new elm::model_options_t(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -56831,9 +57344,10 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   int arg8 = (int) -9 ;
   int arg9 = (int) -9 ;
   int arg10 = (int) -9 ;
-  std::string arg11 = (std::string) "-9" ;
-  int arg12 = (int) -9 ;
+  int arg11 = (int) -9 ;
+  std::string arg12 = (std::string) "-9" ;
   int arg13 = (int) -9 ;
+  int arg14 = (int) -9 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -56854,10 +57368,12 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   int ecode9 = 0 ;
   int val10 ;
   int ecode10 = 0 ;
-  int val12 ;
-  int ecode12 = 0 ;
+  int val11 ;
+  int ecode11 = 0 ;
   int val13 ;
   int ecode13 = 0 ;
+  int val14 ;
+  int ecode14 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -56871,11 +57387,12 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj10 = 0 ;
   PyObject * obj11 = 0 ;
   PyObject * obj12 = 0 ;
+  PyObject * obj13 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "threads",(char *) "calc_null_likelihood",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
+    (char *) "self",(char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOOOOOO:model_options_t___call__",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOOOOOOO:model_options_t___call__",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t___call__" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
@@ -56945,22 +57462,22 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
     arg10 = static_cast< int >(val10);
   }
   if (obj10) {
-    {
-      std::string *ptr = (std::string *)0;
-      int res = SWIG_AsPtr_std_string(obj10, &ptr);
-      if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "model_options_t___call__" "', argument " "11"" of type '" "std::string""'"); 
-      }
-      arg11 = *ptr;
-      if (SWIG_IsNewObj(res)) delete ptr;
-    }
+    ecode11 = SWIG_AsVal_int(obj10, &val11);
+    if (!SWIG_IsOK(ecode11)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "model_options_t___call__" "', argument " "11"" of type '" "int""'");
+    } 
+    arg11 = static_cast< int >(val11);
   }
   if (obj11) {
-    ecode12 = SWIG_AsVal_int(obj11, &val12);
-    if (!SWIG_IsOK(ecode12)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode12), "in method '" "model_options_t___call__" "', argument " "12"" of type '" "int""'");
-    } 
-    arg12 = static_cast< int >(val12);
+    {
+      std::string *ptr = (std::string *)0;
+      int res = SWIG_AsPtr_std_string(obj11, &ptr);
+      if (!SWIG_IsOK(res) || !ptr) {
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "model_options_t___call__" "', argument " "12"" of type '" "std::string""'"); 
+      }
+      arg12 = *ptr;
+      if (SWIG_IsNewObj(res)) delete ptr;
+    }
   }
   if (obj12) {
     ecode13 = SWIG_AsVal_int(obj12, &val13);
@@ -56969,9 +57486,16 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
     } 
     arg13 = static_cast< int >(val13);
   }
+  if (obj13) {
+    ecode14 = SWIG_AsVal_int(obj13, &val14);
+    if (!SWIG_IsOK(ecode14)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode14), "in method '" "model_options_t___call__" "', argument " "14"" of type '" "int""'");
+    } 
+    arg14 = static_cast< int >(val14);
+  }
   {
     try {
-      (arg1)->__call__(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13);
+      (arg1)->__call__(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -60411,7 +60935,18 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idca__SWIG_0(PyObject *SWIGUNUSEDPA
     arg2 = ptr;
   }
   {
-    temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    try {
+      temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg3 = &(*temp3);
   }
   {
@@ -60583,7 +61118,18 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_idco__SWIG_0(PyObject *SWIGUNUSEDPA
     arg2 = ptr;
   }
   {
-    temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    try {
+      temp3 = boosted::make_shared<long long>(PyLong_AsLongLong(obj2));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg3 = &(*temp3);
   }
   {
@@ -60741,7 +61287,18 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_choo__SWIG_0(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -60873,7 +61430,18 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_wght__SWIG_0(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -61005,7 +61573,18 @@ SWIGINTERN PyObject *_wrap_datamatrix_t_read_aval__SWIG_0(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< elm::Facet * >(argp1);
   {
-    temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    try {
+      temp2 = boosted::make_shared<long long>(PyLong_AsLongLong(obj1));
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      SWIG_fail;
+    }
     arg2 = &(*temp2);
   }
   {
@@ -64875,24 +65454,28 @@ SWIGINTERN PyObject *_wrap_darray_req_satisfied_by(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< elm::darray_req * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if (  (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)
-        &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL  )
-        &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_INT64 )
-        ) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
-        SWIG_fail;
-      }
-      try {
-        temp2 = boosted::make_shared<const elm::darray>(obj1);
-      } catch (const std::exception& e) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-        SWIG_fail;
-      }
-      arg2 = const_cast<elm::darray*>( &(*temp2) );
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
-      SWIG_fail;
+      if (PyArray_Check(obj1)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp2 = boosted::make_shared<const elm::darray>(obj1);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = const_cast<elm::darray*>( &(*temp2) );
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
     }
   }
   {
@@ -64935,24 +65518,28 @@ SWIGINTERN PyObject *_wrap_check_darray(PyObject *SWIGUNUSEDPARM(self), PyObject
   
   if(!PyArg_UnpackTuple(args,(char *)"check_darray",1,1,&obj0)) SWIG_fail;
   {
-    if (PyArray_Check(obj0)) {
-      if (  (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)
-        &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL  )
-        &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_INT64 )
-        ) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
-        SWIG_fail;
-      }
-      try {
-        temp1 = boosted::make_shared<const elm::darray>(obj0);
-      } catch (const std::exception& e) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-        SWIG_fail;
-      }
-      arg1 = const_cast<elm::darray*>( &(*temp1) );
+    if (obj0 == Py_None) {
+      arg1 = nullptr;
     } else {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
-      SWIG_fail;
+      if (PyArray_Check(obj0)) {
+        if (  (PyArray_TYPE((PyArrayObject*)obj0)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)obj0)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp1 = boosted::make_shared<const elm::darray>(obj0);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg1 = const_cast<elm::darray*>( &(*temp1) );
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
     }
   }
   {
@@ -70566,7 +71153,11 @@ SWIGINTERN PyObject *_wrap_sherpa_covariance_matrix(PyObject *SWIGUNUSEDPARM(sel
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -70606,7 +71197,11 @@ SWIGINTERN PyObject *_wrap_sherpa_robust_covariance_matrix(PyObject *SWIGUNUSEDP
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -70811,20 +71406,52 @@ SWIGINTERN PyObject *_wrap_sherpa_hessfull_to_hessfree(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< sherpa * >(argp1);
   {
-    if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp2 = boosted::make_shared<const etk::symmetric_matrix>(obj1);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg2 = const_cast<etk::symmetric_matrix*>( &(*temp2) );
     }
-    temp2 = boosted::make_shared<const etk::symmetric_matrix>(obj1);
-    arg2 = const_cast<etk::symmetric_matrix*>( &(*temp2) );
   }
   {
-    if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp3 = boosted::make_shared<etk::symmetric_matrix>(obj2);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg3 = &(*temp3);
     }
-    temp3 = boosted::make_shared<etk::symmetric_matrix>(obj2);
-    arg3 = &(*temp3);
   }
   {
     try {
@@ -70870,20 +71497,52 @@ SWIGINTERN PyObject *_wrap_sherpa_hessfree_to_hessfull(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< sherpa * >(argp1);
   {
-    if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg2 = &(*temp2);
     }
-    temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
-    arg2 = &(*temp2);
   }
   {
-    if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp3 = boosted::make_shared<const etk::symmetric_matrix>(obj2);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg3 = const_cast<etk::symmetric_matrix*>( &(*temp3) );
     }
-    temp3 = boosted::make_shared<const etk::symmetric_matrix>(obj2);
-    arg3 = const_cast<etk::symmetric_matrix*>( &(*temp3) );
   }
   {
     try {
@@ -71139,7 +71798,54 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_is_provisioned(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_is_provisioned__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_is_provisioned",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_is_provisioned" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model2_is_provisioned" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try {
+      result = (int)((elm::Model2 const *)arg1)->is_provisioned(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_is_provisioned__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   void *argp1 = 0 ;
@@ -71177,903 +71883,136 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_is_provisioned(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Model2_is_provisioned__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Model2_is_provisioned__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_is_provisioned'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Model2::is_provisioned(bool) const\n"
+    "    elm::Model2::is_provisioned() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_Data(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
+  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  elm::darray *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCA_set",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCA_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data" "', argument " "2"" of type '" "std::string const &""'"); 
     }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Data" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (elm::darray *)(arg1)->Data((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    if (!result) {
+      //std::cerr << "typemap(out) elm::darray* return none\n";
+      Py_RETURN_NONE;
     } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
+      //std::cerr << "typemap(out) elm::darray* return something\n";
     }
-  }
-  if (arg1) (arg1)->Data_UtilityCA = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCA_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCA_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_UtilityCA);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCO_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCO_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_UtilityCO_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
+    
+    PyObject* temp_result = result->get_array();
+    
+    resultobj = PyArray_View((PyArrayObject*) temp_result, NULL, NULL);
+    Py_CLEAR(temp_result);
+    
+    PyArray_CLEARFLAGS((PyArrayObject*)resultobj, NPY_ARRAY_WRITEABLE);
+    
+    if (PyObject_HasAttrString(resultobj, "vars")) {
+      PyObject_DelAttrString(resultobj, "vars");
     }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
+    
+    PyObject* py_vars = PyTuple_New((result)->get_variables().size());
+    
+    for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+      PyObject* item = PyString_FromString(((result)->get_variables()[i]).c_str());
+      PyTuple_SetItem(py_vars, i, item);
     }
+    
+    PyObject_SetAttrString(resultobj, "vars", py_vars);
+    
+    Py_CLEAR(py_vars);
+    
+    //PyRun_SimpleString("print('%typemap(out) elm::darray*')");
   }
-  if (arg1) (arg1)->Data_UtilityCO = *arg2;
-  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_UtilityCO_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_UtilityCO_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_UtilityCO_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_UtilityCO);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCA_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCA_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_SamplingCA = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCA_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCA_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_SamplingCA);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCO_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCO_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_SamplingCO_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_SamplingCO = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_SamplingCO_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_SamplingCO_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_SamplingCO_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_SamplingCO);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantityCA_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantityCA_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantityCA_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_QuantityCA = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_QuantityCA_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantityCA_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_QuantityCA);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantLogSum_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantLogSum_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_QuantLogSum_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_QuantLogSum = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_QuantLogSum_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_QuantLogSum_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_QuantLogSum_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_QuantLogSum);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_LogSum_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_LogSum_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_LogSum_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_LogSum = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_LogSum_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_LogSum_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_LogSum_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_LogSum);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Choice_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Choice_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Choice_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Choice_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_Choice = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Choice_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Choice_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Choice_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_Choice);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Weight_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Weight_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Weight_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Weight_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_Weight = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Weight_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Weight_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Weight_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_Weight);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Avail_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  elm::datamatrix tempshared2 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Avail_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Avail_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t,  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Data_Avail_set" "', argument " "2"" of type '" "elm::datamatrix const &""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      if (argp2) tempshared2 = *reinterpret_cast< elm::datamatrix * >(argp2);
-      delete reinterpret_cast< elm::datamatrix * >(argp2);
-      arg2 = &tempshared2;
-    } else {
-      arg2 = (argp2) ? reinterpret_cast< elm::datamatrix * >(argp2) : &tempshared2;
-    }
-  }
-  if (arg1) (arg1)->Data_Avail = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_Data_Avail_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::datamatrix *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_Data_Avail_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Data_Avail_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::datamatrix *) & ((arg1)->Data_Avail);
-  {
-    std::shared_ptr<  elm::datamatrix_t > *smartresult = *result ? new std::shared_ptr<  elm::datamatrix_t >(*result) : 0;
-    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, SWIG_POINTER_OWN);
-  }
-  return resultobj;
-fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
 
 SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg4 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared4 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res4 = SWIG_ConvertPtrAndOwn(obj3, &argp4, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Model2_calc_utility" "', argument " "4"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared4 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >(tempshared4.get());
-    } else {
-      smartarg4 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >((smartarg4 ? smartarg4->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility(arg2,arg3,arg4);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility(arg2,arg3);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -72097,42 +72036,90 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
-    if (PyArray_Check(obj3)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp4 = boosted::make_shared<etk::ndarray>(obj3);
-      arg4 = &(*temp4);
+    if (obj3 == Py_None) {
+      arg4 = nullptr;
     } else {
-      temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
-      arg4 = &(*temp4);		
+      if (PyArray_Check(obj3)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp4 = boosted::make_shared<etk::ndarray>(obj3);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg4 = &(*temp4);
+      } else {
+        temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
+        arg4 = &(*temp4);
+      }
     }
   }
   {
@@ -72153,7 +72140,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72161,7 +72152,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -72182,29 +72173,61 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
@@ -72225,7 +72248,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72233,7 +72260,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -72251,16 +72278,32 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_5(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -72281,7 +72324,134 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_5(PyObject *SWIGUNUSEDPARM(
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->calc_utility();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::map< std::string,boosted::shared_ptr< elm::darray const >,std::less< std::string >,std::allocator< std::pair< std::string const,boosted::shared_ptr< elm::darray const > > > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< std::string,boosted::shared_ptr< elm::darray const > > temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    if (!PyDict_Check(obj1)) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires a dict"));
+      SWIG_fail;
+    }
+    PyObject *thekey, *thearray;
+    Py_ssize_t pos = 0;
+    while (PyDict_Next(obj1, &pos, &thekey, &thearray)) {
+      if (PyArray_Check(thearray)) {
+        if (  (PyArray_TYPE((PyArrayObject*)thearray)!= NPY_DOUBLE)
+          &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
+          &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
+          ) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires all array types to be DOUBLE or BOOL or INT64"));
+          SWIG_fail;
+        }
+        try {
+          temp2[PyString_ExtractCppString(thekey)] = boosted::make_shared<const elm::darray>(thearray);
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &temp2;
+      } else {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+        SWIG_fail;
+      }
+      
+      
+    }
+    
+  }
+  {
+    try {
+      result = (arg1)->calc_utility((std::map< std::string,boosted::shared_ptr< elm::darray const >,std::less< std::string >,std::allocator< std::pair< std::string const,boosted::shared_ptr< elm::darray const > > > > const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72299,14 +72469,43 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
   for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Model2_calc_utility__SWIG_3(self, args);
+    }
+  }
   if (argc == 2) {
     int _v;
     void *vptr = 0;
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
+          }
+        }
+      }
       if (_v) {
         return _wrap_Model2_calc_utility__SWIG_2(self, args);
       }
@@ -72319,6 +72518,41 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       {
+        if (!PyDict_Check(argv[1])) {
+          _v = 0;
+        } else {
+          _v = 1;
+          PyObject *thekey, *thearray;
+          Py_ssize_t pos = 0;
+          while (PyDict_Next(argv[1], &pos, &thekey, &thearray)) {
+            if (PyArray_Check(thearray)) {
+              if (  (PyArray_TYPE((PyArrayObject*)thearray)!= NPY_DOUBLE)
+                &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
+                &&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
+                ) {
+                _v = 0;
+              }
+            } else {
+              _v = 0;
+            }
+            if (!PyUnicode_Check(thekey)) {
+              _v = 0; 
+            }
+          }
+        }
+      }
+      if (_v) {
+        return _wrap_Model2_calc_utility__SWIG_4(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
         if (PyArray_Check(argv[1])) {
           _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
         } else {
@@ -72332,102 +72566,43 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
       if (_v) {
-        return _wrap_Model2_calc_utility__SWIG_5(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          if (PyArray_Check(argv[2])) {
+            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
+          } else {
+            if (PySequence_Check(argv[2])) {
+              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
+                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
+                PyObject* floattest = PyNumber_Float(seqitem);
+                if (!floattest) _v = 0; else _v = 1;
+                Py_CLEAR(floattest);
+                Py_CLEAR(seqitem);
+                if (_v == 0) break;
+              }
+            } else {
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
+            }
+          }
+        }
         if (_v) {
           return _wrap_Model2_calc_utility__SWIG_1(self, args);
         }
       }
     }
   }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        if (PyArray_Check(argv[1])) {
-          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
-        } else {
-          if (PySequence_Check(argv[1])) {
-            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
-              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
-              PyObject* floattest = PyNumber_Float(seqitem);
-              if (!floattest) _v = 0; else _v = 1;
-              Py_CLEAR(floattest);
-              Py_CLEAR(seqitem);
-              if (_v == 0) break;
-            }
-          } else {
-            _v = 0;
-          }
-        }
-      }
-      if (_v) {
-        {
-          if (PyArray_Check(argv[2])) {
-            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
-          } else {
-            if (PySequence_Check(argv[2])) {
-              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
-                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
-                PyObject* floattest = PyNumber_Float(seqitem);
-                if (!floattest) _v = 0; else _v = 1;
-                Py_CLEAR(floattest);
-                Py_CLEAR(seqitem);
-                if (_v == 0) break;
-              }
-            } else {
-              _v = 0;
-            }
-          }
-        }
-        if (_v) {
-          return _wrap_Model2_calc_utility__SWIG_4(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_Model2_calc_utility__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
   if (argc == 4) {
     int _v;
     void *vptr = 0;
@@ -72448,7 +72623,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
@@ -72467,7 +72646,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
                 if (_v == 0) break;
               }
             } else {
-              _v = 0;
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
             }
           }
         }
@@ -72486,12 +72669,16 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
                   if (_v == 0) break;
                 }
               } else {
-                _v = 0;
+                if (argv[3] == Py_None) {
+                  _v = 1;
+                } else {
+                  _v = 0;
+                }
               }
             }
           }
           if (_v) {
-            return _wrap_Model2_calc_utility__SWIG_3(self, args);
+            return _wrap_Model2_calc_utility__SWIG_0(self, args);
           }
         }
       }
@@ -72501,12 +72688,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_calc_utility'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::calc_utility(elm::datamatrix_t *,elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility(elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility(elm::datamatrix_t *) const\n"
     "    elm::Model2::calc_utility(etk::ndarray *,etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility(etk::ndarray *,etk::ndarray *) const\n"
-    "    elm::Model2::calc_utility(etk::ndarray *) const\n");
+    "    elm::Model2::calc_utility(etk::ndarray *) const\n"
+    "    elm::Model2::calc_utility() const\n"
+    "    elm::Model2::calc_utility(std::map< std::string,boosted::shared_ptr< elm::darray const >,std::less< std::string >,std::allocator< std::pair< std::string const,boosted::shared_ptr< elm::darray const > > > > const &)\n");
   return 0;
 }
 
@@ -72529,16 +72715,32 @@ SWIGINTERN PyObject *_wrap_Model2_calc_probability(PyObject *SWIGUNUSEDPARM(self
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -72559,7 +72761,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_probability(PyObject *SWIGUNUSEDPARM(self
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72585,16 +72791,32 @@ SWIGINTERN PyObject *_wrap_Model2_calc_logsums(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -72615,7 +72837,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_logsums(PyObject *SWIGUNUSEDPARM(self), P
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72624,252 +72850,6 @@ fail:
 
 
 SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg4 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared4 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_probability",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_probability" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_probability" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_probability" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res4 = SWIG_ConvertPtrAndOwn(obj3, &argp4, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Model2_calc_utility_probability" "', argument " "4"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared4 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >(tempshared4.get());
-    } else {
-      smartarg4 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >((smartarg4 ? smartarg4->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_probability(arg2,arg3,arg4);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_probability",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_probability" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_probability" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_probability" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_probability(arg2,arg3);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_probability",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_probability" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_probability" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_probability(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -72893,42 +72873,90 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
-    if (PyArray_Check(obj3)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp4 = boosted::make_shared<etk::ndarray>(obj3);
-      arg4 = &(*temp4);
+    if (obj3 == Py_None) {
+      arg4 = nullptr;
     } else {
-      temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
-      arg4 = &(*temp4);		
+      if (PyArray_Check(obj3)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp4 = boosted::make_shared<etk::ndarray>(obj3);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg4 = &(*temp4);
+      } else {
+        temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
+        arg4 = &(*temp4);
+      }
     }
   }
   {
@@ -72949,7 +72977,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_3(PyObject *SWI
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -72957,7 +72989,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -72978,29 +73010,61 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWI
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
@@ -73021,7 +73085,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_4(PyObject *SWI
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -73029,7 +73097,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -73047,16 +73115,32 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_5(PyObject *SWI
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -73077,7 +73161,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability__SWIG_5(PyObject *SWI
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -73101,14 +73189,34 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
+          }
+        }
+      }
       if (_v) {
         return _wrap_Model2_calc_utility_probability__SWIG_2(self, args);
       }
     }
   }
-  if (argc == 2) {
+  if (argc == 3) {
     int _v;
     void *vptr = 0;
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
@@ -73128,102 +73236,43 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
       if (_v) {
-        return _wrap_Model2_calc_utility_probability__SWIG_5(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          if (PyArray_Check(argv[2])) {
+            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
+          } else {
+            if (PySequence_Check(argv[2])) {
+              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
+                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
+                PyObject* floattest = PyNumber_Float(seqitem);
+                if (!floattest) _v = 0; else _v = 1;
+                Py_CLEAR(floattest);
+                Py_CLEAR(seqitem);
+                if (_v == 0) break;
+              }
+            } else {
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
+            }
+          }
+        }
         if (_v) {
           return _wrap_Model2_calc_utility_probability__SWIG_1(self, args);
         }
       }
     }
   }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        if (PyArray_Check(argv[1])) {
-          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
-        } else {
-          if (PySequence_Check(argv[1])) {
-            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
-              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
-              PyObject* floattest = PyNumber_Float(seqitem);
-              if (!floattest) _v = 0; else _v = 1;
-              Py_CLEAR(floattest);
-              Py_CLEAR(seqitem);
-              if (_v == 0) break;
-            }
-          } else {
-            _v = 0;
-          }
-        }
-      }
-      if (_v) {
-        {
-          if (PyArray_Check(argv[2])) {
-            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
-          } else {
-            if (PySequence_Check(argv[2])) {
-              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
-                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
-                PyObject* floattest = PyNumber_Float(seqitem);
-                if (!floattest) _v = 0; else _v = 1;
-                Py_CLEAR(floattest);
-                Py_CLEAR(seqitem);
-                if (_v == 0) break;
-              }
-            } else {
-              _v = 0;
-            }
-          }
-        }
-        if (_v) {
-          return _wrap_Model2_calc_utility_probability__SWIG_4(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_Model2_calc_utility_probability__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
   if (argc == 4) {
     int _v;
     void *vptr = 0;
@@ -73244,7 +73293,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
@@ -73263,7 +73316,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
                 if (_v == 0) break;
               }
             } else {
-              _v = 0;
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
             }
           }
         }
@@ -73282,12 +73339,16 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
                   if (_v == 0) break;
                 }
               } else {
-                _v = 0;
+                if (argv[3] == Py_None) {
+                  _v = 1;
+                } else {
+                  _v = 0;
+                }
               }
             }
           }
           if (_v) {
-            return _wrap_Model2_calc_utility_probability__SWIG_3(self, args);
+            return _wrap_Model2_calc_utility_probability__SWIG_0(self, args);
           }
         }
       }
@@ -73297,9 +73358,6 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_probability(PyObject *self, PyObj
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_calc_utility_probability'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::calc_utility_probability(elm::datamatrix_t *,elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility_probability(elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility_probability(elm::datamatrix_t *) const\n"
     "    elm::Model2::calc_utility_probability(etk::ndarray *,etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility_probability(etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility_probability(etk::ndarray *) const\n");
@@ -73308,252 +73366,6 @@ fail:
 
 
 SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg4 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared4 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_logsums" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res4 = SWIG_ConvertPtrAndOwn(obj3, &argp4, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Model2_calc_utility_logsums" "', argument " "4"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared4 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >(tempshared4.get());
-    } else {
-      smartarg4 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp4);
-      arg4 = const_cast< elm::datamatrix_t * >((smartarg4 ? smartarg4->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3,arg4);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  elm::datamatrix_t *arg3 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared3 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    int newmem = 0;
-    res3 = SWIG_ConvertPtrAndOwn(obj2, &argp3, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model2_calc_utility_logsums" "', argument " "3"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared3 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >(tempshared3.get());
-    } else {
-      smartarg3 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp3);
-      arg3 = const_cast< elm::datamatrix_t * >((smartarg3 ? smartarg3->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2,arg3);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::datamatrix_t *arg2 = (elm::datamatrix_t *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  std::shared_ptr< elm::datamatrix_t > tempshared2 ;
-  std::shared_ptr< elm::datamatrix_t > *smartarg2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< etk::ndarray > > result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_calc_utility_logsums",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calc_utility_logsums" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    int newmem = 0;
-    res2 = SWIG_ConvertPtrAndOwn(obj1, &argp2, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0 |  0 , &newmem);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_calc_utility_logsums" "', argument " "2"" of type '" "elm::datamatrix_t *""'"); 
-    }
-    if (newmem & SWIG_CAST_NEW_MEMORY) {
-      tempshared2 = *reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      delete reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >(tempshared2.get());
-    } else {
-      smartarg2 = reinterpret_cast< std::shared_ptr<  elm::datamatrix_t > * >(argp2);
-      arg2 = const_cast< elm::datamatrix_t * >((smartarg2 ? smartarg2->get() : 0));
-    }
-  }
-  {
-    try {
-      result = ((elm::Model2 const *)arg1)->calc_utility_logsums(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = (*(&(result)))->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -73577,42 +73389,90 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_3(PyObject *SWIGUNU
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
-    if (PyArray_Check(obj3)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp4 = boosted::make_shared<etk::ndarray>(obj3);
-      arg4 = &(*temp4);
+    if (obj3 == Py_None) {
+      arg4 = nullptr;
     } else {
-      temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
-      arg4 = &(*temp4);		
+      if (PyArray_Check(obj3)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj3)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj3)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp4 = boosted::make_shared<etk::ndarray>(obj3);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg4 = &(*temp4);
+      } else {
+        temp4 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj3, NPY_DOUBLE, 0, 0));
+        arg4 = &(*temp4);
+      }
     }
   }
   {
@@ -73633,7 +73493,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_3(PyObject *SWIGUNU
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -73641,7 +73505,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -73662,29 +73526,61 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_4(PyObject *SWIGUNU
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
-    if (PyArray_Check(obj2)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp3 = boosted::make_shared<etk::ndarray>(obj2);
-      arg3 = &(*temp3);
+    if (obj2 == Py_None) {
+      arg3 = nullptr;
     } else {
-      temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
-      arg3 = &(*temp3);		
+      if (PyArray_Check(obj2)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj2)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj2)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp3 = boosted::make_shared<etk::ndarray>(obj2);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg3 = &(*temp3);
+      } else {
+        temp3 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj2, NPY_DOUBLE, 0, 0));
+        arg3 = &(*temp3);
+      }
     }
   }
   {
@@ -73705,7 +73601,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_4(PyObject *SWIGUNU
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -73713,7 +73613,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   etk::ndarray *arg2 = (etk::ndarray *) 0 ;
@@ -73731,16 +73631,32 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_5(PyObject *SWIGUNU
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -73761,7 +73677,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums__SWIG_5(PyObject *SWIGUNU
     }
   }
   {
-    resultobj = (*(&(result)))->get_object();
+    if (!*&result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = (*(&(result)))->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -73785,14 +73705,34 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
+      {
+        if (PyArray_Check(argv[1])) {
+          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
+        } else {
+          if (PySequence_Check(argv[1])) {
+            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
+              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
+              PyObject* floattest = PyNumber_Float(seqitem);
+              if (!floattest) _v = 0; else _v = 1;
+              Py_CLEAR(floattest);
+              Py_CLEAR(seqitem);
+              if (_v == 0) break;
+            }
+          } else {
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
+          }
+        }
+      }
       if (_v) {
         return _wrap_Model2_calc_utility_logsums__SWIG_2(self, args);
       }
     }
   }
-  if (argc == 2) {
+  if (argc == 3) {
     int _v;
     void *vptr = 0;
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
@@ -73812,102 +73752,43 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
       if (_v) {
-        return _wrap_Model2_calc_utility_logsums__SWIG_5(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
+        {
+          if (PyArray_Check(argv[2])) {
+            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
+          } else {
+            if (PySequence_Check(argv[2])) {
+              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
+                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
+                PyObject* floattest = PyNumber_Float(seqitem);
+                if (!floattest) _v = 0; else _v = 1;
+                Py_CLEAR(floattest);
+                Py_CLEAR(seqitem);
+                if (_v == 0) break;
+              }
+            } else {
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
+            }
+          }
+        }
         if (_v) {
           return _wrap_Model2_calc_utility_logsums__SWIG_1(self, args);
         }
       }
     }
   }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        if (PyArray_Check(argv[1])) {
-          _v = ((PyArray_TYPE((PyArrayObject*)argv[1])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[1])== NPY_BOOL)) ? 1 : 0;
-        } else {
-          if (PySequence_Check(argv[1])) {
-            for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[1]); seqi++) {
-              PyObject* seqitem = PySequence_GetItem(argv[1], seqi);
-              PyObject* floattest = PyNumber_Float(seqitem);
-              if (!floattest) _v = 0; else _v = 1;
-              Py_CLEAR(floattest);
-              Py_CLEAR(seqitem);
-              if (_v == 0) break;
-            }
-          } else {
-            _v = 0;
-          }
-        }
-      }
-      if (_v) {
-        {
-          if (PyArray_Check(argv[2])) {
-            _v = ((PyArray_TYPE((PyArrayObject*)argv[2])== NPY_DOUBLE)||(PyArray_TYPE((PyArrayObject*)argv[2])== NPY_BOOL)) ? 1 : 0;
-          } else {
-            if (PySequence_Check(argv[2])) {
-              for (Py_ssize_t seqi=0; seqi<PySequence_Length(argv[2]); seqi++) {
-                PyObject* seqitem = PySequence_GetItem(argv[2], seqi);
-                PyObject* floattest = PyNumber_Float(seqitem);
-                if (!floattest) _v = 0; else _v = 1;
-                Py_CLEAR(floattest);
-                Py_CLEAR(seqitem);
-                if (_v == 0) break;
-              }
-            } else {
-              _v = 0;
-            }
-          }
-        }
-        if (_v) {
-          return _wrap_Model2_calc_utility_logsums__SWIG_4(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_Model2_calc_utility_logsums__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
   if (argc == 4) {
     int _v;
     void *vptr = 0;
@@ -73928,7 +73809,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
@@ -73947,7 +73832,11 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
                 if (_v == 0) break;
               }
             } else {
-              _v = 0;
+              if (argv[2] == Py_None) {
+                _v = 1;
+              } else {
+                _v = 0;
+              }
             }
           }
         }
@@ -73966,12 +73855,16 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
                   if (_v == 0) break;
                 }
               } else {
-                _v = 0;
+                if (argv[3] == Py_None) {
+                  _v = 1;
+                } else {
+                  _v = 0;
+                }
               }
             }
           }
           if (_v) {
-            return _wrap_Model2_calc_utility_logsums__SWIG_3(self, args);
+            return _wrap_Model2_calc_utility_logsums__SWIG_0(self, args);
           }
         }
       }
@@ -73981,9 +73874,6 @@ SWIGINTERN PyObject *_wrap_Model2_calc_utility_logsums(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_calc_utility_logsums'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *,elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *,elm::datamatrix_t *) const\n"
-    "    elm::Model2::calc_utility_logsums(elm::datamatrix_t *) const\n"
     "    elm::Model2::calc_utility_logsums(etk::ndarray *,etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility_logsums(etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility_logsums(etk::ndarray *) const\n");
@@ -74009,16 +73899,32 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_Check(obj1)) {
-      if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
-        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
-        SWIG_fail;
-      }
-      temp2 = boosted::make_shared<etk::ndarray>(obj1);
-      arg2 = &(*temp2);
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
     } else {
-      temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
-      arg2 = &(*temp2);		
+      if (PyArray_Check(obj1)) {
+        if ((PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)obj1)!= NPY_BOOL)) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+          SWIG_fail;
+        }
+        
+        try {
+          temp2 = boosted::make_shared<etk::ndarray>(obj1);
+        } catch (const etk::SQLiteError& e) {
+          PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const etk::FacetError& e) {
+          PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        } catch (const std::exception& e) {
+          PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+          SWIG_fail;
+        }
+        arg2 = &(*temp2);
+      } else {
+        temp2 = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny(obj1, NPY_DOUBLE, 0, 0));
+        arg2 = &(*temp2);
+      }
     }
   }
   {
@@ -74039,7 +73945,11 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -74079,7 +73989,11 @@ SWIGINTERN PyObject *_wrap_Model2_probability__SWIG_1(PyObject *SWIGUNUSEDPARM(s
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -74126,7 +74040,11 @@ SWIGINTERN PyObject *_wrap_Model2_probability(PyObject *self, PyObject *args) {
               if (_v == 0) break;
             }
           } else {
-            _v = 0;
+            if (argv[1] == Py_None) {
+              _v = 1;
+            } else {
+              _v = 0;
+            }
           }
         }
       }
@@ -74162,12 +74080,28 @@ SWIGINTERN PyObject *_wrap_Model2_hessian_matrix_set(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
-    if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
-      SWIG_fail;
+    if (obj1 == Py_None) {
+      arg2 = nullptr;
+    } else {
+      if (PyArray_TYPE((PyArrayObject*)obj1)!= NPY_DOUBLE) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE"));
+        SWIG_fail;
+      }
+      
+      try {
+        temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
+      } catch (const etk::SQLiteError& e) {
+        PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const etk::FacetError& e) {
+        PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      } catch (const std::exception& e) {
+        PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+        SWIG_fail;
+      }
+      arg2 = &(*temp2);
     }
-    temp2 = boosted::make_shared<etk::symmetric_matrix>(obj1);
-    arg2 = &(*temp2);
   }
   if (arg1) (arg1)->hessian_matrix = arg2;
   resultobj = SWIG_Py_Void();
@@ -74193,7 +74127,11 @@ SWIGINTERN PyObject *_wrap_Model2_hessian_matrix_get(PyObject *SWIGUNUSEDPARM(se
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   result = (etk::symmetric_matrix *) ((arg1)->hessian_matrix);
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -75431,12 +75369,12 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  std::string *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_logger",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -75444,20 +75382,10 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_logger" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_logger" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_logger" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
+  arg2 = obj1;
   {
     try {
-      (arg1)->logger((std::string const &)*arg2);
+      result = (PyObject *)(arg1)->logger(arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -75472,11 +75400,9 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_Py_Void();
-  if (SWIG_IsNewObj(res2)) delete arg2;
+  resultobj = result;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
 }
 
@@ -75487,6 +75413,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_logger",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -75496,7 +75423,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     try {
-      (arg1)->logger();
+      result = (PyObject *)(arg1)->logger();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -75511,99 +75438,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_logger",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_logger" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model2_logger" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  {
-    try {
-      (arg1)->logger(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_logger__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_logger",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_logger" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model2_logger" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      (arg1)->logger(arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_Py_Void();
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -75635,38 +75470,7 @@ SWIGINTERN PyObject *_wrap_Model2_logger(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        int res = SWIG_AsVal_bool(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Model2_logger__SWIG_2(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_Model2_logger__SWIG_3(self, args);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
+      _v = (argv[1] != 0);
       if (_v) {
         return _wrap_Model2_logger__SWIG_0(self, args);
       }
@@ -75676,10 +75480,8 @@ SWIGINTERN PyObject *_wrap_Model2_logger(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_logger'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::logger(std::string const &)\n"
-    "    elm::Model2::logger()\n"
-    "    elm::Model2::logger(bool)\n"
-    "    elm::Model2::logger(int)\n");
+    "    elm::Model2::logger(PyObject *)\n"
+    "    elm::Model2::logger()\n");
   return 0;
 }
 
@@ -75782,86 +75584,6 @@ SWIGINTERN PyObject *_wrap_Model2_option_get(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   result = (elm::model_options_t *)& ((arg1)->option);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__model_options_t, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_tally_chosen(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  etk::ndarray *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_tally_chosen",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_tally_chosen" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    try {
-      result = (etk::ndarray *)(arg1)->tally_chosen();
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = result->get_object();
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_tally_avail(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  etk::ndarray *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_tally_avail",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_tally_avail" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    try {
-      result = (etk::ndarray *)(arg1)->tally_avail();
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  {
-    resultobj = result->get_object();
-  }
   return resultobj;
 fail:
   return NULL;
@@ -78311,6 +78033,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_setUpMessage_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_setUpMessage_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_setUpMessage_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_setUpMessage_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_setUpMessage_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->setUpMessage = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_setUpMessage_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_setUpMessage_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_setUpMessage_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  result = (std::string *) & ((arg1)->setUpMessage);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_tearDown(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -79828,7 +79609,11 @@ SWIGINTERN PyObject *_wrap_Model2_Utility(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -79868,7 +79653,11 @@ SWIGINTERN PyObject *_wrap_Model2_Probability(PyObject *SWIGUNUSEDPARM(self), Py
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -79908,7 +79697,11 @@ SWIGINTERN PyObject *_wrap_Model2_Cond_Prob(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -79948,7 +79741,11 @@ SWIGINTERN PyObject *_wrap_Model2_Allocation(PyObject *SWIGUNUSEDPARM(self), PyO
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -79988,7 +79785,11 @@ SWIGINTERN PyObject *_wrap_Model2_GammaZ(PyObject *SWIGUNUSEDPARM(self), PyObjec
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -80028,7 +79829,11 @@ SWIGINTERN PyObject *_wrap_Model2_CaseLogLike(PyObject *SWIGUNUSEDPARM(self), Py
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -80068,7 +79873,11 @@ SWIGINTERN PyObject *_wrap_Model2_SamplingWeight(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -80108,7 +79917,11 @@ SWIGINTERN PyObject *_wrap_Model2_AdjProbability(PyObject *SWIGUNUSEDPARM(self),
     }
   }
   {
-    resultobj = result->get_object();
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
   }
   return resultobj;
 fail:
@@ -81483,6 +81296,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Facet_unweighted", _wrap_Facet_unweighted, METH_VARARGS, NULL},
 	 { (char *)"Facet_all_alts_always_available", _wrap_Facet_all_alts_always_available, METH_VARARGS, NULL},
 	 { (char *)"Facet_matrix_library", _wrap_Facet_matrix_library, METH_VARARGS, NULL},
+	 { (char *)"Facet__array_idco_reader", _wrap_Facet__array_idco_reader, METH_VARARGS, NULL},
+	 { (char *)"Facet__array_idca_reader", _wrap_Facet__array_idca_reader, METH_VARARGS, NULL},
 	 { (char *)"Facet_swigregister", Facet_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ParameterLinkArray", _wrap_new_ParameterLinkArray, METH_VARARGS, NULL},
 	 { (char *)"delete_ParameterLinkArray", _wrap_delete_ParameterLinkArray, METH_VARARGS, NULL},
@@ -81762,6 +81577,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"model_options_t_threads_get", _wrap_model_options_t_threads_get, METH_VARARGS, (char *)"For certain easy to parallel-ize calculations, ELM will create this many worker threads. The default value is the number of processor cores on your computer, and it is recommended that you not change this value."},
 	 { (char *)"model_options_t_calc_null_likelihood_set", _wrap_model_options_t_calc_null_likelihood_set, METH_VARARGS, (char *)"Calculate the null model log likelihood in conjunction with an estimation."},
 	 { (char *)"model_options_t_calc_null_likelihood_get", _wrap_model_options_t_calc_null_likelihood_get, METH_VARARGS, (char *)"Calculate the null model log likelihood in conjunction with an estimation."},
+	 { (char *)"model_options_t_null_disregards_holdfast_set", _wrap_model_options_t_null_disregards_holdfast_set, METH_VARARGS, NULL},
+	 { (char *)"model_options_t_null_disregards_holdfast_get", _wrap_model_options_t_null_disregards_holdfast_get, METH_VARARGS, NULL},
 	 { (char *)"model_options_t_calc_std_errors_set", _wrap_model_options_t_calc_std_errors_set, METH_VARARGS, (char *)"Calculate the standard errors of the parameter estimates in conjunction with an estimation. These values can sometimes take a long time to generate, so if you don't need the standard errors (ex. during early model testing) you can save some time by disabling this option."},
 	 { (char *)"model_options_t_calc_std_errors_get", _wrap_model_options_t_calc_std_errors_get, METH_VARARGS, (char *)"Calculate the standard errors of the parameter estimates in conjunction with an estimation. These values can sometimes take a long time to generate, so if you don't need the standard errors (ex. during early model testing) you can save some time by disabling this option."},
 	 { (char *)"model_options_t_mute_nan_warnings_set", _wrap_model_options_t_mute_nan_warnings_set, METH_VARARGS, (char *)"Disable logging warnings of not-a-number error messages, which can occur sometimes in likelihood maximization."},
@@ -81985,26 +81802,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_needs", _wrap_Model2_needs, METH_VARARGS, NULL},
 	 { (char *)"Model2_provision", _wrap_Model2_provision, METH_VARARGS, NULL},
 	 { (char *)"Model2_is_provisioned", _wrap_Model2_is_provisioned, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_UtilityCA_set", _wrap_Model2_Data_UtilityCA_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_UtilityCA_get", _wrap_Model2_Data_UtilityCA_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_UtilityCO_set", _wrap_Model2_Data_UtilityCO_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_UtilityCO_get", _wrap_Model2_Data_UtilityCO_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_SamplingCA_set", _wrap_Model2_Data_SamplingCA_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_SamplingCA_get", _wrap_Model2_Data_SamplingCA_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_SamplingCO_set", _wrap_Model2_Data_SamplingCO_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_SamplingCO_get", _wrap_Model2_Data_SamplingCO_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_QuantityCA_set", _wrap_Model2_Data_QuantityCA_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_QuantityCA_get", _wrap_Model2_Data_QuantityCA_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_QuantLogSum_set", _wrap_Model2_Data_QuantLogSum_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_QuantLogSum_get", _wrap_Model2_Data_QuantLogSum_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_LogSum_set", _wrap_Model2_Data_LogSum_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_LogSum_get", _wrap_Model2_Data_LogSum_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Choice_set", _wrap_Model2_Data_Choice_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Choice_get", _wrap_Model2_Data_Choice_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Weight_set", _wrap_Model2_Data_Weight_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Weight_get", _wrap_Model2_Data_Weight_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Avail_set", _wrap_Model2_Data_Avail_set, METH_VARARGS, NULL},
-	 { (char *)"Model2_Data_Avail_get", _wrap_Model2_Data_Avail_get, METH_VARARGS, NULL},
+	 { (char *)"Model2_Data", _wrap_Model2_Data, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility", _wrap_Model2_calc_utility, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_probability", _wrap_Model2_calc_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_logsums", _wrap_Model2_calc_logsums, METH_VARARGS, NULL},
@@ -82031,8 +81829,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2__string_sender_ptr_get", _wrap_Model2__string_sender_ptr_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_option_set", _wrap_Model2_option_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_option_get", _wrap_Model2_option_get, METH_VARARGS, NULL},
-	 { (char *)"Model2_tally_chosen", _wrap_Model2_tally_chosen, METH_VARARGS, NULL},
-	 { (char *)"Model2_tally_avail", _wrap_Model2_tally_avail, METH_VARARGS, NULL},
 	 { (char *)"Model2_estimate", _wrap_Model2_estimate, METH_VARARGS, NULL},
 	 { (char *)"Model2_estimate_tight", _wrap_Model2_estimate_tight, METH_VARARGS, NULL},
 	 { (char *)"Model2__get_parameter", _wrap_Model2__get_parameter, METH_VARARGS, NULL},
@@ -82055,6 +81851,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_change_data_pointer", _wrap_Model2_change_data_pointer, METH_VARARGS, NULL},
 	 { (char *)"Model2_delete_data_pointer", _wrap_Model2_delete_data_pointer, METH_VARARGS, NULL},
 	 { (char *)"Model2_setUp", _wrap_Model2_setUp, METH_VARARGS, NULL},
+	 { (char *)"Model2_setUpMessage_set", _wrap_Model2_setUpMessage_set, METH_VARARGS, NULL},
+	 { (char *)"Model2_setUpMessage_get", _wrap_Model2_setUpMessage_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_tearDown", _wrap_Model2_tearDown, METH_VARARGS, NULL},
 	 { (char *)"Model2_title_set", _wrap_Model2_title_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_title_get", _wrap_Model2_title_get, METH_VARARGS, NULL},

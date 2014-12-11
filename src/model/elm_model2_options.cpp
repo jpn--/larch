@@ -36,6 +36,7 @@ using namespace etk;
 elm::model_options_t::model_options_t(
 			int threads,
 			bool calc_null_likelihood,
+			bool null_disregards_holdfast,
 			bool calc_std_errors,
 			int gradient_diagnostic,
 			int hessian_diagnostic,
@@ -51,6 +52,7 @@ elm::model_options_t::model_options_t(
 , hessian_diagnostic    (hessian_diagnostic)
 , threads               (threads)
 , calc_null_likelihood  (calc_null_likelihood)
+, null_disregards_holdfast(null_disregards_holdfast)
 , calc_std_errors       (calc_std_errors)
 , mute_nan_warnings     (mute_nan_warnings)
 , force_finite_diff_grad(force_finite_diff_grad)
@@ -79,6 +81,7 @@ elm::model_options_t::model_options_t(
 void elm::model_options_t::__call__(
 			int threads,
 			int calc_null_likelihood,
+			int null_disregards_holdfast,
 			int calc_std_errors,
 			int gradient_diagnostic,
 			int hessian_diagnostic,
@@ -91,34 +94,36 @@ void elm::model_options_t::__call__(
 			int weight_autorescale
 		)
 {
-	if (gradient_diagnostic    != -9 ) (this->gradient_diagnostic     = gradient_diagnostic    );
-	if (hessian_diagnostic     != -9 ) (this->hessian_diagnostic      = hessian_diagnostic     );
-	if (threads                != -9 ) (this->threads                 = threads                );
-	if (calc_null_likelihood   != -9 ) (this->calc_null_likelihood    = calc_null_likelihood   );
-	if (calc_std_errors        != -9 ) (this->calc_std_errors         = calc_std_errors        );
-	if (mute_nan_warnings      != -9 ) (this->mute_nan_warnings       = mute_nan_warnings      );
-	if (force_finite_diff_grad != -9 ) (this->force_finite_diff_grad  = force_finite_diff_grad );
-	if (save_db_hash           != -9 ) (this->save_db_hash            = save_db_hash           );
-	if (force_recalculate      != -9 ) (this->force_recalculate       = force_recalculate      );
-	if (author                 !="-9") (this->author                  = author                 );
-	if (teardown_after_estimate!= -9 ) (this->teardown_after_estimate = teardown_after_estimate);
-	if (weight_autorescale     != -9 ) (this->weight_autorescale      = weight_autorescale     );
+	if (gradient_diagnostic     != -9 ) (this->gradient_diagnostic     = gradient_diagnostic     );
+	if (hessian_diagnostic      != -9 ) (this->hessian_diagnostic      = hessian_diagnostic      );
+	if (threads                 != -9 ) (this->threads                 = threads                 );
+	if (calc_null_likelihood    != -9 ) (this->calc_null_likelihood    = calc_null_likelihood    );
+	if (null_disregards_holdfast!= -9 ) (this->null_disregards_holdfast= null_disregards_holdfast);
+	if (calc_std_errors         != -9 ) (this->calc_std_errors         = calc_std_errors         );
+	if (mute_nan_warnings       != -9 ) (this->mute_nan_warnings       = mute_nan_warnings       );
+	if (force_finite_diff_grad  != -9 ) (this->force_finite_diff_grad  = force_finite_diff_grad  );
+	if (save_db_hash            != -9 ) (this->save_db_hash            = save_db_hash            );
+	if (force_recalculate       != -9 ) (this->force_recalculate       = force_recalculate       );
+	if (author                  !="-9") (this->author                  = author                  );
+	if (teardown_after_estimate != -9 ) (this->teardown_after_estimate = teardown_after_estimate );
+	if (weight_autorescale      != -9 ) (this->weight_autorescale      = weight_autorescale      );
 		
 }
 
 void elm::model_options_t::copy(const model_options_t& other)
 {
-	this->gradient_diagnostic     = other.gradient_diagnostic    ;
-	this->hessian_diagnostic      = other.hessian_diagnostic     ;
-	this->threads                 = other.threads                ;
-	this->calc_null_likelihood    = other.calc_null_likelihood   ;
-	this->calc_std_errors         = other.calc_std_errors        ;
-	this->mute_nan_warnings       = other.mute_nan_warnings      ;
-	this->force_finite_diff_grad  = other.force_finite_diff_grad ;
-	this->save_db_hash            = other.save_db_hash           ;
-	this->force_recalculate       = other.force_recalculate      ;
-	this->teardown_after_estimate = other.teardown_after_estimate;
-	this->weight_autorescale      = other.weight_autorescale     ;
+	this->gradient_diagnostic     = other.gradient_diagnostic     ;
+	this->hessian_diagnostic      = other.hessian_diagnostic      ;
+	this->threads                 = other.threads                 ;
+	this->calc_null_likelihood    = other.calc_null_likelihood    ;
+	this->null_disregards_holdfast= other.null_disregards_holdfast;
+	this->calc_std_errors         = other.calc_std_errors         ;
+	this->mute_nan_warnings       = other.mute_nan_warnings       ;
+	this->force_finite_diff_grad  = other.force_finite_diff_grad  ;
+	this->save_db_hash            = other.save_db_hash            ;
+	this->force_recalculate       = other.force_recalculate       ;
+	this->teardown_after_estimate = other.teardown_after_estimate ;
+	this->weight_autorescale      = other.weight_autorescale      ;
 }
 
 
@@ -126,18 +131,19 @@ std::string elm::model_options_t::__repr__() const
 {
 	std::ostringstream x;
 	x << "larch.core.model_options_t(\n";
-	x << "                threads= "<<threads                <<",\n";
-	x << "   calc_null_likelihood= "<<calc_null_likelihood   <<",\n";
-	x << "        calc_std_errors= "<<calc_std_errors        <<",\n";
-	x << "    gradient_diagnostic= "<<gradient_diagnostic    <<",\n";
-	x << "     hessian_diagnostic= "<<hessian_diagnostic     <<",\n";
-	x << "      mute_nan_warnings= "<<mute_nan_warnings      <<",\n";
-	x << " force_finite_diff_grad= "<<force_finite_diff_grad <<",\n";
-	x << "      force_recalculate= "<<force_recalculate      <<",\n";
-	x << "           save_db_hash= "<<save_db_hash           <<",\n";
-	x << "                 author= "<<author                 <<",\n";
-	x << "teardown_after_estimate= "<<teardown_after_estimate<<",\n";
-	x << "     weight_autorescale= "<<weight_autorescale     <<",\n";
+	x << "                 threads= "<<threads                 <<",\n";
+	x << "    calc_null_likelihood= "<<calc_null_likelihood    <<",\n";
+	x << "null_disregards_holdfast= "<<null_disregards_holdfast<<",\n";
+	x << "         calc_std_errors= "<<calc_std_errors         <<",\n";
+	x << "     gradient_diagnostic= "<<gradient_diagnostic     <<",\n";
+	x << "      hessian_diagnostic= "<<hessian_diagnostic      <<",\n";
+	x << "       mute_nan_warnings= "<<mute_nan_warnings       <<",\n";
+	x << "  force_finite_diff_grad= "<<force_finite_diff_grad  <<",\n";
+	x << "       force_recalculate= "<<force_recalculate       <<",\n";
+	x << "            save_db_hash= "<<save_db_hash            <<",\n";
+	x << "                  author= "<<author                  <<",\n";
+	x << " teardown_after_estimate= "<<teardown_after_estimate <<",\n";
+	x << "      weight_autorescale= "<<weight_autorescale      <<",\n";
 	x << ")";
 	return x.str();
 }
@@ -145,36 +151,38 @@ std::string elm::model_options_t::__repr__() const
 std::string elm::model_options_t::_save_buffer() const
 {
 	std::ostringstream x;
-	x << "self.option.threads= "                << threads                                <<"\n";
-	x << "self.option.calc_null_likelihood= "   <<(calc_null_likelihood   ?"True":"False")<<"\n";
-	x << "self.option.calc_std_errors= "        <<(calc_std_errors        ?"True":"False")<<"\n";
-	x << "self.option.gradient_diagnostic= "    << gradient_diagnostic                    <<"\n";
-	x << "self.option.hessian_diagnostic= "     << hessian_diagnostic                     <<"\n";
-	x << "self.option.mute_nan_warnings= "      <<(mute_nan_warnings      ?"True":"False")<<"\n";
-	x << "self.option.force_finite_diff_grad= " <<(force_finite_diff_grad ?"True":"False")<<"\n";
-	x << "self.option.force_recalculate= "      <<(force_recalculate      ?"True":"False")<<"\n";
-	x << "self.option.save_db_hash= "           <<(save_db_hash           ?"True":"False")<<"\n";
-	x << "self.option.author= '"                << author                                 <<"'\n";
-	x << "self.option.teardown_after_estimate= "<<(teardown_after_estimate?"True":"False")<<"\n";
-	x << "self.weight_autorescale= "            <<(weight_autorescale     ?"True":"False")<<"\n";
+	x << "self.option.threads= "                << threads                                 <<"\n";
+	x << "self.option.calc_null_likelihood= "   <<(calc_null_likelihood    ?"True":"False")<<"\n";
+	x << "self.option.null_disregards_holdfast="<<(null_disregards_holdfast?"True":"False")<<"\n";
+	x << "self.option.calc_std_errors= "        <<(calc_std_errors         ?"True":"False")<<"\n";
+	x << "self.option.gradient_diagnostic= "    << gradient_diagnostic                     <<"\n";
+	x << "self.option.hessian_diagnostic= "     << hessian_diagnostic                      <<"\n";
+	x << "self.option.mute_nan_warnings= "      <<(mute_nan_warnings       ?"True":"False")<<"\n";
+	x << "self.option.force_finite_diff_grad= " <<(force_finite_diff_grad  ?"True":"False")<<"\n";
+	x << "self.option.force_recalculate= "      <<(force_recalculate       ?"True":"False")<<"\n";
+	x << "self.option.save_db_hash= "           <<(save_db_hash            ?"True":"False")<<"\n";
+	x << "self.option.author= '"                << author                                  <<"'\n";
+	x << "self.option.teardown_after_estimate= "<<(teardown_after_estimate ?"True":"False")<<"\n";
+	x << "self.weight_autorescale= "            <<(weight_autorescale      ?"True":"False")<<"\n";
 	return x.str();
 }
 
 std::string elm::model_options_t::__str__() const
 {
 	std::ostringstream x;
-	x << "                threads: "<< threads               <<"\n";
-	x << "   calc_null_likelihood: "<<(calc_null_likelihood  ?"True":"False")<<"\n";
-	x << "        calc_std_errors: "<<(calc_std_errors       ?"True":"False")<<"\n";
-	x << "    gradient_diagnostic: "<< gradient_diagnostic   <<"\n";
-	x << "     hessian_diagnostic: "<< hessian_diagnostic    <<"\n";
-	x << "      mute_nan_warnings: "<<(mute_nan_warnings     ?"True":"False")<<"\n";
-	x << " force_finite_diff_grad: "<<(force_finite_diff_grad?"True":"False")<<"\n";
-	x << "      force_recalculate: "<<(force_recalculate     ?"True":"False")<<"\n";
-	x << "           save_db_hash: "<<(save_db_hash          ?"True":"False")<<"\n";
-	x << "                 author: "<< author                <<"\n";
-	x << "teardown_after_estimate: "<< teardown_after_estimate<<"\n";
-	x << "     weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
+	x << "                 threads: "<< threads               <<"\n";
+	x << "    calc_null_likelihood: "<<(calc_null_likelihood  ?"True":"False")<<"\n";
+	x << "null_disregards_holdfast: "<<(null_disregards_holdfast  ?"True":"False")<<"\n";
+	x << "         calc_std_errors: "<<(calc_std_errors       ?"True":"False")<<"\n";
+	x << "     gradient_diagnostic: "<< gradient_diagnostic   <<"\n";
+	x << "      hessian_diagnostic: "<< hessian_diagnostic    <<"\n";
+	x << "       mute_nan_warnings: "<<(mute_nan_warnings     ?"True":"False")<<"\n";
+	x << "  force_finite_diff_grad: "<<(force_finite_diff_grad?"True":"False")<<"\n";
+	x << "       force_recalculate: "<<(force_recalculate     ?"True":"False")<<"\n";
+	x << "            save_db_hash: "<<(save_db_hash          ?"True":"False")<<"\n";
+	x << "                  author: "<< author                <<"\n";
+	x << " teardown_after_estimate: "<< teardown_after_estimate<<"\n";
+	x << "      weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
 	return x.str();
 }
 

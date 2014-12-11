@@ -148,87 +148,28 @@ void elm::Model2::_simulate_choices
 
 
 
-std::string elm::Model2::choice(const std::string& choicevarname)
-{
-	std::ostringstream ret;
-	if (choicevarname.empty()) {
-		choseness_CA_variable.clear();
-		ret << "success: chosen_CA is cleared";
-	} else {
-		choseness_CA_variable = choicevarname;
-		ret << "success: choice is set to the idCA variable " << choicevarname;
-	}
-	if (_is_setUp>=2) {
-		_setUp_choice_data();
-	}
-	return ret.str();
-}
+//std::string elm::Model2::choice(const std::string& choicevarname)
+//{
+//	std::ostringstream ret;
+//	if (choicevarname.empty()) {
+//		choseness_CA_variable.clear();
+//		ret << "success: chosen_CA is cleared";
+//	} else {
+//		choseness_CA_variable = choicevarname;
+//		ret << "success: choice is set to the idCA variable " << choicevarname;
+//	}
+////	if (_is_setUp>=2) {
+////		_setUp_choice_data();
+////	}
+//	return ret.str();
+//}
 
 PyObject*	elm::Model2::_get_choice() const
 {
 	return etk::py_one_item_list(PyString_FromString(choseness_CA_variable.c_str())); 
 }
 
-etk::ndarray* elm::Model2::tally_chosen()
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-	setUp();
-	etk::ndarray* tally = new etk::ndarray(_Data->nAlts());
-	for (size_t c=0; c<_Data->nCases(); c++) {
-		for (size_t a=0; a<_Data->nAlts(); a++) {
-			tally->at(a) += Data_Choice->value(c,a);
-		}
-	}
-	return tally;
-}
 
-/*
-etk::ndarray* elm::Model2::tally_chosen() const
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-	ScrapePtr Data_Choice_;
-	if (_is_setUp && this->Data_Choice) {
-		Data_Choice_ = this->Data_Choice;
-	} else if (this->Data_Choice) {
-		Data_Choice_ = this->Data_Choice;
-	} else {
-		if (choseness_CA_variable!="") {
-		Data_Choice_ = _Data->get_scrape_idca();
-		Data_Choice_->add_var(choseness_CA_variable);
-	}
-	}
-	Data_Choice_->load_values();
-	etk::ndarray* tally = new etk::ndarray(_Data->nAlts());
-	for (size_t c=0; c<_Data->nCases(); c++) {
-		for (size_t a=0; a<_Data->nAlts(); a++) {
-			tally->at(a) += Data_Choice_->value(c,a);
-		}
-	}
-	return tally;
-}
-*/
-
-
-
-void elm::Model2::_setUp_choice_data()
-{
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
-
-	Data_Choice = _Data->ask_choice();
-
-//	Data_Choice = _Data->get_scrape_choo();
-//	try {
-//		MONITOR(msg) << "preloading choices...";
-//		Data_Choice->load_values();
-//	} catch (std::bad_alloc& ba) {
-//		WARN(msg) << "out of memory in preloading choices";
-//		Data_Choice->load_values(0,1);
-//	} SPOO {
-//		WARN(msg) << "error in preloading choices";
-//		throw;
-//	}
-
-}
 
 
 

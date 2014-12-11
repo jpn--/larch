@@ -164,6 +164,7 @@ namespace elm {
 		int			getInt		(int column);
 		long long	getInt64	(int column);
 		double		getDouble	(int column);
+		bool		getBool		(int column);
 		std::string getText		(int column);
 		const void*	getBlob		(int column);
 		int			getByteCount(int column);
@@ -245,9 +246,13 @@ namespace elm {
 		std::vector<std::string> all_table_names() const;
 		std::vector<std::string> column_names(std::string query) const;
 		std::string              column_name (std::string query, int n) const;
-		
-		void logger(std::string log_name="");
-		void logger(bool log_on);
+
+		#ifndef SWIG
+		PyObject* logger(std::string log_name);
+		PyObject* logger(bool log_on);
+		PyObject* logger(int log_on);
+		#endif // ndef SWIG
+		PyObject* logger(PyObject* log=nullptr);
 		
 		int         error_code();
 		std::string error_msg();

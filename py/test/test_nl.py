@@ -65,6 +65,7 @@ class TestNL(ELM_TestCase):
 		m.link(8, 3)
 		m.link(8, 4)
 		m.option.gradient_diagnostic = 2
+		m.provision()
 		m.setUp()
 		self.assertAlmostEqual( -7309.600971749863, m.loglike(), delta=0.00000001 )	
 		g = m.d_loglike()
@@ -266,7 +267,7 @@ class TestNL(ELM_TestCase):
 		self.assertAlmostEqual( -0.0089907, m.parameter("B_COST").value   ,4 )
 		self.assertAlmostEqual( -0.13352,   m.parameter("ASC_CAR").value  ,4 )
 		self.assertAlmostEqual(  0.49833,   m.parameter("existing").value ,4 )
-		self.assertAlmostEqual(  0.046564596603103144,   m.parameter("ASC_TRAIN").std_err,9 )
+		self.assertAlmostEqual(  0.046564596603103144,   m.parameter("ASC_TRAIN").std_err,7 )
 		self.assertAlmostEqual(  0.00057001, m.parameter("B_TIME").std_err   ,5 )
 		self.assertAlmostEqual(  0.00046797, m.parameter("B_COST").std_err   ,5 )
 		self.assertAlmostEqual(  0.037606,   m.parameter("ASC_CAR").std_err  ,5 )

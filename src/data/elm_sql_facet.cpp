@@ -20,6 +20,8 @@
  *  
  */
 
+#include <unordered_map>
+#include <unordered_set>
 
 #include "elm_sql_facet.h"
 #include "elm_sql_scrape.h"
@@ -1754,4 +1756,194 @@ elm::datamatrix elm::Facet::matrix_library(size_t n)
 	if (i==_extracts.end()) return nullptr;
 	return *i;
 }
+
+
+
+
+
+void elm::Facet::_array_idco_reader(const std::string& qry, elm::darray* array, elm::darray* caseids)
+{
+	assert(array->nCases()==caseids->nCases());
+	assert(caseids->dtype == NPY_INT64);
+	
+	size_t row = 0;
+	clock_t prevmsgtime = clock();
+	clock_t timenow;
+	
+	size_t n_cases = array->_repository.size1();
+	size_t n_vars = array->_repository.size2();
+	
+	auto stmt = sql_statement_readonly(qry);
+	
+	if (stmt->count_columns()-1 < n_vars) {
+		OOPS("(vars underflow ) table has ",stmt->count_columns()-1," variables after the caseid, but the array offers space for ",n_vars," variables");
+	}
+	if (stmt->count_columns()-1 > n_vars) {
+		OOPS("(vars overflow  ) table has ",stmt->count_columns()-1," variables after the caseid, but the array offers space for ",n_vars," variables");
+	}
+
+	std::unordered_set<long long> caseid_set;
+	
+	stmt->execute();
+	while ((stmt->status()==SQLITE_ROW) && row<array->nCases()) {
+
+		long long current_row_caseid = stmt->getInt64(0);
+
+		if (caseid_set.find(current_row_caseid) != caseid_set.end()) {
+			OOPS("duplicate caseid ",current_row_caseid);
+		} else {
+			caseid_set.insert(current_row_caseid);
+		}
+
+		timenow = clock();
+		if (timenow > prevmsgtime + (CLOCKS_PER_SEC * 3)) {
+			INFO(msg) << "reading idco row "<<row<<", "
+				<<"case "<< caseids->value_int64(row, 0) << ", "
+				<< 100.0*double(row)/double(n_cases) << "% ..." ;
+			prevmsgtime = clock();
+		}
+
+		caseids->value_int64(row, 0) = current_row_caseid;
+
+		if (array->dtype == NPY_DOUBLE) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_double(row, i) = stmt->getDouble(i+1);
+			}
+		} else if (array->dtype == NPY_INT64) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_int64(row, i) = stmt->getInt64(i+1);
+			}
+		} else if (array->dtype == NPY_BOOL) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_bool(row, i) = stmt->getBool(i+1);
+			}
+		} else {
+			OOPS("unsupported dtype");
+		}
+		row++;
+		stmt->execute();
+	}
+	
+	if (row < n_cases) {
+		OOPS("(cases underflow) completed reading table after ",row," cases, array of ",n_cases," not filled");
+	}
+	if (stmt->status()==SQLITE_ROW) {
+		OOPS("(cases overflow ) not completed reading table but already filled all ",row," cases");
+	}
+}
+
+
+
+void elm::Facet::_array_idca_reader(const std::string& qry, elm::darray* array, elm::darray* caseids, const std::vector<long long>& altids)
+{
+	assert(array->nCases()==caseids->nCases());
+	assert(caseids->dtype == NPY_INT64);
+	
+	size_t row = 0;
+	size_t max_caserow = 0;
+	clock_t prevmsgtime = clock();
+	clock_t timenow;
+	
+	size_t n_cases = array->_repository.size1();
+	size_t n_alts = array->_repository.size2();
+	size_t n_vars = array->_repository.size3();
+	
+	if (altids.size() < n_alts) {
+		OOPS("(alts underflow ) vector has ",altids.size()," altids given, but the array offers space for ",n_alts," alternatives");
+	}
+	if (altids.size() > n_alts) {
+		OOPS("(alts overflow  ) vector has ",altids.size()," altids given, but the array offers space for ",n_alts," alternatives");
+	}
+	
+	auto stmt = sql_statement_readonly(qry);
+	
+	if (stmt->count_columns()-2 < n_vars) {
+		OOPS("(vars underflow ) table has ",stmt->count_columns()-2," variables after the caseid and altid, but the array offers space for ",n_vars," variables");
+	}
+	if (stmt->count_columns()-2 > n_vars) {
+		OOPS("(vars overflow  ) table has ",stmt->count_columns()-2," variables after the caseid and altid, but the array offers space for ",n_vars," variables");
+	}
+	
+	
+	std::unordered_map<long long, size_t> caseid_map;
+	std::unordered_map<long long, size_t> altid_map;
+	
+	// initialized the alt map with altids
+	size_t j=0;
+	for (auto i=altids.begin(); i!=altids.end(); i++) {
+		altid_map[*i] = j;
+		j++;
+	}
+	
+	size_t c,a;
+	
+	stmt->execute();
+	while ((stmt->status()==SQLITE_ROW)) {
+
+		long long current_row_caseid = stmt->getInt64(0);
+		long long current_row_altid  = stmt->getInt64(1);
+		
+		auto caseiter = caseid_map.find(current_row_caseid);
+		if (caseiter == caseid_map.end()) {
+			c = caseid_map[current_row_caseid] = max_caserow;
+			caseids->value_int64(c, 0) = current_row_caseid;
+			max_caserow++;
+			if (max_caserow>array->nCases()) {
+				OOPS("(cases overflow ) not completed reading table but already filled all ",array->nCases()," cases");
+			}
+		} else {
+			c = caseiter->second;
+		}
+
+		auto altiter = altid_map.find(current_row_altid);
+		if (altiter == altid_map.end()) {
+			OOPS("table contains unknown altid ",current_row_altid);
+		} else {
+			a = altiter->second;
+		}
+
+
+		timenow = clock();
+		if (timenow > prevmsgtime + (CLOCKS_PER_SEC * 3)) {
+			INFO(msg) << "reading idca row "<<row<<", "
+				<<"case "<< current_row_caseid << ", "
+				<< 100.0*double(c)/double(n_cases) << "% ..." ;
+			prevmsgtime = clock();
+		}
+
+
+		if (array->dtype == NPY_DOUBLE) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_double(c,a, i) = stmt->getDouble(i+2);
+			}
+		} else if (array->dtype == NPY_INT64) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_int64(c,a, i) = stmt->getInt64(i+2);
+			}
+		} else if (array->dtype == NPY_BOOL) {
+			for (size_t i=0; i<n_vars; i++) {
+				array->value_bool(c,a, i) = stmt->getBool(i+2);
+			}
+		} else {
+			OOPS("unsupported dtype");
+		}
+		row++;
+		stmt->execute();
+	}
+	
+	if (max_caserow < n_cases) {
+		OOPS("(cases underflow) completed reading table after ",max_caserow," cases, array of ",n_cases," not filled");
+	}
+	if (stmt->status()==SQLITE_ROW) {
+		OOPS("(cases overflow ) not completed reading table but already filled all ",max_caserow," cases");
+	}
+}
+
+
+
+
+
+
+
+
 

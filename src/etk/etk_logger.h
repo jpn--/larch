@@ -79,6 +79,9 @@ namespace etk {
 		
 		void output_message(const unsigned& level, const std::string& message);
 		
+		PyObject* get_logger();
+		PyObject* set_logger(PyObject* z);
+		
 		friend class log_instance;
 	};
 	

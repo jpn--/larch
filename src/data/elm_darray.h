@@ -90,8 +90,8 @@ namespace elm {
 
 
 	public:
-		size_t      nVars()    const;
-		size_t      nAlts()    const;
+		virtual size_t      nVars()    const;
+		virtual size_t      nAlts()    const;
 
 		const std::vector<std::string>& get_variables() const;
 		void                            set_variables(const std::vector<std::string>& v);
@@ -119,6 +119,9 @@ namespace elm {
 		
 		darray(const darray&);
 		//copy constructor is public
+
+		darray(const darray&, double scale);
+		//copy constructor with rescaling is public
 		
 		darray();
 		//default constructor is public, but raises an exception
@@ -175,6 +178,12 @@ namespace elm {
 		bool   boolvalue(const unsigned& c, const unsigned& a, const unsigned& v) const;
 		bool   boolvalue(const unsigned& c, const unsigned& v) const;
 
+		double&    value_double   (const size_t& c, const size_t& a, const size_t& v);
+		double&    value_double   (const size_t& c, const size_t& v);
+		long long& value_int64    (const size_t& c, const size_t& a, const size_t& v);
+		long long& value_int64    (const size_t& c, const size_t& v);
+		bool&      value_bool     (const size_t& c, const size_t& a, const size_t& v);
+		bool&      value_bool     (const size_t& c, const size_t& v);
 
 	public:
 		void ExportData (double* ExportTo, const unsigned& c, const unsigned& a, const unsigned& numberOfAlts) const;
@@ -183,6 +192,7 @@ namespace elm {
 
 		
 		size_t nCases() const;
+		virtual size_t      nVars()    const;
 		
 		PyObject* get_array();
 		

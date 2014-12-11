@@ -114,7 +114,7 @@ elm::datamatrix_t::~datamatrix_t()
 void elm::datamatrix_t::tearDown(bool force)
 {
 	if (!force) {
-		if (_repo_lock->check()) {
+		if (_repo_lock->check_use_count()) {
 			OOPS("There is a repository read lock active, it is not safe to tearDown");
 		}
 	}
@@ -329,7 +329,7 @@ void elm::datamatrix_t::read_from_facet(elm::Facet* db, int style, const std::ve
 		nV = 1;
 	}
 		
-	if (_repo_lock->check()) {
+	if (_repo_lock->check_use_count()) {
 		OOPS("There is a repository read lock active, cannot load new data now");
 	}
 	
@@ -481,11 +481,11 @@ void elm::datamatrix_t::load_values(const size_t& firstcasenum, const size_t& nu
 		if (cs==0 || nVars()==0) return;
 	}
 
-	if (_repo_lock->check()) {
+	if (_repo_lock->check_use_count()) {
 		OOPS("There is a repository read lock active, cannot load new data now\n", describe_loaded_range(),
 			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
 	}
-	if (_bool_lock->check()) {
+	if (_bool_lock->check_use_count()) {
 		OOPS("There is a bool read lock active, cannot load new data now\n", describe_loaded_range(),
 			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
 	}

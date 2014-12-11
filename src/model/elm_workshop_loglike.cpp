@@ -30,8 +30,8 @@
 elm::loglike_w::loglike_w
 (  etk::ndarray** Pr
  , const size_t& nAlts
- , datamatrix Data_CH
- , datamatrix Data_WT
+ , elm::darray_ptr Data_CH
+ , elm::darray_ptr Data_WT
  , double*       LogL
  , bool          mute_warnings
  , etk::logging_service* msgr

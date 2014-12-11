@@ -113,12 +113,12 @@ ndarray::ndarray(PyObject* obj)
 		Py_CLEAR(pool);
 		OOPS("Error creating array wrapper, input array must be aligned. Try reformatting it with larch.array.pack().");
 	}
-	else if (!PyArray_ISWRITEABLE(pool)) {
-		Py_CLEAR(pool);
-		OOPS("Error creating array wrapper, input array must be writable. Try reformatting it with larch.array.pack().");
-	}
-	else if (!PyArray_ISCARRAY(pool)) {
-		std::string errmsg = cat("Error creating array wrapper, flags offered are ",std::hex,PyArray_FLAGS(pool),", flags needed are ",std::hex,NPY_ARRAY_CARRAY);
+//	else if (!PyArray_ISWRITEABLE(pool)) {
+//		Py_CLEAR(pool);
+//		OOPS("Error creating array wrapper, input array must be writable. Try reformatting it with larch.array.pack().");
+//	}
+	else if (!PyArray_ISCARRAY_RO(pool)) {
+		std::string errmsg = cat("Error creating array wrapper, flags offered are ",std::hex,PyArray_FLAGS(pool),", flags needed are ",std::hex,NPY_ARRAY_CARRAY_RO);
 		Py_CLEAR(pool);
 		OOPS(errmsg);
 	}
@@ -138,8 +138,9 @@ void ndarray::same_memory_as(ndarray& x)
 
 
 //    (PyArrayObject*).descr->type_num
-#define ASSERT_ARRAY_DOUBLE   if ( PyArray_DESCR(pool)->type_num != NPY_DOUBLE) OOPS("assert failure, not NPY_DOUBLE")
-#define ASSERT_ARRAY_BOOL     if ( PyArray_DESCR(pool)->type_num != NPY_BOOL) OOPS("assert failure, not NPY_BOOL")
+#define ASSERT_ARRAY_WRITEABLE if ( !PyArray_ISWRITEABLE(pool) ) OOPS("assert failure, array not writeable")
+#define ASSERT_ARRAY_DOUBLE    if ( PyArray_DESCR(pool)->type_num != NPY_DOUBLE) OOPS("assert failure, not NPY_DOUBLE")
+#define ASSERT_ARRAY_BOOL      if ( PyArray_DESCR(pool)->type_num != NPY_BOOL) OOPS("assert failure, not NPY_BOOL")
 
 void ndarray::quick_new(const int& datatype, const char* arrayClass, const int& r,const int& c,const int& s)
 {
@@ -478,6 +479,47 @@ double& ndarray::operator()(const int& r, const int& c, const int& d)
 	return *( double*)PyArray_GETPTR3(pool, r, c, d);
 }
 
+void* ndarray::voidptr(const int& r)
+{
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	return PyArray_GETPTR1(pool, r);
+}
+
+void* ndarray::voidptr(const int& r, const int& c)
+{
+	if (PyArray_NDIM(pool)<2) {
+		if (c==0) {
+			return voidptr(r);
+		}
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	} 
+	return PyArray_GETPTR2(pool, r, c);
+}
+
+void* ndarray::voidptr(const int& r, const int& c, const int& d)
+{
+	if (PyArray_NDIM(pool)<3) {
+		if (d==0) return voidptr(r,c);
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	} 
+	if (d>=PyArray_DIM(pool, 2)) {
+		OOPS("const rectangle dep access out of range, asking ",d," but having only ",PyArray_DIM(pool, 2));
+	}
+	return PyArray_GETPTR3(pool, r, c, d);
+}
+
 
 
 bool& ndarray::bool_at(const int& r)
@@ -664,7 +706,7 @@ void ndarray::neg () {
 	}
 }
 
-double ndarray::sum () {
+double ndarray::sum () const {
 	ASSERT_ARRAY_DOUBLE;
 	double s (0.0);
 	double* i;

@@ -23,7 +23,7 @@
 
 #include "elm_packets.h"
 #include "elm_sql_scrape.h"
-
+#include "elm_darray.h"
 
 
 elm::ca_co_packet::ca_co_packet(
@@ -31,8 +31,8 @@ elm::ca_co_packet::ca_co_packet(
 			 const paramArray*	Params_CO	,
 			 const etk::ndarray*	Coef_CA		,
 			 const etk::ndarray*	Coef_CO		,
-			 datamatrix		Data_CA		,
-			 datamatrix		Data_CO		,
+			 elm::darray_ptr		Data_CA		,
+			 elm::darray_ptr		Data_CO		,
 			 etk::ndarray*		Outcome		)
 : Params_CA	(Params_CA)
 , Params_CO	(Params_CO)
@@ -100,7 +100,7 @@ void elm::ca_co_packet::logit_partial
 			}
 		}
 	}
-	if (Data_CA && Data_CA->nVars()==0) {
+	if ((Data_CA && Data_CA->nVars()==0) || (!Data_CA)) {
 		if (U_premultiplier) {
 			cblas_dscal(Outcome->size2()*Outcome->size3()*numberofcases, U_premultiplier, Outcome->ptr(firstcase), 1);
 		} else {

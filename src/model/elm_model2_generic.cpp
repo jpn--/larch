@@ -39,9 +39,9 @@ elm::Model2::Model2()
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
-, Data_QuantityCA (nullptr)
-, Data_QuantLogSum(nullptr)
-, Data_LogSum     (nullptr)
+//, Data_QuantityCA (nullptr)
+//, Data_QuantLogSum(nullptr)
+//, Data_LogSum     (nullptr)
 , Data_Choice     (nullptr)
 , Data_Weight     (nullptr)
 , Data_Avail      (nullptr)
@@ -58,7 +58,7 @@ elm::Model2::Model2()
 , features (0)
 , option()
 , _is_setUp(0)
-, weight_autorescale (false)
+//, weight_autorescale (false)
 , Input_Utility(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"utility",this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
@@ -76,9 +76,9 @@ elm::Model2::Model2(elm::Facet& datafile)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
-, Data_QuantityCA (nullptr)
-, Data_QuantLogSum(nullptr)
-, Data_LogSum     (nullptr)
+//, Data_QuantityCA (nullptr)
+//, Data_QuantLogSum(nullptr)
+//, Data_LogSum     (nullptr)
 , Data_Choice     (nullptr)
 , Data_Weight     (nullptr)
 , Data_Avail      (nullptr)
@@ -95,7 +95,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , features (0)
 , option()
 , _is_setUp(0)
-, weight_autorescale (false)
+//, weight_autorescale (false)
 , Input_Utility(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"utility",this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
@@ -215,33 +215,62 @@ void elm::Model2::delete_data_pointer()
 }
 
 
-void elm::Model2::logger (const std::string& logname)
+PyObject* elm::Model2::logger (const std::string& logname)
 {
 	if (logname=="") {
-		msg.change_logger_name("");
+//		msg.change_logger_name("");
 	} else if (logname.substr(0,6)=="larch.") {
 		msg.change_logger_name(logname);
 	} else {
 		msg.change_logger_name("larch."+logname);
 	}
+	
+	return msg.get_logger();
 }
 
-void elm::Model2::logger (bool z)
+PyObject* elm::Model2::logger (bool z)
 {
 	if (z) {
 		msg.change_logger_name("larch.Model");
 	} else {
 		msg.change_logger_name("");
 	}
+	return msg.get_logger();
 }
 
-void elm::Model2::logger (int z)
+PyObject* elm::Model2::logger (int z)
 {
 	if (z>0) {
 		msg.change_logger_name("larch.Model");
 	} else {
 		msg.change_logger_name("");
 	}
+	return msg.get_logger();
+}
+
+PyObject* elm::Model2::logger (PyObject* z)
+{
+	if (PyLong_Check(z)) {
+//		std::cerr << "logger int "<<((int)PyLong_AS_LONG(z))<<"\n";
+		return logger((int)PyLong_AS_LONG(z));
+	}
+
+	if (PyUnicode_Check(z)) {
+//		std::cerr << "logger string "<<(PyString_ExtractCppString(z))<<"\n";
+		return logger(PyString_ExtractCppString(z));
+	}
+
+	if (PyBool_Check(z)) {
+//		std::cerr << "logger bool "<<(Py_True==z)<<"\n";
+		return logger(Py_True==z);
+	}
+
+	if (z && z!=Py_None) {
+//		if (z==Py_None) {std::cerr << "logger obj NONE \n";} else {std::cerr << "logger obj SOME \n";}
+		return msg.set_logger(z);
+	}
+	
+	return msg.get_logger();
 }
 
 
@@ -307,6 +336,16 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		}
 	
 		if (option.calc_null_likelihood) {
+			
+			std::vector< int > hold_save (dF());
+			
+			if (option.null_disregards_holdfast) {
+				for (unsigned i=0; i<dF(); i++) {
+					hold_save[i] = FInfo[FNames[i]].holdfast;
+					FInfo[FNames[i]].holdfast = 0;
+				}
+			}
+			
 			for (unsigned i=0; i<dF(); i++) {
 				FCurrent[i] = FInfo[FNames[i]].null_value;
 			}
@@ -314,6 +353,11 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 			_LL_null = objective();			
 			for (unsigned i=0; i<dF(); i++) {
 				FCurrent[i] = FInfo[FNames[i]].value;
+			}
+			if (option.null_disregards_holdfast) {
+				for (unsigned i=0; i<dF(); i++) {
+					FInfo[FNames[i]].holdfast = hold_save[i];
+				}
 			}
 			freshen();
 		}
@@ -518,32 +562,32 @@ void elm::Model2::calculate_parameter_covariance()
 }
 
 
-std::string elm::Model2::weight(const std::string& varname, bool reweight) {
-	
-	weight_autorescale = reweight;
-	
-	ostringstream ret;
-	if (varname.empty()) {
-		weight_CO_variable.clear();
-		weight_autorescale = false;
-		ret << "success: weight is cleared";
-	} else {
-		weight_CO_variable = varname;
-		ret << "success: weight_CO is set to " << weight_CO_variable;
-		if (weight_autorescale) {
-			ret << " (auto-reweighted)";
-		}
-	}
-	return ret.str();
-	
-}
-
-PyObject*	elm::Model2::_get_weight() const
-{
-	return etk::py_one_item_list(
-		Py_BuildValue("(si)", weight_CO_variable.c_str(), int(weight_autorescale))
-	);
-}
+//std::string elm::Model2::weight(const std::string& varname, bool reweight) {
+//	
+//	weight_autorescale = reweight;
+//	
+//	ostringstream ret;
+//	if (varname.empty()) {
+//		weight_CO_variable.clear();
+//		weight_autorescale = false;
+//		ret << "success: weight is cleared";
+//	} else {
+//		weight_CO_variable = varname;
+//		ret << "success: weight_CO is set to " << weight_CO_variable;
+//		if (weight_autorescale) {
+//			ret << " (auto-reweighted)";
+//		}
+//	}
+//	return ret.str();
+//	
+//}
+//
+//PyObject*	elm::Model2::_get_weight() const
+//{
+//	return etk::py_one_item_list(
+//		Py_BuildValue("(si)", weight_CO_variable.c_str(), int(weight_autorescale))
+//	);
+//}
 
 
 void elm::Model2::_parameter_update()

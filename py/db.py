@@ -620,7 +620,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 					l.critical(str(arguments))
 			raise
 
-	def values(self, command, arguments=(), column_number=0, *, fail_silently=False):
+	def values(self, command, arguments=(), column_number=0, *, fail_silently=False, result_type=list):
 		'''A convenience function for extracting a list from an SQL query.
 			
 			:param command: A SQLite query. If there is more than one result column
@@ -630,15 +630,24 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 								  zero (first column). Specify 'None' to get all columns
 								  
 			'''
+		if isinstance(result_type, str):
+			if result_type=='list':
+				result_type=list
+			elif result_type=='set':
+				result_type=set
+			elif result_type=='tuple':
+				result_type=tuple
+			else:
+				raise larch.LarchError("incompatible result_type")
 		if column_number is None:
 			column_number = slice(0,None)
 		try:
 			cur = self.cursor()
 			ret = []
 			if arguments is ():
-				i = [j[column_number] for j in cur.execute(command)]
+				i = result_type((j[column_number] for j in cur.execute(command)))
 			else:
-				i = [j[column_number] for j in cur.execute(command, arguments)]
+				i = result_type((j[column_number] for j in cur.execute(command, arguments)))
 			return i
 		except apsw.SQLError as apswerr:
 			if not fail_silently:
@@ -687,7 +696,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 					l.critical(str(arguments))
 			raise
 
-	def array_idca(self, vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64'):
+	def array_idca(self, vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_idca()
@@ -708,7 +717,8 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				altid = ca_cols[0]
 		cols = "{} AS caseid, {} AS altid, ".format(caseid,altid) + ", ".join(vars)
 		qry = "SELECT {} FROM {}".format(cols, table)
-		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		if n_cases is None:
+			n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
 		n_alts = len(altcodes)
 		n_vars = len(vars)
 		case_slots = dict()
@@ -716,24 +726,30 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		alt_slots = {a:n for n,a in enumerate(altcodes)}
 		n = 0	
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
-		for row in self.execute(qry):
-			if row[0] not in case_slots:
-				c = case_slots[row[0]] = n
-				caseids[c] = row[0]
-				n +=1
-			else:
-				c = case_slots[row[0]]
-			try:
-				a = alt_slots[row[1]]
-			except KeyError:
-				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
-			result[c,a,:] = row[2:]
-		from .array import ldarray
-		result = result.view(ldarray)
+		self._array_idca_reader(qry, result, caseids, altcodes)
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	try:
+		#		a = alt_slots[row[1]]
+		#	except KeyError:
+		#		raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+		#	result[c,a,:] = row[2:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = result[order,:,:]
+			caseids = caseids[order,:]
+		result = numpy.nan_to_num(result)
+		from .array import Array
+		result = result.view(Array)
 		result.vars = vars
 		return result, caseids
 
-	def array_idco(self, vars, table=None, caseid=None, dtype='float64'):
+	def array_idco(self, vars, table=None, caseid=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_idco()
@@ -745,26 +761,33 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				caseid = co_cols[0]
 		cols = "{} AS caseid, ".format(caseid) + ", ".join(vars)
 		qry = "SELECT {} FROM {}".format(cols, table)
-		n_cases = self.value("SELECT count(*) FROM {}".format(table))
+		if n_cases is None:
+			n_cases = self.value("SELECT count(*) FROM {}".format(table))
 		n_vars = len(vars)
 		case_slots = dict()
 		caseids = numpy.zeros([n_cases,1], dtype='int64')
 		n = 0
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
-		for row in self.execute(qry):
-			if row[0] not in case_slots:
-				c = case_slots[row[0]] = n
-				caseids[c] = row[0]
-				n +=1
-			else:
-				c = case_slots[row[0]]
-			result[c,:] = row[1:]
-		from .array import ldarray
-		result = result.view(ldarray)
+		self._array_idco_reader(qry, result, caseids)
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	result[c,:] = row[1:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = result[order,:]
+			caseids = caseids[order,:]
+		result = numpy.nan_to_num(result)
+		from .array import Array
+		result = result.view(Array)
 		result.vars = vars
 		return result, caseids
 
-	def array_weight(self, table=None, caseid=None, var=None, dtype='float64'):
+	def array_weight(self, table=None, caseid=None, var=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_weight()
@@ -785,26 +808,40 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				var = co_cols[0]
 		cols = "{} AS caseid, {} AS weight".format(caseid,var)
 		qry = "SELECT {} FROM {}".format(cols, table)
-		n_cases = self.value("SELECT count(*) FROM {}".format(table))
+		if n_cases is None:
+			n_cases = self.value("SELECT count(*) FROM {}".format(table))
 		n_vars = 1
 		case_slots = dict()
 		caseids = numpy.zeros([n_cases,1], dtype='int64')
 		n = 0
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
-		for row in self.execute(qry):
-			if row[0] not in case_slots:
-				c = case_slots[row[0]] = n
-				caseids[c] = row[0]
-				n +=1
-			else:
-				c = case_slots[row[0]]
-			result[c,:] = row[1:]
-		from .array import ldarray
-		result = result.view(ldarray)
+		try:
+			self._array_idco_reader(qry, result, caseids)
+		except:
+			print("result.shape=",result.shape)
+			print("caseids.shape=",caseids.shape)
+			print("qry=",qry)
+			print("count_cases=",self.value("SELECT count(*) FROM {}".format(table)))
+			raise
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	result[c,:] = row[1:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = result[order,:]
+			caseids = caseids[order,:]
+		result = numpy.nan_to_num(result)
+		from .array import Array
+		result = result.view(Array)
 		result.vars = [var,]
 		return result, caseids
 
-	def array_choice(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='float64'):
+	def array_choice(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_choice()
@@ -836,7 +873,8 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				var = ca_cols[0]
 		cols = "{} AS caseid, {} AS altid, {} AS choice".format(caseid,altid,var)
 		qry = "SELECT {} FROM {}".format(cols, table)
-		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		if n_cases is None:
+			n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
 		n_alts = len(altcodes)
 		n_vars = 1
 		case_slots = dict()
@@ -844,24 +882,37 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		alt_slots = {a:n for n,a in enumerate(altcodes)}
 		n = 0	
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
-		for row in self.execute(qry):
-			if row[0] not in case_slots:
-				c = case_slots[row[0]] = n
-				caseids[c] = row[0]
-				n +=1
-			else:
-				c = case_slots[row[0]]
-			try:
-				a = alt_slots[row[1]]
-			except KeyError:
-				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
-			result[c,a,:] = row[2:]
-		from .array import ldarray
-		result = result.view(ldarray)
+		try:
+			self._array_idca_reader(qry, result, caseids, altcodes)
+		except:
+			print("result.shape=",result.shape)
+			print("caseids.shape=",caseids.shape)
+			print("qry=",qry)
+			print("count_cases=",self.value("SELECT count(distinct {}) FROM {}".format(caseid,table)))
+			raise
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	try:
+		#		a = alt_slots[row[1]]
+		#	except KeyError:
+		#		raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+		#	result[c,a,:] = row[2:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = result[order,:,:]
+			caseids = caseids[order,:]
+		result = numpy.nan_to_num(result)
+		from .array import Array
+		result = result.view(Array)
 		result.vars = [var,]
 		return result, caseids
 
-	def array_avail(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool'):
+	def array_avail(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_avail()
@@ -893,7 +944,8 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				var = ca_cols[0]
 		cols = "{} AS caseid, {} AS altid, {} AS avail".format(caseid,altid,var)
 		qry = "SELECT {} FROM {}".format(cols, table)
-		n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
+		if n_cases is None:
+			n_cases = self.value("SELECT count(distinct {}) FROM {}".format(caseid,table))
 		n_alts = len(altcodes)
 		n_vars = 1
 		case_slots = dict()
@@ -901,20 +953,25 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		alt_slots = {a:n for n,a in enumerate(altcodes)}
 		n = 0	
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
-		for row in self.execute(qry):
-			if row[0] not in case_slots:
-				c = case_slots[row[0]] = n
-				caseids[c] = row[0]
-				n +=1
-			else:
-				c = case_slots[row[0]]
-			try:
-				a = alt_slots[row[1]]
-			except KeyError:
-				raise KeyError("alt {} appears in data but is not defined".format(row[1]))
-			result[c,a,:] = row[2:]
-		from .array import ldarray
-		result = result.view(ldarray)
+		self._array_idca_reader(qry, result, caseids, altcodes)
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	try:
+		#		a = alt_slots[row[1]]
+		#	except KeyError:
+		#		raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+		#	result[c,a,:] = row[2:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = result[order,:,:]
+			caseids = caseids[order,:]
+		from .array import Array
+		result = result.view(Array)
 		result.vars = [var,]
 		return result, caseids
 
@@ -928,21 +985,33 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		import numpy
 		provide = {}
 		cases = None
+		n_cases = None
+		matched_cases = []
+		log = self.logger()
 		for key, req in needs.items():
+			if log:
+				log.info("Provisioning {} data...".format(key))
 			if key=="Avail":
-				provide[key], c = self.array_avail()
+				provide[key], c = self.array_avail(n_cases=n_cases)
 			elif key=="Weight":
-				provide[key], c = self.array_weight()
+				provide[key], c = self.array_weight(n_cases=n_cases)
 			elif key=="Choice":
-				provide[key], c = self.array_choice()
+				provide[key], c = self.array_choice(n_cases=n_cases)
 			elif key[-2:]=="CA":
-				provide[key], c = self.array_idca(vars=req.get_variables())
+				provide[key], c = self.array_idca(vars=req.get_variables(),n_cases=n_cases)
 			elif key[-2:]=="CO":
-				provide[key], c = self.array_idco(vars=req.get_variables())
+				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
 			if cases is None:
 				cases = c
-			elif not numpy.all(cases==c):
-				raise LarchError("mismatched caseids in provisioning")
+				matched_cases += [key,]
+				n_cases = cases.shape[0]
+			else:
+				if numpy.all(cases==c):
+					matched_cases += [key,]
+				else:
+					print("cases.shape=",cases.shape)
+					print("c[{}].shape=".format(key),c.shape)
+					raise LarchError("mismatched caseids in provisioning, ["+",".join(matched_cases)+"] do not match "+key)
 		provide['caseids'] = cases
 		if m is not None:
 			return m.provision(provide)

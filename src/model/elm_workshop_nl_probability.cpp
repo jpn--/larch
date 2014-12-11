@@ -136,7 +136,7 @@ elm::workshop_nl_probability::workshop_nl_probability
 , elm::ca_co_packet UtilPacket
 , elm::ca_co_packet SampPacket
 , const paramArray& Params_LogSum
-, datamatrix     Data_Avail
+, elm::darray_ptr     Data_Avail
 ,  ndarray* Probability
 ,  ndarray* Cond_Prob
 ,	etk::ndarray* AdjProbability
@@ -175,8 +175,8 @@ void elm::workshop_nl_probability::workshop_nl_probability_calc
 //	Data_UtilityCA->load_values(firstcase,numberofcases);
 //	Data_UtilityCO->load_values(firstcase,numberofcases);
 
-	datamatrix Data_SamplingCA = SampPacket.Data_CA;
-	datamatrix Data_SamplingCO = SampPacket.Data_CO;
+	elm::darray_ptr Data_SamplingCA = SampPacket.Data_CA;
+	elm::darray_ptr Data_SamplingCO = SampPacket.Data_CO;
 	etk::ndarray* SamplingWgt = SampPacket.Outcome;
 	const etk::ndarray* Coef_SamplingCA = SampPacket.Coef_CA;
 	const etk::ndarray* Coef_SamplingCO = SampPacket.Coef_CO;
