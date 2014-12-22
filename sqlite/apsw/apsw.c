@@ -58,8 +58,8 @@ API Reference
 #include "sqlite3.h"
 #endif
 
-#if SQLITE_VERSION_NUMBER < 3008003
-#error Your SQLite version is too old.  It must be at least 3.8.3
+#if SQLITE_VERSION_NUMBER < 3008007
+#error Your SQLite version is too old.  It must be at least 3.8.7
 #endif
 
 /* system headers */
@@ -1524,6 +1524,9 @@ modules etc. For example::
       ADDINT(SQLITE_TOOBIG),
       ADDINT(SQLITE_NOTICE),
       ADDINT(SQLITE_WARNING),
+      /* you can't get these from apsw code but present for completeness */
+      ADDINT(SQLITE_DONE),
+      ADDINT(SQLITE_ROW),
       END,
 
       /* open flags */
@@ -1563,6 +1566,7 @@ modules etc. For example::
       ADDINT(SQLITE_LIMIT_LIKE_PATTERN_LENGTH),
       ADDINT(SQLITE_LIMIT_VARIABLE_NUMBER),
       ADDINT(SQLITE_LIMIT_TRIGGER_DEPTH),
+      ADDINT(SQLITE_LIMIT_WORKER_THREADS),
       /* We don't include the MAX limits - see https://github.com/rogerbinns/apsw/issues/17 */
       END,
 
@@ -1653,6 +1657,7 @@ modules etc. For example::
       ADDINT(SQLITE_IOCAP_SEQUENTIAL),
       ADDINT(SQLITE_IOCAP_UNDELETABLE_WHEN_OPEN),
       ADDINT(SQLITE_IOCAP_POWERSAFE_OVERWRITE),
+      ADDINT(SQLITE_IOCAP_IMMUTABLE),
       END,
 
       DICT("mapping_sync"),
@@ -1689,6 +1694,7 @@ modules etc. For example::
       ADDINT(SQLITE_FCNTL_COMMIT_PHASETWO),
       ADDINT(SQLITE_FCNTL_HAS_MOVED),
       ADDINT(SQLITE_FCNTL_SYNC),
+      ADDINT(SQLITE_FCNTL_WIN32_SET_HANDLE),
       END
 
       };
