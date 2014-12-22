@@ -49,7 +49,13 @@ etk::ZeroProbWhenChosen::ZeroProbWhenChosen (const std::string& d) throw()
 : etk::exception_t (d)
 { }
 
-const char* etk::ZeroProbWhenChosen::what() const throw () { return "Zero probability for a chosen alternative"; }
+const char* etk::ZeroProbWhenChosen::what() const throw () {
+	if (_description.empty()) {
+		return "Zero probability for a chosen alternative";
+	} else {
+		return _description.c_str();
+	}
+}
 
 
 

@@ -111,7 +111,7 @@ void elm::workshop_nl_gradient::case_dProbability_dFusedParameters( const unsign
 		if (i<Xylem->n_elemental()) {
 			if (Cho) {
 				if ((Pr[i]==0)&&(Cho[i]>0)) {
-					throw(ZeroProbWhenChosen());
+					throw(ZeroProbWhenChosen(cat("Zero probability case_dProbability_dFusedParameters c=",c)));
 				}
 				if (Cho[i]==0) {
 					//continue;
@@ -225,7 +225,11 @@ void elm::workshop_nl_gradient::case_dLogLike_dFusedParameters( const unsigned& 
 			if (Pr[a]) {		
 				cblas_daxpy(nPar, -Cho[a]/Pr[a], dPr->ptr(a), 1, dLL, 1);
 			} else {
-				throw(ZeroProbWhenChosen());
+				std::ostringstream err;
+				for (unsigned aa=0; aa<nA; aa++) {
+					err << aa << "(ch=" << Cho[aa]<<")pr="<<Pr[aa]<<",";
+				}
+				throw(ZeroProbWhenChosen(cat("Zero probability case_dLogLike_dFusedParameters c=",c,"\n",err.str())));
 			}
 		}
 	}
@@ -328,7 +332,7 @@ void elm::__casewise_nl_dProb_dParam
 		if (i<Xylem.n_elemental()) {
 			if (Cho) {
 				if ((Pr[i]==0)&&(Cho[i]>0)) {
-					throw(ZeroProbWhenChosen());
+					throw(ZeroProbWhenChosen("Zero probability __casewise_nl_dProb_dParam"));
 				}
 				if (Cho[i]==0) {
 					//continue;
@@ -400,7 +404,7 @@ void elm::__casewise_dLogLike_dParameters
 			if (Pr[a]) {		
 				cblas_daxpy(nP, -Cho[a]/Pr[a], dProb.ptr(a), 1, dLL, 1);
 			} else {
-				throw(ZeroProbWhenChosen());
+				throw(ZeroProbWhenChosen("Zero probability __casewise_dLogLike_dParameters"));
 			}
 		}
 	}

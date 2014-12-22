@@ -68,6 +68,9 @@ int py_read_from_dict(PyObject* d, const std::string& key, unsigned long long& v
 
 extern boosted::mutex python_global_mutex;
 
+void larch_initialize();
+
+char* larch_openblas_get_config();
 
 
 	

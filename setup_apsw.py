@@ -42,7 +42,7 @@ def build_apsw():
 				 				libraries=['elmsqlite','python3.4'], library_dirs=[libdir, pylibdir],
 								extra_preargs=linker_pre_args, extra_postargs=linker_post_args)
 	else:
-		print("apparently no need to update",name)
+		print("apparently no need to update",name," at ",os.path.join(libdir, output_file))
 
 	
 

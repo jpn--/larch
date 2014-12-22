@@ -467,6 +467,14 @@ class refcounted(object):
 refcounted_swigregister = _core.refcounted_swigregister
 refcounted_swigregister(refcounted)
 
+
+def larch_initialize() -> "void" :
+  return _core.larch_initialize()
+larch_initialize = _core.larch_initialize
+
+def larch_openblas_get_config() -> "char *" :
+  return _core.larch_openblas_get_config()
+larch_openblas_get_config = _core.larch_openblas_get_config
 class OptimizationMethodList(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -594,13 +602,7 @@ from .array import SymmetricArray
 class Fountain(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    def ask_caseids(self, *args) -> "elm::caseindex const" : return _core.Fountain_ask_caseids(self, *args)
     def ask_dna(self, *args) -> "elm::VAS_dna const" : return _core.Fountain_ask_dna(self, *args)
-    def ask_idco(self, *args) -> "elm::datamatrix const" : return _core.Fountain_ask_idco(self, *args)
-    def ask_idca(self, *args) -> "elm::datamatrix const" : return _core.Fountain_ask_idca(self, *args)
-    def ask_choice(self, *args) -> "elm::datamatrix const" : return _core.Fountain_ask_choice(self, *args)
-    def ask_weight(self, *args) -> "elm::datamatrix const" : return _core.Fountain_ask_weight(self, *args)
-    def ask_avail(self, *args) -> "elm::datamatrix const" : return _core.Fountain_ask_avail(self, *args)
     def nCases(self) -> "unsigned int const &" : return _core.Fountain_nCases(self)
     def nAlts(self) -> "unsigned int const &" : return _core.Fountain_nAlts(self)
     def __init__(self): 
@@ -839,13 +841,7 @@ SQLiteDB_swigregister(SQLiteDB)
 class Facet(SQLiteDB,Fountain):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    def ask_caseids(self) -> "elm::caseindex" : return _core.Facet_ask_caseids(self)
     def ask_dna(self, c : 'long long const &'=0) -> "elm::VAS_dna" : return _core.Facet_ask_dna(self, c)
-    def ask_idco(self, *args) -> "elm::datamatrix" : return _core.Facet_ask_idco(self, *args)
-    def ask_idca(self, *args) -> "elm::datamatrix" : return _core.Facet_ask_idca(self, *args)
-    def ask_choice(self, caseid : 'long long *'=None) -> "elm::datamatrix" : return _core.Facet_ask_choice(self, caseid)
-    def ask_weight(self, caseid : 'long long *'=None) -> "elm::datamatrix" : return _core.Facet_ask_weight(self, caseid)
-    def ask_avail(self, caseid : 'long long *'=None) -> "elm::datamatrix" : return _core.Facet_ask_avail(self, caseid)
     __swig_destroy__ = _core.delete_Facet
     __del__ = lambda self : None;
     window_title = _swig_property(_core.Facet_window_title_get, _core.Facet_window_title_set)
@@ -900,7 +896,6 @@ class Facet(SQLiteDB,Fountain):
     def tbl_caseids(self) -> "std::string" : return _core.Facet_tbl_caseids(self)
     def unweighted(self) -> "bool" : return _core.Facet_unweighted(self)
     def all_alts_always_available(self) -> "bool" : return _core.Facet_all_alts_always_available(self)
-    def matrix_library(self, *args) -> "elm::datamatrix" : return _core.Facet_matrix_library(self, *args)
     def _array_idco_reader(self, *args) -> "void" : return _core.Facet__array_idco_reader(self, *args)
     def _array_idca_reader(self, *args) -> "void" : return _core.Facet__array_idca_reader(self, *args)
     def sql(self):
@@ -1470,112 +1465,6 @@ class runstats(object):
     __del__ = lambda self : None;
 runstats_swigregister = _core.runstats_swigregister
 runstats_swigregister(runstats)
-
-class caseindex_t(object):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    def casenum_from_id(self, *args) -> "size_t const &" : return _core.caseindex_t_casenum_from_id(self, *args)
-    def caseid_from_num(self, *args) -> "long long const &" : return _core.caseindex_t_caseid_from_num(self, *args)
-    def size(self) -> "std::size_t" : return _core.caseindex_t_size(self)
-    def caseids(self) -> "std::vector< long long,std::allocator< long long > > const &" : return _core.caseindex_t_caseids(self)
-    def contains(self, *args) -> "bool" : return _core.caseindex_t_contains(self, *args)
-    def clear(self) -> "void" : return _core.caseindex_t_clear(self)
-    def add_caseid(self, *args) -> "size_t" : return _core.caseindex_t_add_caseid(self, *args)
-    def add_caseids(self, *args) -> "void" : return _core.caseindex_t_add_caseids(self, *args)
-    create = staticmethod(_core.caseindex_t_create)
-    __swig_destroy__ = _core.delete_caseindex_t
-    __del__ = lambda self : None;
-    def __init__(self): 
-        this = _core.new_caseindex_t()
-        try: self.this.append(this)
-        except: self.this = this
-caseindex_t_swigregister = _core.caseindex_t_swigregister
-caseindex_t_swigregister(caseindex_t)
-
-def caseindex_t_create() -> "elm::caseindex" :
-  return _core.caseindex_t_create()
-caseindex_t_create = _core.caseindex_t_create
-
-case_var = _core.case_var
-case_alt_var = _core.case_alt_var
-mtrx_bool = _core.mtrx_bool
-mtrx_double = _core.mtrx_double
-mtrx_int64 = _core.mtrx_int64
-purp_vars = _core.purp_vars
-purp_choice = _core.purp_choice
-purp_avail = _core.purp_avail
-purp_weight = _core.purp_weight
-class datamatrix_t(object):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def pointer(self) -> "elm::datamatrix" : return _core.datamatrix_t_pointer(self)
-    create = staticmethod(_core.datamatrix_t_create)
-    def copy(self) -> "elm::datamatrix" : return _core.datamatrix_t_copy(self)
-    def refcount(self) -> "long" : return _core.datamatrix_t_refcount(self)
-    def set_variables(self, *args) -> "void" : return _core.datamatrix_t_set_variables(self, *args)
-    def get_variables(self) -> "std::vector< std::string,std::allocator< std::string > > const &" : return _core.datamatrix_t_get_variables(self)
-    def tearDown(self, force : 'bool'=False) -> "void" : return _core.datamatrix_t_tearDown(self, force)
-    read_idca = staticmethod(_core.datamatrix_t_read_idca)
-    read_idco = staticmethod(_core.datamatrix_t_read_idco)
-    read_choo = staticmethod(_core.datamatrix_t_read_choo)
-    read_wght = staticmethod(_core.datamatrix_t_read_wght)
-    read_aval = staticmethod(_core.datamatrix_t_read_aval)
-    def value(self, *args) -> "double" : return _core.datamatrix_t_value(self, *args)
-    def boolvalue(self, *args) -> "bool" : return _core.datamatrix_t_boolvalue(self, *args)
-    def nCases(self) -> "size_t" : return _core.datamatrix_t_nCases(self)
-    def nAlts(self) -> "size_t" : return _core.datamatrix_t_nAlts(self)
-    def nVars(self) -> "size_t" : return _core.datamatrix_t_nVars(self)
-    def getArray(self) -> "PyObject *" : return _core.datamatrix_t_getArray(self)
-    def __str__(self) -> "std::string" : return _core.datamatrix_t___str__(self)
-    def __repr__(self) -> "std::string" : return _core.datamatrix_t___repr__(self)
-    def __init__(self): 
-        this = _core.new_datamatrix_t()
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_destroy__ = _core.delete_datamatrix_t
-    __del__ = lambda self : None;
-datamatrix_t_swigregister = _core.datamatrix_t_swigregister
-datamatrix_t_swigregister(datamatrix_t)
-
-def datamatrix_t_create(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_create(*args)
-datamatrix_t_create = _core.datamatrix_t_create
-
-def datamatrix_t_read_idca(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_read_idca(*args)
-datamatrix_t_read_idca = _core.datamatrix_t_read_idca
-
-def datamatrix_t_read_idco(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_read_idco(*args)
-datamatrix_t_read_idco = _core.datamatrix_t_read_idco
-
-def datamatrix_t_read_choo(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_read_choo(*args)
-datamatrix_t_read_choo = _core.datamatrix_t_read_choo
-
-def datamatrix_t_read_wght(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_read_wght(*args)
-datamatrix_t_read_wght = _core.datamatrix_t_read_wght
-
-def datamatrix_t_read_aval(*args) -> "elm::datamatrix" :
-  return _core.datamatrix_t_read_aval(*args)
-datamatrix_t_read_aval = _core.datamatrix_t_read_aval
-
-class datamatrix_req(object):
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def nVars(self) -> "size_t" : return _core.datamatrix_req_nVars(self)
-    def nAlts(self) -> "size_t" : return _core.datamatrix_req_nAlts(self)
-    variables = _swig_property(_core.datamatrix_req_variables_get, _core.datamatrix_req_variables_set)
-    def __str__(self) -> "std::string" : return _core.datamatrix_req___str__(self)
-    def __repr__(self) -> "std::string" : return _core.datamatrix_req___repr__(self)
-    def satisfied(self, *args) -> "bool" : return _core.datamatrix_req_satisfied(self, *args)
-    def __init__(self): 
-        this = _core.new_datamatrix_req()
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_destroy__ = _core.delete_datamatrix_req
-    __del__ = lambda self : None;
-datamatrix_req_swigregister = _core.datamatrix_req_swigregister
-datamatrix_req_swigregister(datamatrix_req)
 
 class Needs(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

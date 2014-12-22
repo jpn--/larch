@@ -470,6 +470,7 @@ void elm::Model2::calculate_hessian_and_save()
 
 void elm::Model2::calculate_parameter_covariance()
 {
+	MONITOR(msg) << "calculate_parameter_covariance()\n";
 
 	if (any_holdfast()) {
 
@@ -499,9 +500,12 @@ void elm::Model2::calculate_parameter_covariance()
 		unpacked_bhhh.copy_uppertriangle_to_lowertriangle();
 
 		MONITOR(msg) << "unpacked_bhhh\n" << unpacked_bhhh.printall() ;
-		MONITOR(msg) << "unpacked_invhess\n" << unpacked_invhess.printall() ;
+		MONITOR(msg) << "unpacked_invhess (calculate_parameter_covariance, yes holdfast)\n" << unpacked_invhess.printall() ;
 		
+		MONITOR(msg) << "s="<<s<<"\n";
 		memarray_symmetric BtimeH (s,s);
+		
+		MONITOR(msg) << "cblas_dsymm...\n";
 		
 		cblas_dsymm(CblasRowMajor, CblasRight, CblasUpper, s, s,
 					1, *unpacked_invhess, s, 
@@ -540,9 +544,13 @@ void elm::Model2::calculate_parameter_covariance()
 		unpacked_bhhh.copy_uppertriangle_to_lowertriangle();
 
 		MONITOR(msg) << "unpacked_bhhh\n" << unpacked_bhhh.printall() ;
-		MONITOR(msg) << "unpacked_invhess\n" << unpacked_invhess.printall() ;
+		MONITOR(msg) << "unpacked_invhess (calculate_parameter_covariance, no holdfast)\n" << unpacked_invhess.printall() ;
+
+		MONITOR(msg) << "s="<<s<<"\n";
 		
 		memarray_symmetric BtimeH (s,s);
+
+		MONITOR(msg) << "cblas_dsymm...\n";
 		
 		cblas_dsymm(CblasRowMajor, CblasRight, CblasUpper, s, s,
 					1, *unpacked_invhess, s, 
@@ -768,22 +776,38 @@ std::string AsPyFloat(const double& x)
 {
 	ostringstream s;
 
+	if(isNan(x)) {
+		return "nan";
+	}
+
+	if(isInf(x)) {
+		if (x<0) {
+			return "-inf";
+		} else {
+			return "inf";
+		}
+	}
+
 	double integer_part;
 	if (modf(x, &integer_part)==0) {
+		// the fractional part is exactly 0 (i.e. the value x is an integer)
 		s << x;
 		return s.str();
 	}
 	
 	s << std::scientific << std::setprecision(17) << x;
 	
-	auto f = s.str().find("0000000");
-	if (f!=std::string::npos) {
-		std::string z = s.str();
-		return z.substr(0,f) + z.substr(z.find("e"));
-	}
+//	auto f = s.str().find("0000000");
+//	if (f!=std::string::npos) {
+//		// when the full precision value has seven zeros, it is almost exactly the value before that point
+//		std::string z = s.str();
+//		return z.substr(0,f) + z.substr(z.find("e"));
+//	}
+
+	// if not an integer, use hex to preserve the exact value at full precision
 	
 	ostringstream h;
-	h << "float.fromhex('" << std::hexfloat << (x) << std::defaultfloat << "')";
+	h << "float.fromhex('" << std::hexfloat << std::setprecision(13) << (x) << std::defaultfloat << "')";
 	return h.str();
 }
 

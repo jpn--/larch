@@ -46,7 +46,7 @@ elm::Facet::Facet(PyObject* pylong_ptr_to_db)
 , source_filename()
 , working_name()
 , active_facet()
-, _caseindex(nullptr)
+//, _caseindex(nullptr)
 , queries(nullptr)
 , queries_ptr(nullptr)
 {
@@ -198,6 +198,8 @@ elm::Facet::~Facet()
 //}
 
 
+
+
 void elm::Facet::change_in_sql_caseids()
 {
 	
@@ -205,12 +207,12 @@ void elm::Facet::change_in_sql_caseids()
 	
 	SQLiteStmtPtr s = sql_statement("");
 	
-	if (_caseindex) {
-		_caseindex.reset();
-	}
+//	if (_caseindex) {
+//		_caseindex.reset();
+//	}
 	
-	_caseindex = caseindex_t::create();
-	_caseindex->add_caseids(caseids(0,0,1));
+//	_caseindex = caseindex_t::create();
+//	_caseindex->add_caseids(caseids(0,0,1));
 }
 
 void elm::Facet::change_in_sql_alts()
@@ -230,70 +232,68 @@ void elm::Facet::change_in_sql_alts()
 	INFO(msg)<< "Found "<< _nAlts <<" elemental alternatives." ;
 }
 
-
 void elm::Facet::change_in_sql_idco()
 {
-	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
-		if ( (*i)->dimty==case_var
-		  && (*i)->dtype==mtrx_double
-		  && (*i)->dpurp==purp_vars
-		) {
-			i = _extracts.erase(i);
-		} else {
-			i++;
-		}
-	}
+//	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
+//		if ( (*i)->dimty==case_var
+//		  && (*i)->dtype==mtrx_double
+//		  && (*i)->dpurp==purp_vars
+//		) {
+//			i = _extracts.erase(i);
+//		} else {
+//			i++;
+//		}
+//	}
 }
-
 
 void elm::Facet::change_in_sql_idca()
 {
-	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
-		if ( (*i)->dimty==case_alt_var
-			&& (*i)->dtype==mtrx_double
-			&& (*i)->dpurp==purp_vars
-			) {
-			i = _extracts.erase(i);
-		} else {
-			i++;
-		}
-	}
+//	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
+//		if ( (*i)->dimty==case_alt_var
+//			&& (*i)->dtype==mtrx_double
+//			&& (*i)->dpurp==purp_vars
+//			) {
+//			i = _extracts.erase(i);
+//		} else {
+//			i++;
+//		}
+//	}
 }
 
 
 void elm::Facet::change_in_sql_choice()
 {
-	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
-		if ( (*i)->dpurp==purp_choice ) {
-			i = _extracts.erase(i);
-		} else {
-			i++;
-		}
-	}
+//	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
+//		if ( (*i)->dpurp==purp_choice ) {
+//			i = _extracts.erase(i);
+//		} else {
+//			i++;
+//		}
+//	}
 }
 
 
 void elm::Facet::change_in_sql_avail()
 {
-	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
-		if ( (*i)->dpurp==purp_avail ) {
-			i = _extracts.erase(i);
-		} else {
-			i++;
-		}
-	}
+//	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
+//		if ( (*i)->dpurp==purp_avail ) {
+//			i = _extracts.erase(i);
+//		} else {
+//			i++;
+//		}
+//	}
 }
 
 
 void elm::Facet::change_in_sql_weight()
 {
-	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
-		if ( (*i)->dpurp==purp_weight ) {
-			i = _extracts.erase(i);
-		} else {
-			i++;
-		}
-	}
+//	for (auto i=_extracts.begin(); i!=_extracts.end(); ) {
+//		if ( (*i)->dpurp==purp_weight ) {
+//			i = _extracts.erase(i);
+//		} else {
+//			i++;
+//		}
+//	}
 }
 
 
@@ -1619,7 +1619,7 @@ elm::ScrapePtr elm::Facet::get_scrape_wght()
 }
 
 
-
+/*
 elm::datamatrix elm::Facet::ask_idca(const std::vector<std::string>& varnames, long long* caseid)
 {
 	if (!caseid) {
@@ -1730,23 +1730,23 @@ elm::datamatrix elm::Facet::ask_avail(long long* caseid)
 }
 
 
+*/
 
 
 
 
 
-
-elm::caseindex elm::Facet::ask_caseids()
-{
-	return _caseindex;
-}
+//elm::caseindex elm::Facet::ask_caseids()
+//{
+//	return _caseindex;
+//}
 
 elm::VAS_dna  elm::Facet::ask_dna(const long long& c)
 {
 	return DataDNA()->genome();
 }
 
-
+/*
 elm::datamatrix elm::Facet::matrix_library(size_t n)
 {
 	auto i = _extracts.begin();
@@ -1757,7 +1757,7 @@ elm::datamatrix elm::Facet::matrix_library(size_t n)
 	return *i;
 }
 
-
+*/
 
 
 

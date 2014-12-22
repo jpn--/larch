@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		DC4F33AE1A43958500895017 /* bdist_wheel */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DC4F33B11A43958500895017 /* Build configuration list for PBXAggregateTarget "bdist_wheel" */;
+			buildPhases = (
+				DC4F33B21A43959C00895017 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = bdist_wheel;
+			productName = bdist_wheel;
+		};
 		DC5FAF9419EC2EF4006F19A0 /* distutils global */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = DC5FAF9519EC2EF4006F19A0 /* Build configuration list for PBXAggregateTarget "distutils global" */;
@@ -236,9 +247,7 @@
 		DC5FB13F19EC69CA006F19A0 /* libelmsqlite.so in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
 		DC5FB14019EC69DC006F19A0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */; };
 		DC5FB14419EC6A4D006F19A0 /* apsw.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
-		DC5FB14519EC6A4F006F19A0 /* libelmsqlhaversine.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC019EC5191006F19A0 /* libelmsqlhaversine.so */; };
 		DC5FB14619EC6A51006F19A0 /* libelmsqlite.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
-		DC5FB14719EC6A53006F19A0 /* libelmsqlite3extension.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC219EC5191006F19A0 /* libelmsqlite3extension.so */; };
 		DC6DD3B81A1AB8B9005F0E42 /* elm_darray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6DD3B61A1AB8B9005F0E42 /* elm_darray.cpp */; };
 		DC6DD3B91A1AB8B9005F0E42 /* elm_darray.h in Headers */ = {isa = PBXBuildFile; fileRef = DC6DD3B71A1AB8B9005F0E42 /* elm_darray.h */; };
 		DC95D35A19ED9D330042F408 /* elmcore_wrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC95D35919ED9D330042F408 /* elmcore_wrap.cpp */; };
@@ -285,9 +294,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				DC5FB14419EC6A4D006F19A0 /* apsw.so in CopyFiles */,
-				DC5FB14519EC6A4F006F19A0 /* libelmsqlhaversine.so in CopyFiles */,
 				DC5FB14619EC6A51006F19A0 /* libelmsqlite.so in CopyFiles */,
-				DC5FB14719EC6A53006F19A0 /* libelmsqlite3extension.so in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,7 +331,7 @@
 		DC5FAFAE19EC50A3006F19A0 /* util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		DC5FAFAF19EC50A3006F19A0 /* vfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vfs.c; sourceTree = "<group>"; };
 		DC5FAFB019EC50A3006F19A0 /* vtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vtable.c; sourceTree = "<group>"; };
-		DC5FAFB319EC50A3006F19A0 /* extension-functions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "extension-functions.c"; sourceTree = "<group>"; };
+		DC5FAFB319EC50A3006F19A0 /* bonus.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bonus.c; sourceTree = "<group>"; };
 		DC5FAFB619EC50A3006F19A0 /* haversine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = haversine.c; sourceTree = "<group>"; };
 		DC5FAFB919EC50A3006F19A0 /* sqlite3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		DC5FAFBA19EC50A3006F19A0 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
@@ -520,7 +527,7 @@
 			isa = PBXGroup;
 			children = (
 				DC5FAFA019EC50A3006F19A0 /* apsw */,
-				DC5FAFB319EC50A3006F19A0 /* extension-functions.c */,
+				DC5FAFB319EC50A3006F19A0 /* bonus.c */,
 				DC5FAFB619EC50A3006F19A0 /* haversine.c */,
 				DC5FAFB919EC50A3006F19A0 /* sqlite3.c */,
 				DC5FAFBA19EC50A3006F19A0 /* sqlite3.h */,
@@ -949,6 +956,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Jeffrey Newman";
 				TargetAttributes = {
+					DC4F33AE1A43958500895017 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
 					DC5FAF9419EC2EF4006F19A0 = {
 						CreatedOnToolsVersion = 6.0.1;
 					};
@@ -981,11 +991,25 @@
 				DCECBCC419CC9315001B673E /* distutils_install_local */,
 				DC5FAF9419EC2EF4006F19A0 /* distutils global */,
 				DC5FAF9B19EC4FD0006F19A0 /* distutils_test */,
+				DC4F33AE1A43958500895017 /* bdist_wheel */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DC4F33B21A43959C00895017 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.4/bin/:${PATH}\"\nexport PATH\nswig -version \n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py build_ext\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py bdist_wheel -d wheelhouse\n\n";
+		};
 		DC5FAF9A19EC2F02006F19A0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1269,6 +1293,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		DC4F33AF1A43958500895017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC4F33B01A43958500895017 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		DC5FAF9619EC2EF4006F19A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1560,6 +1598,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DC4F33B11A43958500895017 /* Build configuration list for PBXAggregateTarget "bdist_wheel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC4F33AF1A43958500895017 /* Debug */,
+				DC4F33B01A43958500895017 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DC5FAF9519EC2EF4006F19A0 /* Build configuration list for PBXAggregateTarget "distutils global" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

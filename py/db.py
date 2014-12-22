@@ -95,14 +95,14 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		trypath = os.path.split(__file__)[0]
 		trypath = utilities.path_shrink_until_exists(trypath)
 		dir_files = os.listdir(trypath)
-		for i in dir_files:
-			if "elmsqlite3extension" in i or "elmsqlhaversine" in i:
-				extend_path = os.path.join(trypath,i)
-				try:
-					apsw.Connection.loadextension(self,extend_path)
-				except:
-					self._attempted_loadextension = extend_path
-					print("failed to load sqlite extension:", extend_path)
+#		for i in dir_files:
+#			if "elmsqlite3extension" in i or "elmsqlhaversine" in i:
+#				extend_path = os.path.join(trypath,i)
+#				try:
+#					apsw.Connection.loadextension(self,extend_path)
+#				except:
+#					self._attempted_loadextension = extend_path
+#					print("failed to load sqlite extension:", extend_path)
 		if self.source_filename == "":
 			self.source_filename = filename
 		self.working_name = self.source_filename

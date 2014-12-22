@@ -29,16 +29,17 @@ elm::Fountain::~Fountain()
 
 
 
-elm::caseindex elm::Fountain::ask_caseids()
-{
-	OOPS("Fountain is an abstract base class");
-}
+//elm::caseindex elm::Fountain::ask_caseids()
+//{
+//	OOPS("Fountain is an abstract base class");
+//}
 
 elm::VAS_dna  elm::Fountain::ask_dna(const long long& c)
 {
 	OOPS("Fountain is an abstract base class");
 }
 
+/*
 elm::datamatrix elm::Fountain::ask_idco(std::vector<std::string> variables)
 {
 	OOPS("Fountain is an abstract base class");
@@ -63,7 +64,7 @@ elm::datamatrix elm::Fountain::ask_avail()
 {
 	OOPS("Fountain is an abstract base class");
 }
-
+*/
 
 
 const unsigned& elm::Fountain::nCases() const
@@ -82,16 +83,17 @@ const unsigned& elm::Fountain::nAlts() const
 
 
 
-const elm::caseindex elm::Fountain::ask_caseids() const
-{
-	return const_cast<elm::Fountain*>(this)->ask_caseids();
-}
+//const elm::caseindex elm::Fountain::ask_caseids() const
+//{
+//	return const_cast<elm::Fountain*>(this)->ask_caseids();
+//}
 
 const elm::VAS_dna  elm::Fountain::ask_dna(const long long& c) const
 {
 	return const_cast<elm::Fountain*>(this)->ask_dna(c);
 }
 
+/*
 const elm::datamatrix elm::Fountain::ask_idco(std::vector<std::string> variables) const
 {
 	return const_cast<elm::Fountain*>(this)->ask_idco(variables);
@@ -116,5 +118,5 @@ const elm::datamatrix elm::Fountain::ask_avail() const
 {
 	return const_cast<elm::Fountain*>(this)->ask_avail();
 }
-
+*/
 

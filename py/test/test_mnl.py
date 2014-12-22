@@ -426,14 +426,17 @@ class TestMNL(ELM_TestCase):
 		m = Model.Example()
 		needco = m.utility.co.needs()
 		needca = m.utility.ca.needs()
-		xa = m.db.ask_idca(needca,1)
-		xo = m.db.ask_idco(needco,1)
-		av = m.db.ask_avail(1)
-		self.assertEqual(1, xa.nCases())
-		self.assertEqual(6, xa.nAlts())
-		self.assertEqual(2, xa.nVars())
-		self.assertEqual(1, xo.nCases())
-		self.assertEqual(2, xo.nVars())
+		xa = m.db.array_idca(needca)[0][0:1,:,:]
+		#xa = m.db.ask_idca(needca,1)
+		xo = m.db.array_idco(needco)[0][0:1,:]
+		#xo = m.db.ask_idco(needco,1)
+		av = m.db.array_avail()[0][0:1,:,:]
+		#av = m.db.ask_avail(1)
+		self.assertEqual(1, xa.shape[0])
+		self.assertEqual(6, xa.shape[1])
+		self.assertEqual(2, xa.shape[2])
+		self.assertEqual(1, xo.shape[0])
+		self.assertEqual(2, xo.shape[1])
 		m.freshen()
 		m.parameter_values([-2.1780392286038217, -3.725133748807042, -0.6709731115935808,
 							-2.3763431244580198, -0.20681363746347237, -0.002170001687300809,
@@ -441,4 +444,4 @@ class TestMNL(ELM_TestCase):
 							-0.009686263668346087, -0.05134043022343194, -0.004920362964462176])
 		pr = numpy.array([[ 0.8174641 ,  0.07770958,  0.01790577,  0.0714228 ,  0.01549774, 0.        ]])
 		m.freshen()
-		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo.getArray(),xa.getArray(),av.getArray())) )
+		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )

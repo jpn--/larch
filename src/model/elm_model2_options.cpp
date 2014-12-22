@@ -63,6 +63,7 @@ elm::model_options_t::model_options_t(
 , weight_autorescale    (weight_autorescale)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
+#ifdef __APPLE__
 	PyObject* multiprocessing_module = PyImport_ImportModule("multiprocessing");
 	PyObject* cpu_count = PyObject_GetAttrString(multiprocessing_module, "cpu_count");
 	PyObject* n_cpu = PyObject_CallFunction(cpu_count, "()");
@@ -75,6 +76,9 @@ elm::model_options_t::model_options_t(
 	Py_CLEAR(n_cpu);
 	Py_CLEAR(cpu_count);
 	Py_CLEAR(multiprocessing_module);
+#else
+	this->threads = 1;
+#endif
 }
 
 

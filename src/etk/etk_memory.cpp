@@ -409,8 +409,8 @@ void memarray_symmetric::operator= (const symmetric_matrix& that)
 memarray_symmetric::memarray_symmetric(const unsigned& r, const unsigned& c)
 : memarray_raw(r,r)
 {
-
 }
+
 void memarray_symmetric::resize(const unsigned& r, const unsigned& c)
 {
 	puddle::resize(r*r);

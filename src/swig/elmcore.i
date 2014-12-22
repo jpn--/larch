@@ -157,8 +157,8 @@ static PyObject* ptrToFacetError;  /* add this! */
 %shared_ptr(elm::QuerySetTwoTable);
 
 namespace elm {
-	typedef std::shared_ptr<elm::datamatrix_t> datamatrix;
-	typedef std::shared_ptr<elm::caseindex_t> caseindex;
+//	typedef std::shared_ptr<elm::datamatrix_t> datamatrix;
+//	typedef std::shared_ptr<elm::caseindex_t> caseindex; 
 //	typedef std::shared_ptr<elm::QuerySet> queries;
 //	typedef std::shared_ptr<elm::QuerySetSimpleCO> queries1;
 //	typedef std::shared_ptr<elm::QuerySetTwoTable> queries2;
@@ -169,7 +169,7 @@ namespace elm {
 #define NPY_NO_DEPRECATED_API NPY_1_8_API_VERSION
 #include <numpy/arrayobject.h>
 %}
-
+ 
 
 %init %{
 
@@ -226,6 +226,12 @@ namespace elm {
 %include "etk_test_swig.h"
 %include "etk_refcount.h"
 
+namespace etk {
+	void larch_initialize();
+	char* larch_openblas_get_config();
+
+};
+
 //%include "etk_vectors.h"
 
 %include "sherpa_pack.h"
@@ -273,5 +279,4 @@ from .db import DB
 from .model import Model
 %}
  
-
  

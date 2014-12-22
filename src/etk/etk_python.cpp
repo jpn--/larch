@@ -20,10 +20,12 @@
  *  
  */
 
-
+#include <iostream>
 #include <string>
 #include "etk_python.h"
+#include "larch_portable.h"
 
+#include "sqlite3ext.h"
 
 
 boosted::mutex etk::python_global_mutex;
@@ -273,8 +275,35 @@ std::string PyString_ExtractCppString(PyObject* pystr) {
 #endif
 
 
+#ifdef __cplusplus 
+extern "C" {
+#endif
+
+extern const sqlite3_api_routines *sqlite3_api;
+void sqlite3_bonus_autoinit();
+void sqlite3_haversine_autoinit();
+
+#ifdef __cplusplus
+}
+#endif
 
 
 
+void etk::larch_initialize()
+{
+	std::cerr << "larch_initialize()\n";
+	_larch_init_;
+	sqlite3_bonus_autoinit();
+	sqlite3_haversine_autoinit();
+}
 
+
+char* etk::larch_openblas_get_config()
+{
+#ifdef __APPLE__
+	return "vecLib";
+#else
+	return openblas_get_config();
+#endif
+}
 

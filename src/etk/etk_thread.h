@@ -33,6 +33,12 @@
 # undef max
 #endif
 
+#ifndef I_AM_WIN
+#ifndef __APPLE__
+#define I_AM_WIN 1
+#endif
+#endif
+
 // On non-Apple systems, use boost::thread
 #ifdef I_AM_WIN
 //#include "etk_thread_windows.h"

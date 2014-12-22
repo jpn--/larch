@@ -150,13 +150,13 @@ namespace elm {
 	, public Fountain
 	{
 	public:
-		virtual elm::caseindex ask_caseids();
+//		virtual elm::caseindex ask_caseids();
 		virtual elm::VAS_dna  ask_dna(const long long& c=0);
-		virtual elm::datamatrix ask_idco(const std::vector<std::string>& varnames, long long* caseid=nullptr);
-		virtual elm::datamatrix ask_idca(const std::vector<std::string>& varnames, long long* caseid=nullptr);
-		virtual elm::datamatrix ask_choice(long long* caseid=nullptr);
-		virtual elm::datamatrix ask_weight(long long* caseid=nullptr);
-		virtual elm::datamatrix ask_avail(long long* caseid=nullptr);
+//		virtual elm::datamatrix ask_idco(const std::vector<std::string>& varnames, long long* caseid=nullptr);
+//		virtual elm::datamatrix ask_idca(const std::vector<std::string>& varnames, long long* caseid=nullptr);
+//		virtual elm::datamatrix ask_choice(long long* caseid=nullptr);
+//		virtual elm::datamatrix ask_weight(long long* caseid=nullptr);
+//		virtual elm::datamatrix ask_avail(long long* caseid=nullptr);
 		
 		virtual ~Facet();
 
@@ -301,9 +301,9 @@ namespace elm {
 		VAS_System* DataDNA(const long long& c=0);
 		
 	public:
-		caseindex _caseindex;
+//		caseindex _caseindex;
 		
-		std::list<datamatrix> _extracts;
+//		std::list<datamatrix> _extracts;
 		
 	protected:
 		// Column names of important keys
@@ -376,7 +376,7 @@ namespace elm {
 		
 		
 	public:
-		elm::datamatrix matrix_library(size_t n);
+//		elm::datamatrix matrix_library(size_t n);
 		
 		
 		

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Jeffrey Newman. All rights reserved.
 //
 
+/*
+
 #include "etk.h"
 #include "elm_caseindex.h"
 
@@ -75,4 +77,4 @@ elm::caseindex elm::caseindex_t::create()
 	return p;
 }
 
-
+*/

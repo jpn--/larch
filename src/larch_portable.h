@@ -36,8 +36,10 @@
 #ifdef __APPLE__
 #	include <Accelerate/Accelerate.h>
 #	define DEBUG_APPLE
+#	define _larch_init_
 #else
 #	include <cblas.h>
+#	define _larch_init_ openblas_set_num_threads(1)
 #endif
 
 // platform specific isInf

@@ -1,12 +1,38 @@
+import setuptools
 import glob, time, platform, os, numpy, sysconfig, sys, shutil
 if platform.system() == 'Darwin':
 	os.environ['LDFLAGS'] = '-framework Accelerate'
 
 
-import distutils.debug
-from distutils.debug import *
 
-from distutils.core import setup, Extension
+
+#
+## monkey-patch for parallel compilation
+#def parallelCCompile(self, sources, output_dir=None, macros=None, include_dirs=None, debug=0, extra_preargs=None, extra_postargs=None, depends=None):
+#    # those lines are copied from distutils.ccompiler.CCompiler directly
+#    macros, objects, extra_postargs, pp_opts, build = self._setup_compile(output_dir, macros, include_dirs, sources, depends, extra_postargs)
+#    cc_args = self._get_cc_args(pp_opts, debug, extra_preargs)
+#    # parallel code
+#    N=2 # number of parallel compilations
+#    import multiprocessing.pool
+#    def _single_compile(obj):
+#        try: src, ext = build[obj]
+#        except KeyError: return
+#        self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
+#    # convert to list, imap is evaluated on-demand
+#    list(multiprocessing.pool.ThreadPool(N).imap(_single_compile,objects))
+#    return objects
+#import distutils.ccompiler
+#distutils.ccompiler.CCompiler.compile=parallelCCompile
+#
+#
+#
+#
+#import distutils.debug
+#from distutils.debug import *
+
+
+from setuptools import setup, Extension
 from distutils.command.build_clib import build_clib
 
 
@@ -255,6 +281,10 @@ sqlite3_exports=[
 'sqlite3_win32_sleep',
 'sqlite3_win32_utf8_to_mbcs',
 'sqlite3_win32_write_debug',
+
+'sqlite3_haversine_autoinit',
+'sqlite3_bonus_autoinit',
+
 ]
 
 
@@ -274,6 +304,7 @@ if platform.system() == 'Darwin':
 	local_data_files = [('/usr/local/bin', ['bin/larch']), ]
 	local_sqlite_extra_postargs = []
 	dylib_name_style = "lib{}.so"
+	DEBUG = False
 elif platform.system() == 'Windows':
 	openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
 	local_swig_opts = []
@@ -281,12 +312,16 @@ elif platform.system() == 'Windows':
 	local_library_dirs = ['Z:/Larch/{0}/{1}'.format(*openblas), 'C:\\local\\boost_1_56_0\\lib64-msvc-10.0']
 	local_includedirs = ['./{0}/include'.format(*openblas), 'C:/local/boost_1_56_0' ]
 	local_macros = [('I_AM_WIN','1')]
-	local_extra_compile_args = ['/EHsc', '/W0']
+	local_extra_compile_args = ['/EHsc', '/W0', ]
+	#  for debugging...
+	#	  extra_compile_args=['/Zi' or maybe '/Z7' ?],
+	#     extra_link_args=[])
 	local_apsw_compile_args = ['/EHsc']
-	local_extra_link_args =    []
+	local_extra_link_args =    ['/DEBUG']
 	local_data_files = []
 	local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'elmsqlite.lib'),]
 	dylib_name_style = "{}.dll"
+	DEBUG = False
 #	raise Exception("TURN OFF multithreading in OpenBLAS")
 
 
@@ -299,9 +334,10 @@ elif platform.system() == 'Windows':
 
 
 shared_libs = [
-('elmsqlite',           'sqlite/sqlite3.c'             ,sqlite3_exports,  local_sqlite_extra_postargs, []),
-('elmsqlhaversine',     'sqlite/haversine.c'           ,None,             []                         , []),
-('elmsqlite3extension', 'sqlite/extension-functions.c' ,None,             []                         , []),
+#('elmsqlite',           'sqlite/sqlite3.c'             ,sqlite3_exports,  local_sqlite_extra_postargs, []),
+#('elmsqlhaversine',     'sqlite/haversine.c'           ,None,             []                         , []),
+#('elmsqlite3extension', 'sqlite/extension-functions.c' ,None,             []                         , []),
+('elmsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
 ]
 
 
@@ -312,6 +348,9 @@ c = new_compiler()
 c.add_include_dir("./sqlite")
 
 for name, source, exports, extra_postargs, extra_preargs in shared_libs:
+	
+	if not isinstance(source,list):
+		source = [source,]
 	
 	try:
 		need_to_update = (os.path.getmtime(source) > os.path.getmtime(os.path.join(libdir, dylib_name_style.format(name))))
@@ -325,7 +364,7 @@ for name, source, exports, extra_postargs, extra_preargs in shared_libs:
 
 	if need_to_update:
 		# Compile into .o files
-		objects = c.compile([source], extra_preargs=extra_preargs, debug=DEBUG)
+		objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG)
 		# Create shared library
 		c.link_shared_lib(objects, name, output_dir=libdir, export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
 
@@ -335,16 +374,16 @@ if openblas is not None:
 
 
 
-simp = Extension('larch._larch',
-				 ['src/larch_hello.i',] + simp_cpp_files,
-				 swig_opts=['-modern', '-py3', '-I../include', '-v', '-c++', '-outdir', './py'] + local_swig_opts,
-				 libraries=local_libraries+['elmsqlite', ],
-				 library_dirs=local_library_dirs+[shlib_folder(),],
-				 define_macros=local_macros,
-				 include_dirs=local_includedirs + [numpy.get_include(), './src', './src/etk', './src/model', './sqlite', ],
-				 extra_compile_args=local_extra_compile_args,
-				 extra_link_args=local_extra_link_args,
-				 )
+#simp = Extension('larch._larch',
+#				 ['src/larch_hello.i',] + simp_cpp_files,
+#				 swig_opts=['-modern', '-py3', '-I../include', '-v', '-c++', '-outdir', './py'] + local_swig_opts,
+#				 libraries=local_libraries+['elmsqlite', ],
+#				 library_dirs=local_library_dirs+[shlib_folder(),],
+#				 define_macros=local_macros,
+#				 include_dirs=local_includedirs + [numpy.get_include(), './src', './src/etk', './src/model', './sqlite', ],
+#				 extra_compile_args=local_extra_compile_args,
+#				 extra_link_args=local_extra_link_args,
+#				 )
 
 core = Extension('larch._core',
 				 ['src/swig/elmcore.i',] + elm_cpp_files,
@@ -378,15 +417,25 @@ apsw = Extension('larch.apsw',
 #				 extra_link_args=apsw_extra_link_args,
 				 )
 
+
+import build_configuration
+build_configuration.write_build_info(build_dir=lib_folder(), packagename="larch")
+
+
+
+
+
 setup(name='larch',
       version='0.1',
       package_dir = {'larch': 'py'},
       packages=['larch', 'larch.examples', 'larch.test'],
-	  ext_modules=[core, apsw, simp],
+	  ext_modules=[core, apsw, ],
 	  package_data={'larch':['data_warehouse/*.elmdata', 'data_warehouse/*.csv']},
 	  data_files=local_data_files,
+	  install_requires=[
+						"numpy >= 1.9.0",
+						"pandas >= 0.14.1",
+					],
      )
 
-import build_configuration
-build_configuration.write_build_info(build_dir=lib_folder(), packagename="larch")
 

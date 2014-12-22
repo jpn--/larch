@@ -208,26 +208,26 @@ size_t elm::darray::nCases() const
 
 
 elm::darray::darray()
-: elm::darray_req::darray_req()
+: elm::darray_req()
 , _repository()
 {
 }
 
-elm::darray::darray(const elm::darray::darray& source_arr)
-: elm::darray_req::darray_req()
+elm::darray::darray(const elm::darray& source_arr)
+: elm::darray_req()
 , _repository(source_arr._repository)
 {
 }
 
-elm::darray::darray(const elm::darray::darray& source_arr, double scale)
-: elm::darray_req::darray_req()
+elm::darray::darray(const elm::darray& source_arr, double scale)
+: elm::darray_req()
 , _repository(source_arr._repository.size1(),source_arr._repository.size2(),source_arr._repository.size3())
 {
 	cblas_daxpy(_repository.size(), scale, source_arr._repository.ptr(), 1, _repository.ptr(), 1);
 }
 
 elm::darray::darray(PyObject* source_arr)
-: elm::darray_req::darray_req()
+: elm::darray_req()
 , _repository(source_arr)
 {
 	if (!PyArray_Check(source_arr)) {

@@ -32,10 +32,10 @@ void elm::__logit_utility
 , const double&   U_premultiplier
 )
 {
-	if (Data_CA->nVars()>0 /*&& Data_CA->fully_loaded()*/) {
+	if (Data_CA && Data_CA->nVars()>0 /*&& Data_CA->fully_loaded()*/) {
 		// Fast Linear Algebra		
 		if (U.size2()==Data_CA->nAlts()) {
-			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
+			cblas_dgemv(CblasRowMajor,CblasNoTrans,
 						Data_CA->nCases() * Data_CA->nAlts(), Data_CA->nVars(), 
 						1,
 						Data_CA->values(0,0),Data_CA->nVars(),
@@ -50,8 +50,8 @@ void elm::__logit_utility
 							*Coef_CA,1, 
 							U_premultiplier, *U+a, U.size2() );
 			}
-		}		
-	} else if (Data_CA->nVars()>0) {
+		}
+	} else if (Data_CA && Data_CA->nVars()>0) {
 		// Slow case-by-case
 		for (unsigned c=0; c<Data_CA->nCases(); c++) {
 			if (U.size2()==Data_CA->nAlts()) {
@@ -72,19 +72,19 @@ void elm::__logit_utility
 			}
 		}
 	}
-	if (Data_CA->nVars()==0) {
+	if (!Data_CA || Data_CA->nVars()==0) {
 		if (U_premultiplier) U.scale(U_premultiplier); else U.initialize(0.0);
 	}
 	
-	if (Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
-		// Fast Linear Algebra		
+	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
+		// Fast Linear Algebra
 		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
 					Data_CO->nCases(), Coef_CO.size2(), Data_CO->nVars(),
 					1,
 					Data_CO->values(0,0), Data_CO->nVars(),
 					*Coef_CO, Coef_CO.size2(),
 					1,*U,U.size2());
-	} else if (Data_CO->nVars()>0) {
+	} else if (Data_CO && Data_CO->nVars()>0) {
 		// Slow case-by-case
 		for (unsigned c=0; c<Data_CA->nCases(); c++) {
 			if (Data_CO->nVars())

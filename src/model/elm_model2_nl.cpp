@@ -188,6 +188,13 @@ void elm::Model2::nl_probability()
 	
 	Utility.initialize(0.0);
 	__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, Coef_UtilityCA, Coef_UtilityCO, 0);
+
+	elm::ca_co_packet sampling_packet_ = sampling_packet();
+	bool use_sampling = sampling_packet_.relevant();
+	
+	if (use_sampling) {
+		sampling_packet_.logit_partial(0, nCases);
+	}
 	
 	for (c=0;c<nCases;c++) {
 		// Unavailable alternatives become -INF
@@ -199,6 +206,37 @@ void elm::Model2::nl_probability()
 		
 		__casewise_nl_utility(Utility.ptr(c), Xylem, *Workspace);
 		__casewise_nl_probability(Utility.ptr(c), Cond_Prob.ptr(c), Probability.ptr(c), Xylem);
+
+		if (use_sampling) {
+			// AdjProbability
+			size_t n            = sampling_packet_.Outcome->size2();
+			double* adjPr       = AdjProbability.ptr(c);
+			const bool* av      = Data_Avail->boolvalues(c,1);
+			
+			double tot = 0.0;
+			const double* origPr = Probability.ptr(c);
+			const double* sampWt = sampling_packet_.Outcome->ptr(c);
+
+			double* p = adjPr;
+			for (size_t i=0; i<n; i++, origPr++, sampWt++, p++, av++) {
+				if (*av) {
+					*p = (*origPr) * ::exp(*sampWt);
+					tot += *p;
+				} else {
+					*p = 0.0;
+				}
+			}
+			
+			p = adjPr;
+			for (size_t i=0; i<n; i++, p++) {
+				*p /= tot;
+			}
+
+		}
+
+
+
+
 		
 		// NANCHECK
 		if (true) {
@@ -245,96 +283,112 @@ void elm::Model2::nl_gradient()
 	nThreads = 1;
 	#endif // ndef _ELM_USE_THREADS_
 	
-	if (nThreads >= 1 && _ELM_USE_THREADS_) {
+	if (nThreads >= 2 && _ELM_USE_THREADS_) {
 
-		#ifdef __APPLE__
-		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-			[&](){return boosted::make_shared<workshop_nl_gradient>(  dF()
-									 , nNodes
-									 , utility_packet()
-									 , sampling_packet()
-									 , Params_LogSum
-									 , Data_Choice
-									 , Data_Weight_active()
-									 , &AdjProbability
-									 , &Probability
-									 , &Cond_Prob
-									 , &Xylem
-									 , &GCurrent
-									 , &Bhhh
-									 , &msg
-									 );};
-		#else
+//		#ifdef __APPLE__
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
-		#endif // def __APPLE__
+//			[&](){return boosted::make_shared<workshop_nl_gradient>(  dF()
+//									 , nNodes
+//									 , utility_packet()
+//									 , sampling_packet()
+//									 , Params_LogSum
+//									 , Data_Choice
+//									 , Data_Weight_active()
+//									 , &AdjProbability
+//									 , &Probability
+//									 , &Cond_Prob
+//									 , &Xylem
+//									 , &GCurrent
+//									 , &Bhhh
+//									 , &msg
+//									 );};
+//		#else
+//		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+//			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
+//		#endif // def __APPLE__
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
 	} else {
-			
-		unsigned c;
 
-		memarray_raw dUtilCA    (nNodes,Params_UtilityCA.length());
-		memarray_raw dUtilCO    (nNodes,Params_UtilityCO.length());
-		memarray_raw dUtilMU    (nNodes,Params_LogSum.length());
-		memarray_raw dProbCA    (nNodes,Params_UtilityCA.length());
-		memarray_raw dProbCO    (nNodes,Params_UtilityCO.length());
-		memarray_raw dProbMU    (nNodes,Params_LogSum.length());
-		memarray_raw WorkspaceCA(Params_UtilityCA.length());
-		memarray_raw WorkspaceCO(Params_UtilityCO.length());
-		memarray_raw WorkspaceMU(Params_LogSum.length());
+
+
+
+		boosted::shared_ptr<workshop> local_grad_workshop;
+		if (!local_grad_workshop) {
+			local_grad_workshop = make_shared_workshop_nl_gradient ();
+		}
+		local_grad_workshop->work(0, nCases, nullptr);
 		
-		memarray_raw CaseGrad(dF());
-			
-		for (c=0;c<nCases;c++) {
-			
-			CaseGrad.initialize();
-			__casewise_nl_gradient
-			( c
-			 , &Probability
-			 , &Cond_Prob
-			 , &Utility
-			 , &Xylem
-			 , Data_UtilityCA
-			 , Data_UtilityCO
-			 , Data_Choice
-			 , dUtilCA
-			 , dUtilCO
-			 , dUtilMU
-			 , dProbCA
-			 , dProbCO
-			 , dProbMU
-			 , WorkspaceCA
-			 , WorkspaceCO
-			 , WorkspaceMU
-			 , Grad_UtilityCA
-			 , Grad_UtilityCO
-			 , Grad_LogSum);		
 
-		if (Data_Weight_active()) {
-			Grad_UtilityCA.scale(Data_Weight_active()->value(c, 0));
-			Grad_UtilityCO.scale(Data_Weight_active()->value(c, 0));
-			Grad_LogSum.scale(Data_Weight_active()->value(c, 0));
-		}
 
-			push_to_freedoms(Params_UtilityCA  , *Grad_UtilityCA  , *CaseGrad);
-			push_to_freedoms(Params_UtilityCO  , *Grad_UtilityCO  , *CaseGrad);
-			push_to_freedoms(Params_LogSum     , *Grad_LogSum     , *CaseGrad);
-			
-			// BHHH
-			#ifdef SYMMETRIC_PACKED
-			cblas_dspr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh);
-			#else
-			cblas_dsyr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh, Bhhh.size1());
-			#endif
-			
-			// ACCUMULATE
-			// cblas_daxpy(dF(),1,*CaseGrad,1,*GCurrent,1);
-			GCurrent += CaseGrad;
-			
-			PERIODICALLY(Sup, INFO(msg)) << "  processing gradient for case "<<c<<", "<<100.0*double(c)/double(nCases)<<"% complete";
-			
-			
-		}
+
+//
+//
+//		
+//		unsigned c;
+//
+//		memarray_raw dUtilCA    (nNodes,Params_UtilityCA.length());
+//		memarray_raw dUtilCO    (nNodes,Params_UtilityCO.length());
+//		memarray_raw dUtilMU    (nNodes,Params_LogSum.length());
+//		memarray_raw dProbCA    (nNodes,Params_UtilityCA.length());
+//		memarray_raw dProbCO    (nNodes,Params_UtilityCO.length());
+//		memarray_raw dProbMU    (nNodes,Params_LogSum.length());
+//		memarray_raw WorkspaceCA(Params_UtilityCA.length());
+//		memarray_raw WorkspaceCO(Params_UtilityCO.length());
+//		memarray_raw WorkspaceMU(Params_LogSum.length());
+//		
+//		memarray_raw CaseGrad(dF());
+//			
+//		for (c=0;c<nCases;c++) {
+//			
+//			CaseGrad.initialize();
+//			__casewise_nl_gradient
+//			( c
+//			 , &Probability
+//			 , &Cond_Prob
+//			 , &Utility
+//			 , &Xylem
+//			 , Data_UtilityCA
+//			 , Data_UtilityCO
+//			 , Data_Choice
+//			 , dUtilCA
+//			 , dUtilCO
+//			 , dUtilMU
+//			 , dProbCA
+//			 , dProbCO
+//			 , dProbMU
+//			 , WorkspaceCA
+//			 , WorkspaceCO
+//			 , WorkspaceMU
+//			 , Grad_UtilityCA
+//			 , Grad_UtilityCO
+//			 , Grad_LogSum);		
+//
+//		if (Data_Weight_active()) {
+//			Grad_UtilityCA.scale(Data_Weight_active()->value(c, 0));
+//			Grad_UtilityCO.scale(Data_Weight_active()->value(c, 0));
+//			Grad_LogSum.scale(Data_Weight_active()->value(c, 0));
+//		}
+//
+//			push_to_freedoms(Params_UtilityCA  , *Grad_UtilityCA  , *CaseGrad);
+//			push_to_freedoms(Params_UtilityCO  , *Grad_UtilityCO  , *CaseGrad);
+//			push_to_freedoms(Params_LogSum     , *Grad_LogSum     , *CaseGrad);
+//			
+//			// BHHH
+//			#ifdef SYMMETRIC_PACKED
+//			cblas_dspr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh);
+//			#else
+//			cblas_dsyr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh, Bhhh.size1());
+//			#endif
+//			
+//			// ACCUMULATE
+//			// cblas_daxpy(dF(),1,*CaseGrad,1,*GCurrent,1);
+//			GCurrent += CaseGrad;
+//			
+//			PERIODICALLY(Sup, INFO(msg)) << "  processing gradient for case "<<c<<", "<<100.0*double(c)/double(nCases)<<"% complete";
+//			
+//			
+//		}
 	}
 	BUGGER(msg)<< "End NL Gradient Evaluation" ;
 }

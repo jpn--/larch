@@ -117,7 +117,9 @@ class TestNL(ELM_TestCase):
 	def test_nl2_single_cycle_multithread(self):		
 		d = DB.Example('MTC');
 		m = Model(d);
-		m.option.threads = 4 
+		import platform
+		if platform.system() == "Darwin":
+			m.option.threads = 4
 		m.parameter ("cost",0)
 		m.parameter("time",0)
 		m.parameter("con2",0)

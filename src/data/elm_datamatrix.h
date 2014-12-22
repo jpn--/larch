@@ -20,6 +20,7 @@
  *  
  */
 
+/*
 
 #ifndef __ELM2_DATAMATRIX_H__
 #define __ELM2_DATAMATRIX_H__
@@ -194,13 +195,6 @@ namespace elm {
 	public:
 		etk::readlock _repo_lock;
 
-//	public:
-//		static datamatrix create_idca(elm::Facet* db, const std::vector<std::string>& varnames);
-//		static datamatrix create_idco(elm::Facet* db, const std::vector<std::string>& varnames);
-//		static datamatrix create_choo(elm::Facet* db);
-//		static datamatrix create_wght(elm::Facet* db);
-//		static datamatrix create_aval(elm::Facet* db);
-
 	#endif // ndef SWIG
 
 	public:
@@ -295,3 +289,4 @@ namespace elm {
 } // end namespace elm
 #endif // __ELM2_SQL_SCRAPE_H__
 
+*/

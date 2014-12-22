@@ -27,21 +27,21 @@ namespace elm {
 	{
 	
 	  public:
-		virtual elm::caseindex ask_caseids();
+//		virtual elm::caseindex ask_caseids();
 		virtual elm::VAS_dna   ask_dna(const long long& c=0);
-		virtual elm::datamatrix ask_idco(std::vector<std::string> variables);
-		virtual elm::datamatrix ask_idca(std::vector<std::string> variables);
-		virtual elm::datamatrix ask_choice();
-		virtual elm::datamatrix ask_weight();
-		virtual elm::datamatrix ask_avail();
+//		virtual elm::datamatrix ask_idco(std::vector<std::string> variables);
+//		virtual elm::datamatrix ask_idca(std::vector<std::string> variables);
+//		virtual elm::datamatrix ask_choice();
+//		virtual elm::datamatrix ask_weight();
+//		virtual elm::datamatrix ask_avail();
 
-		virtual const elm::caseindex ask_caseids() const;
+//		virtual const elm::caseindex ask_caseids() const;
 		virtual const elm::VAS_dna   ask_dna(const long long& c=0) const;
-		virtual const elm::datamatrix ask_idco(std::vector<std::string> variables) const;
-		virtual const elm::datamatrix ask_idca(std::vector<std::string> variables) const;
-		virtual const elm::datamatrix ask_choice() const;
-		virtual const elm::datamatrix ask_weight() const;
-		virtual const elm::datamatrix ask_avail() const;
+//		virtual const elm::datamatrix ask_idco(std::vector<std::string> variables) const;
+//		virtual const elm::datamatrix ask_idca(std::vector<std::string> variables) const;
+//		virtual const elm::datamatrix ask_choice() const;
+//		virtual const elm::datamatrix ask_weight() const;
+//		virtual const elm::datamatrix ask_avail() const;
 
 		virtual const unsigned& nCases() const;
 		virtual const unsigned& nAlts() const;

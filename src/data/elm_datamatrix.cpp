@@ -20,6 +20,8 @@
  *  
  */
 
+
+/*
 #include <iostream>
 
 #include <cstring>
@@ -456,159 +458,6 @@ void elm::datamatrix_t::read_from_facet(elm::Facet* db, int style, const std::ve
 }
 
 
-/*
-void elm::datamatrix_t::load_values(const size_t& firstcasenum, const size_t& numberofcases)
-{
-	if (firstcasenum==0 && numberofcases==0 && fully_loaded()) {
-		return;
-	}
-	
-	if (firstcasenum!=0 || numberofcases!=0) {
-		if (is_loaded_in_range(firstcasenum,numberofcases)) {
-			return;
-		}
-	}
-	
-	size_t cs = numberofcases;
-	if (numberofcases==0) cs = parent->nCases();
-	if (firstcasenum+numberofcases>parent->nCases()) cs = parent->nCases() - firstcasenum;
-
-	if (_style&(CHOO|AVAL|WGHT)) _nVars_ = 1;
-
-	if (_style&IDCA) {
-		if (cs==0 || parent->nAlts()==0 || nVars()==0) return;
-	} else if (_style&IDCO) {
-		if (cs==0 || nVars()==0) return;
-	}
-
-	if (_repo_lock->check_use_count()) {
-		OOPS("There is a repository read lock active, cannot load new data now\n", describe_loaded_range(),
-			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
-	}
-	if (_bool_lock->check_use_count()) {
-		OOPS("There is a bool read lock active, cannot load new data now\n", describe_loaded_range(),
-			 "\nAsking for case ",firstcasenum, " to case ", firstcasenum+numberofcases);
-	}
-		
-
-	if (_as_bool()) {
-		if ((firstcasenum>=_firstcasenum)&&(firstcasenum+cs<=_firstcasenum+_numberofcases)&&(_bools.size()>=cs)) return;
-		_repository.destroy();
-	} else {
-		if ((firstcasenum>=_firstcasenum)&&(firstcasenum+cs<=_firstcasenum+_numberofcases)&&(_repository.size()>=cs)) return;
-		_bools.destroy();
-	}
-	
-	cellcodeset bad_codes;
-		
-	if (_style&IDCA) {
-		if (cs==0 || parent->nAlts()==0 || nVars()==0) return;
-		_repository.resize(cs,parent->nAlts(),nVars());
-	} else if (_style&IDCO) {
-		if (cs==0 || nVars()==0) return;
-		_repository.resize(cs,nVars());
-	} else if (_style&CHOO) {
-		_repository.resize(cs,parent->nAlts(),1);
-	} else if (_style&AVAL) {
-		_bools.resize(cs,parent->nAlts(),1);
-	} else if (_style&WGHT) {
-		_repository.resize(cs,1);
-	} else {
-		OOPS("Unknown datamatrix_t style ",_style);
-	}
-	if (_as_bool()) {
-		_bools.initialize(false);
-	} else {
-		_repository.initialize(0.0);
-	}
-	
-	if (nVars()==0 || cs<=0) return;
-
-
-	const VAS_Cell* alt;
-	cellcode alt_code;
-	long long current_caseid;
-	size_t c = 0;
-	
-	if (_style&IDCA) { 
-		_stmt->prepare( parent->query_idca(_VarNames,firstcasenum,cs) );
-	} else if (_style&IDCO) {
-		_stmt->prepare( parent->query_idco(_VarNames,firstcasenum,cs) );
-	} else if (_style&CHOO) {
-		_stmt->prepare( parent->query_choice(firstcasenum,cs) );
-	} else if (_style&AVAL) {
-		_stmt->prepare( parent->query_avail(firstcasenum,cs) );
-	} else if (_style&WGHT) {
-		_stmt->prepare( parent->query_weight(firstcasenum,cs) );
-	}
-		
-	MONITOR(parent->msg) << "SQL: "<< _stmt->sql() ;
-	std::string the_stmt = _stmt->sql();
-
-	clock_t prevmsgtime = clock();
-	clock_t timenow;
-	
-	_stmt->execute();
-	if (_stmt->status()==SQLITE_ROW) {
-		current_caseid = _stmt->getInt(0);
-	}
-	while (_stmt->status()==SQLITE_ROW) {
-		try { 
-			if (current_caseid != _stmt->getInt64(0)) {
-				c++;
-				current_caseid = _stmt->getInt64(0);
-			}
-			timenow = clock();
-			if (timenow > prevmsgtime + (CLOCKS_PER_SEC * 3)) {
-				MONITOR(parent->msg) << "reading case "<< current_caseid << ", " << 100.0*double(c)/double(cs) << "% ..." ;
-				prevmsgtime = clock();
-			}
-		}
-		SPOO {
-			_stmt->execute();
-			continue;
-		}
-		if (_style&(IDCA|AVAL|CHOO)) {
-			alt_code = _stmt->getInt64(1);
-			if (alt_code==0) {
-				bad_codes.insert(alt_code);
-				_stmt->execute();
-				continue;
-			}
-			try { 
-				alt = parent->DataDNA(current_caseid)->cell_from_code(alt_code);
-			} SPOO {
-				bad_codes.insert(alt_code);
-				_stmt->execute();
-				continue;
-			}
-			if (_as_bool()) {
-				_stmt->getBools (2, 2+nVars(),_bools.ptr(c,alt->slot()));
-			} else {
-				_stmt->getDoubles (2, 2+nVars(),_repository.ptr(c,alt->slot()));
-			}
-		} else if (_style&(IDCO|WGHT)) {
-			if (_as_bool()) {
-				_stmt->getBools (1, 1+nVars(),_bools.ptr(c));
-			} else {
-				_stmt->getDoubles (1, 1+nVars(),_repository.ptr(c));
-			}
-		}
-		_stmt->execute();
-	}
-	MONITOR(parent->msg) << "table read end" ;
-	if (bad_codes.size()) {
-		ostringstream badness;
-		badness << "while reading data ( " << _stmt->sql() << " ) there are " << bad_codes.size() << " unidentified cell codes:\n";
-		for (std::set<cellcode>::iterator b=bad_codes.begin(); b!=bad_codes.end(); b++)
-			badness << *b << "\n"; 
-		OOPS(badness.str());
-	}
-	_firstcasenum = firstcasenum;
-	_numberofcases = cs;
-}
-*/
-
 
 
 std::string elm::datamatrix_t::printcase(const unsigned& r) const
@@ -981,5 +830,5 @@ size_t elm::datamatrix_req::nAlts() const
 	return n_alts;
 }
 
-
+*/
 

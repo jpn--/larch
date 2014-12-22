@@ -470,7 +470,7 @@ void elm::QuerySetTwoTable::set_weight_co_column(const std::string& col)
 		_weight_column = temp_w;
 		throw;
 	}
-	if (validator) validator->change_in_sql_weight();
+//	if (validator) validator->change_in_sql_weight();
 }
 
 void elm::QuerySetTwoTable::set_alts_query(const std::string& q)
@@ -482,7 +482,7 @@ void elm::QuerySetTwoTable::set_alts_query(const std::string& q)
 	if (validator) validator->sql_statement(q);
 	_alts_query = q;
 	
-	if (validator) validator->change_in_sql_alts();
+//	if (validator) validator->change_in_sql_alts();
 
 }
 

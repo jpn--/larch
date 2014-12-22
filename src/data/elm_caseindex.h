@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Jeffrey Newman. All rights reserved.
 //
 
+/*
+
 #ifndef __Hangman__elm_caseindex__
 #define __Hangman__elm_caseindex__
 
@@ -85,4 +87,8 @@ namespace elm {
 
 
 
-#endif /* defined(__Hangman__elm_caseindex__) */
+#endif // defined(__Hangman__elm_caseindex__) 
+
+*/
+
+

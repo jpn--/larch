@@ -204,8 +204,8 @@ void elm::QuerySetSimpleCO::set_idco_query(const std::string& q)
 	_idco_query = q;
 	
 	if (reload) {
-		validator->change_in_sql_idco();
-		validator->change_in_sql_caseids();
+//		validator->change_in_sql_idco();
+//		validator->change_in_sql_caseids();
 	}
 }
 
@@ -230,7 +230,7 @@ void elm::QuerySetSimpleCO::set_choice_column(const std::string& col)
 	}
 
 	if (validator) {
-		validator->change_in_sql_choice();
+//		validator->change_in_sql_choice();
 	}
 
 }
@@ -258,7 +258,7 @@ void elm::QuerySetSimpleCO::set_choice_column_map(const std::map<long long, std:
 	}
 	
 	if (validator) {
-		validator->change_in_sql_choice();
+//		validator->change_in_sql_choice();
 	}
 
 }
@@ -283,7 +283,7 @@ void elm::QuerySetSimpleCO::set_avail_column_map(const std::map<long long, std::
 	}
 	
 	if (validator) {
-		validator->change_in_sql_avail();
+//		validator->change_in_sql_avail();
 	}
 }
 
@@ -299,7 +299,7 @@ void elm::QuerySetSimpleCO::set_avail_all()
 	
 	if (reload) {
 		if (validator) {
-			validator->change_in_sql_avail();
+//			validator->change_in_sql_avail();
 		}
 	}
 }
@@ -314,7 +314,7 @@ void elm::QuerySetSimpleCO::set_weight_column(const std::string& col)
 		}
 		_weight_column.clear();
 		if (validator) {
-			validator->change_in_sql_weight();
+//			validator->change_in_sql_weight();
 		}
 		return;
 	}
@@ -335,7 +335,7 @@ void elm::QuerySetSimpleCO::set_weight_column(const std::string& col)
 	}
 	
 	if (validator) {
-		validator->change_in_sql_weight();
+//		validator->change_in_sql_weight();
 	}
 	
 	
@@ -355,7 +355,7 @@ void elm::QuerySetSimpleCO::set_alts_query(const std::string& q)
 	_alts_query = q;
 	
 	if (reload) {
-		validator->change_in_sql_alts();
+//		validator->change_in_sql_alts();
 	}
 }
 
@@ -385,7 +385,7 @@ void elm::QuerySetSimpleCO::set_alts_values(const std::map<long long, std::strin
 	_alts_query = s.str();
 
 	if (reload) {
-		validator->change_in_sql_alts();
+//		validator->change_in_sql_alts();
 	}
 }
 

@@ -1,3 +1,4 @@
+#define SQLITE_CORE
 #include <sqlite3ext.h>    //boiler-plate that should appear in every loadable extension
 SQLITE_EXTENSION_INIT1     //boiler-plate that should appear in every loadable extension
 
@@ -31,7 +32,7 @@ static void greatCircleDistance(
 ** modules here.  This is usually the only exported symbol in
 ** the shared library.
 */
-int sqlite3_extension_init(             //boiler-plate that should appear in every loadable extension
+int sqlite3_haversine_init(             //boiler-plate that should appear in every loadable extension
   sqlite3 *db,                          //boiler-plate that should appear in every loadable extension
   char **pzErrMsg,                      //boiler-plate that should appear in every loadable extension
   const sqlite3_api_routines *pApi      //boiler-plate that should appear in every loadable extension
@@ -40,3 +41,10 @@ int sqlite3_extension_init(             //boiler-plate that should appear in eve
   sqlite3_create_function(db, "greatcircle", 4, SQLITE_ANY, 0, greatCircleDistance, 0, 0);
   return 0;                             //boiler-plate that should appear in every loadable extension
 }                                       //boiler-plate that should appear in every loadable extension
+
+
+void sqlite3_haversine_autoinit()
+{
+	sqlite3_auto_extension( (void(*)(void))sqlite3_haversine_init );
+}
+

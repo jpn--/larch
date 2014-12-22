@@ -108,6 +108,8 @@ Original code 2006 June 05 by relicoder.
 
 //#include "config.h"
 
+#define SQLITE_CORE
+
 #define COMPILE_SQLITE_EXTENSIONS_AS_LOADABLE_MODULE 1
 #ifdef __APPLE__ // these functions appear to be missing in VC++
 #define HAVE_ACOSH 1
@@ -1873,12 +1875,19 @@ int RegisterExtensionFunctions(sqlite3 *db){
 }
 
 #ifdef COMPILE_SQLITE_EXTENSIONS_AS_LOADABLE_MODULE
-int sqlite3_extension_init(
+int sqlite3_bonus_init(
     sqlite3 *db, char **pzErrMsg, const sqlite3_api_routines *pApi){
   SQLITE_EXTENSION_INIT2(pApi);
   RegisterExtensionFunctions(db);
   return 0;
 }
+
+void sqlite3_bonus_autoinit()
+{
+	sqlite3_auto_extension( (void(*)(void))sqlite3_bonus_init );
+}
+
+
 #endif /* COMPILE_SQLITE_EXTENSIONS_AS_LOADABLE_MODULE */
 
 map map_make(cmp_func cmp){

@@ -82,6 +82,9 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 						U_premultiplier, Probability->ptr(firstcase),1);
 		} else {
 			for (unsigned a=0;a<Data_CA->nAlts();a++) {
+				if (Probability->size2()<=0){
+					OOPS("IncY Zero");
+				}
 				cblas_dgemv(CblasRowMajor,CblasNoTrans,
 							numberofcases,Data_CA->nVars(),
 							1, 
@@ -101,13 +104,17 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 							Coef_CA->ptr(),1,
 							U_premultiplier, Probability->ptr(c),1);
 			} else {
-				for (unsigned a=0;a<Data_CA->nAlts();a++) 
+				for (unsigned a=0;a<Data_CA->nAlts();a++) {
+					if (Probability->size2()<=0){
+						OOPS("IncY Zero");
+					}
 					cblas_dgemv(CblasRowMajor,CblasNoTrans,
 								1,Data_CA->nVars(),
 								1, 
 								Data_CA->values(c,1)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
 								Coef_CA->ptr(),1, 
 								U_premultiplier, Probability->ptr(c)+a, Probability->size2() );
+				}
 			}
 		}
 	}

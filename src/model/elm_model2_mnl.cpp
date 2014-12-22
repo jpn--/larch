@@ -54,7 +54,9 @@ void elm::Model2::_setUp_MNL()
 //	Params_UtilityCA.resize(Data_UtilityCA->nVars());
 //	Params_UtilityCO.resize(Data_UtilityCO->nVars(),_Data->nAlts());
 	
-	
+	if (_Data->nAlts()<=0) {
+		OOPS("The number of alternatives given in the data is non-positive");
+	}
 		
 	// Allocate Memory	
 	Probability.resize(nCases,_Data->nAlts());
@@ -417,6 +419,7 @@ void elm::Model2::mnl_probability()
 			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
 			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);};
 		#else
+		openblas_set_num_threads(1);
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_mnl_probability, this);
 		#endif

@@ -40,6 +40,7 @@ try:
 		pass
 	from . import logging
 	from . import core
+	core.larch_initialize()
 	from . import exceptions
 	from .db import DB
 	from .core import Model, Parameter
