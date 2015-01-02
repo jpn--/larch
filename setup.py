@@ -297,7 +297,7 @@ if platform.system() == 'Darwin':
 	local_libraries = []
 	local_library_dirs = []
 	local_includedirs = []
-	local_macros = [('I_AM_MAC','1')]
+	local_macros = [('I_AM_MAC','1'), ('SQLITE_ENABLE_RTREE','1'), ]
 	local_extra_compile_args = ['-std=gnu++11', '-w', '-arch', 'i386', '-arch', 'x86_64']# +['-framework', 'Accelerate']
 	local_apsw_compile_args = ['-w']
 	local_extra_link_args =   ['-framework', 'Accelerate']
@@ -311,7 +311,7 @@ elif platform.system() == 'Windows':
 	local_libraries = ['PYTHON34','libopenblas','PYTHON34',]
 	local_library_dirs = ['Z:/Larch/{0}/{1}'.format(*openblas), 'C:\\local\\boost_1_56_0\\lib64-msvc-10.0']
 	local_includedirs = ['./{0}/include'.format(*openblas), 'C:/local/boost_1_56_0' ]
-	local_macros = [('I_AM_WIN','1')]
+	local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
 	local_extra_compile_args = ['/EHsc', '/W0', ]
 	#  for debugging...
 	#	  extra_compile_args=['/Zi' or maybe '/Z7' ?],
@@ -364,7 +364,7 @@ for name, source, exports, extra_postargs, extra_preargs in shared_libs:
 
 	if need_to_update:
 		# Compile into .o files
-		objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG)
+		objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros,)
 		# Create shared library
 		c.link_shared_lib(objects, name, output_dir=libdir, export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
 
@@ -433,7 +433,7 @@ setup(name='larch',
 	  package_data={'larch':['data_warehouse/*.elmdata', 'data_warehouse/*.csv']},
 	  data_files=local_data_files,
 	  install_requires=[
-						"numpy >= 1.9.0",
+						"numpy >= 1.8.1",
 						"pandas >= 0.14.1",
 					],
      )

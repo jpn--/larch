@@ -83,7 +83,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 	def __init__(self, filename=None, readonly=False):
 		import os.path
 		if filename is None:
-			filename="file::memory:?mode=memory"
+			filename="file:larchdb?mode=memory"
 		# Use apsw to open a SQLite connection
 		if readonly:
 			apsw.Connection.__init__(self, filename, flags=apsw.SQLITE_OPEN_URI|apsw.SQLITE_OPEN_READONLY)
@@ -110,7 +110,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		facts = []
 		if self.readonly("main"):
 			facts.append("read only")
-		if self.working_name=="file::memory:?mode=memory":
+		if "mode=memory" in self.working_name:
 			facts.append("in memory")
 		if len(facts)>0:
 			fact = " ["+", ".join(facts)+"]"
@@ -131,7 +131,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		facts = []
 		if self.readonly("main"):
 			facts.append("read only")
-		if self.working_name=="file::memory:?mode=memory":
+		if "mode=memory" in self.working_name:
 			facts.append("in memory")
 		if len(facts)>0:
 			fact = " ["+", ".join(facts)+"]"
@@ -188,8 +188,14 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		raise TypeError('only allows list or dict')
 
 	@staticmethod
-	def Copy(source, destination="file::memory:?mode=memory"):
+	def Copy(source, destination="file:larchdb?mode=memory"):
 		'''Create a copy of a database and link it to a DB object.
+
+		:param source: The source database.
+		:type source:  str
+		:param destination: The destination database.
+		:type destination: str
+		:returns: A DB object with an open connection to the destination DB.
 		
 		It is often desirable to work on a copy of your data, instead of working
 		with the original file. If you data file is not very large and you are 
@@ -197,11 +203,6 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		to copying the entire database into memory first, and then working on it
 		there, instead of reading from disk every time you want data.
 		
-		:param source: The source database.
-		:type source:  str
-		:param destination: The destination database.
-		:type destination: str
-		:returns: A DB object with an open connection to the destination DB.
 		'''
 		d = DB(destination)
 		d.copy_from_db(source)
@@ -242,7 +243,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 	def Example(dataset='MTC'):
 		'''Generate an example data object in memory.
 		
-		ELM comes with a few example data sets, which are used in documentation
+		Larch comes with a few example data sets, which are used in documentation
 		and testing. It is important that you do not edit the original data, so
 		this function copies the data into an in-memory database, which you can
 		freely edit without damaging the original data.
@@ -261,7 +262,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 
 	@staticmethod
 	def CSV_idco(filename, caseid="_rowid_", choice=None, weight="_equal_", tablename="data", savename=None, alts={}, safety=True):
-		'''Creates a new ELM DB based on a CSV data file.
+		'''Creates a new larch DB based on a CSV data file.
 		
 		The input data file should be an idco data file, with the first line containing the column headings.
 		
@@ -279,7 +280,7 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		:param safety:      If true, all alternatives that are chosen, even if not given in *alts*, will be
 							automatically added to the alternatives table.
 		
-		:result:            An ELM DB object
+		:result:            A larch DB object
 		'''
 		eL = logging.getScriber("db")
 		d = DB(filename=savename)
@@ -327,16 +328,17 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		assert( d.qry_alts() == "SELECT * FROM csv_alternatives" )
 		return d
 	
-	def import_csv(self, rawdata, drop_old=False, table="data",
-				   pctDoneCallback=None):
-		'''Imports data into an existing ELM DB.
+	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None):
+		'''Import raw csv or tab-delimited data into SQLite.
 		
-		:param self:        An existing larch.DB object.
 		:param rawdata:     The absolute path to the raw csv or tab delimited data file.
-		:param drop_old:    Bool= drop old data table if it already exists?
 		:param table:       The name of the table into which the data is to be imported
+		:param drop_old:    Bool= drop old data table if it already exists?
+		:param progress_callback: If given, this callback function takes a single integer
+		                    as an argument and is called periodically while loading
+		                    with the current precentage complete.
 		
-		:result headers:    A list of column headers from imported csv file
+		:result:            A list of column headers from the imported csv file
 		'''
 		eL = logging.getScriber("db")
 		eL.debug("Importing Data...")
@@ -368,12 +370,9 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 				if (time.time()-lastlogupdate > 2):
 					eL.info("%i rows imported", num_rows)
 					lastlogupdate = time.time()
-					if pctDoneCallback is not None:
-						pctDoneCallback(int(smartFile.percentread()))
-				if (time.time()-lastscreenupdate > 0.1):
+				if progress_callback is not None and (time.time()-lastscreenupdate > 0.1):
 					lastscreenupdate = time.time()
-					if pctDoneCallback is not None:
-						pctDoneCallback(int(smartFile.percentread()))
+					progress_callback(int(smartFile.percentread()))
 			else:
 				eL.warning("Incorrect Length (have %d, need %d) Data Row: %s",len(i),len(headers),str(i))
 		self.execute("END TRANSACTION;")
@@ -382,20 +381,24 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		eL.info("Imported %i rows to %s", num_rows, table)
 		return headers
 
-	def import_dbf(self, rawdata, drop_old=False, table="data",
-				   pctDoneCallback=None):
-		'''Imports data into an existing ELM DB.
+	def import_dbf(self, rawdata, table="data", drop_old=False):
+		'''Imports data from a DBF file into an existing larch DB.
 			
-			:param self:        An existing larch.DB object.
 			:param rawdata:     The path to the raw DBF data file.
-			:param drop_old:    Bool= drop old data table if it already exists?
 			:param table:       The name of the table into which the data is to be imported
+			:param drop_old:    Bool= drop old data table if it already exists?
 			
-			:result headers:    A list of column headers from imported csv file
+			:result:            A list of column headers from imported csv file
+			
+			Note: this method requires the dbfpy module (available using pip).
 			'''
 		eL = logging.getScriber("db")
 		eL.debug("Importing DBF Data...")
-		from dbfpy import dbf_open
+		try:
+			from dbfpy import dbf_open
+		except ImportError:
+			eL.fatal("importing dbf files requires the dbfpy module (available using pip)")
+			raise
 		dbff = dbf_open(rawdata)
 		headers = dbff.fieldNames()
 		if drop_old: self.drop(table)
@@ -435,17 +438,17 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 
 
 	def import_dataframe(self, rawdataframe, table="data", if_exists='fail'):
-		'''Imports data into an existing ELM DB.
+		'''Imports data from a pandas dataframe into an existing larch DB.
 			
-			:param self:         An existing larch.DB object.
 			:param rawdataframe: An existing pandas dataframe.
-			:param if_exists:    {‘fail’, ‘replace’, ‘append’}, default ‘fail’
-			                     fail: If table exists, do nothing. 
-								 replace: If table exists, drop it, recreate it, and insert data. 
-								 append: If table exists, insert data. Create if does not exist.
 			:param table:        The name of the table into which the data is to be imported
+			:param if_exists:    Should be one of {‘fail’, ‘replace’, ‘append’}. If the table
+								 does not exist this parameter is ignored, otherwise,
+								 *fail*: If table exists, raise a ValueError exception.
+								 *replace*: If table exists, drop it, recreate it, and insert data.
+								 *append*: If table exists, insert data.
 			
-			:result headers:     A list of column headers from imported pandas dataframe
+			:result:             A list of column headers from imported pandas dataframe
 			'''
 		if if_exists not in ('fail', 'replace', 'append'):
 			raise ValueError("'%s' is not valid for if_exists" % if_exists)

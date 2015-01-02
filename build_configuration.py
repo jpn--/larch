@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2007-2014 Jeffrey Newman
+#  Copyright 2007-2015 Jeffrey Newman
 #
 #  This file is part of Larch.
 #
@@ -99,4 +99,4 @@ def write_build_info(build_dir=None, packagename="larch"):
 
 	f.close()
 
-# To update the version, run `git tag -a 2.4a-OCT2014 -m'version 2.4alpha, October 2014'`
+# To update the version, run `git tag -a 3.10a-DEC2014 -m'version 3.0alpha, December 2014'`

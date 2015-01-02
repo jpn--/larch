@@ -55,7 +55,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		DC5FB05819EC5446006F19A0 /* elm_caseindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC719EC542B006F19A0 /* elm_caseindex.cpp */; };
 		DC5FB05919EC5452006F19A0 /* elm_datamatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */; };
 		DC5FB05A19EC5452006F19A0 /* elm_fountain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */; };
 		DC5FB05B19EC5452006F19A0 /* elm_queryset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCD19EC542B006F19A0 /* elm_queryset.cpp */; };
@@ -121,11 +120,7 @@
 		DC5FB0A819EC567C006F19A0 /* sandbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03F19EC542B006F19A0 /* sandbox.cpp */; };
 		DC5FB0A919EC5689006F19A0 /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09919EC55C4006F19A0 /* Python */; };
 		DC5FB0B019EC60D4006F19A0 /* apsw.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
-		DC5FB0B119EC60D7006F19A0 /* libelmsqlhaversine.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC019EC5191006F19A0 /* libelmsqlhaversine.so */; };
 		DC5FB0B219EC60DA006F19A0 /* libelmsqlite.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
-		DC5FB0B319EC60DD006F19A0 /* libelmsqlite3extension.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC219EC5191006F19A0 /* libelmsqlite3extension.so */; };
-		DC5FB0C619EC68B2006F19A0 /* elm_caseindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC719EC542B006F19A0 /* elm_caseindex.cpp */; };
-		DC5FB0C719EC68B2006F19A0 /* elm_caseindex.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFC819EC542B006F19A0 /* elm_caseindex.h */; };
 		DC5FB0C819EC68B2006F19A0 /* elm_datamatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */; };
 		DC5FB0C919EC68B2006F19A0 /* elm_datamatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */; };
 		DC5FB0CA19EC68B2006F19A0 /* elm_fountain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */; };
@@ -305,9 +300,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				DC5FB0B019EC60D4006F19A0 /* apsw.so in CopyFiles */,
-				DC5FB0B119EC60D7006F19A0 /* libelmsqlhaversine.so in CopyFiles */,
 				DC5FB0B219EC60DA006F19A0 /* libelmsqlite.so in CopyFiles */,
-				DC5FB0B319EC60DD006F19A0 /* libelmsqlite3extension.so in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,12 +330,8 @@
 		DC5FAFBA19EC50A3006F19A0 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		DC5FAFBD19EC50A3006F19A0 /* sqlite3_exports.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sqlite3_exports.py; sourceTree = "<group>"; };
 		DC5FAFBE19EC50A3006F19A0 /* sqlite3ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
-		DC5FAFC019EC5191006F19A0 /* libelmsqlhaversine.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libelmsqlhaversine.so; path = "build/lib.macosx-10.6-intel-3.4/larch/libelmsqlhaversine.so"; sourceTree = "<group>"; };
 		DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libelmsqlite.so; path = "build/lib.macosx-10.6-intel-3.4/larch/libelmsqlite.so"; sourceTree = "<group>"; };
-		DC5FAFC219EC5191006F19A0 /* libelmsqlite3extension.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libelmsqlite3extension.so; path = "build/lib.macosx-10.6-intel-3.4/larch/libelmsqlite3extension.so"; sourceTree = "<group>"; };
 		DC5FAFC319EC519F006F19A0 /* apsw.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = apsw.so; path = "build/lib.macosx-10.6-intel-3.4/larch/apsw.so"; sourceTree = "<group>"; };
-		DC5FAFC719EC542B006F19A0 /* elm_caseindex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_caseindex.cpp; sourceTree = "<group>"; };
-		DC5FAFC819EC542B006F19A0 /* elm_caseindex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_caseindex.h; sourceTree = "<group>"; };
 		DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_datamatrix.cpp; sourceTree = "<group>"; };
 		DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_datamatrix.h; sourceTree = "<group>"; };
 		DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_fountain.cpp; sourceTree = "<group>"; };
@@ -412,13 +401,7 @@
 		DC5FB00E19EC542B006F19A0 /* etk_vectors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_vectors.h; sourceTree = "<group>"; };
 		DC5FB00F19EC542B006F19A0 /* etk_workshop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_workshop.cpp; sourceTree = "<group>"; };
 		DC5FB01019EC542B006F19A0 /* etk_workshop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_workshop.h; sourceTree = "<group>"; };
-		DC5FB01219EC542B006F19A0 /* larch_hello.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = larch_hello.cpp; sourceTree = "<group>"; };
-		DC5FB01319EC542B006F19A0 /* larch_hello.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = larch_hello.h; sourceTree = "<group>"; };
-		DC5FB01419EC542B006F19A0 /* larch_hello.i */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c.preprocessed; path = larch_hello.i; sourceTree = "<group>"; };
-		DC5FB01519EC542B006F19A0 /* larch_hello_wrap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = larch_hello_wrap.cpp; sourceTree = "<group>"; };
 		DC5FB01619EC542B006F19A0 /* larch_portable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = larch_portable.h; sourceTree = "<group>"; };
-		DC5FB01719EC542B006F19A0 /* main.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cxx; sourceTree = "<group>"; };
-		DC5FB01819EC542B006F19A0 /* math_test.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = math_test.cxx; sourceTree = "<group>"; };
 		DC5FB01A19EC542B006F19A0 /* elm_calculations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_calculations.cpp; sourceTree = "<group>"; };
 		DC5FB01B19EC542B006F19A0 /* elm_calculations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_calculations.h; sourceTree = "<group>"; };
 		DC5FB01C19EC542B006F19A0 /* elm_inputstorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_inputstorage.cpp; sourceTree = "<group>"; };
@@ -483,6 +466,7 @@
 		DC739FF619EF029A003F4597 /* larch */ = {isa = PBXFileReference; lastKnownFileType = text; path = larch; sourceTree = "<group>"; };
 		DC95D35519EC83180042F408 /* setup_apsw.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = setup_apsw.py; sourceTree = "<group>"; };
 		DC95D35919ED9D330042F408 /* elmcore_wrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = elmcore_wrap.cpp; sourceTree = "<group>"; };
+		DC9FF3541A4DB88A000AAF47 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
 		DCECBCA819CB4F5F001B673E /* _core */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = _core; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCECBCBD19CB76AB001B673E /* setup.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
 		DCECBCC219CC8C97001B673E /* windows_build.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = windows_build.bat; sourceTree = "<group>"; };
@@ -564,9 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				DC5FAFC319EC519F006F19A0 /* apsw.so */,
-				DC5FAFC019EC5191006F19A0 /* libelmsqlhaversine.so */,
 				DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */,
-				DC5FAFC219EC5191006F19A0 /* libelmsqlite3extension.so */,
 			);
 			name = internal_libraries;
 			sourceTree = "<group>";
@@ -576,13 +558,7 @@
 			children = (
 				DC5FAFC519EC542B006F19A0 /* data */,
 				DC5FAFDB19EC542B006F19A0 /* etk */,
-				DC5FB01219EC542B006F19A0 /* larch_hello.cpp */,
-				DC5FB01319EC542B006F19A0 /* larch_hello.h */,
-				DC5FB01419EC542B006F19A0 /* larch_hello.i */,
-				DC5FB01519EC542B006F19A0 /* larch_hello_wrap.cpp */,
 				DC5FB01619EC542B006F19A0 /* larch_portable.h */,
-				DC5FB01719EC542B006F19A0 /* main.cxx */,
-				DC5FB01819EC542B006F19A0 /* math_test.cxx */,
 				DC5FB01919EC542B006F19A0 /* model */,
 				DC5FB04119EC542B006F19A0 /* sherpa */,
 				DC5FB04A19EC542B006F19A0 /* swig */,
@@ -597,8 +573,6 @@
 			children = (
 				DC6DD3B61A1AB8B9005F0E42 /* elm_darray.cpp */,
 				DC6DD3B71A1AB8B9005F0E42 /* elm_darray.h */,
-				DC5FAFC719EC542B006F19A0 /* elm_caseindex.cpp */,
-				DC5FAFC819EC542B006F19A0 /* elm_caseindex.h */,
 				DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */,
 				DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */,
 				DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */,
@@ -793,6 +767,7 @@
 				DC95D35519EC83180042F408 /* setup_apsw.py */,
 				DC5FAF9319EC2B8E006F19A0 /* build_configuration.py */,
 				DCECBCC219CC8C97001B673E /* windows_build.bat */,
+				DC9FF3541A4DB88A000AAF47 /* doc */,
 				DC739FF519EF029A003F4597 /* bin */,
 				DC5FAF9F19EC50A3006F19A0 /* sqlite */,
 				DC5FB03E19EC542B006F19A0 /* sandbox */,
@@ -847,7 +822,6 @@
 				DC5FB11C19EC68C4006F19A0 /* elm_names.h in Headers */,
 				DC5FB0C919EC68B2006F19A0 /* elm_datamatrix.h in Headers */,
 				DC5FB12D19EC68C4006F19A0 /* elm_workshop_nl_gradient.h in Headers */,
-				DC5FB0C719EC68B2006F19A0 /* elm_caseindex.h in Headers */,
 				DC5FB0DA19EC68BA006F19A0 /* etk_arraymath.h in Headers */,
 				DC5FB0D519EC68B2006F19A0 /* elm_sql_facet.h in Headers */,
 				DC5FB13B19EC68CF006F19A0 /* sherpa_pack.h in Headers */,
@@ -1021,7 +995,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install";
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/sphinx-build $PROJECT_DIR/doc $PROJECT_DIR/build/doc";
 		};
 		DC5FB0B419EC616C006F19A0 /* Sync data_warehouse and raw_py */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1125,7 +1099,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\nswig -version \n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py build_ext\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install --home=./playground\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 ./playground/play.py";
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\nswig -version \nPYTHONPATH=\"${PYTHONPATH}:$PROJECT_DIR/playground/lib/python\"\nexport PYTHONPATH\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py build_ext\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install --home=./playground\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 ./playground/play.py";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1172,7 +1146,6 @@
 				DC5FB0CE19EC68B2006F19A0 /* elm_queryset_simpleco.cpp in Sources */,
 				DC5FB0D219EC68B2006F19A0 /* elm_sql_connect.cpp in Sources */,
 				DC5FB0DF19EC68BA006F19A0 /* etk_cat.cpp in Sources */,
-				DC5FB0C619EC68B2006F19A0 /* elm_caseindex.cpp in Sources */,
 				DC5FB11619EC68C4006F19A0 /* elm_model2_mnl.cpp in Sources */,
 				DC5FB11819EC68C4006F19A0 /* elm_model2_options.cpp in Sources */,
 				DC5FB0C819EC68B2006F19A0 /* elm_datamatrix.cpp in Sources */,
@@ -1240,7 +1213,6 @@
 				DC5FB05C19EC5452006F19A0 /* elm_queryset_simpleco.cpp in Sources */,
 				DC5FB05E19EC5452006F19A0 /* elm_sql_connect.cpp in Sources */,
 				DC5FB06419EC5475006F19A0 /* etk_cat.cpp in Sources */,
-				DC5FB05819EC5446006F19A0 /* elm_caseindex.cpp in Sources */,
 				DC5FB07E19EC548D006F19A0 /* elm_model2_mnl.cpp in Sources */,
 				DC5FB08019EC548D006F19A0 /* elm_model2_options.cpp in Sources */,
 				DC5FB05919EC5452006F19A0 /* elm_datamatrix.cpp in Sources */,
@@ -1605,6 +1577,7 @@
 				DC4F33B01A43958500895017 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DC5FAF9519EC2EF4006F19A0 /* Build configuration list for PBXAggregateTarget "distutils global" */ = {
 			isa = XCConfigurationList;
