@@ -27,7 +27,7 @@ rst_epilog = """
 .. |sqlite_version| replace:: %(sqlite)s
 .. |numpy_version| replace:: %(numpy)s
 .. |scipy_version| replace:: %(scipy)s
-""" %
+""" % larch_versions
 
 # -- General configuration -----------------------------------------------------
 
