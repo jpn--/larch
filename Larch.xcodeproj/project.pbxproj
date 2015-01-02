@@ -1,0 +1,1648 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		DC4F33AE1A43958500895017 /* bdist_wheel */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DC4F33B11A43958500895017 /* Build configuration list for PBXAggregateTarget "bdist_wheel" */;
+			buildPhases = (
+				DC4F33B21A43959C00895017 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = bdist_wheel;
+			productName = bdist_wheel;
+		};
+		DC5FAF9419EC2EF4006F19A0 /* distutils global */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DC5FAF9519EC2EF4006F19A0 /* Build configuration list for PBXAggregateTarget "distutils global" */;
+			buildPhases = (
+				DC5FAF9A19EC2F02006F19A0 /* ShellScript */,
+			);
+			dependencies = (
+				DC5FAF9919EC2EFB006F19A0 /* PBXTargetDependency */,
+			);
+			name = "distutils global";
+			productName = "distutils global";
+		};
+		DC5FAF9B19EC4FD0006F19A0 /* distutils_test */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DC5FAF9C19EC4FD0006F19A0 /* Build configuration list for PBXAggregateTarget "distutils_test" */;
+			buildPhases = (
+			);
+			dependencies = (
+				DC95D35819ED87720042F408 /* PBXTargetDependency */,
+			);
+			name = distutils_test;
+			productName = distutils_test;
+		};
+		DCECBCC419CC9315001B673E /* distutils_install_local */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DCECBCC519CC9315001B673E /* Build configuration list for PBXAggregateTarget "distutils_install_local" */;
+			buildPhases = (
+				DCECBCCA19CC9321001B673E /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = distutils_install_local;
+			productName = larch_local;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		DC5FB05919EC5452006F19A0 /* elm_datamatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */; };
+		DC5FB05A19EC5452006F19A0 /* elm_fountain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */; };
+		DC5FB05B19EC5452006F19A0 /* elm_queryset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCD19EC542B006F19A0 /* elm_queryset.cpp */; };
+		DC5FB05C19EC5452006F19A0 /* elm_queryset_simpleco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCF19EC542B006F19A0 /* elm_queryset_simpleco.cpp */; };
+		DC5FB05D19EC5452006F19A0 /* elm_queryset_twotable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD119EC542B006F19A0 /* elm_queryset_twotable.cpp */; };
+		DC5FB05E19EC5452006F19A0 /* elm_sql_connect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD319EC542B006F19A0 /* elm_sql_connect.cpp */; };
+		DC5FB05F19EC5452006F19A0 /* elm_sql_facet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD519EC542B006F19A0 /* elm_sql_facet.cpp */; };
+		DC5FB06019EC5452006F19A0 /* elm_sql_scrape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD719EC542B006F19A0 /* elm_sql_scrape.cpp */; };
+		DC5FB06119EC5475006F19A0 /* etk_arraymath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFDD19EC542B006F19A0 /* etk_arraymath.cpp */; };
+		DC5FB06219EC5475006F19A0 /* etk_autoindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFDF19EC542B006F19A0 /* etk_autoindex.cpp */; };
+		DC5FB06319EC5475006F19A0 /* etk_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE119EC542B006F19A0 /* etk_basic.cpp */; };
+		DC5FB06419EC5475006F19A0 /* etk_cat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE319EC542B006F19A0 /* etk_cat.cpp */; };
+		DC5FB06519EC5475006F19A0 /* etk_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE519EC542B006F19A0 /* etk_exception.cpp */; };
+		DC5FB06619EC5475006F19A0 /* etk_index.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE719EC542B006F19A0 /* etk_index.cpp */; };
+		DC5FB06719EC5475006F19A0 /* etk_logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE919EC542B006F19A0 /* etk_logger.cpp */; };
+		DC5FB06819EC5475006F19A0 /* etk_math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFEB19EC542B006F19A0 /* etk_math.cpp */; };
+		DC5FB06919EC5475006F19A0 /* etk_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFED19EC542B006F19A0 /* etk_memory.cpp */; };
+		DC5FB06A19EC5475006F19A0 /* etk_messenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFEF19EC542B006F19A0 /* etk_messenger.cpp */; };
+		DC5FB06B19EC5475006F19A0 /* etk_ndarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF119EC542B006F19A0 /* etk_ndarray.cpp */; };
+		DC5FB06C19EC5475006F19A0 /* etk_ndarray_bool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF319EC542B006F19A0 /* etk_ndarray_bool.cpp */; };
+		DC5FB06D19EC5475006F19A0 /* etk_ndarray_func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF519EC542B006F19A0 /* etk_ndarray_func.cpp */; };
+		DC5FB06E19EC5475006F19A0 /* etk_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF719EC542B006F19A0 /* etk_object.cpp */; };
+		DC5FB06F19EC5475006F19A0 /* etk_pydict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF919EC542B006F19A0 /* etk_pydict.cpp */; };
+		DC5FB07019EC5475006F19A0 /* etk_python.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFB19EC542B006F19A0 /* etk_python.cpp */; };
+		DC5FB07119EC5475006F19A0 /* etk_random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFD19EC542B006F19A0 /* etk_random.cpp */; };
+		DC5FB07219EC5475006F19A0 /* etk_refcount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFF19EC542B006F19A0 /* etk_refcount.cpp */; };
+		DC5FB07319EC5475006F19A0 /* etk_sqlite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00219EC542B006F19A0 /* etk_sqlite.cpp */; };
+		DC5FB07419EC5475006F19A0 /* etk_test_swig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00519EC542B006F19A0 /* etk_test_swig.cpp */; };
+		DC5FB07519EC5475006F19A0 /* etk_thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00719EC542B006F19A0 /* etk_thread.cpp */; };
+		DC5FB07619EC5475006F19A0 /* etk_time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00B19EC542B006F19A0 /* etk_time.cpp */; };
+		DC5FB07719EC5475006F19A0 /* etk_vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00D19EC542B006F19A0 /* etk_vectors.cpp */; };
+		DC5FB07819EC5475006F19A0 /* etk_workshop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00F19EC542B006F19A0 /* etk_workshop.cpp */; };
+		DC5FB07919EC548D006F19A0 /* elm_calculations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01A19EC542B006F19A0 /* elm_calculations.cpp */; };
+		DC5FB07A19EC548D006F19A0 /* elm_inputstorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01C19EC542B006F19A0 /* elm_inputstorage.cpp */; };
+		DC5FB07B19EC548D006F19A0 /* elm_model2_availability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01F19EC542B006F19A0 /* elm_model2_availability.cpp */; };
+		DC5FB07C19EC548D006F19A0 /* elm_model2_choice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02019EC542B006F19A0 /* elm_model2_choice.cpp */; };
+		DC5FB07D19EC548D006F19A0 /* elm_model2_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02219EC542B006F19A0 /* elm_model2_generic.cpp */; };
+		DC5FB07E19EC548D006F19A0 /* elm_model2_mnl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02319EC542B006F19A0 /* elm_model2_mnl.cpp */; };
+		DC5FB07F19EC548D006F19A0 /* elm_model2_nl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02419EC542B006F19A0 /* elm_model2_nl.cpp */; };
+		DC5FB08019EC548D006F19A0 /* elm_model2_options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02519EC542B006F19A0 /* elm_model2_options.cpp */; };
+		DC5FB08119EC548D006F19A0 /* elm_model2_setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02719EC542B006F19A0 /* elm_model2_setup.cpp */; };
+		DC5FB08219EC548D006F19A0 /* elm_names.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02819EC542B006F19A0 /* elm_names.cpp */; };
+		DC5FB08319EC548D006F19A0 /* elm_packets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02A19EC542B006F19A0 /* elm_packets.cpp */; };
+		DC5FB08419EC548D006F19A0 /* elm_parameter2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02C19EC542B006F19A0 /* elm_parameter2.cpp */; };
+		DC5FB08519EC548D006F19A0 /* elm_parameterlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02E19EC542B006F19A0 /* elm_parameterlist.cpp */; };
+		DC5FB08619EC548D006F19A0 /* elm_runstats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03019EC542B006F19A0 /* elm_runstats.cpp */; };
+		DC5FB08719EC548D006F19A0 /* elm_workshop_loglike.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03219EC542B006F19A0 /* elm_workshop_loglike.cpp */; };
+		DC5FB08819EC548D006F19A0 /* elm_workshop_mnl_gradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03419EC542B006F19A0 /* elm_workshop_mnl_gradient.cpp */; };
+		DC5FB08919EC548D006F19A0 /* elm_workshop_mnl_gradient2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03619EC542B006F19A0 /* elm_workshop_mnl_gradient2.cpp */; };
+		DC5FB08A19EC548D006F19A0 /* elm_workshop_mnl_prob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03719EC542B006F19A0 /* elm_workshop_mnl_prob.cpp */; };
+		DC5FB08B19EC548D006F19A0 /* elm_workshop_nl_gradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03919EC542B006F19A0 /* elm_workshop_nl_gradient.cpp */; };
+		DC5FB08C19EC548D006F19A0 /* elm_workshop_nl_probability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03B19EC542B006F19A0 /* elm_workshop_nl_probability.cpp */; };
+		DC5FB08D19EC5495006F19A0 /* sherpa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04219EC542B006F19A0 /* sherpa.cpp */; };
+		DC5FB08E19EC5495006F19A0 /* sherpa_freedom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04419EC542B006F19A0 /* sherpa_freedom.cpp */; };
+		DC5FB08F19EC5495006F19A0 /* sherpa_mountaineer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04619EC542B006F19A0 /* sherpa_mountaineer.cpp */; };
+		DC5FB09019EC5495006F19A0 /* sherpa_pack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04819EC542B006F19A0 /* sherpa_pack.cpp */; };
+		DC5FB09319EC54AA006F19A0 /* elm_cellcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB05019EC542B006F19A0 /* elm_cellcode.cpp */; };
+		DC5FB09419EC54AA006F19A0 /* elm_vascular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB05219EC542B006F19A0 /* elm_vascular.cpp */; };
+		DC5FB09519EC5504006F19A0 /* libelmsqlite.so in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
+		DC5FB09619EC5506006F19A0 /* apsw.so in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
+		DC5FB09A19EC55C4006F19A0 /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09919EC55C4006F19A0 /* Python */; };
+		DC5FB09C19EC55D8006F19A0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */; };
+		DC5FB0A819EC567C006F19A0 /* sandbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03F19EC542B006F19A0 /* sandbox.cpp */; };
+		DC5FB0A919EC5689006F19A0 /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09919EC55C4006F19A0 /* Python */; };
+		DC5FB0B019EC60D4006F19A0 /* apsw.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
+		DC5FB0B219EC60DA006F19A0 /* libelmsqlite.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
+		DC5FB0C819EC68B2006F19A0 /* elm_datamatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */; };
+		DC5FB0C919EC68B2006F19A0 /* elm_datamatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */; };
+		DC5FB0CA19EC68B2006F19A0 /* elm_fountain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */; };
+		DC5FB0CB19EC68B2006F19A0 /* elm_fountain.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFCC19EC542B006F19A0 /* elm_fountain.h */; };
+		DC5FB0CC19EC68B2006F19A0 /* elm_queryset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCD19EC542B006F19A0 /* elm_queryset.cpp */; };
+		DC5FB0CD19EC68B2006F19A0 /* elm_queryset.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFCE19EC542B006F19A0 /* elm_queryset.h */; };
+		DC5FB0CE19EC68B2006F19A0 /* elm_queryset_simpleco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFCF19EC542B006F19A0 /* elm_queryset_simpleco.cpp */; };
+		DC5FB0CF19EC68B2006F19A0 /* elm_queryset_simpleco.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFD019EC542B006F19A0 /* elm_queryset_simpleco.h */; };
+		DC5FB0D019EC68B2006F19A0 /* elm_queryset_twotable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD119EC542B006F19A0 /* elm_queryset_twotable.cpp */; };
+		DC5FB0D119EC68B2006F19A0 /* elm_queryset_twotable.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFD219EC542B006F19A0 /* elm_queryset_twotable.h */; };
+		DC5FB0D219EC68B2006F19A0 /* elm_sql_connect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD319EC542B006F19A0 /* elm_sql_connect.cpp */; };
+		DC5FB0D319EC68B2006F19A0 /* elm_sql_connect.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFD419EC542B006F19A0 /* elm_sql_connect.h */; };
+		DC5FB0D419EC68B2006F19A0 /* elm_sql_facet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD519EC542B006F19A0 /* elm_sql_facet.cpp */; };
+		DC5FB0D519EC68B2006F19A0 /* elm_sql_facet.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFD619EC542B006F19A0 /* elm_sql_facet.h */; };
+		DC5FB0D619EC68B2006F19A0 /* elm_sql_scrape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFD719EC542B006F19A0 /* elm_sql_scrape.cpp */; };
+		DC5FB0D719EC68B2006F19A0 /* elm_sql_scrape.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFD819EC542B006F19A0 /* elm_sql_scrape.h */; };
+		DC5FB0D819EC68BA006F19A0 /* etk.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFDC19EC542B006F19A0 /* etk.h */; };
+		DC5FB0D919EC68BA006F19A0 /* etk_arraymath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFDD19EC542B006F19A0 /* etk_arraymath.cpp */; };
+		DC5FB0DA19EC68BA006F19A0 /* etk_arraymath.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFDE19EC542B006F19A0 /* etk_arraymath.h */; };
+		DC5FB0DB19EC68BA006F19A0 /* etk_autoindex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFDF19EC542B006F19A0 /* etk_autoindex.cpp */; };
+		DC5FB0DC19EC68BA006F19A0 /* etk_autoindex.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFE019EC542B006F19A0 /* etk_autoindex.h */; };
+		DC5FB0DD19EC68BA006F19A0 /* etk_basic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE119EC542B006F19A0 /* etk_basic.cpp */; };
+		DC5FB0DE19EC68BA006F19A0 /* etk_basic.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFE219EC542B006F19A0 /* etk_basic.h */; };
+		DC5FB0DF19EC68BA006F19A0 /* etk_cat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE319EC542B006F19A0 /* etk_cat.cpp */; };
+		DC5FB0E019EC68BA006F19A0 /* etk_cat.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFE419EC542B006F19A0 /* etk_cat.h */; };
+		DC5FB0E119EC68BA006F19A0 /* etk_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE519EC542B006F19A0 /* etk_exception.cpp */; };
+		DC5FB0E219EC68BA006F19A0 /* etk_exception.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFE619EC542B006F19A0 /* etk_exception.h */; };
+		DC5FB0E319EC68BA006F19A0 /* etk_index.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE719EC542B006F19A0 /* etk_index.cpp */; };
+		DC5FB0E419EC68BA006F19A0 /* etk_index.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFE819EC542B006F19A0 /* etk_index.h */; };
+		DC5FB0E519EC68BA006F19A0 /* etk_logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFE919EC542B006F19A0 /* etk_logger.cpp */; };
+		DC5FB0E619EC68BA006F19A0 /* etk_logger.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFEA19EC542B006F19A0 /* etk_logger.h */; };
+		DC5FB0E719EC68BA006F19A0 /* etk_math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFEB19EC542B006F19A0 /* etk_math.cpp */; };
+		DC5FB0E819EC68BA006F19A0 /* etk_math.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFEC19EC542B006F19A0 /* etk_math.h */; };
+		DC5FB0E919EC68BA006F19A0 /* etk_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFED19EC542B006F19A0 /* etk_memory.cpp */; };
+		DC5FB0EA19EC68BA006F19A0 /* etk_memory.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFEE19EC542B006F19A0 /* etk_memory.h */; };
+		DC5FB0EB19EC68BA006F19A0 /* etk_messenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFEF19EC542B006F19A0 /* etk_messenger.cpp */; };
+		DC5FB0EC19EC68BA006F19A0 /* etk_messenger.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFF019EC542B006F19A0 /* etk_messenger.h */; };
+		DC5FB0ED19EC68BA006F19A0 /* etk_ndarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF119EC542B006F19A0 /* etk_ndarray.cpp */; };
+		DC5FB0EE19EC68BA006F19A0 /* etk_ndarray.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFF219EC542B006F19A0 /* etk_ndarray.h */; };
+		DC5FB0EF19EC68BA006F19A0 /* etk_ndarray_bool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF319EC542B006F19A0 /* etk_ndarray_bool.cpp */; };
+		DC5FB0F019EC68BA006F19A0 /* etk_ndarray_bool.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFF419EC542B006F19A0 /* etk_ndarray_bool.h */; };
+		DC5FB0F119EC68BA006F19A0 /* etk_ndarray_func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF519EC542B006F19A0 /* etk_ndarray_func.cpp */; };
+		DC5FB0F219EC68BA006F19A0 /* etk_ndarray_func.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFF619EC542B006F19A0 /* etk_ndarray_func.h */; };
+		DC5FB0F319EC68BA006F19A0 /* etk_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF719EC542B006F19A0 /* etk_object.cpp */; };
+		DC5FB0F419EC68BA006F19A0 /* etk_object.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFF819EC542B006F19A0 /* etk_object.h */; };
+		DC5FB0F519EC68BA006F19A0 /* etk_pydict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFF919EC542B006F19A0 /* etk_pydict.cpp */; };
+		DC5FB0F619EC68BA006F19A0 /* etk_pydict.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFFA19EC542B006F19A0 /* etk_pydict.h */; };
+		DC5FB0F719EC68BA006F19A0 /* etk_python.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFB19EC542B006F19A0 /* etk_python.cpp */; };
+		DC5FB0F819EC68BA006F19A0 /* etk_python.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFFC19EC542B006F19A0 /* etk_python.h */; };
+		DC5FB0F919EC68BA006F19A0 /* etk_random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFD19EC542B006F19A0 /* etk_random.cpp */; };
+		DC5FB0FA19EC68BA006F19A0 /* etk_random.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FAFFE19EC542B006F19A0 /* etk_random.h */; };
+		DC5FB0FB19EC68BA006F19A0 /* etk_refcount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FAFFF19EC542B006F19A0 /* etk_refcount.cpp */; };
+		DC5FB0FC19EC68BA006F19A0 /* etk_refcount.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00019EC542B006F19A0 /* etk_refcount.h */; };
+		DC5FB0FD19EC68BA006F19A0 /* etk_resultcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00119EC542B006F19A0 /* etk_resultcodes.h */; };
+		DC5FB0FE19EC68BA006F19A0 /* etk_sqlite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00219EC542B006F19A0 /* etk_sqlite.cpp */; };
+		DC5FB0FF19EC68BA006F19A0 /* etk_sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00319EC542B006F19A0 /* etk_sqlite.h */; };
+		DC5FB10019EC68BA006F19A0 /* etk_string.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00419EC542B006F19A0 /* etk_string.h */; };
+		DC5FB10119EC68BA006F19A0 /* etk_test_swig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00519EC542B006F19A0 /* etk_test_swig.cpp */; };
+		DC5FB10219EC68BA006F19A0 /* etk_test_swig.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00619EC542B006F19A0 /* etk_test_swig.h */; };
+		DC5FB10319EC68BA006F19A0 /* etk_thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00719EC542B006F19A0 /* etk_thread.cpp */; };
+		DC5FB10419EC68BA006F19A0 /* etk_thread.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00819EC542B006F19A0 /* etk_thread.h */; };
+		DC5FB10519EC68BA006F19A0 /* etk_thread_apple.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00919EC542B006F19A0 /* etk_thread_apple.h */; };
+		DC5FB10619EC68BA006F19A0 /* etk_thread_windows.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00A19EC542B006F19A0 /* etk_thread_windows.h */; };
+		DC5FB10719EC68BA006F19A0 /* etk_time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00B19EC542B006F19A0 /* etk_time.cpp */; };
+		DC5FB10819EC68BA006F19A0 /* etk_time.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00C19EC542B006F19A0 /* etk_time.h */; };
+		DC5FB10919EC68BA006F19A0 /* etk_vectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00D19EC542B006F19A0 /* etk_vectors.cpp */; };
+		DC5FB10A19EC68BA006F19A0 /* etk_vectors.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB00E19EC542B006F19A0 /* etk_vectors.h */; };
+		DC5FB10B19EC68BA006F19A0 /* etk_workshop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB00F19EC542B006F19A0 /* etk_workshop.cpp */; };
+		DC5FB10C19EC68BA006F19A0 /* etk_workshop.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB01019EC542B006F19A0 /* etk_workshop.h */; };
+		DC5FB10D19EC68C4006F19A0 /* elm_calculations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01A19EC542B006F19A0 /* elm_calculations.cpp */; };
+		DC5FB10E19EC68C4006F19A0 /* elm_calculations.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB01B19EC542B006F19A0 /* elm_calculations.h */; };
+		DC5FB10F19EC68C4006F19A0 /* elm_inputstorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01C19EC542B006F19A0 /* elm_inputstorage.cpp */; };
+		DC5FB11019EC68C4006F19A0 /* elm_inputstorage.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB01D19EC542B006F19A0 /* elm_inputstorage.h */; };
+		DC5FB11119EC68C4006F19A0 /* elm_model2.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB01E19EC542B006F19A0 /* elm_model2.h */; };
+		DC5FB11219EC68C4006F19A0 /* elm_model2_availability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB01F19EC542B006F19A0 /* elm_model2_availability.cpp */; };
+		DC5FB11319EC68C4006F19A0 /* elm_model2_choice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02019EC542B006F19A0 /* elm_model2_choice.cpp */; };
+		DC5FB11419EC68C4006F19A0 /* elm_model2_extend.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02119EC542B006F19A0 /* elm_model2_extend.h */; };
+		DC5FB11519EC68C4006F19A0 /* elm_model2_generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02219EC542B006F19A0 /* elm_model2_generic.cpp */; };
+		DC5FB11619EC68C4006F19A0 /* elm_model2_mnl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02319EC542B006F19A0 /* elm_model2_mnl.cpp */; };
+		DC5FB11719EC68C4006F19A0 /* elm_model2_nl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02419EC542B006F19A0 /* elm_model2_nl.cpp */; };
+		DC5FB11819EC68C4006F19A0 /* elm_model2_options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02519EC542B006F19A0 /* elm_model2_options.cpp */; };
+		DC5FB11919EC68C4006F19A0 /* elm_model2_options.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02619EC542B006F19A0 /* elm_model2_options.h */; };
+		DC5FB11A19EC68C4006F19A0 /* elm_model2_setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02719EC542B006F19A0 /* elm_model2_setup.cpp */; };
+		DC5FB11B19EC68C4006F19A0 /* elm_names.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02819EC542B006F19A0 /* elm_names.cpp */; };
+		DC5FB11C19EC68C4006F19A0 /* elm_names.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02919EC542B006F19A0 /* elm_names.h */; };
+		DC5FB11D19EC68C4006F19A0 /* elm_packets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02A19EC542B006F19A0 /* elm_packets.cpp */; };
+		DC5FB11E19EC68C4006F19A0 /* elm_packets.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02B19EC542B006F19A0 /* elm_packets.h */; };
+		DC5FB11F19EC68C4006F19A0 /* elm_parameter2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02C19EC542B006F19A0 /* elm_parameter2.cpp */; };
+		DC5FB12019EC68C4006F19A0 /* elm_parameter2.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02D19EC542B006F19A0 /* elm_parameter2.h */; };
+		DC5FB12119EC68C4006F19A0 /* elm_parameterlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB02E19EC542B006F19A0 /* elm_parameterlist.cpp */; };
+		DC5FB12219EC68C4006F19A0 /* elm_parameterlist.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB02F19EC542B006F19A0 /* elm_parameterlist.h */; };
+		DC5FB12319EC68C4006F19A0 /* elm_runstats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03019EC542B006F19A0 /* elm_runstats.cpp */; };
+		DC5FB12419EC68C4006F19A0 /* elm_runstats.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03119EC542B006F19A0 /* elm_runstats.h */; };
+		DC5FB12519EC68C4006F19A0 /* elm_workshop_loglike.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03219EC542B006F19A0 /* elm_workshop_loglike.cpp */; };
+		DC5FB12619EC68C4006F19A0 /* elm_workshop_loglike.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03319EC542B006F19A0 /* elm_workshop_loglike.h */; };
+		DC5FB12719EC68C4006F19A0 /* elm_workshop_mnl_gradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03419EC542B006F19A0 /* elm_workshop_mnl_gradient.cpp */; };
+		DC5FB12819EC68C4006F19A0 /* elm_workshop_mnl_gradient.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03519EC542B006F19A0 /* elm_workshop_mnl_gradient.h */; };
+		DC5FB12919EC68C4006F19A0 /* elm_workshop_mnl_gradient2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03619EC542B006F19A0 /* elm_workshop_mnl_gradient2.cpp */; };
+		DC5FB12A19EC68C4006F19A0 /* elm_workshop_mnl_prob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03719EC542B006F19A0 /* elm_workshop_mnl_prob.cpp */; };
+		DC5FB12B19EC68C4006F19A0 /* elm_workshop_mnl_prob.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03819EC542B006F19A0 /* elm_workshop_mnl_prob.h */; };
+		DC5FB12C19EC68C4006F19A0 /* elm_workshop_nl_gradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03919EC542B006F19A0 /* elm_workshop_nl_gradient.cpp */; };
+		DC5FB12D19EC68C4006F19A0 /* elm_workshop_nl_gradient.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03A19EC542B006F19A0 /* elm_workshop_nl_gradient.h */; };
+		DC5FB12E19EC68C4006F19A0 /* elm_workshop_nl_probability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB03B19EC542B006F19A0 /* elm_workshop_nl_probability.cpp */; };
+		DC5FB12F19EC68C4006F19A0 /* elm_workshop_nl_probability.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB03C19EC542B006F19A0 /* elm_workshop_nl_probability.h */; };
+		DC5FB13019EC68C8006F19A0 /* elm_cellcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB05019EC542B006F19A0 /* elm_cellcode.cpp */; };
+		DC5FB13119EC68C8006F19A0 /* elm_cellcode.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB05119EC542B006F19A0 /* elm_cellcode.h */; };
+		DC5FB13219EC68C8006F19A0 /* elm_vascular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB05219EC542B006F19A0 /* elm_vascular.cpp */; };
+		DC5FB13319EC68C8006F19A0 /* elm_vascular.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB05319EC542B006F19A0 /* elm_vascular.h */; };
+		DC5FB13419EC68CF006F19A0 /* sherpa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04219EC542B006F19A0 /* sherpa.cpp */; };
+		DC5FB13519EC68CF006F19A0 /* sherpa.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB04319EC542B006F19A0 /* sherpa.h */; };
+		DC5FB13619EC68CF006F19A0 /* sherpa_freedom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04419EC542B006F19A0 /* sherpa_freedom.cpp */; };
+		DC5FB13719EC68CF006F19A0 /* sherpa_freedom.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB04519EC542B006F19A0 /* sherpa_freedom.h */; };
+		DC5FB13819EC68CF006F19A0 /* sherpa_mountaineer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04619EC542B006F19A0 /* sherpa_mountaineer.cpp */; };
+		DC5FB13919EC68CF006F19A0 /* sherpa_mountaineer.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB04719EC542B006F19A0 /* sherpa_mountaineer.h */; };
+		DC5FB13A19EC68CF006F19A0 /* sherpa_pack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC5FB04819EC542B006F19A0 /* sherpa_pack.cpp */; };
+		DC5FB13B19EC68CF006F19A0 /* sherpa_pack.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5FB04919EC542B006F19A0 /* sherpa_pack.h */; };
+		DC5FB13D19EC69C0006F19A0 /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09919EC55C4006F19A0 /* Python */; };
+		DC5FB13E19EC69C7006F19A0 /* apsw.so in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
+		DC5FB13F19EC69CA006F19A0 /* libelmsqlite.so in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
+		DC5FB14019EC69DC006F19A0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */; };
+		DC5FB14419EC6A4D006F19A0 /* apsw.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC319EC519F006F19A0 /* apsw.so */; };
+		DC5FB14619EC6A51006F19A0 /* libelmsqlite.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */; };
+		DC6DD3B81A1AB8B9005F0E42 /* elm_darray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC6DD3B61A1AB8B9005F0E42 /* elm_darray.cpp */; };
+		DC6DD3B91A1AB8B9005F0E42 /* elm_darray.h in Headers */ = {isa = PBXBuildFile; fileRef = DC6DD3B71A1AB8B9005F0E42 /* elm_darray.h */; };
+		DC95D35A19ED9D330042F408 /* elmcore_wrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC95D35919ED9D330042F408 /* elmcore_wrap.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DC5FAF9819EC2EFB006F19A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCECBCA019CB4F5F001B673E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCECBCC419CC9315001B673E;
+			remoteInfo = distutils_install_local;
+		};
+		DC5FB14119EC69F2006F19A0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCECBCA019CB4F5F001B673E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC5FB0BA19EC671E006F19A0;
+			remoteInfo = core;
+		};
+		DC95D35719ED87720042F408 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DCECBCA019CB4F5F001B673E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC5FAF9419EC2EF4006F19A0;
+			remoteInfo = "distutils global";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC5FB09F19EC5671006F19A0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		DC5FB14319EC6A43006F19A0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				DC5FB14419EC6A4D006F19A0 /* apsw.so in CopyFiles */,
+				DC5FB14619EC6A51006F19A0 /* libelmsqlite.so in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCECBCA619CB4F5F001B673E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = larch;
+			dstSubfolderSpec = 16;
+			files = (
+				DC5FB0B019EC60D4006F19A0 /* apsw.so in CopyFiles */,
+				DC5FB0B219EC60DA006F19A0 /* libelmsqlite.so in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		DC5FAF9319EC2B8E006F19A0 /* build_configuration.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = build_configuration.py; sourceTree = "<group>"; };
+		DC5FAFA119EC50A3006F19A0 /* apsw.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = apsw.c; sourceTree = "<group>"; };
+		DC5FAFA219EC50A3006F19A0 /* apswbuffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = apswbuffer.c; sourceTree = "<group>"; };
+		DC5FAFA319EC50A3006F19A0 /* apswversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apswversion.h; sourceTree = "<group>"; };
+		DC5FAFA419EC50A3006F19A0 /* backup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = backup.c; sourceTree = "<group>"; };
+		DC5FAFA519EC50A3006F19A0 /* blob.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = blob.c; sourceTree = "<group>"; };
+		DC5FAFA619EC50A3006F19A0 /* connection.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = connection.c; sourceTree = "<group>"; };
+		DC5FAFA719EC50A3006F19A0 /* cursor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cursor.c; sourceTree = "<group>"; };
+		DC5FAFA819EC50A3006F19A0 /* exceptions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = exceptions.c; sourceTree = "<group>"; };
+		DC5FAFA919EC50A3006F19A0 /* pyutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pyutil.c; sourceTree = "<group>"; };
+		DC5FAFAA19EC50A3006F19A0 /* shell.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = shell.c; sourceTree = "<group>"; };
+		DC5FAFAB19EC50A3006F19A0 /* statementcache.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = statementcache.c; sourceTree = "<group>"; };
+		DC5FAFAC19EC50A3006F19A0 /* testextension.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = testextension.c; sourceTree = "<group>"; };
+		DC5FAFAD19EC50A3006F19A0 /* traceback.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = traceback.c; sourceTree = "<group>"; };
+		DC5FAFAE19EC50A3006F19A0 /* util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
+		DC5FAFAF19EC50A3006F19A0 /* vfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vfs.c; sourceTree = "<group>"; };
+		DC5FAFB019EC50A3006F19A0 /* vtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = vtable.c; sourceTree = "<group>"; };
+		DC5FAFB319EC50A3006F19A0 /* bonus.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bonus.c; sourceTree = "<group>"; };
+		DC5FAFB619EC50A3006F19A0 /* haversine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = haversine.c; sourceTree = "<group>"; };
+		DC5FAFB919EC50A3006F19A0 /* sqlite3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
+		DC5FAFBA19EC50A3006F19A0 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		DC5FAFBD19EC50A3006F19A0 /* sqlite3_exports.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sqlite3_exports.py; sourceTree = "<group>"; };
+		DC5FAFBE19EC50A3006F19A0 /* sqlite3ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libelmsqlite.so; path = "build/lib.macosx-10.6-intel-3.4/larch/libelmsqlite.so"; sourceTree = "<group>"; };
+		DC5FAFC319EC519F006F19A0 /* apsw.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = apsw.so; path = "build/lib.macosx-10.6-intel-3.4/larch/apsw.so"; sourceTree = "<group>"; };
+		DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_datamatrix.cpp; sourceTree = "<group>"; };
+		DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_datamatrix.h; sourceTree = "<group>"; };
+		DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_fountain.cpp; sourceTree = "<group>"; };
+		DC5FAFCC19EC542B006F19A0 /* elm_fountain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_fountain.h; sourceTree = "<group>"; };
+		DC5FAFCD19EC542B006F19A0 /* elm_queryset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_queryset.cpp; sourceTree = "<group>"; };
+		DC5FAFCE19EC542B006F19A0 /* elm_queryset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_queryset.h; sourceTree = "<group>"; };
+		DC5FAFCF19EC542B006F19A0 /* elm_queryset_simpleco.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_queryset_simpleco.cpp; sourceTree = "<group>"; };
+		DC5FAFD019EC542B006F19A0 /* elm_queryset_simpleco.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_queryset_simpleco.h; sourceTree = "<group>"; };
+		DC5FAFD119EC542B006F19A0 /* elm_queryset_twotable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_queryset_twotable.cpp; sourceTree = "<group>"; };
+		DC5FAFD219EC542B006F19A0 /* elm_queryset_twotable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_queryset_twotable.h; sourceTree = "<group>"; };
+		DC5FAFD319EC542B006F19A0 /* elm_sql_connect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_sql_connect.cpp; sourceTree = "<group>"; };
+		DC5FAFD419EC542B006F19A0 /* elm_sql_connect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_sql_connect.h; sourceTree = "<group>"; };
+		DC5FAFD519EC542B006F19A0 /* elm_sql_facet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_sql_facet.cpp; sourceTree = "<group>"; };
+		DC5FAFD619EC542B006F19A0 /* elm_sql_facet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_sql_facet.h; sourceTree = "<group>"; };
+		DC5FAFD719EC542B006F19A0 /* elm_sql_scrape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_sql_scrape.cpp; sourceTree = "<group>"; };
+		DC5FAFD819EC542B006F19A0 /* elm_sql_scrape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_sql_scrape.h; sourceTree = "<group>"; };
+		DC5FAFDC19EC542B006F19A0 /* etk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk.h; sourceTree = "<group>"; };
+		DC5FAFDD19EC542B006F19A0 /* etk_arraymath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_arraymath.cpp; sourceTree = "<group>"; };
+		DC5FAFDE19EC542B006F19A0 /* etk_arraymath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_arraymath.h; sourceTree = "<group>"; };
+		DC5FAFDF19EC542B006F19A0 /* etk_autoindex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_autoindex.cpp; sourceTree = "<group>"; };
+		DC5FAFE019EC542B006F19A0 /* etk_autoindex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_autoindex.h; sourceTree = "<group>"; };
+		DC5FAFE119EC542B006F19A0 /* etk_basic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_basic.cpp; sourceTree = "<group>"; };
+		DC5FAFE219EC542B006F19A0 /* etk_basic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_basic.h; sourceTree = "<group>"; };
+		DC5FAFE319EC542B006F19A0 /* etk_cat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_cat.cpp; sourceTree = "<group>"; };
+		DC5FAFE419EC542B006F19A0 /* etk_cat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_cat.h; sourceTree = "<group>"; };
+		DC5FAFE519EC542B006F19A0 /* etk_exception.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_exception.cpp; sourceTree = "<group>"; };
+		DC5FAFE619EC542B006F19A0 /* etk_exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_exception.h; sourceTree = "<group>"; };
+		DC5FAFE719EC542B006F19A0 /* etk_index.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_index.cpp; sourceTree = "<group>"; };
+		DC5FAFE819EC542B006F19A0 /* etk_index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_index.h; sourceTree = "<group>"; };
+		DC5FAFE919EC542B006F19A0 /* etk_logger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_logger.cpp; sourceTree = "<group>"; };
+		DC5FAFEA19EC542B006F19A0 /* etk_logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_logger.h; sourceTree = "<group>"; };
+		DC5FAFEB19EC542B006F19A0 /* etk_math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_math.cpp; sourceTree = "<group>"; };
+		DC5FAFEC19EC542B006F19A0 /* etk_math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_math.h; sourceTree = "<group>"; };
+		DC5FAFED19EC542B006F19A0 /* etk_memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_memory.cpp; sourceTree = "<group>"; };
+		DC5FAFEE19EC542B006F19A0 /* etk_memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_memory.h; sourceTree = "<group>"; };
+		DC5FAFEF19EC542B006F19A0 /* etk_messenger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_messenger.cpp; sourceTree = "<group>"; };
+		DC5FAFF019EC542B006F19A0 /* etk_messenger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_messenger.h; sourceTree = "<group>"; };
+		DC5FAFF119EC542B006F19A0 /* etk_ndarray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_ndarray.cpp; sourceTree = "<group>"; };
+		DC5FAFF219EC542B006F19A0 /* etk_ndarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_ndarray.h; sourceTree = "<group>"; };
+		DC5FAFF319EC542B006F19A0 /* etk_ndarray_bool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_ndarray_bool.cpp; sourceTree = "<group>"; };
+		DC5FAFF419EC542B006F19A0 /* etk_ndarray_bool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_ndarray_bool.h; sourceTree = "<group>"; };
+		DC5FAFF519EC542B006F19A0 /* etk_ndarray_func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_ndarray_func.cpp; sourceTree = "<group>"; };
+		DC5FAFF619EC542B006F19A0 /* etk_ndarray_func.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_ndarray_func.h; sourceTree = "<group>"; };
+		DC5FAFF719EC542B006F19A0 /* etk_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_object.cpp; sourceTree = "<group>"; };
+		DC5FAFF819EC542B006F19A0 /* etk_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_object.h; sourceTree = "<group>"; };
+		DC5FAFF919EC542B006F19A0 /* etk_pydict.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_pydict.cpp; sourceTree = "<group>"; };
+		DC5FAFFA19EC542B006F19A0 /* etk_pydict.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_pydict.h; sourceTree = "<group>"; };
+		DC5FAFFB19EC542B006F19A0 /* etk_python.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_python.cpp; sourceTree = "<group>"; };
+		DC5FAFFC19EC542B006F19A0 /* etk_python.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_python.h; sourceTree = "<group>"; };
+		DC5FAFFD19EC542B006F19A0 /* etk_random.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_random.cpp; sourceTree = "<group>"; };
+		DC5FAFFE19EC542B006F19A0 /* etk_random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_random.h; sourceTree = "<group>"; };
+		DC5FAFFF19EC542B006F19A0 /* etk_refcount.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_refcount.cpp; sourceTree = "<group>"; };
+		DC5FB00019EC542B006F19A0 /* etk_refcount.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_refcount.h; sourceTree = "<group>"; };
+		DC5FB00119EC542B006F19A0 /* etk_resultcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_resultcodes.h; sourceTree = "<group>"; };
+		DC5FB00219EC542B006F19A0 /* etk_sqlite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_sqlite.cpp; sourceTree = "<group>"; };
+		DC5FB00319EC542B006F19A0 /* etk_sqlite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_sqlite.h; sourceTree = "<group>"; };
+		DC5FB00419EC542B006F19A0 /* etk_string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_string.h; sourceTree = "<group>"; };
+		DC5FB00519EC542B006F19A0 /* etk_test_swig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_test_swig.cpp; sourceTree = "<group>"; };
+		DC5FB00619EC542B006F19A0 /* etk_test_swig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_test_swig.h; sourceTree = "<group>"; };
+		DC5FB00719EC542B006F19A0 /* etk_thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_thread.cpp; sourceTree = "<group>"; };
+		DC5FB00819EC542B006F19A0 /* etk_thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_thread.h; sourceTree = "<group>"; };
+		DC5FB00919EC542B006F19A0 /* etk_thread_apple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_thread_apple.h; sourceTree = "<group>"; };
+		DC5FB00A19EC542B006F19A0 /* etk_thread_windows.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_thread_windows.h; sourceTree = "<group>"; };
+		DC5FB00B19EC542B006F19A0 /* etk_time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_time.cpp; sourceTree = "<group>"; };
+		DC5FB00C19EC542B006F19A0 /* etk_time.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_time.h; sourceTree = "<group>"; };
+		DC5FB00D19EC542B006F19A0 /* etk_vectors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_vectors.cpp; sourceTree = "<group>"; };
+		DC5FB00E19EC542B006F19A0 /* etk_vectors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_vectors.h; sourceTree = "<group>"; };
+		DC5FB00F19EC542B006F19A0 /* etk_workshop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = etk_workshop.cpp; sourceTree = "<group>"; };
+		DC5FB01019EC542B006F19A0 /* etk_workshop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = etk_workshop.h; sourceTree = "<group>"; };
+		DC5FB01619EC542B006F19A0 /* larch_portable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = larch_portable.h; sourceTree = "<group>"; };
+		DC5FB01A19EC542B006F19A0 /* elm_calculations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_calculations.cpp; sourceTree = "<group>"; };
+		DC5FB01B19EC542B006F19A0 /* elm_calculations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_calculations.h; sourceTree = "<group>"; };
+		DC5FB01C19EC542B006F19A0 /* elm_inputstorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_inputstorage.cpp; sourceTree = "<group>"; };
+		DC5FB01D19EC542B006F19A0 /* elm_inputstorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_inputstorage.h; sourceTree = "<group>"; };
+		DC5FB01E19EC542B006F19A0 /* elm_model2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_model2.h; sourceTree = "<group>"; };
+		DC5FB01F19EC542B006F19A0 /* elm_model2_availability.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_availability.cpp; sourceTree = "<group>"; };
+		DC5FB02019EC542B006F19A0 /* elm_model2_choice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_choice.cpp; sourceTree = "<group>"; };
+		DC5FB02119EC542B006F19A0 /* elm_model2_extend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_model2_extend.h; sourceTree = "<group>"; };
+		DC5FB02219EC542B006F19A0 /* elm_model2_generic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_generic.cpp; sourceTree = "<group>"; };
+		DC5FB02319EC542B006F19A0 /* elm_model2_mnl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_mnl.cpp; sourceTree = "<group>"; };
+		DC5FB02419EC542B006F19A0 /* elm_model2_nl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_nl.cpp; sourceTree = "<group>"; };
+		DC5FB02519EC542B006F19A0 /* elm_model2_options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_options.cpp; sourceTree = "<group>"; };
+		DC5FB02619EC542B006F19A0 /* elm_model2_options.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_model2_options.h; sourceTree = "<group>"; };
+		DC5FB02719EC542B006F19A0 /* elm_model2_setup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_model2_setup.cpp; sourceTree = "<group>"; };
+		DC5FB02819EC542B006F19A0 /* elm_names.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_names.cpp; sourceTree = "<group>"; };
+		DC5FB02919EC542B006F19A0 /* elm_names.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_names.h; sourceTree = "<group>"; };
+		DC5FB02A19EC542B006F19A0 /* elm_packets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_packets.cpp; sourceTree = "<group>"; };
+		DC5FB02B19EC542B006F19A0 /* elm_packets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_packets.h; sourceTree = "<group>"; };
+		DC5FB02C19EC542B006F19A0 /* elm_parameter2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_parameter2.cpp; sourceTree = "<group>"; };
+		DC5FB02D19EC542B006F19A0 /* elm_parameter2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_parameter2.h; sourceTree = "<group>"; };
+		DC5FB02E19EC542B006F19A0 /* elm_parameterlist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_parameterlist.cpp; sourceTree = "<group>"; };
+		DC5FB02F19EC542B006F19A0 /* elm_parameterlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_parameterlist.h; sourceTree = "<group>"; };
+		DC5FB03019EC542B006F19A0 /* elm_runstats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_runstats.cpp; sourceTree = "<group>"; };
+		DC5FB03119EC542B006F19A0 /* elm_runstats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_runstats.h; sourceTree = "<group>"; };
+		DC5FB03219EC542B006F19A0 /* elm_workshop_loglike.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_loglike.cpp; sourceTree = "<group>"; };
+		DC5FB03319EC542B006F19A0 /* elm_workshop_loglike.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_workshop_loglike.h; sourceTree = "<group>"; };
+		DC5FB03419EC542B006F19A0 /* elm_workshop_mnl_gradient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_mnl_gradient.cpp; sourceTree = "<group>"; };
+		DC5FB03519EC542B006F19A0 /* elm_workshop_mnl_gradient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_workshop_mnl_gradient.h; sourceTree = "<group>"; };
+		DC5FB03619EC542B006F19A0 /* elm_workshop_mnl_gradient2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_mnl_gradient2.cpp; sourceTree = "<group>"; };
+		DC5FB03719EC542B006F19A0 /* elm_workshop_mnl_prob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_mnl_prob.cpp; sourceTree = "<group>"; };
+		DC5FB03819EC542B006F19A0 /* elm_workshop_mnl_prob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_workshop_mnl_prob.h; sourceTree = "<group>"; };
+		DC5FB03919EC542B006F19A0 /* elm_workshop_nl_gradient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_nl_gradient.cpp; sourceTree = "<group>"; };
+		DC5FB03A19EC542B006F19A0 /* elm_workshop_nl_gradient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_workshop_nl_gradient.h; sourceTree = "<group>"; };
+		DC5FB03B19EC542B006F19A0 /* elm_workshop_nl_probability.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_workshop_nl_probability.cpp; sourceTree = "<group>"; };
+		DC5FB03C19EC542B006F19A0 /* elm_workshop_nl_probability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_workshop_nl_probability.h; sourceTree = "<group>"; };
+		DC5FB03F19EC542B006F19A0 /* sandbox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sandbox.cpp; sourceTree = "<group>"; };
+		DC5FB04019EC542B006F19A0 /* sandbox.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sandbox.py; sourceTree = "<group>"; };
+		DC5FB04219EC542B006F19A0 /* sherpa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sherpa.cpp; sourceTree = "<group>"; };
+		DC5FB04319EC542B006F19A0 /* sherpa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sherpa.h; sourceTree = "<group>"; };
+		DC5FB04419EC542B006F19A0 /* sherpa_freedom.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sherpa_freedom.cpp; sourceTree = "<group>"; };
+		DC5FB04519EC542B006F19A0 /* sherpa_freedom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sherpa_freedom.h; sourceTree = "<group>"; };
+		DC5FB04619EC542B006F19A0 /* sherpa_mountaineer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sherpa_mountaineer.cpp; sourceTree = "<group>"; };
+		DC5FB04719EC542B006F19A0 /* sherpa_mountaineer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sherpa_mountaineer.h; sourceTree = "<group>"; };
+		DC5FB04819EC542B006F19A0 /* sherpa_pack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sherpa_pack.cpp; sourceTree = "<group>"; };
+		DC5FB04919EC542B006F19A0 /* sherpa_pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sherpa_pack.h; sourceTree = "<group>"; };
+		DC5FB04B19EC542B006F19A0 /* elm2array.i */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c.preprocessed; path = elm2array.i; sourceTree = "<group>"; };
+		DC5FB04C19EC542B006F19A0 /* elm_swig_external.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_swig_external.h; sourceTree = "<group>"; };
+		DC5FB04D19EC542B006F19A0 /* elmcore.i */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c.preprocessed; path = elmcore.i; sourceTree = "<group>"; };
+		DC5FB05019EC542B006F19A0 /* elm_cellcode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_cellcode.cpp; sourceTree = "<group>"; };
+		DC5FB05119EC542B006F19A0 /* elm_cellcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_cellcode.h; sourceTree = "<group>"; };
+		DC5FB05219EC542B006F19A0 /* elm_vascular.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_vascular.cpp; sourceTree = "<group>"; };
+		DC5FB05319EC542B006F19A0 /* elm_vascular.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_vascular.h; sourceTree = "<group>"; };
+		DC5FB05519EC542B006F19A0 /* build_configuration.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = build_configuration.py; sourceTree = "<group>"; };
+		DC5FB05619EC542B006F19A0 /* elm_version.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = elm_version.cpp; sourceTree = "<group>"; };
+		DC5FB05719EC542B006F19A0 /* elm_version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = elm_version.h; sourceTree = "<group>"; };
+		DC5FB09919EC55C4006F19A0 /* Python */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Python; path = ../../../../Library/Frameworks/Python.framework/Versions/3.4/Python; sourceTree = "<group>"; };
+		DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
+		DC5FB0A119EC5671006F19A0 /* sandbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sandbox; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC5FB0BB19EC671E006F19A0 /* _core.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = _core.so; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC6DD3B61A1AB8B9005F0E42 /* elm_darray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = elm_darray.cpp; sourceTree = "<group>"; };
+		DC6DD3B71A1AB8B9005F0E42 /* elm_darray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = elm_darray.h; sourceTree = "<group>"; };
+		DC739FF619EF029A003F4597 /* larch */ = {isa = PBXFileReference; lastKnownFileType = text; path = larch; sourceTree = "<group>"; };
+		DC95D35519EC83180042F408 /* setup_apsw.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = setup_apsw.py; sourceTree = "<group>"; };
+		DC95D35919ED9D330042F408 /* elmcore_wrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = elmcore_wrap.cpp; sourceTree = "<group>"; };
+		DC9FF3541A4DB88A000AAF47 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
+		DCECBCA819CB4F5F001B673E /* _core */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = _core; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCECBCBD19CB76AB001B673E /* setup.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
+		DCECBCC219CC8C97001B673E /* windows_build.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = windows_build.bat; sourceTree = "<group>"; };
+		DCECBCC319CC90FA001B673E /* py */ = {isa = PBXFileReference; lastKnownFileType = folder; path = py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DC5FB09E19EC5671006F19A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB0A919EC5689006F19A0 /* Python in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC5FB0B819EC671E006F19A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB13D19EC69C0006F19A0 /* Python in Frameworks */,
+				DC5FB13E19EC69C7006F19A0 /* apsw.so in Frameworks */,
+				DC5FB13F19EC69CA006F19A0 /* libelmsqlite.so in Frameworks */,
+				DC5FB14019EC69DC006F19A0 /* Accelerate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCECBCA519CB4F5F001B673E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB09A19EC55C4006F19A0 /* Python in Frameworks */,
+				DC5FB09C19EC55D8006F19A0 /* Accelerate.framework in Frameworks */,
+				DC5FB09519EC5504006F19A0 /* libelmsqlite.so in Frameworks */,
+				DC5FB09619EC5506006F19A0 /* apsw.so in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DC5FAF9F19EC50A3006F19A0 /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FAFA019EC50A3006F19A0 /* apsw */,
+				DC5FAFB319EC50A3006F19A0 /* bonus.c */,
+				DC5FAFB619EC50A3006F19A0 /* haversine.c */,
+				DC5FAFB919EC50A3006F19A0 /* sqlite3.c */,
+				DC5FAFBA19EC50A3006F19A0 /* sqlite3.h */,
+				DC5FAFBD19EC50A3006F19A0 /* sqlite3_exports.py */,
+				DC5FAFBE19EC50A3006F19A0 /* sqlite3ext.h */,
+			);
+			path = sqlite;
+			sourceTree = "<group>";
+		};
+		DC5FAFA019EC50A3006F19A0 /* apsw */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FAFA119EC50A3006F19A0 /* apsw.c */,
+				DC5FAFA219EC50A3006F19A0 /* apswbuffer.c */,
+				DC5FAFA319EC50A3006F19A0 /* apswversion.h */,
+				DC5FAFA419EC50A3006F19A0 /* backup.c */,
+				DC5FAFA519EC50A3006F19A0 /* blob.c */,
+				DC5FAFA619EC50A3006F19A0 /* connection.c */,
+				DC5FAFA719EC50A3006F19A0 /* cursor.c */,
+				DC5FAFA819EC50A3006F19A0 /* exceptions.c */,
+				DC5FAFA919EC50A3006F19A0 /* pyutil.c */,
+				DC5FAFAA19EC50A3006F19A0 /* shell.c */,
+				DC5FAFAB19EC50A3006F19A0 /* statementcache.c */,
+				DC5FAFAC19EC50A3006F19A0 /* testextension.c */,
+				DC5FAFAD19EC50A3006F19A0 /* traceback.c */,
+				DC5FAFAE19EC50A3006F19A0 /* util.c */,
+				DC5FAFAF19EC50A3006F19A0 /* vfs.c */,
+				DC5FAFB019EC50A3006F19A0 /* vtable.c */,
+			);
+			path = apsw;
+			sourceTree = "<group>";
+		};
+		DC5FAFBF19EC5173006F19A0 /* internal_libraries */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FAFC319EC519F006F19A0 /* apsw.so */,
+				DC5FAFC119EC5191006F19A0 /* libelmsqlite.so */,
+			);
+			name = internal_libraries;
+			sourceTree = "<group>";
+		};
+		DC5FAFC419EC542B006F19A0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FAFC519EC542B006F19A0 /* data */,
+				DC5FAFDB19EC542B006F19A0 /* etk */,
+				DC5FB01619EC542B006F19A0 /* larch_portable.h */,
+				DC5FB01919EC542B006F19A0 /* model */,
+				DC5FB04119EC542B006F19A0 /* sherpa */,
+				DC5FB04A19EC542B006F19A0 /* swig */,
+				DC5FB04F19EC542B006F19A0 /* vascular */,
+				DC5FB05419EC542B006F19A0 /* version */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		DC5FAFC519EC542B006F19A0 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				DC6DD3B61A1AB8B9005F0E42 /* elm_darray.cpp */,
+				DC6DD3B71A1AB8B9005F0E42 /* elm_darray.h */,
+				DC5FAFC919EC542B006F19A0 /* elm_datamatrix.cpp */,
+				DC5FAFCA19EC542B006F19A0 /* elm_datamatrix.h */,
+				DC5FAFCB19EC542B006F19A0 /* elm_fountain.cpp */,
+				DC5FAFCC19EC542B006F19A0 /* elm_fountain.h */,
+				DC5FAFCD19EC542B006F19A0 /* elm_queryset.cpp */,
+				DC5FAFCE19EC542B006F19A0 /* elm_queryset.h */,
+				DC5FAFCF19EC542B006F19A0 /* elm_queryset_simpleco.cpp */,
+				DC5FAFD019EC542B006F19A0 /* elm_queryset_simpleco.h */,
+				DC5FAFD119EC542B006F19A0 /* elm_queryset_twotable.cpp */,
+				DC5FAFD219EC542B006F19A0 /* elm_queryset_twotable.h */,
+				DC5FAFD319EC542B006F19A0 /* elm_sql_connect.cpp */,
+				DC5FAFD419EC542B006F19A0 /* elm_sql_connect.h */,
+				DC5FAFD519EC542B006F19A0 /* elm_sql_facet.cpp */,
+				DC5FAFD619EC542B006F19A0 /* elm_sql_facet.h */,
+				DC5FAFD719EC542B006F19A0 /* elm_sql_scrape.cpp */,
+				DC5FAFD819EC542B006F19A0 /* elm_sql_scrape.h */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		DC5FAFDB19EC542B006F19A0 /* etk */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FAFDC19EC542B006F19A0 /* etk.h */,
+				DC5FAFDD19EC542B006F19A0 /* etk_arraymath.cpp */,
+				DC5FAFDE19EC542B006F19A0 /* etk_arraymath.h */,
+				DC5FAFDF19EC542B006F19A0 /* etk_autoindex.cpp */,
+				DC5FAFE019EC542B006F19A0 /* etk_autoindex.h */,
+				DC5FAFE119EC542B006F19A0 /* etk_basic.cpp */,
+				DC5FAFE219EC542B006F19A0 /* etk_basic.h */,
+				DC5FAFE319EC542B006F19A0 /* etk_cat.cpp */,
+				DC5FAFE419EC542B006F19A0 /* etk_cat.h */,
+				DC5FAFE519EC542B006F19A0 /* etk_exception.cpp */,
+				DC5FAFE619EC542B006F19A0 /* etk_exception.h */,
+				DC5FAFE719EC542B006F19A0 /* etk_index.cpp */,
+				DC5FAFE819EC542B006F19A0 /* etk_index.h */,
+				DC5FAFE919EC542B006F19A0 /* etk_logger.cpp */,
+				DC5FAFEA19EC542B006F19A0 /* etk_logger.h */,
+				DC5FAFEB19EC542B006F19A0 /* etk_math.cpp */,
+				DC5FAFEC19EC542B006F19A0 /* etk_math.h */,
+				DC5FAFED19EC542B006F19A0 /* etk_memory.cpp */,
+				DC5FAFEE19EC542B006F19A0 /* etk_memory.h */,
+				DC5FAFEF19EC542B006F19A0 /* etk_messenger.cpp */,
+				DC5FAFF019EC542B006F19A0 /* etk_messenger.h */,
+				DC5FAFF119EC542B006F19A0 /* etk_ndarray.cpp */,
+				DC5FAFF219EC542B006F19A0 /* etk_ndarray.h */,
+				DC5FAFF319EC542B006F19A0 /* etk_ndarray_bool.cpp */,
+				DC5FAFF419EC542B006F19A0 /* etk_ndarray_bool.h */,
+				DC5FAFF519EC542B006F19A0 /* etk_ndarray_func.cpp */,
+				DC5FAFF619EC542B006F19A0 /* etk_ndarray_func.h */,
+				DC5FAFF719EC542B006F19A0 /* etk_object.cpp */,
+				DC5FAFF819EC542B006F19A0 /* etk_object.h */,
+				DC5FAFF919EC542B006F19A0 /* etk_pydict.cpp */,
+				DC5FAFFA19EC542B006F19A0 /* etk_pydict.h */,
+				DC5FAFFB19EC542B006F19A0 /* etk_python.cpp */,
+				DC5FAFFC19EC542B006F19A0 /* etk_python.h */,
+				DC5FAFFD19EC542B006F19A0 /* etk_random.cpp */,
+				DC5FAFFE19EC542B006F19A0 /* etk_random.h */,
+				DC5FAFFF19EC542B006F19A0 /* etk_refcount.cpp */,
+				DC5FB00019EC542B006F19A0 /* etk_refcount.h */,
+				DC5FB00119EC542B006F19A0 /* etk_resultcodes.h */,
+				DC5FB00219EC542B006F19A0 /* etk_sqlite.cpp */,
+				DC5FB00319EC542B006F19A0 /* etk_sqlite.h */,
+				DC5FB00419EC542B006F19A0 /* etk_string.h */,
+				DC5FB00519EC542B006F19A0 /* etk_test_swig.cpp */,
+				DC5FB00619EC542B006F19A0 /* etk_test_swig.h */,
+				DC5FB00719EC542B006F19A0 /* etk_thread.cpp */,
+				DC5FB00819EC542B006F19A0 /* etk_thread.h */,
+				DC5FB00919EC542B006F19A0 /* etk_thread_apple.h */,
+				DC5FB00A19EC542B006F19A0 /* etk_thread_windows.h */,
+				DC5FB00B19EC542B006F19A0 /* etk_time.cpp */,
+				DC5FB00C19EC542B006F19A0 /* etk_time.h */,
+				DC5FB00D19EC542B006F19A0 /* etk_vectors.cpp */,
+				DC5FB00E19EC542B006F19A0 /* etk_vectors.h */,
+				DC5FB00F19EC542B006F19A0 /* etk_workshop.cpp */,
+				DC5FB01019EC542B006F19A0 /* etk_workshop.h */,
+			);
+			path = etk;
+			sourceTree = "<group>";
+		};
+		DC5FB01919EC542B006F19A0 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB01A19EC542B006F19A0 /* elm_calculations.cpp */,
+				DC5FB01B19EC542B006F19A0 /* elm_calculations.h */,
+				DC5FB01C19EC542B006F19A0 /* elm_inputstorage.cpp */,
+				DC5FB01D19EC542B006F19A0 /* elm_inputstorage.h */,
+				DC5FB01E19EC542B006F19A0 /* elm_model2.h */,
+				DC5FB01F19EC542B006F19A0 /* elm_model2_availability.cpp */,
+				DC5FB02019EC542B006F19A0 /* elm_model2_choice.cpp */,
+				DC5FB02119EC542B006F19A0 /* elm_model2_extend.h */,
+				DC5FB02219EC542B006F19A0 /* elm_model2_generic.cpp */,
+				DC5FB02319EC542B006F19A0 /* elm_model2_mnl.cpp */,
+				DC5FB02419EC542B006F19A0 /* elm_model2_nl.cpp */,
+				DC5FB02519EC542B006F19A0 /* elm_model2_options.cpp */,
+				DC5FB02619EC542B006F19A0 /* elm_model2_options.h */,
+				DC5FB02719EC542B006F19A0 /* elm_model2_setup.cpp */,
+				DC5FB02819EC542B006F19A0 /* elm_names.cpp */,
+				DC5FB02919EC542B006F19A0 /* elm_names.h */,
+				DC5FB02A19EC542B006F19A0 /* elm_packets.cpp */,
+				DC5FB02B19EC542B006F19A0 /* elm_packets.h */,
+				DC5FB02C19EC542B006F19A0 /* elm_parameter2.cpp */,
+				DC5FB02D19EC542B006F19A0 /* elm_parameter2.h */,
+				DC5FB02E19EC542B006F19A0 /* elm_parameterlist.cpp */,
+				DC5FB02F19EC542B006F19A0 /* elm_parameterlist.h */,
+				DC5FB03019EC542B006F19A0 /* elm_runstats.cpp */,
+				DC5FB03119EC542B006F19A0 /* elm_runstats.h */,
+				DC5FB03219EC542B006F19A0 /* elm_workshop_loglike.cpp */,
+				DC5FB03319EC542B006F19A0 /* elm_workshop_loglike.h */,
+				DC5FB03419EC542B006F19A0 /* elm_workshop_mnl_gradient.cpp */,
+				DC5FB03519EC542B006F19A0 /* elm_workshop_mnl_gradient.h */,
+				DC5FB03619EC542B006F19A0 /* elm_workshop_mnl_gradient2.cpp */,
+				DC5FB03719EC542B006F19A0 /* elm_workshop_mnl_prob.cpp */,
+				DC5FB03819EC542B006F19A0 /* elm_workshop_mnl_prob.h */,
+				DC5FB03919EC542B006F19A0 /* elm_workshop_nl_gradient.cpp */,
+				DC5FB03A19EC542B006F19A0 /* elm_workshop_nl_gradient.h */,
+				DC5FB03B19EC542B006F19A0 /* elm_workshop_nl_probability.cpp */,
+				DC5FB03C19EC542B006F19A0 /* elm_workshop_nl_probability.h */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		DC5FB03E19EC542B006F19A0 /* sandbox */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB03F19EC542B006F19A0 /* sandbox.cpp */,
+				DC5FB04019EC542B006F19A0 /* sandbox.py */,
+			);
+			name = sandbox;
+			path = src/sandbox;
+			sourceTree = "<group>";
+		};
+		DC5FB04119EC542B006F19A0 /* sherpa */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB04219EC542B006F19A0 /* sherpa.cpp */,
+				DC5FB04319EC542B006F19A0 /* sherpa.h */,
+				DC5FB04419EC542B006F19A0 /* sherpa_freedom.cpp */,
+				DC5FB04519EC542B006F19A0 /* sherpa_freedom.h */,
+				DC5FB04619EC542B006F19A0 /* sherpa_mountaineer.cpp */,
+				DC5FB04719EC542B006F19A0 /* sherpa_mountaineer.h */,
+				DC5FB04819EC542B006F19A0 /* sherpa_pack.cpp */,
+				DC5FB04919EC542B006F19A0 /* sherpa_pack.h */,
+			);
+			path = sherpa;
+			sourceTree = "<group>";
+		};
+		DC5FB04A19EC542B006F19A0 /* swig */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB04B19EC542B006F19A0 /* elm2array.i */,
+				DC5FB04C19EC542B006F19A0 /* elm_swig_external.h */,
+				DC5FB04D19EC542B006F19A0 /* elmcore.i */,
+				DC95D35919ED9D330042F408 /* elmcore_wrap.cpp */,
+			);
+			path = swig;
+			sourceTree = "<group>";
+		};
+		DC5FB04F19EC542B006F19A0 /* vascular */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB05019EC542B006F19A0 /* elm_cellcode.cpp */,
+				DC5FB05119EC542B006F19A0 /* elm_cellcode.h */,
+				DC5FB05219EC542B006F19A0 /* elm_vascular.cpp */,
+				DC5FB05319EC542B006F19A0 /* elm_vascular.h */,
+			);
+			path = vascular;
+			sourceTree = "<group>";
+		};
+		DC5FB05419EC542B006F19A0 /* version */ = {
+			isa = PBXGroup;
+			children = (
+				DC5FB05519EC542B006F19A0 /* build_configuration.py */,
+				DC5FB05619EC542B006F19A0 /* elm_version.cpp */,
+				DC5FB05719EC542B006F19A0 /* elm_version.h */,
+			);
+			path = version;
+			sourceTree = "<group>";
+		};
+		DC739FF519EF029A003F4597 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				DC739FF619EF029A003F4597 /* larch */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		DCECBC9F19CB4F5F001B673E = {
+			isa = PBXGroup;
+			children = (
+				DCECBCBD19CB76AB001B673E /* setup.py */,
+				DC95D35519EC83180042F408 /* setup_apsw.py */,
+				DC5FAF9319EC2B8E006F19A0 /* build_configuration.py */,
+				DCECBCC219CC8C97001B673E /* windows_build.bat */,
+				DC9FF3541A4DB88A000AAF47 /* doc */,
+				DC739FF519EF029A003F4597 /* bin */,
+				DC5FAF9F19EC50A3006F19A0 /* sqlite */,
+				DC5FB03E19EC542B006F19A0 /* sandbox */,
+				DC5FAFC419EC542B006F19A0 /* src */,
+				DCECBCC319CC90FA001B673E /* py */,
+				DC5FB09B19EC55D8006F19A0 /* Accelerate.framework */,
+				DC5FB09919EC55C4006F19A0 /* Python */,
+				DC5FAFBF19EC5173006F19A0 /* internal_libraries */,
+				DCECBCA919CB4F5F001B673E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DCECBCA919CB4F5F001B673E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCECBCA819CB4F5F001B673E /* _core */,
+				DC5FB0A119EC5671006F19A0 /* sandbox */,
+				DC5FB0BB19EC671E006F19A0 /* _core.so */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DC5FB0B919EC671E006F19A0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB13319EC68C8006F19A0 /* elm_vascular.h in Headers */,
+				DC5FB10A19EC68BA006F19A0 /* etk_vectors.h in Headers */,
+				DC6DD3B91A1AB8B9005F0E42 /* elm_darray.h in Headers */,
+				DC5FB0CF19EC68B2006F19A0 /* elm_queryset_simpleco.h in Headers */,
+				DC5FB12219EC68C4006F19A0 /* elm_parameterlist.h in Headers */,
+				DC5FB10619EC68BA006F19A0 /* etk_thread_windows.h in Headers */,
+				DC5FB13919EC68CF006F19A0 /* sherpa_mountaineer.h in Headers */,
+				DC5FB10219EC68BA006F19A0 /* etk_test_swig.h in Headers */,
+				DC5FB12B19EC68C4006F19A0 /* elm_workshop_mnl_prob.h in Headers */,
+				DC5FB12019EC68C4006F19A0 /* elm_parameter2.h in Headers */,
+				DC5FB0CB19EC68B2006F19A0 /* elm_fountain.h in Headers */,
+				DC5FB13119EC68C8006F19A0 /* elm_cellcode.h in Headers */,
+				DC5FB0F619EC68BA006F19A0 /* etk_pydict.h in Headers */,
+				DC5FB11119EC68C4006F19A0 /* elm_model2.h in Headers */,
+				DC5FB0FD19EC68BA006F19A0 /* etk_resultcodes.h in Headers */,
+				DC5FB10819EC68BA006F19A0 /* etk_time.h in Headers */,
+				DC5FB0E219EC68BA006F19A0 /* etk_exception.h in Headers */,
+				DC5FB10519EC68BA006F19A0 /* etk_thread_apple.h in Headers */,
+				DC5FB0E019EC68BA006F19A0 /* etk_cat.h in Headers */,
+				DC5FB12619EC68C4006F19A0 /* elm_workshop_loglike.h in Headers */,
+				DC5FB11419EC68C4006F19A0 /* elm_model2_extend.h in Headers */,
+				DC5FB0D719EC68B2006F19A0 /* elm_sql_scrape.h in Headers */,
+				DC5FB11C19EC68C4006F19A0 /* elm_names.h in Headers */,
+				DC5FB0C919EC68B2006F19A0 /* elm_datamatrix.h in Headers */,
+				DC5FB12D19EC68C4006F19A0 /* elm_workshop_nl_gradient.h in Headers */,
+				DC5FB0DA19EC68BA006F19A0 /* etk_arraymath.h in Headers */,
+				DC5FB0D519EC68B2006F19A0 /* elm_sql_facet.h in Headers */,
+				DC5FB13B19EC68CF006F19A0 /* sherpa_pack.h in Headers */,
+				DC5FB0F219EC68BA006F19A0 /* etk_ndarray_func.h in Headers */,
+				DC5FB0EA19EC68BA006F19A0 /* etk_memory.h in Headers */,
+				DC5FB0CD19EC68B2006F19A0 /* elm_queryset.h in Headers */,
+				DC5FB0FC19EC68BA006F19A0 /* etk_refcount.h in Headers */,
+				DC5FB0F419EC68BA006F19A0 /* etk_object.h in Headers */,
+				DC5FB0D119EC68B2006F19A0 /* elm_queryset_twotable.h in Headers */,
+				DC5FB10019EC68BA006F19A0 /* etk_string.h in Headers */,
+				DC5FB13519EC68CF006F19A0 /* sherpa.h in Headers */,
+				DC5FB0E819EC68BA006F19A0 /* etk_math.h in Headers */,
+				DC5FB0DE19EC68BA006F19A0 /* etk_basic.h in Headers */,
+				DC5FB0FF19EC68BA006F19A0 /* etk_sqlite.h in Headers */,
+				DC5FB0E419EC68BA006F19A0 /* etk_index.h in Headers */,
+				DC5FB13719EC68CF006F19A0 /* sherpa_freedom.h in Headers */,
+				DC5FB0F019EC68BA006F19A0 /* etk_ndarray_bool.h in Headers */,
+				DC5FB10E19EC68C4006F19A0 /* elm_calculations.h in Headers */,
+				DC5FB10C19EC68BA006F19A0 /* etk_workshop.h in Headers */,
+				DC5FB0F819EC68BA006F19A0 /* etk_python.h in Headers */,
+				DC5FB0EE19EC68BA006F19A0 /* etk_ndarray.h in Headers */,
+				DC5FB12419EC68C4006F19A0 /* elm_runstats.h in Headers */,
+				DC5FB0FA19EC68BA006F19A0 /* etk_random.h in Headers */,
+				DC5FB0DC19EC68BA006F19A0 /* etk_autoindex.h in Headers */,
+				DC5FB11E19EC68C4006F19A0 /* elm_packets.h in Headers */,
+				DC5FB11019EC68C4006F19A0 /* elm_inputstorage.h in Headers */,
+				DC5FB0E619EC68BA006F19A0 /* etk_logger.h in Headers */,
+				DC5FB0EC19EC68BA006F19A0 /* etk_messenger.h in Headers */,
+				DC5FB10419EC68BA006F19A0 /* etk_thread.h in Headers */,
+				DC5FB12819EC68C4006F19A0 /* elm_workshop_mnl_gradient.h in Headers */,
+				DC5FB0D319EC68B2006F19A0 /* elm_sql_connect.h in Headers */,
+				DC5FB0D819EC68BA006F19A0 /* etk.h in Headers */,
+				DC5FB11919EC68C4006F19A0 /* elm_model2_options.h in Headers */,
+				DC5FB12F19EC68C4006F19A0 /* elm_workshop_nl_probability.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DC5FB0A019EC5671006F19A0 /* sandbox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC5FB0A519EC5671006F19A0 /* Build configuration list for PBXNativeTarget "sandbox" */;
+			buildPhases = (
+				DC5FB09D19EC5671006F19A0 /* Sources */,
+				DC5FB09E19EC5671006F19A0 /* Frameworks */,
+				DC5FB09F19EC5671006F19A0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DC5FB14219EC69F2006F19A0 /* PBXTargetDependency */,
+			);
+			name = sandbox;
+			productName = sapling;
+			productReference = DC5FB0A119EC5671006F19A0 /* sandbox */;
+			productType = "com.apple.product-type.tool";
+		};
+		DC5FB0BA19EC671E006F19A0 /* core */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC5FB0C319EC671E006F19A0 /* Build configuration list for PBXNativeTarget "core" */;
+			buildPhases = (
+				DC5FB14B19EC7606006F19A0 /* SWIG */,
+				DC95D35619EC83260042F408 /* Build APSW */,
+				DC5FB0B719EC671E006F19A0 /* Sources */,
+				DC5FB0B819EC671E006F19A0 /* Frameworks */,
+				DC5FB0B919EC671E006F19A0 /* Headers */,
+				DC5FB14319EC6A43006F19A0 /* CopyFiles */,
+				DC5FB14A19EC6D8C006F19A0 /* Sync Py Raw and data_warehouse */,
+				DC5FB14919EC6B65006F19A0 /* Prepare Build Info Py */,
+				DC739FF719EF10A2003F4597 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = core;
+			productName = core;
+			productReference = DC5FB0BB19EC671E006F19A0 /* _core.so */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		DCECBCA719CB4F5F001B673E /* larch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCECBCB119CB4F5F001B673E /* Build configuration list for PBXNativeTarget "larch" */;
+			buildPhases = (
+				DCECBCA419CB4F5F001B673E /* Sources */,
+				DCECBCA519CB4F5F001B673E /* Frameworks */,
+				DCECBCA619CB4F5F001B673E /* CopyFiles */,
+				DC5FB0B419EC616C006F19A0 /* Sync data_warehouse and raw_py */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = larch;
+			productName = Larch;
+			productReference = DCECBCA819CB4F5F001B673E /* _core */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DCECBCA019CB4F5F001B673E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Jeffrey Newman";
+				TargetAttributes = {
+					DC4F33AE1A43958500895017 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					DC5FAF9419EC2EF4006F19A0 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					DC5FAF9B19EC4FD0006F19A0 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					DC5FB0A019EC5671006F19A0 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					DC5FB0BA19EC671E006F19A0 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+				};
+			};
+			buildConfigurationList = DCECBCA319CB4F5F001B673E /* Build configuration list for PBXProject "Larch" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DCECBC9F19CB4F5F001B673E;
+			productRefGroup = DCECBCA919CB4F5F001B673E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCECBCA719CB4F5F001B673E /* larch */,
+				DC5FB0BA19EC671E006F19A0 /* core */,
+				DC5FB0A019EC5671006F19A0 /* sandbox */,
+				DCECBCC419CC9315001B673E /* distutils_install_local */,
+				DC5FAF9419EC2EF4006F19A0 /* distutils global */,
+				DC5FAF9B19EC4FD0006F19A0 /* distutils_test */,
+				DC4F33AE1A43958500895017 /* bdist_wheel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DC4F33B21A43959C00895017 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.4/bin/:${PATH}\"\nexport PATH\nswig -version \n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py build_ext\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py bdist_wheel -d wheelhouse\n\n";
+		};
+		DC5FAF9A19EC2F02006F19A0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/sphinx-build $PROJECT_DIR/doc $PROJECT_DIR/build/doc";
+		};
+		DC5FB0B419EC616C006F19A0 /* Sync data_warehouse and raw_py */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sync data_warehouse and raw_py";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rsync -r -v --exclude=.* $PROJECT_DIR/py/ $CONFIGURATION_BUILD_DIR/";
+		};
+		DC5FB14919EC6B65006F19A0 /* Prepare Build Info Py */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Build Info Py";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /Library/Frameworks/Python.framework/Versions/3.4/bin/python3;
+			shellScript = "import sys, os\nsys.path.insert(0,os.environ['PROJECT_DIR'])\nimport build_configuration\nbuild_configuration.write_build_info(packagename=\"larch\")";
+			showEnvVarsInLog = 0;
+		};
+		DC5FB14A19EC6D8C006F19A0 /* Sync Py Raw and data_warehouse */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sync Py Raw and data_warehouse";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rsync -r -v --exclude=.* $PROJECT_DIR/py/ $CONFIGURATION_BUILD_DIR/";
+		};
+		DC5FB14B19EC7606006F19A0 /* SWIG */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$PROJECT_DIR/src/swig/elmcore.i,
+				$PROJECT_DIR/src/model/elm_model2.h,
+				$PROJECT_DIR/src/swig/elm2array.i,
+				$PROJECT_DIR/src/data/elm_datamatrix.h,
+				$PROJECT_DIR/src/data/elm_darray.h,
+			);
+			name = SWIG;
+			outputPaths = (
+				$PROJECT_DIR/src/swig/elmcore_wrap.cpp,
+				$PROJECT_DIR/py/core.py,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\n/usr/local/bin/swig -python -modern -py3 -I../include -v -c++ \\\n-outdir ./py                                 \\\n-I../include -I./src/etk -I./src/model       \\\n-I./src/data -I./src/sherpa -I./src/vascular \\\n-I./src/version -I./src/swig -I./sqlite      \\\n-DSWIG_TYPE_TABLE=\"elm_swig_type_table\"      \\\n-o src/swig/elmcore_wrap.cpp                 \\\nsrc/swig/elmcore.i\n\ncd $PROJECT_DIR\n/usr/local/bin/swig -python -modern -py3 -I../include -v -c++ \\\n-outdir ./py                                 \\\n-I../include -I./src/etk -I./src/model       \\\n-I./src/data -I./src/sherpa -I./src/vascular \\\n-I./src/version -I./src/swig -I./sqlite      \\\n-DSWIG_TYPE_TABLE=\"elm_swig_type_table\"      \\\n-external-runtime elm_swig_external.h\n\n\n";
+		};
+		DC739FF719EF10A2003F4597 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" == \"Release\" ]; then\nrsync -r -v --exclude=.* --exclude=*.dSYM $CONFIGURATION_BUILD_DIR/ /Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/larch/\nfi";
+		};
+		DC95D35619EC83260042F408 /* Build APSW */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build APSW";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup_apsw.py";
+		};
+		DCECBCCA19CC9321001B673E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $PROJECT_DIR\necho $PROJECT_DIR\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\nswig -version \nPYTHONPATH=\"${PYTHONPATH}:$PROJECT_DIR/playground/lib/python\"\nexport PYTHONPATH\n\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py build_ext\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 setup.py install --home=./playground\n/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 ./playground/play.py";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DC5FB09D19EC5671006F19A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB0A819EC567C006F19A0 /* sandbox.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC5FB0B719EC671E006F19A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB0DB19EC68BA006F19A0 /* etk_autoindex.cpp in Sources */,
+				DC5FB0FB19EC68BA006F19A0 /* etk_refcount.cpp in Sources */,
+				DC5FB0CC19EC68B2006F19A0 /* elm_queryset.cpp in Sources */,
+				DC5FB0F119EC68BA006F19A0 /* etk_ndarray_func.cpp in Sources */,
+				DC5FB12719EC68C4006F19A0 /* elm_workshop_mnl_gradient.cpp in Sources */,
+				DC5FB12C19EC68C4006F19A0 /* elm_workshop_nl_gradient.cpp in Sources */,
+				DC5FB13A19EC68CF006F19A0 /* sherpa_pack.cpp in Sources */,
+				DC5FB0E519EC68BA006F19A0 /* etk_logger.cpp in Sources */,
+				DC5FB0D619EC68B2006F19A0 /* elm_sql_scrape.cpp in Sources */,
+				DC5FB10D19EC68C4006F19A0 /* elm_calculations.cpp in Sources */,
+				DC5FB10B19EC68BA006F19A0 /* etk_workshop.cpp in Sources */,
+				DC5FB12319EC68C4006F19A0 /* elm_runstats.cpp in Sources */,
+				DC5FB11B19EC68C4006F19A0 /* elm_names.cpp in Sources */,
+				DC5FB10719EC68BA006F19A0 /* etk_time.cpp in Sources */,
+				DC5FB0EF19EC68BA006F19A0 /* etk_ndarray_bool.cpp in Sources */,
+				DC5FB13419EC68CF006F19A0 /* sherpa.cpp in Sources */,
+				DC6DD3B81A1AB8B9005F0E42 /* elm_darray.cpp in Sources */,
+				DC5FB0D919EC68BA006F19A0 /* etk_arraymath.cpp in Sources */,
+				DC5FB11719EC68C4006F19A0 /* elm_model2_nl.cpp in Sources */,
+				DC5FB10919EC68BA006F19A0 /* etk_vectors.cpp in Sources */,
+				DC5FB11A19EC68C4006F19A0 /* elm_model2_setup.cpp in Sources */,
+				DC5FB10F19EC68C4006F19A0 /* elm_inputstorage.cpp in Sources */,
+				DC5FB12A19EC68C4006F19A0 /* elm_workshop_mnl_prob.cpp in Sources */,
+				DC5FB13219EC68C8006F19A0 /* elm_vascular.cpp in Sources */,
+				DC5FB0D419EC68B2006F19A0 /* elm_sql_facet.cpp in Sources */,
+				DC5FB11219EC68C4006F19A0 /* elm_model2_availability.cpp in Sources */,
+				DC5FB12919EC68C4006F19A0 /* elm_workshop_mnl_gradient2.cpp in Sources */,
+				DC5FB0CE19EC68B2006F19A0 /* elm_queryset_simpleco.cpp in Sources */,
+				DC5FB0D219EC68B2006F19A0 /* elm_sql_connect.cpp in Sources */,
+				DC5FB0DF19EC68BA006F19A0 /* etk_cat.cpp in Sources */,
+				DC5FB11619EC68C4006F19A0 /* elm_model2_mnl.cpp in Sources */,
+				DC5FB11819EC68C4006F19A0 /* elm_model2_options.cpp in Sources */,
+				DC5FB0C819EC68B2006F19A0 /* elm_datamatrix.cpp in Sources */,
+				DC5FB0E319EC68BA006F19A0 /* etk_index.cpp in Sources */,
+				DC5FB0ED19EC68BA006F19A0 /* etk_ndarray.cpp in Sources */,
+				DC5FB0D019EC68B2006F19A0 /* elm_queryset_twotable.cpp in Sources */,
+				DC5FB0F319EC68BA006F19A0 /* etk_object.cpp in Sources */,
+				DC95D35A19ED9D330042F408 /* elmcore_wrap.cpp in Sources */,
+				DC5FB0EB19EC68BA006F19A0 /* etk_messenger.cpp in Sources */,
+				DC5FB0E919EC68BA006F19A0 /* etk_memory.cpp in Sources */,
+				DC5FB10319EC68BA006F19A0 /* etk_thread.cpp in Sources */,
+				DC5FB13019EC68C8006F19A0 /* elm_cellcode.cpp in Sources */,
+				DC5FB11519EC68C4006F19A0 /* elm_model2_generic.cpp in Sources */,
+				DC5FB11319EC68C4006F19A0 /* elm_model2_choice.cpp in Sources */,
+				DC5FB0FE19EC68BA006F19A0 /* etk_sqlite.cpp in Sources */,
+				DC5FB10119EC68BA006F19A0 /* etk_test_swig.cpp in Sources */,
+				DC5FB11D19EC68C4006F19A0 /* elm_packets.cpp in Sources */,
+				DC5FB12E19EC68C4006F19A0 /* elm_workshop_nl_probability.cpp in Sources */,
+				DC5FB0CA19EC68B2006F19A0 /* elm_fountain.cpp in Sources */,
+				DC5FB0E719EC68BA006F19A0 /* etk_math.cpp in Sources */,
+				DC5FB0E119EC68BA006F19A0 /* etk_exception.cpp in Sources */,
+				DC5FB12519EC68C4006F19A0 /* elm_workshop_loglike.cpp in Sources */,
+				DC5FB13819EC68CF006F19A0 /* sherpa_mountaineer.cpp in Sources */,
+				DC5FB12119EC68C4006F19A0 /* elm_parameterlist.cpp in Sources */,
+				DC5FB0F719EC68BA006F19A0 /* etk_python.cpp in Sources */,
+				DC5FB0F919EC68BA006F19A0 /* etk_random.cpp in Sources */,
+				DC5FB13619EC68CF006F19A0 /* sherpa_freedom.cpp in Sources */,
+				DC5FB0DD19EC68BA006F19A0 /* etk_basic.cpp in Sources */,
+				DC5FB11F19EC68C4006F19A0 /* elm_parameter2.cpp in Sources */,
+				DC5FB0F519EC68BA006F19A0 /* etk_pydict.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCECBCA419CB4F5F001B673E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC5FB08F19EC5495006F19A0 /* sherpa_mountaineer.cpp in Sources */,
+				DC5FB06219EC5475006F19A0 /* etk_autoindex.cpp in Sources */,
+				DC5FB07219EC5475006F19A0 /* etk_refcount.cpp in Sources */,
+				DC5FB05B19EC5452006F19A0 /* elm_queryset.cpp in Sources */,
+				DC5FB06D19EC5475006F19A0 /* etk_ndarray_func.cpp in Sources */,
+				DC5FB08D19EC5495006F19A0 /* sherpa.cpp in Sources */,
+				DC5FB08819EC548D006F19A0 /* elm_workshop_mnl_gradient.cpp in Sources */,
+				DC5FB08B19EC548D006F19A0 /* elm_workshop_nl_gradient.cpp in Sources */,
+				DC5FB06719EC5475006F19A0 /* etk_logger.cpp in Sources */,
+				DC5FB06019EC5452006F19A0 /* elm_sql_scrape.cpp in Sources */,
+				DC5FB07919EC548D006F19A0 /* elm_calculations.cpp in Sources */,
+				DC5FB07819EC5475006F19A0 /* etk_workshop.cpp in Sources */,
+				DC5FB08619EC548D006F19A0 /* elm_runstats.cpp in Sources */,
+				DC5FB08219EC548D006F19A0 /* elm_names.cpp in Sources */,
+				DC5FB07619EC5475006F19A0 /* etk_time.cpp in Sources */,
+				DC5FB06C19EC5475006F19A0 /* etk_ndarray_bool.cpp in Sources */,
+				DC5FB06119EC5475006F19A0 /* etk_arraymath.cpp in Sources */,
+				DC5FB07F19EC548D006F19A0 /* elm_model2_nl.cpp in Sources */,
+				DC5FB07719EC5475006F19A0 /* etk_vectors.cpp in Sources */,
+				DC5FB08119EC548D006F19A0 /* elm_model2_setup.cpp in Sources */,
+				DC5FB07A19EC548D006F19A0 /* elm_inputstorage.cpp in Sources */,
+				DC5FB08A19EC548D006F19A0 /* elm_workshop_mnl_prob.cpp in Sources */,
+				DC5FB05F19EC5452006F19A0 /* elm_sql_facet.cpp in Sources */,
+				DC5FB07B19EC548D006F19A0 /* elm_model2_availability.cpp in Sources */,
+				DC5FB08919EC548D006F19A0 /* elm_workshop_mnl_gradient2.cpp in Sources */,
+				DC5FB09319EC54AA006F19A0 /* elm_cellcode.cpp in Sources */,
+				DC5FB08E19EC5495006F19A0 /* sherpa_freedom.cpp in Sources */,
+				DC5FB05C19EC5452006F19A0 /* elm_queryset_simpleco.cpp in Sources */,
+				DC5FB05E19EC5452006F19A0 /* elm_sql_connect.cpp in Sources */,
+				DC5FB06419EC5475006F19A0 /* etk_cat.cpp in Sources */,
+				DC5FB07E19EC548D006F19A0 /* elm_model2_mnl.cpp in Sources */,
+				DC5FB08019EC548D006F19A0 /* elm_model2_options.cpp in Sources */,
+				DC5FB05919EC5452006F19A0 /* elm_datamatrix.cpp in Sources */,
+				DC5FB06619EC5475006F19A0 /* etk_index.cpp in Sources */,
+				DC5FB09419EC54AA006F19A0 /* elm_vascular.cpp in Sources */,
+				DC5FB06B19EC5475006F19A0 /* etk_ndarray.cpp in Sources */,
+				DC5FB05D19EC5452006F19A0 /* elm_queryset_twotable.cpp in Sources */,
+				DC5FB06E19EC5475006F19A0 /* etk_object.cpp in Sources */,
+				DC5FB06A19EC5475006F19A0 /* etk_messenger.cpp in Sources */,
+				DC5FB06919EC5475006F19A0 /* etk_memory.cpp in Sources */,
+				DC5FB07519EC5475006F19A0 /* etk_thread.cpp in Sources */,
+				DC5FB07D19EC548D006F19A0 /* elm_model2_generic.cpp in Sources */,
+				DC5FB07C19EC548D006F19A0 /* elm_model2_choice.cpp in Sources */,
+				DC5FB07319EC5475006F19A0 /* etk_sqlite.cpp in Sources */,
+				DC5FB07419EC5475006F19A0 /* etk_test_swig.cpp in Sources */,
+				DC5FB08319EC548D006F19A0 /* elm_packets.cpp in Sources */,
+				DC5FB08C19EC548D006F19A0 /* elm_workshop_nl_probability.cpp in Sources */,
+				DC5FB05A19EC5452006F19A0 /* elm_fountain.cpp in Sources */,
+				DC5FB06819EC5475006F19A0 /* etk_math.cpp in Sources */,
+				DC5FB06519EC5475006F19A0 /* etk_exception.cpp in Sources */,
+				DC5FB08719EC548D006F19A0 /* elm_workshop_loglike.cpp in Sources */,
+				DC5FB08519EC548D006F19A0 /* elm_parameterlist.cpp in Sources */,
+				DC5FB09019EC5495006F19A0 /* sherpa_pack.cpp in Sources */,
+				DC5FB07019EC5475006F19A0 /* etk_python.cpp in Sources */,
+				DC5FB07119EC5475006F19A0 /* etk_random.cpp in Sources */,
+				DC5FB06319EC5475006F19A0 /* etk_basic.cpp in Sources */,
+				DC5FB08419EC548D006F19A0 /* elm_parameter2.cpp in Sources */,
+				DC5FB06F19EC5475006F19A0 /* etk_pydict.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DC5FAF9919EC2EFB006F19A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCECBCC419CC9315001B673E /* distutils_install_local */;
+			targetProxy = DC5FAF9819EC2EFB006F19A0 /* PBXContainerItemProxy */;
+		};
+		DC5FB14219EC69F2006F19A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC5FB0BA19EC671E006F19A0 /* core */;
+			targetProxy = DC5FB14119EC69F2006F19A0 /* PBXContainerItemProxy */;
+		};
+		DC95D35819ED87720042F408 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC5FAF9419EC2EF4006F19A0 /* distutils global */;
+			targetProxy = DC95D35719ED87720042F408 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DC4F33AF1A43958500895017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC4F33B01A43958500895017 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DC5FAF9619EC2EF4006F19A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC5FAF9719EC2EF4006F19A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DC5FAF9D19EC4FD0006F19A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC5FAF9E19EC4FD0006F19A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DC5FB0A619EC5671006F19A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC5FB0A719EC5671006F19A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DC5FB0C419EC671E006F19A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/larch";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = _;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__BUILDCONFIG__=\\\"$CONFIGURATION\\\"",
+					"SWIG_TYPE_TABLE=\"elm_swig_type_table\"",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PREFIX)_$(PRODUCT_NAME).so";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC5FB0C519EC671E006F19A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/larch";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = _;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__BUILDCONFIG__=\\\"$CONFIGURATION\\\"",
+					"SWIG_TYPE_TABLE=\"elm_swig_type_table\"",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PREFIX)_$(PRODUCT_NAME).so";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DCECBCAF19CB4F5F001B673E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks/Python.framework/Versions/3.4/include/python3.4m,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/numpy/core/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DCECBCB019CB4F5F001B673E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks/Python.framework/Versions/3.4/include/python3.4m,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/numpy/core/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DCECBCB219CB4F5F001B673E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/larch";
+				DYLIB_INSTALL_NAME_BASE = /usr/local/lib;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = _;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"__BUILDCONFIG__=\\\"$CONFIGURATION\\\"",
+					"SWIG_TYPE_TABLE=\"elm_swig_type_table\"",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/lib$(EXECUTABLE_PREFIX)$(PRODUCT_NAME).dylib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/theatre/larch\"",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_NAME = core;
+			};
+			name = Debug;
+		};
+		DCECBCB319CB4F5F001B673E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/larch";
+				DYLIB_INSTALL_NAME_BASE = /usr/local/lib;
+				EXECUTABLE_EXTENSION = so;
+				EXECUTABLE_PREFIX = _;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"__BUILDCONFIG__=\\\"$CONFIGURATION\\\"",
+					"SWIG_TYPE_TABLE=\"elm_swig_type_table\"",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/lib$(EXECUTABLE_PREFIX)$(PRODUCT_NAME).dylib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/theatre/larch\"",
+					"$(PROJECT_DIR)/build/lib.macosx-10.6-intel-3.4/larch",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.4",
+				);
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_NAME = core;
+			};
+			name = Release;
+		};
+		DCECBCC619CC9315001B673E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DCECBCC719CC9315001B673E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DC4F33B11A43958500895017 /* Build configuration list for PBXAggregateTarget "bdist_wheel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC4F33AF1A43958500895017 /* Debug */,
+				DC4F33B01A43958500895017 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC5FAF9519EC2EF4006F19A0 /* Build configuration list for PBXAggregateTarget "distutils global" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC5FAF9619EC2EF4006F19A0 /* Debug */,
+				DC5FAF9719EC2EF4006F19A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC5FAF9C19EC4FD0006F19A0 /* Build configuration list for PBXAggregateTarget "distutils_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC5FAF9D19EC4FD0006F19A0 /* Debug */,
+				DC5FAF9E19EC4FD0006F19A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC5FB0A519EC5671006F19A0 /* Build configuration list for PBXNativeTarget "sandbox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC5FB0A619EC5671006F19A0 /* Debug */,
+				DC5FB0A719EC5671006F19A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC5FB0C319EC671E006F19A0 /* Build configuration list for PBXNativeTarget "core" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC5FB0C419EC671E006F19A0 /* Debug */,
+				DC5FB0C519EC671E006F19A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCECBCA319CB4F5F001B673E /* Build configuration list for PBXProject "Larch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCECBCAF19CB4F5F001B673E /* Debug */,
+				DCECBCB019CB4F5F001B673E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCECBCB119CB4F5F001B673E /* Build configuration list for PBXNativeTarget "larch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCECBCB219CB4F5F001B673E /* Debug */,
+				DCECBCB319CB4F5F001B673E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCECBCC519CC9315001B673E /* Build configuration list for PBXAggregateTarget "distutils_install_local" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCECBCC619CC9315001B673E /* Debug */,
+				DCECBCC719CC9315001B673E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DCECBCA019CB4F5F001B673E /* Project object */;
+}
