@@ -8,7 +8,7 @@ larch_test_osx.sh
 win/*
 *.obj
 *.o
-Larch.xcodeproj*
+*.xcodeproj*
 *.so
 LarchTest.app/*
 build/lib.macosx-10.6-intel-3.4/larch/libelmsqlite.so
@@ -16,7 +16,7 @@ build/lib.macosx-10.6-intel-3.4/larch/apsw.so
 Larch.xcodeproj/xcuserdata/jpn.xcuserdatad/xcschemes/xcschememanagement.plist
 larch.egg-info*
 wheelhouse*
-
+Icon
 
 src/larch.py
 
