@@ -12,7 +12,6 @@
 # serve to show the default.
 
 import sys, os
-import larch
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -24,7 +23,7 @@ rst_epilog = """
 .. |sqlite_version| replace:: %(sqlite)s
 .. |numpy_version| replace:: %(numpy)s
 .. |scipy_version| replace:: %(scipy)s
-""" % larch.versions
+""" % {'larch': '3.10a-DEC2014-0-ga2c83bd', 'pandas': '0.14.1', 'apsw': '3.8.7.3-r1', 'python': '3.4.0 final', 'scipy': '0.14.0c1', 'sqlite': '3.8.7.4', 'numpy': '1.8.1'}
 
 # -- General configuration -----------------------------------------------------
 
