@@ -259,7 +259,6 @@ from .db import DB
 %include "elm_model2_options.h"
 %include "elm_runstats.h"
 
-%include "elm_caseindex.h"
 %include "elm_datamatrix.h"
 
 %template(Needs) std::map<std::string, elm::darray_req>;
