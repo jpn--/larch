@@ -180,6 +180,15 @@ html_favicon =  '../img/larch_favicon.ico'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+#html_context = {
+#    'css_files': [
+#        '_static/elm_doc_style.css',  # overrides for wide tables in RTD theme
+#        ],
+#    }
+
+def setup(app):
+	app.add_stylesheet("elm_doc_style")
+
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
