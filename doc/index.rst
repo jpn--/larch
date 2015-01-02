@@ -1,7 +1,7 @@
 .. larch documentation master file
 
 ===================
-Larch documentation
+Larch Documentation
 ===================
 
 .. centered:: Larch |release|
@@ -35,11 +35,11 @@ Contents
 Frequently Asked Questions
 ==========================
 
-Why should I use Larch instead of `**Biogeme** <http://biogeme.epfl.ch/>`_ to estimate my logit models?
+Why should I use Larch instead of `Biogeme <http://biogeme.epfl.ch/>`_ to estimate my logit models?
 
-	`**Biogeme** <http://biogeme.epfl.ch/>`_ is a different free software package that also estimates
+	`Biogeme <http://biogeme.epfl.ch/>`_ is a different free software package that also estimates
 	parameters for logit models. If you know it, and how to use it, awesome!  If you don't, it's really not
-	that hard to learn and in many ways quite similar to **Larch**. Depending on your particular application
+	that hard to learn and in many ways quite similar to *Larch*. Depending on your particular application
 	and needs, (especially if you want to explore more complex non-linear models) then Biogeme could be right
 	for you.
 
