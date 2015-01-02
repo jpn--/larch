@@ -1,10 +1,10 @@
 .. larch documentation master file
 
-===================
-Larch Documentation
-===================
+==============================
+|treelogo| Larch Documentation
+==============================
 
-.. centered:: |treelogo| Larch |release|
+.. centered:: Larch |release|
 
 .. |treelogo| image:: ../img/larch_favicon.png
 

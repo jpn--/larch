@@ -3,7 +3,7 @@
     width: 16px !important;
     height: 16px !important;
     content: "" !important;
-    background: url("larch_favicon.png") no-repeat 0 2px !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
     background-size: 100% !important;
 
 }
@@ -64,7 +64,7 @@ div.body h6 { font-size: 80%;  padding-left: 95px; }
     height: 16px !important;
 	margin-right:5px !important;
     content: "" !important;
-    background: url("larch_favicon.png") no-repeat 0 2px !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
     background-size: 100% !important;
 }
 
