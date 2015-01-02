@@ -4,7 +4,10 @@
 Larch Documentation
 ===================
 
-.. centered:: Larch |release|
+.. centered:: |treelogo| Larch |release|
+
+.. |treelogo| image:: ../img/larch_favicon.png
+
 
 This documentation is for the Python interface for Larch.
 
