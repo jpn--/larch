@@ -1,0 +1,47 @@
+img.logo
+{
+	width:200px;
+}
+
+div.body h1
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 150%;
+	font-weight: 700;
+}
+
+div.body h2
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 130%;
+	font-weight: 400;
+}
+
+div.body h3, div.body h4, div.body h5, div.body h6
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-weight: 100;
+	
+}
+
+div.body h3 { font-size: 110%; padding-left: 50px; }
+div.body h4 { font-size: 100%; padding-left: 65px; }
+div.body h5 { font-size: 90%;  padding-left: 80px; }
+div.body h6 { font-size: 80%;  padding-left: 95px; }
+
+/*
+tt {
+	font-family: 'Source Code Pro', monospace;
+	font-size: 80%;
+}
+
+tt.descname {
+	font-weight: 700;
+	font-size: 90%;
+}
+
+tt.descclassname {
+	font-weight: 300;
+	font-size: 90%;
+}
+*/
