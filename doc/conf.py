@@ -138,8 +138,6 @@ if on_rtd:
 	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch']
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
-	css_files = '_static/elm_doc_style.css'
-
 
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -186,8 +184,9 @@ html_static_path = ['_static']
 #        ],
 #    }
 
-def setup(app):
-	app.add_stylesheet("elm_doc_style.css")
+if on_rtd:
+	def setup(app):
+		app.add_stylesheet("larch_rtfd.css")
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
