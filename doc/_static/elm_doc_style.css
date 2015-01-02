@@ -1,10 +1,10 @@
 .fa-home::before, .icon-home::before {
-	display: inline-block;
-    width: 16px;
-    height: 16px;
-    content: "";
-    background: url("../_static/larch_favicon.png") no-repeat 0 2px;
-    background-size: 100%;
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    content: "" !important;
+    background: url("../_static/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
 
 }
 
@@ -53,19 +53,19 @@ div.body h6 { font-size: 80%;  padding-left: 95px; }
 
 .wy-side-nav-search
 {
-	background-color: rgb(101,0,122);
+	background-color: rgb(101,0,122) !important;
 }
 
 
 .wy-breadcrumbs li:first-child::before
 {
-	display: inline-block;
-    width: 16px;
-    height: 16px;
-	margin-right:5px;
-    content: "";
-    background: url("../_static/larch_favicon.png") no-repeat 0 2px;
-    background-size: 100%;
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+	margin-right:5px !important;
+    content: "" !important;
+    background: url("../_static/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
 }
 
 /*

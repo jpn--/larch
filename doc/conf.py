@@ -187,7 +187,7 @@ html_static_path = ['_static']
 #    }
 
 def setup(app):
-	app.add_stylesheet("elm_doc_style")
+	app.add_stylesheet("elm_doc_style.css")
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
