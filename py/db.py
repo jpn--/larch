@@ -251,9 +251,9 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		import os.path
 		TEST_DIR = DB.ExampleDirectory()
 		TEST_DATA = {
-		  'MTC':os.path.join(TEST_DIR,"MTCWork.elmdata"),
+		  'MTC':os.path.join(TEST_DIR,"MTCWork.sqlite"),
 		  'TWINCITY':os.path.join(TEST_DIR,"TwinCityQ.elmdata"),
-		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.elmdata"),
+		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.sqlite"),
 		  }
 		if dataset.upper() not in TEST_DATA:
 			raise LarchError("Example data set %s not found"%dataset)

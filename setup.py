@@ -1,9 +1,12 @@
 import setuptools
-import glob, time, platform, os, numpy, sysconfig, sys, shutil
+import glob, time, platform, os, numpy, sysconfig, sys, shutil, io
+
+VERSION = '3.1.2'
+
 if platform.system() == 'Darwin':
 	os.environ['LDFLAGS'] = '-framework Accelerate'
 
-
+# To update the version, run `git tag -a 3.1.1-JAN2015 -m'version 3.1.1, January 2015'`
 
 
 #
@@ -422,11 +425,20 @@ import build_configuration
 build_configuration.write_build_info(build_dir=lib_folder(), packagename="larch")
 
 
+def read(*filenames, **kwargs):
+    encoding = kwargs.get('encoding', 'utf-8')
+    sep = kwargs.get('sep', '\n')
+    buf = []
+    for filename in filenames:
+        with io.open(filename, encoding=encoding) as f:
+            buf.append(f.read())
+    return sep.join(buf)
 
+long_description = read('README.md')
 
 
 setup(name='larch',
-      version='0.1',
+      version=VERSION,
       package_dir = {'larch': 'py'},
       packages=['larch', 'larch.examples', 'larch.test'],
 	  ext_modules=[core, apsw, ],
@@ -434,8 +446,23 @@ setup(name='larch',
 	  data_files=local_data_files,
 	  install_requires=[
 						"numpy >= 1.8.1",
+					#	"scipy >= 0.14",
 						"pandas >= 0.14.1",
 					],
+	  url='http://larch.readthedocs.org',
+	  download_url='http://github.com/jpn--/larch',
+	  author='Jeffrey Newman',
+	  author_email='jeff@newman.me',
+	  description='A framework for estimating and applying discrete choice models.',
+	  long_description=long_description,
+	  license = 'GPLv3',
+	  classifiers = [
+		'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+		'Programming Language :: Python :: 3',
+		'Programming Language :: Python :: 3.4',
+		'Operating System :: MacOS :: MacOS X',
+		'Operating System :: Microsoft :: Windows',
+	  ],
      )
 
 

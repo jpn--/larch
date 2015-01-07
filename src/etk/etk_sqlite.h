@@ -82,7 +82,7 @@ public:
 //	void define_otherkey (string tablesource, string casevar, string otherkey, string renameotherkey="");
 	void define_alts (std::string tablesource="", std::string altvar="", bool temp=false);
 //	void auto_maketablelist (bool temp=false);
-	void make_setup_table();
+//	void make_setup_table();
 //	void define_table (const std::string& table_name,
 //							std::string table_kind,
 //							const std::string& master_key, 

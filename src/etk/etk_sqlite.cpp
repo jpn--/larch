@@ -452,18 +452,18 @@ void etk::database_service::define_alts (string tablesource, string altvar, bool
 
 }
 
-void etk::database_service::make_setup_table()
-{
-	ostringstream sql;
-	int z;
-	
-	sql << "CREATE TABLE IF NOT EXISTS elm_setup (\n"
-	<< "  id TEXT UNIQUE,\n"
-	<< "  value)";
-	z=direct_execute(sql.str());
-	if (z != SQLITE_DONE) OOPS("error in making elm_setup: ",get_error_message());
-	sql.str(""); sql.clear();
-}
+//void etk::database_service::make_setup_table()
+//{
+//	ostringstream sql;
+//	int z;
+//	
+//	sql << "CREATE TABLE IF NOT EXISTS elm_setup (\n"
+//	<< "  id TEXT UNIQUE,\n"
+//	<< "  value)";
+//	z=direct_execute(sql.str());
+//	if (z != SQLITE_DONE) OOPS("error in making elm_setup: ",get_error_message());
+//	sql.str(""); sql.clear();
+//}
 
 //void etk::database_service::auto_maketablelist (bool temp)
 //{

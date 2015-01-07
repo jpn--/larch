@@ -36,7 +36,7 @@ print ("larch.__file__")
 print(larch.__file__)
 print ("-"*80)
 
-#d = larch.DB('/Users/jpn/Dropbox/Larch/py/data_warehouse/swissmetro.elmdata')
+#d = larch.DB('/Users/jpn/Dropbox/Larch/py/data_warehouse/swissmetro.sqlite')
 #
 #print(d.list_queries())
 #q = d.store["queries:{}".format('default')]
@@ -49,7 +49,7 @@ print ("-"*80)
 #d.load_queries('weighted')
 #d.save_queries('weighted')
 #
-#d = larch.DB('/Users/jpn/Dropbox/Larch/py/data_warehouse/MTCwork.elmdata')
+#d = larch.DB('/Users/jpn/Dropbox/Larch/py/data_warehouse/MTCwork.sqlite')
 #d.load_queries()
 #d.save_queries('default')
 

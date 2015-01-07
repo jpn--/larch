@@ -465,7 +465,10 @@ def storage_decode(encoded_item, form):
 class storage():
 	def __init__(self, db, name=None, *, reverse_index=False, key_format="", value_format=""):
 		if name is None:
-			name = "elm_store"
+			name = "larch_genericstorage"
+		if db is None:
+			from . import DB
+			db = DB()
 		if isinstance(db,str):
 			from . import DB
 			db = DB(db)
@@ -496,7 +499,7 @@ class storage():
 					raise KeyError("key '{}' not found".format(key))
 			self._cur.execute("DELETE FROM {} WHERE id=?".format(self._name), (key,))
 		except apsw.SQLError as err:
-			if "no such table: elm_store" in str(err):
+			if "no such table: larch_genericstorage" in str(err):
 				self._create_table()
 				raise KeyError("key '{}' not found".format(key))
 			else:
@@ -507,7 +510,7 @@ class storage():
 				return storage_decode(row[0], storage_format(row[1]))
 			raise KeyError("key '{}' not found".format(key))
 		except apsw.SQLError as err:
-			if "no such table: elm_store" in str(err):
+			if "no such table: larch_genericstorage" in str(err):
 				self._create_table()
 				for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
 					return storage_decode(row[0], storage_format(row[1]))
@@ -540,7 +543,7 @@ class storage():
 		try:
 			self._cur.execute("INSERT OR REPLACE INTO {} VALUES (?,?,?)".format(self._name),(key,value,f.value))
 		except apsw.SQLError as err:
-			if "no such table: elm_store" in str(err):
+			if "no such table: larch_genericstorage" in str(err):
 				self._create_table()
 				self._cur.execute("INSERT OR REPLACE INTO {} VALUES (?,?,?)".format(self._name),(key,value,f.value))
 			else:
@@ -563,7 +566,7 @@ class storage():
 		try:
 			cur = self._cur.execute("SELECT SUBSTR(id,{2}) FROM {0} WHERE id LIKE '{1}:%'".format(self._name,category,len(category)+2))
 		except apsw.SQLError as err:
-			if "no such table: elm_store" in str(err):
+			if "no such table: larch_genericstorage" in str(err):
 				self._create_table()
 				return []
 			else:

@@ -7,7 +7,7 @@
 .. centered:: Larch |release|
 
 .. |treelogo| image:: ../img/larch_favicon.png
-
+	:height: 0.9em
 
 This documentation is for the Python interface for Larch.
 
