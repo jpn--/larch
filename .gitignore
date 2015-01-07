@@ -20,3 +20,4 @@ Icon
 *.graffle
 src/larch.py
 *.bat
+local/*
