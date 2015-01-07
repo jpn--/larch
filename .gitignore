@@ -17,7 +17,6 @@ Larch.xcodeproj/xcuserdata/jpn.xcuserdatad/xcschemes/xcschememanagement.plist
 larch.egg-info*
 wheelhouse*
 Icon
-
+*.graffle
 src/larch.py
-
 *.bat
