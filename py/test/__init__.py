@@ -52,15 +52,14 @@ if not os.path.exists(TEST_DIR):
 
 
 TEST_DATA = {
-  'MTC WORK MODE CHOICE':os.path.join(TEST_DIR,"MTCwork.elmdata"),
-  'MTCWORK-CSV':os.path.join(TEST_DIR,"MTC_WorkMode.csv"),
-  'MTCWORK-CSV-SHORT':os.path.join(TEST_DIR,"MTC_WorkMode_Short.csv"),
-  'TWIN CITY DEST CHOICE':os.path.join(TEST_DIR,"TwinCityQ.elmdata"),
-  'MSOM SIMULATION':os.path.join(TEST_DIR,"msom_sim.elmdata"),
-  'MICRODATA':os.path.join(TEST_DIR,"microdata.sql"),
-  'MICRODATA SQUEEZE':os.path.join(TEST_DIR,"microdata_squeeze.sql"),
-  'REFERENCE OUTPUT':os.path.join(TEST_DIR,"reference_output.txt"),
-  'OD SYNTH':os.path.join(TEST_DIR,"od_synth.elmd"),
+  'MTC WORK MODE CHOICE':os.path.join(TEST_DIR,"MTCwork.sqlite"),
+#  'MTCWORK-CSV':os.path.join(TEST_DIR,"MTC_WorkMode.csv"),
+#  'MTCWORK-CSV-SHORT':os.path.join(TEST_DIR,"MTC_WorkMode_Short.csv"),
+#  'TWIN CITY DEST CHOICE':os.path.join(TEST_DIR,"TwinCityQ.sqlite"),
+#  'MSOM SIMULATION':os.path.join(TEST_DIR,"msom_sim.elmdata"),
+#  'MICRODATA':os.path.join(TEST_DIR,"microdata.sql"),
+#  'MICRODATA SQUEEZE':os.path.join(TEST_DIR,"microdata_squeeze.sql"),
+#  'REFERENCE OUTPUT':os.path.join(TEST_DIR,"reference_output.txt"),
   'SWISSMETRO-CSV':os.path.join(TEST_DIR,"swissmetro.csv"),
   }
 
