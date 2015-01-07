@@ -12,5 +12,6 @@ If you don't know what the difference is, you probably want to start with linear
 This project is very much under development.  There are plenty of undocumented functions
 and features; use them at your own risk.  Undocumented features may be non-functional, 
 not rigorously tested, deprecated or removed without notice in a future version.  If a
-function or method is documented here, it is intended to be stable in future updates.
+function or method is `documented <http://larch.readthedocs.org>`, it is intended to be
+stable in future updates.
 
