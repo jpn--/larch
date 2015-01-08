@@ -1113,11 +1113,25 @@ class DB(utilities.FrozenClass, Facet, apsw.Connection):
 		raise TypeError("type not valid")
 
 	def attach(self, sqlname, filename):
+		'''Attach another SQLite database.
+		
+		:param sqlname: The name SQLite will use to reference the other database.
+		:param filename: The filename or URI to attach.
+		'''
 		if sqlname in self.values('PRAGMA database_list;', column_number=1):
 			return
 		if filename in self.values('PRAGMA database_list;', column_number=2):
 			return
 		self.execute("ATTACH '{}' AS {};".format(filename,sqlname))
+
+	def detach(self, sqlname):
+		'''Detach another SQLite database.
+		
+		:param sqlname: The name SQLite uses to reference the other database.
+		'''
+		if sqlname not in self.values('PRAGMA database_list;', column_number=1):
+			return
+		self.execute("DETACH {};".format(sqlname))
 
 	def table_names(self, dbname="main", views=True):
 		qry = "SELECT name FROM "

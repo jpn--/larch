@@ -58,6 +58,10 @@ Did this software used to be called *ELM*?  Why the name change?
 	Python software to use names from Monty Python, particularly when you want to be able to identify
 	your software `from quite a long way away <https://www.youtube.com/watch?v=ug8nHaelWtc>`_.
 
+Why is the Windows wheel download so much larger than the Mac one?
 
+	The Windows wheel include the openblas library for linear algebra computations.  The
+	Mac version does not need an extra library because Mac OS X includes vector math libraries
+	by default in the Accelerate framework.
 
 

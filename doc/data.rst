@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-=============
-Data in Larch
-=============
+====
+Data
+====
 
 The default storage of data within Larch is handled using SQLite. This portable and
 open source database system provides a common file format that is flexible and 
@@ -115,4 +115,12 @@ standard SQLite database, it is possible to access your data directly from SQLit
 other programs, or through :mod:`apsw` (included as part of Larch)
 or :mod:`sqlite3` (included in standard Python distributions).
 
+
+
+Convenience Methods
+-------------------
+
+.. automethod:: DB.attach
+
+.. automethod:: DB.detach
 
