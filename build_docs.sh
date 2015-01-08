@@ -1,1 +1,0 @@
-/Library/Frameworks/Python.framework/Versions/3.4/bin/sphinx-build /Users/jpn/Dropbox/Larch/doc /Users/jpn/Dropbox/Larch/build/doc

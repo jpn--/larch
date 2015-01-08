@@ -141,7 +141,7 @@ if on_rtd:
 		def __getattr__(cls, name):
 				return Mock()
 
-	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch.core']
+	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch.core', 'larch.apsw']
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
@@ -186,7 +186,7 @@ html_static_path = ['_static']
 
 #html_context = {
 #    'css_files': [
-#        '_static/elm_doc_style.css',  # overrides for wide tables in RTD theme
+#        '_static/larch_rtfd.css',  # overrides for wide tables in RTD theme
 #        ],
 #    }
 
