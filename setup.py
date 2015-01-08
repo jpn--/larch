@@ -1,5 +1,6 @@
 import setuptools
-import glob, time, platform, os, numpy, sysconfig, sys, shutil, io
+from setuptools import setup, Extension
+import glob, time, platform, os, sysconfig, sys, shutil, io
 
 VERSION = '3.1.2'
 
@@ -47,7 +48,7 @@ else:
 
 
 
-
+	import numpy
 
 
 
@@ -84,7 +85,6 @@ else:
 	#from distutils.debug import *
 
 
-	from setuptools import setup, Extension
 	from distutils.command.build_clib import build_clib
 
 
