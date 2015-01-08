@@ -19,6 +19,22 @@
 #
 ################################################################################
 
+if os.environ.get('READTHEDOCS', None) == 'True':
+	# hack for building docs on rtfd
+
+	import sys
+	from unittest.mock import MagicMock
+
+	class Mock(MagicMock):
+		@classmethod
+		def __getattr__(cls, name):
+				return Mock()
+
+	MOCK_MODULES = ['numpy', 'pandas', 'larch._core', 'larch.core', 'larch.apsw']
+	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+
+
 info = """Larch is free, open source software to estimate discrete choice models.
 Copyright 2007-2015 Jeffrey Newman
 This program is licensed under GPLv3 and comes with ABSOLUTELY NO WARRANTY."""

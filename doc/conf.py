@@ -141,7 +141,7 @@ if on_rtd:
 		def __getattr__(cls, name):
 				return Mock()
 
-	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch.core', 'larch.apsw']
+	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw']
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
