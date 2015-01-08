@@ -326,6 +326,22 @@ elif platform.system() == 'Windows':
 	dylib_name_style = "{}.dll"
 	DEBUG = False
 #	raise Exception("TURN OFF multithreading in OpenBLAS")
+else:
+	openblas = '', '', ''
+	local_swig_opts = []
+	local_libraries = []
+	local_library_dirs = []
+	local_includedirs = []
+	local_macros = [('I_AM_LINUX','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
+	local_extra_compile_args = []
+	local_apsw_compile_args = []
+	local_extra_link_args =    []
+	local_data_files = []
+	local_sqlite_extra_postargs = []
+	dylib_name_style = "{}.so"
+	DEBUG = False
+
+
 
 
 #lib_sqlite = ('elmsqlite',           {'sources': ['sqlite/sqlite3.c']})
