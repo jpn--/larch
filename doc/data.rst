@@ -120,7 +120,22 @@ or :mod:`sqlite3` (included in standard Python distributions).
 Convenience Methods
 -------------------
 
-.. automethod:: DB.attach
+.. py:method:: DB.attach
 
-.. automethod:: DB.detach
+	Attach another SQLite database.
+		
+	:param str sqlname: The name SQLite will use to reference the other database.
+	:param str filename: The filename or URI to attach.
+
+	If the other database is already attached, or if the name is already taken by another
+	attached database, the command will be ignored.
+
+.. py:method:: DB.detach
+
+	Detach a previously attached SQLite database.
+		
+	:param str sqlname: The name SQLite will use to reference the other database.
+
+	If the name is not an attached database, the command will be ignored.
+
 
