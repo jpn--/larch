@@ -120,7 +120,7 @@ or :mod:`sqlite3` (included in standard Python distributions).
 Convenience Methods
 -------------------
 
-.. automethod:: attach
+.. automethod:: DB.attach
 
-.. automethod:: detach
+.. automethod:: DB.detach
 
