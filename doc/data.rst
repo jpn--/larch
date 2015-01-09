@@ -15,7 +15,7 @@ wrapper for SQLite.
 Creating :class:`DB` Objects
 ----------------------------
 
-.. class:: DB(filename='file:larchdb?mode=memory', skip_initialization=False)
+.. py:class:: DB(filename='file:larchdb?mode=memory', skip_initialization=False)
 	
 	This object wraps a :class:`apsw.Connection`, adding a number of methods designed
 	specifically for working with choice-based data used in `larch`.
@@ -28,7 +28,7 @@ In addition to opening an existing SQLite database directly, there are a number 
 methods available to create a :class:`DB` object without having it linked to an
 original database file.
 	
-.. method:: DB.Copy
+.. py:method:: DB.Copy
 
 	:param source: The source database.
 	:type source:  str
@@ -44,7 +44,7 @@ original database file.
 	there, instead of reading from disk every time you want data.
 
 
-.. method:: DB.Example
+.. py:method:: DB.Example
 
 	Generate an example data object in memory.
 	Larch comes with a few example data sets, which are used in documentation
@@ -61,7 +61,7 @@ Importing Data
 There are a variety of methods available to import data from external sources into
 a SQLite table for use with the larch DB facility.
 
-.. method:: DB.import_csv
+.. py:method:: DB.import_csv
 
 	Import raw csv or tab-delimited data into SQLite.
 
@@ -75,7 +75,7 @@ a SQLite table for use with the larch DB facility.
 	:result:            A list of column headers from the imported csv file
 
 
-.. method:: DB.import_dataframe
+.. py:method:: DB.import_dataframe
 
 	Imports data from a pandas dataframe into an existing larch DB.
 
@@ -90,7 +90,7 @@ a SQLite table for use with the larch DB facility.
 	:result:             A list of column headers from imported pandas dataframe
 
 
-.. method:: DB.import_dbf
+.. py:method:: DB.import_dbf
 
 	Imports data from a DBF file into an existing larch DB.
 	
@@ -120,7 +120,7 @@ or :mod:`sqlite3` (included in standard Python distributions).
 Convenience Methods
 -------------------
 
-.. automethod:: DB.attach
+.. automethod:: larch.DB.attach
 
 .. automethod:: DB.detach
 
