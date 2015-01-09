@@ -120,7 +120,7 @@ or :mod:`sqlite3` (included in standard Python distributions).
 Convenience Methods
 -------------------
 
-.. automethod:: larch.DB.attach
+.. automethod:: attach
 
-.. automethod:: DB.detach
+.. automethod:: detach
 
