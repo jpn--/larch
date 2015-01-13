@@ -1,11 +1,14 @@
 
+from . import utilities
+
 try:
 	from . import apsw
+	apsw_Connection = apsw.Connection
 except ImportError:
 	from .mock_module import Mock
 	apsw = Mock()
+	apsw_Connection = utilities.Dummy
 
-from . import utilities
 from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO
 from .exceptions import NoResultsError, TooManyResultsError
 from . import logging
@@ -76,7 +79,7 @@ If no weights are given, they are assumed to be all equal.";
 
 
 
-class DB(utilities.FrozenClass, Facet, apsw.Connection):
+class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	sql_alts   = property(Facet.qry_alts  , None, None, _docstring_sql_alts   )
 	sql_idco   = property(Facet.qry_idco  , None, None, _docstring_sql_idco   )

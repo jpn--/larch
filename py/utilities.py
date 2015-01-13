@@ -24,6 +24,7 @@ try:
 except ImportError:
 	from .mock_module import Mock
 	apsw = Mock()
+	class Dummy(): pass
 
 
 TemporaryBucket = []
