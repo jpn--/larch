@@ -24,15 +24,7 @@ import os, os.path
 
 if os.environ.get('READTHEDOCS', None) == 'True':
 	# hack for building docs on rtfd
-
-	import sys
-	from unittest.mock import MagicMock
-
-	class Mock(MagicMock):
-		@classmethod
-		def __getattr__(cls, name):
-				return Mock()
-
+	from .mock_module import Mock
 	MOCK_MODULES = ['numpy', 'pandas', 'larch._core', 'larch.apsw']
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 

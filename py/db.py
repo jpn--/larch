@@ -1,5 +1,10 @@
 
-from . import apsw
+try:
+	from . import apsw
+except ImportError:
+	from .mock_module import Mock
+	apsw = Mock()
+
 from . import utilities
 from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO
 from .exceptions import NoResultsError, TooManyResultsError
