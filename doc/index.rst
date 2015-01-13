@@ -4,10 +4,10 @@
 |treelogo| Larch Documentation
 ==============================
 
-.. centered:: Larch |release|
-
 .. |treelogo| image:: ../img/larch_favicon.png
 	:height: 0.9em
+	:class: treelogo
+	
 
 This documentation is for the Python interface for Larch.
 
@@ -31,6 +31,8 @@ Contents
    :maxdepth: 4
 
    data
+   model
+   parameter
    math
 
 

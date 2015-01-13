@@ -24,14 +24,14 @@
 
 
 freedom_info::freedom_info(const std::string& name,
-						   const double& initial_value, 
-						   const double& null_value, 
-						   const double& value, 
+						   const double& value,
+						   const double& null_value,
+						   const int& holdfast,
+						   const double& initial_value,
 						   const double& std_err,
 						   const double& robust_std_err,
-						   const double& max_value, 
 						   const double& min_value,
-						   const int& holdfast,
+						   const double& max_value,
 						   PyObject* covariance,
 						   PyObject* robust_covariance)
 : name (name)
@@ -46,7 +46,7 @@ freedom_info::freedom_info(const std::string& name,
 , _covar (nullptr)
 , _robust_covar (nullptr)
 {
-	if (isNan(value)) this->value = initial_value;	
+	if (isNan(initial_value)) this->initial_value = value;	
 
 	if (covariance) {
 		_covar = PyDict_Copy(covariance);
@@ -64,24 +64,19 @@ freedom_info::freedom_info(const std::string& name,
 }
 
 
-freedom_info::freedom_info(const freedom_info& n)
-: name (n.name)
-, initial_value (n.initial_value)
-, value (n.value)
-, std_err (n.std_err)
-, robust_std_err(n.robust_std_err)
-, null_value (n.null_value)
-, max_value (n.max_value)
-, min_value (n.min_value)
-, holdfast (n.holdfast)
-, _covar (nullptr)
-, _robust_covar (nullptr)
+freedom_info freedom_info::copy(const freedom_info& n)
 {
-	_covar = PyDict_Copy(n._covar);
-	Py_XINCREF(_covar);
 
-	_robust_covar = PyDict_Copy(n._robust_covar);
-	Py_XINCREF(_robust_covar);
+	freedom_info x (n.name, n.initial_value, n.value, n.std_err, n.robust_std_err, n.null_value, n.max_value, n.min_value, n.holdfast);
+	
+
+	x._covar = PyDict_Copy(n._covar);
+	Py_XINCREF(x._covar);
+
+	x._robust_covar = PyDict_Copy(n._robust_covar);
+	Py_XINCREF(x._robust_covar);
+	
+	return x;
 }
 
 
@@ -155,13 +150,13 @@ void freedom_info::setRobustCovariance(PyObject* covariance)
 }
 
 void freedom_info::update(const double& value_,
-						   const double& initial_value_,
 						   const double& null_value_,
+						   const int& holdfast_,
+						   const double& initial_value_,
 						   const double& std_err_,
 						   const double& robust_std_err_,
-						   const double& max_value_,
 						   const double& min_value_,
-						   const int& holdfast_,
+						   const double& max_value_,
 						   PyObject* covariance_,
 						   PyObject* robust_covariance_)
 {

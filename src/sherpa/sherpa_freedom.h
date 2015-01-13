@@ -29,18 +29,7 @@
 #endif
 
 #ifdef SWIG 
-%rename(Parameter) freedom_info;
-%feature("kwargs", 1) elm::freedom_info::update;
-
-%feature("kwargs", 1) elm::freedom_info::freedom_info;
-
-
-
-%feature("docstring") freedom_info::t_stat
-"Calculates the t statistic against the null value of the parameter. 
-
-The t statistic is calculated as value - null_value)/std_err.";
-
+%include "sherpa_freedom.i"
 #endif // SWIG
 
 class freedom_info {
@@ -67,27 +56,27 @@ public:
 	std::string representation(bool pretty=true) const;
 	
 	freedom_info(const std::string& name="",
-						   const double& initial_value=0,
+						   const double& value=0,
 						   const double& null_value=0,
-						   const double& value=NAN,
+						   const int& holdfast=0,
+						   const double& initial_value=NAN,
 						   const double& std_err=NAN,
 						   const double& robust_std_err=NAN,
-						   const double& max_value=INF,
 						   const double& min_value=-INF,
-						   const int& holdfast=0,
+						   const double& max_value=INF,
 						   PyObject* covariance=nullptr,
 						   PyObject* robust_covariance=nullptr);
-	freedom_info(const freedom_info& n);
+	static freedom_info copy(const freedom_info& n);
 	~freedom_info();
 	
 	void update(const double& value=NAN,
-						   const double& initial_value=NAN,
 						   const double& null_value=NAN,
+						   const int& holdfast=-1,
+						   const double& initial_value=NAN,
 						   const double& std_err=NAN,
 						   const double& robust_std_err=NAN,
-						   const double& max_value=NAN,
 						   const double& min_value=NAN,
-						   const int& holdfast=-1,
+						   const double& max_value=NAN,
 						   PyObject* covariance=nullptr,
 						   PyObject* robust_covariance=nullptr);
 };

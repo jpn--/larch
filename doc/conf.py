@@ -48,6 +48,7 @@ extensions = [
 	'sphinx.ext.viewcode',
 	'sphinx.ext.mathjax',
 	'sphinx.ext.intersphinx',
+	'sphinxcontrib.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -143,6 +144,7 @@ if on_rtd:
 
 	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw']
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+	import larch
 
 
 

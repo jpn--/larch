@@ -1,9 +1,8 @@
 %define DOCSTRING
-"The ELM module v3 can be used to estimate discrete choice models. It runs in python v3."
+"Larch can be used to estimate discrete choice models."
 %enddef
 
-%module(docstring=DOCSTRING, package="elm") core
-
+%module(docstring=DOCSTRING, package="larch") core
 
 
 // Fix an error in swig property::setter's
@@ -210,7 +209,7 @@ namespace std {
 			return self.__class__, args
 	}
 }
- 
+
 
 %{
 #include "etk_arraymath.h"

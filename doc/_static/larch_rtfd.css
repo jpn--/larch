@@ -51,11 +51,20 @@ div.body h4 { font-size: 100%; padding-left: 65px; }
 div.body h5 { font-size: 90%;  padding-left: 80px; }
 div.body h6 { font-size: 80%;  padding-left: 95px; }
 
-.wy-side-nav-search
+.wy-side-nav-search, .wy-nav-top
 {
-	background-color: rgb(51,121,51) !important;
+	background-color: rgb(51,91,71) !important;
 }
 
+.treelogo {
+	max-width: 32px !important;
+}
+
+.wy-side-nav-search .fa-home
+{
+	font-family: 'Roboto Slab';
+	font-weight: 700;
+}
 
 .wy-breadcrumbs li:first-child::before
 {

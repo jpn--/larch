@@ -8,7 +8,7 @@
 
 
 """
-The ELM module v3 can be used to estimate discrete choice models. It runs in python v3.
+Larch can be used to estimate discrete choice models.
 """
 
 
@@ -1566,6 +1566,52 @@ ParameterList_swigregister(ParameterList)
 ParameterList.__len__ = lambda self: int(self._len())
 
 class Parameter(object):
+    """
+    This object represents a discrete choice model parameter.
+
+    Parameters
+    ----------
+    name : str
+    	The name of the parameter. This name is used both in commands
+    	that refer to this parameter, as well as in reports. Generally
+    	it is best to choose a short but descriptive name that does
+    	not include any special characters, although any unicode string
+    	should be acceptable.
+    value : float
+    	This value represents the current value of the parameter.
+    null_value : float
+    	This value represents the default value of the parameter, which
+    	would be assumed if no information is available. It is generally
+    	zero, although for some parameters -- notably the logsum parameters
+    	in a nest logit model, but also certain others -- the default value
+    	might be one, or some other value.
+    holdfast : bool
+    	Sets the holdfast attribute. When True, the value of this parameter
+    	is held constant during parameter estimation.
+
+    Other Parameters
+    ----------------
+    initial_value : float
+    	The initial value of the parameter. This is where the
+    	search algorithm began.
+    std_err, robust_std_err : float
+    	This is the standard error of the estimate of this parameter. The
+    	standard error is derived from the curvature of the log likelihood
+    	function at its maximum. The robust standard error of the estimate
+    	is derived from the sandwich estimator.
+    covariance, robust_covariance : dict
+    	These are dictionary with parameter names as keys and floats
+    	as values, representing the (robust) covariance between this estimator
+    	and the other estimators in the model.
+
+    Notes
+    -----
+    It is not usually necessary to define the 'other parameters' explicitly.
+    The values are normally derived as an outcome of the model estimation
+    process, and the ability to set them here is provided to allow
+    the save and load methods to accurately
+    recreate a model with all attributes intact.
+    """
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     name = _swig_property(_core.Parameter_name_get, _core.Parameter_name_set)
     value = _swig_property(_core.Parameter_value_get, _core.Parameter_value_set)
@@ -1591,10 +1637,62 @@ class Parameter(object):
         return _core.Parameter_t_stat(self)
 
     def representation(self, pretty : 'bool'=True) -> "std::string" : return _core.Parameter_representation(self, pretty)
-    def __init__(self, *args): 
-        this = _core.new_Parameter(*args)
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(freedom_info self, std::string const & name="", double const & value=0, double const & null_value=0, 
+            int const & holdfast=0, double const & initial_value=NAN, double const & std_err=NAN, 
+            double const & robust_std_err=NAN, double const & min_value=-INF, 
+            double const & max_value=INF, PyObject * covariance=None, PyObject * robust_covariance=None) -> Parameter
+
+        This object represents a discrete choice model parameter.
+
+        Parameters
+        ----------
+        name : str
+        	The name of the parameter. This name is used both in commands
+        	that refer to this parameter, as well as in reports. Generally
+        	it is best to choose a short but descriptive name that does
+        	not include any special characters, although any unicode string
+        	should be acceptable.
+        value : float
+        	This value represents the current value of the parameter.
+        null_value : float
+        	This value represents the default value of the parameter, which
+        	would be assumed if no information is available. It is generally
+        	zero, although for some parameters -- notably the logsum parameters
+        	in a nest logit model, but also certain others -- the default value
+        	might be one, or some other value.
+        holdfast : bool
+        	Sets the holdfast attribute. When True, the value of this parameter
+        	is held constant during parameter estimation.
+
+        Other Parameters
+        ----------------
+        initial_value : float
+        	The initial value of the parameter. This is where the
+        	search algorithm began.
+        std_err, robust_std_err : float
+        	This is the standard error of the estimate of this parameter. The
+        	standard error is derived from the curvature of the log likelihood
+        	function at its maximum. The robust standard error of the estimate
+        	is derived from the sandwich estimator.
+        covariance, robust_covariance : dict
+        	These are dictionary with parameter names as keys and floats
+        	as values, representing the (robust) covariance between this estimator
+        	and the other estimators in the model.
+
+        Notes
+        -----
+        It is not usually necessary to define the 'other parameters' explicitly.
+        The values are normally derived as an outcome of the model estimation
+        process, and the ability to set them here is provided to allow
+        the save and load methods to accurately
+        recreate a model with all attributes intact.
+        """
+        this = _core.new_Parameter(*args, **kwargs)
         try: self.this.append(this)
         except: self.this = this
+    copy = staticmethod(_core.Parameter_copy)
     __swig_destroy__ = _core.delete_Parameter
     __del__ = lambda self : None;
     def update(self, *args) -> "void" : return _core.Parameter_update(self, *args)
@@ -1624,6 +1722,10 @@ class Parameter(object):
 
 Parameter_swigregister = _core.Parameter_swigregister
 Parameter_swigregister(Parameter)
+
+def Parameter_copy(*args) -> "freedom_info" :
+  return _core.Parameter_copy(*args)
+Parameter_copy = _core.Parameter_copy
 
 
 def algorithm_name(*args) -> "std::string" :

@@ -62614,19 +62614,28 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_Parameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  double *arg7 = 0 ;
-  double *arg8 = 0 ;
-  int *arg9 = 0 ;
-  PyObject *arg10 = (PyObject *) 0 ;
-  PyObject *arg11 = (PyObject *) 0 ;
+  std::string const &arg1_defvalue = "" ;
+  std::string *arg1 = (std::string *) &arg1_defvalue ;
+  double arg2_defvalue = 0 ;
+  double *arg2 = (double *) &arg2_defvalue ;
+  double arg3_defvalue = 0 ;
+  double *arg3 = (double *) &arg3_defvalue ;
+  int arg4_defvalue = 0 ;
+  int *arg4 = (int *) &arg4_defvalue ;
+  double arg5_defvalue = NAN ;
+  double *arg5 = (double *) &arg5_defvalue ;
+  double arg6_defvalue = NAN ;
+  double *arg6 = (double *) &arg6_defvalue ;
+  double arg7_defvalue = NAN ;
+  double *arg7 = (double *) &arg7_defvalue ;
+  double arg8_defvalue = -INF ;
+  double *arg8 = (double *) &arg8_defvalue ;
+  double arg9_defvalue = INF ;
+  double *arg9 = (double *) &arg9_defvalue ;
+  PyObject *arg10 = (PyObject *) nullptr ;
+  PyObject *arg11 = (PyObject *) nullptr ;
   int res1 = SWIG_OLDOBJ ;
   double temp2 ;
   double val2 ;
@@ -62634,8 +62643,8 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -62649,8 +62658,8 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   double temp8 ;
   double val8 ;
   int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
+  double temp9 ;
+  double val9 ;
   int ecode9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -62663,73 +62672,98 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj8 = 0 ;
   PyObject * obj9 = 0 ;
   PyObject * obj10 = 0 ;
+  char *  kwnames[] = {
+    (char *) "name",(char *) "value",(char *) "null_value",(char *) "holdfast",(char *) "initial_value",(char *) "std_err",(char *) "robust_std_err",(char *) "min_value",(char *) "max_value",(char *) "covariance",(char *) "robust_covariance", NULL 
+  };
   freedom_info *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",11,11,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOOOO:new_Parameter",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10)) SWIG_fail;
+  if (obj0) {
+    {
+      std::string *ptr = (std::string *)0;
+      res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+      if (!SWIG_IsOK(res1)) {
+        SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
+      }
+      if (!ptr) {
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
+      }
+      arg1 = ptr;
     }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
   }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  ecode7 = SWIG_AsVal_double(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
-  } 
-  temp7 = static_cast< double >(val7);
-  arg7 = &temp7;
-  ecode8 = SWIG_AsVal_double(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Parameter" "', argument " "8"" of type '" "double""'");
-  } 
-  temp8 = static_cast< double >(val8);
-  arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_Parameter" "', argument " "9"" of type '" "int""'");
-  } 
-  temp9 = static_cast< int >(val9);
-  arg9 = &temp9;
-  arg10 = obj9;
-  arg11 = obj10;
+  if (obj1) {
+    ecode2 = SWIG_AsVal_double(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
+    } 
+    temp2 = static_cast< double >(val2);
+    arg2 = &temp2;
+  }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_double(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
+    } 
+    temp3 = static_cast< double >(val3);
+    arg3 = &temp3;
+  }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "int""'");
+    } 
+    temp4 = static_cast< int >(val4);
+    arg4 = &temp4;
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_double(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
+    } 
+    temp5 = static_cast< double >(val5);
+    arg5 = &temp5;
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_double(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
+    } 
+    temp6 = static_cast< double >(val6);
+    arg6 = &temp6;
+  }
+  if (obj6) {
+    ecode7 = SWIG_AsVal_double(obj6, &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
+    } 
+    temp7 = static_cast< double >(val7);
+    arg7 = &temp7;
+  }
+  if (obj7) {
+    ecode8 = SWIG_AsVal_double(obj7, &val8);
+    if (!SWIG_IsOK(ecode8)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Parameter" "', argument " "8"" of type '" "double""'");
+    } 
+    temp8 = static_cast< double >(val8);
+    arg8 = &temp8;
+  }
+  if (obj8) {
+    ecode9 = SWIG_AsVal_double(obj8, &val9);
+    if (!SWIG_IsOK(ecode9)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_Parameter" "', argument " "9"" of type '" "double""'");
+    } 
+    temp9 = static_cast< double >(val9);
+    arg9 = &temp9;
+  }
+  if (obj9) {
+    arg10 = obj9;
+  }
+  if (obj10) {
+    arg11 = obj10;
+  }
   {
     try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9,arg10,arg11);
+      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(double const &)*arg9,arg10,arg11);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -62753,992 +62787,26 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  double *arg7 = 0 ;
-  double *arg8 = 0 ;
-  int *arg9 = 0 ;
-  PyObject *arg10 = (PyObject *) 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double temp6 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double temp7 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  double temp8 ;
-  double val8 ;
-  int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
-  int ecode9 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  PyObject * obj8 = 0 ;
-  PyObject * obj9 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",10,10,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  ecode7 = SWIG_AsVal_double(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
-  } 
-  temp7 = static_cast< double >(val7);
-  arg7 = &temp7;
-  ecode8 = SWIG_AsVal_double(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Parameter" "', argument " "8"" of type '" "double""'");
-  } 
-  temp8 = static_cast< double >(val8);
-  arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_Parameter" "', argument " "9"" of type '" "int""'");
-  } 
-  temp9 = static_cast< int >(val9);
-  arg9 = &temp9;
-  arg10 = obj9;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9,arg10);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  double *arg7 = 0 ;
-  double *arg8 = 0 ;
-  int *arg9 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double temp6 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double temp7 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  double temp8 ;
-  double val8 ;
-  int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
-  int ecode9 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  PyObject * obj8 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",9,9,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  ecode7 = SWIG_AsVal_double(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
-  } 
-  temp7 = static_cast< double >(val7);
-  arg7 = &temp7;
-  ecode8 = SWIG_AsVal_double(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Parameter" "', argument " "8"" of type '" "double""'");
-  } 
-  temp8 = static_cast< double >(val8);
-  arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "new_Parameter" "', argument " "9"" of type '" "int""'");
-  } 
-  temp9 = static_cast< int >(val9);
-  arg9 = &temp9;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  double *arg7 = 0 ;
-  double *arg8 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double temp6 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double temp7 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  double temp8 ;
-  double val8 ;
-  int ecode8 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",8,8,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  ecode7 = SWIG_AsVal_double(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
-  } 
-  temp7 = static_cast< double >(val7);
-  arg7 = &temp7;
-  ecode8 = SWIG_AsVal_double(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "new_Parameter" "', argument " "8"" of type '" "double""'");
-  } 
-  temp8 = static_cast< double >(val8);
-  arg8 = &temp8;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  double *arg7 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double temp6 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double temp7 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",7,7,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  ecode7 = SWIG_AsVal_double(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "new_Parameter" "', argument " "7"" of type '" "double""'");
-  } 
-  temp7 = static_cast< double >(val7);
-  arg7 = &temp7;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  double *arg6 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double temp6 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",6,6,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  ecode6 = SWIG_AsVal_double(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_Parameter" "', argument " "6"" of type '" "double""'");
-  } 
-  temp6 = static_cast< double >(val6);
-  arg6 = &temp6;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  double *arg5 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double temp5 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Parameter" "', argument " "5"" of type '" "double""'");
-  } 
-  temp5 = static_cast< double >(val5);
-  arg5 = &temp5;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  double *arg4 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Parameter" "', argument " "4"" of type '" "double""'");
-  } 
-  temp4 = static_cast< double >(val4);
-  arg4 = &temp4;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3,(double const &)*arg4);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_8(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  double *arg3 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double temp3 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  ecode3 = SWIG_AsVal_double(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Parameter" "', argument " "3"" of type '" "double""'");
-  } 
-  temp3 = static_cast< double >(val3);
-  arg3 = &temp3;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2,(double const &)*arg3);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_9(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  double *arg2 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  double temp2 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",2,2,&obj0,&obj1)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Parameter" "', argument " "2"" of type '" "double""'");
-  } 
-  temp2 = static_cast< double >(val2);
-  arg2 = &temp2;
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1,(double const &)*arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_10(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",1,1,&obj0)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  {
-    try {
-      result = (freedom_info *)new freedom_info((std::string const &)*arg1);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  freedom_info *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",0,0)) SWIG_fail;
-  {
-    try {
-      result = (freedom_info *)new freedom_info();
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_12(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Parameter_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   freedom_info *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  freedom_info *result = 0 ;
+  freedom_info result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_Parameter",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"Parameter_copy",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_freedom_info,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Parameter" "', argument " "1"" of type '" "freedom_info const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_copy" "', argument " "1"" of type '" "freedom_info const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Parameter" "', argument " "1"" of type '" "freedom_info const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Parameter_copy" "', argument " "1"" of type '" "freedom_info const &""'"); 
   }
   arg1 = reinterpret_cast< freedom_info * >(argp1);
   {
     try {
-      result = (freedom_info *)new freedom_info((freedom_info const &)*arg1);
+      result = freedom_info::copy((freedom_info const &)*arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -63753,461 +62821,10 @@ SWIGINTERN PyObject *_wrap_new_Parameter__SWIG_12(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_info, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj((new freedom_info(static_cast< const freedom_info& >(result))), SWIGTYPE_p_freedom_info, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_Parameter(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[12];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 11) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_Parameter__SWIG_11(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_freedom_info, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Parameter__SWIG_12(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Parameter__SWIG_10(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_new_Parameter__SWIG_9(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_new_Parameter__SWIG_8(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            return _wrap_new_Parameter__SWIG_7(self, args);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 5) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              return _wrap_new_Parameter__SWIG_6(self, args);
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 6) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                return _wrap_new_Parameter__SWIG_5(self, args);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 7) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_double(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  return _wrap_new_Parameter__SWIG_4(self, args);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 8) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_double(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    return _wrap_new_Parameter__SWIG_3(self, args);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 9) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_double(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
-                    if (_v) {
-                      return _wrap_new_Parameter__SWIG_2(self, args);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 10) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_double(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
-                    if (_v) {
-                      _v = (argv[9] != 0);
-                      if (_v) {
-                        return _wrap_new_Parameter__SWIG_1(self, args);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 11) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_double(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_double(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_double(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
-                    _v = SWIG_CheckState(res);
-                  }
-                  if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
-                    if (_v) {
-                      _v = (argv[9] != 0);
-                      if (_v) {
-                        _v = (argv[10] != 0);
-                        if (_v) {
-                          return _wrap_new_Parameter__SWIG_0(self, args);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_Parameter'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &,PyObject *,PyObject *)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &,PyObject *)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &,double const &)\n"
-    "    freedom_info::freedom_info(std::string const &)\n"
-    "    freedom_info::freedom_info()\n"
-    "    freedom_info::freedom_info(freedom_info const &)\n");
-  return 0;
 }
 
 
@@ -64253,12 +62870,12 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   double *arg7 = 0 ;
   double *arg8 = 0 ;
-  int *arg9 = 0 ;
+  double *arg9 = 0 ;
   PyObject *arg10 = (PyObject *) 0 ;
   PyObject *arg11 = (PyObject *) 0 ;
   void *argp1 = 0 ;
@@ -64269,8 +62886,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64284,8 +62901,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   double temp8 ;
   double val8 ;
   int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
+  double temp9 ;
+  double val9 ;
   int ecode9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -64317,11 +62934,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64347,17 +62964,17 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp8 = static_cast< double >(val8);
   arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
+  ecode9 = SWIG_AsVal_double(obj8, &val9);
   if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "double""'");
   } 
-  temp9 = static_cast< int >(val9);
+  temp9 = static_cast< double >(val9);
   arg9 = &temp9;
   arg10 = obj9;
   arg11 = obj10;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9,arg10,arg11);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(double const &)*arg9,arg10,arg11);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64384,12 +63001,12 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   double *arg7 = 0 ;
   double *arg8 = 0 ;
-  int *arg9 = 0 ;
+  double *arg9 = 0 ;
   PyObject *arg10 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -64399,8 +63016,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64414,8 +63031,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   double temp8 ;
   double val8 ;
   int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
+  double temp9 ;
+  double val9 ;
   int ecode9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -64446,11 +63063,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64476,16 +63093,16 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp8 = static_cast< double >(val8);
   arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
+  ecode9 = SWIG_AsVal_double(obj8, &val9);
   if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "double""'");
   } 
-  temp9 = static_cast< int >(val9);
+  temp9 = static_cast< double >(val9);
   arg9 = &temp9;
   arg10 = obj9;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9,arg10);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(double const &)*arg9,arg10);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64512,12 +63129,12 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   double *arg7 = 0 ;
   double *arg8 = 0 ;
-  int *arg9 = 0 ;
+  double *arg9 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double temp2 ;
@@ -64526,8 +63143,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64541,8 +63158,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   double temp8 ;
   double val8 ;
   int ecode8 = 0 ;
-  int temp9 ;
-  int val9 ;
+  double temp9 ;
+  double val9 ;
   int ecode9 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -64572,11 +63189,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64602,15 +63219,15 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp8 = static_cast< double >(val8);
   arg8 = &temp8;
-  ecode9 = SWIG_AsVal_int(obj8, &val9);
+  ecode9 = SWIG_AsVal_double(obj8, &val9);
   if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "Parameter_update" "', argument " "9"" of type '" "double""'");
   } 
-  temp9 = static_cast< int >(val9);
+  temp9 = static_cast< double >(val9);
   arg9 = &temp9;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(int const &)*arg9);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8,(double const &)*arg9);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64637,7 +63254,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   double *arg7 = 0 ;
@@ -64650,8 +63267,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64692,11 +63309,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64724,7 +63341,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
   arg8 = &temp8;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7,(double const &)*arg8);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64751,7 +63368,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   double *arg7 = 0 ;
@@ -64763,8 +63380,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64801,11 +63418,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64827,7 +63444,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
   arg7 = &temp7;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6,(double const &)*arg7);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64854,7 +63471,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   double *arg6 = 0 ;
   void *argp1 = 0 ;
@@ -64865,8 +63482,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64899,11 +63516,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -64919,7 +63536,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
   arg6 = &temp6;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5,(double const &)*arg6);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5,(double const &)*arg6);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -64946,7 +63563,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   double *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -64956,8 +63573,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   double temp5 ;
   double val5 ;
@@ -64986,11 +63603,11 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -65000,7 +63617,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
   arg5 = &temp5;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4,(double const &)*arg5);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4,(double const &)*arg5);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -65027,7 +63644,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_7(PyObject *SWIGUNUSEDPARM(sel
   freedom_info *arg1 = (freedom_info *) 0 ;
   double *arg2 = 0 ;
   double *arg3 = 0 ;
-  double *arg4 = 0 ;
+  int *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double temp2 ;
@@ -65036,8 +63653,8 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_7(PyObject *SWIGUNUSEDPARM(sel
   double temp3 ;
   double val3 ;
   int ecode3 = 0 ;
-  double temp4 ;
-  double val4 ;
+  int temp4 ;
+  int val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -65062,15 +63679,15 @@ SWIGINTERN PyObject *_wrap_Parameter_update__SWIG_7(PyObject *SWIGUNUSEDPARM(sel
   } 
   temp3 = static_cast< double >(val3);
   arg3 = &temp3;
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Parameter_update" "', argument " "4"" of type '" "int""'");
   } 
-  temp4 = static_cast< double >(val4);
+  temp4 = static_cast< int >(val4);
   arg4 = &temp4;
   {
     try {
-      (arg1)->update((double const &)*arg2,(double const &)*arg3,(double const &)*arg4);
+      (arg1)->update((double const &)*arg2,(double const &)*arg3,(int const &)*arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -65308,7 +63925,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65335,7 +63952,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65368,7 +63985,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65407,7 +64024,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65452,7 +64069,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65503,7 +64120,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65528,7 +64145,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
                   }
                   if (_v) {
                     {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      int res = SWIG_AsVal_double(argv[8], NULL);
                       _v = SWIG_CheckState(res);
                     }
                     if (_v) {
@@ -65560,7 +64177,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65585,7 +64202,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
                   }
                   if (_v) {
                     {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      int res = SWIG_AsVal_double(argv[8], NULL);
                       _v = SWIG_CheckState(res);
                     }
                     if (_v) {
@@ -65620,7 +64237,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_double(argv[3], NULL);
+            int res = SWIG_AsVal_int(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -65645,7 +64262,7 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
                   }
                   if (_v) {
                     {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
+                      int res = SWIG_AsVal_double(argv[8], NULL);
                       _v = SWIG_CheckState(res);
                     }
                     if (_v) {
@@ -65670,14 +64287,14 @@ SWIGINTERN PyObject *_wrap_Parameter_update(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Parameter_update'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &,PyObject *,PyObject *)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &,PyObject *)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &,double const &,double const &,int const &)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::update(double const &,double const &,double const &,double const &)\n"
-    "    freedom_info::update(double const &,double const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &,double const &,double const &,double const &,PyObject *,PyObject *)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &,double const &,double const &,double const &,PyObject *)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &,double const &,double const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &,double const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &,double const &)\n"
+    "    freedom_info::update(double const &,double const &,int const &)\n"
     "    freedom_info::update(double const &,double const &)\n"
     "    freedom_info::update(double const &)\n"
     "    freedom_info::update()\n");
@@ -76952,7 +75569,58 @@ static PyMethodDef SwigMethods[] = {
 		"The t statistic is calculated as value - null_value)/std_err.\n"
 		""},
 	 { (char *)"Parameter_representation", _wrap_Parameter_representation, METH_VARARGS, NULL},
-	 { (char *)"new_Parameter", _wrap_new_Parameter, METH_VARARGS, NULL},
+	 { (char *)"new_Parameter", (PyCFunction) _wrap_new_Parameter, METH_VARARGS | METH_KEYWORDS, (char *)"\n"
+		"new_Parameter(std::string const & name=\"\", double const & value=0, double const & null_value=0, \n"
+		"    int const & holdfast=0, double const & initial_value=NAN, double const & std_err=NAN, \n"
+		"    double const & robust_std_err=NAN, double const & min_value=-INF, \n"
+		"    double const & max_value=INF, PyObject * covariance=None, PyObject * robust_covariance=None) -> Parameter\n"
+		"\n"
+		"This object represents a discrete choice model parameter.\n"
+		"\n"
+		"Parameters\n"
+		"----------\n"
+		"name : str\n"
+		"	The name of the parameter. This name is used both in commands\n"
+		"	that refer to this parameter, as well as in reports. Generally\n"
+		"	it is best to choose a short but descriptive name that does\n"
+		"	not include any special characters, although any unicode string\n"
+		"	should be acceptable.\n"
+		"value : float\n"
+		"	This value represents the current value of the parameter.\n"
+		"null_value : float\n"
+		"	This value represents the default value of the parameter, which\n"
+		"	would be assumed if no information is available. It is generally\n"
+		"	zero, although for some parameters -- notably the logsum parameters\n"
+		"	in a nest logit model, but also certain others -- the default value\n"
+		"	might be one, or some other value.\n"
+		"holdfast : bool\n"
+		"	Sets the holdfast attribute. When True, the value of this parameter\n"
+		"	is held constant during parameter estimation.\n"
+		"\n"
+		"Other Parameters\n"
+		"----------------\n"
+		"initial_value : float\n"
+		"	The initial value of the parameter. This is where the\n"
+		"	search algorithm began.\n"
+		"std_err, robust_std_err : float\n"
+		"	This is the standard error of the estimate of this parameter. The\n"
+		"	standard error is derived from the curvature of the log likelihood\n"
+		"	function at its maximum. The robust standard error of the estimate\n"
+		"	is derived from the sandwich estimator.\n"
+		"covariance, robust_covariance : dict\n"
+		"	These are dictionary with parameter names as keys and floats\n"
+		"	as values, representing the (robust) covariance between this estimator\n"
+		"	and the other estimators in the model.\n"
+		"\n"
+		"Notes\n"
+		"-----\n"
+		"It is not usually necessary to define the 'other parameters' explicitly.\n"
+		"The values are normally derived as an outcome of the model estimation\n"
+		"process, and the ability to set them here is provided to allow\n"
+		"the save and load methods to accurately\n"
+		"recreate a model with all attributes intact.\n"
+		""},
+	 { (char *)"Parameter_copy", _wrap_Parameter_copy, METH_VARARGS, NULL},
 	 { (char *)"delete_Parameter", _wrap_delete_Parameter, METH_VARARGS, NULL},
 	 { (char *)"Parameter_update", _wrap_Parameter_update, METH_VARARGS, NULL},
 	 { (char *)"Parameter___str__", _wrap_Parameter___str__, METH_VARARGS, NULL},

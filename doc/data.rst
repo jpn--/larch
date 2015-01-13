@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-====
-Data
-====
+=======================
+Data Storage and Access
+=======================
 
 The default storage of data within Larch is handled using SQLite. This portable and
 open source database system provides a common file format that is flexible and 
@@ -23,7 +23,10 @@ Creating :class:`DB` Objects
 	The normal constructor creates a :class:`DB` object linked to an existing SQLite
 	database file. Editing the object edits the file as well. There is currently no
 	"undo" so be careful with this method.
-	
+
+
+
+
 In addition to opening an existing SQLite database directly, there are a number of
 methods available to create a :class:`DB` object without having it linked to an
 original database file.
@@ -120,7 +123,7 @@ or :mod:`sqlite3` (included in standard Python distributions).
 Convenience Methods
 -------------------
 
-.. py:method:: DB.attach
+.. py:method:: DB.attach(sqlname, filename)
 
 	Attach another SQLite database.
 		
@@ -128,14 +131,25 @@ Convenience Methods
 	:param str filename: The filename or URI to attach.
 
 	If the other database is already attached, or if the name is already taken by another
-	attached database, the command will be ignored.
+	attached database, the command will be ignored. Otherwise, this command is the
+	equivalent of executing::
 
-.. py:method:: DB.detach
+		ATTACH filename AS sqlname;
+
+	.. seealso:: :py:meth:`DB.detach`
+
+
+
+.. method:: DB.detach(sqlname)
 
 	Detach a previously attached SQLite database.
 		
 	:param str sqlname: The name SQLite will use to reference the other database.
 
-	If the name is not an attached database, the command will be ignored.
+	If the name is not an attached database, the command will be ignored. Otherwise,
+	this command is the equivalent of executing::
 
+		DETACH sqlname;
+
+	.. seealso:: :py:meth:`DB.attach`
 
