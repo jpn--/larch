@@ -18,7 +18,13 @@
 #
 
 import os.path, os, pickle, zlib, glob
-from . import logging, apsw
+from . import logging
+try:
+	from . import apsw
+except ImportError:
+	from .mock_module import Mock
+	apsw = Mock()
+
 
 TemporaryBucket = []
 
