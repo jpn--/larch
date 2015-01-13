@@ -56,11 +56,11 @@ try:
 	from .model import ModelFamily
 	from . import array
 	core._set_array_module(array)
-	from .built import version, build, versions, build_config
 	try:
+		from .built import version, build, versions, build_config
 		del built
-	except NameError:
-		pass
+	except (NameError, ImportError):
+		version, build, versions, build_config = "","",{},""
 
 	try:
 		from . import linalg
