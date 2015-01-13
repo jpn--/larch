@@ -67,6 +67,9 @@ try:
 		core.set_linalg(linalg)
 	except AttributeError as err:
 		print(err)
+	except ImportError:
+		from .mock_module import Mock
+		linalg = Mock()
 
 	status += "\nLarch "+build
 	_directory_ = os.path.split(__file__)[0]
