@@ -14,7 +14,7 @@
 import sys, os
 
 larch_versions = {
-	'larch': '3.1.2',
+	'larch': '3.1.4',
 	'pandas': '0.14.1',
 	'apsw': '3.8.7.3-r1',
 	'python': '3.4.0 final',
@@ -113,6 +113,7 @@ intersphinx_mapping = {
 	'python': ('http://docs.python.org/3.4/', 'python_3_4_2.inv'),
 	'apsw': ('http://rogerbinns.github.io/apsw/', 'apsw_3_8_7_3.inv'),
 	'numpy': ('http://docs.scipy.org/doc/numpy/', 'numpy_1_9.inv'),
+	'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------

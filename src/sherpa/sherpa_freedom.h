@@ -66,8 +66,11 @@ public:
 						   const double& max_value=INF,
 						   PyObject* covariance=nullptr,
 						   PyObject* robust_covariance=nullptr);
-	static freedom_info copy(const freedom_info& n);
 	~freedom_info();
+	
+	#ifndef SWIG
+	freedom_info(const freedom_info& that);
+	#endif
 	
 	void update(const double& value=NAN,
 						   const double& null_value=NAN,

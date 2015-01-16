@@ -62787,47 +62787,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Parameter_copy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  freedom_info *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  freedom_info result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Parameter_copy",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_freedom_info,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Parameter_copy" "', argument " "1"" of type '" "freedom_info const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Parameter_copy" "', argument " "1"" of type '" "freedom_info const &""'"); 
-  }
-  arg1 = reinterpret_cast< freedom_info * >(argp1);
-  {
-    try {
-      result = freedom_info::copy((freedom_info const &)*arg1);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_NewPointerObj((new freedom_info(static_cast< const freedom_info& >(result))), SWIGTYPE_p_freedom_info, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_Parameter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   freedom_info *arg1 = (freedom_info *) 0 ;
@@ -75620,7 +75579,6 @@ static PyMethodDef SwigMethods[] = {
 		"the save and load methods to accurately\n"
 		"recreate a model with all attributes intact.\n"
 		""},
-	 { (char *)"Parameter_copy", _wrap_Parameter_copy, METH_VARARGS, NULL},
 	 { (char *)"delete_Parameter", _wrap_delete_Parameter, METH_VARARGS, NULL},
 	 { (char *)"Parameter_update", _wrap_Parameter_update, METH_VARARGS, NULL},
 	 { (char *)"Parameter___str__", _wrap_Parameter___str__, METH_VARARGS, NULL},

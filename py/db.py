@@ -80,6 +80,31 @@ If no weights are given, they are assumed to be all equal.";
 
 
 class DB(utilities.FrozenClass, Facet, apsw_Connection):
+	"""An SQLite database connection used to get data for models.
+
+	This object wraps a :class:`apsw.Connection`, adding a number of methods designed
+	specifically for working with choice-based data used in Larch.
+
+	Parameters
+	----------
+	filename : str or None
+		The filename or `URI <https://www.sqlite.org/c3ref/open.html#urifilenameexamples>`_
+		of the database to open. It must be encoded as a UTF-8 string. (If your
+		string contains only usual English characters you probably don't need
+		to worry about it.) The default is an in-memory database opened with a URI of
+		``file:larchdb?mode=memory``, which is very fast as long as you've got enough
+		memory to store the whole thing.
+	readonly : bool
+		If true, the database connection is opened with a read-only flag set. If the file
+		does not already exist, an exception is raised.
+
+
+	.. warning::
+		The normal constructor creates a :class:`DB` object linked to an existing SQLite
+		database file. Editing the object edits the file as well. There is currently no
+		"undo" so be careful when manipulating the database.
+
+	"""
 
 	sql_alts   = property(Facet.qry_alts  , None, None, _docstring_sql_alts   )
 	sql_idco   = property(Facet.qry_idco  , None, None, _docstring_sql_idco   )
@@ -199,17 +224,30 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	def Copy(source, destination="file:larchdb?mode=memory"):
 		'''Create a copy of a database and link it to a DB object.
 
-		:param source: The source database.
-		:type source:  str
-		:param destination: The destination database.
-		:type destination: str
-		:returns: A DB object with an open connection to the destination DB.
-		
 		It is often desirable to work on a copy of your data, instead of working
 		with the original file. If you data file is not very large and you are 
 		working with multiple models, there can be significant speed advantages
 		to copying the entire database into memory first, and then working on it
 		there, instead of reading from disk every time you want data.
+		
+		Parameters
+		----------
+		source : str
+			The source SQLite database from which the contents will be copied.
+			Can be given as a plain filename or a 
+			`URI <https://www.sqlite.org/c3ref/open.html#urifilenameexamples>`_.
+		destination : str
+			The destination SQLite database to which the contents will be copied.
+			Can be given as a plain filename or a 
+			`URI <https://www.sqlite.org/c3ref/open.html#urifilenameexamples>`_.
+			If it does not exist it will be created. If the destination is not
+			given, an in-memory database will be opened with a URI of
+			``file:larchdb?mode=memory``.
+
+		Returns
+		-------
+		DB
+			An open connection to destination database.
 		
 		'''
 		d = DB(destination)
@@ -231,7 +269,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	def ExampleDirectory():
 		'''Returns the directory location of the example data files.
 		
-		ELM comes with a few example data sets, which are used in documentation
+		Larch comes with a few example data sets, which are used in documentation
 		and testing. It is important that you do not edit the original data.
 		'''
 		import os.path
@@ -255,6 +293,17 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		and testing. It is important that you do not edit the original data, so
 		this function copies the data into an in-memory database, which you can
 		freely edit without damaging the original data.
+		
+		Parameters
+		----------
+		dataset : {'MTC', 'SWISSMETRO'}
+			Which example dataset should be used.
+			
+		Returns
+		-------
+		DB
+			An open connection to the in-memory copy of the example database.
+		
 		'''
 		import os.path
 		TEST_DIR = DB.ExampleDirectory()
@@ -338,15 +387,25 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	
 	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None):
 		'''Import raw csv or tab-delimited data into SQLite.
+
+		Parameters
+		----------
+		rawdata : str
+			The filename (relative or absolute) of the raw csv or tab delimited data file.
+		table : str
+			The name of the table into which the data is to be imported
+		drop_old : bool
+			If true and the `table` already exists in the SQLite database, then the
+			pre-existing `table` is deleted.
+		progress_callback : callback function
+			If given, this callback function takes a single integer
+			as an argument and is called periodically while loading
+			with the current precentage complete.
 		
-		:param rawdata:     The absolute path to the raw csv or tab delimited data file.
-		:param table:       The name of the table into which the data is to be imported
-		:param drop_old:    Bool= drop old data table if it already exists?
-		:param progress_callback: If given, this callback function takes a single integer
-		                    as an argument and is called periodically while loading
-		                    with the current precentage complete.
-		
-		:result:            A list of column headers from the imported csv file
+		Returns
+		-------
+		list
+			A list of column headers from the imported csv file
 		'''
 		eL = logging.getScriber("db")
 		eL.debug("Importing Data...")
@@ -391,15 +450,26 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	def import_dbf(self, rawdata, table="data", drop_old=False):
 		'''Imports data from a DBF file into an existing larch DB.
-			
-			:param rawdata:     The path to the raw DBF data file.
-			:param table:       The name of the table into which the data is to be imported
-			:param drop_old:    Bool= drop old data table if it already exists?
-			
-			:result:            A list of column headers from imported csv file
-			
-			Note: this method requires the dbfpy module (available using pip).
-			'''
+
+		Parameters
+		----------
+		rawdata : str
+			The filename (relative or absolute) of the raw DBF data file.
+		table : str
+			The name of the table into which the data is to be imported
+		drop_old : bool
+			If true and the `table` already exists in the SQLite database, then the
+			pre-existing `table` is deleted.
+		
+		Returns
+		-------
+		list
+			A list of column headers from the imported DBF file
+
+
+		.. note::
+			This method requires the dbfpy module (available using pip).
+		'''
 		eL = logging.getScriber("db")
 		eL.debug("Importing DBF Data...")
 		try:
@@ -448,16 +518,23 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	def import_dataframe(self, rawdataframe, table="data", if_exists='fail'):
 		'''Imports data from a pandas dataframe into an existing larch DB.
 			
-			:param rawdataframe: An existing pandas dataframe.
-			:param table:        The name of the table into which the data is to be imported
-			:param if_exists:    Should be one of {‘fail’, ‘replace’, ‘append’}. If the table
-								 does not exist this parameter is ignored, otherwise,
-								 *fail*: If table exists, raise a ValueError exception.
-								 *replace*: If table exists, drop it, recreate it, and insert data.
-								 *append*: If table exists, insert data.
-			
-			:result:             A list of column headers from imported pandas dataframe
-			'''
+		Parameters
+		----------
+		rawdataframe : :class:`pandas.DataFrame`
+			The filename (relative or absolute) of the raw DataFrame.
+		table : str
+			The name of the table into which the data is to be imported
+		if_exists : {'fail', 'replace', 'append'}
+			If the table does not exist this parameter is ignored, otherwise,
+			*fail*: If table exists, raise a ValueError exception.
+			*replace*: If table exists, drop it, recreate it, and insert data.
+			*append*: If table exists, insert data.
+
+		Returns
+		-------
+		list
+			A list of column headers from the imported DBF file
+		'''
 		if if_exists not in ('fail', 'replace', 'append'):
 			raise ValueError("'%s' is not valid for if_exists" % if_exists)
 		exists = table in self.all_table_names()
@@ -506,6 +583,43 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		eL.info("%i rows imported", num_rows)
 		cur.close()
 		return [s.replace(' ', '_').strip() for s in rawdataframe.columns]
+
+	def import_xlsx(self, io, sheetname=0, table="data", if_exists='fail', **kwargs):
+		'''Imports data from an Excel spreadsheet into an existing larch DB.
+		
+		Parameters
+		----------
+		io : string, file-like object, or xlrd workbook.
+			The string could be a URL. Valid URL schemes include http, ftp, s3, and file.
+			For file URLs, a host is expected. For instance, a local file could be
+			file://localhost/path/to/workbook.xlsx
+		sheetname : string or int, default 0
+			Name of Excel sheet or the page number of the sheet
+		table : str
+			The name of the table into which the data is to be imported
+		if_exists : {'fail', 'replace', 'append'}
+			If the table does not exist this parameter is ignored, otherwise,
+			*fail*: If table exists, raise a ValueError exception.
+			*replace*: If table exists, drop it, recreate it, and insert data.
+			*append*: If table exists, insert data.
+
+		Returns
+		-------
+		list
+			A list of column headers from the imported DBF file
+
+		Notes
+		-----
+		This method uses a :class:`pandas.DataFrame` as an intermediate step, first calling
+		:func:`pandas.io.excel.read_excel` and then calling :meth:`import_dataframe`. All
+		keyword arguments other than those listed here are simply passed to 
+		:func:`pandas.io.excel.read_excel`.
+		
+		'''
+		import pandas
+		df = pandas.io.excel.read_excel(io, sheetname, **kwargs)
+		return self.import_dataframe(df, table=table, if_exists=if_exists)
+	
 
 	def execute(self, command, arguments=(), fancy=False, explain=False, fail_silently=False, echo=False):
 		'''A convenience function wrapping cursor generation and command 
@@ -1123,8 +1237,22 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	def attach(self, sqlname, filename):
 		'''Attach another SQLite database.
 		
-		:param sqlname: The name SQLite will use to reference the other database.
-		:param filename: The filename or URI to attach.
+		Parameters
+		----------
+		sqlname : str
+			The name SQLite will use to reference the other database.
+		filename : str
+			The filename or URI to attach.
+
+		Notes
+		-----
+		If the other database is already attached, or if the name is already taken by another
+		attached database, the command will be ignored. Otherwise, this command is the
+		equivalent of executing::
+
+			ATTACH filename AS sqlname;
+
+		.. seealso:: :meth:`DB.detach`
 		'''
 		if sqlname in self.values('PRAGMA database_list;', column_number=1):
 			return
@@ -1134,8 +1262,21 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	def detach(self, sqlname):
 		'''Detach another SQLite database.
-		
-		:param sqlname: The name SQLite uses to reference the other database.
+
+		Parameters
+		----------
+		sqlname : str
+			The name SQLite uses to reference the other database.
+
+		Notes
+		-----
+		If the name is not an attached database, the command will be ignored. Otherwise,
+		this command is the equivalent of executing::
+
+			DETACH sqlname;
+
+		.. seealso:: :meth:`DB.attach`
+	
 		'''
 		if sqlname not in self.values('PRAGMA database_list;', column_number=1):
 			return

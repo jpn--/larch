@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.2'
+VERSION = '3.1.4'
 
 
 def read(*filenames, **kwargs):
@@ -345,6 +345,7 @@ else:
 
 	if platform.system() == 'Darwin':
 		openblas = None
+		gfortran = None
 		local_swig_opts = []
 		local_libraries = []
 		local_library_dirs = []
@@ -359,8 +360,9 @@ else:
 		DEBUG = False
 	elif platform.system() == 'Windows':
 		openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
+		gfortran = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libgfortran-3.dll'
 		local_swig_opts = []
-		local_libraries = ['PYTHON34','libopenblas','PYTHON34',]
+		local_libraries = ['PYTHON34','libopenblas','libgfortran-3','PYTHON34',]
 		local_library_dirs = ['Z:/Larch/{0}/{1}'.format(*openblas), 'C:\\local\\boost_1_56_0\\lib64-msvc-10.0']
 		local_includedirs = ['./{0}/include'.format(*openblas), 'C:/local/boost_1_56_0' ]
 		local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
@@ -376,7 +378,8 @@ else:
 		DEBUG = False
 	#	raise Exception("TURN OFF multithreading in OpenBLAS")
 	else:
-		openblas = '', '', ''
+		openblas = None
+		gfortran = None
 		local_swig_opts = []
 		local_libraries = []
 		local_library_dirs = []
@@ -420,10 +423,12 @@ else:
 		if not isinstance(source,list):
 			source = [source,]
 		
-		try:
-			need_to_update = (os.path.getmtime(source) > os.path.getmtime(os.path.join(libdir, dylib_name_style.format(name))))
-		except:
-			need_to_update = True
+		need_to_update = False
+		for eachsource in source:
+			try:
+				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(libdir, dylib_name_style.format(name))))
+			except FileNotFoundError:
+				need_to_update = True
 
 		# change dynamic library install name
 		if platform.system() == 'Darwin':
@@ -439,6 +444,8 @@ else:
 
 	if openblas is not None:
 		shutil.copyfile(os.path.join('Z:/Larch',*openblas), os.path.join(shlib_folder(),openblas[-1]))
+	if gfortran is not None:
+		shutil.copyfile(os.path.join('Z:/Larch',*gfortran), os.path.join(shlib_folder(),gfortran[-1]))
 
 
 

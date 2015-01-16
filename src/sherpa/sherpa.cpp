@@ -861,18 +861,52 @@ double sherpa::parameter_stderr(const string& freedom_name) const
 
 void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangle* robust_covar)
 {
+	BUGGER(msg) << "sherpa::_update_freedom_info()";
+	BUGGER(msg) << "dF()="<<dF();
+	if (ihess) {
+		BUGGER(msg) << "ihess->size()="<<ihess->size();
+	} else {
+		BUGGER(msg) << "ihess not given";
+	}
+	if (robust_covar) {
+		BUGGER(msg) << "robust_covar->size()="<<robust_covar->size();
+	} else {
+		BUGGER(msg) << "robust_covar not given";
+	}
+	
+	double temp;
+	
 	for (unsigned i=0; i<dF(); i++) {
 		FInfo[FNames[i]].value = ReadFCurrent()[i];
 		if (ihess) {
-			FInfo[FNames[i]].std_err = sqrt((*ihess)(i,i));
-			for (unsigned j=0; j<dF(); j++) {
-				dictionary_sd(FInfo[FNames[i]]._covar).key(FNames[j]) = (*ihess)(i,j);
+			BUGGER(msg) << "Setting std_err "<<i<<" for "<<FNames[i];
+			temp = (*ihess)(i,i);
+			if (temp < 0) {
+				WARN(msg) << "Negative value in covariance diagonal at "<<i;
+				temp = -temp;
 			}
-		}
-		if (robust_covar) {
-			if (robust_covar->size()==0) continue;
-			FInfo[FNames[i]].robust_std_err = sqrt((*robust_covar)(i,i));
+			FInfo[FNames[i]].std_err = sqrt(temp);
 			for (unsigned j=0; j<dF(); j++) {
+				BUGGER(msg) << "Setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
+				if (isNan((*ihess)(i,j))) {
+					dictionary_sd(FInfo[FNames[i]]._covar).set_key_nan(FNames[j]);
+				} else {
+					dictionary_sd(FInfo[FNames[i]]._covar).key(FNames[j]) = (*ihess)(i,j);
+				}
+				BUGGER(msg) << "Done setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
+			}
+			BUGGER(msg) << "Done setting std_err "<<i<<" for "<<FNames[i];
+		}
+		if (robust_covar && robust_covar->size()>0) {
+			BUGGER(msg) << "Setting robust_std_err "<<i<<" for "<<FNames[i];
+			temp = (*robust_covar)(i,i);
+			if (temp < 0) {
+				WARN(msg) << "Negative value in robust covariance diagonal at "<<i;
+				temp = -temp;
+			}
+			FInfo[FNames[i]].robust_std_err = sqrt(temp);
+			for (unsigned j=0; j<dF(); j++) {
+				BUGGER(msg) << "Setting robust covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j]<< " = "<< (*robust_covar)(i,j);
 				dictionary_sd(FInfo[FNames[i]]._robust_covar).key(FNames[j]) = (*robust_covar)(i,j);
 			}
 		}

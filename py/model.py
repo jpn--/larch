@@ -126,16 +126,19 @@ class Model(Model2):
 				filename_ext = ".py"
 			filename = filename+filename_ext
 			filemaker = lambda: open(filename, 'w')
+		print("save log 1")
 		with filemaker() as f:
 			if report:
 				f.write(self.report(lineprefix="#\t", cats=report_cats))
 				f.write("\n\n\n")
+			print("save log 2")
 			import time
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
 			f.write(" on %s\n"%time.strftime("%d %b %Y"))
 			f.write(self.save_buffer())
 			blank_attr = set(dir(Model()))
 			aliens_found = False
+			print("save log 3")
 			for a in dir(self):
 				if a not in blank_attr:
 					if isinstance(getattr(self,a),(int,float)):
@@ -439,30 +442,30 @@ class Model(Model2):
 		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
 	
 		x = XML("div", {'class':"data_statistics"})
-		if self.Data_Choice is None: return x.close
+		if self.Data("Choice") is None: return x.close
 		x.h2("Choice and Availability Data Statistics")
 
 		# get weights
-		if self.Data_Weight:
-			w = self.Data_Weight.getArray()
+		if bool((self.Data("Weight")!=1).any()):
+			w = self.Data("Weight")
 			w = w.reshape(w.shape+(1,))
 		else:
 			w = numpy.ones([self.nCases()])
 		tot_w = numpy.sum(w)
 		# calc avails
-		if self.Data_Avail:
-			av = self.Data_Avail.getArray()
+		if self.Data("Avail") is not None:
+			av = self.Data("Avail")
 			avails = numpy.sum(av,0)
 			avails_weighted = numpy.sum(av*w,0)
 		else:
 			avails = numpy.ones([self.nAlts()]) * self.nCases()
 			avails_weighted =numpy.ones([self.nAlts()]) * tot_w
-		ch = self.Data_Choice.getArray()
+		ch = self.Data("Choice")
 		choices_unweighted = numpy.sum(ch,0)
 		alts = self.alternative_names()
 		altns = self.alternative_codes()
 		choices_weighted = numpy.sum(ch*w,0)
-		use_weights = bool(self.Data_Weight)
+		use_weights = bool((self.Data("Weight")!=1).any())
 		
 		with x.block("table"):
 			with x.block("thead"):
@@ -503,17 +506,17 @@ class Model(Model2):
 		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
 	
 		x = XML("div", {'class':"utilitydata_statistics"})
-		if self.Data_Choice is None: return x.close
+		if self.Data("Choice") is None: return x.close
 		x.h2("Utility Data Statistics")
 
-		if self.Data_UtilityCO:
-			if self.Data_Weight:
+		if self.Data("UtilityCO") is not None:
+			if bool((self.Data("Weight")!=1).any()):
 				x.h3("idCO Utility (weighted)")
 			else:
 				x.h3("idCO Utility")
 
 			means,stdevs,mins,maxs,nonzers,posis,negs,zers = self.stats_utility_co()
-			names = self.Data_UtilityCO.get_variables()
+			names = self.needs()["UtilityCO"].get_variables()
 			
 			head_fmt = "{0:<19}\t{1:<11}\t{2:<11}\t{3:<11}\t{4:<11}\t{5:<11}"
 			body_fmt = "{0:<19}\t{1:<11.7g}\t{2:<11.7g}\t{3:<11.7g}\t{4:<11.7g}\t{5:<11.7g}"
@@ -747,31 +750,31 @@ class Model(Model2):
 
 			# Data Summary
 			def report_DATA():
-				if self.Data_Choice is None:
+				if self.Data("Choice") is None:
 					return []
 				x = ["="]
 				x += ["Choice and Availability Data Statistics"]
 				x += ["-"]
 				# get weights
-				if self.Data_Weight:
-					w = self.Data_Weight.getArray()
+				if bool((self.Data("Weight")!=1).any()):
+					w = self.Data("Weight")
 					w = w.reshape(w.shape+(1,))
 				else:
 					w = numpy.ones([self.nCases()])
 				tot_w = numpy.sum(w)
 				# calc avails
-				if self.Data_Avail:
-					av = self.Data_Avail.getArray()
+				if self.Data("Avail") is not None:
+					av = self.Data("Avail")
 					avails = numpy.sum(av,0)
 					avails_weighted = numpy.sum(av*w,0)
 				else:
 					avails = numpy.ones([self.nAlts()]) * self.nCases()
 					avails_weighted =numpy.ones([self.nAlts()]) * tot_w
-				ch = self.Data_Choice.getArray()
+				ch = self.Data("Choice")
 				choices_unweighted = numpy.sum(ch,0)
 				alts = self.alternative_names()
 				choices_weighted = numpy.sum(ch*w,0)
-				if self.Data_Weight:
+				if bool((self.Data("Weight")!=1).any()):
 					x += ["{0:<19}\t{1:<15}\t{2:<15}\t{3:<15}\t{4:<15}".format("Alternative","# Wgt Avail","# Wgt Chosen","# Raw Avail","# Raw Chosen")]
 					for alt,availw,availu,choicew,choiceu in zip(alts,avails_weighted,avails,choices_weighted,choices_unweighted):
 						x += ["{0:<19}\t{1:<15.7g}\t{2:<15.7g}\t{3:<15.7g}\t{4:<15.7g}".format(alt,availw[0],choicew[0],availu[0],choiceu[0])]
@@ -786,9 +789,9 @@ class Model(Model2):
 			def report_UTILITYDATA():
 				x = ["="]
 				x += ["Utility Data Statistics"]
-				if self.Data_UtilityCO:
+				if self.Data_UtilityCO is not None:
 					x += ["-"]
-					if self.Data_Weight:
+					if bool((self.Data("Weight")!=1).any()):
 						x += ["idCO Utility (weighted)"]
 					else:
 						x += ["idCO Utility"]
@@ -927,9 +930,9 @@ class Model(Model2):
 		positives,negatives,zeros) on the model's idco data as loaded. Uses weights
 		if available.
 		"""
-		x = self.Data_UtilityCO.getArray()
-		if self.Data_Weight:
-			w = self.Data_Weight.getArray().flatten()
+		x = self.Data("UtilityCO")
+		if bool((self.Data("Weight")!=1).any()):
+			w = self.Data("Weight").flatten()
 			mean = numpy.average(x, axis=0, weights=w)
 			variance = numpy.average((x-mean)**2, axis=0, weights=w)
 			stdev = numpy.sqrt(variance)
@@ -1244,10 +1247,11 @@ class ModelFamily(list):
 
 	db = property(_get_db, _set_db, _del_db)
 
-	def constants_only_model(self, est=True):
+	def constants_only_model(self, est=True, logger=False):
 		m = self.spawn("constants_only")
 		m.utility_full_constants()
 		m.option.calc_std_errors = False
+		m.logger(logger)
 		if est:
 			m.estimate()
 

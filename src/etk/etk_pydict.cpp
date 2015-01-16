@@ -20,6 +20,7 @@
 
 #include "etk.h"
 #include <iostream>
+#include <numpy/npy_math.h>
 
 /*	class dictionary_sd {
 		std::string	_key;
@@ -36,8 +37,8 @@
 
 etk::dictionary_sd::dictionary_sd(PyObject* dict)
 : _key ("")
-, _value (0)
-, _value_orig (0)
+, _value (NAN)
+, _value_orig (NAN)
 , _pyo (dict)
 {
 	if (!PyDict_Check(_pyo)) OOPS("dictionary_sd requires a python dictionary object");
@@ -46,18 +47,29 @@ etk::dictionary_sd::dictionary_sd(PyObject* dict)
 
 etk::dictionary_sd::~dictionary_sd()
 {
+	int err = 999;
 	if (_value_orig != _value) {
 		PyObject* v = PyFloat_FromDouble(_value);
-		PyDict_SetItemString(_pyo, _key.c_str(), v);
+		if (!v) {
+			v = Py_None;
+			Py_XINCREF(v);
+		}
+		err = PyDict_SetItemString(_pyo, _key.c_str(), v);
 		Py_CLEAR(v);
 	}
 	Py_CLEAR(_pyo);
+//	if (err<0) {
+//		std::cerr << "potential failure, did not add '"<<_key.c_str()<<"' to dict with value "<<_value<<"\n";
+//	} else if (err==0) {
+//		std::cerr << "ok, did add '"<<_key.c_str()<<"' to dict with value "<<_value<<"\n";
+//	}
 }
 
 double& etk::dictionary_sd::key(const std::string& key)
 {
 	_key = key;
 	PyObject* v = PyDict_GetItemString(_pyo, _key.c_str());
+	// v is null if _key is not in the dict
 	if (v) {
 		_value = _value_orig = PyFloat_AsDouble(v);
 		if (PyErr_Occurred()) OOPS("an error occurred in retriving a double from the dictionary");
@@ -65,6 +77,23 @@ double& etk::dictionary_sd::key(const std::string& key)
 	return _value;
 }
 
+void etk::dictionary_sd::set_key_nan(const std::string& key)
+{
+	_key = key;
+	_value = _value_orig = 0;
+	
+	PyObject* v = PyFloat_FromDouble(Py_NAN);
+	Py_XINCREF(v);
+	int err = PyDict_SetItemString(_pyo, _key.c_str(), v);
+	Py_CLEAR(v);
+
+//	if (err!=0) {
+//		std::cerr << "potential failure, did not add '"<<_key.c_str()<<"' to dict with value NaN\n";
+//	} else {
+//		std::cerr << "ok, did add '"<<_key.c_str()<<"' to dict with value NaN\n";
+//	}
+
+}
 
 
 

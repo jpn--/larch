@@ -39,6 +39,7 @@ namespace etk {
 		~dictionary_sd();
 		double& operator[](const std::string& key);
 		double& key(const std::string& key);
+		void set_key_nan(const std::string& key);
 	};
 		
 	

@@ -490,7 +490,7 @@ void elm::QuerySetTwoTable::set_alts_query(const std::string& q)
 	if (validator) validator->sql_statement(q);
 	_alts_query = q;
 	
-//	if (validator) validator->change_in_sql_alts();
+	if (validator) validator->change_in_sql_alts();
 
 }
 

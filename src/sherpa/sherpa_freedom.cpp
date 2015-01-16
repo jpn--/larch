@@ -46,42 +46,63 @@ freedom_info::freedom_info(const std::string& name,
 , _covar (nullptr)
 , _robust_covar (nullptr)
 {
-	if (isNan(initial_value)) this->initial_value = value;	
+//	std::cerr << "PARAMETER (+) "<< (long)this <<"\n";
+
+	if (isNan(initial_value)) this->initial_value = value;
 
 	if (covariance) {
 		_covar = PyDict_Copy(covariance);
 	} else {
 		_covar = PyDict_New();
 	}
-	Py_XINCREF(_covar);
+	//Py_XINCREF(_covar);
+	// no need to incref here, will create memory leak
 
 	if (robust_covariance) {
 		_robust_covar = PyDict_Copy(covariance);
 	} else {
 		_robust_covar = PyDict_New();
 	}
-	Py_XINCREF(_robust_covar);
+	//Py_XINCREF(_robust_covar);
 }
 
 
-freedom_info freedom_info::copy(const freedom_info& n)
+freedom_info::freedom_info(const freedom_info& n)
+: name (n.name)
+, initial_value (n.initial_value)
+, value (n.value)
+, std_err (n.std_err)
+, robust_std_err(n.robust_std_err)
+, null_value (n.null_value)
+, max_value (n.max_value)
+, min_value (n.min_value)
+, holdfast (n.holdfast)
+, _covar (nullptr)
+, _robust_covar (nullptr)
 {
 
-	freedom_info x (n.name, n.initial_value, n.value, n.std_err, n.robust_std_err, n.null_value, n.max_value, n.min_value, n.holdfast);
+//	std::cerr << "PARAMETER (*) "<< (long)this <<"\n";
 	
+	if (n._covar) {
+		if (!PyDict_Check(n._covar)) OOPS("covariance must be a python dictionary");
+		Py_CLEAR(_covar);
+		_covar = PyDict_Copy(n._covar);
+		//Py_XINCREF(x._covar);
+	}
 
-	x._covar = PyDict_Copy(n._covar);
-	Py_XINCREF(x._covar);
+	if (n._robust_covar) {
+		if (!PyDict_Check(n._robust_covar)) OOPS("robust_covariance must be a python dictionary");
+		Py_CLEAR(_robust_covar);
+		_robust_covar = PyDict_Copy(n._robust_covar);
+		//Py_XINCREF(x._robust_covar);
+	}
 
-	x._robust_covar = PyDict_Copy(n._robust_covar);
-	Py_XINCREF(x._robust_covar);
-	
-	return x;
 }
 
 
 freedom_info::~freedom_info()
 {
+//	std::cerr << "PARAMETER (-) "<< (long)this <<"\n"; 
 	Py_CLEAR(_covar);
 	Py_CLEAR(_robust_covar);
 }
@@ -132,7 +153,7 @@ void freedom_info::setCovariance(PyObject* covariance)
 	if (!PyDict_Check(covariance)) OOPS("covariance must be a python dictionary");
 	Py_CLEAR(_covar);
 	_covar = PyDict_Copy(covariance);
-	Py_XINCREF(_covar);
+	//Py_XINCREF(_covar);
 }
 
 PyObject* freedom_info::getRobustCovariance() const
@@ -146,7 +167,7 @@ void freedom_info::setRobustCovariance(PyObject* covariance)
 	if (!PyDict_Check(covariance)) OOPS("covariance must be a python dictionary");
 	Py_CLEAR(_robust_covar);
 	_robust_covar = PyDict_Copy(covariance);
-	Py_XINCREF(_robust_covar);
+	//Py_XINCREF(_robust_covar);
 }
 
 void freedom_info::update(const double& value_,

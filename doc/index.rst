@@ -32,7 +32,6 @@ Contents
 
    data
    model
-   parameter
    math
 
 

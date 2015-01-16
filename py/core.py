@@ -1692,7 +1692,6 @@ class Parameter(object):
         this = _core.new_Parameter(*args, **kwargs)
         try: self.this.append(this)
         except: self.this = this
-    copy = staticmethod(_core.Parameter_copy)
     __swig_destroy__ = _core.delete_Parameter
     __del__ = lambda self : None;
     def update(self, *args) -> "void" : return _core.Parameter_update(self, *args)
@@ -1722,10 +1721,6 @@ class Parameter(object):
 
 Parameter_swigregister = _core.Parameter_swigregister
 Parameter_swigregister(Parameter)
-
-def Parameter_copy(*args) -> "freedom_info" :
-  return _core.Parameter_copy(*args)
-Parameter_copy = _core.Parameter_copy
 
 
 def algorithm_name(*args) -> "std::string" :

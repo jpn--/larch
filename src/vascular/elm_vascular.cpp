@@ -464,7 +464,18 @@ const VAS_Cell* VAS_System::cell_from_code(const cellcode& cod) const
 {
 	cellmap::const_iterator ce = _anatomy.find(cod);
 	if ( ce == _anatomy.end() ) {
-		OOPS("Cell code "+string(CELLCODEasCSTR(cod))+" not found");
+		if (_anatomy.size() < 20) {
+			std::ostringstream em;
+			em << "Cell code " << CELLCODEasCSTR(cod) << " not found in {";
+			for (auto iter=_anatomy.begin(); iter!=_anatomy.end(); iter++) {
+				if (iter!=_anatomy.begin()) em << ",";
+				em << iter->first;
+			}
+			em << "}";
+			OOPS(em.str());
+		} else {
+			OOPS("Cell code ",CELLCODEasCSTR(cod)," not found among ",_anatomy.size()," possibilities");
+		}
 	}
 	return ce->second;
 }
@@ -799,6 +810,9 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, F
 	_allocation_breaks.push_back(_n_competitive_allocations);
 	
 	BUGGER_(msg, "Vascular system regrow complete.");
+	
+	BUGGER_(msg, display());
+	
 	
 	_touch = false;
 }

@@ -382,7 +382,9 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 			//invHess = Hess;
 			//invHess.inv(true);
 			//MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
+			BUGGER(msg) << "calculate_parameter_covariance...";
 			calculate_parameter_covariance();
+			BUGGER(msg) << "calculate_parameter_covariance complete.";
 		} else {
 			Hess.initialize(NAN);
 			invHess.initialize(NAN);
@@ -401,6 +403,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	}
 	
 	
+	BUGGER(msg) << "updating freedom info...";
 	try {
 		_update_freedom_info(&invHess, &robustCovariance);
 	} SPOO {
@@ -413,9 +416,11 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	}
 	
 	
+	BUGGER(msg) << "teardown...";
 	if (option.teardown_after_estimate) tearDown();
 	
 	
+	BUGGER(msg) << "record finish time...";
 	
 	_latest_run.finish();
 	if (_latest_run.results.empty()) _latest_run.results = "ignored";
@@ -427,6 +432,8 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	timeinfo = localtime(&rawtime);
 	strftime(timebuff, 255, "%A, %B %d %Y, %I:%M:%S %p", timeinfo);
 	_latest_run.timestamp = string(timebuff);
+
+	BUGGER(msg) << "estimation complete.";
 	
 	return _latest_run;
 }
@@ -843,40 +850,77 @@ std::string elm::Model2::save_buffer() const
 	
 	//sv << "import numpy\n" << "inf=numpy.inf\n" << "nan=numpy.nan\n\n";
 	
+	etk::logging_service msg (this->msg);
+	
 	sv << "self.title = '''"<<title<<"'''\n\n";
 	
 	// save parameter
+	BUGGER( msg ) << "save parameter";
 	for (auto p=FNames.strings().begin(); p!=FNames.strings().end(); p++) {
+		BUGGER( msg ) << "save parameter "<<*p;
 		auto i = FInfo.find(*p);
-		auto j = i->second;
-		
-		sv << "self.parameter('"<<*p<<"'";
-		sv << ","<<AsPyFloat(j.value);
-		sv << ","<<AsPyFloat(j.null_value);
-		sv << ","<<AsPyFloat(j.initial_value);
-		sv << ","<<AsPyFloat(j.max_value);
-		sv << ","<<AsPyFloat(j.min_value);
-		sv << ","<<AsPyFloat(j.std_err);
-		sv << ","<<AsPyFloat(j.robust_std_err);
-		sv << ","<<j.holdfast;
-		
-		PyObject* c = PyObject_Str(j._covar);
-		if (c) {
-			sv << ",covariance="<<PyString_ExtractCppString(c);
+		if (i==FInfo.end()) {
+    		BUGGER( msg ) << "error in save parameter "<<*p<<", not found in FInfo";
+		} else {
+    		BUGGER( msg ) << "save parameter "<<*p<<" found in FInfo";
+			auto j = i->second;
+			BUGGER( msg ) << "j.value=" << j.value;
+			
+			sv << "self.parameter('"<<*p<<"'";
+			sv << ","<<AsPyFloat(j.value);
+			BUGGER( msg ) << "j.null_value=" << j.null_value;
+			sv << ","<<AsPyFloat(j.null_value);
+			BUGGER( msg ) << "j.initial_value=" << j.initial_value;
+			sv << ","<<AsPyFloat(j.initial_value);
+			BUGGER( msg ) << "j.max_value=" << j.max_value;
+			sv << ","<<AsPyFloat(j.max_value);
+			BUGGER( msg ) << "j.min_value=" << j.min_value;
+			sv << ","<<AsPyFloat(j.min_value);
+			BUGGER( msg ) << "j.std_err=" << j.std_err;
+			sv << ","<<AsPyFloat(j.std_err);
+			BUGGER( msg ) << "j.robust_std_err=" << j.robust_std_err;
+			sv << ","<<AsPyFloat(j.robust_std_err);
+			BUGGER( msg ) << "j.holdfast=" << j.holdfast;
+			sv << ","<<j.holdfast;
+			
+			if (j._covar) {
+				BUGGER( msg ) << "j._covar is not null";
+				int check = PyMapping_Check(j._covar);
+				if (check) {
+				BUGGER( msg ) << "j._covar check "<<check;
+				BUGGER( msg ) << "j._covar length "<< (int)PyMapping_Size(j._covar);
+				}
+				PyObject* c = PyObject_Str(j._covar);
+				BUGGER( msg ) << "next line";
+				if (c) {
+					BUGGER( msg ) << "j.covariance=";
+					BUGGER( msg ) << PyString_ExtractCppString(c);
+					sv << ",covariance="<<PyString_ExtractCppString(c);
+				}
+				Py_CLEAR(c);
+			}
+			
+			if (j._robust_covar) {
+				BUGGER( msg ) << "j._robust_covar is not null";
+				int check = PyMapping_Check(j._robust_covar);
+				BUGGER( msg ) << "j._robust_covar check "<<check;
+				PyObject* c = PyObject_Str(j._robust_covar);
+				BUGGER( msg ) << "next line 2";
+				if (c) {
+					BUGGER( msg ) << "j.robust_covariance=";
+					BUGGER( msg ) << PyString_ExtractCppString(c);
+					sv << ",robust_covariance="<<PyString_ExtractCppString(c);
+				}
+				Py_CLEAR(c);
+			}
+			
+			sv << ")\n";
 		}
-		Py_CLEAR(c);
-
-		c = PyObject_Str(j._robust_covar);
-		if (c) {
-			sv << ",robust_covariance="<<PyString_ExtractCppString(c);
-		}
-		Py_CLEAR(c);
-
-		sv << ")\n";
 	}
 	sv << "\n";
 	
 	// save utility
+	BUGGER( msg ) << "save utility";
 	for (auto u=Input_Utility.ca.begin(); u!=Input_Utility.ca.end(); u++) {
 		sv << "self.utility.ca('"<<u->apply_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
@@ -890,6 +934,7 @@ std::string elm::Model2::save_buffer() const
 	sv << "\n";
 
 	// save nest
+	BUGGER( msg ) << "save nest";
 	for (auto n=Input_LogSum.begin(); n!=Input_LogSum.end(); n++) {
 		sv << "self.nest('"<<n->second.altname<<"',"<<n->second.altcode<<",'"<<n->second.param_name<<"'";
 		if (n->second.multiplier!=1.0) {
@@ -899,6 +944,7 @@ std::string elm::Model2::save_buffer() const
 	}
 	
 	// save link
+	BUGGER( msg ) << "save link";
 	for (auto n=Input_Edges.begin(); n!=Input_Edges.end(); n++) {
 		if (n->second.size()) {
 			// This edge has a component list
@@ -910,6 +956,7 @@ std::string elm::Model2::save_buffer() const
 	}
 	
 	// save samplingbias
+	BUGGER( msg ) << "save samplingbias";
 	for (auto u=Input_Sampling.ca.begin(); u!=Input_Sampling.ca.end(); u++) {
 		sv << "self.samplingbias.ca('"<<u->apply_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
@@ -922,6 +969,7 @@ std::string elm::Model2::save_buffer() const
 	}
 	sv << "\n";
 	
+	BUGGER( msg ) << "save statistics";
 	sv << "self._set_estimation_statistics("<<
 		AsPyFloat(ZCurrent)<<","<<
 		AsPyFloat(_LL_null) <<","<<

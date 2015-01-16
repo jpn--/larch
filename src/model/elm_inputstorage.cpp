@@ -195,6 +195,7 @@ void elm::ComponentList::receive_utility_co_kwd
 			if (alt_code==cellcode_empty) {
 				OOPS("utility.co input requires that you specify an alternative.");
 			}
+			BUGGER(parentmodel->msg) << "parentmodel->_Data->source_filename=" << parentmodel->_Data->source_filename;
 			slot = parentmodel->_Data->DataDNA()->slot_from_code(alt_code);
 		}
 	}

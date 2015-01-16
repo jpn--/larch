@@ -367,7 +367,7 @@ void elm::QuerySetSimpleCO::set_alts_query(const std::string& q)
 	_alts_query = q;
 	
 	if (reload) {
-//		validator->change_in_sql_alts();
+		validator->change_in_sql_alts();
 	}
 }
 
@@ -397,7 +397,7 @@ void elm::QuerySetSimpleCO::set_alts_values(const std::map<long long, std::strin
 	_alts_query = s.str();
 
 	if (reload) {
-//		validator->change_in_sql_alts();
+		validator->change_in_sql_alts();
 	}
 }
 

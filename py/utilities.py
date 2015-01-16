@@ -492,6 +492,8 @@ class storage():
 		id {} PRIMARY KEY, 
 		value {}, 
 		form INTEGER DEFAULT 0)""".format(self._name,self._key_format,self._value_format))
+		if "elm_store" in self._db.all_table_names():
+			self._cur.execute("INSERT OR IGNORE INTO {} SELECT * FROM elm_store;".format(self._name))
 	def __getattr__(self, item):
 		return self[item]
 	def __setattr__(self, item, value):
