@@ -13,8 +13,11 @@
 
 import sys, os
 
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
 larch_versions = {
-	'larch': '3.1.4',
+	'larch': '3.1.5',
 	'pandas': '0.14.1',
 	'apsw': '3.8.7.3-r1',
 	'python': '3.4.0 final',
@@ -49,7 +52,10 @@ extensions = [
 	'sphinx.ext.mathjax',
 	'sphinx.ext.intersphinx',
 	'sphinxcontrib.napoleon',
+	'sphinx.ext.doctest',
 ]
+
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -121,9 +127,6 @@ intersphinx_mapping = {
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #html_theme = 'default'
-# on_rtd is whether we are on readthedocs.org
-import os
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not on_rtd:  # only import and set the theme if we're building docs locally
     import sphinx_rtd_theme

@@ -28,12 +28,13 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 4
+	:maxdepth: 4
 
-   data
-   model
-   math
-
+	data
+	data-fundamentals
+	model
+	math
+	example/examples
 
 
 Frequently Asked Questions
