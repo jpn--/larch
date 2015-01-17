@@ -28,7 +28,7 @@ original database file.
 
 .. automethod:: DB.Example
 
-
+.. automethod:: DB.CSV_idco
 
 
 

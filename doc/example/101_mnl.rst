@@ -1,0 +1,49 @@
+.. currentmodule:: larch
+
+============================
+Example 101: MNL Mode Choice
+============================
+
+.. testsetup:: *
+
+   import larch
+
+
+
+This example is a mode choice model built using the Swissmetro example dataset.
+First we create the DB and Model objects:
+
+.. testcode::
+
+	d = larch.DB.Example('SWISSMETRO')
+	m = larch.Model(d)
+
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+
+.. testcode::
+
+	m.utility.co("1",1,"ASC_TRAIN")
+	m.utility.co("1",3,"ASC_CAR")
+	m.utility.co("TRAIN_TT",1,"B_TIME")
+	m.utility.co("SM_TT",2,"B_TIME")
+	m.utility.co("CAR_TT",3,"B_TIME")
+	m.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
+	m.utility.co("SM_CO*(GA==0)",2,"B_COST")
+	m.utility.co("CAR_CO",3,"B_COST")
+
+We can estimate the models and check the results match up with those given by Biogeme:
+
+	>>> m.estimate()
+	success ...
+	>>> m.loglike()
+	-5331.252...
+	>>> m['B_TIME'].value
+	-0.01277...
+	>>> m['B_COST'].value
+	-0.01083...
+	>>> m.parameter("ASC_TRAIN").value
+	-0.7012...
+	>>> m.parameter("ASC_CAR").value
+	-0.1546...
+
+

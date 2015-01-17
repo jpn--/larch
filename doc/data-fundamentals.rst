@@ -4,8 +4,8 @@
 Data Fundamentals
 =======================
 
-Larch requires data to be structured in one of two formats: the case-only (co)
-format or the case-alternative (ca) format. This are commonly referred to as
+Larch requires data to be structured in one of two formats: the case-only ("idco")
+format or the case-alternative ("idca") format. This are commonly referred to as
 IDCase (each record contains all the information for mode choice over
 alternatives for a single trip) or IDCase-IDAlt (each record contains all the
 information for a single alternative available to each decision maker so there is one
