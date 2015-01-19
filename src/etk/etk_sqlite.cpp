@@ -415,42 +415,42 @@ void etk::database_service::define_otherkey (string tablesource, string casevar,
 }
  */
 
-void etk::database_service::define_alts (string tablesource, string altvar, bool temp)
-{
-	/* 
-	 CREATE TABLE IF NOT EXISTS elm_alternatives (\n  id INT UNIQUE,\n  name TEXT,\n  upcodes TEXT DEFAULT NULL,\n  dncodes TEXT DEFAULT NULL);
-	 INSERT OR IGNORE INTO elm_alternatives (id) SELECT ALTNUM FROM STOPS;
-	 UPDATE elm_alternatives SET name="alt"||id WHERE name="";
-	 */
-	
-	ostringstream sql;
-	int z;
-	
-	sql << "CREATE ";
-	if (temp) sql << "TEMPORARY ";
-	sql << "TABLE IF NOT EXISTS elm_alternatives (\n  id INT UNIQUE,\n  name TEXT,\n  upcodes TEXT DEFAULT NULL,\n  dncodes TEXT DEFAULT NULL)";
-	z=direct_execute(sql.str());
-	if (z != SQLITE_DONE) OOPS("error in making elm_alternatives: ",get_error_message());
-	sql.str(""); sql.clear();
-	
-	if (tablesource.empty() || altvar.empty()) return;
-	
-	sql << "INSERT OR IGNORE INTO elm_alternatives (id) SELECT "<<altvar<<" FROM "<<tablesource;
-	z=direct_execute(sql.str());
-	if (z != SQLITE_DONE) OOPS("error in inserting elm_alternatives: ",get_error_message());
-	sql.str(""); sql.clear();
-	
-	sql << "UPDATE elm_alternatives SET name=\"alt\"||id WHERE name=\"\"";
-	z=direct_execute(sql.str());
-	if (z != SQLITE_DONE) OOPS("error in updating elm_alternatives: ",get_error_message());
-	sql.str(""); sql.clear();
-
-	sql << "UPDATE elm_alternatives SET name=\"alt\"||id WHERE name is NULL";
-	z=direct_execute(sql.str());
-	if (z != SQLITE_DONE) OOPS("error in updating elm_alternatives: ",get_error_message());
-	sql.str(""); sql.clear();
-
-}
+//void etk::database_service::define_alts (string tablesource, string altvar, bool temp)
+//{
+//	/* 
+//	 CREATE TABLE IF NOT EXISTS elm_alternatives (\n  id INT UNIQUE,\n  name TEXT,\n  upcodes TEXT DEFAULT NULL,\n  dncodes TEXT DEFAULT NULL);
+//	 INSERT OR IGNORE INTO elm_alternatives (id) SELECT ALTNUM FROM STOPS;
+//	 UPDATE elm_alternatives SET name="alt"||id WHERE name="";
+//	 */
+//	
+//	ostringstream sql;
+//	int z;
+//	
+//	sql << "CREATE ";
+//	if (temp) sql << "TEMPORARY ";
+//	sql << "TABLE IF NOT EXISTS elm_alternatives (\n  id INT UNIQUE,\n  name TEXT,\n  upcodes TEXT DEFAULT NULL,\n  dncodes TEXT DEFAULT NULL)";
+//	z=direct_execute(sql.str());
+//	if (z != SQLITE_DONE) OOPS("error in making elm_alternatives: ",get_error_message());
+//	sql.str(""); sql.clear();
+//	
+//	if (tablesource.empty() || altvar.empty()) return;
+//	
+//	sql << "INSERT OR IGNORE INTO elm_alternatives (id) SELECT "<<altvar<<" FROM "<<tablesource;
+//	z=direct_execute(sql.str());
+//	if (z != SQLITE_DONE) OOPS("error in inserting elm_alternatives: ",get_error_message());
+//	sql.str(""); sql.clear();
+//	
+//	sql << "UPDATE elm_alternatives SET name=\"alt\"||id WHERE name=\"\"";
+//	z=direct_execute(sql.str());
+//	if (z != SQLITE_DONE) OOPS("error in updating elm_alternatives: ",get_error_message());
+//	sql.str(""); sql.clear();
+//
+//	sql << "UPDATE elm_alternatives SET name=\"alt\"||id WHERE name is NULL";
+//	z=direct_execute(sql.str());
+//	if (z != SQLITE_DONE) OOPS("error in updating elm_alternatives: ",get_error_message());
+//	sql.str(""); sql.clear();
+//
+//}
 
 //void etk::database_service::make_setup_table()
 //{

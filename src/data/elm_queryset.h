@@ -51,13 +51,13 @@ namespace elm {
 		virtual std::string qry_weight () const;
 		virtual std::string qry_avail  () const;
 
-		std::string tbl_idco   () const;
-		std::string tbl_idca   () const;
-		std::string tbl_alts   () const;
-		std::string tbl_caseids() const;
-		std::string tbl_choice () const;
-		std::string tbl_weight () const;
-		std::string tbl_avail  () const;
+		virtual std::string tbl_idco   () const;
+		virtual std::string tbl_idca   () const;
+		virtual std::string tbl_alts   () const;
+		virtual std::string tbl_caseids() const;
+		virtual std::string tbl_choice () const;
+		virtual std::string tbl_weight () const;
+		virtual std::string tbl_avail  () const;
 		
 		virtual bool unweighted() const;
 		virtual bool all_alts_always_available() const;

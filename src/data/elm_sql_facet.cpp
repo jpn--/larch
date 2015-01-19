@@ -511,13 +511,13 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	std::string use_query = sql_alts;
 //	// If a query for alternatives codes and names is not defined but the idca table is, use that table's values by default.
 //	if ((use_query.empty()) && (!sql_idca.empty())) {
-//		use_query = "SELECT DISTINCT altid, 'alt'||altid from elm_idca ORDER BY altid";
+//		use_query = "SELECT DISTINCT altid, 'alt'||altid from larch_idca ORDER BY altid";
 //	}
 //	
-//	drop("elm_alternatives");
+//	drop("larch_alternatives");
 //	
 //	std::ostringstream sql;
-//	sql<<"CREATE TEMPORARY VIEW elm_alternatives AS "<<use_query;
+//	sql<<"CREATE TEMPORARY VIEW larch_alternatives AS "<<use_query;
 //	sql_statement(sql)->execute();
 //}
 
@@ -527,7 +527,7 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	std::string use_query = sql_idco;
 //	// If a query for idca is not defined but the idco table is, assume all alternatives are available to all cases.
 //	if ((use_query.empty()) && (!sql_idca.empty())) {
-//		use_query = "SELECT DISTINCT caseid FROM elm_idca";
+//		use_query = "SELECT DISTINCT caseid FROM larch_idca";
 //	}
 //	std::ostringstream sql;
 //	sql<<"CREATE TEMPORARY VIEW elm_idco AS "<<use_query;
@@ -538,16 +538,16 @@ std::vector<std::string> elm::Facet::list_facets() const
 
 //void elm::Facet::_init_idca_query()
 //{
-//	drop("elm_idca");
+//	drop("larch_idca");
 //	std::string use_query = sql_idca;
 //	// If a query for idca is not defined but the idco table is, assume all alternatives are available to all cases.
 //	if ((use_query.empty()) && (!sql_idco.empty()) && (!sql_alts.empty())) {
 //		use_query = "SELECT elm_idco."+alias_idco_caseid()+" AS caseid"+
-//					", elm_alternatives."+alias_alts_altid()+" AS altid"+
-//					" FROM elm_idco, elm_alternatives";
+//					", larch_alternatives."+alias_alts_altid()+" AS altid"+
+//					" FROM elm_idco, larch_alternatives";
 //	}
 //	std::ostringstream sql;
-//	sql<<"CREATE TEMPORARY VIEW elm_idca AS "<<use_query;
+//	sql<<"CREATE TEMPORARY VIEW larch_idca AS "<<use_query;
 //	sql_statement(sql)->execute();
 //	
 //}
@@ -555,24 +555,24 @@ std::vector<std::string> elm::Facet::list_facets() const
 //void elm::Facet::_init_avail_query()
 //{
 //	if (!queries_ptr) OOPS_FACET("queries not defined");
-//	drop("elm_avail");
+//	drop("larch_avail");
 //	std::string use_query = sql_avail;
 //	// If a query for avail is not defined, assume all alternatives are available to all cases.
 //	if ((use_query.empty()) && (!sql_idco.empty()) && (!sql_alts.empty())) {
 //		use_query = "SELECT elm_idco."+alias_idco_caseid()+" AS caseid"+
-//					", elm_alternatives."+alias_alts_altid()+" AS altid"+
-//					", 1 AS avail FROM elm_idco, elm_alternatives";
+//					", larch_alternatives."+alias_alts_altid()+" AS altid"+
+//					", 1 AS avail FROM elm_idco, larch_alternatives";
 //	}
 //	std::ostringstream sql;
-//	sql<<"CREATE TEMPORARY VIEW elm_avail AS "<<use_query;
+//	sql<<"CREATE TEMPORARY VIEW larch_avail AS "<<use_query;
 //	try {
 //		sql_statement(sql)->execute();
 //	} catch (etk::SQLiteError) {
 //		std::string caseid_alias = sql_statement("SELECT * FROM elm_idco")->column_name(0);
-//		std::string altid_alias = sql_statement("SELECT * FROM ("+queries_ptr->qry_alts()+") AS elm_alternatives")->column_name(0);
-//		use_query = "SELECT elm_idco."+caseid_alias+", elm_alternatives."+altid_alias+", 1 FROM elm_idco, ("+queries_ptr->qry_alts()+") AS elm_alternatives";
+//		std::string altid_alias = sql_statement("SELECT * FROM ("+queries_ptr->qry_alts()+") AS larch_alternatives")->column_name(0);
+//		use_query = "SELECT elm_idco."+caseid_alias+", larch_alternatives."+altid_alias+", 1 FROM elm_idco, ("+queries_ptr->qry_alts()+") AS larch_alternatives";
 //		std::ostringstream sql;
-//		sql<<"CREATE TEMPORARY VIEW elm_avail AS "<<use_query;
+//		sql<<"CREATE TEMPORARY VIEW larch_avail AS "<<use_query;
 //		sql_statement(sql)->execute();
 //	}
 //}
@@ -584,21 +584,21 @@ std::vector<std::string> elm::Facet::list_facets() const
 
 //void elm::Facet::_init_choice_query()
 //{
-//	drop("elm_choice");
+//	drop("larch_choice");
 //	std::string use_query = sql_choice;
 //	// If a query for choice is not defined, assume nothing is chosen.
 //	if ((use_query.empty()) && (!sql_idco.empty()) && (!sql_alts.empty())) {
 //		use_query = "SELECT NULL AS caseid, NULL AS altid, NULL AS choice LIMIT 0;";
 //	}
 //	std::ostringstream sql;
-//	sql<<"CREATE TEMPORARY VIEW elm_choice AS "<<use_query;
+//	sql<<"CREATE TEMPORARY VIEW larch_choice AS "<<use_query;
 //	sql_statement(sql)->execute();
 //}
 
 //void elm::Facet::_init_weight_query()
 //{
-//	drop("elm_weight_raw");
-//	drop("elm_weight");
+//	drop("larch_weight_raw");
+//	drop("larch_weight");
 //	std::string use_query = sql_weight;
 //	// If a query for weight is not defined, assume all equal to 1.
 //	if (use_query.empty() || etk::to_uppercase(use_query)=="_EQUAL_") {
@@ -606,16 +606,16 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	}
 //	if (read_setup("auto_reweight")=="1") {
 //		std::ostringstream sql;
-//		sql<<"CREATE TEMPORARY VIEW elm_weight_raw AS "<<use_query;
+//		sql<<"CREATE TEMPORARY VIEW larch_weight_raw AS "<<use_query;
 //		sql_statement(sql)->execute();
-//		double totwgt = sql_statement("SELECT sum(weight) FROM elm_weight_raw;")->simpleDouble("");
-//		int cntwgt = sql_statement("SELECT count(weight) FROM elm_weight_raw;")->simpleInteger("");
+//		double totwgt = sql_statement("SELECT sum(weight) FROM larch_weight_raw;")->simpleDouble("");
+//		int cntwgt = sql_statement("SELECT count(weight) FROM larch_weight_raw;")->simpleInteger("");
 //		sql.str(""); sql.clear();
-//		sql << "CREATE TEMPORARY VIEW elm_weight AS SELECT caseid, weight*"<<cntwgt<<"/"<<totwgt<<" AS weight FROM elm_weight_raw;";
+//		sql << "CREATE TEMPORARY VIEW larch_weight AS SELECT caseid, weight*"<<cntwgt<<"/"<<totwgt<<" AS weight FROM larch_weight_raw;";
 //		sql_statement(sql)->execute();
 //	} else {
 //		std::ostringstream sql;
-//		sql<<"CREATE TEMPORARY VIEW elm_weight AS "<<use_query;
+//		sql<<"CREATE TEMPORARY VIEW larch_weight AS "<<use_query;
 //		sql_statement(sql)->execute();
 //	}
 //}
@@ -723,14 +723,14 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	
 //	// If a query for alternatives codes and names is not defined but the idca table is, use that table's values by default.
 //	if ((use_query.empty()) && (!sql_idca.empty())) {
-//		use_query = "SELECT DISTINCT altid, 'alt'||altid from "+build_idca_query()+" AS elm_idca ORDER BY altid";
+//		use_query = "SELECT DISTINCT altid, 'alt'||altid from "+build_idca_query()+" AS larch_idca ORDER BY altid";
 //	}
 //		
 //	try {
 //		sql_statement(use_query);
 //	} catch (etk::SQLiteError) {
 //		std::string a = alias_idca_altid();
-//		use_query = "SELECT DISTINCT "+a+", 'alt'||"+a+" from "+build_idca_query()+" AS elm_idca ORDER BY "+a;
+//		use_query = "SELECT DISTINCT "+a+", 'alt'||"+a+" from "+build_idca_query()+" AS larch_idca ORDER BY "+a;
 //	}
 //
 //	return build_misc_query(use_query);
@@ -756,7 +756,7 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	
 //	// If a query for weight is not defined, assume all equal to 1.
 //	if (use_query.empty() || etk::to_uppercase(use_query)=="_EQUAL_") {
-//		use_query = etk::cat("SELECT elm_caseids.",alias_caseids_caseid()," AS caseid, 1 AS weight FROM ",build_caseids_query()," AS elm_caseids;");
+//		use_query = etk::cat("SELECT larch_caseids.",alias_caseids_caseid()," AS caseid, 1 AS weight FROM ",build_caseids_query()," AS larch_caseids;");
 //	}
 //	
 //	return build_misc_query(use_query);
@@ -800,9 +800,9 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	// but the caseids and alts are defined,
 //	// assume all alternatives are available to all cases.
 //	if ((use_query.empty()) && (!sql_caseids.empty()) && (!sql_alts.empty())) {
-//		use_query = "SELECT elm_caseids."+alias_caseids_caseid()+" AS caseid"+
-//		", elm_alternatives."+alias_alts_altid()+" AS altid"+
-//		", 1 AS avail FROM "+build_caseids_query()+" AS elm_caseids, "+build_alts_query()+" AS elm_alternatives";
+//		use_query = "SELECT larch_caseids."+alias_caseids_caseid()+" AS caseid"+
+//		", larch_alternatives."+alias_alts_altid()+" AS altid"+
+//		", 1 AS avail FROM "+build_caseids_query()+" AS larch_caseids, "+build_alts_query()+" AS larch_alternatives";
 //	}
 //	
 //	try {
@@ -810,9 +810,9 @@ std::vector<std::string> elm::Facet::list_facets() const
 //	} catch (etk::SQLiteError) {
 //		std::string caseid_alias = sql_statement(build_caseids_query())->column_name(0);
 //		std::string altid_alias = sql_statement(build_alts_query())->column_name(0);
-//		use_query = "SELECT elm_caseids."+caseid_alias+" AS caseid"+
-//		", elm_alternatives."+altid_alias+" AS altid"+
-//		", 1 AS avail FROM "+build_caseids_query()+" AS elm_caseids, "+build_alts_query()+" AS elm_alternatives";
+//		use_query = "SELECT larch_caseids."+caseid_alias+" AS caseid"+
+//		", larch_alternatives."+altid_alias+" AS altid"+
+//		", 1 AS avail FROM "+build_caseids_query()+" AS larch_caseids, "+build_alts_query()+" AS larch_alternatives";
 //		sql_statement(use_query);
 //	}
 //	
@@ -953,7 +953,7 @@ std::vector<elm::caseid_t> elm::Facet::caseids(const unsigned& firstcasenum, con
 	try {
 		sql_statement(sql);
 	} catch (etk::SQLiteError) {
-		// Should throw an SQLite error when 'caseid' is not a valid column name in elm_idco
+		// Should throw an SQLite error when 'caseid' is not a valid column name in larch_idco
 		//  in which case use the first column as the caseid.
 		sql.str(""); sql.clear();
 		std::string caseid_alias = column_name("SELECT * FROM "+tbl_idco(),0);
@@ -975,7 +975,7 @@ std::vector<elm::cellcode> elm::Facet::altids() const
 	try {
 		sql_statement(sql);
 	} catch (etk::SQLiteError) {
-		// Should throw an SQLite error when 'caseid' is not a valid column name in elm_idco
+		// Should throw an SQLite error when 'caseid' is not a valid column name in larch_idco
 		//  in which case use the first column as the caseid.
 		sql.str(""); sql.clear();
 		std::string altid_alias = column_name("SELECT * FROM "+queries_ptr->tbl_alts()+";",0);
@@ -996,7 +996,7 @@ long long elm::Facet::alternative_code(std::string name) const
 	try {
 		sql_statement(sql);
 	} catch (etk::SQLiteError) {
-		// Should throw an SQLite error when 'caseid' is not a valid column name in elm_idco
+		// Should throw an SQLite error when 'caseid' is not a valid column name in larch_idco
 		//  in which case use the first column as the caseid.
 		sql.str(""); sql.clear();
 		std::string altid_alias = column_name("SELECT * FROM "+queries_ptr->tbl_alts()+";",0);
@@ -1018,7 +1018,7 @@ std::vector<std::string> elm::Facet::alternative_names() const
 	try {
 		sql_statement(sql);
 	} catch (etk::SQLiteError) {
-		// Should throw an SQLite error when 'caseid' is not a valid column name in elm_idco
+		// Should throw an SQLite error when 'caseid' is not a valid column name in larch_idco
 		//  in which case use the first column as the caseid.
 		sql.str(""); sql.clear();
 		std::string altid_alias = column_name("SELECT * FROM "+queries_ptr->tbl_alts()+";",0);
@@ -1041,7 +1041,7 @@ std::string elm::Facet::alternative_name(long long code) const
 	try {
 		sql_statement(sql);
 	} catch (etk::SQLiteError) {
-		// Should throw an SQLite error when 'caseid' is not a valid column name in elm_idco
+		// Should throw an SQLite error when 'caseid' is not a valid column name in larch_idco
 		//  in which case use the first column as the caseid.
 		sql.str(""); sql.clear();
 		std::string altid_alias = column_name("SELECT * FROM "+queries_ptr->tbl_alts()+";",0);
@@ -1456,7 +1456,7 @@ std::string elm::Facet::alias_avail_avail() const
 //	std::ostringstream q ("");
 //	std::string caseid_alias = alias_avail_caseid();
 //	std::string altid_alias = alias_avail_altid();
-//	//auto cn =sql_statement("SELECT * FROM elm_avail")->column_names();
+//	//auto cn =sql_statement("SELECT * FROM larch_avail")->column_names();
 //	std::string avail_alias = alias_avail_avail();
 //
 //	if (queries_ptr) return queries_ptr->qry_avail();
@@ -1464,7 +1464,7 @@ std::string elm::Facet::alias_avail_avail() const
 //	OOPS("queries not defined");
 //
 //	q << "SELECT "<<caseid_alias<<" AS caseid, "<<altid_alias<<" AS altid, "<<avail_alias<<" AS avail ";
-//	q << "FROM "<<build_avail_query()<<" AS elm_avail";
+//	q << "FROM "<<build_avail_query()<<" AS larch_avail";
 //	q << _query_chopper(firstrow, numrows);
 //	q << " ORDER BY caseid, altid;";
 //	return q.str();
@@ -1482,25 +1482,25 @@ std::string elm::Facet::alias_avail_avail() const
 //	
 //	std::ostringstream q ("");
 //	std::string caseid_alias = "caseid";
-//	auto cn =sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_names();
+//	auto cn =sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_names();
 //	try {
-//		sql_statement("SELECT caseid FROM ("+q_avail+") AS elm_avail");
+//		sql_statement("SELECT caseid FROM ("+q_avail+") AS larch_avail");
 //	} catch (etk::SQLiteError) {
-//		caseid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(0);
+//		caseid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(0);
 //	}
 //	std::string altid_alias = "altid";
 //	try {
-//		sql_statement("SELECT altid FROM ("+q_avail+") AS elm_avail");
+//		sql_statement("SELECT altid FROM ("+q_avail+") AS larch_avail");
 //	} catch (etk::SQLiteError) {
-//		altid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(1);
+//		altid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(1);
 //	}
 //	std::string avail_alias = "avail";
 //	try {
-//		sql_statement("SELECT avail FROM ("+q_avail+") AS elm_avail");
+//		sql_statement("SELECT avail FROM ("+q_avail+") AS larch_avail");
 //	} catch (etk::SQLiteError) {
-//		avail_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(2);
+//		avail_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(2);
 //	}
-//	q<<"SELECT "<<caseid_alias<<" AS caseid, "<<altid_alias<<" AS altid, "<<avail_alias<<" AS avail FROM ("+q_avail+") AS elm_avail";
+//	q<<"SELECT "<<caseid_alias<<" AS caseid, "<<altid_alias<<" AS altid, "<<avail_alias<<" AS avail FROM ("+q_avail+") AS larch_avail";
 //	q << _query_chopper(firstrow, numrows);
 //	q << " ORDER BY caseid, altid;";
 //	return q.str();
@@ -1518,25 +1518,25 @@ std::string elm::Facet::query_avail(long long* caseid) const
 	
 	std::ostringstream q ("");
 	std::string caseid_alias = "caseid";
-	auto cn =sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_names();
+	auto cn =sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_names();
 	try {
-		sql_statement("SELECT caseid FROM ("+q_avail+") AS elm_avail");
+		sql_statement("SELECT caseid FROM ("+q_avail+") AS larch_avail");
 	} catch (etk::SQLiteError) {
-		caseid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(0);
+		caseid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(0);
 	}
 	std::string altid_alias = "altid";
 	try {
-		sql_statement("SELECT altid FROM ("+q_avail+") AS elm_avail");
+		sql_statement("SELECT altid FROM ("+q_avail+") AS larch_avail");
 	} catch (etk::SQLiteError) {
-		altid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(1);
+		altid_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(1);
 	}
 	std::string avail_alias = "avail";
 	try {
-		sql_statement("SELECT avail FROM ("+q_avail+") AS elm_avail");
+		sql_statement("SELECT avail FROM ("+q_avail+") AS larch_avail");
 	} catch (etk::SQLiteError) {
-		avail_alias = sql_statement("SELECT * FROM ("+q_avail+") AS elm_avail")->column_name(2);
+		avail_alias = sql_statement("SELECT * FROM ("+q_avail+") AS larch_avail")->column_name(2);
 	}
-	q<<"SELECT "<<caseid_alias<<" AS caseid, "<<altid_alias<<" AS altid, "<<avail_alias<<" AS avail FROM ("+q_avail+") AS elm_avail";
+	q<<"SELECT "<<caseid_alias<<" AS caseid, "<<altid_alias<<" AS altid, "<<avail_alias<<" AS avail FROM ("+q_avail+") AS larch_avail";
 	if (caseid) {
 		q << " WHERE caseid="<<*caseid;
 	}

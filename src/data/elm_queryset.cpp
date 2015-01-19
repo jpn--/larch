@@ -115,32 +115,32 @@ PyObject* elm::QuerySet::pickled  () const
 
 std::string elm::QuerySet::tbl_idco   () const
 {
-	return "("+qry_idco()+") AS elm_idco";
+	return "("+qry_idco()+") AS larch_idco";
 }
 
 std::string elm::QuerySet::tbl_idca   () const
 {
-	return "("+qry_idca()+") AS elm_idca";
+	return "("+qry_idca()+") AS larch_idca";
 }
 
 std::string elm::QuerySet::tbl_alts   () const
 {
-	return "("+qry_alts()+") AS elm_alternatives";
+	return "("+qry_alts()+") AS larch_alternatives";
 }
 
 std::string elm::QuerySet::tbl_caseids() const
 {
-	return "("+qry_caseids()+") AS elm_caseids";
+	return "("+qry_caseids()+") AS larch_caseids";
 }
 
 std::string elm::QuerySet::tbl_choice () const
 {
-	return "("+qry_choice()+") AS elm_choice";
+	return "("+qry_choice()+") AS larch_choice";
 }
 
 std::string elm::QuerySet::tbl_weight () const
 {
-	return "("+qry_weight()+") AS elm_weight";
+	return "("+qry_weight()+") AS larch_weight";
 }
 
 std::string elm::QuerySet::tbl_avail  () const
@@ -149,7 +149,7 @@ std::string elm::QuerySet::tbl_avail  () const
 		OOPS("empty avail query");
 	}
 
-	return "("+qry_avail()+") AS elm_avail";
+	return "("+qry_avail()+") AS larch_avail";
 }
 
 

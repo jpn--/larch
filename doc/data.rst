@@ -62,6 +62,8 @@ or :mod:`sqlite3` (included in standard Python distributions).
 
 
 
+
+
 Convenience Methods
 -------------------
 
@@ -69,4 +71,19 @@ Convenience Methods
 
 .. automethod:: DB.detach
 
+
+
+
+
+Queries
+-------
+
+.. attribute:: DB.queries
+
+	This attribute defines the automatic queries used to provision a model with data.
+
+
+.. toctree::
+
+	queryset
 

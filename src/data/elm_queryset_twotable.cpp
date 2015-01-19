@@ -248,7 +248,7 @@ std::string elm::QuerySetTwoTable::qry_avail  () const
 		std::ostringstream s;
 		s << "SELECT "<<__alias_caseid_ca()<<" AS caseid, ";
 		s << __alias_altid_ca()<<" AS altid, ";
-		s << _alt_avail_ca_column << " AS choice FROM "+tbl_idca();
+		s << _alt_avail_ca_column << " AS avail FROM "+tbl_idca();
 		if (validator) validator->sql_statement(s.str());
 		return s.str();
 	}

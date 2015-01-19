@@ -18,7 +18,7 @@ import sys
 
 
 _docstring_sql_alts =\
-"An SQL query that evaluates to an elm_alternatives table.\n\
+"An SQL query that evaluates to a larch_alternatives table.\n\
 \n\
 Column 1: id (integer) a key for every alternative observed in the sample\n\
 Column 2: name (text) a name for each alternative\n\
@@ -26,14 +26,14 @@ Column 2: name (text) a name for each alternative\n\
 
 
 _docstring_sql_idco =\
-"An SQL query that evaluates to an elm_idco table.\n\
+"An SQL query that evaluates to an larch_idco table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2+ can contain any explanatory data, typically numeric data, although non-numeric data is allowable.";
 
 
 _docstring_sql_idca =\
-"An SQL query that evaluates to an elm_idca table.\n\
+"An SQL query that evaluates to an larch_idca table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -43,7 +43,7 @@ A query with less than two columns will raise an exception.";
 
 
 _docstring_sql_choice =\
-"An SQL query that evaluates to an elm_choice table.\n\
+"An SQL query that evaluates to an larch_choice table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -54,7 +54,7 @@ it can simply be omitted from the result.";
 
 
 _docstring_sql_avail =\
-"An SQL query that evaluates to an elm_avail table.\n\
+"An SQL query that evaluates to an larch_avail table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -66,7 +66,7 @@ all alternatives are available in all cases.";
 
 
 _docstring_sql_weight =\
-"An SQL query that evaluates to an elm_weight table.\n\
+"An SQL query that evaluates to an larch_weight table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: weight (numeric) a weight associated with each case\n\
@@ -370,21 +370,21 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		d.queries.set_idco_query("SELECT {1} AS caseid, * FROM {0}".format(tablename,caseid))
 		#d.sql_idca = ""
 		if choice is None:
-			#choice_subquerys = ["SELECT caseid, {0} AS altid, {1} AS choice FROM elm_idco".format(code,info[2])
+			#choice_subquerys = ["SELECT caseid, {0} AS altid, {1} AS choice FROM larch_idco".format(code,info[2])
 			#				   for code,info in alts.items()]
 			#d.sql_choice = " UNION ALL ".join(choice_subquerys)
 			d.queries.set_choice_column_map({code:info[2] for code,info in alts.items()})
 		else:
 			d.queries.set_choice_column(choice)
-			#d.sql_choice = "SELECT caseid, {0} AS altid, 1 AS choice FROM elm_idco;".format(choice)
-		#avail_subquerys = ["SELECT caseid, {0} AS altid, {1} AS avail FROM elm_idco".format(code,info[1])
+			#d.sql_choice = "SELECT caseid, {0} AS altid, 1 AS choice FROM larch_idco;".format(choice)
+		#avail_subquerys = ["SELECT caseid, {0} AS altid, {1} AS avail FROM larch_idco".format(code,info[1])
 		#                   for code,info in alts.items()]
 		#d.sql_avail = " UNION ALL ".join(avail_subquerys)
 		d.queries.set_avail_column_map({code:info[1] for code,info in alts.items()})
-		if weight is None:
+		if weight is None or weight == "_equal_":
 			weight = "_equal_"
 		else:
-			#d.sql_weight = "SELECT caseid, {0} AS weight FROM elm_idco;".format(weight)
+			#d.sql_weight = "SELECT caseid, {0} AS weight FROM larch_idco;".format(weight)
 			d.queries.set_weight_column(weight)
 		if safety:
 			missing_codes = set()
@@ -1412,7 +1412,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 #				max({0}) AS MAXIMUM,
 #				avg({0}) AS MEAN,
 #				stdev({0}) AS STDEV
-#				FROM elm_idco
+#				FROM larch_idco
 #				""".format(u)
 #			s = self.dataframe(qry)
 #			s = s.set_index('DATA')

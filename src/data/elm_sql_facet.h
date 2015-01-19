@@ -42,7 +42,7 @@
 // !!!: HELP TEXT
 
 %feature("docstring") elm::Facet::get_sql_alts
-"An SQL query that evaluates to an elm_alternatives table.\n\
+"An SQL query that evaluates to an larch_alternatives table.\n\
 \n\
 Column 1: id (integer) a key for every alternative observed in the sample\n\
 Column 2: name (text) a name for each alternative\n\
@@ -50,14 +50,14 @@ Column 2: name (text) a name for each alternative\n\
 
 
 %feature("docstring") elm::Facet::get_sql_idco
-"An SQL query that evaluates to an elm_idco table.\n\
+"An SQL query that evaluates to an larch_idco table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2+ can contain any explanatory data, typically numeric data, although non-numeric data is allowable.";
 
 
 %feature("docstring") elm::Facet::get_sql_idca
-"An SQL query that evaluates to an elm_idca table.\n\
+"An SQL query that evaluates to an larch_idca table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -67,7 +67,7 @@ A query with less than two columns will raise an exception.";
 
 
 %feature("docstring") elm::Facet::get_sql_choice
-"An SQL query that evaluates to an elm_choice table.\n\
+"An SQL query that evaluates to an larch_choice table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -78,7 +78,7 @@ it can simply be omitted from the result.";
 
 
 %feature("docstring") elm::Facet::get_sql_avail
-"An SQL query that evaluates to an elm_avail table.\n\
+"An SQL query that evaluates to an larch_avail table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: altid (integer) a key for each alternative available in this case\n\
@@ -90,7 +90,7 @@ all alternatives are available in all cases.";
 
 
 %feature("docstring") elm::Facet::get_sql_weight
-"An SQL query that evaluates to an elm_weight table.\n\
+"An SQL query that evaluates to an larch_weight table.\n\
 \n\
 Column 1: caseid (integer) a key for every case observed in the sample\n\
 Column 2: weight (numeric) a weight associated with each case\n\

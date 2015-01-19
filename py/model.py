@@ -894,7 +894,7 @@ class Model(Model2):
 	def stats_utility_co_sqlite(self, where=None):
 		"""
 		Generate a dataframe of descriptive statistics on the model idco data read from SQLite.
-		If the where argument is given, it is used as a filter on the elm_idco table.
+		If the where argument is given, it is used as a filter on the larch_idco table.
 		"""
 		import pandas
 		keys = set()
