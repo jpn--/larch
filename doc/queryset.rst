@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-=======================
-Automatic Queries
-=======================
+======================================
+Queries To Provision a Model with Data
+======================================
 
 
 
@@ -114,13 +114,13 @@ Automatic Queries
 
 
 
-Queries for a Single *idco* Table
----------------------------------
+Queries for a Single :ref:`idco` Table
+--------------------------------------
 
 .. class:: QuerySetSimpleCO
 
 	This subclass of :class:`core.QuerySet` is used when the data consists exclusively of a single
-	idco format table.
+	:ref:`idco` format table.
 
 	.. note::
 

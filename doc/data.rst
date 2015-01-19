@@ -75,12 +75,14 @@ Convenience Methods
 
 
 
-Queries
--------
+Using Data in Models
+----------------------------
 
 .. attribute:: DB.queries
 
-	This attribute defines the automatic queries used to provision a model with data.
+	This attribute defines the automatic queries used to provision a :class:`Model` with data.
+	It should be an object that inherits from the :class:`core.QuerySet` abstract base class.
+
 
 
 .. toctree::

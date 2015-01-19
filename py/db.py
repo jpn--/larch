@@ -319,9 +319,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	@staticmethod
 	def CSV_idco(filename, caseid="_rowid_", choice=None, weight=None, tablename="data", savename=None, alts={}, safety=True):
-		'''Creates a new larch DB based on an idco CSV data file.
+		'''Creates a new larch DB based on an :ref:`idco` CSV data file.
 
-		The input data file should be an idco data file, with the first line containing the column headings.
+		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
+		The reader will attempt to determine the format (csv, tab-delimited, etc) automatically. 
 
 		Parameters
 		----------
