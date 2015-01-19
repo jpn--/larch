@@ -18,6 +18,14 @@ First we create the DB and Model objects:
 	d = larch.DB.Example('SWISSMETRO')
 	m = larch.Model(d)
 
+We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.
+
+.. testcode::
+
+	m.title = "swissmetro example 01 (simple logit)"
+
+
 The swissmetro dataset, as with all Biogeme data, is only in `co` format.
 
 .. testcode::
@@ -33,6 +41,9 @@ The swissmetro dataset, as with all Biogeme data, is only in `co` format.
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
 	>>> m.estimate()
 	success ...
 	>>> m.loglike()
@@ -41,9 +52,37 @@ We can estimate the models and check the results match up with those given by Bi
 	-0.01277...
 	>>> m['B_COST'].value
 	-0.01083...
-	>>> m.parameter("ASC_TRAIN").value
+	>>> m['ASC_TRAIN'].value
 	-0.7012...
-	>>> m.parameter("ASC_CAR").value
+	>>> m['ASC_CAR'].value
 	-0.1546...
+
+
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> print(m)
+	============================================================================================
+	swissmetro example 01 (simple logit)
+	============================================================================================
+	Model Parameter Estimates
+	--------------------------------------------------------------------------------------------
+	Parameter	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
+	ASC_TRAIN	 0          	-0.701201   	 0.0548739  	-12.7784    	 0          
+	ASC_CAR  	 0          	-0.154633   	 0.0432354  	-3.57653    	 0          
+	B_TIME   	 0          	-0.0127785  	 0.000568832	-22.4644    	 0          
+	B_COST   	 0          	-0.0108379  	 0.000518301	-20.9104    	 0          
+	============================================================================================
+	Model Estimation Statistics
+	--------------------------------------------------------------------------------------------
+	Log Likelihood at Convergence     	-5331.25
+	Log Likelihood at Null Parameters 	-6964.66
+	--------------------------------------------------------------------------------------------
+	Rho Squared w.r.t. Null Parameters	0.235
+	============================================================================================
+	...
+
+	
 
 
