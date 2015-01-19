@@ -12,6 +12,11 @@ def info(self):
 	return s
 
 
+_weight_doc = """\
+This attribute names the column in the main table that defines the weight for each case.
+Set it to an empty string, or 1.0, to assign all cases equal weight.
+"""
+
 weight = property(lambda self: self.get_weight_column(), lambda self,w: self.set_weight_column(str(w)), None, "The weight indicator")
 
 
@@ -28,7 +33,26 @@ def get_choice(self):
 	return self.get_choice_column_map()
 
 
-choice = property(lambda self: self.get_choice(), lambda self,w: self.set_choice(w), None, "The choice indicator")
+_doc_choice = """\
+This attributes defines the choices. It has two styles:
+
+	* When set to a string, the string names the column of the main table that identifies
+	  the choice for each case.  The indicated column should contain integer values
+	  corresponding to the alternative codes.
+
+	* When set to a dict, the dict should contain {integer:string} key/value pairs, where
+	  each key is an integer value corresponding to an alternative code, and each
+	  value is a string identifying a column in the main table; that column should
+	  contain a value indication whether the alternative was chosen. Usually this will be
+	  a binary dummy variable, although it need not be. For certain specialized models,
+	  values other than 0 or 1 may be appropriate.
+
+The choice of style is a matter of convenience; the same data can be expressed with either
+style as long as the choices are binary.
+
+"""
+
+choice = property(lambda self: self.get_choice(), lambda self,w: self.set_choice(w), None, _doc_choice)
 
 
 def set_avail(self, x):
@@ -67,16 +91,42 @@ should have the following features:
 """
 
 alts_query = property(lambda self: self.get_alts_query(), lambda self,w: self.set_alts_query(w), None, _alts_query_doc)
-idco_query = property(lambda self: self.get_idco_query(), lambda self,w: self.set_idco_query(w), None, "The idco query")
 
 
+
+_idco_query_doc = """\
+This attribute defines a SQL query that evaluates to an larch_idco table. The table
+should have the following features:
+
+	* Column 1: caseid (integer) a key for every case observed in the sample
+	* Column 2+ can contain any explanatory data, typically numeric data, although non-numeric data is allowable.
+
+If the main table is named "data" typically this query will be::
+
+	SELECT _rowid_ AS caseid, * FROM data
+
+"""
+
+idco_query = property(lambda self: self.get_idco_query(), lambda self,w: self.set_idco_query(w), None, _idco_query_doc)
+
+
+_alts_values_doc = """\
+This attribute defines a set of alternative codes and names, as a dictionary
+that contains {integer:string} key/value pairs, where
+each key is an integer value corresponding to an alternative code, and each
+value is a string giving a descriptive name for the alternative.
+When assigning to this attribute, a
+query is defined that can be used with no table.
+
+.. warning:: Using this method will overwrite :attr:`alts_query`
+"""
 
 
 def get_alts_values(self):
 	raise NotImplementedError("Reading alts here is not yet implemented, sorry")
 
 
-alts_values = property(lambda self: self.get_alts_values(), lambda self,w: self.set_alts_values(w), None, "The alts values")
+alts_values = property(lambda self: self.get_alts_values(), lambda self,w: self.set_alts_values(w), None, _alts_values_doc)
 
 
 
