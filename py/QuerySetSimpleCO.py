@@ -17,7 +17,7 @@ This attribute names the column in the main table that defines the weight for ea
 Set it to an empty string, or 1.0, to assign all cases equal weight.
 """
 
-weight = property(lambda self: self.get_weight_column(), lambda self,w: self.set_weight_column(str(w)), None, "The weight indicator")
+weight = property(lambda self: self.get_weight_column(), lambda self,w: self.set_weight_column(str(w)), None, _weight_doc)
 
 
 def set_choice(self, x):
