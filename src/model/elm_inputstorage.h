@@ -15,6 +15,8 @@
 %rename(data) elm::InputStorage::apply_name;
 %rename(param) elm::InputStorage::param_name;
 
+%rename(LinearFunction) elm::ComponentListPair;
+
 %feature("kwargs", 1) elm::InputStorage::InputStorage;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_ca;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_co_kwd;
@@ -192,6 +194,8 @@ namespace elm {
 		
 		void __call__(const elm::cellcode& altcode, std::string param="", const double& multiplier=1.0);
 		void clean(Facet& db);
+
+		std::string __repr__() const;
 	};
 	
 	
@@ -254,7 +258,7 @@ namespace elm {
 		const ComponentCellcodeMap* nodes;
 		const ComponentEdgeMap* edges;
 		
-		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const ComponentEdgeMap* edges=nullptr, const Facet* db=nullptr);
+		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const ComponentEdgeMap* edges=nullptr, const Facet* db=nullptr, const elm::cellcode* root=nullptr);
 		ComponentGraphDNA(const ComponentGraphDNA&);
 		bool operator==(const ComponentGraphDNA&) const;
 		
@@ -262,6 +266,7 @@ namespace elm {
 		
 		std::string node_name(const elm::cellcode& node_code) const;
 		elm::cellcode node_code(const std::string& node_name) const;
+		elm::cellcode root_code;
 
 		std::string __repr__() const;
 		

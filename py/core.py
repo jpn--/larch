@@ -1126,7 +1126,7 @@ class VAS_dna(cellcode_infodict):
     def clear(self) -> "void" : return _core.VAS_dna_clear(self)
     def elemental_codes(self) -> "elm::cellcodeset" : return _core.VAS_dna_elemental_codes(self)
     def all_known_codes(self) -> "elm::cellcodeset" : return _core.VAS_dna_all_known_codes(self)
-    def branches_in_ascending_order(self) -> "std::list< elm::cellcode,std::allocator< elm::cellcode > >" : return _core.VAS_dna_branches_in_ascending_order(self)
+    def branches_in_ascending_order(self, *args) -> "std::list< elm::cellcode,std::allocator< elm::cellcode > >" : return _core.VAS_dna_branches_in_ascending_order(self, *args)
     def __init__(self): 
         this = _core.new_VAS_dna()
         try: self.this.append(this)
@@ -1255,22 +1255,22 @@ class ComponentCellcodeMap(object):
 ComponentCellcodeMap_swigregister = _core.ComponentCellcodeMap_swigregister
 ComponentCellcodeMap_swigregister(ComponentCellcodeMap)
 
-class ComponentListPair(object):
+class LinearFunction(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
-    descrip = _swig_property(_core.ComponentListPair_descrip_get, _core.ComponentListPair_descrip_set)
-    ca = _swig_property(_core.ComponentListPair_ca_get, _core.ComponentListPair_ca_set)
-    co = _swig_property(_core.ComponentListPair_co_get, _core.ComponentListPair_co_set)
+    descrip = _swig_property(_core.LinearFunction_descrip_get, _core.LinearFunction_descrip_set)
+    ca = _swig_property(_core.LinearFunction_ca_get, _core.LinearFunction_ca_set)
+    co = _swig_property(_core.LinearFunction_co_get, _core.LinearFunction_co_set)
     def __init__(self, type1 : 'int'=0, type2 : 'int'=0, descrip : 'std::string'="", parentmodel : 'Model2'=None): 
-        this = _core.new_ComponentListPair(type1, type2, descrip, parentmodel)
+        this = _core.new_LinearFunction(type1, type2, descrip, parentmodel)
         try: self.this.append(this)
         except: self.this = this
-    def __call__(self, *args) -> "void" : return _core.ComponentListPair___call__(self, *args)
-    def clean(self, *args) -> "void" : return _core.ComponentListPair_clean(self, *args)
-    __swig_destroy__ = _core.delete_ComponentListPair
+    def __call__(self, *args) -> "void" : return _core.LinearFunction___call__(self, *args)
+    def clean(self, *args) -> "void" : return _core.LinearFunction_clean(self, *args)
+    def __repr__(self) -> "std::string" : return _core.LinearFunction___repr__(self)
+    __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self : None;
-ComponentListPair_swigregister = _core.ComponentListPair_swigregister
-ComponentListPair_swigregister(ComponentListPair)
+LinearFunction_swigregister = _core.LinearFunction_swigregister
+LinearFunction_swigregister(LinearFunction)
 
 class ComponentEdgeMap(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1308,6 +1308,7 @@ class ComponentGraphDNA(object):
     def valid(self) -> "bool" : return _core.ComponentGraphDNA_valid(self)
     def node_name(self, *args) -> "std::string" : return _core.ComponentGraphDNA_node_name(self, *args)
     def node_code(self, *args) -> "elm::cellcode" : return _core.ComponentGraphDNA_node_code(self, *args)
+    root_code = _swig_property(_core.ComponentGraphDNA_root_code_get, _core.ComponentGraphDNA_root_code_set)
     def __repr__(self) -> "std::string" : return _core.ComponentGraphDNA___repr__(self)
     def elemental_codes(self) -> "elm::cellcodeset" : return _core.ComponentGraphDNA_elemental_codes(self)
     def all_node_codes(self) -> "elm::cellcodeset" : return _core.ComponentGraphDNA_all_node_codes(self)
@@ -1764,6 +1765,8 @@ sherpa_swigregister(sherpa)
 
 class Model2(sherpa):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def _get_root_cellcode(self) -> "elm::cellcode" : return _core.Model2__get_root_cellcode(self)
+    def _set_root_cellcode(self, *args) -> "void" : return _core.Model2__set_root_cellcode(self, *args)
     def CoefUtilityCA(self) -> "PyObject *" : return _core.Model2_CoefUtilityCA(self)
     def CoefUtilityCO(self) -> "PyObject *" : return _core.Model2_CoefUtilityCO(self)
     def needs(self) -> "std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >" :

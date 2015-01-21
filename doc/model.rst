@@ -43,3 +43,20 @@ Model Parameters
 .. autoclass:: Parameter(name='', value=0, null_value=0, holdfast=False)
 
 
+
+
+GEV Network
+-----------
+
+Nested logit and Network GEV models have an underlying network structure.
+
+.. autoattribute:: Model.nest(id, name=None, parameter=None)
+
+.. autoattribute:: Model.node
+
+.. autoattribute:: Model.link(up_id, down_id)
+
+.. autoattribute:: Model.edge
+
+.. autoattribute:: Model.root_id
+

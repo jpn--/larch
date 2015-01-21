@@ -59,13 +59,75 @@ class Model(Model2):
 	def _set_nest(self, *args):
 		_core.Model2_nest_set(self, *args)
 		self.freshen()
-	nest = property(_core.Model2_nest_get, _set_nest)
+	_nest_doc = """\
+	A function-like object mapping node codes to names and parameters.
+	
+	This can be called as if it was a normal method of :class:`Model`.
+	It also is an object that acts like a dict with integer keys 
+	representing the node code numbers and :class:`larch.core.Component`
+	values.
+	
+	Parameters
+	----------
+	id : int
+		The code number of the nest. Must be unique to this nest among the 
+		set of all nests and all elemental alternatives.
+	name : str or None
+		The name of the nest. This name is used in various reports.
+		It can be any string but generally something short and descriptive
+		is useful. If None, the name is set to "nest_{id}".
+	parameter : str or None
+		The name of the parameter to associate with this nest.  If None, 
+		the `name` is used.
+		
+	Returns
+	-------
+	:class:`larch.core.Component`
+		The component object for the designated node
+		
+	Notes
+	-----
+	Earlier versions of this software required node code numbers to be non-negative.  
+	They can now be any 64 bit signed integer.
+	
+	Because the id and name are distinct data types, Larch can detect (and silently allow) when
+	they are transposed (i.e. with `name` given before `id`).
+	"""
+	nest = property(_core.Model2_nest_get, _set_nest, None, _nest_doc)
+	node = property(_core.Model2_nest_get, _set_nest, None, "an alias for :attr:`nest`")
+	
 	
 	def _set_link(self, *args):
 		_core.Model2_link_set(self, *args)
 		self.freshen()
-	link = property(_core.Model2_link_get, _set_link)
+	_link_doc = """\
+	A function-like object defining links between network nodes.
+	
+	Parameters
+	----------
+	up_id : int
+		The code number of the upstream (i.e. closer to the root node) node on the link.
+		This should never be an elemental alternative.
+	down_id : int
+		The code number of the downstream node on the link. This can be an elemental
+		alternative.
+	"""
+	link = property(_core.Model2_link_get, _set_link, None, _link_doc)
+	edge = property(_core.Model2_link_get, _set_link, None, "an alias for :attr:`link`")
 
+	def _set_rootcode(self, *args):
+		_core.Model2__set_root_cellcode(self, *args)
+		#self.freshen()
+	_rootcode_doc = """\
+	The root_id is the code number for the root node in a nested logit or
+	network GEV model. The default value for the root_id is 0. It is important
+	that the root_id be different from the code for every elemental alternative
+	and intermediate nesting node. If it is convenient for one of the elemental
+	alternatives or one of the intermediate nesting nodes to have a code number
+	of 0 (e.g., for a binary logit model where the choices are yes and no),
+	then this value can be changed to some other integer.
+	"""
+	root_id = property(_core.Model2__get_root_cellcode, _set_rootcode, None, _rootcode_doc)
 
 	def get_data_pointer(self):
 		return self._ref_to_db
@@ -126,19 +188,16 @@ class Model(Model2):
 				filename_ext = ".py"
 			filename = filename+filename_ext
 			filemaker = lambda: open(filename, 'w')
-		print("save log 1")
 		with filemaker() as f:
 			if report:
 				f.write(self.report(lineprefix="#\t", cats=report_cats))
 				f.write("\n\n\n")
-			print("save log 2")
 			import time
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
 			f.write(" on %s\n"%time.strftime("%d %b %Y"))
 			f.write(self.save_buffer())
 			blank_attr = set(dir(Model()))
 			aliens_found = False
-			print("save log 3")
 			for a in dir(self):
 				if a not in blank_attr:
 					if isinstance(getattr(self,a),(int,float)):

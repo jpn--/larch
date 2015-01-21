@@ -7,6 +7,7 @@ parser.add_argument("-t", "--test", help="run unit tests", action="store_true")
 #parser.add_argument("-f", "--face", help="run new gui", action="store_true")
 parser.add_argument("-s", "--spool", help="spool into a new working directory", type=str)
 parser.add_argument("-p", "--package", help="copy and load the package", type=str)
+parser.add_argument("-e", "--example", help="load an example model and data", type=int, nargs='?', const=1, default=0)
 args = parser.parse_args()
 
 try:
@@ -44,6 +45,8 @@ if args.file:
 
 if args.test:
 	import larch.test
+	from larch.core import Parameter, Model, DB, LarchError, SQLiteError
+	from larch.model import ModelFamily
 	try:
 		larch.test.run()
 	except SystemExit as se:
@@ -75,5 +78,11 @@ if args.package:
 			raise
 		else:
 			os.system('say finished')
+
+if args.example>0:
+	import larch.examples
+	larch.examples.load_example(args.example)
+	d = larch.examples.data()
+	m = larch.examples.model(d)
 
 del args

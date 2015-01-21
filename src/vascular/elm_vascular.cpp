@@ -574,7 +574,7 @@ void VAS_System::ungrow()
 	_touch = true;
 }
 
-std::list<elm::cellcode> elm::VAS_dna::branches_in_ascending_order() const
+std::list<elm::cellcode> elm::VAS_dna::branches_in_ascending_order(const elm::cellcode& root_cellcode) const
 {
 	cellcodeset Elementals = elemental_codes();
 	list<VAS_dna::const_iterator> Branches;
@@ -582,7 +582,7 @@ std::list<elm::cellcode> elm::VAS_dna::branches_in_ascending_order() const
 	// Sort Branches into an ascending order
 	VAS_dna::const_iterator root_iter = end();
 	for (VAS_dna::const_iterator b = begin(); b!=end(); b++) {
-		if (b->first == cellcode_null) {
+		if (b->first == root_cellcode) {
 			root_iter = b;
 			continue;
 		}
@@ -604,11 +604,27 @@ std::list<elm::cellcode> elm::VAS_dna::branches_in_ascending_order() const
 }
 
 
-void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, Facet* db, etk::logging_service* msg )
+elm::cellcode VAS_System::root_cellcode() const
+{
+	return _graph.root_code;
+}
+
+
+void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg)
+{
+	if (_graph.root_code != r) {
+		_touch = true;
+		_graph.root_code = r;
+		regrow(nullptr,nullptr,nullptr,nullptr,msg);
+	}
+}
+
+
+void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
 {
 	BUGGER_(msg, "Regrowing vascular system...");
-	if (nodes||edges||db) {
-		ComponentGraphDNA new_graph = ComponentGraphDNA(nodes, edges, db);
+	if (nodes||edges||db||root) {
+		ComponentGraphDNA new_graph = ComponentGraphDNA(nodes, edges, db, root);
 		if (!(_graph == new_graph)) {
 			_graph = new_graph;
 			_touch = true;
@@ -634,32 +650,6 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, F
 	list<VAS_dna::iterator>::iterator hop;
 	unsigned i,j;
 	
-	/*
-	// Sort Branches into an ascending order
-	VAS_dna::iterator root_iter = _genome.end();
-	for (b = _genome.begin(); b!=_genome.end(); b++) {
-		if (b->first == cellcode_null) {
-			root_iter = b;
-			continue;
-		}
-		if (Elementals.contains(b->first)) continue;
-		hop = Branches.begin();
-		while ( hop!=Branches.end() && !(*hop)->second.dns.contains(b->first) ) hop++;
-		Branches.insert(hop,b);
-	}
-	if (root_iter != _genome.end()) { // If found the root, tack it on the end.
-		Branches.insert(Branches.end(),root_iter);
-	}
-	
-	// Assemble cells
-	unsigned s=0;
-	for (e=Elementals.begin(); e!=Elementals.end(); e++) 
-		_cells.push_back(VAS_Cell(*e,s++));
-	for (hop = Branches.begin(); hop!=Branches.end(); hop++) 
-		_cells.push_back(VAS_Cell((*hop)->first,s++));
-	if (root_iter == _genome.end()) 
-		_cells.push_back(VAS_Cell(cellcode_null,s++));
-	*/
 	
 	// Sort Branches into an ascending order
 	BUGGER_(msg, "Sorting branches in ascending order...");
@@ -667,10 +657,10 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, F
 	if (_graph.valid()) {
 		BUGGER_(msg, "  _graph is valid");
 		BranchesAscend = _graph.branches_ascending_order(msg);
-		if (BranchesAscend.size()==0 || BranchesAscend.back()!=0) BranchesAscend.push_back(0);
+		if (BranchesAscend.size()==0 || BranchesAscend.back()!=_graph.root_code) BranchesAscend.push_back(_graph.root_code);
 	} else {
 		BUGGER_(msg, "  _graph is not valid");
-		BranchesAscend = _genome.branches_in_ascending_order();
+		BranchesAscend = _genome.branches_in_ascending_order(_graph.root_code);
 	}
 	
 	// Assemble cells
@@ -737,7 +727,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, F
 	BUGGER_(msg, "Connecting loose nodes to the root...");
 	for (j=0; j<_cells.size()-1; j++) {
 		if (_cells[j].upsize()==0) {
-			_edges.add_back(_anatomy[cellcode_null],_anatomy[_cells[j].code()]);
+			_edges.add_back(_anatomy[_graph.root_code],_anatomy[_cells[j].code()]);
 			_edges[i]._edge_slot = i;
 			_edges[i].u()->_dns.push_back(&_edges[i]);
 			_edges[i].d()->_ups.push_back(&_edges[i]);

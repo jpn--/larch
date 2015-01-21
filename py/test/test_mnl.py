@@ -422,6 +422,24 @@ class TestMNL(ELM_TestCase):
 		m = Model.loads(f['constants_only'].save(None))
 		self.assertEqual(m.parameter_values(), f['constants_only'].parameter_values())
 
+	def test_save_and_load(self):
+		m = Model.Example(114)
+		m['ASC_TRAIN'].value = -.123
+		m['ASC_CAR'].value = .123
+		m['B_TIME'].value = -.0045
+		m['B_COST'].value = -.0067
+		m['existing'].value = 0.5
+		m['SB_TRAIN'].value = 0.1
+		m.root_id = 999
+		m.provision()
+		m2 = Model.loads(m.save(None))
+		m2.db = m.db
+		m2.provision()
+		self.assertEqual(m.parameter_values(), m2.parameter_values())
+		self.assertEqual(m.parameter_names(), m2.parameter_names())
+		self.assertEqual(m.root_id, m2.root_id)
+		self.assertEqual(m.loglike(), m2.loglike())
+
 	def test_single_row_probability(self):
 		m = Model.Example()
 		needco = m.utility.co.needs()

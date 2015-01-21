@@ -451,7 +451,8 @@ ELM_RESULTCODE elm::Model2::nest
 		OOPS( cat("error in adding nest: ",oops.what()));
 	}
 	if (result & ELM_CREATED) {
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &msg );
+		elm::cellcode root = Xylem.root_cellcode();
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 		nElementals = Xylem.n_elemental();
 		nNests = Xylem.n_branches();
 		nNodes = Xylem.size();

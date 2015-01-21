@@ -193,9 +193,10 @@ void elm::Model2::change_data_pointer(elm::Facet& datafile)
 	if (_Data) {
 		Py_INCREF(_Data->apsw_connection);
 	}
+	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.clear();
 	Xylem.add_dna_sequence(_Data->alternatives_dna());
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &msg );
+	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 	
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
@@ -283,6 +284,22 @@ elm::Model2::~Model2()
 	tearDown();
 	
 }
+
+
+
+
+elm::cellcode elm::Model2::_get_root_cellcode() const
+{
+	return Xylem.root_cellcode();
+}
+
+
+void elm::Model2::_set_root_cellcode(const elm::cellcode& r)
+{
+	Xylem.root_cellcode( r, &msg );
+}
+
+
 
 
 runstats elm::Model2::estimate_tight(double magnitude)
@@ -932,6 +949,10 @@ std::string elm::Model2::save_buffer() const
 		}
 	}
 	sv << "\n";
+
+	// save root_id
+	BUGGER( msg ) << "save root_id";
+	sv << "self.root_id = "<< _get_root_cellcode() <<"\n";
 
 	// save nest
 	BUGGER( msg ) << "save nest";

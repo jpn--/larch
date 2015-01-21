@@ -282,7 +282,8 @@ void elm::Model2::setUp(bool and_load_data)
 	}
 
 	BUGGER(msg) << "Rebuilding Xylem network...";
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &msg );
+	elm::cellcode root = Xylem.root_cellcode();
+	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 	
 	if (Xylem.n_branches() > 0) {
 		BUGGER(msg) << "Setting model features to include nesting.";
@@ -306,7 +307,8 @@ void elm::Model2::setUp(bool and_load_data)
 	
 	if (features & MODELFEATURES_NESTING) {
 		Xylem.repoint_parameters(*Coef_LogSum, NULL);
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &msg );
+		elm::cellcode root = Xylem.root_cellcode();
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 	}
 	
 	pull_coefficients_from_freedoms();

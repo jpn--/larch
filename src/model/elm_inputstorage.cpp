@@ -271,6 +271,8 @@ elm::ComponentListPair::ComponentListPair(int type1, int type2, std::string desc
 }
 
 
+
+
 void elm::ComponentListPair::__call__(const elm::cellcode& altcode, std::string param, const double& multiplier)
 {
 	if (param=="") {
@@ -279,6 +281,13 @@ void elm::ComponentListPair::__call__(const elm::cellcode& altcode, std::string 
 	co.receive_utility_co ("1", altcode, param, multiplier);
 }
 
+
+std::string elm::ComponentListPair::__repr__() const
+{
+	std::ostringstream x;
+	x<< "<LinearFunction with length ("<< ca.size()<<"," << co.size() <<")>";
+	return x.str();
+}
 
 void elm::ComponentListPair::clean(elm::Facet& db)
 {
@@ -346,22 +355,30 @@ std::string elm::ComponentEdgeMap::__repr__() const
 
 
 
-elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const ComponentEdgeMap* edges, const Facet* db)
-: db(db), nodes(nodes), edges(edges) {}
+elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const ComponentEdgeMap* edges, const Facet* db, const elm::cellcode* root)
+: db(db)
+, nodes(nodes)
+, edges(edges)
+, root_code(root ? *root : cellcode_null)
+{}
 
 elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentGraphDNA& x)
-: db(x.db), nodes(x.nodes), edges(x.edges) {}
+: db(x.db)
+, nodes(x.nodes)
+, edges(x.edges)
+, root_code(x.root_code)
+{}
 
 bool elm::ComponentGraphDNA::operator==(const ComponentGraphDNA& x) const
 {
-	if (db!=x.db || nodes!=x.nodes || edges!=x.edges) return false;
+	if (db!=x.db || nodes!=x.nodes || edges!=x.edges || root_code!=x.root_code) return false;
 	return true;
 }
 
 
 std::string elm::ComponentGraphDNA::node_name(const elm::cellcode& node_code) const
 {
-	if (node_code==0) return "ROOT";
+	if (node_code==root_code) return "ROOT";
 	
 	// Look in nodes
 	if (nodes) {
@@ -384,6 +401,8 @@ std::string elm::ComponentGraphDNA::node_name(const elm::cellcode& node_code) co
 
 elm::cellcode elm::ComponentGraphDNA::node_code(const std::string& node_name) const
 {
+	if (node_name=="ROOT") return root_code;
+
 	// Look in nodes
 	if (nodes) {
 		elm::ComponentCellcodeMap::const_iterator i = nodes->begin();
@@ -469,7 +488,7 @@ elm::cellcodeset elm::ComponentGraphDNA::all_node_codes() const
 		}
 	}
 
-	ret.insert(0);
+	ret.insert(root_code);
 	return ret;
 	
 	OOPS("error in finding all_node_codes");
@@ -492,7 +511,7 @@ elm::cellcodeset elm::ComponentGraphDNA::nest_node_codes() const
 	elm::cellcodeset elem = elemental_codes();
 	elm::cellcodeset ret;
 	for (std::set<cellcode>::iterator i=all.begin(); i!=all.end(); i++) {
-		if (!elem.contains(*i) && *i) ret.append(*i);
+		if (!elem.contains(*i) && *i!=root_code) ret.append(*i);
 	}
 	return ret;
 }
@@ -554,7 +573,7 @@ elm::cellcodeset elm::ComponentGraphDNA::up_node_codes(const elm::cellcode& node
 {
 	elm::cellcodeset ret;
 	
-	if (node_code==0) {
+	if (node_code==root_code) {
 		return ret;
 	}
 	
@@ -566,7 +585,7 @@ elm::cellcodeset elm::ComponentGraphDNA::up_node_codes(const elm::cellcode& node
 		}
 	}
 	
-	if (ret.size()==0 && include_implicit_root) ret.insert(0);
+	if (ret.size()==0 && include_implicit_root) ret.insert(root_code);
 	return ret;
 	
 	OOPS("error in finding up codes");
@@ -630,7 +649,7 @@ std::string elm::ComponentGraphDNA::__repr__() const
 					d++;
 				}
 			}
-			if (*a==0) {
+			if (*a==root_code) {
 				for (std::list<elm::cellcode>::iterator y=all.begin(); y!=all.end(); y++) {
 					if (!dns.contains(*y) && up_node_codes(*y).contains(0)) {
 						implieds += *y;
@@ -701,8 +720,8 @@ std::list<elm::cellcode> elm::ComponentGraphDNA::branches_ascending_order(etk::l
 		BUGGER_(msg, "  inserting "<<b->first);
 		Branches.insert(hop,b->first);
 	}
-	if (Branches.size()==0 || Branches.back() != 0) {
-		Branches.insert(Branches.end(),0);
+	if (Branches.size()==0 || Branches.back() != root_code) {
+		Branches.insert(Branches.end(),root_code);
 	}
 	return Branches;
 }

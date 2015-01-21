@@ -121,6 +121,15 @@ namespace elm {
 		VAS_System Xylem;
 		// this is the nesting structure for the model. even MNL models have a
 		// xylem structure, if very simple. 
+
+
+#endif // ndef SWIG
+
+	public:		
+		elm::cellcode _get_root_cellcode() const;
+		void _set_root_cellcode(const elm::cellcode& r);
+
+#ifndef SWIG
 		
 		
 //////// MARK: MODEL ATTRIBUTES //////////////////////////////////////////////////////

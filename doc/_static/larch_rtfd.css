@@ -77,6 +77,11 @@ div.body h6 { font-size: 80%;  padding-left: 95px; }
     background-size: 100% !important;
 }
 
+p.rubric
+{
+	font-weight: bold;
+}
+
 /*
 tt {
 	font-family: 'Source Code Pro', monospace;

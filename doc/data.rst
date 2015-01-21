@@ -88,4 +88,5 @@ Using Data in Models
 .. toctree::
 
 	queryset
+	queryset_idco
 

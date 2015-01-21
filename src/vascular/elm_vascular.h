@@ -115,7 +115,7 @@ namespace elm {
 		cellcodeset elemental_codes() const;
 		cellcodeset all_known_codes() const;
 		
-		std::list<cellcode> branches_in_ascending_order() const;
+		std::list<cellcode> branches_in_ascending_order(const elm::cellcode& root_cellcode=cellcode_null) const;
 		
 		VAS_dna();
 	}; // end class VAS_dna
@@ -281,9 +281,12 @@ namespace elm {
 		void ungrow();
 		// UNGROW flushes the existing cells and edges, leaving the genome intact.
 		
-		void regrow( ComponentCellcodeMap* nodes=nullptr, ComponentEdgeMap* edges=nullptr, Facet* db=nullptr, etk::logging_service* msg=nullptr );
+		void regrow( ComponentCellcodeMap* nodes=nullptr, ComponentEdgeMap* edges=nullptr, Facet* db=nullptr, elm::cellcode* root=nullptr, etk::logging_service* msg=nullptr );
 		// REGROW flushes the existing cells and edges, and regrows new ones based
 		//  on the genome.
+
+		elm::cellcode root_cellcode() const;
+		void root_cellcode(const elm::cellcode& r, etk::logging_service* msg=nullptr);
 		
 		void clear();
 		

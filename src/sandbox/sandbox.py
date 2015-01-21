@@ -93,6 +93,15 @@ def assertAlmostEqual(x,y,delta=0.00001):
 		return 0
 
 
+def assertEqual(x,y):
+	if x!=y:
+		print ("%s, %s"%(str(x),str(y),))
+		return -1
+	else:
+		print ("assert ok")
+		return 0
+
+
 import larch.core
 from larch.core import DB, Model
 
@@ -286,6 +295,21 @@ def test_swissmetro_09nested():
 	#del m
 	#del d
 	
+def test_save_and_load():
+	m = Model.Example(114)
+	m.logger(1)
+	m['ASC_TRAIN'].value = -.123
+	m['ASC_CAR'].value = .123
+	m['B_TIME'].value = -.0045
+	m['B_COST'].value = -.0067
+	m.root_id = 999
+	m2 = Model.loads(m.save(None))
+	m2.db = m.db
+	assertEqual(m.parameter_values(), m2.parameter_values())
+	assertEqual(m.parameter_names(), m2.parameter_names())
+	assertEqual(m.root_id, m2.root_id)
+
+
 
 #ms = larch.Model.Example()
 #ms.estimate_scipy()
@@ -311,11 +335,12 @@ def test_swissmetro_09nested():
 #import gc
 #gc.collect()#
 
-larch.logging.setLevel(1)
-sys.path.append("/Users/jpn/Dropbox/CamSys/Memphis/")
-os.chdir("/Users/jpn/Dropbox/CamSys/Memphis/")
-execfile("/Users/jpn/Dropbox/CamSys/Memphis/dest_main.py")
+#larch.logging.setLevel(1)
+#sys.path.append("/Users/jpn/Dropbox/CamSys/Memphis/")
+#os.chdir("/Users/jpn/Dropbox/CamSys/Memphis/")
+#execfile("/Users/jpn/Dropbox/CamSys/Memphis/dest_main.py")
+#
+#larch.logging.setLevel(1)
+#dcm.loglike()
 
-larch.logging.setLevel(1)
-dcm.loglike()
-
+test_save_and_load()
