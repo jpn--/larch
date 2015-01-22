@@ -63,14 +63,15 @@ PyObject* elm::QuerySetTwoTable::pickled() const
 }
 
 
-std::string elm::QuerySetTwoTable::qry_idco   () const
+std::string elm::QuerySetTwoTable::qry_idco   (const bool& corrected) const
 {
+	if (corrected) return qry_idco_();
 	if (!_idco_query.empty()) {
 		if (validator) validator->sql_statement(_idco_query);
 		return _idco_query;
 	}
 	
-	std::string s = "SELECT DISTINCT "+__alias_caseid_ca()+" AS caseid FROM ("+qry_idca()+")";
+	std::string s = "SELECT DISTINCT "+__alias_caseid_ca()+" AS caseid FROM ("+qry_idca(false)+")";
 	if (validator) validator->sql_statement(s);
 	return s;
 }
@@ -82,19 +83,21 @@ std::string elm::QuerySetTwoTable::qry_idco_   () const
 		
 		std::string alias = __alias_caseid_co();
 		if (alias != "caseid") {
-			return "SELECT "+alias+" AS caseid, * FROM ("+qry_idco()+")";
+			return "SELECT "+alias+" AS caseid, * FROM ("+qry_idco(false)+")";
 		}
 		
 		return _idco_query;
 	}
 	
-	std::string s = "SELECT DISTINCT "+__alias_caseid_ca()+" AS caseid FROM ("+qry_idca()+")";
+	std::string s = "SELECT DISTINCT "+__alias_caseid_ca()+" AS caseid FROM ("+qry_idca(false)+")";
 	if (validator) validator->sql_statement(s);
 	return s;
 }
 
-std::string elm::QuerySetTwoTable::qry_idca   () const
+std::string elm::QuerySetTwoTable::qry_idca   (const bool& corrected) const
 {
+	if (corrected) return qry_idca_();
+
 	if (_idca_query.empty()) {
 		return "SELECT NULL AS caseid, NULL AS altid LIMIT 0";
 	}
@@ -113,13 +116,13 @@ std::string elm::QuerySetTwoTable::qry_idca_   () const
 	std::string alias_aid = __alias_altid_ca();
 	
 	if (alias_cid!="caseid" && alias_aid!="altid") {
-		return "SELECT "+alias_cid+" AS caseid, "+alias_aid+" AS altid, * FROM ("+qry_idca()+")";
+		return "SELECT "+alias_cid+" AS caseid, "+alias_aid+" AS altid, * FROM ("+qry_idca(false)+")";
 	}
 	if (alias_cid=="caseid" && alias_aid!="altid") {
-		return "SELECT "+alias_aid+" AS altid, * FROM ("+qry_idca()+")";
+		return "SELECT "+alias_aid+" AS altid, * FROM ("+qry_idca(false)+")";
 	}
 	if (alias_cid!="caseid" && alias_aid=="altid") {
-		return "SELECT "+alias_cid+" AS caseid, * FROM ("+qry_idca()+")";
+		return "SELECT "+alias_cid+" AS caseid, * FROM ("+qry_idca(false)+")";
 	}
 	
 	if (validator) validator->sql_statement(_idca_query);
@@ -141,7 +144,7 @@ std::string elm::QuerySetTwoTable::__test_query_caseids(const std::string& alias
 {
 	std::string s = "SELECT ";
 	s += alias_caseid;
-	s += " AS caseid FROM " + tbl_idco();
+	s += " AS caseid FROM " + tbl_idco(false);
 	if (validator) validator->sql_statement(s);
 	return s;
 }
@@ -152,29 +155,29 @@ std::string elm::QuerySetTwoTable::__alias_caseid_co() const
 		__test_query_caseids("caseid");
 		return "caseid";
 	} catch (etk::SQLiteError) {
-		return validator->sql_statement(qry_idco())->column_name(0);
+		return validator->sql_statement(qry_idco(false))->column_name(0);
 	}
 }
 
 std::string elm::QuerySetTwoTable::__alias_caseid_ca() const
 {
-	std::string s = "SELECT caseid FROM " + tbl_idca();
+	std::string s = "SELECT caseid FROM " + tbl_idca(false);
 	try {
 		if (validator) validator->sql_statement(s);
 		return "caseid";
 	} catch (etk::SQLiteError) {
-		return validator->sql_statement(qry_idca())->column_name(0);
+		return validator->sql_statement(qry_idca(false))->column_name(0);
 	}
 }
 
 std::string elm::QuerySetTwoTable::__alias_altid_ca() const
 {
-	std::string s = "SELECT altid FROM " + tbl_idca();
+	std::string s = "SELECT altid FROM " + tbl_idca(false);
 	try {
 		if (validator) validator->sql_statement(s);
 		return "altid";
 	} catch (etk::SQLiteError) {
-		return validator->sql_statement(qry_idca())->column_name(1);
+		return validator->sql_statement(qry_idca(false))->column_name(1);
 	}
 }
 
@@ -184,7 +187,7 @@ std::string elm::QuerySetTwoTable::qry_caseids() const
 	try {
 		return __test_query_caseids("caseid");
 	} catch (etk::SQLiteError) {
-		return __test_query_caseids( validator->sql_statement(qry_idco())->column_name(0) );
+		return __test_query_caseids( validator->sql_statement(qry_idco(false))->column_name(0) );
 	}
 }
 
@@ -304,7 +307,7 @@ void elm::QuerySetTwoTable::set_idca_query(const std::string& q)
 
 }
 
-void elm::QuerySetTwoTable::set_choice_co_column(const std::string& col)
+void elm::QuerySetTwoTable::set_choice_co(const std::string& col)
 {
 	if (col.empty()) {
 		return;
@@ -333,7 +336,7 @@ void elm::QuerySetTwoTable::set_choice_co_column(const std::string& col)
 	
 }
 
-void elm::QuerySetTwoTable::set_choice_co_column_map(const std::map<long long, std::string>& cols)
+void elm::QuerySetTwoTable::set_choice_co_map(const std::map<long long, std::string>& cols)
 {
 	if (cols.empty()) {
 		return;
@@ -361,7 +364,7 @@ void elm::QuerySetTwoTable::set_choice_co_column_map(const std::map<long long, s
 	if (validator) validator->change_in_sql_choice();
 }
 
-void elm::QuerySetTwoTable::set_choice_ca_column(const std::string& col)
+void elm::QuerySetTwoTable::set_choice_ca(const std::string& col)
 {
 	if (col.empty()) {
 		return;
@@ -561,19 +564,19 @@ std::string elm::QuerySetTwoTable::get_idca_query() const
 
 
 
-std::string elm::QuerySetTwoTable::get_choice_co_column() const
+std::string elm::QuerySetTwoTable::get_choice_co() const
 {
 	return _single_choice_column;
 }
 
 
-std::map<long long, std::string> elm::QuerySetTwoTable::get_choice_co_column_map() const
+std::map<long long, std::string> elm::QuerySetTwoTable::get_choice_co_map() const
 {
 	return _alt_choice_columns;
 }
 
 
-std::string elm::QuerySetTwoTable::get_choice_ca_column() const
+std::string elm::QuerySetTwoTable::get_choice_ca() const
 {
 	return _choice_ca_column;
 }
@@ -605,6 +608,21 @@ std::string elm::QuerySetTwoTable::get_alts_query() const
 	return _alts_query;
 }
 
+std::map<long long, std::string> elm::QuerySetTwoTable::_get_alts_values() const
+{
+	std::map<long long, std::string> x;
+	
+	
+	auto qry = validator->sql_statement(_alts_query);
+	
+	qry->execute();
+	while (qry->status()==SQLITE_ROW) {
+		x[ qry->getInt64(0) ] = qry->getText(1);
+		qry->execute();
+	}
+	
+	return x;
+}
 
 
 

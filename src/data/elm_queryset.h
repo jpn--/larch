@@ -41,9 +41,9 @@ namespace elm {
 		
 	  public:
 		
-		virtual std::string qry_idco   () const;
+		virtual std::string qry_idco   (const bool& corrected=true) const;
 		virtual std::string qry_idco_  () const;
-		virtual std::string qry_idca   () const;
+		virtual std::string qry_idca   (const bool& corrected=true) const;
 		virtual std::string qry_idca_  () const;
 		virtual std::string qry_alts   () const;
 		virtual std::string qry_caseids() const;
@@ -51,8 +51,8 @@ namespace elm {
 		virtual std::string qry_weight () const;
 		virtual std::string qry_avail  () const;
 
-		virtual std::string tbl_idco   () const;
-		virtual std::string tbl_idca   () const;
+		virtual std::string tbl_idco   (const bool& corrected=true) const;
+		virtual std::string tbl_idca   (const bool& corrected=true) const;
 		virtual std::string tbl_alts   () const;
 		virtual std::string tbl_caseids() const;
 		virtual std::string tbl_choice () const;

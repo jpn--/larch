@@ -52,8 +52,8 @@ try:
 	core.larch_initialize()
 	from . import exceptions
 	from .db import DB
-	from .core import Model, Parameter
-	from .model import ModelFamily
+	from .core import Parameter
+	from .model import Model, ModelFamily
 	from . import array
 	core._set_array_module(array)
 	try:

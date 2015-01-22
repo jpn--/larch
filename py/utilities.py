@@ -338,7 +338,10 @@ def prepare_import_headers(rawfilename):
 	'''
 	import csv
 	eL = logging.getScriber("util")
-	raw = SmartFileReader(rawfilename, 'rU')
+	if isinstance(rawfilename,str):
+		raw = SmartFileReader(rawfilename, 'rU')
+	else:
+		raw = rawfilename
 	sample = raw.read(28192)
 	raw.seek(0)
 	dialect = csv.Sniffer().sniff(sample)

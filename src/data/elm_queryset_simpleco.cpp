@@ -54,8 +54,9 @@ std::string elm::QuerySetSimpleCO::actual_type() const
 }
 
 
-std::string elm::QuerySetSimpleCO::qry_idco   () const
+std::string elm::QuerySetSimpleCO::qry_idco   (const bool& corrected) const
 {
+	if (corrected) return qry_idco_();
 	std::string qry = _idco_query;
 	if (qry.empty()) {
 		qry = "SELECT NULL as caseid LIMIT 0";
@@ -73,14 +74,14 @@ std::string elm::QuerySetSimpleCO::qry_idco_  () const
 	
 	std::string alias = __alias_caseid();
 	if (alias!="caseid") {
-		return "SELECT "+alias+" AS caseid, * FROM ("+qry_idco()+")";
+		return "SELECT "+alias+" AS caseid, * FROM ("+qry_idco(false)+")";
 	}
 	
 	if (validator) validator->sql_statement(qry);
 	return qry;
 }
 
-std::string elm::QuerySetSimpleCO::qry_idca   () const
+std::string elm::QuerySetSimpleCO::qry_idca   (const bool& corrected) const
 {
 	return "SELECT NULL AS caseid, NULL AS altid LIMIT 0";
 }
@@ -105,7 +106,7 @@ std::string elm::QuerySetSimpleCO::__test_query_caseids(const std::string& alias
 {
 	std::string s = "SELECT ";
 	s += alias_caseid;
-	s += " AS caseid FROM " + tbl_idco();
+	s += " AS caseid FROM " + tbl_idco(false);
 	if (validator) validator->sql_statement(s);
 	return s;
 }
@@ -116,7 +117,7 @@ std::string elm::QuerySetSimpleCO::__alias_caseid() const
 		__test_query_caseids("caseid");
 		return "caseid";
 	} catch (etk::SQLiteError) {
-		return validator->sql_statement(qry_idco())->column_name(0);
+		return validator->sql_statement(qry_idco(false))->column_name(0);
 	}
 }
 
@@ -126,7 +127,7 @@ std::string elm::QuerySetSimpleCO::qry_caseids() const
 	try {
 		return __test_query_caseids("caseid");
 	} catch (etk::SQLiteError) {
-		return __test_query_caseids( validator->sql_statement(qry_idco())->column_name(0) );
+		return __test_query_caseids( validator->sql_statement(qry_idco(false))->column_name(0) );
 	}
 }
 
@@ -457,6 +458,21 @@ std::string elm::QuerySetSimpleCO::get_alts_query() const
 	return _alts_query;
 }
 
+std::map<long long, std::string> elm::QuerySetSimpleCO::_get_alts_values() const
+{
+	std::map<long long, std::string> x;
+	
+	
+	auto qry = validator->sql_statement(_alts_query);
+	
+	qry->execute();
+	while (qry->status()==SQLITE_ROW) {
+		x[ qry->getInt64(0) ] = qry->getText(1);
+		qry->execute();
+	}
+	
+	return x;
+}
 
 
 

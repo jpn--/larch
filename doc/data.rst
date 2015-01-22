@@ -30,6 +30,7 @@ original database file.
 
 .. automethod:: DB.CSV_idco
 
+.. automethod:: DB.CSV_idca
 
 
 Importing Data
@@ -60,8 +61,9 @@ standard SQLite database, it is possible to access your data directly from SQLit
 other programs, or through :mod:`apsw` (included as part of Larch)
 or :mod:`sqlite3` (included in standard Python distributions).
 
+.. automethod:: DB.export_idca
 
-
+.. automethod:: DB.export_idco
 
 
 Convenience Methods
@@ -71,22 +73,6 @@ Convenience Methods
 
 .. automethod:: DB.detach
 
+.. automethod:: DB.crack_idca
 
-
-
-
-Using Data in Models
-----------------------------
-
-.. attribute:: DB.queries
-
-	This attribute defines the automatic queries used to provision a :class:`Model` with data.
-	It should be an object that inherits from the :class:`core.QuerySet` abstract base class.
-
-
-
-.. toctree::
-
-	queryset
-	queryset_idco
 

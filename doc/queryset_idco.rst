@@ -1,4 +1,4 @@
-.. currentmodule:: larch
+.. currentmodule:: larch.core
 
 ======================================
 Queries for a Single :ref:`idco` Table

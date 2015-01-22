@@ -28354,7 +28354,68 @@ SWIGINTERN PyObject *Fountain_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObj
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_QuerySet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySet const > tempshared1 ;
+  std::shared_ptr< elm::QuerySet const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_qry_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_qry_idco" "', argument " "1"" of type '" "elm::QuerySet const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySet_qry_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySet const *)arg1)->qry_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
   void *argp1 = 0 ;
@@ -28401,6 +28462,48 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySet_qry_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySet_qry_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySet_qry_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySet::qry_idco(bool const &) const\n"
+    "    elm::QuerySet::qry_idco() const\n");
+  return 0;
 }
 
 
@@ -28454,7 +28557,68 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySet_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySet const > tempshared1 ;
+  std::shared_ptr< elm::QuerySet const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_qry_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_qry_idca" "', argument " "1"" of type '" "elm::QuerySet const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySet_qry_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySet const *)arg1)->qry_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
   void *argp1 = 0 ;
@@ -28501,6 +28665,48 @@ SWIGINTERN PyObject *_wrap_QuerySet_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_qry_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySet_qry_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySet_qry_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySet_qry_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySet::qry_idca(bool const &) const\n"
+    "    elm::QuerySet::qry_idca() const\n");
+  return 0;
 }
 
 
@@ -28804,7 +29010,68 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySet_tbl_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySet const > tempshared1 ;
+  std::shared_ptr< elm::QuerySet const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_tbl_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_tbl_idco" "', argument " "1"" of type '" "elm::QuerySet const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySet_tbl_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySet const *)arg1)->tbl_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
   void *argp1 = 0 ;
@@ -28854,7 +29121,110 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySet_tbl_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySet_tbl_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySet_tbl_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySet::tbl_idco(bool const &) const\n"
+    "    elm::QuerySet::tbl_idco() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySet const > tempshared1 ;
+  std::shared_ptr< elm::QuerySet const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_tbl_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_tbl_idca" "', argument " "1"" of type '" "elm::QuerySet const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySet_tbl_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySet const *)arg1)->tbl_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
   void *argp1 = 0 ;
@@ -28901,6 +29271,48 @@ SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_tbl_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySet_tbl_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySet_tbl_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySet_tbl_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySet::tbl_idca(bool const &) const\n"
+    "    elm::QuerySet::tbl_idca() const\n");
+  return 0;
 }
 
 
@@ -29623,7 +30035,68 @@ SWIGINTERN PyObject *QuerySet_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObj
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetSimpleCO_qry_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetSimpleCO_qry_idco" "', argument " "1"" of type '" "elm::QuerySetSimpleCO const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySetSimpleCO_qry_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySetSimpleCO const *)arg1)->qry_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
   void *argp1 = 0 ;
@@ -29670,6 +30143,48 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySetSimpleCO_qry_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySetSimpleCO_qry_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySetSimpleCO_qry_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySetSimpleCO::qry_idco(bool const &) const\n"
+    "    elm::QuerySetSimpleCO::qry_idco() const\n");
+  return 0;
 }
 
 
@@ -29723,7 +30238,68 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetSimpleCO_qry_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetSimpleCO_qry_idca" "', argument " "1"" of type '" "elm::QuerySetSimpleCO const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySetSimpleCO_qry_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySetSimpleCO const *)arg1)->qry_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
   void *argp1 = 0 ;
@@ -29770,6 +30346,48 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_qry_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySetSimpleCO_qry_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySetSimpleCO_qry_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySetSimpleCO_qry_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySetSimpleCO::qry_idca(bool const &) const\n"
+    "    elm::QuerySetSimpleCO::qry_idca() const\n");
+  return 0;
 }
 
 
@@ -31379,6 +31997,56 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO__get_alts_values(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetSimpleCO__get_alts_values",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetSimpleCO__get_alts_values" "', argument " "1"" of type '" "elm::QuerySetSimpleCO const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::QuerySetSimpleCO const *)arg1)->_get_alts_values();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::map<long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *QuerySetSimpleCO_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -31386,7 +32054,68 @@ SWIGINTERN PyObject *QuerySetSimpleCO_swigregister(PyObject *SWIGUNUSEDPARM(self
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_qry_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_qry_idco" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySetTwoTable_qry_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySetTwoTable const *)arg1)->qry_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   void *argp1 = 0 ;
@@ -31433,6 +32162,48 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySetTwoTable_qry_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySetTwoTable_qry_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySetTwoTable_qry_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySetTwoTable::qry_idco(bool const &) const\n"
+    "    elm::QuerySetTwoTable::qry_idco() const\n");
+  return 0;
 }
 
 
@@ -31486,7 +32257,68 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > *smartarg1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_qry_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_qry_idca" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "QuerySetTwoTable_qry_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::QuerySetTwoTable const *)arg1)->qry_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   void *argp1 = 0 ;
@@ -31533,6 +32365,48 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_qry_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_QuerySetTwoTable_qry_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_QuerySetTwoTable_qry_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'QuerySetTwoTable_qry_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySetTwoTable::qry_idca(bool const &) const\n"
+    "    elm::QuerySetTwoTable::qry_idca() const\n");
+  return 0;
 }
 
 
@@ -32518,7 +33392,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   std::string *arg2 = 0 ;
@@ -32530,12 +33404,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column(PyObject *SWIGU
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_co_column",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_co",2,2,&obj0,&obj1)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_co_column" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_co" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
@@ -32550,16 +33424,16 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column(PyObject *SWIGU
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_co_column" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_co_column" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
   {
     try {
-      (arg1)->set_choice_co_column((std::string const &)*arg2);
+      (arg1)->set_choice_co((std::string const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -32583,7 +33457,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column_map(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_map(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > *arg2 = 0 ;
@@ -32595,12 +33469,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column_map(PyObject *S
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_co_column_map",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_co_map",2,2,&obj0,&obj1)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_co_column_map" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_co_map" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
@@ -32615,16 +33489,16 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_co_column_map(PyObject *S
     std::map<long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > *ptr = (std::map<long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > *)0;
     res2 = swig::asptr(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_co_column_map" "', argument " "2"" of type '" "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_co_map" "', argument " "2"" of type '" "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_co_column_map" "', argument " "2"" of type '" "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_co_map" "', argument " "2"" of type '" "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &""'"); 
     }
     arg2 = ptr;
   }
   {
     try {
-      (arg1)->set_choice_co_column_map((std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &)*arg2);
+      (arg1)->set_choice_co_map((std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -32648,7 +33522,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_ca_column(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   std::string *arg2 = 0 ;
@@ -32660,12 +33534,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_ca_column(PyObject *SWIGU
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_ca_column",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_set_choice_ca",2,2,&obj0,&obj1)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_ca_column" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_set_choice_ca" "', argument " "1"" of type '" "elm::QuerySetTwoTable *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySetTwoTable > * >(argp1);
@@ -32680,16 +33554,16 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_set_choice_ca_column(PyObject *SWIGU
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_ca_column" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetTwoTable_set_choice_ca" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_ca_column" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetTwoTable_set_choice_ca" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
   {
     try {
-      (arg1)->set_choice_ca_column((std::string const &)*arg2);
+      (arg1)->set_choice_ca((std::string const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -33187,7 +34061,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   void *argp1 = 0 ;
@@ -33197,12 +34071,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column(PyObject *SWIGU
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_co_column",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_co",1,1,&obj0)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_co_column" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_co" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
@@ -33215,7 +34089,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column(PyObject *SWIGU
   }
   {
     try {
-      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_co_column();
+      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_co();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -33237,7 +34111,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column_map(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_map(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   void *argp1 = 0 ;
@@ -33247,12 +34121,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column_map(PyObject *S
   PyObject * obj0 = 0 ;
   std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_co_column_map",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_co_map",1,1,&obj0)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_co_column_map" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_co_map" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
@@ -33265,7 +34139,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_co_column_map(PyObject *S
   }
   {
     try {
-      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_co_column_map();
+      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_co_map();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -33287,7 +34161,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_ca_column(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
   void *argp1 = 0 ;
@@ -33297,12 +34171,12 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_ca_column(PyObject *SWIGU
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_ca_column",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable_get_choice_ca",1,1,&obj0)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_ca_column" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable_get_choice_ca" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
@@ -33315,7 +34189,7 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_choice_ca_column(PyObject *SWIGU
   }
   {
     try {
-      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_ca_column();
+      result = ((elm::QuerySetTwoTable const *)arg1)->get_choice_ca();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -33531,6 +34405,56 @@ SWIGINTERN PyObject *_wrap_QuerySetTwoTable_get_alts_query(PyObject *SWIGUNUSEDP
     }
   }
   resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetTwoTable__get_alts_values(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetTwoTable *arg1 = (elm::QuerySetTwoTable *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetTwoTable const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetTwoTable__get_alts_values",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetTwoTable__get_alts_values" "', argument " "1"" of type '" "elm::QuerySetTwoTable const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetTwoTable > * >(argp1);
+      arg1 = const_cast< elm::QuerySetTwoTable * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::QuerySetTwoTable const *)arg1)->_get_alts_values();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::map<long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > >(result));
   return resultobj;
 fail:
   return NULL;
@@ -37693,7 +38617,56 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Facet_qry_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Facet_qry_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_qry_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_qry_idca" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Facet_qry_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->qry_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_qry_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Facet *arg1 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
@@ -37731,7 +38704,100 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Facet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Facet_qry_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Facet_qry_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Facet_qry_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Facet_qry_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Facet::qry_idca(bool const &) const\n"
+    "    elm::Facet::qry_idca() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_qry_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_qry_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_qry_idco" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Facet_qry_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->qry_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_qry_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Facet *arg1 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
@@ -37766,6 +38832,50 @@ SWIGINTERN PyObject *_wrap_Facet_qry_idco(PyObject *SWIGUNUSEDPARM(self), PyObje
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_qry_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Facet_qry_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Facet_qry_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Facet_qry_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Facet::qry_idco(bool const &) const\n"
+    "    elm::Facet::qry_idco() const\n");
+  return 0;
 }
 
 
@@ -38035,7 +39145,56 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Facet_tbl_idca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Facet_tbl_idca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_tbl_idca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_tbl_idca" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Facet_tbl_idca" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->tbl_idca((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_tbl_idca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Facet *arg1 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
@@ -38073,7 +39232,100 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Facet_tbl_idco(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Facet_tbl_idca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Facet_tbl_idca__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Facet_tbl_idca__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Facet_tbl_idca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Facet::tbl_idca(bool const &) const\n"
+    "    elm::Facet::tbl_idca() const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_tbl_idco__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  bool *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_tbl_idco",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_tbl_idco" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Facet_tbl_idco" "', argument " "2"" of type '" "bool""'");
+  } 
+  temp2 = static_cast< bool >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->tbl_idco((bool const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_tbl_idco__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Facet *arg1 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
@@ -38108,6 +39360,50 @@ SWIGINTERN PyObject *_wrap_Facet_tbl_idco(PyObject *SWIGUNUSEDPARM(self), PyObje
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_tbl_idco(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Facet_tbl_idco__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_bool(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Facet_tbl_idco__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Facet_tbl_idco'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Facet::tbl_idco(bool const &) const\n"
+    "    elm::Facet::tbl_idco() const\n");
+  return 0;
 }
 
 
@@ -75331,6 +76627,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetSimpleCO_get_avail_column_map", _wrap_QuerySetSimpleCO_get_avail_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_weight_column", _wrap_QuerySetSimpleCO_get_weight_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_alts_query", _wrap_QuerySetSimpleCO_get_alts_query, METH_VARARGS, NULL},
+	 { (char *)"QuerySetSimpleCO__get_alts_values", _wrap_QuerySetSimpleCO__get_alts_values, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_swigregister", QuerySetSimpleCO_swigregister, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_qry_idco", _wrap_QuerySetTwoTable_qry_idco, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_qry_idco_", _wrap_QuerySetTwoTable_qry_idco_, METH_VARARGS, NULL},
@@ -75351,9 +76648,28 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetTwoTable_set_validator", _wrap_QuerySetTwoTable_set_validator, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_idco_query", _wrap_QuerySetTwoTable_set_idco_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_idca_query", _wrap_QuerySetTwoTable_set_idca_query, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_set_choice_co_column", _wrap_QuerySetTwoTable_set_choice_co_column, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_set_choice_co_column_map", _wrap_QuerySetTwoTable_set_choice_co_column_map, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_set_choice_ca_column", _wrap_QuerySetTwoTable_set_choice_ca_column, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_set_choice_co", _wrap_QuerySetTwoTable_set_choice_co, METH_VARARGS, (char *)"\n"
+		"Set the choice expression that will evaluate on the idco table. \n"
+		" \n"
+		"Parameters \n"
+		"---------- \n"
+		"expr : str \n"
+		"	The expression to be evaluated. It should result in integer values \n"
+		"	corresponding to the alternative codes.\n"
+		"\n"
+		""},
+	 { (char *)"QuerySetTwoTable_set_choice_co_map", _wrap_QuerySetTwoTable_set_choice_co_map, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_set_choice_ca", _wrap_QuerySetTwoTable_set_choice_ca, METH_VARARGS, (char *)"\n"
+		"Set the choice expression that will evaluate on the idca table. \n"
+		" \n"
+		"Parameters \n"
+		"---------- \n"
+		"expr : str \n"
+		"	The expression to be evaluated. It should evaluate to 1 if the alternative for the \n"
+		"	particular row was chosen, and 0 otherwise. (For certain specialized models,     \n"
+		"	values other than 0 or 1 may be appropriate.)\n"
+		"\n"
+		""},
 	 { (char *)"QuerySetTwoTable_set_avail_co_column_map", _wrap_QuerySetTwoTable_set_avail_co_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_avail_ca_column", _wrap_QuerySetTwoTable_set_avail_ca_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_set_avail_all", _wrap_QuerySetTwoTable_set_avail_all, METH_VARARGS, NULL},
@@ -75362,13 +76678,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetTwoTable_set_alts_values", _wrap_QuerySetTwoTable_set_alts_values, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_idco_query", _wrap_QuerySetTwoTable_get_idco_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_idca_query", _wrap_QuerySetTwoTable_get_idca_query, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_get_choice_co_column", _wrap_QuerySetTwoTable_get_choice_co_column, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_get_choice_co_column_map", _wrap_QuerySetTwoTable_get_choice_co_column_map, METH_VARARGS, NULL},
-	 { (char *)"QuerySetTwoTable_get_choice_ca_column", _wrap_QuerySetTwoTable_get_choice_ca_column, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_get_choice_co", _wrap_QuerySetTwoTable_get_choice_co, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_get_choice_co_map", _wrap_QuerySetTwoTable_get_choice_co_map, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable_get_choice_ca", _wrap_QuerySetTwoTable_get_choice_ca, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_avail_co_column_map", _wrap_QuerySetTwoTable_get_avail_co_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_avail_ca_column", _wrap_QuerySetTwoTable_get_avail_ca_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_weight_co_column", _wrap_QuerySetTwoTable_get_weight_co_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_get_alts_query", _wrap_QuerySetTwoTable_get_alts_query, METH_VARARGS, NULL},
+	 { (char *)"QuerySetTwoTable__get_alts_values", _wrap_QuerySetTwoTable__get_alts_values, METH_VARARGS, NULL},
 	 { (char *)"QuerySetTwoTable_swigregister", QuerySetTwoTable_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SQLiteDB", _wrap_new_SQLiteDB, METH_VARARGS, NULL},
 	 { (char *)"delete_SQLiteDB", _wrap_delete_SQLiteDB, METH_VARARGS, NULL},

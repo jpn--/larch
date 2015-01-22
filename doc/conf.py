@@ -50,7 +50,7 @@ extensions = [
 	'sphinx.ext.autodoc',
 #	'numpydoc',
 	'sphinxcontrib.napoleon',
-	'sphinx.ext.viewcode',
+#	'sphinx.ext.viewcode',
 	'sphinx.ext.mathjax',
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.doctest',

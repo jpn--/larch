@@ -55,11 +55,11 @@ std::string elm::QuerySet::actual_type() const
 
 
 
-std::string elm::QuerySet::qry_idco   () const
+std::string elm::QuerySet::qry_idco   (const bool& corrected) const
 {
 	return "QuerySet is an abstract base class, use a derived class";
 }
-std::string elm::QuerySet::qry_idca   () const
+std::string elm::QuerySet::qry_idca   (const bool& corrected) const
 {
 	return "QuerySet is an abstract base class, use a derived class";
 }
@@ -113,14 +113,14 @@ PyObject* elm::QuerySet::pickled  () const
 
 
 
-std::string elm::QuerySet::tbl_idco   () const
+std::string elm::QuerySet::tbl_idco   (const bool& corrected) const
 {
-	return "("+qry_idco()+") AS larch_idco";
+	return "("+qry_idco(corrected)+") AS larch_idco";
 }
 
-std::string elm::QuerySet::tbl_idca   () const
+std::string elm::QuerySet::tbl_idca   (const bool& corrected) const
 {
-	return "("+qry_idca()+") AS larch_idca";
+	return "("+qry_idca(corrected)+") AS larch_idca";
 }
 
 std::string elm::QuerySet::tbl_alts   () const

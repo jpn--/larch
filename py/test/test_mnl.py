@@ -244,39 +244,6 @@ class TestMTC(ELM_TestCase):
 		m.parameter("time").holdfast = True
 		m.estimate()
 
-#	def test_save_and_load_model(self):
-#		d = self._db
-#		m = Model (d)
-#		m.option.calculate_std_err = 0
-#		m.parameter("cost",-0.01)
-#		m.parameter("time",-0.001, holdfast=1)
-#		m.parameter("con2",0) 
-#		m.parameter("con3",0) 
-#		m.parameter("con4",0.1) 
-#		m.parameter("con5",0) 
-#		m.parameter("con6",0) 
-#		m.parameter("inc2",0.1) 
-#		m.parameter("inc3",0) 
-#		m.parameter("inc4",0) 
-#		m.parameter("inc5",0) 
-#		m.parameter("inc6",0) 
-#		m.utility.ca("tottime","time")
-#		m.utility.ca("totcost","cost")
-#		m.utility.co("HHINC","SR2","inc2") 
-#		m.utility.co("HHINC","SR3+","inc3") 
-#		m.utility.co("HHINC","Tran","inc4") 
-#		m.utility.co("HHINC","Bike","inc5") 
-#		m.utility.co("HHINC","Walk","inc6") 
-#		m.utility.co("1","SR2","con2") 
-#		m.utility.co("1","SR3+","con3") 
-#		m.utility.co("1","Tran","con4") 
-#		m.utility.co("1","Bike","con5") 
-#		m.utility.co("1","Walk","con6") 
-#		import tempfile
-#		t = tempfile.TemporaryFile()
-#		m.Save(t)
-#		t.seek(0)
-#		m2 = Model.Load(d,t)
 
 
 class TestMNL(ELM_TestCase):

@@ -329,8 +329,8 @@ def test_save_and_load():
 #larch.logging.setLevel(30)
 #test_swissmetro_09nested()
 #
-#import larch.test
-#larch.test.run()
+import larch.test
+larch.test.run()
 
 #import gc
 #gc.collect()#

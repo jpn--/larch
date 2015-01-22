@@ -1,4 +1,4 @@
-.. currentmodule:: larch
+.. currentmodule:: larch.core
 
 ======================================
 Queries To Provision a Model with Data
@@ -6,7 +6,7 @@ Queries To Provision a Model with Data
 
 
 
-.. class:: core.QuerySet
+.. class:: QuerySet
 
 	To provide the ability to extract the correct data from the database, the
 	:class:`DB` object has an attribute :attr:`DB.queries`, which is an object that is a subclass of

@@ -75,3 +75,28 @@ employ one or the other of these data formats.  You can use either, or both
 simultaneously.
 
 
+
+
+
+Using Data in Models
+--------------------
+
+The :class:`DB` class primarily presents an interface between python and SQLite. The interface
+between a :class:`DB` and a :class:`Model` is governed by a special attribute of the
+:class:`DB` class:
+
+.. attribute:: DB.queries
+
+	This attribute defines the automatic queries used to provision a :class:`Model` with data.
+	It should be an object that is a specialized subtype of the :class:`core.QuerySet` abstract
+	base class.
+
+
+.. toctree::
+
+	queryset
+	queryset_idco
+	queryset_2
+
+
+

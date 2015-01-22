@@ -40,9 +40,9 @@ namespace elm {
 
 //		static std::shared_ptr<QuerySetSimpleCO> create(elm::Facet* validator=nullptr);
 		
-		virtual std::string qry_idco   () const;
+		virtual std::string qry_idco   (const bool& corrected=true) const;
 		virtual std::string qry_idco_  () const;
-		virtual std::string qry_idca   () const;
+		virtual std::string qry_idca   (const bool& corrected=true) const;
 		virtual std::string qry_idca_  () const;
 		virtual std::string qry_alts   () const;
 		virtual std::string qry_caseids() const;
@@ -79,6 +79,7 @@ namespace elm {
 		std::map<long long, std::string> get_avail_column_map() const;
 		std::string get_weight_column() const;
 		std::string get_alts_query() const;
+		std::map<long long, std::string> _get_alts_values() const;
 		
 	private:
 		std::string _idco_query;
@@ -102,7 +103,7 @@ namespace elm {
 
 #ifdef SWIG
 %pythoncode %{
-from . import QuerySetSimpleCO as _morefuncs
+from . import _QuerySetSimpleCO_extras as _morefuncs
 del _morefuncs
 %}
 #endif // def SWIG

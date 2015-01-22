@@ -35,18 +35,18 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
 
 
 
-%pythoncode %{
-class LarchError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error:" + Exception.__str__(self)
-class SQLiteError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error using SQLite:" + Exception.__str__(self)
-class FacetError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error in the data facet:" + Exception.__str__(self)
-pass	
-%}
+//%pythoncode %{
+//class LarchError(Exception):
+//	def __str__(self):
+//		return "ELM has encountered an error:" + Exception.__str__(self)
+//class SQLiteError(Exception):
+//	def __str__(self):
+//		return "ELM has encountered an error using SQLite:" + Exception.__str__(self)
+//class FacetError(Exception):
+//	def __str__(self):
+//		return "ELM has encountered an error in the data facet:" + Exception.__str__(self)
+//pass	
+//%}
 
 
 
@@ -118,9 +118,9 @@ static PyObject* ptrToFacetError;  /* add this! */
 %}
 
 %pythoncode %{
-	LarchError = _core.LarchError
-	SQLiteError = _core.SQLiteError
-	FacetError = _core.FacetError
+	from ._core import LarchError
+	from ._core import SQLiteError
+	from ._core import FacetError
 %}
 
 %include "exception.i"

@@ -9,7 +9,7 @@ except ImportError:
 	apsw = Mock()
 	apsw_Connection = utilities.Dummy
 
-from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO
+from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO, QuerySetTwoTable
 from .exceptions import NoResultsError, TooManyResultsError
 from . import logging
 import time
@@ -343,7 +343,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			If not None, the name of the location to save the SQLite database file that is created.
 		alts : dict
 			A dictionary with keys of alt codes, and values of (alt name, avail column, choice column) tuples.
-			If *choice* is given, the third item in the tuple is ignored and can be omitted.
+			If `choice` is given, the third item in the tuple is ignored and can be omitted.
 		safety : bool     
 			If true, all alternatives that are chosen, even if not given in `alts`, will be
 			automatically added to the alternatives table.
@@ -365,22 +365,12 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		for code,info in alts.items():
 			d.execute("INSERT INTO csv_alternatives VALUES (?,?)",(code,info[0]))
 		d.execute("END TRANSACTION;")
-		#d.sql_alts = "SELECT * FROM csv_alternatives"
 		d.queries.set_alts_query("SELECT * FROM csv_alternatives")
-		#d.sql_idco = "SELECT {1} AS caseid, * FROM {0}".format(tablename,caseid)
 		d.queries.set_idco_query("SELECT {1} AS caseid, * FROM {0}".format(tablename,caseid))
-		#d.sql_idca = ""
 		if choice is None:
-			#choice_subquerys = ["SELECT caseid, {0} AS altid, {1} AS choice FROM larch_idco".format(code,info[2])
-			#				   for code,info in alts.items()]
-			#d.sql_choice = " UNION ALL ".join(choice_subquerys)
 			d.queries.set_choice_column_map({code:info[2] for code,info in alts.items()})
 		else:
 			d.queries.set_choice_column(choice)
-			#d.sql_choice = "SELECT caseid, {0} AS altid, 1 AS choice FROM larch_idco;".format(choice)
-		#avail_subquerys = ["SELECT caseid, {0} AS altid, {1} AS avail FROM larch_idco".format(code,info[1])
-		#                   for code,info in alts.items()]
-		#d.sql_avail = " UNION ALL ".join(avail_subquerys)
 		d.queries.set_avail_column_map({code:info[1] for code,info in alts.items()})
 		if weight is None or weight == "_equal_":
 			weight = "_equal_"
@@ -397,8 +387,218 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		d.refresh_queries()
 		assert( d.qry_alts() == "SELECT * FROM csv_alternatives" )
 		return d
-	
-	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None):
+
+
+	@staticmethod
+	def CSV_idca(filename, caseid=None, altid=None, choice=None, weight=None, avail=None, tablename="data",
+				 tablename_co="_co", savename=None, alts={}, safety=True):
+		'''Creates a new larch DB based on an :ref:`idca` CSV data file.
+
+		The input data file should be an :ref:`idca` data file, with the first line containing the column headings.
+		The reader will attempt to determine the format (csv, tab-delimited, etc) automatically. 
+
+		Parameters
+		----------
+		filename : str
+			File name (absolute or relative) for CSV (or other text-based delimited) source data.
+		caseid : str or None
+			Column name that contains the caseids. Because multiple rows will share the same
+			caseid, caseid's *cannot* be generated automatically based on line numbers by using the 
+			reserved keyword '_rowid_'. If None, either the columns titled 'caseid' will be used if it
+			exists, and if not then the first column of data in the file will be used.
+		altid : str or None
+			Column name that contains the altids. If None, the second column of data in the file will be used.
+		choice : str or None
+			Column name that contains the id of the alternative that is selected (if applicable). If None, 
+			the third column of data in the file will be used.
+		weight : str or None
+			Column name of the weight for each case. If None, defaults to equal weights. Note that the weight
+			needs to be identical for all altids sharing the same caseid.
+		avail : str or None
+			Column name of the availability indicator. If None, it is assumed that unavailable alternatives
+			have the entire row of data missing from the table.
+		tablename : str  
+			The name of the sql table into which the data is to be imported. Do not give a reserved name
+			(i.e. any name beginning with *sqlite* or *larch*).
+		tablename_co : str or None
+			The name of the sql table into which idco format data is to be imported. Do not give a reserved name
+			(i.e. any name beginning with *sqlite* or *larch*). If None, then no automatic cracking 
+			will be attempted and all data will be imported into the idca table. If the given name begins with
+			an underscore, it will be used as a suffix added onto `tablename`.
+		savename : str or None
+			If not None, the name of the location to save the SQLite database file that is created.
+		alts : dict
+			A dictionary with integer keys of alt codes, and string values of alt names.
+		safety : bool
+			If true, all alternatives that appear in the altid column, even if not given in `alts`, will be
+			automatically added to the alternatives table.
+
+		Returns
+		-------
+		DB
+			An open connection to the database.
+		'''
+		if weight is not None and tablename_co is None:
+			raise LarchError("Weight is only allowed in the idco table, but th")
+		if tablename_co is not None and tablename_co[0]=="_":
+			tablename_co = tablename+tablename_co
+		eL = logging.getScriber("db")
+		d = DB(filename=savename)
+		d.queries = QuerySetTwoTable(d)
+		if tablename_co:
+			heads = d.import_csv(filename, table="larch_temp_import_table", temp=True)
+		else:
+			heads = d.import_csv(filename, table=tablename)
+		heads = [h.rsplit(" ",1)[0] for h in heads]
+		lower_heads = {h.lower():h for h in heads}
+		if len(heads) != len(lower_heads):
+			raise LarchError("The imported data file must have unique (case-insensitive) names for each column")
+		# caseid
+		if caseid is None:
+			if "caseid" in lower_heads:
+				caseid = lower_heads["caseid"]
+			else:
+				caseid = heads[0]
+		if caseid.lower() not in lower_heads:
+			from pprint import pprint
+			pprint(lower_heads)
+			raise LarchError("The caseid column '"+caseid+"' was not found in the data file")
+		if "caseid" in lower_heads and caseid.lower()!="caseid":
+			raise LarchError("If the imported file has a column called caseid, it must be the case identifier")
+		# altid
+		if altid is None:
+			if "altid" in lower_heads:
+				altid = lower_heads["altid"]
+			else:
+				if len(heads)<2:
+					raise LarchError("The imported file has less than two columns")
+				altid = heads[1]
+		if altid.lower() not in lower_heads:
+			raise LarchError("The altid column '"+altid+"' was not found in the data file")
+		if "altid" in lower_heads and altid.lower()!="altid":
+			raise LarchError("If the imported file has a column called altid, it must be the alt identifier")
+		# choice
+		if choice is None:
+			if "choice" in lower_heads:
+				choice = lower_heads["choice"]
+			else:
+				if len(heads)<3:
+					raise LarchError("The imported file has less than three columns")
+				choice = heads[2]
+		if choice.lower() not in lower_heads:
+			raise LarchError("The choice column '"+choice+"' was not found in the data file")
+		if "choice" in lower_heads and choice.lower()!="choice":
+			raise LarchError("If the imported file has a column called choice, it must be the choice identifier")
+		### CRACK
+		if tablename_co:
+			d.crack_idca("larch_temp_import_table", caseid=caseid, ca_tablename=tablename, co_tablename=tablename_co)
+		d.execute("CREATE TABLE csv_alternatives (id PRIMARY KEY, name TEXT);")
+		d.execute("BEGIN TRANSACTION;")
+		for code,info in alts.items():
+			d.execute("INSERT INTO csv_alternatives VALUES (?,?)",(code,str(info)))
+		d.execute("END TRANSACTION;")
+		d.queries.set_alts_query("SELECT * FROM csv_alternatives")
+		idca = "SELECT "
+		if caseid.lower()!='caseid':
+			idca += "{caseid} AS caseid, "
+		if altid.lower()!='altid':
+			idca += "{altid} AS altid, "
+		idca += "* FROM {0}"
+		d.queries.set_idca_query(idca.format(tablename,caseid=caseid,altid=altid))
+		if tablename_co:
+			idco = "SELECT "
+			if caseid.lower()!='caseid':
+				idco += "{caseid} AS caseid, "
+			idco += "* FROM {0}"
+			d.queries.set_idco_query(idco.format(tablename_co,caseid=caseid))
+		d.queries.choice = choice
+		d.queries.avail = avail
+		if weight: d.queries.weight = weight
+		if safety:
+			missing_codes = set()
+			for row in d.execute("SELECT DISTINCT altid FROM "+d.queries.tbl_choice()+" WHERE altid NOT IN (SELECT id FROM csv_alternatives);"):
+				missing_codes.add(row[0])
+			for code in missing_codes:
+				d.execute("INSERT INTO csv_alternatives VALUES (?,?)",(code,str(code)))
+		d.refresh_queries()
+		assert( d.qry_alts() == "SELECT * FROM csv_alternatives" )
+		return d
+
+
+
+	def crack_idca(self, tablename, caseid=None, ca_tablename=None, co_tablename=None):
+		"""Crack an existing idCA table into idCA and idCO component tables.
+		
+		This method will automatically analyze an existing :ref:`idca` table and
+		identify columns of data that are invariant within individual cases. Those 
+		variables will be segregated into a new :ref:`idco` table, and the remaining
+		variables will be put into a new :ref:`idca` table.
+		
+		Parameters
+		----------
+		tablename : str
+			The name of the existing :ref:`idca` table
+		caseid : str or None
+			The name of the column representing the caseids in the existing table. 
+			If not given, it is assumed these are in the first column.
+		ca_tablename : str or None
+			The name of the table that will be created to hold the new (with fewer columns)
+			:ref:`idca` table.
+		co_tablename : str or None
+			The name of the table that will be created to hold the new
+			:ref:`idco` table.
+			
+		Raises
+		------
+		apsw.SQLError
+			If the name of one of the tables to be created already exists in the database.
+		
+		"""
+		if ca_tablename is None: ca_tablename=tablename+"_ca"
+		if co_tablename is None: co_tablename=tablename+"_co"
+		
+		heads = self.column_names(tablename)
+		lower_heads = {h.lower():h for h in heads}
+		# caseid
+		if caseid is None:
+			if "caseid" in lower_heads:
+				caseid = lower_heads["caseid"]
+			else:
+				caseid = heads[0]
+		if caseid.lower() not in lower_heads:
+			raise LarchError("The caseid column '"+caseid+"' was not found in the source table")
+		if "caseid" in lower_heads and caseid.lower()!="caseid":
+			raise LarchError("If the source table has a column called caseid, it must be the case identifier")
+
+		v_ca = []
+		v_co = []
+		cmd = "SELECT SUM(ExcessRows) FROM (SELECT COUNT(*)-1 AS ExcessRows, %(caseid)s FROM (SELECT DISTINCT %(caseid)s, %(varcol)s FROM %(tablename)s) GROUP BY %(caseid)s);"
+		for v in heads:
+			if v.lower() != caseid.lower():
+				total_dev = self.value(cmd % {'caseid':caseid, 'varcol':v, 'tablename':tablename})
+				if total_dev>0:
+					v_ca.append(v)
+				else:
+					v_co.append(v)
+		if len(v_ca) > 0:
+			c_ca = "CREATE TABLE %(ca_tablename)s AS SELECT %(caseid)s"
+			for v in v_ca:
+				c_ca += ", " + v
+			c_ca += " FROM %(tablename)s"
+			self.execute(c_ca % locals())
+		if len(v_co) >= 0:
+			c_co = "CREATE TABLE %(co_tablename)s AS SELECT DISTINCT %(caseid)s"
+			for v in v_co:
+				c_co += ", " + v
+			c_co += " FROM %(tablename)s"
+			self.execute(c_co % {'tablename':tablename, 'co_tablename':co_tablename, 'caseid':caseid})
+
+
+
+
+
+
+	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None, temp=False):
 		'''Import raw csv or tab-delimited data into SQLite.
 
 		Parameters
@@ -414,6 +614,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			If given, this callback function takes a single integer
 			as an argument and is called periodically while loading
 			with the current precentage complete.
+		temp : bool
+			If true, the data is imported into a temporary table in the database, which
+			will be deleted automatically when the connection is closed.
 		
 		Returns
 		-------
@@ -432,7 +635,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		# drop table in DB
 		if drop_old: self.drop(table)
 		# create table in DB	
-		stmt = "CREATE TABLE IF NOT EXISTS "+table+" (\n  "+",\n  ".join(headers)+")"
+		if temp:
+			stmt = "CREATE TEMPORARY TABLE IF NOT EXISTS "+table+" (\n  "+",\n  ".join(headers)+")"
+		else:
+			stmt = "CREATE TABLE IF NOT EXISTS "+table+" (\n  "+",\n  ".join(headers)+")"
 		self.execute(stmt)
 		#.......
 		# insert rows
@@ -634,15 +840,114 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return self.import_dataframe(df, table=table, if_exists=if_exists)
 	
 
-	def execute(self, command, arguments=(), fancy=False, explain=False, fail_silently=False, echo=False):
+	def export_idca(self, file, include_idco='intersect', **formats):
+		'''Export the data in idca format to a csv file.
+		
+		Parameters
+		----------
+		file : str or file-like
+			If a string, this is the file name to give to the `open` command. Otherwise,
+			this object is passed to :class:`csv.writer` directly.
+		include_idco : {'intersect', 'all', 'none'}
+			Unless this is 'none', the idca and idco tables are joined on caseids before exporting.
+			For 'intersect', a natural join is used, so that all columns with the same name
+			are used for the join. This may cause problems if columns in the idca and idco 
+			tables have the same name but different data.  For 'all', the join is made on caseids only, and
+			every column in both tables is included in the output.
+			When 'none', only the idca table is exported and the idco table is ignored.
+			
+		Notes
+		-----
+		This method uses a :class:`csv.writer` object to write the output file. Any keyword
+		arguments not listed here are passed through to the writer.
+		'''
+		if include_idco=='all':
+			qry = "SELECT * FROM larch_idca, larch_idco ON larch_idca.caseid==larch_idco.caseid"
+		elif include_idco=='intersect':
+			qry = "SELECT * FROM larch_idca NATURAL JOIN larch_idco"
+		elif include_idco=='none' or include_idco is None:
+			qry = "SELECT * FROM larch_idca"
+		else:
+			raise TypeError("include_idco must be one of {'intersect', 'all', 'none'}")
+		import csv
+		if isinstance(file, str):
+			csvfile = open(file, 'w', newline='')
+		else:
+			csvfile = file
+		writer = csv.writer(csvfile, **formats)
+		cursor = self.execute(qry, cte=True)
+		writer.writerow([i[0] for i in cursor.getdescription()])
+		for row in cursor:
+			writer.writerow(row)
+		if isinstance(file, str):
+			csvfile.close()
+		else:
+			# cleanup file-like object here
+			pass
+		return
+
+	def export_idco(self, file, **formats):
+		'''Export the data in idco format to a csv file.
+		
+		Only the idco table is exported, the idca table is ignored.  Future versions
+		of Larch may provide a facility to export idco and idca data together in a 
+		single idco output file.
+		
+		Parameters
+		----------
+		file : str or file-like
+			If a string, this is the file name to give to the `open` command. Otherwise,
+			this object is passed to :class:`csv.writer` directly.
+			
+		Notes
+		-----
+		This method uses a :class:`csv.writer` object to write the output file. Any keyword
+		arguments not listed here are passed through to the writer.
+		'''
+		qry = "SELECT * FROM larch_idco"
+		import csv
+		if isinstance(file, str):
+			csvfile = open(file, 'w', newline='')
+		else:
+			csvfile = file
+		writer = csv.writer(csvfile, **formats)
+		cursor = self.execute(qry, cte=True)
+		writer.writerow([i[0] for i in cursor.getdescription()])
+		for row in cursor:
+			writer.writerow(row)
+		if isinstance(file, str):
+			csvfile.close()
+		else:
+			# cleanup file-like object here
+			pass
+
+	def execute(self, command, arguments=(), fancy=False, explain=False, fail_silently=False, echo=False, cte=False):
 		'''A convenience function wrapping cursor generation and command 
 		   execution for simple queries.
 		
-		:param command: An SQLite command.
-		:param arguments: Values to bind to the SQLite command.
-		:param fancy: If true, return rows as dict-type objects that can be indexed
-		              by row headings instead of integer index positions.
-		:param explain: If true, print the EXPLAIN QUERY PLAN results before executing.
+		Parameters
+		----------
+		command : str
+			An SQLite command to evaulate
+		arguments : tuple
+			Values to bind to the SQLite command.
+		fancy : bool
+			If true, return rows as dict-type objects that can be indexed
+		    by row headings instead of integer index positions.
+		explain : bool
+			If true, print the EXPLAIN QUERY PLAN results before executing.
+		fail_silently : bool
+			If false, log (at level critical) the SQL command and arguments
+			to the larch.db logger before returning an SQLError 
+		echo : bool
+			If true, log (at level critical) the SQL command and arguments
+			to the larch.db logger before executing
+		cte : bool
+			If true, prepend all :attr:`queries` tables (larch_caseids, larch_idco, larch_idca,
+			larch_choice, larch_weight, and larch_avail) as common table expression
+			in a 'WITH' clause before the command. This allows these names to
+			be referenced in the command as if they were actual tables in the 
+			:class:`DB`.
 		'''
 		try:
 			if echo:
@@ -651,6 +956,15 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				if arguments is not None and arguments!=():
 					l.critical("Bindings:")
 					l.critical(str(arguments))
+			if cte:
+				prefix = "WITH \n"
+				prefix += "  larch_caseids AS ("+self.qry_caseids()+"), \n"
+				prefix += "  larch_idco AS ("+self.qry_idco_()+"), \n"
+				prefix += "  larch_idca AS ("+self.qry_idca_()+"), \n"
+				prefix += "  larch_choice AS ("+self.qry_choice()+"), \n"
+				prefix += "  larch_weight AS ("+self.qry_weight()+"), \n"
+				prefix += "  larch_avail AS ("+self.qry_avail()+") \n"
+				command = prefix + command
 			if explain:
 				self.query_plan(command, arguments)
 			cur = self.cursor()
@@ -1455,7 +1769,6 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	def save_queries(self, facetname=None):
 		if facetname is None:
 			facetname = self.active_facet
-		import pickle
 		assert(isinstance(facetname,str))
 		self.store["queries:{}".format(facetname)] = self.queries
 

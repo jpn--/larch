@@ -29,6 +29,11 @@ struct _object;
 typedef _object PyObject;
 #endif
 
+#ifdef SWIG
+%include "elm_queryset_twotable.i"
+#endif // def SWIG
+
+
 namespace elm {
 	
 	
@@ -40,9 +45,9 @@ namespace elm {
 
 //		static std::shared_ptr<QuerySetTwoTable> create(elm::Facet* validator=nullptr);
 		
-		virtual std::string qry_idco   () const;
+		virtual std::string qry_idco   (const bool& corrected=true) const;
 		virtual std::string qry_idco_  () const;
-		virtual std::string qry_idca   () const;
+		virtual std::string qry_idca   (const bool& corrected=true) const;
 		virtual std::string qry_idca_  () const;
 		virtual std::string qry_alts   () const;
 		virtual std::string qry_caseids() const;
@@ -69,9 +74,9 @@ namespace elm {
 		void set_idco_query(const std::string& q);
 		void set_idca_query(const std::string& q);
 		
-		void set_choice_co_column(const std::string& col);
-		void set_choice_co_column_map(const std::map<long long, std::string>& cols);
-		void set_choice_ca_column(const std::string& col);
+		void set_choice_co(const std::string& col);
+		void set_choice_co_map(const std::map<long long, std::string>& cols);
+		void set_choice_ca(const std::string& col);
 		
 		void set_avail_co_column_map(const std::map<long long, std::string>& cols);
 		void set_avail_ca_column(const std::string& col);
@@ -87,9 +92,9 @@ namespace elm {
 		std::string get_idco_query() const;
 		std::string get_idca_query() const;
 		
-		std::string                      get_choice_co_column() const;
-		std::map<long long, std::string> get_choice_co_column_map() const;
-		std::string                      get_choice_ca_column() const;
+		std::string                      get_choice_co() const;
+		std::map<long long, std::string> get_choice_co_map() const;
+		std::string                      get_choice_ca() const;
 		
 		std::map<long long, std::string> get_avail_co_column_map() const;
 		std::string                      get_avail_ca_column() const;
@@ -98,6 +103,7 @@ namespace elm {
 		
 		std::string get_alts_query() const;
 
+		std::map<long long, std::string> _get_alts_values() const;
 		
 		
 	private:
@@ -130,7 +136,7 @@ namespace elm {
 
 #ifdef SWIG
 %pythoncode %{
-from . import QuerySetTwoTable as _morefuncs
+from . import _QuerySetTwoTable_extras as _morefuncs
 del _morefuncs
 %}
 #endif // def SWIG

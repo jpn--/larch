@@ -24,7 +24,9 @@ if __name__ == "__main__" and __package__ is None:
 import nose, unittest
 from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import DB, LarchError, SQLiteError, FacetError, darray_req
+from ..db import DB
+from ..model import Model
+from ..core import LarchError, SQLiteError, FacetError, darray_req
 from ..exceptions import *
 from ..array import Array, ArrayError
 import shutil, os
@@ -123,3 +125,29 @@ class TestData1(unittest.TestCase):
 		self.assertTrue(req.satisfied_by(q)==0)
 		self.assertFalse(req.satisfied_by(w)==0)
 		self.assertTrue(req.satisfied_by(z)==0)
+
+
+	def test_export_import_idca(self):
+		from io import StringIO
+		f = StringIO()
+		d = DB.Example('MTC')
+		d.queries.idco_query += " WHERE casenum < 100"
+		d.queries.idca_query += " WHERE casenum < 100"
+		m1 = Model.Example()
+		m1.db = d
+		m1.provision()
+		self.assertAlmostEqual( -147.81203484134275, m1.loglike(), delta= 0.000001)
+		self.assertAlmostEqual( -472.8980609887492, m1.loglike((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0)), delta= 0.000001)
+		d.export_idca(f)
+		f.seek(0)
+		x = DB.CSV_idca(f, caseid='caseid', altid='altid', choice='chose', weight=None, avail=None, tablename='data', tablename_co='_co', savename=None, alts={}, safety=True)
+		self.assertEqual( 99, x.nCases() )
+		self.assertEqual( 6, x.nAlts() )
+		self.assertEqual( ('caseid', 'altid', 'altnum', 'chose', 'ivtt', 'ovtt', 'tottime', 'totcost'), x.variables_ca() )
+		self.assertEqual( ('caseid', 'casenum', 'hhid', 'perid', 'numalts', 'dist', 'wkzone', 'hmzone', 'rspopden', 'rsempden', 'wkpopden', 'wkempden', 'vehavdum', 'femdum', 'age', 'drlicdum', 'noncadum', 'numveh', 'hhsize', 'hhinc', 'famtype', 'hhowndum', 'numemphh', 'numadlt', 'nmlt5', 'nm5to11', 'nm12to16', 'wkccbd', 'wknccbd', 'corredis', 'vehbywrk', 'vocc', 'wgt'), x.variables_co() )
+		m = Model.Example()
+		m.db = x
+		m.provision()
+		self.assertAlmostEqual( -147.81203484134275, m.loglike(), delta= 0.000001)
+		self.assertAlmostEqual( -472.8980609887492, m.loglike((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0)), delta= 0.000001)
+

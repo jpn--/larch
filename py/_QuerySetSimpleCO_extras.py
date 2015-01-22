@@ -122,11 +122,9 @@ query is defined that can be used with no table.
 """
 
 
-def get_alts_values(self):
-	raise NotImplementedError("Reading alts here is not yet implemented, sorry")
 
 
-alts_values = property(lambda self: self.get_alts_values(), lambda self,w: self.set_alts_values(w), None, _alts_values_doc)
+alts_values = property(lambda self: self._get_alts_values(), lambda self,w: self.set_alts_values(w), None, _alts_values_doc)
 
 
 

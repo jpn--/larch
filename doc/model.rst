@@ -4,7 +4,8 @@
 Logit Models
 =======================
 
-The basic tool for analysis in Larch is a discrete choice model.
+The basic tool for analysis in Larch is a discrete choice model.  A model is a
+structure that interacts data with a set of :class:`Parameter`\ s.
 
 Creating :class:`Model` Objects
 -------------------------------
@@ -33,14 +34,6 @@ Creating :class:`Model` Objects
 .. py:method:: Model.estimate()
 
 	Find the likelihood maximizing parameters of the model.
-
-
-
-Model Parameters
-----------------
-
-
-.. autoclass:: Parameter(name='', value=0, null_value=0, holdfast=False)
 
 
 

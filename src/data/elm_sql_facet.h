@@ -349,8 +349,8 @@ namespace elm {
 //		std::string build_weight_query() const;
 //		std::string build_caseids_query() const;
 
-		std::string qry_idca   () const {return queries_ptr ? queries_ptr->qry_idca   () : OOPS_FACET("queries undefined");}
-		std::string qry_idco   () const {return queries_ptr ? queries_ptr->qry_idco   () : OOPS_FACET("queries undefined");}
+		std::string qry_idca(const bool& corrected=true) const {return queries_ptr ? queries_ptr->qry_idca(corrected) : OOPS_FACET("queries undefined");}
+		std::string qry_idco(const bool& corrected=true) const {return queries_ptr ? queries_ptr->qry_idco(corrected) : OOPS_FACET("queries undefined");}
 		std::string qry_idca_  () const {return queries_ptr ? queries_ptr->qry_idca_  () : OOPS_FACET("queries undefined");}
 		std::string qry_idco_  () const {return queries_ptr ? queries_ptr->qry_idco_  () : OOPS_FACET("queries undefined");}
 		std::string qry_alts   () const {return queries_ptr ? queries_ptr->qry_alts   () : OOPS_FACET("queries undefined");}
@@ -359,8 +359,8 @@ namespace elm {
 		std::string qry_weight () const {return queries_ptr ? queries_ptr->qry_weight () : OOPS_FACET("queries undefined");}
 		std::string qry_caseids() const {return queries_ptr ? queries_ptr->qry_caseids() : OOPS_FACET("queries undefined");}
 		
-		std::string tbl_idca   () const {return queries_ptr ? queries_ptr->tbl_idca   () : OOPS_FACET("queries undefined");}
-		std::string tbl_idco   () const {return queries_ptr ? queries_ptr->tbl_idco   () : OOPS_FACET("queries undefined");}
+		std::string tbl_idca   (const bool& corrected=true) const {return queries_ptr ? queries_ptr->tbl_idca   (corrected) : OOPS_FACET("queries undefined");}
+		std::string tbl_idco   (const bool& corrected=true) const {return queries_ptr ? queries_ptr->tbl_idco   (corrected) : OOPS_FACET("queries undefined");}
 		std::string tbl_alts   () const {return queries_ptr ? queries_ptr->tbl_alts   () : OOPS_FACET("queries undefined");}
 		std::string tbl_choice () const {return queries_ptr ? queries_ptr->tbl_choice () : OOPS_FACET("queries undefined");}
 		std::string tbl_avail  () const {return queries_ptr ? queries_ptr->tbl_avail  () : OOPS_FACET("queries undefined");}

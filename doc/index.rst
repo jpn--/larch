@@ -33,6 +33,7 @@ Contents
 	data
 	data-fundamentals
 	model
+	parameter
 	math
 	example/examples
 

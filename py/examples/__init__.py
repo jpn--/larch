@@ -43,7 +43,7 @@ examplefiles = {
 exampledir = os.path.dirname(__file__)
 
 from .. import Model, DB, _directory_
-class elm:
+class larch:
 	DB = DB
 	Model = Model
 	_directory_ = _directory_

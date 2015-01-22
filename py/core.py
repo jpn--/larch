@@ -97,20 +97,9 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
         raise AttributeError("You cannot add attributes to %s" % self)
 
 
-class LarchError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error:" + Exception.__str__(self)
-class SQLiteError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error using SQLite:" + Exception.__str__(self)
-class FacetError(Exception):
-	def __str__(self):
-		return "ELM has encountered an error in the data facet:" + Exception.__str__(self)
-pass	
-
-LarchError = _core.LarchError
-SQLiteError = _core.SQLiteError
-FacetError = _core.FacetError
+from ._core import LarchError
+from ._core import SQLiteError
+from ._core import FacetError
 
 class SwigPyIterator(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -616,17 +605,17 @@ Fountain_swigregister(Fountain)
 
 class QuerySet(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def qry_idco(self) -> "std::string" : return _core.QuerySet_qry_idco(self)
+    def qry_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySet_qry_idco(self, corrected)
     def qry_idco_(self) -> "std::string" : return _core.QuerySet_qry_idco_(self)
-    def qry_idca(self) -> "std::string" : return _core.QuerySet_qry_idca(self)
+    def qry_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySet_qry_idca(self, corrected)
     def qry_idca_(self) -> "std::string" : return _core.QuerySet_qry_idca_(self)
     def qry_alts(self) -> "std::string" : return _core.QuerySet_qry_alts(self)
     def qry_caseids(self) -> "std::string" : return _core.QuerySet_qry_caseids(self)
     def qry_choice(self) -> "std::string" : return _core.QuerySet_qry_choice(self)
     def qry_weight(self) -> "std::string" : return _core.QuerySet_qry_weight(self)
     def qry_avail(self) -> "std::string" : return _core.QuerySet_qry_avail(self)
-    def tbl_idco(self) -> "std::string" : return _core.QuerySet_tbl_idco(self)
-    def tbl_idca(self) -> "std::string" : return _core.QuerySet_tbl_idca(self)
+    def tbl_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySet_tbl_idco(self, corrected)
+    def tbl_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySet_tbl_idca(self, corrected)
     def tbl_alts(self) -> "std::string" : return _core.QuerySet_tbl_alts(self)
     def tbl_caseids(self) -> "std::string" : return _core.QuerySet_tbl_caseids(self)
     def tbl_choice(self) -> "std::string" : return _core.QuerySet_tbl_choice(self)
@@ -660,9 +649,9 @@ QuerySet_swigregister(QuerySet)
 
 class QuerySetSimpleCO(QuerySet):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def qry_idco(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_idco(self)
+    def qry_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySetSimpleCO_qry_idco(self, corrected)
     def qry_idco_(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_idco_(self)
-    def qry_idca(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_idca(self)
+    def qry_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySetSimpleCO_qry_idca(self, corrected)
     def qry_idca_(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_idca_(self)
     def qry_alts(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_alts(self)
     def qry_caseids(self) -> "std::string" : return _core.QuerySetSimpleCO_qry_caseids(self)
@@ -694,17 +683,18 @@ class QuerySetSimpleCO(QuerySet):
     def get_avail_column_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetSimpleCO_get_avail_column_map(self)
     def get_weight_column(self) -> "std::string" : return _core.QuerySetSimpleCO_get_weight_column(self)
     def get_alts_query(self) -> "std::string" : return _core.QuerySetSimpleCO_get_alts_query(self)
+    def _get_alts_values(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetSimpleCO__get_alts_values(self)
 QuerySetSimpleCO_swigregister = _core.QuerySetSimpleCO_swigregister
 QuerySetSimpleCO_swigregister(QuerySetSimpleCO)
 
-from . import QuerySetSimpleCO as _morefuncs
+from . import _QuerySetSimpleCO_extras as _morefuncs
 del _morefuncs
 
 class QuerySetTwoTable(QuerySet):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def qry_idco(self) -> "std::string" : return _core.QuerySetTwoTable_qry_idco(self)
+    def qry_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySetTwoTable_qry_idco(self, corrected)
     def qry_idco_(self) -> "std::string" : return _core.QuerySetTwoTable_qry_idco_(self)
-    def qry_idca(self) -> "std::string" : return _core.QuerySetTwoTable_qry_idca(self)
+    def qry_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.QuerySetTwoTable_qry_idca(self, corrected)
     def qry_idca_(self) -> "std::string" : return _core.QuerySetTwoTable_qry_idca_(self)
     def qry_alts(self) -> "std::string" : return _core.QuerySetTwoTable_qry_alts(self)
     def qry_caseids(self) -> "std::string" : return _core.QuerySetTwoTable_qry_caseids(self)
@@ -725,9 +715,34 @@ class QuerySetTwoTable(QuerySet):
     def set_validator(self, validator : 'Facet'=None) -> "void" : return _core.QuerySetTwoTable_set_validator(self, validator)
     def set_idco_query(self, *args) -> "void" : return _core.QuerySetTwoTable_set_idco_query(self, *args)
     def set_idca_query(self, *args) -> "void" : return _core.QuerySetTwoTable_set_idca_query(self, *args)
-    def set_choice_co_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_choice_co_column(self, *args)
-    def set_choice_co_column_map(self, *args) -> "void" : return _core.QuerySetTwoTable_set_choice_co_column_map(self, *args)
-    def set_choice_ca_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_choice_ca_column(self, *args)
+    def set_choice_co(self, *args) -> "void" :
+        """
+        Set the choice expression that will evaluate on the idco table. 
+         
+        Parameters 
+        ---------- 
+        expr : str 
+        	The expression to be evaluated. It should result in integer values 
+        	corresponding to the alternative codes.
+
+        """
+        return _core.QuerySetTwoTable_set_choice_co(self, *args)
+
+    def set_choice_co_map(self, *args) -> "void" : return _core.QuerySetTwoTable_set_choice_co_map(self, *args)
+    def set_choice_ca(self, *args) -> "void" :
+        """
+        Set the choice expression that will evaluate on the idca table. 
+         
+        Parameters 
+        ---------- 
+        expr : str 
+        	The expression to be evaluated. It should evaluate to 1 if the alternative for the 
+        	particular row was chosen, and 0 otherwise. (For certain specialized models,     
+        	values other than 0 or 1 may be appropriate.)
+
+        """
+        return _core.QuerySetTwoTable_set_choice_ca(self, *args)
+
     def set_avail_co_column_map(self, *args) -> "void" : return _core.QuerySetTwoTable_set_avail_co_column_map(self, *args)
     def set_avail_ca_column(self, *args) -> "void" : return _core.QuerySetTwoTable_set_avail_ca_column(self, *args)
     def set_avail_all(self) -> "void" : return _core.QuerySetTwoTable_set_avail_all(self)
@@ -736,17 +751,18 @@ class QuerySetTwoTable(QuerySet):
     def set_alts_values(self, *args) -> "void" : return _core.QuerySetTwoTable_set_alts_values(self, *args)
     def get_idco_query(self) -> "std::string" : return _core.QuerySetTwoTable_get_idco_query(self)
     def get_idca_query(self) -> "std::string" : return _core.QuerySetTwoTable_get_idca_query(self)
-    def get_choice_co_column(self) -> "std::string" : return _core.QuerySetTwoTable_get_choice_co_column(self)
-    def get_choice_co_column_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetTwoTable_get_choice_co_column_map(self)
-    def get_choice_ca_column(self) -> "std::string" : return _core.QuerySetTwoTable_get_choice_ca_column(self)
+    def get_choice_co(self) -> "std::string" : return _core.QuerySetTwoTable_get_choice_co(self)
+    def get_choice_co_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetTwoTable_get_choice_co_map(self)
+    def get_choice_ca(self) -> "std::string" : return _core.QuerySetTwoTable_get_choice_ca(self)
     def get_avail_co_column_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetTwoTable_get_avail_co_column_map(self)
     def get_avail_ca_column(self) -> "std::string" : return _core.QuerySetTwoTable_get_avail_ca_column(self)
     def get_weight_co_column(self) -> "std::string" : return _core.QuerySetTwoTable_get_weight_co_column(self)
     def get_alts_query(self) -> "std::string" : return _core.QuerySetTwoTable_get_alts_query(self)
+    def _get_alts_values(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetTwoTable__get_alts_values(self)
 QuerySetTwoTable_swigregister = _core.QuerySetTwoTable_swigregister
 QuerySetTwoTable_swigregister(QuerySetTwoTable)
 
-from . import QuerySetTwoTable as _morefuncs
+from . import _QuerySetTwoTable_extras as _morefuncs
 del _morefuncs
 
 class SQLiteDB(object):
@@ -878,8 +894,8 @@ class Facet(SQLiteDB,Fountain):
     def query_choice(self, caseid : 'long long *'=None) -> "std::string" : return _core.Facet_query_choice(self, caseid)
     def query_avail(self, caseid : 'long long *'=None) -> "std::string" : return _core.Facet_query_avail(self, caseid)
     def query_weight(self, caseid : 'long long *'=None) -> "std::string" : return _core.Facet_query_weight(self, caseid)
-    def qry_idca(self) -> "std::string" : return _core.Facet_qry_idca(self)
-    def qry_idco(self) -> "std::string" : return _core.Facet_qry_idco(self)
+    def qry_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.Facet_qry_idca(self, corrected)
+    def qry_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.Facet_qry_idco(self, corrected)
     def qry_idca_(self) -> "std::string" : return _core.Facet_qry_idca_(self)
     def qry_idco_(self) -> "std::string" : return _core.Facet_qry_idco_(self)
     def qry_alts(self) -> "std::string" : return _core.Facet_qry_alts(self)
@@ -887,8 +903,8 @@ class Facet(SQLiteDB,Fountain):
     def qry_avail(self) -> "std::string" : return _core.Facet_qry_avail(self)
     def qry_weight(self) -> "std::string" : return _core.Facet_qry_weight(self)
     def qry_caseids(self) -> "std::string" : return _core.Facet_qry_caseids(self)
-    def tbl_idca(self) -> "std::string" : return _core.Facet_tbl_idca(self)
-    def tbl_idco(self) -> "std::string" : return _core.Facet_tbl_idco(self)
+    def tbl_idca(self, corrected : 'bool const &'=True) -> "std::string" : return _core.Facet_tbl_idca(self, corrected)
+    def tbl_idco(self, corrected : 'bool const &'=True) -> "std::string" : return _core.Facet_tbl_idco(self, corrected)
     def tbl_alts(self) -> "std::string" : return _core.Facet_tbl_alts(self)
     def tbl_choice(self) -> "std::string" : return _core.Facet_tbl_choice(self)
     def tbl_avail(self) -> "std::string" : return _core.Facet_tbl_avail(self)
