@@ -126,7 +126,6 @@ class TestData1(unittest.TestCase):
 		self.assertFalse(req.satisfied_by(w)==0)
 		self.assertTrue(req.satisfied_by(z)==0)
 
-
 	def test_export_import_idca(self):
 		from io import StringIO
 		f = StringIO()

@@ -83,5 +83,10 @@ def simple():
 	import nose
 	return nose.run(argv=['-','--where='+os.path.split(__file__)[0],'--verbosity=3'])
 
-def run():
-	simple()
+def run(exit=False):
+	result = simple()
+	if exit:
+		import sys
+		sys.exit(0 if result else -1)
+	else:
+		return result
