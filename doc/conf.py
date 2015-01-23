@@ -17,7 +17,7 @@ import sys, os
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 larch_versions = {
-	'larch': '3.1.6',
+	'larch': '3.1.7',
 	'pandas': '0.14.1',
 	'apsw': '3.8.7.3-r1',
 	'python': '3.4.0 final',
