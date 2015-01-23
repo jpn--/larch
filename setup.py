@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.5'
+VERSION = '3.1.6'
 
 
 def read(*filenames, **kwargs):
