@@ -22,6 +22,8 @@
 import sys
 import os, os.path
 
+__version__ = '3.1.7'
+
 if os.environ.get('READTHEDOCS', None) == 'True':
 	# hack for building docs on rtfd
 	from .mock_module import Mock

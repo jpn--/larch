@@ -82,6 +82,17 @@ p.rubric
 	font-weight: bold;
 }
 
+.rst-content dl dd
+{
+	line-height: 24px;
+	font-size: 16px;
+}
+
+.rst-content dl dt
+{
+	margin-bottom: 0.3em;
+}
+
 /*
 tt {
 	font-family: 'Source Code Pro', monospace;

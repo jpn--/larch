@@ -16,8 +16,24 @@ import sys, os
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
+
+if on_rtd:
+	from unittest.mock import MagicMock
+
+	class Mock(MagicMock):
+		@classmethod
+		def __getattr__(cls, name):
+				return Mock()
+
+	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw']
+	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+import larch
+
+
 larch_versions = {
-	'larch': '3.1.7',
+	'larch': larch.__version__,
+	'build': "24 January 2015",
 	'pandas': '0.14.1',
 	'apsw': '3.8.7.3-r1',
 	'python': '3.4.0 final',
@@ -33,6 +49,7 @@ larch_versions = {
 #sys.path.insert(0, os.path.abspath('.'))
 
 rst_epilog = """
+.. |larch_build| replace:: %(larch)s, %(build)s
 .. |apsw_version| replace:: %(apsw)s
 .. |sqlite_version| replace:: %(sqlite)s
 .. |numpy_version| replace:: %(numpy)s
@@ -142,18 +159,6 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 
 
 
-if on_rtd:
-	import sys
-	from unittest.mock import MagicMock
-
-	class Mock(MagicMock):
-		@classmethod
-		def __getattr__(cls, name):
-				return Mock()
-
-	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw']
-	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
-	import larch
 
 
 
