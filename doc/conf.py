@@ -33,7 +33,7 @@ import larch
 
 larch_versions = {
 	'larch': larch.__version__,
-	'build': "24 January 2015",
+	'build': larch.__build_date__,
 	'pandas': '0.14.1',
 	'apsw': '3.8.7.3-r1',
 	'python': '3.4.0 final',
@@ -49,7 +49,7 @@ larch_versions = {
 #sys.path.insert(0, os.path.abspath('.'))
 
 rst_epilog = """
-.. |larch_build| replace:: %(larch)s, %(build)s
+.. |larch_build| replace:: %(larch)s, released %(build)s
 .. |apsw_version| replace:: %(apsw)s
 .. |sqlite_version| replace:: %(sqlite)s
 .. |numpy_version| replace:: %(numpy)s
