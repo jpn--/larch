@@ -54,6 +54,8 @@ rst_epilog = """
 .. |sqlite_version| replace:: %(sqlite)s
 .. |numpy_version| replace:: %(numpy)s
 .. |scipy_version| replace:: %(scipy)s
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
 """ % larch_versions
 
 # -- General configuration -----------------------------------------------------

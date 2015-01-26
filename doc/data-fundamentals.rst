@@ -11,6 +11,7 @@ alternatives for a single trip) or IDCase-IDAlt (each record contains all the
 information for a single alternative available to each decision maker so there is one
 record for each alternative for each choice).
 
+
 .. _idco:
 
 idco Format
@@ -31,7 +32,6 @@ idco Format
 		3      40,000 40         125        50         75         30         175        3
 		4      50,000 15         225        20         150        10         250        3
 		====== ====== ========== ========== ========== ========== ========== ========== ==========
-
 
 
 

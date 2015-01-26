@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 =====================================
-Example 0: Importing idca Data
+Example 0: Importing |idca| Data
 =====================================
 
 .. testsetup:: *
@@ -12,7 +12,7 @@ Example 0: Importing idca Data
 
 
 In this example we will import the MTC example dataset, starting from a csv
-text file in idca format.  Suppose that data file is named "MTCwork.csv" and
+text file in |idca| format.  Suppose that data file is named "MTCwork.csv" and
 is located in the current directory (use :func:`os.getcwd` to see what is the
 current directory).
 
@@ -27,15 +27,11 @@ current directory).
 
 We can take a peek at the contents of the file, examining the first 10 lines:
 
-.. testcode::
-
-	with open("MTCwork.csv") as previewfile:
-		print(*(next(previewfile) for x in range(10)))
-
-
-.. testoutput::
+.. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
-	
+
+	>>> with open("MTCwork.csv") as previewfile:
+	...     print(*(next(previewfile) for x in range(10)))
 	caseid,altid,casenum,altnum,chose,ivtt,ovtt,tottime,totcost,hhid,perid,numalts,dist,wkzone,hmzone,rspopden,rsempden,wkpopden,wkempden,vehavdum,femdum,age,drlicdum,noncadum,numveh,hhsize,hhinc,famtype,hhowndum,numemphh,numadlt,nmlt5,nm5to11,nm12to16,wkccbd,wknccbd,corredis,vehbywrk,vocc,wgt
 	1,1,1,1,1,13.38,2,15.38,70.63,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
 	1,2,1,2,0,18.38,2,20.38,35.32,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
