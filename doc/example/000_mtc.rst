@@ -1,0 +1,83 @@
+.. currentmodule:: larch
+
+=====================================
+Example 0: Importing idca Data
+=====================================
+
+.. testsetup:: *
+
+   import larch
+   import os
+
+
+
+In this example we will import the MTC example dataset, starting from a csv
+text file in idca format.  Suppose that data file is named "MTCwork.csv" and
+is located in the current directory (use :func:`os.getcwd` to see what is the
+current directory).
+
+
+
+.. testcode::
+	:hide:
+
+	os.chdir(os.path.join(larch._directory_,"data_warehouse"))
+
+
+
+We can take a peek at the contents of the file, examining the first 10 lines:
+
+.. testcode::
+
+	with open("MTCwork.csv") as previewfile:
+		print(*(next(previewfile) for x in range(10)))
+
+
+.. testoutput::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	
+	caseid,altid,casenum,altnum,chose,ivtt,ovtt,tottime,totcost,hhid,perid,numalts,dist,wkzone,hmzone,rspopden,rsempden,wkpopden,wkempden,vehavdum,femdum,age,drlicdum,noncadum,numveh,hhsize,hhinc,famtype,hhowndum,numemphh,numadlt,nmlt5,nm5to11,nm12to16,wkccbd,wknccbd,corredis,vehbywrk,vocc,wgt
+	1,1,1,1,1,13.38,2,15.38,70.63,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+	1,2,1,2,0,18.38,2,20.38,35.32,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+	1,3,1,3,0,20.38,2,22.38,20.18,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+	1,4,1,4,0,25.9,15.2,41.1,115.64,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+	1,5,1,5,0,40.5,2,42.5,0,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+	2,1,2,1,0,29.92,10,39.92,390.81,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+	2,2,2,2,0,34.92,10,44.92,195.4,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+	2,3,2,3,0,21.92,10,31.92,97.97,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+	2,4,2,4,1,22.96,14.2,37.16,185,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+
+
+The first line of the file contains column headers. After that, each line represents
+an alternative available to a decision maker. In our sample data, we see the first 5
+lines of data share a ``caseid`` of 1, indicating that they are 5 different alternatives
+available to the first decision maker.  The identity of the alternatives is given by the
+number in the column ``altid``. The observed choice of the decision maker is
+indicated in the column ``chose`` with a 1 in the appropriate row. We can import this data easily:
+
+
+.. testcode::
+
+	d = larch.DB.CSV_idca("MTCwork.csv", caseid="caseid", altid="altid", choice="chose")
+
+We can then look at some of the attibutes of the imported data:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> d.variables_ca()
+	('caseid', 'altid', 'altnum', 'chose', 'ivtt', 'ovtt', 'tottime', 'totcost')
+	>>> d.variables_co()
+	('caseid', 'casenum', 'hhid', 'perid', 'numalts', 'dist', 'wkzone', 'hmzone', 'rspopden', 'rsempden', 'wkpopden', 'wkempden', 'vehavdum', 'femdum', 'age', 'drlicdum', 'noncadum', 'numveh', 'hhsize', 'hhinc', 'famtype', 'hhowndum', 'numemphh', 'numadlt', 'nmlt5', 'nm5to11', 'nm12to16', 'wkccbd', 'wknccbd', 'corredis', 'vehbywrk', 'vocc', 'wgt')
+	>>> d.alternative_codes()
+	(1, 2, 3, 4, 5, 6)
+	>>> d.alternative_names()
+	('1', '2', '3', '4', '5', '6')
+
+Larch automatically analyzed the data file to find variables that do not vary within
+cases, and transformed those into idco format variables.
+
+Also, the set of all possible alternatives is deduced automatically from all the values
+in the ``altid`` column.  However, the alterative names are not very descriptive when
+they are set automatically, as the csv data file does not have enough information to
+tell what each alternative code number means.
