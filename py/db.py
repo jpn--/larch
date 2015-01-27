@@ -1538,7 +1538,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 						else:
 							print("\t".join(["{0!s:<11}".format(j[0]) for j in descrip]), file=file)
 					except apsw.ExecutionCompleteError:
-						pass
+						print("empty table")
 				for i in iter:
 					if format=="html":
 						print("<tr>", file=file)
