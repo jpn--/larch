@@ -56,12 +56,12 @@ def write_build_info(build_dir=None, packagename="larch"):
 	f.write("day='%s'\n"%time.strftime("%A"))
 	if sys.version_info[0] >= 3:
 		try:
-			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--long']).decode("utf-8").strip())
+			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--tags','--long']).decode("utf-8").strip())
 		except:
 			f.write("version='%s'\n" % "XXX")
 	else:
 		try:
-			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--long']).strip())
+			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--tags','--long']).strip())
 		except:
 			f.write("version='%s'\n" % "XXX")
 	f.write("""

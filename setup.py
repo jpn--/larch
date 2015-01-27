@@ -375,7 +375,7 @@ else:
 		local_apsw_compile_args = ['/EHsc']
 		local_extra_link_args =    ['/DEBUG']
 		local_data_files = []
-		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'elmsqlite.lib'),]
+		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'larchsqlite.lib'),]
 		dylib_name_style = "{}.dll"
 		DEBUG = False
 	#	raise Exception("TURN OFF multithreading in OpenBLAS")
@@ -398,19 +398,19 @@ else:
 
 
 
-	#lib_sqlite = ('elmsqlite',           {'sources': ['sqlite/sqlite3.c']})
-	#lib_sqlhav = ('elmsqlhaversine',     {'sources': ['sqlite/haversine.c']})
-	#lib_sqlext = ('elmsqlite3extension', {'sources': ['sqlite/extension-functions.c']})
+	#lib_sqlite = ('larchsqlite',           {'sources': ['sqlite/sqlite3.c']})
+	#lib_sqlhav = ('larchsqlhaversine',     {'sources': ['sqlite/haversine.c']})
+	#lib_sqlext = ('larchsqlite3extension', {'sources': ['sqlite/extension-functions.c']})
 
 
 
 
 
 	shared_libs = [
-	#('elmsqlite',           'sqlite/sqlite3.c'             ,sqlite3_exports,  local_sqlite_extra_postargs, []),
-	#('elmsqlhaversine',     'sqlite/haversine.c'           ,None,             []                         , []),
-	#('elmsqlite3extension', 'sqlite/extension-functions.c' ,None,             []                         , []),
-	('elmsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
+	#('larchsqlite',           'sqlite/sqlite3.c'             ,sqlite3_exports,  local_sqlite_extra_postargs, []),
+	#('larchsqlhaversine',     'sqlite/haversine.c'           ,None,             []                         , []),
+	#('larchsqlite3extension', 'sqlite/extension-functions.c' ,None,             []                         , []),
+	('larchsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
 	]
 
 
@@ -454,7 +454,7 @@ else:
 	#simp = Extension('larch._larch',
 	#				 ['src/larch_hello.i',] + simp_cpp_files,
 	#				 swig_opts=['-modern', '-py3', '-I../include', '-v', '-c++', '-outdir', './py'] + local_swig_opts,
-	#				 libraries=local_libraries+['elmsqlite', ],
+	#				 libraries=local_libraries+['larchsqlite', ],
 	#				 library_dirs=local_library_dirs+[shlib_folder(),],
 	#				 define_macros=local_macros,
 	#				 include_dirs=local_includedirs + [numpy.get_include(), './src', './src/etk', './src/model', './sqlite', ],
@@ -468,7 +468,7 @@ else:
 								'-I../include', '-I./src/etk', '-I./src/model',
 								'-I./src/data', '-I./src/sherpa', '-I./src/vascular', '-I./src/version',
 								'-I./src/swig', '-I./sqlite', ] + local_swig_opts,
-					 libraries=local_libraries+['elmsqlite', ],
+					 libraries=local_libraries+['larchsqlite', ],
 					 library_dirs=local_library_dirs+[shlib_folder(),],
 					 define_macros=local_macros,
 					 include_dirs=local_includedirs + [numpy.get_include(), './src', './src/etk', './src/model',
@@ -486,7 +486,7 @@ else:
 
 	apsw = Extension('larch.apsw',
 					 ['sqlite/apsw/apsw.c',],
-					 libraries=['elmsqlite', ],
+					 libraries=['larchsqlite', ],
 					 library_dirs=[shlib_folder(),],
 					 define_macros=local_macros+[('EXPERIMENTAL','1')],
 					 include_dirs= [ './sqlite', './sqlite/apsw', ],
@@ -506,11 +506,11 @@ else:
 		  package_dir = {'larch': 'py'},
 		  packages=['larch', 'larch.examples', 'larch.test'],
 		  ext_modules=[core, apsw, ],
-		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv']},
+		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz']},
 		  data_files=local_data_files,
 		  install_requires=[
 							"numpy >= 1.8.1",
-						#	"scipy >= 0.14",
+							"scipy >= 0.14",
 							"pandas >= 0.14.1",
 						],
 		  url='http://larch.readthedocs.org',

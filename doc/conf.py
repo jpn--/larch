@@ -35,7 +35,7 @@ larch_versions = {
 	'larch': larch.__version__,
 	'build': larch.__build_date__,
 	'pandas': '0.14.1',
-	'apsw': '3.8.7.3-r1',
+	'apsw': '3.8.8.1-r1',
 	'python': '3.4.0 final',
 	'scipy': '0.14.0c1',
 	'sqlite': '3.8.7.4',

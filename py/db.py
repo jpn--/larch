@@ -128,14 +128,6 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		trypath = os.path.split(__file__)[0]
 		trypath = utilities.path_shrink_until_exists(trypath)
 		dir_files = os.listdir(trypath)
-#		for i in dir_files:
-#			if "elmsqlite3extension" in i or "elmsqlhaversine" in i:
-#				extend_path = os.path.join(trypath,i)
-#				try:
-#					apsw.Connection.loadextension(self,extend_path)
-#				except:
-#					self._attempted_loadextension = extend_path
-#					print("failed to load sqlite extension:", extend_path)
 		if self.source_filename == "":
 			self.source_filename = filename
 		self.working_name = self.source_filename
@@ -605,6 +597,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		----------
 		rawdata : str
 			The filename (relative or absolute) of the raw csv or tab delimited data file.
+			If the filename has a .gz extension, it is assumed to be in gzip format instead
+			of plain text.
 		table : str
 			The name of the table into which the data is to be imported
 		drop_old : bool
@@ -840,7 +834,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return self.import_dataframe(df, table=table, if_exists=if_exists)
 	
 
-	def export_idca(self, file, include_idco='intersect', **formats):
+	def export_idca(self, file, include_idco='intersect', exclude=[], **formats):
 		'''Export the data in idca format to a csv file.
 		
 		Parameters
@@ -855,6 +849,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			tables have the same name but different data.  For 'all', the join is made on caseids only, and
 			every column in both tables is included in the output.
 			When 'none', only the idca table is exported and the idco table is ignored.
+		exclude : set or list
+			A list of variables names to exclude from the output.  This could be useful
+			in shrinking the file size if you don't need all the output columns,
+			or suppressing duplicate copies of caseid and altid columns.
 			
 		Notes
 		-----
@@ -870,15 +868,27 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		else:
 			raise TypeError("include_idco must be one of {'intersect', 'all', 'none'}")
 		import csv
+		
 		if isinstance(file, str):
-			csvfile = open(file, 'w', newline='')
+			if file[-3:].lower()=='.gz':
+				import gzip
+				csvfile = gzip.open(file, 'wt')
+			else:
+				csvfile = open(file, 'w', newline='')
 		else:
 			csvfile = file
 		writer = csv.writer(csvfile, **formats)
 		cursor = self.execute(qry, cte=True)
-		writer.writerow([i[0] for i in cursor.getdescription()])
-		for row in cursor:
-			writer.writerow(row)
+		names = [i[0] for i in cursor.getdescription()]
+		if len(exclude)>0:
+			cols_to_keep = [ num for num,name in enumerate(names) if name not in exclude ]
+			writer.writerow(tuple(names[i] for i in cols_to_keep))
+			for row in cursor:
+				writer.writerow(tuple(row[i] for i in cols_to_keep))
+		else:
+			writer.writerow(names)
+			for row in cursor:
+				writer.writerow(row)
 		if isinstance(file, str):
 			csvfile.close()
 		else:
@@ -886,7 +896,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			pass
 		return
 
-	def export_idco(self, file, **formats):
+	def export_idco(self, file, exclude=[], **formats):
 		'''Export the data in idco format to a csv file.
 		
 		Only the idco table is exported, the idca table is ignored.  Future versions
@@ -898,6 +908,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		file : str or file-like
 			If a string, this is the file name to give to the `open` command. Otherwise,
 			this object is passed to :class:`csv.writer` directly.
+		exclude : set or list
+			A list of variables names to exclude from the output.  This could be useful
+			in shrinking the file size if you don't need all the output columns,
+			or suppressing duplicate copies of caseid and altid columns.
 			
 		Notes
 		-----
@@ -907,14 +921,26 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		qry = "SELECT * FROM larch_idco"
 		import csv
 		if isinstance(file, str):
-			csvfile = open(file, 'w', newline='')
+			if file[-3:].lower()=='.gz':
+				import gzip
+				csvfile = gzip.open(file, 'wt')
+			else:
+				csvfile = open(file, 'w', newline='')
 		else:
 			csvfile = file
 		writer = csv.writer(csvfile, **formats)
 		cursor = self.execute(qry, cte=True)
-		writer.writerow([i[0] for i in cursor.getdescription()])
-		for row in cursor:
-			writer.writerow(row)
+		names = [i[0] for i in cursor.getdescription()]
+		exclude = {i.lower() for i in exclude}
+		if len(exclude)>0:
+			cols_to_keep = [ num for num,name in enumerate(names) if name.lower() not in exclude ]
+			writer.writerow(tuple(names[i] for i in cols_to_keep))
+			for row in cursor:
+				writer.writerow(tuple(row[i] for i in cols_to_keep))
+		else:
+			writer.writerow(names)
+			for row in cursor:
+				writer.writerow(row)
 		if isinstance(file, str):
 			csvfile.close()
 		else:

@@ -277,23 +277,28 @@ def sqlite_keyword_check_list(trial_list):
 
 
 class SmartFileReader(object):
-	def __init__(self, *args, **kwargs):
-		self.file = open(*args, **kwargs)
+	def __init__(self, file, *args, **kwargs):
+		if file[-3:]=='.gz':
+			import gzip
+			import struct
+			with open(file, 'rb') as f:
+				f.seek(-4, 2)
+				self._filesize = struct.unpack('I', f.read(4))[0]
+			self.file = gzip.open(file, 'rt', *args, **kwargs)
+		else:
+			import os
+			self.file = open(file, 'rt', *args, **kwargs)
+			self._filesize = os.fstat(self.file.fileno()).st_size
 	def __getattr__(self, name):
 		return getattr(self.file, name)
 	def __setattr__(self, name, value):
-		if name in ['file', 'percentread', 'filesize']:
+		if name in ['file', 'percentread', '_filesize']:
 			return object.__setattr__(self, name, value)
 		return setattr(self.file, name, value)
 	def __delattr__(self, name):
 		return delattr(self.file, name)
-	def filesize(self):
-		import os
-		return os.fstat(self.file.fileno()).st_size
 	def percentread(self):
-		i = self.file.tell()
-		j = self.filesize()
-		return (float(i)/float(j)*100)
+		return (float(self.file.tell())/float(self._filesize)*100)
 	def __iter__(self):
 		return self.file.__iter__()
 
@@ -339,11 +344,13 @@ def prepare_import_headers(rawfilename):
 	import csv
 	eL = logging.getScriber("util")
 	if isinstance(rawfilename,str):
-		raw = SmartFileReader(rawfilename, 'rU')
+		raw = SmartFileReader(rawfilename)
 	else:
 		raw = rawfilename
 	sample = raw.read(28192)
 	raw.seek(0)
+	if isinstance(sample, bytes):
+		sample = sample.decode('UTF-8')
 	dialect = csv.Sniffer().sniff(sample)
 	r = csv.reader(raw, dialect)
 	eL.debug("DIALECT = %s",str(dialect))
