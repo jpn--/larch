@@ -85,6 +85,9 @@ namespace elm {
 		%}
 		%feature("pythonappend") Model2() %{
 			self._ref_to_db = None
+			from .logging import easy_logging_active
+			if easy_logging_active():
+				self.logger(True)
 		%}
 		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
 			try:
@@ -173,7 +176,7 @@ namespace elm {
 		// hold the linkages to the freedoms for the various parameters
 		//  used to create the model parmeters at each iteration from the freedoms
 		
-		void pull_from_freedoms(const paramArray& par,       double* ops, const double* fr);
+		void pull_from_freedoms(const paramArray& par,       double* ops, const double* fr, const bool& log=false);
 		void push_to_freedoms  (      paramArray& par, const double* ops,       double* fr);
 		void pull_coefficients_from_freedoms();
 		void _setUp_coef_and_grad_arrays();
@@ -319,6 +322,11 @@ namespace elm {
 
 
 #endif // ndef SWIG
+
+	public:
+		double loglike();
+		double loglike(std::vector<double> v);
+
 
 //		std::shared_ptr<etk::ndarray> calc_utility(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;

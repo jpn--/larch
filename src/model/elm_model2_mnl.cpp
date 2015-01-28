@@ -83,11 +83,14 @@ void elm::Model2::_setUp_MNL()
 
 
 
-void elm::Model2::pull_from_freedoms(const paramArray& par,       double* ops, const double* fr)
+void elm::Model2::pull_from_freedoms(const paramArray& par,       double* ops, const double* fr, const bool& log)
 {
 	for (unsigned i=0; i<par.length(); i++) {
 		if (par[i]){
 			ops[i] = par[i]->pullvalue(fr);
+			if (log) {
+				BUGGER(msg) << "PULL "<<par[i]->freedomName()<<" "<<ops[i]<<" into slot "<<i;
+			}
 		} else {
 		}
 	}
@@ -127,7 +130,7 @@ void elm::Model2::pull_coefficients_from_freedoms()
 	pull_from_freedoms(Params_SamplingCO , *Coef_SamplingCO , *ReadFCurrent());
 	pull_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());
 	pull_from_freedoms(Params_QuantLogSum, *Coef_QuantLogSum, *ReadFCurrent());
-	pull_from_freedoms(Params_LogSum     , *Coef_LogSum     , *ReadFCurrent());
+	pull_from_freedoms(Params_LogSum     , *Coef_LogSum     , *ReadFCurrent(), true);
 }
 
 void elm::Model2::freshen()
@@ -748,11 +751,13 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 		if (Data_Weight_active()) {
 			accumulate_LogL = cblas_ddot(nCases, *CaseLogLike, 1, Data_Weight_active()->values(0,0), 1);
 			if (accumulate_LogL) {
+				INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using weights with cblas)";
 				return accumulate_LogL;
 			}
 		} else {
 			accumulate_LogL = CaseLogLike.sum();
 			if (accumulate_LogL) {
+				INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using simple summation)";
 				return accumulate_LogL;
 			}
 		}
@@ -771,6 +776,8 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 			boosted::bind(&elm::Model2::make_shared_workshop_accumulate_loglike, this);
 	#endif // def __APPLE__
 	USE_DISPATCH(loglike_dispatcher,option.threads, nCases, workshop_builder);
+
+	INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using "<<option.threads<<" threads)";
 
 	#else // not _ELM_USE_THREADS_
 
@@ -802,14 +809,10 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 		
 	} 	
 
+	INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (not using threads)";
+
 	#endif // _ELM_USE_THREADS_
 
-	std::ostringstream ret;
-	size_t s = FNames.size();
-	for (unsigned i=0; i<s; i++) {
-		ret << "," << ReadFCurrent()[i];
-	}
-	INFO(msg) << "LL(["<< ret.str().substr(1) <<"])->"<<accumulate_LogL;
 
 
 
@@ -1215,6 +1218,7 @@ double elm::Model2::objective ()
 	double LL_ = 0;
 	
 	pull_coefficients_from_freedoms();
+	freshen(); // TODO : is this really needed here?
 	calculate_probability();	
 	LL_= accumulate_log_likelihood();
 	

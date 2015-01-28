@@ -1803,6 +1803,7 @@ class Model2(sherpa):
 
     def is_provisioned(self, ex : 'bool'=True) -> "int" : return _core.Model2_is_provisioned(self, ex)
     def Data(self, *args) -> "elm::darray const *" : return _core.Model2_Data(self, *args)
+    def loglike(self, *args) -> "double" : return _core.Model2_loglike(self, *args)
     def calc_utility(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility(self, *args)
     def calc_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_probability(self, *args)
     def calc_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_logsums(self, *args)
@@ -1917,7 +1918,6 @@ class Model2(sherpa):
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.Model2_alternative_names(self)
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >" : return _core.Model2_alternative_codes(self)
     def parameter_values(self, *args) -> "void" : return _core.Model2_parameter_values(self, *args)
-    def loglike(self, *args) -> "double" : return _core.Model2_loglike(self, *args)
     def d_loglike(self, *args) -> "std::vector< double,std::allocator< double > >" : return _core.Model2_d_loglike(self, *args)
     def d2_loglike(self, *args) -> "void" : return _core.Model2_d2_loglike(self, *args)
     def negative_loglike(self, *args) -> "double" : return _core.Model2_negative_loglike(self, *args)

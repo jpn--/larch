@@ -131,7 +131,10 @@ def _get_choice_plus(self):
 	x = self.get_choice_ca()
 	if x!="":
 		return x, 'ca'
-	return self.get_choice_co_map(), 'map'
+	x = self.get_choice_co_map()
+	if len(x)>0:
+		return x, 'map'
+	return None, 'blank'
 
 
 def set_choice(self, x):
@@ -156,13 +159,18 @@ def set_choice(self, x):
 			self.set_choice_co(x)
 		except _SQLiteError:
 			return
+		except:
+			raise
 		else:
 			if currenttable=='ca':
 				self.set_choice_ca(x)
+				return
 			elif currenttable=='co':
 				self.set_choice_co(x)
+				return
 			elif currenttable=='map':
 				self.set_choice_co_map(x)
+				return
 			else:
 				raise ValueError("fatal error in setting choice, the queries may be invalid")
 			raise ValueError("choice is a valid expression for both idca or idco queries, must set using set_choice_co() or set_choice_ca()")

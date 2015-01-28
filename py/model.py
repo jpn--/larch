@@ -848,7 +848,7 @@ class Model(Model2):
 			def report_UTILITYDATA():
 				x = ["="]
 				x += ["Utility Data Statistics"]
-				if self.Data_UtilityCO is not None:
+				if self.Data("UtilityCO") is not None:
 					x += ["-"]
 					if bool((self.Data("Weight")!=1).any()):
 						x += ["idCO Utility (weighted)"]
@@ -856,7 +856,7 @@ class Model(Model2):
 						x += ["idCO Utility"]
 					x += ["-"]
 					means,stdevs,mins,maxs,nonzers,posis,negs,zers = self.stats_utility_co()
-					names = self.Data_UtilityCO.get_variables()
+					names = self.Data("UtilityCO").get_variables()
 					
 					head_fmt = "{0:<19}\t{1:<11}\t{2:<11}\t{3:<11}\t{4:<11}\t{5:<11}"
 					body_fmt = "{0:<19}\t{1:<11.7g}\t{2:<11.7g}\t{3:<11.7g}\t{4:<11.7g}\t{5:<11.7g}"

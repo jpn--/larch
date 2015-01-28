@@ -51,22 +51,27 @@ void elm::__casewise_nl_utility
 			Work[k] = U[Xy[i]->dncell(k)->slot()];
 			if (Work[k] > max) max = Work[k];
 		}			
-		if (max == -INF) max = 0;
-		max /= Xy[i]->mu();
-		U[i] = 0;
 		if (Xy[i]->mu() == 0) { // When Mu is zero, special calculation
 			U[i] = max;
 			//OOPS("error: zero value for Mu");
 		} else { // Mu is not zero
+			if (max == -INF) max = 0;
+			max /= Xy[i]->mu();
+			U[i] = 0;
 			for (k=0; k<Xy[i]->dnsize(); k++) {
+				if (Work[k] == -INF) continue;
 				Work[k] /= Xy[i]->mu();
 				Work[k] -= max;
 				Work[k] = exp(Work[k]);
 				U[i] += Work[k];
 			}
-			U[i] = log(U[i]);
-			U[i] += max;
-			U[i] *= Xy[i]->mu();
+			if (U[i]) {
+				U[i] = log(U[i]);
+				U[i] += max;
+				U[i] *= Xy[i]->mu();
+			} else {
+				U[i] = -INF;
+			}
 		}
 	}
 }
@@ -90,10 +95,20 @@ void elm::__casewise_nl_probability
 		i--;
 		Pr[i] = 0;
 		u=0; 
-		if (U[i]!=-INF)
-			CPr[Xy[i]->upedge(u)->edge_slot()] = exp((U[i] - U[Xy[i]->upcell(u)->slot()]) / Xy[i]->upcell(u)->mu());
-		else
+		if (U[i]!=-INF) {
+			if (Xy[i]->upcell(u)->mu() == 0) {
+				if (U[i] == U[Xy[i]->upcell(u)->slot()]) {
+					CPr[Xy[i]->upedge(u)->edge_slot()] = 1.0;
+					// TODO: count number of other nodes with identical maximum utility (a pathological case)
+				} else {
+					CPr[Xy[i]->upedge(u)->edge_slot()] = 0.0;
+				}
+			} else {
+				CPr[Xy[i]->upedge(u)->edge_slot()] = exp((U[i] - U[Xy[i]->upcell(u)->slot()]) / Xy[i]->upcell(u)->mu());
+			}
+		} else {
 			CPr[Xy[i]->upedge(u)->edge_slot()] = 0.0;
+		}
 		Pr[i] += CPr[Xy[i]->upedge(u)->edge_slot()] * Pr[Xy[i]->upcell(u)->slot()];			
 	}
 }

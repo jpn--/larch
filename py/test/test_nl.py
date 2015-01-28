@@ -352,6 +352,44 @@ class TestNL(ELM_TestCase):
 		self.assertEqual(2, len(m.samplingbias.co))
 
 
+	def test_out_of_order_nests(self):
+		d = DB.Example('mini')
+		m = Model(d);
+		m.logger(False)
+		m.option.weight_autorescale = False
+		m.utility.ca("COST","B_COST")
+		m.node(100, 'Walk', 'mu_walking')
+		m.node(200, 'notWalking', 'mu_notwalking')
+		m.node(300, 'car', 'mu_car')
+		m.node(400, 'publicTransport', 'mu_public')
+		m.node(500, 'walking', 'mu_walk')
+		m.link(0,500)
+		m.link(0,200)
+		m.link(500,100)
+		m.link(100,1)
+		m.link(200,300)
+		m.link(200,400)
+		m.link(300,2)
+		m.link(300,3)
+		m.link(400,4)
+		m.link(400,5)
+		m.parameter('B_COST').value = -0.10
+		m.parameter('mu_walking').value = 1
+		m.parameter('mu_notwalking').value = 0.8
+		m.parameter('mu_car').value = 0.8
+		# m.parameter('mu_public').value = 0.8 
+		m.parameter('mu_walk').value = 1
+		m.parameter('B_COST').holdfast = 1
+		m.parameter('mu_walking').holdfast = 1
+		m.parameter('mu_notwalking').holdfast = 1
+		m.parameter('mu_car').holdfast = 1
+		#m.parameter('mu_public').holdfast = 1
+		m.parameter('mu_walk').holdfast = 1
+		m.provision()
+		self.assertNearlyEqual(-17.042185953864063, m.loglike([-0.1, 1, .8, .8, -0.0779, 1]), 7)
+		self.assertNearlyEqual(-21.789514514441944, m.loglike(([0,1,1,1,1,1])), 7)
+		#m.estimate([larch.core.OptimizationMethod(honey=100, thresh=1e-12, max=400, ext=1.1)])
+
 
 
 

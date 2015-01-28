@@ -1100,3 +1100,35 @@ PyObject* elm::Model2::negative_d_loglike(std::vector<double> v) {
 	
 }
 
+
+
+double elm::Model2::loglike() {
+	setUp();
+	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+	_parameter_update();
+	return objective();
+}
+
+
+
+double elm::Model2::loglike(std::vector<double> v) {
+	setUp();
+	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+	_parameter_update();
+	if (v.size() != dF()) {
+		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
+	}
+	for (unsigned z=0; z<v.size(); z++) {
+		if (FInfo[FNames[z]].holdfast) {
+			if (v[z] != FInfo[FNames[z]].value) {
+				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+			}
+		} else {
+			FCurrent[z] = v[z];
+		}
+	}
+	freshen();
+	return objective();
+}
+

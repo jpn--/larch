@@ -246,6 +246,8 @@ namespace elm {
 	public:
 		VAS_dna genome() const {return _genome;}
 	
+		void touch() {_touch = true;}
+	
 		const unsigned& n_elemental() const { return _n_elemental; }
 		const unsigned& n_branches()  const { return _n_branches; }
 		const unsigned& n_edges()     const { return _n_edges; }

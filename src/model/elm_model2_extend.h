@@ -50,12 +50,6 @@ namespace elm {
 			return $self->Xylem.elemental_codes();
 		}
 		
-		double loglike() {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			return $self->objective();
-		}
 		void parameter_values(std::vector<double> v) {
 			if (v.size() != $self->dF()) {
 				OOPS("You must specify values for exactly the correct number of degrees of freedom (",$self->dF(),"), you gave ",v.size(),".");
@@ -64,19 +58,6 @@ namespace elm {
 				$self->FCurrent[z] = v[z];
 			}
 			$self->freshen();
-		}
-		double loglike(std::vector<double> v) {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			if (v.size() != $self->dF()) {
-				OOPS("You must specify values for exactly the correct number of degrees of freedom (",$self->dF(),"), you gave ",v.size(),".");
-			}
-			for (unsigned z=0; z<v.size(); z++) {
-				$self->FCurrent[z] = v[z];
-			}
-			$self->freshen();
-			return $self->objective();
 		}
 		std::vector<double> d_loglike() {
 			$self->setUp();

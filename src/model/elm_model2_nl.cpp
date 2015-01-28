@@ -62,6 +62,9 @@ void elm::Model2::_setUp_NL()
 	if (nThreads < 1) nThreads = 1;
 	if (nThreads > 1024) nThreads = 1024;
 	
+	Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+	BUGGER(msg) << "_setUp_NL:Xylem:\n" << Xylem.display();
+	
 	unsigned slot;
 	for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
 		slot = Xylem.slot_from_code(m->first);

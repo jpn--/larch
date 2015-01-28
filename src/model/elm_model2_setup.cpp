@@ -293,6 +293,9 @@ void elm::Model2::setUp(bool and_load_data)
 	BUGGER(msg) << "Setting up utility parameters...";
 	_setUp_utility_data_and_params(and_load_data);
 	if (features & MODELFEATURES_NESTING) {
+		elm::cellcode root = Xylem.root_cellcode();
+		Xylem.touch();
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 		_setUp_NL();
 	} else {
 		_setUp_MNL();

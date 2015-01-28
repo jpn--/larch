@@ -6793,12 +6793,6 @@ SWIGINTERN std::vector< std::string,std::allocator< std::string > > elm_Model2_a
 SWIGINTERN std::vector< long long,std::allocator< long long > > elm_Model2_alternative_codes(elm::Model2 const *self){
 			return self->Xylem.elemental_codes();
 		}
-SWIGINTERN double elm_Model2_loglike__SWIG_0(elm::Model2 *self){
-			self->setUp();
-			//if (!self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			self->_parameter_update();
-			return self->objective();
-		}
 SWIGINTERN void elm_Model2_parameter_values__SWIG_1(elm::Model2 *self,std::vector< double,std::allocator< double > > v){
 			if (v.size() != self->dF()) {
 				OOPS("You must specify values for exactly the correct number of degrees of freedom (",self->dF(),"), you gave ",v.size(),".");
@@ -6807,19 +6801,6 @@ SWIGINTERN void elm_Model2_parameter_values__SWIG_1(elm::Model2 *self,std::vecto
 				self->FCurrent[z] = v[z];
 			}
 			self->freshen();
-		}
-SWIGINTERN double elm_Model2_loglike__SWIG_1(elm::Model2 *self,std::vector< double,std::allocator< double > > v){
-			self->setUp();
-			//if (!self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			self->_parameter_update();
-			if (v.size() != self->dF()) {
-				OOPS("You must specify values for exactly the correct number of degrees of freedom (",self->dF(),"), you gave ",v.size(),".");
-			}
-			for (unsigned z=0; z<v.size(); z++) {
-				self->FCurrent[z] = v[z];
-			}
-			self->freshen();
-			return self->objective();
 		}
 SWIGINTERN std::vector< double,std::allocator< double > > elm_Model2_d_loglike__SWIG_1(elm::Model2 *self){
 			self->setUp();
@@ -67493,6 +67474,135 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_loglike",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_loglike" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = (double)(arg1)->loglike();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::vector< double,std::allocator< double > > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_loglike",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_loglike" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    int res = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Model2_loglike" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > >""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      result = (double)(arg1)->loglike(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_loglike(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Model2_loglike__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = swig::asptr(argv[1], (std::vector<double,std::allocator< double > >**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Model2_loglike__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_loglike'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Model2::loglike()\n"
+    "    elm::Model2::loglike(std::vector< double,std::allocator< double > >)\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_calc_utility__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -75562,44 +75672,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  double result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_loglike",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_loglike" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    try {
-      result = (double)elm_Model2_loglike__SWIG_0(arg1);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Model2_parameter_values__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -75686,97 +75758,6 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    elm::Model2::parameter_values() const\n"
     "    elm::Model2::parameter_values(std::vector< double,std::allocator< double > >)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  std::vector< double,std::allocator< double > > arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  double result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_loglike",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_loglike" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Model2_loglike" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > >""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      result = (double)elm_Model2_loglike__SWIG_1(arg1,arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_From_double(static_cast< double >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_loglike(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Model2_loglike__SWIG_0(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = swig::asptr(argv[1], (std::vector<double,std::allocator< double > >**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Model2_loglike__SWIG_1(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_loglike'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::loglike()\n"
-    "    elm::Model2::loglike(std::vector< double,std::allocator< double > >)\n");
   return 0;
 }
 
@@ -77304,6 +77285,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_provision", _wrap_Model2_provision, METH_VARARGS, NULL},
 	 { (char *)"Model2_is_provisioned", _wrap_Model2_is_provisioned, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data", _wrap_Model2_Data, METH_VARARGS, NULL},
+	 { (char *)"Model2_loglike", _wrap_Model2_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility", _wrap_Model2_calc_utility, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_probability", _wrap_Model2_calc_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_logsums", _wrap_Model2_calc_logsums, METH_VARARGS, NULL},
@@ -77373,7 +77355,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_alternative_names", _wrap_Model2_alternative_names, METH_VARARGS, NULL},
 	 { (char *)"Model2_alternative_codes", _wrap_Model2_alternative_codes, METH_VARARGS, NULL},
 	 { (char *)"Model2_parameter_values", _wrap_Model2_parameter_values, METH_VARARGS, NULL},
-	 { (char *)"Model2_loglike", _wrap_Model2_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_d_loglike", _wrap_Model2_d_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_d2_loglike", _wrap_Model2_d2_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_negative_loglike", _wrap_Model2_negative_loglike, METH_VARARGS, NULL},

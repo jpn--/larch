@@ -329,8 +329,8 @@ def test_save_and_load():
 #larch.logging.setLevel(30)
 #test_swissmetro_09nested()
 #
-import larch.test
-larch.test.run()
+#import larch.test
+#larch.test.run()
 
 #import gc
 #gc.collect()#
@@ -339,8 +339,17 @@ larch.test.run()
 #sys.path.append("/Users/jpn/Dropbox/CamSys/Memphis/")
 #os.chdir("/Users/jpn/Dropbox/CamSys/Memphis/")
 #execfile("/Users/jpn/Dropbox/CamSys/Memphis/dest_main.py")
+
+
+sys.path.append("/Users/jpn/Downloads/2015-01-27/")
+os.chdir("/Users/jpn/Downloads/2015-01-27/")
+execfile("/Users/jpn/Downloads/2015-01-27/NL_3levels.py")
+
+
+
+
 #
 #larch.logging.setLevel(1)
 #dcm.loglike()
 
-test_save_and_load()
+#test_save_and_load()

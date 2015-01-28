@@ -165,6 +165,7 @@ public:
 	
 public:
 	const etk::memarray& ReadFCurrent() const {return FCurrent;};
+	std::string ReadFCurrentAsString() const;
 	
 protected:
 	etk::memarray FBest;

@@ -622,7 +622,6 @@ void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg
 
 void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
 {
-	BUGGER_(msg, "Regrowing vascular system...");
 	if (nodes||edges||db||root) {
 		ComponentGraphDNA new_graph = ComponentGraphDNA(nodes, edges, db, root);
 		if (!(_graph == new_graph)) {
@@ -630,7 +629,11 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, F
 			_touch = true;
 		}
 	}
-	if (!_touch) return;
+	if (!_touch) {
+		BUGGER_(msg, "Not regrowing vascular system, touch is false.");
+		BUGGER_(msg, display());
+		return;
+	}
 	BUGGER_(msg, "Deleting old vascular system...");
 	ungrow();
 	

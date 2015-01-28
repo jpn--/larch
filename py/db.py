@@ -124,6 +124,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			apsw.Connection.__init__(self, filename, flags=apsw.SQLITE_OPEN_URI|apsw.SQLITE_OPEN_READWRITE|apsw.SQLITE_OPEN_CREATE)
 		# Init classes
 		Facet.__init__(self,self)
+		# easy logging
+		from .logging import easy_logging_active
+		if easy_logging_active():
+			self.logger(True)
 		# Load SQLite extended math functions
 		trypath = os.path.split(__file__)[0]
 		trypath = utilities.path_shrink_until_exists(trypath)
@@ -151,6 +155,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			pass
 		except apsw.SQLError:
 			pass
+
+
 
 	def operating_name(self):
 		facts = []
@@ -288,7 +294,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		
 		Parameters
 		----------
-		dataset : {'MTC', 'SWISSMETRO'}
+		dataset : {'MTC', 'SWISSMETRO', 'MINI'}
 			Which example dataset should be used.
 			
 		Returns
@@ -303,6 +309,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		  'MTC':os.path.join(TEST_DIR,"MTCWork.sqlite"),
 		  'TWINCITY':os.path.join(TEST_DIR,"TwinCityQ.elmdata"),
 		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.sqlite"),
+		  'MINI':os.path.join(TEST_DIR,"mini.sqlite"),
 		  }
 		if dataset.upper() not in TEST_DATA:
 			raise LarchError("Example data set %s not found"%dataset)

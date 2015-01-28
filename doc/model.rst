@@ -36,6 +36,18 @@ Creating :class:`Model` Objects
 	Find the likelihood maximizing parameters of the model.
 
 
+.. py:method:: Model.loglike([values])
+
+	Find the log likelihood of the model.
+
+	:param values: If given, an array-like vector of values should be provided that
+                   will replace the current parameter values.  The vector must be exactly
+                   as long as the number of parameters in the model (including holdfast
+                   parameters).  If any holdfast parameter values differ in the provided
+                   `values`, the new values are ignored and a warning is emitted to the
+                   model logger.
+	:type values:  array-like, optional
+
 
 
 GEV Network

@@ -1196,5 +1196,14 @@ void sherpa::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric
 }
 
 
+std::string sherpa::ReadFCurrentAsString() const
+{
+	std::ostringstream ret;
+	size_t s = FNames.size();
+	for (unsigned i=0; i<s; i++) {
+		ret << "," << ReadFCurrent()[i];
+	}
+	return ret.str().substr(1);
+}
 
 
