@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.9'
+VERSION = '3.1.10'
 
 
 def read(*filenames, **kwargs):
@@ -504,7 +504,7 @@ else:
 	setup(name='larch',
 		  version=VERSION,
 		  package_dir = {'larch': 'py'},
-		  packages=['larch', 'larch.examples', 'larch.test'],
+		  packages=['larch', 'larch.examples', 'larch.test', 'larch.version'],
 		  ext_modules=[core, apsw, ],
 		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz']},
 		  data_files=local_data_files,
