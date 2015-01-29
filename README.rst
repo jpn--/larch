@@ -9,7 +9,7 @@ larch
 .. image:: https://readthedocs.org/projects/larch/badge/?version=latest&style=round
     :target: http://larch.readthedocs.org
 
-.. image:: https://img.shields.io/pypi/v/larch.svg&style=flat
+.. image:: https://img.shields.io/pypi/v/larch.svg
     :target: https://pypi.python.org/pypi/larch
 
 This is a tool for the estimation and application of logit-based discrete choice models.
