@@ -3,6 +3,8 @@ larch
 
 **Larch**: the logit architect
 
+.. image:: https://readthedocs.org/projects/larch/badge/
+
 This is a tool for the estimation and application of logit-based discrete choice models.
 It is designed to integrate with NumPy and facilitate fast processing of linear models.
 If you want to estimate *non-linear* models, try `Biogeme <http://biogeme.epfl.ch/>`_,
