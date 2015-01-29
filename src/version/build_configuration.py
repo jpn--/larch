@@ -58,7 +58,7 @@ print sys.argv
 
 
 f.write("# -*- coding: utf-8 -*-\n")
-f.write("# This file automatically created while building ELM. Do not edit manually.\n")
+f.write("# This file automatically created while building Larch. Do not edit manually.\n")
 f.write("configuration='%s'\n"%build_configuration)
 f.write("time='%s'\n"%time.strftime("%I:%M:%S %p %Z"))
 f.write("date='%s'\n"%time.strftime("%d %b %Y"))

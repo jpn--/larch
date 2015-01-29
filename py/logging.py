@@ -172,11 +172,19 @@ _easy_logger = None
 
 def easy(level=20, label=""):
 	global _easy_logger
+	if isinstance(level, str):
+		label_ = level
+		level = label if isinstance(label, int) else 20
+		label = label_
+	if isinstance(label, int):
+		level_ = label
+		label = level if isinstance(level, str) else ""
+		level = level_
 	if _easy_logger is None:
 		scribe_to_stream()
 		setLevel(level)
 		_easy_logger = 1
-	return logging.getLogger(label).debug
+	return logging.getLogger(label).critical
 
 def easy_debug(label=""):
 	global _easy_logger

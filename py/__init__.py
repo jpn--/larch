@@ -60,10 +60,10 @@ try:
 	from . import array
 	core._set_array_module(array)
 	try:
-		from .built import version, build, versions, build_config
+		from .built import version as _version, build, versions, build_config
 		del built
 	except (NameError, ImportError):
-		version, build, versions, build_config = "","",{},""
+		_version, build, versions, build_config = "","",{},""
 
 	try:
 		from . import linalg
@@ -79,6 +79,26 @@ try:
 	status += "\nLoaded from %s" % _directory_
 
 	larch = sys.modules[__name__]
+
+
+	import sys
+	import subprocess
+
+	from distutils.version import LooseVersion as _LooseVersion
+	from .version import remote as _remote
+	version.version = _version
+	try:
+		outdated = _LooseVersion(_remote.version) > _LooseVersion(version.version)
+	except:
+		outdated = True
+
+	if outdated:
+		_verion_warning = "Version {} is available from pypi.python.org (currently using {})".format(_remote.version,version.version)
+		print("!"*len(_verion_warning))
+		print(_verion_warning)
+		print("!"*len(_verion_warning))
+	_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
+
 
 
 except:

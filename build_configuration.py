@@ -54,16 +54,17 @@ def write_build_info(build_dir=None, packagename="larch"):
 	f.write("time='%s'\n"%time.strftime("%I:%M:%S %p %Z"))
 	f.write("date='%s'\n"%time.strftime("%d %b %Y"))
 	f.write("day='%s'\n"%time.strftime("%A"))
+
 	if sys.version_info[0] >= 3:
-		try:
-			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--tags','--long']).decode("utf-8").strip())
-		except:
-			f.write("version='%s'\n" % "XXX")
+		ver = subprocess.check_output(['git','describe','--tags','--long']).decode("utf-8").strip()
 	else:
-		try:
-			f.write("version='%s'\n" % subprocess.check_output(['git','describe','--tags','--long']).strip())
-		except:
-			f.write("version='%s'\n" % "XXX")
+		ver = subprocess.check_output(['git','describe','--tags','--long']).strip()
+
+	if ver[0].lower() == 'v': ver = ver[1:]
+	try:
+		f.write("version='%s'\n" % ver)
+	except:
+		f.write("version='%s'\n" % "XXX")
 	f.write("""
 	build='%s (%s, %s %s)'%(version,day,date,time)
 	from .apsw import apswversion, sqlitelibversion

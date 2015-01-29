@@ -21,9 +21,10 @@ function or method is documented here, it is intended to be stable in future upd
 You may also find these links useful:
 
 * `Python <http://www.python.org/>`_ 3.4: http://docs.python.org/3.4/index.html
-* `NumPy <http://www.numpy.org>`__ |numpy_version|: http://docs.scipy.org/doc/numpy/
-* `SQLite <http://www.sqlite.org/>`_ |sqlite_version|: http://www.sqlite.org/docs.html
-* `APSW <https://github.com/rogerbinns/apsw>`_ |apsw_version|: http://rogerbinns.github.io/apsw/
+* `NumPy <http://www.numpy.org>`__: http://docs.scipy.org/doc/numpy/
+* `SciPy <http://www.scipy.org>`__: http://docs.scipy.org/doc/scipy/reference/
+* `SQLite <http://www.sqlite.org/>`_: http://www.sqlite.org/docs.html
+* `APSW <https://github.com/rogerbinns/apsw>`_: http://rogerbinns.github.io/apsw/
 
 
 Contents

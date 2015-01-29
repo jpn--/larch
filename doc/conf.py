@@ -37,9 +37,9 @@ larch_versions = {
 	'pandas': '0.14.1',
 	'apsw': '3.8.8.1-r1',
 	'python': '3.4.0 final',
-	'scipy': '0.14.0c1',
-	'sqlite': '3.8.7.4',
-	'numpy': '1.8.1'
+	'scipy': '0.15.1',
+	'sqlite': '3.8.8.1',
+	'numpy': '1.9.1'
 }
 
 
@@ -144,6 +144,7 @@ intersphinx_mapping = {
 	'apsw': ('http://rogerbinns.github.io/apsw/', 'apsw_3_8_7_3.inv'),
 	'numpy': ('http://docs.scipy.org/doc/numpy/', 'numpy_1_9.inv'),
 	'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+	'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------

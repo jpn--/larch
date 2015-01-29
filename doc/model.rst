@@ -31,6 +31,13 @@ Creating :class:`Model` Objects
 	and testing.  Models with numbers greater than 100 are designed to align with
 	the `example models given for Biogeme <http://biogeme.epfl.ch/swissmetro/examples.html>`_.
 
+
+
+
+
+Using :class:`Model` Objects
+-------------------------------
+
 .. py:method:: Model.estimate()
 
 	Find the likelihood maximizing parameters of the model.
