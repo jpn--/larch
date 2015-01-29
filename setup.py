@@ -24,7 +24,7 @@ if os.environ.get('READTHEDOCS', None) == 'True':
 	setup(name='larch',
 		  version=VERSION,
 		  package_dir = {'larch': 'py'},
-		  packages=['larch', 'larch.examples', ],
+		  packages=['larch', 'larch.examples', 'larch.version'],
 		  url='http://larch.readthedocs.org',
 		  download_url='http://github.com/jpn--/larch',
 		  author='Jeffrey Newman',
