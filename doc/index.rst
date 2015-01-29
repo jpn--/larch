@@ -18,6 +18,10 @@ and features; use them at your own risk.  Undocumented features may be non-funct
 not rigorously tested, deprecated or removed without notice in a future version.  If a
 function or method is documented here, it is intended to be stable in future updates.
 
+You can download and install larch from `PyPI <https://pypi.python.org/pypi/larch>`__
+by running `pip install larch`. Or you can get the source code from
+`GitHub <https://github.com/jpn--/larch>`__.
+
 You may also find these links useful:
 
 * `Python <http://www.python.org/>`_ 3.4: http://docs.python.org/3.4/index.html
