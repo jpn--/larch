@@ -1,7 +1,8 @@
 larch
 =====
 
-**Larch**: the logit architect
+.. image:: https://img.shields.io/pypi/v/larch.svg
+    :target: https://pypi.python.org/pypi/larch
 
 .. image:: https://img.shields.io/pypi/l/larch.svg
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
@@ -9,8 +10,7 @@ larch
 .. image:: https://readthedocs.org/projects/larch/badge/?version=latest&style=round
     :target: http://larch.readthedocs.org
 
-.. image:: https://img.shields.io/pypi/v/larch.svg
-    :target: https://pypi.python.org/pypi/larch
+**Larch**: the logit architect
 
 This is a tool for the estimation and application of logit-based discrete choice models.
 It is designed to integrate with NumPy and facilitate fast processing of linear models.
