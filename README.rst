@@ -3,7 +3,12 @@ larch
 
 **Larch**: the logit architect
 
+.. image:: https://img.shields.io/badge/license-GPLv3-yellow.svg
+    :target: https://github.com/jpn--/larch/blob/master/LICENSE
+
 .. image:: https://readthedocs.org/projects/larch/badge/
+    :target: http://larch.readthedocs.org
+
 
 This is a tool for the estimation and application of logit-based discrete choice models.
 It is designed to integrate with NumPy and facilitate fast processing of linear models.
