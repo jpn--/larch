@@ -60,10 +60,10 @@ try:
 	from . import array
 	core._set_array_module(array)
 	try:
-		from .built import version as _version, build, versions, build_config
+		from .built import build, versions, build_config
 		del built
 	except (NameError, ImportError):
-		_version, build, versions, build_config = "","",{},""
+		build, versions, build_config = "",{},""
 
 	try:
 		from . import linalg
@@ -85,8 +85,8 @@ try:
 	import subprocess
 
 	from distutils.version import LooseVersion as _LooseVersion
+	from . import version
 	from .version import remote as _remote
-	version.version = _version
 	try:
 		outdated = _LooseVersion(_remote.version) > _LooseVersion(version.version)
 	except:

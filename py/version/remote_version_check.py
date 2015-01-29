@@ -1,5 +1,5 @@
 #
-#	This file modified to be compatible with Python 3.4 from
+#	This file modified from
 #	https://github.com/cakebread/yolk/blob/develop/yolk/pypi.py
 #
 # 	Copyright (c) 2007,2008,2009,2010,2011,2012, Robert Cakebread
@@ -130,11 +130,11 @@ class CheeseShop(object):
         else:
             self.yolk_dir = "/tmp"
         self.xmlrpc = self.get_xmlrpc_server()
-        self.pkg_cache_file = self.get_pkg_cache_file()
-        self.last_sync_file = self.get_last_sync_file()
-        self.pkg_list = None
+        #self.pkg_cache_file = self.get_pkg_cache_file()
+        #self.last_sync_file = self.get_last_sync_file()
+        #self.pkg_list = None
         #self.logger = logging.getLogger("yolk")
-        self.get_cache()
+        #self.get_cache()
 
     def get_cache(self):
         """
@@ -177,6 +177,12 @@ class CheeseShop(object):
         Returns filename of pkg cache
         """
         return os.path.abspath('%s/pkg_list.pkl' % self.yolk_dir)
+
+
+    def query_versions_pypi_larch(self):
+        v = self.package_releases('larch')
+        #print(v)
+        return v
 
     def query_versions_pypi(self, package_name):
         """Fetch list of available versions for a package from The CheeseShop"""
@@ -313,6 +319,6 @@ def filter_url(pkg_type, url):
 
 
 if __name__ == '__main__':
-	remote_version = CheeseShop(yolk_dir=directory).query_versions_pypi("larch")[1][0]
+	remote_version = CheeseShop(yolk_dir=directory).query_versions_pypi_larch()[0]
 	with open(os.path.join(directory,"remote.py"), 'w') as f:
 		f.write("version = '{}'\n".format(remote_version))
