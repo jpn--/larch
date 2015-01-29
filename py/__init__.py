@@ -22,7 +22,7 @@
 import sys
 import os, os.path
 
-__version__ = '3.1.10'
+__version__ = '3.1.11'
 __build_date__ = '29 January 2015'
 
 if os.environ.get('READTHEDOCS', None) == 'True':
@@ -89,13 +89,15 @@ try:
 	from .version import remote as _remote
 	try:
 		outdated = _LooseVersion(_remote.version) > _LooseVersion(version.version)
+		_verion_warning = "Version {} is available (currently using {})".format(_remote.version,version.version)
 	except:
 		outdated = True
+		_verion_warning = "There may be an update available (currently using version {})".format(_remote.version,version.version)
 
 	if outdated:
-		_verion_warning = "Version {} is available from pypi.python.org (currently using {})".format(_remote.version,version.version)
 		print("!"*len(_verion_warning))
 		print(_verion_warning)
+		print("To upgrade, run 'pip install larch --upgrade'")
 		print("!"*len(_verion_warning))
 	_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
 

@@ -26,6 +26,14 @@ You may also find these links useful:
 * `SQLite <http://www.sqlite.org/>`_: http://www.sqlite.org/docs.html
 * `APSW <https://github.com/rogerbinns/apsw>`_: http://rogerbinns.github.io/apsw/
 
+For learning Python itself:
+
+* If you are new to Python but have some experience with some other programming language,
+  I recommend `Dive Into Python <http://www.diveintopython3.net>`__.
+* If you are new to programming in general, there are better (slower) guides at
+  `Learning Python <http://docs.python-guide.org/en/latest/intro/learning/>`__
+
+
 
 Contents
 ========

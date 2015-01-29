@@ -405,7 +405,7 @@ class TestMNL(ELM_TestCase):
 		self.assertEqual(m.parameter_values(), m2.parameter_values())
 		self.assertEqual(m.parameter_names(), m2.parameter_names())
 		self.assertEqual(m.root_id, m2.root_id)
-		self.assertEqual(m.loglike(), m2.loglike())
+		self.assertNearlyEqual(m.loglike(), m2.loglike(), 12)
 
 	def test_single_row_probability(self):
 		m = Model.Example()

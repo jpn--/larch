@@ -471,9 +471,14 @@ def storage_decode(encoded_item, form):
 		return pickle.loads(encoded_item)
 	if form==storage_format.picklezip:
 		try:
-			return pickle.loads(zlib.decompress(encoded_item))
+			try:
+				return pickle.loads(zlib.decompress(encoded_item))
+			except:
+				return pickle.loads(zlib.decompress(encoded_item).replace(b'elm.',b'larch.'))
 		except:
-			return pickle.loads(zlib.decompress(encoded_item).replace(b'elm.',b'larch.'))
+			print("error in processing:")
+			print(zlib.decompress(encoded_item))
+			raise
 	if form==storage_format.string:
 		return encoded_item
 	if form==storage_format.stringzip:
@@ -524,18 +529,33 @@ class storage():
 			else:
 				raise
 	def __getitem__(self, key):
-		try:
-			for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
-				return storage_decode(row[0], storage_format(row[1]))
-			raise KeyError("key '{}' not found".format(key))
-		except apsw.SQLError as err:
-			if "no such table: larch_genericstorage" in str(err):
-				self._create_table()
+		if len(key) > 2 and key[:2]=='?!':
+			key = key[2:]
+			try:
+				for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
+					return (row[0], storage_format(row[1]))
+				raise KeyError("key '{}' not found".format(key))
+			except apsw.SQLError as err:
+				if "no such table: larch_genericstorage" in str(err):
+					self._create_table()
+					for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
+						return (row[0], storage_format(row[1]))
+					raise KeyError("key '{}' not found".format(key))
+				else:
+					raise
+		else:
+			try:
 				for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
 					return storage_decode(row[0], storage_format(row[1]))
 				raise KeyError("key '{}' not found".format(key))
-			else:
-				raise
+			except apsw.SQLError as err:
+				if "no such table: larch_genericstorage" in str(err):
+					self._create_table()
+					for row in self._cur.execute("SELECT value, form FROM {} WHERE id=? LIMIT 1".format(self._name), (key,)):
+						return storage_decode(row[0], storage_format(row[1]))
+					raise KeyError("key '{}' not found".format(key))
+				else:
+					raise
 	def __setitem__(self, key, value):
 		f = storage_format.plain
 		if isinstance(value, str):

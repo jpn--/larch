@@ -1803,6 +1803,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if facetname is None:
 			facetname = self.active_facet
 		assert(isinstance(facetname,str))
+		if facetname=='':
+			facetname = 'default'
 		self.store["queries:{}".format(facetname)] = self.queries
 
 	def del_queries(self, facetname):

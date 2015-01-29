@@ -171,11 +171,13 @@ def set_choice(self, x):
 			elif currenttable=='map':
 				self.set_choice_co_map(x)
 				return
+			elif currenttable=='blank':
+				raise ValueError("choice is a valid expression for both idca or idco queries, must set using set_choice_co() or set_choice_ca()")
 			else:
 				raise ValueError("fatal error in setting choice, the queries may be invalid")
 			raise ValueError("choice is a valid expression for both idca or idco queries, must set using set_choice_co() or set_choice_ca()")
 
-def get_choice(self):
+def _get_choice(self):
 	return self._get_choice_plus()[0]
 
 _doc_choice = """\
@@ -203,7 +205,7 @@ style as long as the choices are binary, or if the first style names an expressi
 
 """
 
-choice = property(lambda self: self.get_choice(), lambda self,w: self.set_choice(w), None, _doc_choice)
+choice = property(lambda self: self._get_choice(), lambda self,w: self.set_choice(w), None, _doc_choice)
 
 
 
@@ -226,7 +228,7 @@ def _spong(self, n):
 import_these = dict(locals())
 
 from .core import QuerySetTwoTable
-_private_methods = ['_get_choice_plus', ]
+_private_methods = ['_get_choice_plus', '_get_choice', ]
 
 for k,f in import_these.items():
 	if len(k)>0 and (k[0]!='_' or k in _private_methods):
