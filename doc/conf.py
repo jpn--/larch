@@ -274,7 +274,7 @@ latex_elements = {
 		'\DeclareUnicodeCharacter{00A0}{ }',  # NO-BREAK SPACE
         '\DeclareUnicodeCharacter{251C}{+}',  # BOX DRAWINGS LIGHT VERTICAL AND RIGHT
         '\DeclareUnicodeCharacter{2514}{+}',  # BOX DRAWINGS LIGHT UP AND RIGHT
-        '\DeclareUnicodeCharacter{2640}{\female}',
+        '\DeclareUnicodeCharacter{2640}{\\female}',
     )),
 }
 
