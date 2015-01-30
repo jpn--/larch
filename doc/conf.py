@@ -39,7 +39,8 @@ larch_versions = {
 	'python': '3.4.0 final',
 	'scipy': '0.15.1',
 	'sqlite': '3.8.8.1',
-	'numpy': '1.9.1'
+	'numpy': '1.9.1',
+	'released': larch.__build_date__.replace(' ', '%20'),
 }
 
 
@@ -268,7 +269,13 @@ latex_elements = {
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    'preamble': "".join((
+		'\usepackage{wasysym}',
+		'\DeclareUnicodeCharacter{00A0}{ }',  # NO-BREAK SPACE
+        '\DeclareUnicodeCharacter{251C}{+}',  # BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+        '\DeclareUnicodeCharacter{2514}{+}',  # BOX DRAWINGS LIGHT UP AND RIGHT
+        '\DeclareUnicodeCharacter{2640}{\female}',
+    )),
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

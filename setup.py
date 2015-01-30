@@ -510,7 +510,7 @@ else:
 		  data_files=local_data_files,
 		  install_requires=[
 							"numpy >= 1.8.1",
-							"scipy >= 0.14",
+							"scipy >= 0.14.0",
 							"pandas >= 0.14.1",
 						],
 		  url='http://larch.readthedocs.org',

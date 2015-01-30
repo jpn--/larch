@@ -3,12 +3,23 @@ larch
 
 .. image:: https://img.shields.io/pypi/v/larch.svg
     :target: https://pypi.python.org/pypi/larch
+    :class: statusbadge
+
+.. image:: https://img.shields.io/badge/released-29%20January%202015-blue.svg
+    :target: https://pypi.python.org/pypi/larch
+    :class: statusbadge
+
+.. image:: https://img.shields.io/badge/source-GitHub-blue.svg
+    :target: https://github.com/jpn--/larch
+    :class: statusbadge
 
 .. image:: https://img.shields.io/pypi/l/larch.svg
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
+    :class: statusbadge
 
 .. image:: https://readthedocs.org/projects/larch/badge/?version=latest&style=round
     :target: http://larch.readthedocs.org
+    :class: statusbadge
 
 **Larch**: the logit architect
 

@@ -93,6 +93,17 @@ p.rubric
 	margin-bottom: 0.3em;
 }
 
+
+div#treelogo-larch-documentation>p:first-of-type
+{
+	margin-top: 24px;
+}
+
+.statusbadge {
+	max-height: 18px !important;
+}
+
+
 /*
 tt {
 	font-family: 'Source Code Pro', monospace;
