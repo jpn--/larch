@@ -135,6 +135,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if self.source_filename == "":
 			self.source_filename = filename
 		self.working_name = self.source_filename
+		self._reported_changes = 0
+		self.setcommithook(self._commithook)
 		# Set Window Title
 		facts = []
 		if self.readonly("main"):
@@ -156,7 +158,14 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		except apsw.SQLError:
 			pass
 
-
+	def _commithook(self):
+		if self.totalchanges() > self._reported_changes:
+			net = self.totalchanges() - self._reported_changes
+			self._reported_changes = self.totalchanges()
+			log = self.logger()
+			if log is not None and net > 0:
+				log.debug("committing changes to %i database rows", net)
+		return 0
 
 	def operating_name(self):
 		facts = []

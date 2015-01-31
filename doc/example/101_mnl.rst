@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-============================
-Example 101: MNL Mode Choice
-============================
+================================
+101: Swissmetro MNL Mode Choice
+================================
 
 .. testsetup:: *
 

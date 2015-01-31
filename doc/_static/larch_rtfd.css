@@ -8,6 +8,18 @@
 
 }
 
+.wy-nav-top a::before {
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    content: "" !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+	margin-right:5px !important;
+
+}
+
+
 #mainlogo
 {
     -ms-transform-origin: left 75%; /* IE 9 */
@@ -60,7 +72,7 @@ div.body h6 { font-size: 80%;  padding-left: 95px; }
 	max-width: 32px !important;
 }
 
-.wy-side-nav-search .fa-home
+.wy-side-nav-search .fa-home, .wy-nav-top a
 {
 	font-family: 'Roboto Slab';
 	font-weight: 700;

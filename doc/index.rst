@@ -12,7 +12,7 @@
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/source-GitHub-blue.svg
+.. image:: https://img.shields.io/badge/source-GitHub-yellow.svg
     :target: https://github.com/jpn--/larch
     :class: statusbadge
 

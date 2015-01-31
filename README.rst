@@ -9,10 +9,6 @@ larch
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/source-GitHub-blue.svg
-    :target: https://github.com/jpn--/larch
-    :class: statusbadge
-
 .. image:: https://img.shields.io/pypi/l/larch.svg
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
     :class: statusbadge

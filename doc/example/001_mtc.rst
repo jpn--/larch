@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 ==========================
-Example 1: MNL Mode Choice
+1: MTC MNL Mode Choice
 ==========================
 
 .. testsetup:: *

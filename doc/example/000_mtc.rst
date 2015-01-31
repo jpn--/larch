@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 =====================================
-Example 0: Importing |idca| Data
+Importing |idca| Data
 =====================================
 
 .. testsetup:: *

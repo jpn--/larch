@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 ===========================
-Example 1b: Using Loops
+1b: Using Loops
 ===========================
 
 .. testsetup:: *
