@@ -8,6 +8,7 @@ parser.add_argument("-t", "--test", help="run unit tests", action="store_true")
 parser.add_argument("-s", "--spool", help="spool into a new working directory", type=str)
 parser.add_argument("-p", "--package", help="copy and load the package", type=str)
 parser.add_argument("-e", "--example", help="load an example model and data", type=int, nargs='?', const=1, default=0)
+parser.add_argument("-v", "--verbose", help="initialize easy logging", type=int, nargs='?', const=20, default=0)
 args = parser.parse_args()
 
 try:
@@ -78,6 +79,9 @@ if args.package:
 			raise
 		else:
 			os.system('say finished')
+
+if args.verbose>0:
+	larch.logging.easy(args.verbose)
 
 if args.example>0:
 	import larch.examples
