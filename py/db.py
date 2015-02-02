@@ -535,26 +535,26 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 
 	def crack_idca(self, tablename, caseid=None, ca_tablename=None, co_tablename=None):
-		"""Crack an existing idCA table into idCA and idCO component tables.
+		"""Crack an existing |idca| table into |idca| and |idco| component tables.
 		
-		This method will automatically analyze an existing :ref:`idca` table and
+		This method will automatically analyze an existing |idca| table and
 		identify columns of data that are invariant within individual cases. Those 
-		variables will be segregated into a new :ref:`idco` table, and the remaining
-		variables will be put into a new :ref:`idca` table.
+		variables will be segregated into a new |idco| table, and the remaining
+		variables will be put into a new |idca| table.
 		
 		Parameters
 		----------
 		tablename : str
-			The name of the existing :ref:`idca` table
+			The name of the existing |idca| table
 		caseid : str or None
 			The name of the column representing the caseids in the existing table. 
 			If not given, it is assumed these are in the first column.
 		ca_tablename : str or None
 			The name of the table that will be created to hold the new (with fewer columns)
-			:ref:`idca` table.
+			|idca| table.
 		co_tablename : str or None
 			The name of the table that will be created to hold the new
-			:ref:`idco` table.
+			|idco| table.
 			
 		Raises
 		------

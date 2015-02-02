@@ -1857,6 +1857,9 @@ class Model2(sherpa):
         	self._ref_to_db = args[0]
         except IndexError:
         	self._ref_to_db = None
+        from .logging import easy_logging_active
+        if easy_logging_active():
+        	self.logger(True)
 
 
 

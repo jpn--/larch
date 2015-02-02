@@ -68,14 +68,14 @@ class Scriber(_base_log_class):
 
 logging.setLoggerClass(Scriber)
 
-def getScriber(name=""):
-	if name=="":
+def getScriber(name="",*args,**kwargs):
+	if name=="" or name.lower()=="larch":
 		name = "larch"
-	elif name[0:6]=="larch.":
+	elif len(name)>6 and name[0:6]=="larch.":
 		pass
 	else:
 		name = "larch."+name
-	return logging.getLogger(name)
+	return logging.getLogger(name,*args,**kwargs)
 
 getLogger = getScriber
 

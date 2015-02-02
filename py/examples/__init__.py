@@ -37,6 +37,7 @@ examplefiles = {
 	102:	"swissmetro02weighted",
 	104:	"swissmetro04transforms",
 	109:	"swissmetro09nested",
+	111:	"swissmetro11cnl",
 	114:	"swissmetro14selectionBias",
 }
 
