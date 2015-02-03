@@ -939,13 +939,13 @@ std::string elm::Model2::save_buffer() const
 	// save utility
 	BUGGER( msg ) << "save utility";
 	for (auto u=Input_Utility.ca.begin(); u!=Input_Utility.ca.end(); u++) {
-		sv << "self.utility.ca('"<<u->apply_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.utility.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Utility.co.begin(); u!=Input_Utility.co.end(); u++) {
-		if (u->altcode) {
-			sv << "self.utility.co('"<<u->apply_name<<"',"<<u->altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		if (u->_altcode) {
+			sv << "self.utility.co('"<<u->data_name<<"',"<<u->_altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 		} else {
-			sv << "self.utility.co('"<<u->apply_name<<"','"<<u->altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+			sv << "self.utility.co('"<<u->data_name<<"','"<<u->_altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";
@@ -957,7 +957,7 @@ std::string elm::Model2::save_buffer() const
 	// save nest
 	BUGGER( msg ) << "save nest";
 	for (auto n=Input_LogSum.begin(); n!=Input_LogSum.end(); n++) {
-		sv << "self.nest('"<<n->second.altname<<"',"<<n->second.altcode<<",'"<<n->second.param_name<<"'";
+		sv << "self.nest('"<<n->second._altname<<"',"<<n->second._altcode<<",'"<<n->second.param_name<<"'";
 		if (n->second.multiplier!=1.0) {
 			sv << ","<<AsPyFloat(n->second.multiplier);
 		}
@@ -979,13 +979,13 @@ std::string elm::Model2::save_buffer() const
 	// save samplingbias
 	BUGGER( msg ) << "save samplingbias";
 	for (auto u=Input_Sampling.ca.begin(); u!=Input_Sampling.ca.end(); u++) {
-		sv << "self.samplingbias.ca('"<<u->apply_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.samplingbias.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Sampling.co.begin(); u!=Input_Sampling.co.end(); u++) {
-		if (u->altcode) {
-			sv << "self.samplingbias.co('"<<u->apply_name<<"',"<<u->altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		if (u->_altcode) {
+			sv << "self.samplingbias.co('"<<u->data_name<<"',"<<u->_altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 		} else {
-			sv << "self.samplingbias.co('"<<u->apply_name<<"','"<<u->altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+			sv << "self.samplingbias.co('"<<u->data_name<<"','"<<u->_altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";

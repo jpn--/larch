@@ -114,7 +114,7 @@ namespace elm {
 	void push_to_freedoms2  (const paramArray& par, const double* ops,       double* fr);
 
 	class DBArray;
-	class InputStorage;
+	class Component;
 	class logging_service;
 
 	

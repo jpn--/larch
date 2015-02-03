@@ -118,14 +118,14 @@ namespace etk {
 
 		
 	// Pointer Location Access
-		const double* ptr() const { return static_cast<double*>( PyArray_DATA(pool) ); }
-		const double* ptr(const int& i) const {return &(operator()(i));}
-		const double* ptr(const int& i, const int& j) const {return &(operator()(i,j));}
-		const double* ptr(const int& i, const int& j, const int& k) const {return &(operator()(i,j,k));}
-		double* ptr() { return static_cast<double*>( PyArray_DATA(pool) ); }
-		double* ptr(const int& i)  {return &(operator()(i));}
-		double* ptr(const int& i, const int& j)  {return &(operator()(i,j));}
-		double* ptr(const int& i, const int& j, const int& k)  {return &(operator()(i,j,k));}
+		const double* ptr() const { return pool? static_cast<double*>( PyArray_DATA(pool) ) :nullptr; }
+		const double* ptr(const int& i) const {return pool? &(operator()(i)) :nullptr;}
+		const double* ptr(const int& i, const int& j) const {return pool? &(operator()(i,j)) :nullptr;}
+		const double* ptr(const int& i, const int& j, const int& k) const {return pool? &(operator()(i,j,k)) :nullptr;}
+		double* ptr() { return pool? static_cast<double*>( PyArray_DATA(pool) ) :nullptr; }
+		double* ptr(const int& i)  {return pool? &(operator()(i)) :nullptr;}
+		double* ptr(const int& i, const int& j)  {return pool? &(operator()(i,j)) :nullptr;}
+		double* ptr(const int& i, const int& j, const int& k)  {return pool? &(operator()(i,j,k)) :nullptr;}
 
 	// Pointer Location Access (bool)
 		inline const bool* ptr_bool() const { return static_cast<bool*>( PyArray_DATA(pool) ); }
@@ -165,6 +165,7 @@ namespace etk {
 		double scale_so_total_is(const double& tot);
 		double scale_so_mean_is(const double& mean);
 		void prob_scale_2 (ndarray* out=nullptr);
+		void sector_prob_scale_2 (const std::vector<unsigned>& sectors, ndarray* out=nullptr);
 		void logsums_2 (ndarray* out);
 		void operator+=(const ndarray& that);
 		void operator-=(const ndarray& that);

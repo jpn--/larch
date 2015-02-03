@@ -253,6 +253,7 @@ namespace elm {
 		const unsigned& n_edges()     const { return _n_edges; }
 		const unsigned& n_compet_alloc() const { return _n_competitive_allocations; }
 		const unsigned& alloc_break(const unsigned& i) const { return _allocation_breaks.at(i); }
+		const std::vector<unsigned>& alloc_breaks() const { return _allocation_breaks; }
 		size_t n_alloc_break() const { return _allocation_breaks.size(); }
 		size_t        size()        const { return _cells.size(); }
 		

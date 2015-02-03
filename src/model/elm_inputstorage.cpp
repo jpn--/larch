@@ -19,55 +19,89 @@
 #include <iostream>
 #include <iomanip>
 
-elm::InputStorage::InputStorage(std::string data, std::string param, cellcode altcode, std::string altname, double multiplier)
-: apply_name(data)
+elm::Component::Component(std::string data, std::string param, double multiplier, PyObject* category)
+: data_name(data)
 , param_name(param)
-, altcode(altcode)
-, altname(altname)
+, _altcode(cellcode_empty)
+, _altname("")
+, _upcode(cellcode_empty)
+, _dncode(cellcode_empty)
 , multiplier(multiplier)
-{}
+{
+	if (category) {
+		Py_XINCREF(category);
+		
+		if (category == Py_None) {
+			// do nothing
+		}
+	
+		else if PyLong_Check(category) {
+			_altcode = PyLong_AsLongLong(category);
+		}
+		
+		else if PyUnicode_Check(category) {
+			_altname = PyString_ExtractCppString(category);
+		}
+	
+		else if PyTuple_Check(category) {
+			int i = PyArg_ParseTuple(category, "LL", &_upcode, &_dncode);
+			if (!i) OOPS("incompatible category type, tuple must be (int,int)");
+		}
+		
+		else {
+			OOPS("incompatible category type, must be int, str, or tuple(int,int)");
+		}
 
-//elm::InputStorage::InputStorage(const elm::InputStorage& x)
-//: apply_name(x.apply_name)
+	
+		Py_XDECREF(category);
+	}
+}
+
+elm::Component::~Component()
+{
+}
+
+//elm::Component::Component(const elm::Component& x)
+//: data_name(x.data_name)
 //, param_name(x.param_name)
 //, altcode(x.altcode)
 //, altname(x.altname)
 //, multiplier(x.multiplier)
 //{}
 
-elm::InputStorage elm::InputStorage::Create(PyObject* obj)
+elm::Component elm::Component::Create(PyObject* obj)
 {
-	elm::InputStorage x;
+	elm::Component x;
 	
 	const char* d =nullptr;
 	const char* p =nullptr;
 	const char* a =nullptr;
 		
-	if (!PyArg_ParseTuple(obj, "s|sKsd", &d, &p, &(x.altcode), &a, &(x.multiplier))) OOPS("Error reading ModelComponent");
-	if (d) x.apply_name = d;
+	if (!PyArg_ParseTuple(obj, "s|sKsd", &d, &p, &(x._altcode), &a, &(x.multiplier))) OOPS("Error reading ModelComponent");
+	if (d) x.data_name = d;
 	if (p) x.param_name = p;
-	if (a) x.altname = a;
+	if (a) x._altname = a;
 	
 	return x;
 }
 
-std::string elm::InputStorage::__repr__() const
+std::string elm::Component::__repr__() const
 {
 	std::ostringstream x;
 	x << "Component(";
 	bool comma = false;
-	if (!apply_name.empty()) {
-		x<<"data='"<<apply_name<<"'";
+	if (!data_name.empty()) {
+		x<<"data='"<<data_name<<"'";
 		comma = true;
 	}
-	if (!altname.empty()) {
+	if (!_altname.empty()) {
 		if (comma) x << ", ";
-		x<<"altname='"<<altname<<"'";
+		x<<"altname='"<<_altname<<"'";
 		comma = true;
 	}
-	if (altcode != cellcode_empty) {
+	if (_altcode != cellcode_empty) {
 		if (comma) x << ", ";
-		x<<"altcode="<<altcode;
+		x<<"altcode="<<_altcode;
 		comma = true;
 	}
 	if (!param_name.empty()) {
@@ -108,8 +142,8 @@ void elm::ComponentList::receive_utility_ca(const std::string& column_name,
 		parentmodel->parameter(freedom_name);
 	}
 	
-	InputStorage x;
-	x.apply_name = column_name;
+	Component x;
+	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	push_back( x );
@@ -178,12 +212,12 @@ void elm::ComponentList::receive_utility_co_kwd
 		parentmodel->parameter(freedom_name);
 	}
 
-	InputStorage x;
-	x.apply_name = column_name;
+	Component x;
+	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
-	x.altcode = alt_code;
-	x.altname = alt_name;
+	x._altcode = alt_code;
+	x._altname = alt_name;
 	push_back( x );
 	
 	if (parentmodel && parentmodel->_Data) {
@@ -213,7 +247,7 @@ std::vector<std::string> elm::ComponentList::needs() const
 	std::vector<std::string> u_ca;
 	
 	for (unsigned b=0; b<size(); b++) {
-		etk::push_back_if_unique(u_ca, (*this)[b].apply_name);
+		etk::push_back_if_unique(u_ca, (*this)[b].data_name);
 	}
 	
 	return u_ca;
@@ -242,14 +276,14 @@ std::string elm::ComponentCellcodeMap::__repr__() const
 	for (elm::ComponentCellcodeMap::const_iterator a=begin(); a!=end(); a++) {
 		std::string temp = etk::cat(a->first);
 		if (temp.size() > minwide_code) minwide_code = temp.size();
-		temp = a->second.altname;
+		temp = a->second._altname;
 		if (temp.size() > minwide_name) minwide_name = temp.size();
 	}
 	
 	for (elm::ComponentCellcodeMap::const_iterator a=begin(); a!=end(); a++) {
 		x << "\n["<< std::setw(minwide_code) <<a->first<<"] "
 		  << std::setw(minwide_name) << std::left
-		  << a->second.altname << std::right
+		  << a->second._altname << std::right
 		  << " { mu = "<< a->second.param_name;
 		if (a->second.multiplier != 1.0) {
 			x << " * "<<a->second.multiplier;
@@ -294,7 +328,7 @@ void elm::ComponentListPair::clean(elm::Facet& db)
 	
 	for (elm::ComponentList::iterator i=ca.begin(); i!=ca.end(); i++) {
 		try {
-			db.check_ca(i->apply_name);
+			db.check_ca(i->data_name);
 		} SPOO {
 			i = ca.erase(i);
 			i--;
@@ -302,7 +336,7 @@ void elm::ComponentListPair::clean(elm::Facet& db)
 	}
 	for (elm::ComponentList::iterator i=co.begin(); i!=co.end(); i++) {
 		try {
-			db.check_co(i->apply_name);
+			db.check_co(i->data_name);
 		} SPOO {
 			i = co.erase(i);
 			i--;
@@ -384,7 +418,7 @@ std::string elm::ComponentGraphDNA::node_name(const elm::cellcode& node_code) co
 	if (nodes) {
 		elm::ComponentCellcodeMap::const_iterator i = nodes->find(node_code);
 		if (i != nodes->end()) {
-			return i->second.altname;
+			return i->second._altname;
 		}
 	}
 	
@@ -407,7 +441,7 @@ elm::cellcode elm::ComponentGraphDNA::node_code(const std::string& node_name) co
 	if (nodes) {
 		elm::ComponentCellcodeMap::const_iterator i = nodes->begin();
 		while (i != nodes->end()) {
-			if (i->second.altname == node_name) return i->first;
+			if (i->second._altname == node_name) return i->first;
 			i++;
 		}
 	}

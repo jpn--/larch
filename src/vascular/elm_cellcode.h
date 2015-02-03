@@ -57,8 +57,8 @@ namespace elm {
 	long long longlong_from_string(const std::string& s);
 
 	#define cellcode_null			  (0)
-	#define cellcode_empty			  (-9)
-	#define is_cellcode_empty(x)      ((x) == ULLONG_MAX)
+	#define cellcode_empty			  (-9997999)
+	#define is_cellcode_empty(x)      ((x) == cellcode_empty)
 	typedef std::list<cellcode>		  cellcodelist;
 
 	#define CELLCODEasCSTR(x)         (etk::thing_as_string(x).c_str())

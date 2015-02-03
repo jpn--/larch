@@ -638,6 +638,45 @@ void ndarray::prob_scale_2 (ndarray* out) {
 	}
 }
 
+void ndarray::sector_prob_scale_2 (const std::vector<unsigned>& sectors, ndarray* out) {
+	ASSERT_ARRAY_DOUBLE;
+	if (out && out!=this) {
+		if ( !out->pool || !PyArray_SAMESHAPE(pool, out->pool) ) {
+			Py_CLEAR(out->pool);
+			out->pool = (PyArrayObject*)PyArray_NewCopy((PyArrayObject*)pool, NPY_CORDER);
+			Py_INCREF(out->pool);
+		}
+	} else out = this;
+	unsigned x1, x2, x3, i, sectorbegin, sectorend; double temp;
+	if (PyArray_NDIM(pool)==3) {
+		for ( x1=0; x1<ROWS; x1++ ) {
+			for ( x3=0; x3<DEPS; x3++ ) {
+				for (i=0; i<sectors.size()-1; i++) {
+					sectorbegin = sectors[i];
+					sectorend   = sectors[i+1];
+					temp = 0;
+					for ( x2=sectorbegin; x2<sectorend; x2++ ) { temp += this->operator()(x1,x2,x3); }
+					if (!temp) break;
+					for ( x2=sectorbegin; x2<sectorend; x2++ ) { out->operator()(x1,x2,x3) /= temp; }
+				}
+			}
+		}
+	} else if (PyArray_NDIM(pool)==2) {
+		for ( x1=0; x1<ROWS; x1++ ) {
+			for (i=0; i<sectors.size()-1; i++) {
+				sectorbegin = sectors[i];
+				sectorend   = sectors[i+1];
+				temp = 0;
+				for ( x2=sectorbegin; x2<sectorend; x2++ ) { temp += this->operator()(x1,x2); }
+				if (!temp) break;
+				for ( x2=sectorbegin; x2<sectorend; x2++ ) { out->operator()(x1,x2) /= temp; }
+			}
+		}
+	}
+}
+
+
+
 void ndarray::logsums_2 (ndarray* out) {
 	ASSERT_ARRAY_DOUBLE;
 	if (!out || out==this) {

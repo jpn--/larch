@@ -11,13 +11,13 @@
 
 
 #ifdef SWIG
-%rename(Component) elm::InputStorage;
-%rename(data) elm::InputStorage::apply_name;
-%rename(param) elm::InputStorage::param_name;
+%rename(Component) elm::Component;
+%rename(data) elm::Component::data_name;
+%rename(param) elm::Component::param_name;
 
 %rename(LinearFunction) elm::ComponentListPair;
 
-%feature("kwargs", 1) elm::InputStorage::InputStorage;
+%feature("kwargs", 1) elm::Component::Component;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_ca;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_co_kwd;
 
@@ -47,20 +47,24 @@ namespace elm {
 	class Model2;
 	class Facet;
 		
-	struct InputStorage {
-		std::string		apply_name;
+	struct Component {
+		std::string		data_name;
 		std::string     param_name;
-		elm::cellcode	altcode;
-		std::string	    altname;
+		
+		elm::cellcode	_altcode;
+		std::string	    _altname;
+
+		elm::cellcode	_upcode;
+		elm::cellcode	_dncode;
+
 		double			multiplier;
 
 		std::string __repr__() const;
 		
-		InputStorage(std::string data="", std::string param="",
-					 elm::cellcode altcode=cellcode_empty, std::string altname="",
-					 double multiplier=1.0);
-		static InputStorage Create(PyObject* obj);
-//		InputStorage(const InputStorage& obj);
+		Component(std::string data="", std::string param="", double multiplier=1.0, PyObject* category=nullptr);
+		static Component Create(PyObject* obj);
+		~Component();
+//		Component(const Component& obj);
 
 		#ifdef SWIG
 		%pythoncode %{
@@ -79,7 +83,7 @@ namespace elm {
 };
 
 #ifdef SWIG
-%template(ComponentVector) std::vector<elm::InputStorage>;
+%template(ComponentVector) std::vector<elm::Component>;
 #endif
 
 #define COMPONENTLIST_TYPE_UTILITYCA 0x1
@@ -90,7 +94,7 @@ namespace elm {
 namespace elm {
 	
 	class ComponentList
-	: public ::std::vector<InputStorage>
+	: public ::std::vector<Component>
 	{
 		public:
 		int _receiver_type;
@@ -126,7 +130,7 @@ namespace elm {
 
 	class ComponentCellcodeMap
 	#ifndef SWIG
-	: public ::std::map<elm::cellcode, elm::InputStorage>
+	: public ::std::map<elm::cellcode, elm::Component>
 	#endif
 	{
 		public:
@@ -141,25 +145,25 @@ namespace elm {
         bool empty() const;
         void clear();
 		%extend {
-            elm::InputStorage& __getitem__(const elm::cellcode& key) throw (std::out_of_range) {
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+            elm::Component& __getitem__(const elm::cellcode& key) throw (std::out_of_range) {
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 if (i != self->end())
                     return i->second;
                 else
                     throw std::out_of_range("key not found");
             }
-            void __setitem__(const elm::cellcode& key, const elm::InputStorage& x) {
+            void __setitem__(const elm::cellcode& key, const elm::Component& x) {
                 (*self)[key] = x;
             }
             void __delitem__(const elm::cellcode& key) throw (std::out_of_range) {
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 if (i != self->end())
                     self->erase(i);
 					else
 						throw std::out_of_range("key not found");
             }
             bool __contains__(const elm::cellcode& key) {
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 return i != self->end();
             }
 			int __len__() const {

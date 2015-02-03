@@ -26,7 +26,7 @@ from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
 from ..db import DB
 from ..model import Model
-from ..core import LarchError, SQLiteError, FacetError, darray_req
+from ..core import LarchError, SQLiteError, FacetError, darray_req, Component
 from ..exceptions import *
 from ..array import Array, ArrayError
 import shutil, os
@@ -149,4 +149,40 @@ class TestData1(unittest.TestCase):
 		m.provision()
 		self.assertAlmostEqual( -147.81203484134275, m.loglike(), delta= 0.000001)
 		self.assertAlmostEqual( -472.8980609887492, m.loglike((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0)), delta= 0.000001)
+
+
+	def test_component(self):
+		nullcode = -9997999
+	
+		c = Component()
+		self.assertEqual( nullcode, c._altcode )
+		self.assertEqual( nullcode, c._upcode )
+		self.assertEqual( nullcode, c._dncode )
+		self.assertEqual( ""      , c._altname )
+		self.assertEqual( ""      , c.data )
+		self.assertEqual( ""      , c.param )
+
+		c = Component(data="123", param="par", category=(3,4))
+		self.assertEqual( nullcode, c._altcode )
+		self.assertEqual( 3, c._upcode )
+		self.assertEqual( 4, c._dncode )
+		self.assertEqual( "", c._altname )
+		self.assertEqual( "123", c.data )
+		self.assertEqual( "par", c.param )
+
+		c = Component(data="123", param="par", category=5)
+		self.assertEqual( 5, c._altcode )
+		self.assertEqual( nullcode, c._upcode )
+		self.assertEqual( nullcode, c._dncode )
+		self.assertEqual( "", c._altname )
+		self.assertEqual( "123", c.data )
+		self.assertEqual( "par", c.param )
+
+		c = Component(data="123", param="PAR", category="five")
+		self.assertEqual( nullcode, c._altcode )
+		self.assertEqual( nullcode, c._upcode )
+		self.assertEqual( nullcode, c._dncode )
+		self.assertEqual( "five", c._altname )
+		self.assertEqual( "123", c.data )
+		self.assertEqual( "PAR", c.param )
 

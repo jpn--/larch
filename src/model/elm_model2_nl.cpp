@@ -68,7 +68,7 @@ void elm::Model2::_setUp_NL()
 	unsigned slot;
 	for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
 		slot = Xylem.slot_from_code(m->first);
-	//	multiname itemname (m->second.apply_name);
+	//	multiname itemname (m->second.data_name);
 	//	if (is_cellcode_empty(itemname.node_code)) {
 	//		slot = Xylem.slot_from_name(itemname.alternative);
 	//	} else {
@@ -105,6 +105,76 @@ void elm::Model2::_setUp_NL()
 	INFO(msg)<< "Set up NL model complete." ;
 	
 }
+
+
+
+void elm::Model2::_setUp_NGEV()
+{
+	if (is_provisioned()!=1) {
+		OOPS("data not provisioned");
+	}
+	INFO(msg)<< "Setting up NGEV model..." ;
+	
+	// COUNTING
+//	nCases is set in provisioning
+	nElementals = Xylem.n_elemental();
+	nNests = Xylem.n_branches();
+	nNodes = Xylem.size();
+	
+//	Params_UtilityCA and Params_UtilityCO are resized in _setUp_linear_data_and_params
+	Params_LogSum.resize(nNests+1);
+
+	nThreads = option.threads;
+	if (nThreads < 1) nThreads = 1;
+	if (nThreads > 1024) nThreads = 1024;
+	
+	Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+	BUGGER(msg) << "_setUp_NL:Xylem:\n" << Xylem.display();
+	
+	unsigned slot;
+	for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
+		slot = Xylem.slot_from_code(m->first);
+	//	multiname itemname (m->second.data_name);
+	//	if (is_cellcode_empty(itemname.node_code)) {
+	//		slot = Xylem.slot_from_name(itemname.alternative);
+	//	} else {
+	//		slot = Xylem.slot_from_code(itemname.node_code);
+	//	}
+		if (slot < Xylem.n_elemental()) {
+			OOPS("pointing to a negative slot");
+		}
+		slot -= Xylem.n_elemental();
+		Params_LogSum[slot] = _generate_parameter(m->second.param_name, m->second.multiplier);
+	}
+	if (!Params_LogSum[nNests]) Params_LogSum[nNests] = boosted::make_shared<elm::parametex_constant>(1.0);
+
+	
+		
+	// Allocate Memory	
+	Cond_Prob.resize(nCases,Xylem.n_edges());
+	Probability.resize(nCases,nNodes);
+	Utility.resize(nCases,nNodes);
+	
+	Allocation.resize(nCases,Xylem.n_compet_alloc());
+	
+	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.size()>0 ) {
+		AdjProbability.resize(nCases,nElementals);
+		SamplingWeight.resize(nCases,nElementals);
+	} else {
+		AdjProbability.same_memory_as(Probability);
+		SamplingWeight.resize(0);
+	}
+	
+	Workspace.resize(nNodes);
+		
+	sherpa::allocate_memory();
+	
+
+	INFO(msg)<< "Set up NGEV model complete." ;
+	
+}
+
+
 
 //#ifndef __APPLE__
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_probability ()
@@ -427,12 +497,12 @@ ELM_RESULTCODE elm::Model2::nest
 				i->second.multiplier = freedom_multiplier;
 				result |= ELM_UPDATED;
 			}
-			if (i->second.altname != nest_name) {
-				i->second.altname = nest_name;
+			if (i->second._altname != nest_name) {
+				i->second._altname = nest_name;
 				result |= ELM_UPDATED;
 			}
-			if (i->second.altcode != nest_code) {
-				i->second.altcode = nest_code;
+			if (i->second._altcode != nest_code) {
+				i->second._altcode = nest_code;
 				result |= ELM_UPDATED;
 			}
 			INFO(msg) << "success: updated parameter on existing node "<<nest_name<<" (" <<nest_code<<")";
@@ -441,12 +511,12 @@ ELM_RESULTCODE elm::Model2::nest
 
 		result |= Xylem.add_cell(nest_code, nest_name, true);
 		if (result & ELM_CREATED) {
-			InputStorage z;
-			z.apply_name = "";// n.fuse();
+			Component z;
+			z.data_name = "";// n.fuse();
 			z.param_name = freedom_name;
 			z.multiplier = freedom_multiplier;
-			z.altcode = nest_code;
-			z.altname = nest_name;
+			z._altcode = nest_code;
+			z._altname = nest_name;
 			Input_LogSum[nest_code] =  z ;
 		}
 		INFO(msg) << "created "<<nest_name << "("<<nest_code<<")";
@@ -464,13 +534,13 @@ ELM_RESULTCODE elm::Model2::nest
 }
 
 
-PyObject* __GetInputTupleNest(const InputStorage& i)
+PyObject* __GetInputTupleNest(const elm::Component& i)
 {
-//	multiname x (i.apply_name);
+//	multiname x (i.data_name);
 	if (i.multiplier==1.0) {
-		return Py_BuildValue("(sKs)", i.altname.c_str(), i.altcode, i.param_name.c_str());
+		return Py_BuildValue("(sKs)", i._altname.c_str(), i._altcode, i.param_name.c_str());
 	}
-	return Py_BuildValue("(sKsd)", i.altname.c_str(), i.altcode, i.param_name.c_str(), i.multiplier);
+	return Py_BuildValue("(sKsd)", i._altname.c_str(), i._altcode, i.param_name.c_str(), i.multiplier);
 }
 
 PyObject* elm::Model2::_get_nest() const

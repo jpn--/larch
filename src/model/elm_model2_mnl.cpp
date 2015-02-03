@@ -144,8 +144,8 @@ void elm::Model2::freshen()
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-	_setUp_utility_data_and_params(false);
-	_setUp_samplefactor_data_and_params(false);
+	_setUp_utility_data_and_params();
+	_setUp_samplefactor_data_and_params();
 
 	Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 	Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
@@ -1017,8 +1017,8 @@ void elm::Model2::utilityca
 			parameter(freedom_name);
 		}
 	}
-	InputStorage x;
-	x.apply_name = variable_name;
+	Component x;
+	x.data_name = variable_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	Input_Utility.ca.push_back( x );
@@ -1033,10 +1033,10 @@ void elm::Model2::utilityca
 //void elm::Model2::CleanUtilityCA()
 //{
 //	if (!_Data) OOPS("A database must be linked to this model to do this.");
-//	for (vector<InputStorage>::iterator i=Input_Utility.ca.begin(); i!=Input_Utility.ca.end(); i++) {
-//  		BUGGER(msg) << "checking for validity of "<<i->apply_name<<" in idCA data";
+//	for (vector<Component>::iterator i=Input_Utility.ca.begin(); i!=Input_Utility.ca.end(); i++) {
+//  		BUGGER(msg) << "checking for validity of "<<i->data_name<<" in idCA data";
 //		try {
-//			_Data->check_ca(i->apply_name);
+//			_Data->check_ca(i->data_name);
 //		} SPOO {
 //			i = Input_Utility.ca.erase(i);
 //			i--;
@@ -1049,10 +1049,10 @@ void elm::Model2::utilityca
 //void elm::Model2::CleanUtilityCO()
 //{
 //	if (!_Data) OOPS("A database must be linked to this model to do this.");
-//	for (vector<InputStorage>::iterator i=Input_Utility.co.begin(); i!=Input_Utility.co.end(); i++) {
-//  		BUGGER(msg) << "checking for validity of "<<i->apply_name<<" in idCA data";
+//	for (vector<Component>::iterator i=Input_Utility.co.begin(); i!=Input_Utility.co.end(); i++) {
+//  		BUGGER(msg) << "checking for validity of "<<i->data_name<<" in idCA data";
 //		try {
-//			_Data->check_co(i->apply_name);
+//			_Data->check_co(i->data_name);
 //		} SPOO {
 //			i = Input_Utility.co.erase(i);
 //			i--;
@@ -1105,12 +1105,12 @@ string elm::Model2::_add_utility_co
 			parameter(freedom_name);
 		}
 	}
-	InputStorage x;
-	x.apply_name = column_name;
+	Component x;
+	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
-	x.altcode = alt_code;
-	x.altname = alt_name;
+	x._altcode = alt_code;
+	x._altname = alt_name;
 	Input_Utility.co.push_back( x );
 	
 	if (_Data) {
@@ -1131,12 +1131,12 @@ string elm::Model2::_add_utility_co
 }
 
 
-PyObject* __GetInputTupleUtilityCA(const InputStorage& i)
+PyObject* __GetInputTupleUtilityCA(const elm::Component& i)
 {
 	if (i.multiplier==1.0) {
-		return Py_BuildValue("(ss)", i.apply_name.c_str(), i.param_name.c_str());
+		return Py_BuildValue("(ss)", i.data_name.c_str(), i.param_name.c_str());
 	}
-	return Py_BuildValue("(ssd)", i.apply_name.c_str(), i.param_name.c_str(), i.multiplier);
+	return Py_BuildValue("(ssd)", i.data_name.c_str(), i.param_name.c_str(), i.multiplier);
 }
 
 PyObject* elm::Model2::_get_utilityca() const
@@ -1161,22 +1161,22 @@ PyObject* elm::Model2::_get_samplingbiasca() const
 	return U;
 }
 
-PyObject* __GetInputTupleUtilityCO(const InputStorage& i)
+PyObject* __GetInputTupleUtilityCO(const elm::Component& i)
 {
-	if (!i.altname.empty()) {
+	if (!i._altname.empty()) {
 		if (i.multiplier==1.0) {
-			return Py_BuildValue("(sss)", i.apply_name.c_str(), i.altname.c_str(), i.param_name.c_str());
+			return Py_BuildValue("(sss)", i.data_name.c_str(), i._altname.c_str(), i.param_name.c_str());
 		}
-		return Py_BuildValue("(sssd)", i.apply_name.c_str(), i.altname.c_str(), i.param_name.c_str(), i.multiplier);
+		return Py_BuildValue("(sssd)", i.data_name.c_str(), i._altname.c_str(), i.param_name.c_str(), i.multiplier);
 	} else {
-		if (i.altcode==cellcode_empty) {
+		if (i._altcode==cellcode_empty) {
 			OOPS("co input does not specify an alternative.\n"
 				 "Inputs in the co space need to identify an alternative.");
 		}
 		if (i.multiplier==1.0) {
-			return Py_BuildValue("(sKs)", i.apply_name.c_str(), i.altcode, i.param_name.c_str());
+			return Py_BuildValue("(sKs)", i.data_name.c_str(), i._altcode, i.param_name.c_str());
 		}
-		return Py_BuildValue("(sKsd)", i.apply_name.c_str(), i.altcode, i.param_name.c_str(), i.multiplier);
+		return Py_BuildValue("(sKsd)", i.data_name.c_str(), i._altcode, i.param_name.c_str(), i.multiplier);
 	}
 }
 

@@ -38,7 +38,7 @@ etk::strvec elm::__identify_needs(const ComponentList& Input_List)
 	etk::strvec u_ca;
 	
 	for (unsigned b=0; b<Input_List.size(); b++) {
-		u_ca.push_back_if_unique(Input_List[b].apply_name);
+		u_ca.push_back_if_unique(Input_List[b].data_name);
 	}
 	
 	return u_ca;
@@ -69,8 +69,6 @@ void _setUp_linear_data_and_params
  ,	VAS_System&				Xylem
  ,	ComponentList&			Input_UtilityCA
  ,	ComponentList&			Input_UtilityCO
-// ,	datamatrix*			Data_UtilityCA_
-// ,	datamatrix*			Data_UtilityCO_
  ,	paramArray&				Params_UtilityCA
  ,	paramArray&				Params_UtilityCO
  ,	etk::logging_service*	msg
@@ -90,7 +88,7 @@ void _setUp_linear_data_and_params
 	
 	// Third, populate the paramArray
 	for (unsigned b=0; b<Input_UtilityCA.size(); b++) {
-		slot = u_ca.push_back_if_unique(Input_UtilityCA[b].apply_name);
+		slot = u_ca.push_back_if_unique(Input_UtilityCA[b].data_name);
 		Params_UtilityCA(slot) = self._generate_parameter(Input_UtilityCA[b].param_name,Input_UtilityCA[b].multiplier);
 	}
 	
@@ -109,43 +107,67 @@ void _setUp_linear_data_and_params
 	// Third, populate the paramArray
 	for (unsigned b=0; b<Input_UtilityCO.size(); b++) {
 		BUGGER_(msg, "setting Params_?CO b="<<b);
-		slot = u_co.push_back_if_unique(Input_UtilityCO[b].apply_name);
-		if (!Input_UtilityCO[b].altname.empty()) {
-			slot2 = Xylem.slot_from_name(Input_UtilityCO[b].altname);
+		slot = u_co.push_back_if_unique(Input_UtilityCO[b].data_name);
+		if (!Input_UtilityCO[b]._altname.empty()) {
+			slot2 = Xylem.slot_from_name(Input_UtilityCO[b]._altname);
 		} else {
-			if (Input_UtilityCO[b].altcode==cellcode_empty) {
+			if (Input_UtilityCO[b]._altcode==cellcode_empty) {
 				OOPS("utilityco input does not specify an alternative.\n"
 					 "Inputs in the utilityco space need to identify an alternative.");
 			}
-			slot2 = Xylem.slot_from_code(Input_UtilityCO[b].altcode);
+			slot2 = Xylem.slot_from_code(Input_UtilityCO[b]._altcode);
 		}
 		Params_UtilityCO(slot,slot2) = self._generate_parameter(Input_UtilityCO[b].param_name, Input_UtilityCO[b].multiplier);
 	}
 	
-//	if (Data_UtilityCA_) {
-//		BUGGER_(msg, "asking for idca data");
-//		if (!_Data) OOPS("A database must be linked to this model to do this.");
-//		*Data_UtilityCA_ = _Data->ask_idca(u_ca);
-//	} else {
-//		BUGGER_(msg, "not asking for idca data");
-//	}
-//	
-//	if (Data_UtilityCO_) {
-//		BUGGER_(msg, "asking for idco data");
-//		if (!_Data) OOPS("A database must be linked to this model to do this.");
-//		*Data_UtilityCO_ = _Data->ask_idco(u_co);
-//	} else {
-//		BUGGER_(msg, "not asking for idco data");
-//	}
-
 	BUGGER_(msg, "_setUp_linear_data_and_params complete");
 	
 }
 
 
 
+void _setUp_linear_data_and_params_edges
+(	ParameterList&			self
+ ,	VAS_System&				Xylem
+ ,	ComponentList&			Input_Alloc
+ ,	paramArray&				Params_Alloc
+ ,	etk::logging_service*	msg
+)
+{
+	size_t slot, slot2;
 
-void elm::Model2::_setUp_utility_data_and_params(bool and_load_data)
+	
+	
+	// idco //
+	etk::strvec u_co = __identify_needs(Input_Alloc);
+
+	// resize the paramArray
+	auto s = Xylem.n_compet_alloc();
+	BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
+	Params_Alloc.resize(u_co.size(), s);
+	
+	// Third, populate the paramArray
+	for (unsigned b=0; b<Input_Alloc.size(); b++) {
+		BUGGER_(msg, "setting Params_?CO b="<<b);
+		slot = u_co.push_back_if_unique(Input_Alloc[b].data_name);
+		
+		auto edge = Xylem.edge_from_codes(Input_Alloc[b]._upcode, Input_Alloc[b]._dncode);
+		if (!edge) {
+			OOPS("allocation input does not specify a valid network link.");
+		}
+		slot2 = edge->alloc_slot();
+		
+		Params_Alloc(slot,slot2) = self._generate_parameter(Input_Alloc[b].param_name, Input_Alloc[b].multiplier);
+	}
+	
+	BUGGER_(msg, "_setUp_linear_data_and_params_edges complete");
+	
+}
+
+
+
+
+void elm::Model2::_setUp_utility_data_and_params()
 {
 	BUGGER(msg) << "--Params_Utility--\n";
 
@@ -165,7 +187,7 @@ void elm::Model2::_setUp_utility_data_and_params(bool and_load_data)
 
 }
 
-void elm::Model2::_setUp_samplefactor_data_and_params(bool and_load_data)
+void elm::Model2::_setUp_samplefactor_data_and_params()
 {
 	BUGGER(msg) << "--Params_Sampling--\n";
 
@@ -291,7 +313,7 @@ void elm::Model2::setUp(bool and_load_data)
 	}
 	
 	BUGGER(msg) << "Setting up utility parameters...";
-	_setUp_utility_data_and_params(and_load_data);
+	_setUp_utility_data_and_params();
 	if (features & MODELFEATURES_NESTING) {
 		elm::cellcode root = Xylem.root_cellcode();
 		Xylem.touch();
@@ -304,7 +326,7 @@ void elm::Model2::setUp(bool and_load_data)
 
 	
 	if (Input_Sampling.ca.size() || Input_Sampling.co.size()) {
-		_setUp_samplefactor_data_and_params(and_load_data);
+		_setUp_samplefactor_data_and_params();
 	}
 	_setUp_coef_and_grad_arrays();
 	

@@ -447,11 +447,12 @@ namespace elm {
 //		void _setUp_availability_data();
 //		void _setUp_choice_data();
 //		void _setUp_weight_data();
-		void _setUp_utility_data_and_params(bool and_load_data=true);
-		void _setUp_samplefactor_data_and_params(bool and_load_data=true);
+		void _setUp_utility_data_and_params();
+		void _setUp_samplefactor_data_and_params();
 		
 		void _setUp_MNL();
 		void _setUp_NL();
+		void _setUp_NGEV();
 
 	
 	public:
@@ -626,7 +627,7 @@ namespace elm {
 		#endif // def SWIG
 
 		ComponentListPair           Input_Utility;
-		std::vector< InputStorage > Input_QuantityCA ;
+		std::vector< Component >    Input_QuantityCA ;
 		ComponentCellcodeMap        Input_LogSum;
 		ComponentEdgeMap            Input_Edges;
 		ComponentListPair           Input_Sampling;
