@@ -78,6 +78,27 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
     return boost::shared_ptr< T >( pt, pt2 );
 }
 
+
+template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11 >
+boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3, A4 const & a4, A5 const & a5, A6 const & a6, A7 const & a7, A8 const & a8, A9 const & a9, A10 const & a10, A11 const & a11 )
+{
+    boost::shared_ptr< T > pt( static_cast< T* >( 0 ), detail::sp_ms_deleter< T >() );
+
+    detail::sp_ms_deleter< T > * pd = boost::get_deleter< detail::sp_ms_deleter< T > >( pt );
+
+    void * pv = pd->address();
+
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 );
+    pd->set_initialized();
+
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
+}
+
+
+
 template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14 >
 boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3, A4 const & a4, A5 const & a5, A6 const & a6, A7 const & a7, A8 const & a8, A9 const & a9, A10 const & a10, A11 const & a11, A12 const & a12, A13 const & a13, A14 const & a14 )
 {
@@ -95,6 +116,25 @@ boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3,
     boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
     return boost::shared_ptr< T >( pt, pt2 );
 }
+
+template< class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15 >
+boost::shared_ptr< T > make_shared( A1 const & a1, A2 const & a2, A3 const & a3, A4 const & a4, A5 const & a5, A6 const & a6, A7 const & a7, A8 const & a8, A9 const & a9, A10 const & a10, A11 const & a11, A12 const & a12, A13 const & a13, A14 const & a14, A15 const & a15 )
+{
+    boost::shared_ptr< T > pt( static_cast< T* >( 0 ), detail::sp_ms_deleter< T >() );
+
+    detail::sp_ms_deleter< T > * pd = boost::get_deleter< detail::sp_ms_deleter< T > >( pt );
+
+    void * pv = pd->address();
+
+    ::new( pv ) T( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15 );
+    pd->set_initialized();
+
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
+}
+
 
 
 
