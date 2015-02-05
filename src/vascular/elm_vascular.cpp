@@ -254,7 +254,9 @@ VAS_Edge::VAS_Edge (const VAS_Edge& x)
 
 const unsigned& VAS_Edge::alloc_slot() const 
 { 
-	if (_alloc_slot==UINT_MAX) OOPS("VAS_Edge::alloc_slot(): bad call");
+	if (_alloc_slot==UINT_MAX) {
+		OOPS("VAS_Edge::alloc_slot(): bad call");
+	}
 	return _alloc_slot; 
 }
 
@@ -966,7 +968,8 @@ string VAS_System::display_edges() const
 		s<< _edges[e].u()->code() << "\t";
 		s<< _edges[e].d()->code() << "\t";
 		try {
-			s<< _edges[e].alloc_slot() << "\n";
+			s<< ("-?-\n");
+//			s<< _edges[e].alloc_slot() << "\n";
 		} SPOO {
 			s<< ("---\n");
 		}

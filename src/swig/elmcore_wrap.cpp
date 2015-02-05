@@ -2941,14 +2941,14 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_allocator_type swig_types[1]
 #define SWIGTYPE_p_char swig_types[2]
 #define SWIGTYPE_p_difference_type swig_types[3]
-#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[4]
-#define SWIGTYPE_p_elm__ComponentEdgeMap swig_types[5]
-#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[6]
-#define SWIGTYPE_p_elm__ComponentList swig_types[7]
-#define SWIGTYPE_p_elm__ComponentListPair swig_types[8]
-#define SWIGTYPE_p_elm__Facet swig_types[9]
-#define SWIGTYPE_p_elm__Fountain swig_types[10]
-#define SWIGTYPE_p_elm__InputStorage swig_types[11]
+#define SWIGTYPE_p_elm__Component swig_types[4]
+#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[5]
+#define SWIGTYPE_p_elm__ComponentEdgeMap swig_types[6]
+#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[7]
+#define SWIGTYPE_p_elm__ComponentList swig_types[8]
+#define SWIGTYPE_p_elm__ComponentListPair swig_types[9]
+#define SWIGTYPE_p_elm__Facet swig_types[10]
+#define SWIGTYPE_p_elm__Fountain swig_types[11]
 #define SWIGTYPE_p_elm__Model2 swig_types[12]
 #define SWIGTYPE_p_elm__ParameterList swig_types[13]
 #define SWIGTYPE_p_elm__QuerySet swig_types[14]
@@ -2980,7 +2980,7 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_sherpa_result swig_types[40]
 #define SWIGTYPE_p_size_type swig_types[41]
 #define SWIGTYPE_p_std__allocatorT_double_t swig_types[42]
-#define SWIGTYPE_p_std__allocatorT_elm__InputStorage_t swig_types[43]
+#define SWIGTYPE_p_std__allocatorT_elm__Component_t swig_types[43]
 #define SWIGTYPE_p_std__allocatorT_int_t swig_types[44]
 #define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[45]
 #define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[46]
@@ -3008,7 +3008,7 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_std__string swig_types[68]
 #define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[69]
 #define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[70]
-#define SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t swig_types[71]
+#define SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t swig_types[71]
 #define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[72]
 #define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[73]
 #define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[74]
@@ -6444,129 +6444,129 @@ SWIGINTERN void std_list_Sl_elm_cellcode_Sg__insert__SWIG_1(std::list< elm::cell
 
 
   namespace swig {
-    template <>  struct traits<elm::InputStorage > {
+    template <>  struct traits<elm::Component > {
       typedef pointer_category category;
-      static const char* type_name() { return"elm::InputStorage"; }
+      static const char* type_name() { return"elm::Component"; }
     };
   }
 
 
       namespace swig {
-	template <>  struct traits<std::vector<elm::InputStorage, std::allocator< elm::InputStorage > > > {
+	template <>  struct traits<std::vector<elm::Component, std::allocator< elm::Component > > > {
 	  typedef pointer_category category;
 	  static const char* type_name() {
-	    return "std::vector<" "elm::InputStorage" "," "std::allocator< elm::InputStorage >" " >";
+	    return "std::vector<" "elm::Component" "," "std::allocator< elm::Component >" " >";
 	  }
 	};
       }
     
-SWIGINTERN swig::SwigPyIterator *std_vector_Sl_elm_InputStorage_Sg__iterator(std::vector< elm::InputStorage > *self,PyObject **PYTHON_SELF){
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_elm_Component_Sg__iterator(std::vector< elm::Component > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
     }
-SWIGINTERN bool std_vector_Sl_elm_InputStorage_Sg____nonzero__(std::vector< elm::InputStorage > const *self){
+SWIGINTERN bool std_vector_Sl_elm_Component_Sg____nonzero__(std::vector< elm::Component > const *self){
       return !(self->empty());
     }
-SWIGINTERN bool std_vector_Sl_elm_InputStorage_Sg____bool__(std::vector< elm::InputStorage > const *self){
+SWIGINTERN bool std_vector_Sl_elm_Component_Sg____bool__(std::vector< elm::Component > const *self){
       return !(self->empty());
     }
-SWIGINTERN std::vector< elm::InputStorage >::size_type std_vector_Sl_elm_InputStorage_Sg____len__(std::vector< elm::InputStorage > const *self){
+SWIGINTERN std::vector< elm::Component >::size_type std_vector_Sl_elm_Component_Sg____len__(std::vector< elm::Component > const *self){
       return self->size();
     }
-SWIGINTERN std::vector< elm::InputStorage >::value_type std_vector_Sl_elm_InputStorage_Sg__pop(std::vector< elm::InputStorage > *self){
+SWIGINTERN std::vector< elm::Component >::value_type std_vector_Sl_elm_Component_Sg__pop(std::vector< elm::Component > *self){
       if (self->size() == 0)
 	throw std::out_of_range("pop from empty container");
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::value_type x = self->back();
+      std::vector<elm::Component,std::allocator< elm::Component > >::value_type x = self->back();
       self->pop_back();
       return x;
     }
-SWIGINTERN std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *std_vector_Sl_elm_InputStorage_Sg____getslice__(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::difference_type i,std::vector< elm::InputStorage >::difference_type j){
+SWIGINTERN std::vector< elm::Component,std::allocator< elm::Component > > *std_vector_Sl_elm_Component_Sg____getslice__(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j){
       return swig::getslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____setslice____SWIG_0(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::difference_type i,std::vector< elm::InputStorage >::difference_type j,std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &v=std::vector< elm::InputStorage,std::allocator< elm::InputStorage > >()){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j,std::vector< elm::Component,std::allocator< elm::Component > > const &v=std::vector< elm::Component,std::allocator< elm::Component > >()){
       swig::setslice(self, i, j, 1, v);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____delslice__(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::difference_type i,std::vector< elm::InputStorage >::difference_type j){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____delslice__(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j){
       swig::delslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____delitem____SWIG_0(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::difference_type i){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____delitem____SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i){
       self->erase(swig::getpos(self,i));
     }
-SWIGINTERN std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *std_vector_Sl_elm_InputStorage_Sg____getitem____SWIG_0(std::vector< elm::InputStorage > *self,PySliceObject *slice){
+SWIGINTERN std::vector< elm::Component,std::allocator< elm::Component > > *std_vector_Sl_elm_Component_Sg____getitem____SWIG_0(std::vector< elm::Component > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return NULL;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type id = i;
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type jd = j;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
       return swig::getslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_0(std::vector< elm::InputStorage > *self,PySliceObject *slice,std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &v){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_0(std::vector< elm::Component > *self,PySliceObject *slice,std::vector< elm::Component,std::allocator< elm::Component > > const &v){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type id = i;
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type jd = j;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
       swig::setslice(self, id, jd, step, v);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_1(std::vector< elm::InputStorage > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_1(std::vector< elm::Component > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type id = i;
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type jd = j;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____delitem____SWIG_1(std::vector< elm::InputStorage > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____delitem____SWIG_1(std::vector< elm::Component > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type id = i;
-      std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >::difference_type jd = j;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
+      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN std::vector< elm::InputStorage >::value_type const &std_vector_Sl_elm_InputStorage_Sg____getitem____SWIG_1(std::vector< elm::InputStorage > const *self,std::vector< elm::InputStorage >::difference_type i){
+SWIGINTERN std::vector< elm::Component >::value_type const &std_vector_Sl_elm_Component_Sg____getitem____SWIG_1(std::vector< elm::Component > const *self,std::vector< elm::Component >::difference_type i){
       return *(swig::cgetpos(self, i));
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_2(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::difference_type i,std::vector< elm::InputStorage >::value_type const &x){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_2(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::value_type const &x){
       *(swig::getpos(self,i)) = x;
     }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg__append(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::value_type const &x){
+SWIGINTERN void std_vector_Sl_elm_Component_Sg__append(std::vector< elm::Component > *self,std::vector< elm::Component >::value_type const &x){
       self->push_back(x);
     }
-SWIGINTERN std::vector< elm::InputStorage >::iterator std_vector_Sl_elm_InputStorage_Sg__erase__SWIG_0(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::iterator pos){ return self->erase(pos); }
-SWIGINTERN std::vector< elm::InputStorage >::iterator std_vector_Sl_elm_InputStorage_Sg__erase__SWIG_1(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::iterator first,std::vector< elm::InputStorage >::iterator last){ return self->erase(first, last); }
-SWIGINTERN std::vector< elm::InputStorage >::iterator std_vector_Sl_elm_InputStorage_Sg__insert__SWIG_0(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::iterator pos,std::vector< elm::InputStorage >::value_type const &x){ return self->insert(pos, x); }
-SWIGINTERN void std_vector_Sl_elm_InputStorage_Sg__insert__SWIG_1(std::vector< elm::InputStorage > *self,std::vector< elm::InputStorage >::iterator pos,std::vector< elm::InputStorage >::size_type n,std::vector< elm::InputStorage >::value_type const &x){ self->insert(pos, n, x); }
-SWIGINTERN elm::InputStorage &elm_ComponentCellcodeMap___getitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__erase__SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__erase__SWIG_1(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator first,std::vector< elm::Component >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__insert__SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos,std::vector< elm::Component >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_elm_Component_Sg__insert__SWIG_1(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos,std::vector< elm::Component >::size_type n,std::vector< elm::Component >::value_type const &x){ self->insert(pos, n, x); }
+SWIGINTERN elm::Component &elm_ComponentCellcodeMap___getitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 if (i != self->end())
                     return i->second;
                 else
                     throw std::out_of_range("key not found");
             }
-SWIGINTERN void elm_ComponentCellcodeMap___setitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key,elm::InputStorage const &x){
+SWIGINTERN void elm_ComponentCellcodeMap___setitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key,elm::Component const &x){
                 (*self)[key] = x;
             }
 SWIGINTERN void elm_ComponentCellcodeMap___delitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 if (i != self->end())
                     self->erase(i);
 					else
 						throw std::out_of_range("key not found");
             }
 SWIGINTERN bool elm_ComponentCellcodeMap___contains__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::InputStorage >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
                 return i != self->end();
             }
 SWIGINTERN int elm_ComponentCellcodeMap___len__(elm::ComponentCellcodeMap const *self){
@@ -6792,15 +6792,6 @@ SWIGINTERN std::vector< std::string,std::allocator< std::string > > elm_Model2_a
 		}
 SWIGINTERN std::vector< long long,std::allocator< long long > > elm_Model2_alternative_codes(elm::Model2 const *self){
 			return self->Xylem.elemental_codes();
-		}
-SWIGINTERN void elm_Model2_parameter_values__SWIG_1(elm::Model2 *self,std::vector< double,std::allocator< double > > v){
-			if (v.size() != self->dF()) {
-				OOPS("You must specify values for exactly the correct number of degrees of freedom (",self->dF(),"), you gave ",v.size(),".");
-			}
-			for (unsigned z=0; z<v.size(); z++) {
-				self->FCurrent[z] = v[z];
-			}
-			self->freshen();
 		}
 SWIGINTERN std::vector< double,std::allocator< double > > elm_Model2_d_loglike__SWIG_1(elm::Model2 *self){
 			self->setUp();
@@ -47997,7 +47988,7 @@ SWIGINTERN PyObject *VAS_dna_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
 
 SWIGINTERN PyObject *_wrap_Component_data_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48006,11 +47997,11 @@ SWIGINTERN PyObject *_wrap_Component_data_set(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_data_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_set" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_set" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
@@ -48022,7 +48013,7 @@ SWIGINTERN PyObject *_wrap_Component_data_set(PyObject *SWIGUNUSEDPARM(self), Py
     }
     arg2 = ptr;
   }
-  if (arg1) (arg1)->apply_name = *arg2;
+  if (arg1) (arg1)->data_name = *arg2;
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -48034,19 +48025,19 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component_data_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_data_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_get" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_get" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
-  result = (std::string *) & ((arg1)->apply_name);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  result = (std::string *) & ((arg1)->data_name);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
 fail:
@@ -48056,7 +48047,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component_param_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48065,11 +48056,11 @@ SWIGINTERN PyObject *_wrap_Component_param_set(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_param_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_set" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_set" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
@@ -48093,18 +48084,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component_param_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_param_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_get" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_get" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   result = (std::string *) & ((arg1)->param_name);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
@@ -48113,9 +48104,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_altcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Component__altcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   elm::cellcode arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48124,18 +48115,18 @@ SWIGINTERN PyObject *_wrap_Component_altcode_set(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_altcode_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"Component__altcode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_altcode_set" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altcode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component_altcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__altcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   arg2 = static_cast< elm::cellcode >(val2);
-  if (arg1) (arg1)->altcode = arg2;
+  if (arg1) (arg1)->_altcode = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -48143,21 +48134,21 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_altcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Component__altcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   elm::cellcode result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_altcode_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"Component__altcode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_altcode_get" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altcode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
-  result = (elm::cellcode) ((arg1)->altcode);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  result = (elm::cellcode) ((arg1)->_altcode);
   resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
 fail:
@@ -48165,9 +48156,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_altname_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Component__altname_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48175,24 +48166,24 @@ SWIGINTERN PyObject *_wrap_Component_altname_set(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_altname_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"Component__altname_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_altname_set" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altname_set" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Component_altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Component__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Component_altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Component__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
-  if (arg1) (arg1)->altname = *arg2;
+  if (arg1) (arg1)->_altname = *arg2;
   resultobj = SWIG_Py_Void();
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
@@ -48202,22 +48193,126 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_altname_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Component__altname_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_altname_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"Component__altname_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_altname_get" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altname_get" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
-  result = (std::string *) & ((arg1)->altname);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  result = (std::string *) & ((arg1)->_altname);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Component__upcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::cellcode arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Component__upcode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__upcode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__upcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  arg2 = static_cast< elm::cellcode >(val2);
+  if (arg1) (arg1)->_upcode = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Component__upcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Component *arg1 = (elm::Component *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::cellcode result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Component__upcode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__upcode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  result = (elm::cellcode) ((arg1)->_upcode);
+  resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Component__dncode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::cellcode arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Component__dncode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__dncode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__dncode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  arg2 = static_cast< elm::cellcode >(val2);
+  if (arg1) (arg1)->_dncode = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Component__dncode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Component *arg1 = (elm::Component *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::cellcode result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Component__dncode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__dncode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  result = (elm::cellcode) ((arg1)->_dncode);
+  resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -48226,7 +48321,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component_multiplier_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48236,11 +48331,11 @@ SWIGINTERN PyObject *_wrap_Component_multiplier_set(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_multiplier_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_set" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_set" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component_multiplier_set" "', argument " "2"" of type '" "double""'");
@@ -48256,18 +48351,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component_multiplier_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_multiplier_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_get" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_get" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   result = (double) ((arg1)->multiplier);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
@@ -48278,21 +48373,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Component___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string result;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component___repr__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component___repr__" "', argument " "1"" of type '" "elm::InputStorage const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component___repr__" "', argument " "1"" of type '" "elm::Component const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   {
     try {
-      result = ((elm::InputStorage const *)arg1)->__repr__();
+      result = ((elm::Component const *)arg1)->__repr__();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48318,24 +48413,20 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
   PyObject *resultobj = 0;
   std::string arg1 = (std::string) "" ;
   std::string arg2 = (std::string) "" ;
-  elm::cellcode arg3 = (elm::cellcode) cellcode_empty ;
-  std::string arg4 = (std::string) "" ;
-  double arg5 = (double) 1.0 ;
-  long long val3 ;
+  double arg3 = (double) 1.0 ;
+  PyObject *arg4 = (PyObject *) nullptr ;
+  double val3 ;
   int ecode3 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
   char *  kwnames[] = {
-    (char *) "data",(char *) "param",(char *) "altcode",(char *) "altname",(char *) "multiplier", NULL 
+    (char *) "data",(char *) "param",(char *) "multiplier",(char *) "category", NULL 
   };
-  elm::InputStorage *result = 0 ;
+  elm::Component *result = 0 ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOO:new_Component",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_Component",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   if (obj0) {
     {
       std::string *ptr = (std::string *)0;
@@ -48359,33 +48450,18 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
     }
   }
   if (obj2) {
-    ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
+    ecode3 = SWIG_AsVal_double(obj2, &val3);
     if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Component" "', argument " "3"" of type '" "elm::cellcode""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Component" "', argument " "3"" of type '" "double""'");
     } 
-    arg3 = static_cast< elm::cellcode >(val3);
+    arg3 = static_cast< double >(val3);
   }
   if (obj3) {
-    {
-      std::string *ptr = (std::string *)0;
-      int res = SWIG_AsPtr_std_string(obj3, &ptr);
-      if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Component" "', argument " "4"" of type '" "std::string""'"); 
-      }
-      arg4 = *ptr;
-      if (SWIG_IsNewObj(res)) delete ptr;
-    }
-  }
-  if (obj4) {
-    ecode5 = SWIG_AsVal_double(obj4, &val5);
-    if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_Component" "', argument " "5"" of type '" "double""'");
-    } 
-    arg5 = static_cast< double >(val5);
+    arg4 = obj3;
   }
   {
     try {
-      result = (elm::InputStorage *)new elm::InputStorage(arg1,arg2,arg3,arg4,arg5);
+      result = (elm::Component *)new elm::Component(arg1,arg2,arg3,arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48400,7 +48476,7 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__InputStorage, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48411,13 +48487,13 @@ SWIGINTERN PyObject *_wrap_Component_Create(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *resultobj = 0;
   PyObject *arg1 = (PyObject *) 0 ;
   PyObject * obj0 = 0 ;
-  elm::InputStorage result;
+  elm::Component result;
   
   if(!PyArg_UnpackTuple(args,(char *)"Component_Create",1,1,&obj0)) SWIG_fail;
   arg1 = obj0;
   {
     try {
-      result = elm::InputStorage::Create(arg1);
+      result = elm::Component::Create(arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48432,7 +48508,7 @@ SWIGINTERN PyObject *_wrap_Component_Create(PyObject *SWIGUNUSEDPARM(self), PyOb
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::InputStorage(static_cast< const elm::InputStorage& >(result))), SWIGTYPE_p_elm__InputStorage, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new elm::Component(static_cast< const elm::Component& >(result))), SWIGTYPE_p_elm__Component, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48441,17 +48517,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_Component(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::InputStorage *arg1 = (elm::InputStorage *) 0 ;
+  elm::Component *arg1 = (elm::Component *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"delete_Component",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__InputStorage, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Component" "', argument " "1"" of type '" "elm::InputStorage *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Component" "', argument " "1"" of type '" "elm::Component *""'"); 
   }
-  arg1 = reinterpret_cast< elm::InputStorage * >(argp1);
+  arg1 = reinterpret_cast< elm::Component * >(argp1);
   {
     try {
       delete arg1;
@@ -48479,13 +48555,13 @@ fail:
 SWIGINTERN PyObject *Component_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_elm__InputStorage, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__Component, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 SWIGINTERN PyObject *_wrap_ComponentVector_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   PyObject **arg2 = (PyObject **) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48494,14 +48570,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector_iterator(PyObject *SWIGUNUSEDPARM(sel
   
   arg2 = &obj0;
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_iterator",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_iterator" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_iterator" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (swig::SwigPyIterator *)std_vector_Sl_elm_InputStorage_Sg__iterator(arg1,arg2);
+      result = (swig::SwigPyIterator *)std_vector_Sl_elm_Component_Sg__iterator(arg1,arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48525,21 +48601,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___nonzero__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___nonzero__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___nonzero__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (bool)std_vector_Sl_elm_InputStorage_Sg____nonzero__((std::vector< elm::InputStorage > const *)arg1);
+      result = (bool)std_vector_Sl_elm_Component_Sg____nonzero__((std::vector< elm::Component > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48563,21 +48639,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___bool__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___bool__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___bool__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (bool)std_vector_Sl_elm_InputStorage_Sg____bool__((std::vector< elm::InputStorage > const *)arg1);
+      result = (bool)std_vector_Sl_elm_Component_Sg____bool__((std::vector< elm::Component > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48601,21 +48677,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::size_type result;
+  std::vector< elm::Component >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___len__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___len__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___len__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = std_vector_Sl_elm_InputStorage_Sg____len__((std::vector< elm::InputStorage > const *)arg1);
+      result = std_vector_Sl_elm_Component_Sg____len__((std::vector< elm::Component > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48639,22 +48715,22 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::value_type result;
+  std::vector< elm::Component >::value_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_pop",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       try {
-        result = std_vector_Sl_elm_InputStorage_Sg__pop(arg1);
+        result = std_vector_Sl_elm_Component_Sg__pop(arg1);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48674,7 +48750,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_pop(PyObject *SWIGUNUSEDPARM(self), P
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new std::vector< elm::InputStorage >::value_type(static_cast< const std::vector< elm::InputStorage >::value_type& >(result))), SWIGTYPE_p_elm__InputStorage, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< elm::Component >::value_type(static_cast< const std::vector< elm::Component >::value_type& >(result))), SWIGTYPE_p_elm__Component, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48683,9 +48759,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
-  std::vector< elm::InputStorage >::difference_type arg3 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::Component >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48695,28 +48771,28 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *result = 0 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getslice__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getslice__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___getslice__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___getslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::InputStorage >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
   {
     try {
       try {
-        result = (std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *)std_vector_Sl_elm_InputStorage_Sg____getslice__(arg1,arg2,arg3);
+        result = (std::vector< elm::Component,std::allocator< elm::Component > > *)std_vector_Sl_elm_Component_Sg____getslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48739,7 +48815,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48748,10 +48824,10 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
-  std::vector< elm::InputStorage >::difference_type arg3 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *arg4 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::Component >::difference_type arg3 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48765,36 +48841,36 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_0(PyObject *SWIGUN
   PyObject * obj3 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setslice__",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::InputStorage >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
   {
-    std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *ptr = (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *)0;
+    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
     res4 = swig::asptr(obj3, &ptr);
     if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
     }
     arg4 = ptr;
   }
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &)*arg4);
+        std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< elm::Component,std::allocator< elm::Component > > const &)*arg4);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48828,9 +48904,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
-  std::vector< elm::InputStorage >::difference_type arg3 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::Component >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48842,25 +48918,25 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_1(PyObject *SWIGUN
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::InputStorage >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+        std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48902,7 +48978,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -48922,7 +48998,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
   }
   if (argc == 4) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -48935,7 +49011,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          int res = swig::asptr(argv[3], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+          int res = swig::asptr(argv[3], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_ComponentVector___setslice____SWIG_0(self, args);
@@ -48948,17 +49024,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___setslice__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::__setslice__(std::vector< elm::InputStorage >::difference_type,std::vector< elm::InputStorage >::difference_type,std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &)\n"
-    "    std::vector< elm::InputStorage >::__setslice__(std::vector< elm::InputStorage >::difference_type,std::vector< elm::InputStorage >::difference_type)\n");
+    "    std::vector< elm::Component >::__setslice__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::difference_type,std::vector< elm::Component,std::allocator< elm::Component > > const &)\n"
+    "    std::vector< elm::Component >::__setslice__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::difference_type)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
-  std::vector< elm::InputStorage >::difference_type arg3 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::Component >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48970,25 +49046,25 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delslice__(PyObject *SWIGUNUSEDPARM
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delslice__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delslice__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___delslice__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___delslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::InputStorage >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____delslice__(arg1,arg2,arg3);
+        std_vector_Sl_elm_Component_Sg____delslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49020,8 +49096,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -49030,20 +49106,20 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_0(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____delitem____SWIG_0(arg1,arg2);
+        std_vector_Sl_elm_Component_Sg____delitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49072,20 +49148,20 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *result = 0 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49095,7 +49171,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNU
   {
     try {
       try {
-        result = (std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *)std_vector_Sl_elm_InputStorage_Sg____getitem____SWIG_0(arg1,arg2);
+        result = (std::vector< elm::Component,std::allocator< elm::Component > > *)std_vector_Sl_elm_Component_Sg____getitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49118,7 +49194,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNU
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49127,9 +49203,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *arg3 = 0 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res3 = SWIG_OLDOBJ ;
@@ -49138,11 +49214,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNU
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49150,20 +49226,20 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNU
     arg2 = (PySliceObject *) obj1;
   }
   {
-    std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *ptr = (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *)0;
+    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
     res3 = swig::asptr(obj2, &ptr);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
     }
     arg3 = ptr;
   }
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &)*arg3);
+        std_vector_Sl_elm_Component_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< elm::Component,std::allocator< elm::Component > > const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49197,7 +49273,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -49205,11 +49281,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49219,7 +49295,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNU
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_elm_Component_Sg____setitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49251,7 +49327,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -49259,11 +49335,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49273,7 +49349,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNU
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____delitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_elm_Component_Sg____delitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49315,7 +49391,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49328,7 +49404,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49344,39 +49420,39 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___delitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::__delitem__(std::vector< elm::InputStorage >::difference_type)\n"
-    "    std::vector< elm::InputStorage >::__delitem__(PySliceObject *)\n");
+    "    std::vector< elm::Component >::__delitem__(std::vector< elm::Component >::difference_type)\n"
+    "    std::vector< elm::Component >::__delitem__(PySliceObject *)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::InputStorage >::value_type *result = 0 ;
+  std::vector< elm::Component >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
   {
     try {
       try {
-        result = (std::vector< elm::InputStorage >::value_type *) &std_vector_Sl_elm_InputStorage_Sg____getitem____SWIG_1((std::vector< elm::InputStorage > const *)arg1,arg2);
+        result = (std::vector< elm::Component >::value_type *) &std_vector_Sl_elm_Component_Sg____getitem____SWIG_1((std::vector< elm::Component > const *)arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49396,7 +49472,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_1(PyObject *SWIGUNU
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49415,7 +49491,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49428,7 +49504,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49444,17 +49520,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___getitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::__getitem__(PySliceObject *)\n"
-    "    std::vector< elm::InputStorage >::__getitem__(std::vector< elm::InputStorage >::difference_type) const\n");
+    "    std::vector< elm::Component >::__getitem__(PySliceObject *)\n"
+    "    std::vector< elm::Component >::__getitem__(std::vector< elm::Component >::difference_type) const\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::difference_type arg2 ;
-  std::vector< elm::InputStorage >::value_type *arg3 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::Component >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -49466,28 +49542,28 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_2(PyObject *SWIGUNU
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::difference_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
   {
     try {
       try {
-        std_vector_Sl_elm_InputStorage_Sg____setitem____SWIG_2(arg1,arg2,(elm::InputStorage const &)*arg3);
+        std_vector_Sl_elm_Component_Sg____setitem____SWIG_2(arg1,arg2,(elm::Component const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49526,7 +49602,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49539,14 +49615,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
         _v = PySlice_Check(argv[1]);
       }
       if (_v) {
-        int res = swig::asptr(argv[2], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+        int res = swig::asptr(argv[2], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector___setitem____SWIG_0(self, args);
@@ -49556,7 +49632,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49564,7 +49640,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__InputStorage, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector___setitem____SWIG_2(self, args);
@@ -49576,17 +49652,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___setitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::__setitem__(PySliceObject *,std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > const &)\n"
-    "    std::vector< elm::InputStorage >::__setitem__(PySliceObject *)\n"
-    "    std::vector< elm::InputStorage >::__setitem__(std::vector< elm::InputStorage >::difference_type,std::vector< elm::InputStorage >::value_type const &)\n");
+    "    std::vector< elm::Component >::__setitem__(PySliceObject *,std::vector< elm::Component,std::allocator< elm::Component > > const &)\n"
+    "    std::vector< elm::Component >::__setitem__(PySliceObject *)\n"
+    "    std::vector< elm::Component >::__setitem__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::value_type *arg2 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -49595,22 +49671,22 @@ SWIGINTERN PyObject *_wrap_ComponentVector_append(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_append",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_append" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_append" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
   {
     try {
-      std_vector_Sl_elm_InputStorage_Sg__append(arg1,(elm::InputStorage const &)*arg2);
+      std_vector_Sl_elm_Component_Sg__append(arg1,(elm::Component const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49634,12 +49710,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *result = 0 ;
+  std::vector< elm::Component > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",0,0)) SWIG_fail;
   {
     try {
-      result = (std::vector< elm::InputStorage > *)new std::vector< elm::InputStorage >();
+      result = (std::vector< elm::Component > *)new std::vector< elm::Component >();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49654,7 +49730,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_0(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49663,26 +49739,26 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = 0 ;
+  std::vector< elm::Component > *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage > *result = 0 ;
+  std::vector< elm::Component > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",1,1,&obj0)) SWIG_fail;
   {
-    std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *ptr = (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > > *)0;
+    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
     res1 = swig::asptr(obj0, &ptr);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > const &""'"); 
     }
     arg1 = ptr;
   }
   {
     try {
-      result = (std::vector< elm::InputStorage > *)new std::vector< elm::InputStorage >((std::vector< elm::InputStorage > const &)*arg1);
+      result = (std::vector< elm::Component > *)new std::vector< elm::Component >((std::vector< elm::Component > const &)*arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49697,7 +49773,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_1(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
   if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
@@ -49708,21 +49784,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_empty",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_empty" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_empty" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (bool)((std::vector< elm::InputStorage > const *)arg1)->empty();
+      result = (bool)((std::vector< elm::Component > const *)arg1)->empty();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49746,21 +49822,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::size_type result;
+  std::vector< elm::Component >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_size",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_size" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_size" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::InputStorage > const *)arg1)->size();
+      result = ((std::vector< elm::Component > const *)arg1)->size();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49784,17 +49860,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_clear",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_clear" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_clear" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       (arg1)->clear();
@@ -49821,8 +49897,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage > *arg2 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -49831,19 +49907,19 @@ SWIGINTERN PyObject *_wrap_ComponentVector_swap(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_swap",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_swap" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_swap" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t,  0 );
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::InputStorage > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::Component > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::InputStorage > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::Component > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::Component > * >(argp2);
   {
     try {
       (arg1)->swap(*arg2);
@@ -49870,21 +49946,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::allocator< elm::InputStorage > > result;
+  SwigValueWrapper< std::allocator< elm::Component > > result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_get_allocator",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_get_allocator" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_get_allocator" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::InputStorage > const *)arg1)->get_allocator();
+      result = ((std::vector< elm::Component > const *)arg1)->get_allocator();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49899,7 +49975,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_get_allocator(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new std::vector< elm::InputStorage >::allocator_type(static_cast< const std::vector< elm::InputStorage >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_elm__InputStorage_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< elm::Component >::allocator_type(static_cast< const std::vector< elm::Component >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_elm__Component_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49908,18 +49984,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::iterator result;
+  std::vector< elm::Component >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_begin",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_begin" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_begin" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       result = (arg1)->begin();
@@ -49937,7 +50013,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_begin(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -49947,18 +50023,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::iterator result;
+  std::vector< elm::Component >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_end",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_end" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_end" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       result = (arg1)->end();
@@ -49976,7 +50052,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_end(PyObject *SWIGUNUSEDPARM(self), P
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -49986,18 +50062,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::reverse_iterator result;
+  std::vector< elm::Component >::reverse_iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_rbegin",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rbegin" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rbegin" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       result = (arg1)->rbegin();
@@ -50015,7 +50091,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rbegin(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50025,18 +50101,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::reverse_iterator result;
+  std::vector< elm::Component >::reverse_iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_rend",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rend" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rend" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       result = (arg1)->rend();
@@ -50054,7 +50130,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rend(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50064,21 +50140,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage >::size_type arg1 ;
+  std::vector< elm::Component >::size_type arg1 ;
   size_t val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage > *result = 0 ;
+  std::vector< elm::Component > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",1,1,&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< elm::InputStorage >::size_type >(val1);
+  arg1 = static_cast< std::vector< elm::Component >::size_type >(val1);
   {
     try {
-      result = (std::vector< elm::InputStorage > *)new std::vector< elm::InputStorage >(arg1);
+      result = (std::vector< elm::Component > *)new std::vector< elm::Component >(arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50093,7 +50169,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_2(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50102,17 +50178,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_pop_back",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop_back" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop_back" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       (arg1)->pop_back();
@@ -50139,8 +50215,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::size_type arg2 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50149,16 +50225,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_resize",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::size_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
   {
     try {
       (arg1)->resize(arg2);
@@ -50185,36 +50261,36 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::iterator arg2 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::iterator arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::InputStorage >::iterator result;
+  std::vector< elm::Component >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_erase",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
     }
   }
   {
     try {
-      result = std_vector_Sl_elm_InputStorage_Sg__erase__SWIG_0(arg1,arg2);
+      result = std_vector_Sl_elm_Component_Sg__erase__SWIG_0(arg1,arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50229,7 +50305,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50239,9 +50315,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::iterator arg2 ;
-  std::vector< elm::InputStorage >::iterator arg3 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::iterator arg2 ;
+  std::vector< elm::Component >::iterator arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50251,39 +50327,39 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::InputStorage >::iterator result;
+  std::vector< elm::Component >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_erase",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
     }
   }
   res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res3) || !iter3) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::Component >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter3);
+    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter3);
     if (iter_t) {
       arg3 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::Component >::iterator""'");
     }
   }
   {
     try {
-      result = std_vector_Sl_elm_InputStorage_Sg__erase__SWIG_1(arg1,arg2,arg3);
+      result = std_vector_Sl_elm_Component_Sg__erase__SWIG_1(arg1,arg2,arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50298,7 +50374,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50318,12 +50394,12 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
       if (_v) {
         return _wrap_ComponentVector_erase__SWIG_0(self, args);
       }
@@ -50331,16 +50407,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
       if (_v) {
         swig::SwigPyIterator *iter = 0;
         int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter) != 0));
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
         if (_v) {
           return _wrap_ComponentVector_erase__SWIG_1(self, args);
         }
@@ -50351,41 +50427,41 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_erase'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::erase(std::vector< elm::InputStorage >::iterator)\n"
-    "    std::vector< elm::InputStorage >::erase(std::vector< elm::InputStorage >::iterator,std::vector< elm::InputStorage >::iterator)\n");
+    "    std::vector< elm::Component >::erase(std::vector< elm::Component >::iterator)\n"
+    "    std::vector< elm::Component >::erase(std::vector< elm::Component >::iterator,std::vector< elm::Component >::iterator)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage >::size_type arg1 ;
-  std::vector< elm::InputStorage >::value_type *arg2 = 0 ;
+  std::vector< elm::Component >::size_type arg1 ;
+  std::vector< elm::Component >::value_type *arg2 = 0 ;
   size_t val1 ;
   int ecode1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::InputStorage > *result = 0 ;
+  std::vector< elm::Component > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",2,2,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< elm::InputStorage >::size_type >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg1 = static_cast< std::vector< elm::Component >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
   {
     try {
-      result = (std::vector< elm::InputStorage > *)new std::vector< elm::InputStorage >(arg1,(std::vector< elm::InputStorage >::value_type const &)*arg2);
+      result = (std::vector< elm::Component > *)new std::vector< elm::Component >(arg1,(std::vector< elm::Component >::value_type const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50400,7 +50476,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_3(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50432,7 +50508,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_ComponentVector__SWIG_1(self, args);
@@ -50445,7 +50521,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__InputStorage, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__Component, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_new_ComponentVector__SWIG_3(self, args);
@@ -50456,18 +50532,18 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ComponentVector'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::vector()\n"
-    "    std::vector< elm::InputStorage >::vector(std::vector< elm::InputStorage > const &)\n"
-    "    std::vector< elm::InputStorage >::vector(std::vector< elm::InputStorage >::size_type)\n"
-    "    std::vector< elm::InputStorage >::vector(std::vector< elm::InputStorage >::size_type,std::vector< elm::InputStorage >::value_type const &)\n");
+    "    std::vector< elm::Component >::vector()\n"
+    "    std::vector< elm::Component >::vector(std::vector< elm::Component > const &)\n"
+    "    std::vector< elm::Component >::vector(std::vector< elm::Component >::size_type)\n"
+    "    std::vector< elm::Component >::vector(std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::value_type *arg2 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -50476,22 +50552,22 @@ SWIGINTERN PyObject *_wrap_ComponentVector_push_back(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_push_back",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_push_back" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_push_back" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
   {
     try {
-      (arg1)->push_back((std::vector< elm::InputStorage >::value_type const &)*arg2);
+      (arg1)->push_back((std::vector< elm::Component >::value_type const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50515,21 +50591,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::value_type *result = 0 ;
+  std::vector< elm::Component >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_front",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_front" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_front" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (std::vector< elm::InputStorage >::value_type *) &((std::vector< elm::InputStorage > const *)arg1)->front();
+      result = (std::vector< elm::Component >::value_type *) &((std::vector< elm::Component > const *)arg1)->front();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50544,7 +50620,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_front(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50553,21 +50629,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::value_type *result = 0 ;
+  std::vector< elm::Component >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_back",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_back" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_back" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = (std::vector< elm::InputStorage >::value_type *) &((std::vector< elm::InputStorage > const *)arg1)->back();
+      result = (std::vector< elm::Component >::value_type *) &((std::vector< elm::Component > const *)arg1)->back();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50582,7 +50658,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_back(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50591,9 +50667,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::size_type arg2 ;
-  std::vector< elm::InputStorage >::value_type *arg3 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::size_type arg2 ;
+  std::vector< elm::Component >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50605,27 +50681,27 @@ SWIGINTERN PyObject *_wrap_ComponentVector_assign(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_assign",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_assign" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_assign" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_assign" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_assign" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
   {
     try {
-      (arg1)->assign(arg2,(std::vector< elm::InputStorage >::value_type const &)*arg3);
+      (arg1)->assign(arg2,(std::vector< elm::Component >::value_type const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50649,9 +50725,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::size_type arg2 ;
-  std::vector< elm::InputStorage >::value_type *arg3 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::size_type arg2 ;
+  std::vector< elm::Component >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50663,27 +50739,27 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_1(PyObject *SWIGUNUSEDPA
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_resize",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
   {
     try {
-      (arg1)->resize(arg2,(std::vector< elm::InputStorage >::value_type const &)*arg3);
+      (arg1)->resize(arg2,(std::vector< elm::Component >::value_type const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50717,7 +50793,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -50731,7 +50807,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -50739,7 +50815,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__InputStorage, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector_resize__SWIG_1(self, args);
@@ -50751,17 +50827,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_resize'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::resize(std::vector< elm::InputStorage >::size_type)\n"
-    "    std::vector< elm::InputStorage >::resize(std::vector< elm::InputStorage >::size_type,std::vector< elm::InputStorage >::value_type const &)\n");
+    "    std::vector< elm::Component >::resize(std::vector< elm::Component >::size_type)\n"
+    "    std::vector< elm::Component >::resize(std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::iterator arg2 ;
-  std::vector< elm::InputStorage >::value_type *arg3 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::iterator arg2 ;
+  std::vector< elm::Component >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50771,36 +50847,36 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::InputStorage >::iterator result;
+  std::vector< elm::Component >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_insert",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
     }
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
   {
     try {
-      result = std_vector_Sl_elm_InputStorage_Sg__insert__SWIG_0(arg1,arg2,(elm::InputStorage const &)*arg3);
+      result = std_vector_Sl_elm_Component_Sg__insert__SWIG_0(arg1,arg2,(elm::Component const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50815,7 +50891,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::InputStorage >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50825,10 +50901,10 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::iterator arg2 ;
-  std::vector< elm::InputStorage >::size_type arg3 ;
-  std::vector< elm::InputStorage >::value_type *arg4 = 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::iterator arg2 ;
+  std::vector< elm::Component >::size_type arg3 ;
+  std::vector< elm::Component >::value_type *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50843,38 +50919,38 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_1(PyObject *SWIGUNUSEDPA
   PyObject * obj3 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_insert",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
     }
   }
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::InputStorage >::size_type >(val3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  arg3 = static_cast< std::vector< elm::Component >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
   if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::InputStorage >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
   }
-  arg4 = reinterpret_cast< std::vector< elm::InputStorage >::value_type * >(argp4);
+  arg4 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp4);
   {
     try {
-      std_vector_Sl_elm_InputStorage_Sg__insert__SWIG_1(arg1,arg2,arg3,(elm::InputStorage const &)*arg4);
+      std_vector_Sl_elm_Component_Sg__insert__SWIG_1(arg1,arg2,arg3,(elm::Component const &)*arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50908,14 +50984,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__InputStorage, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector_insert__SWIG_0(self, args);
@@ -50925,19 +51001,19 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
   }
   if (argc == 4) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::InputStorage,std::allocator< elm::InputStorage > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::InputStorage >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
       if (_v) {
         {
           int res = SWIG_AsVal_size_t(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_elm__InputStorage, 0);
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_elm__Component, 0);
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_ComponentVector_insert__SWIG_1(self, args);
@@ -50950,16 +51026,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_insert'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::InputStorage >::insert(std::vector< elm::InputStorage >::iterator,std::vector< elm::InputStorage >::value_type const &)\n"
-    "    std::vector< elm::InputStorage >::insert(std::vector< elm::InputStorage >::iterator,std::vector< elm::InputStorage >::size_type,std::vector< elm::InputStorage >::value_type const &)\n");
+    "    std::vector< elm::Component >::insert(std::vector< elm::Component >::iterator,std::vector< elm::Component >::value_type const &)\n"
+    "    std::vector< elm::Component >::insert(std::vector< elm::Component >::iterator,std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
-  std::vector< elm::InputStorage >::size_type arg2 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::Component >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50968,16 +51044,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_reserve(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_reserve",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_reserve" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_reserve" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_reserve" "', argument " "2"" of type '" "std::vector< elm::InputStorage >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_reserve" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::InputStorage >::size_type >(val2);
+  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
   {
     try {
       (arg1)->reserve(arg2);
@@ -51004,21 +51080,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage >::size_type result;
+  std::vector< elm::Component >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_capacity",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_capacity" "', argument " "1"" of type '" "std::vector< elm::InputStorage > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_capacity" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::InputStorage > const *)arg1)->capacity();
+      result = ((std::vector< elm::Component > const *)arg1)->capacity();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -51042,17 +51118,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_ComponentVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::InputStorage > *arg1 = (std::vector< elm::InputStorage > *) 0 ;
+  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"delete_ComponentVector",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::InputStorage > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::InputStorage > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
   {
     try {
       delete arg1;
@@ -51080,7 +51156,7 @@ fail:
 SWIGINTERN PyObject *ComponentVector_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -51411,6 +51487,89 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSED
   {
     try {
       (arg1)->receive_utility_ca((std::string const &)*arg2,arg3,(double const &)*arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ComponentList_receive_allocation(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string arg3 = (std::string) "" ;
+  double arg4_defvalue = 1.0 ;
+  double *arg4 = (double *) &arg4_defvalue ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  double temp4 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "data",(char *) "param",(char *) "multiplier", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:ComponentList_receive_allocation",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_allocation" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (obj2) {
+    {
+      std::string *ptr = (std::string *)0;
+      int res = SWIG_AsPtr_std_string(obj2, &ptr);
+      if (!SWIG_IsOK(res) || !ptr) {
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_allocation" "', argument " "3"" of type '" "std::string""'"); 
+      }
+      arg3 = *ptr;
+      if (SWIG_IsNewObj(res)) delete ptr;
+    }
+  }
+  if (obj3) {
+    ecode4 = SWIG_AsVal_double(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ComponentList_receive_allocation" "', argument " "4"" of type '" "double""'");
+    } 
+    temp4 = static_cast< double >(val4);
+    arg4 = &temp4;
+  }
+  {
+    try {
+      (arg1)->receive_allocation((std::string const &)*arg2,arg3,(double const &)*arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -52727,7 +52886,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  elm::InputStorage *result = 0 ;
+  elm::Component *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
@@ -52744,7 +52903,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
   {
     try {
       try {
-        result = (elm::InputStorage *) &elm_ComponentCellcodeMap___getitem__(arg1,(long long const &)*arg2);
+        result = (elm::Component *) &elm_ComponentCellcodeMap___getitem__(arg1,(long long const &)*arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -52764,7 +52923,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__InputStorage, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -52775,7 +52934,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___setitem__(PyObject *SWIGUNUSED
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
   elm::cellcode *arg2 = 0 ;
-  elm::InputStorage *arg3 = 0 ;
+  elm::Component *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   elm::cellcode temp2 ;
@@ -52799,17 +52958,17 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___setitem__(PyObject *SWIGUNUSED
   } 
   temp2 = static_cast< elm::cellcode >(val2);
   arg2 = &temp2;
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__InputStorage,  0  | 0);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::InputStorage const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::Component const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::InputStorage const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::Component const &""'"); 
   }
-  arg3 = reinterpret_cast< elm::InputStorage * >(argp3);
+  arg3 = reinterpret_cast< elm::Component * >(argp3);
   {
     try {
-      elm_ComponentCellcodeMap___setitem__(arg1,(long long const &)*arg2,(elm::InputStorage const &)*arg3);
+      elm_ComponentCellcodeMap___setitem__(arg1,(long long const &)*arg2,(elm::Component const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -67150,6 +67309,66 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_Coef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  etk::ndarray *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_Coef",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Coef" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Coef" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_Coef" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (etk::ndarray *)(arg1)->Coef((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    if (!result) {
+      Py_RETURN_NONE;
+    } else {
+      resultobj = result->get_object();
+    }
+  }
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -69768,6 +69987,96 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_parameter_values__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::vector< double,std::allocator< double > > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_parameter_values",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_parameter_values" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    int res = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Model2_parameter_values" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > >""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      (arg1)->parameter_values(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_parameter_values(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Model2_parameter_values__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = swig::asptr(argv[1], (std::vector<double,std::allocator< double > >**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Model2_parameter_values__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_parameter_values'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::Model2::parameter_values() const\n"
+    "    elm::Model2::parameter_values(std::vector< double,std::allocator< double > >)\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_utilityca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -70714,7 +71023,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *arg2 = (std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *) 0 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *arg2 = (std::vector< elm::Component,std::allocator< elm::Component > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -70728,11 +71037,11 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_set(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Input_QuantityCA_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Input_QuantityCA_set" "', argument " "2"" of type '" "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Input_QuantityCA_set" "', argument " "2"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > *""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::Component,std::allocator< elm::Component > > * >(argp2);
   if (arg1) (arg1)->Input_QuantityCA = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -70747,7 +71056,7 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *result = 0 ;
+  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Input_QuantityCA_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -70755,8 +71064,8 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Input_QuantityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *)& ((arg1)->Input_QuantityCA);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0 |  0 );
+  result = (std::vector< elm::Component,std::allocator< elm::Component > > *)& ((arg1)->Input_QuantityCA);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -75672,96 +75981,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model2_parameter_values__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  std::vector< double,std::allocator< double > > arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"Model2_parameter_values",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_parameter_values" "', argument " "1"" of type '" "elm::Model2 *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "Model2_parameter_values" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > >""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  {
-    try {
-      elm_Model2_parameter_values__SWIG_1(arg1,arg2);
-    } catch (const etk::PythonStopIteration& e) {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    } catch (const etk::SQLiteError& e) {
-      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const etk::FacetError& e) {
-      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
-      return NULL;
-    } catch (const std::exception& e) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
-      return NULL;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_Model2_parameter_values(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Model2_parameter_values__SWIG_0(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = swig::asptr(argv[1], (std::vector<double,std::allocator< double > >**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Model2_parameter_values__SWIG_1(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model2_parameter_values'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    elm::Model2::parameter_values() const\n"
-    "    elm::Model2::parameter_values(std::vector< double,std::allocator< double > >)\n");
-  return 0;
-}
-
-
 SWIGINTERN PyObject *_wrap_Model2_d_loglike__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -76914,10 +77133,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Component_data_get", _wrap_Component_data_get, METH_VARARGS, NULL},
 	 { (char *)"Component_param_set", _wrap_Component_param_set, METH_VARARGS, NULL},
 	 { (char *)"Component_param_get", _wrap_Component_param_get, METH_VARARGS, NULL},
-	 { (char *)"Component_altcode_set", _wrap_Component_altcode_set, METH_VARARGS, NULL},
-	 { (char *)"Component_altcode_get", _wrap_Component_altcode_get, METH_VARARGS, NULL},
-	 { (char *)"Component_altname_set", _wrap_Component_altname_set, METH_VARARGS, NULL},
-	 { (char *)"Component_altname_get", _wrap_Component_altname_get, METH_VARARGS, NULL},
+	 { (char *)"Component__altcode_set", _wrap_Component__altcode_set, METH_VARARGS, NULL},
+	 { (char *)"Component__altcode_get", _wrap_Component__altcode_get, METH_VARARGS, NULL},
+	 { (char *)"Component__altname_set", _wrap_Component__altname_set, METH_VARARGS, NULL},
+	 { (char *)"Component__altname_get", _wrap_Component__altname_get, METH_VARARGS, NULL},
+	 { (char *)"Component__upcode_set", _wrap_Component__upcode_set, METH_VARARGS, NULL},
+	 { (char *)"Component__upcode_get", _wrap_Component__upcode_get, METH_VARARGS, NULL},
+	 { (char *)"Component__dncode_set", _wrap_Component__dncode_set, METH_VARARGS, NULL},
+	 { (char *)"Component__dncode_get", _wrap_Component__dncode_get, METH_VARARGS, NULL},
 	 { (char *)"Component_multiplier_set", _wrap_Component_multiplier_set, METH_VARARGS, NULL},
 	 { (char *)"Component_multiplier_get", _wrap_Component_multiplier_get, METH_VARARGS, NULL},
 	 { (char *)"Component___repr__", _wrap_Component___repr__, METH_VARARGS, NULL},
@@ -76965,6 +77188,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComponentList_parentmodel_get", _wrap_ComponentList_parentmodel_get, METH_VARARGS, NULL},
 	 { (char *)"new_ComponentList", _wrap_new_ComponentList, METH_VARARGS, NULL},
 	 { (char *)"ComponentList_receive_utility_ca", (PyCFunction) _wrap_ComponentList_receive_utility_ca, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ComponentList_receive_allocation", (PyCFunction) _wrap_ComponentList_receive_allocation, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComponentList_receive_utility_co", _wrap_ComponentList_receive_utility_co, METH_VARARGS, NULL},
 	 { (char *)"ComponentList_receive_utility_co_kwd", (PyCFunction) _wrap_ComponentList_receive_utility_co_kwd, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComponentList___repr__", _wrap_ComponentList___repr__, METH_VARARGS, NULL},
@@ -77281,6 +77505,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2__set_root_cellcode", _wrap_Model2__set_root_cellcode, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCA", _wrap_Model2_CoefUtilityCA, METH_VARARGS, NULL},
 	 { (char *)"Model2_CoefUtilityCO", _wrap_Model2_CoefUtilityCO, METH_VARARGS, NULL},
+	 { (char *)"Model2_Coef", _wrap_Model2_Coef, METH_VARARGS, NULL},
 	 { (char *)"Model2_needs", _wrap_Model2_needs, METH_VARARGS, NULL},
 	 { (char *)"Model2_provision", _wrap_Model2_provision, METH_VARARGS, NULL},
 	 { (char *)"Model2_is_provisioned", _wrap_Model2_is_provisioned, METH_VARARGS, NULL},
@@ -77294,6 +77519,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_probability", _wrap_Model2_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_set", _wrap_Model2_hessian_matrix_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_get", _wrap_Model2_hessian_matrix_get, METH_VARARGS, NULL},
+	 { (char *)"Model2_parameter_values", _wrap_Model2_parameter_values, METH_VARARGS, NULL},
 	 { (char *)"Model2_utilityca", _wrap_Model2_utilityca, METH_VARARGS, NULL},
 	 { (char *)"Model2_utilityco", _wrap_Model2_utilityco, METH_VARARGS, NULL},
 	 { (char *)"Model2_utility_set", _wrap_Model2_utility_set, METH_VARARGS, NULL},
@@ -77354,7 +77580,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_nCases", _wrap_Model2_nCases, METH_VARARGS, NULL},
 	 { (char *)"Model2_alternative_names", _wrap_Model2_alternative_names, METH_VARARGS, NULL},
 	 { (char *)"Model2_alternative_codes", _wrap_Model2_alternative_codes, METH_VARARGS, NULL},
-	 { (char *)"Model2_parameter_values", _wrap_Model2_parameter_values, METH_VARARGS, NULL},
 	 { (char *)"Model2_d_loglike", _wrap_Model2_d_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_d2_loglike", _wrap_Model2_d2_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_negative_loglike", _wrap_Model2_negative_loglike, METH_VARARGS, NULL},
@@ -77370,11 +77595,11 @@ static PyMethodDef SwigMethods[] = {
 static void *_p_elm__paramArrayTo_p_etk__three_dim(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((etk::three_dim *)  ((elm::paramArray *) x));
 }
-static void *_p_elm__ComponentListTo_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *)  ((elm::ComponentList *) x));
-}
 static void *_p_elm__Model2To_p_sherpa(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((sherpa *)  ((elm::Model2 *) x));
+}
+static void *_p_elm__ComponentListTo_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((std::vector< elm::Component,std::allocator< elm::Component > > *)  ((elm::ComponentList *) x));
 }
 static void *_p_elm__FacetTo_p_elm__Fountain(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((elm::Fountain *)  ((elm::Facet *) x));
@@ -77409,6 +77634,7 @@ static swig_type_info _swigt__p__object = {"_p__object", "_object *|PyObject *",
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__Component = {"_p_elm__Component", "std::vector< elm::Component >::value_type *|elm::Component *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentCellcodeMap = {"_p_elm__ComponentCellcodeMap", "elm::ComponentCellcodeMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentEdgeMap = {"_p_elm__ComponentEdgeMap", "elm::ComponentEdgeMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentGraphDNA = {"_p_elm__ComponentGraphDNA", "elm::ComponentGraphDNA *", 0, 0, (void*)0, 0};
@@ -77416,7 +77642,6 @@ static swig_type_info _swigt__p_elm__ComponentList = {"_p_elm__ComponentList", "
 static swig_type_info _swigt__p_elm__ComponentListPair = {"_p_elm__ComponentListPair", "elm::ComponentListPair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Facet = {"_p_elm__Facet", "elm::Facet *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Fountain = {"_p_elm__Fountain", "elm::Fountain *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__InputStorage = {"_p_elm__InputStorage", "std::vector< elm::InputStorage >::value_type *|elm::InputStorage *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Model2 = {"_p_elm__Model2", "elm::Model2 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ParameterList = {"_p_elm__ParameterList", "elm::ParameterList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__QuerySet = {"_p_elm__QuerySet", "elm::QuerySet *", 0, 0, (void*)0, 0};
@@ -77448,7 +77673,7 @@ static swig_type_info _swigt__p_sherpa_pack = {"_p_sherpa_pack", "sherpa_pack *|
 static swig_type_info _swigt__p_sherpa_result = {"_p_sherpa_result", "sherpa_result *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_double_t = {"_p_std__allocatorT_double_t", "std::vector< double >::allocator_type *|std::allocator< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__allocatorT_elm__InputStorage_t = {"_p_std__allocatorT_elm__InputStorage_t", "std::vector< elm::InputStorage >::allocator_type *|std::allocator< elm::InputStorage > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_elm__Component_t = {"_p_std__allocatorT_elm__Component_t", "std::vector< elm::Component >::allocator_type *|std::allocator< elm::Component > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_int_t = {"_p_std__allocatorT_int_t", "std::vector< int >::allocator_type *|std::allocator< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_long_long_t = {"_p_std__allocatorT_long_long_t", "std::vector< long long >::allocator_type *|std::list< long long >::allocator_type *|std::allocator< long long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_sherpa_pack_t = {"_p_std__allocatorT_sherpa_pack_t", "std::vector< sherpa_pack >::allocator_type *|std::allocator< sherpa_pack > *", 0, 0, (void*)0, 0};
@@ -77476,7 +77701,7 @@ static swig_type_info _swigt__p_std__shared_ptrT_elm__datamatrix_t_t = {"_p_std_
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT__Tp__Alloc_t = {"_p_std__vectorT__Tp__Alloc_t", "std::vector< _Tp,_Alloc > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t = {"_p_std__vectorT_double_std__allocatorT_double_t_t", "std::vector< double,std::allocator< double > > *|std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t = {"_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t", "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *|std::vector< elm::InputStorage > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t = {"_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t", "std::vector< elm::Component,std::allocator< elm::Component > > *|std::vector< elm::Component > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_int_std__allocatorT_int_t_t = {"_p_std__vectorT_int_std__allocatorT_int_t_t", "std::vector< int,std::allocator< int > > *|std::vector< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t = {"_p_std__vectorT_long_long_std__allocatorT_long_long_t_t", "elm::cellcodevec *|std::vector< long long,std::allocator< long long > > *|std::vector< long long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t = {"_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t", "std::vector< sherpa_pack,std::allocator< sherpa_pack > > *|std::vector< sherpa_pack > *", 0, 0, (void*)0, 0};
@@ -77492,6 +77717,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_difference_type,
+  &_swigt__p_elm__Component,
   &_swigt__p_elm__ComponentCellcodeMap,
   &_swigt__p_elm__ComponentEdgeMap,
   &_swigt__p_elm__ComponentGraphDNA,
@@ -77499,7 +77725,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_elm__ComponentListPair,
   &_swigt__p_elm__Facet,
   &_swigt__p_elm__Fountain,
-  &_swigt__p_elm__InputStorage,
   &_swigt__p_elm__Model2,
   &_swigt__p_elm__ParameterList,
   &_swigt__p_elm__QuerySet,
@@ -77531,7 +77756,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_sherpa_result,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_double_t,
-  &_swigt__p_std__allocatorT_elm__InputStorage_t,
+  &_swigt__p_std__allocatorT_elm__Component_t,
   &_swigt__p_std__allocatorT_int_t,
   &_swigt__p_std__allocatorT_long_long_t,
   &_swigt__p_std__allocatorT_sherpa_pack_t,
@@ -77559,7 +77784,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__string,
   &_swigt__p_std__vectorT__Tp__Alloc_t,
   &_swigt__p_std__vectorT_double_std__allocatorT_double_t_t,
-  &_swigt__p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t,
+  &_swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,
   &_swigt__p_std__vectorT_int_std__allocatorT_int_t_t,
   &_swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t,
   &_swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t,
@@ -77575,6 +77800,7 @@ static swig_cast_info _swigc__p__object[] = {  {&_swigt__p__object, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__Component[] = {  {&_swigt__p_elm__Component, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentCellcodeMap[] = {  {&_swigt__p_elm__ComponentCellcodeMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentEdgeMap[] = {  {&_swigt__p_elm__ComponentEdgeMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentGraphDNA[] = {  {&_swigt__p_elm__ComponentGraphDNA, 0, 0, 0},{0, 0, 0, 0}};
@@ -77582,7 +77808,6 @@ static swig_cast_info _swigc__p_elm__ComponentList[] = {  {&_swigt__p_elm__Compo
 static swig_cast_info _swigc__p_elm__ComponentListPair[] = {  {&_swigt__p_elm__ComponentListPair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Facet[] = {  {&_swigt__p_elm__Facet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Fountain[] = {  {&_swigt__p_elm__Facet, _p_elm__FacetTo_p_elm__Fountain, 0, 0},  {&_swigt__p_elm__Fountain, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_elm__InputStorage[] = {  {&_swigt__p_elm__InputStorage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Model2[] = {  {&_swigt__p_elm__Model2, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ParameterList[] = {  {&_swigt__p_elm__Model2, _p_elm__Model2To_p_elm__ParameterList, 0, 0},  {&_swigt__p_sherpa, _p_sherpaTo_p_elm__ParameterList, 0, 0},  {&_swigt__p_elm__ParameterList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__QuerySet[] = {  {&_swigt__p_elm__QuerySetTwoTable, _p_elm__QuerySetTwoTableTo_p_elm__QuerySet, 0, 0},  {&_swigt__p_elm__QuerySetSimpleCO, _p_elm__QuerySetSimpleCOTo_p_elm__QuerySet, 0, 0},  {&_swigt__p_elm__QuerySet, 0, 0, 0},{0, 0, 0, 0}};
@@ -77614,7 +77839,7 @@ static swig_cast_info _swigc__p_sherpa_pack[] = {  {&_swigt__p_sherpa_pack, 0, 0
 static swig_cast_info _swigc__p_sherpa_result[] = {  {&_swigt__p_sherpa_result, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_double_t[] = {  {&_swigt__p_std__allocatorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__allocatorT_elm__InputStorage_t[] = {  {&_swigt__p_std__allocatorT_elm__InputStorage_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_elm__Component_t[] = {  {&_swigt__p_std__allocatorT_elm__Component_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_int_t[] = {  {&_swigt__p_std__allocatorT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_long_long_t[] = {  {&_swigt__p_std__allocatorT_long_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_sherpa_pack_t[] = {  {&_swigt__p_std__allocatorT_sherpa_pack_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -77642,7 +77867,7 @@ static swig_cast_info _swigc__p_std__shared_ptrT_elm__datamatrix_t_t[] = {  {&_s
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT__Tp__Alloc_t[] = {  {&_swigt__p_std__vectorT__Tp__Alloc_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_double_std__allocatorT_double_t_t[] = {  {&_swigt__p_std__vectorT_double_std__allocatorT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t[] = {  {&_swigt__p_elm__ComponentList, _p_elm__ComponentListTo_p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0, 0},  {&_swigt__p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t[] = {  {&_swigt__p_elm__ComponentList, _p_elm__ComponentListTo_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0, 0},  {&_swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_int_std__allocatorT_int_t_t[] = {  {&_swigt__p_std__vectorT_int_std__allocatorT_int_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_long_long_std__allocatorT_long_long_t_t[] = {  {&_swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t[] = {  {&_swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -77658,6 +77883,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_difference_type,
+  _swigc__p_elm__Component,
   _swigc__p_elm__ComponentCellcodeMap,
   _swigc__p_elm__ComponentEdgeMap,
   _swigc__p_elm__ComponentGraphDNA,
@@ -77665,7 +77891,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_elm__ComponentListPair,
   _swigc__p_elm__Facet,
   _swigc__p_elm__Fountain,
-  _swigc__p_elm__InputStorage,
   _swigc__p_elm__Model2,
   _swigc__p_elm__ParameterList,
   _swigc__p_elm__QuerySet,
@@ -77697,7 +77922,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_sherpa_result,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_double_t,
-  _swigc__p_std__allocatorT_elm__InputStorage_t,
+  _swigc__p_std__allocatorT_elm__Component_t,
   _swigc__p_std__allocatorT_int_t,
   _swigc__p_std__allocatorT_long_long_t,
   _swigc__p_std__allocatorT_sherpa_pack_t,
@@ -77725,7 +77950,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__string,
   _swigc__p_std__vectorT__Tp__Alloc_t,
   _swigc__p_std__vectorT_double_std__allocatorT_double_t_t,
-  _swigc__p_std__vectorT_elm__InputStorage_std__allocatorT_elm__InputStorage_t_t,
+  _swigc__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,
   _swigc__p_std__vectorT_int_std__allocatorT_int_t_t,
   _swigc__p_std__vectorT_long_long_std__allocatorT_long_long_t_t,
   _swigc__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t,

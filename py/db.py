@@ -1495,6 +1495,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				provide[key], c = self.array_idca(vars=req.get_variables(),n_cases=n_cases)
 			elif key[-2:]=="CO":
 				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
+			elif key=="Allocation":
+				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
 			if cases is None:
 				cases = c
 				matched_cases += [key,]

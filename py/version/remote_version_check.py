@@ -319,6 +319,10 @@ def filter_url(pkg_type, url):
 
 
 if __name__ == '__main__':
+	
+	
+	with open(os.path.join(directory,"last_check.py"), 'w') as f:
+		f.write("time = {}\n".format(time.time()))
 	remote_version = CheeseShop(yolk_dir=directory).query_versions_pypi_larch()[0]
 	with open(os.path.join(directory,"remote.py"), 'w') as f:
 		f.write("version = '{}'\n".format(remote_version))

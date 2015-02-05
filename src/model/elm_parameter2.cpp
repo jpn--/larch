@@ -343,6 +343,7 @@ void elm::paramArray::delete_and_clear()
 std::string elm::paramArray::__str__() const
 {	
 	ostringstream ret;
+	ret << "<class larch.ParameterLinkArray size=("<<rows<<","<<cols<<","<<deps<<")>\n";
 	for (size_t r=0; r<rows; r++) for (size_t c=0; c<cols; c++) for (size_t d=0; d<deps; d++) {
 		if (z[r*cols*deps+c*deps+d]) ret << "["<<r<<","<<c<<","<<d<<"]" << z[r*cols*deps+c*deps+d]->print();
 	}
@@ -401,6 +402,17 @@ void elm::push_to_freedoms2  (const paramArray& par, const double* ops,       do
 	}
 }
 
+std::string elm::push_to_freedoms2_  (const paramArray& par, const double* ops,       double* fr)
+{
+	std::ostringstream x;
+	for (unsigned i=0; i<par.length(); i++) {
+		if (par[i]){
+			par[i]->pushvalue(fr,ops[i]);
+			x << "pushed "<<ops[i]<<" using par["<<i<<"]="<< par[i]->print();
+		}
+	}
+	return x.str();
+}
 
 
 

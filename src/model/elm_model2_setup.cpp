@@ -44,6 +44,22 @@ etk::strvec elm::__identify_needs(const ComponentList& Input_List)
 	return u_ca;
 }
 
+etk::strvec elm::__identify_needs(const ComponentEdgeMap& Input_EdgeMap)
+{
+	etk::strvec data_names;
+	for (auto iter=Input_EdgeMap.begin(); iter!=Input_EdgeMap.end(); iter++) {
+		__identify_additional_needs(iter->second, data_names);
+	}
+	return data_names;
+}
+
+void elm::__identify_additional_needs(const ComponentList& Input_List, etk::strvec& needs)
+{
+	for (unsigned b=0; b<Input_List.size(); b++) {
+		needs.push_back_if_unique(Input_List[b].data_name);
+	}
+}
+
 
 void __check_validity_of_needs(const etk::strvec& needs, Facet*	_Data, int k, etk::logging_service* msg)
 {
@@ -129,7 +145,7 @@ void _setUp_linear_data_and_params
 void _setUp_linear_data_and_params_edges
 (	ParameterList&			self
  ,	VAS_System&				Xylem
- ,	ComponentList&			Input_Alloc
+ ,	ComponentEdgeMap&		Input_Alloc
  ,	paramArray&				Params_Alloc
  ,	etk::logging_service*	msg
 )
@@ -139,26 +155,39 @@ void _setUp_linear_data_and_params_edges
 	
 	
 	// idco //
-	etk::strvec u_co = __identify_needs(Input_Alloc);
+	etk::strvec data_names = __identify_needs(Input_Alloc);
 
 	// resize the paramArray
 	auto s = Xylem.n_compet_alloc();
-	BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
-	Params_Alloc.resize(u_co.size(), s);
+	BUGGER_(msg, "setting Params_Alloc size to ("<<data_names.size()<<","<< s <<")");
+	Params_Alloc.resize(data_names.size(), s);
 	
 	// Third, populate the paramArray
-	for (unsigned b=0; b<Input_Alloc.size(); b++) {
-		BUGGER_(msg, "setting Params_?CO b="<<b);
-		slot = u_co.push_back_if_unique(Input_Alloc[b].data_name);
-		
-		auto edge = Xylem.edge_from_codes(Input_Alloc[b]._upcode, Input_Alloc[b]._dncode);
+	for (auto iter=Input_Alloc.begin(); iter!=Input_Alloc.end(); iter++) {
+		auto edge = Xylem.edge_from_codes(iter->first.up, iter->first.dn);
 		if (!edge) {
 			OOPS("allocation input does not specify a valid network link.");
 		}
-		slot2 = edge->alloc_slot();
 		
-		Params_Alloc(slot,slot2) = self._generate_parameter(Input_Alloc[b].param_name, Input_Alloc[b].multiplier);
+		try {
+			slot2 = edge->alloc_slot();
+		} SPOO {
+			slot2 = UINT_MAX;
+		}
+		
+		if (slot2 != UINT_MAX) {
+			for (unsigned b=0; b<iter->second.size(); b++) {
+				BUGGER_(msg, "setting Params_?CO b="<<b);
+				slot = data_names.push_back_if_unique(iter->second[b].data_name);
+				Params_Alloc(slot,slot2) = self._generate_parameter(iter->second[b].param_name, iter->second[b].multiplier);
+			}
+		}
+		
+		
 	}
+	
+	
+	
 	
 	BUGGER_(msg, "_setUp_linear_data_and_params_edges complete");
 	
@@ -207,6 +236,15 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 
 }
 
+void elm::Model2::_setUp_allocation_data_and_params()
+{
+	BUGGER(msg) << "--Params_Allocation--\n";
+
+	_setUp_linear_data_and_params_edges(*this, Xylem, Input_Edges, Params_Edges, &msg);
+
+	BUGGER(msg) << "Params_Allocation \n" << Params_Edges.__str__();
+
+}
 
 
 
@@ -305,11 +343,18 @@ void elm::Model2::setUp(bool and_load_data)
 
 	BUGGER(msg) << "Rebuilding Xylem network...";
 	elm::cellcode root = Xylem.root_cellcode();
+	Xylem.touch();
 	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 	
 	if (Xylem.n_branches() > 0) {
 		BUGGER(msg) << "Setting model features to include nesting.";
 		features |= MODELFEATURES_NESTING;
+	}
+
+	if (Xylem.n_compet_alloc() > 0) {
+		BUGGER(msg) << "Setting model features to include nest allocation.";
+		features |= MODELFEATURES_NESTING;
+		features |= MODELFEATURES_ALLOCATION;
 	}
 	
 	BUGGER(msg) << "Setting up utility parameters...";
@@ -318,7 +363,11 @@ void elm::Model2::setUp(bool and_load_data)
 		elm::cellcode root = Xylem.root_cellcode();
 		Xylem.touch();
 		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
-		_setUp_NL();
+		if (features & MODELFEATURES_ALLOCATION) {
+			_setUp_NGEV();
+		} else {
+			_setUp_NL();
+		}
 	} else {
 		_setUp_MNL();
 	}
@@ -328,6 +377,11 @@ void elm::Model2::setUp(bool and_load_data)
 	if (Input_Sampling.ca.size() || Input_Sampling.co.size()) {
 		_setUp_samplefactor_data_and_params();
 	}
+	
+	if (features & MODELFEATURES_ALLOCATION) {
+		_setUp_allocation_data_and_params();
+	}
+	
 	_setUp_coef_and_grad_arrays();
 	
 	if (features & MODELFEATURES_NESTING) {
@@ -418,6 +472,7 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 	ret += _subprovision("UtilityCO", Data_UtilityCO, input, need, ncases);
 	ret += _subprovision("SamplingCA", Data_SamplingCA, input, need, ncases);
 	ret += _subprovision("SamplingCO", Data_SamplingCO, input, need, ncases);
+	ret += _subprovision("Allocation", Data_Allocation, input, need, ncases);
 
 	ret += _subprovision("Avail",  Data_Avail , input, need, ncases);
 	ret += _subprovision("Choice", Data_Choice, input, need, ncases);
@@ -468,6 +523,11 @@ std::map<std::string, darray_req> elm::Model2::needs() const
 		requires["SamplingCO"].set_variables(s_co);
 	}
 	
+	etk::strvec allo = __identify_needs(Input_Edges);
+	if (allo.size()) {
+		requires["Allocation"] = darray_req (2,NPY_DOUBLE);
+		requires["Allocation"].set_variables(allo);
+	}
 	
 	requires["Avail"] = darray_req (3,NPY_BOOL);
 	requires["Weight"] = darray_req (2,NPY_DOUBLE);
@@ -518,6 +578,7 @@ int elm::Model2::is_provisioned(bool ex) const
 	i |= _is_subprovisioned("UtilityCO", Data_UtilityCO, requires, ex);
 	i |= _is_subprovisioned("SamplingCA", Data_SamplingCA, requires, ex);
 	i |= _is_subprovisioned("SamplingCO", Data_SamplingCO, requires, ex);
+	i |= _is_subprovisioned("Allocation", Data_Allocation, requires, ex);
 	
 	i |= _is_subprovisioned("Avail", Data_Avail, requires, ex);
 	i |= _is_subprovisioned("Weight", Data_Weight, requires, ex);
@@ -538,12 +599,27 @@ const elm::darray* elm::Model2::Data(const std::string& label)
 	if (label=="UtilityCO") return Data_UtilityCO ?   (&*Data_UtilityCO) : nullptr;
 	if (label=="SamplingCA") return Data_SamplingCA ? (&*Data_SamplingCA) : nullptr;
 	if (label=="SamplingCO") return Data_SamplingCO ? (&*Data_SamplingCO) : nullptr;
+	if (label=="Allocation") return Data_Allocation ? (&*Data_Allocation) : nullptr;
 
 	if (label=="Avail" ) return Data_Avail ?  (&*Data_Avail ) : nullptr;
 	if (label=="Choice") return Data_Choice ? (&*Data_Choice) : nullptr;
 	if (label=="Weight") return Data_Weight ? (&*Data_Weight) : nullptr;
 
 	OOPS(label, " is not a valid label for model data");
+	
+}
+
+
+
+const etk::ndarray* elm::Model2::Coef(const std::string& label)
+{
+	if (label=="UtilityCA") return &Coef_UtilityCA;
+	if (label=="UtilityCO") return &Coef_UtilityCO   ;
+	if (label=="SamplingCA") return &Coef_SamplingCA ;
+	if (label=="SamplingCO") return &Coef_SamplingCO ;
+	if (label=="Allocation") return &Coef_Edges ;
+
+	OOPS(label, " is not a valid label for model coefficients");
 	
 }
 

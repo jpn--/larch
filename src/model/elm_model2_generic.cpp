@@ -37,6 +37,7 @@ elm::Model2::Model2()
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
+, Data_Allocation (nullptr)
 //, Data_QuantityCA (nullptr)
 //, Data_QuantLogSum(nullptr)
 //, Data_LogSum     (nullptr)
@@ -74,6 +75,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
+, Data_Allocation (nullptr)
 //, Data_QuantityCA (nullptr)
 //, Data_QuantLogSum(nullptr)
 //, Data_LogSum     (nullptr)
@@ -148,8 +150,6 @@ elm::ca_co_packet elm::Model2::utility_packet()
 
 elm::ca_co_packet elm::Model2::sampling_packet()
 {
-//	if (Data_SamplingCA->fully_loaded() && Data_SamplingCO->fully_loaded()) {
-//		BUGGER(msg) << "spawning sampling packet fully loaded";
 		return elm::ca_co_packet(&Params_SamplingCA	,
 								 &Params_SamplingCO	,
 								 &Coef_SamplingCA	,
@@ -157,25 +157,18 @@ elm::ca_co_packet elm::Model2::sampling_packet()
 								 Data_SamplingCA	,
 								 Data_SamplingCO	,
 								 &SamplingWeight	);
-//	} else {
-//		BUGGER(msg) << "Data_SamplingCA->fully_loaded = " << Data_SamplingCA->fully_loaded();
-//		BUGGER(msg) << "Data_SamplingCO->fully_loaded = " << Data_SamplingCO->fully_loaded();
-//		WARN(msg) << "spawning sampling packet when data is not fully loaded, things are gonna be slow...";
-//		ScrapePtr d_ca = Data_SamplingCA->copy();
-//		ScrapePtr d_co = Data_SamplingCO->copy();
-//
-//		return elm::ca_co_packet(&Params_SamplingCA	,
-//								 &Params_SamplingCO	,
-//								 &Coef_SamplingCA	,
-//								 &Coef_SamplingCO	,
-//								 Data_SamplingCA	,
-//								 Data_SamplingCO	,
-//								 Data_SamplingCA	,
-//								 Data_SamplingCO	,
-//								 &SamplingWeight	);
-//	}
 }
 
+elm::ca_co_packet elm::Model2::allocation_packet()
+{
+		return elm::ca_co_packet(nullptr	,
+								 &Params_Edges	,
+								 nullptr	,
+								 &Coef_Edges	,
+								 nullptr	,
+								 Data_Allocation	,
+								 &Allocation	);
+}
 
 
 
@@ -1022,22 +1015,49 @@ std::string elm::Model2::save_buffer() const
 
 
 
+void elm::Model2::parameter_values(std::vector<double> v) {
+	
+	_parameter_update();
+	if (v.size() != dF()) {
+		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
+	}
+	for (unsigned z=0; z<v.size(); z++) {
+		if (FInfo[FNames[z]].holdfast) {
+			if (v[z] != FInfo[FNames[z]].value) {
+				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+			}
+		} else {
+			FCurrent[z] = v[z];
+			FInfo[FNames[z]].value = v[z];
+		}
+	}
+	freshen();
+
+}
+
+
 
 PyObject* elm::Model2::d_loglike(std::vector<double> v) {
 		
-	this->setUp();
-	//if (!this->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	//this->_parameter_update();
-	if (v.size() != this->dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",this->dF(),"), you gave ",v.size(),".");
+	setUp();
+	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+	_parameter_update();
+	if (v.size() != dF()) {
+		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		this->FCurrent[z] = v[z];
+		if (FInfo[FNames[z]].holdfast) {
+			if (v[z] != FInfo[FNames[z]].value) {
+				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+			}
+		} else {
+			FCurrent[z] = v[z];
+		}
 	}
-	this->freshen();
-	this->setUp();
-	//if (!this->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	this->_parameter_update();
+	freshen();
+	
 	etk::ndarray g = this->gradient();
 	bool z = true;
 	for (size_t i=0; i!=g.size(); i++) {
@@ -1064,20 +1084,26 @@ PyObject* elm::Model2::d_loglike(std::vector<double> v) {
 
 
 PyObject* elm::Model2::negative_d_loglike(std::vector<double> v) {
-	
-	this->setUp();
-	//if (!this->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	//this->_parameter_update();
-	if (v.size() != this->dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",this->dF(),"), you gave ",v.size(),".");
+
+
+	setUp();
+	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+	_parameter_update();
+	if (v.size() != dF()) {
+		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		this->FCurrent[z] = v[z];
+		if (FInfo[FNames[z]].holdfast) {
+			if (v[z] != FInfo[FNames[z]].value) {
+				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+			}
+		} else {
+			FCurrent[z] = v[z];
+		}
 	}
-	this->freshen();
-	this->setUp();
-	//if (!this->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	this->_parameter_update();
+	freshen();
+
 	etk::ndarray g = this->gradient();
 	bool z = true;
 	for (size_t i=0; i!=g.size(); i++) {

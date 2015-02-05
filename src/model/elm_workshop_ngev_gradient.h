@@ -1,0 +1,141 @@
+/*
+ *  elm_model.cpp
+ *
+ *  Copyright 2007-2015 Jeffrey Newman
+ *
+ *  Larch is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  Larch is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with Larch.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ */
+
+#ifndef __ELM_WORKSHOP_NGEV_GRADIENT_H__
+#define __ELM_WORKSHOP_NGEV_GRADIENT_H__
+
+
+#include <cstring>
+#include "elm_model2.h"
+#include "elm_parameter2.h"
+#include "elm_sql_scrape.h"
+#include "elm_names.h"
+#include "etk_workshop.h"
+#include <iostream>
+
+
+namespace elm {
+
+
+
+
+
+
+
+
+
+
+class workshop_ngev_gradient
+: public etk::workshop
+{
+
+public:
+
+	unsigned dF;
+	unsigned nNodes;
+	
+	// Fused Parameter Block Sizes
+	size_t nCA;
+	size_t nCO;
+	size_t nMU;
+	size_t nSA;
+	size_t nSO;
+	size_t nAO;
+	size_t nPar;
+	
+	inline size_t offset_mu() {return nCA+nCO;}
+	inline size_t offset_sampadj() {return nCA+nCO+nMU;}
+	inline size_t offset_alloc() {return nCA+nCO+nMU+nSA+nSO;}
+	
+	etk::memarray_raw dUtil      ;
+	etk::memarray_raw dProb      ;
+
+	etk::memarray_raw dSampWgt   ;
+	etk::memarray_raw dAdjProb   ;
+
+	etk::memarray_raw Workspace  ;
+
+	etk::memarray_raw GradT_Fused    ;
+	etk::memarray_raw CaseGrad       ;
+	
+	etk::memarray_raw workshopGCurrent;
+	etk::memarray_symmetric workshopBHHH   ;
+
+	const paramArray* Params_LogSum;
+	
+	elm::darray_ptr Data_Choice;
+	elm::darray_ptr Data_Weight;
+
+	const etk::memarray* _Probability;
+	const etk::memarray* _AdjProbability;
+	const etk::memarray* _Cond_Prob;
+	const VAS_System* _Xylem;
+	etk::memarray* _GCurrent;
+	etk::memarray_symmetric* _Bhhh;
+	boosted::mutex* _lock;
+	
+	int threadnumber;
+	etk::logging_service* msg_;
+
+	elm::ca_co_packet UtilPacket;
+	elm::ca_co_packet AllocPacket;
+	elm::ca_co_packet SampPacket;
+
+//	workshop_ngev_gradient();
+	
+	workshop_ngev_gradient(
+	   const unsigned&   dF
+	 , const unsigned&   nNodes
+	 , elm::ca_co_packet UtilPacket
+	 , elm::ca_co_packet AllocPacket
+	 , elm::ca_co_packet SampPacket
+	 , const paramArray& Params_LogSum
+	 , elm::darray_ptr     Data_Choice
+	 , elm::darray_ptr     Data_Weight
+	 , const etk::memarray* AdjProbability
+	 , const etk::memarray* Probability
+	 , const etk::memarray* Cond_Prob
+	 , const VAS_System* Xylem
+	 , etk::memarray* GCurrent
+	 , etk::memarray_symmetric* Bhhh
+	 , etk::logging_service* msgr
+	 );
+	
+	virtual ~workshop_ngev_gradient();
+
+	void workshop_ngev_gradient_do(const unsigned& firstcase, const unsigned& numberofcases);
+	void workshop_ngev_gradient_send();
+
+	void case_dUtility_dFusedParameters( const unsigned& c );
+	void case_dProbability_dFusedParameters( const unsigned& c );
+
+	void case_dSamplingFactor_dFusedParameters( const unsigned& c );
+	void case_dAdjProbability_dFusedParameters( const unsigned& c );
+
+	void case_dLogLike_dFusedParameters( const unsigned& c );
+	
+	virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);	
+};
+
+
+
+}
+#endif // __ELM_WORKSHOP_NGEV_GRADIENT_H__
+

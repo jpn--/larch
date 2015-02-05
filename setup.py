@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.11'
+VERSION = '3.1.12'
 
 
 def read(*filenames, **kwargs):

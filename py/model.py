@@ -1132,9 +1132,11 @@ class Model(Model2):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def estimate_scipy(self, method='BFGS'):
+	def estimate_scipy(self, method='Nelder-Mead'):
 		import scipy.optimize
-		return scipy.optimize.minimize(
+		import datetime
+		starttime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
+		ret = scipy.optimize.minimize(
 			self.negative_loglike,   # objective function
 			self.parameter_values(), # initial values
 			args=(),
@@ -1142,6 +1144,18 @@ class Model(Model2):
 			jac=False, #? self.d_loglike,
 			hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=print,
 			options=dict(disp=True))
+		endtime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
+		startfrac, startwhole = math.modf(starttime)
+		endfrac, endwhole = math.modf(endtime)
+		startfrac *= 1000000
+		endfrac *= 1000000
+		if ret.success:
+			self.parameter_values(ret.x)
+			self._set_estimation_statistics( -(ret.fun) )
+			self._set_estimation_run_statistics(int(startwhole),int(startfrac),
+												int(endwhole),int(endfrac),
+												ret.nit,ret.message)
+		return ret
 
 	def utility_full_constants(self):
 		"Add a complete set of alternative specific constants"

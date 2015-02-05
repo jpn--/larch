@@ -58,10 +58,11 @@ def model(d=None):
 	#	A structure that defines certain options to be applied when estimating
 	#	models.
 	m.option.calculate_std_err = True
+	m.option.threads = 1
 
 	# ModelObject.nest(<name of nest>, <altcode of nest>, <parameter name>)
-	m.nest("existing", 4, "mu_existing")
-	m.nest("public",   5, "mu_public")
+	m.nest("existing", 4, "MU_EXISTING")
+	m.nest("public",   5, "MU_PUBLIC")
 	
 	# ModelObject.link(<altcode of upstream node>, <altcode of downstream node>)
 	m.link(4, 1)
@@ -69,11 +70,19 @@ def model(d=None):
 	m.link(5, 1)
 	m.link(5, 2)
 	
-	m.parameter('alpha_existing', value = 0.5, null_value = 0.5)
-	m.link[4, 1].append( larch.core.Component('1','alpha_existing') )
-	m.link[5, 1].append( larch.core.Component('-1','alpha_existing') )
-	m.link[5, 1].append( larch.core.Component('1','CONSTANT',multiplier=1.0) )
+	m.parameter('PHI_EXISTING')
+	m.link[4, 1](data='1',param='PHI_EXISTING')
 	
+	
+#	m['ASC_TRAIN'].value = 0.0983
+#	m['B_TIME'].value = -0.00777
+#	m['B_COST'].value = -0.00819
+#	m['PHI_EXISTING'].value =-0.02
+#	m['MU_EXISTING'].value = 1.0/2.51
+#	m['ASC_CAR'].value =-0.240
+#	m['MU_PUBLIC'].value = 1.0/4.11
+
+
 	return m # Returns the model object from the model() function.
 
 ############################# END OF EXAMPLE FILE ##############################

@@ -111,6 +111,7 @@ void elm::Model2::_setUp_coef_and_grad_arrays()
 	Coef_QuantityCA.resize(Params_QuantityCA.size1(),Params_QuantityCA.size2(),Params_QuantityCA.size3());
 	Coef_QuantLogSum.resize(Params_QuantLogSum.size1(),Params_QuantLogSum.size2(),Params_QuantLogSum.size3());
 	Coef_LogSum.resize(Params_LogSum.size1(),Params_LogSum.size2(),Params_LogSum.size3());
+	Coef_Edges.resize(Params_Edges.size1(), Params_Edges.size2(), Params_Edges.size3());
 	Coef_SamplingCA.resize(Params_SamplingCA.size1(),Params_SamplingCA.size2(),Params_SamplingCA.size3());
 	Coef_SamplingCO.resize(Params_SamplingCO.size1(),Params_SamplingCO.size2(),Params_SamplingCO.size3());
 
@@ -131,6 +132,7 @@ void elm::Model2::pull_coefficients_from_freedoms()
 	pull_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());
 	pull_from_freedoms(Params_QuantLogSum, *Coef_QuantLogSum, *ReadFCurrent());
 	pull_from_freedoms(Params_LogSum     , *Coef_LogSum     , *ReadFCurrent(), true);
+	pull_from_freedoms(Params_Edges      , *Coef_Edges      , *ReadFCurrent());
 }
 
 void elm::Model2::freshen()
@@ -146,12 +148,14 @@ void elm::Model2::freshen()
 	
 	_setUp_utility_data_and_params();
 	_setUp_samplefactor_data_and_params();
+	_setUp_allocation_data_and_params();
 
 	Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 	Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
 	Coef_QuantityCA.resize_if_needed(Params_QuantityCA);
 	Coef_QuantLogSum.resize_if_needed(Params_QuantLogSum);
 	Coef_LogSum.resize_if_needed(Params_LogSum);
+	Coef_Edges.resize_if_needed(Params_Edges);
 	Coef_SamplingCA.resize_if_needed(Params_SamplingCA);
 	Coef_SamplingCO.resize_if_needed(Params_SamplingCO);
 
@@ -161,7 +165,9 @@ void elm::Model2::freshen()
 
 void elm::Model2::calculate_probability()
 {
-	if ((features & MODELFEATURES_NESTING)) {
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		ngev_probability();
+	} else if ((features & MODELFEATURES_NESTING)) {
 		nl_probability();
 	} else {
 		// MNL
@@ -172,7 +178,9 @@ void elm::Model2::calculate_probability()
 
 void elm::Model2::calculate_utility_only()
 {
-	if ((features & MODELFEATURES_NESTING)) {
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		ngev_probability();
+	} else if ((features & MODELFEATURES_NESTING)) {
 		nl_probability();
 	} else {
 		// MNL
@@ -298,7 +306,9 @@ std::shared_ptr<ndarray> elm::Model2::_calc_utility(const ndarray* dco, const nd
 
 std::shared_ptr<ndarray> elm::Model2::calc_probability(ndarray* u) const
 {
-	if ((features & MODELFEATURES_NESTING)) {
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		OOPS("not implemented");  //TODO
+	} else if ((features & MODELFEATURES_NESTING)) {
 		OOPS("not implemented");  //TODO
 	} else {
 		
@@ -325,7 +335,9 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 
 
 	std::shared_ptr<ndarray> LogSum = std::make_shared<ndarray>(u->size1());
-	if ((features & MODELFEATURES_NESTING)) {
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		TODO;
+	} else if ((features & MODELFEATURES_NESTING)) {
 		
 		std::cerr << "Calculate NL Logsums, size="<< u->size1() <<"\n";
 		
@@ -1250,7 +1262,10 @@ const etk::memarray& elm::Model2::gradient ()
 		if (option.force_finite_diff_grad) {
 			finite_diff_gradient(GCurrent);
 		} else {
-			if (features & MODELFEATURES_NESTING) {
+			if (features & MODELFEATURES_ALLOCATION) {
+				finite_diff_gradient(GCurrent);
+				//ngev_gradient();
+			} else if (features & MODELFEATURES_NESTING) {
 				nl_gradient();
 			} else {
 				mnl_gradient_v2();

@@ -26,6 +26,8 @@
 #include "elm_names.h"
 #include "elm_workshop_nl_gradient.h"
 #include "elm_workshop_nl_probability.h"
+#include "elm_workshop_ngev_gradient.h"
+#include "elm_workshop_ngev_probability.h"
 #include <iostream>
 #include "etk_thread.h"
 #include "elm_calculations.h"
@@ -205,6 +207,34 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_gradient ()
 									 , &msg
 									 );}
 
+boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability ()
+{return boosted::make_shared<workshop_ngev_probability>(nNodes, utility_packet(), allocation_packet(), sampling_packet()
+								 , Params_LogSum
+								 , Data_Avail
+								 , &Probability
+								 , &Cond_Prob
+								 , &AdjProbability
+								 , &Xylem
+								 , &msg
+								 );}
+
+boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
+{return boosted::make_shared<workshop_ngev_gradient>(  dF()
+									 , nNodes
+									 , utility_packet(), allocation_packet()
+									 , sampling_packet()
+									 , Params_LogSum
+									 , Data_Choice
+									 , Data_Weight_active()
+									 , &AdjProbability
+									 , &Probability
+									 , &Cond_Prob
+									 , &Xylem
+									 , &GCurrent
+									 , &Bhhh
+									 , &msg
+									 );}
+
 //#endif // ndef __APPLE__
 
 
@@ -216,6 +246,7 @@ void elm::Model2::nl_probability()
 	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
 	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
 	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
+	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
 //	if (!Data_UtilityCA) OOPS("data for utility calculation is not loaded, try setUp model first");
 	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
 		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
@@ -340,6 +371,56 @@ void elm::Model2::nl_probability()
 	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
 }
 
+
+void elm::Model2::ngev_probability()
+{
+	BUGGER(msg) << "Calculate NGEV probability";
+	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
+	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
+	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
+	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
+	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
+	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
+	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
+		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
+	}
+	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
+		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
+	}
+	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
+		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
+	}
+
+	unsigned c,a;
+	unsigned warningcount (0);
+	unsigned zerosize_warncount (0);
+	bool found_nan (false);
+	pull_coefficients_from_freedoms();
+	
+	if (nThreads<=1) nThreads = 1;
+	 
+	BUGGER(msg) << "Number of threads in ngev_probability =" << nThreads;
+	if (nThreads>=2 && _ELM_USE_THREADS_) {
+		
+		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+			boosted::bind(&elm::Model2::make_shared_workshop_ngev_probability, this);
+		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
+	
+	} else {
+	
+		boosted::shared_ptr<workshop> local_prob_workshop;
+		if (!local_prob_workshop) {
+			local_prob_workshop = make_shared_workshop_ngev_probability ();
+		}
+		local_prob_workshop->work(0, nCases, nullptr);
+	
+	}
+	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
+	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
+	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
+}
+
+
 void elm::Model2::nl_gradient() 
 {
 	periodic Sup (5);
@@ -356,112 +437,52 @@ void elm::Model2::nl_gradient()
 	
 	if (nThreads >= 2 && _ELM_USE_THREADS_) {
 
-//		#ifdef __APPLE__
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
-//			[&](){return boosted::make_shared<workshop_nl_gradient>(  dF()
-//									 , nNodes
-//									 , utility_packet()
-//									 , sampling_packet()
-//									 , Params_LogSum
-//									 , Data_Choice
-//									 , Data_Weight_active()
-//									 , &AdjProbability
-//									 , &Probability
-//									 , &Cond_Prob
-//									 , &Xylem
-//									 , &GCurrent
-//									 , &Bhhh
-//									 , &msg
-//									 );};
-//		#else
-//		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-//			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
-//		#endif // def __APPLE__
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
+		
 	} else {
-
-
-
 
 		boosted::shared_ptr<workshop> local_grad_workshop;
 		if (!local_grad_workshop) {
 			local_grad_workshop = make_shared_workshop_nl_gradient ();
 		}
 		local_grad_workshop->work(0, nCases, nullptr);
-		
 
-
-
-//
-//
-//		
-//		unsigned c;
-//
-//		memarray_raw dUtilCA    (nNodes,Params_UtilityCA.length());
-//		memarray_raw dUtilCO    (nNodes,Params_UtilityCO.length());
-//		memarray_raw dUtilMU    (nNodes,Params_LogSum.length());
-//		memarray_raw dProbCA    (nNodes,Params_UtilityCA.length());
-//		memarray_raw dProbCO    (nNodes,Params_UtilityCO.length());
-//		memarray_raw dProbMU    (nNodes,Params_LogSum.length());
-//		memarray_raw WorkspaceCA(Params_UtilityCA.length());
-//		memarray_raw WorkspaceCO(Params_UtilityCO.length());
-//		memarray_raw WorkspaceMU(Params_LogSum.length());
-//		
-//		memarray_raw CaseGrad(dF());
-//			
-//		for (c=0;c<nCases;c++) {
-//			
-//			CaseGrad.initialize();
-//			__casewise_nl_gradient
-//			( c
-//			 , &Probability
-//			 , &Cond_Prob
-//			 , &Utility
-//			 , &Xylem
-//			 , Data_UtilityCA
-//			 , Data_UtilityCO
-//			 , Data_Choice
-//			 , dUtilCA
-//			 , dUtilCO
-//			 , dUtilMU
-//			 , dProbCA
-//			 , dProbCO
-//			 , dProbMU
-//			 , WorkspaceCA
-//			 , WorkspaceCO
-//			 , WorkspaceMU
-//			 , Grad_UtilityCA
-//			 , Grad_UtilityCO
-//			 , Grad_LogSum);		
-//
-//		if (Data_Weight_active()) {
-//			Grad_UtilityCA.scale(Data_Weight_active()->value(c, 0));
-//			Grad_UtilityCO.scale(Data_Weight_active()->value(c, 0));
-//			Grad_LogSum.scale(Data_Weight_active()->value(c, 0));
-//		}
-//
-//			push_to_freedoms(Params_UtilityCA  , *Grad_UtilityCA  , *CaseGrad);
-//			push_to_freedoms(Params_UtilityCO  , *Grad_UtilityCO  , *CaseGrad);
-//			push_to_freedoms(Params_LogSum     , *Grad_LogSum     , *CaseGrad);
-//			
-//			// BHHH
-//			#ifdef SYMMETRIC_PACKED
-//			cblas_dspr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh);
-//			#else
-//			cblas_dsyr(CblasRowMajor,CblasUpper, dF(),1,*CaseGrad, 1, *Bhhh, Bhhh.size1());
-//			#endif
-//			
-//			// ACCUMULATE
-//			// cblas_daxpy(dF(),1,*CaseGrad,1,*GCurrent,1);
-//			GCurrent += CaseGrad;
-//			
-//			PERIODICALLY(Sup, INFO(msg)) << "  processing gradient for case "<<c<<", "<<100.0*double(c)/double(nCases)<<"% complete";
-//			
-//			
-//		}
 	}
 	BUGGER(msg)<< "End NL Gradient Evaluation" ;
+}
+
+void elm::Model2::ngev_gradient()
+{
+	periodic Sup (5);
+	BUGGER(msg)<< "Beginning NGEV Gradient Evaluation" ;
+	GCurrent.initialize(0.0);
+	Bhhh.initialize(0.0);
+	if (nThreads <= 0) nThreads=1;
+	//nThreads=1; /* there may be a bug in the threading */
+	BUGGER(msg)<< "Using "<< nThreads <<" threads" ;
+	
+	#ifndef _ELM_USE_THREADS_
+	nThreads = 1;
+	#endif // ndef _ELM_USE_THREADS_
+	
+	if (nThreads >= 2 && _ELM_USE_THREADS_) {
+
+		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+			boosted::bind(&elm::Model2::make_shared_workshop_ngev_gradient, this);
+		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
+		
+	} else {
+
+		boosted::shared_ptr<workshop> local_grad_workshop;
+		if (!local_grad_workshop) {
+			local_grad_workshop = make_shared_workshop_ngev_gradient ();
+		}
+		local_grad_workshop->work(0, nCases, nullptr);
+
+	}
+	BUGGER(msg)<< "End NGEV Gradient Evaluation" ;
 }
 
 

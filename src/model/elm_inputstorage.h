@@ -19,6 +19,7 @@
 
 %feature("kwargs", 1) elm::Component::Component;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_ca;
+%feature("kwargs", 1) elm::ComponentList::receive_allocation;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_co_kwd;
 
 /* Convert cellcodepair from Python --> C */
@@ -103,6 +104,9 @@ namespace elm {
 		
 		
 		void receive_utility_ca(const std::string& data,
+							    std::string param="",
+							    const double& multiplier=1.0);
+		void receive_allocation(const std::string& data,
 							    std::string param="",
 							    const double& multiplier=1.0);
 
@@ -350,6 +354,8 @@ def __ComponentList__call(self, *args, **kwargs):
 			self.receive_utility_co(*args)
 		else:
 			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
+	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
+		self.receive_allocation(*args, **kwargs)
 	else:
 		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:

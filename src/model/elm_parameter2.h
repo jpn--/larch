@@ -112,6 +112,7 @@ namespace elm {
 	
 	void pull_from_freedoms2(const paramArray& par,       double* ops, const double* fr);
 	void push_to_freedoms2  (const paramArray& par, const double* ops,       double* fr);
+	std::string push_to_freedoms2_ (const paramArray& par, const double* ops,       double* fr);
 
 	class DBArray;
 	class Component;

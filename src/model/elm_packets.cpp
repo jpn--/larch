@@ -107,13 +107,25 @@ void elm::ca_co_packet::logit_partial
 	}
 	
 	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
-		// Fast Linear Algebra		
+		// Fast Linear Algebra
+		
+		// TODO debug
+//		auto Coef_CO_size2= Coef_CO->size2();
+//		auto Outcome_size2 = Outcome->size2();
+//		auto Data_CO_nVars = Data_CO->nVars();
+		
+		if (Coef_CO->size2()>0) {
+		
 		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
 					numberofcases,Coef_CO->size2(), Data_CO->nVars(),
 					1,
 					Data_CO->values(firstcase,numberofcases), Data_CO->nVars(),
 					Coef_CO->ptr(), Coef_CO->size2(),
 					1,Outcome->ptr(firstcase),Outcome->size2());
+			
+		} else {
+			OOPS("Coef_CO->size2()=",Coef_CO->size2()," while Data_CO->nVars()=",Data_CO->nVars());
+		}
 	} else if (Data_CO && Data_CO->nVars()>0) {
 		// Slow case-by-case
 		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
@@ -130,10 +142,15 @@ void elm::ca_co_packet::logit_partial
 
 bool elm::ca_co_packet::relevant()
 {
-	if (!Params_CA || !Params_CO) return false;
-	return (Params_CA->size1()*Params_CA->size2()*Params_CA->size3() > 0 ||
-			Params_CO->size1()*Params_CO->size2()*Params_CO->size3() > 0
-			);
+	if (Params_CA && Params_CA->size1()*Params_CA->size2()*Params_CA->size3() > 0) {
+		return true;
+	}
+	
+	if (Params_CO && Params_CO->size1()*Params_CO->size2()*Params_CO->size3() > 0) {
+		return true;
+	}
+	
+	return false;
 }
 
 

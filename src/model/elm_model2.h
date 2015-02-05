@@ -49,7 +49,8 @@ namespace etk {
   class workshop;
 }
 
-#define MODELFEATURES_NESTING  0x1
+#define MODELFEATURES_NESTING       0x1
+#define MODELFEATURES_ALLOCATION    0x2
 
 #endif // ndef SWIG
 
@@ -175,6 +176,7 @@ namespace elm {
 		paramArray  Params_QuantityCA ; 
 		paramArray  Params_QuantLogSum;
 		paramArray  Params_LogSum     ;
+		paramArray  Params_Edges      ;
 
 		// hold the linkages to the freedoms for the various parameters
 		//  used to create the model parmeters at each iteration from the freedoms
@@ -195,6 +197,7 @@ namespace elm {
 		etk::ndarray      Coef_QuantityCA ;
 		etk::ndarray      Coef_QuantLogSum;
 		etk::ndarray      Coef_LogSum     ;
+		etk::ndarray      Coef_Edges      ;
 		// holds the calculated parameters themselves
 		
 #endif // ndef SWIG
@@ -202,7 +205,9 @@ namespace elm {
 	public:
 		PyObject*  CoefUtilityCA() {return Coef_UtilityCA.get_object();}
 		PyObject*  CoefUtilityCO() {return Coef_UtilityCO.get_object();}
-				
+
+		const etk::ndarray* Coef(const std::string& label);
+			
 #ifndef SWIG
 				
 		
@@ -246,6 +251,7 @@ namespace elm {
 		elm::darray_ptr  Data_UtilityCO;
 		elm::darray_ptr  Data_SamplingCA;
 		elm::darray_ptr  Data_SamplingCO;
+		elm::darray_ptr  Data_Allocation;
 //		elm::datamatrix  Data_QuantityCA;
 //		elm::datamatrix  Data_QuantLogSum;
 //		elm::datamatrix  Data_LogSum;
@@ -361,6 +367,9 @@ namespace elm {
 		void nl_probability();
 		void nl_gradient   ();
 
+		void ngev_probability();
+		void ngev_gradient   ();
+
 		void calculate_hessian_and_save();
 		
 		//bool any_holdfast() ;
@@ -380,6 +389,8 @@ namespace elm {
 		boosted::shared_ptr<etk::workshop> make_shared_workshop_mnl_probability ();
 		boosted::shared_ptr<etk::workshop> make_shared_workshop_nl_probability ();
 		boosted::shared_ptr<etk::workshop> make_shared_workshop_nl_gradient ();
+		boosted::shared_ptr<etk::workshop> make_shared_workshop_ngev_probability ();
+		boosted::shared_ptr<etk::workshop> make_shared_workshop_ngev_gradient ();
 
 	private:
 		// Private variables to use in likelihood accumulation
@@ -449,6 +460,7 @@ namespace elm {
 //		void _setUp_weight_data();
 		void _setUp_utility_data_and_params();
 		void _setUp_samplefactor_data_and_params();
+		void _setUp_allocation_data_and_params();
 		
 		void _setUp_MNL();
 		void _setUp_NL();
@@ -575,6 +587,7 @@ namespace elm {
 
 		ca_co_packet utility_packet();
 		ca_co_packet sampling_packet();
+		ca_co_packet allocation_packet();
 
 		// note: nest and link are not SWIG'd, they are replaced below
 		ELM_RESULTCODE nest(const std::string& nest_name, const elm::cellcode& nest_code,
@@ -596,6 +609,7 @@ namespace elm {
 
 	public:
 		std::vector<double> parameter_values() const;
+		void parameter_values(std::vector<double> v);
 		
 		void utilityca (const std::string& column_name,
 							   std::string freedom_name="", 
@@ -746,6 +760,8 @@ FOSWIG(	%rename(__repr__) representation; )
 
 	#ifndef SWIG
 	etk::strvec __identify_needs(const ComponentList& Input_List);
+	etk::strvec __identify_needs(const ComponentEdgeMap& Input_EdgeMap);
+	void __identify_additional_needs(const ComponentList& Input_List, etk::strvec& needs);
 	#endif // ndef SWIG
 
 		

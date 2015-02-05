@@ -1156,15 +1156,19 @@ class Component(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     data = _swig_property(_core.Component_data_get, _core.Component_data_set)
     param = _swig_property(_core.Component_param_get, _core.Component_param_set)
-    altcode = _swig_property(_core.Component_altcode_get, _core.Component_altcode_set)
-    altname = _swig_property(_core.Component_altname_get, _core.Component_altname_set)
+    _altcode = _swig_property(_core.Component__altcode_get, _core.Component__altcode_set)
+    _altname = _swig_property(_core.Component__altname_get, _core.Component__altname_set)
+    _upcode = _swig_property(_core.Component__upcode_get, _core.Component__upcode_set)
+    _dncode = _swig_property(_core.Component__dncode_get, _core.Component__dncode_set)
     multiplier = _swig_property(_core.Component_multiplier_get, _core.Component_multiplier_set)
     def __repr__(self) -> "std::string" : return _core.Component___repr__(self)
-    def __init__(self, *args, **kwargs): 
-        this = _core.new_Component(*args, **kwargs)
+    def __init__(self, data : 'std::string'="", param : 'std::string'="", multiplier : 'double'=1.0, category : 'PyObject *'=None): 
+        this = _core.new_Component(data, param, multiplier, category)
         try: self.this.append(this)
         except: self.this = this
     Create = staticmethod(_core.Component_Create)
+    __swig_destroy__ = _core.delete_Component
+    __del__ = lambda self : None;
     def altcallsign(self):
     	return "%i: %s"%(self.altcode, self.altname)
     def set_from_callsign(self, x):
@@ -1172,12 +1176,10 @@ class Component(object):
     	self.altcode = long(c)
     	self.altname = n
 
-    __swig_destroy__ = _core.delete_Component
-    __del__ = lambda self : None;
 Component_swigregister = _core.Component_swigregister
 Component_swigregister(Component)
 
-def Component_Create(*args) -> "elm::InputStorage" :
+def Component_Create(*args) -> "elm::Component" :
   return _core.Component_Create(*args)
 Component_Create = _core.Component_Create
 
@@ -1188,38 +1190,38 @@ class ComponentVector(object):
     def __iter__(self): return self.iterator()
     def __nonzero__(self) -> "bool" : return _core.ComponentVector___nonzero__(self)
     def __bool__(self) -> "bool" : return _core.ComponentVector___bool__(self)
-    def __len__(self) -> "std::vector< elm::InputStorage >::size_type" : return _core.ComponentVector___len__(self)
-    def pop(self) -> "std::vector< elm::InputStorage >::value_type" : return _core.ComponentVector_pop(self)
-    def __getslice__(self, *args) -> "std::vector< elm::InputStorage,std::allocator< elm::InputStorage > > *" : return _core.ComponentVector___getslice__(self, *args)
+    def __len__(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector___len__(self)
+    def pop(self) -> "std::vector< elm::Component >::value_type" : return _core.ComponentVector_pop(self)
+    def __getslice__(self, *args) -> "std::vector< elm::Component,std::allocator< elm::Component > > *" : return _core.ComponentVector___getslice__(self, *args)
     def __setslice__(self, *args) -> "void" : return _core.ComponentVector___setslice__(self, *args)
     def __delslice__(self, *args) -> "void" : return _core.ComponentVector___delslice__(self, *args)
     def __delitem__(self, *args) -> "void" : return _core.ComponentVector___delitem__(self, *args)
-    def __getitem__(self, *args) -> "std::vector< elm::InputStorage >::value_type const &" : return _core.ComponentVector___getitem__(self, *args)
+    def __getitem__(self, *args) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector___getitem__(self, *args)
     def __setitem__(self, *args) -> "void" : return _core.ComponentVector___setitem__(self, *args)
     def append(self, *args) -> "void" : return _core.ComponentVector_append(self, *args)
     def empty(self) -> "bool" : return _core.ComponentVector_empty(self)
-    def size(self) -> "std::vector< elm::InputStorage >::size_type" : return _core.ComponentVector_size(self)
+    def size(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector_size(self)
     def clear(self) -> "void" : return _core.ComponentVector_clear(self)
     def swap(self, *args) -> "void" : return _core.ComponentVector_swap(self, *args)
-    def get_allocator(self) -> "std::vector< elm::InputStorage >::allocator_type" : return _core.ComponentVector_get_allocator(self)
-    def begin(self) -> "std::vector< elm::InputStorage >::iterator" : return _core.ComponentVector_begin(self)
-    def end(self) -> "std::vector< elm::InputStorage >::iterator" : return _core.ComponentVector_end(self)
-    def rbegin(self) -> "std::vector< elm::InputStorage >::reverse_iterator" : return _core.ComponentVector_rbegin(self)
-    def rend(self) -> "std::vector< elm::InputStorage >::reverse_iterator" : return _core.ComponentVector_rend(self)
+    def get_allocator(self) -> "std::vector< elm::Component >::allocator_type" : return _core.ComponentVector_get_allocator(self)
+    def begin(self) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_begin(self)
+    def end(self) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_end(self)
+    def rbegin(self) -> "std::vector< elm::Component >::reverse_iterator" : return _core.ComponentVector_rbegin(self)
+    def rend(self) -> "std::vector< elm::Component >::reverse_iterator" : return _core.ComponentVector_rend(self)
     def pop_back(self) -> "void" : return _core.ComponentVector_pop_back(self)
-    def erase(self, *args) -> "std::vector< elm::InputStorage >::iterator" : return _core.ComponentVector_erase(self, *args)
+    def erase(self, *args) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_erase(self, *args)
     def __init__(self, *args): 
         this = _core.new_ComponentVector(*args)
         try: self.this.append(this)
         except: self.this = this
     def push_back(self, *args) -> "void" : return _core.ComponentVector_push_back(self, *args)
-    def front(self) -> "std::vector< elm::InputStorage >::value_type const &" : return _core.ComponentVector_front(self)
-    def back(self) -> "std::vector< elm::InputStorage >::value_type const &" : return _core.ComponentVector_back(self)
+    def front(self) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector_front(self)
+    def back(self) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector_back(self)
     def assign(self, *args) -> "void" : return _core.ComponentVector_assign(self, *args)
     def resize(self, *args) -> "void" : return _core.ComponentVector_resize(self, *args)
     def insert(self, *args) -> "void" : return _core.ComponentVector_insert(self, *args)
     def reserve(self, *args) -> "void" : return _core.ComponentVector_reserve(self, *args)
-    def capacity(self) -> "std::vector< elm::InputStorage >::size_type" : return _core.ComponentVector_capacity(self)
+    def capacity(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector_capacity(self)
     __swig_destroy__ = _core.delete_ComponentVector
     __del__ = lambda self : None;
 ComponentVector_swigregister = _core.ComponentVector_swigregister
@@ -1238,6 +1240,7 @@ class ComponentList(ComponentVector):
         try: self.this.append(this)
         except: self.this = this
     def receive_utility_ca(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_utility_ca(self, *args, **kwargs)
+    def receive_allocation(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_allocation(self, *args, **kwargs)
     def receive_utility_co(self, *args) -> "void" : return _core.ComponentList_receive_utility_co(self, *args)
     def receive_utility_co_kwd(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_utility_co_kwd(self, *args, **kwargs)
     def __repr__(self) -> "std::string" : return _core.ComponentList___repr__(self)
@@ -1259,7 +1262,7 @@ class ComponentCellcodeMap(object):
     def size(self) -> "unsigned int" : return _core.ComponentCellcodeMap_size(self)
     def empty(self) -> "bool" : return _core.ComponentCellcodeMap_empty(self)
     def clear(self) -> "void" : return _core.ComponentCellcodeMap_clear(self)
-    def __getitem__(self, *args) -> "elm::InputStorage &" : return _core.ComponentCellcodeMap___getitem__(self, *args)
+    def __getitem__(self, *args) -> "elm::Component &" : return _core.ComponentCellcodeMap___getitem__(self, *args)
     def __setitem__(self, *args) -> "void" : return _core.ComponentCellcodeMap___setitem__(self, *args)
     def __delitem__(self, *args) -> "void" : return _core.ComponentCellcodeMap___delitem__(self, *args)
     def __contains__(self, *args) -> "bool" : return _core.ComponentCellcodeMap___contains__(self, *args)
@@ -1382,6 +1385,8 @@ def __ComponentList__call(self, *args, **kwargs):
 			self.receive_utility_co(*args)
 		else:
 			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
+	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
+		self.receive_allocation(*args, **kwargs)
 	else:
 		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:
@@ -1785,6 +1790,7 @@ class Model2(sherpa):
     def _set_root_cellcode(self, *args) -> "void" : return _core.Model2__set_root_cellcode(self, *args)
     def CoefUtilityCA(self) -> "PyObject *" : return _core.Model2_CoefUtilityCA(self)
     def CoefUtilityCO(self) -> "PyObject *" : return _core.Model2_CoefUtilityCO(self)
+    def Coef(self, *args) -> "etk::ndarray const *" : return _core.Model2_Coef(self, *args)
     def needs(self) -> "std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > >" :
         val = _core.Model2_needs(self)
         temp = {}
@@ -1811,6 +1817,7 @@ class Model2(sherpa):
     def calc_utility_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility_logsums(self, *args)
     def probability(self, params : 'etk::ndarray *'=None) -> "etk::ndarray *" : return _core.Model2_probability(self, params)
     hessian_matrix = _swig_property(_core.Model2_hessian_matrix_get, _core.Model2_hessian_matrix_set)
+    def parameter_values(self, *args) -> "void" : return _core.Model2_parameter_values(self, *args)
     def utilityca(self, *args) -> "void" : return _core.Model2_utilityca(self, *args)
     def utilityco(self, *args) -> "void" : return _core.Model2_utilityco(self, *args)
     utility = _swig_property(_core.Model2_utility_get, _core.Model2_utility_set)
@@ -1920,7 +1927,6 @@ class Model2(sherpa):
     def nCases(self) -> "unsigned long long" : return _core.Model2_nCases(self)
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.Model2_alternative_names(self)
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >" : return _core.Model2_alternative_codes(self)
-    def parameter_values(self, *args) -> "void" : return _core.Model2_parameter_values(self, *args)
     def d_loglike(self, *args) -> "std::vector< double,std::allocator< double > >" : return _core.Model2_d_loglike(self, *args)
     def d2_loglike(self, *args) -> "void" : return _core.Model2_d2_loglike(self, *args)
     def negative_loglike(self, *args) -> "double" : return _core.Model2_negative_loglike(self, *args)

@@ -22,8 +22,8 @@
 import sys
 import os, os.path
 
-__version__ = '3.1.11'
-__build_date__ = '30 January 2015'
+__version__ = '3.1.12'
+__build_date__ = '05 February 2015'
 
 if os.environ.get('READTHEDOCS', None) == 'True':
 	# hack for building docs on rtfd
@@ -99,7 +99,15 @@ try:
 		print(_verion_warning)
 		print("To upgrade, run 'pip install larch --upgrade'")
 		print("!"*len(_verion_warning))
-	_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
+	
+	if 'sandbox' not in sys.executable and 'python' in sys.executable.lower() and os.environ.get('READTHEDOCS', None) != 'True':
+		import time as _time
+		try:
+			from .version.last_check import time as _last_version_check_time
+		except ImportError:
+			_last_version_check_time = 0
+		if float(_last_version_check_time) + 60*60*24 < _time.time():
+			_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
 
 
 

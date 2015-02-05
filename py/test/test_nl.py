@@ -391,6 +391,131 @@ class TestNL(ELM_TestCase):
 		#m.estimate([larch.core.OptimizationMethod(honey=100, thresh=1e-12, max=400, ext=1.1)])
 
 
+	def test_cnl_loglike(self):
+		m = Model.Example(111)
+		m.provision()
+		m['ASC_TRAIN'].value = 0.0983
+		m['B_TIME'].value = -0.00777
+		m['B_COST'].value = -0.00819
+		m['PHI_EXISTING'].value =-0.02
+		m['MU_EXISTING'].value = 1.0/2.51
+		m['ASC_CAR'].value =-0.240
+		m['MU_PUBLIC'].value = 1.0/4.11
+		self.assertNearlyEqual(-5214.049, m.loglike(),sigfigs=6)
+
+	def test_ngev(self):
+		d = DB.Example('MTC')
+		m = Model(d)
+		m.option.threads = 1
+		m.option.calculate_std_err = 0
+		m.parameter("cost",0)
+		m.parameter("tottime",0) 
+		m.parameter("con2",0) 
+		m.parameter("con3",0) 
+		m.parameter("con4",0)
+		m.parameter("con5",0) 
+		m.parameter("con6",0) 
+		m.parameter("inc2",0)
+		m.parameter("inc3",0) 
+		m.parameter("inc4",0) 
+		m.parameter("inc5",0) 
+		m.parameter("inc6",0) 
+		m.parameter("motoNest", 0.9, 1.0) 
+		m.parameter("greenNest",0.8, 1.0) 
+		m.parameter("carNest",  0.7, 1.0) 
+		m.parameter("PhiINC", 0.0) 
+		m.parameter("PhiCON", 0.0) 
+		m.utility.ca("tottime")
+		m.utility.ca("totcost","cost")
+		m.utility.co("HHINC",2,"inc2") 
+		m.utility.co("HHINC",3,"inc3") 
+		m.utility.co("HHINC",4,"inc4") 
+		m.utility.co("HHINC",5,"inc5") 
+		m.utility.co("HHINC",6,"inc6") 
+		m.utility.co("1","SR2","con2") 
+		m.utility.co("1","SR3+","con3") 
+		m.utility.co("1","Tran","con4") 
+		m.utility.co("1","Bike","con5") 
+		m.utility.co("1","Walk","con6") 
+		m.nest("moto", 8, "motoNest")
+		m.nest("green", 10, "greenNest")
+		m.nest("cars", 9, "carNest")
+		m.link(8, 9)
+		m.link(8, 4)
+		m.link(9, 1)
+		m.link(9, 2)
+		m.link(9, 3)
+		m.link(10, 4)
+		m.link(10, 5)
+		m.link(10, 6)
+		m.link[10, 4](data="HHINC", param="PhiINC")
+		m.link[10, 4](data="1", param="PhiCON")
+		m.setUp()
+		ll =  m.loglike()
+		g = m.d_loglike()
+		v =(-0.000423724,
+			-0.00974341 ,
+			-0.136579   ,
+			-0.740303   ,
+			1.19811     ,
+			0.288508    ,
+			0.679871    ,
+			-0.00051391 ,
+			0.000961995 ,
+			-0.000331558,
+			-0.00245688 ,
+			-0.00166543 ,
+			0.0287018   ,
+			0.695356    ,
+			1.17513     ,
+			-0.0239607  ,
+			2.33664     ,
+			)
+
+		ll2 =  m.loglike(v)
+		m.option.force_recalculate = True
+		g2 = m.d_loglike(v)
+		self.assertNearlyEqual(-7500.712699231124, ll,)
+		self.assertNearlyEqual(-203148.818120826, g[0 ], )
+		self.assertNearlyEqual( 55620.21857904255, g[1 ], )
+		self.assertNearlyEqual( 1007.8,  g[2 ], )		
+		self.assertNearlyEqual( 1516.37, g[3 ], )	
+		self.assertNearlyEqual( 518.005, g[4 ], )	
+		self.assertNearlyEqual( 342.357, g[5 ], )	
+		self.assertNearlyEqual( 151.047, g[6 ], )	
+		self.assertNearlyEqual( 60950.5, g[7 ], )		
+		self.assertNearlyEqual( 88824.8, g[8 ], )
+		self.assertNearlyEqual( 32281.1, g[9 ], )
+		self.assertNearlyEqual( 21146.5, g[10], )
+		self.assertNearlyEqual( 9743.75, g[11], )
+		self.assertNearlyEqual( 339.24,  g[12], )
+		self.assertNearlyEqual( 420.713, g[13], )			
+		self.assertNearlyEqual( -1142.84,g[14], )			
+		self.assertNearlyEqual( -1089.43,g[15], )									
+		self.assertNearlyEqual( -16.8988,g[16], )
+		self.assertNearlyEqual(-6619.19437740866, ll2     )
+		self.assertNearlyEqual( -44078.1,         g2[0 ], )
+		self.assertNearlyEqual( 45385.9,          g2[1 ], )		
+		self.assertNearlyEqual( 455.611,          g2[2 ], )		
+		self.assertNearlyEqual( 441.68,           g2[3 ], )	
+		self.assertNearlyEqual( 888.106,          g2[4 ], )	
+		self.assertNearlyEqual( 198.114,          g2[5 ], )	
+		self.assertNearlyEqual( 65.9350316424698, g2[6 ], )	
+		self.assertNearlyEqual( 26252.9503317513, g2[7 ], )		
+		self.assertNearlyEqual( 25587.8552481395, g2[8 ], )
+		self.assertNearlyEqual( 49404.8394509919, g2[9 ], )
+		self.assertNearlyEqual( 12898.5,          g2[10], )
+		self.assertNearlyEqual( 6240.038886725008,g2[11], )
+		self.assertNearlyEqual( -620.796083378989,g2[12], )
+		self.assertNearlyEqual( 528.361336255419, g2[13], )			
+		self.assertNearlyEqual( -630.085253427633,g2[14], )			
+		self.assertNearlyEqual( 9125.88491483512, g2[15], )									
+		self.assertNearlyEqual( 174.008,          g2[16], )
+
+
+
+
+
 
 
 

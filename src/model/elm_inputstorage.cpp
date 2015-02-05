@@ -158,6 +158,32 @@ void elm::ComponentList::receive_utility_ca(const std::string& column_name,
 	
 }
 
+void elm::ComponentList::receive_allocation(const std::string& column_name,
+							    std::string freedom_name, 
+							    const double& freedom_multiplier)
+
+{
+	if (freedom_name=="") freedom_name = column_name;
+	if (parentmodel && etk::to_uppercase(freedom_name)!="CONSTANT" && !parentmodel->__contains__(freedom_name)) {
+		parentmodel->parameter(freedom_name);
+	}
+	
+	Component x;
+	x.data_name = column_name;
+	x.param_name = freedom_name;
+	x.multiplier = freedom_multiplier;
+	push_back( x );
+	if (parentmodel && parentmodel->_Data) {
+		if (parentmodel) BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCO data";
+		parentmodel->_Data->check_co(column_name);
+	}
+	if (parentmodel) {
+		INFO(parentmodel->msg) << "success: added "<<column_name;
+		//parentmodel->freshen();
+	}
+	
+}
+
 
 
 
