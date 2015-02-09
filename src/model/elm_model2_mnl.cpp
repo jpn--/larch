@@ -1029,7 +1029,7 @@ void elm::Model2::utilityca
 			parameter(freedom_name);
 		}
 	}
-	Component x;
+	LinearComponent x;
 	x.data_name = variable_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
@@ -1117,7 +1117,7 @@ string elm::Model2::_add_utility_co
 			parameter(freedom_name);
 		}
 	}
-	Component x;
+	LinearComponent x;
 	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
@@ -1143,7 +1143,7 @@ string elm::Model2::_add_utility_co
 }
 
 
-PyObject* __GetInputTupleUtilityCA(const elm::Component& i)
+PyObject* __GetInputTupleUtilityCA(const elm::LinearComponent& i)
 {
 	if (i.multiplier==1.0) {
 		return Py_BuildValue("(ss)", i.data_name.c_str(), i.param_name.c_str());
@@ -1173,7 +1173,7 @@ PyObject* elm::Model2::_get_samplingbiasca() const
 	return U;
 }
 
-PyObject* __GetInputTupleUtilityCO(const elm::Component& i)
+PyObject* __GetInputTupleUtilityCO(const elm::LinearComponent& i)
 {
 	if (!i._altname.empty()) {
 		if (i.multiplier==1.0) {

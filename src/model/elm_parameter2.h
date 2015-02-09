@@ -115,7 +115,7 @@ namespace elm {
 	std::string push_to_freedoms2_ (const paramArray& par, const double* ops,       double* fr);
 
 	class DBArray;
-	class Component;
+	class LinearComponent;
 	class logging_service;
 
 	

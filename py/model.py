@@ -248,6 +248,14 @@ class Model(Model2):
 		exec(code)
 		return self
 
+	def __utility_get(self):
+		return _core.Model2_utility_get(self)
+
+	def __utility_set(self,x):
+		return _core.Model2_utility_set(self,x)
+
+	utility = property(__utility_get, __utility_set)
+
 	def note(self, comment):
 		if not hasattr(self,"notes"): self.notes = []
 		self.notes += ["{}".format(comment).replace("\n"," -- ")]

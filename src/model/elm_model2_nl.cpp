@@ -532,7 +532,7 @@ ELM_RESULTCODE elm::Model2::nest
 
 		result |= Xylem.add_cell(nest_code, nest_name, true);
 		if (result & ELM_CREATED) {
-			Component z;
+			LinearComponent z;
 			z.data_name = "";// n.fuse();
 			z.param_name = freedom_name;
 			z.multiplier = freedom_multiplier;
@@ -555,7 +555,7 @@ ELM_RESULTCODE elm::Model2::nest
 }
 
 
-PyObject* __GetInputTupleNest(const elm::Component& i)
+PyObject* __GetInputTupleNest(const elm::LinearComponent& i)
 {
 //	multiname x (i.data_name);
 	if (i.multiplier==1.0) {

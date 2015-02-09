@@ -19,7 +19,7 @@
 #include <iostream>
 #include <iomanip>
 
-elm::Component::Component(std::string data, std::string param, double multiplier, PyObject* category)
+elm::LinearComponent::LinearComponent(std::string data, std::string param, double multiplier, PyObject* category)
 : data_name(data)
 , param_name(param)
 , _altcode(cellcode_empty)
@@ -57,11 +57,11 @@ elm::Component::Component(std::string data, std::string param, double multiplier
 	}
 }
 
-elm::Component::~Component()
+elm::LinearComponent::~LinearComponent()
 {
 }
 
-//elm::Component::Component(const elm::Component& x)
+//elm::LinearComponent::LinearComponent(const elm::LinearComponent& x)
 //: data_name(x.data_name)
 //, param_name(x.param_name)
 //, altcode(x.altcode)
@@ -69,15 +69,15 @@ elm::Component::~Component()
 //, multiplier(x.multiplier)
 //{}
 
-elm::Component elm::Component::Create(PyObject* obj)
+elm::LinearComponent elm::LinearComponent::Create(PyObject* obj)
 {
-	elm::Component x;
+	elm::LinearComponent x;
 	
 	const char* d =nullptr;
 	const char* p =nullptr;
 	const char* a =nullptr;
 		
-	if (!PyArg_ParseTuple(obj, "s|sKsd", &d, &p, &(x._altcode), &a, &(x.multiplier))) OOPS("Error reading ModelComponent");
+	if (!PyArg_ParseTuple(obj, "s|sKsd", &d, &p, &(x._altcode), &a, &(x.multiplier))) OOPS("Error reading LinearComponent");
 	if (d) x.data_name = d;
 	if (p) x.param_name = p;
 	if (a) x._altname = a;
@@ -85,10 +85,10 @@ elm::Component elm::Component::Create(PyObject* obj)
 	return x;
 }
 
-std::string elm::Component::__repr__() const
+std::string elm::LinearComponent::__repr__() const
 {
 	std::ostringstream x;
-	x << "Component(";
+	x << "LinearComponent(";
 	bool comma = false;
 	if (!data_name.empty()) {
 		x<<"data='"<<data_name<<"'";
@@ -118,6 +118,16 @@ std::string elm::Component::__repr__() const
 	return x.str();
 }
 
+
+elm::ComponentList elm::LinearComponent::operator+(const elm::LinearComponent& other)
+{
+	elm::ComponentList x (0,nullptr);
+	x.push_back(*this);
+	x.push_back(other);
+	return x;
+}
+
+
 elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
 : _receiver_type (type)
 , parentmodel(parentmodel)
@@ -128,7 +138,20 @@ elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
 std::string elm::ComponentList::__repr__() const
 {
 	std::ostringstream x;
-	x << "<ComponentList with length "<< size() <<">";
+	x << "<LinearFunction with length "<< size() <<">";
+	return x.str();
+}
+
+std::string elm::ComponentList::__str__() const
+{
+	std::ostringstream x;
+	bool plus = false;
+	
+	for (auto i=begin(); i!=end(); i++) {
+		if (plus) x << "+";
+		x << i->__repr__();
+		plus = true;
+	}
 	return x.str();
 }
 
@@ -142,7 +165,7 @@ void elm::ComponentList::receive_utility_ca(const std::string& column_name,
 		parentmodel->parameter(freedom_name);
 	}
 	
-	Component x;
+	LinearComponent x;
 	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
@@ -168,7 +191,7 @@ void elm::ComponentList::receive_allocation(const std::string& column_name,
 		parentmodel->parameter(freedom_name);
 	}
 	
-	Component x;
+	LinearComponent x;
 	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
@@ -238,7 +261,7 @@ void elm::ComponentList::receive_utility_co_kwd
 		parentmodel->parameter(freedom_name);
 	}
 
-	Component x;
+	LinearComponent x;
 	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
@@ -279,6 +302,32 @@ std::vector<std::string> elm::ComponentList::needs() const
 	return u_ca;
 }
 
+elm::ComponentList elm::ComponentList::operator+(const elm::LinearComponent& x)
+{
+	elm::ComponentList n (*this);
+	n.push_back(x);
+	return n;
+}
+
+elm::ComponentList elm::ComponentList::operator+(const elm::ComponentList& x)
+{
+	elm::ComponentList n (*this);
+	n.insert(n.end(), x.begin(), x.end());
+	return n;
+}
+
+
+elm::ComponentList& elm::ComponentList::operator+=(const elm::LinearComponent& x)
+{
+	push_back(x);
+	return *this;
+}
+
+elm::ComponentList& elm::ComponentList::operator+=(const elm::ComponentList& x)
+{
+	insert(end(), x.begin(), x.end());
+	return *this;
+}
 
 
 elm::ComponentCellcodeMap::ComponentCellcodeMap(int type, elm::Model2* parentmodel)
@@ -322,6 +371,141 @@ std::string elm::ComponentCellcodeMap::__repr__() const
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+elm::LinearBundle_1::LinearBundle_1(std::string descrip, elm::Model2* parentmodel)
+: ca (COMPONENTLIST_TYPE_UTILITYCA, parentmodel)
+, co ()
+, descrip(descrip)
+{
+
+}
+
+
+
+
+void elm::LinearBundle_1::__call__(std::string data, std::string param, const double& multiplier)
+{
+	ca.receive_utility_ca (data, param, multiplier);
+}
+
+
+std::string elm::LinearBundle_1::__repr__() const
+{
+	std::ostringstream x;
+	x<< "<LinearBundle_1 id("<<this<<")>";
+	return x.str();
+}
+
+void elm::LinearBundle_1::clean(elm::Facet& db)
+{
+	
+	for (elm::ComponentList::iterator i=ca.begin(); i!=ca.end(); i++) {
+		try {
+			db.check_ca(i->data_name);
+		} SPOO {
+			i = ca.erase(i);
+			i--;
+		}
+	}
+	for (auto i=co.begin(); i!=co.end(); i++) {
+		for (auto j=i->second.begin(); j!=i->second.end(); j++) {
+			try {
+				db.check_co(j->data_name);
+			} SPOO {
+				j = i->second.erase(j);
+				j--;
+			}
+		}
+	}
+	
+}
+
+
+void elm::LinearBundle_1::_set_ca(const elm::LinearComponent& x)
+{
+	elm::ComponentList y (COMPONENTLIST_TYPE_UTILITYCA, ca.parentmodel);
+	y.push_back(x);
+	_set_ca(y);
+}
+
+
+void elm::LinearBundle_1::_set_ca(const elm::ComponentList& x)
+{
+	auto parentmodel = ca.parentmodel;
+	auto t = ca._receiver_type;
+	ca = x;
+	ca._receiver_type = t;
+	ca.parentmodel = parentmodel;
+	
+	for (auto i=ca.begin(); i!=ca.end(); i++) {
+		if (parentmodel && etk::to_uppercase(i->param_name)!="CONSTANT" && !parentmodel->__contains__(i->param_name)) {
+			parentmodel->parameter(i->param_name);
+		}
+	}
+}
+
+void elm::LinearBundle_1::_set_co(const std::map< elm::cellcode, elm::ComponentList >& x)
+{
+	elm::Model2* parentmodel = nullptr;
+	if (co.size()) {
+		parentmodel = co.begin()->second.parentmodel;
+	}
+	co.clear();
+	
+	co = x;
+	
+	if (parentmodel) {
+		for (auto i=co.begin(); i!=co.end(); i++) {
+		 i->second.parentmodel = parentmodel;
+		}
+	}
+	
+	
+}
+
+elm::ComponentList& elm::LinearBundle_1::_get_ca()
+{
+	return ca;
+}
+
+std::map< elm::cellcode, elm::ComponentList >& elm::LinearBundle_1::_get_co()
+{
+	return co;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 elm::ComponentListPair::ComponentListPair(int type1, int type2, std::string descrip, elm::Model2* parentmodel)
 : ca (type1, parentmodel)
 , co (type2, parentmodel)
@@ -345,7 +529,7 @@ void elm::ComponentListPair::__call__(const elm::cellcode& altcode, std::string 
 std::string elm::ComponentListPair::__repr__() const
 {
 	std::ostringstream x;
-	x<< "<LinearFunction with length ("<< ca.size()<<"," << co.size() <<")>";
+	x<< "<LinearFunctionPair with length ("<< ca.size()<<"," << co.size() <<")>";
 	return x.str();
 }
 
@@ -370,6 +554,63 @@ void elm::ComponentListPair::clean(elm::Facet& db)
 	}
 
 }
+
+
+void elm::ComponentListPair::_set_ca(const elm::LinearComponent& x)
+{
+	elm::ComponentList y;
+	y.push_back(x);
+	_set_ca(y);
+}
+
+
+void elm::ComponentListPair::_set_ca(const elm::ComponentList& x)
+{
+	auto parentmodel = ca.parentmodel;
+	auto t = ca._receiver_type;
+	ca = x;
+	ca._receiver_type = t;
+	ca.parentmodel = parentmodel;
+	
+	for (auto i=ca.begin(); i!=ca.end(); i++) {
+		if (parentmodel && etk::to_uppercase(i->param_name)!="CONSTANT" && !parentmodel->__contains__(i->param_name)) {
+			parentmodel->parameter(i->param_name);
+		}
+	}
+}
+
+void elm::ComponentListPair::_set_co(const elm::LinearComponent& x)
+{
+	elm::ComponentList y;
+	y.push_back(x);
+	_set_co(y);
+}
+
+void elm::ComponentListPair::_set_co(const elm::ComponentList& x)
+{
+	auto parentmodel = co.parentmodel;
+	auto t = co._receiver_type;
+	co = x;
+	co._receiver_type = t;
+	co.parentmodel = parentmodel;
+	for (auto i=co.begin(); i!=co.end(); i++) {
+		if (parentmodel && etk::to_uppercase(i->param_name)!="CONSTANT" && !parentmodel->__contains__(i->param_name)) {
+			parentmodel->parameter(i->param_name);
+		}
+	}
+}
+
+elm::ComponentList& elm::ComponentListPair::_get_ca()
+{
+	return ca;
+}
+
+elm::ComponentList& elm::ComponentListPair::_get_co()
+{
+	return co;
+}
+
+
 
 
 elm::ComponentEdgeMap::ComponentEdgeMap(elm::Model2* parentmodel)

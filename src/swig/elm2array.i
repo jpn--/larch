@@ -592,3 +592,119 @@
 	//PyRun_SimpleString("print('%typemap(out) elm::darray*')");
 }
 
+
+
+
+
+
+%typecheck(SWIG_TYPECHECK_POINTER) elm::Component *, elm::Component & {
+
+
+
+	// check if input is Component
+	int res = SWIG_ConvertPtr($input, 0, $1_descriptor, 0);
+	$1 = SWIG_CheckState(res);
+
+	// if not, check if input is ParameterRef (can build component)
+	if (!($1)) {
+		if (PyUnicode_Check($input) && PyObject_HasAttrString($input, "_role")) {
+			PyObject* role = PyObject_GetAttrString($input, "_role");
+			$1 = (PyString_ExtractCppString(role)=="parameter");
+			Py_CLEAR(role);
+		}
+		if ($1 == 0) PyErr_Clear();
+	}
+
+//	PyObject* type_o = PyObject_Type($input);
+//	if (type_o) {
+//		PyObject* type_o_str = PyObject_Str(type_o);
+//		if (type_o_str)
+//			std::cerr << "check "<<$1<<": type is " << PyString_ExtractCppString(type_o_str) << "\n";
+//		Py_CLEAR(type_o_str);
+//	}
+//	Py_CLEAR(type_o);
+
+}
+
+
+
+
+%typemap(in) elm::Component* (int res, void* argp, bool use_temp, elm::Component temp_comp) {
+	
+	
+	use_temp = false;
+	res = SWIG_ConvertPtr($input, &argp, $1_descriptor,  0  | 0);
+	if (!SWIG_IsOK(res)) {
+		if (PyUnicode_Check($input) && PyObject_HasAttrString($input, "_role")) {
+			PyObject* role = PyObject_GetAttrString($input, "_role");
+			use_temp = (PyString_ExtractCppString(role)=="parameter");
+			if (use_temp) {
+				PyObject* pname = PyObject_Str($input);
+				temp_comp.param_name = PyString_ExtractCppString(pname);
+				Py_CLEAR(pname);
+			}
+			Py_CLEAR(role);
+		}
+		if (!use_temp) {
+			SWIG_exception_fail(SWIG_ArgError(res), "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component' (*)");
+		}
+	}
+	if (!argp && !use_temp) {
+		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component'");
+	}
+	if (use_temp) {
+		$1 = &temp_comp;
+	} else {
+		$1 = reinterpret_cast< elm::Component * >(argp);
+	}
+	
+	
+}
+
+%typemap(in) elm::Component& (int res, void* argp, bool use_temp, elm::Component temp_comp) {
+//	
+//	PyObject* type_o = PyObject_Type($input);
+//	if (type_o) {
+//		PyObject* type_o_str = PyObject_Str(type_o);
+//		if (type_o_str)
+//			std::cerr << "le type is " << PyString_ExtractCppString(type_o_str) << "\n";
+//		Py_CLEAR(type_o_str);
+//	}
+//	Py_CLEAR(type_o);
+	
+	
+	use_temp = false;
+	res = SWIG_ConvertPtr($input, &argp, $1_descriptor,  0  | 0);
+	if (!SWIG_IsOK(res)) {
+
+		if (PyUnicode_Check($input) && PyObject_HasAttrString($input, "_role")) {
+			PyObject* role = PyObject_GetAttrString($input, "_role");
+			
+//			std::cerr << "converting role "<<PyString_ExtractCppString(role) << "\n";
+			
+			use_temp = (PyString_ExtractCppString(role)=="parameter");
+			if (use_temp) {
+				PyObject* pname = PyObject_Str($input);
+				temp_comp.param_name = PyString_ExtractCppString(pname);
+				temp_comp.data_name = "1";
+				Py_CLEAR(pname);
+			}
+			Py_CLEAR(role);
+		}
+		if (!use_temp) {
+			SWIG_exception_fail(SWIG_ArgError(res), "in method '$symname', argument $argnum of type 'larch.Component' (&)");
+		}
+	}
+	if (!argp && !use_temp) {
+		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component'");
+	}
+	if (use_temp) {
+		$1 = &temp_comp;
+	} else {
+		$1 = reinterpret_cast< elm::Component * >(argp);
+	}
+	
+	
+}
+
+

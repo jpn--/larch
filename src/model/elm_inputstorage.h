@@ -11,16 +11,18 @@
 
 
 #ifdef SWIG
-%rename(Component) elm::Component;
-%rename(data) elm::Component::data_name;
-%rename(param) elm::Component::param_name;
+%rename(LinearComponent) elm::LinearComponent;
+%rename(data) elm::LinearComponent::data_name;
+%rename(param) elm::LinearComponent::param_name;
 
-%rename(LinearFunction) elm::ComponentListPair;
+%rename(LinearFunction) elm::ComponentList;
+%rename(LinearFunctionPair) elm::ComponentListPair;
 
-%feature("kwargs", 1) elm::Component::Component;
+%feature("kwargs", 1) elm::LinearComponent::LinearComponent;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_ca;
 %feature("kwargs", 1) elm::ComponentList::receive_allocation;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_co_kwd;
+%feature("kwargs", 1) std::map< elm::cellcode, elm::ComponentList >::__call__;
 
 /* Convert cellcodepair from Python --> C */
 %typemap(in) const elm::cellcodepair& (elm::cellcodepair temp) {
@@ -47,8 +49,9 @@ namespace elm {
 	
 	class Model2;
 	class Facet;
+	class ComponentList;
 		
-	struct Component {
+	struct LinearComponent {
 		std::string		data_name;
 		std::string     param_name;
 		
@@ -62,10 +65,10 @@ namespace elm {
 
 		std::string __repr__() const;
 		
-		Component(std::string data="", std::string param="", double multiplier=1.0, PyObject* category=nullptr);
-		static Component Create(PyObject* obj);
-		~Component();
-//		Component(const Component& obj);
+		LinearComponent(std::string data="", std::string param="", double multiplier=1.0, PyObject* category=nullptr);
+		static LinearComponent Create(PyObject* obj);
+		~LinearComponent();
+//		LinearComponent(const LinearComponent& obj);
 
 		#ifdef SWIG
 		%pythoncode %{
@@ -78,14 +81,45 @@ namespace elm {
 		%}
 		#endif // SWIG
 
+		ComponentList operator+(const LinearComponent& other);
+		
+
 	};
 	
 
 };
 
 #ifdef SWIG
-%template(ComponentVector) std::vector<elm::Component>;
+%template(ComponentVector) std::vector<elm::LinearComponent>;
+%template(LinearSubBundle_1) std::map< elm::cellcode, elm::ComponentList >;
+
+%extend std::map< elm::cellcode, elm::ComponentList > {
+   std::string __str__() {
+       return "<LinearSubBundle_1>";
+   }
+
+	void __call__ (const elm::cellcode& altcode,
+				   const std::string& data,
+				   std::string param="",
+				   const double& multiplier=1.0) {
+		try {
+			$self->at(altcode).receive_utility_co(data,altcode,param,multiplier);
+		} catch (std::out_of_range) {
+			elm::Model2* parentmodel = nullptr;
+			if ($self->size()) {
+				parentmodel = $self->begin()->second.parentmodel;
+			}
+			$self->emplace(altcode, elm::ComponentList(COMPONENTLIST_TYPE_UTILITYCO, parentmodel));
+			$self->at(altcode).receive_utility_co(data,altcode,param,multiplier);
+		}
+		
+		
+	}
+
+}
+
 #endif
+
 
 #define COMPONENTLIST_TYPE_UTILITYCA 0x1
 #define COMPONENTLIST_TYPE_UTILITYCO 0x2
@@ -95,7 +129,7 @@ namespace elm {
 namespace elm {
 	
 	class ComponentList
-	: public ::std::vector<Component>
+	: public ::std::vector<LinearComponent>
 	{
 		public:
 		int _receiver_type;
@@ -124,9 +158,15 @@ namespace elm {
 									std::string				param="",
 									const double&			multiplier=1.0);
 
+		std::string __str__() const;
 		std::string __repr__() const;
 
 		std::vector<std::string> needs() const;
+
+		ComponentList operator+(const LinearComponent& x);
+		ComponentList operator+(const ComponentList& x);
+		ComponentList& operator+=(const LinearComponent& x);
+		ComponentList& operator+=(const ComponentList& x);
 
 	};
 
@@ -134,12 +174,14 @@ namespace elm {
 
 	class ComponentCellcodeMap
 	#ifndef SWIG
-	: public ::std::map<elm::cellcode, elm::Component>
+	: public ::std::map<elm::cellcode, elm::LinearComponent>
 	#endif
 	{
 		public:
+		#ifndef SWIG
 		int _receiver_type;
 		Model2* parentmodel;
+		#endif // ndef swig
 		ComponentCellcodeMap(int type=0, Model2* parentmodel=nullptr);
 
 		std::string __repr__() const;
@@ -149,25 +191,25 @@ namespace elm {
         bool empty() const;
         void clear();
 		%extend {
-            elm::Component& __getitem__(const elm::cellcode& key) throw (std::out_of_range) {
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+            elm::LinearComponent& __getitem__(const elm::cellcode& key) throw (std::out_of_range) {
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 if (i != self->end())
                     return i->second;
                 else
                     throw std::out_of_range("key not found");
             }
-            void __setitem__(const elm::cellcode& key, const elm::Component& x) {
+            void __setitem__(const elm::cellcode& key, const elm::LinearComponent& x) {
                 (*self)[key] = x;
             }
             void __delitem__(const elm::cellcode& key) throw (std::out_of_range) {
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 if (i != self->end())
                     self->erase(i);
 					else
 						throw std::out_of_range("key not found");
             }
             bool __contains__(const elm::cellcode& key) {
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 return i != self->end();
             }
 			int __len__() const {
@@ -192,18 +234,92 @@ namespace elm {
         }
 		#endif // def SWIG
 	};
+
+
+
+
+
+
+
+
+	struct LinearBundle_1 {
+		std::string descrip;
+		
+		#ifndef SWIG
+		ComponentList ca;
+		std::map< elm::cellcode, ComponentList > co;
+		#endif
+		
+		LinearBundle_1(std::string descrip="", Model2* parentmodel=nullptr);
+		
+		void __call__(std::string data="", std::string param="", const double& multiplier=1.0);
+		void clean(Facet& db);
+
+		std::string __repr__() const;
+		
+		void _set_ca(const LinearComponent& x);
+		void _set_ca(const ComponentList& x);
+		void _set_co(const std::map< elm::cellcode, elm::ComponentList >& x);
+		ComponentList&  _get_ca();
+		std::map< elm::cellcode, elm::ComponentList >&       _get_co();
+		
+		#ifdef SWIG
+		%pythoncode %{
+		ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca(x))
+		co = property(lambda self: self._get_co(), lambda self,x: self._set_co(x))
+		%}
+		#endif // def SWIG
+
+		
+	};
+
+
+
+
+
+
+
+
+
+
 	
 	
 	struct ComponentListPair {
 		std::string descrip;
+		
+		#ifndef SWIG
 		ComponentList ca;
 		ComponentList co;
+		#endif
+		
 		ComponentListPair(int type1=0, int type2=0, std::string descrip="", Model2* parentmodel=nullptr);
 		
 		void __call__(const elm::cellcode& altcode, std::string param="", const double& multiplier=1.0);
 		void clean(Facet& db);
 
 		std::string __repr__() const;
+		
+		void _set_ca(const LinearComponent& x);
+		void _set_co(const LinearComponent& x);
+		void _set_ca(const ComponentList& x);
+		void _set_co(const ComponentList& x);
+		ComponentList&  _get_ca();
+		ComponentList&  _get_co();
+		
+		#ifdef SWIG
+		%pythoncode %{
+		def _set_ca_1(self,x):
+			#//if type(x) is ParameterRef: x = Component(param=str(x), data="1")
+			self._set_ca(x)
+		def _set_co_1(self,x):
+			#//if type(x) is ParameterRef: x = Component(param=str(x), data="1")
+			self._set_co(x)
+		ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca_1(x))
+		co = property(lambda self: self._get_co(), lambda self,x: self._set_co_1(x))
+		%}
+		#endif // def SWIG
+
+		
 	};
 	
 	
@@ -341,29 +457,29 @@ namespace elm {
 
 #ifdef SWIG
 %pythoncode %{
-def __ComponentList__call(self, *args, **kwargs):
+def __LinearFunction__call(self, *args, **kwargs):
 	if (self._receiver_type==0):
-		raise LarchError("ComponentList improperly initialized")
+		raise LarchError("LinearFunction improperly initialized")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
 		self.receive_utility_ca(*args, **kwargs)
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
 		if len(kwargs)>0 and len(args)==0:
 			self.receive_utility_co_kwd(**kwargs)
 		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise LarchError("ComponentList for co type requires at least two arguments: data and alt")
+			if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
 			self.receive_utility_co(*args)
 		else:
-			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
+			raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
 		self.receive_allocation(*args, **kwargs)
 	else:
-		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
+		raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:
 	####	self.parentmodel.freshen()
-ComponentList.__call__ = __ComponentList__call
-del __ComponentList__call
-ComponentList.__long_len = ComponentList.__len__
-ComponentList.__len__ = lambda self: int(self.__long_len())
+LinearFunction.__call__ = __LinearFunction__call
+del __LinearFunction__call
+LinearFunction.__long_len = LinearFunction.__len__
+LinearFunction.__len__ = lambda self: int(self.__long_len())
 
 def __ComponentCellcodeMap__call(self, nest_name, nest_code=None, param_name="", multiplier=1.0, parent=None, parents=None, children=None):
 	if isinstance(nest_name,(int,)) and nest_code is None:
