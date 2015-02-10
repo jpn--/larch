@@ -622,7 +622,7 @@ void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg
 }
 
 
-void VAS_System::regrow( ComponentCellcodeMap* nodes, ComponentEdgeMap* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
+void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
 {
 	if (nodes||edges||db||root) {
 		ComponentGraphDNA new_graph = ComponentGraphDNA(nodes, edges, db, root);

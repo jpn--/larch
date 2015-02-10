@@ -2941,85 +2941,90 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_allocator_type swig_types[1]
 #define SWIGTYPE_p_char swig_types[2]
 #define SWIGTYPE_p_difference_type swig_types[3]
-#define SWIGTYPE_p_elm__Component swig_types[4]
-#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[5]
-#define SWIGTYPE_p_elm__ComponentEdgeMap swig_types[6]
-#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[7]
-#define SWIGTYPE_p_elm__ComponentList swig_types[8]
-#define SWIGTYPE_p_elm__ComponentListPair swig_types[9]
-#define SWIGTYPE_p_elm__Facet swig_types[10]
-#define SWIGTYPE_p_elm__Fountain swig_types[11]
-#define SWIGTYPE_p_elm__Model2 swig_types[12]
-#define SWIGTYPE_p_elm__ParameterList swig_types[13]
-#define SWIGTYPE_p_elm__QuerySet swig_types[14]
-#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[15]
-#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[16]
-#define SWIGTYPE_p_elm__SQLiteDB swig_types[17]
-#define SWIGTYPE_p_elm__VAS_dna swig_types[18]
-#define SWIGTYPE_p_elm__VAS_dna_info swig_types[19]
-#define SWIGTYPE_p_elm__cellcodepair swig_types[20]
-#define SWIGTYPE_p_elm__cellcodeset swig_types[21]
-#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[22]
-#define SWIGTYPE_p_elm__darray_req swig_types[23]
-#define SWIGTYPE_p_elm__model_options_t swig_types[24]
-#define SWIGTYPE_p_elm__paramArray swig_types[25]
-#define SWIGTYPE_p_elm__runstats swig_types[26]
-#define SWIGTYPE_p_elm__string_and_cellcode swig_types[27]
-#define SWIGTYPE_p_etk__exception_t swig_types[28]
-#define SWIGTYPE_p_etk__ostream_c swig_types[29]
-#define SWIGTYPE_p_etk__refcounted swig_types[30]
-#define SWIGTYPE_p_etk__string_sender swig_types[31]
-#define SWIGTYPE_p_etk__three_dim swig_types[32]
-#define SWIGTYPE_p_freedom_info swig_types[33]
-#define SWIGTYPE_p_key_type swig_types[34]
-#define SWIGTYPE_p_long_long swig_types[35]
-#define SWIGTYPE_p_mapped_type swig_types[36]
-#define SWIGTYPE_p_p__object swig_types[37]
-#define SWIGTYPE_p_sherpa swig_types[38]
-#define SWIGTYPE_p_sherpa_pack swig_types[39]
-#define SWIGTYPE_p_sherpa_result swig_types[40]
-#define SWIGTYPE_p_size_type swig_types[41]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[42]
-#define SWIGTYPE_p_std__allocatorT_elm__Component_t swig_types[43]
-#define SWIGTYPE_p_std__allocatorT_int_t swig_types[44]
-#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[45]
-#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[46]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[47]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[48]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t swig_types[49]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[50]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[51]
-#define SWIGTYPE_p_std__invalid_argument swig_types[52]
-#define SWIGTYPE_p_std__lessT_long_long_t swig_types[53]
-#define SWIGTYPE_p_std__lessT_std__string_t swig_types[54]
-#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[55]
-#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[56]
-#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[57]
-#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[58]
-#define SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t swig_types[59]
-#define SWIGTYPE_p_std__ostream swig_types[60]
-#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[61]
-#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[62]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[63]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[64]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[65]
-#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[66]
-#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[67]
-#define SWIGTYPE_p_std__string swig_types[68]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[69]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[70]
-#define SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t swig_types[71]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[72]
-#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[73]
-#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[74]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[75]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[76]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[77]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[78]
-#define SWIGTYPE_p_timeval swig_types[79]
-#define SWIGTYPE_p_value_type swig_types[80]
-static swig_type_info *swig_types[82];
-static swig_module_info swig_module = {swig_types, 81, 0, 0, 0, 0};
+#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[4]
+#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[5]
+#define SWIGTYPE_p_elm__ComponentList swig_types[6]
+#define SWIGTYPE_p_elm__ComponentListPair swig_types[7]
+#define SWIGTYPE_p_elm__Facet swig_types[8]
+#define SWIGTYPE_p_elm__Fountain swig_types[9]
+#define SWIGTYPE_p_elm__LinearBundle_1 swig_types[10]
+#define SWIGTYPE_p_elm__LinearCOBundle_1 swig_types[11]
+#define SWIGTYPE_p_elm__LinearCOBundle_2 swig_types[12]
+#define SWIGTYPE_p_elm__LinearComponent swig_types[13]
+#define SWIGTYPE_p_elm__Model2 swig_types[14]
+#define SWIGTYPE_p_elm__ParameterList swig_types[15]
+#define SWIGTYPE_p_elm__QuerySet swig_types[16]
+#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[17]
+#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[18]
+#define SWIGTYPE_p_elm__SQLiteDB swig_types[19]
+#define SWIGTYPE_p_elm__VAS_dna swig_types[20]
+#define SWIGTYPE_p_elm__VAS_dna_info swig_types[21]
+#define SWIGTYPE_p_elm__cellcodepair swig_types[22]
+#define SWIGTYPE_p_elm__cellcodeset swig_types[23]
+#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[24]
+#define SWIGTYPE_p_elm__darray_req swig_types[25]
+#define SWIGTYPE_p_elm__model_options_t swig_types[26]
+#define SWIGTYPE_p_elm__paramArray swig_types[27]
+#define SWIGTYPE_p_elm__runstats swig_types[28]
+#define SWIGTYPE_p_elm__string_and_cellcode swig_types[29]
+#define SWIGTYPE_p_etk__exception_t swig_types[30]
+#define SWIGTYPE_p_etk__ostream_c swig_types[31]
+#define SWIGTYPE_p_etk__refcounted swig_types[32]
+#define SWIGTYPE_p_etk__string_sender swig_types[33]
+#define SWIGTYPE_p_etk__three_dim swig_types[34]
+#define SWIGTYPE_p_freedom_info swig_types[35]
+#define SWIGTYPE_p_key_type swig_types[36]
+#define SWIGTYPE_p_long_long swig_types[37]
+#define SWIGTYPE_p_mapped_type swig_types[38]
+#define SWIGTYPE_p_p__object swig_types[39]
+#define SWIGTYPE_p_sherpa swig_types[40]
+#define SWIGTYPE_p_sherpa_pack swig_types[41]
+#define SWIGTYPE_p_sherpa_result swig_types[42]
+#define SWIGTYPE_p_size_type swig_types[43]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[44]
+#define SWIGTYPE_p_std__allocatorT_elm__LinearComponent_t swig_types[45]
+#define SWIGTYPE_p_std__allocatorT_int_t swig_types[46]
+#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[47]
+#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[48]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t swig_types[49]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[50]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[51]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t swig_types[52]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[53]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[54]
+#define SWIGTYPE_p_std__invalid_argument swig_types[55]
+#define SWIGTYPE_p_std__lessT_long_long_t swig_types[56]
+#define SWIGTYPE_p_std__lessT_std__string_t swig_types[57]
+#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[58]
+#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[59]
+#define SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t swig_types[60]
+#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[61]
+#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[62]
+#define SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t swig_types[63]
+#define SWIGTYPE_p_std__ostream swig_types[64]
+#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[65]
+#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[66]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[67]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[68]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[69]
+#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[70]
+#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[71]
+#define SWIGTYPE_p_std__string swig_types[72]
+#define SWIGTYPE_p_std__vectorT_Component_std__allocatorT_Component_t_t swig_types[73]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[74]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[75]
+#define SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t swig_types[76]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[77]
+#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[78]
+#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[79]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[80]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[81]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[82]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[83]
+#define SWIGTYPE_p_timeval swig_types[84]
+#define SWIGTYPE_p_value_type swig_types[85]
+static swig_type_info *swig_types[87];
+static swig_module_info swig_module = {swig_types, 86, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6444,129 +6449,261 @@ SWIGINTERN void std_list_Sl_elm_cellcode_Sg__insert__SWIG_1(std::list< elm::cell
 
 
   namespace swig {
-    template <>  struct traits<elm::Component > {
+    template <>  struct traits<elm::LinearComponent > {
       typedef pointer_category category;
-      static const char* type_name() { return"elm::Component"; }
+      static const char* type_name() { return"elm::LinearComponent"; }
     };
   }
 
 
       namespace swig {
-	template <>  struct traits<std::vector<elm::Component, std::allocator< elm::Component > > > {
+	template <>  struct traits<std::vector<elm::LinearComponent, std::allocator< elm::LinearComponent > > > {
 	  typedef pointer_category category;
 	  static const char* type_name() {
-	    return "std::vector<" "elm::Component" "," "std::allocator< elm::Component >" " >";
+	    return "std::vector<" "elm::LinearComponent" "," "std::allocator< elm::LinearComponent >" " >";
 	  }
 	};
       }
     
-SWIGINTERN swig::SwigPyIterator *std_vector_Sl_elm_Component_Sg__iterator(std::vector< elm::Component > *self,PyObject **PYTHON_SELF){
+SWIGINTERN swig::SwigPyIterator *std_vector_Sl_elm_LinearComponent_Sg__iterator(std::vector< elm::LinearComponent > *self,PyObject **PYTHON_SELF){
       return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
     }
-SWIGINTERN bool std_vector_Sl_elm_Component_Sg____nonzero__(std::vector< elm::Component > const *self){
+SWIGINTERN bool std_vector_Sl_elm_LinearComponent_Sg____nonzero__(std::vector< elm::LinearComponent > const *self){
       return !(self->empty());
     }
-SWIGINTERN bool std_vector_Sl_elm_Component_Sg____bool__(std::vector< elm::Component > const *self){
+SWIGINTERN bool std_vector_Sl_elm_LinearComponent_Sg____bool__(std::vector< elm::LinearComponent > const *self){
       return !(self->empty());
     }
-SWIGINTERN std::vector< elm::Component >::size_type std_vector_Sl_elm_Component_Sg____len__(std::vector< elm::Component > const *self){
+SWIGINTERN std::vector< elm::LinearComponent >::size_type std_vector_Sl_elm_LinearComponent_Sg____len__(std::vector< elm::LinearComponent > const *self){
       return self->size();
     }
-SWIGINTERN std::vector< elm::Component >::value_type std_vector_Sl_elm_Component_Sg__pop(std::vector< elm::Component > *self){
+SWIGINTERN std::vector< elm::LinearComponent >::value_type std_vector_Sl_elm_LinearComponent_Sg__pop(std::vector< elm::LinearComponent > *self){
       if (self->size() == 0)
 	throw std::out_of_range("pop from empty container");
-      std::vector<elm::Component,std::allocator< elm::Component > >::value_type x = self->back();
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::value_type x = self->back();
       self->pop_back();
       return x;
     }
-SWIGINTERN std::vector< elm::Component,std::allocator< elm::Component > > *std_vector_Sl_elm_Component_Sg____getslice__(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j){
+SWIGINTERN std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *std_vector_Sl_elm_LinearComponent_Sg____getslice__(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::difference_type i,std::vector< elm::LinearComponent >::difference_type j){
       return swig::getslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j,std::vector< elm::Component,std::allocator< elm::Component > > const &v=std::vector< elm::Component,std::allocator< elm::Component > >()){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____setslice____SWIG_0(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::difference_type i,std::vector< elm::LinearComponent >::difference_type j,std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &v=std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > >()){
       swig::setslice(self, i, j, 1, v);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____delslice__(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::difference_type j){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____delslice__(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::difference_type i,std::vector< elm::LinearComponent >::difference_type j){
       swig::delslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____delitem____SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____delitem____SWIG_0(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::difference_type i){
       self->erase(swig::getpos(self,i));
     }
-SWIGINTERN std::vector< elm::Component,std::allocator< elm::Component > > *std_vector_Sl_elm_Component_Sg____getitem____SWIG_0(std::vector< elm::Component > *self,PySliceObject *slice){
+SWIGINTERN std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *std_vector_Sl_elm_LinearComponent_Sg____getitem____SWIG_0(std::vector< elm::LinearComponent > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return NULL;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type id = i;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type jd = j;
       return swig::getslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_0(std::vector< elm::Component > *self,PySliceObject *slice,std::vector< elm::Component,std::allocator< elm::Component > > const &v){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_0(std::vector< elm::LinearComponent > *self,PySliceObject *slice,std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &v){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type id = i;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type jd = j;
       swig::setslice(self, id, jd, step, v);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_1(std::vector< elm::Component > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_1(std::vector< elm::LinearComponent > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type id = i;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____delitem____SWIG_1(std::vector< elm::Component > *self,PySliceObject *slice){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____delitem____SWIG_1(std::vector< elm::LinearComponent > *self,PySliceObject *slice){
       Py_ssize_t i, j, step;
       if( !PySlice_Check(slice) ) {
         SWIG_Error(SWIG_TypeError, "Slice object expected.");
         return;
       }
       PySlice_GetIndices(SWIGPY_SLICE_ARG(slice), (Py_ssize_t)self->size(), &i, &j, &step);
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type id = i;
-      std::vector<elm::Component,std::allocator< elm::Component > >::difference_type jd = j;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type id = i;
+      std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN std::vector< elm::Component >::value_type const &std_vector_Sl_elm_Component_Sg____getitem____SWIG_1(std::vector< elm::Component > const *self,std::vector< elm::Component >::difference_type i){
+SWIGINTERN std::vector< elm::LinearComponent >::value_type const &std_vector_Sl_elm_LinearComponent_Sg____getitem____SWIG_1(std::vector< elm::LinearComponent > const *self,std::vector< elm::LinearComponent >::difference_type i){
       return *(swig::cgetpos(self, i));
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg____setitem____SWIG_2(std::vector< elm::Component > *self,std::vector< elm::Component >::difference_type i,std::vector< elm::Component >::value_type const &x){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_2(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::difference_type i,std::vector< elm::LinearComponent >::value_type const &x){
       *(swig::getpos(self,i)) = x;
     }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg__append(std::vector< elm::Component > *self,std::vector< elm::Component >::value_type const &x){
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg__append(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::value_type const &x){
       self->push_back(x);
     }
-SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__erase__SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos){ return self->erase(pos); }
-SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__erase__SWIG_1(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator first,std::vector< elm::Component >::iterator last){ return self->erase(first, last); }
-SWIGINTERN std::vector< elm::Component >::iterator std_vector_Sl_elm_Component_Sg__insert__SWIG_0(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos,std::vector< elm::Component >::value_type const &x){ return self->insert(pos, x); }
-SWIGINTERN void std_vector_Sl_elm_Component_Sg__insert__SWIG_1(std::vector< elm::Component > *self,std::vector< elm::Component >::iterator pos,std::vector< elm::Component >::size_type n,std::vector< elm::Component >::value_type const &x){ self->insert(pos, n, x); }
-SWIGINTERN elm::Component &elm_ComponentCellcodeMap___getitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+SWIGINTERN std::vector< elm::LinearComponent >::iterator std_vector_Sl_elm_LinearComponent_Sg__erase__SWIG_0(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< elm::LinearComponent >::iterator std_vector_Sl_elm_LinearComponent_Sg__erase__SWIG_1(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::iterator first,std::vector< elm::LinearComponent >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< elm::LinearComponent >::iterator std_vector_Sl_elm_LinearComponent_Sg__insert__SWIG_0(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::iterator pos,std::vector< elm::LinearComponent >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_elm_LinearComponent_Sg__insert__SWIG_1(std::vector< elm::LinearComponent > *self,std::vector< elm::LinearComponent >::iterator pos,std::vector< elm::LinearComponent >::size_type n,std::vector< elm::LinearComponent >::value_type const &x){ self->insert(pos, n, x); }
+
+  namespace swig {
+    template <>  struct traits<elm::ComponentList > {
+      typedef pointer_category category;
+      static const char* type_name() { return"elm::ComponentList"; }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::pair< long long, elm::ComponentList > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::pair<" "long long" "," "elm::ComponentList" " >";
+	  }
+	};
+      }
+    
+
+      namespace swig {
+	template <>  struct traits<std::map<long long, elm::ComponentList, std::less< long long >, std::allocator< std::pair< long long const,elm::ComponentList > > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::map<" "long long" "," "elm::ComponentList" "," "std::less< long long >" "," "std::allocator< std::pair< long long const,elm::ComponentList > >" " >";
+	  }
+	};
+      }
+    
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__iterator(std::map< elm::cellcode,elm::ComponentList > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN bool std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____nonzero__(std::map< elm::cellcode,elm::ComponentList > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN bool std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____bool__(std::map< elm::cellcode,elm::ComponentList > const *self){
+      return !(self->empty());
+    }
+SWIGINTERN std::map< long long,elm::ComponentList >::size_type std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____len__(std::map< elm::cellcode,elm::ComponentList > const *self){
+      return self->size();
+    }
+SWIGINTERN std::map< long long,elm::ComponentList >::mapped_type const &std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____getitem__(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::key_type const &key){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::const_iterator i = self->find(key);
+      if (i != self->end())
+	return i->second;
+      else
+	throw std::out_of_range("key not found");
+    }
+SWIGINTERN void std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____delitem__(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::key_type const &key){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::iterator i = self->find(key);
+      if (i != self->end())
+	self->erase(i);
+      else
+	throw std::out_of_range("key not found");
+    }
+SWIGINTERN bool std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__has_key(std::map< elm::cellcode,elm::ComponentList > const *self,std::map< long long,elm::ComponentList >::key_type const &key){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::const_iterator i = self->find(key);
+      return i != self->end();
+    }
+SWIGINTERN PyObject *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__keys(std::map< elm::cellcode,elm::ComponentList > *self){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }
+      PyObject* keyList = PyList_New(pysize);
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(keyList, j, swig::from(i->first));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return keyList;
+    }
+SWIGINTERN PyObject *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__values(std::map< elm::cellcode,elm::ComponentList > *self){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }
+      PyObject* valList = PyList_New(pysize);
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(valList, j, swig::from(i->second));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return valList;
+    }
+SWIGINTERN PyObject *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__items(std::map< elm::cellcode,elm::ComponentList > *self){
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type size = self->size();
+      int pysize = (size <= (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::size_type) INT_MAX) ? (int) size : -1;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      if (pysize < 0) {
+	PyErr_SetString(PyExc_OverflowError,
+			"map size not valid in python");
+	SWIG_PYTHON_THREAD_END_BLOCK;
+	return NULL;
+      }    
+      PyObject* itemList = PyList_New(pysize);
+      std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >::const_iterator i = self->begin();
+      for (int j = 0; j < pysize; ++i, ++j) {
+	PyList_SET_ITEM(itemList, j, swig::from(*i));
+      }
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return itemList;
+    }
+SWIGINTERN bool std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____contains__(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::key_type const &key){
+      return self->find(key) != self->end();
+    }
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__key_iterator(std::map< elm::cellcode,elm::ComponentList > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_key_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN swig::SwigPyIterator *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__value_iterator(std::map< elm::cellcode,elm::ComponentList > *self,PyObject **PYTHON_SELF){
+      return swig::make_output_value_iterator(self->begin(), self->begin(), self->end(), *PYTHON_SELF);
+    }
+SWIGINTERN void std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____setitem____SWIG_0(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::key_type const &key){
+      self->erase(key);
+    }
+SWIGINTERN void std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____setitem____SWIG_1(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::key_type const &key,std::map< long long,elm::ComponentList >::mapped_type const &x){
+      (*self)[key] = x;
+    }
+SWIGINTERN PyObject *std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__asdict(std::map< elm::cellcode,elm::ComponentList > *self){
+      return swig::traits_from< std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > > >::asdict(*self);
+    }
+SWIGINTERN void std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__erase__SWIG_1(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::iterator position){ self->erase(position); }
+SWIGINTERN void std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__erase__SWIG_2(std::map< elm::cellcode,elm::ComponentList > *self,std::map< long long,elm::ComponentList >::iterator first,std::map< long long,elm::ComponentList >::iterator last){ self->erase(first, last); }
+SWIGINTERN elm::LinearComponent &elm_ComponentCellcodeMap___getitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 if (i != self->end())
                     return i->second;
                 else
                     throw std::out_of_range("key not found");
             }
-SWIGINTERN void elm_ComponentCellcodeMap___setitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key,elm::Component const &x){
+SWIGINTERN void elm_ComponentCellcodeMap___setitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key,elm::LinearComponent const &x){
                 (*self)[key] = x;
             }
 SWIGINTERN void elm_ComponentCellcodeMap___delitem__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 if (i != self->end())
                     self->erase(i);
 					else
 						throw std::out_of_range("key not found");
             }
 SWIGINTERN bool elm_ComponentCellcodeMap___contains__(elm::ComponentCellcodeMap *self,elm::cellcode const &key){
-                std::map<elm::cellcode,elm::Component >::iterator i = self->find(key);
+                std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
                 return i != self->end();
             }
 SWIGINTERN int elm_ComponentCellcodeMap___len__(elm::ComponentCellcodeMap const *self){
@@ -6586,31 +6723,31 @@ SWIGINTERN void elm_ComponentCellcodeMap__link(elm::ComponentCellcodeMap *self,e
 					throw etk::exception_t("not linked to a model");
 				}
 			}
-SWIGINTERN elm::EdgeValue &elm_ComponentEdgeMap___getitem__(elm::ComponentEdgeMap *self,elm::cellcodepair const &key){
+SWIGINTERN elm::EdgeValue &elm_LinearCOBundle_2___getitem__(elm::LinearCOBundle_2 *self,elm::cellcodepair const &key){
                 std::map<elm::cellcodepair, elm::EdgeValue>::iterator i = self->find(key);
                 if (i != self->end())
                     return i->second;
                 else
                     throw std::out_of_range("key not found");
             }
-SWIGINTERN void elm_ComponentEdgeMap___setitem__(elm::ComponentEdgeMap *self,elm::cellcodepair const &key,elm::EdgeValue const &x){
+SWIGINTERN void elm_LinearCOBundle_2___setitem__(elm::LinearCOBundle_2 *self,elm::cellcodepair const &key,elm::EdgeValue const &x){
                 (*self)[key] = x;
             }
-SWIGINTERN void elm_ComponentEdgeMap___delitem__(elm::ComponentEdgeMap *self,elm::cellcodepair const &key){
+SWIGINTERN void elm_LinearCOBundle_2___delitem__(elm::LinearCOBundle_2 *self,elm::cellcodepair const &key){
                 std::map<elm::cellcodepair, elm::EdgeValue>::iterator i = self->find(key);
                 if (i != self->end())
                     self->erase(i);
 					else
 						throw std::out_of_range("key not found");
             }
-SWIGINTERN bool elm_ComponentEdgeMap___contains__(elm::ComponentEdgeMap *self,elm::cellcodepair const &key){
+SWIGINTERN bool elm_LinearCOBundle_2___contains__(elm::LinearCOBundle_2 *self,elm::cellcodepair const &key){
                 std::map<elm::cellcodepair, elm::EdgeValue>::iterator i = self->find(key);
                 return i != self->end();
             }
-SWIGINTERN int elm_ComponentEdgeMap___len__(elm::ComponentEdgeMap const *self){
+SWIGINTERN int elm_LinearCOBundle_2___len__(elm::LinearCOBundle_2 const *self){
 				return self->size();
 			}
-SWIGINTERN void elm_ComponentEdgeMap___call__(elm::ComponentEdgeMap *self,elm::cellcode upcode,elm::cellcode dncode){
+SWIGINTERN void elm_LinearCOBundle_2___call__(elm::LinearCOBundle_2 *self,elm::cellcode upcode,elm::cellcode dncode){
 				elm::cellcodepair x (upcode,dncode);
                 (*self)[x] = elm::EdgeValue(0x8, self->parentmodel);
 			}
@@ -47986,9 +48123,9 @@ SWIGINTERN PyObject *VAS_dna_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObje
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_Component_data_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_data_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -47996,20 +48133,20 @@ SWIGINTERN PyObject *_wrap_Component_data_set(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_data_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_data_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_data_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Component_data_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearComponent_data_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Component_data_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearComponent_data_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -48023,20 +48160,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_data_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_data_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_data_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_data_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_data_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_data_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (std::string *) & ((arg1)->data_name);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
@@ -48045,9 +48182,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_param_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_param_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48055,20 +48192,20 @@ SWIGINTERN PyObject *_wrap_Component_param_set(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_param_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_param_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_param_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Component_param_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearComponent_param_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Component_param_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearComponent_param_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -48082,20 +48219,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_param_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_param_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_param_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_param_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_param_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_param_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (std::string *) & ((arg1)->param_name);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
@@ -48104,9 +48241,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__altcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__altcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   elm::cellcode arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48115,15 +48252,15 @@ SWIGINTERN PyObject *_wrap_Component__altcode_set(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__altcode_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__altcode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altcode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__altcode_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__altcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearComponent__altcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   arg2 = static_cast< elm::cellcode >(val2);
   if (arg1) (arg1)->_altcode = arg2;
@@ -48134,20 +48271,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__altcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__altcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   elm::cellcode result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__altcode_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__altcode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altcode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__altcode_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (elm::cellcode) ((arg1)->_altcode);
   resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
@@ -48156,9 +48293,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__altname_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__altname_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48166,20 +48303,20 @@ SWIGINTERN PyObject *_wrap_Component__altname_set(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__altname_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__altname_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altname_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__altname_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Component__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearComponent__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Component__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearComponent__altname_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -48193,20 +48330,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__altname_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__altname_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__altname_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__altname_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__altname_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__altname_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (std::string *) & ((arg1)->_altname);
   resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
   return resultobj;
@@ -48215,9 +48352,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__upcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__upcode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   elm::cellcode arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48226,15 +48363,15 @@ SWIGINTERN PyObject *_wrap_Component__upcode_set(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__upcode_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__upcode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__upcode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__upcode_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__upcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearComponent__upcode_set" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   arg2 = static_cast< elm::cellcode >(val2);
   if (arg1) (arg1)->_upcode = arg2;
@@ -48245,20 +48382,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__upcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__upcode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   elm::cellcode result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__upcode_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__upcode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__upcode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__upcode_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (elm::cellcode) ((arg1)->_upcode);
   resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
@@ -48267,9 +48404,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__dncode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__dncode_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   elm::cellcode arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48278,15 +48415,15 @@ SWIGINTERN PyObject *_wrap_Component__dncode_set(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__dncode_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__dncode_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__dncode_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__dncode_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component__dncode_set" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearComponent__dncode_set" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   arg2 = static_cast< elm::cellcode >(val2);
   if (arg1) (arg1)->_dncode = arg2;
@@ -48297,20 +48434,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component__dncode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent__dncode_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   elm::cellcode result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component__dncode_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent__dncode_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component__dncode_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent__dncode_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (elm::cellcode) ((arg1)->_dncode);
   resultobj = SWIG_From_long_SS_long(static_cast< long long >(result));
   return resultobj;
@@ -48319,9 +48456,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_multiplier_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_multiplier_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48330,15 +48467,15 @@ SWIGINTERN PyObject *_wrap_Component_multiplier_set(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_multiplier_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_multiplier_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_set" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_multiplier_set" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Component_multiplier_set" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearComponent_multiplier_set" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   if (arg1) (arg1)->multiplier = arg2;
@@ -48349,20 +48486,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_multiplier_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_multiplier_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   double result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_multiplier_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_multiplier_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component_multiplier_get" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent_multiplier_get" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   result = (double) ((arg1)->multiplier);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
@@ -48371,23 +48508,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Component___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component___repr__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Component___repr__" "', argument " "1"" of type '" "elm::Component const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent___repr__" "', argument " "1"" of type '" "elm::LinearComponent const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   {
     try {
-      result = ((elm::Component const *)arg1)->__repr__();
+      result = ((elm::LinearComponent const *)arg1)->__repr__();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48409,7 +48546,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_new_LinearComponent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   std::string arg1 = (std::string) "" ;
   std::string arg2 = (std::string) "" ;
@@ -48424,15 +48561,15 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
   char *  kwnames[] = {
     (char *) "data",(char *) "param",(char *) "multiplier",(char *) "category", NULL 
   };
-  elm::Component *result = 0 ;
+  elm::LinearComponent *result = 0 ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_Component",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_LinearComponent",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   if (obj0) {
     {
       std::string *ptr = (std::string *)0;
       int res = SWIG_AsPtr_std_string(obj0, &ptr);
       if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Component" "', argument " "1"" of type '" "std::string""'"); 
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearComponent" "', argument " "1"" of type '" "std::string""'"); 
       }
       arg1 = *ptr;
       if (SWIG_IsNewObj(res)) delete ptr;
@@ -48443,7 +48580,7 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
       std::string *ptr = (std::string *)0;
       int res = SWIG_AsPtr_std_string(obj1, &ptr);
       if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_Component" "', argument " "2"" of type '" "std::string""'"); 
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearComponent" "', argument " "2"" of type '" "std::string""'"); 
       }
       arg2 = *ptr;
       if (SWIG_IsNewObj(res)) delete ptr;
@@ -48452,7 +48589,7 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
   if (obj2) {
     ecode3 = SWIG_AsVal_double(obj2, &val3);
     if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Component" "', argument " "3"" of type '" "double""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_LinearComponent" "', argument " "3"" of type '" "double""'");
     } 
     arg3 = static_cast< double >(val3);
   }
@@ -48461,7 +48598,7 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   {
     try {
-      result = (elm::Component *)new elm::Component(arg1,arg2,arg3,arg4);
+      result = (elm::LinearComponent *)new elm::LinearComponent(arg1,arg2,arg3,arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48476,24 +48613,24 @@ SWIGINTERN PyObject *_wrap_new_Component(PyObject *SWIGUNUSEDPARM(self), PyObjec
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearComponent, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_Component_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   PyObject *arg1 = (PyObject *) 0 ;
   PyObject * obj0 = 0 ;
-  elm::Component result;
+  elm::LinearComponent result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Component_Create",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent_Create",1,1,&obj0)) SWIG_fail;
   arg1 = obj0;
   {
     try {
-      result = elm::Component::Create(arg1);
+      result = elm::LinearComponent::Create(arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48508,26 +48645,26 @@ SWIGINTERN PyObject *_wrap_Component_Create(PyObject *SWIGUNUSEDPARM(self), PyOb
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new elm::Component(static_cast< const elm::Component& >(result))), SWIGTYPE_p_elm__Component, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new elm::LinearComponent(static_cast< const elm::LinearComponent& >(result))), SWIGTYPE_p_elm__LinearComponent, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_Component(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_LinearComponent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::Component *arg1 = (elm::Component *) 0 ;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"delete_Component",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Component, SWIG_POINTER_DISOWN |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearComponent",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Component" "', argument " "1"" of type '" "elm::Component *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearComponent" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
   }
-  arg1 = reinterpret_cast< elm::Component * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
   {
     try {
       delete arg1;
@@ -48552,16 +48689,66 @@ fail:
 }
 
 
-SWIGINTERN PyObject *Component_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearComponent___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearComponent *arg1 = (elm::LinearComponent *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearComponent___add__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearComponent___add__" "', argument " "1"" of type '" "elm::LinearComponent *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearComponent * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearComponent___add__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearComponent___add__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      result = (arg1)->operator +((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new elm::ComponentList(static_cast< const elm::ComponentList& >(result))), SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *LinearComponent_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_elm__Component, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__LinearComponent, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
 SWIGINTERN PyObject *_wrap_ComponentVector_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   PyObject **arg2 = (PyObject **) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -48570,14 +48757,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector_iterator(PyObject *SWIGUNUSEDPARM(sel
   
   arg2 = &obj0;
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_iterator",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_iterator" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_iterator" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (swig::SwigPyIterator *)std_vector_Sl_elm_Component_Sg__iterator(arg1,arg2);
+      result = (swig::SwigPyIterator *)std_vector_Sl_elm_LinearComponent_Sg__iterator(arg1,arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48601,21 +48788,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___nonzero__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___nonzero__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___nonzero__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (bool)std_vector_Sl_elm_Component_Sg____nonzero__((std::vector< elm::Component > const *)arg1);
+      result = (bool)std_vector_Sl_elm_LinearComponent_Sg____nonzero__((std::vector< elm::LinearComponent > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48639,21 +48826,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___bool__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___bool__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___bool__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (bool)std_vector_Sl_elm_Component_Sg____bool__((std::vector< elm::Component > const *)arg1);
+      result = (bool)std_vector_Sl_elm_LinearComponent_Sg____bool__((std::vector< elm::LinearComponent > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48677,21 +48864,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::size_type result;
+  std::vector< elm::LinearComponent >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___len__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___len__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___len__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = std_vector_Sl_elm_Component_Sg____len__((std::vector< elm::Component > const *)arg1);
+      result = std_vector_Sl_elm_LinearComponent_Sg____len__((std::vector< elm::LinearComponent > const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -48715,22 +48902,22 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_pop(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::value_type result;
+  std::vector< elm::LinearComponent >::value_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_pop",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       try {
-        result = std_vector_Sl_elm_Component_Sg__pop(arg1);
+        result = std_vector_Sl_elm_LinearComponent_Sg__pop(arg1);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48750,7 +48937,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_pop(PyObject *SWIGUNUSEDPARM(self), P
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new std::vector< elm::Component >::value_type(static_cast< const std::vector< elm::Component >::value_type& >(result))), SWIGTYPE_p_elm__Component, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< elm::LinearComponent >::value_type(static_cast< const std::vector< elm::LinearComponent >::value_type& >(result))), SWIGTYPE_p_elm__LinearComponent, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48759,9 +48946,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
-  std::vector< elm::Component >::difference_type arg3 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
+  std::vector< elm::LinearComponent >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48771,28 +48958,28 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
+  std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getslice__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getslice__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___getslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___getslice__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val3);
   {
     try {
       try {
-        result = (std::vector< elm::Component,std::allocator< elm::Component > > *)std_vector_Sl_elm_Component_Sg____getslice__(arg1,arg2,arg3);
+        result = (std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *)std_vector_Sl_elm_LinearComponent_Sg____getslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48815,7 +49002,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getslice__(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -48824,10 +49011,10 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
-  std::vector< elm::Component >::difference_type arg3 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *arg4 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
+  std::vector< elm::LinearComponent >::difference_type arg3 ;
+  std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48841,36 +49028,36 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_0(PyObject *SWIGUN
   PyObject * obj3 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setslice__",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val3);
   {
-    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
+    std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *ptr = (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *)0;
     res4 = swig::asptr(obj3, &ptr);
     if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setslice__" "', argument " "4"" of type '" "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &""'"); 
     }
     arg4 = ptr;
   }
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< elm::Component,std::allocator< elm::Component > > const &)*arg4);
+        std_vector_Sl_elm_LinearComponent_Sg____setslice____SWIG_0(arg1,arg2,arg3,(std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &)*arg4);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48904,9 +49091,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
-  std::vector< elm::Component >::difference_type arg3 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
+  std::vector< elm::LinearComponent >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -48918,25 +49105,25 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice____SWIG_1(PyObject *SWIGUN
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setslice__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setslice__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___setslice__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val3);
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____setslice____SWIG_0(arg1,arg2,arg3);
+        std_vector_Sl_elm_LinearComponent_Sg____setslice____SWIG_0(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -48978,7 +49165,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -48998,7 +49185,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
   }
   if (argc == 4) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49011,7 +49198,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          int res = swig::asptr(argv[3], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+          int res = swig::asptr(argv[3], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_ComponentVector___setslice____SWIG_0(self, args);
@@ -49024,17 +49211,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setslice__(PyObject *self, PyObject
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___setslice__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::__setslice__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::difference_type,std::vector< elm::Component,std::allocator< elm::Component > > const &)\n"
-    "    std::vector< elm::Component >::__setslice__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::difference_type)\n");
+    "    std::vector< elm::LinearComponent >::__setslice__(std::vector< elm::LinearComponent >::difference_type,std::vector< elm::LinearComponent >::difference_type,std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &)\n"
+    "    std::vector< elm::LinearComponent >::__setslice__(std::vector< elm::LinearComponent >::difference_type,std::vector< elm::LinearComponent >::difference_type)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
-  std::vector< elm::Component >::difference_type arg3 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
+  std::vector< elm::LinearComponent >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -49046,25 +49233,25 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delslice__(PyObject *SWIGUNUSEDPARM
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delslice__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delslice__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delslice__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delslice__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delslice__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___delslice__" "', argument " "3"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector___delslice__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::Component >::difference_type >(val3);
+  arg3 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val3);
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____delslice__(arg1,arg2,arg3);
+        std_vector_Sl_elm_LinearComponent_Sg____delslice__(arg1,arg2,arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49096,8 +49283,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -49106,20 +49293,20 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_0(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____delitem____SWIG_0(arg1,arg2);
+        std_vector_Sl_elm_LinearComponent_Sg____delitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49148,20 +49335,20 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
+  std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49171,7 +49358,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNU
   {
     try {
       try {
-        result = (std::vector< elm::Component,std::allocator< elm::Component > > *)std_vector_Sl_elm_Component_Sg____getitem____SWIG_0(arg1,arg2);
+        result = (std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *)std_vector_Sl_elm_LinearComponent_Sg____getitem____SWIG_0(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49194,7 +49381,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_0(PyObject *SWIGUNU
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49203,9 +49390,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *arg3 = 0 ;
+  std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res3 = SWIG_OLDOBJ ;
@@ -49214,11 +49401,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNU
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49226,20 +49413,20 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_0(PyObject *SWIGUNU
     arg2 = (PySliceObject *) obj1;
   }
   {
-    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
+    std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *ptr = (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *)0;
     res3 = swig::asptr(obj2, &ptr);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &""'"); 
     }
     arg3 = ptr;
   }
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< elm::Component,std::allocator< elm::Component > > const &)*arg3);
+        std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_0(arg1,arg2,(std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49273,7 +49460,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -49281,11 +49468,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49295,7 +49482,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_1(PyObject *SWIGUNU
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____setitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49327,7 +49514,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   PySliceObject *arg2 = (PySliceObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -49335,11 +49522,11 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNU
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___delitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     if (!PySlice_Check(obj1)) {
       SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector___delitem__" "', argument " "2"" of type '" "PySliceObject *""'");
@@ -49349,7 +49536,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem____SWIG_1(PyObject *SWIGUNU
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____delitem____SWIG_1(arg1,arg2);
+        std_vector_Sl_elm_LinearComponent_Sg____delitem____SWIG_1(arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49391,7 +49578,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49404,7 +49591,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49420,39 +49607,39 @@ SWIGINTERN PyObject *_wrap_ComponentVector___delitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___delitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::__delitem__(std::vector< elm::Component >::difference_type)\n"
-    "    std::vector< elm::Component >::__delitem__(PySliceObject *)\n");
+    "    std::vector< elm::LinearComponent >::__delitem__(std::vector< elm::LinearComponent >::difference_type)\n"
+    "    std::vector< elm::LinearComponent >::__delitem__(PySliceObject *)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::Component >::value_type *result = 0 ;
+  std::vector< elm::LinearComponent >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___getitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___getitem__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
   {
     try {
       try {
-        result = (std::vector< elm::Component >::value_type *) &std_vector_Sl_elm_Component_Sg____getitem____SWIG_1((std::vector< elm::Component > const *)arg1,arg2);
+        result = (std::vector< elm::LinearComponent >::value_type *) &std_vector_Sl_elm_LinearComponent_Sg____getitem____SWIG_1((std::vector< elm::LinearComponent > const *)arg1,arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49472,7 +49659,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem____SWIG_1(PyObject *SWIGUNU
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49491,7 +49678,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49504,7 +49691,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49520,17 +49707,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___getitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___getitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::__getitem__(PySliceObject *)\n"
-    "    std::vector< elm::Component >::__getitem__(std::vector< elm::Component >::difference_type) const\n");
+    "    std::vector< elm::LinearComponent >::__getitem__(PySliceObject *)\n"
+    "    std::vector< elm::LinearComponent >::__getitem__(std::vector< elm::LinearComponent >::difference_type) const\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::difference_type arg2 ;
-  std::vector< elm::Component >::value_type *arg3 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::difference_type arg2 ;
+  std::vector< elm::LinearComponent >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -49542,28 +49729,28 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem____SWIG_2(PyObject *SWIGUNU
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector___setitem__" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "std::vector< elm::Component >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector___setitem__" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::difference_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector___setitem__" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp3);
   {
     try {
       try {
-        std_vector_Sl_elm_Component_Sg____setitem____SWIG_2(arg1,arg2,(elm::Component const &)*arg3);
+        std_vector_Sl_elm_LinearComponent_Sg____setitem____SWIG_2(arg1,arg2,(elm::LinearComponent const &)*arg3);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -49602,7 +49789,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49615,14 +49802,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
         _v = PySlice_Check(argv[1]);
       }
       if (_v) {
-        int res = swig::asptr(argv[2], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+        int res = swig::asptr(argv[2], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector___setitem____SWIG_0(self, args);
@@ -49632,7 +49819,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -49640,7 +49827,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__LinearComponent, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector___setitem____SWIG_2(self, args);
@@ -49652,17 +49839,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector___setitem__(PyObject *self, PyObject 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector___setitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::__setitem__(PySliceObject *,std::vector< elm::Component,std::allocator< elm::Component > > const &)\n"
-    "    std::vector< elm::Component >::__setitem__(PySliceObject *)\n"
-    "    std::vector< elm::Component >::__setitem__(std::vector< elm::Component >::difference_type,std::vector< elm::Component >::value_type const &)\n");
+    "    std::vector< elm::LinearComponent >::__setitem__(PySliceObject *,std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > const &)\n"
+    "    std::vector< elm::LinearComponent >::__setitem__(PySliceObject *)\n"
+    "    std::vector< elm::LinearComponent >::__setitem__(std::vector< elm::LinearComponent >::difference_type,std::vector< elm::LinearComponent >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::value_type *arg2 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -49671,22 +49858,22 @@ SWIGINTERN PyObject *_wrap_ComponentVector_append(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_append",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_append" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_append" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_append" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp2);
   {
     try {
-      std_vector_Sl_elm_Component_Sg__append(arg1,(elm::Component const &)*arg2);
+      std_vector_Sl_elm_LinearComponent_Sg__append(arg1,(elm::LinearComponent const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49710,12 +49897,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *result = 0 ;
+  std::vector< elm::LinearComponent > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",0,0)) SWIG_fail;
   {
     try {
-      result = (std::vector< elm::Component > *)new std::vector< elm::Component >();
+      result = (std::vector< elm::LinearComponent > *)new std::vector< elm::LinearComponent >();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49730,7 +49917,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_0(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49739,26 +49926,26 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component > *result = 0 ;
+  std::vector< elm::LinearComponent > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",1,1,&obj0)) SWIG_fail;
   {
-    std::vector<elm::Component,std::allocator< elm::Component > > *ptr = (std::vector<elm::Component,std::allocator< elm::Component > > *)0;
+    std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *ptr = (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > > *)0;
     res1 = swig::asptr(obj0, &ptr);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const &""'"); 
     }
     arg1 = ptr;
   }
   {
     try {
-      result = (std::vector< elm::Component > *)new std::vector< elm::Component >((std::vector< elm::Component > const &)*arg1);
+      result = (std::vector< elm::LinearComponent > *)new std::vector< elm::LinearComponent >((std::vector< elm::LinearComponent > const &)*arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49773,7 +49960,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_1(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_NEW |  0 );
   if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
@@ -49784,21 +49971,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_empty",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_empty" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_empty" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (bool)((std::vector< elm::Component > const *)arg1)->empty();
+      result = (bool)((std::vector< elm::LinearComponent > const *)arg1)->empty();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49822,21 +50009,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::size_type result;
+  std::vector< elm::LinearComponent >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_size",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_size" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_size" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::Component > const *)arg1)->size();
+      result = ((std::vector< elm::LinearComponent > const *)arg1)->size();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49860,17 +50047,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_clear",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_clear" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_clear" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       (arg1)->clear();
@@ -49897,8 +50084,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component > *arg2 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -49907,19 +50094,19 @@ SWIGINTERN PyObject *_wrap_ComponentVector_swap(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_swap",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_swap" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_swap" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,  0 );
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::Component > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::LinearComponent > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::Component > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_swap" "', argument " "2"" of type '" "std::vector< elm::LinearComponent > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::Component > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp2);
   {
     try {
       (arg1)->swap(*arg2);
@@ -49946,21 +50133,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  SwigValueWrapper< std::allocator< elm::Component > > result;
+  SwigValueWrapper< std::allocator< elm::LinearComponent > > result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_get_allocator",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_get_allocator" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_get_allocator" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::Component > const *)arg1)->get_allocator();
+      result = ((std::vector< elm::LinearComponent > const *)arg1)->get_allocator();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -49975,7 +50162,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_get_allocator(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj((new std::vector< elm::Component >::allocator_type(static_cast< const std::vector< elm::Component >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_elm__Component_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< elm::LinearComponent >::allocator_type(static_cast< const std::vector< elm::LinearComponent >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_elm__LinearComponent_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -49984,18 +50171,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::iterator result;
+  std::vector< elm::LinearComponent >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_begin",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_begin" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_begin" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       result = (arg1)->begin();
@@ -50013,7 +50200,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_begin(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50023,18 +50210,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::iterator result;
+  std::vector< elm::LinearComponent >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_end",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_end" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_end" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       result = (arg1)->end();
@@ -50052,7 +50239,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_end(PyObject *SWIGUNUSEDPARM(self), P
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50062,18 +50249,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::reverse_iterator result;
+  std::vector< elm::LinearComponent >::reverse_iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_rbegin",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rbegin" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rbegin" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       result = (arg1)->rbegin();
@@ -50091,7 +50278,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rbegin(PyObject *SWIGUNUSEDPARM(self)
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50101,18 +50288,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::reverse_iterator result;
+  std::vector< elm::LinearComponent >::reverse_iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_rend",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rend" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_rend" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       result = (arg1)->rend();
@@ -50130,7 +50317,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_rend(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50140,21 +50327,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component >::size_type arg1 ;
+  std::vector< elm::LinearComponent >::size_type arg1 ;
   size_t val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component > *result = 0 ;
+  std::vector< elm::LinearComponent > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",1,1,&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< elm::Component >::size_type >(val1);
+  arg1 = static_cast< std::vector< elm::LinearComponent >::size_type >(val1);
   {
     try {
-      result = (std::vector< elm::Component > *)new std::vector< elm::Component >(arg1);
+      result = (std::vector< elm::LinearComponent > *)new std::vector< elm::LinearComponent >(arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50169,7 +50356,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_2(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50178,17 +50365,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_pop_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_pop_back",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop_back" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_pop_back" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       (arg1)->pop_back();
@@ -50215,8 +50402,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::size_type arg2 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50225,16 +50412,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_resize",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::size_type >(val2);
   {
     try {
       (arg1)->resize(arg2);
@@ -50261,36 +50448,36 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::iterator arg2 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::iterator arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::Component >::iterator result;
+  std::vector< elm::LinearComponent >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_erase",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
     }
   }
   {
     try {
-      result = std_vector_Sl_elm_Component_Sg__erase__SWIG_0(arg1,arg2);
+      result = std_vector_Sl_elm_LinearComponent_Sg__erase__SWIG_0(arg1,arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50305,7 +50492,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50315,9 +50502,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::iterator arg2 ;
-  std::vector< elm::Component >::iterator arg3 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::iterator arg2 ;
+  std::vector< elm::LinearComponent >::iterator arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50327,39 +50514,39 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::Component >::iterator result;
+  std::vector< elm::LinearComponent >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_erase",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_erase" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
     }
   }
   res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res3) || !iter3) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::Component >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter3);
+    swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter3);
     if (iter_t) {
       arg3 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::Component >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_erase" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
     }
   }
   {
     try {
-      result = std_vector_Sl_elm_Component_Sg__erase__SWIG_1(arg1,arg2,arg3);
+      result = std_vector_Sl_elm_LinearComponent_Sg__erase__SWIG_1(arg1,arg2,arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50374,7 +50561,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50394,12 +50581,12 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter) != 0));
       if (_v) {
         return _wrap_ComponentVector_erase__SWIG_0(self, args);
       }
@@ -50407,16 +50594,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter) != 0));
       if (_v) {
         swig::SwigPyIterator *iter = 0;
         int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter) != 0));
         if (_v) {
           return _wrap_ComponentVector_erase__SWIG_1(self, args);
         }
@@ -50427,41 +50614,41 @@ SWIGINTERN PyObject *_wrap_ComponentVector_erase(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_erase'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::erase(std::vector< elm::Component >::iterator)\n"
-    "    std::vector< elm::Component >::erase(std::vector< elm::Component >::iterator,std::vector< elm::Component >::iterator)\n");
+    "    std::vector< elm::LinearComponent >::erase(std::vector< elm::LinearComponent >::iterator)\n"
+    "    std::vector< elm::LinearComponent >::erase(std::vector< elm::LinearComponent >::iterator,std::vector< elm::LinearComponent >::iterator)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component >::size_type arg1 ;
-  std::vector< elm::Component >::value_type *arg2 = 0 ;
+  std::vector< elm::LinearComponent >::size_type arg1 ;
+  std::vector< elm::LinearComponent >::value_type *arg2 = 0 ;
   size_t val1 ;
   int ecode1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  std::vector< elm::Component > *result = 0 ;
+  std::vector< elm::LinearComponent > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"new_ComponentVector",2,2,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< elm::Component >::size_type >(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg1 = static_cast< std::vector< elm::LinearComponent >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ComponentVector" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp2);
   {
     try {
-      result = (std::vector< elm::Component > *)new std::vector< elm::Component >(arg1,(std::vector< elm::Component >::value_type const &)*arg2);
+      result = (std::vector< elm::LinearComponent > *)new std::vector< elm::LinearComponent >(arg1,(std::vector< elm::LinearComponent >::value_type const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50476,7 +50663,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector__SWIG_3(PyObject *SWIGUNUSEDPARM(
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50508,7 +50695,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_ComponentVector__SWIG_1(self, args);
@@ -50521,7 +50708,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__Component, 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_new_ComponentVector__SWIG_3(self, args);
@@ -50532,18 +50719,18 @@ SWIGINTERN PyObject *_wrap_new_ComponentVector(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ComponentVector'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::vector()\n"
-    "    std::vector< elm::Component >::vector(std::vector< elm::Component > const &)\n"
-    "    std::vector< elm::Component >::vector(std::vector< elm::Component >::size_type)\n"
-    "    std::vector< elm::Component >::vector(std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
+    "    std::vector< elm::LinearComponent >::vector()\n"
+    "    std::vector< elm::LinearComponent >::vector(std::vector< elm::LinearComponent > const &)\n"
+    "    std::vector< elm::LinearComponent >::vector(std::vector< elm::LinearComponent >::size_type)\n"
+    "    std::vector< elm::LinearComponent >::vector(std::vector< elm::LinearComponent >::size_type,std::vector< elm::LinearComponent >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::value_type *arg2 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -50552,22 +50739,22 @@ SWIGINTERN PyObject *_wrap_ComponentVector_push_back(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_push_back",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_push_back" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_push_back" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_push_back" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp2);
+  arg2 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp2);
   {
     try {
-      (arg1)->push_back((std::vector< elm::Component >::value_type const &)*arg2);
+      (arg1)->push_back((std::vector< elm::LinearComponent >::value_type const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50591,21 +50778,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_front(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::value_type *result = 0 ;
+  std::vector< elm::LinearComponent >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_front",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_front" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_front" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (std::vector< elm::Component >::value_type *) &((std::vector< elm::Component > const *)arg1)->front();
+      result = (std::vector< elm::LinearComponent >::value_type *) &((std::vector< elm::LinearComponent > const *)arg1)->front();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50620,7 +50807,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_front(PyObject *SWIGUNUSEDPARM(self),
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50629,21 +50816,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::value_type *result = 0 ;
+  std::vector< elm::LinearComponent >::value_type *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_back",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_back" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_back" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = (std::vector< elm::Component >::value_type *) &((std::vector< elm::Component > const *)arg1)->back();
+      result = (std::vector< elm::LinearComponent >::value_type *) &((std::vector< elm::LinearComponent > const *)arg1)->back();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50658,7 +50845,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_back(PyObject *SWIGUNUSEDPARM(self), 
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -50667,9 +50854,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::size_type arg2 ;
-  std::vector< elm::Component >::value_type *arg3 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::size_type arg2 ;
+  std::vector< elm::LinearComponent >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50681,27 +50868,27 @@ SWIGINTERN PyObject *_wrap_ComponentVector_assign(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_assign",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_assign" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_assign" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_assign" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_assign" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_assign" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp3);
   {
     try {
-      (arg1)->assign(arg2,(std::vector< elm::Component >::value_type const &)*arg3);
+      (arg1)->assign(arg2,(std::vector< elm::LinearComponent >::value_type const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50725,9 +50912,9 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::size_type arg2 ;
-  std::vector< elm::Component >::value_type *arg3 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::size_type arg2 ;
+  std::vector< elm::LinearComponent >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -50739,27 +50926,27 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize__SWIG_1(PyObject *SWIGUNUSEDPA
   PyObject * obj2 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_resize",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_resize" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_resize" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_resize" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp3);
   {
     try {
-      (arg1)->resize(arg2,(std::vector< elm::Component >::value_type const &)*arg3);
+      (arg1)->resize(arg2,(std::vector< elm::LinearComponent >::value_type const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50793,7 +50980,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
   }
   if (argc == 2) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -50807,7 +50994,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -50815,7 +51002,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__LinearComponent, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector_resize__SWIG_1(self, args);
@@ -50827,17 +51014,17 @@ SWIGINTERN PyObject *_wrap_ComponentVector_resize(PyObject *self, PyObject *args
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_resize'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::resize(std::vector< elm::Component >::size_type)\n"
-    "    std::vector< elm::Component >::resize(std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
+    "    std::vector< elm::LinearComponent >::resize(std::vector< elm::LinearComponent >::size_type)\n"
+    "    std::vector< elm::LinearComponent >::resize(std::vector< elm::LinearComponent >::size_type,std::vector< elm::LinearComponent >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::iterator arg2 ;
-  std::vector< elm::Component >::value_type *arg3 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::iterator arg2 ;
+  std::vector< elm::LinearComponent >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50847,36 +51034,36 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  std::vector< elm::Component >::iterator result;
+  std::vector< elm::LinearComponent >::iterator result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_insert",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
     }
   }
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp3);
   {
     try {
-      result = std_vector_Sl_elm_Component_Sg__insert__SWIG_0(arg1,arg2,(elm::Component const &)*arg3);
+      result = std_vector_Sl_elm_LinearComponent_Sg__insert__SWIG_0(arg1,arg2,(elm::LinearComponent const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50891,7 +51078,7 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_0(PyObject *SWIGUNUSEDPA
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::Component >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< elm::LinearComponent >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -50901,10 +51088,10 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::iterator arg2 ;
-  std::vector< elm::Component >::size_type arg3 ;
-  std::vector< elm::Component >::value_type *arg4 = 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::iterator arg2 ;
+  std::vector< elm::LinearComponent >::size_type arg3 ;
+  std::vector< elm::LinearComponent >::value_type *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -50919,38 +51106,38 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert__SWIG_1(PyObject *SWIGUNUSEDPA
   PyObject * obj3 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_insert",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_insert" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::Component >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "ComponentVector_insert" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::iterator""'");
     }
   }
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentVector_insert" "', argument " "3"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg3 = static_cast< std::vector< elm::Component >::size_type >(val3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_elm__Component,  0  | 0);
+  arg3 = static_cast< std::vector< elm::LinearComponent >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
   if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::Component >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentVector_insert" "', argument " "4"" of type '" "std::vector< elm::LinearComponent >::value_type const &""'"); 
   }
-  arg4 = reinterpret_cast< std::vector< elm::Component >::value_type * >(argp4);
+  arg4 = reinterpret_cast< std::vector< elm::LinearComponent >::value_type * >(argp4);
   {
     try {
-      std_vector_Sl_elm_Component_Sg__insert__SWIG_1(arg1,arg2,arg3,(elm::Component const &)*arg4);
+      std_vector_Sl_elm_LinearComponent_Sg__insert__SWIG_1(arg1,arg2,arg3,(elm::LinearComponent const &)*arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -50984,14 +51171,14 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
   }
   if (argc == 3) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter) != 0));
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__Component, 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__LinearComponent, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_ComponentVector_insert__SWIG_0(self, args);
@@ -51001,19 +51188,19 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
   }
   if (argc == 4) {
     int _v;
-    int res = swig::asptr(argv[0], (std::vector<elm::Component,std::allocator< elm::Component > >**)(0));
+    int res = swig::asptr(argv[0], (std::vector<elm::LinearComponent,std::allocator< elm::LinearComponent > >**)(0));
     _v = SWIG_CheckState(res);
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::Component >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< elm::LinearComponent >::iterator > *>(iter) != 0));
       if (_v) {
         {
           int res = SWIG_AsVal_size_t(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_elm__Component, 0);
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_elm__LinearComponent, 0);
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_ComponentVector_insert__SWIG_1(self, args);
@@ -51026,16 +51213,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_insert(PyObject *self, PyObject *args
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentVector_insert'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< elm::Component >::insert(std::vector< elm::Component >::iterator,std::vector< elm::Component >::value_type const &)\n"
-    "    std::vector< elm::Component >::insert(std::vector< elm::Component >::iterator,std::vector< elm::Component >::size_type,std::vector< elm::Component >::value_type const &)\n");
+    "    std::vector< elm::LinearComponent >::insert(std::vector< elm::LinearComponent >::iterator,std::vector< elm::LinearComponent >::value_type const &)\n"
+    "    std::vector< elm::LinearComponent >::insert(std::vector< elm::LinearComponent >::iterator,std::vector< elm::LinearComponent >::size_type,std::vector< elm::LinearComponent >::value_type const &)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_ComponentVector_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
-  std::vector< elm::Component >::size_type arg2 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
+  std::vector< elm::LinearComponent >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -51044,16 +51231,16 @@ SWIGINTERN PyObject *_wrap_ComponentVector_reserve(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj1 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_reserve",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_reserve" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_reserve" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_reserve" "', argument " "2"" of type '" "std::vector< elm::Component >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentVector_reserve" "', argument " "2"" of type '" "std::vector< elm::LinearComponent >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< elm::Component >::size_type >(val2);
+  arg2 = static_cast< std::vector< elm::LinearComponent >::size_type >(val2);
   {
     try {
       (arg1)->reserve(arg2);
@@ -51080,21 +51267,21 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ComponentVector_capacity(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component >::size_type result;
+  std::vector< elm::LinearComponent >::size_type result;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentVector_capacity",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_capacity" "', argument " "1"" of type '" "std::vector< elm::Component > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentVector_capacity" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > const *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
-      result = ((std::vector< elm::Component > const *)arg1)->capacity();
+      result = ((std::vector< elm::LinearComponent > const *)arg1)->capacity();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -51118,17 +51305,17 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_ComponentVector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< elm::Component > *arg1 = (std::vector< elm::Component > *) 0 ;
+  std::vector< elm::LinearComponent > *arg1 = (std::vector< elm::LinearComponent > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"delete_ComponentVector",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::Component > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentVector" "', argument " "1"" of type '" "std::vector< elm::LinearComponent > *""'"); 
   }
-  arg1 = reinterpret_cast< std::vector< elm::Component > * >(argp1);
+  arg1 = reinterpret_cast< std::vector< elm::LinearComponent > * >(argp1);
   {
     try {
       delete arg1;
@@ -51156,11 +51343,1758 @@ fail:
 SWIGINTERN PyObject *ComponentVector_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_ComponentList__receiver_type_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new__base_LinearSubBundle_1__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::less< long long > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< elm::cellcode,elm::ComponentList > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new__base_LinearSubBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__lessT_long_long_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new__base_LinearSubBundle_1" "', argument " "1"" of type '" "std::less< long long > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new__base_LinearSubBundle_1" "', argument " "1"" of type '" "std::less< long long > const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::less< long long > * >(argp1);
+  {
+    try {
+      result = (std::map< elm::cellcode,elm::ComponentList > *)new std::map< elm::cellcode,elm::ComponentList >((std::less< long long > const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_iterator" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___nonzero__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___nonzero__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___nonzero__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (bool)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____nonzero__((std::map< long long,elm::ComponentList > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___bool__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___bool__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___bool__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (bool)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____bool__((std::map< long long,elm::ComponentList > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< long long,elm::ComponentList >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___len__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___len__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____len__((std::map< long long,elm::ComponentList > const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< long long,elm::ComponentList >::mapped_type *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___getitem__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1___getitem__" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      try {
+        result = (std::map< long long,elm::ComponentList >::mapped_type *) &std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____getitem__(arg1,(long long const &)*arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___delitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___delitem__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1___delitem__" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      try {
+        std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____delitem__(arg1,(long long const &)*arg2);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_has_key(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_has_key",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_has_key" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_has_key" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (bool)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__has_key((std::map< long long,elm::ComponentList > const *)arg1,(long long const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_keys(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_keys",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_keys" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__keys(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_values(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_values",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_values" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__values(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_items(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_items",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_items" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__items(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___contains__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___contains__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___contains__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1___contains__" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (bool)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____contains__(arg1,(long long const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_key_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_key_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_key_iterator" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__key_iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_value_iterator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  PyObject **arg2 = (PyObject **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  swig::SwigPyIterator *result = 0 ;
+  
+  arg2 = &obj0;
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_value_iterator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_value_iterator" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (swig::SwigPyIterator *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__value_iterator(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_swig__SwigPyIterator, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___setitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___setitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____setitem____SWIG_0(arg1,(long long const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___setitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  std::map< long long,elm::ComponentList >::mapped_type *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "3"" of type '" "std::map< long long,elm::ComponentList >::mapped_type const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "_base_LinearSubBundle_1___setitem__" "', argument " "3"" of type '" "std::map< long long,elm::ComponentList >::mapped_type const &""'"); 
+  }
+  arg3 = reinterpret_cast< std::map< long long,elm::ComponentList >::mapped_type * >(argp3);
+  {
+    try {
+      try {
+        std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg____setitem____SWIG_1(arg1,(long long const &)*arg2,(elm::ComponentList const &)*arg3);
+      }
+      catch(std::out_of_range &_e) {
+        SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
+      }
+      
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1___setitem__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap__base_LinearSubBundle_1___setitem____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_elm__ComponentList, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap__base_LinearSubBundle_1___setitem____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function '_base_LinearSubBundle_1___setitem__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::__setitem__(std::map< long long,elm::ComponentList >::key_type const &)\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::__setitem__(std::map< long long,elm::ComponentList >::key_type const &,std::map< long long,elm::ComponentList >::mapped_type const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_asdict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_asdict",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_asdict" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (PyObject *)std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__asdict(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new__base_LinearSubBundle_1__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new__base_LinearSubBundle_1",0,0)) SWIG_fail;
+  {
+    try {
+      result = (std::map< elm::cellcode,elm::ComponentList > *)new std::map< elm::cellcode,elm::ComponentList >();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new__base_LinearSubBundle_1__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  std::map< elm::cellcode,elm::ComponentList > *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new__base_LinearSubBundle_1",1,1,&obj0)) SWIG_fail;
+  {
+    std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > > *ptr = (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new__base_LinearSubBundle_1" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new__base_LinearSubBundle_1" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try {
+      result = (std::map< elm::cellcode,elm::ComponentList > *)new std::map< elm::cellcode,elm::ComponentList >((std::map< elm::cellcode,elm::ComponentList > const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new__base_LinearSubBundle_1(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new__base_LinearSubBundle_1__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__lessT_long_long_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new__base_LinearSubBundle_1__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new__base_LinearSubBundle_1__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new__base_LinearSubBundle_1'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::map(std::less< long long > const &)\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::map()\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::map(std::map< elm::cellcode,elm::ComponentList > const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_empty",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_empty" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (bool)((std::map< elm::cellcode,elm::ComponentList > const *)arg1)->empty();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::map< long long,elm::ComponentList >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_size",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_size" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = ((std::map< elm::cellcode,elm::ComponentList > const *)arg1)->size();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_clear",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_clear" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      (arg1)->clear();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_swap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< elm::cellcode,elm::ComponentList > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_swap",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_swap" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "_base_LinearSubBundle_1_swap" "', argument " "2"" of type '" "std::map< elm::cellcode,elm::ComponentList > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "_base_LinearSubBundle_1_swap" "', argument " "2"" of type '" "std::map< elm::cellcode,elm::ComponentList > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp2);
+  {
+    try {
+      (arg1)->swap(*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_get_allocator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::allocator< std::pair< long long const,elm::ComponentList > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_get_allocator",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_get_allocator" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = ((std::map< elm::cellcode,elm::ComponentList > const *)arg1)->get_allocator();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new std::map< long long,elm::ComponentList >::allocator_type(static_cast< const std::map< long long,elm::ComponentList >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_begin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_begin",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_begin" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (arg1)->begin();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_end(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_end",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_end" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (arg1)->end();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_rbegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::reverse_iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_rbegin",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_rbegin" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (arg1)->rbegin();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_rend(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::reverse_iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_rend",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_rend" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      result = (arg1)->rend();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::reverse_iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< long long,elm::ComponentList >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_erase",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (arg1)->erase((std::map< long long,elm::ComponentList >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_count(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::map< long long,elm::ComponentList >::size_type result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_count",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_count" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > const *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_count" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = ((std::map< elm::cellcode,elm::ComponentList > const *)arg1)->count((std::map< long long,elm::ComponentList >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_erase",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+    }
+  }
+  {
+    try {
+      std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__erase__SWIG_1(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_erase__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > arg2 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  swig::SwigPyIterator *iter2 = 0 ;
+  int res2 ;
+  swig::SwigPyIterator *iter3 = 0 ;
+  int res3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_erase",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res2) || !iter2) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter2);
+    if (iter_t) {
+      arg2 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
+  if (!SWIG_IsOK(res3) || !iter3) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "3"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+  } else {
+    swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter3);
+    if (iter_t) {
+      arg3 = iter_t->get_current();
+    } else {
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "_base_LinearSubBundle_1_erase" "', argument " "3"" of type '" "std::map< long long,elm::ComponentList >::iterator""'");
+    }
+  }
+  {
+    try {
+      std_map_Sl_elm_cellcode_Sc_elm_ComponentList_Sg__erase__SWIG_2(arg1,arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_erase(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter) != 0));
+      if (_v) {
+        return _wrap__base_LinearSubBundle_1_erase__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap__base_LinearSubBundle_1_erase__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::map<long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      swig::SwigPyIterator *iter = 0;
+      int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter) != 0));
+      if (_v) {
+        swig::SwigPyIterator *iter = 0;
+        int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::map< long long,elm::ComponentList >::iterator > *>(iter) != 0));
+        if (_v) {
+          return _wrap__base_LinearSubBundle_1_erase__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function '_base_LinearSubBundle_1_erase'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::erase(std::map< long long,elm::ComponentList >::key_type const &)\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::erase(std::map< long long,elm::ComponentList >::iterator)\n"
+    "    std::map< elm::cellcode,elm::ComponentList >::erase(std::map< long long,elm::ComponentList >::iterator,std::map< long long,elm::ComponentList >::iterator)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_find(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_find",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_find" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_find" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (arg1)->find((std::map< long long,elm::ComponentList >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_lower_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_lower_bound",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_lower_bound" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_lower_bound" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (arg1)->lower_bound((std::map< long long,elm::ComponentList >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap__base_LinearSubBundle_1_upper_bound(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  std::map< long long,elm::ComponentList >::key_type *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::map< long long,elm::ComponentList >::key_type temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SwigValueWrapper< std::map< long long,elm::ComponentList >::iterator > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"_base_LinearSubBundle_1_upper_bound",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "_base_LinearSubBundle_1_upper_bound" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "_base_LinearSubBundle_1_upper_bound" "', argument " "2"" of type '" "std::map< long long,elm::ComponentList >::key_type""'");
+  } 
+  temp2 = static_cast< std::map< long long,elm::ComponentList >::key_type >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (arg1)->upper_bound((std::map< long long,elm::ComponentList >::key_type const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::map< long long,elm::ComponentList >::iterator & >(result)),
+    swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete__base_LinearSubBundle_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::map< elm::cellcode,elm::ComponentList > *arg1 = (std::map< elm::cellcode,elm::ComponentList > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete__base_LinearSubBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete__base_LinearSubBundle_1" "', argument " "1"" of type '" "std::map< elm::cellcode,elm::ComponentList > *""'"); 
+  }
+  arg1 = reinterpret_cast< std::map< elm::cellcode,elm::ComponentList > * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_base_LinearSubBundle_1_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_LinearFunction__receiver_type_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   int arg2 ;
@@ -51171,15 +53105,15 @@ SWIGINTERN PyObject *_wrap_ComponentList__receiver_type_set(PyObject *SWIGUNUSED
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList__receiver_type_set",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction__receiver_type_set",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList__receiver_type_set" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction__receiver_type_set" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentList__receiver_type_set" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunction__receiver_type_set" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   if (arg1) (arg1)->_receiver_type = arg2;
@@ -51190,7 +53124,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList__receiver_type_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction__receiver_type_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   void *argp1 = 0 ;
@@ -51198,10 +53132,10 @@ SWIGINTERN PyObject *_wrap_ComponentList__receiver_type_get(PyObject *SWIGUNUSED
   PyObject * obj0 = 0 ;
   int result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList__receiver_type_get",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction__receiver_type_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList__receiver_type_get" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction__receiver_type_get" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   result = (int) ((arg1)->_receiver_type);
@@ -51212,7 +53146,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   elm::Model2 *arg2 = (elm::Model2 *) 0 ;
@@ -51223,15 +53157,15 @@ SWIGINTERN PyObject *_wrap_ComponentList_parentmodel_set(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_parentmodel_set" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_parentmodel_set" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
   }
   arg2 = reinterpret_cast< elm::Model2 * >(argp2);
   if (arg1) (arg1)->parentmodel = arg2;
@@ -51242,7 +53176,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   void *argp1 = 0 ;
@@ -51250,10 +53184,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_parentmodel_get(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   elm::Model2 *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_parentmodel_get",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_parentmodel_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_parentmodel_get" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_parentmodel_get" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   result = (elm::Model2 *) ((arg1)->parentmodel);
@@ -51264,7 +53198,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   elm::Model2 *arg2 = (elm::Model2 *) 0 ;
@@ -51276,15 +53210,15 @@ SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   elm::ComponentList *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_ComponentList",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",2,2,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentList" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentList" "', argument " "2"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_LinearFunction" "', argument " "2"" of type '" "elm::Model2 *""'"); 
   }
   arg2 = reinterpret_cast< elm::Model2 * >(argp2);
   {
@@ -51311,7 +53245,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -51319,10 +53253,10 @@ SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj0 = 0 ;
   elm::ComponentList *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_ComponentList",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",1,1,&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ComponentList" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   {
@@ -51349,11 +53283,11 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentList__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_ComponentList",0,0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",0,0)) SWIG_fail;
   {
     try {
       result = (elm::ComponentList *)new elm::ComponentList();
@@ -51378,7 +53312,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentList(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[3];
   int ii;
@@ -51389,7 +53323,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentList(PyObject *self, PyObject *args) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_ComponentList__SWIG_2(self, args);
+    return _wrap_new_LinearFunction__SWIG_2(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -51398,7 +53332,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentList(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new_ComponentList__SWIG_1(self, args);
+      return _wrap_new_LinearFunction__SWIG_1(self, args);
     }
   }
   if (argc == 2) {
@@ -51412,13 +53346,13 @@ SWIGINTERN PyObject *_wrap_new_ComponentList(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__Model2, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_new_ComponentList__SWIG_0(self, args);
+        return _wrap_new_LinearFunction__SWIG_0(self, args);
       }
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ComponentList'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearFunction'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    elm::ComponentList::ComponentList(int,elm::Model2 *)\n"
     "    elm::ComponentList::ComponentList(int)\n"
@@ -51427,7 +53361,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51448,20 +53382,20 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSED
     (char *) "self",(char *) "data",(char *) "param",(char *) "multiplier", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:ComponentList_receive_utility_ca",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:LinearFunction_receive_utility_ca",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_ca" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_ca" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_ca" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_ca" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_ca" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_ca" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -51470,7 +53404,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSED
       std::string *ptr = (std::string *)0;
       int res = SWIG_AsPtr_std_string(obj2, &ptr);
       if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_ca" "', argument " "3"" of type '" "std::string""'"); 
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_ca" "', argument " "3"" of type '" "std::string""'"); 
       }
       arg3 = *ptr;
       if (SWIG_IsNewObj(res)) delete ptr;
@@ -51479,7 +53413,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_ca(PyObject *SWIGUNUSED
   if (obj3) {
     ecode4 = SWIG_AsVal_double(obj3, &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ComponentList_receive_utility_ca" "', argument " "4"" of type '" "double""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearFunction_receive_utility_ca" "', argument " "4"" of type '" "double""'");
     } 
     temp4 = static_cast< double >(val4);
     arg4 = &temp4;
@@ -51510,7 +53444,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_allocation(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_allocation(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51531,20 +53465,20 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_allocation(PyObject *SWIGUNUSED
     (char *) "self",(char *) "data",(char *) "param",(char *) "multiplier", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:ComponentList_receive_allocation",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:LinearFunction_receive_allocation",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_allocation" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_allocation" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_allocation" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -51553,7 +53487,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_allocation(PyObject *SWIGUNUSED
       std::string *ptr = (std::string *)0;
       int res = SWIG_AsPtr_std_string(obj2, &ptr);
       if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_allocation" "', argument " "3"" of type '" "std::string""'"); 
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_allocation" "', argument " "3"" of type '" "std::string""'"); 
       }
       arg3 = *ptr;
       if (SWIG_IsNewObj(res)) delete ptr;
@@ -51562,7 +53496,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_allocation(PyObject *SWIGUNUSED
   if (obj3) {
     ecode4 = SWIG_AsVal_double(obj3, &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ComponentList_receive_allocation" "', argument " "4"" of type '" "double""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearFunction_receive_allocation" "', argument " "4"" of type '" "double""'");
     } 
     temp4 = static_cast< double >(val4);
     arg4 = &temp4;
@@ -51593,7 +53527,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51613,20 +53547,20 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_0(PyObject *SW
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -51634,10 +53568,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_0(PyObject *SW
     std::string *ptr = (std::string *)0;
     res3 = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     arg3 = ptr;
   }
@@ -51645,14 +53579,14 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_0(PyObject *SW
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj3, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
     }
     arg4 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "ComponentList_receive_utility_co" "', argument " "5"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "LinearFunction_receive_utility_co" "', argument " "5"" of type '" "double""'");
   } 
   temp5 = static_cast< double >(val5);
   arg5 = &temp5;
@@ -51684,7 +53618,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51699,20 +53633,20 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_1(PyObject *SW
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -51720,10 +53654,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_1(PyObject *SW
     std::string *ptr = (std::string *)0;
     res3 = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     arg3 = ptr;
   }
@@ -51731,7 +53665,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_1(PyObject *SW
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj3, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
     }
     arg4 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
@@ -51764,7 +53698,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51777,20 +53711,20 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_2(PyObject *SW
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -51798,10 +53732,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_2(PyObject *SW
     std::string *ptr = (std::string *)0;
     res3 = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "std::string const &""'"); 
     }
     arg3 = ptr;
   }
@@ -51833,7 +53767,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51855,26 +53789,26 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_3(PyObject *SW
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
   ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
   } 
   temp3 = static_cast< elm::cellcode >(val3);
   arg3 = &temp3;
@@ -51882,14 +53816,14 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_3(PyObject *SW
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj3, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
     }
     arg4 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   ecode5 = SWIG_AsVal_double(obj4, &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "ComponentList_receive_utility_co" "', argument " "5"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "LinearFunction_receive_utility_co" "', argument " "5"" of type '" "double""'");
   } 
   temp5 = static_cast< double >(val5);
   arg5 = &temp5;
@@ -51919,7 +53853,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -51936,26 +53870,26 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_4(PyObject *SW
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
   ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
   } 
   temp3 = static_cast< elm::cellcode >(val3);
   arg3 = &temp3;
@@ -51963,7 +53897,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_4(PyObject *SW
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj3, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_co" "', argument " "4"" of type '" "std::string""'"); 
     }
     arg4 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
@@ -51994,7 +53928,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string *arg2 = 0 ;
@@ -52009,26 +53943,26 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co__SWIG_5(PyObject *SW
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_receive_utility_co",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_receive_utility_co",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
   ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentList_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "LinearFunction_receive_utility_co" "', argument " "3"" of type '" "elm::cellcode""'");
   } 
   temp3 = static_cast< elm::cellcode >(val3);
   arg3 = &temp3;
@@ -52058,7 +53992,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[6];
   int ii;
@@ -52082,7 +54016,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_ComponentList_receive_utility_co__SWIG_5(self, args);
+          return _wrap_LinearFunction_receive_utility_co__SWIG_5(self, args);
         }
       }
     }
@@ -52099,7 +54033,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_ComponentList_receive_utility_co__SWIG_2(self, args);
+          return _wrap_LinearFunction_receive_utility_co__SWIG_2(self, args);
         }
       }
     }
@@ -52121,7 +54055,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
           int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            return _wrap_ComponentList_receive_utility_co__SWIG_4(self, args);
+            return _wrap_LinearFunction_receive_utility_co__SWIG_4(self, args);
           }
         }
       }
@@ -52142,7 +54076,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
           int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
           _v = SWIG_CheckState(res);
           if (_v) {
-            return _wrap_ComponentList_receive_utility_co__SWIG_1(self, args);
+            return _wrap_LinearFunction_receive_utility_co__SWIG_1(self, args);
           }
         }
       }
@@ -52170,7 +54104,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_ComponentList_receive_utility_co__SWIG_3(self, args);
+              return _wrap_LinearFunction_receive_utility_co__SWIG_3(self, args);
             }
           }
         }
@@ -52197,7 +54131,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_ComponentList_receive_utility_co__SWIG_0(self, args);
+              return _wrap_LinearFunction_receive_utility_co__SWIG_0(self, args);
             }
           }
         }
@@ -52206,7 +54140,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co(PyObject *self, PyOb
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ComponentList_receive_utility_co'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunction_receive_utility_co'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    elm::ComponentList::receive_utility_co(std::string const &,std::string const &,std::string,double const &)\n"
     "    elm::ComponentList::receive_utility_co(std::string const &,std::string const &,std::string)\n"
@@ -52218,7 +54152,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_LinearFunction_receive_utility_co_kwd(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   std::string const &arg2_defvalue = "" ;
@@ -52250,10 +54184,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
     (char *) "self",(char *) "data",(char *) "altname",(char *) "altcode",(char *) "param",(char *) "multiplier", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:ComponentList_receive_utility_co_kwd",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:LinearFunction_receive_utility_co_kwd",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   if (obj1) {
@@ -52261,10 +54195,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
       std::string *ptr = (std::string *)0;
       res2 = SWIG_AsPtr_std_string(obj1, &ptr);
       if (!SWIG_IsOK(res2)) {
-        SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "2"" of type '" "std::string const &""'"); 
+        SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "2"" of type '" "std::string const &""'"); 
       }
       if (!ptr) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "2"" of type '" "std::string const &""'"); 
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "2"" of type '" "std::string const &""'"); 
       }
       arg2 = ptr;
     }
@@ -52274,10 +54208,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
       std::string *ptr = (std::string *)0;
       res3 = SWIG_AsPtr_std_string(obj2, &ptr);
       if (!SWIG_IsOK(res3)) {
-        SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "3"" of type '" "std::string const &""'"); 
+        SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "3"" of type '" "std::string const &""'"); 
       }
       if (!ptr) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "3"" of type '" "std::string const &""'"); 
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "3"" of type '" "std::string const &""'"); 
       }
       arg3 = ptr;
     }
@@ -52285,7 +54219,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
   if (obj3) {
     ecode4 = SWIG_AsVal_long_SS_long(obj3, &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "4"" of type '" "elm::cellcode""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "4"" of type '" "elm::cellcode""'");
     } 
     temp4 = static_cast< elm::cellcode >(val4);
     arg4 = &temp4;
@@ -52295,7 +54229,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
       std::string *ptr = (std::string *)0;
       int res = SWIG_AsPtr_std_string(obj4, &ptr);
       if (!SWIG_IsOK(res) || !ptr) {
-        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "5"" of type '" "std::string""'"); 
+        SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "5"" of type '" "std::string""'"); 
       }
       arg5 = *ptr;
       if (SWIG_IsNewObj(res)) delete ptr;
@@ -52304,7 +54238,7 @@ SWIGINTERN PyObject *_wrap_ComponentList_receive_utility_co_kwd(PyObject *SWIGUN
   if (obj5) {
     ecode6 = SWIG_AsVal_double(obj5, &val6);
     if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "ComponentList_receive_utility_co_kwd" "', argument " "6"" of type '" "double""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "LinearFunction_receive_utility_co_kwd" "', argument " "6"" of type '" "double""'");
     } 
     temp6 = static_cast< double >(val6);
     arg6 = &temp6;
@@ -52337,7 +54271,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction___str__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   void *argp1 = 0 ;
@@ -52345,10 +54279,48 @@ SWIGINTERN PyObject *_wrap_ComponentList___repr__(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList___repr__",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___str__",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList___repr__" "', argument " "1"" of type '" "elm::ComponentList const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___str__" "', argument " "1"" of type '" "elm::ComponentList const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  {
+    try {
+      result = ((elm::ComponentList const *)arg1)->__str__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___repr__" "', argument " "1"" of type '" "elm::ComponentList const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
@@ -52375,7 +54347,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentList_needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction_needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   void *argp1 = 0 ;
@@ -52383,10 +54355,10 @@ SWIGINTERN PyObject *_wrap_ComponentList_needs(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj0 = 0 ;
   std::vector< std::string,std::allocator< std::string > > result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentList_needs",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_needs",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentList_needs" "', argument " "1"" of type '" "elm::ComponentList const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_needs" "', argument " "1"" of type '" "elm::ComponentList const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
@@ -52413,17 +54385,306 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_ComponentList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunction___add____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___add__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___add__" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction___add__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction___add__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      result = (arg1)->operator +((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new elm::ComponentList(static_cast< const elm::ComponentList& >(result))), SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___add____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  elm::ComponentList *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___add__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___add__" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction___add__" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction___add__" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
+  {
+    try {
+      result = (arg1)->operator +((elm::ComponentList const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new elm::ComponentList(static_cast< const elm::ComponentList& >(result))), SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___add__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunction___add____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__ComponentList, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunction___add____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___iadd____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___iadd__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___iadd__" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction___iadd__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction___iadd__" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->operator +=((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___iadd____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
+  elm::ComponentList *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___iadd__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___iadd__" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction___iadd__" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction___iadd__" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->operator +=((elm::ComponentList const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunction___iadd__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunction___iadd____SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__ComponentList, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunction___iadd____SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunction___iadd__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::ComponentList::operator +=(elm::LinearComponent const &)\n"
+    "    elm::ComponentList::operator +=(elm::ComponentList const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_LinearFunction(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentList *arg1 = (elm::ComponentList *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"delete_ComponentList",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearFunction",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentList, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentList" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearFunction" "', argument " "1"" of type '" "elm::ComponentList *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentList * >(argp1);
   {
@@ -52450,116 +54711,12 @@ fail:
 }
 
 
-SWIGINTERN PyObject *ComponentList_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *LinearFunction_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_elm__ComponentList, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
-
-SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__receiver_type_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap__receiver_type_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentCellcodeMap__receiver_type_set" "', argument " "1"" of type '" "elm::ComponentCellcodeMap *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentCellcodeMap__receiver_type_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (arg1) (arg1)->_receiver_type = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ComponentCellcodeMap__receiver_type_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  int result;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap__receiver_type_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentCellcodeMap__receiver_type_get" "', argument " "1"" of type '" "elm::ComponentCellcodeMap *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  result = (int) ((arg1)->_receiver_type);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  elm::Model2 *arg2 = (elm::Model2 *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentCellcodeMap_parentmodel_set" "', argument " "1"" of type '" "elm::ComponentCellcodeMap *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentCellcodeMap_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
-  }
-  arg2 = reinterpret_cast< elm::Model2 * >(argp2);
-  if (arg1) (arg1)->parentmodel = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::Model2 *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap_parentmodel_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentCellcodeMap_parentmodel_get" "', argument " "1"" of type '" "elm::ComponentCellcodeMap *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  result = (elm::Model2 *) ((arg1)->parentmodel);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Model2, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
 
 SWIGINTERN PyObject *_wrap_new_ComponentCellcodeMap__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -52886,7 +55043,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  elm::Component *result = 0 ;
+  elm::LinearComponent *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
@@ -52903,7 +55060,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
   {
     try {
       try {
-        result = (elm::Component *) &elm_ComponentCellcodeMap___getitem__(arg1,(long long const &)*arg2);
+        result = (elm::LinearComponent *) &elm_ComponentCellcodeMap___getitem__(arg1,(long long const &)*arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -52923,7 +55080,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___getitem__(PyObject *SWIGUNUSED
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Component, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearComponent, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -52934,7 +55091,7 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___setitem__(PyObject *SWIGUNUSED
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
   elm::cellcode *arg2 = 0 ;
-  elm::Component *arg3 = 0 ;
+  elm::LinearComponent *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   elm::cellcode temp2 ;
@@ -52958,17 +55115,17 @@ SWIGINTERN PyObject *_wrap_ComponentCellcodeMap___setitem__(PyObject *SWIGUNUSED
   } 
   temp2 = static_cast< elm::cellcode >(val2);
   arg2 = &temp2;
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__Component,  0  | 0);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::Component const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::LinearComponent const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::Component const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentCellcodeMap___setitem__" "', argument " "3"" of type '" "elm::LinearComponent const &""'"); 
   }
-  arg3 = reinterpret_cast< elm::Component * >(argp3);
+  arg3 = reinterpret_cast< elm::LinearComponent * >(argp3);
   {
     try {
-      elm_ComponentCellcodeMap___setitem__(arg1,(long long const &)*arg2,(elm::Component const &)*arg3);
+      elm_ComponentCellcodeMap___setitem__(arg1,(long long const &)*arg2,(elm::LinearComponent const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -53569,9 +55726,734 @@ SWIGINTERN PyObject *ComponentCellcodeMap_swigregister(PyObject *SWIGUNUSEDPARM(
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_LinearFunction_descrip_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  elm::Model2 *arg2 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1_parentmodel_set" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearCOBundle_1_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
+  }
+  arg2 = reinterpret_cast< elm::Model2 * >(argp2);
+  if (arg1) (arg1)->parentmodel = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::Model2 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1_parentmodel_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1_parentmodel_get" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  result = (elm::Model2 *) ((arg1)->parentmodel);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Model2, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_1__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::LinearCOBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearCOBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_LinearCOBundle_1" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = (elm::LinearCOBundle_1 *)new elm::LinearCOBundle_1(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_1__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearCOBundle_1",0,0)) SWIG_fail;
+  {
+    try {
+      result = (elm::LinearCOBundle_1 *)new elm::LinearCOBundle_1();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_1__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::LinearCOBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearCOBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_elm__LinearCOBundle_1,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_LinearCOBundle_1" "', argument " "1"" of type '" "elm::LinearCOBundle_1 const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_LinearCOBundle_1" "', argument " "1"" of type '" "elm::LinearCOBundle_1 const &""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  {
+    try {
+      result = (elm::LinearCOBundle_1 *)new elm::LinearCOBundle_1((elm::LinearCOBundle_1 const &)*arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_1(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_LinearCOBundle_1__SWIG_1(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_LinearCOBundle_1__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_elm__LinearCOBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_LinearCOBundle_1__SWIG_2(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearCOBundle_1'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::LinearCOBundle_1::LinearCOBundle_1(elm::Model2 *)\n"
+    "    elm::LinearCOBundle_1::LinearCOBundle_1()\n"
+    "    elm::LinearCOBundle_1::LinearCOBundle_1(elm::LinearCOBundle_1 const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1_metasize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1_metasize",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1_metasize" "', argument " "1"" of type '" "elm::LinearCOBundle_1 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  {
+    try {
+      result = ((elm::LinearCOBundle_1 const *)arg1)->metasize();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1___str__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1___str__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1___str__" "', argument " "1"" of type '" "elm::LinearCOBundle_1 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  {
+    try {
+      result = ((elm::LinearCOBundle_1 const *)arg1)->__str__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1_needs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1_needs",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1_needs" "', argument " "1"" of type '" "elm::LinearCOBundle_1 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  {
+    try {
+      result = ((elm::LinearCOBundle_1 const *)arg1)->needs();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::vector<std::string,std::allocator< std::string > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1_add_blank(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  elm::cellcode *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  elm::cellcode temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1_add_blank",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1_add_blank" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_1_add_blank" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  temp2 = static_cast< elm::cellcode >(val2);
+  arg2 = &temp2;
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->add_blank((elm::cellcode const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1__call__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  elm::cellcode *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string arg4 ;
+  double *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  elm::cellcode temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  double temp5 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1__call",5,5,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1__call" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_1__call" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  temp2 = static_cast< elm::cellcode >(val2);
+  arg2 = &temp2;
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearCOBundle_1__call" "', argument " "4"" of type '" "std::string""'"); 
+    }
+    arg4 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  ecode5 = SWIG_AsVal_double(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "LinearCOBundle_1__call" "', argument " "5"" of type '" "double""'");
+  } 
+  temp5 = static_cast< double >(val5);
+  arg5 = &temp5;
+  {
+    try {
+      (arg1)->_call((elm::cellcode const &)*arg2,(std::string const &)*arg3,arg4,(double const &)*arg5);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1__call__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  elm::cellcode *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  elm::cellcode temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1__call",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1__call" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_1__call" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  temp2 = static_cast< elm::cellcode >(val2);
+  arg2 = &temp2;
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj3, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearCOBundle_1__call" "', argument " "4"" of type '" "std::string""'"); 
+    }
+    arg4 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      (arg1)->_call((elm::cellcode const &)*arg2,(std::string const &)*arg3,arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1__call__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  elm::cellcode *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  elm::cellcode temp2 ;
+  long long val2 ;
+  int ecode2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_1__call",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_1__call" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_1__call" "', argument " "2"" of type '" "elm::cellcode""'");
+  } 
+  temp2 = static_cast< elm::cellcode >(val2);
+  arg2 = &temp2;
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearCOBundle_1__call" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    try {
+      (arg1)->_call((elm::cellcode const &)*arg2,(std::string const &)*arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_1__call(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[6];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearCOBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_LinearCOBundle_1__call__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearCOBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_LinearCOBundle_1__call__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearCOBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_long_SS_long(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_string(argv[3], (std::string**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            {
+              int res = SWIG_AsVal_double(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_LinearCOBundle_1__call__SWIG_0(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearCOBundle_1__call'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::LinearCOBundle_1::_call(elm::cellcode const &,std::string const &,std::string,double const &)\n"
+    "    elm::LinearCOBundle_1::_call(elm::cellcode const &,std::string const &,std::string)\n"
+    "    elm::LinearCOBundle_1::_call(elm::cellcode const &,std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_LinearCOBundle_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_1 *arg1 = (elm::LinearCOBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearCOBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_1, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearCOBundle_1" "', argument " "1"" of type '" "elm::LinearCOBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *LinearCOBundle_1_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__LinearCOBundle_1, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1_descrip_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -53579,20 +56461,20 @@ SWIGINTERN PyObject *_wrap_LinearFunction_descrip_set(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_descrip_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1_descrip_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_descrip_set" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1_descrip_set" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
   {
     std::string *ptr = (std::string *)0;
     res2 = SWIG_AsPtr_std_string(obj1, &ptr);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearBundle_1_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearBundle_1_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
     }
     arg2 = ptr;
   }
@@ -53606,7 +56488,927 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction_descrip_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearBundle_1_descrip_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1_descrip_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1_descrip_get" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  result = (std::string *) & ((arg1)->descrip);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearBundle_1__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string arg1 ;
+  elm::Model2 *arg2 = (elm::Model2 *) 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::LinearBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearBundle_1",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearBundle_1" "', argument " "1"" of type '" "std::string""'"); 
+    }
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_LinearBundle_1" "', argument " "2"" of type '" "elm::Model2 *""'"); 
+  }
+  arg2 = reinterpret_cast< elm::Model2 * >(argp2);
+  {
+    try {
+      result = (elm::LinearBundle_1 *)new elm::LinearBundle_1(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearBundle_1__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string arg1 ;
+  PyObject * obj0 = 0 ;
+  elm::LinearBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearBundle_1",1,1,&obj0)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearBundle_1" "', argument " "1"" of type '" "std::string""'"); 
+    }
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      result = (elm::LinearBundle_1 *)new elm::LinearBundle_1(arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearBundle_1__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearBundle_1",0,0)) SWIG_fail;
+  {
+    try {
+      result = (elm::LinearBundle_1 *)new elm::LinearBundle_1();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearBundle_1, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_LinearBundle_1(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_LinearBundle_1__SWIG_2(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_LinearBundle_1__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__Model2, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_LinearBundle_1__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearBundle_1'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::LinearBundle_1::LinearBundle_1(std::string,elm::Model2 *)\n"
+    "    elm::LinearBundle_1::LinearBundle_1(std::string)\n"
+    "    elm::LinearBundle_1::LinearBundle_1()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  std::string arg2 ;
+  std::string arg3 ;
+  double *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double temp4 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1___call__",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1___call__" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearBundle_1___call__" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearBundle_1___call__" "', argument " "3"" of type '" "std::string""'"); 
+    }
+    arg3 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearBundle_1___call__" "', argument " "4"" of type '" "double""'");
+  } 
+  temp4 = static_cast< double >(val4);
+  arg4 = &temp4;
+  {
+    try {
+      (arg1)->__call__(arg2,arg3,(double const &)*arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  std::string arg2 ;
+  std::string arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1___call__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1___call__" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearBundle_1___call__" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearBundle_1___call__" "', argument " "3"" of type '" "std::string""'"); 
+    }
+    arg3 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      (arg1)->__call__(arg2,arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___call____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  std::string arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1___call__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1___call__" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearBundle_1___call__" "', argument " "2"" of type '" "std::string""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      (arg1)->__call__(arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___call____SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1___call__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1___call__" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    try {
+      (arg1)->__call__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___call__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_LinearBundle_1___call____SWIG_3(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearBundle_1___call____SWIG_2(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_LinearBundle_1___call____SWIG_1(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_LinearBundle_1___call____SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearBundle_1___call__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::LinearBundle_1::__call__(std::string,std::string,double const &)\n"
+    "    elm::LinearBundle_1::__call__(std::string,std::string)\n"
+    "    elm::LinearBundle_1::__call__(std::string)\n"
+    "    elm::LinearBundle_1::__call__()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1_clean(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  elm::Facet *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1_clean",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1_clean" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Facet,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearBundle_1_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearBundle_1_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::Facet * >(argp2);
+  {
+    try {
+      (arg1)->clean(*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1___repr__" "', argument " "1"" of type '" "elm::LinearBundle_1 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    try {
+      result = ((elm::LinearBundle_1 const *)arg1)->__repr__();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__set_ca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1__set_ca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1__set_ca" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearBundle_1__set_ca" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearBundle_1__set_ca" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      (arg1)->_set_ca((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__set_ca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  elm::ComponentList *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1__set_ca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1__set_ca" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearBundle_1__set_ca" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearBundle_1__set_ca" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
+  {
+    try {
+      (arg1)->_set_ca((elm::ComponentList const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__set_ca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearBundle_1__set_ca__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__LinearBundle_1, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__ComponentList, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearBundle_1__set_ca__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearBundle_1__set_ca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::LinearBundle_1::_set_ca(elm::LinearComponent const &)\n"
+    "    elm::LinearBundle_1::_set_ca(elm::ComponentList const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__set_co(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  elm::LinearCOBundle_1 *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1__set_co",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1__set_co" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearCOBundle_1,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearBundle_1__set_co" "', argument " "2"" of type '" "elm::LinearCOBundle_1 const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearBundle_1__set_co" "', argument " "2"" of type '" "elm::LinearCOBundle_1 const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearCOBundle_1 * >(argp2);
+  {
+    try {
+      (arg1)->_set_co((elm::LinearCOBundle_1 const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__get_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1__get_ca",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1__get_ca" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->_get_ca();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearBundle_1__get_co(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::LinearCOBundle_1 *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearBundle_1__get_co",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearBundle_1__get_co" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    try {
+      result = (elm::LinearCOBundle_1 *) &(arg1)->_get_co();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_1, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_LinearBundle_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearBundle_1 *arg1 = (elm::LinearBundle_1 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearBundle_1",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearBundle_1, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearBundle_1" "', argument " "1"" of type '" "elm::LinearBundle_1 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearBundle_1 * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *LinearBundle_1_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__LinearBundle_1, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair_descrip_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair_descrip_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair_descrip_set" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair_descrip_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->descrip = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair_descrip_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   void *argp1 = 0 ;
@@ -53614,10 +57416,10 @@ SWIGINTERN PyObject *_wrap_LinearFunction_descrip_get(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj0 = 0 ;
   std::string *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_descrip_get",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair_descrip_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_descrip_get" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair_descrip_get" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   result = (std::string *) & ((arg1)->descrip);
@@ -53628,111 +57430,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction_ca_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
-  elm::ComponentList *arg2 = (elm::ComponentList *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_ca_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_ca_set" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_ca_set" "', argument " "2"" of type '" "elm::ComponentList *""'"); 
-  }
-  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
-  if (arg1) (arg1)->ca = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_LinearFunction_ca_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::ComponentList *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_ca_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_ca_get" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
-  result = (elm::ComponentList *)& ((arg1)->ca);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_LinearFunction_co_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
-  elm::ComponentList *arg2 = (elm::ComponentList *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_co_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_co_set" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentList, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_co_set" "', argument " "2"" of type '" "elm::ComponentList *""'"); 
-  }
-  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
-  if (arg1) (arg1)->co = *arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_LinearFunction_co_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  elm::ComponentList *result = 0 ;
-  
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_co_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_co_get" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
-  }
-  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
-  result = (elm::ComponentList *)& ((arg1)->co);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int arg2 ;
@@ -53750,29 +57448,29 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_0(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj3 = 0 ;
   elm::ComponentListPair *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunctionPair",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunctionPair" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunction" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunctionPair" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   {
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearFunction" "', argument " "3"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearFunctionPair" "', argument " "3"" of type '" "std::string""'"); 
     }
     arg3 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_elm__Model2, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_LinearFunction" "', argument " "4"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_LinearFunctionPair" "', argument " "4"" of type '" "elm::Model2 *""'"); 
   }
   arg4 = reinterpret_cast< elm::Model2 * >(argp4);
   {
@@ -53799,7 +57497,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int arg2 ;
@@ -53813,22 +57511,22 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_1(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj2 = 0 ;
   elm::ComponentListPair *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunctionPair",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunctionPair" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunction" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunctionPair" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   {
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearFunction" "', argument " "3"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "new_LinearFunctionPair" "', argument " "3"" of type '" "std::string""'"); 
     }
     arg3 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
@@ -53857,7 +57555,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int arg2 ;
@@ -53869,15 +57567,15 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_2(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj1 = 0 ;
   elm::ComponentListPair *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunctionPair",2,2,&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunctionPair" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunction" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_LinearFunctionPair" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   {
@@ -53904,7 +57602,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -53912,10 +57610,10 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_3(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj0 = 0 ;
   elm::ComponentListPair *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunctionPair",1,1,&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunction" "', argument " "1"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_LinearFunctionPair" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = static_cast< int >(val1);
   {
@@ -53942,11 +57640,11 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LinearFunction__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunction",0,0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearFunctionPair",0,0)) SWIG_fail;
   {
     try {
       result = (elm::ComponentListPair *)new elm::ComponentListPair();
@@ -53971,7 +57669,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearFunctionPair(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[5];
   int ii;
@@ -53982,7 +57680,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_LinearFunction__SWIG_4(self, args);
+    return _wrap_new_LinearFunctionPair__SWIG_4(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -53991,7 +57689,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new_LinearFunction__SWIG_3(self, args);
+      return _wrap_new_LinearFunctionPair__SWIG_3(self, args);
     }
   }
   if (argc == 2) {
@@ -54006,7 +57704,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_LinearFunction__SWIG_2(self, args);
+        return _wrap_new_LinearFunctionPair__SWIG_2(self, args);
       }
     }
   }
@@ -54025,7 +57723,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_new_LinearFunction__SWIG_1(self, args);
+          return _wrap_new_LinearFunctionPair__SWIG_1(self, args);
         }
       }
     }
@@ -54049,7 +57747,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
           int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_elm__Model2, 0);
           _v = SWIG_CheckState(res);
           if (_v) {
-            return _wrap_new_LinearFunction__SWIG_0(self, args);
+            return _wrap_new_LinearFunctionPair__SWIG_0(self, args);
           }
         }
       }
@@ -54057,7 +57755,7 @@ SWIGINTERN PyObject *_wrap_new_LinearFunction(PyObject *self, PyObject *args) {
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearFunction'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearFunctionPair'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    elm::ComponentListPair::ComponentListPair(int,int,std::string,elm::Model2 *)\n"
     "    elm::ComponentListPair::ComponentListPair(int,int,std::string)\n"
@@ -54068,7 +57766,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   elm::cellcode *arg2 = 0 ;
@@ -54087,15 +57785,15 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_0(PyObject *SWIGUNUSEDP
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___call__",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair___call__",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunction___call__" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunctionPair___call__" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   temp2 = static_cast< elm::cellcode >(val2);
   arg2 = &temp2;
@@ -54103,14 +57801,14 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_0(PyObject *SWIGUNUSEDP
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction___call__" "', argument " "3"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunctionPair___call__" "', argument " "3"" of type '" "std::string""'"); 
     }
     arg3 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
   }
   ecode4 = SWIG_AsVal_double(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearFunction___call__" "', argument " "4"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "LinearFunctionPair___call__" "', argument " "4"" of type '" "double""'");
   } 
   temp4 = static_cast< double >(val4);
   arg4 = &temp4;
@@ -54138,7 +57836,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   elm::cellcode *arg2 = 0 ;
@@ -54152,15 +57850,15 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_1(PyObject *SWIGUNUSEDP
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___call__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair___call__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunction___call__" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunctionPair___call__" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   temp2 = static_cast< elm::cellcode >(val2);
   arg2 = &temp2;
@@ -54168,7 +57866,7 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_1(PyObject *SWIGUNUSEDP
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(obj2, &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunction___call__" "', argument " "3"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "LinearFunctionPair___call__" "', argument " "3"" of type '" "std::string""'"); 
     }
     arg3 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
@@ -54197,7 +57895,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair___call____SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   elm::cellcode *arg2 = 0 ;
@@ -54209,15 +57907,15 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call____SWIG_2(PyObject *SWIGUNUSEDP
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___call__",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair___call__",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair___call__" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunction___call__" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearFunctionPair___call__" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   temp2 = static_cast< elm::cellcode >(val2);
   arg2 = &temp2;
@@ -54245,7 +57943,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction___call__(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair___call__(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[5];
   int ii;
@@ -54266,7 +57964,7 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call__(PyObject *self, PyObject *arg
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_LinearFunction___call____SWIG_2(self, args);
+        return _wrap_LinearFunctionPair___call____SWIG_2(self, args);
       }
     }
   }
@@ -54284,7 +57982,7 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call__(PyObject *self, PyObject *arg
         int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_LinearFunction___call____SWIG_1(self, args);
+          return _wrap_LinearFunctionPair___call____SWIG_1(self, args);
         }
       }
     }
@@ -54308,7 +58006,7 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call__(PyObject *self, PyObject *arg
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_LinearFunction___call____SWIG_0(self, args);
+            return _wrap_LinearFunctionPair___call____SWIG_0(self, args);
           }
         }
       }
@@ -54316,7 +58014,7 @@ SWIGINTERN PyObject *_wrap_LinearFunction___call__(PyObject *self, PyObject *arg
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunction___call__'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunctionPair___call__'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    elm::ComponentListPair::__call__(elm::cellcode const &,std::string,double const &)\n"
     "    elm::ComponentListPair::__call__(elm::cellcode const &,std::string)\n"
@@ -54325,7 +58023,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction_clean(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair_clean(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   elm::Facet *arg2 = 0 ;
@@ -54336,18 +58034,18 @@ SWIGINTERN PyObject *_wrap_LinearFunction_clean(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction_clean",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair_clean",2,2,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction_clean" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair_clean" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__Facet,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunction_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunction_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair_clean" "', argument " "2"" of type '" "elm::Facet &""'"); 
   }
   arg2 = reinterpret_cast< elm::Facet * >(argp2);
   {
@@ -54374,7 +58072,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LinearFunction___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   void *argp1 = 0 ;
@@ -54382,10 +58080,10 @@ SWIGINTERN PyObject *_wrap_LinearFunction___repr__(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"LinearFunction___repr__",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair___repr__",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunction___repr__" "', argument " "1"" of type '" "elm::ComponentListPair const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair___repr__" "', argument " "1"" of type '" "elm::ComponentListPair const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   {
@@ -54412,17 +58110,381 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_LinearFunction(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_ca__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__set_ca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__set_ca" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair__set_ca" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair__set_ca" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      (arg1)->_set_ca((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_co__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  elm::LinearComponent *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__set_co",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__set_co" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__LinearComponent,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair__set_co" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair__set_co" "', argument " "2"" of type '" "elm::LinearComponent const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::LinearComponent * >(argp2);
+  {
+    try {
+      (arg1)->_set_co((elm::LinearComponent const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_ca__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  elm::ComponentList *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__set_ca",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__set_ca" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair__set_ca" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair__set_ca" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
+  {
+    try {
+      (arg1)->_set_ca((elm::ComponentList const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_ca(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentListPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunctionPair__set_ca__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentListPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__ComponentList, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunctionPair__set_ca__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunctionPair__set_ca'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::ComponentListPair::_set_ca(elm::LinearComponent const &)\n"
+    "    elm::ComponentListPair::_set_ca(elm::ComponentList const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_co__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  elm::ComponentList *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__set_co",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__set_co" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_elm__ComponentList,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearFunctionPair__set_co" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearFunctionPair__set_co" "', argument " "2"" of type '" "elm::ComponentList const &""'"); 
+  }
+  arg2 = reinterpret_cast< elm::ComponentList * >(argp2);
+  {
+    try {
+      (arg1)->_set_co((elm::ComponentList const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__set_co(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentListPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__LinearComponent, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunctionPair__set_co__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ComponentListPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_elm__ComponentList, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_LinearFunctionPair__set_co__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LinearFunctionPair__set_co'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::ComponentListPair::_set_co(elm::LinearComponent const &)\n"
+    "    elm::ComponentListPair::_set_co(elm::ComponentList const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__get_ca(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__get_ca",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__get_ca" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->_get_ca();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearFunctionPair__get_co(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  elm::ComponentList *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearFunctionPair__get_co",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearFunctionPair__get_co" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
+  {
+    try {
+      result = (elm::ComponentList *) &(arg1)->_get_co();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentList, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_LinearFunctionPair(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentListPair *arg1 = (elm::ComponentListPair *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearFunction",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearFunctionPair",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentListPair, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearFunction" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearFunctionPair" "', argument " "1"" of type '" "elm::ComponentListPair *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentListPair * >(argp1);
   {
@@ -54449,16 +58511,16 @@ fail:
 }
 
 
-SWIGINTERN PyObject *LinearFunction_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *LinearFunctionPair_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_elm__ComponentListPair, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap__receiver_type_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2__receiver_type_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -54467,15 +58529,15 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap__receiver_type_set(PyObject *SWIGUNU
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap__receiver_type_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2__receiver_type_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap__receiver_type_set" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2__receiver_type_set" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentEdgeMap__receiver_type_set" "', argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_2__receiver_type_set" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   if (arg1) (arg1)->_receiver_type = arg2;
@@ -54486,20 +58548,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap__receiver_type_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2__receiver_type_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   int result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap__receiver_type_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2__receiver_type_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap__receiver_type_get" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2__receiver_type_get" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   result = (int) ((arg1)->_receiver_type);
   resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
@@ -54508,9 +58570,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_parentmodel_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::Model2 *arg2 = (elm::Model2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -54519,15 +58581,15 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap_parentmodel_set(PyObject *SWIGUNUSED
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_parentmodel_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap_parentmodel_set" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_parentmodel_set" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Model2, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentEdgeMap_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "LinearCOBundle_2_parentmodel_set" "', argument " "2"" of type '" "elm::Model2 *""'"); 
   }
   arg2 = reinterpret_cast< elm::Model2 * >(argp2);
   if (arg1) (arg1)->parentmodel = arg2;
@@ -54538,20 +58600,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_parentmodel_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   elm::Model2 *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap_parentmodel_get",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_parentmodel_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap_parentmodel_get" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_parentmodel_get" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   result = (elm::Model2 *) ((arg1)->parentmodel);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__Model2, 0 |  0 );
   return resultobj;
@@ -54560,23 +58622,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_2__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::ComponentEdgeMap *result = 0 ;
+  elm::LinearCOBundle_2 *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_ComponentEdgeMap",1,1,&obj0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearCOBundle_2",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentEdgeMap" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_LinearCOBundle_2" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
   {
     try {
-      result = (elm::ComponentEdgeMap *)new elm::ComponentEdgeMap(arg1);
+      result = (elm::LinearCOBundle_2 *)new elm::LinearCOBundle_2(arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54591,21 +58653,21 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_0(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentEdgeMap, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_2, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_2__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *result = 0 ;
+  elm::LinearCOBundle_2 *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"new_ComponentEdgeMap",0,0)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"new_LinearCOBundle_2",0,0)) SWIG_fail;
   {
     try {
-      result = (elm::ComponentEdgeMap *)new elm::ComponentEdgeMap();
+      result = (elm::LinearCOBundle_2 *)new elm::LinearCOBundle_2();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54620,14 +58682,14 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap__SWIG_1(PyObject *SWIGUNUSEDPARM
       return NULL;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentEdgeMap, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_2, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_LinearCOBundle_2(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[2];
   int ii;
@@ -54638,7 +58700,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap(PyObject *self, PyObject *args) 
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_ComponentEdgeMap__SWIG_1(self, args);
+    return _wrap_new_LinearCOBundle_2__SWIG_1(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -54646,36 +58708,36 @@ SWIGINTERN PyObject *_wrap_new_ComponentEdgeMap(PyObject *self, PyObject *args) 
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Model2, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_new_ComponentEdgeMap__SWIG_0(self, args);
+      return _wrap_new_LinearCOBundle_2__SWIG_0(self, args);
     }
   }
   
 fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ComponentEdgeMap'.\n"
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_LinearCOBundle_2'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::ComponentEdgeMap::ComponentEdgeMap(elm::Model2 *)\n"
-    "    elm::ComponentEdgeMap::ComponentEdgeMap()\n");
+    "    elm::LinearCOBundle_2::LinearCOBundle_2(elm::Model2 *)\n"
+    "    elm::LinearCOBundle_2::LinearCOBundle_2()\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___repr__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   std::string result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___repr__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___repr__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___repr__" "', argument " "1"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___repr__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
-      result = ((elm::ComponentEdgeMap const *)arg1)->__repr__();
+      result = ((elm::LinearCOBundle_2 const *)arg1)->__repr__();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54697,23 +58759,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   unsigned int result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap_size",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_size",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap_size" "', argument " "1"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_size" "', argument " "1"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
-      result = (unsigned int)((elm::ComponentEdgeMap const *)arg1)->size();
+      result = (unsigned int)((elm::LinearCOBundle_2 const *)arg1)->size();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54735,23 +58797,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   bool result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap_empty",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_empty",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap_empty" "', argument " "1"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_empty" "', argument " "1"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
-      result = (bool)((elm::ComponentEdgeMap const *)arg1)->empty();
+      result = (bool)((elm::LinearCOBundle_2 const *)arg1)->empty();
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54773,19 +58835,19 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap_clear",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_clear",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap_clear" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_clear" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
       (arg1)->clear();
@@ -54810,9 +58872,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::cellcodepair *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -54821,12 +58883,12 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___getitem__(PyObject *SWIGUNUSEDPARM
   PyObject * obj1 = 0 ;
   elm::EdgeValue *result = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___getitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___getitem__" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___getitem__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
       PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
@@ -54837,7 +58899,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___getitem__(PyObject *SWIGUNUSEDPARM
   {
     try {
       try {
-        result = (elm::EdgeValue *) &elm_ComponentEdgeMap___getitem__(arg1,(elm::cellcodepair const &)*arg2);
+        result = (elm::EdgeValue *) &elm_LinearCOBundle_2___getitem__(arg1,(elm::cellcodepair const &)*arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -54864,9 +58926,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::cellcodepair *arg2 = 0 ;
   elm::EdgeValue *arg3 = 0 ;
   void *argp1 = 0 ;
@@ -54878,12 +58940,12 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___setitem__(PyObject *SWIGUNUSEDPARM
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___setitem__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___setitem__" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___setitem__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
       PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
@@ -54893,15 +58955,15 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___setitem__(PyObject *SWIGUNUSEDPARM
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_elm__ComponentList,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ComponentEdgeMap___setitem__" "', argument " "3"" of type '" "elm::EdgeValue const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LinearCOBundle_2___setitem__" "', argument " "3"" of type '" "elm::EdgeValue const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ComponentEdgeMap___setitem__" "', argument " "3"" of type '" "elm::EdgeValue const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LinearCOBundle_2___setitem__" "', argument " "3"" of type '" "elm::EdgeValue const &""'"); 
   }
   arg3 = reinterpret_cast< elm::EdgeValue * >(argp3);
   {
     try {
-      elm_ComponentEdgeMap___setitem__(arg1,(elm::cellcodepair const &)*arg2,(elm::ComponentList const &)*arg3);
+      elm_LinearCOBundle_2___setitem__(arg1,(elm::cellcodepair const &)*arg2,(elm::ComponentList const &)*arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -54923,9 +58985,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___delitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___delitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::cellcodepair *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -54933,12 +58995,12 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___delitem__(PyObject *SWIGUNUSEDPARM
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___delitem__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___delitem__" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___delitem__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
       PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
@@ -54949,7 +59011,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___delitem__(PyObject *SWIGUNUSEDPARM
   {
     try {
       try {
-        elm_ComponentEdgeMap___delitem__(arg1,(elm::cellcodepair const &)*arg2);
+        elm_LinearCOBundle_2___delitem__(arg1,(elm::cellcodepair const &)*arg2);
       }
       catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
@@ -54976,9 +59038,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___contains__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___contains__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::cellcodepair *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -54987,12 +59049,12 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___contains__(PyObject *SWIGUNUSEDPAR
   PyObject * obj1 = 0 ;
   bool result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___contains__",2,2,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___contains__",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___contains__" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___contains__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
       PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
@@ -55002,7 +59064,7 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___contains__(PyObject *SWIGUNUSEDPAR
   }
   {
     try {
-      result = (bool)elm_ComponentEdgeMap___contains__(arg1,(elm::cellcodepair const &)*arg2);
+      result = (bool)elm_LinearCOBundle_2___contains__(arg1,(elm::cellcodepair const &)*arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55024,23 +59086,23 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___len__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   int result;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___len__",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___len__",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___len__" "', argument " "1"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___len__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
-      result = (int)elm_ComponentEdgeMap___len__((elm::ComponentEdgeMap const *)arg1);
+      result = (int)elm_LinearCOBundle_2___len__((elm::LinearCOBundle_2 const *)arg1);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55062,9 +59124,9 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComponentEdgeMap___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   elm::cellcode arg2 ;
   elm::cellcode arg3 ;
   void *argp1 = 0 ;
@@ -55077,25 +59139,25 @@ SWIGINTERN PyObject *_wrap_ComponentEdgeMap___call__(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"ComponentEdgeMap___call__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2___call__",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentEdgeMap___call__" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2___call__" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   ecode2 = SWIG_AsVal_long_SS_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComponentEdgeMap___call__" "', argument " "2"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LinearCOBundle_2___call__" "', argument " "2"" of type '" "elm::cellcode""'");
   } 
   arg2 = static_cast< elm::cellcode >(val2);
   ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ComponentEdgeMap___call__" "', argument " "3"" of type '" "elm::cellcode""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "LinearCOBundle_2___call__" "', argument " "3"" of type '" "elm::cellcode""'");
   } 
   arg3 = static_cast< elm::cellcode >(val3);
   {
     try {
-      elm_ComponentEdgeMap___call__(arg1,arg2,arg3);
+      elm_LinearCOBundle_2___call__(arg1,arg2,arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55117,19 +59179,19 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_delete_ComponentEdgeMap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_delete_LinearCOBundle_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  elm::ComponentEdgeMap *arg1 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"delete_ComponentEdgeMap",1,1,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentEdgeMap, SWIG_POINTER_DISOWN |  0 );
+  if(!PyArg_UnpackTuple(args,(char *)"delete_LinearCOBundle_2",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ComponentEdgeMap" "', argument " "1"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_LinearCOBundle_2" "', argument " "1"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg1 = reinterpret_cast< elm::ComponentEdgeMap * >(argp1);
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
     try {
       delete arg1;
@@ -55154,10 +59216,10 @@ fail:
 }
 
 
-SWIGINTERN PyObject *ComponentEdgeMap_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *LinearCOBundle_2_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_elm__ComponentEdgeMap, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_elm__LinearCOBundle_2, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -55268,7 +59330,7 @@ fail:
 SWIGINTERN PyObject *_wrap_ComponentGraphDNA_edges_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentGraphDNA *arg1 = (elm::ComponentGraphDNA *) 0 ;
-  elm::ComponentEdgeMap *arg2 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg2 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -55282,12 +59344,12 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_edges_set(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentGraphDNA_edges_set" "', argument " "1"" of type '" "elm::ComponentGraphDNA *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentGraphDNA * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentEdgeMap, SWIG_POINTER_DISOWN |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearCOBundle_2, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentGraphDNA_edges_set" "', argument " "2"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ComponentGraphDNA_edges_set" "', argument " "2"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentEdgeMap * >(argp2);
-  if (arg1) (arg1)->edges = (elm::ComponentEdgeMap const *)arg2;
+  arg2 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp2);
+  if (arg1) (arg1)->edges = (elm::LinearCOBundle_2 const *)arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -55301,7 +59363,7 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_edges_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::ComponentEdgeMap *result = 0 ;
+  elm::LinearCOBundle_2 *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"ComponentGraphDNA_edges_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentGraphDNA, 0 |  0 );
@@ -55309,8 +59371,8 @@ SWIGINTERN PyObject *_wrap_ComponentGraphDNA_edges_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentGraphDNA_edges_get" "', argument " "1"" of type '" "elm::ComponentGraphDNA *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentGraphDNA * >(argp1);
-  result = (elm::ComponentEdgeMap *) ((arg1)->edges);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  result = (elm::LinearCOBundle_2 *) ((arg1)->edges);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -55320,7 +59382,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  elm::ComponentEdgeMap *arg2 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg2 = (elm::LinearCOBundle_2 *) 0 ;
   elm::Facet *arg3 = (elm::Facet *) 0 ;
   elm::cellcode *arg4 = (elm::cellcode *) 0 ;
   void *argp1 = 0 ;
@@ -55342,11 +59404,11 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentGraphDNA" "', argument " "1"" of type '" "elm::ComponentCellcodeMap const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentEdgeMap * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_elm__Facet, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_ComponentGraphDNA" "', argument " "3"" of type '" "elm::Facet const *""'"); 
@@ -55369,7 +59431,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_0(PyObject *SWIGUNUSEDPAR
   }
   {
     try {
-      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::ComponentEdgeMap const *)arg2,(elm::Facet const *)arg3,(elm::cellcode const *)arg4);
+      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::LinearCOBundle_2 const *)arg2,(elm::Facet const *)arg3,(elm::cellcode const *)arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55394,7 +59456,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  elm::ComponentEdgeMap *arg2 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg2 = (elm::LinearCOBundle_2 *) 0 ;
   elm::Facet *arg3 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -55413,11 +59475,11 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_1(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentGraphDNA" "', argument " "1"" of type '" "elm::ComponentCellcodeMap const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentEdgeMap * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_elm__Facet, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_ComponentGraphDNA" "', argument " "3"" of type '" "elm::Facet const *""'"); 
@@ -55425,7 +59487,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_1(PyObject *SWIGUNUSEDPAR
   arg3 = reinterpret_cast< elm::Facet * >(argp3);
   {
     try {
-      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::ComponentEdgeMap const *)arg2,(elm::Facet const *)arg3);
+      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::LinearCOBundle_2 const *)arg2,(elm::Facet const *)arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55450,7 +59512,7 @@ fail:
 SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
-  elm::ComponentEdgeMap *arg2 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg2 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -55465,14 +59527,14 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA__SWIG_2(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ComponentGraphDNA" "', argument " "1"" of type '" "elm::ComponentCellcodeMap const *""'"); 
   }
   arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::ComponentEdgeMap const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ComponentGraphDNA" "', argument " "2"" of type '" "elm::LinearCOBundle_2 const *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentEdgeMap * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp2);
   {
     try {
-      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::ComponentEdgeMap const *)arg2);
+      result = (elm::ComponentGraphDNA *)new elm::ComponentGraphDNA((elm::ComponentCellcodeMap const *)arg1,(elm::LinearCOBundle_2 const *)arg2);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -55639,7 +59701,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__ComponentEdgeMap, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__LinearCOBundle_2, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_new_ComponentGraphDNA__SWIG_2(self, args);
@@ -55653,7 +59715,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__ComponentEdgeMap, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__LinearCOBundle_2, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         void *vptr = 0;
@@ -55672,7 +59734,7 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA(PyObject *self, PyObject *args)
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__ComponentEdgeMap, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_elm__LinearCOBundle_2, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         void *vptr = 0;
@@ -55693,9 +59755,9 @@ SWIGINTERN PyObject *_wrap_new_ComponentGraphDNA(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_ComponentGraphDNA'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::ComponentEdgeMap const *,elm::Facet const *,elm::cellcode const *)\n"
-    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::ComponentEdgeMap const *,elm::Facet const *)\n"
-    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::ComponentEdgeMap const *)\n"
+    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::LinearCOBundle_2 const *,elm::Facet const *,elm::cellcode const *)\n"
+    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::LinearCOBundle_2 const *,elm::Facet const *)\n"
+    "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *,elm::LinearCOBundle_2 const *)\n"
     "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentCellcodeMap const *)\n"
     "    elm::ComponentGraphDNA::ComponentGraphDNA()\n"
     "    elm::ComponentGraphDNA::ComponentGraphDNA(elm::ComponentGraphDNA const &)\n");
@@ -70971,7 +75033,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_utility_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::ComponentListPair *arg2 = (elm::ComponentListPair *) 0 ;
+  elm::LinearBundle_1 *arg2 = (elm::LinearBundle_1 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -70985,11 +75047,11 @@ SWIGINTERN PyObject *_wrap_Model2_utility_set(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_utility_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_utility_set" "', argument " "2"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_utility_set" "', argument " "2"" of type '" "elm::LinearBundle_1 *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentListPair * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearBundle_1 * >(argp2);
   if (arg1) (arg1)->Input_Utility = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -71004,7 +75066,7 @@ SWIGINTERN PyObject *_wrap_Model2_utility_get(PyObject *SWIGUNUSEDPARM(self), Py
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::ComponentListPair *result = 0 ;
+  elm::LinearBundle_1 *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_utility_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -71012,8 +75074,8 @@ SWIGINTERN PyObject *_wrap_Model2_utility_get(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_utility_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::ComponentListPair *)& ((arg1)->Input_Utility);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  result = (elm::LinearBundle_1 *)& ((arg1)->Input_Utility);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -71023,7 +75085,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *arg2 = (std::vector< elm::Component,std::allocator< elm::Component > > *) 0 ;
+  std::vector< Component,std::allocator< Component > > *arg2 = (std::vector< Component,std::allocator< Component > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -71037,11 +75099,11 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_set(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Input_QuantityCA_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_Component_std__allocatorT_Component_t_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Input_QuantityCA_set" "', argument " "2"" of type '" "std::vector< elm::Component,std::allocator< elm::Component > > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_Input_QuantityCA_set" "', argument " "2"" of type '" "std::vector< Component,std::allocator< Component > > *""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< elm::Component,std::allocator< elm::Component > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< Component,std::allocator< Component > > * >(argp2);
   if (arg1) (arg1)->Input_QuantityCA = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -71056,7 +75118,7 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< elm::Component,std::allocator< elm::Component > > *result = 0 ;
+  std::vector< Component,std::allocator< Component > > *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_Input_QuantityCA_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -71064,8 +75126,8 @@ SWIGINTERN PyObject *_wrap_Model2_Input_QuantityCA_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_Input_QuantityCA_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (std::vector< elm::Component,std::allocator< elm::Component > > *)& ((arg1)->Input_QuantityCA);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0 |  0 );
+  result = (std::vector< Component,std::allocator< Component > > *)& ((arg1)->Input_QuantityCA);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_Component_std__allocatorT_Component_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -71127,7 +75189,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_link_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::ComponentEdgeMap *arg2 = (elm::ComponentEdgeMap *) 0 ;
+  elm::LinearCOBundle_2 *arg2 = (elm::LinearCOBundle_2 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -71141,11 +75203,11 @@ SWIGINTERN PyObject *_wrap_Model2_link_set(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_link_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_link_set" "', argument " "2"" of type '" "elm::ComponentEdgeMap *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_link_set" "', argument " "2"" of type '" "elm::LinearCOBundle_2 *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentEdgeMap * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp2);
   if (arg1) (arg1)->Input_Edges = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -71160,7 +75222,7 @@ SWIGINTERN PyObject *_wrap_Model2_link_get(PyObject *SWIGUNUSEDPARM(self), PyObj
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::ComponentEdgeMap *result = 0 ;
+  elm::LinearCOBundle_2 *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_link_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -71168,8 +75230,8 @@ SWIGINTERN PyObject *_wrap_Model2_link_get(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_link_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::ComponentEdgeMap *)& ((arg1)->Input_Edges);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentEdgeMap, 0 |  0 );
+  result = (elm::LinearCOBundle_2 *)& ((arg1)->Input_Edges);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -71179,7 +75241,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Model2_samplingbias_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
-  elm::ComponentListPair *arg2 = (elm::ComponentListPair *) 0 ;
+  elm::LinearBundle_1 *arg2 = (elm::LinearBundle_1 *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -71193,11 +75255,11 @@ SWIGINTERN PyObject *_wrap_Model2_samplingbias_set(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_samplingbias_set" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_samplingbias_set" "', argument " "2"" of type '" "elm::ComponentListPair *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_samplingbias_set" "', argument " "2"" of type '" "elm::LinearBundle_1 *""'"); 
   }
-  arg2 = reinterpret_cast< elm::ComponentListPair * >(argp2);
+  arg2 = reinterpret_cast< elm::LinearBundle_1 * >(argp2);
   if (arg1) (arg1)->Input_Sampling = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -71212,7 +75274,7 @@ SWIGINTERN PyObject *_wrap_Model2_samplingbias_get(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  elm::ComponentListPair *result = 0 ;
+  elm::LinearBundle_1 *result = 0 ;
   
   if(!PyArg_UnpackTuple(args,(char *)"Model2_samplingbias_get",1,1,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
@@ -71220,8 +75282,8 @@ SWIGINTERN PyObject *_wrap_Model2_samplingbias_get(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_samplingbias_get" "', argument " "1"" of type '" "elm::Model2 *""'"); 
   }
   arg1 = reinterpret_cast< elm::Model2 * >(argp1);
-  result = (elm::ComponentListPair *)& ((arg1)->Input_Sampling);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__ComponentListPair, 0 |  0 );
+  result = (elm::LinearBundle_1 *)& ((arg1)->Input_Sampling);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_elm__LinearBundle_1, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -73930,6 +77992,43 @@ fail:
     "    elm::Model2::setUp(bool)\n"
     "    elm::Model2::setUp()\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2__pull_graph_from_db(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2__pull_graph_from_db",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2__pull_graph_from_db" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      (arg1)->_pull_graph_from_db();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -77129,25 +81228,26 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_VAS_dna", _wrap_new_VAS_dna, METH_VARARGS, NULL},
 	 { (char *)"delete_VAS_dna", _wrap_delete_VAS_dna, METH_VARARGS, NULL},
 	 { (char *)"VAS_dna_swigregister", VAS_dna_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Component_data_set", _wrap_Component_data_set, METH_VARARGS, NULL},
-	 { (char *)"Component_data_get", _wrap_Component_data_get, METH_VARARGS, NULL},
-	 { (char *)"Component_param_set", _wrap_Component_param_set, METH_VARARGS, NULL},
-	 { (char *)"Component_param_get", _wrap_Component_param_get, METH_VARARGS, NULL},
-	 { (char *)"Component__altcode_set", _wrap_Component__altcode_set, METH_VARARGS, NULL},
-	 { (char *)"Component__altcode_get", _wrap_Component__altcode_get, METH_VARARGS, NULL},
-	 { (char *)"Component__altname_set", _wrap_Component__altname_set, METH_VARARGS, NULL},
-	 { (char *)"Component__altname_get", _wrap_Component__altname_get, METH_VARARGS, NULL},
-	 { (char *)"Component__upcode_set", _wrap_Component__upcode_set, METH_VARARGS, NULL},
-	 { (char *)"Component__upcode_get", _wrap_Component__upcode_get, METH_VARARGS, NULL},
-	 { (char *)"Component__dncode_set", _wrap_Component__dncode_set, METH_VARARGS, NULL},
-	 { (char *)"Component__dncode_get", _wrap_Component__dncode_get, METH_VARARGS, NULL},
-	 { (char *)"Component_multiplier_set", _wrap_Component_multiplier_set, METH_VARARGS, NULL},
-	 { (char *)"Component_multiplier_get", _wrap_Component_multiplier_get, METH_VARARGS, NULL},
-	 { (char *)"Component___repr__", _wrap_Component___repr__, METH_VARARGS, NULL},
-	 { (char *)"new_Component", (PyCFunction) _wrap_new_Component, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Component_Create", _wrap_Component_Create, METH_VARARGS, NULL},
-	 { (char *)"delete_Component", _wrap_delete_Component, METH_VARARGS, NULL},
-	 { (char *)"Component_swigregister", Component_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_data_set", _wrap_LinearComponent_data_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_data_get", _wrap_LinearComponent_data_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_param_set", _wrap_LinearComponent_param_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_param_get", _wrap_LinearComponent_param_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__altcode_set", _wrap_LinearComponent__altcode_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__altcode_get", _wrap_LinearComponent__altcode_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__altname_set", _wrap_LinearComponent__altname_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__altname_get", _wrap_LinearComponent__altname_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__upcode_set", _wrap_LinearComponent__upcode_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__upcode_get", _wrap_LinearComponent__upcode_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__dncode_set", _wrap_LinearComponent__dncode_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent__dncode_get", _wrap_LinearComponent__dncode_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_multiplier_set", _wrap_LinearComponent_multiplier_set, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_multiplier_get", _wrap_LinearComponent_multiplier_get, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent___repr__", _wrap_LinearComponent___repr__, METH_VARARGS, NULL},
+	 { (char *)"new_LinearComponent", (PyCFunction) _wrap_new_LinearComponent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"LinearComponent_Create", _wrap_LinearComponent_Create, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearComponent", _wrap_delete_LinearComponent, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent___add__", _wrap_LinearComponent___add__, METH_VARARGS, NULL},
+	 { (char *)"LinearComponent_swigregister", LinearComponent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ComponentVector_iterator", _wrap_ComponentVector_iterator, METH_VARARGS, NULL},
 	 { (char *)"ComponentVector___nonzero__", _wrap_ComponentVector___nonzero__, METH_VARARGS, NULL},
 	 { (char *)"ComponentVector___bool__", _wrap_ComponentVector___bool__, METH_VARARGS, NULL},
@@ -77182,23 +81282,54 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComponentVector_capacity", _wrap_ComponentVector_capacity, METH_VARARGS, NULL},
 	 { (char *)"delete_ComponentVector", _wrap_delete_ComponentVector, METH_VARARGS, NULL},
 	 { (char *)"ComponentVector_swigregister", ComponentVector_swigregister, METH_VARARGS, NULL},
-	 { (char *)"ComponentList__receiver_type_set", _wrap_ComponentList__receiver_type_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentList__receiver_type_get", _wrap_ComponentList__receiver_type_get, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_parentmodel_set", _wrap_ComponentList_parentmodel_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_parentmodel_get", _wrap_ComponentList_parentmodel_get, METH_VARARGS, NULL},
-	 { (char *)"new_ComponentList", _wrap_new_ComponentList, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_receive_utility_ca", (PyCFunction) _wrap_ComponentList_receive_utility_ca, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ComponentList_receive_allocation", (PyCFunction) _wrap_ComponentList_receive_allocation, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ComponentList_receive_utility_co", _wrap_ComponentList_receive_utility_co, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_receive_utility_co_kwd", (PyCFunction) _wrap_ComponentList_receive_utility_co_kwd, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ComponentList___repr__", _wrap_ComponentList___repr__, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_needs", _wrap_ComponentList_needs, METH_VARARGS, NULL},
-	 { (char *)"delete_ComponentList", _wrap_delete_ComponentList, METH_VARARGS, NULL},
-	 { (char *)"ComponentList_swigregister", ComponentList_swigregister, METH_VARARGS, NULL},
-	 { (char *)"ComponentCellcodeMap__receiver_type_set", _wrap_ComponentCellcodeMap__receiver_type_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentCellcodeMap__receiver_type_get", _wrap_ComponentCellcodeMap__receiver_type_get, METH_VARARGS, NULL},
-	 { (char *)"ComponentCellcodeMap_parentmodel_set", _wrap_ComponentCellcodeMap_parentmodel_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentCellcodeMap_parentmodel_get", _wrap_ComponentCellcodeMap_parentmodel_get, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_iterator", _wrap__base_LinearSubBundle_1_iterator, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___nonzero__", _wrap__base_LinearSubBundle_1___nonzero__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___bool__", _wrap__base_LinearSubBundle_1___bool__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___len__", _wrap__base_LinearSubBundle_1___len__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___getitem__", _wrap__base_LinearSubBundle_1___getitem__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___delitem__", _wrap__base_LinearSubBundle_1___delitem__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_has_key", _wrap__base_LinearSubBundle_1_has_key, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_keys", _wrap__base_LinearSubBundle_1_keys, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_values", _wrap__base_LinearSubBundle_1_values, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_items", _wrap__base_LinearSubBundle_1_items, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___contains__", _wrap__base_LinearSubBundle_1___contains__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_key_iterator", _wrap__base_LinearSubBundle_1_key_iterator, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_value_iterator", _wrap__base_LinearSubBundle_1_value_iterator, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1___setitem__", _wrap__base_LinearSubBundle_1___setitem__, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_asdict", _wrap__base_LinearSubBundle_1_asdict, METH_VARARGS, NULL},
+	 { (char *)"new__base_LinearSubBundle_1", _wrap_new__base_LinearSubBundle_1, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_empty", _wrap__base_LinearSubBundle_1_empty, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_size", _wrap__base_LinearSubBundle_1_size, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_clear", _wrap__base_LinearSubBundle_1_clear, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_swap", _wrap__base_LinearSubBundle_1_swap, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_get_allocator", _wrap__base_LinearSubBundle_1_get_allocator, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_begin", _wrap__base_LinearSubBundle_1_begin, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_end", _wrap__base_LinearSubBundle_1_end, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_rbegin", _wrap__base_LinearSubBundle_1_rbegin, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_rend", _wrap__base_LinearSubBundle_1_rend, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_count", _wrap__base_LinearSubBundle_1_count, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_erase", _wrap__base_LinearSubBundle_1_erase, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_find", _wrap__base_LinearSubBundle_1_find, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_lower_bound", _wrap__base_LinearSubBundle_1_lower_bound, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_upper_bound", _wrap__base_LinearSubBundle_1_upper_bound, METH_VARARGS, NULL},
+	 { (char *)"delete__base_LinearSubBundle_1", _wrap_delete__base_LinearSubBundle_1, METH_VARARGS, NULL},
+	 { (char *)"_base_LinearSubBundle_1_swigregister", _base_LinearSubBundle_1_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction__receiver_type_set", _wrap_LinearFunction__receiver_type_set, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction__receiver_type_get", _wrap_LinearFunction__receiver_type_get, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_parentmodel_set", _wrap_LinearFunction_parentmodel_set, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_parentmodel_get", _wrap_LinearFunction_parentmodel_get, METH_VARARGS, NULL},
+	 { (char *)"new_LinearFunction", _wrap_new_LinearFunction, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_receive_utility_ca", (PyCFunction) _wrap_LinearFunction_receive_utility_ca, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"LinearFunction_receive_allocation", (PyCFunction) _wrap_LinearFunction_receive_allocation, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"LinearFunction_receive_utility_co", _wrap_LinearFunction_receive_utility_co, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_receive_utility_co_kwd", (PyCFunction) _wrap_LinearFunction_receive_utility_co_kwd, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"LinearFunction___str__", _wrap_LinearFunction___str__, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction___repr__", _wrap_LinearFunction___repr__, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_needs", _wrap_LinearFunction_needs, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction___add__", _wrap_LinearFunction___add__, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction___iadd__", _wrap_LinearFunction___iadd__, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearFunction", _wrap_delete_LinearFunction, METH_VARARGS, NULL},
+	 { (char *)"LinearFunction_swigregister", LinearFunction_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ComponentCellcodeMap", _wrap_new_ComponentCellcodeMap, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap___repr__", _wrap_ComponentCellcodeMap___repr__, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap_size", _wrap_ComponentCellcodeMap_size, METH_VARARGS, NULL},
@@ -77213,35 +81344,57 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComponentCellcodeMap__link", _wrap_ComponentCellcodeMap__link, METH_VARARGS, NULL},
 	 { (char *)"delete_ComponentCellcodeMap", _wrap_delete_ComponentCellcodeMap, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap_swigregister", ComponentCellcodeMap_swigregister, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_descrip_set", _wrap_LinearFunction_descrip_set, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_descrip_get", _wrap_LinearFunction_descrip_get, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_ca_set", _wrap_LinearFunction_ca_set, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_ca_get", _wrap_LinearFunction_ca_get, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_co_set", _wrap_LinearFunction_co_set, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_co_get", _wrap_LinearFunction_co_get, METH_VARARGS, NULL},
-	 { (char *)"new_LinearFunction", _wrap_new_LinearFunction, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction___call__", _wrap_LinearFunction___call__, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_clean", _wrap_LinearFunction_clean, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction___repr__", _wrap_LinearFunction___repr__, METH_VARARGS, NULL},
-	 { (char *)"delete_LinearFunction", _wrap_delete_LinearFunction, METH_VARARGS, NULL},
-	 { (char *)"LinearFunction_swigregister", LinearFunction_swigregister, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap__receiver_type_set", _wrap_ComponentEdgeMap__receiver_type_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap__receiver_type_get", _wrap_ComponentEdgeMap__receiver_type_get, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_parentmodel_set", _wrap_ComponentEdgeMap_parentmodel_set, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_parentmodel_get", _wrap_ComponentEdgeMap_parentmodel_get, METH_VARARGS, NULL},
-	 { (char *)"new_ComponentEdgeMap", _wrap_new_ComponentEdgeMap, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___repr__", _wrap_ComponentEdgeMap___repr__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_size", _wrap_ComponentEdgeMap_size, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_empty", _wrap_ComponentEdgeMap_empty, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_clear", _wrap_ComponentEdgeMap_clear, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___getitem__", _wrap_ComponentEdgeMap___getitem__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___setitem__", _wrap_ComponentEdgeMap___setitem__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___delitem__", _wrap_ComponentEdgeMap___delitem__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___contains__", _wrap_ComponentEdgeMap___contains__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___len__", _wrap_ComponentEdgeMap___len__, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap___call__", _wrap_ComponentEdgeMap___call__, METH_VARARGS, NULL},
-	 { (char *)"delete_ComponentEdgeMap", _wrap_delete_ComponentEdgeMap, METH_VARARGS, NULL},
-	 { (char *)"ComponentEdgeMap_swigregister", ComponentEdgeMap_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_parentmodel_set", _wrap_LinearCOBundle_1_parentmodel_set, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_parentmodel_get", _wrap_LinearCOBundle_1_parentmodel_get, METH_VARARGS, NULL},
+	 { (char *)"new_LinearCOBundle_1", _wrap_new_LinearCOBundle_1, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_metasize", _wrap_LinearCOBundle_1_metasize, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1___str__", _wrap_LinearCOBundle_1___str__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_needs", _wrap_LinearCOBundle_1_needs, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_add_blank", _wrap_LinearCOBundle_1_add_blank, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1__call", _wrap_LinearCOBundle_1__call, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearCOBundle_1", _wrap_delete_LinearCOBundle_1, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_1_swigregister", LinearCOBundle_1_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1_descrip_set", _wrap_LinearBundle_1_descrip_set, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1_descrip_get", _wrap_LinearBundle_1_descrip_get, METH_VARARGS, NULL},
+	 { (char *)"new_LinearBundle_1", _wrap_new_LinearBundle_1, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1___call__", _wrap_LinearBundle_1___call__, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1_clean", _wrap_LinearBundle_1_clean, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1___repr__", _wrap_LinearBundle_1___repr__, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1__set_ca", _wrap_LinearBundle_1__set_ca, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1__set_co", _wrap_LinearBundle_1__set_co, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1__get_ca", _wrap_LinearBundle_1__get_ca, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1__get_co", _wrap_LinearBundle_1__get_co, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearBundle_1", _wrap_delete_LinearBundle_1, METH_VARARGS, NULL},
+	 { (char *)"LinearBundle_1_swigregister", LinearBundle_1_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair_descrip_set", _wrap_LinearFunctionPair_descrip_set, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair_descrip_get", _wrap_LinearFunctionPair_descrip_get, METH_VARARGS, NULL},
+	 { (char *)"new_LinearFunctionPair", _wrap_new_LinearFunctionPair, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair___call__", _wrap_LinearFunctionPair___call__, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair_clean", _wrap_LinearFunctionPair_clean, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair___repr__", _wrap_LinearFunctionPair___repr__, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair__set_ca", _wrap_LinearFunctionPair__set_ca, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair__set_co", _wrap_LinearFunctionPair__set_co, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair__get_ca", _wrap_LinearFunctionPair__get_ca, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair__get_co", _wrap_LinearFunctionPair__get_co, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearFunctionPair", _wrap_delete_LinearFunctionPair, METH_VARARGS, NULL},
+	 { (char *)"LinearFunctionPair_swigregister", LinearFunctionPair_swigregister, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2__receiver_type_set", _wrap_LinearCOBundle_2__receiver_type_set, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2__receiver_type_get", _wrap_LinearCOBundle_2__receiver_type_get, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_parentmodel_set", _wrap_LinearCOBundle_2_parentmodel_set, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_parentmodel_get", _wrap_LinearCOBundle_2_parentmodel_get, METH_VARARGS, NULL},
+	 { (char *)"new_LinearCOBundle_2", _wrap_new_LinearCOBundle_2, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___repr__", _wrap_LinearCOBundle_2___repr__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_size", _wrap_LinearCOBundle_2_size, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_empty", _wrap_LinearCOBundle_2_empty, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_clear", _wrap_LinearCOBundle_2_clear, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___getitem__", _wrap_LinearCOBundle_2___getitem__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___setitem__", _wrap_LinearCOBundle_2___setitem__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___delitem__", _wrap_LinearCOBundle_2___delitem__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___contains__", _wrap_LinearCOBundle_2___contains__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___len__", _wrap_LinearCOBundle_2___len__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2___call__", _wrap_LinearCOBundle_2___call__, METH_VARARGS, NULL},
+	 { (char *)"delete_LinearCOBundle_2", _wrap_delete_LinearCOBundle_2, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_swigregister", LinearCOBundle_2_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ComponentGraphDNA_db_set", _wrap_ComponentGraphDNA_db_set, METH_VARARGS, NULL},
 	 { (char *)"ComponentGraphDNA_db_get", _wrap_ComponentGraphDNA_db_get, METH_VARARGS, NULL},
 	 { (char *)"ComponentGraphDNA_nodes_set", _wrap_ComponentGraphDNA_nodes_set, METH_VARARGS, NULL},
@@ -77560,6 +81713,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_change_data_pointer", _wrap_Model2_change_data_pointer, METH_VARARGS, NULL},
 	 { (char *)"Model2_delete_data_pointer", _wrap_Model2_delete_data_pointer, METH_VARARGS, NULL},
 	 { (char *)"Model2_setUp", _wrap_Model2_setUp, METH_VARARGS, NULL},
+	 { (char *)"Model2__pull_graph_from_db", _wrap_Model2__pull_graph_from_db, METH_VARARGS, NULL},
 	 { (char *)"Model2_setUpMessage_set", _wrap_Model2_setUpMessage_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_setUpMessage_get", _wrap_Model2_setUpMessage_get, METH_VARARGS, NULL},
 	 { (char *)"Model2_tearDown", _wrap_Model2_tearDown, METH_VARARGS, NULL},
@@ -77592,14 +81746,14 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_elm__LinearCOBundle_1To_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((std::map< long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > > *)  ((elm::LinearCOBundle_1 *) x));
+}
 static void *_p_elm__paramArrayTo_p_etk__three_dim(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((etk::three_dim *)  ((elm::paramArray *) x));
 }
 static void *_p_elm__Model2To_p_sherpa(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((sherpa *)  ((elm::Model2 *) x));
-}
-static void *_p_elm__ComponentListTo_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((std::vector< elm::Component,std::allocator< elm::Component > > *)  ((elm::ComponentList *) x));
 }
 static void *_p_elm__FacetTo_p_elm__Fountain(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((elm::Fountain *)  ((elm::Facet *) x));
@@ -77624,6 +81778,9 @@ static void *_p_elm__Model2To_p_elm__ParameterList(void *x, int *SWIGUNUSEDPARM(
 static void *_p_sherpaTo_p_elm__ParameterList(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((elm::ParameterList *)  ((sherpa *) x));
 }
+static void *_p_elm__ComponentListTo_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *)  ((elm::ComponentList *) x));
+}
 static void *_p_elm__FacetTo_p_elm__SQLiteDB(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((elm::SQLiteDB *)  ((elm::Facet *) x));
 }
@@ -77634,14 +81791,16 @@ static swig_type_info _swigt__p__object = {"_p__object", "_object *|PyObject *",
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__Component = {"_p_elm__Component", "std::vector< elm::Component >::value_type *|elm::Component *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentCellcodeMap = {"_p_elm__ComponentCellcodeMap", "elm::ComponentCellcodeMap *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__ComponentEdgeMap = {"_p_elm__ComponentEdgeMap", "elm::ComponentEdgeMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentGraphDNA = {"_p_elm__ComponentGraphDNA", "elm::ComponentGraphDNA *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_elm__ComponentList = {"_p_elm__ComponentList", "elm::EdgeValue *|elm::ComponentList *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__ComponentList = {"_p_elm__ComponentList", "elm::EdgeValue *|elm::ComponentList *|std::map< long long,elm::ComponentList >::mapped_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentListPair = {"_p_elm__ComponentListPair", "elm::ComponentListPair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Facet = {"_p_elm__Facet", "elm::Facet *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Fountain = {"_p_elm__Fountain", "elm::Fountain *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__LinearBundle_1 = {"_p_elm__LinearBundle_1", "elm::LinearBundle_1 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__LinearCOBundle_1 = {"_p_elm__LinearCOBundle_1", "elm::LinearCOBundle_1 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__LinearCOBundle_2 = {"_p_elm__LinearCOBundle_2", "elm::LinearCOBundle_2 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_elm__LinearComponent = {"_p_elm__LinearComponent", "std::vector< elm::LinearComponent >::value_type *|elm::LinearComponent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__Model2 = {"_p_elm__Model2", "elm::Model2 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ParameterList = {"_p_elm__ParameterList", "elm::ParameterList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__QuerySet = {"_p_elm__QuerySet", "elm::QuerySet *", 0, 0, (void*)0, 0};
@@ -77673,10 +81832,11 @@ static swig_type_info _swigt__p_sherpa_pack = {"_p_sherpa_pack", "sherpa_pack *|
 static swig_type_info _swigt__p_sherpa_result = {"_p_sherpa_result", "sherpa_result *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_double_t = {"_p_std__allocatorT_double_t", "std::vector< double >::allocator_type *|std::allocator< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__allocatorT_elm__Component_t = {"_p_std__allocatorT_elm__Component_t", "std::vector< elm::Component >::allocator_type *|std::allocator< elm::Component > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_elm__LinearComponent_t = {"_p_std__allocatorT_elm__LinearComponent_t", "std::vector< elm::LinearComponent >::allocator_type *|std::allocator< elm::LinearComponent > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_int_t = {"_p_std__allocatorT_int_t", "std::vector< int >::allocator_type *|std::allocator< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_long_long_t = {"_p_std__allocatorT_long_long_t", "std::vector< long long >::allocator_type *|std::list< long long >::allocator_type *|std::allocator< long long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_sherpa_pack_t = {"_p_std__allocatorT_sherpa_pack_t", "std::vector< sherpa_pack >::allocator_type *|std::allocator< sherpa_pack > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t = {"_p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t", "std::map< long long,elm::ComponentList >::allocator_type *|std::allocator< std::pair< long long const,elm::ComponentList > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t = {"_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t", "std::allocator< std::pair< long long const,elm::VAS_dna_info > > *|std::map< long long,elm::VAS_dna_info >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t = {"_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t", "std::allocator< std::pair< long long const,std::string > > *|std::map< long long,std::string >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t = {"_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t", "std::allocator< std::pair< std::string const,elm::darray_req > > *|std::map< std::string,elm::darray_req >::allocator_type *", 0, 0, (void*)0, 0};
@@ -77687,6 +81847,7 @@ static swig_type_info _swigt__p_std__lessT_long_long_t = {"_p_std__lessT_long_lo
 static swig_type_info _swigt__p_std__lessT_std__string_t = {"_p_std__lessT_std__string_t", "std::less< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__listT__Tp__Alloc_t = {"_p_std__listT__Tp__Alloc_t", "std::list< _Tp,_Alloc > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t = {"_p_std__listT_long_long_std__allocatorT_long_long_t_t", "std::list< long long,std::allocator< long long > > *|std::list< long long > *|std::list< elm::cellcode > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t = {"_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t", "std::map< long long,elm::ComponentList > *|std::map< elm::cellcode,elm::ComponentList > *|std::map< long long,elm::ComponentList,std::less< long long >,std::allocator< std::pair< long long const,elm::ComponentList > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t = {"_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t", "std::map< long long,elm::VAS_dna_info,std::less< long long >,std::allocator< std::pair< long long const,elm::VAS_dna_info > > > *|std::map< long long,elm::VAS_dna_info > *|std::map< elm::cellcode,elm::VAS_dna_info > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t = {"_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t", "std::map< long long,std::string > *|std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t = {"_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t", "std::map< std::string,elm::darray_req,std::less< std::string >,std::allocator< std::pair< std::string const,elm::darray_req > > > *|std::map< std::string,elm::darray_req > *", 0, 0, (void*)0, 0};
@@ -77699,9 +81860,10 @@ static swig_type_info _swigt__p_std__shared_ptrT_elm__QuerySet_t = {"_p_std__sha
 static swig_type_info _swigt__p_std__shared_ptrT_elm__caseindex_t_t = {"_p_std__shared_ptrT_elm__caseindex_t_t", "std::shared_ptr< elm::caseindex_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_elm__datamatrix_t_t = {"_p_std__shared_ptrT_elm__datamatrix_t_t", "std::shared_ptr< elm::datamatrix_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Component_std__allocatorT_Component_t_t = {"_p_std__vectorT_Component_std__allocatorT_Component_t_t", "std::vector< Component,std::allocator< Component > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT__Tp__Alloc_t = {"_p_std__vectorT__Tp__Alloc_t", "std::vector< _Tp,_Alloc > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t = {"_p_std__vectorT_double_std__allocatorT_double_t_t", "std::vector< double,std::allocator< double > > *|std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t = {"_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t", "std::vector< elm::Component,std::allocator< elm::Component > > *|std::vector< elm::Component > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t = {"_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t", "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *|std::vector< elm::LinearComponent > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_int_std__allocatorT_int_t_t = {"_p_std__vectorT_int_std__allocatorT_int_t_t", "std::vector< int,std::allocator< int > > *|std::vector< int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t = {"_p_std__vectorT_long_long_std__allocatorT_long_long_t_t", "elm::cellcodevec *|std::vector< long long,std::allocator< long long > > *|std::vector< long long > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t = {"_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t", "std::vector< sherpa_pack,std::allocator< sherpa_pack > > *|std::vector< sherpa_pack > *", 0, 0, (void*)0, 0};
@@ -77717,14 +81879,16 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_difference_type,
-  &_swigt__p_elm__Component,
   &_swigt__p_elm__ComponentCellcodeMap,
-  &_swigt__p_elm__ComponentEdgeMap,
   &_swigt__p_elm__ComponentGraphDNA,
   &_swigt__p_elm__ComponentList,
   &_swigt__p_elm__ComponentListPair,
   &_swigt__p_elm__Facet,
   &_swigt__p_elm__Fountain,
+  &_swigt__p_elm__LinearBundle_1,
+  &_swigt__p_elm__LinearCOBundle_1,
+  &_swigt__p_elm__LinearCOBundle_2,
+  &_swigt__p_elm__LinearComponent,
   &_swigt__p_elm__Model2,
   &_swigt__p_elm__ParameterList,
   &_swigt__p_elm__QuerySet,
@@ -77756,10 +81920,11 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_sherpa_result,
   &_swigt__p_size_type,
   &_swigt__p_std__allocatorT_double_t,
-  &_swigt__p_std__allocatorT_elm__Component_t,
+  &_swigt__p_std__allocatorT_elm__LinearComponent_t,
   &_swigt__p_std__allocatorT_int_t,
   &_swigt__p_std__allocatorT_long_long_t,
   &_swigt__p_std__allocatorT_sherpa_pack_t,
+  &_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t,
   &_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t,
   &_swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t,
   &_swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t,
@@ -77770,6 +81935,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__lessT_std__string_t,
   &_swigt__p_std__listT__Tp__Alloc_t,
   &_swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t,
+  &_swigt__p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t,
   &_swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t,
   &_swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t,
   &_swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t,
@@ -77782,9 +81948,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__shared_ptrT_elm__caseindex_t_t,
   &_swigt__p_std__shared_ptrT_elm__datamatrix_t_t,
   &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_Component_std__allocatorT_Component_t_t,
   &_swigt__p_std__vectorT__Tp__Alloc_t,
   &_swigt__p_std__vectorT_double_std__allocatorT_double_t_t,
-  &_swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,
+  &_swigt__p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t,
   &_swigt__p_std__vectorT_int_std__allocatorT_int_t_t,
   &_swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t,
   &_swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t,
@@ -77800,14 +81967,16 @@ static swig_cast_info _swigc__p__object[] = {  {&_swigt__p__object, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_elm__Component[] = {  {&_swigt__p_elm__Component, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentCellcodeMap[] = {  {&_swigt__p_elm__ComponentCellcodeMap, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_elm__ComponentEdgeMap[] = {  {&_swigt__p_elm__ComponentEdgeMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentGraphDNA[] = {  {&_swigt__p_elm__ComponentGraphDNA, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentList[] = {  {&_swigt__p_elm__ComponentList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentListPair[] = {  {&_swigt__p_elm__ComponentListPair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Facet[] = {  {&_swigt__p_elm__Facet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Fountain[] = {  {&_swigt__p_elm__Facet, _p_elm__FacetTo_p_elm__Fountain, 0, 0},  {&_swigt__p_elm__Fountain, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__LinearBundle_1[] = {  {&_swigt__p_elm__LinearBundle_1, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__LinearCOBundle_1[] = {  {&_swigt__p_elm__LinearCOBundle_1, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__LinearCOBundle_2[] = {  {&_swigt__p_elm__LinearCOBundle_2, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_elm__LinearComponent[] = {  {&_swigt__p_elm__LinearComponent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__Model2[] = {  {&_swigt__p_elm__Model2, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ParameterList[] = {  {&_swigt__p_elm__Model2, _p_elm__Model2To_p_elm__ParameterList, 0, 0},  {&_swigt__p_sherpa, _p_sherpaTo_p_elm__ParameterList, 0, 0},  {&_swigt__p_elm__ParameterList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__QuerySet[] = {  {&_swigt__p_elm__QuerySetTwoTable, _p_elm__QuerySetTwoTableTo_p_elm__QuerySet, 0, 0},  {&_swigt__p_elm__QuerySetSimpleCO, _p_elm__QuerySetSimpleCOTo_p_elm__QuerySet, 0, 0},  {&_swigt__p_elm__QuerySet, 0, 0, 0},{0, 0, 0, 0}};
@@ -77839,10 +82008,11 @@ static swig_cast_info _swigc__p_sherpa_pack[] = {  {&_swigt__p_sherpa_pack, 0, 0
 static swig_cast_info _swigc__p_sherpa_result[] = {  {&_swigt__p_sherpa_result, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_double_t[] = {  {&_swigt__p_std__allocatorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__allocatorT_elm__Component_t[] = {  {&_swigt__p_std__allocatorT_elm__Component_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_elm__LinearComponent_t[] = {  {&_swigt__p_std__allocatorT_elm__LinearComponent_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_int_t[] = {  {&_swigt__p_std__allocatorT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_long_long_t[] = {  {&_swigt__p_std__allocatorT_long_long_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_sherpa_pack_t[] = {  {&_swigt__p_std__allocatorT_sherpa_pack_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t[] = {  {&_swigt__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -77853,6 +82023,7 @@ static swig_cast_info _swigc__p_std__lessT_long_long_t[] = {  {&_swigt__p_std__l
 static swig_cast_info _swigc__p_std__lessT_std__string_t[] = {  {&_swigt__p_std__lessT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__listT__Tp__Alloc_t[] = {  {&_swigt__p_std__listT__Tp__Alloc_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__listT_long_long_std__allocatorT_long_long_t_t[] = {  {&_swigt__p_std__listT_long_long_std__allocatorT_long_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t[] = {  {&_swigt__p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0, 0, 0},  {&_swigt__p_elm__LinearCOBundle_1, _p_elm__LinearCOBundle_1To_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t[] = {  {&_swigt__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t, 0, 0, 0},  {&_swigt__p_elm__VAS_dna, _p_elm__VAS_dnaTo_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -77865,9 +82036,10 @@ static swig_cast_info _swigc__p_std__shared_ptrT_elm__QuerySet_t[] = {  {&_swigt
 static swig_cast_info _swigc__p_std__shared_ptrT_elm__caseindex_t_t[] = {  {&_swigt__p_std__shared_ptrT_elm__caseindex_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__shared_ptrT_elm__datamatrix_t_t[] = {  {&_swigt__p_std__shared_ptrT_elm__datamatrix_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Component_std__allocatorT_Component_t_t[] = {  {&_swigt__p_std__vectorT_Component_std__allocatorT_Component_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT__Tp__Alloc_t[] = {  {&_swigt__p_std__vectorT__Tp__Alloc_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_double_std__allocatorT_double_t_t[] = {  {&_swigt__p_std__vectorT_double_std__allocatorT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t[] = {  {&_swigt__p_elm__ComponentList, _p_elm__ComponentListTo_p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0, 0},  {&_swigt__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t[] = {  {&_swigt__p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0, 0, 0},  {&_swigt__p_elm__ComponentList, _p_elm__ComponentListTo_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_int_std__allocatorT_int_t_t[] = {  {&_swigt__p_std__vectorT_int_std__allocatorT_int_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_long_long_std__allocatorT_long_long_t_t[] = {  {&_swigt__p_std__vectorT_long_long_std__allocatorT_long_long_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t[] = {  {&_swigt__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -77883,14 +82055,16 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_difference_type,
-  _swigc__p_elm__Component,
   _swigc__p_elm__ComponentCellcodeMap,
-  _swigc__p_elm__ComponentEdgeMap,
   _swigc__p_elm__ComponentGraphDNA,
   _swigc__p_elm__ComponentList,
   _swigc__p_elm__ComponentListPair,
   _swigc__p_elm__Facet,
   _swigc__p_elm__Fountain,
+  _swigc__p_elm__LinearBundle_1,
+  _swigc__p_elm__LinearCOBundle_1,
+  _swigc__p_elm__LinearCOBundle_2,
+  _swigc__p_elm__LinearComponent,
   _swigc__p_elm__Model2,
   _swigc__p_elm__ParameterList,
   _swigc__p_elm__QuerySet,
@@ -77922,10 +82096,11 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_sherpa_result,
   _swigc__p_size_type,
   _swigc__p_std__allocatorT_double_t,
-  _swigc__p_std__allocatorT_elm__Component_t,
+  _swigc__p_std__allocatorT_elm__LinearComponent_t,
   _swigc__p_std__allocatorT_int_t,
   _swigc__p_std__allocatorT_long_long_t,
   _swigc__p_std__allocatorT_sherpa_pack_t,
+  _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t,
   _swigc__p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t,
   _swigc__p_std__allocatorT_std__pairT_long_long_const_std__string_t_t,
   _swigc__p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t,
@@ -77936,6 +82111,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__lessT_std__string_t,
   _swigc__p_std__listT__Tp__Alloc_t,
   _swigc__p_std__listT_long_long_std__allocatorT_long_long_t_t,
+  _swigc__p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t,
   _swigc__p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t,
   _swigc__p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t,
   _swigc__p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t,
@@ -77948,9 +82124,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__shared_ptrT_elm__caseindex_t_t,
   _swigc__p_std__shared_ptrT_elm__datamatrix_t_t,
   _swigc__p_std__string,
+  _swigc__p_std__vectorT_Component_std__allocatorT_Component_t_t,
   _swigc__p_std__vectorT__Tp__Alloc_t,
   _swigc__p_std__vectorT_double_std__allocatorT_double_t_t,
-  _swigc__p_std__vectorT_elm__Component_std__allocatorT_elm__Component_t_t,
+  _swigc__p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t,
   _swigc__p_std__vectorT_int_std__allocatorT_int_t_t,
   _swigc__p_std__vectorT_long_long_std__allocatorT_long_long_t_t,
   _swigc__p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t,
@@ -78673,6 +82850,7 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "COMPONENTLIST_TYPE_UTILITYCO",SWIG_From_int(static_cast< int >(0x2)));
   SWIG_Python_SetConstant(d, "COMPONENTLIST_TYPE_LOGSUM",SWIG_From_int(static_cast< int >(0x4)));
   SWIG_Python_SetConstant(d, "COMPONENTLIST_TYPE_EDGE",SWIG_From_int(static_cast< int >(0x8)));
+  SWIG_Python_SetConstant(d, "COMPONENTLIST_TYPE_SIMPLECO",SWIG_From_int(static_cast< int >(0x8)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

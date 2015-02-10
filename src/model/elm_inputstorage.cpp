@@ -387,7 +387,7 @@ std::string elm::ComponentCellcodeMap::__repr__() const
 
 elm::LinearBundle_1::LinearBundle_1(std::string descrip, elm::Model2* parentmodel)
 : ca (COMPONENTLIST_TYPE_UTILITYCA, parentmodel)
-, co ()
+, co (parentmodel)
 , descrip(descrip)
 {
 
@@ -457,7 +457,7 @@ void elm::LinearBundle_1::_set_ca(const elm::ComponentList& x)
 	}
 }
 
-void elm::LinearBundle_1::_set_co(const std::map< elm::cellcode, elm::ComponentList >& x)
+void elm::LinearBundle_1::_set_co(const elm::LinearCOBundle_1& x)
 {
 	elm::Model2* parentmodel = nullptr;
 	if (co.size()) {
@@ -481,7 +481,7 @@ elm::ComponentList& elm::LinearBundle_1::_get_ca()
 	return ca;
 }
 
-std::map< elm::cellcode, elm::ComponentList >& elm::LinearBundle_1::_get_co()
+elm::LinearCOBundle_1& elm::LinearBundle_1::_get_co()
 {
 	return co;
 }
@@ -490,8 +490,69 @@ std::map< elm::cellcode, elm::ComponentList >& elm::LinearBundle_1::_get_co()
 
 
 
+elm::LinearCOBundle_1::LinearCOBundle_1(elm::Model2* parent)
+: ::std::map<elm::cellcode, elm::ComponentList> ()
+, parentmodel (parent)
+{
+
+}
+elm::LinearCOBundle_1::LinearCOBundle_1(const LinearCOBundle_1& other)
+: ::std::map<elm::cellcode, elm::ComponentList> (other)
+, parentmodel (other.parentmodel)
+{
+
+}
 
 
+
+size_t elm::LinearCOBundle_1::metasize() const {
+	size_t z = 0;
+	for (auto i=begin(); i!=end(); i++) {
+		z += i->second.size();
+	}
+	return z;
+}
+
+std::string elm::LinearCOBundle_1::__str__() const {
+	return "<LinearCOBundle_1>";
+}
+
+void elm::LinearCOBundle_1::_call (const elm::cellcode& altcode,
+									   const std::string& data,
+									   std::string param,
+									   const double& multiplier) {
+	try {
+		at(altcode).receive_utility_co(data,altcode,param,multiplier);
+	} catch (std::out_of_range) {
+		emplace(altcode, elm::ComponentList(COMPONENTLIST_TYPE_SIMPLECO, parentmodel));
+		at(altcode).receive_utility_co(data,altcode,param,multiplier);
+	}
+	
+	
+}
+
+std::vector<std::string> elm::LinearCOBundle_1::needs() const
+{
+	std::vector<std::string> u_ca;
+	
+	for (auto i=begin(); i!=end(); i++) {
+		for (unsigned b=0; b<i->second.size(); b++) {
+			etk::push_back_if_unique(u_ca, i->second[b].data_name);
+		}
+	}
+	
+	return u_ca;
+}
+
+elm::ComponentList& elm::LinearCOBundle_1::add_blank(const elm::cellcode& i)
+{
+	try {
+		return at(i);
+	} catch (std::out_of_range) {
+		emplace(i, elm::ComponentList(COMPONENTLIST_TYPE_SIMPLECO, parentmodel));
+		return at(i);
+	}
+}
 
 
 
@@ -613,17 +674,17 @@ elm::ComponentList& elm::ComponentListPair::_get_co()
 
 
 
-elm::ComponentEdgeMap::ComponentEdgeMap(elm::Model2* parentmodel)
+elm::LinearCOBundle_2::LinearCOBundle_2(elm::Model2* parentmodel)
 : _receiver_type (COMPONENTLIST_TYPE_EDGE)
 , parentmodel(parentmodel)
 {
 
 }
 
-std::string elm::ComponentEdgeMap::__repr__() const
+std::string elm::LinearCOBundle_2::__repr__() const
 {
 	if (size()==0) {
-		return "<larch.core.ComponentEdgeMap (empty)>";
+		return "<larch.core.LinearCOBundle_2 (empty)>";
 	}
 
 	std::ostringstream x;
@@ -632,14 +693,14 @@ std::string elm::ComponentEdgeMap::__repr__() const
 	int minwide_code2 = 0;
 	int minwide_name = 0;
 	
-	for (elm::ComponentEdgeMap::const_iterator a=begin(); a!=end(); a++) {
+	for (elm::LinearCOBundle_2::const_iterator a=begin(); a!=end(); a++) {
 		std::string temp = etk::cat(a->first.up);
 		if (temp.size() > minwide_code1) minwide_code1 = temp.size();
 		temp = etk::cat(a->first.dn);
 		if (temp.size() > minwide_code2) minwide_code2 = temp.size();
 	}
 	
-	for (elm::ComponentEdgeMap::const_iterator a=begin(); a!=end(); a++) {
+	for (elm::LinearCOBundle_2::const_iterator a=begin(); a!=end(); a++) {
 		x	<< "\n["<< std::setw(minwide_code1) <<a->first.up<<" --> "
 			<< std::setw(minwide_code2) << std::left << a->first.dn << std::right << "] "
 			<< a->second.__repr__();
@@ -656,7 +717,7 @@ std::string elm::ComponentEdgeMap::__repr__() const
 
 
 
-elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const ComponentEdgeMap* edges, const Facet* db, const elm::cellcode* root)
+elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const LinearCOBundle_2* edges, const Facet* db, const elm::cellcode* root)
 : db(db)
 , nodes(nodes)
 , edges(edges)
@@ -738,7 +799,7 @@ elm::cellcodeset elm::ComponentGraphDNA::elemental_codes() const
 	if (edges) {
 		elm::cellcodeset candidates;
 		elm::cellcodeset noncandidates;
-		ComponentEdgeMap::const_iterator i = edges->begin();
+		LinearCOBundle_2::const_iterator i = edges->begin();
 		while (i!=edges->end()) {
 			// up nodes become non-candidates
 			noncandidates.insert(i->first.up);
@@ -781,7 +842,7 @@ elm::cellcodeset elm::ComponentGraphDNA::all_node_codes() const
 	}
 	
 	if (edges) {
-		ComponentEdgeMap::const_iterator i = edges->begin();
+		LinearCOBundle_2::const_iterator i = edges->begin();
 		while (i!=edges->end()) {
 			ret.insert(i->first.up);
 			ret.insert(i->first.dn);
@@ -839,7 +900,7 @@ elm::cellcodeset elm::ComponentGraphDNA::dn_node_codes(const elm::cellcode& node
 		if (node_code==0) {
 			elm::cellcodeset candidates;
 			elm::cellcodeset noncandidates;
-			ComponentEdgeMap::const_iterator i = edges->begin();
+			LinearCOBundle_2::const_iterator i = edges->begin();
 			while (i!=edges->end()) {
 				if (i->first.up == node_code) {
 					ret.insert(i->first.dn);
@@ -857,7 +918,7 @@ elm::cellcodeset elm::ComponentGraphDNA::dn_node_codes(const elm::cellcode& node
 			ret.insert_set(candidates);
 			return ret;
 		} else {
-			ComponentEdgeMap::const_iterator i = edges->begin();
+			LinearCOBundle_2::const_iterator i = edges->begin();
 			while (i!=edges->end()) {
 				if (i->first.up == node_code) ret.insert(i->first.dn);
 				i++;
@@ -879,7 +940,7 @@ elm::cellcodeset elm::ComponentGraphDNA::up_node_codes(const elm::cellcode& node
 	}
 	
 	if (edges) {
-		ComponentEdgeMap::const_iterator i = edges->begin();
+		LinearCOBundle_2::const_iterator i = edges->begin();
 		while (i!=edges->end()) {
 			if (i->first.dn == node_code) ret.insert(i->first.up);
 			i++;

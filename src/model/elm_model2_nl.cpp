@@ -91,7 +91,7 @@ void elm::Model2::_setUp_NL()
 	Probability.resize(nCases,nNodes);
 	Utility.resize(nCases,nNodes);
 	
-	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.size()>0 ) {
+	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
 		AdjProbability.resize(nCases,_Data->nAlts());
 		SamplingWeight.resize(nCases,_Data->nAlts());
 	} else {
@@ -159,7 +159,7 @@ void elm::Model2::_setUp_NGEV()
 	
 	Allocation.resize(nCases,Xylem.n_compet_alloc());
 	
-	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.size()>0 ) {
+	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
 		AdjProbability.resize(nCases,nElementals);
 		SamplingWeight.resize(nCases,nElementals);
 	} else {

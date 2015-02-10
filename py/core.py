@@ -1152,22 +1152,22 @@ class VAS_dna(cellcode_infodict):
 VAS_dna_swigregister = _core.VAS_dna_swigregister
 VAS_dna_swigregister(VAS_dna)
 
-class Component(object):
+class LinearComponent(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    data = _swig_property(_core.Component_data_get, _core.Component_data_set)
-    param = _swig_property(_core.Component_param_get, _core.Component_param_set)
-    _altcode = _swig_property(_core.Component__altcode_get, _core.Component__altcode_set)
-    _altname = _swig_property(_core.Component__altname_get, _core.Component__altname_set)
-    _upcode = _swig_property(_core.Component__upcode_get, _core.Component__upcode_set)
-    _dncode = _swig_property(_core.Component__dncode_get, _core.Component__dncode_set)
-    multiplier = _swig_property(_core.Component_multiplier_get, _core.Component_multiplier_set)
-    def __repr__(self) -> "std::string" : return _core.Component___repr__(self)
+    data = _swig_property(_core.LinearComponent_data_get, _core.LinearComponent_data_set)
+    param = _swig_property(_core.LinearComponent_param_get, _core.LinearComponent_param_set)
+    _altcode = _swig_property(_core.LinearComponent__altcode_get, _core.LinearComponent__altcode_set)
+    _altname = _swig_property(_core.LinearComponent__altname_get, _core.LinearComponent__altname_set)
+    _upcode = _swig_property(_core.LinearComponent__upcode_get, _core.LinearComponent__upcode_set)
+    _dncode = _swig_property(_core.LinearComponent__dncode_get, _core.LinearComponent__dncode_set)
+    multiplier = _swig_property(_core.LinearComponent_multiplier_get, _core.LinearComponent_multiplier_set)
+    def __repr__(self) -> "std::string" : return _core.LinearComponent___repr__(self)
     def __init__(self, data : 'std::string'="", param : 'std::string'="", multiplier : 'double'=1.0, category : 'PyObject *'=None): 
-        this = _core.new_Component(data, param, multiplier, category)
+        this = _core.new_LinearComponent(data, param, multiplier, category)
         try: self.this.append(this)
         except: self.this = this
-    Create = staticmethod(_core.Component_Create)
-    __swig_destroy__ = _core.delete_Component
+    Create = staticmethod(_core.LinearComponent_Create)
+    __swig_destroy__ = _core.delete_LinearComponent
     __del__ = lambda self : None;
     def altcallsign(self):
     	return "%i: %s"%(self.altcode, self.altname)
@@ -1176,12 +1176,13 @@ class Component(object):
     	self.altcode = long(c)
     	self.altname = n
 
-Component_swigregister = _core.Component_swigregister
-Component_swigregister(Component)
+    def __add__(self, *args) -> "elm::ComponentList" : return _core.LinearComponent___add__(self, *args)
+LinearComponent_swigregister = _core.LinearComponent_swigregister
+LinearComponent_swigregister(LinearComponent)
 
-def Component_Create(*args) -> "elm::Component" :
-  return _core.Component_Create(*args)
-Component_Create = _core.Component_Create
+def LinearComponent_Create(*args) -> "elm::LinearComponent" :
+  return _core.LinearComponent_Create(*args)
+LinearComponent_Create = _core.LinearComponent_Create
 
 class ComponentVector(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1190,70 +1191,118 @@ class ComponentVector(object):
     def __iter__(self): return self.iterator()
     def __nonzero__(self) -> "bool" : return _core.ComponentVector___nonzero__(self)
     def __bool__(self) -> "bool" : return _core.ComponentVector___bool__(self)
-    def __len__(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector___len__(self)
-    def pop(self) -> "std::vector< elm::Component >::value_type" : return _core.ComponentVector_pop(self)
-    def __getslice__(self, *args) -> "std::vector< elm::Component,std::allocator< elm::Component > > *" : return _core.ComponentVector___getslice__(self, *args)
+    def __len__(self) -> "std::vector< elm::LinearComponent >::size_type" : return _core.ComponentVector___len__(self)
+    def pop(self) -> "std::vector< elm::LinearComponent >::value_type" : return _core.ComponentVector_pop(self)
+    def __getslice__(self, *args) -> "std::vector< elm::LinearComponent,std::allocator< elm::LinearComponent > > *" : return _core.ComponentVector___getslice__(self, *args)
     def __setslice__(self, *args) -> "void" : return _core.ComponentVector___setslice__(self, *args)
     def __delslice__(self, *args) -> "void" : return _core.ComponentVector___delslice__(self, *args)
     def __delitem__(self, *args) -> "void" : return _core.ComponentVector___delitem__(self, *args)
-    def __getitem__(self, *args) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector___getitem__(self, *args)
+    def __getitem__(self, *args) -> "std::vector< elm::LinearComponent >::value_type const &" : return _core.ComponentVector___getitem__(self, *args)
     def __setitem__(self, *args) -> "void" : return _core.ComponentVector___setitem__(self, *args)
     def append(self, *args) -> "void" : return _core.ComponentVector_append(self, *args)
     def empty(self) -> "bool" : return _core.ComponentVector_empty(self)
-    def size(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector_size(self)
+    def size(self) -> "std::vector< elm::LinearComponent >::size_type" : return _core.ComponentVector_size(self)
     def clear(self) -> "void" : return _core.ComponentVector_clear(self)
     def swap(self, *args) -> "void" : return _core.ComponentVector_swap(self, *args)
-    def get_allocator(self) -> "std::vector< elm::Component >::allocator_type" : return _core.ComponentVector_get_allocator(self)
-    def begin(self) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_begin(self)
-    def end(self) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_end(self)
-    def rbegin(self) -> "std::vector< elm::Component >::reverse_iterator" : return _core.ComponentVector_rbegin(self)
-    def rend(self) -> "std::vector< elm::Component >::reverse_iterator" : return _core.ComponentVector_rend(self)
+    def get_allocator(self) -> "std::vector< elm::LinearComponent >::allocator_type" : return _core.ComponentVector_get_allocator(self)
+    def begin(self) -> "std::vector< elm::LinearComponent >::iterator" : return _core.ComponentVector_begin(self)
+    def end(self) -> "std::vector< elm::LinearComponent >::iterator" : return _core.ComponentVector_end(self)
+    def rbegin(self) -> "std::vector< elm::LinearComponent >::reverse_iterator" : return _core.ComponentVector_rbegin(self)
+    def rend(self) -> "std::vector< elm::LinearComponent >::reverse_iterator" : return _core.ComponentVector_rend(self)
     def pop_back(self) -> "void" : return _core.ComponentVector_pop_back(self)
-    def erase(self, *args) -> "std::vector< elm::Component >::iterator" : return _core.ComponentVector_erase(self, *args)
+    def erase(self, *args) -> "std::vector< elm::LinearComponent >::iterator" : return _core.ComponentVector_erase(self, *args)
     def __init__(self, *args): 
         this = _core.new_ComponentVector(*args)
         try: self.this.append(this)
         except: self.this = this
     def push_back(self, *args) -> "void" : return _core.ComponentVector_push_back(self, *args)
-    def front(self) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector_front(self)
-    def back(self) -> "std::vector< elm::Component >::value_type const &" : return _core.ComponentVector_back(self)
+    def front(self) -> "std::vector< elm::LinearComponent >::value_type const &" : return _core.ComponentVector_front(self)
+    def back(self) -> "std::vector< elm::LinearComponent >::value_type const &" : return _core.ComponentVector_back(self)
     def assign(self, *args) -> "void" : return _core.ComponentVector_assign(self, *args)
     def resize(self, *args) -> "void" : return _core.ComponentVector_resize(self, *args)
     def insert(self, *args) -> "void" : return _core.ComponentVector_insert(self, *args)
     def reserve(self, *args) -> "void" : return _core.ComponentVector_reserve(self, *args)
-    def capacity(self) -> "std::vector< elm::Component >::size_type" : return _core.ComponentVector_capacity(self)
+    def capacity(self) -> "std::vector< elm::LinearComponent >::size_type" : return _core.ComponentVector_capacity(self)
     __swig_destroy__ = _core.delete_ComponentVector
     __del__ = lambda self : None;
 ComponentVector_swigregister = _core.ComponentVector_swigregister
 ComponentVector_swigregister(ComponentVector)
 
+class _base_LinearSubBundle_1(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" : return _core._base_LinearSubBundle_1_iterator(self)
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" : return _core._base_LinearSubBundle_1___nonzero__(self)
+    def __bool__(self) -> "bool" : return _core._base_LinearSubBundle_1___bool__(self)
+    def __len__(self) -> "std::map< long long,elm::ComponentList >::size_type" : return _core._base_LinearSubBundle_1___len__(self)
+    def __iter__(self): return self.key_iterator()
+    def iterkeys(self): return self.key_iterator()
+    def itervalues(self): return self.value_iterator()
+    def iteritems(self): return self.iterator()
+    def __getitem__(self, *args) -> "std::map< long long,elm::ComponentList >::mapped_type const &" : return _core._base_LinearSubBundle_1___getitem__(self, *args)
+    def __delitem__(self, *args) -> "void" : return _core._base_LinearSubBundle_1___delitem__(self, *args)
+    def has_key(self, *args) -> "bool" : return _core._base_LinearSubBundle_1_has_key(self, *args)
+    def keys(self) -> "PyObject *" : return _core._base_LinearSubBundle_1_keys(self)
+    def values(self) -> "PyObject *" : return _core._base_LinearSubBundle_1_values(self)
+    def items(self) -> "PyObject *" : return _core._base_LinearSubBundle_1_items(self)
+    def __contains__(self, *args) -> "bool" : return _core._base_LinearSubBundle_1___contains__(self, *args)
+    def key_iterator(self) -> "swig::SwigPyIterator *" : return _core._base_LinearSubBundle_1_key_iterator(self)
+    def value_iterator(self) -> "swig::SwigPyIterator *" : return _core._base_LinearSubBundle_1_value_iterator(self)
+    def __setitem__(self, *args) -> "void" : return _core._base_LinearSubBundle_1___setitem__(self, *args)
+    def asdict(self) -> "PyObject *" : return _core._base_LinearSubBundle_1_asdict(self)
+    def __init__(self, *args): 
+        this = _core.new__base_LinearSubBundle_1(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def empty(self) -> "bool" : return _core._base_LinearSubBundle_1_empty(self)
+    def size(self) -> "std::map< long long,elm::ComponentList >::size_type" : return _core._base_LinearSubBundle_1_size(self)
+    def clear(self) -> "void" : return _core._base_LinearSubBundle_1_clear(self)
+    def swap(self, *args) -> "void" : return _core._base_LinearSubBundle_1_swap(self, *args)
+    def get_allocator(self) -> "std::map< long long,elm::ComponentList >::allocator_type" : return _core._base_LinearSubBundle_1_get_allocator(self)
+    def begin(self) -> "std::map< long long,elm::ComponentList >::iterator" : return _core._base_LinearSubBundle_1_begin(self)
+    def end(self) -> "std::map< long long,elm::ComponentList >::iterator" : return _core._base_LinearSubBundle_1_end(self)
+    def rbegin(self) -> "std::map< long long,elm::ComponentList >::reverse_iterator" : return _core._base_LinearSubBundle_1_rbegin(self)
+    def rend(self) -> "std::map< long long,elm::ComponentList >::reverse_iterator" : return _core._base_LinearSubBundle_1_rend(self)
+    def count(self, *args) -> "std::map< long long,elm::ComponentList >::size_type" : return _core._base_LinearSubBundle_1_count(self, *args)
+    def erase(self, *args) -> "void" : return _core._base_LinearSubBundle_1_erase(self, *args)
+    def find(self, *args) -> "std::map< long long,elm::ComponentList >::iterator" : return _core._base_LinearSubBundle_1_find(self, *args)
+    def lower_bound(self, *args) -> "std::map< long long,elm::ComponentList >::iterator" : return _core._base_LinearSubBundle_1_lower_bound(self, *args)
+    def upper_bound(self, *args) -> "std::map< long long,elm::ComponentList >::iterator" : return _core._base_LinearSubBundle_1_upper_bound(self, *args)
+    __swig_destroy__ = _core.delete__base_LinearSubBundle_1
+    __del__ = lambda self : None;
+_base_LinearSubBundle_1_swigregister = _core._base_LinearSubBundle_1_swigregister
+_base_LinearSubBundle_1_swigregister(_base_LinearSubBundle_1)
+
 COMPONENTLIST_TYPE_UTILITYCA = _core.COMPONENTLIST_TYPE_UTILITYCA
 COMPONENTLIST_TYPE_UTILITYCO = _core.COMPONENTLIST_TYPE_UTILITYCO
 COMPONENTLIST_TYPE_LOGSUM = _core.COMPONENTLIST_TYPE_LOGSUM
 COMPONENTLIST_TYPE_EDGE = _core.COMPONENTLIST_TYPE_EDGE
-class ComponentList(ComponentVector):
+COMPONENTLIST_TYPE_SIMPLECO = _core.COMPONENTLIST_TYPE_SIMPLECO
+class LinearFunction(ComponentVector):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    _receiver_type = _swig_property(_core.ComponentList__receiver_type_get, _core.ComponentList__receiver_type_set)
-    parentmodel = _swig_property(_core.ComponentList_parentmodel_get, _core.ComponentList_parentmodel_set)
+    _receiver_type = _swig_property(_core.LinearFunction__receiver_type_get, _core.LinearFunction__receiver_type_set)
+    parentmodel = _swig_property(_core.LinearFunction_parentmodel_get, _core.LinearFunction_parentmodel_set)
     def __init__(self, type : 'int'=0, parentmodel : 'Model2'=None): 
-        this = _core.new_ComponentList(type, parentmodel)
+        this = _core.new_LinearFunction(type, parentmodel)
         try: self.this.append(this)
         except: self.this = this
-    def receive_utility_ca(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_utility_ca(self, *args, **kwargs)
-    def receive_allocation(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_allocation(self, *args, **kwargs)
-    def receive_utility_co(self, *args) -> "void" : return _core.ComponentList_receive_utility_co(self, *args)
-    def receive_utility_co_kwd(self, *args, **kwargs) -> "void" : return _core.ComponentList_receive_utility_co_kwd(self, *args, **kwargs)
-    def __repr__(self) -> "std::string" : return _core.ComponentList___repr__(self)
-    def needs(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.ComponentList_needs(self)
-    __swig_destroy__ = _core.delete_ComponentList
+    def receive_utility_ca(self, *args, **kwargs) -> "void" : return _core.LinearFunction_receive_utility_ca(self, *args, **kwargs)
+    def receive_allocation(self, *args, **kwargs) -> "void" : return _core.LinearFunction_receive_allocation(self, *args, **kwargs)
+    def receive_utility_co(self, *args) -> "void" : return _core.LinearFunction_receive_utility_co(self, *args)
+    def receive_utility_co_kwd(self, *args, **kwargs) -> "void" : return _core.LinearFunction_receive_utility_co_kwd(self, *args, **kwargs)
+    def __str__(self) -> "std::string" : return _core.LinearFunction___str__(self)
+    def __repr__(self) -> "std::string" : return _core.LinearFunction___repr__(self)
+    def needs(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.LinearFunction_needs(self)
+    def __add__(self, *args) -> "elm::ComponentList" : return _core.LinearFunction___add__(self, *args)
+    def __iadd__(self, *args) -> "elm::ComponentList &" : return _core.LinearFunction___iadd__(self, *args)
+    __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self : None;
-ComponentList_swigregister = _core.ComponentList_swigregister
-ComponentList_swigregister(ComponentList)
+LinearFunction_swigregister = _core.LinearFunction_swigregister
+LinearFunction_swigregister(LinearFunction)
 
 class ComponentCellcodeMap(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    _receiver_type = _swig_property(_core.ComponentCellcodeMap__receiver_type_get, _core.ComponentCellcodeMap__receiver_type_set)
-    parentmodel = _swig_property(_core.ComponentCellcodeMap_parentmodel_get, _core.ComponentCellcodeMap_parentmodel_set)
     def __init__(self, type : 'int'=0, parentmodel : 'Model2'=None): 
         this = _core.new_ComponentCellcodeMap(type, parentmodel)
         try: self.this.append(this)
@@ -1262,7 +1311,7 @@ class ComponentCellcodeMap(object):
     def size(self) -> "unsigned int" : return _core.ComponentCellcodeMap_size(self)
     def empty(self) -> "bool" : return _core.ComponentCellcodeMap_empty(self)
     def clear(self) -> "void" : return _core.ComponentCellcodeMap_clear(self)
-    def __getitem__(self, *args) -> "elm::Component &" : return _core.ComponentCellcodeMap___getitem__(self, *args)
+    def __getitem__(self, *args) -> "elm::LinearComponent &" : return _core.ComponentCellcodeMap___getitem__(self, *args)
     def __setitem__(self, *args) -> "void" : return _core.ComponentCellcodeMap___setitem__(self, *args)
     def __delitem__(self, *args) -> "void" : return _core.ComponentCellcodeMap___delitem__(self, *args)
     def __contains__(self, *args) -> "bool" : return _core.ComponentCellcodeMap___contains__(self, *args)
@@ -1274,45 +1323,122 @@ class ComponentCellcodeMap(object):
 ComponentCellcodeMap_swigregister = _core.ComponentCellcodeMap_swigregister
 ComponentCellcodeMap_swigregister(ComponentCellcodeMap)
 
-class LinearFunction(object):
+class LinearCOBundle_1(_base_LinearSubBundle_1):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    descrip = _swig_property(_core.LinearFunction_descrip_get, _core.LinearFunction_descrip_set)
-    ca = _swig_property(_core.LinearFunction_ca_get, _core.LinearFunction_ca_set)
-    co = _swig_property(_core.LinearFunction_co_get, _core.LinearFunction_co_set)
-    def __init__(self, type1 : 'int'=0, type2 : 'int'=0, descrip : 'std::string'="", parentmodel : 'Model2'=None): 
-        this = _core.new_LinearFunction(type1, type2, descrip, parentmodel)
+    __repr__ = _swig_repr
+    parentmodel = _swig_property(_core.LinearCOBundle_1_parentmodel_get, _core.LinearCOBundle_1_parentmodel_set)
+    def __init__(self, *args): 
+        this = _core.new_LinearCOBundle_1(*args)
         try: self.this.append(this)
         except: self.this = this
-    def __call__(self, *args) -> "void" : return _core.LinearFunction___call__(self, *args)
-    def clean(self, *args) -> "void" : return _core.LinearFunction_clean(self, *args)
-    def __repr__(self) -> "std::string" : return _core.LinearFunction___repr__(self)
-    __swig_destroy__ = _core.delete_LinearFunction
-    __del__ = lambda self : None;
-LinearFunction_swigregister = _core.LinearFunction_swigregister
-LinearFunction_swigregister(LinearFunction)
+    def metasize(self) -> "size_t" : return _core.LinearCOBundle_1_metasize(self)
+    def __str__(self) -> "std::string" : return _core.LinearCOBundle_1___str__(self)
+    def needs(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.LinearCOBundle_1_needs(self)
+    def add_blank(self, *args) -> "elm::ComponentList &" : return _core.LinearCOBundle_1_add_blank(self, *args)
+    def _call(self, *args) -> "void" : return _core.LinearCOBundle_1__call(self, *args)
+    def __call__(self, altcode, data, param="", multiplier=1.0):
+    	if isinstance(altcode, str) and isinstance(data, int):
+    		_ = data
+    		data = altcode
+    		altcode = _
+    	if isinstance(altcode, str) and isinstance(data, str):
+    		try:
+    			a = DB.alternatives(self.parentmodel, 'reversedict')
+    			if altcode in a:
+    				altcode = a[altcode]
+    			elif data in a:
+    				_ = a[data]
+    				data = altcode
+    				altcode = _
+    		except AttributeError:
+    			raise TypeError('cannot identify alternative')
+    	self._call(altcode, data, param, multiplier)
 
-class ComponentEdgeMap(object):
+    __swig_destroy__ = _core.delete_LinearCOBundle_1
+    __del__ = lambda self : None;
+LinearCOBundle_1_swigregister = _core.LinearCOBundle_1_swigregister
+LinearCOBundle_1_swigregister(LinearCOBundle_1)
+
+class LinearBundle_1(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    _receiver_type = _swig_property(_core.ComponentEdgeMap__receiver_type_get, _core.ComponentEdgeMap__receiver_type_set)
-    parentmodel = _swig_property(_core.ComponentEdgeMap_parentmodel_get, _core.ComponentEdgeMap_parentmodel_set)
-    def __init__(self, parentmodel : 'Model2'=None): 
-        this = _core.new_ComponentEdgeMap(parentmodel)
+    descrip = _swig_property(_core.LinearBundle_1_descrip_get, _core.LinearBundle_1_descrip_set)
+    def __init__(self, descrip : 'std::string'="", parentmodel : 'Model2'=None): 
+        this = _core.new_LinearBundle_1(descrip, parentmodel)
         try: self.this.append(this)
         except: self.this = this
-    def __repr__(self) -> "std::string" : return _core.ComponentEdgeMap___repr__(self)
-    def size(self) -> "unsigned int" : return _core.ComponentEdgeMap_size(self)
-    def empty(self) -> "bool" : return _core.ComponentEdgeMap_empty(self)
-    def clear(self) -> "void" : return _core.ComponentEdgeMap_clear(self)
-    def __getitem__(self, *args) -> "elm::EdgeValue &" : return _core.ComponentEdgeMap___getitem__(self, *args)
-    def __setitem__(self, *args) -> "void" : return _core.ComponentEdgeMap___setitem__(self, *args)
-    def __delitem__(self, *args) -> "void" : return _core.ComponentEdgeMap___delitem__(self, *args)
-    def __contains__(self, *args) -> "bool" : return _core.ComponentEdgeMap___contains__(self, *args)
-    def __len__(self) -> "int" : return _core.ComponentEdgeMap___len__(self)
-    def __call__(self, *args) -> "void" : return _core.ComponentEdgeMap___call__(self, *args)
-    __swig_destroy__ = _core.delete_ComponentEdgeMap
+    def __call__(self, data : 'std::string'="", param : 'std::string'="", multiplier : 'double const &'=1.0) -> "void" : return _core.LinearBundle_1___call__(self, data, param, multiplier)
+    def clean(self, *args) -> "void" : return _core.LinearBundle_1_clean(self, *args)
+    def __repr__(self) -> "std::string" : return _core.LinearBundle_1___repr__(self)
+    def _set_ca(self, *args) -> "void" : return _core.LinearBundle_1__set_ca(self, *args)
+    def _set_co(self, *args) -> "void" : return _core.LinearBundle_1__set_co(self, *args)
+    def _get_ca(self) -> "elm::ComponentList &" : return _core.LinearBundle_1__get_ca(self)
+    def _get_co(self) -> "elm::LinearCOBundle_1 &" : return _core.LinearBundle_1__get_co(self)
+    ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca(x))
+    co = property(lambda self: self._get_co(), lambda self,x: self._set_co(x))
+
+    def __getitem__(self, key):
+    	return self._get_co().add_blank(key)
+    def __setitem__(self, key, value):
+    	self._get_co()[key] = value
+    def __delitem__(self, key):
+    	del self._get_co()[key]
+
+
+    __swig_destroy__ = _core.delete_LinearBundle_1
     __del__ = lambda self : None;
-ComponentEdgeMap_swigregister = _core.ComponentEdgeMap_swigregister
-ComponentEdgeMap_swigregister(ComponentEdgeMap)
+LinearBundle_1_swigregister = _core.LinearBundle_1_swigregister
+LinearBundle_1_swigregister(LinearBundle_1)
+
+class LinearFunctionPair(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    descrip = _swig_property(_core.LinearFunctionPair_descrip_get, _core.LinearFunctionPair_descrip_set)
+    def __init__(self, type1 : 'int'=0, type2 : 'int'=0, descrip : 'std::string'="", parentmodel : 'Model2'=None): 
+        this = _core.new_LinearFunctionPair(type1, type2, descrip, parentmodel)
+        try: self.this.append(this)
+        except: self.this = this
+    def __call__(self, *args) -> "void" : return _core.LinearFunctionPair___call__(self, *args)
+    def clean(self, *args) -> "void" : return _core.LinearFunctionPair_clean(self, *args)
+    def __repr__(self) -> "std::string" : return _core.LinearFunctionPair___repr__(self)
+    def _set_ca(self, *args) -> "void" : return _core.LinearFunctionPair__set_ca(self, *args)
+    def _set_co(self, *args) -> "void" : return _core.LinearFunctionPair__set_co(self, *args)
+    def _get_ca(self) -> "elm::ComponentList &" : return _core.LinearFunctionPair__get_ca(self)
+    def _get_co(self) -> "elm::ComponentList &" : return _core.LinearFunctionPair__get_co(self)
+    def _set_ca_1(self,x):
+    	#//if type(x) is ParameterRef: x = Component(param=str(x), data="1")
+    	self._set_ca(x)
+    def _set_co_1(self,x):
+    	#//if type(x) is ParameterRef: x = Component(param=str(x), data="1")
+    	self._set_co(x)
+    ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca_1(x))
+    co = property(lambda self: self._get_co(), lambda self,x: self._set_co_1(x))
+
+    __swig_destroy__ = _core.delete_LinearFunctionPair
+    __del__ = lambda self : None;
+LinearFunctionPair_swigregister = _core.LinearFunctionPair_swigregister
+LinearFunctionPair_swigregister(LinearFunctionPair)
+
+class LinearCOBundle_2(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    _receiver_type = _swig_property(_core.LinearCOBundle_2__receiver_type_get, _core.LinearCOBundle_2__receiver_type_set)
+    parentmodel = _swig_property(_core.LinearCOBundle_2_parentmodel_get, _core.LinearCOBundle_2_parentmodel_set)
+    def __init__(self, parentmodel : 'Model2'=None): 
+        this = _core.new_LinearCOBundle_2(parentmodel)
+        try: self.this.append(this)
+        except: self.this = this
+    def __repr__(self) -> "std::string" : return _core.LinearCOBundle_2___repr__(self)
+    def size(self) -> "unsigned int" : return _core.LinearCOBundle_2_size(self)
+    def empty(self) -> "bool" : return _core.LinearCOBundle_2_empty(self)
+    def clear(self) -> "void" : return _core.LinearCOBundle_2_clear(self)
+    def __getitem__(self, *args) -> "elm::EdgeValue &" : return _core.LinearCOBundle_2___getitem__(self, *args)
+    def __setitem__(self, *args) -> "void" : return _core.LinearCOBundle_2___setitem__(self, *args)
+    def __delitem__(self, *args) -> "void" : return _core.LinearCOBundle_2___delitem__(self, *args)
+    def __contains__(self, *args) -> "bool" : return _core.LinearCOBundle_2___contains__(self, *args)
+    def __len__(self) -> "int" : return _core.LinearCOBundle_2___len__(self)
+    def __call__(self, *args) -> "void" : return _core.LinearCOBundle_2___call__(self, *args)
+    __swig_destroy__ = _core.delete_LinearCOBundle_2
+    __del__ = lambda self : None;
+LinearCOBundle_2_swigregister = _core.LinearCOBundle_2_swigregister
+LinearCOBundle_2_swigregister(LinearCOBundle_2)
 
 class ComponentGraphDNA(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1372,29 +1498,29 @@ class ComponentGraphDNA(object):
 ComponentGraphDNA_swigregister = _core.ComponentGraphDNA_swigregister
 ComponentGraphDNA_swigregister(ComponentGraphDNA)
 
-def __ComponentList__call(self, *args, **kwargs):
+def __LinearFunction__call(self, *args, **kwargs):
 	if (self._receiver_type==0):
-		raise LarchError("ComponentList improperly initialized")
+		raise LarchError("LinearFunction improperly initialized")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
 		self.receive_utility_ca(*args, **kwargs)
 	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
 		if len(kwargs)>0 and len(args)==0:
 			self.receive_utility_co_kwd(**kwargs)
 		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise LarchError("ComponentList for co type requires at least two arguments: data and alt")
+			if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
 			self.receive_utility_co(*args)
 		else:
-			raise LarchError("ComponentList for co type requires all-or-none use of keyword arguments")
+			raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
 	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
 		self.receive_allocation(*args, **kwargs)
 	else:
-		raise LarchError("ComponentList Not Implemented for type %i list"%self._receiver_type)
+		raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
 	####if self.parentmodel:
 	####	self.parentmodel.freshen()
-ComponentList.__call__ = __ComponentList__call
-del __ComponentList__call
-ComponentList.__long_len = ComponentList.__len__
-ComponentList.__len__ = lambda self: int(self.__long_len())
+LinearFunction.__call__ = __LinearFunction__call
+del __LinearFunction__call
+LinearFunction.__long_len = LinearFunction.__len__
+LinearFunction.__len__ = lambda self: int(self.__long_len())
 
 def __ComponentCellcodeMap__call(self, nest_name, nest_code=None, param_name="", multiplier=1.0, parent=None, parents=None, children=None):
 	if isinstance(nest_name,(int,)) and nest_code is None:
@@ -1867,6 +1993,7 @@ class Model2(sherpa):
         from .logging import easy_logging_active
         if easy_logging_active():
         	self.logger(True)
+        self._pull_graph_from_db()
 
 
 
@@ -1878,6 +2005,7 @@ class Model2(sherpa):
         	self._ref_to_db = args[0]
         except IndexError:
         	self._ref_to_db = None
+        self._pull_graph_from_db()
 
 
         return val
@@ -1898,6 +2026,7 @@ class Model2(sherpa):
 
         return _core.Model2_setUp(self, and_load_data)
 
+    def _pull_graph_from_db(self) -> "void" : return _core.Model2__pull_graph_from_db(self)
     setUpMessage = _swig_property(_core.Model2_setUpMessage_get, _core.Model2_setUpMessage_set)
     def tearDown(self) -> "void" : return _core.Model2_tearDown(self)
     title = _swig_property(_core.Model2_title_get, _core.Model2_title_set)

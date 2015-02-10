@@ -22,7 +22,6 @@
 %feature("kwargs", 1) elm::ComponentList::receive_utility_ca;
 %feature("kwargs", 1) elm::ComponentList::receive_allocation;
 %feature("kwargs", 1) elm::ComponentList::receive_utility_co_kwd;
-%feature("kwargs", 1) std::map< elm::cellcode, elm::ComponentList >::__call__;
 
 /* Convert cellcodepair from Python --> C */
 %typemap(in) const elm::cellcodepair& (elm::cellcodepair temp) {
@@ -91,32 +90,9 @@ namespace elm {
 
 #ifdef SWIG
 %template(ComponentVector) std::vector<elm::LinearComponent>;
-%template(LinearSubBundle_1) std::map< elm::cellcode, elm::ComponentList >;
+%template(_base_LinearSubBundle_1) std::map< elm::cellcode, elm::ComponentList >;
 
-%extend std::map< elm::cellcode, elm::ComponentList > {
-   std::string __str__() {
-       return "<LinearSubBundle_1>";
-   }
 
-	void __call__ (const elm::cellcode& altcode,
-				   const std::string& data,
-				   std::string param="",
-				   const double& multiplier=1.0) {
-		try {
-			$self->at(altcode).receive_utility_co(data,altcode,param,multiplier);
-		} catch (std::out_of_range) {
-			elm::Model2* parentmodel = nullptr;
-			if ($self->size()) {
-				parentmodel = $self->begin()->second.parentmodel;
-			}
-			$self->emplace(altcode, elm::ComponentList(COMPONENTLIST_TYPE_UTILITYCO, parentmodel));
-			$self->at(altcode).receive_utility_co(data,altcode,param,multiplier);
-		}
-		
-		
-	}
-
-}
 
 #endif
 
@@ -125,6 +101,7 @@ namespace elm {
 #define COMPONENTLIST_TYPE_UTILITYCO 0x2
 #define COMPONENTLIST_TYPE_LOGSUM    0x4
 #define COMPONENTLIST_TYPE_EDGE      0x8
+#define COMPONENTLIST_TYPE_SIMPLECO  0x8
 
 namespace elm {
 	
@@ -238,16 +215,58 @@ namespace elm {
 
 
 
+	class LinearCOBundle_1
+	: public ::std::map<elm::cellcode, elm::ComponentList>
+	{
+		
+	public:
+		elm::Model2* parentmodel;
+	
+		LinearCOBundle_1(elm::Model2* parent=nullptr);
+		LinearCOBundle_1(const LinearCOBundle_1& other);
+	
+		size_t metasize() const;
+		std::string __str__() const;
+		std::vector<std::string> needs() const;
+		elm::ComponentList& add_blank(const elm::cellcode& i);
+		
+		void _call (const elm::cellcode& altcode,
+					   const std::string& data,
+					   std::string param="",
+					   const double& multiplier=1.0) ;
 
-
+		#ifdef SWIG
+		%pythoncode %{
+		def __call__(self, altcode, data, param="", multiplier=1.0):
+			if isinstance(altcode, str) and isinstance(data, int):
+				_ = data
+				data = altcode
+				altcode = _
+			if isinstance(altcode, str) and isinstance(data, str):
+				try:
+					a = DB.alternatives(self.parentmodel, 'reversedict')
+					if altcode in a:
+						altcode = a[altcode]
+					elif data in a:
+						_ = a[data]
+						data = altcode
+						altcode = _
+				except AttributeError:
+					raise TypeError('cannot identify alternative')
+			self._call(altcode, data, param, multiplier)
+		%}
+		#endif // def SWIG
+		
+		
+	};
 
 
 	struct LinearBundle_1 {
 		std::string descrip;
 		
 		#ifndef SWIG
-		ComponentList ca;
-		std::map< elm::cellcode, ComponentList > co;
+		ComponentList     ca;
+		LinearCOBundle_1 co;
 		#endif
 		
 		LinearBundle_1(std::string descrip="", Model2* parentmodel=nullptr);
@@ -259,14 +278,22 @@ namespace elm {
 		
 		void _set_ca(const LinearComponent& x);
 		void _set_ca(const ComponentList& x);
-		void _set_co(const std::map< elm::cellcode, elm::ComponentList >& x);
+		void _set_co(const LinearCOBundle_1& x);
 		ComponentList&  _get_ca();
-		std::map< elm::cellcode, elm::ComponentList >&       _get_co();
+		LinearCOBundle_1&       _get_co();
 		
 		#ifdef SWIG
 		%pythoncode %{
 		ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca(x))
 		co = property(lambda self: self._get_co(), lambda self,x: self._set_co(x))
+		
+		def __getitem__(self, key):
+			return self._get_co().add_blank(key)
+		def __setitem__(self, key, value):
+			self._get_co()[key] = value
+		def __delitem__(self, key):
+			del self._get_co()[key]
+		
 		%}
 		#endif // def SWIG
 
@@ -326,7 +353,7 @@ namespace elm {
 	
 	typedef elm::ComponentList EdgeValue;
 
-	class ComponentEdgeMap
+	class LinearCOBundle_2
 	#ifndef SWIG
 	: public ::std::map<elm::cellcodepair, elm::EdgeValue>
 	#endif
@@ -334,7 +361,7 @@ namespace elm {
 		public:
 		int _receiver_type;
 		Model2* parentmodel;
-		ComponentEdgeMap(Model2* parentmodel=nullptr);
+		LinearCOBundle_2(Model2* parentmodel=nullptr);
 
 		std::string __repr__() const;
 
@@ -380,9 +407,9 @@ namespace elm {
 	
 		const Facet* db;
 		const ComponentCellcodeMap* nodes;
-		const ComponentEdgeMap* edges;
+		const LinearCOBundle_2* edges;
 		
-		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const ComponentEdgeMap* edges=nullptr, const Facet* db=nullptr, const elm::cellcode* root=nullptr);
+		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const LinearCOBundle_2* edges=nullptr, const Facet* db=nullptr, const elm::cellcode* root=nullptr);
 		ComponentGraphDNA(const ComponentGraphDNA&);
 		bool operator==(const ComponentGraphDNA&) const;
 		

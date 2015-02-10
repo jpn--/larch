@@ -26,7 +26,7 @@ from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
 from ..db import DB
 from ..model import Model
-from ..core import LarchError, SQLiteError, FacetError, darray_req, Component
+from ..core import LarchError, SQLiteError, FacetError, darray_req, LinearComponent
 from ..exceptions import *
 from ..array import Array, ArrayError
 import shutil, os
@@ -154,7 +154,7 @@ class TestData1(unittest.TestCase):
 	def test_component(self):
 		nullcode = -9997999
 	
-		c = Component()
+		c = LinearComponent()
 		self.assertEqual( nullcode, c._altcode )
 		self.assertEqual( nullcode, c._upcode )
 		self.assertEqual( nullcode, c._dncode )
@@ -162,7 +162,7 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( ""      , c.data )
 		self.assertEqual( ""      , c.param )
 
-		c = Component(data="123", param="par", category=(3,4))
+		c = LinearComponent(data="123", param="par", category=(3,4))
 		self.assertEqual( nullcode, c._altcode )
 		self.assertEqual( 3, c._upcode )
 		self.assertEqual( 4, c._dncode )
@@ -170,7 +170,7 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( "123", c.data )
 		self.assertEqual( "par", c.param )
 
-		c = Component(data="123", param="par", category=5)
+		c = LinearComponent(data="123", param="par", category=5)
 		self.assertEqual( 5, c._altcode )
 		self.assertEqual( nullcode, c._upcode )
 		self.assertEqual( nullcode, c._dncode )
@@ -178,7 +178,7 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( "123", c.data )
 		self.assertEqual( "par", c.param )
 
-		c = Component(data="123", param="PAR", category="five")
+		c = LinearComponent(data="123", param="PAR", category="five")
 		self.assertEqual( nullcode, c._altcode )
 		self.assertEqual( nullcode, c._upcode )
 		self.assertEqual( nullcode, c._dncode )

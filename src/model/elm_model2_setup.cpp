@@ -44,7 +44,21 @@ etk::strvec elm::__identify_needs(const ComponentList& Input_List)
 	return u_ca;
 }
 
-etk::strvec elm::__identify_needs(const ComponentEdgeMap& Input_EdgeMap)
+etk::strvec elm::__identify_needs(const LinearCOBundle_1& Input_ListMap)
+{
+	etk::strvec u_ca;
+	
+	for (auto b=Input_ListMap.begin(); b!=Input_ListMap.end(); b++) {
+		for (auto i=b->second.begin(); i!=b->second.end(); i++) {
+			u_ca.push_back_if_unique(i->data_name);
+		}
+	}
+	
+	return u_ca;
+}
+
+
+etk::strvec elm::__identify_needs(const LinearCOBundle_2& Input_EdgeMap)
 {
 	etk::strvec data_names;
 	for (auto iter=Input_EdgeMap.begin(); iter!=Input_EdgeMap.end(); iter++) {
@@ -84,7 +98,7 @@ void _setUp_linear_data_and_params
  ,	Facet*					_Data
  ,	VAS_System&				Xylem
  ,	ComponentList&			Input_UtilityCA
- ,	ComponentList&			Input_UtilityCO
+ ,	LinearCOBundle_1&		Input_UtilityCO
  ,	paramArray&				Params_UtilityCA
  ,	paramArray&				Params_UtilityCO
  ,	etk::logging_service*	msg
@@ -119,22 +133,26 @@ void _setUp_linear_data_and_params
 	auto s = _Data ? _Data->nAlts() : Xylem.n_elemental();
 	BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
 	Params_UtilityCO.resize(u_co.size(), s);
-	
+
+
+
 	// Third, populate the paramArray
-	for (unsigned b=0; b<Input_UtilityCO.size(); b++) {
-		BUGGER_(msg, "setting Params_?CO b="<<b);
-		slot = u_co.push_back_if_unique(Input_UtilityCO[b].data_name);
-		if (!Input_UtilityCO[b]._altname.empty()) {
-			slot2 = Xylem.slot_from_name(Input_UtilityCO[b]._altname);
-		} else {
-			if (Input_UtilityCO[b]._altcode==cellcode_empty) {
-				OOPS("utilityco input does not specify an alternative.\n"
-					 "Inputs in the utilityco space need to identify an alternative.");
-			}
-			slot2 = Xylem.slot_from_code(Input_UtilityCO[b]._altcode);
+	int count =0;
+	for (auto top_i=Input_UtilityCO.begin(); top_i!=Input_UtilityCO.end(); top_i++) {
+		for (auto i=top_i->second.begin(); i!=top_i->second.end(); i++) {
+
+		BUGGER_(msg, "setting Params_?CO count="<<(++count));
+		slot = u_co.push_back_if_unique(i->data_name);
+		if (top_i->first==cellcode_empty) {
+			OOPS("utilityco input does not specify an alternative.\n"
+				 "Inputs in the utilityco space need to identify an alternative.");
 		}
-		Params_UtilityCO(slot,slot2) = self._generate_parameter(Input_UtilityCO[b].param_name, Input_UtilityCO[b].multiplier);
+		slot2 = Xylem.slot_from_code(top_i->first);
+		Params_UtilityCO(slot,slot2) = self._generate_parameter(i->param_name, i->multiplier);
+
+		}
 	}
+
 	
 	BUGGER_(msg, "_setUp_linear_data_and_params complete");
 	
@@ -145,7 +163,7 @@ void _setUp_linear_data_and_params
 void _setUp_linear_data_and_params_edges
 (	ParameterList&			self
  ,	VAS_System&				Xylem
- ,	ComponentEdgeMap&		Input_Alloc
+ ,	LinearCOBundle_2&		Input_Alloc
  ,	paramArray&				Params_Alloc
  ,	etk::logging_service*	msg
 )
@@ -327,6 +345,15 @@ void elm::Model2::scan_for_multiple_choices()
 }
 
 
+void elm::Model2::_pull_graph_from_db()
+{
+	BUGGER(msg) << "Rebuilding Xylem network...";
+	elm::cellcode root = Xylem.root_cellcode();
+	Xylem.touch();
+	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+}
+
+
 void elm::Model2::setUp(bool and_load_data)
 {
 	INFO(msg) << "Setting up the model...";
@@ -341,10 +368,7 @@ void elm::Model2::setUp(bool and_load_data)
 		return;
 	}
 
-	BUGGER(msg) << "Rebuilding Xylem network...";
-	elm::cellcode root = Xylem.root_cellcode();
-	Xylem.touch();
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+	_pull_graph_from_db();
 	
 	if (Xylem.n_branches() > 0) {
 		BUGGER(msg) << "Setting model features to include nesting.";
@@ -374,7 +398,7 @@ void elm::Model2::setUp(bool and_load_data)
 	if (and_load_data) scan_for_multiple_choices();
 
 	
-	if (Input_Sampling.ca.size() || Input_Sampling.co.size()) {
+	if (Input_Sampling.ca.size() || Input_Sampling.co.metasize()) {
 		_setUp_samplefactor_data_and_params();
 	}
 	

@@ -58,10 +58,10 @@ elm::Model2::Model2()
 , option()
 , _is_setUp(0)
 //, weight_autorescale (false)
-, Input_Utility(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"utility",this)
+, Input_Utility("utility",this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
-, Input_Sampling(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"samplingbias",this)
+, Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
 , hessian_matrix(new etk::symmetric_matrix())
@@ -96,10 +96,10 @@ elm::Model2::Model2(elm::Facet& datafile)
 , option()
 , _is_setUp(0)
 //, weight_autorescale (false)
-, Input_Utility(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"utility",this)
+, Input_Utility("utility",this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
-, Input_Sampling(COMPONENTLIST_TYPE_UTILITYCA,COMPONENTLIST_TYPE_UTILITYCO,"samplingbias",this)
+, Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
 , hessian_matrix(new etk::symmetric_matrix())
@@ -935,10 +935,8 @@ std::string elm::Model2::save_buffer() const
 		sv << "self.utility.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Utility.co.begin(); u!=Input_Utility.co.end(); u++) {
-		if (u->_altcode) {
-			sv << "self.utility.co('"<<u->data_name<<"',"<<u->_altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
-		} else {
-			sv << "self.utility.co('"<<u->data_name<<"','"<<u->_altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
+			sv << "self.utility.co("<<u->first<<",'"<<k->data_name<<"','"<<k->param_name<<"',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";
@@ -975,10 +973,8 @@ std::string elm::Model2::save_buffer() const
 		sv << "self.samplingbias.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Sampling.co.begin(); u!=Input_Sampling.co.end(); u++) {
-		if (u->_altcode) {
-			sv << "self.samplingbias.co('"<<u->data_name<<"',"<<u->_altcode<<",'"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
-		} else {
-			sv << "self.samplingbias.co('"<<u->data_name<<"','"<<u->_altname<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
+			sv << "self.samplingbias.co('"<<u->first<<"',"<<k->data_name<<",'"<<k->param_name<<"',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";

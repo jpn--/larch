@@ -86,6 +86,7 @@ namespace elm {
 			from .logging import easy_logging_active
 			if easy_logging_active():
 				self.logger(True)
+			self._pull_graph_from_db()
 		%}
 		%feature("pythonappend") Model2() %{
 			self._ref_to_db = None
@@ -98,6 +99,7 @@ namespace elm {
 				self._ref_to_db = args[0]
 			except IndexError:
 				self._ref_to_db = None
+			self._pull_graph_from_db()
 		%}
 		%feature("pythonappend") delete_data_pointer() %{
 			self._ref_to_db = None
@@ -640,11 +642,11 @@ namespace elm {
 		%rename(samplingbias) Input_Sampling;
 		#endif // def SWIG
 
-		ComponentListPair           Input_Utility;
+		LinearBundle_1              Input_Utility;
 		std::vector< Component >    Input_QuantityCA ;
 		ComponentCellcodeMap        Input_LogSum;
-		ComponentEdgeMap            Input_Edges;
-		ComponentListPair           Input_Sampling;
+		LinearCOBundle_2            Input_Edges;
+		LinearBundle_1              Input_Sampling;
 		ComponentGraphDNA           Input_Graph();
 
 	public:
@@ -710,6 +712,7 @@ FOSWIG(	%rename(__repr__) representation; )
 
 	public:
 		void setUp(bool and_load_data=true);
+		void _pull_graph_from_db();
 		
 		std::string setUpMessage;
 		
@@ -760,7 +763,8 @@ FOSWIG(	%rename(__repr__) representation; )
 
 	#ifndef SWIG
 	etk::strvec __identify_needs(const ComponentList& Input_List);
-	etk::strvec __identify_needs(const ComponentEdgeMap& Input_EdgeMap);
+	etk::strvec __identify_needs(const LinearCOBundle_1& Input_List);
+	etk::strvec __identify_needs(const LinearCOBundle_2& Input_EdgeMap);
 	void __identify_additional_needs(const ComponentList& Input_List, etk::strvec& needs);
 	#endif // ndef SWIG
 

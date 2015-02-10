@@ -267,7 +267,7 @@ std::shared_ptr<ndarray> elm::Model2::_calc_utility(const ndarray* dco, const nd
 
 	
 	if (Input_Utility.ca.size() && !dca) OOPS("idca data needed but not given");
-	if (Input_Utility.co.size() && !dco) OOPS("idco data needed but not given");
+	if (Input_Utility.co.metasize() && !dco) OOPS("idco data needed but not given");
 
 	
 	size_t ncases = 0;
@@ -1042,36 +1042,6 @@ void elm::Model2::utilityca
 }
 
 
-//void elm::Model2::CleanUtilityCA()
-//{
-//	if (!_Data) OOPS("A database must be linked to this model to do this.");
-//	for (vector<Component>::iterator i=Input_Utility.ca.begin(); i!=Input_Utility.ca.end(); i++) {
-//  		BUGGER(msg) << "checking for validity of "<<i->data_name<<" in idCA data";
-//		try {
-//			_Data->check_ca(i->data_name);
-//		} SPOO {
-//			i = Input_Utility.ca.erase(i);
-//			i--;
-//		}
-//	}
-//}
-//
-//
-//
-//void elm::Model2::CleanUtilityCO()
-//{
-//	if (!_Data) OOPS("A database must be linked to this model to do this.");
-//	for (vector<Component>::iterator i=Input_Utility.co.begin(); i!=Input_Utility.co.end(); i++) {
-//  		BUGGER(msg) << "checking for validity of "<<i->data_name<<" in idCA data";
-//		try {
-//			_Data->check_co(i->data_name);
-//		} SPOO {
-//			i = Input_Utility.co.erase(i);
-//			i--;
-//		}
-//	}
-//}
-//
 
 void elm::Model2::utilityco
 (const string&    column_name, 
@@ -1121,9 +1091,9 @@ string elm::Model2::_add_utility_co
 	x.data_name = column_name;
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
-	x._altcode = alt_code;
-	x._altname = alt_name;
-	Input_Utility.co.push_back( x );
+//	x._altcode = alt_code;
+//	x._altname = alt_name;
+	Input_Utility.co[alt_code].push_back( x );
 	
 	if (_Data) {
 		BUGGER(msg) << "checking for validity of "<<column_name<<" in idCO data";
@@ -1173,32 +1143,27 @@ PyObject* elm::Model2::_get_samplingbiasca() const
 	return U;
 }
 
-PyObject* __GetInputTupleUtilityCO(const elm::LinearComponent& i)
+PyObject* __GetInputTupleUtilityCO(const elm::cellcode& altcode, const elm::LinearComponent& i)
 {
-	if (!i._altname.empty()) {
-		if (i.multiplier==1.0) {
-			return Py_BuildValue("(sss)", i.data_name.c_str(), i._altname.c_str(), i.param_name.c_str());
-		}
-		return Py_BuildValue("(sssd)", i.data_name.c_str(), i._altname.c_str(), i.param_name.c_str(), i.multiplier);
-	} else {
-		if (i._altcode==cellcode_empty) {
-			OOPS("co input does not specify an alternative.\n"
-				 "Inputs in the co space need to identify an alternative.");
-		}
-		if (i.multiplier==1.0) {
-			return Py_BuildValue("(sKs)", i.data_name.c_str(), i._altcode, i.param_name.c_str());
-		}
-		return Py_BuildValue("(sKsd)", i.data_name.c_str(), i._altcode, i.param_name.c_str(), i.multiplier);
+	if (altcode==cellcode_empty) {
+		OOPS("co input does not specify an alternative.\n"
+			 "Inputs in the co space need to identify an alternative.");
 	}
+	if (i.multiplier==1.0) {
+		return Py_BuildValue("(Kss)", i._altcode, i.data_name.c_str(), i.param_name.c_str());
+	}
+	return Py_BuildValue("(Kssd)", i._altcode, i.data_name.c_str(), i.param_name.c_str(), i.multiplier);
 }
 
 PyObject* elm::Model2::_get_utilityco() const
 {
 	PyObject* U = PyList_New(0);
-	for (unsigned i=0; i<Input_Utility.co.size(); i++) {
-		PyObject* z = __GetInputTupleUtilityCO(Input_Utility.co[i]);
-		PyList_Append(U, z);
-		Py_CLEAR(z);
+	for (auto a = Input_Utility.co.begin(); a!=Input_Utility.co.end(); a++) {
+		for (unsigned i=0; i<a->second.size(); i++) {
+			PyObject* z = __GetInputTupleUtilityCO(a->first, a->second[i]);
+			PyList_Append(U, z);
+			Py_CLEAR(z);
+		}
 	}
 	return U;
 }
@@ -1206,10 +1171,12 @@ PyObject* elm::Model2::_get_utilityco() const
 PyObject* elm::Model2::_get_samplingbiasco() const
 {
 	PyObject* U = PyList_New(0);
-	for (unsigned i=0; i<Input_Sampling.co.size(); i++) {
-		PyObject* z = __GetInputTupleUtilityCO(Input_Sampling.co[i]);
-		PyList_Append(U, z);
-		Py_CLEAR(z);
+	for (auto a = Input_Sampling.co.begin(); a!=Input_Sampling.co.end(); a++) {
+		for (unsigned i=0; i<a->second.size(); i++) {
+			PyObject* z = __GetInputTupleUtilityCO(a->first, a->second[i]);
+			PyList_Append(U, z);
+			Py_CLEAR(z);
+		}
 	}
 	return U;
 }

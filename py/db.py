@@ -225,6 +225,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			return list(zip(self.alternative_codes(), self.alternative_names()))
 		if format==dict or format=='dict':
 			return {i:j for i,j in zip(self.alternative_codes(), self.alternative_names())}
+		if format=='reversedict':
+			return {j:i for i,j in zip(self.alternative_codes(), self.alternative_names())}
 		raise TypeError('only allows list or dict')
 
 	@staticmethod

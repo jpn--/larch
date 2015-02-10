@@ -343,13 +343,12 @@ class TestNL(ELM_TestCase):
 		m.nest("existing", 4, "existing") 
 		m.link(4, 1)
 		m.link(4, 3)
-		m.samplingbias(1,"SB_TRAIN")
-		m.samplingbias(2)
-		self.assertEqual("1", m.samplingbias.co[0].data)
-		self.assertEqual("SB_TRAIN", m.samplingbias.co[0].param)
-		self.assertEqual("1", m.samplingbias.co[1].data)
-		self.assertEqual("samplingbias#2", m.samplingbias.co[1].param)
-		self.assertEqual(2, len(m.samplingbias.co))
+		m.samplingbias[1]("1","SB_TRAIN")
+		self.assertEqual("1", m.samplingbias.co[1][0].data)
+		self.assertEqual("SB_TRAIN", m.samplingbias.co[1][0].param)
+#		self.assertEqual("1", m.samplingbias.co[1].data)
+#		self.assertEqual("samplingbias#2", m.samplingbias.co[1].param)
+#		self.assertEqual(2, len(m.samplingbias.co))
 
 
 	def test_out_of_order_nests(self):

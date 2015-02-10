@@ -103,21 +103,22 @@ class TestMTC(ELM_TestCase):
 		m.utility.co("1","Walk","con6") 
 		with self.assertRaises(Exception):
 			m.utility.co("HHINC","AltNameWhichDoesNotExist")
-		del m.utility.co[-1]
+		#del m.utility.co[6][-1]
 		del m["HHINC@AltNameWhichDoesNotExist"]
 		with self.assertRaises(Exception):
 			m.utility.co("HHINC",666)
 		del m["HHINC#666"]
-		del m.utility.co[-1]
+		del m.utility.co[666]
 		with self.assertRaises(Exception):
 			m.utility.ca("CA_ColumnNameWhichDoesNotExist")
 		del m.utility.ca[-1]
 		del m["CA_ColumnNameWhichDoesNotExist"]
 		with self.assertRaises(Exception):
 			m.utility.co("CO_ColumnNameWhichDoesNotExist","Tran")
-		del m["CO_ColumnNameWhichDoesNotExist@Tran"]
+		del m["CO_ColumnNameWhichDoesNotExist#4"]
 		m.utility.clean(d)
 		m.setUp()
+		self.assertEqual(['cost','tottime','con2','con3','con4','con5','con6','inc2','inc3','inc4','inc5','inc6'],m.parameter_names())
 		self.assertEqual((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0),m.parameter_values())
 		self.assertAlmostEqual(-28993.7, m.loglike(), delta=0.05)
 		g = m.d_loglike()
