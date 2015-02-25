@@ -1424,6 +1424,7 @@ std::string elm::Facet::query_choice(long long* caseid) const
 
 std::string elm::Facet::alias_avail_caseid() const
 {
+	if (tbl_avail()=="") return "";
 	try {
 		sql_statement("SELECT caseid FROM "+tbl_avail());
 	} catch (etk::SQLiteError) {
@@ -1433,6 +1434,7 @@ std::string elm::Facet::alias_avail_caseid() const
 }
 std::string elm::Facet::alias_avail_altid() const
 {
+	if (tbl_avail()=="") return "";
 	try {
 		sql_statement("SELECT altid FROM "+tbl_avail());
 	} catch (etk::SQLiteError) {
@@ -1442,6 +1444,7 @@ std::string elm::Facet::alias_avail_altid() const
 }
 std::string elm::Facet::alias_avail_avail() const
 {
+	if (tbl_avail()=="") return "";
 	try {
 		sql_statement("SELECT avail FROM "+tbl_avail());
 	} catch (etk::SQLiteError) {
@@ -1761,15 +1764,16 @@ elm::datamatrix elm::Facet::matrix_library(size_t n)
 
 void elm::Facet::_array_idco_reader(const std::string& qry, elm::darray* array, elm::darray* caseids)
 {
-	assert(array->nCases()==caseids->nCases());
+	if (array) assert(array->nCases()==caseids->nCases());
 	assert(caseids->dtype == NPY_INT64);
 	
 	size_t row = 0;
 	clock_t prevmsgtime = clock();
 	clock_t timenow;
 	
-	size_t n_cases = array->_repository.size1();
-	size_t n_vars = array->_repository.size2();
+	
+	size_t n_cases = array? array->_repository.size1() : caseids->_repository.size1();
+	size_t n_vars =  array? array->_repository.size2() : 0;
 	
 	auto stmt = sql_statement_readonly(qry);
 	
@@ -1783,7 +1787,7 @@ void elm::Facet::_array_idco_reader(const std::string& qry, elm::darray* array, 
 	std::unordered_set<long long> caseid_set;
 	
 	stmt->execute();
-	while ((stmt->status()==SQLITE_ROW) && row<array->nCases()) {
+	while ((stmt->status()==SQLITE_ROW) && row<n_cases) {
 
 		long long current_row_caseid = stmt->getInt64(0);
 
@@ -1803,20 +1807,22 @@ void elm::Facet::_array_idco_reader(const std::string& qry, elm::darray* array, 
 
 		caseids->value_int64(row, 0) = current_row_caseid;
 
-		if (array->dtype == NPY_DOUBLE) {
-			for (size_t i=0; i<n_vars; i++) {
-				array->value_double(row, i) = stmt->getDouble(i+1);
+		if (array) {
+			if (array->dtype == NPY_DOUBLE) {
+				for (size_t i=0; i<n_vars; i++) {
+					array->value_double(row, i) = stmt->getDouble(i+1);
+				}
+			} else if (array->dtype == NPY_INT64) {
+				for (size_t i=0; i<n_vars; i++) {
+					array->value_int64(row, i) = stmt->getInt64(i+1);
+				}
+			} else if (array->dtype == NPY_BOOL) {
+				for (size_t i=0; i<n_vars; i++) {
+					array->value_bool(row, i) = stmt->getBool(i+1);
+				}
+			} else {
+				OOPS("unsupported dtype");
 			}
-		} else if (array->dtype == NPY_INT64) {
-			for (size_t i=0; i<n_vars; i++) {
-				array->value_int64(row, i) = stmt->getInt64(i+1);
-			}
-		} else if (array->dtype == NPY_BOOL) {
-			for (size_t i=0; i<n_vars; i++) {
-				array->value_bool(row, i) = stmt->getBool(i+1);
-			}
-		} else {
-			OOPS("unsupported dtype");
 		}
 		row++;
 		stmt->execute();

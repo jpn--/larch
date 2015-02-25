@@ -864,7 +864,7 @@ class Model(Model2):
 						x += ["idCO Utility"]
 					x += ["-"]
 					means,stdevs,mins,maxs,nonzers,posis,negs,zers = self.stats_utility_co()
-					names = self.Data("UtilityCO").get_variables()
+					names = self.needs()["UtilityCO"].get_variables()
 					
 					head_fmt = "{0:<19}\t{1:<11}\t{2:<11}\t{3:<11}\t{4:<11}\t{5:<11}"
 					body_fmt = "{0:<19}\t{1:<11.7g}\t{2:<11.7g}\t{3:<11.7g}\t{4:<11.7g}\t{5:<11.7g}"
@@ -1140,24 +1140,45 @@ class Model(Model2):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def estimate_scipy(self, method='Nelder-Mead'):
+	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, **kwargs):
 		import scipy.optimize
 		import datetime
 		starttime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
-		ret = scipy.optimize.minimize(
-			self.negative_loglike,   # objective function
-			self.parameter_values(), # initial values
-			args=(),
-			method=method,
-			jac=False, #? self.d_loglike,
-			hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=print,
-			options=dict(disp=True))
+		if basinhopping:
+			cb = lambda x, f, accept: print("{} <- {} ({})".format(f,",".join(str(i) for i in x), 'accepted' if accept else 'not accepted'))
+			ret = scipy.optimize.basinhopping(
+				self.negative_loglike,   # objective function
+				self.parameter_values(), # initial values
+				minimizer_kwargs=dict(method=method,args=(),jac=self.d_loglike,
+										hess=None, hessp=None, bounds=None,
+										constraints=(), tol=None, callback=None,),
+				disp=True,
+				callback=cb,
+				**kwargs)
+		else:
+			ret = scipy.optimize.minimize(
+				self.negative_loglike,   # objective function
+				self.parameter_values(), # initial values
+				args=(),
+				method=method,
+				jac=False, #? self.d_loglike,
+				hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=print,
+				options=dict(disp=True))
 		endtime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
 		startfrac, startwhole = math.modf(starttime)
 		endfrac, endwhole = math.modf(endtime)
 		startfrac *= 1000000
 		endfrac *= 1000000
-		if ret.success:
+		try:
+			s = ret.success
+		except AttributeError:
+			s = False
+			try:
+				if basinhopping and 'success' in ret.message[0]:
+					s = True
+			except:
+				pass
+		if s:
 			self.parameter_values(ret.x)
 			self._set_estimation_statistics( -(ret.fun) )
 			self._set_estimation_run_statistics(int(startwhole),int(startfrac),

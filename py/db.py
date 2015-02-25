@@ -1192,6 +1192,30 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 					l.critical(str(arguments))
 			raise
 
+	def array_caseids(self, table=None, caseid=None, sort=True, n_cases=None):
+		import numpy
+		if table is None:
+			table = self.queries.tbl_caseids()
+		co_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in co_cols:
+				caseid = 'caseid'
+			else:
+				caseid = co_cols[0]
+		qry = "SELECT {} AS caseid FROM {}".format(caseid, table)
+		if n_cases is None:
+			n_cases = self.value("SELECT count(*) FROM {}".format(table))
+		n_vars = 1
+		case_slots = dict()
+		caseids = numpy.zeros([n_cases,1], dtype='int64')
+		n = 0
+		self._array_idco_reader(qry, None, caseids)
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			caseids = caseids[order,:]
+		return caseids
+
+
 	def array_idca(self, vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
@@ -1410,10 +1434,17 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	def array_avail(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
 		import numpy
-		if table is None:
-			table = self.queries.tbl_avail()
 		if altcodes is None:
 			altcodes = self.alternative_codes()
+		if table is None:
+			table = self.queries.tbl_avail()
+			if table=="":
+				if n_cases is None:
+					n_cases = self.value("SELECT count(*) FROM {}".format(self.queries.tbl_caseids()))
+				n_alts = len(altcodes)
+				n_vars = 1
+				result = numpy.ones([n_cases,n_alts,n_vars], dtype=dtype)
+				return result, None
 		ca_cols = [i.lower() for i in self.column_names(table)]
 		if caseid is None:
 			if 'caseid' in ca_cols:
@@ -1499,11 +1530,11 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
 			elif key=="Allocation":
 				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
-			if cases is None:
+			if cases is None and c is not None:
 				cases = c
 				matched_cases += [key,]
 				n_cases = cases.shape[0]
-			else:
+			elif c is not None:
 				if numpy.all(cases==c):
 					matched_cases += [key,]
 				else:
@@ -1532,7 +1563,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return z
 
 
-	def display(self, stmt, arguments=(), file=None, header=True, format=None, countrows=False, shell=False, w=None):
+	def display(self, stmt, arguments=(), file=None, header=True, format=None, countrows=False, shell=False, w=None, explode=False):
 		if shell:
 			sh = apsw.Shell(db=self)
 			if header:
@@ -1548,7 +1579,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 					print("<table>", file=file)
 				cur = self.cursor()
 				iter = cur.execute(stmt, arguments)
-				if header:
+				if header and format!="explode":
 					try:
 						descrip = cur.getdescription()
 						if format=="html":
@@ -1559,11 +1590,17 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 							print("\t".join(["{0!s:<11}".format(j[0]) for j in descrip]), file=file)
 					except apsw.ExecutionCompleteError:
 						print("empty table")
+				if format=="explode":
+					print("-"*80, file=file)
 				for i in iter:
 					if format=="html":
 						print("<tr>", file=file)
 						print("".join(["<td>{0!s:<11}</td>".format(j) for j in i]), file=file)
 						print("</tr>", file=file)
+					elif format=="explode":
+						for j,jh in zip(i,cur.getdescription()):
+							print("{1!s:>40}: {0!s:<20}".format(j,jh[0]), file=file)
+						print("-"*80, file=file)
 					else:
 						print("\t".join(["{0!s:<11}".format(j) for j in i]), file=file)
 					rows = rows+1

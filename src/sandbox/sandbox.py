@@ -22,7 +22,9 @@ print ("="*80)
 print ("="*32," sandbox module ","="*32,sep="")
 print ("="*80)
 
+print("(import larch...)")
 import larch
+print("(import larch complete)")
 
 def execfile(filename):
 	import __main__
@@ -32,8 +34,7 @@ def execfile(filename):
 
 
 print ("-"*80)
-print ("larch.__file__")
-print(larch.__file__)
+print ("larch.__file__ = ",larch.__file__)
 print ("-"*80)
 
 #d = larch.DB('/Users/jpn/Dropbox/Larch/py/data_warehouse/swissmetro.sqlite')
@@ -55,10 +56,8 @@ print ("-"*80)
 
 
 
-import scipy.optimize
-
 import logging, os, sys, pprint, math
-logging.basicConfig(format='%(levelname)s:%(name)s:%(message)s', level=5)
+#logging.basicConfig(format='%(levelname)s:%(name)s:%(message)s', level=5)
 
 bitstring = "%x" % sys.maxsize, sys.maxsize > 2**32
 if bitstring[1]:
@@ -332,6 +331,10 @@ def test_save_and_load():
 #import larch.test
 #larch.test.run()
 
+#sys.path.append("/Users/jpn/")
+#os.chdir("/Users/jpn/")
+#execfile("/Users/jpn/ngev.py")
+
 #import gc
 #gc.collect()#
 
@@ -341,9 +344,9 @@ def test_save_and_load():
 #execfile("/Users/jpn/Dropbox/CamSys/Memphis/dest_main.py")
 
 
-sys.path.append("/Users/jpn/Downloads/2015-01-27/")
-os.chdir("/Users/jpn/Downloads/2015-01-27/")
-execfile("/Users/jpn/Downloads/2015-01-27/NL_3levels.py")
+#sys.path.append("/Users/jpn/Downloads/2015-01-27/")
+#os.chdir("/Users/jpn/Downloads/2015-01-27/")
+#execfile("/Users/jpn/Downloads/2015-01-27/NL_3levels.py")
 
 
 
@@ -353,3 +356,18 @@ execfile("/Users/jpn/Downloads/2015-01-27/NL_3levels.py")
 #dcm.loglike()
 
 #test_save_and_load()
+
+
+
+sys.path.append("/Users/jpn/Dropbox/Logisticare/")
+os.chdir("/Users/jpn/Dropbox/Logisticare/")
+execfile("/Users/jpn/Dropbox/Logisticare/NJ.py")
+
+
+
+
+
+
+
+
+

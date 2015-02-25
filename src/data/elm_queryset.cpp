@@ -146,7 +146,8 @@ std::string elm::QuerySet::tbl_weight () const
 std::string elm::QuerySet::tbl_avail  () const
 {
 	if (qry_avail()=="") {
-		OOPS("empty avail query");
+		return "";
+		//OOPS("empty avail query");
 	}
 
 	return "("+qry_avail()+") AS larch_avail";

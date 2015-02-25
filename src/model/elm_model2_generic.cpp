@@ -932,11 +932,11 @@ std::string elm::Model2::save_buffer() const
 	// save utility
 	BUGGER( msg ) << "save utility";
 	for (auto u=Input_Utility.ca.begin(); u!=Input_Utility.ca.end(); u++) {
-		sv << "self.utility.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.utility.ca('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Utility.co.begin(); u!=Input_Utility.co.end(); u++) {
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
-			sv << "self.utility.co("<<u->first<<",'"<<k->data_name<<"','"<<k->param_name<<"',"<<AsPyFloat(k->multiplier)<<")\n";
+			sv << "self.utility.co("<<u->first<<",'''"<<k->data_name<<"''','''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";
@@ -948,7 +948,7 @@ std::string elm::Model2::save_buffer() const
 	// save nest
 	BUGGER( msg ) << "save nest";
 	for (auto n=Input_LogSum.begin(); n!=Input_LogSum.end(); n++) {
-		sv << "self.nest('"<<n->second._altname<<"',"<<n->second._altcode<<",'"<<n->second.param_name<<"'";
+		sv << "self.nest('''"<<n->second._altname<<"''',"<<n->second._altcode<<",'''"<<n->second.param_name<<"'''";
 		if (n->second.multiplier!=1.0) {
 			sv << ","<<AsPyFloat(n->second.multiplier);
 		}
@@ -970,11 +970,11 @@ std::string elm::Model2::save_buffer() const
 	// save samplingbias
 	BUGGER( msg ) << "save samplingbias";
 	for (auto u=Input_Sampling.ca.begin(); u!=Input_Sampling.ca.end(); u++) {
-		sv << "self.samplingbias.ca('"<<u->data_name<<"','"<<u->param_name<<"',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.samplingbias.ca('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Sampling.co.begin(); u!=Input_Sampling.co.end(); u++) {
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
-			sv << "self.samplingbias.co('"<<u->first<<"',"<<k->data_name<<",'"<<k->param_name<<"',"<<AsPyFloat(k->multiplier)<<")\n";
+			sv << "self.samplingbias.co('''"<<u->first<<"''',"<<k->data_name<<",'''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";

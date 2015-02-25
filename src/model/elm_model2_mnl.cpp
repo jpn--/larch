@@ -398,28 +398,28 @@ void elm::Model2::mnl_probability()
 	
 	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
 	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-	if (Data_UtilityCA) {
+	if (Data_UtilityCA && Data_UtilityCA->_repository.size1()>1) {
 		BUGGER(msg) << "Data_UtilityCA (case 0)\n" << Data_UtilityCA->printcase(0);
 		BUGGER(msg) << "Data_UtilityCA (case 1)\n" << Data_UtilityCA->printcase(1);
 		BUGGER(msg) << "Data_UtilityCA (case "<<nCases-1<<")\n" << Data_UtilityCA->printcase(nCases-1);
 	} else {
 		BUGGER(msg) << "Data_UtilityCA is NULL\n";
 	}
-	if (Data_UtilityCO) {
+	if (Data_UtilityCO && Data_UtilityCO->_repository.size1()>1) {
 		BUGGER(msg) << "Data_UtilityCO (case 0)\n" << Data_UtilityCO->printcase(0);
 		BUGGER(msg) << "Data_UtilityCO (case 1)\n" << Data_UtilityCO->printcase(1);
 		BUGGER(msg) << "Data_UtilityCO (case "<<nCases-1<<")\n" << Data_UtilityCO->printcase(nCases-1);
 	} else {
 		BUGGER(msg) << "Data_UtilityCO is NULL\n";
 	}
-	if (Data_Choice) {
+	if (Data_Choice && Data_Choice->_repository.size1()>1) {
 		BUGGER(msg) << "Data_Choice (case 0)\n" << Data_Choice->printcase(0);
 		BUGGER(msg) << "Data_Choice (case 1)\n" << Data_Choice->printcase(1);
 		BUGGER(msg) << "Data_Choice (case "<<nCases-1<<")\n" << Data_Choice->printcase(nCases-1);
 	} else {
 		BUGGER(msg) << "Data_Choice is NULL\n";
 	}
-	if (Data_Avail) {
+	if (Data_Avail && Data_Avail->_repository.size1()>1) {
 		BUGGER(msg) << "Data_Avail (case 0)\n" << Data_Avail->printboolcase(0);
 		BUGGER(msg) << "Data_Avail (case 1)\n" << Data_Avail->printboolcase(1);
 		BUGGER(msg) << "Data_Avail (case "<<nCases-1<<")\n" << Data_Avail->printboolcase(nCases-1);
@@ -494,8 +494,12 @@ void elm::Model2::mnl_probability()
 		} // end if NANCHECK
 	}
 	
-	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
-	BUGGER(msg) << "Probability (case n)\n" << Probability.printrow(nCases-1) ;
+	if (Probability.size1()>0) {
+		BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
+		BUGGER(msg) << "Probability (case n)\n" << Probability.printrow(nCases-1) ;
+	} else {
+		BUGGER(msg) << "Probability (size 0)\n" ;
+	}
 	
 }
 

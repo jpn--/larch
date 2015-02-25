@@ -29,10 +29,13 @@ int main(int argc, char **argv) {
 	PyRun_SimpleString("print ('.'*40, 'larch sandbox', '.'*40)");
 	PyRun_SimpleString("import os, sys");
 	PyRun_SimpleString("print( 'CWD:', os.getcwd() )");
-//	PyRun_SimpleString("sys.path.insert(0,os.getcwd())");
+	PyRun_SimpleString("sys.path.insert(0,os.getcwd())");
 	PyRun_SimpleString("print( 'Version:', sys.version )");
 	PyRun_SimpleString("print( 'Executable:', sys.executable )");
 	PyRun_SimpleString("print( 'Prefix:', sys.prefix )");
+//	PyRun_SimpleString("sys.path.insert(0,os.environ['CONFIGURATION_BUILD_DIR'])");
+	PyRun_SimpleString("print('=====> Loading sandbox.py <=====')");
+	PyRun_SimpleString("import larch");
 	PyRun_SimpleString("exec(open('/Users/jpn/Dropbox/Larch/src/sandbox/sandbox.py').read())");
 	PyRun_SimpleString("print('=====> Testing Sandbox Complete. <=====')");
 	Py_Finalize();
