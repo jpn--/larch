@@ -24,6 +24,7 @@
 #include "sherpa.h"
 #include "sherpa_freedom.h"
 #include <iostream>
+#include <iomanip>
 
 #define PERTURBATION_SIZE (1e-5)
 
@@ -116,7 +117,7 @@ void sherpa::finite_diff_hessian (triangle& fHESS)
 
 // DIAGNOSTICS //
 
-double sherpa::gradient_diagnostic () 
+double sherpa::gradient_diagnostic (bool shout)
 {
 	unsigned i;
 	INFO(msg) << "Conducting Gradient Diagnostic..." ;
@@ -156,7 +157,11 @@ double sherpa::gradient_diagnostic ()
 	buff << "Maximum Absolute Deviation:   " << max_diff << "\n";
 	buff << "Maximum Percentage Deviation: " << max_percent_diff*100 << "%";
 	
-	INFO(msg)<< buff.str() ;
+	if (shout) {
+		SHOUT(msg)<< buff.str() ;
+	} else {
+		INFO(msg)<< buff.str() ;
+	}
 	if (max_percent_diff > 0.09 || found_nan) {
 		OOPS("error: gradient diagnostic disagreement\n",buff.str());
 		//msg << "Press enter to continue...\n";
@@ -631,7 +636,6 @@ sherpa_result sherpa::_maximize_pack(sherpa_pack& Norgay, unsigned& iteration_nu
 		MONITOR(msg) << "=================================================" ;
 		MONITOR(msg)<< "ITERATION NUMBER "<<iteration_number<< " BEGINS" ;
 		MONITOR(msg) << "=================================================" ;
-		MONITOR(msg) << "\n" << printStatus(status_FNames|status_FCurrent) ;
 		objective();
 		if (outcome.starting_obj_value==-INF) outcome.starting_obj_value = ZCurrent;
 		if (previous_obj_value==-INF) previous_obj_value = ZCurrent;
@@ -639,14 +643,24 @@ sherpa_result sherpa::_maximize_pack(sherpa_pack& Norgay, unsigned& iteration_nu
 		
 		int direction_status = _find_ascent_direction(Norgay.Algorithm);
 		tolerance = -(FDirection*GCurrent);
+		
+		if (flag_log_turns) {
+			FATAL(msg) << "Log Likelihood = "<<ZCurrent << "\t"<<Norgay.AlgorithmName()<<" Convergence Tolerance = "<<tolerance<<" @\n" << printStatus(status_FNames|status_FCurrent|status_GCurrent|status_FDirection|status_FDirectionLarge, tolerance) ;
+		} else {
+			MONITOR(msg) << "\n" << printStatus(status_FNames|status_FCurrent) ;
+		}
+		
 		if ((tolerance==0.0)&&(direction_status<0)) {
 			return_outcome( SHERPA_FAIL );
+		}
+		if (isnan(tolerance)) {
+			return_outcome( SHERPA_NAN_TOL );
 		}
 		
 		keep_going = Norgay.tell_turn(ZCurrent,tolerance,outcome.explain_stop, local_iteration);
 		if (!keep_going) {
 			MONITOR(msg) << "+++++++++++++++++++++++++++++++++++++++++++++++++" ;
-			INFO(msg)<< outcome.explain_stop ;
+			WARN(msg)<< "success: "<< outcome.explain_stop ;
 			MONITOR(msg) << "+++++++++++++++++++++++++++++++++++++++++++++++++" ;
 			MONITOR(msg) << "\n" << printStatus(status_FNames|status_FCurrent|status_GCurrent|status_FDirection) ;
 			return_outcome( SHERPA_SUCCESS );
@@ -656,8 +670,12 @@ sherpa_result sherpa::_maximize_pack(sherpa_pack& Norgay, unsigned& iteration_nu
 		MONITOR(msg) << "\n" << printStatus(status_FNames|status_FCurrent|status_GCurrent|status_FDirection) ;
 		
 		if (flag_gradient_diagnostic) {
-			INFO(msg)<< "Running gradient diagnostic";
-			gradient_diagnostic();
+			if (flag_gradient_diagnostic>10) {
+				SHOUT(msg)<< "Running gradient diagnostic";
+			} else {
+				INFO(msg)<< "Running gradient diagnostic";
+			}
+			gradient_diagnostic(flag_gradient_diagnostic>10);
 			flag_gradient_diagnostic--;
 		}
 		if (flag_hessian_diagnostic) {
@@ -913,6 +931,22 @@ void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangl
 	}
 }
 
+
+void sherpa::_update_freedom_info_best()
+{
+	BUGGER(msg) << "sherpa::_update_freedom_info_best()";
+	BUGGER(msg) << "dF()="<<dF();
+	
+	double temp;
+	
+	for (unsigned i=0; i<dF(); i++) {
+		FInfo[FNames[i]].value = ReadFBest()[i];
+	}
+}
+
+
+
+
 string sherpa::add_freedom(const string& param_name, const double& value, const double& nullvalue, 
 						   const double& max, const double& min)
 {
@@ -1033,19 +1067,33 @@ void sherpa::free_memory()
 	invHessTemp.resize(0);	
 }
 
-string sherpa::printStatus(int which) const
+string sherpa::printStatus(int which, double total_tol) const
 {
+	size_t pname_width = 9;
+	for ( unsigned i=0; i<dF(); i++) {
+		if (FNames[i].length() > pname_width) {
+			pname_width = FNames[i].length();
+		}
+	}
+	if (pname_width>60) pname_width = 60;
+
 	ostringstream ret;
-	if (which & status_FNames    ) ret << "Parameter           ";
-	if (which & status_FCurrent  ) ret << "Current Value       ";
-	if (which & status_FLastTurn ) ret << "LastTurn            ";
-	if (which & status_GCurrent  ) ret << "Current Gradient    ";
-	if (which & status_FDirection) ret << "Direction           ";
+	if (which & status_FNames    ) {
+		ret.width(pname_width);
+		ret << std::left << "Parameter";
+	}
+	if (which & status_FCurrent       ) ret << "Current Value       ";
+	if (which & status_FLastTurn      ) ret << "LastTurn            ";
+	if (which & status_GCurrent       ) ret << "Current Gradient    ";
+	if (which & status_FDirection     ) ret << "Direction           ";
+	if (which & status_FDirectionLarge) ret << "Problematic";
 	ret << "\n";
+
 	for (unsigned i=0; i<dF(); i++) {
+		ret << std::setprecision(6);
 		if (which & status_FNames    ) {
-			ret.width(20);
-			ret << FNames[i];
+			ret.width(pname_width);
+			ret << std::left << FNames[i];
 		}
 		if (which & status_FCurrent  ) {
 			ret.width(20);
@@ -1062,6 +1110,26 @@ string sherpa::printStatus(int which) const
 		if (which & status_FDirection) {
 			ret.width(20);
 			ret << FDirection[i];
+		}
+		if (which & status_FDirectionLarge) {
+			ret.width( total_tol==0? 12:5);
+			if (fabs(FDirection[i])>fabs(ReadFCurrent()[i])*100) {
+				ret << "****";
+			} else if (fabs(FDirection[i])>fabs(ReadFCurrent()[i])*10) {
+				ret << "***";
+			} else if (fabs(FDirection[i])>fabs(ReadFCurrent()[i])) {
+				ret << "**";
+			} else if (fabs(FDirection[i])>fabs(ReadFCurrent()[i])*0.1) {
+				ret << "*";
+			} else
+			ret << "-";
+			if (total_tol!=0) {
+				ret.width( 7 );
+				ret << std::fixed;
+				ret << std::setprecision(4);
+				ret << fabs(GCurrent[i]*FDirection[i])/fabs(total_tol);
+				ret.unsetf(ios_base::floatfield);
+			}
 		}
 		ret << "\n";
 	}

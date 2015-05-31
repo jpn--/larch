@@ -173,6 +173,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 ,  ndarray* Cond_Prob
 ,	etk::ndarray* AdjProbability
 , const VAS_System* Xylem
+, const bool& option_mute_nan_warnings
 , etk::logging_service* msgr
 )
 : nNodes          (nNodes)
@@ -185,6 +186,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , Cond_Prob       (Cond_Prob)
 , AdjProbability  (AdjProbability)
 , Xylem           (Xylem)
+, option_mute_nan_warnings (option_mute_nan_warnings)
 , msg_            (msgr)
 {
 	Workspace.resize(nNodes);
@@ -284,7 +286,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 //		   );
 
 		// NANCHECK
-		if (true) {
+		if (!option_mute_nan_warnings) {
 			bool found_nan = false;
 			for (unsigned a=0; a<AdjProbability->size2();a++) {
 				if (isNan((*AdjProbability)(c,a))) {

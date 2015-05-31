@@ -170,12 +170,12 @@ void elm::ComponentList::receive_utility_ca(const std::string& column_name,
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	push_back( x );
-	if (parentmodel && parentmodel->_Data) {
+	if (parentmodel && parentmodel->_Data && column_name!="1") {
 		if (parentmodel) BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCA data";
 		parentmodel->_Data->check_ca(column_name);
 	}
 	if (parentmodel) {
-		INFO(parentmodel->msg) << "success: added "<<column_name;
+		MONITOR(parentmodel->msg) << "success: added "<<column_name;
 		//parentmodel->freshen();
 	}
 	
@@ -196,12 +196,12 @@ void elm::ComponentList::receive_allocation(const std::string& column_name,
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	push_back( x );
-	if (parentmodel && parentmodel->_Data) {
+	if (parentmodel && parentmodel->_Data && column_name!="1") {
 		if (parentmodel) BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCO data";
 		parentmodel->_Data->check_co(column_name);
 	}
 	if (parentmodel) {
-		INFO(parentmodel->msg) << "success: added "<<column_name;
+		MONITOR(parentmodel->msg) << "success: added "<<column_name;
 		//parentmodel->freshen();
 	}
 	
@@ -284,7 +284,7 @@ void elm::ComponentList::receive_utility_co_kwd
 	}
 
 	if (parentmodel) {
-		INFO(parentmodel->msg) << "success: added "<<column_name;
+		MONITOR(parentmodel->msg) << "success: added "<<column_name;
 		//parentmodel->freshen();
 	}
 
@@ -1047,31 +1047,34 @@ std::string elm::ComponentGraphDNA::__repr__() const
 }
 
 
-
+#define SORTING_LOG BUGGER_
 
 std::list<elm::cellcode> elm::ComponentGraphDNA::branches_ascending_order(etk::logging_service* msg) const
 {
-	BUGGER_(msg, "Getting branches in ascending order...");
+	SORTING_LOG(msg, "Getting branches in ascending order...");
 	cellcodeset Elementals = elemental_codes();
+	SORTING_LOG(msg, "  there are "<<Elementals.size()<<" elemental_codes");
 	cellcodeset all = all_node_codes();
+	SORTING_LOG(msg, "  there are "<<all.size()<<" all_node_codes");
 	ComponentCellcodeMap::const_iterator b;
 	std::list<elm::cellcode> Branches;
 	std::list<elm::cellcode>::iterator hop;
 	
 	std::map< elm::cellcode, elm::cellcodeset > down_nodes;
-	BUGGER_(msg, "Mapping all down nodes...");
+	SORTING_LOG(msg, "Mapping all down nodes...");
 	for (std::set<elm::cellcode>::iterator a=all.begin(); a!=all.end(); a++) {
 		down_nodes[*a] = dn_node_codes(*a);
+		SORTING_LOG(msg, "  all down nodes for "<< *a << " (there are "<< down_nodes[*a].size() <<")...");
 	}
 	
 	// Sort Branches into an ascending order
-	BUGGER_(msg, "Setting default root node...");
+	SORTING_LOG(msg, "Setting default root node...");
 	ComponentCellcodeMap::const_iterator root_iter = nodes->end();
-	BUGGER_(msg, "Sorting "<<nodes->size()<<" branches...");
+	SORTING_LOG(msg, "Sorting "<<nodes->size()<<" branches...");
 	int b_count = 0;
 	for (b = nodes->begin(); b!=nodes->end(); b++) {
-		BUGGER_(msg, "Branch:"<<b_count++);
-		BUGGER_(msg, "    is:"<<b->first);
+		SORTING_LOG(msg, "Branch:"<<b_count++);
+		SORTING_LOG(msg, "    is:"<<b->first);
 		if (b->first == 0) {
 			root_iter = b;
 			continue;
@@ -1079,7 +1082,7 @@ std::list<elm::cellcode> elm::ComponentGraphDNA::branches_ascending_order(etk::l
 		if (Elementals.contains(b->first)) continue;
 		hop = Branches.begin();
 		while ( hop!=Branches.end() && !down_nodes[*hop].contains(b->first) ) hop++;
-		BUGGER_(msg, "  inserting "<<b->first);
+		SORTING_LOG(msg, "  inserting "<<b->first);
 		Branches.insert(hop,b->first);
 	}
 	if (Branches.size()==0 || Branches.back() != root_code) {

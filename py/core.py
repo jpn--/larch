@@ -625,11 +625,12 @@ class QuerySet(object):
     def all_alts_always_available(self) -> "bool" : return _core.QuerySet_all_alts_always_available(self)
     __swig_destroy__ = _core.delete_QuerySet
     __del__ = lambda self : None;
-    def __init__(self, validator : 'Facet'=None): 
-        this = _core.new_QuerySet(validator)
+    def __init__(self, validator : 'Facet'=None, validator2 : 'PyObject *'=None): 
+        this = _core.new_QuerySet(validator, validator2)
         try: self.this.append(this)
         except: self.this = this
-    def set_validator(self, *args) -> "void" : return _core.QuerySet_set_validator(self, *args)
+    def set_validator_(self, *args) -> "void" : return _core.QuerySet_set_validator_(self, *args)
+    def get_validator(self) -> "PyObject *" : return _core.QuerySet_get_validator(self)
     def __repr__(self) -> "std::string" : return _core.QuerySet___repr__(self)
     def actual_type(self) -> "std::string" : return _core.QuerySet_actual_type(self)
     def pickled(self) -> "PyObject *" : return _core.QuerySet_pickled(self)
@@ -643,6 +644,9 @@ class QuerySet(object):
     	self.__init__()
     	for key, value in state.items():
     		getattr(self,key)(value)
+    def set_validator(self, v):
+    	self.set_validator_(v,v)
+    	
 
 QuerySet_swigregister = _core.QuerySet_swigregister
 QuerySet_swigregister(QuerySet)
@@ -673,6 +677,7 @@ class QuerySetSimpleCO(QuerySet):
     def set_choice_column(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_choice_column(self, *args)
     def set_choice_column_map(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_choice_column_map(self, *args)
     def set_avail_column_map(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_avail_column_map(self, *args)
+    def set_avail_query(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_avail_query(self, *args)
     def set_avail_all(self) -> "void" : return _core.QuerySetSimpleCO_set_avail_all(self)
     def set_weight_column(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_weight_column(self, *args)
     def set_alts_query(self, *args) -> "void" : return _core.QuerySetSimpleCO_set_alts_query(self, *args)
@@ -681,6 +686,7 @@ class QuerySetSimpleCO(QuerySet):
     def get_choice_column(self) -> "std::string" : return _core.QuerySetSimpleCO_get_choice_column(self)
     def get_choice_column_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetSimpleCO_get_choice_column_map(self)
     def get_avail_column_map(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetSimpleCO_get_avail_column_map(self)
+    def get_avail_query(self) -> "std::string" : return _core.QuerySetSimpleCO_get_avail_query(self)
     def get_weight_column(self) -> "std::string" : return _core.QuerySetSimpleCO_get_weight_column(self)
     def get_alts_query(self) -> "std::string" : return _core.QuerySetSimpleCO_get_alts_query(self)
     def _get_alts_values(self) -> "std::map< long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > >" : return _core.QuerySetSimpleCO__get_alts_values(self)
@@ -880,6 +886,8 @@ class Facet(SQLiteDB,Fountain):
     def caseids(self, firstcasenum : 'unsigned int const &'=0, numberofcases : 'unsigned int const &'=0, 
     no_error_checking : 'int'=0) -> "std::vector< long long,std::allocator< long long > >" : return _core.Facet_caseids(self, firstcasenum, numberofcases, no_error_checking)
     def altids(self) -> "std::vector< long long,std::allocator< long long > >" : return _core.Facet_altids(self)
+    def cache_alternative_names(self) -> "boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > >" : return _core.Facet_cache_alternative_names(self)
+    def cache_alternative_codes(self) -> "boosted::shared_ptr< std::vector< long long,std::allocator< long long > > >" : return _core.Facet_cache_alternative_codes(self)
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.Facet_alternative_names(self)
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >" : return _core.Facet_alternative_codes(self)
     def alternative_name(self, *args) -> "std::string" : return _core.Facet_alternative_name(self, *args)
@@ -914,6 +922,7 @@ class Facet(SQLiteDB,Fountain):
     def all_alts_always_available(self) -> "bool" : return _core.Facet_all_alts_always_available(self)
     def _array_idco_reader(self, *args) -> "void" : return _core.Facet__array_idco_reader(self, *args)
     def _array_idca_reader(self, *args) -> "void" : return _core.Facet__array_idca_reader(self, *args)
+    def _array_idca_reader_blind(self, *args) -> "void" : return _core.Facet__array_idca_reader_blind(self, *args)
     def sql(self):
     	print("sql_idco:   %s"%(self.sql_idco   if self.sql_idco   else "<blank>"))
     	print("sql_idca:   %s"%(self.sql_idca   if self.sql_idca   else "<blank>"))
@@ -1318,6 +1327,7 @@ class ComponentCellcodeMap(object):
     def __len__(self) -> "int" : return _core.ComponentCellcodeMap___len__(self)
     def _create(self, *args) -> "void" : return _core.ComponentCellcodeMap__create(self, *args)
     def _link(self, *args) -> "void" : return _core.ComponentCellcodeMap__link(self, *args)
+    def nodes(self) -> "std::vector< elm::cellcode,std::allocator< elm::cellcode > >" : return _core.ComponentCellcodeMap_nodes(self)
     __swig_destroy__ = _core.delete_ComponentCellcodeMap
     __del__ = lambda self : None;
 ComponentCellcodeMap_swigregister = _core.ComponentCellcodeMap_swigregister
@@ -1435,6 +1445,7 @@ class LinearCOBundle_2(object):
     def __contains__(self, *args) -> "bool" : return _core.LinearCOBundle_2___contains__(self, *args)
     def __len__(self) -> "int" : return _core.LinearCOBundle_2___len__(self)
     def __call__(self, *args) -> "void" : return _core.LinearCOBundle_2___call__(self, *args)
+    def links(self) -> "::std::vector< elm::cellcodepair,std::allocator< elm::cellcodepair > >" : return _core.LinearCOBundle_2_links(self)
     __swig_destroy__ = _core.delete_LinearCOBundle_2
     __del__ = lambda self : None;
 LinearCOBundle_2_swigregister = _core.LinearCOBundle_2_swigregister
@@ -1499,24 +1510,31 @@ ComponentGraphDNA_swigregister = _core.ComponentGraphDNA_swigregister
 ComponentGraphDNA_swigregister(ComponentGraphDNA)
 
 def __LinearFunction__call(self, *args, **kwargs):
-	if (self._receiver_type==0):
-		raise LarchError("LinearFunction improperly initialized")
-	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
-		self.receive_utility_ca(*args, **kwargs)
-	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
-		if len(kwargs)>0 and len(args)==0:
-			self.receive_utility_co_kwd(**kwargs)
-		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
-			self.receive_utility_co(*args)
+	try:
+		if (self._receiver_type==0):
+			raise LarchError("LinearFunction improperly initialized")
+		elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
+			self.receive_utility_ca(*args, **kwargs)
+		elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
+			if len(kwargs)>0 and len(args)==0:
+				self.receive_utility_co_kwd(**kwargs)
+			elif len(kwargs)==0 and len(args)>0:
+				if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
+				self.receive_utility_co(*args)
+			else:
+				raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
+		elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
+			self.receive_allocation(*args, **kwargs)
 		else:
-			raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
-	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
-		self.receive_allocation(*args, **kwargs)
-	else:
-		raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
-	####if self.parentmodel:
-	####	self.parentmodel.freshen()
+			raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
+		####if self.parentmodel:
+		####	self.parentmodel.freshen()
+	except TypeError:
+		for arg in args:
+			print('type=',type(arg), 'value=',arg)
+		for key,arg in kwargs.items():
+			print('key=',key,'type=',type(arg), 'value=',arg)
+		raise
 LinearFunction.__call__ = __LinearFunction__call
 del __LinearFunction__call
 LinearFunction.__long_len = LinearFunction.__len__
@@ -1554,16 +1572,20 @@ class model_options_t(object):
     force_recalculate = _swig_property(_core.model_options_t_force_recalculate_get, _core.model_options_t_force_recalculate_set)
     teardown_after_estimate = _swig_property(_core.model_options_t_teardown_after_estimate_get, _core.model_options_t_teardown_after_estimate_set)
     weight_autorescale = _swig_property(_core.model_options_t_weight_autorescale_get, _core.model_options_t_weight_autorescale_set)
+    suspend_xylem_rebuild = _swig_property(_core.model_options_t_suspend_xylem_rebuild_get, _core.model_options_t_suspend_xylem_rebuild_set)
+    log_turns = _swig_property(_core.model_options_t_log_turns_get, _core.model_options_t_log_turns_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
     def __init__(self, threads : 'int'=1, calc_null_likelihood : 'bool'=True, null_disregards_holdfast : 'bool'=True, 
     calc_std_errors : 'bool'=True, gradient_diagnostic : 'int'=0, 
     hessian_diagnostic : 'int'=0, mute_nan_warnings : 'bool'=True, force_finite_diff_grad : 'bool'=False, 
     save_db_hash : 'bool'=False, force_recalculate : 'bool'=False, 
     author : 'std::string'="Chuck Finley", teardown_after_estimate : 'bool'=True, 
-    weight_autorescale : 'bool'=True): 
+    weight_autorescale : 'bool'=True, suspend_xylem_rebuild : 'bool'=False, 
+    log_turns : 'bool'=False): 
         this = _core.new_model_options_t(threads, calc_null_likelihood, null_disregards_holdfast, calc_std_errors, gradient_diagnostic, 
     hessian_diagnostic, mute_nan_warnings, force_finite_diff_grad, 
-    save_db_hash, force_recalculate, author, teardown_after_estimate, weight_autorescale)
+    save_db_hash, force_recalculate, author, teardown_after_estimate, weight_autorescale, 
+    suspend_xylem_rebuild, log_turns)
         try: self.this.append(this)
         except: self.this = this
     def __call__(self, *args, **kwargs) -> "void" : return _core.model_options_t___call__(self, *args, **kwargs)
@@ -1582,6 +1604,10 @@ class model_options_t(object):
     		if k[0:2]!="__" and k not in ['copy', 'this', 'thisown', '_as_dict']:
     			dct[k] = getattr(self, k)
     	return dct
+    def __setattr__(self, key, value):
+    	if key not in dir(self) and key not in ['copy', 'this', 'thisown', '_as_dict']:
+    		raise TypeError( "cannot create the new attribute '%s' for %s" % (str(key),str(type(self))) )
+    	super(model_options_t, self).__setattr__(key, value)
 
     __swig_destroy__ = _core.delete_model_options_t
     __del__ = lambda self : None;
@@ -1702,6 +1728,9 @@ class ParameterList(object):
     def __delitem__(self, *args) -> "void" : return _core.ParameterList___delitem__(self, *args)
     def __contains__(self, *args) -> "bool" : return _core.ParameterList___contains__(self, *args)
     def _len(self) -> "size_t" : return _core.ParameterList__len(self)
+    def alias(self, *args) -> "freedom_alias &" : return _core.ParameterList_alias(self, *args)
+    def del_alias(self, *args) -> "void" : return _core.ParameterList_del_alias(self, *args)
+    def unlink_alias(self, *args) -> "void" : return _core.ParameterList_unlink_alias(self, *args)
     def values(self, *args) -> "void" : return _core.ParameterList_values(self, *args)
     def zeros(self) -> "PyObject *" : return _core.ParameterList_zeros(self)
     def constraints(self) -> "PyObject *" : return _core.ParameterList_constraints(self)
@@ -1712,6 +1741,21 @@ ParameterList_swigregister = _core.ParameterList_swigregister
 ParameterList_swigregister(ParameterList)
 
 ParameterList.__len__ = lambda self: int(self._len())
+
+class ParameterAlias(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    name = _swig_property(_core.ParameterAlias_name_get, _core.ParameterAlias_name_set)
+    refers_to = _swig_property(_core.ParameterAlias_refers_to_get, _core.ParameterAlias_refers_to_set)
+    multiplier = _swig_property(_core.ParameterAlias_multiplier_get, _core.ParameterAlias_multiplier_set)
+    def __init__(self, *args): 
+        this = _core.new_ParameterAlias(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _core.delete_ParameterAlias
+    __del__ = lambda self : None;
+ParameterAlias_swigregister = _core.ParameterAlias_swigregister
+ParameterAlias_swigregister(ParameterAlias)
 
 class Parameter(object):
     """
@@ -1927,20 +1971,26 @@ class Model2(sherpa):
         return val
 
     def provision(self, *args) -> "void" :
-        if len(args)==0 and hasattr(self,'db') and isinstance(self.db,DB):
-        	args = (self.db.provision(self.needs()), )
+        if len(args)==0:
+        	if hasattr(self,'db') and isinstance(self.db,DB):
+        		args = (self.db.provision(self.needs()), )
+        	else:
+        		raise LarchError('model has no db specified for provisioning')
 
 
         return _core.Model2_provision(self, *args)
 
     def is_provisioned(self, ex : 'bool'=True) -> "int" : return _core.Model2_is_provisioned(self, ex)
     def Data(self, *args) -> "elm::darray const *" : return _core.Model2_Data(self, *args)
+    def DataEdit(self, *args) -> "elm::darray *" : return _core.Model2_DataEdit(self, *args)
     def loglike(self, *args) -> "double" : return _core.Model2_loglike(self, *args)
     def calc_utility(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility(self, *args)
     def calc_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_probability(self, *args)
     def calc_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_logsums(self, *args)
     def calc_utility_probability(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility_probability(self, *args)
     def calc_utility_logsums(self, *args) -> "std::shared_ptr< etk::ndarray >" : return _core.Model2_calc_utility_logsums(self, *args)
+    def calculate_parameter_covariance(self) -> "void" : return _core.Model2_calculate_parameter_covariance(self)
+    def alias_names(self) -> "std::vector< std::string,std::allocator< std::string > >" : return _core.Model2_alias_names(self)
     def probability(self, params : 'etk::ndarray *'=None) -> "etk::ndarray *" : return _core.Model2_probability(self, params)
     hessian_matrix = _swig_property(_core.Model2_hessian_matrix_get, _core.Model2_hessian_matrix_set)
     def parameter_values(self, *args) -> "void" : return _core.Model2_parameter_values(self, *args)
@@ -1993,7 +2043,12 @@ class Model2(sherpa):
         from .logging import easy_logging_active
         if easy_logging_active():
         	self.logger(True)
-        self._pull_graph_from_db()
+        try:
+        	self._pull_graph_from_db()
+        except LarchError:
+        	pass
+        from .utilities import dicta
+        self.descriptions = dicta()
 
 
 
@@ -2005,7 +2060,10 @@ class Model2(sherpa):
         	self._ref_to_db = args[0]
         except IndexError:
         	self._ref_to_db = None
-        self._pull_graph_from_db()
+        try:
+        	self._pull_graph_from_db()
+        except LarchError:
+        	pass
 
 
         return val

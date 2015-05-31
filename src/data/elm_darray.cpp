@@ -270,6 +270,30 @@ elm::darray::darray(PyObject* source_arr)
 	set_variables(vs);
 }
 
+
+
+
+elm::darray::darray(int dtype, int ncases, int nalts, int nvars)
+: elm::darray_req(3,dtype,nalts)
+, _repository("Array",dtype,ncases,nalts,nvars)
+{
+}
+
+elm::darray::darray(int dtype, int ncases, int nvars)
+: elm::darray_req(2,dtype)
+, _repository("Array",dtype,ncases,nvars)
+{
+}
+
+elm::darray::darray(int dtype, int ncases)
+: elm::darray_req(1,dtype)
+, _repository("Array",dtype,ncases)
+{
+}
+
+
+
+
 elm::darray::~darray()
 {
 	_repository.destroy();

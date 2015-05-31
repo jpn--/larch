@@ -25,22 +25,36 @@
 
 elm::QuerySet::~QuerySet()
 {
-	
+	Py_CLEAR(this->py_validator);
 }
 
 
-elm::QuerySet::QuerySet(elm::Facet* validator)
+elm::QuerySet::QuerySet(elm::Facet* validator, PyObject* validator2)
 : validator (validator)
+, py_validator(nullptr)
 {
-	
+	Py_XINCREF(validator2);
+	this->py_validator = validator2;
 }
 
 
-void elm::QuerySet::set_validator(elm::Facet* validator)
+void elm::QuerySet::set_validator_(elm::Facet* validator, PyObject* validator2)
 {
+	Py_CLEAR(this->py_validator);
+
 	this->validator = validator;
+	Py_XINCREF(validator2);
+	this->py_validator = validator2;
 }
 
+PyObject* elm::QuerySet::get_validator()
+{
+	if (this->py_validator) {
+		Py_INCREF(this->py_validator);
+		return this->py_validator;
+	}
+	Py_RETURN_NONE;
+}
 
 
 std::string elm::QuerySet::__repr__() const

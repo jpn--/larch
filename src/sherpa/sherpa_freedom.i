@@ -19,6 +19,7 @@
  */
 
 
+%rename(ParameterAlias) freedom_alias;
 %rename(Parameter) freedom_info;
 %feature("kwargs", 1) elm::freedom_info::update;
 

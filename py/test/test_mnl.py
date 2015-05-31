@@ -76,7 +76,7 @@ class TestMTC(ELM_TestCase):
 	def test_model2_mnl(self):
 		d = self._db
 		m = Model (d)
-		m.option.calculate_std_err = 0
+		m.option.calc_std_errors = False
 		m.parameter("cost",-0.01) 
 		m.parameter("tottime",0) 
 		m.parameter("con2",0) 
@@ -142,7 +142,7 @@ class TestMTC(ELM_TestCase):
 	def test_model2_mnl_with_constant_parameter(self):
 		d = self._db
 		m = Model (d)
-		m.option.calculate_std_err = 0
+		m.option.calc_std_errors = False
 		m.parameter("cost",-0.01) 
 		m.parameter("con2",0) 
 		m.parameter("con3",0) 
@@ -185,7 +185,7 @@ class TestMTC(ELM_TestCase):
 	def test_model2_mnl_with_holdfast_parameter(self):
 		d = self._db
 		m = Model (d)
-		m.option.calculate_std_err = 0
+		m.option.calc_std_errors = False
 		m.parameter("cost",-0.01)
 		m.parameter("time",-0.001, holdfast=1)
 		m.parameter("con2",0) 
@@ -246,6 +246,53 @@ class TestMTC(ELM_TestCase):
 		m.estimate()
 
 
+	def test_model2_mnl_with_alias_parameter(self):
+		d = self._db
+		m = Model (d)
+		m.option.calc_std_errors = False
+		m.parameter("cost",-0.01)
+		m.parameter("time",-0.001)
+		m.parameter("con2",0) 
+		m.parameter("con3",0) 
+		m.parameter("con4",0.1) 
+		m.parameter("con5",0) 
+		m.parameter("con6",0) 
+		m.parameter("inc2",0.1) 
+		m.parameter("inc3",0) 
+		m.parameter("inc4",0) 
+		m.parameter("inc5",0) 
+		m.parameter("inc6",0) 
+		m.utility.ca("tottime","time")
+		m.utility.ca("totcost","cost")
+		m.utility.co("HHINC","SR2","inc2") 
+		m.utility.co("HHINC","SR3+","inc3") 
+		m.utility.co("HHINC","Tran","inc4") 
+		m.utility.co("HHINC","Bike","inc5") 
+		m.utility.co("HHINC","Walk","inc6") 
+		m.utility.co("1","SR2","con2") 
+		m.utility.co("1","SR3+","con3") 
+		m.utility.co("1","Tran","con4") 
+		m.utility.co("1","Bike","con5") 
+		m.utility.co("1","Walk","con6") 
+		m.alias("cost", "time", 1.0)
+		m.setUp()
+		self.assertAlmostEqual(-27082.08468362813, m.loglike(), delta=0.05)
+		g = m.d_loglike()
+		self.assertEqual(11, len(g))
+		self.assertAlmostEqual(   -187015.11988655446, g[0 ], delta=.5 )
+		self.assertAlmostEqual(   4130.665795197024,   g[1 ], delta=.5 )
+		self.assertAlmostEqual(   -43.15184299217523,  g[2 ], delta=.005 )
+		self.assertAlmostEqual(  -400.2936592090151,   g[3 ], delta=.0000005 )
+		self.assertAlmostEqual(  -16.881507840220,     g[4 ], delta=.0005 )
+		self.assertAlmostEqual(   -124.63236050685,    g[5 ], delta=.000005 )
+		self.assertAlmostEqual(  255383.056358671,     g[6 ], delta=.0005 )
+		self.assertAlmostEqual(    -6796.808724221511, g[7 ], delta=.5 )
+		self.assertAlmostEqual(  -24443.198884079553,  g[8 ], delta=.005 )
+		self.assertAlmostEqual(  -1553.1927312531757,  g[9 ], delta=.05 )
+		self.assertAlmostEqual(  -6347.310737255839,   g[10], delta=.0005 )
+
+
+
 
 class TestMNL(ELM_TestCase):
 
@@ -255,7 +302,7 @@ class TestMNL(ELM_TestCase):
 	def test_model2_mnl_simulate_probabilities(self):
 		d=DB.Example()
 		m=Model(d)
-		m.option.calculate_std_err = 0
+		m.option.calc_std_errors = False
 		m.parameter("cost",-0.00491995) 
 		m.parameter("time",-0.0513384) 
 		m.parameter("con2", -2.17804) 
@@ -320,7 +367,7 @@ class TestMNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic=0
-		m.option.calculate_std_err=1
+		m.option.calc_std_errors=True
 		m.setUp()
 		m.estimate()
 		self.assertAlmostEqual( -5331.252006978, m.LL(), 6 )
@@ -364,7 +411,7 @@ class TestMNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic=0
-		m.option.calculate_std_err=1
+		m.option.calc_std_errors=True
 		m.estimate()
 		self.assertAlmostEqual( -5273.743, m.LL(), 3 )
 		self.assertAlmostEqual( -0.7565,   m.parameter("ASC_TRAIN").value,4 )
@@ -430,4 +477,6 @@ class TestMNL(ELM_TestCase):
 							-0.009686263668346087, -0.05134043022343194, -0.004920362964462176])
 		pr = numpy.array([[ 0.8174641 ,  0.07770958,  0.01790577,  0.0714228 ,  0.01549774, 0.        ]])
 		m.freshen()
+		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
+		av = m.db.array_avail_blind()[0][0:1,:,:]
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )

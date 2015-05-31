@@ -3,7 +3,7 @@ def info(self):
 	s = ""
 	from .core import IntStringDict
 	d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
-	p = lambda x: str(d(x)).replace("\n","\n           \t")
+	p = lambda x: str(d(x)).strip().replace("\n","\n           \t")
 	s += "idco query:\t{}\n".format(p(self.get_idco_query()))
 	s += "alts query:\t{}\n".format(p(self.get_alts_query()))
 	s += "choice:    \t{}\n".format(p(self.choice))
@@ -60,12 +60,16 @@ def set_avail(self, x):
 		self.set_avail_all()
 	elif isinstance(x,bool) and x is True:
 		self.set_avail_all()
+	elif isinstance(x,str):
+		self.set_avail_query(x)
 	else:
 		self.set_avail_column_map(x)
 
 def get_avail(self):
 	if self.all_alts_always_available():
 		return True
+	if self.get_avail_query() != "":
+		return self.get_avail_query()
 	return self.get_avail_column_map()
 
 
@@ -125,6 +129,34 @@ query is defined that can be used with no table.
 
 
 alts_values = property(lambda self: self._get_alts_values(), lambda self,w: self.set_alts_values(w), None, _alts_values_doc)
+
+
+
+def quality_check(self):
+	warns = []
+	validator = self.get_validator()
+	if validator is None:
+		return
+	if not (self.avail is True) and not isinstance(self.avail, str):
+		import warnings
+		for altnum, altavail in dict(self.avail).items():
+			try:
+				altname = "{} (Alt {})".format( self.alts_values[altnum], altnum )
+			except (KeyError, IndexError):
+				altname = "Alt {}".format(altnum)
+			bads = validator.value("SELECT count(*) FROM larch_idco WHERE NOT ({0}) AND ({1}={2})".format(altavail,self.choice,altnum),cte=True)
+			if bads > 0:
+				warns += ["Warning: {} has {} instances where it is chosen but explicitly not available".format(altname, bads),]
+				warnings.warn(warns[-1], stacklevel=2)
+			nulls = validator.value("SELECT count(*) FROM larch_idco WHERE ({0}) IS NULL AND ({1}={2})".format(altavail,self.choice,altnum),cte=True)
+			if nulls > 0:
+				warns += ["Warning: {} has {} instances where it is chosen but implicitly not available (criteria evaluates NULL)".format(altname, nulls),]
+				warnings.warn(warns[-1], stacklevel=2)
+	elif not (self.avail is True) and isinstance(self.avail, str) and validator is not None:
+		pass
+		# m.Data("Choice")[~m.Data("Avail")].sum() > 0 means problems
+	return warns
+
 
 
 

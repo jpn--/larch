@@ -170,11 +170,11 @@ def spew(level=10):
 
 _easy_logger = None
 
-def easy(level=20, label=""):
+def easy(level=-1, label=""):
 	global _easy_logger
 	if isinstance(level, str):
 		label_ = level
-		level = label if isinstance(label, int) else 20
+		level = label if isinstance(label, int) else -1
 		label = label_
 	if isinstance(label, int):
 		level_ = label
@@ -182,8 +182,8 @@ def easy(level=20, label=""):
 		level = level_
 	if _easy_logger is None:
 		scribe_to_stream()
-		setLevel(level)
 		_easy_logger = 1
+	if level>0: setLevel(level)
 	return logging.getLogger(label).critical
 
 def easy_debug(label=""):

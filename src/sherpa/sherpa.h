@@ -38,6 +38,7 @@
 #define SHERPA_BAD       -4
 #define SHERPA_FATAL     -5
 #define SHERPA_MAXITER   -6
+#define SHERPA_NAN_TOL   -7
 
 #define LINE_SEARCH_SUCCESS_BIG		( 2)
 #define LINE_SEARCH_SUCCESS_SMALL	( 1)
@@ -73,10 +74,11 @@ public:
 	void finite_diff_gradient(etk::memarray& fGrad);
 	void finite_diff_hessian (etk::triangle& fHESS);
 	
-	double gradient_diagnostic ();
+	double gradient_diagnostic (bool shout=false);
 	double hessian_diagnostic () ;
 	int flag_gradient_diagnostic;
 	int flag_hessian_diagnostic;
+	int flag_log_turns;
 
 protected:
 	void allocate_memory();
@@ -142,18 +144,20 @@ public:
 //	std::map<std::string,freedom_info> FInfo;
 protected:
 	void _update_freedom_info(const etk::triangle* ihess=NULL, const etk::triangle* robust_covar=NULL);
+	void _update_freedom_info_best();
 	
 public:
 	void reset_to_initial_value();
 	void refresh_initial_value();
 
 public:
-#define status_FNames       0x1
-#define status_FCurrent     0x2
-#define status_FLastTurn    0x4
-#define status_FDirection   0x8	
-#define status_GCurrent     0x10
-	std::string printStatus(int which=0x3) const;
+#define status_FNames            0x01
+#define status_FCurrent          0x02
+#define status_FLastTurn         0x04
+#define status_FDirection        0x08
+#define status_GCurrent          0x10
+#define status_FDirectionLarge   0x20
+	std::string printStatus(int which=0x3, double total_tol=0) const;
 	
 protected:
 	double ZCurrent;
@@ -165,6 +169,7 @@ public:
 	
 public:
 	const etk::memarray& ReadFCurrent() const {return FCurrent;};
+	const etk::memarray& ReadFBest() const {return FBest;};
 	std::string ReadFCurrentAsString() const;
 	
 protected:

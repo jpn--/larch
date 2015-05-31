@@ -140,12 +140,13 @@ namespace etk {
 
 
 
-#define BUGGER(msgr)  etk::log_instance((msgr),05)
+#define BUGGER(msgr)  etk::log_instance((msgr), 5)
 #define MONITOR(msgr) etk::log_instance((msgr),10)
 #define INFO(msgr)    etk::log_instance((msgr),20)
 #define WARN(msgr)    etk::log_instance((msgr),30)
 #define ERRO(msgr)    etk::log_instance((msgr),40)
 #define FATAL(msgr)   etk::log_instance((msgr),50)
+#define SHOUT(msgr)   etk::log_instance((msgr),60)
 
 #define BUGGER_BUFFER(msgr)  (msgr).buffered_message
 #define MONITOR_BUFFER(msgr) (msgr).buffered_message
@@ -156,7 +157,7 @@ namespace etk {
 
 #define QUIET(msgr)  (void) 0
 
-#define BUGGER_(msgr_ptr, message) {if (msgr_ptr) { etk::log_instance(*(msgr_ptr),05) << message; } else { }}
+#define BUGGER_(msgr_ptr, message) {if (msgr_ptr) { etk::log_instance(*(msgr_ptr), 5) << message; } else { }}
 #define MONITOR_(msgr_ptr, message) {if (msgr_ptr) { etk::log_instance(*(msgr_ptr),10) << message; } else { }}
 #define INFO_(msgr_ptr, message) {if (msgr_ptr) { etk::log_instance(*(msgr_ptr),20) << message; } else { }}
 #define WARN_(msgr_ptr, message) {if (msgr_ptr) { etk::log_instance(*(msgr_ptr),30) << message; } else { }}

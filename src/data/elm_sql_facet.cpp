@@ -47,6 +47,8 @@ elm::Facet::Facet(PyObject* pylong_ptr_to_db)
 //, _caseindex(nullptr)
 , queries(nullptr)
 , queries_ptr(nullptr)
+, _alternative_names()
+, _alternative_codes()
 {
 	try {
 //		load_facet();
@@ -440,7 +442,7 @@ PyObject* elm::Facet::_get_queries()
 	Py_XINCREF(queries);
 	return queries;
 }
-void elm::Facet::_set_queries(PyObject* q, QuerySet* qp)
+void elm::Facet::_set_queries(PyObject* q, QuerySet* qp, PyObject* facetself)
 {
 	bool time_to_update = false;
 
@@ -449,7 +451,7 @@ void elm::Facet::_set_queries(PyObject* q, QuerySet* qp)
 	}
 
 	if (qp) {
-		qp->set_validator(this);
+		qp->set_validator_(this, facetself);
 	}
 	
 	Py_XINCREF(q);
@@ -967,6 +969,8 @@ std::vector<elm::caseid_t> elm::Facet::caseids(const unsigned& firstcasenum, con
 
 std::vector<elm::cellcode> elm::Facet::altids() const
 {
+	if (!_alternative_codes.expired()) { return *(_alternative_codes.lock()); }
+
 	if (!queries_ptr) OOPS_FACET("queries not defined");
 		
 	std::ostringstream sql;
@@ -1008,9 +1012,37 @@ long long elm::Facet::alternative_code(std::string name) const
 	return eval_int64(sql.str());
 }
 
+boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_names() const
+{
+	elm::Facet* modthis = const_cast<elm::Facet*>(this);
+	
+	if (modthis->_alternative_names.expired()) {
+    	std::shared_ptr< std::vector<std::string> > x = std::make_shared< std::vector<std::string> >( alternative_names() );
+		modthis->_alternative_names = x;
+		return x;
+	} else {
+		return modthis->_alternative_names.lock();
+	}
+}
+
+boosted::shared_ptr< std::vector<long long> > elm::Facet::cache_alternative_codes() const
+{
+	elm::Facet* modthis = const_cast<elm::Facet*>(this);
+	
+	if (modthis->_alternative_codes.expired()) {
+    	std::shared_ptr< std::vector<long long> > x = std::make_shared< std::vector<long long> >( alternative_codes() );
+		modthis->_alternative_codes = x;
+		return x;
+	} else {
+		return modthis->_alternative_codes.lock();
+	}
+}
+
 
 std::vector<std::string> elm::Facet::alternative_names() const
 {
+	if (!_alternative_names.expired()) { return *(_alternative_names.lock()); }
+
 	if (!queries_ptr) OOPS_FACET("queries not defined");
 	std::ostringstream sql;
 	sql << "SELECT name FROM "+queries_ptr->tbl_alts()+" ORDER BY altid;";
@@ -1056,6 +1088,7 @@ std::string elm::Facet::alternative_name(long long code) const
 
 std::vector<elm::cellcode> elm::Facet::alternative_codes() const
 {
+	if (!_alternative_codes.expired()) { return *(_alternative_codes.lock()); }
 	return altids();
 }
 
@@ -1944,6 +1977,112 @@ void elm::Facet::_array_idca_reader(const std::string& qry, elm::darray* array, 
 }
 
 
+void elm::Facet::_array_idca_reader_blind(const std::string& qry, int arraytype, const std::vector<long long>& altids,
+											elm::darray** result_array, elm::darray** result_caseids)
+{
+	auto stmt = sql_statement_readonly(qry);
+	size_t n_cases_ = 10;
+	size_t n_alts = altids.size();
+	size_t n_vars = stmt->count_columns()-2;
+	
+	std::vector< elm::darray* > array_rows;
+	std::vector< long long > caseids_vector;
+	
+//	elm::darray caseids_ (NPY_INT64, n_cases_);
+//	elm::darray array_ (arraytype, n_cases_, n_alts, n_vars);
+
+	size_t row = 0;
+	size_t max_caserow = 0;
+	clock_t prevmsgtime = clock();
+	clock_t timenow;
+	
+	std::unordered_map<long long, size_t> caseid_map;
+	std::unordered_map<long long, size_t> altid_map;
+	
+	// initialized the alt map with altids
+	size_t j=0;
+	for (auto i=altids.begin(); i!=altids.end(); i++) {
+		altid_map[*i] = j;
+		j++;
+	}
+	
+	size_t c,a;
+	
+	stmt->execute();
+	while ((stmt->status()==SQLITE_ROW)) {
+
+		long long current_row_caseid = stmt->getInt64(0);
+		long long current_row_altid  = stmt->getInt64(1);
+		
+		auto caseiter = caseid_map.find(current_row_caseid);
+		if (caseiter == caseid_map.end()) {
+			c = caseid_map[current_row_caseid] = max_caserow;
+			caseids_vector.push_back(current_row_caseid);
+			array_rows.push_back(new elm::darray(arraytype, 1, n_alts, n_vars));
+			max_caserow++;
+		} else {
+			c = caseiter->second;
+		}
+
+		auto altiter = altid_map.find(current_row_altid);
+		if (altiter == altid_map.end()) {
+			OOPS("table contains unknown altid ",current_row_altid);
+		} else {
+			a = altiter->second;
+		}
+
+
+		timenow = clock();
+		if (timenow > prevmsgtime + (CLOCKS_PER_SEC * 3)) {
+			INFO(msg) << "blind reading idca row "<<row<<", "
+				<<"case "<< current_row_caseid << " ...";
+			prevmsgtime = clock();
+		}
+
+
+		if (arraytype == NPY_DOUBLE) {
+			for (size_t i=0; i<n_vars; i++) {
+				array_rows[c]->value_double(0,a, i) = stmt->getDouble(i+2);
+			}
+		} else if (arraytype == NPY_INT64) {
+			for (size_t i=0; i<n_vars; i++) {
+				array_rows[c]->value_int64(0,a, i) = stmt->getInt64(i+2);
+			}
+		} else if (arraytype == NPY_BOOL) {
+			for (size_t i=0; i<n_vars; i++) {
+				array_rows[c]->value_bool(0,a, i) = stmt->getBool(i+2);
+			}
+		} else {
+			OOPS("unsupported dtype");
+		}
+		row++;
+		stmt->execute();
+	}
+	
+	*result_array = new elm::darray (arraytype, array_rows.size(), n_alts, n_vars);
+	*result_caseids = new elm::darray (NPY_INT64, caseids_vector.size(), 1);
+	
+	for (c=0; c<array_rows.size(); c++) {
+
+		if (arraytype == NPY_DOUBLE) {
+			memcpy(&(*result_array)->value_double(c,0,0), &array_rows[c]->value_double(0,0,0), n_alts*n_vars*sizeof(double));
+		} else if (arraytype == NPY_INT64) {
+			memcpy(&(*result_array)->value_int64(c,0,0), &array_rows[c]->value_int64(0,0,0), n_alts*n_vars*sizeof(long long));
+		} else if (arraytype == NPY_BOOL) {
+			memcpy(&(*result_array)->value_bool(c,0,0), &array_rows[c]->value_bool(0,0,0), n_alts*n_vars*sizeof(bool));
+		} else {
+			OOPS("unsupported dtype");
+		}
+
+		delete array_rows[c];
+		array_rows[c] = nullptr;
+		
+		(*result_caseids)->value_int64(c,0,0) = caseids_vector[c];
+
+	}
+	
+
+}
 
 
 

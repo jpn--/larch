@@ -24,6 +24,7 @@
 #include <climits>
 #include "elm_vascular.h"
 #include "etk_resultcodes.h"
+#include "elm_sql_facet.h"
 
 using namespace elm;
 using namespace etk;
@@ -622,8 +623,19 @@ void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg
 }
 
 
+#define REGROW_LOG BUGGER_
+
+
 void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
 {
+	boosted::shared_ptr< std::vector<std::string> > _altnames;
+	boosted::shared_ptr< std::vector<long long  > > _altcodes;
+	
+	if (db) {
+		_altnames = db->cache_alternative_names();
+		_altcodes = db->cache_alternative_codes();
+	}
+	
 	if (nodes||edges||db||root) {
 		ComponentGraphDNA new_graph = ComponentGraphDNA(nodes, edges, db, root);
 		if (!(_graph == new_graph)) {
@@ -632,14 +644,14 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 		}
 	}
 	if (!_touch) {
-		BUGGER_(msg, "Not regrowing vascular system, touch is false.");
-		BUGGER_(msg, display());
+		REGROW_LOG(msg, "Not regrowing vascular system, touch is false.");
+		REGROW_LOG(msg, display());
 		return;
 	}
-	BUGGER_(msg, "Deleting old vascular system...");
+	REGROW_LOG(msg, "Deleting old vascular system...");
 	ungrow();
 	
-	BUGGER_(msg, "Identifying elemental alternatives...");
+	REGROW_LOG(msg, "Identifying elemental alternatives...");
 	cellcodeset Elementals;
 	if (_graph.valid()) {
 		Elementals.insert_set(_graph.elemental_codes());
@@ -657,33 +669,33 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	
 	
 	// Sort Branches into an ascending order
-	BUGGER_(msg, "Sorting branches in ascending order...");
+	REGROW_LOG(msg, "Sorting branches in ascending order...");
 	std::list< elm::cellcode > BranchesAscend;
 	if (_graph.valid()) {
-		BUGGER_(msg, "  _graph is valid");
+		REGROW_LOG(msg, "  _graph is valid");
 		BranchesAscend = _graph.branches_ascending_order(msg);
 		if (BranchesAscend.size()==0 || BranchesAscend.back()!=_graph.root_code) BranchesAscend.push_back(_graph.root_code);
 	} else {
-		BUGGER_(msg, "  _graph is not valid");
+		REGROW_LOG(msg, "  _graph is not valid");
 		BranchesAscend = _genome.branches_in_ascending_order(_graph.root_code);
 	}
 	
 	// Assemble cells
-	BUGGER_(msg, "Assembling cells...");
+	REGROW_LOG(msg, "Assembling cells...");
 	unsigned s=0;
 	for (std::set<cellcode>::iterator e=Elementals.begin(); e!=Elementals.end(); e++) {
 		_cells.push_back(VAS_Cell(*e,s++));
 		KnownNodes.insert(*e);
-		BUGGER_(msg, "  elemental alternative:" << *e);
+		REGROW_LOG(msg, "  elemental alternative:" << *e);
 	}
 	for (std::list<cellcode>::iterator b_iter = BranchesAscend.begin(); b_iter!=BranchesAscend.end(); b_iter++) {
 		_cells.push_back(VAS_Cell(*b_iter,s++));
 		KnownNodes.insert(*b_iter);
-		BUGGER_(msg, "  branch:" << *b_iter);
+		REGROW_LOG(msg, "  branch:" << *b_iter);
 	}
 	
 	// Build anatomy and name cells
-	BUGGER_(msg, "Building anatomy and name cells...");
+	REGROW_LOG(msg, "Building anatomy and name cells...");
 	if (_graph.valid()) {
 		for ( i=0; i<_cells.size(); i++) {
 			_anatomy[_cells[i].code()] = &(_cells[i]);
@@ -700,7 +712,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 
 	
 	// Create and attach edges
-	BUGGER_(msg, "Creating and attaching edges...");
+	REGROW_LOG(msg, "Creating and attaching edges...");
 	i=0;
 	if (_graph.valid()) {
 		std::list<cellcode> nao = _graph.nodes_ascending_order();
@@ -729,7 +741,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 		}
 	}
 	// Connect no-ups to the root
-	BUGGER_(msg, "Connecting loose nodes to the root...");
+	REGROW_LOG(msg, "Connecting loose nodes to the root...");
 	for (j=0; j<_cells.size()-1; j++) {
 		if (_cells[j].upsize()==0) {
 			_edges.add_back(_anatomy[_graph.root_code],_anatomy[_cells[j].code()]);
@@ -742,7 +754,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	
 	
 	// Counting
-	BUGGER_(msg, "Calculating counts...");
+	REGROW_LOG(msg, "Calculating counts...");
 	_n_elemental = Elementals.size();
 	if (_n_elemental >= _cells.size()) {
 		OOPS("in vascular::regrow, cell count (",_cells.size(),") too small for elementals count (",_n_elemental,")");
@@ -752,7 +764,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 		
 	// Setup cascading data system
 	if (_use_cascading_data) {
-		BUGGER_(msg, "Setting up cascading data system...");
+		REGROW_LOG(msg, "Setting up cascading data system...");
 		for (i=0; i<_n_elemental; i++) {
 			_cells[i]._contained_elementals.insert(_cells[i]._cell_code);
 			_cells[i]._elemental_slots.insert(_cells[i]._cell_slot);
@@ -768,7 +780,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	
 	
 	// Repoint MU parameters and offsets
-	BUGGER_(msg, "re-pointing mu parameters and offsets...");
+	REGROW_LOG(msg, "re-pointing mu parameters and offsets...");
 	unsigned offset (0);
 	if (_mu_offset) offset = *_mu_offset;
 	double* par_ptr = NULL;
@@ -790,7 +802,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	}
 	
 	// Assign PHI allocation slots
-	BUGGER_(msg, "Assigning phi allocation slots...");
+	REGROW_LOG(msg, "Assigning phi allocation slots...");
 	_n_competitive_allocations = 0;
 	_allocation_breaks.clear();
 	for (i=0; i<size(); i++) {
@@ -804,9 +816,9 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	}
 	_allocation_breaks.push_back(_n_competitive_allocations);
 	
-	BUGGER_(msg, "Vascular system regrow complete.");
+	REGROW_LOG(msg, "Vascular system regrow complete.");
 	
-	BUGGER_(msg, display());
+	REGROW_LOG(msg, display());
 	
 	
 	_touch = false;

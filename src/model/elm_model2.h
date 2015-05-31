@@ -86,20 +86,30 @@ namespace elm {
 			from .logging import easy_logging_active
 			if easy_logging_active():
 				self.logger(True)
-			self._pull_graph_from_db()
+			try:
+				self._pull_graph_from_db()
+			except LarchError:
+				pass
+			from .utilities import dicta
+			self.descriptions = dicta()
 		%}
 		%feature("pythonappend") Model2() %{
 			self._ref_to_db = None
 			from .logging import easy_logging_active
 			if easy_logging_active():
 				self.logger(True)
+			from .utilities import dicta
+			self.descriptions = dicta()
 		%}
 		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
 			try:
 				self._ref_to_db = args[0]
 			except IndexError:
 				self._ref_to_db = None
-			self._pull_graph_from_db()
+			try:
+				self._pull_graph_from_db()
+			except LarchError:
+				pass
 		%}
 		%feature("pythonappend") delete_data_pointer() %{
 			self._ref_to_db = None
@@ -229,8 +239,11 @@ namespace elm {
 			val = temp
 		%}
 		%feature("pythonprepend") provision %{
-			if len(args)==0 and hasattr(self,'db') and isinstance(self.db,DB):
-				args = (self.db.provision(self.needs()), )
+			if len(args)==0:
+				if hasattr(self,'db') and isinstance(self.db,DB):
+					args = (self.db.provision(self.needs()), )
+				else:
+					raise LarchError('model has no db specified for provisioning')
 		%}
 		#endif // def SWIG
 		std::map<std::string, elm::darray_req> needs() const;
@@ -245,6 +258,7 @@ namespace elm {
 
 	public:
 		const elm::darray* Data(const std::string& label);
+		elm::darray* DataEdit(const std::string& label);
 
 #ifndef SWIG
 
@@ -356,9 +370,16 @@ namespace elm {
 		std::shared_ptr<etk::ndarray> calc_utility_probability(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 //		std::shared_ptr<etk::ndarray> calc_utility_logsums(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
-		
+
+
+#ifdef SWIG
+		// in the swig-exposed verion of this function, always update_freedoms
+		void calculate_parameter_covariance();
+#endif
 
 #ifndef SWIG
+		// in the internal verion of this function, allow update_freedoms or not
+		void calculate_parameter_covariance(bool update_freedoms=true);
 
 
 		void mnl_probability();
@@ -379,7 +400,6 @@ namespace elm {
 		//void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
 		//void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
 	
-		void calculate_parameter_covariance();
 		
 //		std::vector<sidecar*> sidecars;
 
@@ -473,7 +493,7 @@ namespace elm {
 		int _is_setUp;
 		void _parameter_update();
 		void _parameter_log();
-		
+		std::string _parameter_report() const;
 
 //////// MARK: RECORDED RESULTS //////////////////////////////////////////////////////
 
@@ -599,6 +619,8 @@ namespace elm {
 
 
 #endif // ndef SWIG
+
+		std::vector< std::string > alias_names() const;
 
 		etk::ndarray* probability(etk::ndarray* params=nullptr);
 

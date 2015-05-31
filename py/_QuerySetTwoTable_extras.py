@@ -218,6 +218,32 @@ idca table.
 weight = property(lambda self: self.get_weight_co_column(), lambda self,w: self.set_weight_co_column(str(w)), None, _weight_doc)
 
 
+def quality_check(self):
+	warns = []
+#	validator = self.get_validator()
+#	if validator is None:
+#		return
+#	if not (self.avail is True) and not isinstance(self.avail, str):
+#		import warnings
+#		for altnum, altavail in dict(self.avail).items():
+#			try:
+#				altname = "{} (Alt {})".format( self.alts_values[altnum], altnum )
+#			except (KeyError, IndexError):
+#				altname = "Alt {}".format(altnum)
+#			bads = validator.value("SELECT count(*) FROM larch_idco WHERE NOT ({0}) AND ({1}={2})".format(altavail,self.choice,altnum),cte=True)
+#			if bads > 0:
+#				warns += ["Warning: {} has {} instances where it is chosen but explicitly not available".format(altname, bads),]
+#				warnings.warn(warns[-1], stacklevel=2)
+#			nulls = validator.value("SELECT count(*) FROM larch_idco WHERE ({0}) IS NULL AND ({1}={2})".format(altavail,self.choice,altnum),cte=True)
+#			if nulls > 0:
+#				warns += ["Warning: {} has {} instances where it is chosen but implicitly not available (criteria evaluates NULL)".format(altname, nulls),]
+#				warnings.warn(warns[-1], stacklevel=2)
+#	elif not (self.avail is True) and isinstance(self.avail, str) and validator is not None:
+#		pass
+#		# m.Data("Choice")[~m.Data("Avail")].sum() > 0 means problems
+	return warns
+
+
 spork = lambda self: print("SPORK")
 
 def _spong(self, n):

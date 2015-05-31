@@ -192,8 +192,10 @@ std::string elm::QuerySetSimpleCO::qry_avail  () const
 		}
 		if (validator) validator->sql_statement(s.str());
 		return s.str();
+	} else if (!_alt_avail_query.empty()) {
+		if (validator) validator->sql_statement(_alt_avail_query);
+		return _alt_avail_query;
 	}
-	
 	return "";
 }
 
@@ -276,6 +278,34 @@ void elm::QuerySetSimpleCO::set_choice_column_map(const std::map<long long, std:
 
 }
 
+void elm::QuerySetSimpleCO::set_avail_query(const std::string& q)
+{
+	if (q.empty()) {
+		return;
+	}
+	
+	if (_alt_avail_query == q) {
+		return;
+	}
+	
+	auto t1 = _alt_avail_columns;
+	auto t2 = _alt_avail_query;
+	_alt_avail_columns.clear();
+	_alt_avail_query = q;
+	try {
+		qry_avail();
+	} catch (etk::SQLiteError) {
+		_alt_avail_columns = t1;
+		_alt_avail_query = t2;
+		throw;
+	}
+	
+	if (validator) {
+//		validator->change_in_sql_avail();
+	}
+}
+
+
 void elm::QuerySetSimpleCO::set_avail_column_map(const std::map<long long, std::string>& cols)
 {
 	if (cols.empty()) {
@@ -287,11 +317,14 @@ void elm::QuerySetSimpleCO::set_avail_column_map(const std::map<long long, std::
 	}
 	
 	auto t1 = _alt_avail_columns;
+	auto t2 = _alt_avail_query;
 	_alt_avail_columns = cols;
+	_alt_avail_query.clear();
 	try {
 		qry_avail();
 	} catch (etk::SQLiteError) {
 		_alt_avail_columns = t1;
+		_alt_avail_query = t2;
 		throw;
 	}
 	
@@ -304,11 +337,12 @@ void elm::QuerySetSimpleCO::set_avail_all()
 {
 	bool reload = false;
 	
-	if (!_alt_avail_columns.empty()) {
+	if (!_alt_avail_columns.empty() && !_alt_avail_query.empty()) {
 		reload = true;
 	}
 	
 	_alt_avail_columns.clear();
+	_alt_avail_query.clear();
 	
 	if (reload) {
 		if (validator) {
@@ -379,26 +413,36 @@ void elm::QuerySetSimpleCO::set_alts_values(const std::map<long long, std::strin
 	if (alts.empty()) {
 		return;
 	}
-	std::ostringstream s;
-	bool joiner = false;
-	for (auto i=alts.begin(); i!=alts.end(); i++) {
-		if (joiner) {
-			s << " UNION ALL ";
-		} else {
-			joiner = true;
+	
+	
+	if (alts.size()>100) {
+	
+		OOPS("If you have more than 100 alternatives, you need to define them in a table to be queried, not with a dictionary");
+	
+	
+	} else {
+	
+		std::ostringstream s;
+		bool joiner = false;
+		for (auto i=alts.begin(); i!=alts.end(); i++) {
+			if (joiner) {
+				s << " UNION ALL ";
+			} else {
+				joiner = true;
+			}
+			s << "SELECT "<<i->first<<" AS id, \""<< i->second << "\" AS name";
 		}
-		s << "SELECT "<<i->first<<" AS id, \""<< i->second << "\" AS name";
-	}
-	if (validator) {
-		validator->sql_statement(s.str());
-		if (_alts_query != s.str()) {
-			reload = true;
+		if (validator) {
+			validator->sql_statement(s.str());
+			if (_alts_query != s.str()) {
+				reload = true;
+			}
 		}
-	}
-	_alts_query = s.str();
+		_alts_query = s.str();
 
-	if (reload) {
-		validator->change_in_sql_alts();
+		if (reload) {
+			validator->change_in_sql_alts();
+		}
 	}
 }
 
@@ -414,7 +458,7 @@ bool elm::QuerySetSimpleCO::unweighted() const
 }
 bool elm::QuerySetSimpleCO::all_alts_always_available() const
 {
-	if (_alt_avail_columns.empty()) {
+	if (_alt_avail_columns.empty() && _alt_avail_query.empty()) {
 		return true;
 	}
 	return false;
@@ -445,6 +489,12 @@ std::map<long long, std::string> elm::QuerySetSimpleCO::get_avail_column_map() c
 {
 	return _alt_avail_columns;
 }
+
+std::string elm::QuerySetSimpleCO::get_avail_query() const
+{
+	return _alt_avail_query;
+}
+
 
 
 std::string elm::QuerySetSimpleCO::get_weight_column() const

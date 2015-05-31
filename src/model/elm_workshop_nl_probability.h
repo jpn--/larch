@@ -72,6 +72,8 @@ public:
 	etk::ndarray* AdjProbability;
 	
 	etk::logging_service* msg_;
+	
+	bool option_mute_nan_warnings;
 
 	workshop_nl_probability
 	(  const unsigned&   nNodes
@@ -83,6 +85,7 @@ public:
 	 ,  etk::ndarray* Cond_Prob
 	 ,	etk::ndarray* AdjProbability
 	 , const VAS_System* Xylem
+	 , const bool& option_mute_nan_warnings
 	 , etk::logging_service* msgr=nullptr
 	 );
 	

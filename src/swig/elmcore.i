@@ -217,7 +217,7 @@ namespace std {
 #include "elm_queryset_simpleco.h"
 #include "elm_queryset_twotable.h"
 %} 
- 
+
 namespace elm {
 	void set_linalg(PyObject* mod);
 };

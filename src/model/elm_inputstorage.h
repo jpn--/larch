@@ -25,8 +25,8 @@
 
 /* Convert cellcodepair from Python --> C */
 %typemap(in) const elm::cellcodepair& (elm::cellcodepair temp) {
-	if (!PyArg_ParseTuple($input, "KK", &(temp.up), &(temp.dn))) {
-		PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+	if (!PyArg_ParseTuple($input, "LL", &(temp.up), &(temp.dn))) {
+		PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of integers"));
 		SWIG_fail;
 	};
 	$1 = &temp;
@@ -34,7 +34,16 @@
 
 /* Convert cellcodepair from C --> Python */
 %typemap(out) elm::cellcodepair {
-    $result = Py_BuildValue("KK", &(($1).up), &(($1).dn)));
+    $result = Py_BuildValue("LL", &(($1).up), &(($1).dn)));
+}
+
+%typemap(out) ::std::vector<elm::cellcodepair> {
+
+	$result = PyTuple_New((&($1))->size());
+	for (size_t j=0; j<(&($1))->size(); j++) {
+		//std::cerr << "OUTX j="<<j<<": "<<(((*&($1))[j].up)<<","<<(((*&($1))[j].dn)));
+		PyTuple_SetItem($result, j, Py_BuildValue("LL", ((*&($1))[j].up), ((*&($1))[j].dn)));
+	}
 }
 
 %{
@@ -207,6 +216,13 @@ namespace elm {
 				} else {
 					throw etk::exception_t("not linked to a model");
 				}
+			}
+			std::vector<elm::cellcode> nodes() const {
+				std::vector<elm::cellcode> it;
+				for (auto i=self->begin(); i!=self->end(); i++) {
+					it.push_back(i->first);
+				}
+				return it;
 			}
         }
 		#endif // def SWIG
@@ -398,6 +414,16 @@ namespace elm {
 				elm::cellcodepair x (upcode,dncode);
                 (*self)[x] = elm::EdgeValue(COMPONENTLIST_TYPE_EDGE, self->parentmodel);
 			}
+			
+			::std::vector<elm::cellcodepair> links () const {
+				::std::vector<elm::cellcodepair> lks;
+				std::map<elm::cellcodepair, elm::EdgeValue>::const_iterator i = self->begin();
+				while (i!=self->end()) {
+					lks.push_back(i->first);
+					i++;
+				}
+				return lks;
+			}
         }
 		#endif // def SWIG
 	};
@@ -485,24 +511,31 @@ namespace elm {
 #ifdef SWIG
 %pythoncode %{
 def __LinearFunction__call(self, *args, **kwargs):
-	if (self._receiver_type==0):
-		raise LarchError("LinearFunction improperly initialized")
-	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
-		self.receive_utility_ca(*args, **kwargs)
-	elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
-		if len(kwargs)>0 and len(args)==0:
-			self.receive_utility_co_kwd(**kwargs)
-		elif len(kwargs)==0 and len(args)>0:
-			if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
-			self.receive_utility_co(*args)
+	try:
+		if (self._receiver_type==0):
+			raise LarchError("LinearFunction improperly initialized")
+		elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCA):
+			self.receive_utility_ca(*args, **kwargs)
+		elif (self._receiver_type & COMPONENTLIST_TYPE_UTILITYCO):
+			if len(kwargs)>0 and len(args)==0:
+				self.receive_utility_co_kwd(**kwargs)
+			elif len(kwargs)==0 and len(args)>0:
+				if len(args)<2: raise LarchError("LinearFunction for co type requires at least two arguments: data and alt")
+				self.receive_utility_co(*args)
+			else:
+				raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
+		elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
+			self.receive_allocation(*args, **kwargs)
 		else:
-			raise LarchError("LinearFunction for co type requires all-or-none use of keyword arguments")
-	elif (self._receiver_type & COMPONENTLIST_TYPE_EDGE):
-		self.receive_allocation(*args, **kwargs)
-	else:
-		raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
-	####if self.parentmodel:
-	####	self.parentmodel.freshen()
+			raise LarchError("LinearFunction Not Implemented for type %i list"%self._receiver_type)
+		####if self.parentmodel:
+		####	self.parentmodel.freshen()
+	except TypeError:
+		for arg in args:
+			print('type=',type(arg), 'value=',arg)
+		for key,arg in kwargs.items():
+			print('key=',key,'type=',type(arg), 'value=',arg)
+		raise
 LinearFunction.__call__ = __LinearFunction__call
 del __LinearFunction__call
 LinearFunction.__long_len = LinearFunction.__len__

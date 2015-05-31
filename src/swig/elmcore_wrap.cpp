@@ -2939,92 +2939,96 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 #define SWIGTYPE_p__object swig_types[0]
 #define SWIGTYPE_p_allocator_type swig_types[1]
-#define SWIGTYPE_p_char swig_types[2]
-#define SWIGTYPE_p_difference_type swig_types[3]
-#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[4]
-#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[5]
-#define SWIGTYPE_p_elm__ComponentList swig_types[6]
-#define SWIGTYPE_p_elm__ComponentListPair swig_types[7]
-#define SWIGTYPE_p_elm__Facet swig_types[8]
-#define SWIGTYPE_p_elm__Fountain swig_types[9]
-#define SWIGTYPE_p_elm__LinearBundle_1 swig_types[10]
-#define SWIGTYPE_p_elm__LinearCOBundle_1 swig_types[11]
-#define SWIGTYPE_p_elm__LinearCOBundle_2 swig_types[12]
-#define SWIGTYPE_p_elm__LinearComponent swig_types[13]
-#define SWIGTYPE_p_elm__Model2 swig_types[14]
-#define SWIGTYPE_p_elm__ParameterList swig_types[15]
-#define SWIGTYPE_p_elm__QuerySet swig_types[16]
-#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[17]
-#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[18]
-#define SWIGTYPE_p_elm__SQLiteDB swig_types[19]
-#define SWIGTYPE_p_elm__VAS_dna swig_types[20]
-#define SWIGTYPE_p_elm__VAS_dna_info swig_types[21]
-#define SWIGTYPE_p_elm__cellcodepair swig_types[22]
-#define SWIGTYPE_p_elm__cellcodeset swig_types[23]
-#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[24]
-#define SWIGTYPE_p_elm__darray_req swig_types[25]
-#define SWIGTYPE_p_elm__model_options_t swig_types[26]
-#define SWIGTYPE_p_elm__paramArray swig_types[27]
-#define SWIGTYPE_p_elm__runstats swig_types[28]
-#define SWIGTYPE_p_elm__string_and_cellcode swig_types[29]
-#define SWIGTYPE_p_etk__exception_t swig_types[30]
-#define SWIGTYPE_p_etk__ostream_c swig_types[31]
-#define SWIGTYPE_p_etk__refcounted swig_types[32]
-#define SWIGTYPE_p_etk__string_sender swig_types[33]
-#define SWIGTYPE_p_etk__three_dim swig_types[34]
-#define SWIGTYPE_p_freedom_info swig_types[35]
-#define SWIGTYPE_p_key_type swig_types[36]
-#define SWIGTYPE_p_long_long swig_types[37]
-#define SWIGTYPE_p_mapped_type swig_types[38]
-#define SWIGTYPE_p_p__object swig_types[39]
-#define SWIGTYPE_p_sherpa swig_types[40]
-#define SWIGTYPE_p_sherpa_pack swig_types[41]
-#define SWIGTYPE_p_sherpa_result swig_types[42]
-#define SWIGTYPE_p_size_type swig_types[43]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[44]
-#define SWIGTYPE_p_std__allocatorT_elm__LinearComponent_t swig_types[45]
-#define SWIGTYPE_p_std__allocatorT_int_t swig_types[46]
-#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[47]
-#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[48]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t swig_types[49]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[50]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[51]
-#define SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t swig_types[52]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[53]
-#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[54]
-#define SWIGTYPE_p_std__invalid_argument swig_types[55]
-#define SWIGTYPE_p_std__lessT_long_long_t swig_types[56]
-#define SWIGTYPE_p_std__lessT_std__string_t swig_types[57]
-#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[58]
-#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[59]
-#define SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t swig_types[60]
-#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[61]
-#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[62]
-#define SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t swig_types[63]
-#define SWIGTYPE_p_std__ostream swig_types[64]
-#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[65]
-#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[66]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[67]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[68]
-#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[69]
-#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[70]
-#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[71]
-#define SWIGTYPE_p_std__string swig_types[72]
-#define SWIGTYPE_p_std__vectorT_Component_std__allocatorT_Component_t_t swig_types[73]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[74]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[75]
-#define SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t swig_types[76]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[77]
-#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[78]
-#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[79]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[80]
-#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[81]
-#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[82]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[83]
-#define SWIGTYPE_p_timeval swig_types[84]
-#define SWIGTYPE_p_value_type swig_types[85]
-static swig_type_info *swig_types[87];
-static swig_module_info swig_module = {swig_types, 86, 0, 0, 0, 0};
+#define SWIGTYPE_p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t swig_types[2]
+#define SWIGTYPE_p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t swig_types[3]
+#define SWIGTYPE_p_char swig_types[4]
+#define SWIGTYPE_p_difference_type swig_types[5]
+#define SWIGTYPE_p_elm__ComponentCellcodeMap swig_types[6]
+#define SWIGTYPE_p_elm__ComponentGraphDNA swig_types[7]
+#define SWIGTYPE_p_elm__ComponentList swig_types[8]
+#define SWIGTYPE_p_elm__ComponentListPair swig_types[9]
+#define SWIGTYPE_p_elm__Facet swig_types[10]
+#define SWIGTYPE_p_elm__Fountain swig_types[11]
+#define SWIGTYPE_p_elm__LinearBundle_1 swig_types[12]
+#define SWIGTYPE_p_elm__LinearCOBundle_1 swig_types[13]
+#define SWIGTYPE_p_elm__LinearCOBundle_2 swig_types[14]
+#define SWIGTYPE_p_elm__LinearComponent swig_types[15]
+#define SWIGTYPE_p_elm__Model2 swig_types[16]
+#define SWIGTYPE_p_elm__ParameterList swig_types[17]
+#define SWIGTYPE_p_elm__QuerySet swig_types[18]
+#define SWIGTYPE_p_elm__QuerySetSimpleCO swig_types[19]
+#define SWIGTYPE_p_elm__QuerySetTwoTable swig_types[20]
+#define SWIGTYPE_p_elm__SQLiteDB swig_types[21]
+#define SWIGTYPE_p_elm__VAS_dna swig_types[22]
+#define SWIGTYPE_p_elm__VAS_dna_info swig_types[23]
+#define SWIGTYPE_p_elm__cellcodepair swig_types[24]
+#define SWIGTYPE_p_elm__cellcodeset swig_types[25]
+#define SWIGTYPE_p_elm__cellcodeset_iterator swig_types[26]
+#define SWIGTYPE_p_elm__darray_req swig_types[27]
+#define SWIGTYPE_p_elm__model_options_t swig_types[28]
+#define SWIGTYPE_p_elm__paramArray swig_types[29]
+#define SWIGTYPE_p_elm__runstats swig_types[30]
+#define SWIGTYPE_p_elm__string_and_cellcode swig_types[31]
+#define SWIGTYPE_p_etk__exception_t swig_types[32]
+#define SWIGTYPE_p_etk__ostream_c swig_types[33]
+#define SWIGTYPE_p_etk__refcounted swig_types[34]
+#define SWIGTYPE_p_etk__string_sender swig_types[35]
+#define SWIGTYPE_p_etk__three_dim swig_types[36]
+#define SWIGTYPE_p_freedom_alias swig_types[37]
+#define SWIGTYPE_p_freedom_info swig_types[38]
+#define SWIGTYPE_p_key_type swig_types[39]
+#define SWIGTYPE_p_long_long swig_types[40]
+#define SWIGTYPE_p_mapped_type swig_types[41]
+#define SWIGTYPE_p_p__object swig_types[42]
+#define SWIGTYPE_p_p_elm__darray swig_types[43]
+#define SWIGTYPE_p_sherpa swig_types[44]
+#define SWIGTYPE_p_sherpa_pack swig_types[45]
+#define SWIGTYPE_p_sherpa_result swig_types[46]
+#define SWIGTYPE_p_size_type swig_types[47]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[48]
+#define SWIGTYPE_p_std__allocatorT_elm__LinearComponent_t swig_types[49]
+#define SWIGTYPE_p_std__allocatorT_int_t swig_types[50]
+#define SWIGTYPE_p_std__allocatorT_long_long_t swig_types[51]
+#define SWIGTYPE_p_std__allocatorT_sherpa_pack_t swig_types[52]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t swig_types[53]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t swig_types[54]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_long_long_const_std__string_t_t swig_types[55]
+#define SWIGTYPE_p_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t swig_types[56]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[57]
+#define SWIGTYPE_p_std__allocatorT_unsigned_long_long_t swig_types[58]
+#define SWIGTYPE_p_std__invalid_argument swig_types[59]
+#define SWIGTYPE_p_std__lessT_long_long_t swig_types[60]
+#define SWIGTYPE_p_std__lessT_std__string_t swig_types[61]
+#define SWIGTYPE_p_std__listT__Tp__Alloc_t swig_types[62]
+#define SWIGTYPE_p_std__listT_long_long_std__allocatorT_long_long_t_t swig_types[63]
+#define SWIGTYPE_p_std__mapT_long_long_elm__ComponentList_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__ComponentList_t_t_t swig_types[64]
+#define SWIGTYPE_p_std__mapT_long_long_elm__VAS_dna_info_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_elm__VAS_dna_info_t_t_t swig_types[65]
+#define SWIGTYPE_p_std__mapT_long_long_std__string_std__lessT_long_long_t_std__allocatorT_std__pairT_long_long_const_std__string_t_t_t swig_types[66]
+#define SWIGTYPE_p_std__mapT_std__string_elm__darray_req_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_elm__darray_req_t_t_t swig_types[67]
+#define SWIGTYPE_p_std__ostream swig_types[68]
+#define SWIGTYPE_p_std__setT_long_long_t__const_iterator swig_types[69]
+#define SWIGTYPE_p_std__setT_long_long_t__iterator swig_types[70]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t swig_types[71]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySetTwoTable_t swig_types[72]
+#define SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t swig_types[73]
+#define SWIGTYPE_p_std__shared_ptrT_elm__caseindex_t_t swig_types[74]
+#define SWIGTYPE_p_std__shared_ptrT_elm__datamatrix_t_t swig_types[75]
+#define SWIGTYPE_p_std__string swig_types[76]
+#define SWIGTYPE_p_std__vectorT_Component_std__allocatorT_Component_t_t swig_types[77]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[78]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[79]
+#define SWIGTYPE_p_std__vectorT_elm__LinearComponent_std__allocatorT_elm__LinearComponent_t_t swig_types[80]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[81]
+#define SWIGTYPE_p_std__vectorT_long_long_std__allocatorT_long_long_t_t swig_types[82]
+#define SWIGTYPE_p_std__vectorT_sherpa_pack_std__allocatorT_sherpa_pack_t_t swig_types[83]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[84]
+#define SWIGTYPE_p_std__vectorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_std__allocatorT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t_t swig_types[85]
+#define SWIGTYPE_p_std__vectorT_unsigned_long_long_std__allocatorT_unsigned_long_long_t_t swig_types[86]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[87]
+#define SWIGTYPE_p_timeval swig_types[88]
+#define SWIGTYPE_p_value_type swig_types[89]
+static swig_type_info *swig_types[91];
+static swig_module_info swig_module = {swig_types, 90, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6723,6 +6727,13 @@ SWIGINTERN void elm_ComponentCellcodeMap__link(elm::ComponentCellcodeMap *self,e
 					throw etk::exception_t("not linked to a model");
 				}
 			}
+SWIGINTERN std::vector< elm::cellcode,std::allocator< elm::cellcode > > elm_ComponentCellcodeMap_nodes(elm::ComponentCellcodeMap const *self){
+				std::vector<elm::cellcode> it;
+				for (auto i=self->begin(); i!=self->end(); i++) {
+					it.push_back(i->first);
+				}
+				return it;
+			}
 SWIGINTERN elm::EdgeValue &elm_LinearCOBundle_2___getitem__(elm::LinearCOBundle_2 *self,elm::cellcodepair const &key){
                 std::map<elm::cellcodepair, elm::EdgeValue>::iterator i = self->find(key);
                 if (i != self->end())
@@ -6750,6 +6761,15 @@ SWIGINTERN int elm_LinearCOBundle_2___len__(elm::LinearCOBundle_2 const *self){
 SWIGINTERN void elm_LinearCOBundle_2___call__(elm::LinearCOBundle_2 *self,elm::cellcode upcode,elm::cellcode dncode){
 				elm::cellcodepair x (upcode,dncode);
                 (*self)[x] = elm::EdgeValue(0x8, self->parentmodel);
+			}
+SWIGINTERN ::std::vector< elm::cellcodepair,std::allocator< elm::cellcodepair > > elm_LinearCOBundle_2_links(elm::LinearCOBundle_2 const *self){
+				::std::vector<elm::cellcodepair> lks;
+				std::map<elm::cellcodepair, elm::EdgeValue>::const_iterator i = self->begin();
+				while (i!=self->end()) {
+					lks.push_back(i->first);
+					i++;
+				}
+				return lks;
 			}
 
 
@@ -29827,6 +29847,50 @@ fail:
 SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Facet *arg1 = (elm::Facet *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::QuerySet *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_QuerySet",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_QuerySet" "', argument " "1"" of type '" "elm::Facet *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  arg2 = obj1;
+  {
+    try {
+      result = (elm::QuerySet *)new elm::QuerySet(arg1,arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    std::shared_ptr<  elm::QuerySet > *smartresult = result ? new std::shared_ptr<  elm::QuerySet >(result SWIG_NO_NULL_DELETER_SWIG_POINTER_NEW) : 0;
+    resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(smartresult), SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, SWIG_POINTER_NEW | SWIG_POINTER_OWN);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29865,7 +29929,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_QuerySet__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *result = 0 ;
   
@@ -29899,16 +29963,16 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_QuerySet(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[2];
+  PyObject *argv[3];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_QuerySet__SWIG_1(self, args);
+    return _wrap_new_QuerySet__SWIG_2(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -29916,23 +29980,37 @@ SWIGINTERN PyObject *_wrap_new_QuerySet(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_new_QuerySet__SWIG_0(self, args);
+      return _wrap_new_QuerySet__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__Facet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      _v = (argv[1] != 0);
+      if (_v) {
+        return _wrap_new_QuerySet__SWIG_0(self, args);
+      }
     }
   }
   
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_QuerySet'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    elm::QuerySet::QuerySet(elm::Facet *,PyObject *)\n"
     "    elm::QuerySet::QuerySet(elm::Facet *)\n"
     "    elm::QuerySet::QuerySet()\n");
   return 0;
 }
 
 
-SWIGINTERN PyObject *_wrap_QuerySet_set_validator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_QuerySet_set_validator_(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
   elm::Facet *arg2 = (elm::Facet *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   std::shared_ptr< elm::QuerySet > tempshared1 ;
@@ -29941,13 +30019,14 @@ SWIGINTERN PyObject *_wrap_QuerySet_set_validator(PyObject *SWIGUNUSEDPARM(self)
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_set_validator",2,2,&obj0,&obj1)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_set_validator_",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
   {
     int newmem = 0;
     res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_set_validator" "', argument " "1"" of type '" "elm::QuerySet *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_set_validator_" "', argument " "1"" of type '" "elm::QuerySet *""'"); 
     }
     if (newmem & SWIG_CAST_NEW_MEMORY) {
       tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySet > * >(argp1);
@@ -29960,12 +30039,13 @@ SWIGINTERN PyObject *_wrap_QuerySet_set_validator(PyObject *SWIGUNUSEDPARM(self)
   }
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_elm__Facet, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySet_set_validator" "', argument " "2"" of type '" "elm::Facet *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySet_set_validator_" "', argument " "2"" of type '" "elm::Facet *""'"); 
   }
   arg2 = reinterpret_cast< elm::Facet * >(argp2);
+  arg3 = obj2;
   {
     try {
-      (arg1)->set_validator(arg2);
+      (arg1)->set_validator_(arg2,arg3);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -29981,6 +30061,56 @@ SWIGINTERN PyObject *_wrap_QuerySet_set_validator(PyObject *SWIGUNUSEDPARM(self)
     }
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySet_get_validator(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySet *arg1 = (elm::QuerySet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySet > tempshared1 ;
+  std::shared_ptr< elm::QuerySet > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySet_get_validator",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySet_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySet_get_validator" "', argument " "1"" of type '" "elm::QuerySet *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySet > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr<  elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr<  elm::QuerySet > * >(argp1);
+      arg1 = const_cast< elm::QuerySet * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = (PyObject *)(arg1)->get_validator();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -31562,6 +31692,71 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_avail_query(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetSimpleCO > tempshared1 ;
+  std::shared_ptr< elm::QuerySetSimpleCO > *smartarg1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetSimpleCO_set_avail_query",2,2,&obj0,&obj1)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetSimpleCO_set_avail_query" "', argument " "1"" of type '" "elm::QuerySetSimpleCO *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr<  elm::QuerySetSimpleCO > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr<  elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr<  elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QuerySetSimpleCO_set_avail_query" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "QuerySetSimpleCO_set_avail_query" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      (arg1)->set_avail_query((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_set_avail_all(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
@@ -32000,6 +32195,56 @@ SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_avail_column_map(PyObject *SWIGU
     }
   }
   resultobj = swig::from(static_cast< std::map<long long,std::string,std::less< long long >,std::allocator< std::pair< long long const,std::string > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_QuerySetSimpleCO_get_avail_query(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::QuerySetSimpleCO *arg1 = (elm::QuerySetSimpleCO *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > tempshared1 ;
+  std::shared_ptr< elm::QuerySetSimpleCO const > *smartarg1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"QuerySetSimpleCO_get_avail_query",1,1,&obj0)) SWIG_fail;
+  {
+    int newmem = 0;
+    res1 = SWIG_ConvertPtrAndOwn(obj0, &argp1, SWIGTYPE_p_std__shared_ptrT_elm__QuerySetSimpleCO_t, 0 |  0 , &newmem);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QuerySetSimpleCO_get_avail_query" "', argument " "1"" of type '" "elm::QuerySetSimpleCO const *""'"); 
+    }
+    if (newmem & SWIG_CAST_NEW_MEMORY) {
+      tempshared1 = *reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      delete reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >(tempshared1.get());
+    } else {
+      smartarg1 = reinterpret_cast< std::shared_ptr< const elm::QuerySetSimpleCO > * >(argp1);
+      arg1 = const_cast< elm::QuerySetSimpleCO * >((smartarg1 ? smartarg1->get() : 0));
+    }
+  }
+  {
+    try {
+      result = ((elm::QuerySetSimpleCO const *)arg1)->get_avail_query();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
   return resultobj;
 fail:
   return NULL;
@@ -36554,6 +36799,7 @@ SWIGINTERN PyObject *_wrap_Facet__set_queries(PyObject *SWIGUNUSEDPARM(self), Py
   elm::Facet *arg1 = (elm::Facet *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   elm::QuerySet *arg3 = (elm::QuerySet *) 0 ;
+  PyObject *arg4 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp3 = 0 ;
@@ -36563,8 +36809,9 @@ SWIGINTERN PyObject *_wrap_Facet__set_queries(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   
-  if(!PyArg_UnpackTuple(args,(char *)"Facet__set_queries",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  if(!PyArg_UnpackTuple(args,(char *)"Facet__set_queries",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet__set_queries" "', argument " "1"" of type '" "elm::Facet *""'"); 
@@ -36586,9 +36833,10 @@ SWIGINTERN PyObject *_wrap_Facet__set_queries(PyObject *SWIGUNUSEDPARM(self), Py
       arg3 = const_cast< elm::QuerySet * >((smartarg3 ? smartarg3->get() : 0));
     }
   }
+  arg4 = obj3;
   {
     try {
-      (arg1)->_set_queries(arg2,arg3);
+      (arg1)->_set_queries(arg2,arg3,arg4);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -37347,6 +37595,82 @@ SWIGINTERN PyObject *_wrap_Facet_altids(PyObject *SWIGUNUSEDPARM(self), PyObject
     }
   }
   resultobj = swig::from(static_cast< std::vector<long long,std::allocator< long long > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_cache_alternative_names(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_cache_alternative_names",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_cache_alternative_names" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->cache_alternative_names();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > >(static_cast< const boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > >& >(result))), SWIGTYPE_p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet_cache_alternative_codes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  boosted::shared_ptr< std::vector< long long,std::allocator< long long > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Facet_cache_alternative_codes",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet_cache_alternative_codes" "', argument " "1"" of type '" "elm::Facet const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  {
+    try {
+      result = ((elm::Facet const *)arg1)->cache_alternative_codes();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new boosted::shared_ptr< std::vector< long long,std::allocator< long long > > >(static_cast< const boosted::shared_ptr< std::vector< long long,std::allocator< long long > > >& >(result))), SWIGTYPE_p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -40012,6 +40336,152 @@ SWIGINTERN PyObject *_wrap_Facet__array_idca_reader(PyObject *SWIGUNUSEDPARM(sel
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res5)) delete arg5;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Facet__array_idca_reader_blind(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Facet *arg1 = (elm::Facet *) 0 ;
+  std::string *arg2 = 0 ;
+  int arg3 ;
+  std::vector< long long,std::allocator< long long > > *arg4 = 0 ;
+  elm::darray **arg5 = (elm::darray **) 0 ;
+  elm::darray **arg6 = (elm::darray **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int res4 = SWIG_OLDOBJ ;
+  elm::darray *temp5 ;
+  elm::darray *temp6 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  {
+    temp5 = nullptr;
+    arg5 = &temp5;
+  }
+  {
+    temp6 = nullptr;
+    arg6 = &temp6;
+  }
+  if(!PyArg_UnpackTuple(args,(char *)"Facet__array_idca_reader_blind",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Facet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Facet__array_idca_reader_blind" "', argument " "1"" of type '" "elm::Facet *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Facet * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Facet__array_idca_reader_blind" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Facet__array_idca_reader_blind" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Facet__array_idca_reader_blind" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  {
+    std::vector<long long,std::allocator< long long > > *ptr = (std::vector<long long,std::allocator< long long > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Facet__array_idca_reader_blind" "', argument " "4"" of type '" "std::vector< long long,std::allocator< long long > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Facet__array_idca_reader_blind" "', argument " "4"" of type '" "std::vector< long long,std::allocator< long long > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  {
+    try {
+      (arg1)->_array_idca_reader_blind((std::string const &)*arg2,arg3,(std::vector< long long,std::allocator< long long > > const &)*arg4,arg5,arg6);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    Py_XDECREF(resultobj);   /* Blow away any previous result */
+    
+    PyObject* ret1 = nullptr;
+    PyObject* ret2 = nullptr;
+    
+    if (!arg5 || !(*arg5)) {
+      Py_INCREF(Py_None);
+      ret1 = Py_None;
+    } else {
+      ret1 = (*arg5)->get_array();
+      
+      if (PyObject_HasAttrString(ret1, "vars")) {
+        PyObject_DelAttrString(ret1, "vars");
+      }
+      
+      PyObject* py_vars = PyTuple_New(((*arg5))->get_variables().size());
+      
+      for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+        PyObject* item = PyString_FromString((((*arg5))->get_variables()[i]).c_str());
+        PyTuple_SetItem(py_vars, i, item);
+      }
+      
+      PyObject_SetAttrString(ret1, "vars", py_vars);
+      
+      Py_CLEAR(py_vars);
+      delete (*arg5);
+    }
+    
+    if (!arg6 || !(*arg6)) {
+      Py_INCREF(Py_None);
+      ret2 = Py_None;
+    } else {
+      ret2 = (*arg6)->get_array();
+      
+      if (PyObject_HasAttrString(ret2, "vars")) {
+        PyObject_DelAttrString(ret2, "vars");
+      }
+      
+      PyObject* py_vars = PyTuple_New(((*arg6))->get_variables().size());
+      
+      for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+        PyObject* item = PyString_FromString((((*arg6))->get_variables()[i]).c_str());
+        PyTuple_SetItem(py_vars, i, item);
+      }
+      
+      PyObject_SetAttrString(ret2, "vars", py_vars);
+      
+      Py_CLEAR(py_vars);
+      delete (*arg6);
+    }
+    
+    resultobj = PyTuple_New(2);
+    PyTuple_SetItem(resultobj, 0, ret1);
+    PyTuple_SetItem(resultobj, 1, ret2);
+  }
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res4)) delete arg4;
   return NULL;
 }
 
@@ -55682,6 +56152,44 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ComponentCellcodeMap_nodes(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< elm::cellcode,std::allocator< elm::cellcode > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ComponentCellcodeMap_nodes",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ComponentCellcodeMap, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComponentCellcodeMap_nodes" "', argument " "1"" of type '" "elm::ComponentCellcodeMap const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ComponentCellcodeMap * >(argp1);
+  {
+    try {
+      result = elm_ComponentCellcodeMap_nodes((elm::ComponentCellcodeMap const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::vector<long long,std::allocator< long long > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_ComponentCellcodeMap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ComponentCellcodeMap *arg1 = (elm::ComponentCellcodeMap *) 0 ;
@@ -58890,8 +59398,8 @@ SWIGINTERN PyObject *_wrap_LinearCOBundle_2___getitem__(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
-    if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+    if (!PyArg_ParseTuple(obj1, "LL", &(temp2.up), &(temp2.dn))) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -58947,8 +59455,8 @@ SWIGINTERN PyObject *_wrap_LinearCOBundle_2___setitem__(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
-    if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+    if (!PyArg_ParseTuple(obj1, "LL", &(temp2.up), &(temp2.dn))) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -59002,8 +59510,8 @@ SWIGINTERN PyObject *_wrap_LinearCOBundle_2___delitem__(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
-    if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+    if (!PyArg_ParseTuple(obj1, "LL", &(temp2.up), &(temp2.dn))) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -59056,8 +59564,8 @@ SWIGINTERN PyObject *_wrap_LinearCOBundle_2___contains__(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
   {
-    if (!PyArg_ParseTuple(obj1, "KK", &(temp2.up), &(temp2.dn))) {
-      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of non-negative integers"));
+    if (!PyArg_ParseTuple(obj1, "LL", &(temp2.up), &(temp2.dn))) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>("a cellcode pair must be a 2-tuple of integers"));
       SWIG_fail;
     };
     arg2 = &temp2;
@@ -59173,6 +59681,50 @@ SWIGINTERN PyObject *_wrap_LinearCOBundle_2___call__(PyObject *SWIGUNUSEDPARM(se
     }
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_LinearCOBundle_2_links(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::LinearCOBundle_2 *arg1 = (elm::LinearCOBundle_2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  SwigValueWrapper< ::std::vector< elm::cellcodepair,std::allocator< elm::cellcodepair > > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"LinearCOBundle_2_links",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__LinearCOBundle_2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LinearCOBundle_2_links" "', argument " "1"" of type '" "elm::LinearCOBundle_2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::LinearCOBundle_2 * >(argp1);
+  {
+    try {
+      result = elm_LinearCOBundle_2_links((elm::LinearCOBundle_2 const *)arg1);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    resultobj = PyTuple_New((&(result))->size());
+    for (size_t j=0; j<(&(result))->size(); j++) {
+      //std::cerr << "OUTX j="<<j<<": "<<(((*&(result))[j].up)<<","<<(((*&(result))[j].dn)));
+      PyTuple_SetItem(resultobj, j, Py_BuildValue("LL", ((*&(result))[j].up), ((*&(result))[j].dn)));
+    }
+  }
   return resultobj;
 fail:
   return NULL;
@@ -61252,6 +61804,110 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_model_options_t_suspend_xylem_rebuild_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_suspend_xylem_rebuild_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_suspend_xylem_rebuild_set" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "model_options_t_suspend_xylem_rebuild_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->suspend_xylem_rebuild = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_model_options_t_suspend_xylem_rebuild_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_suspend_xylem_rebuild_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_suspend_xylem_rebuild_get" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  result = (bool) ((arg1)->suspend_xylem_rebuild);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_model_options_t_log_turns_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_log_turns_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_log_turns_set" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "model_options_t_log_turns_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->log_turns = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_model_options_t_log_turns_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"model_options_t_log_turns_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t_log_turns_get" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::model_options_t * >(argp1);
+  result = (bool) ((arg1)->log_turns);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_model_options_t_author_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::model_options_t *arg1 = (elm::model_options_t *) 0 ;
@@ -61326,6 +61982,8 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   std::string arg11 = (std::string) "Chuck Finley" ;
   bool arg12 = (bool) true ;
   bool arg13 = (bool) true ;
+  bool arg14 = (bool) false ;
+  bool arg15 = (bool) false ;
   int val1 ;
   int ecode1 = 0 ;
   bool val2 ;
@@ -61350,6 +62008,10 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   int ecode12 = 0 ;
   bool val13 ;
   int ecode13 = 0 ;
+  bool val14 ;
+  int ecode14 = 0 ;
+  bool val15 ;
+  int ecode15 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -61363,12 +62025,14 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj10 = 0 ;
   PyObject * obj11 = 0 ;
   PyObject * obj12 = 0 ;
+  PyObject * obj13 = 0 ;
+  PyObject * obj14 = 0 ;
   char *  kwnames[] = {
-    (char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
+    (char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale",(char *) "suspend_xylem_rebuild",(char *) "log_turns", NULL 
   };
   elm::model_options_t *result = 0 ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOOOOOO:new_model_options_t",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOOOOOOOO:new_model_options_t",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
   if (obj0) {
     ecode1 = SWIG_AsVal_int(obj0, &val1);
     if (!SWIG_IsOK(ecode1)) {
@@ -61464,9 +62128,23 @@ SWIGINTERN PyObject *_wrap_new_model_options_t(PyObject *SWIGUNUSEDPARM(self), P
     } 
     arg13 = static_cast< bool >(val13);
   }
+  if (obj13) {
+    ecode14 = SWIG_AsVal_bool(obj13, &val14);
+    if (!SWIG_IsOK(ecode14)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode14), "in method '" "new_model_options_t" "', argument " "14"" of type '" "bool""'");
+    } 
+    arg14 = static_cast< bool >(val14);
+  }
+  if (obj14) {
+    ecode15 = SWIG_AsVal_bool(obj14, &val15);
+    if (!SWIG_IsOK(ecode15)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode15), "in method '" "new_model_options_t" "', argument " "15"" of type '" "bool""'");
+    } 
+    arg15 = static_cast< bool >(val15);
+  }
   {
     try {
-      result = (elm::model_options_t *)new elm::model_options_t(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13);
+      result = (elm::model_options_t *)new elm::model_options_t(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -61504,6 +62182,8 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   std::string arg12 = (std::string) "-9" ;
   int arg13 = (int) -9 ;
   int arg14 = (int) -9 ;
+  int arg15 = (int) -9 ;
+  int arg16 = (int) -9 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -61530,6 +62210,10 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   int ecode13 = 0 ;
   int val14 ;
   int ecode14 = 0 ;
+  int val15 ;
+  int ecode15 = 0 ;
+  int val16 ;
+  int ecode16 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -61544,11 +62228,13 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj11 = 0 ;
   PyObject * obj12 = 0 ;
   PyObject * obj13 = 0 ;
+  PyObject * obj14 = 0 ;
+  PyObject * obj15 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale", NULL 
+    (char *) "self",(char *) "threads",(char *) "calc_null_likelihood",(char *) "null_disregards_holdfast",(char *) "calc_std_errors",(char *) "gradient_diagnostic",(char *) "hessian_diagnostic",(char *) "mute_nan_warnings",(char *) "force_finite_diff_grad",(char *) "save_db_hash",(char *) "force_recalculate",(char *) "author",(char *) "teardown_after_estimate",(char *) "weight_autorescale",(char *) "suspend_xylem_rebuild",(char *) "log_turns", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOOOOOOO:model_options_t___call__",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOOOOOOOOO:model_options_t___call__",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14,&obj15)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__model_options_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "model_options_t___call__" "', argument " "1"" of type '" "elm::model_options_t *""'"); 
@@ -61649,9 +62335,23 @@ SWIGINTERN PyObject *_wrap_model_options_t___call__(PyObject *SWIGUNUSEDPARM(sel
     } 
     arg14 = static_cast< int >(val14);
   }
+  if (obj14) {
+    ecode15 = SWIG_AsVal_int(obj14, &val15);
+    if (!SWIG_IsOK(ecode15)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode15), "in method '" "model_options_t___call__" "', argument " "15"" of type '" "int""'");
+    } 
+    arg15 = static_cast< int >(val15);
+  }
+  if (obj15) {
+    ecode16 = SWIG_AsVal_int(obj15, &val16);
+    if (!SWIG_IsOK(ecode16)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode16), "in method '" "model_options_t___call__" "', argument " "16"" of type '" "int""'");
+    } 
+    arg16 = static_cast< int >(val16);
+  }
   {
     try {
-      (arg1)->__call__(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14);
+      (arg1)->__call__(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15,arg16);
     } catch (const etk::PythonStopIteration& e) {
       PyErr_SetNone(PyExc_StopIteration);
       return NULL;
@@ -67228,6 +67928,303 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ParameterList_alias__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ParameterList *arg1 = (elm::ParameterList *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  double *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  double temp4 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  freedom_alias *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterList_alias",4,4,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ParameterList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterList_alias" "', argument " "1"" of type '" "elm::ParameterList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ParameterList * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterList_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterList_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ParameterList_alias" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterList_alias" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  ecode4 = SWIG_AsVal_double(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ParameterList_alias" "', argument " "4"" of type '" "double""'");
+  } 
+  temp4 = static_cast< double >(val4);
+  arg4 = &temp4;
+  {
+    try {
+      result = (freedom_alias *) &(arg1)->alias((std::string const &)*arg2,(std::string const &)*arg3,(double const &)*arg4);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterList_alias__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ParameterList *arg1 = (elm::ParameterList *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  freedom_alias *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterList_alias",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ParameterList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterList_alias" "', argument " "1"" of type '" "elm::ParameterList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ParameterList * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterList_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterList_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (freedom_alias *) &(arg1)->alias((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterList_alias(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[5];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ParameterList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ParameterList_alias__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_elm__ParameterList, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_ParameterList_alias__SWIG_0(self, args);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ParameterList_alias'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    elm::ParameterList::alias(std::string const &,std::string const &,double const &)\n"
+    "    elm::ParameterList::alias(std::string const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterList_del_alias(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ParameterList *arg1 = (elm::ParameterList *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterList_del_alias",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ParameterList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterList_del_alias" "', argument " "1"" of type '" "elm::ParameterList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ParameterList * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterList_del_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterList_del_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      (arg1)->del_alias((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterList_unlink_alias(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::ParameterList *arg1 = (elm::ParameterList *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterList_unlink_alias",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__ParameterList, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterList_unlink_alias" "', argument " "1"" of type '" "elm::ParameterList *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::ParameterList * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterList_unlink_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterList_unlink_alias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      (arg1)->unlink_alias((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ParameterList_values__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::ParameterList *arg1 = (elm::ParameterList *) 0 ;
@@ -67501,6 +68498,292 @@ SWIGINTERN PyObject *ParameterList_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *obj;
   if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_elm__ParameterList, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_name_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_name_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_name_set" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterAlias_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterAlias_name_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->name = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_name_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_name_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_name_get" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  result = (std::string *) & ((arg1)->name);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_refers_to_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_refers_to_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_refers_to_set" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ParameterAlias_refers_to_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ParameterAlias_refers_to_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->refers_to = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_refers_to_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_refers_to_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_refers_to_get" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  result = (std::string *) & ((arg1)->refers_to);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_multiplier_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_multiplier_set",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_multiplier_set" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ParameterAlias_multiplier_set" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->multiplier = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ParameterAlias_multiplier_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"ParameterAlias_multiplier_get",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ParameterAlias_multiplier_get" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  result = (double) ((arg1)->multiplier);
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_ParameterAlias(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  double *arg3 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  double temp3 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  freedom_alias *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"new_ParameterAlias",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_ParameterAlias" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ParameterAlias" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_ParameterAlias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_ParameterAlias" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_ParameterAlias" "', argument " "3"" of type '" "double""'");
+  } 
+  temp3 = static_cast< double >(val3);
+  arg3 = &temp3;
+  {
+    try {
+      result = (freedom_alias *)new freedom_alias((std::string const &)*arg1,(std::string const &)*arg2,(double const &)*arg3);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_freedom_alias, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_ParameterAlias(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  freedom_alias *arg1 = (freedom_alias *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"delete_ParameterAlias",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_freedom_alias, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ParameterAlias" "', argument " "1"" of type '" "freedom_alias *""'"); 
+  }
+  arg1 = reinterpret_cast< freedom_alias * >(argp1);
+  {
+    try {
+      delete arg1;
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *ParameterAlias_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_freedom_alias, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -71755,6 +73038,86 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Model2_DataEdit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  elm::darray *result = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_DataEdit",2,2,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_DataEdit" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model2_DataEdit" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model2_DataEdit" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      result = (elm::darray *)(arg1)->DataEdit((std::string const &)*arg2);
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  {
+    if (!result) {
+      //std::cerr << "typemap(out) elm::darray* return none\n";
+      Py_RETURN_NONE;
+    } else {
+      //std::cerr << "typemap(out) elm::darray* return something\n";
+    }
+    
+    resultobj = result->get_array();
+    
+    if (PyObject_HasAttrString(resultobj, "vars")) {
+      PyObject_DelAttrString(resultobj, "vars");
+    }
+    
+    PyObject* py_vars = PyTuple_New((result)->get_variables().size());
+    
+    for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+      PyObject* item = PyString_FromString(((result)->get_variables()[i]).c_str());
+      PyTuple_SetItem(py_vars, i, item);
+    }
+    
+    PyObject_SetAttrString(resultobj, "vars", py_vars);
+    
+    Py_CLEAR(py_vars);
+    
+    //PyRun_SimpleString("print('%typemap(out) elm::darray*')");
+  }
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Model2_loglike__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   elm::Model2 *arg1 = (elm::Model2 *) 0 ;
@@ -73750,6 +75113,81 @@ fail:
     "    elm::Model2::calc_utility_logsums(etk::ndarray *,etk::ndarray *) const\n"
     "    elm::Model2::calc_utility_logsums(etk::ndarray *) const\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_calculate_parameter_covariance(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_calculate_parameter_covariance",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_calculate_parameter_covariance" "', argument " "1"" of type '" "elm::Model2 *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      (arg1)->calculate_parameter_covariance();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model2_alias_names(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  elm::Model2 *arg1 = (elm::Model2 *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > result;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Model2_alias_names",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_elm__Model2, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model2_alias_names" "', argument " "1"" of type '" "elm::Model2 const *""'"); 
+  }
+  arg1 = reinterpret_cast< elm::Model2 * >(argp1);
+  {
+    try {
+      result = ((elm::Model2 const *)arg1)->alias_names();
+    } catch (const etk::PythonStopIteration& e) {
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
+    } catch (const etk::SQLiteError& e) {
+      PyErr_SetString(ptrToSQLError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const etk::FacetError& e) {
+      PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+      return NULL;
+    } catch (const std::exception& e) {
+      PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+      return NULL;
+    }
+  }
+  resultobj = swig::from(static_cast< std::vector<std::string,std::allocator< std::string > > >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -80891,7 +82329,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySet_all_alts_always_available", _wrap_QuerySet_all_alts_always_available, METH_VARARGS, NULL},
 	 { (char *)"delete_QuerySet", _wrap_delete_QuerySet, METH_VARARGS, NULL},
 	 { (char *)"new_QuerySet", _wrap_new_QuerySet, METH_VARARGS, NULL},
-	 { (char *)"QuerySet_set_validator", _wrap_QuerySet_set_validator, METH_VARARGS, NULL},
+	 { (char *)"QuerySet_set_validator_", _wrap_QuerySet_set_validator_, METH_VARARGS, NULL},
+	 { (char *)"QuerySet_get_validator", _wrap_QuerySet_get_validator, METH_VARARGS, NULL},
 	 { (char *)"QuerySet___repr__", _wrap_QuerySet___repr__, METH_VARARGS, NULL},
 	 { (char *)"QuerySet_actual_type", _wrap_QuerySet_actual_type, METH_VARARGS, NULL},
 	 { (char *)"QuerySet_pickled", _wrap_QuerySet_pickled, METH_VARARGS, NULL},
@@ -80916,6 +82355,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetSimpleCO_set_choice_column", _wrap_QuerySetSimpleCO_set_choice_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_set_choice_column_map", _wrap_QuerySetSimpleCO_set_choice_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_set_avail_column_map", _wrap_QuerySetSimpleCO_set_avail_column_map, METH_VARARGS, NULL},
+	 { (char *)"QuerySetSimpleCO_set_avail_query", _wrap_QuerySetSimpleCO_set_avail_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_set_avail_all", _wrap_QuerySetSimpleCO_set_avail_all, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_set_weight_column", _wrap_QuerySetSimpleCO_set_weight_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_set_alts_query", _wrap_QuerySetSimpleCO_set_alts_query, METH_VARARGS, NULL},
@@ -80924,6 +82364,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"QuerySetSimpleCO_get_choice_column", _wrap_QuerySetSimpleCO_get_choice_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_choice_column_map", _wrap_QuerySetSimpleCO_get_choice_column_map, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_avail_column_map", _wrap_QuerySetSimpleCO_get_avail_column_map, METH_VARARGS, NULL},
+	 { (char *)"QuerySetSimpleCO_get_avail_query", _wrap_QuerySetSimpleCO_get_avail_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_weight_column", _wrap_QuerySetSimpleCO_get_weight_column, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO_get_alts_query", _wrap_QuerySetSimpleCO_get_alts_query, METH_VARARGS, NULL},
 	 { (char *)"QuerySetSimpleCO__get_alts_values", _wrap_QuerySetSimpleCO__get_alts_values, METH_VARARGS, NULL},
@@ -81054,6 +82495,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Facet_nAlts", _wrap_Facet_nAlts, METH_VARARGS, NULL},
 	 { (char *)"Facet_caseids", _wrap_Facet_caseids, METH_VARARGS, NULL},
 	 { (char *)"Facet_altids", _wrap_Facet_altids, METH_VARARGS, NULL},
+	 { (char *)"Facet_cache_alternative_names", _wrap_Facet_cache_alternative_names, METH_VARARGS, NULL},
+	 { (char *)"Facet_cache_alternative_codes", _wrap_Facet_cache_alternative_codes, METH_VARARGS, NULL},
 	 { (char *)"Facet_alternative_names", _wrap_Facet_alternative_names, METH_VARARGS, NULL},
 	 { (char *)"Facet_alternative_codes", _wrap_Facet_alternative_codes, METH_VARARGS, NULL},
 	 { (char *)"Facet_alternative_name", _wrap_Facet_alternative_name, METH_VARARGS, NULL},
@@ -81088,6 +82531,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Facet_all_alts_always_available", _wrap_Facet_all_alts_always_available, METH_VARARGS, NULL},
 	 { (char *)"Facet__array_idco_reader", _wrap_Facet__array_idco_reader, METH_VARARGS, NULL},
 	 { (char *)"Facet__array_idca_reader", _wrap_Facet__array_idca_reader, METH_VARARGS, NULL},
+	 { (char *)"Facet__array_idca_reader_blind", _wrap_Facet__array_idca_reader_blind, METH_VARARGS, NULL},
 	 { (char *)"Facet_swigregister", Facet_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ParameterLinkArray", _wrap_new_ParameterLinkArray, METH_VARARGS, NULL},
 	 { (char *)"delete_ParameterLinkArray", _wrap_delete_ParameterLinkArray, METH_VARARGS, NULL},
@@ -81342,6 +82786,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComponentCellcodeMap___len__", _wrap_ComponentCellcodeMap___len__, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap__create", _wrap_ComponentCellcodeMap__create, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap__link", _wrap_ComponentCellcodeMap__link, METH_VARARGS, NULL},
+	 { (char *)"ComponentCellcodeMap_nodes", _wrap_ComponentCellcodeMap_nodes, METH_VARARGS, NULL},
 	 { (char *)"delete_ComponentCellcodeMap", _wrap_delete_ComponentCellcodeMap, METH_VARARGS, NULL},
 	 { (char *)"ComponentCellcodeMap_swigregister", ComponentCellcodeMap_swigregister, METH_VARARGS, NULL},
 	 { (char *)"LinearCOBundle_1_parentmodel_set", _wrap_LinearCOBundle_1_parentmodel_set, METH_VARARGS, NULL},
@@ -81393,6 +82838,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LinearCOBundle_2___contains__", _wrap_LinearCOBundle_2___contains__, METH_VARARGS, NULL},
 	 { (char *)"LinearCOBundle_2___len__", _wrap_LinearCOBundle_2___len__, METH_VARARGS, NULL},
 	 { (char *)"LinearCOBundle_2___call__", _wrap_LinearCOBundle_2___call__, METH_VARARGS, NULL},
+	 { (char *)"LinearCOBundle_2_links", _wrap_LinearCOBundle_2_links, METH_VARARGS, NULL},
 	 { (char *)"delete_LinearCOBundle_2", _wrap_delete_LinearCOBundle_2, METH_VARARGS, NULL},
 	 { (char *)"LinearCOBundle_2_swigregister", LinearCOBundle_2_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ComponentGraphDNA_db_set", _wrap_ComponentGraphDNA_db_set, METH_VARARGS, NULL},
@@ -81445,6 +82891,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"model_options_t_teardown_after_estimate_get", _wrap_model_options_t_teardown_after_estimate_get, METH_VARARGS, NULL},
 	 { (char *)"model_options_t_weight_autorescale_set", _wrap_model_options_t_weight_autorescale_set, METH_VARARGS, NULL},
 	 { (char *)"model_options_t_weight_autorescale_get", _wrap_model_options_t_weight_autorescale_get, METH_VARARGS, NULL},
+	 { (char *)"model_options_t_suspend_xylem_rebuild_set", _wrap_model_options_t_suspend_xylem_rebuild_set, METH_VARARGS, NULL},
+	 { (char *)"model_options_t_suspend_xylem_rebuild_get", _wrap_model_options_t_suspend_xylem_rebuild_get, METH_VARARGS, NULL},
+	 { (char *)"model_options_t_log_turns_set", _wrap_model_options_t_log_turns_set, METH_VARARGS, NULL},
+	 { (char *)"model_options_t_log_turns_get", _wrap_model_options_t_log_turns_get, METH_VARARGS, NULL},
 	 { (char *)"model_options_t_author_set", _wrap_model_options_t_author_set, METH_VARARGS, (char *)"This option currently does nothing."},
 	 { (char *)"model_options_t_author_get", _wrap_model_options_t_author_get, METH_VARARGS, (char *)"This option currently does nothing."},
 	 { (char *)"new_model_options_t", (PyCFunction) _wrap_new_model_options_t, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -81536,12 +82986,24 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ParameterList___delitem__", _wrap_ParameterList___delitem__, METH_VARARGS, NULL},
 	 { (char *)"ParameterList___contains__", _wrap_ParameterList___contains__, METH_VARARGS, NULL},
 	 { (char *)"ParameterList__len", _wrap_ParameterList__len, METH_VARARGS, NULL},
+	 { (char *)"ParameterList_alias", _wrap_ParameterList_alias, METH_VARARGS, NULL},
+	 { (char *)"ParameterList_del_alias", _wrap_ParameterList_del_alias, METH_VARARGS, NULL},
+	 { (char *)"ParameterList_unlink_alias", _wrap_ParameterList_unlink_alias, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_values", _wrap_ParameterList_values, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_zeros", _wrap_ParameterList_zeros, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_constraints", _wrap_ParameterList_constraints, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_freshen", _wrap_ParameterList_freshen, METH_VARARGS, NULL},
 	 { (char *)"delete_ParameterList", _wrap_delete_ParameterList, METH_VARARGS, NULL},
 	 { (char *)"ParameterList_swigregister", ParameterList_swigregister, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_name_set", _wrap_ParameterAlias_name_set, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_name_get", _wrap_ParameterAlias_name_get, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_refers_to_set", _wrap_ParameterAlias_refers_to_set, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_refers_to_get", _wrap_ParameterAlias_refers_to_get, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_multiplier_set", _wrap_ParameterAlias_multiplier_set, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_multiplier_get", _wrap_ParameterAlias_multiplier_get, METH_VARARGS, NULL},
+	 { (char *)"new_ParameterAlias", _wrap_new_ParameterAlias, METH_VARARGS, NULL},
+	 { (char *)"delete_ParameterAlias", _wrap_delete_ParameterAlias, METH_VARARGS, NULL},
+	 { (char *)"ParameterAlias_swigregister", ParameterAlias_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Parameter_name_set", _wrap_Parameter_name_set, METH_VARARGS, NULL},
 	 { (char *)"Parameter_name_get", _wrap_Parameter_name_get, METH_VARARGS, NULL},
 	 { (char *)"Parameter_value_set", _wrap_Parameter_value_set, METH_VARARGS, NULL},
@@ -81663,12 +83125,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Model2_provision", _wrap_Model2_provision, METH_VARARGS, NULL},
 	 { (char *)"Model2_is_provisioned", _wrap_Model2_is_provisioned, METH_VARARGS, NULL},
 	 { (char *)"Model2_Data", _wrap_Model2_Data, METH_VARARGS, NULL},
+	 { (char *)"Model2_DataEdit", _wrap_Model2_DataEdit, METH_VARARGS, NULL},
 	 { (char *)"Model2_loglike", _wrap_Model2_loglike, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility", _wrap_Model2_calc_utility, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_probability", _wrap_Model2_calc_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_logsums", _wrap_Model2_calc_logsums, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility_probability", _wrap_Model2_calc_utility_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_calc_utility_logsums", _wrap_Model2_calc_utility_logsums, METH_VARARGS, NULL},
+	 { (char *)"Model2_calculate_parameter_covariance", _wrap_Model2_calculate_parameter_covariance, METH_VARARGS, NULL},
+	 { (char *)"Model2_alias_names", _wrap_Model2_alias_names, METH_VARARGS, NULL},
 	 { (char *)"Model2_probability", _wrap_Model2_probability, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_set", _wrap_Model2_hessian_matrix_set, METH_VARARGS, NULL},
 	 { (char *)"Model2_hessian_matrix_get", _wrap_Model2_hessian_matrix_get, METH_VARARGS, NULL},
@@ -81789,6 +83254,8 @@ static void *_p_elm__VAS_dnaTo_p_std__mapT_long_long_elm__VAS_dna_info_std__less
 }
 static swig_type_info _swigt__p__object = {"_p__object", "_object *|PyObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t = {"_p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t", "boosted::shared_ptr< std::vector< long long,std::allocator< long long > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t = {"_p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t", "boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_elm__ComponentCellcodeMap = {"_p_elm__ComponentCellcodeMap", "elm::ComponentCellcodeMap *", 0, 0, (void*)0, 0};
@@ -81822,11 +83289,13 @@ static swig_type_info _swigt__p_etk__ostream_c = {"_p_etk__ostream_c", "etk::ost
 static swig_type_info _swigt__p_etk__refcounted = {"_p_etk__refcounted", "etk::refcounted *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_etk__string_sender = {"_p_etk__string_sender", "etk::string_sender *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_etk__three_dim = {"_p_etk__three_dim", "etk::three_dim *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_freedom_alias = {"_p_freedom_alias", "freedom_alias *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_freedom_info = {"_p_freedom_info", "freedom_info *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_key_type = {"_p_key_type", "key_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long_long = {"_p_long_long", "long long *|elm::caseid_t *|elm::cellcode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mapped_type = {"_p_mapped_type", "mapped_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p__object = {"_p_p__object", "_object **|PyObject **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_elm__darray = {"_p_p_elm__darray", "elm::darray **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sherpa = {"_p_sherpa", "sherpa *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sherpa_pack = {"_p_sherpa_pack", "sherpa_pack *|std::vector< sherpa_pack >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sherpa_result = {"_p_sherpa_result", "sherpa_result *", 0, 0, (void*)0, 0};
@@ -81877,6 +83346,8 @@ static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p__object,
   &_swigt__p_allocator_type,
+  &_swigt__p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t,
+  &_swigt__p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t,
   &_swigt__p_char,
   &_swigt__p_difference_type,
   &_swigt__p_elm__ComponentCellcodeMap,
@@ -81910,11 +83381,13 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_etk__refcounted,
   &_swigt__p_etk__string_sender,
   &_swigt__p_etk__three_dim,
+  &_swigt__p_freedom_alias,
   &_swigt__p_freedom_info,
   &_swigt__p_key_type,
   &_swigt__p_long_long,
   &_swigt__p_mapped_type,
   &_swigt__p_p__object,
+  &_swigt__p_p_elm__darray,
   &_swigt__p_sherpa,
   &_swigt__p_sherpa_pack,
   &_swigt__p_sherpa_result,
@@ -81965,6 +83438,8 @@ static swig_type_info *swig_type_initial[] = {
 
 static swig_cast_info _swigc__p__object[] = {  {&_swigt__p__object, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t[] = {  {&_swigt__p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t[] = {  {&_swigt__p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_elm__ComponentCellcodeMap[] = {  {&_swigt__p_elm__ComponentCellcodeMap, 0, 0, 0},{0, 0, 0, 0}};
@@ -81998,11 +83473,13 @@ static swig_cast_info _swigc__p_etk__ostream_c[] = {  {&_swigt__p_etk__ostream_c
 static swig_cast_info _swigc__p_etk__refcounted[] = {  {&_swigt__p_etk__refcounted, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_etk__string_sender[] = {  {&_swigt__p_etk__string_sender, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_etk__three_dim[] = {  {&_swigt__p_etk__three_dim, 0, 0, 0},  {&_swigt__p_elm__paramArray, _p_elm__paramArrayTo_p_etk__three_dim, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_freedom_alias[] = {  {&_swigt__p_freedom_alias, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_freedom_info[] = {  {&_swigt__p_freedom_info, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_key_type[] = {  {&_swigt__p_key_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mapped_type[] = {  {&_swigt__p_mapped_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p__object[] = {  {&_swigt__p_p__object, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_elm__darray[] = {  {&_swigt__p_p_elm__darray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sherpa[] = {  {&_swigt__p_elm__Model2, _p_elm__Model2To_p_sherpa, 0, 0},  {&_swigt__p_sherpa, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sherpa_pack[] = {  {&_swigt__p_sherpa_pack, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sherpa_result[] = {  {&_swigt__p_sherpa_result, 0, 0, 0},{0, 0, 0, 0}};
@@ -82053,6 +83530,8 @@ static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p__object,
   _swigc__p_allocator_type,
+  _swigc__p_boosted__shared_ptrT_std__vectorT_long_long_std__allocatorT_long_long_t_t_t,
+  _swigc__p_boosted__shared_ptrT_std__vectorT_std__string_std__allocatorT_std__string_t_t_t,
   _swigc__p_char,
   _swigc__p_difference_type,
   _swigc__p_elm__ComponentCellcodeMap,
@@ -82086,11 +83565,13 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_etk__refcounted,
   _swigc__p_etk__string_sender,
   _swigc__p_etk__three_dim,
+  _swigc__p_freedom_alias,
   _swigc__p_freedom_info,
   _swigc__p_key_type,
   _swigc__p_long_long,
   _swigc__p_mapped_type,
   _swigc__p_p__object,
+  _swigc__p_p_elm__darray,
   _swigc__p_sherpa,
   _swigc__p_sherpa_pack,
   _swigc__p_sherpa_result,

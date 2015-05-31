@@ -1020,13 +1020,16 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			else:
 				return cur.execute(command, arguments)
 		except apsw.SQLError as apswerr:
-			if not fail_silently:
-				l = logging.getScriber("db")
-				l.critical("(execute) SQL:\n%s"%command)
-				if arguments is not None:
-					l.critical("Bindings:")
-					l.critical(str(arguments))
-			raise
+			if 'no such table: larch_' in str(apswerr):
+				return self.execute(command, arguments=arguments, fancy=fancy, explain=explain, fail_silently=fail_silently, echo=echo, cte=True)
+			else:
+				if not fail_silently:
+					l = logging.getScriber("db")
+					l.critical("(execute) SQL:\n%s"%command)
+					if arguments is not None:
+						l.critical("Bindings:")
+						l.critical(str(arguments))
+				raise
 
 	def dict(self, command, arguments=()):
 		'''A convenience function for extracting a single row from an SQL query.
@@ -1055,7 +1058,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				l.critical(str(arguments))
 			raise
 
-	def value(self, command, arguments=(), *, fail_silently=False):
+	#def value(self, command, arguments=(), *, fail_silently=False, **kwargs):
+	def value(self, *args, **kwargs):
 		'''A convenience function for extracting a single value from an SQL query.
 		
 		:param command: A SQLite query.  If there is more than one result column
@@ -1064,26 +1068,37 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 						raised.
 		:param arguments: Values to bind to the SQLite command.
 		'''
+		cur = self.execute(*args, **kwargs)
 		try:
-			cur = self.cursor()
-			ret = []
-			if arguments is ():
-				i = [j[0] for j in cur.execute(command)]
-			else:
-				i = [j[0] for j in cur.execute(command, arguments)]
-			if len(i)>1:
-				raise TooManyResultsError('query returned multiple rows, expected only one row')
-			if len(i)==0:
-				raise NoResultsError('query returned no rows, expected one row')
-			return i[0]
-		except apsw.SQLError as apswerr:
-			if not fail_silently:
-				l = logging.getScriber("db")
-				l.critical("(value) SQL:\n%s"%command)
-				if arguments is not None:
-					l.critical("Bindings:")
-					l.critical(str(arguments))
-			raise
+			ret = next(cur)
+		except StopIteration:
+			raise NoResultsError('query returned no rows, expected one row')
+		try:
+			ret2 = next(cur)
+		except StopIteration:
+			return ret[0]
+		else:
+			raise TooManyResultsError('query returned multiple rows, expected only one row')
+		#
+		#		try:
+		#			cur = self.cursor()
+		#			ret = []
+		#			if arguments is ():
+		#				i = [j[0] for j in cur.execute(command, **kwargs)]
+		#			else:
+		#				i = [j[0] for j in cur.execute(command, arguments, **kwargs)]
+		#			if len(i)>1:
+		#				raise TooManyResultsError('query returned multiple rows, expected only one row')
+		#			if len(i)==0:
+		#			return i[0]
+		#		except apsw.SQLError as apswerr:
+		#			if not fail_silently:
+		#				l = logging.getScriber("db")
+		#				l.critical("(value) SQL:\n%s"%command)
+		#				if arguments is not None:
+		#					l.critical("Bindings:")
+		#					l.critical(str(arguments))
+		#			raise
 
 	def row(self, command, arguments=(), *, fail_silently=False, fancy=False):
 		'''A convenience function for extracting a single row from an SQL query.
@@ -1261,7 +1276,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#	result[c,a,:] = row[2:]
 		if sort:
 			order = numpy.argsort(caseids[:,0])
-			result = result[order,:,:]
+			result = numpy.ascontiguousarray( result[order,:,:] )
 			caseids = caseids[order,:]
 		result = numpy.nan_to_num(result)
 		from .array import Array
@@ -1299,7 +1314,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#	result[c,:] = row[1:]
 		if sort:
 			order = numpy.argsort(caseids[:,0])
-			result = result[order,:]
+			result = numpy.ascontiguousarray( result[order,:] )
 			caseids = caseids[order,:]
 		result = numpy.nan_to_num(result)
 		from .array import Array
@@ -1353,7 +1368,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#	result[c,:] = row[1:]
 		if sort:
 			order = numpy.argsort(caseids[:,0])
-			result = result[order,:]
+			result = numpy.ascontiguousarray( result[order,:] )
 			caseids = caseids[order,:]
 		result = numpy.nan_to_num(result)
 		from .array import Array
@@ -1424,7 +1439,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#	result[c,a,:] = row[2:]
 		if sort:
 			order = numpy.argsort(caseids[:,0])
-			result = result[order,:,:]
+			result = numpy.ascontiguousarray( result[order,:,:] )
 			caseids = caseids[order,:]
 		result = numpy.nan_to_num(result)
 		from .array import Array
@@ -1480,7 +1495,14 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		alt_slots = {a:n for n,a in enumerate(altcodes)}
 		n = 0	
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
-		self._array_idca_reader(qry, result, caseids, altcodes)
+		try:
+			self._array_idca_reader(qry, result, caseids, altcodes)
+		except:
+			print("result.shape=",result.shape)
+			print("caseids.shape=",caseids.shape)
+			print("qry=",qry)
+			print("count_cases=",self.value("SELECT count(distinct {}) FROM {}".format(caseid,table)))
+			raise
 		#for row in self.execute(qry):
 		#	if row[0] not in case_slots:
 		#		c = case_slots[row[0]] = n
@@ -1495,7 +1517,80 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#	result[c,a,:] = row[2:]
 		if sort:
 			order = numpy.argsort(caseids[:,0])
-			result = result[order,:,:]
+			result = numpy.ascontiguousarray( result[order,:,:] )
+			caseids = caseids[order,:]
+		from .array import Array
+		result = result.view(Array)
+		result.vars = [var,]
+		return result, caseids
+
+	def array_avail_blind(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
+		"""
+		Notes
+		-----
+		The blind version of this function does not attempt to find the number of cases before reading the data. 
+		This results in an extra copy step and greater (double plus) memory usage, but may be faster if the larch_avail table
+		is a complex query.
+		"""
+		import numpy
+		if altcodes is None:
+			altcodes = self.alternative_codes()
+		if table is None:
+			table = self.queries.tbl_avail()
+			if table=="":
+				if n_cases is None:
+					n_cases = self.value("SELECT count(*) FROM {}".format(self.queries.tbl_caseids()))
+				n_alts = len(altcodes)
+				n_vars = 1
+				result = numpy.ones([n_cases,n_alts,n_vars], dtype=dtype)
+				return result, None
+		ca_cols = [i.lower() for i in self.column_names(table)]
+		if caseid is None:
+			if 'caseid' in ca_cols:
+				caseid = 'caseid'
+			else:
+				caseid = ca_cols[0]
+		if altid is None:
+			if 'altid' in ca_cols:
+				altid = 'altid'
+			elif ca_cols[1]!=caseid:
+				altid = ca_cols[1]
+			else:
+				altid = ca_cols[0]
+		if var is None:
+			if 'avail' in ca_cols:
+				var = 'avail'
+			elif 'available' in ca_cols:
+				var = 'available'
+			elif ca_cols[2]!=caseid and ca_cols[2]!=altid:
+				var = ca_cols[2]
+			elif ca_cols[1]!=caseid and ca_cols[1]!=altid:
+				var = ca_cols[1]
+			else:
+				var = ca_cols[0]
+		cols = "{} AS caseid, {} AS altid, {} AS avail".format(caseid,altid,var)
+		qry = "SELECT {} FROM {}".format(cols, table)
+		try:
+			result, caseids = self._array_idca_reader_blind(qry, numpy.dtype('bool').num, altcodes)
+		except:
+			print("qry=",qry)
+			print("count_cases=",self.value("SELECT count(distinct {}) FROM {}".format(caseid,table)))
+			raise
+		#for row in self.execute(qry):
+		#	if row[0] not in case_slots:
+		#		c = case_slots[row[0]] = n
+		#		caseids[c] = row[0]
+		#		n +=1
+		#	else:
+		#		c = case_slots[row[0]]
+		#	try:
+		#		a = alt_slots[row[1]]
+		#	except KeyError:
+		#		raise KeyError("alt {} appears in data but is not defined".format(row[1]))
+		#	result[c,a,:] = row[2:]
+		if sort:
+			order = numpy.argsort(caseids[:,0])
+			result = numpy.ascontiguousarray( result[order,:,:] )
 			caseids = caseids[order,:]
 		from .array import Array
 		result = result.view(Array)
@@ -1519,7 +1614,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			if log:
 				log.info("Provisioning {} data...".format(key))
 			if key=="Avail":
-				provide[key], c = self.array_avail(n_cases=n_cases)
+				provide[key], c = self.array_avail_blind(n_cases=n_cases)
 			elif key=="Weight":
 				provide[key], c = self.array_weight(n_cases=n_cases)
 			elif key=="Choice":
@@ -1563,22 +1658,24 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return z
 
 
-	def display(self, stmt, arguments=(), file=None, header=True, format=None, countrows=False, shell=False, w=None, explode=False):
+	def display(self, stmt, arguments=(), file=None, header=True, format=None, countrows=False, shell=False, w=None, explode=False, **kwargs):
+		if format is None and explode:
+			format = "explode"
 		if shell:
 			sh = apsw.Shell(db=self)
 			if header:
 				sh.process_command(".header on")
 			sh.process_command(".mode column")
 			if w is not None:
-				sh.process_command(".width "+" ".join(w))
+				sh.process_command(".width "+" ".join([str(wx) for wx in w]))
 			sh.process_sql(stmt, arguments if arguments!=() else None,)
 		else:
 			rows = 0
 			try:
 				if format=="html":
 					print("<table>", file=file)
-				cur = self.cursor()
-				iter = cur.execute(stmt, arguments)
+				cur = self.execute(stmt, arguments, **kwargs)
+				iter = cur
 				if header and format!="explode":
 					try:
 						descrip = cur.getdescription()
@@ -1618,7 +1715,24 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	def table_info(self,table,**kwargs):
 		'''A convenience function to replace `display('PRAMGA table_info(<table>);', **kwargs)`.'''
-		return self.display('PRAGMA table_info({});'.format(table), **kwargs)
+		if len(kwargs)==0:
+			df = self.dataframe('PRAGMA table_info({});'.format(table))
+			max_lens = dict(
+				ci=max(3,max(len(str(i)) for i in df['cid'])),
+				nm=max(4,max(len(str(i)) for i in df['name'])),
+				ty=max(4,max(len(str(i)) for i in df['type'])),
+				nn=max(7,max(len(str(i)) for i in df['notnull'])),
+				df=max(7,max(len(str(i)) for i in df['dflt_value'])),
+				pk=max(2,max(len(str(i)) for i in df['pk'])),
+				)
+			print("{0:-<{ci}s} {1:-<{nm}s} {2:-<{ty}s} {3:-<{nn}s} {4:-<{df}s} {5:-<{pk}s}".format('','','','','','',**max_lens))
+			print("{0!s:{ci}s} {1!s:{nm}s} {2!s:{ty}s} {3!s:{nn}s} {4!s:{df}s} {5!s:{pk}s}".format('cid','name','type','notnull','default','pk',**max_lens))
+			print("{0:-<{ci}s} {1:-<{nm}s} {2:-<{ty}s} {3:-<{nn}s} {4:-<{df}s} {5:-<{pk}s}".format('','','','','','',**max_lens))
+			for rownum,row in df.iterrows():
+				print("{0!s:{ci}s} {1!s:{nm}s} {2!s:{ty}s} {3!s:{nn}s} {4!s:{df}s} {5!s:{pk}s}".format(*row,**max_lens))
+			print("{0:-<{ci}s} {1:-<{nm}s} {2:-<{ty}s} {3:-<{nn}s} {4:-<{df}s} {5:-<{pk}s}".format('','','','','','',**max_lens))
+		else:
+			return self.display('PRAGMA table_info({});'.format(table), **kwargs)
 
 	def table_schema(self,table,**kwargs):
 		return self.value("SELECT sql FROM sqlite_master WHERE name='{0}' UNION ALL SELECT sql FROM sqlite_temp_master WHERE name='{0}';".format(table), **kwargs)
@@ -1831,7 +1945,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			n += 1
 		return x
 
-	queries = property(Facet._get_queries,lambda self,x: self._set_queries(x,x))
+	queries = property(Facet._get_queries,lambda self,x: self._set_queries(x,x,self))
 
 	def load_queries(self, facetname=None):
 		if facetname is None:

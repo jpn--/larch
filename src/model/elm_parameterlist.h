@@ -39,8 +39,11 @@ namespace elm {
 	public:
 		etk::autoindex_string FNames;
 		std::map<std::string,freedom_info> FInfo;
+		
+		std::map<std::string,freedom_alias> AliasInfo;
+		
 		parametexr _generate_parameter(const std::string& freedom_name,
-									   const double& freedom_multiplier);
+									   double freedom_multiplier);
 	#endif // not SWIG
 
 public:
@@ -65,9 +68,13 @@ public:
 	void __setitem__(const std::string& param_name, freedom_info& value);
 	void __delitem__(const std::string& param_name);
 
-
 	bool __contains__(const std::string& param_name) const;
 	size_t _len() const;
+	
+	freedom_alias& alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier);
+	freedom_alias& alias(const std::string& alias_name);
+	void del_alias(const std::string& alias_name);
+	void unlink_alias(const std::string& alias_name);
 
 	PyObject* values() const;
 	void values(PyObject*);

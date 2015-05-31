@@ -324,36 +324,3 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 
 
 
-
-
-from .xhtml import XHTML
-
-
-def singlereport_2(filename, model, params=[], ratios=[], *, overwrite=False, spool=True, title=None):
-	with XHTML(filename) as x:
-		x.start("head")
-		if title: x.title(str(title))
-		x.end("head")
-		
-		x.body
-		
-		x.h1("Alternatives")
-		
-		x.table
-		
-		x.thead
-		x.th("Alternative Name")
-		x.th("Number")
-		x.end_thead
-
-		x.tbody
-		x.td("NAME1")
-		x.td("1")
-		x.end_tbody
-		
-		x.end_table
-		
-		x.end_body
-
-
-

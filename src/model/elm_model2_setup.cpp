@@ -184,7 +184,7 @@ void _setUp_linear_data_and_params_edges
 	for (auto iter=Input_Alloc.begin(); iter!=Input_Alloc.end(); iter++) {
 		auto edge = Xylem.edge_from_codes(iter->first.up, iter->first.dn);
 		if (!edge) {
-			OOPS("allocation input does not specify a valid network link.");
+			OOPS("allocation input up=",iter->first.up," dn=",iter->first.dn," does not specify a valid network link.");
 		}
 		
 		try {
@@ -347,6 +347,9 @@ void elm::Model2::scan_for_multiple_choices()
 
 void elm::Model2::_pull_graph_from_db()
 {
+	if (option.suspend_xylem_rebuild) {
+		OOPS("Xylem regrow is suspended");
+	}
 	BUGGER(msg) << "Rebuilding Xylem network...";
 	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.touch();
@@ -368,7 +371,7 @@ void elm::Model2::setUp(bool and_load_data)
 		return;
 	}
 
-	_pull_graph_from_db();
+	if (!option.suspend_xylem_rebuild) _pull_graph_from_db();
 	
 	if (Xylem.n_branches() > 0) {
 		BUGGER(msg) << "Setting model features to include nesting.";
@@ -384,9 +387,11 @@ void elm::Model2::setUp(bool and_load_data)
 	BUGGER(msg) << "Setting up utility parameters...";
 	_setUp_utility_data_and_params();
 	if (features & MODELFEATURES_NESTING) {
-		elm::cellcode root = Xylem.root_cellcode();
-		Xylem.touch();
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+		if (!option.suspend_xylem_rebuild) {
+			elm::cellcode root = Xylem.root_cellcode();
+			Xylem.touch();
+			Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+		}
 		if (features & MODELFEATURES_ALLOCATION) {
 			_setUp_NGEV();
 		} else {
@@ -408,7 +413,7 @@ void elm::Model2::setUp(bool and_load_data)
 	
 	_setUp_coef_and_grad_arrays();
 	
-	if (features & MODELFEATURES_NESTING) {
+	if ((features & MODELFEATURES_NESTING) && (!option.suspend_xylem_rebuild)) {
 		Xylem.repoint_parameters(*Coef_LogSum, NULL);
 		elm::cellcode root = Xylem.root_cellcode();
 		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
@@ -633,6 +638,21 @@ const elm::darray* elm::Model2::Data(const std::string& label)
 	
 }
 
+elm::darray* elm::Model2::DataEdit(const std::string& label)
+{
+	if (label=="UtilityCA") return Data_UtilityCA ?   const_cast<elm::darray*>(&*Data_UtilityCA) : nullptr;
+	if (label=="UtilityCO") return Data_UtilityCO ?   const_cast<elm::darray*>(&*Data_UtilityCO) : nullptr;
+	if (label=="SamplingCA") return Data_SamplingCA ? const_cast<elm::darray*>(&*Data_SamplingCA) : nullptr;
+	if (label=="SamplingCO") return Data_SamplingCO ? const_cast<elm::darray*>(&*Data_SamplingCO) : nullptr;
+	if (label=="Allocation") return Data_Allocation ? const_cast<elm::darray*>(&*Data_Allocation) : nullptr;
+
+	if (label=="Avail" ) return Data_Avail ?  const_cast<elm::darray*>(&*Data_Avail ) : nullptr;
+	if (label=="Choice") return Data_Choice ? const_cast<elm::darray*>(&*Data_Choice) : nullptr;
+	if (label=="Weight") return Data_Weight ? const_cast<elm::darray*>(&*Data_Weight) : nullptr;
+
+	OOPS(label, " is not a valid label for model data");
+	
+}
 
 
 const etk::ndarray* elm::Model2::Coef(const std::string& label)

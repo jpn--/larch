@@ -123,6 +123,10 @@ namespace elm {
 		
 		darray();
 		//default constructor is public, but raises an exception
+
+		darray(int dtype, int ncases, int nalts, int nvars);
+		darray(int dtype, int ncases, int nvars);
+		darray(int dtype, int ncases);
 		
 	public:
 		virtual ~darray();

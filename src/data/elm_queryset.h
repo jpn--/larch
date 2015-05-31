@@ -38,6 +38,7 @@ namespace elm {
 		
 	  protected:
 		elm::Facet* validator;
+		PyObject* py_validator;
 		
 	  public:
 		
@@ -65,9 +66,10 @@ namespace elm {
 		
 		virtual ~QuerySet();
 		
-		QuerySet(elm::Facet* validator=nullptr);
+		QuerySet(elm::Facet* validator=nullptr, PyObject* validator2=nullptr);
 
-		virtual void set_validator(elm::Facet* validator);
+		virtual void set_validator_(elm::Facet* validator, PyObject* validator2);
+		virtual PyObject* get_validator();
 
 		virtual std::string __repr__() const;
 		virtual std::string actual_type() const;
@@ -89,6 +91,9 @@ def __setstate__(self, state):
 	self.__init__()
 	for key, value in state.items():
 		getattr(self,key)(value)
+def set_validator(self, v):
+	self.set_validator_(v,v)
+	
 }
 }
 #endif // def SWIG

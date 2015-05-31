@@ -58,7 +58,7 @@ models.
 
 .. testcode::
 
-	m.option.calculate_std_err = True
+	m.option.calc_std_errors = True
 
 
 Having created this model, we can then estimate it:

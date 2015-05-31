@@ -81,6 +81,8 @@ namespace elm {
 		bool force_recalculate;
 		bool teardown_after_estimate;
 		bool weight_autorescale;
+		bool suspend_xylem_rebuild;
+		bool log_turns;
 		
 		std::string author;
 		
@@ -98,7 +100,9 @@ namespace elm {
 			bool force_recalculate=false,
 			std::string author="Chuck Finley",
 			bool teardown_after_estimate=true,
-			bool weight_autorescale=true
+			bool weight_autorescale=true,
+			bool suspend_xylem_rebuild=false,
+			bool log_turns=false
 		);
 	
 		// Re-constructor
@@ -115,7 +119,9 @@ namespace elm {
 			int force_recalculate=-9,
 			std::string author="-9",
 			int teardown_after_estimate=-9,
-			int weight_autorescale=-9
+			int weight_autorescale=-9,
+			int suspend_xylem_rebuild=-9,
+			int log_turns=-9
 		);
 
 		void copy(const model_options_t& other);
@@ -140,6 +146,10 @@ namespace elm {
 					if k[0:2]!="__" and k not in ['copy', 'this', 'thisown', '_as_dict']:
 						dct[k] = getattr(self, k)
 				return dct
+			def __setattr__(self, key, value):
+				if key not in dir(self) and key not in ['copy', 'this', 'thisown', '_as_dict']:
+					raise TypeError( "cannot create the new attribute '%s' for %s" % (str(key),str(type(self))) )
+				super(model_options_t, self).__setattr__(key, value)
 			%}
 		}
 		#endif // SWIG

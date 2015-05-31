@@ -26,7 +26,7 @@ elm::ParameterList::ParameterList(const elm::ParameterList& dupe)
 
 
 elm::parametexr elm::ParameterList::_generate_parameter(const std::string& freedom_name,
-										   const double& freedom_multiplier)
+														double freedom_multiplier)
 {
 	std::string fn = freedom_name;
 	etk::uppercase(fn);
@@ -35,16 +35,30 @@ elm::parametexr elm::ParameterList::_generate_parameter(const std::string& freed
 	} else if (freedom_multiplier==0) {
 		OOPS("multiplier cannot be zero");
 	}
-	if (!FNames.has_key(freedom_name) ) {
-		throw(etk::ParameterNameError(etk::cat("parameter name '",freedom_name,"' not found")));
+	
+	auto iter = AliasInfo.find(freedom_name);
+	if (iter!=AliasInfo.end()) {
+		freedom_alias* x = &iter->second;
+		fn = x->refers_to;
+		freedom_multiplier *= x->multiplier;
+		if (!FNames.has_key(fn) &&  AliasInfo.find(fn)==AliasInfo.end()) {
+			throw(etk::ParameterNameError(etk::cat("parameter name '",fn,"' referred to by alias '",freedom_name,"' not found")));
+		}
+		return _generate_parameter(fn,freedom_multiplier);
+	} else {
+		fn = freedom_name;
 	}
-	if (FInfo[freedom_name].holdfast) {
-		return boosted::make_shared<parametex_constant>(freedom_multiplier*FInfo[freedom_name].value);
+	
+	if (!FNames.has_key(fn) ) {
+		throw(etk::ParameterNameError(etk::cat("parameter name '",fn,"' not found")));
+	}
+	if (FInfo[fn].holdfast) {
+		return boosted::make_shared<parametex_constant>(freedom_multiplier*FInfo[fn].value);
 	}
 	if (freedom_multiplier==1.0) {
-		return boosted::make_shared<elm::parametex_equal>(freedom_name,this);
+		return boosted::make_shared<elm::parametex_equal>(fn,this);
 	} 
-	return boosted::make_shared<elm::parametex_scale>(freedom_name,this,freedom_multiplier);
+	return boosted::make_shared<elm::parametex_scale>(fn,this,freedom_multiplier);
 }
 
 
@@ -100,6 +114,87 @@ freedom_info& elm::ParameterList::parameter(const std::string& param_name,
 	return FInfo[param_name];
 }
 
+freedom_alias& elm::ParameterList::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot name an alias with an empty string."));
+	}
+	if (refers_to=="") {
+		throw(etk::ParameterNameError("Cannot refer to a parameter with an empty string."));
+	}
+	
+	auto iter = FInfo.find(refers_to);
+	if (iter == FInfo.end()) {
+		throw(etk::ParameterNameError("Cannot refer to a parameter that has not been previously defined."));
+	}
+
+	if (alias_name==refers_to) {
+		throw(etk::ParameterNameError("Cannot create an alias that refers to a parameter with the same name."));
+	}
+
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		AliasInfo.emplace(alias_name,freedom_alias(alias_name, refers_to, multiplier));
+	} else {
+		AliasInfo.at(alias_name) = freedom_alias(alias_name, refers_to, multiplier);
+	}
+	
+	// If the alias_name is a parameter and not self-referential, delete the parameter
+	auto iter2 = FInfo.find(alias_name);
+	if ((alias_name!=refers_to) && (iter2 != FInfo.end())) {
+		__delitem__(alias_name);
+	}
+	
+	return AliasInfo.at(alias_name);
+}
+
+freedom_alias& elm::ParameterList::alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot reference an alias with an empty string."));
+	}
+
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		throw(etk::ParameterNameError(etk::cat("Cannot find an alias named '",alias_name,"'.")));
+	} else {
+		return AliasInfo.at(alias_name);
+	}
+	
+}
+
+void elm::ParameterList::del_alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot delete an alias named <empty string>."));
+	}
+	AliasInfo.erase(alias_name);
+}
+
+void elm::ParameterList::unlink_alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot unlink an alias named <empty string>."));
+	}
+	
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		throw(etk::ParameterNameError("Cannot unlink an alias that does not exist."));
+	}
+	std::string refers_to = AliasInfo.at(alias_name).refers_to;
+	double multiplier = AliasInfo.at(alias_name).multiplier;
+	
+	parameter(alias_name,
+			  FInfo[refers_to].value*multiplier,
+			  FInfo[refers_to].null_value*multiplier,
+			  FInfo[refers_to].initial_value*multiplier,
+			  FInfo[refers_to].max_value*multiplier,
+			  FInfo[refers_to].min_value*multiplier,
+			  NAN,
+			  NAN,
+			  FInfo[refers_to].holdfast);
+	
+	AliasInfo.erase(alias_name);
+}
+
+
 freedom_info& elm::ParameterList::__getitem__(const std::string& param_name)
 {
 	return parameter(param_name);
@@ -128,7 +223,11 @@ void elm::ParameterList::__delitem__(const std::string& param_name)
 
 bool elm::ParameterList::__contains__(const std::string& param_name) const
 {
-	return FNames.has_key(param_name);
+	bool t = FNames.has_key(param_name);
+	if (t) return true;
+	auto iter = AliasInfo.find(param_name);
+	if (iter != AliasInfo.end()) return true;
+	return false;
 }
 
 PyObject* elm::ParameterList::values() const

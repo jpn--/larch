@@ -102,6 +102,10 @@ bool sherpa_pack::tell_turn(const double& val, const double& tol, std::string& e
 		explain_stop = x.str();
 		return false;
 	}
+	if (isnan(tol)) {
+		explain_stop = "Tolerance is NaN";
+		return false;
+	}
 	std::ostringstream x;
 	x << "Tolerance is "<<tol<<" which is less than the threshold value of "<<tolerance_threshold;
 	explain_stop = x.str();

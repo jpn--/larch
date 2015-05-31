@@ -57,7 +57,7 @@ def model(d=None):
 	# ModelObject.option
 	#	A structure that defines certain options to be applied when estimating
 	#	models.
-	m.option.calculate_std_err = True
+	m.option.calc_std_errors = True
 
 	# ModelObject.nest(<name of nest>, <altcode of nest>, <parameter name>)
 	m.nest("existing", 4, "existing") 

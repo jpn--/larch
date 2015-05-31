@@ -141,7 +141,7 @@ void elm::Model2::freshen()
 	allocate_memory();
 	
 	elm::cellcode root = Xylem.root_cellcode();
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+	if (!option.suspend_xylem_rebuild) Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
@@ -1042,7 +1042,7 @@ void elm::Model2::utilityca
 		BUGGER(msg) << "checking for validity of "<<variable_name<<" in idCA data";
 		_Data->check_ca(variable_name);
 	}
-	INFO(msg) << "success: added "<<variable_name;
+	MONITOR(msg) << "success: added "<<variable_name;
 }
 
 
@@ -1112,7 +1112,7 @@ string elm::Model2::_add_utility_co
 		}
 	}
 
-	INFO(msg) << "success: added "<<variable_name;
+	MONITOR(msg) << "success: added "<<variable_name;
 	return "success";
 }
 
@@ -1297,6 +1297,13 @@ string elm::Model2::prints(const unsigned& precision, const unsigned& cell_width
 		ret << std::setw(cell_width) << fi->std_err << "\t";
 		ret << std::setw(cell_width) << fi->t_stat() << "\t";
 		ret << std::setw(cell_width) << fi->null_value << "\n";
+	}
+	for (auto al=AliasInfo.begin(); al !=AliasInfo.end(); al++) {
+		const freedom_info* fi = get_raw_info(al->second.refers_to);
+		ret << std::setw(max_length_freedom_name) << std::left << al->first << std::right << "\t";
+		ret << std::setw(cell_width) << fi->initial_value*al->second.multiplier << "\t";
+		ret << std::setw(cell_width) << fi->value*al->second.multiplier << "\t";
+		ret << "= "<<al->second.refers_to<<" * "<<al->second.multiplier<< "\n";
 	}
 	
 	if (Xylem.size()>Xylem.n_elemental()+1) {

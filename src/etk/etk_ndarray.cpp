@@ -191,6 +191,12 @@ ndarray::ndarray(const char* arrayType)
 	quick_new(NPY_DOUBLE, arrayType, 0);
 }
 
+ndarray::ndarray(const char* arrayType, const int& datatype, const int& r, const int& c, const int& s)
+: pool (nullptr)
+{
+	quick_new(datatype, arrayType, r,c,s);
+}
+
 
 ndarray::ndarray(const int& r, const char* arrayType)
 : pool (nullptr)

@@ -68,6 +68,7 @@ namespace elm {
 		void set_choice_column(const std::string& col);
 		void set_choice_column_map(const std::map<long long, std::string>& cols);
 		void set_avail_column_map(const std::map<long long, std::string>& cols);
+		void set_avail_query(const std::string& q);
 		void set_avail_all();
 		void set_weight_column(const std::string& col);
 		void set_alts_query(const std::string& q);
@@ -77,6 +78,7 @@ namespace elm {
 		std::string get_choice_column() const;
 		std::map<long long, std::string> get_choice_column_map() const;
 		std::map<long long, std::string> get_avail_column_map() const;
+		std::string get_avail_query() const;
 		std::string get_weight_column() const;
 		std::string get_alts_query() const;
 		std::map<long long, std::string> _get_alts_values() const;
@@ -88,6 +90,7 @@ namespace elm {
 		std::map<long long, std::string> _alt_avail_columns;
 		std::string _weight_column;
 		std::string _alts_query;
+		std::string _alt_avail_query;
 		
 		std::string __test_query_caseids(const std::string& alias_caseid) const;
 		std::string __alias_caseid() const;

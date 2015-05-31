@@ -708,3 +708,74 @@
 }
 
 
+
+
+/* Set the input argument to point to a temporary variable */
+%typemap(in, numinputs=0) elm::darray** result_array (elm::darray* temp) {
+	temp = nullptr;
+	$1 = &temp;
+}
+
+%typemap(in, numinputs=0) elm::darray** result_caseids (elm::darray* temp) {
+	temp = nullptr;
+	$1 = &temp;
+}
+
+// Return the buffer.  Discarding any previous return result
+%typemap(argout) (elm::darray** result_array, elm::darray** result_caseids) {
+   Py_XDECREF($result);   /* Blow away any previous result */
+	
+	PyObject* ret1 = nullptr;
+	PyObject* ret2 = nullptr;
+	
+	if (!$1 || !(*$1)) {
+		Py_INCREF(Py_None);
+		ret1 = Py_None;
+	} else {
+		ret1 = (*$1)->get_array();
+		
+		if (PyObject_HasAttrString(ret1, "vars")) {
+			PyObject_DelAttrString(ret1, "vars");
+		}
+		
+		PyObject* py_vars = PyTuple_New(((*$1))->get_variables().size());
+		
+		for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+			PyObject* item = PyString_FromString((((*$1))->get_variables()[i]).c_str());
+			PyTuple_SetItem(py_vars, i, item);
+		}
+		
+		PyObject_SetAttrString(ret1, "vars", py_vars);
+		
+		Py_CLEAR(py_vars);
+		delete (*$1);
+	}
+
+	if (!$2 || !(*$2)) {
+		Py_INCREF(Py_None);
+		ret2 = Py_None;
+	} else {
+		ret2 = (*$2)->get_array();
+		
+		if (PyObject_HasAttrString(ret2, "vars")) {
+			PyObject_DelAttrString(ret2, "vars");
+		}
+		
+		PyObject* py_vars = PyTuple_New(((*$2))->get_variables().size());
+		
+		for (Py_ssize_t i = 0; i<PySequence_Size(py_vars); i++) {
+			PyObject* item = PyString_FromString((((*$2))->get_variables()[i]).c_str());
+			PyTuple_SetItem(py_vars, i, item);
+		}
+		
+		PyObject_SetAttrString(ret2, "vars", py_vars);
+		
+		Py_CLEAR(py_vars);
+		delete (*$2);
+	}
+	
+	$result = PyTuple_New(2);
+	PyTuple_SetItem($result, 0, ret1);
+	PyTuple_SetItem($result, 1, ret2);
+}
+

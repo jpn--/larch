@@ -217,7 +217,7 @@ class TestNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic = 0
-		m.option.calculate_std_err = 1
+		m.option.calc_std_errors = True
 		m.nest("existing", 4, "existing") 
 		m.link(4, 1)
 		m.link(4, 3)
@@ -258,7 +258,7 @@ class TestNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic = 0
-		m.option.calculate_std_err = 1
+		m.option.calc_std_errors = True
 		m.nest("existing", 4, "existing") 
 		m.link(4, 1)
 		m.link(4, 3)
@@ -294,7 +294,7 @@ class TestNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic = 5
-		m.option.calculate_std_err = 1
+		m.option.calc_std_errors = True
 		m.nest("existing", 4, "existing") 
 		m.link(4, 1)
 		m.link(4, 3)
@@ -339,7 +339,7 @@ class TestNL(ELM_TestCase):
 		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 		m.utility.co("CAR_CO",        3,"B_COST") 
 		m.option.gradient_diagnostic = 0
-		m.option.calculate_std_err = 1
+		m.option.calc_std_errors = True
 		m.nest("existing", 4, "existing") 
 		m.link(4, 1)
 		m.link(4, 3)
@@ -406,7 +406,7 @@ class TestNL(ELM_TestCase):
 		d = DB.Example('MTC')
 		m = Model(d)
 		m.option.threads = 1
-		m.option.calculate_std_err = 0
+		m.option.calc_std_errors = False
 		m.parameter("cost",0)
 		m.parameter("tottime",0) 
 		m.parameter("con2",0) 

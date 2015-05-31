@@ -189,7 +189,9 @@ void elm::Model2::change_data_pointer(elm::Facet& datafile)
 	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.clear();
 	Xylem.add_dna_sequence(_Data->alternatives_dna());
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+	if (!option.suspend_xylem_rebuild) {
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+	}
 	
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
@@ -337,6 +339,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		
 		flag_gradient_diagnostic = option.gradient_diagnostic; //Option_integer("gradient_diagnostic");
 		flag_hessian_diagnostic = option.hessian_diagnostic; // Option_integer("hessian_diagnostic");
+		flag_log_turns = option.log_turns;
 		BUGGER(msg) << "Diagnostic flags set.";
 	
 		if (flag_gradient_diagnostic) {
@@ -393,7 +396,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 			//invHess.inv(true);
 			//MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 			BUGGER(msg) << "calculate_parameter_covariance...";
-			calculate_parameter_covariance();
+			calculate_parameter_covariance(false);
 			BUGGER(msg) << "calculate_parameter_covariance complete.";
 		} else {
 			Hess.initialize(NAN);
@@ -402,7 +405,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 
 	} SPOO {
 		if (oops.code()==-8) {
-			_update_freedom_info();
+			_update_freedom_info_best();
 			_latest_run.write_result( "User Interrupt" );
 			_latest_run.finish();
 			PYTHON_INTERRUPT;
@@ -483,7 +486,7 @@ void elm::Model2::calculate_hessian_and_save()
 //}
 
 
-void elm::Model2::calculate_parameter_covariance()
+void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 {
 	MONITOR(msg) << "calculate_parameter_covariance()\n";
 
@@ -582,6 +585,16 @@ void elm::Model2::calculate_parameter_covariance()
 		MONITOR(msg) << "robustCovariance\n" << robustCovariance.printSquare() ;
 
 	}
+
+	if (update_freedoms) {
+		BUGGER(msg) << "updating freedom info...";
+		try {
+			_update_freedom_info(&invHess, &robustCovariance);
+		} SPOO {
+			FATAL(msg) << "error in updating standard errors";
+		}
+	}
+
 }
 
 
@@ -634,10 +647,41 @@ void elm::Model2::_parameter_log()
 	MONITOR(msg) << "----------------------";
 }
 
+std::string elm::Model2::_parameter_report() const
+{
+	std::ostringstream buff;
+	int pname_width = 9;
+	for ( size_t i=0; i<dF(); i++) {
+		if (FNames[i].length() > pname_width) {
+			pname_width = FNames[i].length();
+		}
+	}
+	buff << "\n" ;
+	buff.width(pname_width);
+	buff << "Parameter" << "\t";
+	buff.width(18);
+	buff << "Value" << "\n" ;
+	for ( size_t i=0; i<dF(); i++) {
+		buff.width(pname_width);
+		buff << FNames[i] << "\t";
+		buff.width(18);
+		buff << ReadFCurrent()[i] << "\n";
+	}
+	return buff.str();
+}
 
 std::vector< std::string > elm::Model2::parameter_names() const
 {
 	return FNames.strings();
+}
+
+std::vector< std::string > elm::Model2::alias_names() const
+{
+	std::vector< std::string > x;
+	for (auto i=AliasInfo.begin(); i!=AliasInfo.end(); i++) {
+		x.push_back(i->first);
+	}
+	return x;
 }
 
 PyObject* __GetParameterDict(const freedom_info& i)
@@ -929,6 +973,20 @@ std::string elm::Model2::save_buffer() const
 	}
 	sv << "\n";
 	
+	// save alias
+	BUGGER( msg ) << "save alias";
+	for (auto p=AliasInfo.begin(); p!=AliasInfo.end(); p++) {
+		BUGGER( msg ) << "save alias "<<p->first;
+		auto j = p->second;
+		
+		sv << "self.alias('"<<j.name<<"'";
+		sv << ",'"<<j.refers_to<<"'";
+		sv << ","<<AsPyFloat(j.multiplier);
+		sv << ")\n";
+	}
+	sv << "\n";
+	
+	
 	// save utility
 	BUGGER( msg ) << "save utility";
 	for (auto u=Input_Utility.ca.begin(); u!=Input_Utility.ca.end(); u++) {
@@ -974,7 +1032,7 @@ std::string elm::Model2::save_buffer() const
 	}
 	for (auto u=Input_Sampling.co.begin(); u!=Input_Sampling.co.end(); u++) {
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
-			sv << "self.samplingbias.co('''"<<u->first<<"''',"<<k->data_name<<",'''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
+			sv << "self.samplingbias.co("<<u->first<<",'''"<<k->data_name<<"''','''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";

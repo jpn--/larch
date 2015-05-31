@@ -72,7 +72,7 @@ Let's see what we get:
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.option.calculate_std_err = True
+	>>> m.option.calc_std_errors = True
 	>>> m.estimate()
 	success ...
 	>>> m.loglike()

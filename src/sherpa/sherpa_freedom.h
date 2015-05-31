@@ -32,6 +32,22 @@
 %include "sherpa_freedom.i"
 #endif // SWIG
 
+
+struct freedom_alias {
+	std::string name;
+	std::string refers_to;
+	double multiplier;
+	
+	freedom_alias(const std::string& name, const std::string& refers_to, const double& multiplier)
+	: name(name)
+	, refers_to(refers_to)
+	, multiplier(multiplier)
+	{ }
+	
+};
+
+
+
 class freedom_info {
 public:
 	std::string name;
@@ -83,6 +99,8 @@ public:
 						   PyObject* covariance=nullptr,
 						   PyObject* robust_covariance=nullptr);
 };
+
+
 
 
 #ifdef SWIG 

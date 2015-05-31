@@ -73,6 +73,8 @@ namespace etk {
 	protected:
 		void quick_new(const int& datatype, const char* arrayClass, const int& r,const int& c=-1,const int& s=-1);
 	public:
+		ndarray(const char* arrayType, const int& datatype, const int& r, const int& c=-1, const int& s=-1);
+
 		ndarray(const char* arrayType="Array");
 		ndarray(const int& r, const char* arrayType="Array");
 		ndarray(const int& r,const int& c, const char* arrayType="Array");

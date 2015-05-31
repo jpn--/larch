@@ -18,6 +18,7 @@
 #
 
 import os.path, os, pickle, zlib, glob
+import numpy
 from . import logging
 try:
 	from . import apsw
@@ -25,6 +26,55 @@ except ImportError:
 	from .mock_module import Mock
 	apsw = Mock()
 	class Dummy(): pass
+
+
+_uidn = 0
+
+def uid():
+	global _uidn
+	_uidn += 1
+	return "rx{}".format(_uidn)
+
+
+
+def random_sample(a, size=None, replace=False, p=None):
+	""" Generates a random sample from a given 1-D array, using numpy.random.choice
+
+		Parameters
+		----------
+		a : 1-D array-like or int
+			If an ndarray, a random sample is generated from its elements. 
+			If an int, the random sample is generated as if a was np.arange(n)
+		size : int or tuple of ints, optional
+			Output shape. If the given shape is, e.g., (m, n, k), then m * n * k samples are drawn. 
+			Default is None, in which case a single value is returned.
+		replace : boolean, optional
+			Whether the sample is with or without replacement
+		p : 1-D array-like, optional
+			The weights associated with each entry in a. If not given the sample assumes 
+			a uniform distribution over all entries in a.
+			Unlike numpy.random.choice, the sum of p need not equal 1; the weights
+			are automatically scaled into probabilities.
+			
+		Returns
+		-------
+		samples : 1-D ndarray, shape (size,)
+			The generated random samples
+		
+		Raises
+		------
+		ValueError
+			If a is an int and less than zero, 
+			if a or p are not 1-dimensional, 
+			if a is an array-like of size 0, 
+			if p contains any negative weights,
+			if a and p have different lengths, 
+			or if replace=False and the sample size is greater than the population size
+	"""
+	if p is not None:
+		return numpy.random.choice(a, size, replace, p=numpy.array(p)/numpy.array(p).sum())
+	else:
+		return numpy.random.choice(a, size, replace)
 
 
 TemporaryBucket = []
@@ -50,11 +100,28 @@ def TemporaryFile(suffix=None, mode='w+'):
 	TemporaryBucket.append(t)
 	return t
 
-def TemporaryHtml(style=None):
-	t = TemporaryFile(suffix='.html')
-	if style is not None:
-		stylehead = """<head><style>{}</style></head>""".format(style)
-		t.write(stylehead)
+def _try_write(self, content):
+	try:
+		self.write_(content)
+	except:
+		try:
+			self.write_(str(content))
+		except:
+			self.write_(str(content).encode('utf-8'))
+
+
+def TemporaryHtml(style=None, *, nohead=False, mode='wb+', **tagheads):
+	t = TemporaryFile(suffix='.html', mode=mode)
+	if 'b' in mode:
+		t.write_ = t.write
+		t.write = lambda x: _try_write(t,x)
+	if not nohead and (style or len(tagheads)>0):
+		t.write("<head>")
+		if style:
+			t.write("<style>{}</style>".format(style))
+		for tag, content in tagheads.items():
+			t.write("<{0}>{1}</{0}>".format(tag.lower(),content))
+		t.write("</head>")
 	return t
 
 def webpage(content, *, file=None, title=None):
@@ -679,6 +746,9 @@ class pmath():
 		self._fmt = "{}"
 		self._name = ""
 	def value(self,m):
+		if self._p in m.alias_names():
+			als = m.alias(self._p)
+			return m.metaparameter(self._p).value
 		if self._p in m:
 			return m[self._p].value
 		raise LarchError("parameter {} not in model".format(self._p))

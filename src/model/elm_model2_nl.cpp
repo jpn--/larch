@@ -64,7 +64,7 @@ void elm::Model2::_setUp_NL()
 	if (nThreads < 1) nThreads = 1;
 	if (nThreads > 1024) nThreads = 1024;
 	
-	Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+	if (!option.suspend_xylem_rebuild) Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
 	BUGGER(msg) << "_setUp_NL:Xylem:\n" << Xylem.display();
 	
 	unsigned slot;
@@ -130,7 +130,7 @@ void elm::Model2::_setUp_NGEV()
 	if (nThreads < 1) nThreads = 1;
 	if (nThreads > 1024) nThreads = 1024;
 	
-	Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+	if (!option.suspend_xylem_rebuild) Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
 	BUGGER(msg) << "_setUp_NL:Xylem:\n" << Xylem.display();
 	
 	unsigned slot;
@@ -187,6 +187,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_probability (
 								 , &Cond_Prob
 								 , &AdjProbability
 								 , &Xylem
+								 , option.mute_nan_warnings
 								 , &msg
 								 );}
 
@@ -215,6 +216,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability
 								 , &Cond_Prob
 								 , &AdjProbability
 								 , &Xylem
+								 , option.mute_nan_warnings
 								 , &msg
 								 );}
 
@@ -278,6 +280,7 @@ void elm::Model2::nl_probability()
 								 , &Cond_Prob
 								 , &AdjProbability
 								 , &Xylem
+								 , option.mute_nan_warnings
 								 , &msg
 								 );};
 		#else
@@ -341,7 +344,7 @@ void elm::Model2::nl_probability()
 
 		
 		// NANCHECK
-		if (true) {
+		if (!option.mute_nan_warnings) {
 			found_nan = false;
 			for (a=0; a<Probability.size2();a++) {
 				if (isNan(Probability(c,a))) {
@@ -526,7 +529,7 @@ ELM_RESULTCODE elm::Model2::nest
 				i->second._altcode = nest_code;
 				result |= ELM_UPDATED;
 			}
-			INFO(msg) << "success: updated parameter on existing node "<<nest_name<<" (" <<nest_code<<")";
+			MONITOR(msg) << "success: updated parameter on existing node "<<nest_name<<" (" <<nest_code<<")";
 			return result;
 		}
 
@@ -545,11 +548,18 @@ ELM_RESULTCODE elm::Model2::nest
 		OOPS( cat("error in adding nest: ",oops.what()));
 	}
 	if (result & ELM_CREATED) {
-		elm::cellcode root = Xylem.root_cellcode();
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
-		nElementals = Xylem.n_elemental();
-		nNests = Xylem.n_branches();
-		nNodes = Xylem.size();
+		if (!option.suspend_xylem_rebuild) {
+			elm::cellcode root = Xylem.root_cellcode();
+			Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+			nElementals = Xylem.n_elemental();
+			nNests = Xylem.n_branches();
+			nNodes = Xylem.size();
+		} else {
+			// make a best guess for now, and regrow for real later...
+			// nElementals = no change;
+			nNests += 1;
+			nNodes += 1;
+		}
 	}
 	return result;
 }

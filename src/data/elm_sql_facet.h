@@ -197,7 +197,7 @@ namespace elm {
 		QuerySet* queries_ptr;
 	public:
 		PyObject* _get_queries();
-		void _set_queries(PyObject* q, QuerySet* qp);
+		void _set_queries(PyObject* q, QuerySet* qp, PyObject* facetself);
 		
 		void refresh_queries();
 	
@@ -263,6 +263,13 @@ namespace elm {
 		std::vector<long long> caseids(const unsigned& firstcasenum=0, const unsigned& numberofcases=0, int no_error_checking=0) const;
 		std::vector<long long> altids() const;
 
+	private:
+		boosted::weak_ptr< std::vector<std::string> >  _alternative_names;
+		boosted::weak_ptr< std::vector<long long>   >  _alternative_codes;
+
+	public:
+		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names() const;
+		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes() const;
 		std::vector<std::string>    alternative_names() const;
 		std::vector<long long>      alternative_codes() const;
 		
@@ -379,6 +386,8 @@ namespace elm {
 		
 		void _array_idco_reader(const std::string& qry, elm::darray* array, elm::darray* caseids);
 		void _array_idca_reader(const std::string& qry, elm::darray* array, elm::darray* caseids, const std::vector<long long>& altids);
+
+		void _array_idca_reader_blind(const std::string& qry, int arraytype, const std::vector<long long>& altids, elm::darray** result_array, elm::darray** result_caseids);
 	};
 
 

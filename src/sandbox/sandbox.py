@@ -134,7 +134,7 @@ def test_swissmetro_1():
 	m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
 	m.utility.co("CAR_CO",        3,"B_COST") 
 	m.option.gradient_diagnostic=3
-	m.option.calculate_std_err=1
+	m.option.calc_std_errors=True
 	m.setUp()
 	d.sql()
 	#raise RuntimeError()
@@ -285,7 +285,7 @@ def test_swissmetro_09nested():
 	m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST")
 	m.utility.co("CAR_CO",        3,"B_COST")
 	m.option.gradient_diagnostic = 10
-	m.option.calculate_std_err = 1
+	m.option.calc_std_errors = 1
 	m.option.threads = 4
 	m.nest("existing", 4, "existing")
 	m.link(4, 1)
@@ -359,13 +359,43 @@ def test_save_and_load():
 
 
 
-sys.path.append("/Users/jpn/Dropbox/Logisticare/")
-os.chdir("/Users/jpn/Dropbox/Logisticare/")
-execfile("/Users/jpn/Dropbox/Logisticare/NJ.py")
+#sys.path.append("/Users/jpn/Dropbox/Logisticare/")
+#os.chdir("/Users/jpn/Dropbox/Logisticare/")
+#execfile("/Users/jpn/Dropbox/Logisticare/NJ.py")
 
+#import larch.test
+#larch.test.run()
 
+sys.path.append("/Users/jpn/Dropbox/Thurston/Code")
+os.chdir("/Users/jpn/Dropbox/Thurston/Code")
+execfile("spinup.py")
 
-
+#d = larch.DB.Example()
+#m = larch.Model(d)
+#
+#m.utility.co("1",2,"ASC_SR2") 
+#m.utility.co("1",3,"ASC_SR3P") 
+#m.utility.co("1",4,"ASC_TRAN") 
+#m.utility.co("1",5,"ASC_BIKE") 
+#m.utility.co("1",6,"ASC_WALK") 
+#m.utility.co("hhinc",2)
+#m.utility.co("hhinc",3)
+#m.utility.co("hhinc",4)
+#m.utility.co("hhinc",5)
+#m.utility.co("hhinc",6)
+#
+#m.utility.ca("tottime")
+#m.utility.ca("totcost")
+#
+#m.alias("totcost", "tottime", 1.0)
+#
+#m.option.calc_std_errors = False
+#m.estimate()
+#print(m)
+#
+#m.unlink_alias("totcost")
+#m.estimate()
+#print(m)
 
 
 

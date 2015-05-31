@@ -57,7 +57,7 @@ def model(d=None): # Define a function to create a model object.
 	# ModelObject.option
 	#	A structure that defines certain options to be applied when estimating
 	#	models.
-	m.option.calculate_std_err = True
+	m.option.calc_std_errors = True
 
 	return m # Returns the model object from the model() function.
 
