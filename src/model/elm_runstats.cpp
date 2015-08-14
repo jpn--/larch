@@ -67,13 +67,15 @@ elm::runstats::runstats(long startTimeSec, long startTimeUSec,
 				 unsigned iteration,
 				 std::string results,
 				 std::string notes,
-				 std::string timestamp)
+				 std::string timestamp,
+				 std::string processor)
 : startTime ()
 , endTime ()
 , iteration (iteration)
 , _notes (notes)
 , results (results)
 , timestamp (timestamp)
+, processor(processor)
 {
 #ifdef __APPLE__
 	if (startTimeSec || startTimeUSec) {
@@ -96,6 +98,7 @@ elm::runstats::runstats(const runstats& other)
 , _notes (other._notes)
 , results (other.results)
 , timestamp (other.timestamp)
+, processor(other.processor)
 {
 }
 
@@ -106,6 +109,7 @@ elm::runstats::runstats(PyObject* dictionary)
 , _notes ()
 , results ()
 , timestamp ()
+, processor ()
 {
 	read_from_dictionary(dictionary);
 }
@@ -193,6 +197,7 @@ PyObject* elm::runstats::dictionary() const
 	etk::py_add_to_dict(P, "results", results);
 	etk::py_add_to_dict(P, "notes", _notes);
 	etk::py_add_to_dict(P, "timestamp", timestamp);
+	etk::py_add_to_dict(P, "processor", processor);
 	
 	return etk::py_one_item_list(P);
 }
@@ -216,6 +221,8 @@ void elm::runstats::read_from_dictionary(PyObject* P)
 	if (x!=0) OOPS("error in reading run_stats results");
 	x=etk::py_read_from_dict(P, "timestamp", timestamp);
 	if (x!=0) OOPS("error in reading run_stats timestamp");
+	x=etk::py_read_from_dict(P, "processor", processor);
+	if (x!=0) OOPS("error in reading run_stats processor");
 	x=etk::py_read_from_dict(P, "notes", _notes);
 	if (x!=0) OOPS("error in reading run_stats notes");
 }

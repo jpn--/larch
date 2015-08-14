@@ -4,10 +4,9 @@ from .array import SymmetricArray
 from .utilities import category, pmath, rename
 import numpy
 import os
-from .xhtml import XHTML, XML_Builder
+from .util.xhtml import XHTML, XML_Builder
 import math
-
-
+from .model_reporter import ModelReporter
 
 
 class MetaParameter():
@@ -29,7 +28,7 @@ class MetaParameter():
 
 
 
-class Model(Model2):
+class Model(Model2, ModelReporter):
 
 	def dir(self):
 		for f in dir(self):
@@ -103,7 +102,7 @@ class Model(Model2):
 	
 	This can be called as if it was a normal method of :class:`Model`.
 	It also is an object that acts like a dict with integer keys 
-	representing the node code numbers and :class:`larch.core.Component`
+	representing the node code numbers and :class:`larch.core.LinearComponent`
 	values.
 	
 	Parameters
@@ -121,7 +120,7 @@ class Model(Model2):
 		
 	Returns
 	-------
-	:class:`larch.core.Component`
+	:class:`larch.core.LinearComponent`
 		The component object for the designated node
 		
 	Notes
@@ -314,6 +313,10 @@ class Model(Model2):
 		exec(code)
 		return self
 
+	def recall(self, nCases=None):
+		if nCases is not None:
+			self._nCases_recall = nCases
+
 	def __utility_get(self):
 		return _core.Model2_utility_get(self)
 
@@ -332,735 +335,6 @@ class Model(Model2):
 			for eachcomment in comment: _append_note(eachcomment)
 		else:
 			_append_note(comment)
-
-	def xhtml_title(self, **format):
-		x = XML_Builder("div", {'class':"page_header"})
-		if self.title != 'Untitled Model':
-			x.h1(self.title)
-		else:
-			x.h1("A Model")
-		return x.close()
-
-	def xhtml_computed_factors(self, groups, ignore_na=False, **format):
-		# keys fix
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		# build table
-		x = XML_Builder("div", {'class':"computed_factors"})
-		x.h2("Computed Factors", anchor=1)
-		def write_factor_row(p):
-				if not isinstance(p,category) and not (p in self) and not ignore_na:
-					raise LarchError("factor contains bad components")
-				if p in self:
-					if isinstance(p,category):
-						with x.block("tr"):
-							x.td(p.name, {'colspan':str(2), 'class':"parameter_category"})
-						for subp in p.members:
-							write_factor_row(subp)
-					else:
-						with x.block("tr"):
-							x.td('{}'.format(p.getname()))
-							if p in self:
-								x.td(p.str(self))
-							else:
-								x.td("---")
-		with x.block("table"):
-			for p in groups:
-				write_factor_row(p)
-		return x.close()
-
-	def xhtml_params(self, groups=None, display_inital=False, **format):
-		# keys fix
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'PARAM' not in format: format['PARAM'] = '< 12.4g'
-		if 'TSTAT' not in format: format['TSTAT'] = '0.2f'
-		# build table
-		x = XML_Builder("div", {'class':"parameter_estimates"})
-		x.h2("Model Parameter Estimates", anchor=1)
-		
-		if groups is None and hasattr(self, 'parameter_groups'):
-			groups = self.parameter_groups
-		
-		
-		if groups is None:
-			
-			footer = set()
-			es = self._get_estimation_statistics()
-			x.table()
-			# Write headers
-			x.thead
-			x.th("Parameter")
-			if display_inital:
-				x.th("Initial Value", {'class':'initial_value'})
-			x.th("Estimated Value", {'class':'estimated_value'})
-			x.th("Std Error", {'class':'std_err'})
-			x.th("t-Stat", {'class':'tstat'})
-			x.th("Null Value", {'class':'null_value'})
-#			x.th("", {'class':'footnote_mark'}) # footnote markers
-			x.end_thead
-			
-			x.tbody
-			
-			for p in self._get_parameter():
-				x.tr
-				try:
-					tstat = (p['value'] - p['null_value']) / p['std_err']
-				except ZeroDivisionError:
-					tstat = float('nan')
-				x.start('td')
-				x.simple_anchor("param"+p['name'].replace("#","_hash_"))
-				x.data('{}'.format(p['name']))
-				x.end('td')
-				if display_inital:
-					x.td("{:{PARAM}}".format(p['initial_value'],**format), {'class':'initial_value'})
-				x.td("{:{PARAM}}".format(p['value'],**format), {'class':'estimated_value'})
-				if p['holdfast']:
-					x.td("fixed value", {'colspan':'3','class':'notation'})
-				else:
-					x.td("{:{PARAM}}".format(p['std_err'],**format), {'class':'std_err'})
-					x.td("{:{TSTAT}}".format(tstat,**format), {'class':'tstat'})
-					x.td("{:{PARAM}}".format(p['null_value'],**format), {'class':'null_value'})
-#					if p['holdfast']:
-#						x.td("H", {'class':'footnote_mark'})
-#						footer.add("H")
-#					else:
-#						x.td("", {'class':'footnote_mark'})
-				x.end_tr
-			for p in self.alias_names():
-				x.tr
-				x.start('td')
-				x.simple_anchor("param"+str(p).replace("#","_hash_"))
-				x.data('{}'.format(str(p)))
-				x.end('td')
-				if display_inital:
-					x.td("{:{PARAM}}".format(self.metaparameter(p).initial_value,**format), {'class':'initial_value'})
-				x.td("{:{PARAM}}".format(self.metaparameter(p).value,**format), {'class':'estimated_value'})
-				x.td("= {} * {}".format(self.alias(p).refers_to, self.alias(p).multiplier), {'colspan':'3'})
-				x.end_tr
-			x.end_tbody
-			
-			if len(footer):
-				x.tfoot
-				x.tr
-				if 'H' in footer:
-					x.td("H: Parameters held fixed at their initial values (not estimated)", colspan=str(6 if display_inital else 5))
-				x.end_tr
-				x.end_tfoot
-			x.end_table()
-		else:
-			## USING GROUPS
-			listed_parameters = set([p for p in groups if not isinstance(p,category)])
-			for p in groups:
-				if isinstance(p,category):
-					listed_parameters.update( p.complete_members() )
-			unlisted_parameters = (set(self.parameter_names()) | set(self.alias_names())) - listed_parameters
-			n_cols_params = 6 if display_inital else 5
-			def write_param_row(p, *, force=False):
-				if p is None: return
-				if force or (p in self) or (p in self.alias_names()):
-					if isinstance(p,category):
-						with x.block("tr"):
-							x.td(p.name, {'colspan':str(n_cols_params), 'class':"parameter_category"})
-						for subp in p.members:
-							write_param_row(subp)
-					else:
-						if isinstance(p,rename):
-							with x.block("tr"):
-								x.start('td')
-								x.simple_anchor("param"+p.name.replace("#","_hash_"))
-								x.data('{}'.format(p.name))
-								x.end('td')
-#								x.td('{}'.format(p.name))
-								if display_inital:
-									x.td("{:{PARAM}}".format(self[p].initial_value, **format), {'class':'initial_value'})
-								x.td("{:{PARAM}}".format(self[p].value, **format), {'class':'estimated_value'})
-								if self[p].holdfast:
-									x.td("fixed value", {'colspan':'3', 'class':'notation'})
-								else:
-									x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
-									x.td("{:{TSTAT}}".format(self[p].t_stat(), **format), {'class':'tstat'})
-									x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
-						else:
-							pwide = self.parameter_wide(p)
-							if isinstance(pwide,ParameterAlias):
-								with x.block("tr"):
-									x.td('{}'.format(pwide.name))
-									if display_inital:
-										x.td("{:{PARAM}}".format(self.metaparameter(pwide.name).initial_value, **format), {'class':'initial_value'})
-									x.td("{:{PARAM}}".format(self.metaparameter(pwide.name).value, **format), {'class':'estimated_value'})
-									x.td("= {} * {}".format(pwide.refers_to,pwide.multiplier), {'class':'alias notation', 'colspan':'3'})
-							else:
-								with x.block("tr"):
-									x.td('{}'.format(p))
-									if display_inital:
-										x.td("{:{PARAM}}".format(pwide.initial_value, **format), {'class':'initial_value'})
-									x.td("{:{PARAM}}".format(pwide.value, **format), {'class':'estimated_value'})
-									if pwide.holdfast:
-										x.td("fixed value", {'colspan':'3', 'class':'notation'})
-									else:
-										x.td("{:{PARAM}}".format(pwide.std_err, **format), {'class':'std_err'})
-										x.td("{:{TSTAT}}".format(pwide.t_stat(), **format), {'class':'tstat'})
-										x.td("{:{PARAM}}".format(pwide.null_value, **format), {'class':'null_value'})
-			with x.block("table"):
-				with x.block("thead"):
-					# PARAMETER ESTIMATES
-					with x.block("tr"):
-						x.th("Parameter")
-						if display_inital:
-							x.th("Initial Value", {'class':'initial_value'})
-						x.th("Estimated Value", {'class':'estimated_value'})
-						x.th("Std Error", {'class':'std_err'})
-						x.th("t-Stat", {'class':'tstat'})
-						x.th("Null Value", {'class':'null_value'})
-				with x.block("tbody"):
-					for p in groups:
-						write_param_row(p)
-					if len(groups)>0 and len(unlisted_parameters)>0:
-						write_param_row(category("Other Parameters"),force=True)
-					if len(unlisted_parameters)>0:
-						for p in unlisted_parameters:
-							write_param_row(p)
-		return x.close()
-	xhtml_param = xhtml_parameters = xhtml_params
-
-	# Model Estimation Statistics
-	def xhtml_ll(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'LL' not in format: format['LL'] = '0.2f'
-		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
-	
-		es = self._get_estimation_statistics()
-		x = XML_Builder("div", {'class':"statistics"})
-		x.h2("Model Estimation Statistics", anchor=1)
-
-		x.table
-		x.tr
-		x.th("Statistic")
-		x.th("Aggregate")
-		x.th("Per Case")
-		x.end_tr
-		x.tr
-		x.td("Number of Cases")
-		x.td("{0}".format(self.nCases()), {'colspan':'2', 'class':'statistics_bridge'})
-		x.end_tr
-		ll = es[0]['log_like']
-		if not math.isnan(ll):
-			x.tr
-			x.td("Log Likelihood at Convergence")
-			x.td("{0:{LL}}".format(ll,**format))
-			x.td("{0:{LL}}".format(ll/self.nCases(),**format))
-			x.end_tr
-		llc = es[0]['log_like_constants']
-		if not math.isnan(llc):
-			x.tr
-			x.td("Log Likelihood at Constants")
-			x.td("{0:{LL}}".format(llc,**format))
-			x.td("{0:{LL}}".format(llc/self.nCases(),**format))
-			x.end_tr
-		llz = es[0]['log_like_null']
-		if not math.isnan(llz):
-			x.tr
-			x.td("Log Likelihood at Null Parameters")
-			x.td("{0:{LL}}".format(llz,**format))
-			x.td("{0:{LL}}".format(llz/self.nCases(),**format))
-			x.end_tr
-		ll0 = es[0]['log_like_nil']
-		if not math.isnan(ll0):
-			x.tr
-			x.td("Log Likelihood with No Model")
-			x.td("{0:{LL}}".format(ll0,**format))
-			x.td("{0:{LL}}".format(ll0/self.nCases(),**format))
-			x.end_tr
-		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
-			x.tr({'class':"top_rho_sq"})
-			if not math.isnan(llc):
-				rsc = 1.0-(ll/llc)
-				x.td("Rho Squared w.r.t. Constants")
-				x.td("{0:{RHOSQ}}".format(rsc,**format), {'colspan':'2', 'class':'statistics_bridge'})
-				x.end_tr
-				if not math.isnan(llz) or not math.isnan(ll0): x.tr
-			if not math.isnan(llz):
-				rsz = 1.0-(ll/llz)
-				x.td("Rho Squared w.r.t. Null Parameters")
-				x.td("{0:{RHOSQ}}".format(rsz,**format), {'colspan':'2', 'class':'statistics_bridge'})
-				x.end_tr
-				if not math.isnan(ll0): x.tr
-			if not math.isnan(ll0):
-				rs0 = 1.0-(ll/ll0)
-				x.td("Rho Squared w.r.t. No Model")
-				x.td("{0:{RHOSQ}}".format(rs0,**format), {'colspan':'2', 'class':'statistics_bridge'})
-				x.end_tr
-		x.end_table
-		return x.close()
-
-	def xhtml_latest(self,**format):
-		from .utilities import format_seconds
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'LL' not in format: format['LL'] = '0.2f'
-		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
-	
-		es = self._get_estimation_statistics()
-		x = XML_Builder("div", {'class':"run_statistics"})
-		x.h2("Latest Estimation Run Statistics", anchor=1)
-
-		with x.table_:
-			ers = self._get_estimation_run_statistics()
-			i = ers[0]['timestamp']
-			if i is not '':
-				with x.tr_:
-					x.td("Estimation Date")
-					x.td("{0}".format(i,**format))
-			i = ers[0]['iteration']
-			if not math.isnan(i):
-				with x.tr_:
-					x.td("Number of Iterations")
-					x.td("{0}".format(i,**format))
-			q = ers[0]
-			seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
-			tformat = "{}\t{}".format(*format_seconds(seconds))
-			with x.tr_:
-				x.td("Running Time")
-				x.td("{0}".format(tformat,**format))
-			i = ers[0]['notes']
-			if i is not '':
-				with x.tr_:
-					x.td("Notes")
-					x.td("{0}".format(i,**format))
-			i = ers[0]['results']
-			if i is not '':
-				with x.tr_:
-					x.td("Results")
-					x.td("{0}".format(i,**format))
-		return x.close()
-
-	def xhtml_data(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'LL' not in format: format['LL'] = '0.2f'
-		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
-	
-		x = XML_Builder("div", {'class':"data_statistics"})
-		if self.Data("Choice") is None: return x.close
-		x.h2("Choice and Availability Data Statistics", anchor=1)
-
-		# get weights
-		if bool((self.Data("Weight")!=1).any()):
-			w = self.Data("Weight")
-		else:
-			w = numpy.ones([self.nCases()])
-		tot_w = numpy.sum(w)
-		# calc avails
-		if self.Data("Avail") is not None:
-			av = self.Data("Avail")
-			avails = numpy.sum(av,0)
-			avails_weighted = numpy.sum(av*w[:,numpy.newaxis,numpy.newaxis],0)
-		else:
-			avails = numpy.ones([self.nAlts()]) * self.nCases()
-			avails_weighted =numpy.ones([self.nAlts()]) * tot_w
-		ch = self.Data("Choice")
-		choices_unweighted = numpy.sum(ch,0)
-		alts = self.alternative_names()
-		altns = self.alternative_codes()
-		choices_weighted = numpy.sum(ch*w[:,numpy.newaxis,numpy.newaxis],0)
-		use_weights = bool((self.Data("Weight")!=1).any())
-		show_avail = not isinstance(self.db.queries.avail, str)
-		show_descrip = 'alternatives' in self.descriptions
-		
-		with x.block("table"):
-			with x.block("thead"):
-				with x.block("tr"):
-					x.th("Code")
-					x.th("Alternative")
-					if use_weights:
-						x.th("# Wgt Avail")
-						x.th("# Wgt Chosen")
-						x.th("# Raw Avail")
-						x.th("# Raw Chosen")
-					else:
-						x.th("# Avail")
-						x.th("# Chosen")
-					if show_descrip:
-						x.th("Description")
-					if show_avail:
-						x.th("Availability Condition")
-			with x.block("tbody"):
-				for alt,altn,availw,availu,choicew,choiceu in zip(alts,altns,avails_weighted,avails,choices_weighted,choices_unweighted):
-					with x.block("tr"):
-						x.td("{:d}".format(altn))
-						x.td("{:<19}".format(alt))
-						if use_weights:
-							x.td("{:<15.7g}".format(availw[0]))
-							x.td("{:<15.7g}".format(choicew[0]))
-						x.td("{:<15.7g}".format(availu[0]))
-						x.td("{:<15.7g}".format(choiceu[0]))
-						if show_descrip:
-							try:
-								alt_descrip = self.descriptions.alternatives[altn]
-							except:
-								alt_descrip = "n/a"
-							x.td("{}".format(alt_descrip))
-						if show_avail:
-							try:
-								alt_condition = self.db.queries.avail[altn]
-							except:
-								alt_condition = "n/a"
-							x.td("{}".format(alt_condition))
-		return x.close()
-
-
-	# Utility Data Summary
-	def xhtml_utilitydata(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'LL' not in format: format['LL'] = '0.2f'
-		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
-	
-		x = XML_Builder("div", {'class':"utilitydata_statistics"})
-		if self.Data("Choice") is None: return x.close
-		x.h2("Utility Data Statistics", anchor=1)
-
-
-		if self.Data("UtilityCO") is not None:
-			show_descrip = 'data_co' in self.descriptions
-			if bool((self.Data("Weight")!=1).any()):
-				x.h3("idCO Utility (weighted)")
-			else:
-				x.h3("idCO Utility")
-
-			means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
-			names = self.needs()["UtilityCO"].get_variables()
-			
-			
-			ncols = 6
-			
-			stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-			titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-			
-			use_p = (numpy.sum(posis)>0)
-			use_n = (numpy.sum(negs)>0)
-			
-			if numpy.sum(posis)>0:
-				stack += [posis,]
-				titles += ["Positives",]
-				ncols += 1
-			if numpy.sum(negs)>0:
-				stack += [negs,]
-				titles += ["Negatives",]
-				ncols += 1
-			if show_descrip:
-				descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-				stack += [descriptions,]
-				titles += ["Description",]
-				ncols += 1
-			
-			x.table
-			x.thead
-			x.tr
-			for ti in titles:
-				x.th(ti)
-			x.end_tr
-			x.end_thead
-			with x.tbody_:
-				for s in zip(*stack):
-					with x.tr_:
-						for thing,ti in zip(s,titles):
-							if ti=="Description":
-								x.td("{:s}".format(thing), {'class':'strut2'})
-							elif isinstance(thing,str):
-								x.td("{:s}".format(thing))
-							else:
-								x.td("{:<11.7g}".format(thing))
-			x.end_table
-		return x.close()
-
-	# Utility Specification Summary
-	def xhtml_utilityspec(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'PARAM' not in format: format['PARAM'] = '0.4g'
-		
-		def bracketize(s):
-			s = s.strip()
-			if len(s)<3: return s
-			if s[0]=="(" and s[-1]==")": return s
-			if "=" in s: return "({})".format(s)
-			if "+" in s: return "({})".format(s)
-			if "-" in s: return "({})".format(s)
-			if " in " in s.casefold(): return "({})".format(s)
-			return s
-		
-		x = XML_Builder("div", {'class':"utilityspec"})
-		x.h2("Utility Specification", anchor=1)
-		
-		for resolved in (True, False):
-			if resolved:
-				headline = "Resolved Utility"
-			else:
-				headline = "Formulaic Utility"
-			x.h3(headline, anchor=1)
-			
-			with x.table_:
-				with x.thead_:
-					with x.tr_:
-						x.th('Code')
-						x.th('Alternative')
-						x.th(headline)
-				with x.tbody_:
-					for altcode,altname in self.alternatives().items():
-						with x.tr_:
-							x.td(str(altcode))
-							x.td(str(altname))
-							x.start("td")
-							
-							first_thing = True
-							
-							def add_util_component(beta, resolved, x, first_thing):
-								if resolved:
-									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format)
-									if not first_thing:
-										x.data(" + {}".format(beta_val).replace("+ -","- "))
-									else: # is first thing
-										x.data(beta_val)
-									first_thing = False
-								else:
-									if not first_thing:
-										x.data(" + ")
-									first_thing = False
-									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
-									x.data(beta.param)
-									x.end('a')
-									if beta.multiplier != 1.0:
-										x.data("*"+str(beta.multiplier))
-								try:
-									beta_data_value = float(beta.data)
-									if beta_data_value==1.0:
-										beta_data_value=""
-									else:
-										beta_data_value="*"+str(bracketize(beta_data_value))
-								except:
-									beta_data_value = "*"+str(bracketize(beta.data))
-								x.data(beta_data_value)
-								return x, first_thing
-							
-							
-							for beta in self.utility.ca:
-								x, first_thing = add_util_component(beta, resolved, x, first_thing)
-							if altcode in self.utility.co:
-								for beta in self.utility.co[altcode]:
-									x, first_thing = add_util_component(beta, resolved, x, first_thing)
-							
-
-							x.end("td")
-				
-					G = self.networkx_digraph()
-					if len(G.node)>self.alternative_codes()+1:
-						with x.tr_:
-							x.th('Code')
-							x.th('Nest')
-							x.th(headline)
-						for altcode in self.nodes_ascending_order(exclude_elementals=True):
-							if altcode==self.root_id:
-								altname = 'ROOT'
-								mu_name = '1'
-							else:
-								altname = self.nest[altcode]._altname
-								mu_name = self.nest[altcode].param
-							try:
-								skip_mu = (float(mu_name)==1)
-							except ValueError:
-								skip_mu = False
-							with x.tr_:
-								x.td(str(altcode))
-								x.td(str(altname))
-								x.start("td")
-								if not skip_mu:
-									if resolved:
-										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
-										x.data(beta_val)
-									else:
-										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
-										x.data(mu_name)
-										x.end('a')
-									x.data(" * ")
-								x.data("log(")
-								for i,successorcode in enumerate(G.successors(altcode)):
-									if i>0: x.data("+")
-									successorname = G.node[successorcode]['name']
-									x.data(" exp(Utility[{}]".format(successorname))
-									if not skip_mu:
-										x.data("/")
-										if resolved:
-											beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
-											x.data(beta_val)
-										else:
-											x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
-											x.data(mu_name)
-											x.end('a')
-									x.data(") ")
-								
-								x.data(")")
-								x.end("td")
-		return x.close()
-
-
-
-	# Probability Specification Summary
-	def xhtml_probabilityspec(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'PARAM' not in format: format['PARAM'] = '0.4g'
-		
-		x = XML_Builder("div", {'class':"probabilityspec"})
-		x.h2("Probability Specification", anchor=1)
-		G = self.networkx_digraph()
-
-		for resolved in (True, False):
-			if resolved:
-				headline = "Resolved Probablity"
-			else:
-				headline = "Formulaic Probablity"
-			x.h3(headline, anchor=1)
-		
-			with x.table_:
-				with x.thead_:
-					with x.tr_:
-						x.th('Code')
-						x.th('Alternative')
-						x.th(headline)
-				with x.tbody_:
-					for altcode,altname in self.alternatives().items():
-						with x.tr_:
-							x.td(str(altcode))
-							x.td(str(altname))
-							x.start("td")
-							
-							curr = altcode
-							if G.in_degree(curr) > 1:
-								raise LarchError('xhtml_probabilityspec is not compatible with non-NL models')
-							pred = G.predecessors(curr)[0]
-							
-							curr_name = G.node[curr]['name']
-							pred_name = G.node[pred]['name']
-							mu_name = '1' if pred==self.root_id else self.nest[pred].param
-							try:
-								skip_mu = (float(mu_name)==1)
-							except ValueError:
-								skip_mu = False
-							
-							def add_part():
-								x.data("exp(Utility[{}]".format(curr_name))
-								if not skip_mu:
-									x.data("/")
-									if resolved:
-										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
-										x.data(beta_val)
-									else:
-										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
-										x.data(mu_name)
-										x.end('a')
-								x.data(")/")
-								x.data("exp(Utility[{}]".format(pred_name))
-								if not skip_mu:
-									x.data("/")
-									if resolved:
-										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
-										x.data(beta_val)
-									else:
-										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
-										x.data(mu_name)
-										x.end('a')
-								x.data(")")
-							add_part()
-
-							while pred != self.root_id:
-								curr = pred
-								pred = G.predecessors(curr)[0]
-								curr_name = G.node[curr]['name']
-								pred_name = G.node[pred]['name']
-								mu_name = '1' if pred==self.root_id else self.nest[pred].param
-								try:
-									skip_mu = (float(mu_name)==1)
-								except ValueError:
-									skip_mu = False
-								x.data(" * ")
-								add_part()
-							x.end("td")
-				
-		return x.close()
-
-
-
-	def xhtml_notes(self,**format):
-		x = XML_Builder("div", {'class':"notes"})
-		if not hasattr(self,"notes"): return x.close()
-		x.h2("Notes", anchor=1)
-		for note in self.notes:
-			x.start("p", {'class':'note'})
-			x.data(note)
-			x.end("p")
-		return x.close()
-
-	def xhtml_queryinfo(self,**format):
-		x = XML_Builder("div", {'class':"query_info"})
-		x.h2("Query Info", anchor=1)
-		with x.block("table"):
-			try:
-				q = self.db.queries.idco_query
-			except AttributeError:
-				pass
-			else:
-				with x.block("tr"):
-					x.td("idco query")
-					x.td(str(q))
-
-			try:
-				q = self.db.queries.idca_query
-			except AttributeError:
-				pass
-			else:
-				with x.block("tr"):
-					x.td("idca query")
-					x.td(str(q))
-
-			try:
-				q = self.db.queries.choice
-			except AttributeError:
-				pass
-			else:
-				with x.block("tr"):
-					x.td("choice")
-					x.td(str(q))
-
-			try:
-				q = self.db.queries.weight
-			except AttributeError:
-				pass
-			else:
-				with x.block("tr"):
-					x.td("weight")
-					x.td(str(q))
-
-			try:
-				q = self.db.queries.avail
-			except AttributeError:
-				pass
-			else:
-				with x.block("tr"):
-					x.td("avail")
-					x.td(str(q))
-
-		return x.close()
 
 	def networkx_digraph(self):
 		import networkx as nx
@@ -1112,430 +386,15 @@ class Model(Model2):
 					basement.add(s)
 		return discovered
 
-	def xhtml_nesting_tree(self,**format):
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'GRAPHWIDTH' not in format: format['GRAPHWIDTH'] = 6.5
-		if 'GRAPHHEIGHT' not in format: format['GRAPHHEIGHT'] = 4
-		if 'UNAVAILABLE' not in format: format['UNAVAILABLE'] = True
-		x = XML_Builder("div", {'class':"nesting_graph"})
-		x.h2("Nesting Structure", anchor=1)
-		import pygraphviz as viz
-		from io import BytesIO
-		import xml.etree.ElementTree as ET
-		ET.register_namespace("","http://www.w3.org/2000/svg")
-		ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
-		G=viz.AGraph(name='Tree',directed=True,size="{GRAPHWIDTH},{GRAPHHEIGHT}".format(**format))
-		for n,name in self.alternatives().items():
-			G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,name))
-		eG = G.add_subgraph(name='cluster_elemental', nbunch=self.alternative_codes(), color='#cccccc', bgcolor='#eeeeee',
-					   label='Elemental Alternatives', labelloc='b', style='rounded,solid')
-		unavailable_nodes = set()
-		if format['UNAVAILABLE']:
-			if self.is_provisioned():
-				try:
-					for n, ncode in enumerate(self.alternative_codes()):
-#						print("AVCHEK1",ncode,'-->',numpy.sum(self.Data('Avail'),axis=0)[n,0])
-						if numpy.sum(self.Data('Avail'),axis=0)[n,0]==0: unavailable_nodes.add(ncode)
-				except: raise
-			legible_avail = not isinstance(self.db.queries.avail, str)
-			if legible_avail:
-				for ncode,navail in self.db.queries.avail.items():
-					try:
-#						print("AVCHEK2",ncode,'-->',navail)
-						if navail=='0': unavailable_nodes.add(ncode)
-					except: raise
-			eG.add_subgraph(name='cluster_elemental_unavailable', nbunch=unavailable_nodes, color='#bbbbbb', bgcolor='#dddddd',
-						   label='Unavailable Alternatives', labelloc='b', style='rounded,solid')
-		G.add_node(self.root_id, label="Root")
-		for n in self.node.nodes():
-			if self.node[n]._altname==self.node[n].param:
-				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,self.node[n]._altname,self.node[n].param))
-			else:
-				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT><BR/>µ<SUB>{2}</SUB>>'.format(n,self.node[n]._altname,self.node[n].param))
-		up_nodes = set()
-		down_nodes = set()
-		for i,j in self.link.links():
-			G.add_edge(i,j)
-			down_nodes.add(j)
-			up_nodes.add(i)
-		all_nodes = set(self.alternative_codes()) | up_nodes | down_nodes
-		for j in all_nodes-down_nodes-unavailable_nodes:
-			G.add_edge(self.root_id,j)
-		pyg_imgdata = BytesIO()
-		G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
-		xx = x.close()
-		xx << ET.fromstring(pyg_imgdata.getvalue().decode())
-		return xx
 
 	def report_(self, **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:
 			f << self.report('*', style='xml')
 
 
-	def report(self, cats=['title','params','LL','latest'], css=None, **format):
-		import math
-		from .utilities import format_seconds
-		
-		if cats=='*' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES']
-		elif cats=='*':
-			cats=['title','params','LL','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES']
-		
-		
-		
-		# make all formatting keys uppercase
-		existing_format_keys = list(format.keys())
-		for key in existing_format_keys:
-			if key.upper()!=key: format[key.upper()] = format[key]
-
-		if 'STYLE' not in format: format['STYLE'] = 'txt'
-
-		if format['STYLE'] == 'xml':
-			from .xhtml import Elem
-			x = Elem('div', {'class':'model_report'})
-			for c in cats:
-				try:
-					func = getattr(type(self),"xhtml_"+c.lower())
-				except (KeyError, AttributeError):
-					xerr = XML_Builder("div", {'class':'error_report'})
-					xerr.simple("hr")
-					xerr.start("pre")
-					xerr.data("Key Error: No known report section named {}\n".format(c))
-					xerr.end("pre")
-					xerr.simple("hr")
-					x.append(xerr.close())
-					continue
-				try:
-					x.append(func(self,**format))
-				except:
-					import traceback, sys
-					xerr = XML_Builder()
-					xerr.simple("hr")
-					xerr.start("pre", {'class':'error_report'})
-					xerr.data("Error in {}".format(c))
-					xerr.simple("br")
-					y = traceback.format_exception(*sys.exc_info())
-					for yy in y:
-						for eachline in yy.split("\n"):
-							xerr.data(eachline)
-							xerr.simple("br")
-					xerr.end("pre")
-					xerr.simple("hr")
-					x.append(xerr.close())
-			return x
-
-
-
-		if format['STYLE'] == 'html':
-			import base64
-			with XHTML(quickhead=self) as x:
-				for c in cats:
-					try:
-						func = getattr(type(self),"xhtml_"+c.lower())
-						#func = locals()["report_"+c.upper()]
-						#func = section[c.upper()]
-					except (KeyError, AttributeError):
-						xerr = XML_Builder("div", {'class':'error_report'})
-						xerr.simple("hr")
-						xerr.start("pre")
-						xerr.data("Key Error: No known report section named {}\n".format(c))
-						xerr.end("pre")
-						xerr.simple("hr")
-						x.append(xerr)
-						continue
-					try:
-						x.append(func(self,**format))
-					except:
-						import traceback, sys
-						xerr = XML_Builder()
-						xerr.simple("hr")
-						xerr.start("pre", {'class':'error_report'})
-						xerr.data("Error in {}".format(c))
-						xerr.simple("br")
-						y = traceback.format_exception(*sys.exc_info())
-						for yy in y:
-							for eachline in yy.split("\n"):
-								xerr.data(eachline)
-								xerr.simple("br")
-						xerr.end("pre")
-						xerr.simple("hr")
-						x.append(xerr)
-				return x.dump()
-
-
-
-		elif format['STYLE'] == 'txt':
-			x = []
-			# Add style options if not given
-			if 'LL' not in format: format['LL'] = '0.2f'
-			if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
-			if 'TABSIZE' not in format: format['TABSIZE'] = 8
-			if 'PARAM' not in format: format['PARAM'] = '< 12g'
-			if 'PARAM_W' not in format: format['PARAM_W'] = '12'
-			if 'LINEPREFIX' not in format: format['LINEPREFIX'] = ''
-
-			def report_TITLE():
-				if self.title != 'Untitled Model':
-					x = ["="]
-					x += [self.title]
-					return x
-				else:
-					return []
-
-			# Model Parameter Estimates
-			def report_PARAM():
-				x = ["="]
-				footer = set()
-				es = self._get_estimation_statistics()
-				x += ["Model Parameter Estimates"]
-				x += ["-"]
-				# Find max length parameter name
-				max_length_freedom_name = 9
-				for p in self._get_parameter():
-					max_length_freedom_name = max(max_length_freedom_name, len(p['name']))
-				# Write headers
-				y  = "{0:<{1}}".format("Parameter",max_length_freedom_name)
-				y += "\t{:{PARAM_W}}".format("InitValue",**format)
-				y += "\t{:{PARAM_W}}".format("FinalValue",**format)
-				y += "\t{:{PARAM_W}}".format("StdError",**format)
-				y += "\t{:{PARAM_W}}".format("t-Stat",**format)
-				y += "\t{:{PARAM_W}}".format("NullValue",**format)
-				x.append(y)
-				for p in self._get_parameter():
-					try:
-						tstat = (p['value'] - p['null_value']) / p['std_err']
-					except ZeroDivisionError:
-						tstat = float('nan')
-					y  = "{0:<{1}}".format(p['name'],max_length_freedom_name)
-					y += "\t{:{PARAM}}".format(p['initial_value'],**format)
-					y += "\t{:{PARAM}}".format(p['value'],**format)
-					y += "\t{:{PARAM}}".format(p['std_err'],**format)
-					y += "\t{:{PARAM}}".format(tstat,**format)
-					y += "\t{:{PARAM}}".format(p['null_value'],**format)
-					if p['holdfast']:
-						y += "\tH"
-						footer.add("H")
-					x.append(y)
-				if len(footer):
-					x += ["-"]
-					if 'H' in footer:
-						x += ["H\tParameters held fixed at their initial values (not estimated)"]
-				return x
-
-			# Model Estimation Statistics
-			def report_LL():
-				x = ["="]
-				es = self._get_estimation_statistics()
-				x += ["Model Estimation Statistics"]
-				x += ["-"]
-				ll = es[0]['log_like']
-				if not math.isnan(ll):
-					x += ["Log Likelihood at Convergence     \t{0:{LL}}".format(ll,**format)]
-				llc = es[0]['log_like_constants']
-				if not math.isnan(llc):
-					x += ["Log Likelihood at Constants       \t{0:{LL}}".format(llc,**format)]
-				llz = es[0]['log_like_null']
-				if not math.isnan(llz):
-					x += ["Log Likelihood at Null Parameters \t{0:{LL}}".format(llz,**format)]
-				ll0 = es[0]['log_like_nil']
-				if not math.isnan(ll0):
-					x += ["Log Likelihood with No Model      \t{0:{LL}}".format(ll0,**format)]
-				if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
-					x += ["-"]
-					if not math.isnan(llc):
-						rsc = 1.0-(ll/llc)
-						x += ["Rho Squared w.r.t. Constants      \t{0:{RHOSQ}}".format(rsc,**format)]
-					if not math.isnan(llz):
-						rsz = 1.0-(ll/llz)
-						x += ["Rho Squared w.r.t. Null Parameters\t{0:{RHOSQ}}".format(rsz,**format)]
-					if not math.isnan(ll0):
-						rs0 = 1.0-(ll/ll0)
-						x += ["Rho Squared w.r.t. No Model       \t{0:{RHOSQ}}".format(rs0,**format)]
-
-				return x
-
-			# Model Latest Run Statistics
-			def report_LATEST():
-				x = ["="]
-				ers = self._get_estimation_run_statistics()
-				x += ["Latest Estimation Run Statistics"]
-				x += ["-"]
-				i = ers[0]['iteration']
-				if not math.isnan(i):
-					x += ["Number of Iterations \t{0}".format(i,**format)]
-				q = ers[0]
-				seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
-				tformat = "{}\t{}".format(*format_seconds(seconds))
-				x += ["Running Time         \t{0}".format(tformat,**format)]
-				i = ers[0]['notes']
-				if i is not '':
-					x += ["Notes                \t{0}".format(i,**format)]
-				i = ers[0]['results']
-				if i is not '':
-					x += ["Results              \t{0}".format(i,**format)]
-				return x
-
-			# Data Summary
-			def report_DATA():
-				if self.Data("Choice") is None:
-					x = ["="]
-					x += ["Choice and availability data not provisioned"]
-					return x
-				x = ["="]
-				x += ["Choice and Availability Data Statistics"]
-				x += ["-"]
-				# get weights
-				if bool((self.Data("Weight")!=1).any()):
-					w = self.Data("Weight")
-					w = w.reshape(w.shape+(1,))
-				else:
-					w = numpy.ones([self.nCases()])
-				tot_w = numpy.sum(w)
-				# calc avails
-				import time
-				if self.Data("Avail") is not None:
-					av = self.Data("Avail")
-					avails = numpy.sum(av,0)
-					avails_weighted = numpy.sum(av*w[:,numpy.newaxis,numpy.newaxis],0)
-				else:
-					avails = numpy.ones([self.nAlts()]) * self.nCases()
-					avails_weighted =numpy.ones([self.nAlts()]) * tot_w
-				ch = self.Data("Choice")
-				choices_unweighted = numpy.sum(ch,0)
-				alts = self.alternative_names()
-				choices_weighted = numpy.sum(ch*w[:,numpy.newaxis,numpy.newaxis],0)
-				if bool((self.Data("Weight")!=1).any()):
-					x += ["{0:<19}\t{1:<15}\t{2:<15}\t{3:<15}\t{4:<15}".format("Alternative","# Wgt Avail","# Wgt Chosen","# Raw Avail","# Raw Chosen")]
-					for alt,availw,availu,choicew,choiceu in zip(alts,avails_weighted,avails,choices_weighted,choices_unweighted):
-						x += ["{0:<19}\t{1:<15.7g}\t{2:<15.7g}\t{3:<15.7g}\t{4:<15.7g}".format(alt,availw[0],choicew[0],availu[0],choiceu[0])]
-				else:
-					x += ["{0:<19}\t{1:<15}\t{2:<15}".format("Alternative","# Avail","# Chosen",)]
-					for alt,availw,availu,choicew,choiceu in zip(alts,avails_weighted,avails,choices_weighted,choices_unweighted):
-						x += ["{0:<19}\t{1:<15.7g}\t{2:<15.7g}".format(alt,availu[0],choiceu[0])]
-				return x
-				
-			
-			# Utility Data Summary
-			def report_UTILITYDATA():
-				if self.Data("UtilityCO") is None:
-					x = ["="]
-					x += ["Utility CO data not provisioned"]
-					return x
-				if self.Data("UtilityCO") is not None:
-					x = ["="]
-					x += ["Utility Data Statistics"]
-					x += ["-"]
-					if bool((self.Data("Weight")!=1).any()):
-						x += ["idCO Utility (weighted)"]
-					else:
-						x += ["idCO Utility"]
-					x += ["-"]
-					means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
-					names = self.needs()["UtilityCO"].get_variables()
-					
-					head_fmt = "{0:<19}\t{1:<11}\t{2:<11}\t{3:<11}\t{4:<11}\t{5:<11}\t{5:<11}"
-					body_fmt = "{0:<19}\t{1:<11.7g}\t{2:<11.7g}\t{3:<11.7g}\t{4:<11.7g}\t{5:<11.7g}\t{5:<11.7g}"
-					ncols = 6
-					
-					stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-					titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZeros)"]
-					
-					if numpy.sum(posis)>0:
-						stack += [posis,]
-						head_fmt += "\t{{{0}:<11}}".format(ncols)
-						body_fmt += "\t{{{0}:<11.7g}}".format(ncols)
-						titles += ["Positives",]
-						ncols += 1
-					if numpy.sum(negs)>0:
-						stack += [negs,]
-						head_fmt += "\t{{{0}:<11}}".format(ncols)
-						body_fmt += "\t{{{0}:<11.7g}}".format(ncols)
-						titles += ["Negatives",]
-						ncols += 1
-					
-					x += [head_fmt.format(*titles)]
-					for s in zip(*stack):
-						if len(s[0]) > 19:
-							x += [s[0]]
-							x += [body_fmt.format("",*(s[1:]))]
-						else:
-							try:
-								x += [body_fmt.format(*s)]
-							except TypeError:
-								print("TypeErr:",s)
-								raise
-				return x
-
-			def report_NOTES():
-				if not hasattr(self,"notes"): return []
-				x = ["="]
-				x += ["Notes"]
-				x += ["-"]
-				x += self.notes
-				return x
-
-			def report_UTILITYSPEC():
-				return [] # not implemented in txt reports
-				
-			def report_PROBABILITYSPEC():
-				return [] # not implemented in txt reports
-				
-			def report_NESTING_TREE():
-				return [] # not implemented in txt reports
-
-			report_PARAMS = report_PARAM
-			section = {
-				'LL': report_LL,
-				'LATEST': report_LATEST,
-				'PARAM': report_PARAM,
-				'PARAMS': report_PARAM,
-				'DATA': report_DATA,
-				'TITLE': report_TITLE,
-				'UTILITYDATA': report_UTILITYDATA,
-				'UTILITYSPEC': report_UTILITYSPEC,
-				'PROBABILITYSPEC': report_PROBABILITYSPEC,
-				'NOTES': report_NOTES,
-				'NESTING_TREE': report_NESTING_TREE,
-			}
-			for c in cats:
-				try:
-					func = locals()["report_"+c.upper()]
-					#func = section[c.upper()]
-				except KeyError:
-					x += ["="]
-					x += ["Key Error: No known report section named {}".format(c)]
-					continue
-				try:
-					x += func()
-				except:
-					import traceback, sys
-					x += ["="]
-					x += ["Error in {}".format(c)]
-					x += ["-"]
-					y = traceback.format_exception(*sys.exc_info())
-					for yy in y:
-						x += yy.split("\n")
-			# Bottom liner
-			x += ["="]
-
-			# What is the length longest line?  Make dividers that long
-			longest = 0
-			for i in range(len(x)):
-				longest = max(longest,len(x[i].expandtabs(format['TABSIZE'])))
-			for i in range(len(x)):
-				if x[i]=='-': x[i]='-'*longest
-				if x[i]=='=': x[i]='='*longest
-
-			s = "\n".join(x)
-			return format['LINEPREFIX'] + s.replace("\n", "\n"+format['LINEPREFIX'])
-
-		# otherwise, the format style is not known
-		raise LarchError("Format style '{}' is not known".format(format['STYLE']))
 
 	def __str__(self):
-		return self.report()
+		return self.report('txt')
 
 
 
@@ -1597,6 +456,34 @@ class Model(Model2):
 		mean_nonzer = sumx / numpy.array(nonzer)
 		return (mean,stdev,mins,maxs,nonzer,pos,neg,zer,mean_nonzer)
 		
+	def stats_utility_ca_chosen_unchosen(self):
+		"""
+		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
+		positives,negatives,zeros,mean of nonzero values) on the model's idca data as loaded. Uses weights
+		if available.
+		"""
+		
+		x = self.Data("UtilityCA")
+		ch = self.Data("Choice")
+		
+		x_chosen = x[ch.astype(bool).reshape(ch.shape[0],ch.shape[1])]
+		x_unchosen = x[~ch.astype(bool).reshape(ch.shape[0],ch.shape[1])]
+		
+		def _compute(xxx):
+			mean_ = numpy.mean(xxx,0)
+			stdev_ = numpy.std(xxx,0)
+			mins_ = numpy.amin(xxx,0)
+			maxs_ = numpy.amax(xxx,0)
+			nonzer_ = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx.shape[1]))
+			pos_ = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx.shape[1]))
+			neg_ = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx.shape[1]))
+			zer_ = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx.shape[1]))
+			sumx_ = numpy.sum(xxx,0)
+			mean_nonzer_ = sumx_ / numpy.array(nonzer_)
+			return (mean_,stdev_,mins_,maxs_,nonzer_,pos_,neg_,zer_,mean_nonzer_)
+		
+		return _compute(x_chosen), _compute(x_unchosen),
+
 
 	def parameter_names(self, output_type=list):
 		x = []
@@ -1738,7 +625,7 @@ class Model(Model2):
 
 	def gradient_check(self):
 		try:
-			if not self.is_provisioned():
+			if self.is_provisioned()<=0:
 				self.provision()
 		except LarchError:
 			self.provision()
@@ -1754,14 +641,16 @@ class Model(Model2):
 		self.option.force_recalculate = _force_recalculate
 		namelen = max(len(n) for n in self.parameter_names())
 		namelen = max(namelen,9)
-		print("{1:<{0}s}\t{2:12s}\t{3:12s}\t{4:12s}".format(namelen,'Parameter','Value','Analytic','FiniteDiff'))
+		from .util.flux import flux_mag
+		from math import log10
+		print("{1:<{0}s}\t{2:12s}\t{3:12s}\t{4:12s}\t{5:12s}".format(namelen,'Parameter','Value','Analytic','FiniteDiff','Flux'))
 		for name,val,a,fd in zip(self.parameter_names(),self.parameter_values(), a_grad, fd_grad):
-			print("{1:<{0}s}\t{2:< 12.6g}\t{3:< 12.6g}\t{4:< 12.6g}".format(namelen,name,val,a,fd))
+			print("{1:<{0}s}\t{2:< 12.6g}\t{3:< 12.6g}\t{4:< 12.6g}\t{5:12s}".format(namelen,name,val,a,fd,flux_mag(fd,a)))
 
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, **kwargs):
+	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), **kwargs):
 		import scipy.optimize
 		import datetime
 		starttime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
@@ -1772,7 +661,7 @@ class Model(Model2):
 				self.parameter_values(), # initial values
 				minimizer_kwargs=dict(method=method,args=(),jac=self.d_loglike,
 										hess=None, hessp=None, bounds=None,
-										constraints=(), tol=None, callback=None,),
+										constraints=constraints, tol=None, callback=None,),
 				disp=True,
 				callback=cb,
 				**kwargs)
@@ -1783,7 +672,7 @@ class Model(Model2):
 				args=(),
 				method=method,
 				jac=False, #? self.d_loglike,
-				hess=None, hessp=None, bounds=None, constraints=(), tol=None, callback=print,
+				hess=None, hessp=None, bounds=None, constraints=constraints, tol=None, callback=print,
 				options=dict(disp=True))
 		endtime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
 		startfrac, startwhole = math.modf(starttime)
@@ -1799,7 +688,7 @@ class Model(Model2):
 					s = True
 			except:
 				pass
-		if s:
+		if s or True:
 			self.parameter_values(ret.x)
 			self._set_estimation_statistics( -(ret.fun) )
 			self._set_estimation_run_statistics(int(startwhole),int(startfrac),
@@ -1828,10 +717,11 @@ class Model(Model2):
 			xhead.end_style()
 			htmlfile << xhead
 		else:
-			from . import xhtml
+			from .util import xhtml
 			htmlfile = xhtml.Elem('div')
 
-		self.provision()
+		if self.is_provisioned(False)<=0:
+			self.provision()
 		qc = self.db.queries.quality_check()
 		
 		clashes = numpy.nonzero( numpy.logical_and(self.Data("Choice"), ~self.Data("Avail")) )
@@ -1888,6 +778,9 @@ class Model(Model2):
 				if i in self: return True
 			return False
 		if isinstance(x,pmath):
+			return x.valid(self)
+		from .roles import ParameterRef
+		if isinstance(x,ParameterRef):
 			return x.valid(self)
 		if isinstance(x,rename):
 			found = []

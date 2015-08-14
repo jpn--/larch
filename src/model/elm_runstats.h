@@ -51,6 +51,8 @@ namespace elm {
 		unsigned iteration;
 		std::string results;		
 		std::string timestamp;
+
+		std::string processor;
 		
 		
 		double elapsed_time() const;
@@ -62,7 +64,8 @@ namespace elm {
 				 unsigned iteration=0,
 				 std::string results="",
 				 std::string notes="",
-				 std::string timestamp="");
+				 std::string timestamp="",
+				 std::string processor="");
 		runstats(const runstats& other);
 		runstats(PyObject* dictionary);
 

@@ -368,7 +368,11 @@ def test_save_and_load():
 
 sys.path.append("/Users/jpn/Dropbox/Thurston/Code")
 os.chdir("/Users/jpn/Dropbox/Thurston/Code")
-execfile("spinup.py")
+execfile("review.py")
+
+
+
+
 
 #d = larch.DB.Example()
 #m = larch.Model(d)

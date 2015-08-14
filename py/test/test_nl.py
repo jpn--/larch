@@ -114,6 +114,87 @@ class TestNL(ELM_TestCase):
 		self.assertAlmostEqual(  1741.9031614953105, g[12], delta=0.00000001 )
 		m.tearDown()
 
+
+	def test_nl2_single_cycle_aliased_paramaters(self):
+		d = DB.Example('MTC');
+		m = Model(d);
+		m.parameter ("cost",0)
+		m.parameter("time",0)
+		m.parameter("con2",0)
+		m.parameter("con3",0)
+		m.parameter("con4",0)
+		m.parameter("con5",0)
+		m.parameter("con6",0)
+		m.parameter("inc2",0)
+		m.parameter("inc3",0)
+		m.parameter("inc4",0)
+		m.alias("inc5","inc3",2.0)
+		m.alias("inc6","inc2",1.0)
+		m.parameter("autoNest", 1.0, 1.0)
+		m.utility.ca("tottime","time") 
+		m.utility.ca("totcost","cost") 
+		m.utility.co("HHINC","SR2","inc2") 
+		m.utility.co("HHINC","SR3+","inc3") 
+		m.utility.co("HHINC","Tran","inc4")
+		m.utility.co("HHINC","Bike","inc5") 
+		m.utility.co("HHINC","Walk","inc6") 
+		m.utility.co("1","SR2","con2") 
+		m.utility.co("1","SR3+","con3") 
+		m.utility.co("1","Tran","con4") 
+		m.utility.co("1","Bike","con5") 
+		m.utility.co("1","Walk","con6") 
+		m.nest("auto", 8, "autoNest")
+		m.link(8, 1)
+		m.link(8, 2)
+		m.link(8, 3)
+		m.link(8, 4)
+		m.option.gradient_diagnostic = 2
+		m.provision()
+		m.setUp()
+		self.assertAlmostEqual( -7309.600971749863, m.loglike(), delta=0.00000001 )	
+		g = m.d_loglike()
+		self.assertAlmostEqual( -127397.53666666638, g[ 0], delta=0.000001 )
+		self.assertAlmostEqual( 42104.2, g[ 1], delta=0.01 )
+		self.assertAlmostEqual( 687.7  , g[ 2], delta=0.01 )
+		self.assertAlmostEqual( 1043.7 , g[ 3], delta=0.01 )
+		self.assertAlmostEqual( 380.78333333332864, g[ 4], delta=0.00000001 )
+		self.assertAlmostEqual( 279.8  , g[ 5], delta=0.01 )
+		self.assertAlmostEqual( 113.65 , g[ 6], delta=0.001 )
+		self.assertAlmostEqual( 41179.541666666715+7739.108333333339, g[ 7], delta=0.0000001 ) ### inc2
+		self.assertAlmostEqual( 60691.541666666686+17374.8*2, g[ 8], delta=0.1 ) ### inc3
+		self.assertAlmostEqual( 24028.374999999985, g[ 9], delta=0.0000001 )
+		#self.assertAlmostEqual( 17374.8, g[10], delta=0.01 ) ### inc5
+		#self.assertAlmostEqual( 7739.108333333339, g[11], delta=0.0000001 ) ### inc6
+		self.assertAlmostEqual(-537.598179908304, g[10], delta=0.00000001 )
+		v =(-0.0053047 ,
+			-0.0746418 ,
+			-2.07691   ,
+			-9.2709    ,
+			-0.185096  ,
+			-1.65575   ,
+			1.86265    ,
+			-0.00427335,
+			0.0126937  ,
+			-0.00710494,
+			2.32074    ,
+			)
+		#		self.assertAlmostEqual( -4213.0122967116695, m.loglike(v), delta=0.00000001 )
+		#		m.freshen()
+		#		g = m.d_loglike()
+		#		self.assertAlmostEqual( -5213.854558101514, g[ 0], delta=0.0000001 )
+		#		self.assertAlmostEqual(  12836.151998017447, g[ 1], delta=0.0000001 )
+		#		self.assertAlmostEqual(  629.8310448361855, g[ 2], delta=0.001 )
+		#		self.assertAlmostEqual(  -74.76717809020077, g[ 3], delta=0.001 )
+		#		self.assertAlmostEqual(  263.166080293258, g[ 4], delta=0.0001 )
+		#		self.assertAlmostEqual( -24.52301491338605, g[ 5], delta=0.00000001 )
+		#		self.assertAlmostEqual(  84.57760963703537, g[ 6], delta=0.00000001 )
+		#		self.assertAlmostEqual(  36931.80015794064, g[ 7], delta=0.00000001 )
+		#		self.assertAlmostEqual( -3989.2630876959906, g[ 8], delta=0.00000001 )
+		#		self.assertAlmostEqual(  15728.304436116596, g[ 9], delta=0.01 )
+		#		self.assertAlmostEqual( -1252.58, g[10], delta=0.01 )
+		m.tearDown()
+
+
 	def test_nl2_single_cycle_multithread(self):		
 		d = DB.Example('MTC');
 		m = Model(d);

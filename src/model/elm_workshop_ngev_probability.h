@@ -60,6 +60,7 @@ public:
 	elm::ca_co_packet UtilPacket;
 	elm::ca_co_packet AllocPacket;
 	elm::ca_co_packet SampPacket;
+	elm::ca_co_packet QuantPacket;
 	
 	const paramArray* Params_LogSum;
 	
@@ -83,6 +84,7 @@ public:
 	 , elm::ca_co_packet UtilPacket
 	 , elm::ca_co_packet AllocPacket
 	 , elm::ca_co_packet SampPacket
+	 , elm::ca_co_packet QuantPacket
 	 , const paramArray& Params_LogSum
 	 , elm::darray_ptr     Data_Avail
 	 ,  etk::ndarray* Probability

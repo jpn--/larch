@@ -41,6 +41,7 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 	if (c==0) BUGGER_(msg_, "case_dUtility_dFusedParameters()" )  ;
 
 	const double*	   Pr = _Probability->ptr(c);
+	const double*	   Qnt = _Quantity->size() ? _Quantity->ptr(c) : nullptr;
 	const double*      CPr = _Cond_Prob->ptr(c);
 	const double*	   Util = UtilPacket.Outcome->ptr(c);
 	const double*	   Alloc = AllocPacket.relevant()? AllocPacket.Outcome->ptr(c) : nullptr;
@@ -64,12 +65,27 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 		// and theta parameters. For other nodes, only mu has a direct effect
 		if (a<Xylem->n_elemental()) {
 			// BETA for SELF (elemental alternatives)
-			if (nCA) UtilPacket.Data_CA->ExportData(dUtil.ptr(a),c,a,UtilPacket.Data_CA->nAlts());
+			if (nCA) UtilPacket.Data_CA->ExportData(dUtil.ptr(a)    ,c,a,UtilPacket.nAlt());
 			if (nCO) UtilPacket.Data_CO->ExportData(dUtil.ptr(a)+nCA,c,a,UtilPacket.nAlt());
+
+			// GAMMA on SELF
+			if (nQA) {
+				double* gg = dUtil.ptr(a)+offset_quant();
+				QuantPacket.Data_CA->ExportData(gg,c,a,QuantPacket.Data_CA->nAlts());
+				simple_inplace_element_multiply(nQA, **QuantPacket.Coef_CA, 1, gg, 1);
+				cblas_dscal(nQA,(nQL>0?OOPS("Theta not implemented"):1.0)/Qnt[a],gg,1);
+				
+				if (nQL) {
+					// THETA on SELF
+					*(dUtil.ptr(a)+offset_quant()+nQA) = log(Qnt[a]);
+				}
+				
+			}
+
 		} else {
 			// MU for SELF (adjust the kiddies contributions) /////HERE
-			dUtil(a,a-Xylem->n_elemental()+nCA+nCO) += Util[a];
-			dUtil(a,a-Xylem->n_elemental()+nCA+nCO) /= (*Xylem)[a]->mu();
+			dUtil(a,a-(Xylem->n_elemental())+offset_mu()) += Util[a];
+			dUtil(a,a-(Xylem->n_elemental())+offset_mu()) /= (*Xylem)[a]->mu();
 		}
 
 
@@ -77,13 +93,14 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 		// Then, we compute the carry-on effects from 'a' on other nodes in the
 		// network. For utility, this can only include direct predecessor nodes.
 		for (u=0; u< (*Xylem)[a]->upsize(); u++) {
-
-			if (c==0) BUGGER_(msg_, "gradx "<<u<<","<<a )  ;
 		
 			// define attributes of current edge
 			size_t upcell_slot = (*Xylem)[a]->upcell(u)->slot();
+			size_t slot_of_this_upedge = (*Xylem)[a]->upedge(u)->edge_slot();
+
+			if (c==0) BUGGER_(msg_, "gradx upslot "<<u<<", nodeslot "<<a<<", up_nodeslot "<<upcell_slot<<", mu_offset="<<(*Xylem)[a]->upcell(u)->mu_offset() )  ;
 			
-			//if (c==0) BUGGER_(msg_, "gradxx "<<bool(Alloc)<<","<<(*Xylem)[a]->upedge(u)->is_competitive() )  ;
+			if (c==0) BUGGER_(msg_, "gradxx "<<bool(Alloc)<<","<<(*Xylem)[a]->upedge(u)->is_competitive() )  ;
 			
 			if (Alloc && (*Xylem)[a]->upedge(u)->is_competitive()) {
 				// When this edge is competitive
@@ -92,36 +109,48 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 				// PHI for all competing edges
 				for (ou=0; ou<(*Xylem)[a]->upsize(); ou++) {
 					if (c==0) BUGGER_(msg_, "dU+ "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+					
+					unsigned slot_competing_edges = (*Xylem)[a]->upedge(ou)->alloc_slot();
+					if (c==0) BUGGER_(msg_, "slot_competing_edges "<<slot_competing_edges<<" for number " << ou << ", slot_of_this_upedge="<<slot_of_this_upedge)  ;
+					
 					AllocPacket.Data_CO->OverlayData(dUtil.ptr(upcell_slot,Offset_Phi),
 									  c,
-									  (*Xylem)[a]->upedge(ou)->alloc_slot(),
-									  -CPr[(*Xylem)[a]->upedge(u)->edge_slot()]*Alloc[(*Xylem)[a]->upedge(ou)->alloc_slot()]);
+									  slot_competing_edges,
+									  -CPr[slot_of_this_upedge]*Alloc[slot_competing_edges]);
 					if (c==0) BUGGER_(msg_, "dU!\n" << dUtil.printall())  ;
 				}
 				// PHI for this edge, adjustment
 				AllocPacket.Data_CO->OverlayData(dUtil.ptr(upcell_slot,Offset_Phi),
 								  c,
 								  (*Xylem)[a]->upedge(u)->alloc_slot(),
-								  CPr[(*Xylem)[a]->upedge(u)->edge_slot()]);
+								  CPr[slot_of_this_upedge]);
 				
 				// MU for Parent (competitive edge)
-				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()) -=
-				CPr[(*Xylem)[a]->upedge(u)->edge_slot()] * (Util[a] + log(Alloc[(*Xylem)[a]->upedge(u)->alloc_slot()]));
+				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()+offset_mu()) -=
+				CPr[slot_of_this_upedge] * (Util[a] + log(Alloc[(*Xylem)[a]->upedge(u)->alloc_slot()]));
 				
 			} else {
 				// When this edge is not competitive
 				
 				// MU for Parent (non-competitive edge)
-				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()) -=
-				CPr[(*Xylem)[a]->upedge(u)->edge_slot()] * Util[a];
+				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()+offset_mu()) -=
+				CPr[slot_of_this_upedge] * Util[a];
 			}
 			
 			// Finally, roll up secondary effects on parents
-			if (CPr[(*Xylem)[a]->upedge(u)->edge_slot()])
-				cblas_daxpy(nPar,CPr[(*Xylem)[a]->upedge(u)->edge_slot()],dUtil.ptr(a),1,dUtil.ptr(upcell_slot),1);
+			if (CPr[slot_of_this_upedge])
+				cblas_daxpy(nPar,CPr[slot_of_this_upedge],dUtil.ptr(a),1,dUtil.ptr(upcell_slot),1);
 		}
+
+		if (c==0) {
+		BUGGER_(msg_, "dU[at "<<a<<"]-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+		}
+
 	}
-	if (c==0) BUGGER_(msg_, "dU-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+	if (c==0) {
+	BUGGER_(msg_, "_Cond_Prob-> "<< _Cond_Prob->printrow(c))  ;
+	BUGGER_(msg_, "dU-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+	}
 }
 
 
@@ -140,7 +169,7 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 	const double*	   Cho = Data_Choice->values(c);
 	
 	dProb.initialize(0.0);
-	size_t Offset_Phi = nCA+nCO+nMU+nSA+nSO;
+	size_t Offset_Phi = offset_alloc();
 
 	unsigned i,u,ou;
 	for (i=(*Xylem).size()-1; i!=0; ) {
@@ -153,21 +182,30 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 			// for competitive edges, adjust phi
 			// scratch += X_Phi()[edge] - sum over competes(Alloc[compete]*X_Phi[compete])
 			if (Alloc && (*Xylem)[i]->upedge(u)->is_competitive()) {
-				AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, (*Xylem)[i]->upedge(u)->alloc_slot(), 1.0);
+				auto allocslot_upedge_u = (*Xylem)[i]->upedge(u)->alloc_slot();
+
+	if (c==0) BUGGER_(msg_, "WorkspaceX1 "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
+				
+				AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, allocslot_upedge_u, 1.0);
+	if (c==0) BUGGER_(msg_, "WorkspaceXa "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
 				for (ou=0; ou<(*Xylem)[i]->upsize(); ou++)  {
-					AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, (*Xylem)[i]->upedge(ou)->alloc_slot(), -Alloc[(*Xylem)[i]->upedge(ou)->alloc_slot()]);
+					auto slot = (*Xylem)[i]->upedge(ou)->alloc_slot();
+					AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, slot, -Alloc[slot]);
+	if (c==0) BUGGER_(msg_, "WorkspaceXb "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
 				}
+
+	if (c==0) BUGGER_(msg_, "WorkspaceX2 "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
 				
 				// adjust Mu for hierarchical structure, competitive
-				scratch[(*Xylem)[i]->upcell(u)->mu_offset()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
+				scratch[(*Xylem)[i]->upcell(u)->mu_offset()+offset_mu()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
 														   - Util[i] 
-														   - log(Alloc[(*Xylem)[i]->upedge(u)->alloc_slot()])
+														   - log(Alloc[allocslot_upedge_u])
 														   ) / (*Xylem)[i]->upcell(u)->mu();
 				
 			} else {
 				
 				// adjust Mu for hierarchical structure, noncompete
-				scratch[(*Xylem)[i]->upcell(u)->mu_offset()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
+				scratch[(*Xylem)[i]->upcell(u)->mu_offset()+offset_mu()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
 														   - Util[i] 
 														   ) / (*Xylem)[i]->upcell(u)->mu();
 			}
@@ -202,9 +240,6 @@ void elm::workshop_ngev_gradient::case_dSamplingFactor_dFusedParameters( const u
 	for (int a=0; a<nalt; a++) {
 		if (!Pr[a]) continue;
 		
-		// First, we calculate the effect of various parameters on the utility
-		// of 'a' directly. For elemental alternatives, this means beta, gamma,
-		// and theta parameters. For other nodes, only mu has a direct effect
 		if (nSA) Data_CA->ExportData(dSampWgt.ptr(a),c,a,nalt);
 		if (nSO) Data_CO->ExportData(dSampWgt.ptr(a)+nSA,c,a,nalt);
 				
@@ -224,7 +259,7 @@ void elm::workshop_ngev_gradient::case_dAdjProbability_dFusedParameters( const u
 	dAdjProb.initialize();
 	if (dSampWgt.size()) {
 		for (int a=0; a<nalt; a++) {
-			cblas_dcopy(dSampWgt.size2(), dSampWgt.ptr(a), 1, dAdjProb.ptr(a,nCA+nCO+nMU), 1);
+			cblas_dcopy(dSampWgt.size2(), dSampWgt.ptr(a), 1, dAdjProb.ptr(a,offset_sampadj()), 1);
 		}
 	}
 	
@@ -307,6 +342,7 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
  , elm::ca_co_packet UtilPK
  , elm::ca_co_packet AllocPK
  , elm::ca_co_packet SampPK
+ , elm::ca_co_packet QuantPK
  , const paramArray& Params_LogSum
  , elm::darray_ptr     Data_Choice
  , elm::darray_ptr     Data_Weight
@@ -326,10 +362,14 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , nSA (SampPK.Params_CA->length())
 , nSO (SampPK.Params_CO->length())
 , nAO (AllocPK.Params_CO->length())
-, nPar(nCA+nCO+nMU+nSA+nSO+nAO)
+, nQA (QuantPK.Params_CA->length())
+
+, nQL (0)
+, nPar(nCA+nCO+nMU+nSA+nSO+nAO+nQA+nQL)
 , UtilPacket (UtilPK)
 , AllocPacket(AllocPK)
 , SampPacket (SampPK)
+, QuantPacket (QuantPK)
 , dUtil      (nNodes,nPar)
 , dProb      (nNodes,nPar)
 , dSampWgt   (nNodes,nSA+nSO)
@@ -344,6 +384,7 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , Data_Weight     (Data_Weight)
 , _AdjProbability(AdjProbability )
 , _Probability(Probability )
+, _Quantity   (QuantPK.Outcome  )
 , _Cond_Prob  ( Cond_Prob)
 , _Xylem     (Xylem)
 , _GCurrent(GCurrent)
@@ -405,16 +446,17 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 				
 		elm::push_to_freedoms2(*UtilPacket.Params_CA  , *GradT_Fused          , *CaseGrad);
 		elm::push_to_freedoms2(*UtilPacket.Params_CO  , (*GradT_Fused)+nCA    , *CaseGrad);
-		elm::push_to_freedoms2(*Params_LogSum         , (*GradT_Fused)+nCA+nCO, *CaseGrad);
-		elm::push_to_freedoms2(*SampPacket.Params_CA  , (*GradT_Fused)+nCA+nCO+nMU    , *CaseGrad);
-		elm::push_to_freedoms2(*SampPacket.Params_CO  , (*GradT_Fused)+nCA+nCO+nMU+nSA, *CaseGrad);
-		std::string z = elm::push_to_freedoms2_(*AllocPacket.Params_CO , (*GradT_Fused)+nCA+nCO+nMU+nSA+nSO, *CaseGrad);
+		elm::push_to_freedoms2(*Params_LogSum         , (*GradT_Fused)+offset_mu()         , *CaseGrad);
+		elm::push_to_freedoms2(*SampPacket.Params_CA  , (*GradT_Fused)+offset_sampadj()    , *CaseGrad);
+		elm::push_to_freedoms2(*SampPacket.Params_CO  , (*GradT_Fused)+offset_sampadj()+nSA, *CaseGrad);
+		elm::push_to_freedoms2(*AllocPacket.Params_CO , (*GradT_Fused)+offset_alloc(), *CaseGrad);
+		elm::push_to_freedoms2(*QuantPacket.Params_CA , (*GradT_Fused)+offset_quant(), *CaseGrad);
 
-		if (c==0) {
-			BUGGER_(msg_, "push list:\n"<<z);
-			BUGGER_(msg_, "AllocPacket.Params_CO.__str__():\n"<<AllocPacket.Params_CO->__str__());
-			BUGGER_(msg_, "CaseGrad [c==0]:\n"<<CaseGrad.printall());
-		}
+//		if (c==0) {
+//			BUGGER_(msg_, "push list:\n"<<z);
+//			BUGGER_(msg_, "AllocPacket.Params_CO.__str__():\n"<<AllocPacket.Params_CO->__str__());
+//			BUGGER_(msg_, "CaseGrad [c==0]:\n"<<CaseGrad.printall());
+//		}
 
 		
 		// BHHH

@@ -1758,6 +1758,18 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			return x
 		raise TypeError("type not valid")
 
+
+	def seer(self):
+		'''Display a variety of information about the data in the DB'''
+		x = []
+		self.database_list()
+		dbs = self.database_list(type=list)
+		for dbname in dbs:
+			self.table_info(dbname)
+		return x
+	
+	
+
 	def attach(self, sqlname, filename):
 		'''Attach another SQLite database.
 		
@@ -1843,6 +1855,27 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		except AttributeError:
 			pass
 		return file
+
+	def slick(self, stmt, arguments=(), *, file=None, title="Untitled"):
+		'''A convenience function for extracting a table as a viewable html page from an SQL query.
+			
+		:param stmt:      A SQL query to be evaluated.
+		:param arguments: Values to bind to the SQLite query.
+		:param file:      A file-like object whereupon to write the table. If None
+		                  (the default), a temporary named html file is created.
+		:param title:     An optional title for the page.
+		'''
+		from .util.slickgrid import display_slickgrid
+		cur = self.execute(stmt, arguments)
+		try:
+			descrip = cur.getdescription()
+		except apsw.ExecutionCompleteError:
+			return "no results\n{0!s}\n{1}".format(arguments,stmt)
+		colnames = ["{0!s}".format(j[0]) for j in descrip]
+		datarows = []
+		for i in cur:
+			datarows.append(["{0!s}".format(j) for j in i])
+		display_slickgrid(filename=file, title=title, column_names=colnames, datarows=datarows)
 
 
 	def dataframe(self, stmt, arguments=(), index_col=None, coerce_float=True):

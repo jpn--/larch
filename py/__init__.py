@@ -81,33 +81,33 @@ try:
 	larch = sys.modules[__name__]
 
 
-	import sys
-	import subprocess
-
-	from distutils.version import LooseVersion as _LooseVersion
-	from . import version
-	from .version import remote as _remote
-	try:
-		outdated = _LooseVersion(_remote.version) > _LooseVersion(version.version)
-		_verion_warning = "Version {} is available (currently using {})".format(_remote.version,version.version)
-	except:
-		outdated = True
-		_verion_warning = "There may be an update available (currently using version {})".format(_remote.version,version.version)
-
-	if outdated:
-		print("!"*len(_verion_warning))
-		print(_verion_warning)
-		print("To upgrade, run 'pip install larch --upgrade'")
-		print("!"*len(_verion_warning))
-	
-	if 'sandbox' not in sys.executable and 'python' in sys.executable.lower() and os.environ.get('READTHEDOCS', None) != 'True':
-		import time as _time
-		try:
-			from .version.last_check import time as _last_version_check_time
-		except ImportError:
-			_last_version_check_time = 0
-		if float(_last_version_check_time) + 60*60*24 < _time.time():
-			_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
+#	import sys
+#	import subprocess
+#
+#	from distutils.version import LooseVersion as _LooseVersion
+#	from . import version
+#	from .version import remote as _remote
+#	try:
+#		outdated = _LooseVersion(_remote.version) > _LooseVersion(version.version)
+#		_verion_warning = "Version {} is available (currently using {})".format(_remote.version,version.version)
+#	except:
+#		outdated = True
+#		_verion_warning = "There may be an update available (currently using version {})".format(_remote.version,version.version)
+#
+#	if outdated:
+#		print("!"*len(_verion_warning))
+#		print(_verion_warning)
+#		print("To upgrade, run 'pip install larch --upgrade'")
+#		print("!"*len(_verion_warning))
+#	
+#	if 'sandbox' not in sys.executable and 'python' in sys.executable.lower() and os.environ.get('READTHEDOCS', None) != 'True':
+#		import time as _time
+#		try:
+#			from .version.last_check import time as _last_version_check_time
+#		except ImportError:
+#			_last_version_check_time = 0
+#		if float(_last_version_check_time) + 60*60*24 < _time.time():
+#			_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
 
 
 

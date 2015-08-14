@@ -51,6 +51,7 @@ namespace etk {
 
 #define MODELFEATURES_NESTING       0x1
 #define MODELFEATURES_ALLOCATION    0x2
+#define MODELFEATURES_QUANTITATIVE  0x4
 
 #endif // ndef SWIG
 
@@ -102,10 +103,7 @@ namespace elm {
 			self.descriptions = dicta()
 		%}
 		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
-			try:
-				self._ref_to_db = args[0]
-			except IndexError:
-				self._ref_to_db = None
+			self._ref_to_db = datafile
 			try:
 				self._pull_graph_from_db()
 			except LarchError:
@@ -148,6 +146,9 @@ namespace elm {
 		elm::cellcode _get_root_cellcode() const;
 		void _set_root_cellcode(const elm::cellcode& r);
 
+	public:		
+		unsigned _nCases_recall;
+
 #ifndef SWIG
 		
 		
@@ -157,7 +158,8 @@ namespace elm {
 		unsigned nCases;
 		// This is the number of cases used in the model. It can be smaller than
 		//  the number of cases available in the data, which is called 
-		//  bootstrapping.
+		//  bootstrapping. The recall version saves the value last seen in
+		//  a provisioning.
 		
 		unsigned nElementals;
 		// This is the number of elemental alternatives.
@@ -193,6 +195,7 @@ namespace elm {
 		// hold the linkages to the freedoms for the various parameters
 		//  used to create the model parmeters at each iteration from the freedoms
 		
+		void pull_and_exp_from_freedoms(const paramArray& par,       double* ops, const double* fr, const bool& log=false);
 		void pull_from_freedoms(const paramArray& par,       double* ops, const double* fr, const bool& log=false);
 		void push_to_freedoms  (      paramArray& par, const double* ops,       double* fr);
 		void pull_coefficients_from_freedoms();
@@ -248,6 +251,7 @@ namespace elm {
 		#endif // def SWIG
 		std::map<std::string, elm::darray_req> needs() const;
 		void provision(const std::map< std::string, boosted::shared_ptr<const elm::darray> >&);
+		void provision();
 		int is_provisioned(bool ex=true) const;
 	private:
 		std::string _subprovision(const std::string& name, boosted::shared_ptr<const darray>& storage,
@@ -268,9 +272,9 @@ namespace elm {
 		elm::darray_ptr  Data_SamplingCA;
 		elm::darray_ptr  Data_SamplingCO;
 		elm::darray_ptr  Data_Allocation;
-//		elm::datamatrix  Data_QuantityCA;
-//		elm::datamatrix  Data_QuantLogSum;
-//		elm::datamatrix  Data_LogSum;
+		elm::darray_ptr  Data_QuantityCA;
+//		elm::darray_ptr  Data_QuantLogSum;
+//		elm::darray_ptr  Data_LogSum;
 		
 		elm::darray_ptr  Data_Choice;
 		elm::darray_ptr  Data_Weight;
@@ -320,7 +324,7 @@ namespace elm {
 		etk::ndarray Probability;
 		etk::ndarray Cond_Prob;
 		etk::ndarray Allocation;
-		etk::ndarray GammaZ;
+		etk::ndarray Quantity;
 
 		etk::ndarray CaseLogLike;
 
@@ -481,10 +485,12 @@ namespace elm {
 //		void _setUp_choice_data();
 //		void _setUp_weight_data();
 		void _setUp_utility_data_and_params();
+		void _setUp_quantity_data_and_params();
 		void _setUp_samplefactor_data_and_params();
 		void _setUp_allocation_data_and_params();
 		
 		void _setUp_MNL();
+		void _setUp_QMNL();
 		void _setUp_NL();
 		void _setUp_NGEV();
 
@@ -608,6 +614,7 @@ namespace elm {
 		etk::ndarray* utility(etk::ndarray* params=nullptr);
 
 		ca_co_packet utility_packet();
+		ca_co_packet quantity_packet();
 		ca_co_packet sampling_packet();
 		ca_co_packet allocation_packet();
 
@@ -659,13 +666,14 @@ namespace elm {
 			return $action(self)
 		%}
 		%rename(utility) Input_Utility;
+		%rename(quantity) Input_QuantityCA;
 		%rename(nest) Input_LogSum;
 		%rename(link) Input_Edges;
 		%rename(samplingbias) Input_Sampling;
 		#endif // def SWIG
 
 		LinearBundle_1              Input_Utility;
-		std::vector< Component >    Input_QuantityCA ;
+		ComponentList               Input_QuantityCA ;
 		ComponentCellcodeMap        Input_LogSum;
 		LinearCOBundle_2            Input_Edges;
 		LinearBundle_1              Input_Sampling;
@@ -764,9 +772,9 @@ FOSWIG(	%rename(__repr__) representation; )
 		#ifdef SWIG
 		%pythoncode %{
 		@staticmethod
-		def Example(n=1, db=None):
+		def Example(n=1, db=None, pre=False):
 			from . import examples
-			examples.load_example(n)
+			examples.load_example(n, pre)
 			if db is None:
 				m = examples.model(examples.data())
 			else:

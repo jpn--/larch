@@ -28,6 +28,7 @@ if __name__ == "__main__" and __package__ is None:
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
 from ..core import Parameter, Model, DB, LarchError, SQLiteError
 from ..model import ModelFamily
+from ..roles import ParameterRef
 
 class TestMTC(ELM_TestCase):
 
@@ -56,6 +57,53 @@ class TestMTC(ELM_TestCase):
 		self.assertEqual(8, d.eval_float("select ceil(dist) from "+d.tbl_idco()+" limit 1"))
 		self.assertEqual(7, d.eval_float("select floor(dist) from "+d.tbl_idco()+" limit 1"))
 
+	def test_parameter_math(self):
+		m = Model()
+		m.parameter('P1', value=1.23)
+		m.parameter('P2', value=2.0)
+		
+		P1 = ParameterRef('P1')
+		P1x = ParameterRef('P1', fmt="{:0.1f}")
+		P2 = ParameterRef('P2')
+		P3 = ParameterRef('P3', default=10.0)
+		P4 = ParameterRef('P4')
+		
+		self.assertEqual( 1.23, P1.value(m) )
+		self.assertEqual( 2.0,  P2.value(m) )
+		self.assertEqual( 10.0,  P3.value(m) )
+		with self.assertRaises(LarchError):
+			P4.value(m)
+
+		self.assertAlmostEqual( 3.23   , (P1+P2).value(m) )
+		self.assertAlmostEqual( 3.23   , (P2+P1).value(m) )
+		self.assertAlmostEqual(1.23-2.0, (P1-P2).value(m) )
+		self.assertAlmostEqual( 0.77   , (P2-P1).value(m) )
+		self.assertAlmostEqual( 2.46   , (P1*P2).value(m) )
+		self.assertAlmostEqual( 2.46   , (P2*P1).value(m) )
+		self.assertAlmostEqual( 0.615  , (P1/P2).value(m) )
+		self.assertAlmostEqual(2.0/1.23, (P2/P1).value(m) )
+		self.assertAlmostEqual(-1.23   , (-P1).value(m) )
+	
+		self.assertEqual( '1.2', P1x.str(m) )
+		self.assertEqual( '2.5', (P1x*P2).str(m) )
+		self.assertEqual( '2.5', (P2*P1x).str(m) )
+		self.assertEqual( '3.2', (P1x+P2).str(m) )
+		self.assertEqual( '3.2', (P2+P1x).str(m) )
+		self.assertEqual( '0.6', (P1x/P2).str(m) )
+		self.assertEqual( '1.6', (P2/P1x).str(m) )
+		self.assertEqual( '-0.8',(P1x-P2).str(m) )
+		self.assertEqual( '0.8', (P2-P1x).str(m) )
+		self.assertEqual( '-1.2',(-P1x).str(m) )
+
+	def test_reporting(self):
+		m = Model.Example(1, pre=True)
+		r1 = m.report(style='html')
+		r2 = m.report(style='xml')
+		r3 = m.report(style='txt')
+		self.assertEqual(bytes, type(r1))
+		from ..util.xhtml import Elem
+		self.assertEqual(Elem, type(r2))
+		self.assertEqual(str, type(r3))
 
 	def test_model2_options(self):		
 		d = self._db
@@ -480,3 +528,80 @@ class TestMNL(ELM_TestCase):
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
 		av = m.db.array_avail_blind()[0][0:1,:,:]
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
+
+
+
+	def test_qmnl_loglikelihoods_theta1(self):
+
+		m1 = Model.Example()
+		m1.parameter('quant_cost', value=1)
+		m1.parameter('quant_time', value=2)
+		m1.quantity('totcost+10', 'quant_cost')
+		m1.quantity('tottime',    'quant_time')
+		m1.provision()
+
+		m2 = Model.Example()
+		m2.parameter('theta', value=1)
+		m2.utility.ca('log(((totcost+10)*exp(1))+(tottime*exp(2)))','theta')
+		m2.provision()
+
+		self.assertAlmostEqual(-7823.232043623507, m1.loglike(), 7)
+		self.assertAlmostEqual(-7823.232043623507, m2.loglike(), 7)
+
+		m3 = Model.Example()
+		m3.parameter('quant_cost', value=2)
+		m3.parameter('quant_time', value=1)
+		m3.quantity('totcost+10', 'quant_cost')
+		m3.quantity('tottime',    'quant_time')
+		m3.provision()
+
+		m4 = Model.Example()
+		m4.parameter('theta', value=1)
+		m4.utility.ca('log(((totcost+10)*exp(2))+(tottime*exp(1)))','theta')
+		m4.provision()
+
+		self.assertAlmostEqual(-6974.993686737006, m3.loglike(), 7)
+		self.assertAlmostEqual(-6974.993686737006, m4.loglike(), 7)
+		
+		correct_g = (468.2545410105376, 526.8256449198816, 1026.0599226967315, 76.18605295647285, 6.164706155686871, 28238.215664896412, 30259.2409306726, 60449.75569443522, 5132.286505795491, 2090.2918481169763, 52188.194044174445, 46679.47009934323, -209.09066088279357, 209.09066097374304)
+		check_g = m3.d_loglike()
+		
+		
+		
+		for correct_gi,check_gi in zip(correct_g,check_g):
+			self.assertNearlyEqual(correct_gi,check_gi, 5)
+
+		m3.parameter('ASC_TRAN', value = 1.0)
+		m4.parameter('ASC_TRAN', value = 1.0)
+		self.assertAlmostEqual(-8458.368386815826, m3.loglike(), 7)
+		self.assertAlmostEqual(-8458.368386815826, m4.loglike(), 7)
+
+		correct_g = (214.33071392819235, 342.49202810627287, 1939.683594154003, 31.456485424894787, -59.88434201479634, 13741.611224029959, 19766.022834585823, 113507.44438243657, 2430.4592427702332, -1517.4853508812657, 77160.21217390696, 74488.37299910728, -171.13372819264637, 171.13372819264632)
+		check_g = m3.d_loglike()
+		for correct_gi,check_gi in zip(correct_g,check_g):
+			self.assertNearlyEqual(correct_gi,check_gi, 5)
+
+		m3.parameter('tottime', value = -0.1)
+		m4.parameter('tottime', value = -0.1)
+		self.assertAlmostEqual(-5511.9881882709515, m3.loglike(), 7)
+		self.assertAlmostEqual(-5511.9881882709515, m4.loglike(), 7)
+
+		correct_g = (522.5184853830001, 463.6990251864535, 247.38042830373828, 24.114642455255556, -147.3307132317191, 30984.541140176854, 26322.255483618563, 14156.810114419472, 2004.3211709394827, -6283.239683176233, 3973.4674946145788, 63361.91323563814, -17.98436648149563, 17.98436648149564)
+		check_g = m3.d_loglike()
+		for correct_gi,check_gi in zip(correct_g,check_g):
+			self.assertNearlyEqual(correct_gi,check_gi, 5)
+
+		m3.tearDown()
+		m3.parameter('nonmotor', null_value=1.0, value=0.5)
+		m3.nest(9,'nonmotor')
+		m3.link(9,6)
+		m3.link(9,5)
+		m3.setUp()
+		self.assertAlmostEqual(-5618.048268386866, m3.loglike(), 7)
+
+		correct_g = (523.7844907321696, 464.5988173284788, 250.592567002237, 81.94457436295288, -212.93147800862212, 31060.03073633408, 26376.030177959692, 14345.888386315535, 5056.735849911448, -9803.002436338618, 2615.0622375662056, 63693.22471443263, -3.5640720507976535, 3.5640720507976895, -426.7707472245791)
+		check_g = m3.d_loglike()
+		for correct_gi,check_gi in zip(correct_g,check_g):
+			self.assertNearlyEqual(correct_gi,check_gi, 5)
+
+

@@ -1,0 +1,14 @@
+axes.titlesize : 16
+axes.labelsize : 10
+axes.grid : True
+axes.labelweight : bold
+lines.linewidth : 3
+lines.markersize : 10
+xtick.labelsize : 9
+ytick.labelsize : 9
+grid.color : black
+grid.linestyle : :
+grid.linewidth : 0.1
+grid.alpha : 0.8
+font.family : sans-serif
+font.sans-serif : Helvetica, Lucida Grande, Bitstream Vera Sans, Verdana, Geneva, Lucid, Arial

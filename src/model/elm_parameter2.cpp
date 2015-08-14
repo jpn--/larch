@@ -201,11 +201,11 @@ double elm::parametex_scale::pullfield(const std::string& field) const
 
 void elm::parametex_scale::pushvalue(double* pushDest, const double& q) const
 {
-	if (mdl)  pushDest[mdl->FNames[freedom]] += (q / _multiplier);
+	if (mdl)  pushDest[mdl->FNames[freedom]] += (q * _multiplier);
 }
 void elm::parametex_scale::pushfield(const std::string& field, const double& q) const
 {
-	if (mdl)  mdl->FInfo[freedom].value += (q / _multiplier);
+	if (mdl)  mdl->FInfo[freedom].value += (q * _multiplier);
 }
 
 std::string elm::parametex_scale::print() const

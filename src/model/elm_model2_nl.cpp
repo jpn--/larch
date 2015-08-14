@@ -92,8 +92,8 @@ void elm::Model2::_setUp_NL()
 	Utility.resize(nCases,nNodes);
 	
 	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
-		AdjProbability.resize(nCases,_Data->nAlts());
-		SamplingWeight.resize(nCases,_Data->nAlts());
+		AdjProbability.resize(nCases,nElementals);
+		SamplingWeight.resize(nCases,nElementals);
 	} else {
 		AdjProbability.same_memory_as(Probability);
 		SamplingWeight.resize(0);
@@ -158,6 +158,9 @@ void elm::Model2::_setUp_NGEV()
 	Utility.resize(nCases,nNodes);
 	
 	Allocation.resize(nCases,Xylem.n_compet_alloc());
+
+	if (Input_QuantityCA.size()>0) Quantity.resize(nCases,nElementals);
+
 	
 	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
 		AdjProbability.resize(nCases,nElementals);
@@ -209,7 +212,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_gradient ()
 									 );}
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability ()
-{return boosted::make_shared<workshop_ngev_probability>(nNodes, utility_packet(), allocation_packet(), sampling_packet()
+{return boosted::make_shared<workshop_ngev_probability>(nNodes, utility_packet(), allocation_packet(), sampling_packet(), quantity_packet()
 								 , Params_LogSum
 								 , Data_Avail
 								 , &Probability
@@ -225,6 +228,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 									 , nNodes
 									 , utility_packet(), allocation_packet()
 									 , sampling_packet()
+									 , quantity_packet()
 									 , Params_LogSum
 									 , Data_Choice
 									 , Data_Weight_active()
@@ -292,7 +296,7 @@ void elm::Model2::nl_probability()
 	} else {
 	
 	Utility.initialize(0.0);
-	__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, Coef_UtilityCA, Coef_UtilityCO, 0);
+	__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, &Coef_UtilityCA, &Coef_UtilityCO, 0);
 
 	elm::ca_co_packet sampling_packet_ = sampling_packet();
 	bool use_sampling = sampling_packet_.relevant();
@@ -384,6 +388,7 @@ void elm::Model2::ngev_probability()
 	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
 	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
 	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
+	BUGGER(msg) << "Coef_QuantityCA\n" << Coef_QuantityCA.printall();
 	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
 		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
 	}
@@ -418,9 +423,17 @@ void elm::Model2::ngev_probability()
 		local_prob_workshop->work(0, nCases, nullptr);
 	
 	}
+	BUGGER(msg) << "Quantity (case 0)\n" << Quantity.printrow(0) ;
 	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
 	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
 	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
+
+	if (nCases>1) {
+	BUGGER(msg) << "Quantity (case 1)\n" << Quantity.printrow(1) ;
+	BUGGER(msg) << "Utility (case 1)\n" << Utility.printrow(1) ;
+	BUGGER(msg) << "Probability (case 1)\n" << Probability.printrow(1) ;
+	BUGGER(msg) << "Cond_Prob (case 1)\n" << Cond_Prob.printrow(1) ;
+	}
 }
 
 

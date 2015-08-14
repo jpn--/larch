@@ -504,7 +504,7 @@ else:
 	setup(name='larch',
 		  version=VERSION,
 		  package_dir = {'larch': 'py'},
-		  packages=['larch', 'larch.examples', 'larch.test', 'larch.version'],
+		  packages=['larch', 'larch.examples', 'larch.test', 'larch.version', 'larch.util', 'larch.model_reporter'],
 		  ext_modules=[core, apsw, ],
 		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz']},
 		  data_files=local_data_files,

@@ -33,8 +33,8 @@ namespace elm {
 	( etk::memarray&       U
 	, elm::darray_ptr        Data_CA
 	, elm::darray_ptr        Data_CO
-	, const etk::memarray& Coef_CA
-	, const etk::memarray& Coef_CO
+	, const etk::memarray* Coef_CA
+	, const etk::memarray* Coef_CO
 	, const double&        U_premultiplier
 	);
 

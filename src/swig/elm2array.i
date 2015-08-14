@@ -597,11 +597,11 @@
 
 
 
-%typecheck(SWIG_TYPECHECK_POINTER) elm::Component *, elm::Component & {
+%typecheck(SWIG_TYPECHECK_POINTER) elm::LinearComponent *, elm::LinearComponent & {
 
 
 
-	// check if input is Component
+	// check if input is LinearComponent
 	int res = SWIG_ConvertPtr($input, 0, $1_descriptor, 0);
 	$1 = SWIG_CheckState(res);
 
@@ -629,7 +629,7 @@
 
 
 
-%typemap(in) elm::Component* (int res, void* argp, bool use_temp, elm::Component temp_comp) {
+%typemap(in) elm::LinearComponent* (int res, void* argp, bool use_temp, elm::LinearComponent temp_comp) {
 	
 	
 	use_temp = false;
@@ -646,22 +646,22 @@
 			Py_CLEAR(role);
 		}
 		if (!use_temp) {
-			SWIG_exception_fail(SWIG_ArgError(res), "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component' (*)");
+			SWIG_exception_fail(SWIG_ArgError(res), "in method '" "$symname" "', argument " "$argnum" " of type 'larch.LinearComponent' (*)");
 		}
 	}
 	if (!argp && !use_temp) {
-		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component'");
+		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.LinearComponent'");
 	}
 	if (use_temp) {
 		$1 = &temp_comp;
 	} else {
-		$1 = reinterpret_cast< elm::Component * >(argp);
+		$1 = reinterpret_cast< elm::LinearComponent * >(argp);
 	}
 	
 	
 }
 
-%typemap(in) elm::Component& (int res, void* argp, bool use_temp, elm::Component temp_comp) {
+%typemap(in) elm::LinearComponent& (int res, void* argp, bool use_temp, elm::LinearComponent temp_comp) {
 //	
 //	PyObject* type_o = PyObject_Type($input);
 //	if (type_o) {
@@ -692,16 +692,16 @@
 			Py_CLEAR(role);
 		}
 		if (!use_temp) {
-			SWIG_exception_fail(SWIG_ArgError(res), "in method '$symname', argument $argnum of type 'larch.Component' (&)");
+			SWIG_exception_fail(SWIG_ArgError(res), "in method '$symname', argument $argnum of type 'larch.LinearComponent' (&)");
 		}
 	}
 	if (!argp && !use_temp) {
-		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.Component'");
+		SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "$symname" "', argument " "$argnum" " of type 'larch.LinearComponent'");
 	}
 	if (use_temp) {
 		$1 = &temp_comp;
 	} else {
-		$1 = reinterpret_cast< elm::Component * >(argp);
+		$1 = reinterpret_cast< elm::LinearComponent * >(argp);
 	}
 	
 	

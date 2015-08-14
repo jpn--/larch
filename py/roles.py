@@ -2,6 +2,7 @@ import keyword as _keyword
 import re as _re
 from . import core
 from .core import LinearComponent, LinearFunction
+from .exceptions import LarchError
 
 _chi = u"\u03C7"
 _beta = u"\u03B2"
@@ -91,11 +92,33 @@ class DataRef(str, metaclass=Role):
 
 
 class ParameterRef(str, metaclass=Role):
-	def __new__(cls, name):
+	"""
+	An abstract reference to a parameter, which may or may not be included in any given model.
+	
+	Parameters
+	----------
+	name : str
+		The name of the parameter to reference.
+	default : numeric or None
+		When a targeted model does not include the referenced parameter, use 
+		this value for :meth:`value` and :meth:`str`. If given as None, those
+		methods will raise an exception.
+	fmt : str or None
+		The format string to use for :meth:`str`.
+	"""
+	
+	def __new__(cls, name, default=None, fmt=None, default_value=None, format=None):
+		if fmt is None and format is not None:
+			fmt = format
+		if fmt is None:
+			fmt = "{}"
+		if default is None and default_value is not None:
+			default = default_value
 		self = super().__new__(cls, name)
-		self._fmt = "{}"
+		self._fmt = fmt
 		self._name = name
 		self._role = 'parameter'
+		self._default_value = default
 		return self
 	def __repr__(self):
 		s = super().__str__()
@@ -106,21 +129,133 @@ class ParameterRef(str, metaclass=Role):
 	def __str__(self):
 		return super().__str__()
 	def value(self,m):
-		if str(self) in m:
-			return m[str(self)].value
-		raise LarchError("parameter {} not in model".format(str(self)))
+		"""
+		The value of the parameter in a given model.
+		
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+		
+		Raises
+		------
+		LarchError
+			When the model does not contain a parameter with the same
+			name as this ParameterRef, and the default_value for this
+			ParameterRef is None.
+		"""
+		try:
+			v = m.metaparameter(str(self)).value
+		except LarchError:
+			if self._default_value is not None:
+				v = self._default_value
+			else:
+				raise LarchError("parameter {} not in model".format(str(self)))
+		return v
 	def name(self, n):
+		"""
+		Set or re-set the name of the parameter referenced.
+		
+		Parameters
+		----------
+		n : str
+			The new name of the parameter.
+			
+		Returns
+		-------
+		ParameterRef
+			This method returns the self object, to facilitate method chaining.
+		"""
 		self._name = n
 		return self
 	def fmt(self,format):
-		self._fmt = format
+		"""
+		Set or re-set the format string for the parameter referenced.
+		
+		Parameters
+		----------
+		format : str
+			The new format string. This will be used to format the parameter value when calling :meth:`str`.
+			
+		Returns
+		-------
+		ParameterRef
+			This method returns the self object, to facilitate method chaining.
+		"""
+		if format is None or format == "":
+			self._fmt = "{}"
+		else:
+			self._fmt = format
+		try:
+			self._fmt.format(0)
+		except:
+			raise LarchError("invalid formating string")
 		return self
-	def str(self,m):
-		return self._fmt.format(self.value(m))
+	def default_value(self,val):
+		"""
+		Set or re-set the default value.
+		
+		Parameters
+		----------
+		val : numeric or None
+			The new default value. This will be used by :meth:`value` when 
+			the parameter is not included in the targeted model. Set to None
+			to raise an exception instead.
+			
+		Returns
+		-------
+		ParameterRef
+			This method returns the self object, to facilitate method chaining.
+		"""
+		self._default_value = val
+		return self
+	def str(self,m, fmt=None):
+		"""
+		Gives the :meth:`value` of the parameter in a given model as a string.
+		
+		The string is formated using the :meth:`fmt` string if given. If not
+		given, Python's default string formatting is used.
+		
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+		fmt : str or None
+			If not None, a format string which will be used, overriding any
+			previous setting by a :meth:`fmt` command.  The override is 
+			valid for this method call only, and does not change the 
+			format for future calls.
+		
+		Raises
+		------
+		LarchError
+			When the model does not contain a parameter with the same
+			name as this ParameterRef, and the default_value for this
+			ParameterRef is None.
+		"""
+		if fmt is not None:
+			return fmt.format(self.value(m))
+		else:
+			return self._fmt.format(self.value(m))
 	def getname(self):
 		return self._name
 	def valid(self,m):
+		"""
+		Check if this ParameterRef would give a value for a given model.
+		
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+		
+		Returns
+		-------
+		bool
+			False if the value method would raise an exception, and True otherwise.
+		"""
 		if str(self) in m:
+			return True
+		if self._default_value is not None:
 			return True
 		return False
 	def __add__(self, other):
@@ -167,15 +302,28 @@ class ParameterRef(str, metaclass=Role):
 		return _param_negate(self)
 
 
-class _param_add(ParameterRef):
+class _param_math_binaryop(ParameterRef):
 	def __new__(cls,left,right):
 		self = super().__new__(cls, "")
 		self._left = left
 		self._right = right
-		self._fmt = "{}"
+		if isinstance(self._left, ParameterRef) and isinstance(self._right, ParameterRef):
+			if left._fmt=="{}" and right._fmt!="{}":
+				self._fmt = right._fmt
+			else:
+				self._fmt = left._fmt
+		elif isinstance(self._left, ParameterRef):
+			self._fmt = left._fmt
+		elif isinstance(self._right, ParameterRef):
+			self._fmt = right._fmt
+		else:
+			self._fmt = "{}"
 		self._name = ""
 		self._role = 'parameter_math'
 		return self
+
+
+class _param_add(_param_math_binaryop):
 	def value(self,m):
 		if isinstance(self._left, ParameterRef):
 			x = self._left.value(m)
@@ -197,15 +345,7 @@ class _param_add(ParameterRef):
 	def __repr__(self):
 		return "({} + {})".format(repr(self._left),repr(self._right))
 
-class _param_subtract(ParameterRef):
-	def __new__(cls,left,right):
-		self = super().__new__(cls, "")
-		self._left = left
-		self._right = right
-		self._fmt = "{}"
-		self._name = ""
-		self._role = 'parameter_math'
-		return self
+class _param_subtract(_param_math_binaryop):
 	def value(self,m):
 		if isinstance(self._left, ParameterRef):
 			x = self._left.value(m)
@@ -228,15 +368,7 @@ class _param_subtract(ParameterRef):
 		return "({} - {})".format(repr(self._left),repr(self._right))
 
 
-class _param_multiply(ParameterRef):
-	def __new__(cls,left,right):
-		self = super().__new__(cls, "")
-		self._left = left
-		self._right = right
-		self._fmt = "{}"
-		self._name = ""
-		self._role = 'parameter_math'
-		return self
+class _param_multiply(_param_math_binaryop):
 	def value(self,m):
 		if isinstance(self._left, ParameterRef):
 			x = self._left.value(m)
@@ -259,15 +391,7 @@ class _param_multiply(ParameterRef):
 		return "({} * {})".format(repr(self._left),repr(self._right))
 
 
-class _param_divide(ParameterRef):
-	def __new__(cls,left,right):
-		self = super().__new__(cls, "")
-		self._left = left
-		self._right = right
-		self._fmt = "{}"
-		self._name = ""
-		self._role = 'parameter_math'
-		return self
+class _param_divide(_param_math_binaryop):
 	def value(self,m):
 		if isinstance(self._left, ParameterRef):
 			x = self._left.value(m)

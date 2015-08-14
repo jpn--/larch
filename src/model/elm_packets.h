@@ -49,6 +49,11 @@ namespace elm {
 		~ca_co_packet();
 		
 		// Compute
+		void logarithm_partial
+		( const unsigned&      firstcase
+		, const unsigned&      numberofcases
+		, const size_t&        dim2size
+		);
 		void logit_partial
 		( const unsigned&      firstcase
 		, const unsigned&      numberofcases

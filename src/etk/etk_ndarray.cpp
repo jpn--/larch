@@ -876,6 +876,9 @@ std::string ndarray::printrow(const unsigned& r) const
 	std::ostringstream ret;
 	unsigned x2, x3;
 	char depMarker, colMarker, rowMarker;
+	if (ROWS==0) {
+		return "no rows in array";
+	}
 	if (DEPS==1) {
 		depMarker = ' ';
 		colMarker = '\t';

@@ -97,10 +97,10 @@ void _setUp_linear_data_and_params
 (	ParameterList&			self
  ,	Facet*					_Data
  ,	VAS_System&				Xylem
- ,	ComponentList&			Input_UtilityCA
- ,	LinearCOBundle_1&		Input_UtilityCO
- ,	paramArray&				Params_UtilityCA
- ,	paramArray&				Params_UtilityCO
+ ,	ComponentList*			Input_UtilityCA
+ ,	LinearCOBundle_1*		Input_UtilityCO
+ ,	paramArray*				Params_UtilityCA
+ ,	paramArray*				Params_UtilityCO
  ,	etk::logging_service*	msg
 )
 {
@@ -108,51 +108,53 @@ void _setUp_linear_data_and_params
 
 
 	// utility.ca //
-	// First, populate the data_port
-	etk::strvec u_ca = __identify_needs(Input_UtilityCA);
-	__check_validity_of_needs(u_ca, _Data, IDCA, msg);
-	
-	// Second, resize the paramArray
-	BUGGER_(msg, "setting Params_?CA size to ("<<u_ca.size()<<")");
-	Params_UtilityCA.resize(u_ca.size());
-	
-	// Third, populate the paramArray
-	for (unsigned b=0; b<Input_UtilityCA.size(); b++) {
-		slot = u_ca.push_back_if_unique(Input_UtilityCA[b].data_name);
-		Params_UtilityCA(slot) = self._generate_parameter(Input_UtilityCA[b].param_name,Input_UtilityCA[b].multiplier);
+	if (Input_UtilityCA && Params_UtilityCA) {
+		// First, populate the data_port
+		etk::strvec u_ca = __identify_needs((*Input_UtilityCA));
+		__check_validity_of_needs(u_ca, _Data, IDCA, msg);
+		
+		// Second, resize the paramArray
+		BUGGER_(msg, "setting Params_?CA size to ("<<u_ca.size()<<")");
+		(*Params_UtilityCA).resize(u_ca.size());
+		
+		// Third, populate the paramArray
+		for (unsigned b=0; b<(*Input_UtilityCA).size(); b++) {
+			slot = u_ca.push_back_if_unique((*Input_UtilityCA)[b].data_name);
+			(*Params_UtilityCA)(slot) = self._generate_parameter((*Input_UtilityCA)[b].param_name,(*Input_UtilityCA)[b].multiplier);
+		}
 	}
-	
 	
 	
 	// utility.co //
-	// First, populate the data_port
-	etk::strvec u_co = __identify_needs(Input_UtilityCO);
-	__check_validity_of_needs(u_co, _Data, IDCO, msg);
+	if (Input_UtilityCO && Params_UtilityCO) {
+		// First, populate the data_port
+		etk::strvec u_co = __identify_needs((*Input_UtilityCO));
+		__check_validity_of_needs(u_co, _Data, IDCO, msg);
 
-	// Second, resize the paramArray
-	auto s = _Data ? _Data->nAlts() : Xylem.n_elemental();
-	BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
-	Params_UtilityCO.resize(u_co.size(), s);
+		// Second, resize the paramArray
+		auto s = _Data ? _Data->nAlts() : Xylem.n_elemental();
+		BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
+		(*Params_UtilityCO).resize(u_co.size(), s);
 
 
 
-	// Third, populate the paramArray
-	int count =0;
-	for (auto top_i=Input_UtilityCO.begin(); top_i!=Input_UtilityCO.end(); top_i++) {
-		for (auto i=top_i->second.begin(); i!=top_i->second.end(); i++) {
+		// Third, populate the paramArray
+		int count =0;
+		for (auto top_i=(*Input_UtilityCO).begin(); top_i!=(*Input_UtilityCO).end(); top_i++) {
+			for (auto i=top_i->second.begin(); i!=top_i->second.end(); i++) {
 
-		BUGGER_(msg, "setting Params_?CO count="<<(++count));
-		slot = u_co.push_back_if_unique(i->data_name);
-		if (top_i->first==cellcode_empty) {
-			OOPS("utilityco input does not specify an alternative.\n"
-				 "Inputs in the utilityco space need to identify an alternative.");
-		}
-		slot2 = Xylem.slot_from_code(top_i->first);
-		Params_UtilityCO(slot,slot2) = self._generate_parameter(i->param_name, i->multiplier);
+			BUGGER_(msg, "setting Params_?CO count="<<(++count));
+			slot = u_co.push_back_if_unique(i->data_name);
+			if (top_i->first==cellcode_empty) {
+				OOPS("utilityco input does not specify an alternative.\n"
+					 "Inputs in the utilityco space need to identify an alternative.");
+			}
+			slot2 = Xylem.slot_from_code(top_i->first);
+			(*Params_UtilityCO)(slot,slot2) = self._generate_parameter(i->param_name, i->multiplier);
 
+			}
 		}
 	}
-
 	
 	BUGGER_(msg, "_setUp_linear_data_and_params complete");
 	
@@ -222,15 +224,34 @@ void elm::Model2::_setUp_utility_data_and_params()
 	(	*this
 	 ,	_Data
 	 ,	Xylem
-	 ,	Input_Utility.ca
-	 ,	Input_Utility.co
-	 ,	Params_UtilityCA
-	 ,	Params_UtilityCO
+	 ,	&Input_Utility.ca
+	 ,	&Input_Utility.co
+	 ,	&Params_UtilityCA
+	 ,	&Params_UtilityCO
 	 ,	&msg
 	);
 
 	BUGGER(msg) << "Params_UtilityCA \n" << Params_UtilityCA.__str__();
 	BUGGER(msg) << "Params_UtilityCO \n" << Params_UtilityCO.__str__();
+
+}
+
+void elm::Model2::_setUp_quantity_data_and_params()
+{
+	BUGGER(msg) << "--Params_Quantity--\n";
+
+	_setUp_linear_data_and_params
+	(	*this
+	 ,	_Data
+	 ,	Xylem
+	 ,	&Input_QuantityCA
+	 ,	nullptr
+	 ,	&Params_QuantityCA
+	 ,	nullptr
+	 ,	&msg
+	);
+
+	BUGGER(msg) << "Params_QuantityCA \n" << Params_QuantityCA.__str__();
 
 }
 
@@ -242,10 +263,10 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 	(	*this
 	 ,	_Data
 	 ,	Xylem
-	 ,	Input_Sampling.ca
-	 ,	Input_Sampling.co
-	 ,	Params_SamplingCA
-	 ,	Params_SamplingCO
+	 ,	&Input_Sampling.ca
+	 ,	&Input_Sampling.co
+	 ,	&Params_SamplingCA
+	 ,	&Params_SamplingCO
 	 ,	&msg
 	);
 
@@ -361,9 +382,10 @@ void elm::Model2::setUp(bool and_load_data)
 {
 	INFO(msg) << "Setting up the model...";
 	
-	if (is_provisioned()!=1) {
-		OOPS("data not provisioned");
-	}
+	// MAYBE THIS IS NOT REALLY NEEDED?
+//	if (is_provisioned()!=1) {
+//		OOPS("data not provisioned");
+//	}
 
 //	BUGGER(msg) << "Setting up the model...";
 	if (_is_setUp>=2 || (_is_setUp>=1 && !and_load_data)) {
@@ -384,6 +406,11 @@ void elm::Model2::setUp(bool and_load_data)
 		features |= MODELFEATURES_ALLOCATION;
 	}
 	
+	if (Input_QuantityCA.size()>0) {
+		BUGGER(msg) << "Setting model features to include quantitative alternatives.";
+		features |= MODELFEATURES_QUANTITATIVE;
+	}
+	
 	BUGGER(msg) << "Setting up utility parameters...";
 	_setUp_utility_data_and_params();
 	if (features & MODELFEATURES_NESTING) {
@@ -392,15 +419,17 @@ void elm::Model2::setUp(bool and_load_data)
 			Xylem.touch();
 			Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
 		}
-		if (features & MODELFEATURES_ALLOCATION) {
+		if ((features & MODELFEATURES_ALLOCATION) || (features & MODELFEATURES_QUANTITATIVE)) {
 			_setUp_NGEV();
 		} else {
 			_setUp_NL();
 		}
+	} else if (features & MODELFEATURES_QUANTITATIVE) {
+		_setUp_NGEV();
 	} else {
 		_setUp_MNL();
 	}
-	if (and_load_data) scan_for_multiple_choices();
+	if (is_provisioned()>0) scan_for_multiple_choices();
 
 	
 	if (Input_Sampling.ca.size() || Input_Sampling.co.metasize()) {
@@ -486,7 +515,10 @@ std::string elm::Model2::_subprovision(const std::string& name, boosted::shared_
 }
 
 
-
+void elm::Model2::provision()
+{
+	OOPS("Calling provision with no argument and no db set is not supported");
+}
 
 void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<const darray> >& input)
 {
@@ -499,6 +531,7 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 	
 	ret += _subprovision("UtilityCA", Data_UtilityCA, input, need, ncases);
 	ret += _subprovision("UtilityCO", Data_UtilityCO, input, need, ncases);
+	ret += _subprovision("QuantityCA", Data_QuantityCA, input, need, ncases);
 	ret += _subprovision("SamplingCA", Data_SamplingCA, input, need, ncases);
 	ret += _subprovision("SamplingCO", Data_SamplingCO, input, need, ncases);
 	ret += _subprovision("Allocation", Data_Allocation, input, need, ncases);
@@ -521,6 +554,7 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 	}
 	
 	nCases = nc;
+	_nCases_recall = nCases;
 }
 
 std::map<std::string, darray_req> elm::Model2::needs() const
@@ -537,6 +571,12 @@ std::map<std::string, darray_req> elm::Model2::needs() const
 	if (u_co.size()) {
 		requires["UtilityCO"] = darray_req (2,NPY_DOUBLE);
 		requires["UtilityCO"].set_variables(u_co);
+	}
+
+	etk::strvec q_ca = __identify_needs(Input_QuantityCA);
+	if (q_ca.size()) {
+		requires["QuantityCA"] = darray_req (3,NPY_DOUBLE,Xylem.n_elemental());
+		requires["QuantityCA"].set_variables(q_ca);
 	}
 
 
@@ -605,6 +645,7 @@ int elm::Model2::is_provisioned(bool ex) const
 	int i = 0;
 	i |= _is_subprovisioned("UtilityCA", Data_UtilityCA, requires, ex);
 	i |= _is_subprovisioned("UtilityCO", Data_UtilityCO, requires, ex);
+	i |= _is_subprovisioned("QuantityCA", Data_QuantityCA, requires, ex);
 	i |= _is_subprovisioned("SamplingCA", Data_SamplingCA, requires, ex);
 	i |= _is_subprovisioned("SamplingCO", Data_SamplingCO, requires, ex);
 	i |= _is_subprovisioned("Allocation", Data_Allocation, requires, ex);
@@ -626,6 +667,7 @@ const elm::darray* elm::Model2::Data(const std::string& label)
 {
 	if (label=="UtilityCA") return Data_UtilityCA ?   (&*Data_UtilityCA) : nullptr;
 	if (label=="UtilityCO") return Data_UtilityCO ?   (&*Data_UtilityCO) : nullptr;
+	if (label=="QuantityCA") return Data_QuantityCA ? (&*Data_QuantityCA) : nullptr;
 	if (label=="SamplingCA") return Data_SamplingCA ? (&*Data_SamplingCA) : nullptr;
 	if (label=="SamplingCO") return Data_SamplingCO ? (&*Data_SamplingCO) : nullptr;
 	if (label=="Allocation") return Data_Allocation ? (&*Data_Allocation) : nullptr;
@@ -642,6 +684,7 @@ elm::darray* elm::Model2::DataEdit(const std::string& label)
 {
 	if (label=="UtilityCA") return Data_UtilityCA ?   const_cast<elm::darray*>(&*Data_UtilityCA) : nullptr;
 	if (label=="UtilityCO") return Data_UtilityCO ?   const_cast<elm::darray*>(&*Data_UtilityCO) : nullptr;
+	if (label=="QuantityCA") return Data_QuantityCA ? const_cast<elm::darray*>(&*Data_QuantityCA) : nullptr;
 	if (label=="SamplingCA") return Data_SamplingCA ? const_cast<elm::darray*>(&*Data_SamplingCA) : nullptr;
 	if (label=="SamplingCO") return Data_SamplingCO ? const_cast<elm::darray*>(&*Data_SamplingCO) : nullptr;
 	if (label=="Allocation") return Data_Allocation ? const_cast<elm::darray*>(&*Data_Allocation) : nullptr;

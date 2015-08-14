@@ -114,7 +114,7 @@ freedom_info& elm::ParameterList::parameter(const std::string& param_name,
 	return FInfo[param_name];
 }
 
-freedom_alias& elm::ParameterList::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier)
+freedom_alias& elm::ParameterList::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force)
 {
 	if (alias_name=="") {
 		throw(etk::ParameterNameError("Cannot name an alias with an empty string."));
@@ -123,13 +123,15 @@ freedom_alias& elm::ParameterList::alias(const std::string& alias_name, const st
 		throw(etk::ParameterNameError("Cannot refer to a parameter with an empty string."));
 	}
 	
-	auto iter = FInfo.find(refers_to);
-	if (iter == FInfo.end()) {
-		throw(etk::ParameterNameError("Cannot refer to a parameter that has not been previously defined."));
-	}
+	if (!force) {
+		auto iter = FInfo.find(refers_to);
+		if ((iter == FInfo.end()) && (AliasInfo.find(refers_to)==AliasInfo.end())) {
+			throw(etk::ParameterNameError(etk::cat("Cannot refer to parameter '",refers_to,"' that has not been previously defined.")));
+		}
 
-	if (alias_name==refers_to) {
-		throw(etk::ParameterNameError("Cannot create an alias that refers to a parameter with the same name."));
+		if (alias_name==refers_to) {
+			throw(etk::ParameterNameError(etk::cat("Cannot create an alias '",refers_to,"' that refers to a parameter with the same name.")));
+		}
 	}
 
 	if (AliasInfo.find(alias_name)==AliasInfo.end()) {

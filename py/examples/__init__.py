@@ -41,6 +41,10 @@ examplefiles = {
 	114:	"swissmetro14selectionBias",
 }
 
+examplefiles_pre = {
+	  1:	"mtc01e",
+}
+
 exampledir = os.path.dirname(__file__)
 
 from .. import Model, DB, _directory_
@@ -49,12 +53,19 @@ class larch:
 	Model = Model
 	_directory_ = _directory_
 
-def load_example(n):
-	try:
-		module_name = examplefiles[n]
-	except KeyError:
-		from ..core import LarchError
-		raise LarchError("Example no. %i not found"%n)
+def load_example(n, pre=False):
+	if pre:
+		try:
+			module_name = examplefiles_pre[n]
+		except KeyError:
+			from ..core import LarchError
+			raise LarchError("Example no. %i (pre-estimated) not found"%n)
+	else:
+		try:
+			module_name = examplefiles[n]
+		except KeyError:
+			from ..core import LarchError
+			raise LarchError("Example no. %i not found"%n)
 	filename = module_name+".py"
 	with open(os.path.join(exampledir,filename)) as f:
 		code = compile(f.read(), filename, 'exec')

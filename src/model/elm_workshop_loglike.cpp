@@ -70,14 +70,14 @@ void elm::loglike_w::work(size_t firstcase, size_t numberofcases, boosted::mutex
 		}
 		if (isNan(LogL_local) && !mute_warnings) {
 			WARN_(msg_, "WARNING: Log Likelihood becomes NAN at caserow "<<c 
-						<< "W..prob: "<<(*Probability)->printrows(c,c+1)
-						<< "W..chos: "<<Data_CH->printcases(c,c+1) );
+						<< "\nW..prob: "<<(*Probability)->printrows(c,c+1)
+						<< "\nW..chos: "<<Data_CH->printcases(c,c+1) );
 			break;
 		}
 		if (isInf(LogL_local) && !mute_warnings) {
 			WARN_(msg_, "WARNING: Log Likelihood becomes INF at caserow "<<c 
-						<< "W..prob: "<<(*Probability)->printrows(c,c+1)
-						<< "W..chos: "<<Data_CH->printcases(c,c+1) );
+						<< "\nW..prob: "<<(*Probability)->printrows(c,c+1)
+						<< "\nW..chos: "<<Data_CH->printcases(c,c+1) );
 			break;
 		}
 	}

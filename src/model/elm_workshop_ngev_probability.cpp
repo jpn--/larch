@@ -167,6 +167,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , elm::ca_co_packet UtilPacket
 , elm::ca_co_packet AllocPacket
 , elm::ca_co_packet SampPacket
+, elm::ca_co_packet QuantPacket
 , const paramArray& Params_LogSum
 , elm::darray_ptr     Data_Avail
 ,  ndarray* Probability
@@ -180,6 +181,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , UtilPacket      (UtilPacket)
 , AllocPacket     (AllocPacket)
 , SampPacket      (SampPacket)
+, QuantPacket     (QuantPacket)
 , Params_LogSum   (&Params_LogSum)
 , Data_Avail      (Data_Avail)
 , Probability     (Probability)
@@ -203,8 +205,11 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 )
 {
 	etk::ndarray* Utility = UtilPacket.Outcome;
-	const etk::ndarray* Coef_UtilityCA = UtilPacket.Coef_CA;
-	const etk::ndarray* Coef_UtilityCO = UtilPacket.Coef_CO;
+//	const etk::ndarray* Coef_UtilityCA = UtilPacket.Coef_CA;
+//	const etk::ndarray* Coef_UtilityCO = UtilPacket.Coef_CO;
+	
+//	etk::ndarray* Quantity = QuantPacket.Outcome;
+	
 
 	etk::ndarray* Allocation = AllocPacket.Outcome;
 	elm::darray_ptr Data_Allocation = AllocPacket.Data_CO;
@@ -226,7 +231,21 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 		BUGGER_(msg_, "Allocation A[0]: " << Allocation->printrow(0) );
 	}
 
-	UtilPacket.logit_partial(firstcase, numberofcases);
+	if (QuantPacket.relevant()) {
+		QuantPacket.logit_partial(firstcase, numberofcases);
+		for (size_t c=firstcase; c<lastcase; c++) {
+			cblas_dcopy(nElementals, QuantPacket.Outcome->ptr(c), 1, UtilPacket.Outcome->ptr(c), 1);
+		}
+		UtilPacket.logarithm_partial(firstcase, numberofcases, nElementals);
+		UtilPacket.logit_partial(firstcase, numberofcases, 1.0);
+		
+		
+	} else {
+		UtilPacket.logit_partial(firstcase, numberofcases);
+	}
+	
+	
+
 	AllocPacket.logit_partial(firstcase, numberofcases);
 
 	if (firstcase==0) {
@@ -296,13 +315,21 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 			}
 			if (found_nan) {
 				if (!warningcount) {
-					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c
-					  << "\n" << "W..util: " << Utility->printrow(c)
-					  << "\n" << "W..allo: " << Allocation->printrow(c)
-					  << "\n" << "W..c|pr: " << Cond_Prob->printrow(c)
-					  << "\n" << "W..prob: " << Probability->printrow(c)
-					  << "\n" << "W..adjp: " << AdjProbability->printrow(c)
-					   );
+//					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c
+//					  << "\n" << "W..qant: " << QuantPacket.Outcome->printrow(c)
+//					  << "\n" << "W..util: " << Utility->printrow(c)
+//					  << "\n" << "W..allo: " << Allocation->printrow(c)
+//					  << "\n" << "W..c|pr: " << Cond_Prob->printrow(c)
+//					  << "\n" << "W..prob: " << Probability->printrow(c)
+//					  << "\n" << "W..adjp: " << AdjProbability->printrow(c)
+//					   );
+					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c);
+					WARN_(msg_, "W..qnty["<<c<<"]: " << QuantPacket.Outcome->printrow(c));
+					WARN_(msg_, "W..util["<<c<<"]: " << Utility->printrow(c));
+					WARN_(msg_, "W..allo["<<c<<"]: " << Allocation->printrow(c));
+					WARN_(msg_, "W..c|pr["<<c<<"]: " << Cond_Prob->printrow(c));
+					WARN_(msg_, "W..prob["<<c<<"]: " << Probability->printrow(c));
+					WARN_(msg_, "W..adjp["<<c<<"]: " << AdjProbability->printrow(c));
 				}
 				warningcount++;
 			}

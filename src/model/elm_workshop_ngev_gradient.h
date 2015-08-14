@@ -58,11 +58,14 @@ public:
 	size_t nSA;
 	size_t nSO;
 	size_t nAO;
+	size_t nQA;
+	size_t nQL;
 	size_t nPar;
 	
 	inline size_t offset_mu() {return nCA+nCO;}
 	inline size_t offset_sampadj() {return nCA+nCO+nMU;}
 	inline size_t offset_alloc() {return nCA+nCO+nMU+nSA+nSO;}
+	inline size_t offset_quant() {return nCA+nCO+nMU+nSA+nSO+nAO;}
 	
 	etk::memarray_raw dUtil      ;
 	etk::memarray_raw dProb      ;
@@ -83,6 +86,7 @@ public:
 	elm::darray_ptr Data_Choice;
 	elm::darray_ptr Data_Weight;
 
+	const etk::memarray* _Quantity;
 	const etk::memarray* _Probability;
 	const etk::memarray* _AdjProbability;
 	const etk::memarray* _Cond_Prob;
@@ -97,6 +101,7 @@ public:
 	elm::ca_co_packet UtilPacket;
 	elm::ca_co_packet AllocPacket;
 	elm::ca_co_packet SampPacket;
+	elm::ca_co_packet QuantPacket;
 
 //	workshop_ngev_gradient();
 	
@@ -106,6 +111,7 @@ public:
 	 , elm::ca_co_packet UtilPacket
 	 , elm::ca_co_packet AllocPacket
 	 , elm::ca_co_packet SampPacket
+	 , elm::ca_co_packet QuantPacket
 	 , const paramArray& Params_LogSum
 	 , elm::darray_ptr     Data_Choice
 	 , elm::darray_ptr     Data_Weight

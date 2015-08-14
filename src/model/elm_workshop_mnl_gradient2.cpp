@@ -40,6 +40,7 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 (  const unsigned&   dF
  , const unsigned&   nElementals
  , elm::ca_co_packet UtilPK
+ , elm::ca_co_packet QuantPK
  , elm::darray_ptr     Data_Choice
  , elm::darray_ptr     Data_Weight
  , const etk::memarray* Probability
@@ -54,6 +55,7 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 , CaseGrad        (dF)
 , Grad_UtilityCA (UtilPK.Params_CA->size1(),UtilPK.Params_CA->size2(),UtilPK.Params_CA->size3())
 , Grad_UtilityCO (UtilPK.Params_CO->size1(),UtilPK.Params_CO->size2(),UtilPK.Params_CO->size3())
+, Grad_QuantityCA(QuantPK.Params_CA->size1(),QuantPK.Params_CA->size2(),QuantPK.Params_CA->size3())
 , workshopBHHH    (dF)
 , workshopGCurrent(dF)
 , _multichoices	  (_Data_MultiChoice)
@@ -65,8 +67,10 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 , msg_     (nullptr)
 , nCA (UtilPK.Params_CA->length())
 , nCO (UtilPK.Params_CO->length())
-, nPar(nCA+nCO)
+, nQ  (QuantPK.Params_CA->length())
+, nPar(nCA+nCO+nQ)
 , UtilPacket (UtilPK)
+, QuantPacket (QuantPK)
 {
 
 	size_t s =workshopGCurrent.size();

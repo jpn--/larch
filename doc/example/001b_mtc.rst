@@ -33,7 +33,8 @@ Which gives us
 	[(1, 'DA'), (2, 'SR2'), (3, 'SR3+'), (4, 'Tran'), (5, 'Bike'), (6, 'Walk')]
 
 You'll see that we have a list of 2-tuples, with each containing a code number and
-a name.  We'll denote the code number as our reference alterative.
+a name.  We'll denote the code number (the first part of the tuple, indexed as zero)
+of the first alternative as our reference alterative.
 
 .. testcode::
 

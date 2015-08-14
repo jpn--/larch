@@ -68,6 +68,9 @@ Contents
 	data-fundamentals
 	model
 	parameter
+	roles
+	reporting
+	utilities
 	math
 	example/examples
 	faq

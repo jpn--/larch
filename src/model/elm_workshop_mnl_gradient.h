@@ -44,6 +44,7 @@ namespace elm {
 		// Fused Parameter Block Sizes
 		size_t nCA;
 		size_t nCO;
+		size_t nQ;
 		size_t nPar;
 
 		
@@ -58,6 +59,7 @@ namespace elm {
 		etk::memarray_symmetric workshopBHHH   ;
 		etk::memarray_raw Grad_UtilityCA;
 		etk::memarray_raw Grad_UtilityCO;
+		etk::memarray_raw Grad_QuantityCA;
 
 		
 		// These are memory arrays that are the principle output accumulators of the workshop.
@@ -77,6 +79,7 @@ namespace elm {
 		// This is a workshop packet. It contains members that are memory arrays
 		//  that are shared among multiple places.
 		elm::ca_co_packet UtilPacket;
+		elm::ca_co_packet QuantPacket;
 
 
 		
@@ -92,6 +95,7 @@ namespace elm {
 		(  const unsigned&   dF
 		 , const unsigned&   nElementals
 		 , elm::ca_co_packet UtilPK
+		 , elm::ca_co_packet QuantPK
 		 , elm::darray_ptr     Data_Choice
 		 , elm::darray_ptr     Data_Weight
 		 , const etk::memarray* Probability
@@ -141,6 +145,7 @@ public:
 	
 	etk::memarray Grad_UtilityCA;
 	etk::memarray Grad_UtilityCO;
+	etk::memarray Grad_QuantityCA;
 
 	etk::memarray workshopGCurrent;
 	etk::memarray_symmetric workshopBHHH   ;
@@ -149,10 +154,12 @@ public:
 
 	const paramArray* Params_UtilityCA;
 	const paramArray* Params_UtilityCO;
+	const paramArray* Params_QuantityCA;
 	const paramArray* Params_LogSum;
 	
 	elm::darray_ptr Data_UtilityCA;
 	elm::darray_ptr Data_UtilityCO;
+	elm::darray_ptr Data_QuantityCA;
 	elm::darray_ptr Data_Choice;
 	elm::darray_ptr Data_Weight;
 
@@ -164,9 +171,11 @@ public:
 	 , const unsigned&   nNodes
 	 , const paramArray& Params_UtilityCA
 	 , const paramArray& Params_UtilityCO
+	 , const paramArray& Params_QuantityCA
 	 , const paramArray& Params_LogSum
 	 , elm::darray_ptr     Data_UtilityCA
 	 , elm::darray_ptr     Data_UtilityCO
+	 , elm::darray_ptr     Data_QuantityCA
 	 , elm::darray_ptr     Data_Choice
 	 , elm::darray_ptr     Data_Weight
 	 , const unsigned&   firstcase

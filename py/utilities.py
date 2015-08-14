@@ -27,6 +27,7 @@ except ImportError:
 	apsw = Mock()
 	class Dummy(): pass
 
+from .core import LarchError
 
 _uidn = 0
 
@@ -77,52 +78,9 @@ def random_sample(a, size=None, replace=False, p=None):
 		return numpy.random.choice(a, size, replace)
 
 
-TemporaryBucket = []
 
-def TemporaryBucketCleanUp():
-	global TemporaryBucket
-	for i in TemporaryBucket:
-		try:
-			os.remove(os.path.realpath(i.name))
-		except:
-			pass
-	del TemporaryBucket
+from .util.temporaryfile import TemporaryFile, TemporaryHtml
 
-import atexit
-atexit.register(TemporaryBucketCleanUp)
-
-
-def TemporaryFile(suffix=None, mode='w+'):
-	import tempfile, webbrowser, types
-	t = tempfile.NamedTemporaryFile(suffix=suffix,mode=mode,delete=False)
-	t.view = types.MethodType( lambda self: webbrowser.open('file://'+os.path.realpath(self.name)), t )
-	global TemporaryBucket
-	TemporaryBucket.append(t)
-	return t
-
-def _try_write(self, content):
-	try:
-		self.write_(content)
-	except:
-		try:
-			self.write_(str(content))
-		except:
-			self.write_(str(content).encode('utf-8'))
-
-
-def TemporaryHtml(style=None, *, nohead=False, mode='wb+', **tagheads):
-	t = TemporaryFile(suffix='.html', mode=mode)
-	if 'b' in mode:
-		t.write_ = t.write
-		t.write = lambda x: _try_write(t,x)
-	if not nohead and (style or len(tagheads)>0):
-		t.write("<head>")
-		if style:
-			t.write("<style>{}</style>".format(style))
-		for tag, content in tagheads.items():
-			t.write("<{0}>{1}</{0}>".format(tag.lower(),content))
-		t.write("</head>")
-	return t
 
 def webpage(content, *, file=None, title=None):
 	'''A convenience function for writing a html file.
@@ -148,17 +106,6 @@ def webpage(content, *, file=None, title=None):
 
 
 
-#def TemporaryHtml(style=None):
-#	import tempfile, webbrowser, types
-#	t = tempfile.NamedTemporaryFile(suffix='.html',mode='w+',delete=False)
-#	if style is not None:
-#		stylehead = """<head><style>{}</style></head>""".format(style)
-#		t.write(stylehead)
-#	t.view = types.MethodType( lambda self: webbrowser.open('file://'+os.path.realpath(self.name)), t )
-#	global TemporaryBucket
-#	TemporaryBucket.append(t)
-#	return t
-
 
 class FrozenClass(object):
     __isfrozen = False
@@ -169,64 +116,6 @@ class FrozenClass(object):
     def _freeze(self):
         self.__isfrozen = True
 
-
-def filename_split(filename):
-	pathlocation, basefile = os.path.split(filename)
-	basefile_list = basefile.split(".")
-	if len(basefile_list)>1:
-		basename = ".".join(basefile_list[:-1])
-		extension = "." + basefile_list[-1]
-	else:
-		basename = basefile_list[0]
-		extension = ""
-	return (pathlocation, basename, extension)
-	
-def filename_fuse(pathlocation, basename, extension):
-	x = os.path.join(pathlocation, basename)
-	if extension != "": x+="."+extension
-	return x
-
-def rotate_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
-	if os.path.exists(filename):		
-		pathlocation, basename, extension = filename_split(filename)
-		fn = lambda n: os.path.join(pathlocation,format%{'basename':basename, 'extension':extension, 'number':n})
-		n = 1
-		while os.path.exists(fn(n)):
-			n += 1
-		while n > 1:
-			os.rename(fn(n-1),fn(n))
-			n -= 1
-		os.rename(filename,fn(1))
-	else:
-		from .core import LarchError
-		raise LarchError("File %s does not exist"%filename)
-
-def new_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
-	import os.path
-	if os.path.exists(filename):		
-		pathlocation, basename, extension = filename_split(filename)
-		fn = lambda n: os.path.join(pathlocation,format%{'basename':basename, 'extension':extension, 'number':n})
-		n = 1
-		while os.path.exists(fn(n)):
-			n += 1
-		return fn(n)
-	else:
-		return filename
-
-def top_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
-	import os.path
-	if os.path.exists(filename):		
-		pathlocation, basename, extension = filename_split(filename)
-		fn = lambda n: os.path.join(pathlocation,format%{'basename':basename, 'extension':extension, 'number':n})
-		n = 1
-		if not os.path.exists(fn(n)):
-			return filename
-		while os.path.exists(fn(n)):
-			n += 1
-		return fn(n-1)
-	else:
-		from .core import LarchError
-		raise LarchError("File %s does not exist"%filename)
 
 def priority_iterator(unsorted, priorities=[]):
 	for key in priorities:
@@ -239,6 +128,7 @@ def priority_iterator(unsorted, priorities=[]):
 	
 def path_shrink_until_exists(pth):
 	import os.path
+	from .util.filemanager import filename_split
 	cap = 0
 	while cap < 30 and not os.path.exists(pth):
 		cap += 1
@@ -696,48 +586,7 @@ def globt(*arg, **kwarg):
 	return sorted(glob.glob(*arg, **kwarg),  key=lambda x: os.stat(x).st_mtime)
 
 
-class category():
-	def __init__(self, name, *members):
-		self.name = name
-		if len(members)==1 and isinstance(members[0],(list,tuple)):
-			self.members = members[0]
-		else:
-			self.members = members
-	def complete_members(self):
-		x = []
-		for p in self.members:
-			if isinstance(p,(category,rename)):
-				x += p.complete_members()
-			else:
-				x += [p,]
-		return x
-
-
-class rename():
-	def __init__(self, name, *members):
-		self.name = name
-		if len(members)==1 and isinstance(members[0],(list,tuple)):
-			self.members = members[0]
-		else:
-			self.members = members
-	def find_in(self, m):
-		if self not in m:
-			raise LarchError("%s not in model",self.name)
-		if self.name in m:
-			return self.name
-		for i in self.members:
-			if i in m:
-				return i
-	def complete_members(self):
-		x = [self.name,]
-		for p in self.members:
-			if isinstance(p,(category,rename)):
-				x += p.complete_members()
-			else:
-				x += [p,]
-		return x
-	def __str__(self):
-		return self.name
+from .util.pmath import category, rename
 
 
 class pmath():

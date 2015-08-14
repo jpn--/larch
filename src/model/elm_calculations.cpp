@@ -25,8 +25,8 @@ void elm::__logit_utility
 ( etk::memarray&  U
 , elm::darray_ptr   Data_CA
 , elm::darray_ptr   Data_CO
-, const etk::memarray& Coef_CA
-, const etk::memarray& Coef_CO
+, const etk::memarray* Coef_CA
+, const etk::memarray* Coef_CO
 , const double&   U_premultiplier
 )
 {
@@ -37,7 +37,7 @@ void elm::__logit_utility
 						Data_CA->nCases() * Data_CA->nAlts(), Data_CA->nVars(), 
 						1,
 						Data_CA->values(0,0),Data_CA->nVars(),
-						*Coef_CA,1,
+						*(*Coef_CA),1,
 						U_premultiplier, *U,1);
 		} else {
 			for (unsigned a=0;a<Data_CA->nAlts();a++) {
@@ -45,7 +45,7 @@ void elm::__logit_utility
 							Data_CA->nCases(),Data_CA->nVars(),
 							1, 
 							Data_CA->values(0,0)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-							*Coef_CA,1, 
+							*(*Coef_CA),1, 
 							U_premultiplier, *U+a, U.size2() );
 			}
 		}
@@ -57,7 +57,7 @@ void elm::__logit_utility
 							Data_CA->nAlts(), Data_CA->nVars(), 
 							1,
 							Data_CA->values(c,1),Data_CA->nVars(),
-							*Coef_CA,1,
+							*(*Coef_CA),1,
 							U_premultiplier, U.ptr(c),1);
 			} else {
 				for (unsigned a=0;a<Data_CA->nAlts();a++) 
@@ -65,7 +65,7 @@ void elm::__logit_utility
 								1,Data_CA->nVars(),
 								1, 
 								Data_CA->values(c,1)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-								*Coef_CA,1, 
+								*(*Coef_CA),1, 
 								U_premultiplier, U.ptr(c)+a, U.size2() );
 			}
 		}
@@ -77,20 +77,20 @@ void elm::__logit_utility
 	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
 		// Fast Linear Algebra
 		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
-					Data_CO->nCases(), Coef_CO.size2(), Data_CO->nVars(),
+					Data_CO->nCases(), (*Coef_CO).size2(), Data_CO->nVars(),
 					1,
 					Data_CO->values(0,0), Data_CO->nVars(),
-					*Coef_CO, Coef_CO.size2(),
+					*(*Coef_CO), (*Coef_CO).size2(),
 					1,*U,U.size2());
 	} else if (Data_CO && Data_CO->nVars()>0) {
 		// Slow case-by-case
 		for (unsigned c=0; c<Data_CA->nCases(); c++) {
 			if (Data_CO->nVars())
 				cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
-							1,Coef_CO.size2(), Data_CO->nVars(),
+							1,(*Coef_CO).size2(), Data_CO->nVars(),
 							1,
 							Data_CO->values(c,1), Data_CO->nVars(),
-							*Coef_CO, Coef_CO.size2(),
+							*(*Coef_CO), (*Coef_CO).size2(),
 							1,U.ptr(c),U.size2());
 		}
 	}
@@ -133,7 +133,7 @@ void elm::__logit_utility_arrays
 	}
 
 	
-	if (Data_CO->size2()>0 /*&& Data_CO->fully_loaded()*/) {
+	if (Data_CO && Data_CO->size2()>0 /*&& Data_CO->fully_loaded()*/) {
 		// Fast Linear Algebra
 		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
 					Data_CO->size1(), Coef_CO.size2(), Data_CO->size2(),

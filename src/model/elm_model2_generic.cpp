@@ -38,7 +38,7 @@ elm::Model2::Model2()
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
 , Data_Allocation (nullptr)
-//, Data_QuantityCA (nullptr)
+, Data_QuantityCA (nullptr)
 //, Data_QuantLogSum(nullptr)
 //, Data_LogSum     (nullptr)
 , Data_Choice     (nullptr)
@@ -49,6 +49,7 @@ elm::Model2::Model2()
 , _LL_constants (NAN)
 , weight_scale_factor (1.0)
 , nCases (0)
+, _nCases_recall (0)
 , nElementals (0)
 , nNests (0)
 , nNodes (0)
@@ -59,6 +60,7 @@ elm::Model2::Model2()
 , _is_setUp(0)
 //, weight_autorescale (false)
 , Input_Utility("utility",this)
+, Input_QuantityCA(COMPONENTLIST_TYPE_UTILITYCA, this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
 , Input_Sampling("samplingbias",this)
@@ -76,7 +78,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , Data_SamplingCA (nullptr)
 , Data_SamplingCO (nullptr)
 , Data_Allocation (nullptr)
-//, Data_QuantityCA (nullptr)
+, Data_QuantityCA (nullptr)
 //, Data_QuantLogSum(nullptr)
 //, Data_LogSum     (nullptr)
 , Data_Choice     (nullptr)
@@ -87,6 +89,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , _LL_constants (NAN)
 , weight_scale_factor (1.0)
 , nCases (0)
+, _nCases_recall (0)
 , nElementals (0)
 , nNests (0)
 , nNodes (0)
@@ -97,6 +100,7 @@ elm::Model2::Model2(elm::Facet& datafile)
 , _is_setUp(0)
 //, weight_autorescale (false)
 , Input_Utility("utility",this)
+, Input_QuantityCA(COMPONENTLIST_TYPE_UTILITYCA, this)
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
 , Input_Sampling("samplingbias",this)
@@ -147,6 +151,18 @@ elm::ca_co_packet elm::Model2::utility_packet()
 	}
 	
 }
+
+elm::ca_co_packet elm::Model2::quantity_packet()
+{
+		return elm::ca_co_packet(&Params_QuantityCA	,
+								 nullptr         	,
+								 &Coef_QuantityCA	,
+								 nullptr         	,
+								 Data_QuantityCA	,
+								 nullptr         	,
+								 &Quantity			);
+}
+
 
 elm::ca_co_packet elm::Model2::sampling_packet()
 {
@@ -628,6 +644,11 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 
 void elm::Model2::_parameter_update()
 {
+	size_t FCurrent_size = FCurrent.size();
+	size_t FMax_size = FMax.size();
+	size_t FMin_size = FMin.size();
+	size_t df_z = dF();
+
 	for (unsigned i=0; i<dF(); i++) {
 		freedom_info* f = &(FInfo[FNames[i]]);
 		FCurrent[i] = f->value;
@@ -982,7 +1003,7 @@ std::string elm::Model2::save_buffer() const
 		sv << "self.alias('"<<j.name<<"'";
 		sv << ",'"<<j.refers_to<<"'";
 		sv << ","<<AsPyFloat(j.multiplier);
-		sv << ")\n";
+		sv << ",True)\n";
 	}
 	sv << "\n";
 	
@@ -996,6 +1017,13 @@ std::string elm::Model2::save_buffer() const
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
 			sv << "self.utility.co("<<u->first<<",'''"<<k->data_name<<"''','''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
 		}
+	}
+	sv << "\n";
+
+	// save quantity
+	BUGGER( msg ) << "save quantity";
+	for (auto u=Input_QuantityCA.begin(); u!=Input_QuantityCA.end(); u++) {
+		sv << "self.quantity('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	sv << "\n";
 
@@ -1062,6 +1090,7 @@ std::string elm::Model2::save_buffer() const
 	sv << option._save_buffer() << "\n";
 
 	
+	sv << "self.recall(nCases="<< _nCases_recall <<")\n";
 	
 	
 	return sv.str();

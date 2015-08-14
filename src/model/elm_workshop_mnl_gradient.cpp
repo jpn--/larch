@@ -42,9 +42,11 @@ elm::workshop_mnl_gradient::workshop_mnl_gradient
 , const unsigned&   nElementals
 , const paramArray& Params_UtilityCA
 , const paramArray& Params_UtilityCO
+, const paramArray& Params_QuantityCA
 , const paramArray& Params_LogSum
 , elm::darray_ptr     Data_UtilityCA
 , elm::darray_ptr     Data_UtilityCO
+, elm::darray_ptr     Data_QuantityCA
 , elm::darray_ptr     Data_Choice
 , elm::darray_ptr     Data_Weight
 , const unsigned&   firstcase
@@ -57,14 +59,17 @@ elm::workshop_mnl_gradient::workshop_mnl_gradient
 , CaseGrad        (dF)
 , Grad_UtilityCA (Params_UtilityCA.size1(),Params_UtilityCA.size2(),Params_UtilityCA.size3())
 , Grad_UtilityCO (Params_UtilityCO.size1(),Params_UtilityCO.size2(),Params_UtilityCO.size3())
+, Grad_QuantityCA(Params_QuantityCA.size1(),Params_QuantityCA.size2(),Params_QuantityCA.size3())
 , workshopBHHH    (dF)
 , workshopGCurrent(dF)
 , multichoices	  (numberofcases,1,1)
 , Params_UtilityCA(&Params_UtilityCA)
 , Params_UtilityCO(&Params_UtilityCO)
+, Params_QuantityCA(&Params_QuantityCA)
 , Params_LogSum   (&Params_LogSum)
 , Data_UtilityCA  (Data_UtilityCA)
 , Data_UtilityCO  (Data_UtilityCO)
+, Data_QuantityCA (Data_QuantityCA)
 , Data_Choice     (Data_Choice)
 , Data_Weight     (Data_Weight)
 , firstcase(firstcase)

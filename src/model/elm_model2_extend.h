@@ -33,7 +33,7 @@ namespace elm {
 		etk::ndarray* Probability() {return &($self->Probability);}
 		etk::ndarray* Cond_Prob() {return &($self->Cond_Prob);}
 		etk::ndarray* Allocation() {return &($self->Allocation);}
-		etk::ndarray* GammaZ() {return &($self->GammaZ);}
+		etk::ndarray* Quantity() {return &($self->Quantity);}
 		
 		etk::ndarray* CaseLogLike() {return &($self->CaseLogLike);}
 		etk::ndarray* SamplingWeight() {return &($self->SamplingWeight);}
@@ -41,7 +41,13 @@ namespace elm {
 		
 		
 		unsigned long long nAlts() const {return $self->nElementals;}
-		unsigned long long nCases() const {return $self->nCases;}
+		unsigned long long nCases() const {
+			if ($self->nCases) {
+				return $self->nCases;
+			} else {
+				return $self->_nCases_recall;
+			}
+		}
 		
 		std::vector<std::string> alternative_names() const {
 			return $self->Xylem.elemental_names();

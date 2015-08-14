@@ -59,10 +59,10 @@ void elm::Model2::_setUp_MNL()
 	}
 		
 	// Allocate Memory	
-	Probability.resize(nCases,_Data->nAlts());
+	Probability.resize(nCases,nElementals);
 	CaseLogLike.resize(nCases);
 	
-	Workspace.resize(_Data->nAlts());
+	Workspace.resize(nElementals);
 	
 		
 	sherpa::allocate_memory();
@@ -125,14 +125,14 @@ void elm::Model2::_setUp_coef_and_grad_arrays()
 
 void elm::Model2::pull_coefficients_from_freedoms()
 {
-	pull_from_freedoms(Params_UtilityCA  , *Coef_UtilityCA  , *ReadFCurrent());
-	pull_from_freedoms(Params_UtilityCO  , *Coef_UtilityCO  , *ReadFCurrent());
-	pull_from_freedoms(Params_SamplingCA , *Coef_SamplingCA , *ReadFCurrent());
-	pull_from_freedoms(Params_SamplingCO , *Coef_SamplingCO , *ReadFCurrent());
-	pull_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());
-	pull_from_freedoms(Params_QuantLogSum, *Coef_QuantLogSum, *ReadFCurrent());
-	pull_from_freedoms(Params_LogSum     , *Coef_LogSum     , *ReadFCurrent(), true);
-	pull_from_freedoms(Params_Edges      , *Coef_Edges      , *ReadFCurrent());
+	pull_from_freedoms        (Params_UtilityCA  , *Coef_UtilityCA  , *ReadFCurrent());
+	pull_from_freedoms        (Params_UtilityCO  , *Coef_UtilityCO  , *ReadFCurrent());
+	pull_from_freedoms        (Params_SamplingCA , *Coef_SamplingCA , *ReadFCurrent());
+	pull_from_freedoms        (Params_SamplingCO , *Coef_SamplingCO , *ReadFCurrent());
+	pull_and_exp_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());
+	pull_from_freedoms        (Params_QuantLogSum, *Coef_QuantLogSum, *ReadFCurrent());
+	pull_from_freedoms        (Params_LogSum     , *Coef_LogSum     , *ReadFCurrent(), true);
+	pull_from_freedoms        (Params_Edges      , *Coef_Edges      , *ReadFCurrent());
 }
 
 void elm::Model2::freshen()
@@ -149,6 +149,7 @@ void elm::Model2::freshen()
 	_setUp_utility_data_and_params();
 	_setUp_samplefactor_data_and_params();
 	_setUp_allocation_data_and_params();
+	_setUp_quantity_data_and_params();
 
 	Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 	Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
@@ -165,7 +166,7 @@ void elm::Model2::freshen()
 
 void elm::Model2::calculate_probability()
 {
-	if ((features & MODELFEATURES_ALLOCATION)) {
+	if ((features & MODELFEATURES_ALLOCATION)||(features & MODELFEATURES_QUANTITATIVE)) {
 		ngev_probability();
 	} else if ((features & MODELFEATURES_NESTING)) {
 		nl_probability();
@@ -178,7 +179,7 @@ void elm::Model2::calculate_probability()
 
 void elm::Model2::calculate_utility_only()
 {
-	if ((features & MODELFEATURES_ALLOCATION)) {
+	if ((features & MODELFEATURES_ALLOCATION)||(features & MODELFEATURES_QUANTITATIVE)) {
 		ngev_probability();
 	} else if ((features & MODELFEATURES_NESTING)) {
 		nl_probability();
@@ -188,7 +189,7 @@ void elm::Model2::calculate_utility_only()
 		
 		Utility.resize(nCases,_Data->nAlts());
 		
-		__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, Coef_UtilityCA, Coef_UtilityCO, 0);
+		__logit_utility(Utility, Data_UtilityCA, Data_UtilityCO, &Coef_UtilityCA, &Coef_UtilityCO, 0);
 		
 		unsigned c;
 		unsigned a;
@@ -338,9 +339,7 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 	if ((features & MODELFEATURES_ALLOCATION)) {
 		TODO;
 	} else if ((features & MODELFEATURES_NESTING)) {
-		
-		std::cerr << "Calculate NL Logsums, size="<< u->size1() <<"\n";
-		
+				
 		std::shared_ptr<ndarray> utility_workspace = std::make_shared<ndarray>(nNodes);
 		std::shared_ptr<ndarray> utility_savespace = std::make_shared<ndarray>(nNodes);
 
@@ -427,7 +426,7 @@ void elm::Model2::mnl_probability()
 		BUGGER(msg) << "Data_Avail is NULL\n";
 	}
 
-	if (option.threads>1 && _ELM_USE_THREADS_) {
+	if (option.threads>1 && _ELM_USE_THREADS_ && Input_QuantityCA.size()==0) {
 		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads\n";
 		#ifdef __APPLE__
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
@@ -446,11 +445,42 @@ void elm::Model2::mnl_probability()
 		probability_dispatcher->dispatch(option.threads);
 		
 	} else {
-		BUGGER(msg) << "Not using multithreading\n";
-		__logit_utility(Probability, Data_UtilityCA, Data_UtilityCO, Coef_UtilityCA, Coef_UtilityCO, 0);
-		
 		unsigned c;
 		unsigned a;
+	
+		if (Input_QuantityCA.size()>0) {
+			BUGGER(msg) << "Not using multithreading but using quantity\n";
+			__logit_utility(Probability, Data_QuantityCA, nullptr, &Coef_QuantityCA, nullptr, 0);
+
+
+			Probability.log();
+
+
+//			if (Probability.size1()>0) {
+//				FATAL(msg) << "ProbabilityQ (case 0)\n" << Probability.printrow(0) ;
+//				FATAL(msg) << "ProbabilityQ (case n)\n" << Probability.printrow(nCases-1) ;
+//			} else {
+//				FATAL(msg) << "ProbabilityQ (size 0)\n" ;
+//			}
+
+			__logit_utility(Probability, Data_UtilityCA, Data_UtilityCO, &Coef_UtilityCA, &Coef_UtilityCO, 1);
+			// TODO: scale by theta
+
+
+//			if (Probability.size1()>0) {
+//				FATAL(msg) << "ProbabilityX (case 0)\n" << Probability.printrow(0) ;
+//				FATAL(msg) << "ProbabilityX (case n)\n" << Probability.printrow(nCases-1) ;
+//			} else {
+//				FATAL(msg) << "ProbabilityX (size 0)\n" ;
+//			}
+		} else {
+			BUGGER(msg) << "Not using multithreading or quantity\n";
+			__logit_utility(Probability, Data_UtilityCA, Data_UtilityCO, &Coef_UtilityCA, &Coef_UtilityCO, 0);
+		}
+	
+	
+	
+		
 		
 		// Unavailable alternatives become -INF
 		for (c=0;c<nCases;c++) for (a=0;a<nElementals;a++)
@@ -861,6 +891,7 @@ void elm::Model2::mnl_gradient_v2()
 			(dF()
 			 , nElementals
 			 , utility_packet()
+			 , quantity_packet()
 			 , Data_Choice
 			 , Data_Weight_active()
 			 , &Probability
@@ -885,9 +916,11 @@ void elm::Model2::mnl_gradient_v2()
 	 , nElementals
 	 , Params_UtilityCA
 	 , Params_UtilityCO
+	 , Params_QuantityCA
 	 , Params_LogSum
 	 , Data_UtilityCA
 	 , Data_UtilityCO
+	 , Data_QuantityCA
 	 , Data_Choice
 	 , Data_Weight_active()
 	 , 0
@@ -1233,9 +1266,11 @@ const etk::memarray& elm::Model2::gradient ()
 		if (option.force_finite_diff_grad) {
 			finite_diff_gradient(GCurrent);
 		} else {
-			if (features & MODELFEATURES_ALLOCATION) {
+			if ((features & MODELFEATURES_ALLOCATION)) {
 				finite_diff_gradient(GCurrent);
-				//ngev_gradient();
+//				ngev_gradient();
+			} else if (features & MODELFEATURES_QUANTITATIVE) {
+				ngev_gradient();
 			} else if (features & MODELFEATURES_NESTING) {
 				nl_gradient();
 			} else {
