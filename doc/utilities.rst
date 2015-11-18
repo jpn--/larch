@@ -37,3 +37,4 @@ XHTML
 
 .. autoclass:: Elem
 .. autoclass:: XML_Builder
+.. autoclass:: XHTML

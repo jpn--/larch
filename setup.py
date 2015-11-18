@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.13'
+VERSION = '3.1.14'
 
 
 def read(*filenames, **kwargs):
@@ -512,6 +512,8 @@ else:
 							"numpy >= 1.8.1",
 							"scipy >= 0.14.0",
 							"pandas >= 0.14.1",
+							"python-docx >= 0.8.5",
+							"sphinxcontrib-napoleon >= 0.4",
 						],
 		  url='http://larch.readthedocs.org',
 		  download_url='http://github.com/jpn--/larch',

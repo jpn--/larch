@@ -20,6 +20,7 @@ Parameter References
 
 .. autoclass:: ParameterRef(name, default=None, fmt=None)
 
+For convenience, :class:`ParameterRef` is aliased as `P` in the roles module.
 After a :class:`ParameterRef` object is created, its attributes can be
 modified using these methods:
 
