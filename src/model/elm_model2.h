@@ -381,6 +381,8 @@ namespace elm {
 		void calculate_parameter_covariance();
 #endif
 
+		std::shared_ptr<etk::ndarray> mnl_gradient_full_casewise();
+
 #ifndef SWIG
 		// in the internal verion of this function, allow update_freedoms or not
 		void calculate_parameter_covariance(bool update_freedoms=true);

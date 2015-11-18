@@ -1268,6 +1268,9 @@ std::string sherpa::ReadFCurrentAsString() const
 {
 	std::ostringstream ret;
 	size_t s = FNames.size();
+	if (s==0) {
+		return "";
+	}
 	for (unsigned i=0; i<s; i++) {
 		ret << "," << ReadFCurrent()[i];
 	}

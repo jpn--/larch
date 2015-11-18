@@ -73,7 +73,6 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 		appended after the basename but before the dot extension.  For example,
 		if the filename is "/tmp/boo.txt", the first file created will be named
 		"/tmp/boo.001.txt".  If None, then a temporary file is created instead.
-		(Defaults to None.)
 	
 	
 	Other Parameters

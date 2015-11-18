@@ -110,6 +110,9 @@ class XhtmlModelReporter():
 		"""
 		Generate a div element containing the model title in a H1 tag.
 		
+		The title used is taken from the :attr:`title` of the model. There are
+		no `format` keywords that are relevant for this method.
+		
 		Returns
 		-------
 		larch.util.xhtml.Elem

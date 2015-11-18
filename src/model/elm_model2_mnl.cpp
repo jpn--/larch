@@ -866,6 +866,48 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 }
 
 
+
+
+std::shared_ptr<etk::ndarray> elm::Model2::mnl_gradient_full_casewise()
+{
+	periodic Sup (5);
+	BUGGER(msg)<< "Beginning MNL Gradient (Full Casewise) Evaluation" ;
+	GCurrent.initialize(0.0);
+	Bhhh.initialize(0.0);
+	
+	std::shared_ptr<ndarray> gradient_casewise = make_shared<ndarray> (nCases, dF());
+
+	BUGGER(msg)<< "Beginning MNL Gradient full casewise single-threaded Evaluation" ;
+	
+	boosted::mutex local_lock;
+	
+	workshop_mnl_gradient_full_casewise w
+			(dF()
+			 , nElementals
+			 , utility_packet()
+			 , quantity_packet()
+			 , Data_Choice
+			 , Data_Weight_active()
+			 , &Probability
+			 , &GCurrent
+			 , &Bhhh
+			 , &msg
+			 , &Data_MultiChoice
+			 , &*gradient_casewise
+			 );
+
+	w.work(0, nCases, &local_lock);
+
+
+	BUGGER(msg)<< "End MNL Gradient v2 Evaluation" ;
+	
+	return gradient_casewise;
+}
+
+
+
+
+
 void elm::Model2::mnl_gradient_v2() 
 {
 	periodic Sup (5);
@@ -873,19 +915,11 @@ void elm::Model2::mnl_gradient_v2()
 	GCurrent.initialize(0.0);
 	Bhhh.initialize(0.0);
 
-
-
-
-
-
-
-
-
 	if (nThreads >= 1 && _ELM_USE_THREADS_) {
-		
+
+//		std::cerr << "mnl_gradient_v2 threads\n";
 		
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-//		#ifdef __APPLE__
 		[&](){
 			return boosted::make_shared<workshop_mnl_gradient2>
 			(dF()
@@ -901,39 +935,38 @@ void elm::Model2::mnl_gradient_v2()
 			 , &Data_MultiChoice
 			 );
 		};
-//		#else
-//		boosted::bind(&elm::Model2::make_shared_workshop_mnl_gradient, this);
-//		#endif // def __APPLE__
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
 	} else {
-
+		
 		BUGGER(msg)<< "Beginning MNL Gradient single-threaded Evaluation" ;
-	
-	
-	workshop_mnl_gradient w 
-	(this
-	 , dF()
-	 , nElementals
-	 , Params_UtilityCA
-	 , Params_UtilityCO
-	 , Params_QuantityCA
-	 , Params_LogSum
-	 , Data_UtilityCA
-	 , Data_UtilityCO
-	 , Data_QuantityCA
-	 , Data_Choice
-	 , Data_Weight_active()
-	 , 0
-	 , nCases
-	 );
 
-	w.workshop_mnl_gradient_do
-	(  Probability
-	 );
+//		std::cerr << "mnl_gradient_v2 no threads\n";
+		
+		
+		workshop_mnl_gradient w
+		(this
+		 , dF()
+		 , nElementals
+		 , Params_UtilityCA
+		 , Params_UtilityCO
+		 , Params_QuantityCA
+		 , Params_LogSum
+		 , Data_UtilityCA
+		 , Data_UtilityCO
+		 , Data_QuantityCA
+		 , Data_Choice
+		 , Data_Weight_active()
+		 , 0
+		 , nCases
+		 );
+		
+		w.workshop_mnl_gradient_do
+		(  Probability
+		 );
 	 
-	w.workshop_mnl_gradient_send
-	(  GCurrent
-	 , Bhhh);
+		w.workshop_mnl_gradient_send
+		(  GCurrent
+		 , Bhhh);
 	}
 	BUGGER(msg)<< "End MNL Gradient v2 Evaluation" ;
 }

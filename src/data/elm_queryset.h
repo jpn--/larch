@@ -84,7 +84,7 @@ namespace elm {
 def __getstate__(self):
 	args = {}
 	for i in dir(self):
-		if len(i)>4 and i[:4]=='get_':
+		if len(i)>4 and i[:4]=='get_' and i!='get_validator':
 			args['set_'+i[4:]] = getattr(self,i)()
 	return args
 def __setstate__(self, state):

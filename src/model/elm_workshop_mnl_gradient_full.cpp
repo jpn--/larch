@@ -36,7 +36,7 @@ using namespace std;
 
 
 
-elm::workshop_mnl_gradient2::workshop_mnl_gradient2
+elm::workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_full_casewise
 (  const unsigned&   dF
  , const unsigned&   nElementals
  , elm::ca_co_packet UtilPK
@@ -48,6 +48,7 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
  , etk::memarray_symmetric* Bhhh
  , etk::logging_service* msgr
  , const etk::bitarray* _Data_MultiChoice
+ , etk::memarray* GCurrentCasewise
  )
 : dF           (dF)
 , nElementals  (nElementals)
@@ -63,6 +64,7 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 , Data_Weight     (Data_Weight)
 , _Probability    (Probability)
 , _GCurrent (GCurrent)
+, _GCurrentCasewise (GCurrentCasewise)
 , _Bhhh     (Bhhh)
 , msg_     (nullptr)
 , nCA (UtilPK.Params_CA->length())
@@ -76,10 +78,10 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
 	size_t s =workshopGCurrent.size();
 	size_t s1 = s;
 	s1 += 1;
-	//BUGGER_(msg_, "elm::workshop_mnl_gradient2:: \n\n\nI AM ALIVE!\n\n" );
+	//BUGGER_(msg_, "elm::workshop_mnl_gradient_full_casewise:: \n\n\nI AM ALIVE!\n\n" );
 }
 
-elm::workshop_mnl_gradient2::~workshop_mnl_gradient2()
+elm::workshop_mnl_gradient_full_casewise::~workshop_mnl_gradient_full_casewise()
 {
 
 	Workspace.resize(0);
@@ -96,7 +98,7 @@ elm::workshop_mnl_gradient2::~workshop_mnl_gradient2()
 
 
 
-void elm::workshop_mnl_gradient2::case_gradient_mnl
+void elm::workshop_mnl_gradient_full_casewise::case_gradient_mnl
 ( const unsigned& c
  , const etk::memarray& Probability
  )
@@ -137,15 +139,22 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl
 	
 	// ACCUMULATE
 	cblas_daxpy(dF,wgt/*1*/,*CaseGrad,1,*workshopGCurrent,1);
+	
+	for (unsigned i=0; i<dF; i++) {
+		_GCurrentCasewise->at(c,i) = CaseGrad[i] * wgt;
+	}
 }
 
-void elm::workshop_mnl_gradient2::case_gradient_mnl_multichoice
+void elm::workshop_mnl_gradient_full_casewise::case_gradient_mnl_multichoice
 ( const unsigned& c
  , const etk::memarray& Probability
  )
 {
 //	std::cerr << "MNL Multichoice Case Gradient Evaluation for case "<<c<<"\n" ;
 	double thisWgt;
+	for (unsigned i=0; i<dF; i++) {
+		_GCurrentCasewise->at(c,i) = 0;
+	}
 	for (unsigned a=0; a<nElementals; a++) {
 		thisWgt = Data_Choice->value(c,a);
 		if (Data_Weight) thisWgt *= Data_Weight->value(c,0);
@@ -178,12 +187,16 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl_multichoice
 		cblas_dsyr(CblasRowMajor,CblasUpper, dF,thisWgt/*1*/,*CaseGrad, 1, *workshopBHHH, workshopBHHH.size1());
 #endif
 		cblas_daxpy(dF,thisWgt/*1*/,*CaseGrad,1,*workshopGCurrent,1);
+
+		for (unsigned i=0; i<dF; i++) {
+			_GCurrentCasewise->at(c,i) += CaseGrad[i] * thisWgt;
+		}
 	}
 }
 
 
 
-void elm::workshop_mnl_gradient2::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
+void elm::workshop_mnl_gradient_full_casewise::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
 {
 	workshop_mnl_gradient_do(firstcase,numberofcases);
 	_lock = result_mutex;
@@ -192,7 +205,7 @@ void elm::workshop_mnl_gradient2::work(size_t firstcase, size_t numberofcases, b
 
 
 
-void elm::workshop_mnl_gradient2::workshop_mnl_gradient_send
+void elm::workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_send
 ()
 {
 	if (_lock) {
@@ -201,6 +214,7 @@ void elm::workshop_mnl_gradient2::workshop_mnl_gradient_send
 		*_Bhhh += workshopBHHH;
 		_lock->unlock();
 	} else {
+		std::cerr << "warning: workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_send has no mutex lock\n";
 		*_GCurrent += workshopGCurrent;
 		*_Bhhh += workshopBHHH;
 	}
@@ -208,12 +222,8 @@ void elm::workshop_mnl_gradient2::workshop_mnl_gradient_send
 
 
 
-void elm::workshop_mnl_gradient2::workshop_mnl_gradient_do(const unsigned& firstcase, const unsigned& numberofcases)
+void elm::workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_do(const unsigned& firstcase, const unsigned& numberofcases)
 {
-
-//	std::cerr << "_multichoices : "<<_multichoices<<"\n";
-//	std::cerr << " ... "<<_multichoices->printrow(0);
-//	std::cerr << " ... "<<_multichoices->printrow(1);
 
 	//BUGGER_(msg_, "Beginning MNL Gradient Evaluation" );
 	unsigned c;
@@ -221,22 +231,13 @@ void elm::workshop_mnl_gradient2::workshop_mnl_gradient_do(const unsigned& first
 	workshopBHHH.initialize(0.0);
 	size_t lastcase = firstcase + numberofcases;
 	for (c=firstcase;c<lastcase;c++) {
-//		std::cerr << "c="<<c<<"\n";
-//		std::cerr << "firstcase="<<firstcase<<"\n";
-//		std::cerr << "lastcase="<<lastcase<<"\n";
-//		std::cerr << "(*_multichoices)(c-firstcase)="<<(*_multichoices)(c-firstcase)<<"\n";
 
 		if ((*_multichoices)(c)) {
-//			std::cerr << "WGC case_gradient_mnl_multichoice "<< c <<"\n";
 			case_gradient_mnl_multichoice(c,*_Probability);
 		} else {
-//			std::cerr << "WGC case_gradient_mnl "<< c <<"\n";
 			case_gradient_mnl(c,*_Probability);
 		}
-
 		
-//		std::cerr << "WGC "<< c <<"\n" <<
-//		workshopGCurrent.printall() << "\n\n";
 	}
 	//BUGGER_(msg_, "End MNL Gradient Evaluation" );
 

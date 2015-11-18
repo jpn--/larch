@@ -124,6 +124,7 @@ class XML_Builder(TreeBuilder):
 
 
 class XHTML():
+	"""A class used to conveniently build xhtml documents."""
 	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, view_on_exit=True):
 		self.view_on_exit = view_on_exit
 		self.root = Elem(tag="html", xmlns="http://www.w3.org/1999/xhtml")

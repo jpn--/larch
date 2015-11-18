@@ -449,7 +449,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			An open connection to the database.
 		'''
 		if weight is not None and tablename_co is None:
-			raise LarchError("Weight is only allowed in the idco table, but th")
+			raise LarchError("Weight is only allowed in the idco table, but there will be no such table")
 		if tablename_co is not None and tablename_co[0]=="_":
 			tablename_co = tablename+tablename_co
 		eL = logging.getScriber("db")
@@ -532,6 +532,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				d.execute("INSERT INTO csv_alternatives VALUES (?,?)",(code,str(code)))
 		d.refresh_queries()
 		assert( d.qry_alts() == "SELECT * FROM csv_alternatives" )
+		d.save_queries()
 		return d
 
 
@@ -608,7 +609,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 
 
-	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None, temp=False):
+	def import_csv(self, rawdata, table="data", drop_old=False, progress_callback=None, temp=False, column_names=None):
 		'''Import raw csv or tab-delimited data into SQLite.
 
 		Parameters
@@ -629,6 +630,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		temp : bool
 			If true, the data is imported into a temporary table in the database, which
 			will be deleted automatically when the connection is closed.
+		column_names : list, optional
+			If given, use these column names and assume the first line of the data file is
+			data, not headers.
 		
 		Returns
 		-------
@@ -638,7 +642,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		eL = logging.getScriber("db")
 		eL.debug("Importing Data...")
 		from .utilities import prepare_import_headers
-		headers, csvReader, smartFile = prepare_import_headers(rawdata)
+		import csv
+		headers, csvReader, smartFile = prepare_import_headers(rawdata, column_names)
 		eL.debug("Importing data with headers:")
 		for h in headers:
 			eL.debug("  {0}".format(h))
@@ -655,28 +660,41 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		#.......
 		# insert rows
 		num_rows = 0
+		num_errors = 0
 		logLevel = eL.level
 		eL.setLevel(logging.INFO)
 		stmt = "INSERT INTO "+table+" VALUES ("+(",?"*len(headers))[1:]+")"
 		lastlogupdate = time.time()
 		lastscreenupdate = time.time()
 		self.execute("BEGIN TRANSACTION;")
-		for i in csvReader:
-			if len(i) == len(headers):
-				self.execute(stmt,tuple(i))
+		while True:
+			try:
+				i = next(csvReader)
+			except csv.Error:
 				num_rows = num_rows+1
-				if (time.time()-lastlogupdate > 2):
-					eL.info("%i rows imported", num_rows)
-					lastlogupdate = time.time()
-				if progress_callback is not None and (time.time()-lastscreenupdate > 0.1):
-					lastscreenupdate = time.time()
-					progress_callback(int(smartFile.percentread()))
+				num_errors = num_errors+1
+				eL.warning("csv.Error on row %d",num_rows)
+				continue
+			except StopIteration:
+				break
 			else:
-				eL.warning("Incorrect Length (have %d, need %d) Data Row: %s",len(i),len(headers),str(i))
+				if len(i) == len(headers):
+					self.execute(stmt,tuple(i))
+					num_rows = num_rows+1
+					if (time.time()-lastlogupdate > 2):
+						eL.info("%i rows imported", num_rows)
+						lastlogupdate = time.time()
+					if progress_callback is not None and (time.time()-lastscreenupdate > 0.1):
+						lastscreenupdate = time.time()
+						progress_callback(int(smartFile.percentread()))
+				else:
+					eL.warning("Incorrect Length (have %d, need %d) Data Row: %s",len(i),len(headers),str(i))
 		self.execute("END TRANSACTION;")
 		eL.setLevel(logLevel)
 		# clean up
 		eL.info("Imported %i rows to %s", num_rows, table)
+		if num_errors>0:
+			eL.info("with %i errors", num_errors)
 		return headers
 
 	def import_dbf(self, rawdata, table="data", drop_old=False):
@@ -959,6 +977,45 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			writer.writerow(names)
 			for row in cursor:
 				writer.writerow(row)
+		if isinstance(file, str):
+			csvfile.close()
+		else:
+			# cleanup file-like object here
+			pass
+
+	def export_query(self, file, query, cte=False, **formats):
+		'''Export an arbitrary query to a csv file.
+			
+		Parameters
+		----------
+		file : str or file-like
+			If a string, this is the file name to give to the `open` command. Otherwise,
+			this object is passed to :class:`csv.writer` directly.
+		query : str
+			A SQL query (generally a SELECT query) to export
+		cte : bool
+			Should the standard larch queries be available as CTE to the query.
+			
+		Notes
+		-----
+		This method uses a :class:`csv.writer` object to write the output file. Any keyword
+		arguments not listed here are passed through to the writer.
+		'''
+		import csv
+		if isinstance(file, str):
+			if file[-3:].lower()=='.gz':
+				import gzip
+				csvfile = gzip.open(file, 'wt')
+			else:
+				csvfile = open(file, 'w', newline='')
+		else:
+			csvfile = file
+		writer = csv.writer(csvfile, **formats)
+		cursor = self.execute(query, cte=cte)
+		names = [i[0] for i in cursor.getdescription()]
+		writer.writerow(names)
+		for row in cursor:
+			writer.writerow(row)
 		if isinstance(file, str):
 			csvfile.close()
 		else:

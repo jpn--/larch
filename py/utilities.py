@@ -285,7 +285,7 @@ def interpret_header_name(h):
 
 
 
-def prepare_import_headers(rawfilename):
+def prepare_import_headers(rawfilename, headers=None):
 	'''
 	Identify the file type and read the column headers from the first row.
 	For each column, data type is presumed to be FLOAT unless the column name is
@@ -312,10 +312,11 @@ def prepare_import_headers(rawfilename):
 	r = csv.reader(raw, dialect)
 	eL.debug("DIALECT = %s",str(dialect))
 	eL.debug("TYPE OF READER = %s",str(type(r)))
-	try:
-		headers = r.next()
-	except AttributeError:
-		headers = next(r) ##
+	if headers is None:
+		try:
+			headers = r.next()
+		except AttributeError:
+			headers = next(r) ##
 	# fix header items for type
 	num_cols = len(headers)
 	for h in range(len(headers)):
@@ -533,6 +534,7 @@ class storage():
 					value = pkl
 			except pickle.PickleError:
 				pass
+				raise
 			except zlib.error:
 				f = storage_format.pickle
 				value = pkl

@@ -124,6 +124,97 @@ namespace elm {
 		
 	};
 
+	class workshop_mnl_gradient_full_casewise
+	: public etk::workshop
+	{
+
+	  public:
+		boosted::mutex* _lock;
+
+		// Fused Parameter Block Sizes
+		size_t nCA;
+		size_t nCO;
+		size_t nQ;
+		size_t nPar;
+
+		
+		unsigned dF;
+		unsigned nElementals;
+		
+		// These are memory arrays bound to this workshop.
+		// The workshop is free to read and write to these arrays at will.
+		etk::memarray_raw Workspace;
+		etk::memarray_raw CaseGrad;
+		etk::memarray_raw workshopGCurrent;
+		etk::memarray_symmetric workshopBHHH   ;
+		etk::memarray_raw Grad_UtilityCA;
+		etk::memarray_raw Grad_UtilityCO;
+		etk::memarray_raw Grad_QuantityCA;
+
+		
+		// These are memory arrays that are the principle output accumulators of the workshop.
+		//  The lock needs to be acquired before writing to these arrays.
+		etk::memarray* _GCurrent;
+		etk::memarray_symmetric* _Bhhh;
+		
+		etk::ndarray* _GCurrentCasewise;
+
+		
+		// These are memory arrays that are shared among multiple places.
+		// They are read-only for this workshop, and not expected to be written to
+		//  by anyone else while this workshop is working.
+		const etk::memarray* _Probability;
+		const etk::bitarray* _multichoices;
+
+
+		// This is a workshop packet. It contains members that are memory arrays
+		//  that are shared among multiple places.
+		elm::ca_co_packet UtilPacket;
+		elm::ca_co_packet QuantPacket;
+
+
+		
+		// These are data arrays. If fully loaded, they should not need to be written to
+		//  by this workshop. If not fully loaded, they will need to be updated for each
+		//  call for a new case, but ScrapePtr's are designed (hopefully) to be thread safe
+		elm::darray_ptr Data_Choice;
+		elm::darray_ptr Data_Weight;
+		
+		etk::logging_service* msg_;
+
+		workshop_mnl_gradient_full_casewise
+		(  const unsigned&   dF
+		 , const unsigned&   nElementals
+		 , elm::ca_co_packet UtilPK
+		 , elm::ca_co_packet QuantPK
+		 , elm::darray_ptr     Data_Choice
+		 , elm::darray_ptr     Data_Weight
+		 , const etk::memarray* Probability
+		 , etk::memarray* GCurrent
+		 , etk::memarray_symmetric* Bhhh
+		 , etk::logging_service* msgr
+		 , const etk::bitarray* Data_MultiChoice
+		 , etk::memarray* GCurrentCasewise
+		 );
+		
+		~workshop_mnl_gradient_full_casewise();
+
+		void workshop_mnl_gradient_do(const unsigned& firstcase, const unsigned& numberofcases);
+		void workshop_mnl_gradient_send();
+		
+		virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);
+
+		void case_gradient_mnl
+		( const unsigned& c
+		 , const etk::memarray& Probability
+		 );
+		
+		void case_gradient_mnl_multichoice
+		( const unsigned& c
+		 , const etk::memarray& Probability
+		 );
+		
+	};
 
 
 
