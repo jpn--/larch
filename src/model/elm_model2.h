@@ -103,7 +103,10 @@ namespace elm {
 			self.descriptions = dicta()
 		%}
 		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
-			self._ref_to_db = datafile
+			try:
+				self._ref_to_db = datafile
+			except NameError:
+				self._ref_to_db = args[0]
 			try:
 				self._pull_graph_from_db()
 			except LarchError:

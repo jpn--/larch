@@ -112,11 +112,11 @@ Original code 2006 June 05 by relicoder.
 
 #define COMPILE_SQLITE_EXTENSIONS_AS_LOADABLE_MODULE 1
 #ifdef __APPLE__ // these functions appear to be missing in VC++
+#define HAVE_ISBLANK 1
+#endif // __APPLE__
 #define HAVE_ACOSH 1
 #define HAVE_ASINH 1
 #define HAVE_ATANH 1
-#define HAVE_ISBLANK 1
-#endif // __APPLE__
 #define HAVE_SINH 1
 #define HAVE_COSH 1
 #define HAVE_TANH 1

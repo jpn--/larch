@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.14'
+VERSION = '3.1.15'
 
 
 def read(*filenames, **kwargs):
@@ -36,6 +36,7 @@ if os.environ.get('READTHEDOCS', None) == 'True':
 			'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 			'Programming Language :: Python :: 3',
 			'Programming Language :: Python :: 3.4',
+			'Programming Language :: Python :: 3.5',
 			'Operating System :: MacOS :: MacOS X',
 			'Operating System :: Microsoft :: Windows',
 		  ],
@@ -45,13 +46,7 @@ if os.environ.get('READTHEDOCS', None) == 'True':
 
 else:
 
-
-
-
 	import numpy
-
-
-
 
 	if platform.system() == 'Darwin':
 		os.environ['LDFLAGS'] = '-framework Accelerate'
@@ -364,9 +359,15 @@ else:
 		openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
 		gfortran = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libgfortran-3.dll'
 		local_swig_opts = []
-		local_libraries = ['PYTHON34','libopenblas','libgfortran-3','PYTHON34',]
-		local_library_dirs = ['Z:/Larch/{0}/{1}'.format(*openblas), 'C:\\local\\boost_1_56_0\\lib64-msvc-10.0']
-		local_includedirs = ['./{0}/include'.format(*openblas), 'C:/local/boost_1_56_0' ]
+		local_libraries = ['PYTHON35','libopenblas','libgfortran-3','PYTHON35',]
+		local_library_dirs = [
+			'Z:/Larch/{0}/{1}'.format(*openblas),
+		#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
+			]
+		local_includedirs = [
+			'./{0}/include'.format(*openblas),
+		#	'C:/local/boost_1_56_0',
+			 ]
 		local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
 		local_extra_compile_args = ['/EHsc', '/W0', ]
 		#  for debugging...
@@ -375,7 +376,7 @@ else:
 		local_apsw_compile_args = ['/EHsc']
 		local_extra_link_args =    ['/DEBUG']
 		local_data_files = []
-		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'larchsqlite.lib'),]
+		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(libdir, 'larchsqlite.lib'), '/DLL',]
 		dylib_name_style = "{}.dll"
 		DEBUG = False
 	#	raise Exception("TURN OFF multithreading in OpenBLAS")
@@ -401,8 +402,6 @@ else:
 	#lib_sqlite = ('larchsqlite',           {'sources': ['sqlite/sqlite3.c']})
 	#lib_sqlhav = ('larchsqlhaversine',     {'sources': ['sqlite/haversine.c']})
 	#lib_sqlext = ('larchsqlite3extension', {'sources': ['sqlite/extension-functions.c']})
-
-
 
 
 
@@ -526,6 +525,7 @@ else:
 			'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 			'Programming Language :: Python :: 3',
 			'Programming Language :: Python :: 3.4',
+			'Programming Language :: Python :: 3.5',
 			'Operating System :: MacOS :: MacOS X',
 			'Operating System :: Microsoft :: Windows',
 		  ],

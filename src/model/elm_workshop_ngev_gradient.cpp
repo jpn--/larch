@@ -73,7 +73,11 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 				double* gg = dUtil.ptr(a)+offset_quant();
 				QuantPacket.Data_CA->ExportData(gg,c,a,QuantPacket.Data_CA->nAlts());
 				simple_inplace_element_multiply(nQA, **QuantPacket.Coef_CA, 1, gg, 1);
-				cblas_dscal(nQA,(nQL>0?OOPS("Theta not implemented"):1.0)/Qnt[a],gg,1);
+				if (nQL>0) {
+					OOPS("Theta not implemented");
+				}
+				//(nQL>0?OOPS("Theta not implemented"):1.0)
+				cblas_dscal(nQA,(1.0)/Qnt[a],gg,1);
 				
 				if (nQL) {
 					// THETA on SELF

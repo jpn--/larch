@@ -1012,12 +1012,12 @@ long long elm::Facet::alternative_code(std::string name) const
 	return eval_int64(sql.str());
 }
 
-boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_names() const
+boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_names()
 {
 	elm::Facet* modthis = const_cast<elm::Facet*>(this);
 	
 	if (modthis->_alternative_names.expired()) {
-    	std::shared_ptr< std::vector<std::string> > x = std::make_shared< std::vector<std::string> >( alternative_names() );
+    	boosted::shared_ptr< std::vector<std::string> > x = boosted::make_shared< std::vector<std::string> >( alternative_names() );
 		modthis->_alternative_names = x;
 		return x;
 	} else {
@@ -1025,12 +1025,12 @@ boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_na
 	}
 }
 
-boosted::shared_ptr< std::vector<long long> > elm::Facet::cache_alternative_codes() const
+boosted::shared_ptr< std::vector<long long> > elm::Facet::cache_alternative_codes() 
 {
 	elm::Facet* modthis = const_cast<elm::Facet*>(this);
 	
 	if (modthis->_alternative_codes.expired()) {
-    	std::shared_ptr< std::vector<long long> > x = std::make_shared< std::vector<long long> >( alternative_codes() );
+    	boosted::shared_ptr< std::vector<long long> > x = boosted::make_shared< std::vector<long long> >( alternative_codes() );
 		modthis->_alternative_codes = x;
 		return x;
 	} else {

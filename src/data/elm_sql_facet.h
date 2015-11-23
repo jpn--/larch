@@ -268,8 +268,8 @@ namespace elm {
 		boosted::weak_ptr< std::vector<long long>   >  _alternative_codes;
 
 	public:
-		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names() const;
-		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes() const;
+		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names() ;
+		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes() ;
 		std::vector<std::string>    alternative_names() const;
 		std::vector<long long>      alternative_codes() const;
 		

@@ -22,6 +22,7 @@
 #include "sherpa_pack.h"
 #include <cmath>
 #include <sstream>
+#include "larch_portable.h"
 
 std::string algorithm_name(const char& algo)
 {
@@ -102,7 +103,7 @@ bool sherpa_pack::tell_turn(const double& val, const double& tol, std::string& e
 		explain_stop = x.str();
 		return false;
 	}
-	if (isnan(tol)) {
+	if (isNan(tol)) {
 		explain_stop = "Tolerance is NaN";
 		return false;
 	}

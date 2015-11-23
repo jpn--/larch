@@ -653,7 +653,7 @@ sherpa_result sherpa::_maximize_pack(sherpa_pack& Norgay, unsigned& iteration_nu
 		if ((tolerance==0.0)&&(direction_status<0)) {
 			return_outcome( SHERPA_FAIL );
 		}
-		if (isnan(tolerance)) {
+		if (isNan(tolerance)) {
 			return_outcome( SHERPA_NAN_TOL );
 		}
 		

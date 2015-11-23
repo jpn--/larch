@@ -76,7 +76,7 @@ std::string& etk::uppercase(std::string& s)
 {
 	size_t len (s.length());
 	for (unsigned i=0; i<len; i++) {
-		s[i] = toupper(s[i]);
+		s[i] = ::toupper(s[i]);
 	}
 	return s;
 }
@@ -86,7 +86,7 @@ std::string etk::to_uppercase(const std::string& s)
 	std::string s_out = s;
 	size_t len (s_out.length());
 	for (unsigned i=0; i<len; i++) {
-		s_out[i] = toupper(s_out[i]);
+		s_out[i] = ::toupper(s_out[i]);
 	}
 	return s_out;
 }

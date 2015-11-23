@@ -80,7 +80,7 @@ def write_build_info(build_dir=None, packagename="larch"):
 
 	try:
 		import pandas
-		versions['pandas'] = pandas.version.version
+		versions['pandas'] = pandas.__version__
 	except:
 		versions['pandas'] = 'failed'
 
