@@ -1,19 +1,20 @@
 
-from math import log10
+from numpy import log10
 
 
 def flux(should_be, actually_is):
-	difference = abs(should_be - actually_is);
-	magnitude  = (abs(should_be)+abs(actually_is)) / 2 ;
+	difference = abs(should_be - actually_is)
+	if difference==0:
+		return log10(0.0)
+	magnitude  = max(abs(should_be),abs(actually_is))
 	if magnitude:
-		return float(difference)/float(magnitude);
-	return 0.0;
-
+		return log10(float(difference)/float(magnitude))
+	return 0.0
 
 
 def flux_mag(should_be, actually_is, format="{:< 12.2g}"):
 	try:
-		flx = log10(flux(should_be, actually_is))
+		flx = flux(should_be, actually_is)
 	except ValueError:
 		return format.replace('g','s').replace('f','s').replace(' ','').format('NA')
 	else:
