@@ -661,8 +661,8 @@
 	
 }
 
-%typemap(in) elm::LinearComponent& (int res, void* argp, bool use_temp, elm::LinearComponent temp_comp) {
-//	
+
+//	snipped from function below
 //	PyObject* type_o = PyObject_Type($input);
 //	if (type_o) {
 //		PyObject* type_o_str = PyObject_Str(type_o);
@@ -671,6 +671,10 @@
 //		Py_CLEAR(type_o_str);
 //	}
 //	Py_CLEAR(type_o);
+
+
+
+%typemap(in) elm::LinearComponent& (int res, void* argp, bool use_temp, elm::LinearComponent temp_comp) {
 	
 	
 	use_temp = false;
