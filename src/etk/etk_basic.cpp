@@ -160,10 +160,12 @@ std::map<std::string,std::string> etk::parse_option_string (std::string& input, 
 double etk::flux(const double& should_be, const double& actually_is)
 {
 	double difference = abs(should_be - actually_is);
-	double magnitude  = (abs(should_be)+abs(actually_is)) / 2 ;
-	if (magnitude) return difference/magnitude;
+	double magnitude  = max(abs(should_be),abs(actually_is));
+	if (difference==0) return log10( difference );
+	if (magnitude) return log10( difference/magnitude );
 	return 0.0;
 }
+
 
 double etk::maxflux(const size_t& n, const double* should_be, const double* actually_is)
 {
