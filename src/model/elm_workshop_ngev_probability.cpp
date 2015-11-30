@@ -204,16 +204,11 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 , const unsigned&   numberofcases
 )
 {
-	etk::ndarray* Utility = UtilPacket.Outcome;
-//	const etk::ndarray* Coef_UtilityCA = UtilPacket.Coef_CA;
-//	const etk::ndarray* Coef_UtilityCO = UtilPacket.Coef_CO;
-	
-//	etk::ndarray* Quantity = QuantPacket.Outcome;
-	
+	etk::ndarray* Utility = UtilPacket.Outcome;	
 
 	etk::ndarray* Allocation = AllocPacket.Outcome;
-	elm::darray_ptr Data_Allocation = AllocPacket.Data_CO;
-	const etk::ndarray* Coef_Allocation = AllocPacket.Coef_CO;
+//	elm::darray_ptr Data_Allocation = AllocPacket.Data_CO;
+//	const etk::ndarray* Coef_Allocation = AllocPacket.Coef_CO;
 
 	elm::darray_ptr Data_SamplingCA = SampPacket.Data_CA;
 	elm::darray_ptr Data_SamplingCO = SampPacket.Data_CO;
@@ -232,6 +227,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 	}
 
 	if (QuantPacket.relevant()) {
+		
 		QuantPacket.logit_partial(firstcase, numberofcases);
 		for (size_t c=firstcase; c<lastcase; c++) {
 			cblas_dcopy(nElementals, QuantPacket.Outcome->ptr(c), 1, UtilPacket.Outcome->ptr(c), 1);
@@ -246,7 +242,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 	
 	
 
-	AllocPacket.logit_partial(firstcase, numberofcases);
+	AllocPacket.logit_partial(firstcase, numberofcases, 0.0);
 
 	if (firstcase==0) {
 		BUGGER_(msg_, "Allocation B[0]: " << Allocation->printrow(0) );
@@ -264,7 +260,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 		if (firstcase==0) {
 			BUGGER_(msg_, "Allocation C[0]: " << Allocation->printrow(0) );
 		}
-		Allocation->sector_prob_scale_2(Xylem->alloc_breaks());
+		Allocation->sector_prob_scale_2(Xylem->alloc_breaks(), firstcase, lastcase);
 		if (firstcase==0) {
 			BUGGER_(msg_, "Allocation D[0]: " << Allocation->printrow(0) );
 		}
@@ -342,6 +338,16 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 void elm::workshop_ngev_probability::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
 {
 	workshop_ngev_probability_calc(firstcase,numberofcases);
+
+//	_lock = result_mutex;
+//
+//	if (_lock) {
+//		_lock->lock();
+//		std::cerr << "Finished workshop_ngev_probability ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]\n";
+//		_lock->unlock();
+//	} else {
+//
+//	}
 }
 
 

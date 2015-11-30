@@ -78,6 +78,7 @@ public:
 	etk::logging_service* msg_;
 	
 	bool option_mute_nan_warnings;
+	boosted::mutex* _lock;
 
 	workshop_ngev_probability
 	(  const unsigned&   nNodes
