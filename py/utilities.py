@@ -325,13 +325,6 @@ def prepare_import_headers(rawfilename, headers=None):
 
 
 
-def flux(should_be, actually_is):
-	difference = abs(should_be - actually_is);
-	magnitude  = (abs(should_be)+abs(actually_is)) / 2 ;
-	if magnitude:
-		return float(difference)/float(magnitude);
-	return 0.0;
-
 def format_seconds(seconds):
 	if seconds < 60.0:
 		txt = "{:.3f}".format(seconds)
