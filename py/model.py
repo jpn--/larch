@@ -30,6 +30,8 @@ class MetaParameter():
 
 class Model(Model2, ModelReporter):
 
+	from .util.roll import roll
+
 	def dir(self):
 		for f in dir(self):
 			print(" ",f)
@@ -389,7 +391,7 @@ class Model(Model2, ModelReporter):
 
 	def report_(self, **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:
-			f << self.report('*', style='xml')
+			f << self.report(cats='*', style='xml')
 
 
 
