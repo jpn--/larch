@@ -168,6 +168,7 @@ namespace etk {
 		double scale_so_mean_is(const double& mean);
 		void prob_scale_2 (ndarray* out=nullptr);
 		void sector_prob_scale_2 (const std::vector<unsigned>& sectors, ndarray* out=nullptr);
+		void sector_prob_scale_2 (const std::vector<unsigned>& sectors, const unsigned& rowbegin, const unsigned& rowend);
 		void logsums_2 (ndarray* out);
 		void operator+=(const ndarray& that);
 		void operator-=(const ndarray& that);
