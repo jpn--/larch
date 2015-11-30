@@ -214,9 +214,7 @@ void elm::workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_send
 		*_Bhhh += workshopBHHH;
 		_lock->unlock();
 	} else {
-		std::cerr << "warning: workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_send has no mutex lock\n";
-		*_GCurrent += workshopGCurrent;
-		*_Bhhh += workshopBHHH;
+		OOPS("workshop_mnl_gradient_full_casewise::workshop_mnl_gradient_send has no mutex lock");
 	}
 }
 
