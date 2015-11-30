@@ -868,14 +868,9 @@ void elm::workshop_nl_gradient::workshop_nl_gradient_send
 		*_Bhhh += workshopBHHH;
 		_lock->unlock();
 	} else {
-		*_GCurrent += workshopGCurrent;
-		*_Bhhh += workshopBHHH;
+		OOPS("No lock in elm::workshop_nl_gradient::workshop_nl_gradient_send");
 	}
 }
-
-
-
-boosted::mutex workshop_display_mutex;
 
 
 

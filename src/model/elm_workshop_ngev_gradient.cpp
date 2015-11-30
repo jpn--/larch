@@ -487,8 +487,7 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_send
 		*_Bhhh += workshopBHHH;
 		_lock->unlock();
 	} else {
-		*_GCurrent += workshopGCurrent;
-		*_Bhhh += workshopBHHH;
+		OOPS("No lock in workshop_ngev_gradient_send");
 	}
 }
 
