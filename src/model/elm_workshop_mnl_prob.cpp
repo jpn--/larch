@@ -48,6 +48,7 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 , U_premultiplier(U_premultiplier)
 , msg_(msgr)
 {
+	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
 }
 
 elm::mnl_prob_w::~mnl_prob_w()
@@ -70,7 +71,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 	// UTILITY //
 
 	if (Data_CA && Data_CA->nVars()>0 /* && Data_CA->fully_loaded()*/) {
-		// Fast Linear Algebra		
+		// Fast Linear Algebra
 		if (Probability->size2()==Data_CA->nAlts()) {
 			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
 						numberofcases * Data_CA->nAlts(), Data_CA->nVars(), 
@@ -129,7 +130,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
 					numberofcases,Coef_CO->size2(), Data_CO->nVars(),
 					1,
-					Data_CO->values(firstcase,0), Data_CO->nVars(),
+					Data_CO->values_constptr(firstcase), Data_CO->nVars(),
 					Coef_CO->ptr(), Coef_CO->size2(),
 					1,Probability->ptr(firstcase),Probability->size2());
 	} else if (Data_CO && Data_CO->nVars()>0) {
