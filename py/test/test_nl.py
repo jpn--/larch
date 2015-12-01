@@ -486,7 +486,7 @@ class TestNL(ELM_TestCase):
 	def test_ngev(self):
 		d = DB.Example('MTC')
 		m = Model(d)
-		m.option.threads = 1
+		m.option.threads = 4
 		m.option.calc_std_errors = False
 		m.parameter("cost",0)
 		m.parameter("tottime",0) 
