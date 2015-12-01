@@ -385,9 +385,12 @@ std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray
 #include "etk_workshop.h"
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability ()
-{return boosted::make_shared<elm::mnl_prob_w>(
+{
+	BUGGER(msg) << "CALL make_shared_workshop_mnl_probability()\n";
+	return boosted::make_shared<elm::mnl_prob_w>(
 			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
-			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);}
+			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);
+}
 
 
 void elm::Model2::mnl_probability()
@@ -426,19 +429,38 @@ void elm::Model2::mnl_probability()
 		BUGGER(msg) << "Data_Avail is NULL\n";
 	}
 
-	if (option.threads>1 && _ELM_USE_THREADS_ && Input_QuantityCA.size()==0) {
-		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads\n";
+	if (option.threads>=1 && _ELM_USE_THREADS_ && Input_QuantityCA.size()==0) {
+		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads in mnl_probability()\n";
 		#ifdef __APPLE__
-		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-			[&](){return boosted::make_shared<elm::mnl_prob_w>(
-			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
-			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);};
+//		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+//			[&](){return boosted::make_shared<elm::mnl_prob_w>(
+//			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
+//			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);};
 		#else
+		BUGGER(msg) << "Using non-APPLE compiled\n";
 		openblas_set_num_threads(1);
+		#endif
+//		
+//		BUGGER_(&msg, "Coef_CO->size2() =. \n");
+//		BUGGER_(&msg, "Coef_CO->size2() = "<<Coef_UtilityCO.size2()<<"\n");
+//		BUGGER_(&msg, "Data_CO->nVars() =. \n");
+//		BUGGER_(&msg, "Data_UtilityCO->nVars() = "<<Data_UtilityCO->nVars()<<"\n");
+//		BUGGER_(&msg, "Data_CO->values(0,0) =. \n");
+//		BUGGER_(&msg, "Data_CO->values(0,0) = "<< ((const void*) Data_UtilityCO->values(0,0))<<"\n");
+//		BUGGER_(&msg, "Coef_CO->ptr() =.\n");
+//		BUGGER_(&msg, "Coef_UtilityCO.ptr() = "<<Coef_UtilityCO.ptr()<<"\n");
+//		BUGGER_(&msg, "Probability->ptr(0) =.\n");
+//		BUGGER_(&msg, "Probability->ptr(0) = "<<Probability.ptr(0)<<"\n");
+//		BUGGER_(&msg, "Probability.size1() = "<<Probability.size1()<<"\n");
+//		BUGGER_(&msg, "Probability.size2() = "<<Probability.size2()<<"\n");
+//		BUGGER_(&msg, "Probability.size3() = "<<Probability.size3()<<"\n");
+//		#ifndef __APPLE__
+//		BUGGER_(&msg, "openblas_get_num_threads() = "<<openblas_get_num_threads()<<"\n");
+//		#endif
+//		BUGGER_(&msg, "mongo... \n");
+		
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_mnl_probability, this);
-		#endif
-		//etk::dispatch(option.threads, nCases, workshop_builder);
 		if (!probability_dispatcher) {
 			probability_dispatcher = boosted::make_shared<etk::dispatcher>(option.threads, nCases, workshop_builder);
 		}

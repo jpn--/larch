@@ -451,7 +451,7 @@ void elm::Model2::nl_gradient()
 	nThreads = 1;
 	#endif // ndef _ELM_USE_THREADS_
 	
-	if (nThreads >= 2 && _ELM_USE_THREADS_) {
+	if (nThreads >= 1 && _ELM_USE_THREADS_) {
 
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
@@ -483,7 +483,7 @@ void elm::Model2::ngev_gradient()
 	nThreads = 1;
 	#endif // ndef _ELM_USE_THREADS_
 	
-	if (nThreads >= 2 && _ELM_USE_THREADS_) {
+	if (nThreads >= 1 && _ELM_USE_THREADS_) {
 
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_ngev_gradient, this);
