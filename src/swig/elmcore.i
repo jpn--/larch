@@ -229,6 +229,8 @@ namespace etk {
 	void larch_initialize();
 	char* larch_openblas_get_config();
 
+	void load_scipy_blas_functions();
+
 };
 
 //%include "etk_vectors.h"

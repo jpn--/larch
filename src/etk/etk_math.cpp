@@ -18,7 +18,9 @@
  *  
  */
 #include "larch_portable.h"
+#include "etk_python.h"
 #include "etk_math.h"
+#include "etk_exception.h"
 
 using namespace etk;
 /*
@@ -97,3 +99,36 @@ void etk::simple_inplace_element_multiply(const int& N, const double * A, const 
 {
 	for (int i=0; i<N; i++) Y[i*incY] *= A[i*incA];
 }
+
+
+
+
+void* etk::scipy_dgemm;
+
+void etk::load_scipy_blas_functions()
+{
+//	etk::scipy_dgemm = nullptr;
+
+//>>> import scipy.linalg.cython_blas as b
+//>>> b.__pyx_capi__['dgemm']
+//<capsule object "void (char *, char *, int *, int *, int *, __pyx_t_5scipy_6linalg_11cython_blas_d *, __pyx_t_5scipy_6linalg_11cython_blas_d *, int *, __pyx_t_5scipy_6linalg_11cython_blas_d *, int *, __pyx_t_5scipy_6linalg_11cython_blas_d *, __pyx_t_5scipy_6linalg_11cython_blas_d *, int *)" at 0x107435990>
+
+//	etk::scipy_dgemm = PyCapsule_Import("scipy.linalg.cython_blas.dgemm", 0);
+
+	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
+
+	PyObject* cython_blas = PyImport_ImportModule("scipy.linalg.cython_blas");
+	PyObject* pyx_capi = PyObject_GetAttrString(cython_blas, "__pyx_capi__");
+	PyObject* dgemm_capsule = PyDict_GetItemString(pyx_capi, "dgemm");
+	void* t = PyCapsule_GetPointer(dgemm_capsule, PyCapsule_GetName(dgemm_capsule));
+	etk::scipy_dgemm = t;
+
+	if (PyErr_Occurred()) OOPS("an error occurred in load_scipy_blas_functions");
+	
+	Py_CLEAR(dgemm_capsule);
+	Py_CLEAR(pyx_capi);
+	Py_CLEAR(cython_blas);
+	
+	
+}
+

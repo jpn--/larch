@@ -43,6 +43,29 @@ void simple_element_multiply(const int& N, const double * A, const int& incA,
 							 const double * X, const int& incX, 
 							 double * Y, const int& incY) ;
 
+
+#define PYBLAS_dgemm \
+ (*(void (*)(const enum CBLAS_ORDER __Order,                                \
+        const enum CBLAS_TRANSPOSE __TransA,                                \
+        const enum CBLAS_TRANSPOSE __TransB, const int __M, const int __N,  \
+        const int __K, const double __alpha, const double *__A,             \
+        const int __lda, const double *__B, const int __ldb,                \
+        const double __beta, double *__C, const int __ldc))                 \
+		etk::scipy_dgemm)
+
+extern void *scipy_dgemm;
+
+//extern void (*scipy_dgemm) (const enum CBLAS_ORDER __Order,
+//        const enum CBLAS_TRANSPOSE __TransA,
+//        const enum CBLAS_TRANSPOSE __TransB, const int __M, const int __N,
+//        const int __K, const double __alpha, const double *__A,
+//        const int __lda, const double *__B, const int __ldb,
+//        const double __beta, double *__C, const int __ldc);
+
+void load_scipy_blas_functions();
+
+
+
 };
 #endif
 

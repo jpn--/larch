@@ -23,7 +23,7 @@
 #define __TOOLBOX_THREADING_WINDOWS__
 
 
-#define _ELM_USE_THREADS_ 0  
+#define _ELM_USE_THREADS_ 1  
 
 #include <boost/thread.hpp>
 #include <boost/functional.hpp>
