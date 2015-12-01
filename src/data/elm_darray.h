@@ -145,9 +145,11 @@ namespace elm {
 	
 		etk::ptr_lockout<const double> values(const unsigned& firstcasenum=0, const size_t& numberofcases=0);
 		etk::ptr_lockout<const double> values(const unsigned& firstcasenum=0, const size_t& numberofcases=0) const;
+		const double* values_constptr(const unsigned& firstcasenum=0) const;
 		etk::ptr_lockout<const bool> boolvalues(const unsigned& firstcasenum=0, const size_t& numberofcases=0);
 		etk::ptr_lockout<const bool> boolvalues(const unsigned& firstcasenum=0, const size_t& numberofcases=0) const;
-		// Returns a pointer to memory where the entire block of data is stored 
+		const bool* boolvalues_constptr(const unsigned& firstcasenum=0) const;
+		// Returns a pointer to memory where the entire block of data is stored
 		//  in contiguous memory. The data is in (case,alt,var) three dimensional
 		//  matrix in row major format. This memory space should remain constant
 		//  and available to the program until tearDown is called.

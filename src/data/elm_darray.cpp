@@ -322,6 +322,16 @@ etk::ptr_lockout<const bool> elm::darray::boolvalues(const unsigned& firstcasenu
 	return ptr_lockout<const bool>(_repository.ptr_bool(firstcasenum), const_cast<elm::darray*>(this)->_repo_lock);
 }
 
+const double* elm::darray::values_constptr(const unsigned& firstcasenum) const
+{
+	return _repository.ptr(firstcasenum);
+}
+
+const bool* elm::darray::boolvalues_constptr(const unsigned& firstcasenum) const
+{
+	return _repository.ptr_bool(firstcasenum);
+}
+
 
 double elm::darray::value(const unsigned& c, const unsigned& a, const unsigned& v) const
 {
