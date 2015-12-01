@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.15'
+VERSION = '3.1.20'
 
 
 def read(*filenames, **kwargs):
@@ -343,6 +343,7 @@ else:
 	if platform.system() == 'Darwin':
 		openblas = None
 		gfortran = None
+		mingw64_libs = []
 		local_swig_opts = []
 		local_libraries = []
 		local_library_dirs = []
@@ -356,10 +357,15 @@ else:
 		dylib_name_style = "lib{}.so"
 		DEBUG = False
 	elif platform.system() == 'Windows':
-		openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
-		gfortran = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libgfortran-3.dll'
+		#old openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
+		openblas = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libopenblas.dll'
+		#gfortran = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libgfortran-3.dll'
+		gfortran = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libgfortran-3.dll'
+		mingw64_path = 'OpenBLAS-v0.2.15-Win64-int32', 'lib',
+		mingw64_dlls = ['libgfortran-3', 'libgcc_s_seh-1', 'libquadmath-0']
+		mingw64_libs = [i+'.dll' for i in mingw64_dlls]
 		local_swig_opts = []
-		local_libraries = ['PYTHON35','libopenblas','libgfortran-3','PYTHON35',]
+		local_libraries = ['PYTHON35','libopenblas',]+mingw64_dlls+['PYTHON35',]
 		local_library_dirs = [
 			'Z:/Larch/{0}/{1}'.format(*openblas),
 		#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
@@ -383,6 +389,7 @@ else:
 	else:
 		openblas = None
 		gfortran = None
+		mingw64_libs = []
 		local_swig_opts = []
 		local_libraries = []
 		local_library_dirs = []
@@ -445,8 +452,8 @@ else:
 
 	if openblas is not None:
 		shutil.copyfile(os.path.join('Z:/Larch',*openblas), os.path.join(shlib_folder(),openblas[-1]))
-	if gfortran is not None:
-		shutil.copyfile(os.path.join('Z:/Larch',*gfortran), os.path.join(shlib_folder(),gfortran[-1]))
+	for dll in mingw64_libs:
+		shutil.copyfile(os.path.join('Z:/Larch',*(mingw64_path+(dll,))), os.path.join(shlib_folder(),dll))
 
 
 
@@ -513,6 +520,7 @@ else:
 							"pandas >= 0.14.1",
 							"python-docx >= 0.8.5",
 							"sphinxcontrib-napoleon >= 0.4",
+							"nose >= 1.3",
 						],
 		  url='http://larch.readthedocs.org',
 		  download_url='http://github.com/jpn--/larch',
