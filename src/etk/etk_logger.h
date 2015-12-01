@@ -102,6 +102,7 @@ namespace etk {
 		log_instance& operator<<(const unsigned long long& msg);
 		log_instance& operator<<(const long long& msg);
 		log_instance& operator<<(const int& msg);
+		log_instance& operator<<(const void* msg);
 		log_instance& operator<<(std::ostream& ( *pf )(std::ostream&));
 		log_instance& operator<<(std::ios& ( *pf )(std::ios&));
 		log_instance& operator<<(std::ios_base& ( *pf )(std::ios_base&));

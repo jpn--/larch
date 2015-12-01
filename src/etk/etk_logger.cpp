@@ -352,6 +352,12 @@ etk::log_instance& etk::log_instance::operator<<(const int& msg)
 	return *(this);
 }
 
+etk::log_instance& etk::log_instance::operator<<(const void* msg)
+{
+	msgs << msg;
+	return *(this);
+}
+
 etk::log_instance& etk::log_instance::operator<<(std::ostream& ( *pf )(std::ostream&))
 {
 	msgs << pf;
