@@ -137,6 +137,9 @@ try:
 except NameError:
 	fileHandler = None
 
+def default_formatter():
+	return logging.Formatter(fmt=_mess_format,datefmt=_time_format)
+
 def scribe_to_file(filename, residual=None, overwrite=False):
 	global fileHandler
 	if fileHandler:
