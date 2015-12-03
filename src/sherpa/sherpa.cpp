@@ -253,11 +253,8 @@ void sherpa::_reset_to_best_known_value()
 // ----------------------------------------------------------------------------
 //	_line_search
 //
-//		Return Values:
-//		 2	Found improvement at initial step
-//		 1	Found improvement at smaller than initial step
-//		-1	Did not find an improvement at minimum step value
-//		-2	A function evaluation returned NaN even at minimum step value
+//		Returns the amount of improvement if finite (can be negative)
+//      or zero for errors
 // ----------------------------------------------------------------------------
 double sherpa::_line_search_evaluation(double& step)
 {
@@ -288,6 +285,8 @@ double sherpa::_line_search_evaluation(double& step)
 
 int sherpa::_line_search (sherpa_pack& method)
 {
+
+	MONITOR(msg) << "Turn(["<< ReadFLastTurnAsString() <<"])";
 	
 	int status = 0;	
 	double Step = method.get_step();
@@ -298,6 +297,7 @@ int sherpa::_line_search (sherpa_pack& method)
 	if (isNan(ZCurrent)) status = LINE_SEARCH_ERROR_NAN;
 	if (improvement > 0) {
 		status = LINE_SEARCH_SUCCESS_BIG; 
+		MONITOR(msg)<< "     first step line search improvement="<<improvement ;
 	}
 	
 	// When First Step was an improvement, potentially try some more
@@ -1273,6 +1273,19 @@ std::string sherpa::ReadFCurrentAsString() const
 	}
 	for (unsigned i=0; i<s; i++) {
 		ret << "," << ReadFCurrent()[i];
+	}
+	return ret.str().substr(1);
+}
+
+std::string sherpa::ReadFLastTurnAsString() const
+{
+	std::ostringstream ret;
+	size_t s = FNames.size();
+	if (s==0) {
+		return "";
+	}
+	for (unsigned i=0; i<s; i++) {
+		ret << "," << ReadFLastTurn()[i];
 	}
 	return ret.str().substr(1);
 }

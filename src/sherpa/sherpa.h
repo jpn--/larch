@@ -170,7 +170,9 @@ public:
 public:
 	const etk::memarray& ReadFCurrent() const {return FCurrent;};
 	const etk::memarray& ReadFBest() const {return FBest;};
+	const etk::memarray& ReadFLastTurn() const {return FLastTurn;};
 	std::string ReadFCurrentAsString() const;
+	std::string ReadFLastTurnAsString() const;
 	
 protected:
 	etk::memarray FBest;
