@@ -92,7 +92,7 @@ namespace etk {
 		void finished_job(const size_t& job_id);
 		void exception_on_job(const size_t& job_id, const std::exception& err);
 		void request_work();
-		bool work_remains() const;
+		bool work_remains();
 		boosted::condition_variable has_jobs;
 		boosted::condition_variable jobs_done;
 

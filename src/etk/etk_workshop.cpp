@@ -228,8 +228,9 @@ void etk::dispatcher::exception_on_job(const size_t& job_id, const std::exceptio
 
 
 
-bool etk::dispatcher::work_remains() const
+bool etk::dispatcher::work_remains() 
 {
+	boosted::unique_lock<boosted::mutex> local_lock(queue_mutex);
 	return (jobs_waiting.size()+jobs_out.size() > 0);
 }
 
