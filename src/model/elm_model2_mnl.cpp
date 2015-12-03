@@ -807,8 +807,10 @@ etk::ndarray* elm::Model2::utility(etk::ndarray* params)
 }
 
 boosted::shared_ptr<etk::workshop> elm::Model2::make_shared_workshop_accumulate_loglike ()
-{return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
-		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);}
+{
+	return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);
+}
 
 double elm::Model2::accumulate_log_likelihood() /*const*/
 {
