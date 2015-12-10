@@ -710,6 +710,12 @@ std::string elm::LinearCOBundle_2::__repr__() const
 	return z.substr(1);
 }
 
+void elm::LinearCOBundle_2::__call__(elm::cellcode upcode, elm::cellcode dncode) {
+	elm::cellcodepair x (upcode,dncode);
+	if (find(x) == end()) {
+    	(*this)[x] = elm::EdgeValue(COMPONENTLIST_TYPE_EDGE, this->parentmodel);
+	}
+}
 
 
 

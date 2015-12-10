@@ -168,7 +168,7 @@ namespace elm {
 			}
 			void _link(const elm::cellcode& parent, const elm::cellcode& child) {
 				if (self->parentmodel) {
-					self->parentmodel->link(parent,child);
+					self->parentmodel->Input_Edges.__call__(parent,child);
 				} else {
 					throw etk::exception_t("not linked to a model");
 				}
@@ -336,6 +336,8 @@ namespace elm {
 		LinearCOBundle_2(Model2* parentmodel=nullptr);
 
 		std::string __repr__() const;
+		void __call__(elm::cellcode upcode, elm::cellcode dncode);
+
 
 		#ifdef SWIG
         unsigned int size() const;
@@ -365,10 +367,6 @@ namespace elm {
             }
 			int __len__() const {
 				return self->size();
-			}
-			void __call__(elm::cellcode upcode, elm::cellcode dncode) {
-				elm::cellcodepair x (upcode,dncode);
-                (*self)[x] = elm::EdgeValue(COMPONENTLIST_TYPE_EDGE, self->parentmodel);
 			}
 			
 			::std::vector<elm::cellcodepair> links () const {
