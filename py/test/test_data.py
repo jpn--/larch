@@ -186,3 +186,34 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( "123", c.data )
 		self.assertEqual( "PAR", c.param )
 
+	def test_numbering_system(self):
+		from ..util.numbering import numbering_system
+		from enum import Enum
+		class levels_of_service(Enum):
+			nonstop = 1
+			withstop = 2
+		class carriers(Enum):
+			DL = 1
+			US = 2
+			UA = 3
+			AA = 4 
+			Other = 5
+		class things(Enum):
+			Apple = 1
+			Orange = 2
+			Hat = 3
+			Boot = 4
+			Camera = 5
+			Box = 10
+			Squid = 12
+			Dog = 13
+			Cat = 14
+			Sun = 15
+		ns = numbering_system(levels_of_service, carriers, things)
+		self.assertEqual( ['0b11', '0b11100', '0b111100000'], [bin(a) for a in ns.bitmasks] )
+		self.assertEqual( [0, 2, 5], [s for s in ns.shifts] )
+		nn = ns.code_from_attributes(1, levels_of_service.withstop, carriers.UA, things.Cat)
+		self.assertEqual(974, nn)
+		x = ns.attributes_from_code(nn)
+		self.assertEqual( (1, levels_of_service.withstop, carriers.UA, things.Cat), x)
+
