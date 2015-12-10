@@ -167,6 +167,7 @@ namespace etk {
 		std::string printSquare();
 		void operator= (const memarray_symmetric& that);
 		void operator= (const symmetric_matrix& that);
+		bool all_zero() const;
 	
 	};
 

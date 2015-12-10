@@ -426,6 +426,16 @@ void memarray_symmetric::copy_uppertriangle_to_lowertriangle()
 	}
 }
 
+bool memarray_symmetric::all_zero() const
+{
+	for (size_t i=0; i<size1(); i++) {
+		for (size_t j=i; j<size1(); j++) {
+			if(pool[j*cols+i]) return false;
+		}
+	}
+	return true;
+}
+
 
 void triangle_raw::unpack(memarray_raw& destination) const
 {
