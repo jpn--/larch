@@ -49,7 +49,12 @@ class XhtmlModelReporter():
 			cats=['title','params','LL','nesting_tree','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES']
 		elif cats=='*':
 			cats=['title','params','LL',               'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES']
-	
+
+		if cats=='-' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','latest','NOTES']
+		elif cats=='-':
+			cats=['title','params','LL',               'latest','NOTES']
+
 		# make all formatting keys uppercase
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -82,7 +87,18 @@ class XhtmlModelReporter():
 				x.append(xerr.close())
 				continue
 			try:
-				x.append(func(self,**format))
+				to_append = func(self,**format)
+				if to_append is not None:
+					x.append(to_append)
+			except ImportError as err:
+				import traceback, sys
+				xerr = XML_Builder()
+				xerr.simple("hr")
+				xerr.start("pre", {'class':'error_report'})
+				xerr.data("Unable to provide {}: {}".format(c,str(err)))
+				xerr.end("pre")
+				xerr.simple("hr")
+				x.append(xerr.close())
 			except:
 				import traceback, sys
 				xerr = XML_Builder()
@@ -409,11 +425,16 @@ class XhtmlModelReporter():
 					x.td("Number of Iterations")
 					x.td("{0}".format(i,**format))
 			q = ers[0]
-			seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
+			#seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
+			seconds = ers[0]['total_duration_seconds']
 			tformat = "{}\t{}".format(*format_seconds(seconds))
 			with x.tr_:
 				x.td("Running Time")
 				x.td("{0}".format(tformat,**format))
+			for label, dur in zip(ers[0]['process_label'],ers[0]['process_durations']):
+				with x.tr_:
+					x.td("- "+label)
+					x.td("{0}".format(dur,**format))
 			i = ers[0]['notes']
 			if i is not '':
 				with x.tr_:
@@ -424,6 +445,57 @@ class XhtmlModelReporter():
 				with x.tr_:
 					x.td("Results")
 					x.td("{0}".format(i,**format))
+			i = ers[0]['processor']
+			try:
+				from ..util.sysinfo import get_processor_name
+				i2 = get_processor_name()
+				if isinstance(i2,bytes):
+					i2 = i2.decode('utf8')
+			except:
+				i2 = None
+			if i is not '':
+				with x.tr_:
+					x.td("Processor")
+					if i2 is None:
+						x.td("{0}".format(i,**format))
+					else:
+						with x.td_:
+							x.data("{0}".format(i,**format))
+							x.simple("br")
+							x.data("{0}".format(i2,**format))
+			i = ers[0]['number_cpu_cores']
+			if i is not '':
+				with x.tr_:
+					x.td("Number of CPU Cores")
+					x.td("{0}".format(i,**format))
+			i = ers[0]['number_threads']
+			if i is not '':
+				with x.tr_:
+					x.td("Number of Threads Used")
+					x.td("{0}".format(i,**format))
+			# installed memory
+			try:
+				import psutil
+			except ImportError:
+				pass
+			else:
+				mem = psutil.virtual_memory().total
+				if mem >= 2.0*2**30:
+					mem_size = str(mem/2**30) + " GiB"
+				else:
+					mem_size = str(mem/2**20) + " MiB"
+				with x.tr_:
+					x.td("Installed Memory")
+					x.td("{0}".format(mem_size,**format))
+			# peak memory usage
+			try:
+				from ..util.sysinfo import get_peak_memory_usage
+				peak = get_peak_memory_usage()
+				with x.tr_:
+					x.td("Peak Memory Usage")
+					x.td("{0}".format(peak,**format))
+			except:
+				pass
 		return x.close()
 
 	def xhtml_data(self,**format):
@@ -1040,20 +1112,29 @@ class XhtmlModelReporter():
 
 
 	def xhtml_nesting_tree(self,**format):
+		try:
+			import pygraphviz as viz
+		except ImportError:
+			import warnings
+			warnings.warn("pygraphviz module not installed, unable to draw nesting tree in report")
+			return self.xhtml_nesting_tree_textonly(**format)
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
-		if 'GRAPHWIDTH' not in format: format['GRAPHWIDTH'] = 6.5
-		if 'GRAPHHEIGHT' not in format: format['GRAPHHEIGHT'] = 4
+		if 'SUPPRESSGRAPHSIZE' not in format:
+			if 'GRAPHWIDTH' not in format: format['GRAPHWIDTH'] = 6.5
+			if 'GRAPHHEIGHT' not in format: format['GRAPHHEIGHT'] = 4
 		if 'UNAVAILABLE' not in format: format['UNAVAILABLE'] = True
 		x = XML_Builder("div", {'class':"nesting_graph"})
 		x.h2("Nesting Structure", anchor=1)
-		import pygraphviz as viz
 		from io import BytesIO
 		import xml.etree.ElementTree as ET
 		ET.register_namespace("","http://www.w3.org/2000/svg")
 		ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
-		G=viz.AGraph(name='Tree',directed=True,size="{GRAPHWIDTH},{GRAPHHEIGHT}".format(**format))
+		if 'SUPPRESSGRAPHSIZE' not in format:
+			G=viz.AGraph(name='Tree',directed=True,size="{GRAPHWIDTH},{GRAPHHEIGHT}".format(**format))
+		else:
+			G=viz.AGraph(name='Tree',directed=True)
 		for n,name in self.alternatives().items():
 			G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,name))
 		eG = G.add_subgraph(name='cluster_elemental', nbunch=self.alternative_codes(), color='#cccccc', bgcolor='#eeeeee',
@@ -1095,3 +1176,30 @@ class XhtmlModelReporter():
 		xx = x.close()
 		xx << ET.fromstring(pyg_imgdata.getvalue().decode())
 		return xx
+
+	def xhtml_nesting_tree_textonly(self,**format):
+		x = XML_Builder("div", {'class':"nesting_text"})
+		x.h2("Nesting Structure", anchor=1)
+		with x.block("table"):
+			with x.block("tr"):
+				x.th("Root")
+			with x.block("tr"):
+				x.td("[{}] Root Node".format(self.root_id))
+			with x.block("tr"):
+				x.th("Nests")
+			with x.block("tr"):
+				x.start("td", {'class':'nesting_text_nodes'})
+				for eachline in str(self.nest).split("\n"):
+					x.data(eachline)
+					x.simple("br")
+				x.end("td")
+			with x.block("tr"):
+				x.th("Links")
+			with x.block("tr"):
+				x.start("td", {'class':'nesting_text_links'})
+				for eachline in str(self.link).split("\n"):
+					x.data(eachline)
+					x.simple("br")
+				x.end("td")
+		return x.close()
+

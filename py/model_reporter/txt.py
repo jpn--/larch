@@ -182,9 +182,15 @@ class TxtModelReporter():
 		if not math.isnan(i):
 			x += ["Number of Iterations \t{0}".format(i,**format)]
 		q = ers[0]
-		seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
-		tformat = "{}\t{}".format(*format_seconds(seconds))
-		x += ["Running Time         \t{0}".format(tformat,**format)]
+		try:
+			#seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
+			seconds = ers[0]['total_duration_seconds']
+			tformat = "{}\t{}".format(*format_seconds(seconds))
+			x += ["Running Time         \t{0}".format(tformat,**format)]
+		except KeyError:
+			x += ["Running Time:".format(**format)]
+		for label, dur in zip(ers[0]['process_label'],ers[0]['process_durations']):
+			x += ["- {0:19s}\t{1}".format(label,dur,**format)]
 		i = ers[0]['notes']
 		if i is not '':
 			x += ["Notes                \t{0}".format(i,**format)]
@@ -299,7 +305,21 @@ class TxtModelReporter():
 		return [] # not implemented in txt reports
 		
 	def txt_nesting_tree(self,**format): #report_NESTING_TREE():
-		return [] # not implemented in txt reports
+		if len(self.nest)>0:
+			x = ["="]
+			x += ["Nesting Structure"]
+			x += ["-"]
+			x += ["Nodes"]
+			x += ["-"]
+			nestrep = str(self.nest)
+			x += nestrep.split("\n")
+			x += ["-"]
+			x += ["Links"]
+			x += ["-"]
+			linkrep = str(self.link)
+			x += linkrep.split("\n")
+		else:
+			return [] # nothing to report
 
 	txt_params = txt_param
 

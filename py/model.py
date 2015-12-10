@@ -339,7 +339,12 @@ class Model(Model2, ModelReporter):
 			_append_note(comment)
 
 	def networkx_digraph(self):
-		import networkx as nx
+		try:
+			import networkx as nx
+		except ImportError:
+			import warnings
+			warnings.warn("networkx module not installed, unable to build network graph")
+			raise
 		G = nx.DiGraph()
 		G.add_node(self.root_id, name='ROOT')
 		for i in self.nest.nodes():
@@ -388,6 +393,41 @@ class Model(Model2, ModelReporter):
 					basement.add(s)
 		return discovered
 
+	def new_node(self, nest_name=None, param_name="", **kwargs):
+		"""Generate a new nest with a new unique code.
+		
+		Parameters
+		----------
+		id : int
+			The code number of the nest. Must be unique to this nest among the 
+			set of all nests and all elemental alternatives.
+		nest_name : str or None
+			The name of the nest. This name is used in various reports.
+			It can be any string but generally something short and descriptive
+			is useful. If None, the name is set to "nest_{id}".
+		param_name : str
+			The name of the parameter to associate with this nest.  If not given,
+			or given as an empty string, the `nest_name` is used.
+
+		Returns
+		-------
+		int
+			The code for the newly created nest.
+		
+		Notes
+		-----
+		Other keyword parameters are passed through to the nest creation function.
+			
+		"""
+		if len(self.node.nodes())>0:
+			max_node = max(self.node.nodes())
+		else:
+			max_node = 0
+		newcode = max(max_node,max(self.alternative_codes()),self.root_id)+1
+		self.node(newcode, nest_name, param_name=param_name, **kwargs)
+		return newcode
+	
+	new_nest = new_node
 
 	def report_(self, **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:
