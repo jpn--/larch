@@ -347,8 +347,11 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 
 	BUGGER(msg) << "Estimating the model.";
 	_latest_run.restart();
+	_latest_run.number_cpu_cores = etk::number_of_cpu;
+	_latest_run.number_threads = option.threads;
 
 	try {
+		_latest_run.start_process("setup");
 		setUp();	
 		BUGGER(msg) << "Setup of model complete.";
 		ZBest = -INF;
@@ -363,6 +366,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		}
 	
 		if (option.calc_null_likelihood) {
+			_latest_run.start_process("null_likelihood");
 			
 			std::vector< int > hold_save (dF());
 			
@@ -390,15 +394,18 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		}
 		
 		if (option.weight_autorescale) {
+			_latest_run.start_process("weight autorescale");
 			auto_rescale_weights();
 			ostringstream oss;
 			oss << "autoscaled weights " << weight_scale_factor << "\n";
 			_latest_run._notes += oss.str();
 		}
 		
+		_latest_run.start_process("maximize likelihood");
 		_latest_run.results += maximize(_latest_run.iteration,opts);
 		
 		if (option.weight_autorescale) {
+			_latest_run.start_process("weight unrescale");
 			restore_scale_weights();
 			MONITOR(msg) << "recalculating log likelihood and gradients at normal weights";
 			ZBest = ZCurrent = objective();
@@ -406,6 +413,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		}
 		
 		if (option.calc_std_errors) {
+			_latest_run.start_process("parameter covariance");
 			//hessian();
 			//MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
 			//invHess = Hess;
@@ -423,11 +431,11 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		if (oops.code()==-8) {
 			_update_freedom_info_best();
 			_latest_run.write_result( "User Interrupt" );
-			_latest_run.finish();
 			PYTHON_INTERRUPT;
 		}
 		_latest_run.write_result( "error: ", oops.what() );
 		MONITOR(msg) << "ERROR IN ESTIMATION: " << oops.what() ;
+		_latest_run.end_process();
 		throw;
 	}
 	
@@ -445,13 +453,15 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	}
 	
 	
-	BUGGER(msg) << "teardown...";
-	if (option.teardown_after_estimate) tearDown();
+	if (option.teardown_after_estimate) {
+		BUGGER(msg) << "teardown...";
+		_latest_run.start_process("tearDown");
+		tearDown();
+	}
 	
 	
 	BUGGER(msg) << "record finish time...";
 	
-	_latest_run.finish();
 	if (_latest_run.results.empty()) _latest_run.results = "ignored";
 
 	tm * timeinfo;
@@ -464,6 +474,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 
 	BUGGER(msg) << "estimation complete.";
 	
+	_latest_run.end_process();
 	return _latest_run;
 }
 
@@ -794,7 +805,7 @@ PyObject* elm::Model2::_get_estimation_statistics () const
 
 PyObject* elm::Model2::_get_estimation_run_statistics () const
 {
-	return _latest_run.dictionary();
+	return etk::py_one_item_list(_latest_run.dictionary());
 }
 
 void elm::Model2::_set_estimation_statistics
@@ -833,15 +844,16 @@ void elm::Model2::_set_estimation_run_statistics
 ,	const std::string& notes
 )
 {
-#ifdef __APPLE__
-	_latest_run.startTime.tv_sec = startTimeSec;
-	_latest_run.startTime.tv_usec = startTimeUSec;
-	_latest_run.endTime.tv_sec = endTimeSec;
-	_latest_run.endTime.tv_usec = endTimeUSec;
-#endif // __APPLE
 	_latest_run.iteration = iteration;
 	_latest_run.results = results;
 	_latest_run._notes = notes;	
+}
+
+
+void elm::Model2::_set_estimation_run_statistics_pickle
+(	PyObject* other )
+{
+	_latest_run.read_from_dictionary(other);
 }
 
 runstats& elm::Model2::RunStatistics()
@@ -1073,16 +1085,19 @@ std::string elm::Model2::save_buffer() const
 		AsPyFloat(_LL_constants) <<","<<
 		AsPyFloat(ZBest) <<
 		")\n";
-	sv << "self._set_estimation_run_statistics("<<
-	_latest_run.startTime.tv_sec  <<","<<
-	_latest_run.startTime.tv_usec <<","<<
-	_latest_run.endTime.tv_sec    <<","<<
-	_latest_run.endTime.tv_usec   <<","<<
-	_latest_run.iteration   <<",'''"<<
-	_latest_run.results   <<"''','''"<<
-	_latest_run._notes   <<
-		"''')\n";
+//	sv << "self._set_estimation_run_statistics_pickle("<<
+//	_latest_run.startTime.tv_sec  <<","<<
+//	_latest_run.startTime.tv_usec <<","<<
+//	_latest_run.endTime.tv_sec    <<","<<
+//	_latest_run.endTime.tv_usec   <<","<<
+//	_latest_run.iteration   <<",'''"<<
+//	_latest_run.results   <<"''','''"<<
+//	_latest_run._notes   <<
+//		"'''"
+//	"'''"<<_latest_run.pickled_dictionary()
+//		<<"''')\n";
 
+// TODO: Save the _set_estimation_run_statistics
 
 
 	sv << "\n";
