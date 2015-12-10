@@ -393,7 +393,7 @@ class Model(Model2, ModelReporter):
 					basement.add(s)
 		return discovered
 
-	def new_node(self, nest_name=None, param_name="", **kwargs):
+	def new_node(self, nest_name=None, param_name="", branch=None, **kwargs):
 		"""Generate a new nest with a new unique code.
 		
 		Parameters
@@ -408,6 +408,8 @@ class Model(Model2, ModelReporter):
 		param_name : str
 			The name of the parameter to associate with this nest.  If not given,
 			or given as an empty string, the `nest_name` is used.
+		branch
+			a optional label for the branch of the network that this nest is in.
 
 		Returns
 		-------
@@ -425,6 +427,12 @@ class Model(Model2, ModelReporter):
 			max_node = 0
 		newcode = max(max_node,max(self.alternative_codes()),self.root_id)+1
 		self.node(newcode, nest_name, param_name=param_name, **kwargs)
+		if branch is not None:
+			if not hasattr(self.branches):
+				self.branches = {}
+			if branch not in self.branches:
+				self.branches[branch] = set()
+			self.branches[branch].add(newcode)
 		return newcode
 	
 	new_nest = new_node
