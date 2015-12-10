@@ -65,22 +65,29 @@ elm::model_options_t::model_options_t(
 , log_turns             (log_turns)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
-#ifdef __APPLE__
-	PyObject* multiprocessing_module = PyImport_ImportModule("multiprocessing");
-	PyObject* cpu_count = PyObject_GetAttrString(multiprocessing_module, "cpu_count");
-	PyObject* n_cpu = PyObject_CallFunction(cpu_count, "()");
-	int t = PyInt_AsLong(n_cpu);
-    if (!PyErr_Occurred()) {
-		this->threads = t;
-	} else {
-		PyErr_Clear();
-    }
-	Py_CLEAR(n_cpu);
-	Py_CLEAR(cpu_count);
-	Py_CLEAR(multiprocessing_module);
-#else
-	this->threads = 1;
-#endif
+//#ifdef __APPLE__
+	if (this->threads<=0) {
+//		PyObject* multiprocessing_module = PyImport_ImportModule("multiprocessing");
+//		PyObject* cpu_count = PyObject_GetAttrString(multiprocessing_module, "cpu_count");
+//		PyObject* n_cpu = PyObject_CallFunction(cpu_count, "()");
+//		int t = PyInt_AsLong(n_cpu);
+//		if (!PyErr_Occurred()) {
+//			this->threads = t;
+//		} else {
+//			PyErr_Clear();
+//		}
+//		Py_CLEAR(n_cpu);
+//		Py_CLEAR(cpu_count);
+//		Py_CLEAR(multiprocessing_module);
+		if ((number_of_cpu>0)&&(number_of_cpu<100000)) {
+			this->threads = number_of_cpu;
+		} else {
+			this->threads = 1;
+		}
+	}
+//#else
+//	this->threads = 1;
+//#endif
 }
 
 

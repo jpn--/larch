@@ -88,7 +88,7 @@ namespace elm {
 		
 		// Constructor
 		model_options_t(
-			int threads=1,
+			int threads=-9,
 			bool calc_null_likelihood=true,
 			bool null_disregards_holdfast=true,
 			bool calc_std_errors=true,
