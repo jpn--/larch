@@ -1,15 +1,34 @@
 
-def info(self):
-	s = ""
-	from .core import IntStringDict
-	d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
-	p = lambda x: str(d(x)).strip().replace("\n","\n           \t")
-	s += "idco query:\t{}\n".format(p(self.get_idco_query()))
-	s += "alts query:\t{}\n".format(p(self.get_alts_query()))
-	s += "choice:    \t{}\n".format(p(self.choice))
-	s += "weight:    \t{}\n".format(p(self.weight))
-	s += "avail:     \t{}".format(p(self.avail))
-	return s
+def info(self, format=None):
+	if format=='html':
+		s = "<table>"
+		from .core import IntStringDict
+		d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
+		p = lambda x: str(d(x)).strip().replace("\n","\n           \t")
+		s += "<tr>"
+		s += "<th>idco query:</th><td>{}</td>\n".format(p(self.get_idco_query()))
+		s += "</tr><tr>"
+		s += "<th>alts query:</th><td>{}</td>\n".format(p(self.get_alts_query()))
+		s += "</tr><tr>"
+		s += "<th>choice:</th><td>{}</td>\n".format(p(self.choice))
+		s += "</tr><tr>"
+		s += "<th>weight:</th><td>{}</td>\n".format(p(self.weight))
+		s += "</tr><tr>"
+		s += "<th>avail:</th><td>{}</td>".format(p(self.avail))
+		s += "</tr>"
+		s += "</table>"
+		return s
+	else:
+		s = ""
+		from .core import IntStringDict
+		d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
+		p = lambda x: str(d(x)).strip().replace("\n","\n           \t")
+		s += "idco query:\t{}\n".format(p(self.get_idco_query()))
+		s += "alts query:\t{}\n".format(p(self.get_alts_query()))
+		s += "choice:    \t{}\n".format(p(self.choice))
+		s += "weight:    \t{}\n".format(p(self.weight))
+		s += "avail:     \t{}".format(p(self.avail))
+		return s
 
 
 _weight_doc = """\

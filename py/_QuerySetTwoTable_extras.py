@@ -2,30 +2,63 @@
 from .core import SQLiteError as _SQLiteError
 
 
-def info(self):
-	s = ""
-	from .core import IntStringDict
-	d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
-	p = lambda x: str(d(x)).replace("\n","\n           \t")
-	s += "idco query:\t{}\n".format(p(self.get_idco_query()))
-	s += "idca query:\t{}\n".format(p(self.get_idca_query()))
-	s += "alts query:\t{}\n".format(p(self.get_alts_query()))
-	try:
-		ch = self.choice
-	except AttributeError:
-		ch = "<error/not implemented>"
-	try:
-		wg = self.weight
-	except AttributeError:
-		wg = "<error/not implemented>"
-	try:
-		av = self.avail
-	except AttributeError:
-		av = "<error>"
-	s += "choice:    \t{}\n".format(p(ch))
-	s += "weight:    \t{}\n".format(p(wg))
-	s += "avail:     \t{}".format(p(av))
-	return s
+def info(self, format=None):
+	if format=='html':
+		s = "<table>"
+		from .core import IntStringDict
+		d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
+		p = lambda x: str(d(x)).replace("\n","\n           \t")
+		s += "<tr>"
+		s += "<th>idco query:</th><td>{}</td>\n".format(p(self.get_idco_query()))
+		s += "</tr><tr>"
+		s += "<th>idca query:</th><td>{}</td>\n".format(p(self.get_idca_query()))
+		s += "</tr><tr>"
+		s += "<th>alts query:</th><td>{}</td>\n".format(p(self.get_alts_query()))
+		try:
+			ch = self.choice
+		except AttributeError:
+			ch = "(error/not implemented)"
+		try:
+			wg = self.weight
+		except AttributeError:
+			wg = "(error/not implemented)"
+		try:
+			av = self.avail
+		except AttributeError:
+			av = "(error)"
+		s += "</tr><tr>"
+		s += "<th>choice:</th><td>{}</td>\n".format(p(ch))
+		s += "</tr><tr>"
+		s += "<th>weight:</th><td>{}</td>\n".format(p(wg))
+		s += "</tr><tr>"
+		s += "<th>avail:</th><td>{}</td>".format(p(av))
+		s += "</tr>"
+		s += "</table>"
+		return s
+	else:
+		s = ""
+		from .core import IntStringDict
+		d = lambda x: x if not isinstance(x,IntStringDict) else dict(x)
+		p = lambda x: str(d(x)).replace("\n","\n           \t")
+		s += "idco query:\t{}\n".format(p(self.get_idco_query()))
+		s += "idca query:\t{}\n".format(p(self.get_idca_query()))
+		s += "alts query:\t{}\n".format(p(self.get_alts_query()))
+		try:
+			ch = self.choice
+		except AttributeError:
+			ch = "<error/not implemented>"
+		try:
+			wg = self.weight
+		except AttributeError:
+			wg = "<error/not implemented>"
+		try:
+			av = self.avail
+		except AttributeError:
+			av = "<error>"
+		s += "choice:    \t{}\n".format(p(ch))
+		s += "weight:    \t{}\n".format(p(wg))
+		s += "avail:     \t{}".format(p(av))
+		return s
 
 
 
