@@ -24,6 +24,8 @@
 
 #include <Python.h>
 #include <string>
+#include <vector>
+#include <chrono>
 #include "etk_thread.h"
 
 #if PY_MAJOR_VERSION < 3
@@ -45,6 +47,10 @@ std::string PyString_ExtractCppString(PyObject* pystr) ;
 
 namespace etk {
 
+void initialize_platform();
+void initialize_n_cpu();
+void initialize_pickle();
+
 PyObject* py_one_item_list(PyObject* item);
 
 int py_add_to_dict(PyObject* d, const std::string& key, const std::string& value);
@@ -55,6 +61,8 @@ int py_add_to_dict(PyObject* d, const std::string& key, const bool& value);
 int py_add_to_dict(PyObject* d, const std::string& key, const unsigned& value);
 int py_add_to_dict(PyObject* d, const std::string& key, const unsigned long long& value);
 int py_add_to_dict(PyObject* d, const std::string& key, PyObject* value);
+int py_add_to_dict(PyObject* d, const std::string& key, const std::vector<std::string>& value);
+int py_add_to_dict(PyObject* d, const std::string& key, const std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> >& value);
 
 int py_read_from_dict(PyObject* d, const std::string& key, std::string& value);
 int py_read_from_dict(PyObject* d, const std::string& key, double& value);
@@ -63,8 +71,14 @@ int py_read_from_dict(PyObject* d, const std::string& key, long& value);
 int py_read_from_dict(PyObject* d, const std::string& key, bool& value);
 int py_read_from_dict(PyObject* d, const std::string& key, unsigned& value);
 int py_read_from_dict(PyObject* d, const std::string& key, unsigned long long& value);
+int py_read_from_dict(PyObject* d, const std::string& key, std::vector<std::string>& value);
+int py_read_from_dict(PyObject* d, const std::string& key, std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> >& value);
 
 extern boosted::mutex python_global_mutex;
+extern std::string discovered_platform_description;
+extern int number_of_cpu;
+extern PyObject* pickle_module;
+extern PyObject* base64_module;
 
 void larch_initialize();
 
