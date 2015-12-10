@@ -529,25 +529,32 @@ int sherpa::_find_ascent_direction (char& Method)
 			case 'G':	
 			case 'g':	
 			default:	
-			MONITOR(msg)<< "using BHHH to seek ascent direction" ;
-			BUGGER(msg) << "bhhh=\n" << Bhhh.printSquare() ;
-			invHessTemp = Bhhh;
-			BUGGER(msg) << "invHessTemp1=\n" << invHessTemp.printSquare() ;
 			
-			if (any_holdfast()) {
-				symmetric_matrix temp_free_hess (invHessTemp.size1()-count_holdfast());
-				
-				// invert hessian
-				hessfull_to_hessfree(&invHessTemp, &temp_free_hess) ;
-				temp_free_hess.inv();
-				hessfree_to_hessfull(&invHessTemp, &temp_free_hess) ;
-
+			if (Bhhh.all_zero()) {
+				MONITOR(msg)<< "BHHH is missing, so using BFGS to seek ascent direction" ;
+				status = _bfgs_update();
+				if (status<0) WARN(msg)<< "improvement is too small for BFGS, new "
+					"inverse hessian estimate not calculated";
 			} else {
-				invHessTemp.inv(&msg);
+				MONITOR(msg)<< "using BHHH to seek ascent direction" ;
+				BUGGER(msg) << "bhhh=\n" << Bhhh.printSquare() ;
+				invHessTemp = Bhhh;
+				BUGGER(msg) << "invHessTemp1=\n" << invHessTemp.printSquare() ;
+				
+				if (any_holdfast()) {
+					symmetric_matrix temp_free_hess (invHessTemp.size1()-count_holdfast());
+					
+					// invert hessian
+					hessfull_to_hessfree(&invHessTemp, &temp_free_hess) ;
+					temp_free_hess.inv();
+					hessfree_to_hessfull(&invHessTemp, &temp_free_hess) ;
+
+				} else {
+					invHessTemp.inv(&msg);
+				}
+				
+				BUGGER(msg) << "invHessTemp=\n" << invHessTemp.printSquare() ;
 			}
-			
-			
-			BUGGER(msg) << "invHessTemp=\n" << invHessTemp.printSquare() ;
 			break;
 	}
 
