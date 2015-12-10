@@ -6,7 +6,7 @@ from .xhtml import XHTML, XML_Builder
 import os.path
 from .temporaryfile import TemporaryFile
 
-def roll(m, filename=None, loglevel=baselogging.INFO, cats='*'):
+def roll(m, filename=None, loglevel=baselogging.INFO, cats='-', **format):
 	local_log = False
 	log = m.logger()
 	if log is None:
@@ -38,7 +38,7 @@ def roll(m, filename=None, loglevel=baselogging.INFO, cats='*'):
 	fh.flush()
 
 	with XHTML(use_filename, quickhead=m) as f:
-		f << m.report(cats=cats, style='xml')
+		f << m.report(cats=cats, style='xml', **format)
 
 		xlog = XML_Builder("div", {'class':'raw_log'})
 		xlog.h2("Estimation Log", anchor=1)
