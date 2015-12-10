@@ -1770,10 +1770,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			if countrows:
 				return rows
 
-	def table_info(self,table,**kwargs):
-		'''A convenience function to replace `display('PRAMGA table_info(<table>);', **kwargs)`.'''
+	def table_info(self,table,schema='main',**kwargs):
+		'''A convenience function to replace `display('PRAMGA <schema>.table_info(<table>);', **kwargs)`.'''
 		if len(kwargs)==0:
-			df = self.dataframe('PRAGMA table_info({});'.format(table))
+			df = self.dataframe('PRAGMA {}.table_info({});'.format(schema,table))
 			max_lens = dict(
 				ci=max(3,max(len(str(i)) for i in df['cid'])),
 				nm=max(4,max(len(str(i)) for i in df['name'])),
@@ -1789,18 +1789,25 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				print("{0!s:{ci}s} {1!s:{nm}s} {2!s:{ty}s} {3!s:{nn}s} {4!s:{df}s} {5!s:{pk}s}".format(*row,**max_lens))
 			print("{0:-<{ci}s} {1:-<{nm}s} {2:-<{ty}s} {3:-<{nn}s} {4:-<{df}s} {5:-<{pk}s}".format('','','','','','',**max_lens))
 		else:
-			return self.display('PRAGMA table_info({});'.format(table), **kwargs)
+			return self.display('PRAGMA {}.table_info({});'.format(schema,table), **kwargs)
+
+	def index_info(self,index,schema='main',**kwargs):
+		'''A convenience function to replace `display('PRAMGA <schema>.index_info(<index>);', **kwargs)`.'''
+		return self.display('PRAGMA {}.index_info({});'.format(schema,index), **kwargs)
 
 	def table_schema(self,table,**kwargs):
 		return self.value("SELECT sql FROM sqlite_master WHERE name='{0}' UNION ALL SELECT sql FROM sqlite_temp_master WHERE name='{0}';".format(table), **kwargs)
 
-	def table_columns(self,table,with_affinity=False):
+	def table_columns(self,table,with_affinity=False, schema='main'):
 		if with_affinity:
-			names = self.values('PRAGMA table_info({});'.format(table), column_number=1)
-			affin = self.values('PRAGMA table_info({});'.format(table), column_number=2)
+			names = self.values('PRAGMA {}.table_info({});'.format(schema,table), column_number=1)
+			affin = self.values('PRAGMA {}.table_info({});'.format(schema,table), column_number=2)
 			return ["{} {}".format(i,j) for i,j in zip(names,affin)]
 		else:
-			return self.values('PRAGMA table_info({});'.format(table), column_number=1)
+			return self.values('PRAGMA {}.table_info({});'.format(schema,table), column_number=1)
+
+	def table_indexes(self, table, schema='main'):
+		return self.values('PRAGMA {}.index_list({});'.format(schema,table), column_number=1)
 
 	def database_list(self,**kwargs):
 		'''A convenience function to replace `display('PRAMGA database_list;', **kwargs)`.'''
@@ -1816,15 +1823,74 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		raise TypeError("type not valid")
 
 
-	def seer(self):
+	def seer(self, file=None, counts=False, **kwargs):
 		'''Display a variety of information about the data in the DB'''
-		x = []
-		self.database_list()
+		import time
+		css = """
+		table {border-collapse:collapse;} 
+		table, th, td {border: 1px solid #999999; padding:2px;}
+		.greysmallcap {color:#888888; font-variant: small-caps;}
+		.indented {padding-left:20px; margin-top:10px; padding-bottom:10px; background-color:rgba(0,0,255,0.05);}
+		.header { color:#888888; font-style:italic; text-align: right; }
+		"""
+		if file is None:
+			file = utilities.TemporaryHtml(css)
+		file.write("<body>\n")
+
+		file.write('<div class="header">')
+		file.write('DB.seer() at {}'.format(time.strftime("%A %B %d %Y - %I:%M:%S %p")))
+		file.write('</div>')
+
+		try:
+			qrys = self.queries.info(format='html')
+		except:
+			pass
+		else:
+			file.write("<h1>Queries</h1>\n")
+			file.write(qrys)
+			if counts:
+				file.write("\nQueries represent {} cases\n".format(self.nCases()))
+		file.write("<h1>Databases</h1>\n")
+		self.database_list(file=file, format='html', **kwargs)
 		dbs = self.database_list(type=list)
 		for dbname in dbs:
-			self.table_info(dbname)
-		return x
-	
+			db_tables = self.table_names(dbname, views=False)
+			db_views = self.view_names(dbname)
+			file.write('<div class="indented">\n')
+			file.write('<h2>{} <span class="greysmallcap">database</span></h2>\n'.format(dbname))
+			for dbtable in db_tables:
+				file.write('<div class="indented">\n')
+				file.write('<h3>{} <span class="greysmallcap">table</span></h3>\n'.format(dbtable))
+				self.table_info(dbtable, schema=dbname, file=file, format='html', **kwargs)
+				file.write('<pre class="sql">')
+				file.write( self.value("SELECT sql FROM {}.sqlite_master WHERE name=?".format(dbname),(dbtable,)) )
+				file.write('</pre>')
+				if counts:
+					nrows = self.value("SELECT count(*) FROM {}.{}".format(dbname,dbtable))
+					file.write('<br/>Table contains {} rows'.format(nrows))
+				indexes = self.table_indexes(dbtable, schema=dbname)
+				if len(indexes):
+					file.write('<div class="indented">\n')
+					for idx in indexes:
+						file.write('<h4>{} <span class="greysmallcap">index on {}</span></h4>\n'.format(idx, dbtable))
+						self.index_info(idx, schema=dbname, file=file, format='html', **kwargs)
+					file.write('</div>\n')
+				file.write('</div>\n')
+			if len(db_tables)==0:
+				file.write('<h3><span class="greysmallcap">no tables in this database</span></h3>\n')
+			for dbview in db_views:
+				file.write('<div class="indented">\n')
+				file.write('<h3>{} <span class="greysmallcap">view</span></h3>\n'.format(dbview))
+				self.table_info(dbview, schema=dbname, file=file, format='html', **kwargs)
+				file.write('</div>\n')
+			file.write('</div>\n')
+		file.write("</body>\n")
+		file.flush()
+		try:
+			file.view()
+		except AttributeError:
+			pass
+		return file
 	
 
 	def attach(self, sqlname, filename):
@@ -1890,6 +1956,17 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			qry += ";"
 		return self.values(qry)
 
+	def view_names(self, dbname="main"):
+		qry = "SELECT name FROM "
+		if dbname.lower()=='temp' or dbname.lower()=='temporary':
+			qry += "sqlite_temp_master"
+		elif dbname.lower()!='main':
+			qry += dbname+".sqlite_master"
+		else:
+			qry += "sqlite_master"
+		qry += " WHERE type='view';"
+		return self.values(qry)
+
 	def webpage(self, stmt, arguments=(), *, file=None, title=None):
 		'''A convenience function for extracting a single value from an SQL query.
 			
@@ -1931,7 +2008,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		colnames = ["{0!s}".format(j[0]) for j in descrip]
 		datarows = []
 		for i in cur:
-			datarows.append(["{0!s}".format(j) for j in i])
+			datarows.append(["{0!s}".format(j).replace("\n"," ") for j in i])
 		display_slickgrid(filename=file, title=title, column_names=colnames, datarows=datarows)
 
 
