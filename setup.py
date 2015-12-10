@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.21'
+VERSION = '3.1.28'
 
 
 def read(*filenames, **kwargs):
@@ -518,10 +518,14 @@ else:
 							"numpy >= 1.8.1",
 							"scipy >= 0.14.0",
 							"pandas >= 0.14.1",
-							"python-docx >= 0.8.5",
-							"sphinxcontrib-napoleon >= 0.4",
-							"nose >= 1.3",
 						],
+		  extras_require = {
+			'docx':  ["python-docx >= 0.8.5",],
+			'test': ["nose >= 1.3",],
+			'network': ["networkx >= 1.10",],
+			'graphing': ["pygraphviz >= 1.3", "matplotlib >= 1.5", ],
+			'docs': ["sphinx >= 1.2.3", "sphinxcontrib-napoleon >= 0.4",],
+		  },
 		  url='http://larch.readthedocs.org',
 		  download_url='http://github.com/jpn--/larch',
 		  author='Jeffrey Newman',
