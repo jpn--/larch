@@ -40,6 +40,9 @@ struct timeval
 #endif // ndef SWIG
 #endif // __APPLE__
 
+#include <chrono>
+
+
 #include "etk.h"
 
 namespace elm {
@@ -51,9 +54,14 @@ namespace elm {
 		unsigned iteration;
 		std::string results;		
 		std::string timestamp;
+		int number_threads;
+		int number_cpu_cores;
 
 		std::string processor;
 		
+		std::vector<std::string> process_label;
+		std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> > process_starttime;
+		std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> > process_endtime;
 		
 		double elapsed_time() const;
 		double runtime_seconds() const;
@@ -65,14 +73,15 @@ namespace elm {
 				 std::string results="",
 				 std::string notes="",
 				 std::string timestamp="",
-				 std::string processor="");
+				 std::string processor="?",
+				 int number_threads=-9,
+				 int number_cpu=-9);
 		runstats(const runstats& other);
 		runstats(PyObject* dictionary);
 
 
 	private:
 		void restart();
-		void finish();
 		void iter();
 		
 	private:
@@ -88,7 +97,31 @@ namespace elm {
 		
 		std::string __repr__() const;
 		PyObject* dictionary() const;
+		std::string pickled_dictionary() const;
 		void read_from_dictionary(PyObject* dictionary);
+		
+		
+		void start_process(const std::string& name);
+		void end_process();
+		
+		double process_duration(const std::string& name) const;
+		double process_duration(const size_t& number) const;
+		double total_duration() const;
+		std::string process_duration_fancy(const std::string& name) const;
+		std::string process_duration_fancy(const size_t& number) const;
+		std::string total_duration_fancy() const;
+
+		PyObject* __getstate__() const;
+		
+		#ifdef SWIG
+		%pythoncode %{
+		def __setstate__(self, state):
+			self.__init__()
+			self.read_from_dictionary(state)
+		%}
+		#endif // SWIG
+
+		
 	};
 
 

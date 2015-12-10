@@ -726,6 +726,7 @@ NOSWIG(	runstats estimate(std::vector<sherpa_pack>* opts); )
 											const unsigned& iteration=0,
 											const std::string& results="", const std::string& notes=""
 											);
+		void _set_estimation_run_statistics_pickle(PyObject* dict);
 
 	public:
 FOSWIG(	%rename(__repr__) representation; )
