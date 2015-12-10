@@ -115,7 +115,7 @@ void etk::dispatcher::dispatch(int nThreads)
 	request_work();
 	boosted::unique_lock<boosted::mutex> LOCK(workdone_mutex);
 	while (work_remains()) {
-		jobs_done.wait_for(LOCK, boosted::chrono::milliseconds(100));
+		jobs_done.wait_for(LOCK, boosted::chrono::milliseconds(20));
 	}
 	if (exception_count) {
 		OOPS(exception_message);
