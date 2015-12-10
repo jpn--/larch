@@ -1058,7 +1058,10 @@ std::string elm::Model2::save_buffer() const
 	for (auto n=Input_Edges.begin(); n!=Input_Edges.end(); n++) {
 		if (n->second.size()) {
 			// This edge has a component list
-			OOPS("not yet implemented for edges with components");
+			//OOPS("not yet implemented for edges with components");
+			sv << "self.link("<<n->first.up<<","<<n->first.dn<<")\n";
+			sv << "import warnings\n";
+			sv << "warnings.warn('an edge had components that were not saved; this feature is not implented yet, sorry.')\n";
 		} else {
 			// This edge has no component list
 			sv << "self.link("<<n->first.up<<","<<n->first.dn<<")\n";
