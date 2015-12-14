@@ -409,7 +409,8 @@ class Model(Model2, ModelReporter):
 			The name of the parameter to associate with this nest.  If not given,
 			or given as an empty string, the `nest_name` is used.
 		branch
-			a optional label for the branch of the network that this nest is in.
+			An optional label for the branch of the network that this nest is in.
+			The new code will be populated into the set at model.branches[branch].
 
 		Returns
 		-------
@@ -428,7 +429,7 @@ class Model(Model2, ModelReporter):
 		newcode = max(max_node,max(self.alternative_codes()),self.root_id)+1
 		self.node(newcode, nest_name, param_name=param_name, **kwargs)
 		if branch is not None:
-			if not hasattr(self.branches):
+			if not hasattr(self, 'branches'):
 				self.branches = {}
 			if branch not in self.branches:
 				self.branches[branch] = set()
@@ -696,6 +697,26 @@ class Model(Model2, ModelReporter):
 		print("{1:<{0}s}\t{2:12s}\t{3:12s}\t{4:12s}\t{5:12s}".format(namelen,'Parameter','Value','Analytic','FiniteDiff','Flux'))
 		for name,val,a,fd in zip(self.parameter_names(),self.parameter_values(), a_grad, fd_grad):
 			print("{1:<{0}s}\t{2:< 12.6g}\t{3:< 12.6g}\t{4:< 12.6g}\t{5:12s}".format(namelen,name,val,a,fd,flux_mag(fd,a)))
+
+
+	def finite_diff_gradient_casewise(self, v=None):
+		from .array import Array
+		g = Array([self.nCases(), len(self)])
+		if v is None:
+			v = numpy.asarray(self.parameter_values())
+		else:
+			assert(len(v)==len(self))
+			v = numpy.asarray(v)
+		for n in range(len(self)):
+			jiggle = v[n] * 1e-5 if v[n] else 1e-5
+			v1 = v.copy()
+			v1[n] += jiggle
+			g[:,n] = self.loglike_casewise(v1)
+			v2 = v.copy()
+			v2[n] -= jiggle
+			g[:,n] -= self.loglike_casewise(v2)
+			g[:,n] /= -2*jiggle
+		return g
 
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
