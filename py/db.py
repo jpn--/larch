@@ -401,7 +401,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	@staticmethod
 	def CSV_idca(filename, caseid=None, altid=None, choice=None, weight=None, avail=None, tablename="data",
-				 tablename_co="_co", savename=None, alts={}, safety=True):
+				 tablename_co="_co", savename=None, alts={}, safety=True, index=False):
 		'''Creates a new larch DB based on an :ref:`idca` CSV data file.
 
 		The input data file should be an :ref:`idca` data file, with the first line containing the column headings.
@@ -442,6 +442,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		safety : bool
 			If true, all alternatives that appear in the altid column, even if not given in `alts`, will be
 			automatically added to the alternatives table.
+		index : bool
+			If true, automatically create indexes for caseids and altids on the :ref:`idca` table,
+			and (if it is created) caseids on the :ref:`idco` table.
 
 		Returns
 		-------
@@ -533,6 +536,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		d.refresh_queries()
 		assert( d.qry_alts() == "SELECT * FROM csv_alternatives" )
 		d.save_queries()
+		if index:
+			d.execute("CREATE INDEX IF NOT EXISTS larch_autoindex_ca_{0} ON {0} ({1},{2})".format(tablename,caseid,altid))
+			if tablename_co is not None:
+				d.execute("CREATE INDEX IF NOT EXISTS larch_autoindex_co_{0} ON {0} ({1})".format(tablename_co,caseid))
 		return d
 
 
