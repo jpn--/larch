@@ -25,6 +25,7 @@
 #include "elm_names.h"
 #include <iostream>
 #include <iomanip>
+#include "elm_workshop_loglike.h"
 
 
 using namespace etk;
@@ -653,6 +654,26 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 //}
 
 
+void elm::Model2::_parameter_push(std::vector<double>& v)
+{
+	if (v.size() != dF()) {
+		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
+	}
+	for (unsigned z=0; z<v.size(); z++) {
+		if (FInfo[FNames[z]].holdfast) {
+			if (v[z] != FInfo[FNames[z]].value) {
+				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+			}
+		} else {
+			FCurrent[z] = v[z];
+			FInfo[FNames[z]].value = v[z];
+		}
+	}
+	freshen();
+}
+
+
 void elm::Model2::_parameter_update()
 {
 	size_t FCurrent_size = FCurrent.size();
@@ -1139,25 +1160,39 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 
 
 
+
+PyObject* elm::Model2::d_loglike() {
+	setUp();
+
+	_parameter_update();
+	etk::ndarray g = gradient();
+	bool z = true;
+	for (auto i=0; i!=g.size(); i++) {
+		if (g[i] != 0.0) {
+			z = false;
+			break;
+		}
+	}
+	if (z) {
+		auto fr = option.force_recalculate;
+		option.force_recalculate = true;
+		g = gradient();
+		option.force_recalculate = fr;
+	}
+	Py_INCREF(g.get_object());
+	return g.get_object();
+}
+
+
+
+
+
 PyObject* elm::Model2::d_loglike(std::vector<double> v) {
 		
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
-	if (v.size() != dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
-	}
-	for (unsigned z=0; z<v.size(); z++) {
-		if (FInfo[FNames[z]].holdfast) {
-			if (v[z] != FInfo[FNames[z]].value) {
-				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
-			}
-		} else {
-			FCurrent[z] = v[z];
-		}
-	}
-	freshen();
+	_parameter_push(v);
 	
 	etk::ndarray g = this->gradient();
 	bool z = true;
@@ -1184,26 +1219,21 @@ PyObject* elm::Model2::d_loglike(std::vector<double> v) {
 
 
 
+
+
+
+
+
+
+
+
 PyObject* elm::Model2::negative_d_loglike(std::vector<double> v) {
 
 
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
-	if (v.size() != dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
-	}
-	for (unsigned z=0; z<v.size(); z++) {
-		if (FInfo[FNames[z]].holdfast) {
-			if (v[z] != FInfo[FNames[z]].value) {
-				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
-			}
-		} else {
-			FCurrent[z] = v[z];
-		}
-	}
-	freshen();
+	_parameter_push(v);
 
 	etk::ndarray g = this->gradient();
 	bool z = true;
@@ -1242,20 +1272,45 @@ double elm::Model2::loglike(std::vector<double> v) {
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
-	if (v.size() != dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
-	}
-	for (unsigned z=0; z<v.size(); z++) {
-		if (FInfo[FNames[z]].holdfast) {
-			if (v[z] != FInfo[FNames[z]].value) {
-				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
-			}
-		} else {
-			FCurrent[z] = v[z];
-		}
-	}
-	freshen();
+	_parameter_push(v);
 	return objective();
 }
+
+std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
+{
+
+	setUp();
+	_parameter_update();
+	objective();
+	
+	std::shared_ptr<ndarray> ll_casewise = make_shared<ndarray> (nCases);
+
+	loglike_w w (&PrToAccum, Xylem.n_elemental(),
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, &*ll_casewise, option.mute_nan_warnings, &msg);
+
+	
+	boosted::mutex local_lock;
+	w.work(0, nCases, &local_lock);
+	
+	return ll_casewise;
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise(std::vector<double> v)
+{
+
+	loglike(v);
+	
+	std::shared_ptr<ndarray> ll_casewise = make_shared<ndarray> (nCases);
+
+	loglike_w w (&PrToAccum, Xylem.n_elemental(),
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, &*ll_casewise, option.mute_nan_warnings, &msg);
+
+	
+	boosted::mutex local_lock;
+	w.work(0, nCases, &local_lock);
+	
+	return ll_casewise;
+}
+
+
 

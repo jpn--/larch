@@ -145,6 +145,10 @@ namespace elm {
 
 #endif // ndef SWIG
 
+
+	public:
+		const elm::VAS_System& _xylem() {return Xylem;}
+
 	public:		
 		elm::cellcode _get_root_cellcode() const;
 		void _set_root_cellcode(const elm::cellcode& r);
@@ -347,6 +351,8 @@ namespace elm {
 	public:
 		virtual double objective();
 		virtual const etk::memarray& gradient () ;
+
+
 //		virtual void calculate_hessian();
 
 		void calculate_probability();
@@ -358,7 +364,11 @@ namespace elm {
 	public:
 		double loglike();
 		double loglike(std::vector<double> v);
+		std::shared_ptr<etk::ndarray> loglike_casewise();
+		std::shared_ptr<etk::ndarray> loglike_casewise(std::vector<double> v);
 
+		std::shared_ptr<etk::ndarray> finite_diff_gradient () ;
+		std::shared_ptr<etk::ndarray> finite_diff_gradient (std::vector<double> v) ;
 
 //		std::shared_ptr<etk::ndarray> calc_utility(datamatrix_t* uco, datamatrix_t* uca=nullptr, datamatrix_t* av=nullptr) const;
 		std::shared_ptr<etk::ndarray> calc_utility(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
@@ -385,6 +395,8 @@ namespace elm {
 #endif
 
 		std::shared_ptr<etk::ndarray> mnl_gradient_full_casewise();
+		std::shared_ptr<etk::ndarray> ngev_gradient_full_casewise();
+
 
 #ifndef SWIG
 		// in the internal verion of this function, allow update_freedoms or not
@@ -503,6 +515,7 @@ namespace elm {
 	public:
 		int _is_setUp;
 		void _parameter_update();
+		void _parameter_push(std::vector<double>& v);
 		void _parameter_log();
 		std::string _parameter_report() const;
 
@@ -791,6 +804,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		#endif // def SWIG
 
 
+		PyObject* d_loglike() ;
 		PyObject* d_loglike(std::vector<double> v) ;
 		PyObject* negative_d_loglike(std::vector<double> v) ;
 

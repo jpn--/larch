@@ -56,56 +56,6 @@ namespace elm {
 			return $self->Xylem.elemental_codes();
 		}
 		
-		std::vector<double> d_loglike() {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			std::vector<double> g = $self->gradient().vectorize();
-			bool z = true;
-			for (auto i=g.begin(); i!=g.end(); i++) {
-				if (*i != 0.0) {
-					z = false;
-					break;
-				}
-			}
-			if (z) {
-				auto fr = $self->option.force_recalculate;
-				$self->option.force_recalculate = true;
-				g = $self->gradient().vectorize();
-				$self->option.force_recalculate = fr;
-			}
-			return g;
-		}
-//		std::vector<double> d_loglike(std::vector<double> v) {
-//			$self->setUp();
-//			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//			//$self->_parameter_update();
-//			if (v.size() != $self->dF()) {
-//				OOPS("You must specify values for exactly the correct number of degrees of freedom (",
-//						$self->dF(),"), you gave ",v.size(),".");
-//			}
-//			for (unsigned z=0; z<v.size(); z++) {
-//				$self->FCurrent[z] = v[z];
-//			}
-//			$self->setUp();
-//			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//			$self->_parameter_update();
-//			std::vector<double> g = $self->gradient().vectorize();
-//			bool z = true;
-//			for (auto i=g.begin(); i!=g.end(); i++) {
-//				if (*i != 0.0) {
-//					z = false;
-//					break;
-//				}
-//			}
-//			if (z) {
-//				auto fr = $self->option.force_recalculate;
-//				$self->option.force_recalculate = true;
-//				g = $self->gradient().vectorize();
-//				$self->option.force_recalculate = fr;
-//			}
-//			return g;
-//		}
 		void d2_loglike() {
 			$self->setUp();
 			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
@@ -116,13 +66,7 @@ namespace elm {
 			$self->setUp();
 			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 			$self->_parameter_update();
-			if (v.size() != $self->dF()) {
-				OOPS("You must specify values for exactly the correct number of degrees of freedom (",$self->dF(),"), you gave ",v.size(),".");
-			}
-			for (unsigned z=0; z<v.size(); z++) {
-				$self->FCurrent[z] = v[z];
-			}
-			$self->freshen();
+			$self->_parameter_push(v);
 			$self->calculate_hessian_and_save();
 		}
 
@@ -136,13 +80,7 @@ namespace elm {
 			$self->setUp();
 			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 			$self->_parameter_update();
-			if (v.size() != $self->dF()) {
-				OOPS("You must specify values for exactly the correct number of degrees of freedom (",$self->dF(),"), you gave ",v.size(),".");
-			}
-			for (unsigned z=0; z<v.size(); z++) {
-				$self->FCurrent[z] = v[z];
-			}
-			$self->freshen();
+			$self->_parameter_push(v);
 			return -$self->objective();
 		}
 		std::vector<double> negative_d_loglike() {
@@ -155,12 +93,7 @@ namespace elm {
 //			$self->setUp();
 //			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 //			$self->_parameter_update();
-//			if (v.size() != $self->dF()) {
-//				OOPS("You must specify values for exactly the correct number of degrees of freedom (",$self->dF(),"), you gave ",v.size(),".");
-//			}
-//			for (unsigned z=0; z<v.size(); z++) {
-//				$self->FCurrent[z] = v[z];
-//			}
+//			$self->_parameter_push(v);
 //			return $self->gradient().negative_vectorize();
 //		}
 		
