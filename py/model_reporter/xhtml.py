@@ -381,21 +381,36 @@ class XhtmlModelReporter():
 		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
 			x.tr({'class':"top_rho_sq"})
 			if not math.isnan(llc):
-				rsc = 1.0-(ll/llc)
-				x.td("Rho Squared w.r.t. Constants")
-				x.td("{0:{RHOSQ}}".format(rsc,**format), {'colspan':'2', 'class':'statistics_bridge'})
+				try:
+					rsc = 1.0-(ll/llc)
+				except ZeroDivisionError:
+					x.td("Rho Squared w.r.t. Constants")
+					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+				else:
+					x.td("Rho Squared w.r.t. Constants")
+					x.td("{0:{RHOSQ}}".format(rsc,**format), {'colspan':'2', 'class':'statistics_bridge'})
 				x.end_tr
 				if not math.isnan(llz) or not math.isnan(ll0): x.tr
 			if not math.isnan(llz):
-				rsz = 1.0-(ll/llz)
-				x.td("Rho Squared w.r.t. Null Parameters")
-				x.td("{0:{RHOSQ}}".format(rsz,**format), {'colspan':'2', 'class':'statistics_bridge'})
+				try:
+					rsz = 1.0-(ll/llz)
+				except ZeroDivisionError:
+					x.td("Rho Squared w.r.t. Null Parameters")
+					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+				else:
+					x.td("Rho Squared w.r.t. Null Parameters")
+					x.td("{0:{RHOSQ}}".format(rsz,**format), {'colspan':'2', 'class':'statistics_bridge'})
 				x.end_tr
 				if not math.isnan(ll0): x.tr
 			if not math.isnan(ll0):
-				rs0 = 1.0-(ll/ll0)
-				x.td("Rho Squared w.r.t. No Model")
-				x.td("{0:{RHOSQ}}".format(rs0,**format), {'colspan':'2', 'class':'statistics_bridge'})
+				try:
+					rs0 = 1.0-(ll/ll0)
+				except ZeroDivisionError:
+					x.td("Rho Squared w.r.t. No Model")
+					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+				else:
+					x.td("Rho Squared w.r.t. No Model")
+					x.td("{0:{RHOSQ}}".format(rs0,**format), {'colspan':'2', 'class':'statistics_bridge'})
 				x.end_tr
 		x.end_table
 		return x.close()
