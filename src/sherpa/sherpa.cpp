@@ -39,7 +39,7 @@ double sherpa::objective()
 }
 const etk::memarray& sherpa::gradient()  
 { 
-	finite_diff_gradient(GLastTurn); 
+	finite_diff_gradient_(GLastTurn);
 	return GLastTurn;
 }
 
@@ -49,7 +49,7 @@ void sherpa::calculate_hessian()
 }
 
 
-void sherpa::finite_diff_gradient(memarray& fGrad)
+void sherpa::finite_diff_gradient_(memarray& fGrad)
 {
 	unsigned i;	
 	double jiggle;
@@ -123,7 +123,7 @@ double sherpa::gradient_diagnostic (bool shout)
 	INFO(msg) << "Conducting Gradient Diagnostic..." ;
 	gradient(); 
 	memarray FiniteGrad (dF());
-	finite_diff_gradient(FiniteGrad);
+	finite_diff_gradient_(FiniteGrad);
 
 	std::ostringstream buff;
 	buff << "Parameter         \tParamValue        \tAnalyticGrad      FiniteDiffGrad    \n" ;

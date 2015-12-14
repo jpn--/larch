@@ -71,7 +71,7 @@ public:
 	virtual const etk::memarray& gradient();
 	virtual void calculate_hessian();
 	
-	void finite_diff_gradient(etk::memarray& fGrad);
+	void finite_diff_gradient_(etk::memarray& fGrad);
 	void finite_diff_hessian (etk::triangle& fHESS);
 	
 	double gradient_diagnostic (bool shout=false);

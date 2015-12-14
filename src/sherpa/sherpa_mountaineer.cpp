@@ -23,7 +23,7 @@
 
 using namespace std;
 
-void mountaineer::finite_diff_gradient(const etk::memarray& params, etk::memarray& fGrad)
+void mountaineer::finite_diff_gradient_(const etk::memarray& params, etk::memarray& fGrad)
 {
 	unsigned i;	
 	double jiggle;
@@ -96,7 +96,7 @@ double mountaineer::gradient_diagnostic (const etk::memarray& params)
 	etk::memarray GCurrent;
 	GCurrent = gradient(params); 
 	etk::memarray FiniteGrad (dF());
-	finite_diff_gradient(params,FiniteGrad);
+	finite_diff_gradient_(params,FiniteGrad);
 	
 	ostringstream buff;
 //	buff << "Parameter           \t" ;
