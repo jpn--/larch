@@ -208,7 +208,7 @@ namespace elm {
 	public:
 		void ExportData (double* ExportTo, const unsigned& c, const unsigned& a, const unsigned& numberOfAlts) const;
 		void ExportData	(double* ExportTo, const unsigned& c, const unsigned& a, const double& scale, const unsigned& numberOfAlts) const;
-		void OverlayData(double* ExportTo, const unsigned& c, const unsigned& a, const double& scale, const unsigned& numberOfAlts=0) const;
+		void OverlayData(double* ExportTo, const unsigned& c, const unsigned& a, const double& scale, const unsigned& numberOfAlts) const;
 
 	#endif // ndef SWIG
 		
