@@ -43,6 +43,23 @@ const char* etk::exception_t::what() const throw () { return _description.c_str(
 int etk::exception_t::code() const throw () { return _oops_code; }
 
 
+
+
+etk::LarchCacheError::LarchCacheError (const std::string& d) throw()
+: etk::exception_t (d)
+{ }
+
+const char* etk::LarchCacheError::what() const throw () {
+	if (_description.empty()) {
+		return "cached value not available";
+	} else {
+		return _description.c_str();
+	}
+}
+
+
+
+
 etk::ZeroProbWhenChosen::ZeroProbWhenChosen (const std::string& d) throw()
 : etk::exception_t (d)
 { }

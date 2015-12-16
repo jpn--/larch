@@ -42,6 +42,13 @@ public:
 	virtual int code() const throw ();
 };
 
+class LarchCacheError: public exception_t {
+public:
+	LarchCacheError (const std::string& d="") throw();
+	virtual ~LarchCacheError() throw() { }
+	virtual const char* what() const throw ();
+};
+
 class ZeroProbWhenChosen: public exception_t {
 public:
 	ZeroProbWhenChosen (const std::string& d="") throw();
@@ -113,6 +120,7 @@ bool PythonErrorCheck();
 
 #define OOPS_SQLITE(...) throw(etk::SQLiteError(etk::cat("SQLite Error:",get_error_message(),"\n",__VA_ARGS__)))
 #define OOPS_FACET(...) throw(etk::FacetError(etk::cat(__VA_ARGS__)))
+#define OOPS_CACHE(...) throw(etk::LarchCacheError(etk::cat(__VA_ARGS__)))
 
 #endif
 
