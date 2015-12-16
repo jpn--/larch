@@ -40,6 +40,7 @@ namespace etk {
 	class ndarray_bool;
 	class symmetric_matrix;
 	class memarray_raw;
+	class memarray_symmetric;
 
 	PyObject* get_array_type(const char* type);
 
@@ -80,6 +81,7 @@ namespace etk {
 		ndarray(const int& r,const int& c, const char* arrayType="Array");
 		ndarray(const int& r,const int& c,const int& s, const char* arrayType="Array");
 		ndarray(PyObject* obj);
+		ndarray(const memarray_symmetric& that);
 		~ndarray();
 		void initialize(const double& init=0);
 		void bool_initialize(const bool& init=false);
@@ -154,6 +156,7 @@ namespace etk {
 	// Copying
 		void operator= (const ndarray& that);
 		void operator= (const symmetric_matrix& that);
+		void operator= (const memarray_symmetric& that);
 		std::vector<double> vectorize(unsigned start=0, unsigned stop=UINT_MAX) const;
 		std::vector<double> negative_vectorize(unsigned start=0, unsigned stop=UINT_MAX) const;
 	
@@ -204,10 +207,12 @@ namespace etk {
 		symmetric_matrix(const int& r, const char* arrayType="SymmetricArray");
 		symmetric_matrix(const int& r,const int& c, const char* arrayType="SymmetricArray");
 		symmetric_matrix(PyObject* obj);
+		symmetric_matrix(const memarray_symmetric& that);
 	private:
 		symmetric_matrix(const int& r,const int& c,const int& s, const char* arrayType="SymmetricArray");
 	public:
 		void copy_uppertriangle_to_lowertriangle();
+		void copy_lowertriangle_to_uppertriangle();
 
 	public:
 		void inv(logging_service* msg_=NULL);

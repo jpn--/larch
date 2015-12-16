@@ -122,6 +122,12 @@ ndarray::ndarray(PyObject* obj)
 	}
 }
 
+
+
+
+
+
+
 #include "etk_thread.h"
 
 boosted::mutex ndarray::python_mutex;
@@ -606,6 +612,34 @@ void ndarray::operator= (const symmetric_matrix& that)
 
 }
 
+ndarray::ndarray(const etk::memarray_symmetric& that)
+: pool(nullptr)
+{
+	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
+	for (size_t i=0; i<size1(); i++) {
+		for (size_t j=0; j<size1(); j++) {
+			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
+		}
+	}
+}
+
+symmetric_matrix::symmetric_matrix(const etk::memarray_symmetric& that)
+: ndarray(that)
+{
+
+}
+
+void ndarray::operator= (const memarray_symmetric& that)
+{
+	Py_CLEAR(pool);
+	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
+	for (size_t i=0; i<size1(); i++) {
+		for (size_t j=0; j<size1(); j++) {
+			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
+		}
+	}
+}
+
 bool ndarray::operator==(const ndarray& that) const
 {
 	if (!pool || !that.pool) return false;
@@ -955,6 +989,16 @@ void symmetric_matrix::copy_uppertriangle_to_lowertriangle()
 	for (size_t i=0; i<size1(); i++) {
 		for (size_t j=i+1; j<size1(); j++) {
 			*(double*)PyArray_GETPTR2(pool, j, i) = *(double*)PyArray_GETPTR2(pool, i, j);
+		}
+	}
+}
+
+void symmetric_matrix::copy_lowertriangle_to_uppertriangle()
+{
+	ASSERT_ARRAY_DOUBLE;
+	for (size_t i=0; i<size1(); i++) {
+		for (size_t j=i+1; j<size1(); j++) {
+			*(double*)PyArray_GETPTR2(pool, i,j) = *(double*)PyArray_GETPTR2(pool, j,i);
 		}
 	}
 }
