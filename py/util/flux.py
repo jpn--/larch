@@ -19,6 +19,7 @@ def flux_mag(should_be, actually_is, format="{:< 12.2g}"):
 		return format.replace('g','s').replace('f','s').replace(' ','').format('NA')
 	else:
 		if flx < -6:
-			return format.replace('g','s').replace('f','s').replace(' ','').format('ok')
+			return "ok: "+format.format(flx)
+			#return format.replace('g','s').replace('f','s').replace(' ','').format('ok')
 		else:
-			return format.format(flx)
+			return "    "+format.format(flx)
