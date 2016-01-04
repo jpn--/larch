@@ -76,11 +76,14 @@ public:
 	void del_alias(const std::string& alias_name);
 	void unlink_alias(const std::string& alias_name);
 
+	size_t parameter_index(const std::string& param_name) const;
+
 	PyObject* values() const;
 	void values(PyObject*);
 	PyObject* zeros() const;
 
 	PyObject* constraints() const;
+	virtual void tearDown();
 
 	virtual void freshen();
 	

@@ -32,8 +32,7 @@
 
 namespace etk {
 
-
-
+	class exception_t;
 	class dispatcher;
 
 	class workshop {
@@ -90,7 +89,8 @@ namespace etk {
 		std::set<size_t> jobs_out;
 		job next_job();
 		void finished_job(const size_t& job_id);
-		void exception_on_job(const size_t& job_id, const std::exception& err);
+		void etk_exception_on_job(const size_t& job_id, const etk::exception_t& err);
+		void std_exception_on_job(const size_t& job_id, const std::exception& err);
 		void request_work();
 		bool work_remains();
 		boosted::condition_variable has_jobs;
@@ -108,6 +108,7 @@ namespace etk {
 		
 		boosted::mutex exception_mutex;
 		int exception_count;
+		int zeroprob_exception_count;
 		std::string exception_message;
 	};
 

@@ -323,19 +323,26 @@ void elm::Model2::auto_rescale_weights(const double& mean_weight)
 
 		double current_total = Data_Weight->_repository.sum();
 		double needed_scale_factor = (mean_weight*Data_Weight->_repository.size())/current_total;
-		Data_Weight_rescaled = boosted::make_shared<elm::darray>(*Data_Weight,needed_scale_factor);
-		weight_scale_factor = needed_scale_factor;
-		INFO(msg) << "automatically rescaled weights (total initial weight "<<current_total
-					<<" scaled by "<<weight_scale_factor<<" across "<<Data_Weight->nCases()
-					<<" cases)";
+		if ((needed_scale_factor > 1.0001) || (needed_scale_factor < 0.9999)) {
+			Data_Weight_rescaled = boosted::make_shared<elm::darray>(*Data_Weight,needed_scale_factor);
+			weight_scale_factor = needed_scale_factor;
+			INFO(msg) << "automatically rescaled weights (total initial weight "<<current_total
+						<<" scaled by "<<weight_scale_factor<<" across "<<Data_Weight->nCases()
+						<<" cases)";
+		}
 	}
 }
 
 void elm::Model2::restore_scale_weights()
 {
 	Data_Weight_rescaled.reset();
+	weight_scale_factor = 1.0;
 }
 
+double elm::Model2::get_weight_scale_factor() const
+{
+	return weight_scale_factor;
+}
 
 
 void elm::Model2::scan_for_multiple_choices()
@@ -380,7 +387,6 @@ void elm::Model2::_pull_graph_from_db()
 
 void elm::Model2::setUp(bool and_load_data)
 {
-	INFO(msg) << "Setting up the model...";
 	
 	// MAYBE THIS IS NOT REALLY NEEDED?
 //	if (is_provisioned()!=1) {
@@ -392,6 +398,8 @@ void elm::Model2::setUp(bool and_load_data)
 		BUGGER(msg) << "The model is already set up.";
 		return;
 	}
+	
+	INFO(msg) << "Setting up the model...";
 
 	if (!option.suspend_xylem_rebuild) _pull_graph_from_db();
 	
@@ -473,6 +481,11 @@ void elm::Model2::tearDown()
 	probability_dispatcher.reset();
 	gradient_dispatcher.reset();
 	loglike_dispatcher.reset();
+	
+	clear_cache();
+	
+	CaseLogLike.resize(0);
+
 }
 
 

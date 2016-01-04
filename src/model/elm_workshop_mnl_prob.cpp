@@ -48,7 +48,7 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 , U_premultiplier(U_premultiplier)
 , msg_(msgr)
 {
-	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
+//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
 }
 
 elm::mnl_prob_w::~mnl_prob_w()
@@ -148,42 +148,84 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 
 	// PROBABILITY //
 	
-	if (firstcase==0) BUGGER_(msg_, "Util[0]="<<Probability->printrow(0));
+//	if (firstcase==0) BUGGER_(msg_, "Util[0]="<<Probability->printrow(0));
 	
 	for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
 		double sum_prob = 0.0;
 		double sum_choice = 0.0;
 		CaseLogLike->at(c) = 0.0;
+		double shifter = 0.0;
+		double min_av_utility = INF;
+//		double min_ch_utility = INF;
+//		double max_ch_utility = -INF;
+		double max_av_utility = -INF;
+		for (unsigned a=0;a<nElementals;a++) {
+			if (Data_AV->boolvalue(c,a)) {
+				double p = Probability->at(c,a);
+				if (p > max_av_utility) max_av_utility = p;
+				if (p < min_av_utility) min_av_utility = p;
+//				if (Data_Ch->value(c,a)) {
+//					if (p < min_ch_utility) min_ch_utility = p;
+//					if (p > max_ch_utility) max_ch_utility = p;
+//				}
+			}
+		}
+		if (max_av_utility>700 || min_av_utility<-700) {
+			shifter = 700-max_av_utility;
+		}
+		
+
+		
+//			std::cerr << "Shifter Breaks on "<<c<<"\n";
+//			std::cerr << " max_av_utility= "<<max_av_utility<<"\n";
+//			std::cerr << " min_av_utility= "<<min_av_utility<<"\n";
+//			std::cerr << " shifter       = "<<shifter<<"\n";
 		for (unsigned a=0;a<nElementals;a++) {
 			if (!Data_AV->boolvalue(c,a)) {
-//				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is NO");
 				Probability->at(c,a) = 0.0;
 			} else {
 				double* p = Probability->ptr(c,a);
-				if (Data_Ch->value(c,a)) {
-					CaseLogLike->at(c) += (*p) * Data_Ch->value(c,a);
-					sum_choice += Data_Ch->value(c,a);
+//					std::cerr << "   u["<<a<<"]= "<<*p<<"\n";
+				*p += shifter;
+				double data_ch_value_ca = Data_Ch->value(c,a);
+				if (data_ch_value_ca) {
+					CaseLogLike->at(c) += (*p) * data_ch_value_ca;
+					sum_choice += data_ch_value_ca;
 				}
 				*p = exp(*p);
 				sum_prob += *p;
-//				if (c==0) BUGGER_(msg_, "Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p);
+//					std::cerr << "  Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p<<"\n";
 			}
 		}
-		if (c==0) BUGGER_(msg_, "Data_AV[0]="<<Data_AV->boolvalue(0,0)<<Data_AV->boolvalue(0,1)<<Data_AV->boolvalue(0,2));
-		if (c==0) BUGGER_(msg_, "Sum(exp(Util))[0]="<<sum_prob);
+
+
+//			std::cerr << "  sum_prob="<<sum_prob<<"\n";
+//			std::cerr << "  sum_choice="<<sum_choice<<"\n";
+
+
+	
+		
+//		if (c==565) std::cerr << "Data_AV[565,0:3]="<<Data_AV->boolvalue(565,0)<<Data_AV->boolvalue(565,1)<<Data_AV->boolvalue(565,2)<<"\n";
+//		if (c==565) std::cerr << "sum_prob="<<sum_prob<<"\n";
 		if (sum_prob) {
 			for (unsigned a=0;a<nElementals;a++) {
 				Probability->at(c,a) /= sum_prob;
+//				if (shifter) {
+//					std::cerr << "  pr["<<a<<"]="<<Probability->at(c,a)<<"\n";
+//				}
 			}
 			if (sum_choice) {
 				CaseLogLike->at(c) -= log(sum_prob) * sum_choice;
+//				if (shifter) {
+//					std::cerr << "  CaseLogLike="<<CaseLogLike->at(c)<<"\n";
+//				}
 			}
 		}
 		
 		
 	}
 	
-	if (firstcase==0) BUGGER_(msg_, "Prob[0]="<<Probability->printrow(0));
+//	if (firstcase==0) BUGGER_(msg_, "Prob[0]="<<Probability->printrow(0));
 
 }
 

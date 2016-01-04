@@ -31,6 +31,7 @@ elm::loglike_w::loglike_w
  , elm::darray_ptr Data_CH
  , elm::darray_ptr Data_WT
  , double*       LogL
+ , etk::ndarray* LogL_casewise
  , bool          mute_warnings
  , etk::logging_service* msgr
  )
@@ -39,6 +40,7 @@ elm::loglike_w::loglike_w
 , Data_CH    (Data_CH)
 , Data_WT    (Data_WT)
 , LogL       (LogL)
+, LogL_casewise(LogL_casewise)
 , msg_       (msgr)
 , mute_warnings(mute_warnings)
 {
@@ -56,18 +58,27 @@ elm::loglike_w::~loglike_w()
 void elm::loglike_w::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
 {
 	double LogL_local (0.0);
+	double LogL_local_c (0.0);
 	double choice_value;
 	for (size_t c=firstcase; c<firstcase+numberofcases; c++) {
+		LogL_local_c = 0.0;
 		for (size_t a=0;a<nAlts;a++) {
 			choice_value = Data_CH->value(c,a);
 			if (choice_value) {
 				if (Data_WT) {
-					LogL_local += (log((*Probability)->at(c,a)) * choice_value * Data_WT->value(c,0));
+					LogL_local_c += (log((*Probability)->at(c,a)) * choice_value * Data_WT->value(c,0));
 				} else {
-					LogL_local += (log((*Probability)->at(c,a)) * choice_value);
+					LogL_local_c += (log((*Probability)->at(c,a)) * choice_value);
 				}
 			}			
 		}
+		
+		if (LogL_casewise) {
+			LogL_casewise->at(c) = LogL_local_c;
+		}
+		
+		LogL_local += LogL_local_c;
+		
 		if (isNan(LogL_local) && !mute_warnings) {
 			WARN_(msg_, "WARNING: Log Likelihood becomes NAN at caserow "<<c 
 						<< "\nW..prob: "<<(*Probability)->printrows(c,c+1)
@@ -84,7 +95,7 @@ void elm::loglike_w::work(size_t firstcase, size_t numberofcases, boosted::mutex
 	
 	
 	result_mutex->lock();
-	BUGGER_(msg_, "LogLike["<< firstcase <<"]->["<< firstcase+numberofcases-1 <<"] = "<<LogL_local);
+//	BUGGER_(msg_, "LogLike["<< firstcase <<"]->["<< firstcase+numberofcases-1 <<"] = "<<LogL_local);
 	*LogL += LogL_local;
 	result_mutex->unlock();
 

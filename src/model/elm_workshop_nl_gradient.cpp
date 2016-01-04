@@ -519,7 +519,7 @@ void elm::__casewise_nl_gradient
 //			<< "\n\nProbability\n"<< Probability.printrow(c)
 //			<< "\n\nChoices\n"<< Data_Choice->printcase(c);
 	
-		OOPS( "zero probability found for a chosen alternative in case ", c, "/n",prob_row, "/n",choice_row);
+		OOPS_ZEROPROB( "zero probability found for a chosen alternative in case ", c, "/n",prob_row, "/n",choice_row);
 		
 	}
 }
@@ -731,7 +731,7 @@ void __casewise_nl_gradient_with_samp
 //			<< "\n\nProbability\n"<< Probability.printrow(c)
 //			<< "\n\nChoices\n"<< Data_Choice->printcase(c);
 	
-		OOPS( "zero probability found for a chosen alternative in case ", c, "/n",prob_row, "/n",choice_row);
+		OOPS_ZEROPROB( "zero probability found for a chosen alternative in case ", c, "/n",prob_row, "/n",choice_row);
 		
 	}
 }
@@ -751,7 +751,7 @@ elm::workshop_nl_gradient::workshop_nl_gradient
  , const etk::memarray* Cond_Prob
  , const VAS_System* Xylem
  , etk::memarray* GCurrent
- , etk::memarray_symmetric* Bhhh
+ , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
 )
 : dF         (dF)
@@ -863,10 +863,9 @@ void elm::workshop_nl_gradient::workshop_nl_gradient_send
 ()
 {
 	if (_lock) {
-		_lock->lock();
+		std::lock_guard<std::mutex> lock_while_in_shope(*_lock);
 		*_GCurrent += workshopGCurrent;
 		*_Bhhh += workshopBHHH;
-		_lock->unlock();
 	} else {
 		OOPS("No lock in elm::workshop_nl_gradient::workshop_nl_gradient_send");
 	}

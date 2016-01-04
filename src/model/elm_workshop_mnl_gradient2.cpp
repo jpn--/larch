@@ -45,7 +45,7 @@ elm::workshop_mnl_gradient2::workshop_mnl_gradient2
  , elm::darray_ptr     Data_Weight
  , const etk::memarray* Probability
  , etk::memarray* GCurrent
- , etk::memarray_symmetric* Bhhh
+ , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
  , const etk::bitarray* _Data_MultiChoice
  )
@@ -196,10 +196,9 @@ void elm::workshop_mnl_gradient2::workshop_mnl_gradient_send
 ()
 {
 	if (_lock) {
-		_lock->lock();
+		std::lock_guard<std::mutex> lock_while_in_shope(*_lock);
 		*_GCurrent += workshopGCurrent;
 		*_Bhhh += workshopBHHH;
-		_lock->unlock();
 	} else {
 		OOPS("No lock in elm::workshop_mnl_gradient2::workshop_mnl_gradient_send");
 	}

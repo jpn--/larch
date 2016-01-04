@@ -46,8 +46,12 @@ void etk::workshop::startwork(etk::dispatcher* dispatcher, boosted::mutex* resul
 		}
 		try {
 			work(thisjob.first,thisjob.length, result_mutex);
+		} catch(const etk::exception_t &err) {
+			dispatcher->etk_exception_on_job(thisjob.first, err);
+			LOCK.unlock();
+			continue;
 		} catch(const std::exception &err) {
-			dispatcher->exception_on_job(thisjob.first, err);
+			dispatcher->std_exception_on_job(thisjob.first, err);
 			LOCK.unlock();
 			continue;
 		}
@@ -79,6 +83,7 @@ etk::dispatcher::dispatcher(int nThreads, size_t nJobs, boosted::function< boost
 , terminate(false)
 , exception_message()
 , exception_count(0)
+, zeroprob_exception_count(0)
 , exception_mutex()
 {
 	for (int i=0; i<nThreads; i++) {
@@ -101,6 +106,7 @@ etk::dispatcher::~dispatcher()
 void etk::dispatcher::dispatch(int nThreads)
 {
 	exception_count = 0;
+	zeroprob_exception_count = 0;
 	if (nThreads != -9 && nThreads > threads.size()) {
 		for (int i=threads.size(); i<nThreads; i++) {
 			add_thread();
@@ -119,6 +125,9 @@ void etk::dispatcher::dispatch(int nThreads)
 	}
 	if (exception_count) {
 		OOPS(exception_message);
+	}
+	if (zeroprob_exception_count) {
+		OOPS_ZEROPROB(exception_message);
 	}
 }
 
@@ -209,7 +218,30 @@ void etk::dispatcher::finished_job(const size_t& job_id)
 	}
 }
 
-void etk::dispatcher::exception_on_job(const size_t& job_id, const std::exception& err)
+void etk::dispatcher::etk_exception_on_job(const size_t& job_id, const etk::exception_t& err)
+{
+	boosted::unique_lock<boosted::mutex> lock(queue_mutex);
+	boosted::unique_lock<boosted::mutex> elock(exception_mutex);
+	jobs_out.erase(job_id);
+	exception_message += std::string(err.what()) + "\n";
+	
+	if (err.code()==OOPSCODE_ZEROPROB) {
+		zeroprob_exception_count++;
+	} else {
+		exception_count++;
+	}
+	elock.unlock();
+	if (jobs_out.size()==0) {
+		// release threads waiting on job completion
+		lock.unlock();
+		jobs_done.notify_all();
+	}
+	
+	
+}
+
+
+void etk::dispatcher::std_exception_on_job(const size_t& job_id, const std::exception& err)
 {
 	boosted::unique_lock<boosted::mutex> lock(queue_mutex);
 	boosted::unique_lock<boosted::mutex> elock(exception_mutex);

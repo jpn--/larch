@@ -151,14 +151,6 @@ void array_compare::print_to_cerr() const
 
 
 result_cache::result_cache()
-: my_ll(nullptr)
-, my_grad(nullptr)
-, my_bhhh(nullptr)
-, my_hess(nullptr)
-, _ll (NAN)
-, _grad()
-, _bhhh()
-, _hess()
 { }
 
 
@@ -196,11 +188,30 @@ bool cache_set::read_cached_loglike(const array_compare& key, double& ll) const
 		return false;
 	}
 	
-	ll = *x->my_ll;
-	return true;
+	if (x->_stored_ll) {
+		ll = *x->_stored_ll;
+		return true;
+	}
+	
+	return false;
 }
 
-bool cache_set::read_cached_grad   (const array_compare& key, etk::ndarray*& grad)
+bool cache_set::read_cached_bhhh_tol(const array_compare& key, double& bhhh_tol) const
+{
+	auto x = _get_results(key);
+	if (!x) {
+		return false;
+	}
+	
+	if (x->_stored_bhhh_tol) {
+		bhhh_tol = *x->_stored_bhhh_tol;
+		return true;
+	}
+	
+	return false;
+}
+
+bool cache_set::read_cached_grad   (const array_compare& key, std::shared_ptr<etk::ndarray>& grad)
 {
 	auto x = _get_results(key);
 	if (!x) {
@@ -208,12 +219,14 @@ bool cache_set::read_cached_grad   (const array_compare& key, etk::ndarray*& gra
 		return false;
 	}
 	
-	grad = x->my_grad;
+	if (x->_stored_grad) {
+		grad = x->_stored_grad;
+	}
 	return true;
 }
 
 
-bool cache_set::read_cached_bhhh   (const array_compare& key, etk::ndarray*& bhhh)
+bool cache_set::read_cached_bhhh   (const array_compare& key, etk::symmetric_matrix*& bhhh)
 {
 	auto x = _get_results(key);
 	if (!x) {
@@ -221,12 +234,29 @@ bool cache_set::read_cached_bhhh   (const array_compare& key, etk::ndarray*& bhh
 		return false;
 	}
 	
-	bhhh = x->my_bhhh;
+	if (x->_stored_bhhh) {
+		*bhhh = *x->_stored_bhhh;
+	}
+	return true;
+}
+
+bool cache_set::read_cached_bhhh   (const array_compare& key, std::shared_ptr<etk::symmetric_matrix>& bhhh)
+{
+	auto x = _get_results(key);
+	if (!x) {
+		bhhh = nullptr;
+		return false;
+	}
+	
+	if (x->_stored_bhhh) {
+		bhhh = std::make_shared<etk::symmetric_matrix>();
+		*bhhh = *x->_stored_bhhh;
+	}
 	return true;
 }
 
 
-bool cache_set::read_cached_hess   (const array_compare& key, etk::ndarray*& hess)
+bool cache_set::read_cached_hess   (const array_compare& key, etk::symmetric_matrix*& hess)
 {
 	auto x = _get_results(key);
 	if (!x) {
@@ -234,7 +264,9 @@ bool cache_set::read_cached_hess   (const array_compare& key, etk::ndarray*& hes
 		return false;
 	}
 	
-	hess = x->my_hess;
+	if (x->_stored_hess) {
+		*hess = *x->_stored_hess;
+	}
 	return true;
 }
 
@@ -244,32 +276,40 @@ bool cache_set::read_cached_hess   (const array_compare& key, etk::ndarray*& hes
 void cache_set::set_cached_loglike(const array_compare& key, const double& ll)
 {
 	result_cache* x = &_saved_results[key];
-	x->_ll = ll;
-	x->my_ll = &x->_ll;
+	x->_stored_ll = std::make_shared<double>(ll);
+}
+
+void cache_set::set_cached_bhhh_tol(const array_compare& key, const double& bhhh_tol)
+{
+	result_cache* x = &_saved_results[key];
+	x->_stored_bhhh_tol = std::make_shared<double>(bhhh_tol);
 }
 
 
-void cache_set::set_cached_grad   (const array_compare& key, const etk::ndarray& grad)
+void cache_set::set_cached_grad   (const array_compare& key, std::shared_ptr<etk::ndarray>& grad)
 {
 	result_cache* x = &_saved_results[key];
-	x->_grad = grad;
-	x->my_grad = &x->_grad;
+	x->_stored_grad = grad;
 }
 
 
-void cache_set::set_cached_bhhh   (const array_compare& key, const etk::ndarray& bhhh)
+void cache_set::set_cached_bhhh   (const array_compare& key, const etk::symmetric_matrix& bhhh)
 {
 	result_cache* x = &_saved_results[key];
-	x->_bhhh = bhhh;
-	x->my_bhhh = &x->_bhhh;
+//	x->_bhhh = bhhh;
+//	x->my_bhhh = &x->_bhhh;
+	
+	x->_stored_bhhh = std::make_shared<etk::symmetric_matrix>(bhhh.size1());
+	*x->_stored_bhhh = bhhh;
 }
 
 
-void cache_set::set_cached_hess   (const array_compare& key, const etk::ndarray& hess)
+void cache_set::set_cached_hess   (const array_compare& key, const etk::symmetric_matrix& hess)
 {
 	result_cache* x = &_saved_results[key];
-	x->_hess = hess;
-	x->my_hess = &x->_hess;
+
+	x->_stored_hess = std::make_shared<etk::symmetric_matrix>(hess.size1());
+	*x->_stored_hess = hess;
 }
 
 void cache_set::clear()

@@ -43,6 +43,7 @@
 #include "elm_model2_options.h"
 #include "elm_packets.h"
 #include "elm_darray.h"
+#include "larch_cache.h"
 
 namespace etk {
   class dispatcher;
@@ -116,13 +117,13 @@ namespace elm {
 			self._ref_to_db = None
 		%}
 		%feature("pythonprepend") setUp %{
-			if self._ref_to_db is not None and self.is_provisioned(False)==0:
+			if self._ref_to_db is not None and self.is_provisioned()==0:
 				self.provision()
 				self.setUpMessage = "autoprovision yes (setUp)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
 		%}
 		%feature("pythonprepend") estimate %{
-			if self._ref_to_db is not None and self.is_provisioned(False)==0:
+			if self._ref_to_db is not None and self.is_provisioned()==0:
 				self.provision()
 				self.setUpMessage = "autoprovision yes (estimate)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
@@ -259,7 +260,7 @@ namespace elm {
 		std::map<std::string, elm::darray_req> needs() const;
 		void provision(const std::map< std::string, boosted::shared_ptr<const elm::darray> >&);
 		void provision();
-		int is_provisioned(bool ex=true) const;
+		int is_provisioned(bool ex=false) const;
 	private:
 		std::string _subprovision(const std::string& name, boosted::shared_ptr<const darray>& storage,
 							 	  const std::map< std::string, boosted::shared_ptr<const darray> >& input,
@@ -312,8 +313,11 @@ namespace elm {
 	public:
 		
 		double weight_scale_factor;
+#endif // ndef SWIG
+		double get_weight_scale_factor() const;
 		void auto_rescale_weights(const double& mean_weight=1.0);
 		void restore_scale_weights();
+#ifndef SWIG
 
 		
 //		std::string weight_CO_variable;
@@ -359,13 +363,26 @@ namespace elm {
 		void calculate_utility_only();
 
 
+
+		cache_set _cached_results;
+
+
 #endif // ndef SWIG
 
 	public:
+		void clear_cache();
+		
 		double loglike();
+		double loglike_cached();
+		double loglike_nocache();
 		double loglike(std::vector<double> v);
+		double loglike_cached(std::vector<double> v);
+		double loglike_nocache(std::vector<double> v);
 		std::shared_ptr<etk::ndarray> loglike_casewise();
 		std::shared_ptr<etk::ndarray> loglike_casewise(std::vector<double> v);
+		
+		std::shared_ptr<etk::ndarray> _gradient_casewise();
+		std::shared_ptr<etk::ndarray> _gradient_casewise(std::vector<double> v);
 
 		std::shared_ptr<etk::ndarray> finite_diff_gradient () ;
 		std::shared_ptr<etk::ndarray> finite_diff_gradient (std::vector<double> v) ;
@@ -389,14 +406,15 @@ namespace elm {
 		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 
 
+
 #ifdef SWIG
 		// in the swig-exposed verion of this function, always update_freedoms
 		void calculate_parameter_covariance();
 #endif
 
-		std::shared_ptr<etk::ndarray> mnl_gradient_full_casewise();
-		std::shared_ptr<etk::ndarray> ngev_gradient_full_casewise();
-
+		std::shared_ptr<etk::ndarray> _mnl_gradient_full_casewise();
+		std::shared_ptr<etk::ndarray> _ngev_gradient_full_casewise();
+		
 
 #ifndef SWIG
 		// in the internal verion of this function, allow update_freedoms or not
@@ -515,7 +533,7 @@ namespace elm {
 	public:
 		int _is_setUp;
 		void _parameter_update();
-		void _parameter_push(std::vector<double>& v);
+		void _parameter_push(const std::vector<double>& v);
 		void _parameter_log();
 		std::string _parameter_report() const;
 
@@ -529,6 +547,17 @@ namespace elm {
 		
 	public:
 		runstats& RunStatistics();
+
+
+#endif // ndef SWIG
+
+//////// MARK: TIMING INTERFACE //////////////////////////////////////////////////////
+
+	public:
+		void start_timing(const std::string& name);
+		void finish_timing();
+
+#ifndef SWIG
 		
 //////// MARK: USER FUNCS ////////////////////////////////////////////////////////////
 
@@ -714,6 +743,10 @@ NOSWIG(	PyObject*         logger (int z);)
 	//	etk::ndarray* tally_avail();
 
 
+		runstats _maximize_bhhh();
+
+		double loglike_null();
+
 		runstats estimate();
 NOSWIG(	runstats estimate(std::vector<sherpa_pack>* opts); )
 		runstats estimate(std::vector<sherpa_pack> opts);
@@ -734,11 +767,6 @@ NOSWIG(	runstats estimate(std::vector<sherpa_pack>* opts); )
 		void _set_estimation_statistics(const double& log_like=NAN,	const double& log_like_null=NAN, const double& log_like_nil=NAN,
 										const double& log_like_constants=NAN,	const double& log_like_best=NAN
 										);
-		void _set_estimation_run_statistics(const long& startTimeSec=0, const long& startTimeUSec=0,
-											const long& endTimeSec=0,	const long& endTimeUSec=0,
-											const unsigned& iteration=0,
-											const std::string& results="", const std::string& notes=""
-											);
 		void _set_estimation_run_statistics_pickle(PyObject* dict);
 
 	public:
@@ -765,7 +793,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		
 		std::string setUpMessage;
 		
-		void tearDown();
+		virtual void tearDown();
 
 		std::string title;
 
@@ -804,10 +832,27 @@ FOSWIG(	%rename(__repr__) representation; )
 		#endif // def SWIG
 
 
-		PyObject* d_loglike() ;
-		PyObject* d_loglike(std::vector<double> v) ;
-		PyObject* negative_d_loglike(std::vector<double> v) ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike() ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike(const std::vector<double>& v) ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike_cached() ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike_cached(const std::vector<double>& v) ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike_nocache() ;
+		std::shared_ptr<etk::ndarray> negative_d_loglike_nocache(const std::vector<double>& v) ;
 
+		std::shared_ptr<etk::symmetric_matrix> bhhh_cached();
+		std::shared_ptr<etk::symmetric_matrix> bhhh_cached(const std::vector<double>& v);
+		std::shared_ptr<etk::symmetric_matrix> bhhh_nocache();
+		std::shared_ptr<etk::symmetric_matrix> bhhh_nocache(const std::vector<double>& v);
+		std::shared_ptr<etk::symmetric_matrix> bhhh();
+		std::shared_ptr<etk::symmetric_matrix> bhhh(const std::vector<double>& v);
+
+		std::shared_ptr<etk::ndarray> bhhh_direction();
+		double bhhh_tolerance();
+		double bhhh_tolerance_nocache();
+
+		std::shared_ptr<etk::ndarray> bhhh_direction(const std::vector<double>& v);
+		double bhhh_tolerance(const std::vector<double>& v);
+		double bhhh_tolerance_nocache(const std::vector<double>& v);
 
 	};
 

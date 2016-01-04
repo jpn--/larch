@@ -56,7 +56,7 @@ namespace elm {
 		etk::memarray_raw Workspace;
 		etk::memarray_raw CaseGrad;
 		etk::memarray_raw workshopGCurrent;
-		etk::memarray_symmetric workshopBHHH   ;
+		etk::symmetric_matrix workshopBHHH   ;
 		etk::memarray_raw Grad_UtilityCA;
 		etk::memarray_raw Grad_UtilityCO;
 		etk::memarray_raw Grad_QuantityCA;
@@ -65,7 +65,7 @@ namespace elm {
 		// These are memory arrays that are the principle output accumulators of the workshop.
 		//  The lock needs to be acquired before writing to these arrays.
 		etk::memarray* _GCurrent;
-		etk::memarray_symmetric* _Bhhh;
+		etk::symmetric_matrix* _Bhhh;
 		
 
 		
@@ -100,7 +100,7 @@ namespace elm {
 		 , elm::darray_ptr     Data_Weight
 		 , const etk::memarray* Probability
 		 , etk::memarray* GCurrent
-		 , etk::memarray_symmetric* Bhhh
+		 , etk::symmetric_matrix* Bhhh
 		 , etk::logging_service* msgr
 		 , const etk::bitarray* Data_MultiChoice
 		 );
@@ -146,7 +146,7 @@ namespace elm {
 		etk::memarray_raw Workspace;
 		etk::memarray_raw CaseGrad;
 		etk::memarray_raw workshopGCurrent;
-		etk::memarray_symmetric workshopBHHH   ;
+		etk::symmetric_matrix workshopBHHH   ;
 		etk::memarray_raw Grad_UtilityCA;
 		etk::memarray_raw Grad_UtilityCO;
 		etk::memarray_raw Grad_QuantityCA;
@@ -155,7 +155,7 @@ namespace elm {
 		// These are memory arrays that are the principle output accumulators of the workshop.
 		//  The lock needs to be acquired before writing to these arrays.
 		etk::memarray* _GCurrent;
-		etk::memarray_symmetric* _Bhhh;
+		etk::symmetric_matrix* _Bhhh;
 		
 		etk::ndarray* _GCurrentCasewise;
 
@@ -191,7 +191,7 @@ namespace elm {
 		 , elm::darray_ptr     Data_Weight
 		 , const etk::memarray* Probability
 		 , etk::memarray* GCurrent
-		 , etk::memarray_symmetric* Bhhh
+		 , etk::symmetric_matrix* Bhhh
 		 , etk::logging_service* msgr
 		 , const etk::bitarray* Data_MultiChoice
 		 , etk::memarray* GCurrentCasewise
@@ -239,7 +239,7 @@ public:
 	etk::memarray Grad_QuantityCA;
 
 	etk::memarray workshopGCurrent;
-	etk::memarray_symmetric workshopBHHH   ;
+	etk::symmetric_matrix workshopBHHH   ;
 	
 	etk::bitarray multichoices;
 
@@ -292,7 +292,7 @@ public:
 	 
 	void workshop_mnl_gradient_send
 	(  etk::memarray& GCurrent
-	 , etk::memarray_symmetric& Bhhh);
+	 , etk::symmetric_matrix& Bhhh);
 	
 	
 };

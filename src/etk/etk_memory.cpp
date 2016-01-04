@@ -112,7 +112,9 @@ void puddle::purge()
 
 double puddle::operator*(const puddle& that) const // dot product
 {
-	if (siz != that.size()) OOPS("puddle dot-product of different sized puddles");
+	if (siz != that.size()) {
+		OOPS("puddle dot-product of different sized puddles, ",siz," vs ",that.size());
+	}
 	return cblas_ddot(siz, pool,1, that.pool,1);
 }
 
@@ -222,241 +224,90 @@ std::vector<double> puddle::negative_vectorize(unsigned start, unsigned stop) co
 	return ret;
 }
 
-triangle_raw::triangle_raw(const unsigned& s)
-: puddle (s*(s+1)/2)
-, side (s)
-{ }
-
-triangle_raw::~triangle_raw()
-{ }
-
-double& triangle_raw::operator()(const unsigned& i, const unsigned& j)
-{
-	if (i>=side) {
-		OOPS("triangle_raw access out of range");
-	}
-	if (j>=side) {
-		OOPS("triangle_raw access out of range");
-	}
-	if (i<j) {
-		unsigned col_top = (i*side)-((i*(i-1))/2);
-		return pool[col_top+j-i];
-	}
-	unsigned col_top = (j*side)-((j*(j-1))/2);
-	return pool[col_top+i-j];
-}
-
-const double& triangle_raw::operator()(const unsigned& i, const unsigned& j) const
-{
-	if (i>=side) {
-		OOPS("triangle_raw access out of range");
-	}
-	if (j>=side) {
-		OOPS("triangle_raw access out of range");
-	}
-	if (i<j) {
-		unsigned col_top = (i*side)-((i*(i-1))/2);
-		return pool[col_top+j-i];
-	}
-	unsigned col_top = (j*side)-((j*(j-1))/2);
-	return pool[col_top+i-j];
-}
-
-void triangle_raw::resize(const unsigned& s, bool init)
-{
-	puddle::resize((s*(s-1)/2)+s, init);
-	side = s;
-}
-
-void triangle_raw::operator= (const triangle_raw& that)
-{
-	puddle::operator= (that);
-	side=that.side;
-}
-
-/*
-void triangle_raw::inv(const bool& rescale, bool squeeze)
-{
-	if (squeeze) {
-		// First check if a squeeze is even needed
-		squeeze = false;
-		std::vector<int> zerow (side, 1);
-		// Identify all rows with non-zero values
-		for (unsigned i=0; i<side; i++) {
-			for (unsigned j=0; j<side; j++) {
-				if (this->operator()(i,j)) zerow[i] = 0;
-				break;
-			}
-			// If a zeros-only row is found, squeeze is needed
-			if (zerow[i]) squeeze = true;
-		}
-		if (squeeze) {
-			unsigned shortside (0);
-			for (unsigned i=0; i<side; i++) {if (!zerow[i]) shortside++;}
-			triangle_raw squeezed(shortside);
-			unsigned i(0);
-			unsigned ix(0);
-			unsigned j(0);
-			unsigned jx(0);
-			while (i<shortside) {
-				while (zerow[ix]) { ix++; }
-				while (j<shortside) {
-					while (zerow[jx]) { jx++; }
-					squeezed(i,j) = this->operator()(ix,jx);
-					j++; jx++;
-				}
-				i++; ix++; j=0; jx=0;
-			}
-			squeezed.inv(rescale,false);
-			i=0; ix=0; j=0; jx=0;
-			while (i<shortside) {
-				while (zerow[ix]) { ix++; }
-				while (j<shortside) {
-					while (zerow[jx]) { jx++; }
-					this->operator()(ix,jx) = squeezed(i,j);
-					j++; jx++;
-				}
-				i++; ix++; j=0; jx=0;
-			}
-		}
-	}
-	if (!squeeze) {
-		if (rescale) {
-			puddle scales (side);
-			unsigned i,j;
-			for (i=0; i<side; i++) {
-				scales[i] = sqrt(this->operator()(i,i));
-			}
-			for (i=0;i<side;i++){
-				for (j=i;j<side;j++){
-					this->operator()(i,j) /= scales[i];
-					this->operator()(i,j) /= scales[j];
-				}
-			}
-			
-			etk::dppinv (pool, side);
-			
-			for (i=0;i<side;i++){
-				for (j=i;j<side;j++){
-					this->operator()(i,j) /= scales[i];
-					this->operator()(i,j) /= scales[j];
-				}
-			}
-			// scales.purge();
-		} else {
-			//	cerr << "pool=" << pool << "\n";
-			//	cerr << "pool*=" << *pool << "\n";
-			//	cerr << "side=" << side << "\n";
-			etk::dppinv (pool, side);
-		}
-	}
-}
-*/
-
-void triangle_raw::initialize_identity()
-{
-	initialize();
-	for (unsigned i=0; i<side; i++) operator()(i,i) = 1;
-}
+//std::string memarray_symmetric::printSquare()
+//{
+//    std::ostringstream pr;
+//	for (unsigned i=0; i<size1(); i++) {
+//		for (unsigned j=0; j<size2(); j++) {
+//			pr.width(12);
+//			pr << this->operator()(i, j) << "\t";
+//		}
+//		pr << "\n";
+//	}
+//	return pr.str();
+//}
+//
+//void memarray_symmetric::operator= (const memarray_symmetric& that)
+//{
+//	memarray_raw::operator=(that);
+//}
 
 
-
-std::string triangle_raw::printSquare()
-{
-    std::ostringstream pr;
-	for (unsigned i=0; i<side; i++) {
-		for (unsigned j=0; j<side; j++) {
-			pr.width(12);
-			pr << this->operator()(i, j) << "\t";
-		}
-		pr << "\n";
-	}
-	return pr.str();
-}
-std::string memarray_symmetric::printSquare()
-{
-    std::ostringstream pr;
-	for (unsigned i=0; i<size1(); i++) {
-		for (unsigned j=0; j<size2(); j++) {
-			pr.width(12);
-			pr << this->operator()(i, j) << "\t";
-		}
-		pr << "\n";
-	}
-	return pr.str();
-}
-
-void memarray_symmetric::operator= (const memarray_symmetric& that)
-{
-	memarray_raw::operator=(that);
-}
-
-
-void memarray_symmetric::operator= (const symmetric_matrix& that)
-{
-	if (siz != that.size()) {
-		resize(that.size1());
-	}
-	memcpy(pool, that.ptr(), siz*sizeof(double));
-	rows=that.size1();
-	cols=(that.ndim()>=2 ? that.size2() : 1);
-	deps=(that.ndim()>=3 ? that.size3() : 1);
-}
-
-
-memarray_symmetric::memarray_symmetric(const unsigned& r, const unsigned& c)
-: memarray_raw(r,r)
-{
-}
-
-void memarray_symmetric::resize(const unsigned& r, const unsigned& c)
-{
-	puddle::resize(r*r);
-	rows=r;
-	cols=r;
-	deps=1;
-}
-
-void memarray_symmetric::copy_uppertriangle_to_lowertriangle()
-{
-	for (size_t i=0; i<size1(); i++) {
-		for (size_t j=i+1; j<size1(); j++) {
-			pool[j*cols+i] = pool[i*cols+j];
-		}
-	}
-}
-
-bool memarray_symmetric::all_zero() const
-{
-	for (size_t i=0; i<size1(); i++) {
-		for (size_t j=i; j<size1(); j++) {
-			if(pool[j*cols+i]) return false;
-		}
-	}
-	return true;
-}
+//void memarray_symmetric::operator= (const symmetric_matrix& that)
+//{
+//	if (siz != that.size()) {
+//		resize(that.size1());
+//	}
+//	memcpy(pool, that.ptr(), siz*sizeof(double));
+//	rows=that.size1();
+//	cols=(that.ndim()>=2 ? that.size2() : 1);
+//	deps=(that.ndim()>=3 ? that.size3() : 1);
+//}
+//
+//
+//memarray_symmetric::memarray_symmetric(const unsigned& r, const unsigned& c)
+//: memarray_raw(r,r)
+//{
+//}
+//
+//void memarray_symmetric::resize(const unsigned& r, const unsigned& c)
+//{
+//	puddle::resize(r*r);
+//	rows=r;
+//	cols=r;
+//	deps=1;
+//}
+//
+//void memarray_symmetric::copy_uppertriangle_to_lowertriangle()
+//{
+//	for (size_t i=0; i<size1(); i++) {
+//		for (size_t j=i+1; j<size1(); j++) {
+//			pool[j*cols+i] = pool[i*cols+j];
+//		}
+//	}
+//}
+//
+//bool memarray_symmetric::all_zero() const
+//{
+//	for (size_t i=0; i<size1(); i++) {
+//		for (size_t j=i; j<size1(); j++) {
+//			if(pool[j*cols+i]) return false;
+//		}
+//	}
+//	return true;
+//}
 
 
-void triangle_raw::unpack(memarray_raw& destination) const
-{
-	destination.resize(side,side);
-	for (unsigned i=0; i<side; i++) {
-		for (unsigned j=0; j<side; j++) {
-			destination(i,j) = this->operator()(i, j);
-		}
-	}
-}
-
-void triangle_raw::repack(const memarray_raw& source)
-{
-	if (source.size1()!=source.size2()) OOPS("repack triangle_raw failed, source not square");
-	resize(source.size1());
-	for (unsigned i=0; i<side; i++) {
-		for (unsigned j=i; j<side; j++) {
-			this->operator()(i, j) = source(i,j);
-		}
-	}
-}
+//void triangle_raw::unpack(memarray_raw& destination) const
+//{
+//	destination.resize(side,side);
+//	for (unsigned i=0; i<side; i++) {
+//		for (unsigned j=0; j<side; j++) {
+//			destination(i,j) = this->operator()(i, j);
+//		}
+//	}
+//}
+//
+//void triangle_raw::repack(const memarray_raw& source)
+//{
+//	if (source.size1()!=source.size2()) OOPS("repack triangle_raw failed, source not square");
+//	resize(source.size1());
+//	for (unsigned i=0; i<side; i++) {
+//		for (unsigned j=i; j<side; j++) {
+//			this->operator()(i, j) = source(i,j);
+//		}
+//	}
+//}
 
 
 /////// MARK: THREE_ARRAY
@@ -576,14 +427,14 @@ memarray_raw::memarray_raw(const unsigned& r, const unsigned& c, const unsigned&
 {
 }
 
-memarray_raw::memarray_raw(const triangle_raw& t)
-: puddle (t.side*t.side)
-, three_dim (t.side,t.side,1)
-{
-	for (unsigned i=0; i<t.side; i++) for (unsigned j=0; j<t.side; j++) {
-		operator()(i,j) = t(i,j);
-	}
-}
+//memarray_raw::memarray_raw(const triangle_raw& t)
+//: puddle (t.side*t.side)
+//, three_dim (t.side,t.side,1)
+//{
+//	for (unsigned i=0; i<t.side; i++) for (unsigned j=0; j<t.side; j++) {
+//		operator()(i,j) = t(i,j);
+//	}
+//}
 
 memarray_raw::~memarray_raw()
 { }

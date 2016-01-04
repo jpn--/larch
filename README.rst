@@ -5,7 +5,7 @@ larch
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/released-02%20December%202015-blue.svg
+.. image:: https://img.shields.io/badge/released-10%20December%202015-blue.svg
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
@@ -49,3 +49,7 @@ For some unknown reason, certain mathematical tools are not available on PyPI as
 for Windows.  You will need to download `numpy <http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy>`_,
 `scipy <http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy>`_, and
 `pandas <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pandas>`_ and install them manually.
+
+You may also need to install the
+`Microsoft Visual C++ 2015 <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`
+redistributable libraries. Future versions of Larch may include these for you.

@@ -68,6 +68,12 @@ symmetric_matrix::symmetric_matrix(PyObject* obj)
 
 }
 
+symmetric_matrix::symmetric_matrix(symmetric_matrix& that, bool use_same_memory)
+: ndarray (that, use_same_memory)
+{
+
+}
+
 
 symmetric_matrix::symmetric_matrix(const char* arrayType)
 : ndarray (0,0,arrayType)
@@ -220,6 +226,47 @@ ndarray::ndarray(const int& r,const int& c,const int& s, const char* arrayType)
 : pool (nullptr)
 {
 	quick_new(NPY_DOUBLE, arrayType, r, c, s);
+}
+
+ndarray::ndarray(const ndarray& that, bool use_same_memory)
+: pool (nullptr)
+{
+	if (use_same_memory) {
+		OOPS("cannot use same memory for const array");
+	} else {
+		if (!that.pool) OOPS("Error copying ndarray, source is null");
+		if (!pool || !PyArray_SAMESHAPE(pool, that.pool) || PyArray_DTYPE(pool)!=PyArray_DTYPE(that.pool) ) {
+			Py_CLEAR(pool);
+			pool = (PyArrayObject*)PyArray_NewCopy((PyArrayObject*)that.pool, NPY_CORDER);
+			Py_INCREF(pool);
+		} else {
+			int z = PyArray_CopyInto((PyArrayObject*)pool, (PyArrayObject*)that.pool);
+			if (z) OOPS("Error copying ndarray");
+		}
+	}
+	
+	
+}
+
+ndarray::ndarray(ndarray& that, bool use_same_memory)
+: pool (nullptr)
+{
+	if (use_same_memory && that.pool) {
+		Py_INCREF(that.pool);
+		pool = that.pool;
+	} else {
+		if (!that.pool) OOPS("Error copying ndarray, source is null");
+		if (!pool || !PyArray_SAMESHAPE(pool, that.pool) || PyArray_DTYPE(pool)!=PyArray_DTYPE(that.pool) ) {
+			Py_CLEAR(pool);
+			pool = (PyArrayObject*)PyArray_NewCopy((PyArrayObject*)that.pool, NPY_CORDER);
+			Py_INCREF(pool);
+		} else {
+			int z = PyArray_CopyInto((PyArrayObject*)pool, (PyArrayObject*)that.pool);
+			if (z) OOPS("Error copying ndarray");
+		}
+	}
+	
+	
 }
 
 ndarray::~ndarray()
@@ -612,33 +659,33 @@ void ndarray::operator= (const symmetric_matrix& that)
 
 }
 
-ndarray::ndarray(const etk::memarray_symmetric& that)
-: pool(nullptr)
-{
-	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
-	for (size_t i=0; i<size1(); i++) {
-		for (size_t j=0; j<size1(); j++) {
-			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
-		}
-	}
-}
+//ndarray::ndarray(const etk::memarray_symmetric& that)
+//: pool(nullptr)
+//{
+//	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
+//	for (size_t i=0; i<size1(); i++) {
+//		for (size_t j=0; j<size1(); j++) {
+//			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
+//		}
+//	}
+//}
 
-symmetric_matrix::symmetric_matrix(const etk::memarray_symmetric& that)
-: ndarray(that)
-{
+//symmetric_matrix::symmetric_matrix(const etk::memarray_symmetric& that)
+//: ndarray(that)
+//{
+//
+//}
 
-}
-
-void ndarray::operator= (const memarray_symmetric& that)
-{
-	Py_CLEAR(pool);
-	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
-	for (size_t i=0; i<size1(); i++) {
-		for (size_t j=0; j<size1(); j++) {
-			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
-		}
-	}
-}
+//void ndarray::operator= (const memarray_symmetric& that)
+//{
+//	Py_CLEAR(pool);
+//	quick_new(NPY_DOUBLE, "SymmetricArray", that.size1(), that.size1());
+//	for (size_t i=0; i<size1(); i++) {
+//		for (size_t j=0; j<size1(); j++) {
+//			*(double*)PyArray_GETPTR2(pool, j, i) = that(i,j);
+//		}
+//	}
+//}
 
 bool ndarray::operator==(const ndarray& that) const
 {
@@ -830,14 +877,18 @@ double ndarray::sum () const {
 double ndarray::operator*(const ndarray& that) const // dot product
 {
 	ASSERT_ARRAY_DOUBLE;
-	if (size() != that.size()) OOPS("puddle dot-product of different sized puddles");
+	if (size() != that.size()) {
+		OOPS("puddle dot-product of different sized puddles, ",size()," vs ",that.size());
+	}
 	return cblas_ddot(size(), ptr(),1, that.ptr(),1);
 }
 
 void ndarray::operator+=(const ndarray& that)
 {
 	ASSERT_ARRAY_DOUBLE;
-	if (size() != that.size()) OOPS("puddle addition of different sized puddles");
+	if (size() != that.size()) {
+		OOPS("puddle addition of different sized puddles, this is ",size()," while that is ",that.size());
+	}
 	cblas_daxpy(size(), 1, that.ptr(), 1, ptr(), 1);
 }
 void ndarray::operator-=(const ndarray& that)
@@ -1006,9 +1057,9 @@ void symmetric_matrix::copy_lowertriangle_to_uppertriangle()
 void symmetric_matrix::inv(logging_service* msg_)
 {
 	ASSERT_ARRAY_DOUBLE;
-	BUGGER_(msg_, "inv received matrix =\n" << printSquare() );
+//	BUGGER_(msg_, "inv received matrix =\n" << printSquare() );
 	copy_uppertriangle_to_lowertriangle();
-	BUGGER_(msg_, "inv symmetric-ized matrix =\n" << printSquare() );
+//	BUGGER_(msg_, "inv symmetric-ized matrix =\n" << printSquare() );
 	PyObject* linalg = elm::elm_linalg_module; // PyImport_ImportModule("larch.linalg");
 	Py_XINCREF(linalg);
 	if (!linalg) {
@@ -1023,6 +1074,7 @@ void symmetric_matrix::inv(logging_service* msg_)
 	Py_CLEAR(linalg_inv);
 	Py_CLEAR(linalg);
 	if (!result) {
+		//OOPS_MATRIXINVERSE(this, "Failed to get inverse");
 		OOPS("Failed to get inverse");
 	}
 	Py_CLEAR(pool);
@@ -1036,6 +1088,17 @@ void symmetric_matrix::initialize_identity()
 	ASSERT_ARRAY_DOUBLE;
 	initialize();
 	for (size_t i=0; i<size1(); i++) operator()(i,i) = 1;
+}
+
+
+bool symmetric_matrix::all_zero() const
+{
+	for (size_t i=0; i<size1(); i++) {
+		for (size_t j=i; j<size1(); j++) {
+			if(this->operator()(i, j)) return false;
+		}
+	}
+	return true;
 }
 
 

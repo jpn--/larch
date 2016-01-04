@@ -222,9 +222,9 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 	unsigned nElementals = Xylem->n_elemental();
 	unsigned warningcount = 0;
 
-	if (firstcase==0) {
-		BUGGER_(msg_, "Allocation A[0]: " << Allocation->printrow(0) );
-	}
+//	if (firstcase==0) {
+//		BUGGER_(msg_, "Allocation A[0]: " << Allocation->printrow(0) );
+//	}
 
 	if (QuantPacket.relevant()) {
 		
@@ -244,9 +244,9 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 
 	AllocPacket.logit_partial(firstcase, numberofcases, 0.0);
 
-	if (firstcase==0) {
-		BUGGER_(msg_, "Allocation B[0]: " << Allocation->printrow(0) );
-	}
+//	if (firstcase==0) {
+//		BUGGER_(msg_, "Allocation B[0]: " << Allocation->printrow(0) );
+//	}
 	
 	// Change Alpha's to allocations, simple method (Single Path Diverge)
 	if (true /* todo: flag_single_path_diverge*/) {
@@ -257,13 +257,13 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 			}
 		}
 		
-		if (firstcase==0) {
-			BUGGER_(msg_, "Allocation C[0]: " << Allocation->printrow(0) );
-		}
+//		if (firstcase==0) {
+//			BUGGER_(msg_, "Allocation C[0]: " << Allocation->printrow(0) );
+//		}
 		Allocation->sector_prob_scale_2(Xylem->alloc_breaks(), firstcase, lastcase);
-		if (firstcase==0) {
-			BUGGER_(msg_, "Allocation D[0]: " << Allocation->printrow(0) );
-		}
+//		if (firstcase==0) {
+//			BUGGER_(msg_, "Allocation D[0]: " << Allocation->printrow(0) );
+//		}
 	} else {
 		TODO;
 		OOPS("error: not single path divergent, other algorithms not yet implemented");
@@ -342,9 +342,8 @@ void elm::workshop_ngev_probability::work(size_t firstcase, size_t numberofcases
 //	_lock = result_mutex;
 //
 //	if (_lock) {
-//		_lock->lock();
+//		std::lock_guard<std::mutex> lock_while_in_shope(*_lock);
 //		std::cerr << "Finished workshop_ngev_probability ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]\n";
-//		_lock->unlock();
 //	} else {
 //
 //	}

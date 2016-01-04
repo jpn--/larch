@@ -46,7 +46,9 @@ elm::model_options_t::model_options_t(
 			bool teardown_after_estimate,
 			bool weight_autorescale,
 			bool suspend_xylem_rebuild,
-			bool log_turns
+			bool log_turns,
+			bool enforce_bounds,
+			bool enforce_constraints
 		)
 : gradient_diagnostic   (gradient_diagnostic)
 , hessian_diagnostic    (hessian_diagnostic)
@@ -63,6 +65,8 @@ elm::model_options_t::model_options_t(
 , weight_autorescale    (weight_autorescale)
 , suspend_xylem_rebuild (suspend_xylem_rebuild)
 , log_turns             (log_turns)
+, enforce_bounds        (enforce_bounds)
+, enforce_constraints   (enforce_constraints)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
 //#ifdef __APPLE__
@@ -106,7 +110,9 @@ void elm::model_options_t::__call__(
 			int teardown_after_estimate,
 			int weight_autorescale,
 			int suspend_xylem_rebuild,
-			int log_turns
+			int log_turns,
+			int enforce_bounds,
+			int enforce_constraints
 		)
 {
 	if (gradient_diagnostic     != -9 ) (this->gradient_diagnostic     = gradient_diagnostic     );
@@ -124,6 +130,8 @@ void elm::model_options_t::__call__(
 	if (weight_autorescale      != -9 ) (this->weight_autorescale      = weight_autorescale      );
 	if (suspend_xylem_rebuild   != -9 ) (this->suspend_xylem_rebuild   = suspend_xylem_rebuild   );
 	if (log_turns               != -9 ) (this->log_turns               = log_turns               );
+	if (enforce_bounds          != -9 ) (this->enforce_bounds          = enforce_bounds          );
+	if (enforce_constraints     != -9 ) (this->enforce_constraints     = enforce_constraints     );
 }
 
 void elm::model_options_t::copy(const model_options_t& other)
@@ -142,6 +150,8 @@ void elm::model_options_t::copy(const model_options_t& other)
 	this->weight_autorescale      = other.weight_autorescale      ;
 	this->suspend_xylem_rebuild   = other.suspend_xylem_rebuild   ;
 	this->log_turns               = other.log_turns               ;
+	this->enforce_bounds          = other.enforce_bounds          ;
+	this->enforce_constraints     = other.enforce_constraints     ;
 }
 
 
@@ -164,6 +174,8 @@ std::string elm::model_options_t::__repr__() const
 	x << "      weight_autorescale= "<<weight_autorescale      <<",\n";
 	x << "   suspend_xylem_rebuild= "<<suspend_xylem_rebuild   <<",\n";
 	x << "               log_turns= "<<log_turns               <<",\n";
+	x << "          enforce_bounds= "<<enforce_bounds          <<",\n";
+	x << "     enforce_constraints= "<<enforce_constraints     <<",\n";
 	x << ")";
 	return x.str();
 }
@@ -186,6 +198,8 @@ std::string elm::model_options_t::_save_buffer() const
 	x << "self.weight_autorescale= "            <<(weight_autorescale      ?"True":"False")<<"\n";
 	x << "self.suspend_xylem_rebuild= "         <<(suspend_xylem_rebuild   ?"True":"False")<<"\n";
 	x << "self.log_turns= "                     <<(log_turns               ?"True":"False")<<"\n";
+	x << "self.enforce_bounds= "                <<(enforce_bounds          ?"True":"False")<<"\n";
+	x << "self.enforce_constraints= "           <<(enforce_constraints     ?"True":"False")<<"\n";
 	return x.str();
 }
 
@@ -207,6 +221,8 @@ std::string elm::model_options_t::__str__() const
 	x << "      weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
 	x << "   suspend_xylem_rebuild: "<<(suspend_xylem_rebuild ?"True":"False")<<"\n";
 	x << "               log_turns: "<<(log_turns             ?"True":"False")<<"\n";
+	x << "          enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
+	x << "     enforce_constraints: "<<(enforce_constraints   ?"True":"False")<<"\n";
 	return x.str();
 }
 
@@ -229,6 +245,8 @@ std::set<std::string> elm::Model2::valid_options()
 	valid_options_init.insert("weight_autorescale");
 	valid_options_init.insert("suspend_xylem_rebuild");
 	valid_options_init.insert("log_turns");
+	valid_options_init.insert("enforce_bounds");
+	valid_options_init.insert("enforce_constraints");
 	return valid_options_init;
 }
 

@@ -49,8 +49,6 @@ namespace elm {
 
 	class runstats {
 	public:
-		timeval startTime;
-		timeval endTime;
 		unsigned iteration;
 		std::string results;		
 		std::string timestamp;
@@ -78,11 +76,19 @@ namespace elm {
 				 int number_cpu=-9);
 		runstats(const runstats& other);
 		runstats(PyObject* dictionary);
+		~runstats();
 
+		PyObject* other();
+		void set_other(PyObject* other);
 
+		void prepend_timing(const runstats& previously);
+		void append_timing(const runstats& subsequently);
+		
 	private:
 		void restart();
 		void iter();
+
+		PyObject* _other_attr;
 		
 	private:
 		std::string _notes;

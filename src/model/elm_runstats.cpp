@@ -39,23 +39,11 @@ double timeval_subtract (const timeval& y, const timeval& x)
 	
 double elm::runstats::elapsed_time() const
 {
-//#ifdef __APPLE__
-//	timeval t;
-//	gettimeofday( &t, NULL);
-//	return timeval_subtract(t,startTime);
-//#else
-//	return 0;
-//#endif
 	return total_duration();
 }
 
 double elm::runstats::runtime_seconds() const
 {
-//#ifdef __APPLE__
-//	return timeval_subtract(endTime, startTime);
-//#else
-//	return 0;
-//#endif
 	return total_duration();
 }
 
@@ -73,32 +61,19 @@ elm::runstats::runstats(long startTimeSec, long startTimeUSec,
 				 std::string processor,
 				 int number_threads,
 				 int number_cpu)
-: startTime ()
-, endTime ()
-, iteration (iteration)
+: iteration (iteration)
 , _notes (notes)
 , results (results)
 , timestamp (timestamp)
 , processor(processor)
 , number_threads(number_threads)
 , number_cpu_cores(number_cpu)
+, _other_attr(PyDict_New())
 {
-	//#ifdef __APPLE__
-	//	if (startTimeSec || startTimeUSec) {
-	//		startTime.tv_sec = startTimeSec;
-	//		startTime.tv_usec = startTimeUSec;
-	//		endTime.tv_sec = endTimeSec;
-	//		endTime.tv_usec = endTimeUSec;
-	//	} else {
-	//		gettimeofday( &startTime, NULL);
-	//		endTime.tv_sec = 0;
-	//		endTime.tv_usec = 0;
-	//	}
-	//#endif
 	if (this->processor=="?") this->processor=etk::discovered_platform_description;
-	if (this->number_threads==-9) {
-		this->number_threads = etk::number_of_cpu;
-	}
+//	if (this->number_threads==-9) {
+//		this->number_threads = etk::number_of_cpu;
+//	}
 	if (this->number_cpu_cores==-9) {
 		this->number_cpu_cores = etk::number_of_cpu;
 	}
@@ -114,22 +89,61 @@ elm::runstats::runstats(const runstats& other)
 , process_starttime(other.process_starttime)
 , process_endtime(other.process_endtime)
 , number_threads(other.number_threads)
+, _other_attr(PyDict_Copy(other._other_attr))
 {
 	if (this->processor=="?") this->processor=etk::discovered_platform_description;
 }
 
 elm::runstats::runstats(PyObject* dictionary)
-: startTime ()
-, endTime ()
-, iteration (0)
+: iteration (0)
 , _notes ()
 , results ()
 , timestamp ()
 , processor ()
 , number_threads(0)
+, _other_attr(PyDict_New())
 {
 	read_from_dictionary(dictionary);
 }
+
+elm::runstats::~runstats()
+{
+	Py_CLEAR(_other_attr);
+}
+
+
+PyObject* elm::runstats::other()
+{
+	Py_XINCREF(_other_attr);
+	return _other_attr;
+}
+
+void elm::runstats::set_other(PyObject* other)
+{
+	if (other) {
+		Py_INCREF(other);
+		Py_CLEAR(_other_attr);
+		_other_attr = PyDict_Copy(other);
+		Py_DECREF(other);
+	}
+}
+
+void elm::runstats::prepend_timing(const runstats& previously)
+{
+	
+	process_label.insert(    process_label.begin()    , previously.process_label.begin()    , previously.process_label.end()    );
+	process_starttime.insert(process_starttime.begin(), previously.process_starttime.begin(), previously.process_starttime.end());
+	process_endtime.insert(  process_endtime.begin()  , previously.process_endtime.begin()  , previously.process_endtime.end()  );
+
+}
+
+void elm::runstats::append_timing(const runstats& subsequently)
+{
+	process_label.insert(    process_label.end()    , subsequently.process_label.begin()    , subsequently.process_label.end()    );
+	process_starttime.insert(process_starttime.end(), subsequently.process_starttime.begin(), subsequently.process_starttime.end());
+	process_endtime.insert(  process_endtime.end()  , subsequently.process_endtime.begin()  , subsequently.process_endtime.end()  );
+}
+
 
 void elm::runstats::restart()
 {
@@ -163,21 +177,21 @@ std::string elm::runstats::__repr__() const
 
 void elm::runstats::write(std::string note)
 {
-//	if (_notes=="") {
-//		_notes = note;
-//		return;
-//	}
-//	_notes += "\n";
+	if (_notes=="") {
+		_notes = note;
+		return;
+	}
+	_notes += "\n";
 	_notes += note;
 }
 
 void elm::runstats::write(char* note)
 {
-//	if (_notes=="") {
-//		_notes = note;
-//		return;
-//	}
-//	_notes += "\n";
+	if (_notes=="") {
+		_notes = note;
+		return;
+	}
+	_notes += "\n";
 	_notes += note;
 }
 
@@ -199,12 +213,6 @@ void elm::runstats::write_result(const std::string& a, const std::string& b, con
 PyObject* elm::runstats::dictionary() const
 {
 	PyObject* P = PyDict_New();
-//	#ifdef __APPLE__
-//	etk::py_add_to_dict(P, "startTimeSec", startTime.tv_sec);
-//	etk::py_add_to_dict(P, "startTimeUSec", startTime.tv_usec);
-//	etk::py_add_to_dict(P, "endTimeSec", endTime.tv_sec);
-//	etk::py_add_to_dict(P, "endTimeUSec", endTime.tv_usec);
-//	#endif
 	etk::py_add_to_dict(P, "iteration", iteration);
 	etk::py_add_to_dict(P, "results", results);
 	etk::py_add_to_dict(P, "notes", _notes);
@@ -216,6 +224,8 @@ PyObject* elm::runstats::dictionary() const
 	etk::py_add_to_dict(P, "process_label", process_label);
 	etk::py_add_to_dict(P, "process_starttime", process_starttime);
 	etk::py_add_to_dict(P, "process_endtime", process_endtime);
+
+	etk::py_add_to_dict(P, "_other_attr", _other_attr);
 
 	// These are not used in reading in the data, but are for convenience in printing out.
 	std::vector< std::string > fancy_durations;
@@ -238,51 +248,44 @@ std::string elm::runstats::pickled_dictionary() const
 	PyObject* pickle = PyObject_CallMethod(etk::pickle_module, "dumps", "O", D);
 	Py_CLEAR(D);
 	
-	PyObject* b85pickle = PyObject_CallMethod(etk::base64_module, "b85encode", "O", pickle);
+	PyObject* b64pickle = PyObject_CallMethod(etk::base64_module, "b64encode", "O", pickle);
 	
-	std::string v = PyBytes_AsString(b85pickle);
+	std::string v = PyBytes_AsString(b64pickle);
 	Py_CLEAR(pickle);
-	Py_CLEAR(b85pickle);
+	Py_CLEAR(b64pickle);
 	return v;
 }
 
-void elm::runstats::read_from_dictionary(PyObject* P)
+void elm::runstats::read_from_dictionary(PyObject* input_obj)
 {
+	if (!input_obj) OOPS("no input to runstats::read_from_dictionary");
+	
+	Py_INCREF(input_obj);
+	
 	PyObject* pickle = nullptr;
-	PyObject* b85pickle = nullptr;
+	PyObject* b64pickle = nullptr;
 	
-//	auto q1 = PyList_CheckExact(P);
-//	auto q2 = PyUnicode_Check(P);
+	PyObject* P = nullptr; // this ref is borrowed and does not fer decref'd
 	
-	
-	if (PyList_CheckExact(P)) {
-		if (PyList_Size(P)==1) {
-			P = PyList_GetItem(P, 0);
+	if (PyList_CheckExact(input_obj)) {
+		if (PyList_Size(input_obj)==1) {
+			P = PyList_GetItem(input_obj, 0);
 		} else {
-			OOPS("need a dict or a list of ony one dict");
+			OOPS("need a dict or a list of only one dict");
 		}
 	}
 	
-	if (PyUnicode_Check(P)) {
-		b85pickle = PyObject_CallMethod(etk::base64_module, "b85decode", "O", P);
-		pickle = PyObject_CallMethod(etk::pickle_module, "loads", "O", b85pickle);
+	if (PyUnicode_Check(input_obj)) {
+		b64pickle = PyObject_CallMethod(etk::base64_module, "b64decode", "O", input_obj);
+		pickle = PyObject_CallMethod(etk::pickle_module, "loads", "O", b64pickle);
 		if (pickle != NULL) {
 			P = pickle;
 		}
 	}
 
+	if (!P) P = input_obj;
 
 	int x;
-//	#ifdef __APPLE__
-//	x=etk::py_read_from_dict(P, "startTimeSec", startTime.tv_sec);
-//	if (x!=0) OOPS("error in reading run_stats startTimeSec, code ",x);
-//	x=etk::py_read_from_dict(P, "startTimeUSec", startTime.tv_usec);
-//	if (x!=0) OOPS("error in reading run_stats startTimeUSec");
-//	x=etk::py_read_from_dict(P, "endTimeSec", endTime.tv_sec);
-//	if (x!=0) OOPS("error in reading run_stats endTimeSec");
-//	x=etk::py_read_from_dict(P, "endTimeUSec", endTime.tv_usec);
-//	if (x!=0) OOPS("error in reading run_stats endTimeUSec");
-//	#endif
 	x=etk::py_read_from_dict(P, "iteration", iteration);
 	if (x!=0) OOPS("error in reading run_stats iteration");
 	x=etk::py_read_from_dict(P, "results", results);
@@ -305,9 +308,14 @@ void elm::runstats::read_from_dictionary(PyObject* P)
 	x=etk::py_read_from_dict(P, "process_endtime", process_endtime);
 	if (x!=0) OOPS("error in reading run_stats process_endtime");
 
+	x=etk::py_copydict_from_dict(P, "_other_attr", _other_attr);
+	if (x!=0) OOPS("error in reading run_stats _other_attr");
 
-	Py_XDECREF(b85pickle);
+	Py_XDECREF(b64pickle);
 	Py_XDECREF(pickle);
+	Py_XDECREF(input_obj);
+
+
 }
 
 
@@ -353,13 +361,14 @@ double elm::runstats::process_duration(const size_t& number) const
 
 double elm::runstats::total_duration() const
 {
-	double x;
+	double x (0);
 	if (process_starttime.size()==0) return 0;
 	if (process_endtime.size()==0) return 0;
+	for (unsigned y=0; y<process_endtime.size(); y++) {
+		x += std::chrono::duration_cast<std::chrono::milliseconds>(process_endtime[y] - process_starttime[y]).count();
+	}
 	if (process_starttime.size() > process_endtime.size()) {
-		x = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - process_starttime[0]).count();
-	} else {
-		x = std::chrono::duration_cast<std::chrono::milliseconds>(process_endtime.back() - process_starttime[0]).count();
+		x += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - process_starttime.back()).count();
 	}
 	x /= 1000.0;
 	return x;

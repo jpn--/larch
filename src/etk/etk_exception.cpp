@@ -45,8 +45,26 @@ int etk::exception_t::code() const throw () { return _oops_code; }
 
 
 
+etk::PythonStandardException::PythonStandardException (PyObject* PyExc, const std::string& d) throw()
+: etk::exception_t (OOPSCODE_PYTHON, d)
+, _PyExc(PyExc)
+{ }
+
+const char* etk::PythonStandardException::what() const throw () {
+	if (_description.empty()) {
+		return "cached value not available";
+	} else {
+		return _description.c_str();
+	}
+}
+
+
+
+
+
+
 etk::LarchCacheError::LarchCacheError (const std::string& d) throw()
-: etk::exception_t (d)
+: etk::exception_t (OOPSCODE_CACHE, d)
 { }
 
 const char* etk::LarchCacheError::what() const throw () {
@@ -60,8 +78,9 @@ const char* etk::LarchCacheError::what() const throw () {
 
 
 
+
 etk::ZeroProbWhenChosen::ZeroProbWhenChosen (const std::string& d) throw()
-: etk::exception_t (d)
+: etk::exception_t (OOPSCODE_ZEROPROB, d)
 { }
 
 const char* etk::ZeroProbWhenChosen::what() const throw () {
@@ -70,6 +89,34 @@ const char* etk::ZeroProbWhenChosen::what() const throw () {
 	} else {
 		return _description.c_str();
 	}
+}
+
+
+
+
+etk::MatrixInverseError::MatrixInverseError (etk::ndarray* matrix, const std::string& d) throw()
+: etk::exception_t (OOPSCODE_GENERAL, d)
+, the_matrix(std::make_shared<etk::ndarray>(matrix->size1(), matrix->size2()))
+{
+	auto ii = matrix->size1();
+	auto jj = matrix->size2();
+//	the_matrix = ;
+	for (auto i=0; i<ii; i++) {
+		for (auto j=0; j<jj; j++) {
+			the_matrix->at(i,j) = matrix->at(i,j);
+		}
+	}
+}
+
+PyObject* etk::MatrixInverseError::the_object() const
+{
+	std::shared_ptr<etk::ndarray> copy_of_matrix = std::make_shared<etk::ndarray>(the_matrix->size1(), the_matrix->size2());
+	for (auto i=0; i<the_matrix->size1(); i++) {
+		for (auto j=0; j<the_matrix->size2(); j++) {
+			copy_of_matrix->at(i,j) = the_matrix->at(i,j);
+		}
+	}
+	return (*(&(copy_of_matrix)))->get_object();
 }
 
 

@@ -37,6 +37,8 @@ namespace elm {
 		elm::darray_ptr Data_WT;
 		double*       LogL;
 		
+		etk::ndarray* LogL_casewise;
+		
 		etk::logging_service* msg_;
 		
 		bool mute_warnings;
@@ -48,6 +50,7 @@ namespace elm {
 				   , elm::darray_ptr Data_CH
 				   , elm::darray_ptr Data_WT
 				   , double*       LogL
+				   , etk::ndarray* LogL_casewise
 				   , bool          mute_warnings
 				   , etk::logging_service* msgr=nullptr
 				   );

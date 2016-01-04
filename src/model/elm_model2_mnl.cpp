@@ -88,9 +88,9 @@ void elm::Model2::pull_from_freedoms(const paramArray& par,       double* ops, c
 	for (unsigned i=0; i<par.length(); i++) {
 		if (par[i]){
 			ops[i] = par[i]->pullvalue(fr);
-			if (log) {
-				BUGGER(msg) << "PULL "<<par[i]->freedomName()<<" "<<ops[i]<<" into slot "<<i;
-			}
+//			if (log) {
+//				BUGGER(msg) << "PULL "<<par[i]->freedomName()<<" "<<ops[i]<<" into slot "<<i;
+//			}
 		} else {
 		}
 	}
@@ -386,7 +386,7 @@ std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability ()
 {
-	BUGGER(msg) << "CALL make_shared_workshop_mnl_probability()\n";
+//	BUGGER(msg) << "CALL make_shared_workshop_mnl_probability()\n";
 	return boosted::make_shared<elm::mnl_prob_w>(
 			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
 			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);
@@ -398,46 +398,46 @@ void elm::Model2::mnl_probability()
 	Probability.initialize(0.0);
 	pull_coefficients_from_freedoms();
 	
-	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
-	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-	if (Data_UtilityCA && Data_UtilityCA->_repository.size1()>1) {
-		BUGGER(msg) << "Data_UtilityCA (case 0)\n" << Data_UtilityCA->printcase(0);
-		BUGGER(msg) << "Data_UtilityCA (case 1)\n" << Data_UtilityCA->printcase(1);
-		BUGGER(msg) << "Data_UtilityCA (case "<<nCases-1<<")\n" << Data_UtilityCA->printcase(nCases-1);
-	} else {
-		BUGGER(msg) << "Data_UtilityCA is NULL\n";
-	}
-	if (Data_UtilityCO && Data_UtilityCO->_repository.size1()>1) {
-		BUGGER(msg) << "Data_UtilityCO (case 0)\n" << Data_UtilityCO->printcase(0);
-		BUGGER(msg) << "Data_UtilityCO (case 1)\n" << Data_UtilityCO->printcase(1);
-		BUGGER(msg) << "Data_UtilityCO (case "<<nCases-1<<")\n" << Data_UtilityCO->printcase(nCases-1);
-	} else {
-		BUGGER(msg) << "Data_UtilityCO is NULL\n";
-	}
-	if (Data_Choice && Data_Choice->_repository.size1()>1) {
-		BUGGER(msg) << "Data_Choice (case 0)\n" << Data_Choice->printcase(0);
-		BUGGER(msg) << "Data_Choice (case 1)\n" << Data_Choice->printcase(1);
-		BUGGER(msg) << "Data_Choice (case "<<nCases-1<<")\n" << Data_Choice->printcase(nCases-1);
-	} else {
-		BUGGER(msg) << "Data_Choice is NULL\n";
-	}
-	if (Data_Avail && Data_Avail->_repository.size1()>1) {
-		BUGGER(msg) << "Data_Avail (case 0)\n" << Data_Avail->printboolcase(0);
-		BUGGER(msg) << "Data_Avail (case 1)\n" << Data_Avail->printboolcase(1);
-		BUGGER(msg) << "Data_Avail (case "<<nCases-1<<")\n" << Data_Avail->printboolcase(nCases-1);
-	} else {
-		BUGGER(msg) << "Data_Avail is NULL\n";
-	}
+//	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
+//	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
+//	if (Data_UtilityCA && Data_UtilityCA->_repository.size1()>1) {
+//		BUGGER(msg) << "Data_UtilityCA (case 0)\n" << Data_UtilityCA->printcase(0);
+//		BUGGER(msg) << "Data_UtilityCA (case 1)\n" << Data_UtilityCA->printcase(1);
+//		BUGGER(msg) << "Data_UtilityCA (case "<<nCases-1<<")\n" << Data_UtilityCA->printcase(nCases-1);
+//	} else {
+//		BUGGER(msg) << "Data_UtilityCA is NULL\n";
+//	}
+//	if (Data_UtilityCO && Data_UtilityCO->_repository.size1()>1) {
+//		BUGGER(msg) << "Data_UtilityCO (case 0)\n" << Data_UtilityCO->printcase(0);
+//		BUGGER(msg) << "Data_UtilityCO (case 1)\n" << Data_UtilityCO->printcase(1);
+//		BUGGER(msg) << "Data_UtilityCO (case "<<nCases-1<<")\n" << Data_UtilityCO->printcase(nCases-1);
+//	} else {
+//		BUGGER(msg) << "Data_UtilityCO is NULL\n";
+//	}
+//	if (Data_Choice && Data_Choice->_repository.size1()>1) {
+//		BUGGER(msg) << "Data_Choice (case 0)\n" << Data_Choice->printcase(0);
+//		BUGGER(msg) << "Data_Choice (case 1)\n" << Data_Choice->printcase(1);
+//		BUGGER(msg) << "Data_Choice (case "<<nCases-1<<")\n" << Data_Choice->printcase(nCases-1);
+//	} else {
+//		BUGGER(msg) << "Data_Choice is NULL\n";
+//	}
+//	if (Data_Avail && Data_Avail->_repository.size1()>1) {
+//		BUGGER(msg) << "Data_Avail (case 0)\n" << Data_Avail->printboolcase(0);
+//		BUGGER(msg) << "Data_Avail (case 1)\n" << Data_Avail->printboolcase(1);
+//		BUGGER(msg) << "Data_Avail (case "<<nCases-1<<")\n" << Data_Avail->printboolcase(nCases-1);
+//	} else {
+//		BUGGER(msg) << "Data_Avail is NULL\n";
+//	}
 
 	if (option.threads>=1 && _ELM_USE_THREADS_ && Input_QuantityCA.size()==0) {
-		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads in mnl_probability()\n";
+//		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads in mnl_probability()\n";
 		#ifdef __APPLE__
 //		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 //			[&](){return boosted::make_shared<elm::mnl_prob_w>(
 //			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
 //			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);};
 		#else
-		BUGGER(msg) << "Using non-APPLE compiled\n";
+//		BUGGER(msg) << "Using non-APPLE compiled\n";
 		openblas_set_num_threads(1);
 		#endif
 //		
@@ -546,12 +546,12 @@ void elm::Model2::mnl_probability()
 		} // end if NANCHECK
 	}
 	
-	if (Probability.size1()>0) {
-		BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
-		BUGGER(msg) << "Probability (case n)\n" << Probability.printrow(nCases-1) ;
-	} else {
-		BUGGER(msg) << "Probability (size 0)\n" ;
-	}
+//	if (Probability.size1()>0) {
+//		BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
+//		BUGGER(msg) << "Probability (case n)\n" << Probability.printrow(nCases-1) ;
+//	} else {
+//		BUGGER(msg) << "Probability (size 0)\n" ;
+//	}
 	
 }
 
@@ -809,7 +809,7 @@ etk::ndarray* elm::Model2::utility(etk::ndarray* params)
 boosted::shared_ptr<etk::workshop> elm::Model2::make_shared_workshop_accumulate_loglike ()
 {
 	return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
-		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, nullptr, option.mute_nan_warnings, &msg);
 }
 
 double elm::Model2::accumulate_log_likelihood() /*const*/
@@ -821,7 +821,7 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 		if (Data_Weight_active()) {
 			accumulate_LogL = cblas_ddot(nCases, *CaseLogLike, 1, Data_Weight_active()->values(0,0), 1);
 			if (accumulate_LogL) {
-				INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using weights with cblas)";
+				INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using weights)";
 				return accumulate_LogL;
 			}
 		} else {
@@ -837,14 +837,10 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 	
 	#if _ELM_USE_THREADS_
 	
-	#ifdef __APPLE__
-	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-		[&](){return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
-		Data_Choice, Data_Weight_active(), &accumulate_LogL, option.mute_nan_warnings, &msg);};
-	#else
-	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-			boosted::bind(&elm::Model2::make_shared_workshop_accumulate_loglike, this);
-	#endif // def __APPLE__
+	std::function<std::shared_ptr<workshop> ()> workshop_builder =
+		[&](){return std::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, nullptr, option.mute_nan_warnings, &msg);};
+
 	USE_DISPATCH(loglike_dispatcher,option.threads, nCases, workshop_builder);
 
 	INFO(msg) << "LL(["<< ReadFCurrentAsString() <<"])->"<<accumulate_LogL<< "  (using "<<option.threads<<" threads)";
@@ -892,7 +888,9 @@ double elm::Model2::accumulate_log_likelihood() /*const*/
 
 
 
-std::shared_ptr<etk::ndarray> elm::Model2::mnl_gradient_full_casewise()
+
+
+std::shared_ptr<etk::ndarray> elm::Model2::_mnl_gradient_full_casewise()
 {
 	periodic Sup (5);
 	BUGGER(msg)<< "Beginning MNL Gradient (Full Casewise) Evaluation" ;
@@ -937,6 +935,9 @@ void elm::Model2::mnl_gradient_v2()
 	periodic Sup (5);
 	BUGGER(msg)<< "Beginning MNL Gradient v2 Evaluation" ;
 	GCurrent.initialize(0.0);
+	if (Bhhh.size1() != dF()) {
+		Bhhh.resize(dF());
+	}
 	Bhhh.initialize(0.0);
 
 	if (nThreads >= 1 && _ELM_USE_THREADS_) {
@@ -960,6 +961,13 @@ void elm::Model2::mnl_gradient_v2()
 			 );
 		};
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
+
+		std::ostringstream ret;
+		for (unsigned i=0; i<GCurrent.size(); i++) {
+			ret << "," << GCurrent[i];
+		}
+		INFO(msg) << "MNL Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
+
 	} else {
 		
 		BUGGER(msg)<< "Beginning MNL Gradient single-threaded Evaluation" ;
@@ -1283,16 +1291,23 @@ double elm::Model2::objective ()
 		return 0;
 		OOPS("There are no cases in the current data sample.");
 	}
+	
+	FatGCurrent.initialize(NAN); // tell gradient it needs to recalculate
 
-
+	if (array_compare(_FCurrent_latest_objective.ptr(),_FCurrent_latest_objective.size())
+		==array_compare(FCurrent.ptr(), FCurrent.size()))
+	{
+		return _FCurrent_latest_objective_value;
+	}
+	
 	BUGGER(msg)<< "Calculating LL" ;
 //	msg << printStatus(status_FNames | status_FCurrent) <<"\n"; //101110
-	FatGCurrent.initialize(NAN); // tell gradient it needs to recalculate
 	double LL_ = 0;
 	
 	pull_coefficients_from_freedoms();
 	freshen(); // TODO : is this really needed here?
-	calculate_probability();	
+	calculate_probability();
+	
 	LL_= accumulate_log_likelihood();
 	
 	BUGGER(msg)<< "Model Objective Eval = "<< LL_ ;
@@ -1311,6 +1326,8 @@ double elm::Model2::objective ()
 		_string_sender_ptr->write(update.str());
 	}
 	
+	_FCurrent_latest_objective = FCurrent;
+	_FCurrent_latest_objective_value = LL_;
 	return LL_;
 }
 
@@ -1321,11 +1338,11 @@ const etk::memarray& elm::Model2::gradient ()
 		// do nothing, calculations already done
 	} else {
 		if (option.force_finite_diff_grad) {
-			finite_diff_gradient(GCurrent);
+			negative_finite_diff_gradient_(GCurrent);
 		} else {
+			objective();
 			if ((features & MODELFEATURES_ALLOCATION)) {
-				finite_diff_gradient(GCurrent);
-//				ngev_gradient();
+				ngev_gradient();
 			} else if (features & MODELFEATURES_QUANTITATIVE) {
 				ngev_gradient();
 			} else if (features & MODELFEATURES_NESTING) {
@@ -1341,7 +1358,22 @@ const etk::memarray& elm::Model2::gradient ()
 //			}
 //		}
 	}
+
 	return GCurrent;
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::finite_diff_gradient ()
+{
+	std::shared_ptr<etk::ndarray> g = std::make_shared<etk::ndarray>(dF());
+	finite_diff_gradient_(*g);
+	return g;
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::finite_diff_gradient (std::vector<double> v)
+{
+	std::shared_ptr<etk::ndarray> g = std::make_shared<etk::ndarray>(dF());
+	finite_diff_gradient_(*g);
+	return g;
 }
 
 

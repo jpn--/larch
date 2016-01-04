@@ -61,7 +61,10 @@ elm::parametexr elm::ParameterList::_generate_parameter(const std::string& freed
 	return boosted::make_shared<elm::parametex_scale>(fn,this,freedom_multiplier);
 }
 
-
+size_t elm::ParameterList::parameter_index(const std::string& param_name) const
+{
+	return FNames[param_name];
+}
 
 freedom_info& elm::ParameterList::parameter(const std::string& param_name,
 								   const double& value,
@@ -78,7 +81,13 @@ freedom_info& elm::ParameterList::parameter(const std::string& param_name,
 	if (param_name=="") {
 		throw(etk::ParameterNameError("Cannot name a parameter with an empty string."));
 	}
+	
+	size_t prior_size = FNames.size();
 	FNames[param_name];
+	if (FNames.size() != prior_size) {
+		tearDown();
+	}
+	
 	FInfo[param_name].name = param_name;
 	if (!isNan(value)) {
 		FInfo[param_name].initial_value = value;
@@ -204,7 +213,7 @@ freedom_info& elm::ParameterList::__getitem__(const std::string& param_name)
 
 freedom_info& elm::ParameterList::__getitem__(const int& param_num)
 {
-	if (param_num > FNames.size()-1) OOPS("Parameter number ",param_num," out of range (there are only ",FNames.size()," parameters)");
+	if (param_num > FNames.size()-1) OOPS_IndexError("Parameter number ",param_num," out of range (there are only ",FNames.size()," parameters)");
 	if (param_num < 0 && param_num >= -int(FNames.size())) {
 		return parameter(FNames[FNames.size()+param_num]);
 	}
@@ -285,6 +294,11 @@ size_t elm::ParameterList::_len() const
 PyObject* elm::ParameterList::constraints() const
 {
 	Py_RETURN_NONE;
+}
+
+void elm::ParameterList::tearDown()
+{
+
 }
 
 //void elm::ParameterList::covariance(etk::symmetric_matrix* obj)

@@ -202,6 +202,29 @@ int etk::py_add_to_dict(PyObject* d, const std::string& key, const std::vector< 
 
 #define PY_DICT_KEY_NOT_FOUND -2
 
+int etk::py_copydict_from_dict(PyObject* d, const std::string& key, PyObject*& value)
+{
+	Py_CLEAR(value);
+	int ret = 0;
+	PyObject* item = PyDict_GetItemString(d,key.c_str());
+	if (item) {
+		value = PyDict_Copy(item);
+		if (PyErr_Occurred()) {
+			ret = -1;
+			PyErr_Print();
+		} else {
+
+		}
+		return ret;
+	} else {
+		ret = PY_DICT_KEY_NOT_FOUND;
+	}
+	return ret;
+}
+
+
+
+
 int etk::py_read_from_dict(PyObject* d, const std::string& key,  std::string& value)
 {
 	int ret = 0;
@@ -214,7 +237,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  std::string& va
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -234,7 +256,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  double& value)
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -254,7 +275,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  unsigned& value
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -274,7 +294,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  unsigned long l
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -294,7 +313,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  int& value)
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -314,7 +332,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  long& value)
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;
@@ -334,7 +351,6 @@ int etk::py_read_from_dict(PyObject* d, const std::string& key,  bool& value)
 		} else {
 			value = v;
 		}
-		Py_CLEAR(item);
 		return ret;
 	} else {
 		ret = PY_DICT_KEY_NOT_FOUND;

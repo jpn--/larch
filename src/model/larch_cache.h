@@ -51,16 +51,14 @@ namespace elm {
 
 	class result_cache {
 	public:
-		double*       my_ll;
-		etk::ndarray* my_grad;
-		etk::ndarray* my_bhhh;
-		etk::ndarray* my_hess;
 
-		double        _ll;
-		etk::ndarray  _grad;
-		etk::ndarray  _bhhh;
-		etk::ndarray  _hess;
+		std::shared_ptr<double>                _stored_ll;
+		std::shared_ptr<double>                _stored_bhhh_tol;
 		
+		std::shared_ptr<etk::symmetric_matrix> _stored_hess;
+		std::shared_ptr<etk::ndarray>          _stored_grad;
+		std::shared_ptr<etk::symmetric_matrix> _stored_bhhh;
+
 		result_cache();
 		
 		
@@ -78,16 +76,19 @@ namespace elm {
 	public:
 		// these functions return true if the thing is saved,
 		// and put a pointer to the thing into the 2nd argument.
-		bool read_cached_loglike(const array_compare& key, double& ll) const;
-		bool read_cached_grad   (const array_compare& key, etk::ndarray*& grad) ;
-		bool read_cached_bhhh   (const array_compare& key, etk::ndarray*& bhhh) ;
-		bool read_cached_hess   (const array_compare& key, etk::ndarray*& hess) ;
+		bool read_cached_loglike (const array_compare& key, double& ll) const;
+		bool read_cached_grad    (const array_compare& key, std::shared_ptr<etk::ndarray>& grad) ;
+		bool read_cached_bhhh    (const array_compare& key, etk::symmetric_matrix*& bhhh) ;
+		bool read_cached_bhhh    (const array_compare& key, std::shared_ptr<etk::symmetric_matrix>& bhhh) ;
+		bool read_cached_bhhh_tol(const array_compare& key, double& bhhh_tol) const;
+		bool read_cached_hess    (const array_compare& key, etk::symmetric_matrix*& hess) ;
 		
 		// These functions save the thing
-		void set_cached_loglike(const array_compare& key, const double& ll);
-		void set_cached_grad   (const array_compare& key, const etk::ndarray& grad);
-		void set_cached_bhhh   (const array_compare& key, const etk::ndarray& bhhh);
-		void set_cached_hess   (const array_compare& key, const etk::ndarray& hess);
+		void set_cached_loglike (const array_compare& key, const double& ll);
+		void set_cached_grad    (const array_compare& key, std::shared_ptr<etk::ndarray>& grad);
+		void set_cached_bhhh    (const array_compare& key, const etk::symmetric_matrix& bhhh);
+		void set_cached_bhhh_tol(const array_compare& key, const double& bhhh_tol);
+		void set_cached_hess    (const array_compare& key, const etk::symmetric_matrix& hess);
 		
 		void clear();
 	};

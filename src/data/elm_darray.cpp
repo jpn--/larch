@@ -213,7 +213,7 @@ elm::darray::darray()
 
 elm::darray::darray(const elm::darray& source_arr)
 : elm::darray_req()
-, _repository(source_arr._repository)
+, _repository(source_arr._repository, true)
 {
 }
 

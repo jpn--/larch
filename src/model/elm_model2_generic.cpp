@@ -337,6 +337,128 @@ runstats elm::Model2::estimate()
 	return estimate(NULL);
 }
 
+
+runstats elm::Model2::_maximize_bhhh()
+{
+	// this function is used in emulating the scipy.optimize interface
+
+	BUGGER(msg) << "Estimating the model.";
+	_latest_run.restart();
+	_latest_run.number_cpu_cores = etk::number_of_cpu;
+	_latest_run.number_threads = option.threads;
+
+	try {
+		ZBest = -INF;
+		
+		flag_gradient_diagnostic = option.gradient_diagnostic; //Option_integer("gradient_diagnostic");
+		flag_hessian_diagnostic = option.hessian_diagnostic; // Option_integer("hessian_diagnostic");
+		flag_log_turns = option.log_turns;
+		BUGGER(msg) << "Diagnostic flags set.";
+	
+		if (flag_gradient_diagnostic) {
+			WARN(msg) << "Gradient Diagnostic set to "<<flag_gradient_diagnostic;
+		}
+	
+		
+		if (option.weight_autorescale) {
+			_latest_run.start_process("weight autorescale");
+			auto_rescale_weights();
+			ostringstream oss;
+			oss << "autoscaled weights " << weight_scale_factor << "\n";
+			_latest_run._notes += oss.str();
+		}
+		
+		_latest_run.start_process("optimize:bhhh");
+
+		vector<sherpa_pack> packs;
+		packs.push_back( sherpa_pack('G', 0.000001, 1, 0,   1e-10, 4, 2, .5,    1, 0.001) );
+		_latest_run.results += maximize(_latest_run.iteration,&packs);
+		
+		if (option.weight_autorescale) {
+			_latest_run.start_process("weight unrescale");
+			restore_scale_weights();
+			MONITOR(msg) << "recalculating log likelihood and gradients at normal weights";
+			ZBest = ZCurrent = objective();
+			gradient();
+		}
+		
+
+	} SPOO {
+		if (oops.code()==-8) {
+			_update_freedom_info_best();
+			_latest_run.write_result( "User Interrupt" );
+			PYTHON_INTERRUPT;
+		}
+		_latest_run.write_result( "error: ", oops.what() );
+		MONITOR(msg) << "ERROR IN ESTIMATION: " << oops.what() ;
+		_latest_run.end_process();
+		throw;
+	}
+	
+	
+	BUGGER(msg) << "updating freedom info...";
+	try {
+		_update_freedom_info(&invHess, &robustCovariance);
+	} SPOO {
+		try {
+			_update_freedom_info();
+		} SPOO {
+			_latest_run.write_result( "error: ", oops.what() );
+			OOPS(oops.what());
+		}
+	}
+	
+	
+	BUGGER(msg) << "record finish time...";
+	
+	tm * timeinfo;
+	time_t rawtime;
+	char timebuff[256] = {0};
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(timebuff, 255, "%A, %B %d %Y, %I:%M:%S %p", timeinfo);
+	_latest_run.timestamp = string(timebuff);
+
+	BUGGER(msg) << "estimation complete.";
+	
+	_latest_run.end_process();
+	
+	return _latest_run;
+}
+
+
+double elm::Model2::loglike_null()
+{
+	setUp();	
+	
+	std::vector< int > hold_save (dF());
+	
+	if (option.null_disregards_holdfast) {
+		for (unsigned i=0; i<dF(); i++) {
+			hold_save[i] = FInfo[FNames[i]].holdfast;
+			FInfo[FNames[i]].holdfast = 0;
+		}
+	}
+	
+	for (unsigned i=0; i<dF(); i++) {
+		FCurrent[i] = FInfo[FNames[i]].null_value;
+	}
+	freshen();
+	_LL_null = objective();			
+	for (unsigned i=0; i<dF(); i++) {
+		FCurrent[i] = FInfo[FNames[i]].value;
+	}
+	if (option.null_disregards_holdfast) {
+		for (unsigned i=0; i<dF(); i++) {
+			FInfo[FNames[i]].holdfast = hold_save[i];
+		}
+	}
+	freshen();
+	
+	return _LL_null;
+}
+
+
 runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 {
 	if (_string_sender_ptr) {
@@ -476,6 +598,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	BUGGER(msg) << "estimation complete.";
 	
 	_latest_run.end_process();
+	
 	return _latest_run;
 }
 
@@ -535,8 +658,8 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 		hessfree_to_hessfull(&invHess, &temp_free_hess) ;
 		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 
-		memarray_symmetric unpacked_bhhh;
-		memarray_symmetric unpacked_invhess;
+		symmetric_matrix unpacked_bhhh;
+		symmetric_matrix unpacked_invhess;
 		MONITOR(msg) << "Bhhh\n" << Bhhh.printSquare() ;
 
 		// unpack bhhh and inverse hessian for analysis
@@ -549,7 +672,7 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 		MONITOR(msg) << "unpacked_invhess (calculate_parameter_covariance, yes holdfast)\n" << unpacked_invhess.printall() ;
 		
 		MONITOR(msg) << "s="<<s<<"\n";
-		memarray_symmetric BtimeH (s,s);
+		symmetric_matrix BtimeH (s,s);
 		
 		MONITOR(msg) << "cblas_dsymm...\n";
 		
@@ -579,8 +702,8 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 		invHess.inv();
 		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 
-		memarray_symmetric unpacked_bhhh;
-		memarray_symmetric unpacked_invhess;
+		symmetric_matrix unpacked_bhhh;
+		symmetric_matrix unpacked_invhess;
 		MONITOR(msg) << "Bhhh\n" << Bhhh.printSquare() ;
 
 		// unpack bhhh and inverse hessian for analysis
@@ -594,7 +717,7 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 
 		MONITOR(msg) << "s="<<s<<"\n";
 		
-		memarray_symmetric BtimeH (s,s);
+		symmetric_matrix BtimeH (s,s);
 
 		MONITOR(msg) << "cblas_dsymm...\n";
 		
@@ -654,7 +777,7 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 //}
 
 
-void elm::Model2::_parameter_push(std::vector<double>& v)
+void elm::Model2::_parameter_push(const std::vector<double>& v)
 {
 	if (v.size() != dF()) {
 		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
@@ -855,26 +978,15 @@ void elm::Model2::_set_estimation_statistics
 	}
 }
 
-void elm::Model2::_set_estimation_run_statistics
-(	const long& startTimeSec
-,	const long& startTimeUSec
-,	const long& endTimeSec
-,	const long& endTimeUSec
-,	const unsigned& iteration
-,	const std::string& results
-,	const std::string& notes
-)
-{
-	_latest_run.iteration = iteration;
-	_latest_run.results = results;
-	_latest_run._notes = notes;	
-}
-
 
 void elm::Model2::_set_estimation_run_statistics_pickle
 (	PyObject* other )
 {
-	_latest_run.read_from_dictionary(other);
+	if (other) {
+		Py_INCREF(other);
+		_latest_run.read_from_dictionary(other);
+		Py_DECREF(other);
+	}
 }
 
 runstats& elm::Model2::RunStatistics()
@@ -951,72 +1063,84 @@ std::string _repr(const std::string& x)
 	}
 }
 
+std::string __base64encode_wrap(const std::string& in)
+{
+
+	PyObject* b64string = PyObject_CallMethod(etk::base64_module, "standard_b64encode", "y", in.c_str());
+	std::string out = PyBytes_AsString(b64string);
+	Py_CLEAR(b64string);
+	return "_Str('"+out+"')";
+}
 
 std::string elm::Model2::save_buffer() const
 {
 	ostringstream sv;
+
+//	this stuff is defined in the load method now...
+//	sv << "import numpy\n" << "inf=numpy.inf\n" << "nan=numpy.nan\n";
+//	sv << "def _Str(s): import base64; return (base64.standard_b64decode(s)).decode()\n\n";
+
 	
-	//sv << "import numpy\n" << "inf=numpy.inf\n" << "nan=numpy.nan\n\n";
 	
 	etk::logging_service msg (this->msg);
 	
-	sv << "self.title = '''"<<title<<"'''\n\n";
+	sv << "self.title = "<<__base64encode_wrap(title)<<"\n\n";
 	
 	// save parameter
-	BUGGER( msg ) << "save parameter";
+//	BUGGER( msg ) << "save parameter";
 	for (auto p=FNames.strings().begin(); p!=FNames.strings().end(); p++) {
-		BUGGER( msg ) << "save parameter "<<*p;
+//		BUGGER( msg ) << "save parameter "<<*p;
 		auto i = FInfo.find(*p);
 		if (i==FInfo.end()) {
     		BUGGER( msg ) << "error in save parameter "<<*p<<", not found in FInfo";
 		} else {
-    		BUGGER( msg ) << "save parameter "<<*p<<" found in FInfo";
+//    		BUGGER( msg ) << "save parameter "<<*p<<" found in FInfo";
 			auto j = i->second;
-			BUGGER( msg ) << "j.value=" << j.value;
+//			BUGGER( msg ) << "j.value=" << j.value;
 			
-			sv << "self.parameter('"<<*p<<"'";
+			sv << "self.parameter("<<__base64encode_wrap(*p);
 			sv << ","<<AsPyFloat(j.value);
-			BUGGER( msg ) << "j.null_value=" << j.null_value;
+//			BUGGER( msg ) << "j.null_value=" << j.null_value;
 			sv << ","<<AsPyFloat(j.null_value);
-			BUGGER( msg ) << "j.initial_value=" << j.initial_value;
+//			BUGGER( msg ) << "j.initial_value=" << j.initial_value;
 			sv << ","<<AsPyFloat(j.initial_value);
-			BUGGER( msg ) << "j.max_value=" << j.max_value;
+//			BUGGER( msg ) << "j.max_value=" << j.max_value;
 			sv << ","<<AsPyFloat(j.max_value);
-			BUGGER( msg ) << "j.min_value=" << j.min_value;
+//			BUGGER( msg ) << "j.min_value=" << j.min_value;
 			sv << ","<<AsPyFloat(j.min_value);
-			BUGGER( msg ) << "j.std_err=" << j.std_err;
+//			BUGGER( msg ) << "j.std_err=" << j.std_err;
 			sv << ","<<AsPyFloat(j.std_err);
-			BUGGER( msg ) << "j.robust_std_err=" << j.robust_std_err;
+//			BUGGER( msg ) << "j.robust_std_err=" << j.robust_std_err;
 			sv << ","<<AsPyFloat(j.robust_std_err);
-			BUGGER( msg ) << "j.holdfast=" << j.holdfast;
+//			BUGGER( msg ) << "j.holdfast=" << j.holdfast;
 			sv << ","<<j.holdfast;
 			
 			if (j._covar) {
-				BUGGER( msg ) << "j._covar is not null";
-				int check = PyMapping_Check(j._covar);
-				if (check) {
-				BUGGER( msg ) << "j._covar check "<<check;
-				BUGGER( msg ) << "j._covar length "<< (int)PyMapping_Size(j._covar);
-				}
+//				BUGGER( msg ) << "j._covar is not null";
+//				int check = PyMapping_Check(j._covar);
+//				if (check) {
+//				BUGGER( msg ) << "j._covar check "<<check;
+//				BUGGER( msg ) << "j._covar length "<< (int)PyMapping_Size(j._covar);
+//				}
 				PyObject* c = PyObject_Str(j._covar);
-				BUGGER( msg ) << "next line";
+//				BUGGER( msg ) << "next line";
 				if (c) {
-					BUGGER( msg ) << "j.covariance=";
-					BUGGER( msg ) << PyString_ExtractCppString(c);
+//					BUGGER( msg ) << "j.covariance=";
+//					BUGGER( msg ) << PyString_ExtractCppString(c);
 					sv << ",covariance="<<PyString_ExtractCppString(c);
 				}
 				Py_CLEAR(c);
 			}
 			
 			if (j._robust_covar) {
-				BUGGER( msg ) << "j._robust_covar is not null";
-				int check = PyMapping_Check(j._robust_covar);
-				BUGGER( msg ) << "j._robust_covar check "<<check;
+//				BUGGER( msg ) << "j._robust_covar is not null";
+//				int check = PyMapping_Check(j._robust_covar);
+//				BUGGER( msg ) << "j._robust_covar check "<<check;
 				PyObject* c = PyObject_Str(j._robust_covar);
-				BUGGER( msg ) << "next line 2";
+//				BUGGER( msg ) << "next line 2";
 				if (c) {
-					BUGGER( msg ) << "j.robust_covariance=";
-					BUGGER( msg ) << PyString_ExtractCppString(c);
+//					BUGGER( msg ) << "j.robust_covariance=";
+//					BUGGER( msg ) << PyString_ExtractCppString(c);
 					sv << ",robust_covariance="<<PyString_ExtractCppString(c);
 				}
 				Py_CLEAR(c);
@@ -1033,8 +1157,8 @@ std::string elm::Model2::save_buffer() const
 		BUGGER( msg ) << "save alias "<<p->first;
 		auto j = p->second;
 		
-		sv << "self.alias('"<<j.name<<"'";
-		sv << ",'"<<j.refers_to<<"'";
+		sv << "self.alias("<<__base64encode_wrap(j.name);
+		sv << ","<<__base64encode_wrap(j.refers_to);
 		sv << ","<<AsPyFloat(j.multiplier);
 		sv << ",True)\n";
 	}
@@ -1044,11 +1168,11 @@ std::string elm::Model2::save_buffer() const
 	// save utility
 	BUGGER( msg ) << "save utility";
 	for (auto u=Input_Utility.ca.begin(); u!=Input_Utility.ca.end(); u++) {
-		sv << "self.utility.ca('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.utility.ca("<<__base64encode_wrap(u->data_name)<<","<<__base64encode_wrap(u->param_name)<<","<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Utility.co.begin(); u!=Input_Utility.co.end(); u++) {
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
-			sv << "self.utility.co("<<u->first<<",'''"<<k->data_name<<"''','''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
+			sv << "self.utility.co("<<u->first<<","<<__base64encode_wrap(k->data_name)<<","<<__base64encode_wrap(k->param_name)<<","<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";
@@ -1056,7 +1180,7 @@ std::string elm::Model2::save_buffer() const
 	// save quantity
 	BUGGER( msg ) << "save quantity";
 	for (auto u=Input_QuantityCA.begin(); u!=Input_QuantityCA.end(); u++) {
-		sv << "self.quantity('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.quantity("<<__base64encode_wrap(u->data_name)<<","<<__base64encode_wrap(u->param_name)<<","<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	sv << "\n";
 
@@ -1067,7 +1191,7 @@ std::string elm::Model2::save_buffer() const
 	// save nest
 	BUGGER( msg ) << "save nest";
 	for (auto n=Input_LogSum.begin(); n!=Input_LogSum.end(); n++) {
-		sv << "self.nest('''"<<n->second._altname<<"''',"<<n->second._altcode<<",'''"<<n->second.param_name<<"'''";
+		sv << "self.nest("<<__base64encode_wrap(n->second._altname)<<","<<n->second._altcode<<","<<__base64encode_wrap(n->second.param_name);
 		if (n->second.multiplier!=1.0) {
 			sv << ","<<AsPyFloat(n->second.multiplier);
 		}
@@ -1081,8 +1205,16 @@ std::string elm::Model2::save_buffer() const
 			// This edge has a component list
 			//OOPS("not yet implemented for edges with components");
 			sv << "self.link("<<n->first.up<<","<<n->first.dn<<")\n";
-			sv << "import warnings\n";
-			sv << "warnings.warn('an edge had components that were not saved; this feature is not implented yet, sorry.')\n";
+			
+			for (auto edgecompo=n->second.begin(); edgecompo!=n->second.end(); edgecompo++) {
+				sv << "self.link["<<n->first.up<<","<<n->first.dn<<"](data="<<__base64encode_wrap(edgecompo->data_name)<<",param="<<__base64encode_wrap(edgecompo->param_name);
+				if (edgecompo->multiplier != 1.0) {
+					sv << ", multiplier="<<edgecompo->multiplier;
+				}
+				sv << ")\n";
+			}
+//			sv << "import warnings\n";
+//			sv << "warnings.warn('an edge had components that were not saved; this feature is not implented yet, sorry.')\n";
 		} else {
 			// This edge has no component list
 			sv << "self.link("<<n->first.up<<","<<n->first.dn<<")\n";
@@ -1092,11 +1224,11 @@ std::string elm::Model2::save_buffer() const
 	// save samplingbias
 	BUGGER( msg ) << "save samplingbias";
 	for (auto u=Input_Sampling.ca.begin(); u!=Input_Sampling.ca.end(); u++) {
-		sv << "self.samplingbias.ca('''"<<u->data_name<<"''','''"<<u->param_name<<"''',"<<AsPyFloat(u->multiplier)<<")\n";
+		sv << "self.samplingbias.ca("<<__base64encode_wrap(u->data_name)<<","<<__base64encode_wrap(u->param_name)<<","<<AsPyFloat(u->multiplier)<<")\n";
 	}
 	for (auto u=Input_Sampling.co.begin(); u!=Input_Sampling.co.end(); u++) {
 		for (auto k=u->second.begin(); k!=u->second.end(); k++) {
-			sv << "self.samplingbias.co("<<u->first<<",'''"<<k->data_name<<"''','''"<<k->param_name<<"''',"<<AsPyFloat(k->multiplier)<<")\n";
+			sv << "self.samplingbias.co("<<u->first<<","<<__base64encode_wrap(k->data_name)<<","<<__base64encode_wrap(k->param_name)<<","<<AsPyFloat(k->multiplier)<<")\n";
 		}
 	}
 	sv << "\n";
@@ -1109,19 +1241,7 @@ std::string elm::Model2::save_buffer() const
 		AsPyFloat(_LL_constants) <<","<<
 		AsPyFloat(ZBest) <<
 		")\n";
-//	sv << "self._set_estimation_run_statistics_pickle("<<
-//	_latest_run.startTime.tv_sec  <<","<<
-//	_latest_run.startTime.tv_usec <<","<<
-//	_latest_run.endTime.tv_sec    <<","<<
-//	_latest_run.endTime.tv_usec   <<","<<
-//	_latest_run.iteration   <<",'''"<<
-//	_latest_run.results   <<"''','''"<<
-//	_latest_run._notes   <<
-//		"'''"
-//	"'''"<<_latest_run.pickled_dictionary()
-//		<<"''')\n";
-
-// TODO: Save the _set_estimation_run_statistics
+	sv << "self._set_estimation_run_statistics_pickle('"<< _latest_run.pickled_dictionary() <<"')\n";
 
 
 	sv << "\n";
@@ -1160,15 +1280,39 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 
 
 
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_cached() {
+	std::shared_ptr<etk::ndarray> cached_grad;
+	setUp();
+	_parameter_update();
+	if (FCurrent.size()<=0) {
+		OOPS_CACHE("error in recovering cached value for d_loglike at the current parameters (init fail)");
+	}
 
-PyObject* elm::Model2::d_loglike() {
+	if (_cached_results.read_cached_grad(elm::array_compare(FCurrent.ptr(), FCurrent.size()), cached_grad) && cached_grad) {
+		return cached_grad;
+	} else {
+		OOPS_CACHE("there is no cached value for d_loglike at the current parameters");
+	}
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_cached(const std::vector<double>& v) {
+	std::shared_ptr<etk::ndarray> cached_grad;
+	if (_cached_results.read_cached_grad(elm::array_compare(v), cached_grad) && cached_grad) {
+		return cached_grad;
+	} else {
+		OOPS_CACHE("there is no cached value for d_loglike at the given parameters");
+	}
+}
+
+
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_nocache() {
 	setUp();
 
 	_parameter_update();
-	etk::ndarray g = gradient();
+	std::shared_ptr<etk::ndarray> g = make_shared<etk::ndarray>(gradient(), false);
 	bool z = true;
-	for (auto i=0; i!=g.size(); i++) {
-		if (g[i] != 0.0) {
+	for (auto i=0; i!=g->size(); i++) {
+		if (g->at(i) != 0.0) {
 			z = false;
 			break;
 		}
@@ -1176,28 +1320,50 @@ PyObject* elm::Model2::d_loglike() {
 	if (z) {
 		auto fr = option.force_recalculate;
 		option.force_recalculate = true;
-		g = gradient();
+		*g = gradient();
 		option.force_recalculate = fr;
 	}
-	Py_INCREF(g.get_object());
-	return g.get_object();
+
+	etk::symmetric_matrix bhhh (Bhhh, false);
+	bhhh.copy_uppertriangle_to_lowertriangle();
+
+	_cached_results.set_cached_grad(elm::array_compare(FCurrent.ptr(), FCurrent.size()), g);
+	_cached_results.set_cached_bhhh(elm::array_compare(FCurrent.ptr(), FCurrent.size()), bhhh);
+	return g;
 }
 
 
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike() {
+	try {
+		return negative_d_loglike_cached();
+	} catch (LarchCacheError) {
+		return negative_d_loglike_nocache();
+	}
+}
 
 
-
-PyObject* elm::Model2::d_loglike(std::vector<double> v) {
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_nocache(const std::vector<double>& v) {
 		
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
 	_parameter_push(v);
 	
-	etk::ndarray g = this->gradient();
+	std::shared_ptr<etk::ndarray> g;
+	try {
+		g = std::make_shared<etk::ndarray>(gradient(), false);
+	} catch (ZeroProbWhenChosen) {
+		g = std::make_shared<etk::ndarray>(dF());
+		for (size_t i=0; i!=g->size(); i++) {
+			(*g)[i] = NAN;
+		}
+		return g;
+	}
+	
+	
 	bool z = true;
-	for (size_t i=0; i!=g.size(); i++) {
-		if (g[i] != 0.0) {
+	for (size_t i=0; i!=g->size(); i++) {
+		if ((*g)[i] != 0.0) {
 			z = false;
 			break;
 		}
@@ -1205,75 +1371,325 @@ PyObject* elm::Model2::d_loglike(std::vector<double> v) {
 	if (z) {
 		auto fr = this->option.force_recalculate;
 		this->option.force_recalculate = true;
-		g = this->gradient();
+		*g = this->gradient();
 		this->option.force_recalculate = fr;
 	}
 	
-	Py_INCREF(g.get_object());
-	return g.get_object();
+	_cached_results.set_cached_grad(elm::array_compare(v), g);
+
+	etk::symmetric_matrix bhhh (Bhhh, false);
+	bhhh.copy_uppertriangle_to_lowertriangle();
+	_cached_results.set_cached_bhhh(elm::array_compare(v), bhhh);
+
+	return g;
 	
+	
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike(const std::vector<double>& v) {
+	try {
+		return negative_d_loglike_cached(v);
+	} catch (LarchCacheError) {
+		return negative_d_loglike_nocache(v);
+	}
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::_gradient_casewise() {
+
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		return _ngev_gradient_full_casewise();
+	} else if (features & MODELFEATURES_QUANTITATIVE) {
+		return _ngev_gradient_full_casewise();
+	} else if (features & MODELFEATURES_NESTING) {
+		return _ngev_gradient_full_casewise();
+	} else {
+		return _mnl_gradient_full_casewise();
+	}
+	
+}
+
+std::shared_ptr<etk::ndarray> elm::Model2::_gradient_casewise(std::vector<double> v) {
+
+	loglike_nocache(v);
+
+	if ((features & MODELFEATURES_ALLOCATION)) {
+		return _ngev_gradient_full_casewise();
+	} else if (features & MODELFEATURES_QUANTITATIVE) {
+		return _ngev_gradient_full_casewise();
+	} else if (features & MODELFEATURES_NESTING) {
+		return _ngev_gradient_full_casewise();
+	} else {
+		return _mnl_gradient_full_casewise();
+	}
 	
 }
 
 
 
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh_nocache() {
+	setUp();
+	_parameter_update();
+	
+	std::shared_ptr<etk::ndarray> g = std::make_shared<etk::ndarray>(gradient(), false);
+	bool z = true;
+	for (size_t i=0; i!=g->size(); i++) {
+		if ((*g)[i] != 0.0) {
+			z = false;
+			break;
+		}
+	}
+	if (z) {
+		auto fr = this->option.force_recalculate;
+		this->option.force_recalculate = true;
+		*g = this->gradient();
+		this->option.force_recalculate = fr;
+	}
+
+	std::shared_ptr<etk::symmetric_matrix> bhhh = std::make_shared<etk::symmetric_matrix>(Bhhh, false);
+	
+	bhhh->copy_uppertriangle_to_lowertriangle();
+	_cached_results.set_cached_grad(elm::array_compare(FCurrent.ptr(), FCurrent.size()), g);
+	_cached_results.set_cached_bhhh(elm::array_compare(FCurrent.ptr(), FCurrent.size()), *bhhh);
+	
+	return bhhh;
+	
+	
+}
+
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh_cached() {
+
+	std::shared_ptr<etk::symmetric_matrix> cached_bhhh;
+	setUp();
+	_parameter_update();
+	if (FCurrent.size()<=0) {
+		OOPS_CACHE("error in recovering cached value for bhhh at the current parameters (init fail)");
+	}
+
+	if (_cached_results.read_cached_bhhh(elm::array_compare(FCurrent.ptr(), FCurrent.size()), cached_bhhh) && cached_bhhh) {
+		return cached_bhhh;
+	} else {
+		OOPS_CACHE("there is no cached value for bhhh at the current parameters");
+	}
+}
+
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh() {
+	try {
+		return bhhh_cached();
+	} catch (LarchCacheError) {
+		return bhhh_nocache();
+	}
+	
+}
+
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh_nocache(const std::vector<double>& v) {
+	setUp();
+	_parameter_update();
+	_parameter_push(v);
+	
+	std::shared_ptr<etk::ndarray> g = std::make_shared<etk::ndarray>(gradient(), false);
+
+	bool z = true;
+	for (size_t i=0; i!=g->size(); i++) {
+		if ((*g)[i] != 0.0) {
+			z = false;
+			break;
+		}
+	}
+	if (z) {
+		auto fr = this->option.force_recalculate;
+		this->option.force_recalculate = true;
+		*g = this->gradient();
+		this->option.force_recalculate = fr;
+	}
+	
+	std::shared_ptr<etk::symmetric_matrix> bhhh = std::make_shared<etk::symmetric_matrix>(Bhhh, false);
+	
+	bhhh->copy_uppertriangle_to_lowertriangle();
+	_cached_results.set_cached_grad(elm::array_compare(v), g);
+	_cached_results.set_cached_bhhh(elm::array_compare(v), *bhhh);
+	return bhhh;
+	
+	
+}
 
 
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh_cached(const std::vector<double>& v) {
+	std::shared_ptr<etk::symmetric_matrix> cached_bhhh;
+	if (_cached_results.read_cached_bhhh(elm::array_compare(v), cached_bhhh) && cached_bhhh) {
+		return cached_bhhh;
+	} else {
+		OOPS_CACHE("there is no cached value for bhhh at the given parameters");
+	}
+}
 
 
+std::shared_ptr<etk::symmetric_matrix> elm::Model2::bhhh(const std::vector<double>& v) {
+	try {
+		return bhhh_cached(v);
+	} catch (LarchCacheError) {
+		return bhhh_nocache(v);
+	}
+}
+
+std::shared_ptr< etk::ndarray > elm::Model2::bhhh_direction()
+{
+	return bhhh_direction( parameter_values() );
+}
+
+std::shared_ptr< etk::ndarray > elm::Model2::bhhh_direction(const std::vector<double>& v)
+{
+	
+	std::shared_ptr<etk::symmetric_matrix> use_bhhh = bhhh(v);
+
+	int status = _bhhh_update(&*use_bhhh);
+	
+	if (PyErr_Occurred()) {
+		OOPS("error in finding bhhh_direction");
+	}
+	
+	if (status<0) {
+		OOPS("BHHH direction error");
+	}
+
+	std::shared_ptr< etk::ndarray > direction = std::make_shared<etk::ndarray>(dF());
+	
+	direction->initialize(0.0);
+	
+	#ifdef SYMMETRIC_PACKED
+	cblas_dspmv(CblasRowMajor,CblasUpper,dF(), -1, 
+				*invHessTemp, 
+				*GCurrent,1, 
+				0,**direction,1);
+	#else
+	cblas_dsymv(CblasRowMajor,CblasUpper,dF(), -1,
+				*invHessTemp, invHessTemp.size1(),
+				*GCurrent,1, 
+				0,**direction,1);
+	#endif
+	
+	double tolerance = -((*direction)*GCurrent);
+	_cached_results.set_cached_bhhh_tol(v, tolerance);
+	
+	return direction;
+}
+
+double elm::Model2::bhhh_tolerance()
+{
+	return bhhh_tolerance( parameter_values() );
+}
 
 
+double elm::Model2::bhhh_tolerance(const std::vector<double>& v)
+{
+	double cached_bhhh_tol = NAN;
+	if (_cached_results.read_cached_bhhh_tol(elm::array_compare(v), cached_bhhh_tol)) {
+		return cached_bhhh_tol;
+	} else {
+		return bhhh_tolerance_nocache(v);
+	}
+}
+
+double elm::Model2::bhhh_tolerance_nocache()
+{
+	return bhhh_tolerance_nocache( parameter_values() );
+}
+
+double elm::Model2::bhhh_tolerance_nocache(const std::vector<double>& v)
+{
+	double cached_bhhh_tol = NAN;
+	try {
+		bhhh_direction(v);
+	} SPOO {
+		if (PyErr_Occurred()) PyErr_Clear();
+		return cached_bhhh_tol;
+	}
+	
+	for (auto i=v.begin(); i!=v.end(); i++) {
+		if (isNan(*i)) return cached_bhhh_tol;
+	}
+	
+	if (_cached_results.read_cached_bhhh_tol(elm::array_compare(v), cached_bhhh_tol)) {
+		return cached_bhhh_tol;
+	} else {
+		OOPS_CACHE("error in finding bhhh_tolerance at the given parameters");
+	}
+}
 
 
-
-
-PyObject* elm::Model2::negative_d_loglike(std::vector<double> v) {
-
-
+double elm::Model2::loglike_cached() {
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
-	_parameter_push(v);
 
-	etk::ndarray g = this->gradient();
-	bool z = true;
-	for (size_t i=0; i!=g.size(); i++) {
-		if (g[i] != 0.0) {
-			z = false;
-			break;
-		}
+	double cached_ll = NAN;
+	const double* FCurrent_ptr = FCurrent.ptr(0);
+	size_t FCurrent_size = FCurrent.size();
+	if (FCurrent_size && _cached_results.read_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), cached_ll)) {
+		return cached_ll;
+	} else {
+		OOPS_CACHE("there is no cached value for loglike at the current parameters");
 	}
-	if (z) {
-		auto fr = this->option.force_recalculate;
-		this->option.force_recalculate = true;
-		g = this->gradient();
-		this->option.force_recalculate = fr;
-	}
-	
-	g.neg();
-	Py_INCREF(g.get_object());
-	return g.get_object();
-	
 	
 }
 
 
+double elm::Model2::loglike_nocache() {
+	
+	double x (NAN);
+	const double* FCurrent_ptr = FCurrent.ptr();
+	size_t FCurrent_size = FCurrent.size();
+	x = objective();
+	_cached_results.set_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), x);
+	
+	return x;
+	
+}
 
 double elm::Model2::loglike() {
-	setUp();
-	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	_parameter_update();
-	return objective();
+	
+	try {
+		return loglike_cached();
+	} catch (etk::LarchCacheError) {
+		return loglike_nocache();
+	}
+	
 }
 
+double elm::Model2::loglike_cached(std::vector<double> v) {
+	double cached_ll = NAN;
+	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
+		return cached_ll;
+	} else {
+		OOPS_CACHE("there is no cached value for loglike at the given parameters");
+	}
+}
 
-
-double elm::Model2::loglike(std::vector<double> v) {
+double elm::Model2::loglike_nocache(std::vector<double> v) {
 	setUp();
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
 	_parameter_push(v);
-	return objective();
+	double x = objective();
+	_cached_results.set_cached_loglike(elm::array_compare(v), x);
+	return x;
+}
+
+double elm::Model2::loglike(std::vector<double> v) {
+	
+	double cached_ll = NAN;
+	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
+		return cached_ll;
+	} else {
+
+	}
+	
+	setUp();
+	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+	_parameter_update();
+	_parameter_push(v);
+	double x = objective();
+	_cached_results.set_cached_loglike(elm::array_compare(v), x);
+	return x;
 }
 
 std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
@@ -1284,6 +1700,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
 	objective();
 	
 	std::shared_ptr<ndarray> ll_casewise = make_shared<ndarray> (nCases);
+	PrToAccum = (sampling_packet().relevant() ? &AdjProbability : &Probability);
 
 	loglike_w w (&PrToAccum, Xylem.n_elemental(),
 		Data_Choice, Data_Weight_active(), &accumulate_LogL, &*ll_casewise, option.mute_nan_warnings, &msg);
@@ -1301,6 +1718,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise(std::vector<double> 
 	loglike(v);
 	
 	std::shared_ptr<ndarray> ll_casewise = make_shared<ndarray> (nCases);
+	PrToAccum = (sampling_packet().relevant() ? &AdjProbability : &Probability);
 
 	loglike_w w (&PrToAccum, Xylem.n_elemental(),
 		Data_Choice, Data_Weight_active(), &accumulate_LogL, &*ll_casewise, option.mute_nan_warnings, &msg);
@@ -1310,6 +1728,25 @@ std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise(std::vector<double> 
 	w.work(0, nCases, &local_lock);
 	
 	return ll_casewise;
+}
+
+void elm::Model2::clear_cache()
+{
+	_cached_results.clear();
+	_FCurrent_latest_objective.initialize(NAN);
+	
+}
+
+
+
+void elm::Model2::start_timing(const std::string& name)
+{
+	_latest_run.start_process(name);
+}
+
+void elm::Model2::finish_timing()
+{
+	_latest_run.end_process();
 }
 
 

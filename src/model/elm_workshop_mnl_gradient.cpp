@@ -207,7 +207,7 @@ void elm::workshop_mnl_gradient::case_gradient_mnl_multichoice
 
 void elm::workshop_mnl_gradient::workshop_mnl_gradient_send
 ( memarray& GCurrent
-, memarray_symmetric& Bhhh)
+, symmetric_matrix& Bhhh)
 {
 	GCurrent += workshopGCurrent;
 	Bhhh += workshopBHHH;

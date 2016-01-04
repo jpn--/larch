@@ -40,7 +40,7 @@ namespace etk {
 	class ndarray_bool;
 	class symmetric_matrix;
 	class memarray_raw;
-	class memarray_symmetric;
+//	class memarray_symmetric;
 
 	PyObject* get_array_type(const char* type);
 
@@ -81,7 +81,10 @@ namespace etk {
 		ndarray(const int& r,const int& c, const char* arrayType="Array");
 		ndarray(const int& r,const int& c,const int& s, const char* arrayType="Array");
 		ndarray(PyObject* obj);
-		ndarray(const memarray_symmetric& that);
+		ndarray(const ndarray& that) = delete;
+		ndarray(ndarray& that, bool use_same_memory);
+		ndarray(const ndarray& that, bool use_same_memory);
+
 		~ndarray();
 		void initialize(const double& init=0);
 		void bool_initialize(const bool& init=false);
@@ -156,7 +159,7 @@ namespace etk {
 	// Copying
 		void operator= (const ndarray& that);
 		void operator= (const symmetric_matrix& that);
-		void operator= (const memarray_symmetric& that);
+//		void operator= (const memarray_symmetric& that);
 		std::vector<double> vectorize(unsigned start=0, unsigned stop=UINT_MAX) const;
 		std::vector<double> negative_vectorize(unsigned start=0, unsigned stop=UINT_MAX) const;
 	
@@ -207,7 +210,7 @@ namespace etk {
 		symmetric_matrix(const int& r, const char* arrayType="SymmetricArray");
 		symmetric_matrix(const int& r,const int& c, const char* arrayType="SymmetricArray");
 		symmetric_matrix(PyObject* obj);
-		symmetric_matrix(const memarray_symmetric& that);
+		symmetric_matrix(symmetric_matrix& that, bool use_same_memory);
 	private:
 		symmetric_matrix(const int& r,const int& c,const int& s, const char* arrayType="SymmetricArray");
 	public:
@@ -241,6 +244,9 @@ namespace etk {
 		const double* ptr(const int& i, const int& j) const {return &(operator()(i,j));}
 		double* ptr() { return static_cast<double*>( PyArray_DATA(pool) ); }
 		double* ptr(const int& i, const int& j)  {return &(operator()(i,j));}
+
+	// Other
+		bool all_zero() const;
 
 
 	};

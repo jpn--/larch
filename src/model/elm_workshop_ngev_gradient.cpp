@@ -38,7 +38,7 @@ using namespace std;
 
 void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned& c )
 {
-	if (c==0) BUGGER_(msg_, "case_dUtility_dFusedParameters()" )  ;
+//	if (c==0) BUGGER_(msg_, "case_dUtility_dFusedParameters()" )  ;
 
 	const double*	   Pr = _Probability->ptr(c);
 	const double*	   Qnt = _Quantity->size() ? _Quantity->ptr(c) : nullptr;
@@ -59,6 +59,8 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 		//  the last node is not relevant, as it is the root node and has no predecessors
 
 		if (!Pr[a]) continue;
+		
+		auto xylem_a = (*Xylem)[a];
 		
 		// First, we calculate the effect of various parameters on the utility
 		// of 'a' directly. For elemental alternatives, this means beta, gamma,
@@ -89,55 +91,59 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 		} else {
 			// MU for SELF (adjust the kiddies contributions) /////HERE
 			dUtil(a,a-(Xylem->n_elemental())+offset_mu()) += Util[a];
-			dUtil(a,a-(Xylem->n_elemental())+offset_mu()) /= (*Xylem)[a]->mu();
+			dUtil(a,a-(Xylem->n_elemental())+offset_mu()) /= xylem_a->mu();
 		}
 
-
+		size_t xylem_a_upsize = xylem_a->upsize();
 
 		// Then, we compute the carry-on effects from 'a' on other nodes in the
 		// network. For utility, this can only include direct predecessor nodes.
-		for (u=0; u< (*Xylem)[a]->upsize(); u++) {
+		for (u=0; u< xylem_a_upsize; u++) {
+		
+			auto xylem_a_upcell_u = xylem_a->upcell(u);
+			auto xylem_a_upedge_u = xylem_a->upedge(u);
 		
 			// define attributes of current edge
-			size_t upcell_slot = (*Xylem)[a]->upcell(u)->slot();
-			size_t slot_of_this_upedge = (*Xylem)[a]->upedge(u)->edge_slot();
+			size_t upcell_slot = xylem_a_upcell_u->slot();
+			size_t slot_of_this_upedge = xylem_a_upedge_u->edge_slot();
 
-			if (c==0) BUGGER_(msg_, "gradx upslot "<<u<<", nodeslot "<<a<<", up_nodeslot "<<upcell_slot<<", mu_offset="<<(*Xylem)[a]->upcell(u)->mu_offset() )  ;
+//			if (c==0) BUGGER_(msg_, "gradx upslot "<<u<<", nodeslot "<<a<<", up_nodeslot "<<upcell_slot<<", mu_offset="<<xylem_a_upcell_u->mu_offset() )  ;
 			
-			if (c==0) BUGGER_(msg_, "gradxx "<<bool(Alloc)<<","<<(*Xylem)[a]->upedge(u)->is_competitive() )  ;
+//			if (c==0) BUGGER_(msg_, "gradxx "<<bool(Alloc)<<","<<xylem_a_upedge_u->is_competitive() )  ;
 			
-			if (Alloc && (*Xylem)[a]->upedge(u)->is_competitive()) {
+			if (Alloc && (xylem_a_upsize>1)) {
 				// When this edge is competitive
 				
 				
+				
 				// PHI for all competing edges
-				for (ou=0; ou<(*Xylem)[a]->upsize(); ou++) {
-					if (c==0) BUGGER_(msg_, "dU+ "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+				for (ou=0; ou<xylem_a_upsize; ou++) {
+//					if (c==0) BUGGER_(msg_, "dU+ "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
 					
-					unsigned slot_competing_edges = (*Xylem)[a]->upedge(ou)->alloc_slot();
-					if (c==0) BUGGER_(msg_, "slot_competing_edges "<<slot_competing_edges<<" for number " << ou << ", slot_of_this_upedge="<<slot_of_this_upedge)  ;
+					unsigned slot_competing_edges = xylem_a->upedge(ou)->alloc_slot();
+//					if (c==0) BUGGER_(msg_, "slot_competing_edges "<<slot_competing_edges<<" for number " << ou << ", slot_of_this_upedge="<<slot_of_this_upedge)  ;
 					
 					AllocPacket.Data_CO->OverlayData(dUtil.ptr(upcell_slot,Offset_Phi),
 									  c,
 									  slot_competing_edges,
-									  -CPr[slot_of_this_upedge]*Alloc[slot_competing_edges]);
-					if (c==0) BUGGER_(msg_, "dU!\n" << dUtil.printall())  ;
+									  -CPr[slot_of_this_upedge]*Alloc[slot_competing_edges], xylem_a_upsize);
+//					if (c==0) BUGGER_(msg_, "dU!\n" << dUtil.printall())  ;
 				}
 				// PHI for this edge, adjustment
 				AllocPacket.Data_CO->OverlayData(dUtil.ptr(upcell_slot,Offset_Phi),
 								  c,
-								  (*Xylem)[a]->upedge(u)->alloc_slot(),
-								  CPr[slot_of_this_upedge]);
+								  xylem_a_upedge_u->alloc_slot(),
+								  CPr[slot_of_this_upedge], xylem_a_upsize);
 				
 				// MU for Parent (competitive edge)
-				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()+offset_mu()) -=
-				CPr[slot_of_this_upedge] * (Util[a] + log(Alloc[(*Xylem)[a]->upedge(u)->alloc_slot()]));
+				dUtil(upcell_slot,xylem_a_upcell_u->mu_offset()+offset_mu()) -=
+				CPr[slot_of_this_upedge] * (Util[a] + log(Alloc[xylem_a_upedge_u->alloc_slot()]));
 				
 			} else {
 				// When this edge is not competitive
 				
 				// MU for Parent (non-competitive edge)
-				dUtil(upcell_slot,(*Xylem)[a]->upcell(u)->mu_offset()+offset_mu()) -=
+				dUtil(upcell_slot,xylem_a_upcell_u->mu_offset()+offset_mu()) -=
 				CPr[slot_of_this_upedge] * Util[a];
 			}
 			
@@ -146,15 +152,15 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 				cblas_daxpy(nPar,CPr[slot_of_this_upedge],dUtil.ptr(a),1,dUtil.ptr(upcell_slot),1);
 		}
 
-		if (c==0) {
-		BUGGER_(msg_, "dU[at "<<a<<"]-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
-		}
+//		if (c==0) {
+//		BUGGER_(msg_, "dU[at "<<a<<"]-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+//		}
 
 	}
-	if (c==0) {
-	BUGGER_(msg_, "_Cond_Prob-> "<< _Cond_Prob->printrow(c))  ;
-	BUGGER_(msg_, "dU-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
-	}
+//	if (c==0) {
+//	BUGGER_(msg_, "_Cond_Prob-> "<< _Cond_Prob->printrow(c))  ;
+//	BUGGER_(msg_, "dU-> "<<dUtil.printSize()<<"\n" << dUtil.printall())  ;
+//	}
 }
 
 
@@ -178,47 +184,59 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 	unsigned i,u,ou;
 	for (i=(*Xylem).size()-1; i!=0; ) {
 		i--;
-		for (u=0; u<(*Xylem)[i]->upsize(); u++) {
+		size_t xylem_a_upsize = (*Xylem)[i]->upsize();
+		for (u=0; u<xylem_a_upsize; u++) {
+			
+			auto xylem_i_upcell_u = (*Xylem)[i]->upcell(u);
+			auto xylem_i_upcell_u_slot = xylem_i_upcell_u->slot();
+			
+			// if (c==0) std::cerr << "case_dProbability_dFusedParameters\n";
+			// if (c==0) std::cerr << "i="<<i<<"\n";
+			// if (c==0) std::cerr << "u="<<u<<"\n";
+			// if (c==0) std::cerr << "xylem_i_upcell_u_slot="<<xylem_i_upcell_u_slot<<"\n";
+
+
 			// scratch = dUtil[down] - dUtil[up]
 			cblas_dcopy(nPar, dUtil.ptr(i), 1, scratch, 1);
-			cblas_daxpy(nPar, -1, dUtil.ptr((*Xylem)[i]->upcell(u)->slot()), 1, scratch, 1);
+			cblas_daxpy(nPar, -1, dUtil.ptr(xylem_i_upcell_u_slot), 1, scratch, 1);
 			
 			// for competitive edges, adjust phi
 			// scratch += X_Phi()[edge] - sum over competes(Alloc[compete]*X_Phi[compete])
 			if (Alloc && (*Xylem)[i]->upedge(u)->is_competitive()) {
 				auto allocslot_upedge_u = (*Xylem)[i]->upedge(u)->alloc_slot();
+				// if (c==0) std::cerr << "allocslot_upedge_u="<<allocslot_upedge_u<<"\n";
 
-	if (c==0) BUGGER_(msg_, "WorkspaceX1 "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
+				// if (c==0) std::cerr << "WorkspaceX1 "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
 				
-				AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, allocslot_upedge_u, 1.0);
-	if (c==0) BUGGER_(msg_, "WorkspaceXa "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
-				for (ou=0; ou<(*Xylem)[i]->upsize(); ou++)  {
+				AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, allocslot_upedge_u, 1.0, xylem_a_upsize);
+				// if (c==0) std::cerr <<  "WorkspaceXa "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
+				for (ou=0; ou<xylem_a_upsize; ou++)  {
 					auto slot = (*Xylem)[i]->upedge(ou)->alloc_slot();
-					AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, slot, -Alloc[slot]);
-	if (c==0) BUGGER_(msg_, "WorkspaceXb "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
+					AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, slot, -Alloc[slot], xylem_a_upsize);
+					// if (c==0) std::cerr <<  "WorkspaceXb "<<Workspace.printSize()<<"\n" << Workspace.printall()  ;
 				}
 
-	if (c==0) BUGGER_(msg_, "WorkspaceX2 "<<Workspace.printSize()<<"\n" << Workspace.printall())  ;
+				// if (c==0) std::cerr <<  "WorkspaceX2 "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
 				
 				// adjust Mu for hierarchical structure, competitive
-				scratch[(*Xylem)[i]->upcell(u)->mu_offset()+offset_mu()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
+				scratch[xylem_i_upcell_u->mu_offset()+offset_mu()] += (Util[xylem_i_upcell_u_slot]
 														   - Util[i] 
 														   - log(Alloc[allocslot_upedge_u])
-														   ) / (*Xylem)[i]->upcell(u)->mu();
+														   ) / xylem_i_upcell_u->mu();
 				
 			} else {
 				
 				// adjust Mu for hierarchical structure, noncompete
-				scratch[(*Xylem)[i]->upcell(u)->mu_offset()+offset_mu()] += (Util[(*Xylem)[i]->upcell(u)->slot()]
+				scratch[xylem_i_upcell_u->mu_offset()+offset_mu()] += (Util[xylem_i_upcell_u_slot]
 														   - Util[i] 
-														   ) / (*Xylem)[i]->upcell(u)->mu();
+														   ) / xylem_i_upcell_u->mu();
 			}
 			
 			// scratch *= Pr[up]/mu[up]
-			cblas_dscal(nPar, Pr[(*Xylem)[i]->upcell(u)->slot()]/(*Xylem)[i]->upcell(u)->mu(), scratch, 1);
+			cblas_dscal(nPar, Pr[xylem_i_upcell_u_slot]/xylem_i_upcell_u->mu(), scratch, 1);
 			
 			// scratch += dProb[up]
-			cblas_daxpy(nPar, 1.0, dProb.ptr((*Xylem)[i]->upcell(u)->slot()), 1, scratch, 1);
+			cblas_daxpy(nPar, 1.0, dProb.ptr(xylem_i_upcell_u_slot), 1, scratch, 1);
 			
 			// dProb += scratch * CPr
 			cblas_daxpy(nPar, CPr[(*Xylem)[i]->upedge(u)->edge_slot()], scratch, 1, dProb.ptr(i), 1);
@@ -226,7 +244,7 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 	}
 
 
-	if (c==0) BUGGER_(msg_, "dProb "<<dProb.printSize()<<"\n" << dProb.printall())  ;
+//	if (c==0) BUGGER_(msg_, "dProb "<<dProb.printSize()<<"\n" << dProb.printall())  ;
 	
 }
 
@@ -301,14 +319,14 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 	etk::memarray_raw* dPr = &dProb;
 
 	if (SampPacket.relevant()) {
-		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.relevant")  ;
+//		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.relevant")  ;
 		Pr = _AdjProbability->ptr(c);
 		dPr = &dAdjProb;
 	} else {
-		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.NOTrelevant")  ;
+//		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.NOTrelevant")  ;
 	}
 
-	if (c==0) BUGGER_(msg_, "dPr-> "<<dPr->printSize()<<"\n" << dPr->printall())  ;
+//	if (c==0) BUGGER_(msg_, "dPr-> "<<dPr->printSize()<<"\n" << dPr->printall())  ;
 
 	unsigned a;
 	for (a=0; a<nA; a++) {
@@ -325,7 +343,7 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 		}
 	}
 	
-	if (c==0) BUGGER_(msg_, " dProb:" << dProb.printall() << "\n dAdjProb"<<dAdjProb.printall()<<"\n GradT_Fused:\n"<<GradT_Fused.printall());
+//	if (c==0) BUGGER_(msg_, " dProb:" << dProb.printall() << "\n dAdjProb"<<dAdjProb.printall()<<"\n GradT_Fused:\n"<<GradT_Fused.printall());
 	
 }
 
@@ -355,7 +373,8 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
  , const etk::memarray* Cond_Prob
  , const VAS_System* Xylem
  , etk::memarray* GCurrent
- , etk::memarray_symmetric* Bhhh
+ , etk::ndarray*  GCurrentCasewise
+ , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
 )
 : dF         (dF)
@@ -393,6 +412,7 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , _Xylem     (Xylem)
 , _GCurrent(GCurrent)
 , _Bhhh(Bhhh)
+, _GCurrentCasewise(GCurrentCasewise)
 , _lock(nullptr)
 , msg_ (msgr)
 {
@@ -430,8 +450,9 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 		//BUGGER_(msg_, "NL grad ["<<c<<"]");
 		
 		
-		CaseGrad.initialize();
-		GradT_Fused.initialize();
+		CaseGrad.initialize();    // The CaseGrad holds the gradient for a single case on the freedoms
+		GradT_Fused.initialize(); // GradT_Fused hold the gradient for this case on the 'parameters', which are
+		                          // derived from the freedoms.
 
 		case_dUtility_dFusedParameters(c);
 		case_dProbability_dFusedParameters(c);
@@ -473,6 +494,9 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 		// ACCUMULATE
 		workshopGCurrent += CaseGrad;
 		
+		if (_GCurrentCasewise) {
+			cblas_dcopy(dF, *CaseGrad, 1, _GCurrentCasewise->ptr(c), 1);
+		}
 	}
 	//BUGGER_(msg_, "Finished NL gradient calculation ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]");
 
@@ -482,10 +506,9 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_send
 ()
 {
 	if (_lock) {
-		_lock->lock();
+		std::lock_guard<std::mutex> lock_while_in_shope(*_lock);
 		*_GCurrent += workshopGCurrent;
 		*_Bhhh += workshopBHHH;
-		_lock->unlock();
 	} else {
 		OOPS("No lock in workshop_ngev_gradient_send");
 	}

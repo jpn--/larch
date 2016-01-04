@@ -88,29 +88,29 @@ namespace etk {
 
 	class memarray_raw;
 
-	class triangle_raw: public puddle {
-		unsigned side;
-		friend class memarray_raw;
-	public:
-		triangle_raw(const unsigned& s=0);
-		virtual ~triangle_raw();
-		
-		double& operator()(const unsigned& i, const unsigned& j);
-		const double& operator()(const unsigned& i, const unsigned& j) const;
-
-		virtual void resize(const unsigned& s, bool init = true);
-		virtual void operator= (const triangle_raw& that);
-		
-	//	void inv(const bool& rescale=false, bool squeeze=true);
-		void initialize_identity();
-		
-		std::string printSquare();
-		void unpack(memarray_raw& destination) const;
-		void repack(const memarray_raw& source);
-		
-		void operator= (const memarray_raw& that) {repack(that);}
-		const unsigned& size1() const { return side; }
-	};
+//	class triangle_raw: public puddle {
+//		unsigned side;
+//		friend class memarray_raw;
+//	public:
+//		triangle_raw(const unsigned& s=0);
+//		virtual ~triangle_raw();
+//		
+//		double& operator()(const unsigned& i, const unsigned& j);
+//		const double& operator()(const unsigned& i, const unsigned& j) const;
+//
+//		virtual void resize(const unsigned& s, bool init = true);
+//		virtual void operator= (const triangle_raw& that);
+//		
+//	//	void inv(const bool& rescale=false, bool squeeze=true);
+//		void initialize_identity();
+//		
+//		std::string printSquare();
+//		void unpack(memarray_raw& destination) const;
+//		void repack(const memarray_raw& source);
+//		
+//		void operator= (const memarray_raw& that) {repack(that);}
+//		const unsigned& size1() const { return side; }
+//	};
 
 	class three_array: public three_dim {
 	protected:
@@ -135,7 +135,7 @@ namespace etk {
 	class memarray_raw: public puddle, public three_dim {
 	public:
 		memarray_raw(const unsigned& r=0, const unsigned& c=1, const unsigned& d=1);
-		memarray_raw(const triangle_raw& t);
+//		memarray_raw(const triangle_raw& t);
 		virtual ~memarray_raw();
 		
 		const double& operator()(const unsigned& i, const unsigned& j=0, const unsigned& k=0) const;		
@@ -154,22 +154,24 @@ namespace etk {
 		std::string printall() const;
 		std::string printSize() const;
 
-		void operator= (const triangle_raw& that) {that.unpack(*this);}
+//		void operator= (const triangle_raw& that) {that.unpack(*this);}
 
 		void initialize(const double& init=0);
 	};
 
-	class memarray_symmetric: public memarray_raw {
-	public:
-		memarray_symmetric(const unsigned& r=0, const unsigned& c=0);
-		void resize(const unsigned& r, const unsigned& c=0);
-		void copy_uppertriangle_to_lowertriangle();
-		std::string printSquare();
-		void operator= (const memarray_symmetric& that);
-		void operator= (const symmetric_matrix& that);
-		bool all_zero() const;
-	
-	};
+//	class memarray_symmetric: public memarray_raw {
+//	public:
+//		memarray_symmetric(const unsigned& r=0, const unsigned& c=0);
+//		void resize(const unsigned& r, const unsigned& c=0);
+//		void copy_uppertriangle_to_lowertriangle();
+//		std::string printSquare();
+//		void operator= (const memarray_symmetric& that);
+//		void operator= (const symmetric_matrix& that);
+//		bool all_zero() const;
+//	
+//	};
+
+
 
 	typedef std::vector<memarray_raw> memarrays;
 	

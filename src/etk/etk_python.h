@@ -64,6 +64,8 @@ int py_add_to_dict(PyObject* d, const std::string& key, PyObject* value);
 int py_add_to_dict(PyObject* d, const std::string& key, const std::vector<std::string>& value);
 int py_add_to_dict(PyObject* d, const std::string& key, const std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> >& value);
 
+int py_copydict_from_dict(PyObject* d, const std::string& key, PyObject*& value);
+
 int py_read_from_dict(PyObject* d, const std::string& key, std::string& value);
 int py_read_from_dict(PyObject* d, const std::string& key, double& value);
 int py_read_from_dict(PyObject* d, const std::string& key, int& value);

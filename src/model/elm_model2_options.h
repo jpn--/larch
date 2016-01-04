@@ -83,6 +83,8 @@ namespace elm {
 		bool weight_autorescale;
 		bool suspend_xylem_rebuild;
 		bool log_turns;
+		bool enforce_bounds;
+		bool enforce_constraints;
 		
 		std::string author;
 		
@@ -102,7 +104,9 @@ namespace elm {
 			bool teardown_after_estimate=true,
 			bool weight_autorescale=true,
 			bool suspend_xylem_rebuild=false,
-			bool log_turns=false
+			bool log_turns=false,
+			bool enforce_bounds=true,
+			bool enforce_contraints=false
 		);
 	
 		// Re-constructor
@@ -121,7 +125,9 @@ namespace elm {
 			int teardown_after_estimate=-9,
 			int weight_autorescale=-9,
 			int suspend_xylem_rebuild=-9,
-			int log_turns=-9
+			int log_turns=-9,
+			int enforce_bounds=-9,
+			int enforce_contraints=-9
 		);
 
 		void copy(const model_options_t& other);

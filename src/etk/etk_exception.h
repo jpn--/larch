@@ -27,6 +27,16 @@
 #include <exception>
 #include <string>
 #include "etk_cat.h"
+#include <Python.h>
+#include <memory>
+
+#define OOPSCODE_GENERAL   -31200
+#define OOPSCODE_ZEROPROB  -31201
+#define OOPSCODE_PYTHON    -31202
+#define OOPSCODE_CACHE     -31203
+#define OOPSCODE_SQLITE    -31204
+
+
 
 namespace etk {
 
@@ -41,6 +51,15 @@ public:
 	virtual const char* what() const throw ();
 	virtual int code() const throw ();
 };
+
+class PythonStandardException: public exception_t {
+public:
+	PyObject* _PyExc;
+	PythonStandardException (PyObject* PyExc, const std::string& d="") throw();
+	virtual ~PythonStandardException() throw() { }
+	virtual const char* what() const throw ();
+};
+
 
 class LarchCacheError: public exception_t {
 public:
@@ -95,6 +114,15 @@ public:
 	virtual ~ParameterNameError() throw() { }
 };
 
+class ndarray;
+
+class MatrixInverseError: public exception_t {
+	std::shared_ptr<ndarray> the_matrix;
+public:
+	PyObject* the_object() const;
+	MatrixInverseError (ndarray* matrix, const std::string& d="") throw();
+	virtual ~MatrixInverseError() throw() { }
+};
 
 
 bool PythonErrorCheck();
@@ -118,9 +146,19 @@ bool PythonErrorCheck();
 #define TODO       OOPS("error: this feature has not yet been completed")
 
 
+#define OOPS_ZEROPROB(...)  throw(etk::ZeroProbWhenChosen(etk::cat(__VA_ARGS__)))
+
 #define OOPS_SQLITE(...) throw(etk::SQLiteError(etk::cat("SQLite Error:",get_error_message(),"\n",__VA_ARGS__)))
 #define OOPS_FACET(...) throw(etk::FacetError(etk::cat(__VA_ARGS__)))
 #define OOPS_CACHE(...) throw(etk::LarchCacheError(etk::cat(__VA_ARGS__)))
+#define OOPS_PYSTD(pyexcept,...) throw(etk::PythonStandardException((pyexcept),etk::cat(__VA_ARGS__)))
+#define OOPS_MATRIXINVERSE(matrix,...) throw(etk::MatrixInverseError(matrix,etk::cat(__VA_ARGS__)))
+
+#define OOPS_AttributeError(...) throw(etk::PythonStandardException(PyExc_AttributeError,etk::cat(__VA_ARGS__)))
+#define OOPS_IndexError(...) throw(etk::PythonStandardException(PyExc_IndexError,etk::cat(__VA_ARGS__)))
+#define OOPS_FileExists(...) throw(etk::PythonStandardException(PyExc_FileExistsError,etk::cat(__VA_ARGS__)))
+#define OOPS_FileNotFound(...) throw(etk::PythonStandardException(PyExc_FileNotFoundError,etk::cat(__VA_ARGS__)))
+#define OOPS_KeyError(...) throw(etk::PythonStandardException(PyExc_KeyError,etk::cat(__VA_ARGS__)))
 
 #endif
 

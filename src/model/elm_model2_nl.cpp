@@ -112,7 +112,7 @@ void elm::Model2::_setUp_NL()
 
 void elm::Model2::_setUp_NGEV()
 {
-	if (is_provisioned()!=1) {
+	if (!(is_provisioned())) {
 		OOPS("data not provisioned");
 	}
 	INFO(msg)<< "Setting up NGEV model..." ;
@@ -224,7 +224,8 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability
 								 );}
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
-{return boosted::make_shared<workshop_ngev_gradient>(  dF()
+{
+	return boosted::make_shared<workshop_ngev_gradient>(  dF()
 									 , nNodes
 									 , utility_packet(), allocation_packet()
 									 , sampling_packet()
@@ -237,32 +238,78 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 									 , &Cond_Prob
 									 , &Xylem
 									 , &GCurrent
+									 , nullptr
 									 , &Bhhh
 									 , &msg
-									 );}
+									 );
+}
 
-//#endif // ndef __APPLE__
+
+
+
+
+std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
+{
+	periodic Sup (5);
+	BUGGER(msg)<< "Beginning NGEV Gradient (Full Casewise) Evaluation" ;
+	GCurrent.initialize(0.0);
+	Bhhh.initialize(0.0);
+	
+	std::shared_ptr<ndarray> gradient_casewise = make_shared<ndarray> (nCases, dF());
+
+	BUGGER(msg)<< "Beginning NGEV Gradient full casewise single-threaded Evaluation" ;
+	
+	boosted::mutex local_lock;
+	
+	workshop_ngev_gradient w
+			(  dF()
+			 , nNodes
+			 , utility_packet(), allocation_packet()
+			 , sampling_packet()
+			 , quantity_packet()
+			 , Params_LogSum
+			 , Data_Choice
+			 , Data_Weight_active()
+			 , &AdjProbability
+			 , &Probability
+			 , &Cond_Prob
+			 , &Xylem
+			 , &GCurrent
+			 , &*gradient_casewise
+			 , &Bhhh
+			 , &msg
+			 );
+
+	w.work(0, nCases, &local_lock);
+
+	BUGGER(msg)<< "End NGEV Gradient Evaluation" ;
+	
+	return gradient_casewise;
+}
+
+
+
 
 
 void elm::Model2::nl_probability()
 {
-	BUGGER(msg) << "Calculate NL probability";
-	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
-	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
-	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
-	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
-	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
-//	if (!Data_UtilityCA) OOPS("data for utility calculation is not loaded, try setUp model first");
-	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
-		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
-	}
-	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
-		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
-	}
-	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
-		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
-	}
+//	BUGGER(msg) << "Calculate NL probability";
+//	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
+//	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
+//	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
+//	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
+//	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
+//	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
+////	if (!Data_UtilityCA) OOPS("data for utility calculation is not loaded, try setUp model first");
+//	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
+//		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
+//	}
+//	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
+//		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
+//	}
+//	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
+//		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
+//	}
 
 	unsigned c,a;
 	unsigned warningcount (0);
@@ -272,7 +319,7 @@ void elm::Model2::nl_probability()
 	
 	if (nThreads<=1) nThreads = 1;
 	 
-	BUGGER(msg) << "Number of threads in nl_probability =" << nThreads;
+//	BUGGER(msg) << "Number of threads in nl_probability =" << nThreads;
 	if (nThreads>=2 && _ELM_USE_THREADS_) {
 		
 		#ifdef __APPLE__
@@ -381,23 +428,23 @@ void elm::Model2::nl_probability()
 
 void elm::Model2::ngev_probability()
 {
-	BUGGER(msg) << "Calculate NGEV probability";
-	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
-	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
-	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
-	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
-	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
-	BUGGER(msg) << "Coef_QuantityCA\n" << Coef_QuantityCA.printall();
-	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
-		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
-	}
-	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
-		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
-	}
-	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
-		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
-	}
+//	BUGGER(msg) << "Calculate NGEV probability";
+//	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
+//	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
+//	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
+//	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
+//	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
+//	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
+//	BUGGER(msg) << "Coef_QuantityCA\n" << Coef_QuantityCA.printall();
+//	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
+//		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
+//	}
+//	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
+//		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
+//	}
+//	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
+//		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
+//	}
 
 	unsigned c,a;
 	unsigned warningcount (0);
@@ -423,17 +470,17 @@ void elm::Model2::ngev_probability()
 		local_prob_workshop->work(0, nCases, nullptr);
 	
 	}
-	BUGGER(msg) << "Quantity (case 0)\n" << Quantity.printrow(0) ;
-	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
-	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
-	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
-
-	if (nCases>1) {
-	BUGGER(msg) << "Quantity (case 1)\n" << Quantity.printrow(1) ;
-	BUGGER(msg) << "Utility (case 1)\n" << Utility.printrow(1) ;
-	BUGGER(msg) << "Probability (case 1)\n" << Probability.printrow(1) ;
-	BUGGER(msg) << "Cond_Prob (case 1)\n" << Cond_Prob.printrow(1) ;
-	}
+//	BUGGER(msg) << "Quantity (case 0)\n" << Quantity.printrow(0) ;
+//	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
+//	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
+//	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
+//
+//	if (nCases>1) {
+//	BUGGER(msg) << "Quantity (case 1)\n" << Quantity.printrow(1) ;
+//	BUGGER(msg) << "Utility (case 1)\n" << Utility.printrow(1) ;
+//	BUGGER(msg) << "Probability (case 1)\n" << Probability.printrow(1) ;
+//	BUGGER(msg) << "Cond_Prob (case 1)\n" << Cond_Prob.printrow(1) ;
+//	}
 }
 
 
@@ -441,8 +488,16 @@ void elm::Model2::nl_gradient()
 {
 	periodic Sup (5);
 	BUGGER(msg)<< "Beginning NL Gradient Evaluation" ;
+	
+	if (Bhhh.size1() != dF()) {
+		Bhhh.resize(dF());
+	}
+	
 	GCurrent.initialize(0.0);
 	Bhhh.initialize(0.0);
+	
+	
+	
 	if (nThreads <= 0) nThreads=1;
 	//nThreads=1; /* there may be a bug in the threading */
 	BUGGER(msg)<< "Using "<< nThreads <<" threads" ;
@@ -451,22 +506,28 @@ void elm::Model2::nl_gradient()
 	nThreads = 1;
 	#endif // ndef _ELM_USE_THREADS_
 	
-	if (nThreads >= 1 && _ELM_USE_THREADS_) {
+//	if (nThreads >= 1 && _ELM_USE_THREADS_) {
 
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_nl_gradient, this);
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
 		
-	} else {
-
-		boosted::shared_ptr<workshop> local_grad_workshop;
-		if (!local_grad_workshop) {
-			local_grad_workshop = make_shared_workshop_nl_gradient ();
-		}
-		local_grad_workshop->work(0, nCases, nullptr);
-
-	}
+//	} else {
+//
+//		boosted::shared_ptr<workshop> local_grad_workshop;
+//		if (!local_grad_workshop) {
+//			local_grad_workshop = make_shared_workshop_nl_gradient ();
+//		}
+//		local_grad_workshop->work(0, nCases, nullptr);
+//
+//	}
 	BUGGER(msg)<< "End NL Gradient Evaluation" ;
+	
+	std::ostringstream ret;
+	for (unsigned i=0; i<GCurrent.size(); i++) {
+		ret << "," << GCurrent[i];
+	}
+	INFO(msg) << "NL Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
 }
 
 void elm::Model2::ngev_gradient()
@@ -474,31 +535,36 @@ void elm::Model2::ngev_gradient()
 	periodic Sup (5);
 	BUGGER(msg)<< "Beginning NGEV Gradient Evaluation" ;
 	GCurrent.initialize(0.0);
+	if (Bhhh.size1() != dF()) {
+		Bhhh.resize(dF());
+	}
 	Bhhh.initialize(0.0);
 	if (nThreads <= 0) nThreads=1;
 	//nThreads=1; /* there may be a bug in the threading */
 	BUGGER(msg)<< "Using "<< nThreads <<" threads" ;
 	
-	#ifndef _ELM_USE_THREADS_
-	nThreads = 1;
-	#endif // ndef _ELM_USE_THREADS_
-	
-	if (nThreads >= 1 && _ELM_USE_THREADS_) {
+//	if (nThreads >= 1 && _ELM_USE_THREADS_) {
 
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_ngev_gradient, this);
 		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
 		
-	} else {
-
-		boosted::shared_ptr<workshop> local_grad_workshop;
-		if (!local_grad_workshop) {
-			local_grad_workshop = make_shared_workshop_ngev_gradient ();
-		}
-		local_grad_workshop->work(0, nCases, nullptr);
-
-	}
+//	} else {
+//
+//		boosted::shared_ptr<workshop> local_grad_workshop;
+//		if (!local_grad_workshop) {
+//			local_grad_workshop = make_shared_workshop_ngev_gradient ();
+//		}
+//		local_grad_workshop->work(0, nCases, nullptr);
+//
+//	}
 	BUGGER(msg)<< "End NGEV Gradient Evaluation" ;
+
+	std::ostringstream ret;
+	for (unsigned i=0; i<GCurrent.size(); i++) {
+		ret << "," << GCurrent[i];
+	}
+	INFO(msg) << "NGEV Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
 }
 
 
@@ -519,7 +585,7 @@ ELM_RESULTCODE elm::Model2::nest
 			std::string fn = freedom_name;
 			etk::uppercase(fn);
 			if (fn!="CONSTANT") {
-				parameter(freedom_name,1,1);
+				parameter(freedom_name,1,1,1,1,0);
 			}
 			result |= ELM_UPDATED;
 		}

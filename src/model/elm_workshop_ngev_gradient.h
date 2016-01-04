@@ -79,7 +79,7 @@ public:
 	etk::memarray_raw CaseGrad       ;
 	
 	etk::memarray_raw workshopGCurrent;
-	etk::memarray_symmetric workshopBHHH   ;
+	etk::symmetric_matrix workshopBHHH   ;
 
 	const paramArray* Params_LogSum;
 	
@@ -92,7 +92,8 @@ public:
 	const etk::memarray* _Cond_Prob;
 	const VAS_System* _Xylem;
 	etk::memarray* _GCurrent;
-	etk::memarray_symmetric* _Bhhh;
+	etk::symmetric_matrix* _Bhhh;
+	etk::ndarray* _GCurrentCasewise;
 	boosted::mutex* _lock;
 	
 	int threadnumber;
@@ -120,7 +121,8 @@ public:
 	 , const etk::memarray* Cond_Prob
 	 , const VAS_System* Xylem
 	 , etk::memarray* GCurrent
-	 , etk::memarray_symmetric* Bhhh
+	 , etk::ndarray* GCurrentCasewise
+	 , etk::symmetric_matrix* Bhhh
 	 , etk::logging_service* msgr
 	 );
 	

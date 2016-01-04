@@ -70,32 +70,6 @@ namespace elm {
 			$self->calculate_hessian_and_save();
 		}
 
-		double negative_loglike() {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			return -$self->objective();
-		}
-		double negative_loglike(std::vector<double> v) {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			$self->_parameter_push(v);
-			return -$self->objective();
-		}
-		std::vector<double> negative_d_loglike() {
-			$self->setUp();
-			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-			$self->_parameter_update();
-			return $self->gradient().negative_vectorize();
-		}
-//		std::vector<double> negative_d_loglike(std::vector<double> v) {
-//			$self->setUp();
-//			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//			$self->_parameter_update();
-//			$self->_parameter_push(v);
-//			return $self->gradient().negative_vectorize();
-//		}
 		
 		void teardown() {return $self->tearDown();}
 		
