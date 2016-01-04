@@ -308,7 +308,15 @@ def prepare_import_headers(rawfilename, headers=None):
 	raw.seek(0)
 	if isinstance(sample, bytes):
 		sample = sample.decode('UTF-8')
-	dialect = csv.Sniffer().sniff(sample)
+	try:
+		dialect = csv.Sniffer().sniff(sample)
+	except csv.Error:
+		sample = raw.read(512000)
+		raw.seek(0)
+		if isinstance(sample, bytes):
+			sample = sample.decode('UTF-8')
+		try:
+			dialect = csv.Sniffer().sniff(sample)
 	r = csv.reader(raw, dialect)
 	eL.debug("DIALECT = %s",str(dialect))
 	eL.debug("TYPE OF READER = %s",str(type(r)))
