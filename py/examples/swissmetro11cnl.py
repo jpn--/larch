@@ -58,9 +58,11 @@ def model(d=None):
 	#	A structure that defines certain options to be applied when estimating
 	#	models.
 	m.option.calc_std_errors = True
-	m.option.threads = 1
 
 	# ModelObject.nest(<name of nest>, <altcode of nest>, <parameter name>)
+	m.parameter("MU_EXISTING", min=0.001, max=1.0, value=1, null_value=1)
+	m.parameter("MU_PUBLIC",   min=0.001, max=1.0, value=1, null_value=1)
+	
 	m.nest("existing", 4, "MU_EXISTING")
 	m.nest("public",   5, "MU_PUBLIC")
 	
@@ -70,7 +72,7 @@ def model(d=None):
 	m.link(5, 1)
 	m.link(5, 2)
 	
-	m.parameter('PHI_EXISTING')
+	m.parameter('PHI_EXISTING', min=-10, max=10)
 	m.link[4, 1](data='1',param='PHI_EXISTING')
 	
 	

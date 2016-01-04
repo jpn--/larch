@@ -31,7 +31,7 @@ class PdfModelReporter():
 					   label='Elemental Alternatives', labelloc='b', style='rounded,solid')
 		unavailable_nodes = set()
 		if format['UNAVAILABLE']==True or format['UNAVAILABLE']=='HIDE':
-			if self.is_provisioned(False):
+			if self.is_provisioned():
 				try:
 					for n, ncode in enumerate(self.alternative_codes()):
 #						print("AVCHEK1",ncode,'-->',numpy.sum(self.Data('Avail'),axis=0)[n,0])

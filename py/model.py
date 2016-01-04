@@ -7,7 +7,7 @@ import os
 from .util.xhtml import XHTML, XML_Builder
 import math
 from .model_reporter import ModelReporter
-
+import base64
 
 class MetaParameter():
 	def __init__(self, name, value, under, initial_value=None):
@@ -31,6 +31,7 @@ class MetaParameter():
 class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
+	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, optimizers
 
 	def dir(self):
 		for f in dir(self):
@@ -119,6 +120,15 @@ class Model(Model2, ModelReporter):
 	parameter : str or None
 		The name of the parameter to associate with this nest.  If None, 
 		the `name` is used.
+	parent : int, optional
+		The code number of the parent node of the nest, for which a link
+		will automatically be created.
+	parents : list of ints, optional
+		A list of code numbers for the parent nodes of the nest, for which
+		links will automatically be created.
+	children : list of ints, optional
+		A list of code numbers for the child nodes of the nest, for which
+		links will automatically be created.
 		
 	Returns
 	-------
@@ -183,6 +193,7 @@ class Model(Model2, ModelReporter):
 			self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
+		_Str = lambda s: (base64.standard_b64decode(s)).decode()
 		if (len(filename)>5 and filename[-5:]=='.html') or (len(filename)>6 and filename[-6:]=='.xhtml'):
 			from html.parser import HTMLParser
 			class LarchHTMLParser_ModelLoader(HTMLParser):
@@ -214,8 +225,8 @@ class Model(Model2, ModelReporter):
 			self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
+		_Str = lambda s: (base64.standard_b64decode(s)).decode()
 		if use_base64:
-			import base64
 			content = base64.standard_b64decode(content)
 		if isinstance(content, bytes):
 			import zlib
@@ -658,46 +669,75 @@ class Model(Model2, ModelReporter):
 		m.estimate()
 		self._set_estimation_statistics(log_like_nil=m.LL())
 
+	def negative_loglike(self, x=None):
+		if x is None:
+			return -(self.loglike())
+		else:
+			return -(self.loglike(x))
+
+	def d_loglike(self, x=None):
+		if x is None:
+			return -(self.negative_d_loglike())
+		else:
+			return -(self.negative_d_loglike(x))
+
+	def d_loglike_nocache(self, x=None):
+		if x is None:
+			return -(self.negative_d_loglike_nocache())
+		else:
+			return -(self.negative_d_loglike_nocache(x))
+
+	def d_loglike_cached(self, x=None):
+		if x is None:
+			return -(self.negative_d_loglike_cached())
+		else:
+			return -(self.negative_d_loglike_cached(x))
+
 	def negative_loglike_(self, x):
+		'''Same as negative_loglike, but converts NAN to INF'''
 		y = self.negative_loglike(x)
 		if numpy.isnan(y):
 			y = numpy.inf
-			print("negative_loglike_ is NAN")
-		print("negative_loglike:",x,"->",y)
 		return y
 
-	def d_loglike_(self, x):
-		y = self.d_loglike(x)
-		#if not hasattr(self,"first_grad"):
-		#	y *= 0.0000001
-		#	self.first_grad = 1
-		print("d_loglike:",x,"->",y)
-		return y
-
-	def gradient_check(self):
+	def gradient_check(self, disp=True):
 		try:
 			if self.is_provisioned()<=0:
 				self.provision()
 		except LarchError:
 			self.provision()
+		self.setUp()
 		self.loglike()
-		_fin_diff = self.option.force_finite_diff_grad
 		_force_recalculate = self.option.force_recalculate
 		self.option.force_recalculate = True
-		self.option.force_finite_diff_grad = False
-		a_grad = self.d_loglike()
-		self.option.force_finite_diff_grad = True
-		fd_grad = self.d_loglike()
-		self.option.force_finite_diff_grad = _fin_diff
+		a_grad = self.d_loglike_nocache()
+		fd_grad = self.finite_diff_gradient()
 		self.option.force_recalculate = _force_recalculate
 		namelen = max(len(n) for n in self.parameter_names())
 		namelen = max(namelen,9)
-		from .util.flux import flux_mag
+		from .util.flux import flux_mag, flux
 		from math import log10
-		print("{1:<{0}s}\t{2:12s}\t{3:12s}\t{4:12s}\t{5:12s}".format(namelen,'Parameter','Value','Analytic','FiniteDiff','Flux'))
+		s = ("{1:<{0}s}\t{2:12s}\t{3:12s}\t{4:12s}\t{5:12s}".format(namelen,'Parameter','Value','Analytic','FiniteDiff','Flux'))
+		max_flux = -999
+		max_flux_name = ""
 		for name,val,a,fd in zip(self.parameter_names(),self.parameter_values(), a_grad, fd_grad):
-			print("{1:<{0}s}\t{2:< 12.6g}\t{3:< 12.6g}\t{4:< 12.6g}\t{5:12s}".format(namelen,name,val,a,fd,flux_mag(fd,a)))
+			s += "\n{1:<{0}s}\t{2:< 12.6g}\t{3:< 12.6g}\t{4:< 12.6g}\t{5:12s}".format(namelen,name,val,a,fd,flux_mag(fd,a))
+			flx = flux(fd,a)
+			if flx>max_flux:
+				max_flux = flx
+				max_flux_name = name
+		if disp:
+			print(s)
+			return max_flux, name
+		return max_flux, s
 
+
+	def d_loglike_casewise(self, v=None):
+		if self.option.force_finite_diff_grad:
+			return self.finite_diff_gradient_casewise(v)
+		if v is None:
+			return self._gradient_casewise()
+		return self._gradient_casewise(v)
 
 	def finite_diff_gradient_casewise(self, v=None):
 		from .array import Array
@@ -721,7 +761,7 @@ class Model(Model2, ModelReporter):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), **kwargs):
+	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), maxiter=1000, disp=True, **kwargs):
 		import scipy.optimize
 		import datetime
 		starttime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
@@ -730,10 +770,10 @@ class Model(Model2, ModelReporter):
 			ret = scipy.optimize.basinhopping(
 				self.negative_loglike,   # objective function
 				self.parameter_values(), # initial values
-				minimizer_kwargs=dict(method=method,args=(),jac=self.d_loglike,
+				minimizer_kwargs=dict(method=method,args=(),jac=self.negative_d_loglike,
 										hess=None, hessp=None, bounds=None,
 										constraints=constraints, tol=None, callback=None,),
-				disp=True,
+				disp=disp,
 				callback=cb,
 				**kwargs)
 		else:
@@ -742,9 +782,9 @@ class Model(Model2, ModelReporter):
 				self.parameter_values(), # initial values
 				args=(),
 				method=method,
-				jac=False, #? self.d_loglike,
-				hess=None, hessp=None, bounds=None, constraints=constraints, tol=None, callback=print,
-				options=dict(disp=True))
+				jac=self.negative_d_loglike,
+				hess=None, hessp=None, bounds=None, constraints=constraints, tol=None, callback=print if disp else None,
+				options=dict(disp=disp, maxiter=maxiter))
 		endtime = (datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds()
 		startfrac, startwhole = math.modf(starttime)
 		endfrac, endwhole = math.modf(endtime)
@@ -762,9 +802,6 @@ class Model(Model2, ModelReporter):
 		if s or True:
 			self.parameter_values(ret.x)
 			self._set_estimation_statistics( -(ret.fun) )
-			self._set_estimation_run_statistics(int(startwhole),int(startfrac),
-												int(endwhole),int(endfrac),
-												ret.nit,ret.message)
 		return ret
 
 	def analyze(self, reportfile=None, css=None, repair=None, est_args=None, est_tight=None, *arg, **kwargs):
@@ -791,7 +828,7 @@ class Model(Model2, ModelReporter):
 			from .util import xhtml
 			htmlfile = xhtml.Elem('div')
 
-		if self.is_provisioned(False)<=0:
+		if self.is_provisioned()<=0:
 			self.provision()
 		qc = self.db.queries.quality_check()
 		

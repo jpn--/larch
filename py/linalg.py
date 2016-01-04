@@ -28,6 +28,9 @@ def general_inverse(a):
 	#_Skr.log(5,"call:general_inverse")
 	try:
 		try:
+			eig = numpy.linalg.eigvalsh(a)
+			if numpy.min(eig) < 0.001:
+				raise numpy.linalg.linalg.LinAlgError()
 			x = numpy.linalg.inv(a)
 			#_Skr.log(5,"normal matrix inverse calculated")
 		except numpy.linalg.linalg.LinAlgError:
@@ -35,7 +38,7 @@ def general_inverse(a):
 			x = scipy.linalg.pinvh(a)
 			_Skr.log(5,"matrix pseudo-inverse calculated")
 	except:
-		print("error in general_inverse")
+		#print("error in general_inverse")
 		raise
 	#_Skr.log(5,"ending:general_inverse")
 	return pack(x)

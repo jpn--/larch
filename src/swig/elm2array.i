@@ -236,7 +236,13 @@
 	}
 }
 
-
+%typemap(out) std::shared_ptr<etk::symmetric_matrix> {
+	if (!*&$1) {
+		Py_RETURN_NONE;
+	} else {
+		$result = (*(&($1)))->get_object();
+	}
+}
 
 
 

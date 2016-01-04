@@ -103,6 +103,8 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
 static PyObject* ptrToLarchError;  /* add this! */
 static PyObject* ptrToSQLError;  /* add this! */
 static PyObject* ptrToFacetError;  /* add this! */
+static PyObject* ptrToLarchCacheError;  /* add this! */
+static PyObject* ptrToMatrixInverseError;  /* add this! */
 %}
 
 %init %{
@@ -115,12 +117,21 @@ static PyObject* ptrToFacetError;  /* add this! */
     ptrToFacetError = PyErr_NewException("larch.FacetError", NULL, NULL);
     Py_INCREF(ptrToFacetError);
     PyModule_AddObject(m, "FacetError", ptrToFacetError);
+    ptrToLarchCacheError = PyErr_NewException("larch.LarchCacheError", NULL, NULL);
+    Py_INCREF(ptrToLarchCacheError);
+    PyModule_AddObject(m, "LarchCacheError", ptrToLarchCacheError);
+
+    ptrToMatrixInverseError = PyErr_NewException("larch.MatrixInverseError", NULL, NULL);
+    Py_INCREF(ptrToMatrixInverseError);
+    PyModule_AddObject(m, "MatrixInverseError", ptrToMatrixInverseError);
 %}
 
 %pythoncode %{
 	from ._core import LarchError
 	from ._core import SQLiteError
 	from ._core import FacetError
+	from ._core import LarchCacheError
+	from ._core import MatrixInverseError
 %}
 
 %include "exception.i"
@@ -135,6 +146,15 @@ static PyObject* ptrToFacetError;  /* add this! */
 		return NULL;
 	} catch (const etk::FacetError& e) {
 		PyErr_SetString(ptrToFacetError, const_cast<char*>(e.what()));
+		return NULL;
+	} catch (const etk::LarchCacheError& e) {
+		PyErr_SetString(ptrToLarchCacheError, const_cast<char*>(e.what()));
+		return NULL;
+	} catch (const etk::MatrixInverseError& e) {
+		PyErr_SetObject(ptrToMatrixInverseError, e.the_object());
+		return NULL;
+	} catch (const etk::PythonStandardException& e) {
+		PyErr_SetString(e._PyExc, const_cast<char*>(e.what()));
 		return NULL;
 	} catch (const std::exception& e) {
 		PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
@@ -216,7 +236,7 @@ namespace std {
 #include "elm_queryset.h"
 #include "elm_queryset_simpleco.h"
 #include "elm_queryset_twotable.h"
-%} 
+%}
 
 namespace elm {
 	void set_linalg(PyObject* mod);
@@ -256,6 +276,7 @@ from .db import DB
 %include "elm_parameter2.h"
 %include "elm_cellcode.h"
 %include "elm_vascular.h"
+%include "elm_vascular.i"
 %include "elm_inputstorage.h"
 %include "elm_model2_options.h"
 %include "elm_runstats.h"

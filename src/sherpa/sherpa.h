@@ -71,6 +71,7 @@ public:
 	virtual const etk::memarray& gradient();
 	virtual void calculate_hessian();
 	
+	void negative_finite_diff_gradient_(etk::memarray& fGrad);
 	void finite_diff_gradient_(etk::memarray& fGrad);
 	void finite_diff_hessian (etk::triangle& fHESS);
 	
@@ -100,8 +101,9 @@ private:
 	//		-1	Did not find an improvement at minimum step value
 	//		-2	A function evaluation returned NaN even at minimum step value
 	
-private:
+protected:
 	// Direction finding schemes, return 0 for good values, <0 if there is a problem
+	int _bhhh_update(etk::symmetric_matrix* use_bhhh);
 	int _bfgs_update();
 	int _dfp_update();
 	int _dfpj_update();
@@ -167,6 +169,10 @@ protected:
 public:
 	etk::memarray FCurrent;
 	
+protected:
+	etk::memarray _FCurrent_latest_objective;
+	double _FCurrent_latest_objective_value;
+	
 public:
 	const etk::memarray& ReadFCurrent() const {return FCurrent;};
 	const etk::memarray& ReadFBest() const {return FBest;};
@@ -194,7 +200,7 @@ protected:
 	etk::memarray FatGCurrent;
 	
 protected:	
-	etk::memarray_symmetric Bhhh;
+	etk::triangle Bhhh;
 	etk::triangle Hess;
 	etk::triangle invHess;
 	etk::triangle invHessTemp;

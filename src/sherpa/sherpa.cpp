@@ -39,7 +39,7 @@ double sherpa::objective()
 }
 const etk::memarray& sherpa::gradient()  
 { 
-	finite_diff_gradient_(GLastTurn);
+	negative_finite_diff_gradient_(GLastTurn);
 	return GLastTurn;
 }
 
@@ -48,6 +48,31 @@ void sherpa::calculate_hessian()
 	finite_diff_hessian(Hess);
 }
 
+
+void sherpa::negative_finite_diff_gradient_(memarray& fGrad)
+{
+	unsigned i;	
+	double jiggle;
+	if (fGrad.size() < dF()) OOPS("error(sherpa): not enough finite diff array space");
+	
+	for (i=0;i<dF();i++) {
+		jiggle = FCurrent[i] * PERTURBATION_SIZE;
+		if (!jiggle) jiggle = PERTURBATION_SIZE;
+		
+		FCurrent[i] += jiggle;
+		freshen();
+		fGrad[i] = objective();
+		FCurrent[i] -= jiggle;
+		
+		FCurrent[i] -= jiggle;
+		freshen();
+		fGrad[i] -= objective();
+		FCurrent[i] += jiggle;
+		freshen();
+		
+		fGrad[i] /= -2*jiggle;
+	}
+}
 
 void sherpa::finite_diff_gradient_(memarray& fGrad)
 {
@@ -70,7 +95,7 @@ void sherpa::finite_diff_gradient_(memarray& fGrad)
 		FCurrent[i] += jiggle;
 		freshen();
 		
-		fGrad[i] /= -2*jiggle;
+		fGrad[i] /= 2*jiggle;
 	}
 }
 
@@ -123,7 +148,7 @@ double sherpa::gradient_diagnostic (bool shout)
 	INFO(msg) << "Conducting Gradient Diagnostic..." ;
 	gradient(); 
 	memarray FiniteGrad (dF());
-	finite_diff_gradient_(FiniteGrad);
+	negative_finite_diff_gradient_(FiniteGrad);
 
 	std::ostringstream buff;
 	buff << "Parameter         \tParamValue        \tAnalyticGrad      FiniteDiffGrad    \n" ;
@@ -350,6 +375,45 @@ int sherpa::_line_search (sherpa_pack& method)
 
 // TODO: Identify when maximization has every parameter but one alternating sign direction over many iterations
 
+int sherpa::_bhhh_update (etk::symmetric_matrix* use_bhhh)
+{
+
+	if (!use_bhhh) {
+		return -2;
+	}
+
+	if (use_bhhh->all_zero()) {
+		return -1;
+	}
+
+//	BUGGER(msg) << "bhhh=\n" << Bhhh.printSquare() ;
+	invHessTemp = *use_bhhh;
+//	BUGGER(msg) << "invHessTemp1=\n" << invHessTemp.printSquare() ;
+	
+	if (any_holdfast()) {
+
+		symmetric_matrix temp_free_hess (invHessTemp.size1()-count_holdfast());
+		
+		// invert hessian
+		hessfull_to_hessfree(&invHessTemp, &temp_free_hess) ;
+		temp_free_hess.inv();
+		hessfree_to_hessfull(&invHessTemp, &temp_free_hess) ;
+
+	} else {
+		
+//		std::cerr << "#  #   GCurrent   .ptr()="<<&GCurrent<<"\n";
+//		std::cerr << "#  #   invHessTemp.ptr()="<<&invHessTemp<<"\n";
+//		std::cerr << "#  #   invHessTemp.size()="<<invHessTemp.size1()<<"\n";
+//		std::cerr << "#  #   invHessTemp.size()="<<invHessTemp.size2()<<"\n";
+//		std::cerr << "#  #   invHessTemp.size()="<<invHessTemp.size3()<<"\n";
+		
+		invHessTemp.inv(&msg);
+	}
+		
+//	BUGGER(msg) << "invHessTemp=\n" << invHessTemp.printSquare() ;
+	return 0;
+}
+
 int sherpa::_bfgs_update () 
 {
 	double Denom, DenomB;
@@ -362,7 +426,7 @@ int sherpa::_bfgs_update ()
 	if (isNan(Denom)) return -1;
 	if (fabs(Denom) > 1e30) return -1;
 	
-	memarray HdG (dF());
+	ndarray HdG (dF());
 	#ifdef SYMMETRIC_PACKED
 	cblas_dspmv(CblasRowMajor,CblasUpper, dF(), 1,
 				*invHessTemp, *GMotion,1, 0, *HdG,1);
@@ -476,6 +540,7 @@ int sherpa::_dfpj_update ()
 }
 
 
+
 int sherpa::_find_ascent_direction (char& Method) 
 {
 	MONITOR(msg)<< "Seeking ascent direction" ;
@@ -501,8 +566,8 @@ int sherpa::_find_ascent_direction (char& Method)
 			break;
 			
 			// DFP (Davidson-Fletcher-Powell) Algorithm
-			case 'D':	
-			case 'd':	
+		case 'D':
+		case 'd':	
 			MONITOR(msg)<< "using DFP to seek ascent direction" ;
 			status = _dfp_update();
 			if (status<0) WARN(msg)<< "improvement is too small for DFP, new "
@@ -510,8 +575,8 @@ int sherpa::_find_ascent_direction (char& Method)
 			break;
 			
 			// Jeff's Undocumented DFP Variant
-			case 'J':	
-			case 'j':	
+		case 'J':
+		case 'j':	
 			MONITOR(msg)<< "using DFP(J) to seek ascent direction" ;
 			status = _dfpj_update();
 			if (status<0) WARN(msg)<< "improvement is too small for DFP(J), new "
@@ -519,41 +584,23 @@ int sherpa::_find_ascent_direction (char& Method)
 			break;
 			
 			// Steepest Ascent
-			case 'S':	
-			case 's':	
+		case 'S':
+		case 's':	
 			MONITOR(msg)<< "using Steepest Ascent direction" ;
 			invHessTemp.initialize_identity();
 			break;
 			
 			// BHHH (Berndt-Hall-Hall-Hausman) Algorithm
-			case 'G':	
-			case 'g':	
-			default:	
-			
-			if (Bhhh.all_zero()) {
-				MONITOR(msg)<< "BHHH is missing, so using BFGS to seek ascent direction" ;
+		case 'G':
+		case 'g':	
+		default:
+			MONITOR(msg)<< "using BHHH to seek ascent direction" ;
+			status = _bhhh_update(&Bhhh);
+			if (status<0) {
+				WARN(msg)<< "BHHH is missing, so using BFGS to seek ascent direction" ;
 				status = _bfgs_update();
 				if (status<0) WARN(msg)<< "improvement is too small for BFGS, new "
 					"inverse hessian estimate not calculated";
-			} else {
-				MONITOR(msg)<< "using BHHH to seek ascent direction" ;
-				BUGGER(msg) << "bhhh=\n" << Bhhh.printSquare() ;
-				invHessTemp = Bhhh;
-				BUGGER(msg) << "invHessTemp1=\n" << invHessTemp.printSquare() ;
-				
-				if (any_holdfast()) {
-					symmetric_matrix temp_free_hess (invHessTemp.size1()-count_holdfast());
-					
-					// invert hessian
-					hessfull_to_hessfree(&invHessTemp, &temp_free_hess) ;
-					temp_free_hess.inv();
-					hessfree_to_hessfull(&invHessTemp, &temp_free_hess) ;
-
-				} else {
-					invHessTemp.inv(&msg);
-				}
-				
-				BUGGER(msg) << "invHessTemp=\n" << invHessTemp.printSquare() ;
 			}
 			break;
 	}
@@ -629,6 +676,13 @@ sherpa_result sherpa::_maximize_pack(sherpa_pack& Norgay, unsigned& iteration_nu
 	double previous_obj_value (-INF);
 	
 	etk::dblvec Recorded_Objective_Values;
+
+//  ## initialization of invHess is only done once, we use the old estimate when switching packs...
+//	if (Norgay.Algorithm=='b' || Norgay.Algorithm=='B' ||
+//		Norgay.Algorithm=='d' || Norgay.Algorithm=='D' ||
+//		Norgay.Algorithm=='j' || Norgay.Algorithm=='J' ) {
+//		invHess.initialize_identity();
+//	}
 	
 	while (keep_going) {
 		std::ostringstream message;
@@ -814,6 +868,8 @@ string sherpa::maximize(unsigned& iteration_number, vector<sherpa_pack>* opts)
 	
 	_initialize();
 	
+	invHess.initialize_identity();
+	
 	while (current_pack) {
 		status = _maximize_pack(*current_pack, iteration_number);
 		net_improvement += (status.best_obj_value - status.starting_obj_value);
@@ -886,44 +942,46 @@ double sherpa::parameter_stderr(const string& freedom_name) const
 
 void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangle* robust_covar)
 {
-	BUGGER(msg) << "sherpa::_update_freedom_info()";
-	BUGGER(msg) << "dF()="<<dF();
-	if (ihess) {
-		BUGGER(msg) << "ihess->size()="<<ihess->size();
-	} else {
-		BUGGER(msg) << "ihess not given";
-	}
-	if (robust_covar) {
-		BUGGER(msg) << "robust_covar->size()="<<robust_covar->size();
-	} else {
-		BUGGER(msg) << "robust_covar not given";
-	}
+//	BUGGER(msg) << "sherpa::_update_freedom_info()";
+//	BUGGER(msg) << "dF()="<<dF();
+//	if (ihess) {
+//		BUGGER(msg) << "ihess->size()="<<ihess->size();
+//	} else {
+//		BUGGER(msg) << "ihess not given";
+//	}
+//	if (robust_covar) {
+//		BUGGER(msg) << "robust_covar->size()="<<robust_covar->size();
+//	} else {
+//		BUGGER(msg) << "robust_covar not given";
+//	}
 	
 	double temp;
 	
 	for (unsigned i=0; i<dF(); i++) {
 		FInfo[FNames[i]].value = ReadFCurrent()[i];
 		if (ihess) {
-			BUGGER(msg) << "Setting std_err "<<i<<" for "<<FNames[i];
+//			BUGGER(msg) << "Setting std_err "<<i<<" for "<<FNames[i];
 			temp = (*ihess)(i,i);
 			if (temp < 0) {
 				WARN(msg) << "Negative value in covariance diagonal at "<<i;
 				temp = -temp;
+				FInfo[FNames[i]].std_err = -sqrt(temp);
+			} else {
+				FInfo[FNames[i]].std_err = sqrt(temp);
 			}
-			FInfo[FNames[i]].std_err = sqrt(temp);
 			for (unsigned j=0; j<dF(); j++) {
-				BUGGER(msg) << "Setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
+//				BUGGER(msg) << "Setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
 				if (isNan((*ihess)(i,j))) {
 					dictionary_sd(FInfo[FNames[i]]._covar).set_key_nan(FNames[j]);
 				} else {
 					dictionary_sd(FInfo[FNames[i]]._covar).key(FNames[j]) = (*ihess)(i,j);
 				}
-				BUGGER(msg) << "Done setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
+//				BUGGER(msg) << "Done setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
 			}
-			BUGGER(msg) << "Done setting std_err "<<i<<" for "<<FNames[i];
+//			BUGGER(msg) << "Done setting std_err "<<i<<" for "<<FNames[i];
 		}
 		if (robust_covar && robust_covar->size()>0) {
-			BUGGER(msg) << "Setting robust_std_err "<<i<<" for "<<FNames[i];
+//			BUGGER(msg) << "Setting robust_std_err "<<i<<" for "<<FNames[i];
 			temp = (*robust_covar)(i,i);
 			if (temp < 0) {
 				WARN(msg) << "Negative value in robust covariance diagonal at "<<i;
@@ -931,7 +989,7 @@ void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangl
 			}
 			FInfo[FNames[i]].robust_std_err = sqrt(temp);
 			for (unsigned j=0; j<dF(); j++) {
-				BUGGER(msg) << "Setting robust covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j]<< " = "<< (*robust_covar)(i,j);
+//				BUGGER(msg) << "Setting robust covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j]<< " = "<< (*robust_covar)(i,j);
 				dictionary_sd(FInfo[FNames[i]]._robust_covar).key(FNames[j]) = (*robust_covar)(i,j);
 			}
 		}
@@ -941,8 +999,8 @@ void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangl
 
 void sherpa::_update_freedom_info_best()
 {
-	BUGGER(msg) << "sherpa::_update_freedom_info_best()";
-	BUGGER(msg) << "dF()="<<dF();
+//	BUGGER(msg) << "sherpa::_update_freedom_info_best()";
+//	BUGGER(msg) << "dF()="<<dF();
 	
 	double temp;
 	
@@ -1016,6 +1074,10 @@ void sherpa::allocate_memory()
 	if (FCurrent.size1()!=dF()) {
 	
 		FCurrent.resize(dF());
+		_FCurrent_latest_objective.resize(dF());
+		if (dF()>0) {
+			_FCurrent_latest_objective[0] = NAN;
+		}
 		FBest.resize(dF());
 		FLastTurn.resize(dF());
 		FPrevTurn.resize(dF());
@@ -1051,11 +1113,13 @@ void sherpa::_initialize()
 	if (isNan(ZBest)) ZBest = -INF;
 	ZCurrent = -INF;
 	freshen();
+
 }
 
 void sherpa::free_memory()
 {
-	FCurrent.resize(0);	
+	FCurrent.resize(0);
+	_FCurrent_latest_objective.resize(0);
 	FBest.resize(0);
 	FLastTurn.resize(0);
 	FPrevTurn.resize(0);
@@ -1157,6 +1221,7 @@ sherpa::sherpa()
 , invHessTemp ()
 , robustCovariance ()
 , FCurrent()
+, _FCurrent_latest_objective()
 , FBest()
 , FLastTurn()
 , FPrevTurn()

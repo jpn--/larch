@@ -140,7 +140,7 @@ except NameError:
 def default_formatter():
 	return logging.Formatter(fmt=_mess_format,datefmt=_time_format)
 
-def scribe_to_file(filename, residual=None, overwrite=False):
+def scribe_to_file(filename, residual=None, overwrite=False, *, fmt=None, datefmt=None):
 	global fileHandler
 	if fileHandler:
 		fileHandler.flush()
@@ -158,7 +158,11 @@ def scribe_to_file(filename, residual=None, overwrite=False):
 		f.close()
 		mode = 'a'
 	fileHandler = logging.FileHandler(filename, mode)
-	fileHandler.setFormatter(logging.Formatter(fmt=_mess_format,datefmt=_time_format))
+	if fmt is None:
+		fmt=_mess_format
+	if datefmt is None:
+		datefmt=_time_format
+	fileHandler.setFormatter(logging.Formatter(fmt=fmt,datefmt=datefmt))
 	Scrb.addHandler(fileHandler)
 	Scrb.critical("Connected log to %s",filename)
 
@@ -173,8 +177,10 @@ def spew(level=10):
 
 _easy_logger = None
 
-def easy(level=-1, label=""):
+def easy(level=-1, label="", *, filename=None):
 	global _easy_logger
+	if filename:
+		scribe_to_file(filename, fmt='[%(name)s] %(message)s')
 	if isinstance(level, str):
 		label_ = level
 		level = label if isinstance(label, int) else -1
@@ -187,7 +193,7 @@ def easy(level=-1, label=""):
 		scribe_to_stream()
 		_easy_logger = 1
 	if level>0: setLevel(level)
-	return logging.getLogger(label).critical
+	return getScriber(label).critical
 
 def easy_debug(label=""):
 	global _easy_logger
