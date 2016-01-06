@@ -670,6 +670,19 @@ class TestNL(ELM_TestCase):
 		self.assertNearlyEqual(-7309.600971749633, m.loglike_nocache([0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1]))
 		self.assertNearlyEqual(-numpy.inf, m.loglike_nocache([-10,0,0,0,0,0,0,0,0,10,0,0,1,1,1,1]))
 
+	def test_cnl_probability_features(self):
+		m = Model.Example(111, DB.Example('swissmetro'))
+		m.setUp()
+		m.loglike([ 0.09827949, -0.24044757, -0.0077686 , -0.00818902,  0.39764565,
+				0.24308742, -0.01971338])
+		p1 = m.probability()
+		p2 = m.Probability()
+		self.assertTrue(p1 is p2)
+		self.assertTrue(len(m._xylem().all_codes()) == p1.shape[1])
+		self.assertEqual((6768, 6), p1.shape)
+		p1top = [ 0.15184372,  0.62716611,  0.22099017,  0.35932659,  0.64067341, 1.        ]
+		for p_c, p_o in zip (p1top, p1[0,:]):
+			self.assertNearlyEqual(p_c,p_o)
 
 
 
