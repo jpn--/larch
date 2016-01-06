@@ -85,7 +85,7 @@ elm::workshop_mnl_gradient2::~workshop_mnl_gradient2()
 	Workspace.resize(0);
 	CaseGrad.resize(0);
 	workshopGCurrent.resize(0);
-	workshopBHHH.resize(0);
+	workshopBHHH.destroy();
 	Grad_UtilityCA.resize(0);
 	Grad_UtilityCO.resize(0);
 

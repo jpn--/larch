@@ -277,7 +277,8 @@ ndarray::~ndarray()
 
 void ndarray::resize(const int& r)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_DOUBLE
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
 		||	ndim() != 1
 		||	size1() != r
 		)
@@ -286,7 +287,8 @@ void ndarray::resize(const int& r)
 
 void ndarray::resize(const int& r,const int& c)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_DOUBLE
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
 		||	ndim() != 2
 		||	size1() != r
 		||	size2() != c
@@ -296,7 +298,8 @@ void ndarray::resize(const int& r,const int& c)
 
 void ndarray::resize(const int& r,const int& c,const int& s)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_DOUBLE
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
 		||	ndim() != 3
 		||	size1() != r
 		||	size2() != c
@@ -307,7 +310,8 @@ void ndarray::resize(const int& r,const int& c,const int& s)
 
 void ndarray::resize_bool(const int& r)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_BOOL
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_BOOL
 		||	ndim() != 1
 		||	size1() != r
 		)
@@ -316,7 +320,8 @@ void ndarray::resize_bool(const int& r)
 
 void ndarray::resize_bool(const int& r,const int& c)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_BOOL
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_BOOL
 		||	ndim() != 2
 		||	size1() != r
 		||	size2() != c
@@ -326,7 +331,8 @@ void ndarray::resize_bool(const int& r,const int& c)
 
 void ndarray::resize_bool(const int& r,const int& c,const int& s)
 {
-	if (PyArray_DESCR(pool)->type_num != NPY_BOOL
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_BOOL
 		||	ndim() != 3
 		||	size1() != r
 		||	size2() != c

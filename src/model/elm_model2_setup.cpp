@@ -484,7 +484,7 @@ void elm::Model2::tearDown()
 	
 	clear_cache();
 	
-	CaseLogLike.resize(0);
+	CaseLogLike.destroy();
 
 }
 

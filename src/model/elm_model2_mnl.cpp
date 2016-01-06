@@ -746,6 +746,8 @@ etk::ndarray* elm::Model2::probability(etk::ndarray* params)
 {
 	if (!_Data) OOPS("A database must be linked to this model to do this.");
 
+	if (_is_setUp<2) setUp();
+
 	if (!params) {
 		_parameter_update();
 	} else {
@@ -756,7 +758,6 @@ etk::ndarray* elm::Model2::probability(etk::ndarray* params)
 		freshen();
 	}
 	
-	if (_is_setUp<2) setUp();
 	 
 	_parameter_log();
 	 
@@ -1294,11 +1295,11 @@ double elm::Model2::objective ()
 	
 	FatGCurrent.initialize(NAN); // tell gradient it needs to recalculate
 
-	if (array_compare(_FCurrent_latest_objective.ptr(),_FCurrent_latest_objective.size())
-		==array_compare(FCurrent.ptr(), FCurrent.size()))
-	{
-		return _FCurrent_latest_objective_value;
-	}
+//	if (array_compare(_FCurrent_latest_objective.ptr(),_FCurrent_latest_objective.size())
+//		==array_compare(FCurrent.ptr(), FCurrent.size()))
+//	{
+//		return _FCurrent_latest_objective_value;
+//	}
 	
 	BUGGER(msg)<< "Calculating LL" ;
 //	msg << printStatus(status_FNames | status_FCurrent) <<"\n"; //101110
