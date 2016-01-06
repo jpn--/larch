@@ -1037,9 +1037,9 @@ string VAS_System::display_phenotype() const
 	return S.str();
 }
 
-etk::strvec VAS_System::elemental_names() const
+std::vector<std::string> VAS_System::elemental_names() const
 {
-	etk::strvec ret;
+	std::vector<std::string> ret;
 	for (unsigned a=0; a<n_elemental(); a++) {
 		ret.push_back(operator[](a)->name());
 	}
@@ -1050,6 +1050,15 @@ cellcodevec VAS_System::elemental_codes() const
 {
 	cellcodevec ret;
 	for (unsigned a=0; a<n_elemental(); a++) {
+		ret.push_back(operator[](a)->code());
+	}
+	return ret;
+}
+
+cellcodevec VAS_System::all_codes() const
+{
+	cellcodevec ret;
+	for (unsigned a=0; a<size(); a++) {
 		ret.push_back(operator[](a)->code());
 	}
 	return ret;

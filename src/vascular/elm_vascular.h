@@ -310,8 +310,9 @@ namespace elm {
 		std::vector< std::pair<cellcode, cellcode> > list_edges_dna() const;
 		// DISPLAY prints a representation of the network.
 		
-		etk::strvec elemental_names() const;
-		cellcodevec elemental_codes() const;
+		std::vector<std::string> elemental_names() const;
+		std::vector<long long> elemental_codes() const;
+		std::vector<long long> all_codes() const;
 		
 		VAS_System();
 	};

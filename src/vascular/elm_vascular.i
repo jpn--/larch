@@ -17,7 +17,15 @@ namespace elm {
 
 		size_t          n_alloc_break() const ;
 		size_t          size()        const ;
-		
+
+		std::string display() const;
+		std::string display_phenotype() const;
+		std::string display_edges() const;
+	
+		std::vector<std::string> elemental_names() const;
+		std::vector<long long> elemental_codes() const;
+		std::vector<long long> all_codes() const;
+	
 	};
 
 }
