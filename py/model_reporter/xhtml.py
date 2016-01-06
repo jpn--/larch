@@ -335,6 +335,14 @@ class XhtmlModelReporter():
 			if key.upper()!=key: format[key.upper()] = format[key]
 		if 'LL' not in format: format['LL'] = '0.2f'
 		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
+
+		try:
+			total_weight = float(self.Data("Weight").sum())
+		except:
+			total_weight = None
+		if total_weight is not None:
+			if round(total_weight) == self.nCases():
+				total_weight = None
 	
 		es = self._get_estimation_statistics()
 		x = XML_Builder("div", {'class':"statistics"})
@@ -345,17 +353,30 @@ class XhtmlModelReporter():
 		x.th("Statistic")
 		x.th("Aggregate")
 		x.th("Per Case")
+		use_colspan = '2'
+		if total_weight is not None:
+			x.th("Per Unit Weight")
+			use_colspan = '3'
 		x.end_tr
 		x.tr
 		x.td("Number of Cases")
-		x.td("{0}".format(self.nCases()), {'colspan':'2', 'class':'statistics_bridge'})
+		x.td("{0}".format(self.nCases()), {'colspan':use_colspan, 'class':'statistics_bridge'})
 		x.end_tr
+		
+		if total_weight is not None:
+			x.tr
+			x.td("Total Weight")
+			x.td("{0}".format(total_weight), {'colspan':use_colspan, 'class':'statistics_bridge'})
+			x.end_tr
+		
 		ll = es[0]['log_like']
 		if not math.isnan(ll):
 			x.tr
 			x.td("Log Likelihood at Convergence")
 			x.td("{0:{LL}}".format(ll,**format))
 			x.td("{0:{LL}}".format(ll/self.nCases(),**format))
+			if total_weight is not None:
+				x.td("{0:{LL}}".format(ll/total_weight,**format))
 			x.end_tr
 		llc = es[0]['log_like_constants']
 		if not math.isnan(llc):
@@ -363,6 +384,8 @@ class XhtmlModelReporter():
 			x.td("Log Likelihood at Constants")
 			x.td("{0:{LL}}".format(llc,**format))
 			x.td("{0:{LL}}".format(llc/self.nCases(),**format))
+			if total_weight is not None:
+				x.td("{0:{LL}}".format(llc/total_weight,**format))
 			x.end_tr
 		llz = es[0]['log_like_null']
 		if not math.isnan(llz):
@@ -370,6 +393,8 @@ class XhtmlModelReporter():
 			x.td("Log Likelihood at Null Parameters")
 			x.td("{0:{LL}}".format(llz,**format))
 			x.td("{0:{LL}}".format(llz/self.nCases(),**format))
+			if total_weight is not None:
+				x.td("{0:{LL}}".format(llz/total_weight,**format))
 			x.end_tr
 		ll0 = es[0]['log_like_nil']
 		if not math.isnan(ll0):
@@ -377,6 +402,8 @@ class XhtmlModelReporter():
 			x.td("Log Likelihood with No Model")
 			x.td("{0:{LL}}".format(ll0,**format))
 			x.td("{0:{LL}}".format(ll0/self.nCases(),**format))
+			if total_weight is not None:
+				x.td("{0:{LL}}".format(ll0/total_weight,**format))
 			x.end_tr
 		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
 			x.tr({'class':"top_rho_sq"})
@@ -385,10 +412,10 @@ class XhtmlModelReporter():
 					rsc = 1.0-(ll/llc)
 				except ZeroDivisionError:
 					x.td("Rho Squared w.r.t. Constants")
-					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("ZeroDivisionError", {'colspan':use_colspan, 'class':'statistics_bridge'})
 				else:
 					x.td("Rho Squared w.r.t. Constants")
-					x.td("{0:{RHOSQ}}".format(rsc,**format), {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("{0:{RHOSQ}}".format(rsc,**format), {'colspan':use_colspan, 'class':'statistics_bridge'})
 				x.end_tr
 				if not math.isnan(llz) or not math.isnan(ll0): x.tr
 			if not math.isnan(llz):
@@ -396,10 +423,10 @@ class XhtmlModelReporter():
 					rsz = 1.0-(ll/llz)
 				except ZeroDivisionError:
 					x.td("Rho Squared w.r.t. Null Parameters")
-					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("ZeroDivisionError", {'colspan':use_colspan, 'class':'statistics_bridge'})
 				else:
 					x.td("Rho Squared w.r.t. Null Parameters")
-					x.td("{0:{RHOSQ}}".format(rsz,**format), {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("{0:{RHOSQ}}".format(rsz,**format), {'colspan':use_colspan, 'class':'statistics_bridge'})
 				x.end_tr
 				if not math.isnan(ll0): x.tr
 			if not math.isnan(ll0):
@@ -407,10 +434,10 @@ class XhtmlModelReporter():
 					rs0 = 1.0-(ll/ll0)
 				except ZeroDivisionError:
 					x.td("Rho Squared w.r.t. No Model")
-					x.td("ZeroDivisionError", {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("ZeroDivisionError", {'colspan':use_colspan, 'class':'statistics_bridge'})
 				else:
 					x.td("Rho Squared w.r.t. No Model")
-					x.td("{0:{RHOSQ}}".format(rs0,**format), {'colspan':'2', 'class':'statistics_bridge'})
+					x.td("{0:{RHOSQ}}".format(rs0,**format), {'colspan':use_colspan, 'class':'statistics_bridge'})
 				x.end_tr
 		x.end_table
 		return x.close()

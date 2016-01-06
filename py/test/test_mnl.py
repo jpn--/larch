@@ -432,49 +432,16 @@ class TestMNL(ELM_TestCase):
 		self.assertAlmostEqual( 0.000682,  m.parameter("B_COST").robust_std_err   ,6 )
 		self.assertAlmostEqual( 0.0582,    m.parameter("ASC_CAR").robust_std_err  ,4 )
 
-#	duplicate test in examples.
-#	def test_swissmetro_02weight(self):
-#		swissmetro_alts = {
-#		1:('Train','TRAIN_AV*(SP!=0)'),
-#		2:('SM','SM_AV'),
-#		3:('Car','CAR_AV*(SP!=0)'),
-#		}
-#		d = DB.CSV_idco(filename=TEST_DATA['SWISSMETRO-CSV'],
-#				   choice="CHOICE", weight="(1.0*(GROUPid==2)+1.2*(GROUPid==3))*0.8890991",
-#				   tablename="data", savename=None, alts=swissmetro_alts, safety=True)
-#		d.queries.set_idco_query(d.queries.get_idco_query()+" WHERE CHOICE!=0 AND (PURPOSE==1 OR PURPOSE==3)")
-#		#d.refresh()
-#		m = Model(d);
-#		m.logger(False)
-#		m.parameter("ASC_TRAIN",0)
-#		m.parameter("B_TIME"   ,0)
-#		m.parameter("B_COST"   ,0)
-#		m.parameter("ASC_CAR"  ,0)
-#		m.utility.co("1",1,"ASC_TRAIN") 
-#		m.utility.co("1",3,"ASC_CAR") 
-#		m.utility.co("TRAIN_TT",1,"B_TIME")
-#		m.utility.co("SM_TT",2,"B_TIME") 
-#		m.utility.co("CAR_TT",3,"B_TIME") 
-#		m.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
-#		m.utility.co("SM_CO*(GA==0)"   ,2,"B_COST") 
-#		m.utility.co("CAR_CO",        3,"B_COST") 
-#		m.option.gradient_diagnostic=0
-#		m.option.calc_std_errors=True
-#		m.estimate()
-#		self.assertAlmostEqual( -5273.742461488077, m.LL(), 3 )
-#		self.assertAlmostEqual( -0.7565557083130686,   m.parameter("ASC_TRAIN").value,8 )
-#		self.assertAlmostEqual( -0.0132,  m.parameter("B_TIME").value   ,4 )
-#		self.assertAlmostEqual( -0.0112,  m.parameter("B_COST").value   ,4 )
-#		self.assertAlmostEqual( -0.114,   m.parameter("ASC_CAR").value  ,3 )
-#		self.assertAlmostEqual( 0.0560,   m.parameter("ASC_TRAIN").std_err,4 )
-#		self.assertAlmostEqual( 0.000569, m.parameter("B_TIME").std_err   ,6 )
-#		self.assertAlmostEqual( 0.000520, m.parameter("B_COST").std_err   ,6 )
-#		self.assertAlmostEqual( 0.0432,   m.parameter("ASC_CAR").std_err  ,4 )
-#		self.assertNearlyEqual( 0.08325742000250282,m.parameter("ASC_TRAIN").robust_std_err )
-#		self.assertNearlyEqual( 0.0010365818243247937,  m.parameter("B_TIME").robust_std_err    )
-#		self.assertNearlyEqual( 0.0006767859433091413,m.parameter("B_COST").robust_std_err    )
-#		self.assertNearlyEqual( 0.05831177412562568,   m.parameter("ASC_CAR").robust_std_err   )
 
+	def test_swissmetro_02weight_double(self):
+		m = Model.Example(102, DB.Example('swissmetro'))
+		m.db.queries.weight = '(1.0*(GROUPid==2)+1.2*(GROUPid==3))*0.8890991*2.0'
+		m.option.calc_std_errors=False
+		m.maximize_loglike()
+		m.loglike()
+		self.assertAlmostEqual( -10547.48518638403, m.LL(), 3 )
+		self.assertAlmostEqual( -10547.48518638403, m.loglike(), 3 )
+		self.assertAlmostEqual( -10547.48518638403, m.loglike_nocache(), 3 )
 
 	def test_automatic_family(self):
 		d = DB.Example('swissmetro')

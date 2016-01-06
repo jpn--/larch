@@ -28,7 +28,7 @@ def roll(m, filename=None, loglevel=baselogging.INFO, cats='-', **format):
 	if log.getEffectiveLevel() > loglevel:
 		log.setLevel(loglevel)
 	
-	m.estimate()
+	m.maximize_loglike()
 
 	log.removeHandler(fh)
 	if local_log:

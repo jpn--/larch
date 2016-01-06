@@ -21,10 +21,12 @@
 
 from scipy.optimize import minimize as _minimize
 import numpy
-from scipy.optimize import OptimizeResult
+from scipy.optimize import OptimizeResult, OptimizeWarning
 from enum import Enum
 from ...core import LarchError, runstats
+import warnings
 
+warnings.filterwarnings(action="ignore", message='.*Unknown solver options.*', category=OptimizeWarning, module='', lineno=0)
 
 
 
@@ -96,6 +98,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 
 	r = _minimize(lambda z: 0, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 	r.stats.prepend_timing(stat)
+	ll = model.loglike()
 
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
 		r.stats.start_process("weight unrescale")
@@ -108,7 +111,6 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 
 	r.stats.start_process("cleanup")
 	r.stats.number_threads = model.option.threads
-	ll = model.loglike()
 	model._set_estimation_statistics(log_like_best=ll, log_like=ll)
 	r.loglike = ll
 	if model.option.calc_null_likelihood:
