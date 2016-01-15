@@ -31,7 +31,7 @@ class MetaParameter():
 class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
-	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, optimizers
+	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers
 
 	def dir(self):
 		for f in dir(self):
@@ -404,22 +404,27 @@ class Model(Model2, ModelReporter):
 					basement.add(s)
 		return discovered
 
-	def new_node(self, nest_name=None, param_name="", branch=None, **kwargs):
+	def new_nest(self, nest_name=None, param_name="", branch=None, **kwargs):
 		"""Generate a new nest with a new unique code.
+		
+		If you don't want to bother managing the code numbers for nests and instead
+		just work with them more abstractly, this handy function allows you to 
+		create a new nest node without worrying about the code number; an otherwise
+		unused number will be selected for you (and returned by this method, so you
+		can use it elsewhere).
+		
 		
 		Parameters
 		----------
-		id : int
-			The code number of the nest. Must be unique to this nest among the 
-			set of all nests and all elemental alternatives.
 		nest_name : str or None
 			The name of the nest. This name is used in various reports.
 			It can be any string but generally something short and descriptive
-			is useful. If None, the name is set to "nest_{id}".
+			is useful. If None, the name is set to "nest_{id}", although since
+			you're not picking your own id, this might not be the best way to go.
 		param_name : str
 			The name of the parameter to associate with this nest.  If not given,
 			or given as an empty string, the `nest_name` is used.
-		branch
+		branch : str or other immutable
 			An optional label for the branch of the network that this nest is in.
 			The new code will be populated into the set at model.branches[branch].
 
@@ -430,7 +435,7 @@ class Model(Model2, ModelReporter):
 		
 		Notes
 		-----
-		Other keyword parameters are passed through to the nest creation function.
+		Other keyword parameters are passed through to the :meth:`nest` creation function.
 			
 		"""
 		if len(self.node.nodes())>0:
@@ -447,7 +452,7 @@ class Model(Model2, ModelReporter):
 			self.branches[branch].add(newcode)
 		return newcode
 	
-	new_nest = new_node
+	new_node = new_nest
 
 	def report_(self, **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:

@@ -32,6 +32,9 @@ import sys, os.path
 
 examplefiles = {
 	  1:	"mtc01",
+	 17:	"mtc17",
+	 22:	"mtc22",
+	 80:	"itin80",
 	100:	"swissmetro00data",
 	101:	"swissmetro01logit",
 	102:	"swissmetro02weighted",

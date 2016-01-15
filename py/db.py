@@ -113,7 +113,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	sql_avail  = property(Facet.qry_avail , None, None, _docstring_sql_avail  )
 	sql_weight = property(Facet.qry_weight, None, None, _docstring_sql_weight )
 
-	def __init__(self, filename=None, readonly=False):
+	from .util.numbering import recode_alts
+
+	def __init__(self, filename=None, readonly=False, load_queries=True):
 		import os.path
 		if filename is None:
 			filename="file:larchdb?mode=memory"
@@ -152,11 +154,11 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		try: self._freeze()
 		except: pass
 		# load queries if available
-		try:
-			#self.load_queries()
-			pass
-		except apsw.SQLError:
-			pass
+		if load_queries:
+			try:
+				self.load_queries()
+			except apsw.SQLError:
+				pass
 
 	def _commithook(self):
 		if self.totalchanges() > self._reported_changes:
@@ -305,7 +307,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		
 		Parameters
 		----------
-		dataset : {'MTC', 'SWISSMETRO', 'MINI'}
+		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'ITINERARY'}
 			Which example dataset should be used.
 			
 		Returns
@@ -320,6 +322,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		  'MTC':os.path.join(TEST_DIR,"MTCWork.sqlite"),
 		  'TWINCITY':os.path.join(TEST_DIR,"TwinCityQ.elmdata"),
 		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.sqlite"),
+		  'ITINERARY':os.path.join(TEST_DIR,"airmini.sqlite"),
 		  'MINI':os.path.join(TEST_DIR,"mini.sqlite"),
 		  }
 		if dataset.upper() not in TEST_DATA:
@@ -878,7 +881,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 	
 
 	def export_idca(self, file, include_idco='intersect', exclude=[], **formats):
-		'''Export the data in idca format to a csv file.
+		'''Export the :ref:`idca` data to a csv file.
 		
 		Parameters
 		----------
@@ -940,9 +943,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return
 
 	def export_idco(self, file, exclude=[], **formats):
-		'''Export the data in idco format to a csv file.
+		'''Export the :ref:`idco` data to a csv file.
 		
-		Only the idco table is exported, the idca table is ignored.  Future versions
+		Only the :ref:`idco` table is exported, the :ref:`idca` table is ignored.  Future versions
 		of Larch may provide a facility to export idco and idca data together in a 
 		single idco output file.
 		
@@ -1271,7 +1274,36 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 					l.critical(str(arguments))
 			raise
 
-	def array_caseids(self, table=None, caseid=None, sort=True, n_cases=None):
+	def array_caseids(self, *, table=None, caseid=None, sort=True, n_cases=None):
+		"""Extract the caseids from the DB based on preset queries.
+		
+		Generaly you won't need to specify any parameters to this method, as
+		most values are determined automatically from the preset queries.
+		However, if you need to override things for this array without changing
+		the queries more permanently, you can use the input parameters to do so.
+		Note that all parameters must be called by keyword, not as positional 
+		arguments.
+		
+		Parameters
+		----------
+		tablename : str
+			The caseids will be found in this table.
+		caseid : str
+			This sets the column name where the caseids can be found.
+		sort : bool
+			If true (the default) the resulting array will sorted in 
+			ascending order.
+		n_cases : int
+			If you know the number of cases, you can specify it here to speed up
+			the return of the results, particularly if the caseids query is complex.
+			You can safely ignore this and the number of cases will be calculated
+			for you. If you give the wrong number, an exception will be raised.
+		
+		Returns
+		-------
+		ndarray
+			An int64 array of shape (n_cases,1).
+		"""
 		import numpy
 		if table is None:
 			table = self.queries.tbl_caseids()
@@ -1295,7 +1327,72 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return caseids
 
 
-	def array_idca(self, vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
+	def array_idca(self, *vars, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
+		"""Extract a set of idca values from the DB based on preset queries.
+		
+		Generaly you won't need to specify any parameters to this method beyond the
+		variables to include in the array, as
+		most values are determined automatically from the preset queries.
+		However, if you need to override things for this array without changing
+		the queries more permanently, you can use the input parameters to do so.
+		Note that all override parameters must be called by keyword, not as positional
+		arguments.
+		
+		Parameters
+		----------
+		vars : tuple of str
+			A tuple giving the expressions (often column names, but any valid
+			SQLite expression works) to extract as :ref:`idca` format variables.
+		
+		Other Parameters
+		----------------
+		tablename : str
+			The idca data will be found in this table, view, or self contained query (if
+			the latter, it should be surrounded by parentheses).
+		caseid : str
+			This sets the column name where the caseids can be found.
+		altid : str
+			This sets the column name where the altids can be found.
+		altcodes : tuple of int
+			This is the set of alternative codes used in the data. The second (middle) dimension 
+			of the result array will match these codes in length and order.
+		dtype : str or dtype
+			Describe the data type you would like the output array to adopt, probably 
+			'int64', 'float64', or 'bool'.
+		sort : bool
+			If true (the default) the resulting arrays (both of them) will sorted in
+			ascending order by caseid.
+		n_cases : int
+			If you know the number of cases, you can specify it here to speed up
+			the return of the results, particularly if the caseids query is complex.
+			You can safely ignore this and the number of cases will be calculated
+			for you. If you give the wrong number, an exception will be raised.
+		
+		Returns
+		-------
+		data : ndarray
+			An array with specified dtype, of shape (n_cases,len(altcodes),len(vars)).
+		caseids : ndarray
+			An int64 array of shape (n_cases,1).
+			
+		Examples
+		--------
+		Extract a cost and time array from the MTC example data:
+		
+		>>> import larch
+		>>> db = larch.DB.Example()
+		>>> x, c = db.array_idca('totcost','tottime')
+		>>> x.shape
+		(5029, 6, 2)
+		>>> x[0]
+		Array([[  70.63,   15.38],
+		       [  35.32,   20.38],
+		       [  20.18,   22.38],
+		       [ 115.64,   41.1 ],
+		       [   0.  ,   42.5 ],
+		       [   0.  ,    0.  ]])
+
+		"""
 		import numpy
 		if table is None:
 			table = self.queries.tbl_idca()
@@ -1348,7 +1445,49 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = vars
 		return result, caseids
 
-	def array_idco(self, vars, table=None, caseid=None, dtype='float64', sort=True, n_cases=None):
+	def array_idco(self, *vars, table=None, caseid=None, dtype='float64', sort=True, n_cases=None):
+		"""Extract a set of idco values from the DB based on preset queries.
+		
+		Generaly you won't need to specify any parameters to this method beyond the
+		variables to include in the array, as
+		most values are determined automatically from the preset queries.
+		However, if you need to override things for this array without changing
+		the queries more permanently, you can use the input parameters to do so.
+		Note that all override parameters must be called by keyword, not as positional
+		arguments.
+		
+		Parameters
+		----------
+		vars : tuple of str
+			A tuple (or other iterable) giving the expressions (often column names, but any valid
+			SQLite expression works) to extract as :ref:`idco` format variables.
+		
+		Other Parameters
+		----------------
+		tablename : str
+			The idco data will be found in this table, view, or self contained query (if
+			the latter, it should be surrounded by parentheses).
+		caseid : str
+			This sets the column name where the caseids can be found.
+		dtype : str or dtype
+			Describe the data type you would like the output array to adopt, probably 
+			'int64', 'float64', or 'bool'.
+		sort : bool
+			If true (the default) the resulting arrays (both of them) will sorted in
+			ascending order by caseid.
+		n_cases : int
+			If you know the number of cases, you can specify it here to speed up
+			the return of the results, particularly if the caseids query is complex.
+			You can safely ignore this and the number of cases will be calculated
+			for you. If you give the wrong number, an exception will be raised.
+		
+		Returns
+		-------
+		data : ndarray
+			An array with specified dtype, of shape (n_cases,len(vars)).
+		caseids : ndarray
+			An int64 array of shape (n_cases,1).
+		"""
 		import numpy
 		if table is None:
 			table = self.queries.tbl_idco()
@@ -1386,7 +1525,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = vars
 		return result, caseids
 
-	def array_weight(self, table=None, caseid=None, var=None, dtype='float64', sort=True, n_cases=None):
+	def array_weight(self, *, table=None, caseid=None, var=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_weight()
@@ -1440,7 +1579,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = [var,]
 		return result, caseids
 
-	def array_choice(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
+	def array_choice(self, *, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='float64', sort=True, n_cases=None):
 		import numpy
 		if table is None:
 			table = self.queries.tbl_choice()
@@ -1511,7 +1650,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = [var,]
 		return result, caseids
 
-	def array_avail(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
+	def array_avail(self, *, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
 		import numpy
 		if altcodes is None:
 			altcodes = self.alternative_codes()
@@ -1588,7 +1727,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = [var,]
 		return result, caseids
 
-	def array_avail_blind(self, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
+	def array_avail_blind(self, *, var=None, table=None, caseid=None, altid=None, altcodes=None, dtype='bool', sort=True, n_cases=None):
 		"""
 		Notes
 		-----
@@ -1684,11 +1823,11 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			elif key=="Choice":
 				provide[key], c = self.array_choice(n_cases=n_cases)
 			elif key[-2:]=="CA":
-				provide[key], c = self.array_idca(vars=req.get_variables(),n_cases=n_cases)
+				provide[key], c = self.array_idca(*req.get_variables(),n_cases=n_cases)
 			elif key[-2:]=="CO":
-				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
+				provide[key], c = self.array_idco(*req.get_variables(),n_cases=n_cases)
 			elif key=="Allocation":
-				provide[key], c = self.array_idco(vars=req.get_variables(),n_cases=n_cases)
+				provide[key], c = self.array_idco(*req.get_variables(),n_cases=n_cases)
 			if cases is None and c is not None:
 				cases = c
 				matched_cases += [key,]
@@ -1831,7 +1970,22 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 
 	def seer(self, file=None, counts=False, **kwargs):
-		'''Display a variety of information about the data in the DB'''
+		'''Display a variety of information about the DB connection in an HTML report.
+		
+		Parameters
+		----------
+		file : str, optional
+			A name for the HTML file that will be created. If not given, a temporary
+			file will automatically be created.
+		counts : bool, optional
+			If true, the number of rows in each table is calculated. This may take a 
+			long time if the database is large.
+			
+		Notes
+		-----
+		The report will pop up in Chrome or a default browser after it is generated.
+		
+		'''
 		import time
 		css = """
 		table {border-collapse:collapse;} 

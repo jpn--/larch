@@ -399,6 +399,20 @@ etk::periodic::periodic(const unsigned& ticks)
 , interval (ticks*CLOCKS_PER_SEC)
 { }
 
+std::string etk::full_precision_hex(const double& x)
+{
+	std::ostringstream s;
+	s << std::hexfloat << x;
+	std::string ss = s.str();
+	
+	if (ss.size()>20)
+		return ss.substr(0,9)+" "+ss.substr(9,5)+" "+ss.substr(14,5)+" "+ss.substr(19);
+	if (ss.size()>16)
+		return ss.substr(0,9)+" "+ss.substr(9,5)+" "+ss.substr(14);
+	if (ss.size()>11)
+		return ss.substr(0,9)+" "+ss.substr(9);
+	return ss;
+}
 
 
 bool etk::periodic::ping() 

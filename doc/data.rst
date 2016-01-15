@@ -66,6 +66,23 @@ or :mod:`sqlite3` (included in standard Python distributions).
 .. automethod:: DB.export_idco
 
 
+
+Reviewing Data
+--------------
+
+.. automethod:: DB.seer
+
+
+Loading Data into Arrays
+------------------------
+
+.. automethod:: DB.array_caseids
+
+.. automethod:: DB.array_idca
+
+.. automethod:: DB.array_idco
+
+
 Convenience Methods
 -------------------
 

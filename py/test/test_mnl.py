@@ -475,9 +475,9 @@ class TestMNL(ELM_TestCase):
 		m = Model.Example()
 		needco = m.utility.co.needs()
 		needca = m.utility.ca.needs()
-		xa = m.db.array_idca(needca)[0][0:1,:,:]
+		xa = m.db.array_idca(*needca)[0][0:1,:,:]
 		#xa = m.db.ask_idca(needca,1)
-		xo = m.db.array_idco(needco)[0][0:1,:]
+		xo = m.db.array_idco(*needco)[0][0:1,:]
 		#xo = m.db.ask_idco(needco,1)
 		av = m.db.array_avail()[0][0:1,:,:]
 		#av = m.db.ask_avail(1)

@@ -1,0 +1,168 @@
+.. currentmodule:: larch
+
+==============================
+17: Better MTC MNL Mode Choice
+==============================
+
+.. testsetup:: *
+
+   import larch
+
+For this example, we're going to create a richer and more sophisticated
+mode choice model, using the same MTC data.  We'll jump straight to the
+preferred model 17 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_.
+
+To build that model, we are going to have to create some variables that
+we don't already have: cost divided by income, and out of vehicle travel time
+divided by distance.  The tricky part is that cost and time are :ref:`idca`
+variables, and income and distance are :ref:`idco` variables, in a different table.
+Fortunately, we can use SQL to pull the data from one table to the other,
+but first we'll set ourselves up to do so efficiently.
+
+.. testcode::
+
+	d = larch.DB.Example('MTC')
+	d.execute("CREATE INDEX IF NOT EXISTS data_co_casenum ON data_co (casenum);")
+
+The index we create here on the :ref:`idco` table will allow SQLite to grab the
+correct row from the data_co table almost instantly (more or less) each time, instead of having
+to search through the whole table for the matching caseid.  Once we have this index, we
+can write a couple UPDATE queries to build our two new :ref:`idca` variables:
+
+.. testcode::
+
+	d.add_column("data_ca", "costbyincome FLOAT")
+	qry1="UPDATE data_ca SET costbyincome = totcost/(SELECT hhinc FROM data_co WHERE data_co.casenum=data_ca.casenum)"
+	d.execute(qry1)
+
+	d.add_column("data_ca", "ovtbydist FLOAT")
+	qry2="UPDATE data_ca SET ovtbydist = ovtt/(SELECT dist FROM data_co WHERE data_co.casenum=data_ca.casenum)"
+	d.execute(qry2)
+
+In each block, we first add a new column to the data_ca table, and then populate
+that column with the calculated values.  Now we are ready to build our model.
+
+.. testcode::
+
+	m = larch.Model(d)
+
+	m.utility.ca("costbyincome")
+
+	m.utility.ca("tottime * (altnum IN (1,2,3,4))", "motorized_time")
+	m.utility.ca("tottime * (altnum IN (5,6))", "nonmotorized_time")
+	m.utility.ca("ovtbydist * (altnum IN (1,2,3,4))", "motorized_ovtbydist")
+
+The costbyincome data is already computed above so we can add it
+to the model very simply.  In our preferred specification, we want to differentiate
+the total travel time by motorized modes (1 to 4) and non-motorized modes (5 and 6),
+which we can do by specifying some math inside the data string. Often the
+data string is just the name of a column as we have seen before, but it can
+also be any valid SQLite expression that can be evaluated on the relevant master
+query (either larch_idca or larch_idco).
+
+
+.. testcode::
+
+	m.utility.co("hhinc",4)
+	m.utility.co("hhinc",5)
+	m.utility.co("hhinc",6)
+
+Since the model we want to create groups together DA, SR2 and SR3+ jointly as
+reference alternatives with respect to income, we can simply omit all of these alternatives
+from the block that applies to **hhinc**.
+
+For vehicles per worker, the preferred model include a joint parameter on SR2 and SR3+,
+but not including DA and not fixed at zero.  Here we might use an alias, which allows
+us to specify one or more parameters that are simply a fixed proportion of another parameter.
+For example, we can say that vehbywrk_SR2 will be equal to 1.0 times vehbywrk_SR.
+
+.. testcode::
+
+	m.parameter("vehbywrk_SR")
+	m.alias("vehbywrk_SR2","vehbywrk_SR",1.0)
+	m.alias("vehbywrk_SR3+","vehbywrk_SR",1.0)
+
+Having defined these parameter aliases, we can then loop over all alternatives (skipping DA
+in the index-zero position) to add vehicles per worker to the utility function:
+
+.. testcode::
+
+	for a,name in m.db.alternatives()[1:]:
+		m.utility.co("vehbywrk",a,"vehbywrk_"+name)
+
+We can also run similar loops over workplace in CBD, etc:
+
+.. testcode::
+
+	for a,name in m.db.alternatives()[1:]:
+		m.utility.co("wkccbd+wknccbd",a,"wkcbd_"+name)
+
+	for a,name in m.db.alternatives()[1:]:
+		m.utility.co("wkempden",a,"wkempden_"+name)
+
+	for a,name in m.db.alternatives()[1:]:
+		m.utility.co("1",a,"ASC_"+name)
+
+	m.option.calc_std_errors = True
+
+
+Having created this model, we can then estimate it:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.estimate()
+	<larch.core.runstats, success ...
+	>>> m.loglike()
+	-3444.17...
+
+	>>> print(m)
+	====================================================================================================
+	Model Parameter Estimates
+	----------------------------------------------------------------------------------------------------
+	Parameter          	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
+	costbyincome       	 0          	-0.0524542  	 0.0103927  	-5.04723    	 0          
+	motorized_time     	 0          	-0.020202   	 0.00381504 	-5.29536    	 0          
+	nonmotorized_time  	 0          	-0.0454254  	 0.00576823 	-7.87511    	 0          
+	motorized_ovtbydist	 0          	-0.132984   	 0.0196426  	-6.77021    	 0          
+	hhinc#4            	 0          	-0.00538604 	 0.00197579 	-2.72602    	 0          
+	hhinc#5            	 0          	-0.00863694 	 0.00515404 	-1.67576    	 0          
+	hhinc#6            	 0          	-0.00598743 	 0.0031488  	-1.90149    	 0          
+	vehbywrk_SR        	 0          	-0.316565   	 0.0666292  	-4.75114    	 0          
+	vehbywrk_Tran      	 0          	-0.946429   	 0.118295   	-8.00058    	 0          
+	vehbywrk_Bike      	 0          	-0.701925   	 0.258274   	-2.71776    	 0          
+	vehbywrk_Walk      	 0          	-0.721626   	 0.169383   	-4.26032    	 0          
+	wkcbd_SR2          	 0          	 0.259861   	 0.12335    	 2.10669    	 0          
+	wkcbd_SR3+         	 0          	 1.06927    	 0.191274   	 5.59028    	 0          
+	wkcbd_Tran         	 0          	 1.30748    	 0.165732   	 7.88911    	 0          
+	wkcbd_Bike         	 0          	 0.489151   	 0.361088   	 1.35466    	 0          
+	wkcbd_Walk         	 0          	 0.101856   	 0.252116   	 0.404005   	 0          
+	wkempden_SR2       	 0          	 0.00157737 	 0.000390338	 4.04104    	 0          
+	wkempden_SR3+      	 0          	 0.00225628 	 0.000451947	 4.99237    	 0          
+	wkempden_Tran      	 0          	 0.00313045 	 0.000360761	 8.67734    	 0          
+	wkempden_Bike      	 0          	 0.0019328  	 0.0012155  	 1.59012    	 0          
+	wkempden_Walk      	 0          	 0.0028897  	 0.000742234	 3.89324    	 0          
+	ASC_SR2            	 0          	-1.80792    	 0.106119   	-17.0366    	 0          
+	ASC_SR3+           	 0          	-3.43378    	 0.151859   	-22.6116    	 0          
+	ASC_Tran           	 0          	-0.682509   	 0.247859   	-2.75362    	 0          
+	ASC_Bike           	 0          	-1.63014    	 0.427394   	-3.81415    	 0          
+	ASC_Walk           	 0          	 0.0663944  	 0.348027   	 0.190773   	 0          
+	====================================================================================================
+	Model Estimation Statistics
+	----------------------------------------------------------------------------------------------------
+	Log Likelihood at Convergence     	-3444.17
+	Log Likelihood at Null Parameters 	-7309.60
+	----------------------------------------------------------------------------------------------------
+	Rho Squared w.r.t. Null Parameters	0.529
+	====================================================================================================
+	...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.Model.Example(17)
+

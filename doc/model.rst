@@ -38,9 +38,24 @@ Creating :class:`Model` Objects
 Using :class:`Model` Objects
 -------------------------------
 
+.. py:method:: Model.maximize_loglike()
+
+	Find the likelihood maximizing parameters of the model, using the scipy.optimize module.
+	Depending on the model type and structure, various different optimization algorithms
+	may be used.
+
+	
+.. automethod:: Model.roll
+
+
 .. py:method:: Model.estimate()
 
-	Find the likelihood maximizing parameters of the model.
+	Find the likelihood maximizing parameters of the model using deprecated Larch optimization
+	engine.  This engine has fewer algorithms available than the scipy.optimize and may perform
+	poorly for some model types, particularly cross-nested and network GEV models.  Users should
+	almost always prefer the :meth:`Model.maximize_loglike` function instead.
+
+
 
 
 .. py:method:: Model.loglike([values])
@@ -65,6 +80,12 @@ Nested logit and Network GEV models have an underlying network structure.
 .. autoattribute:: Model.nest(id, name=None, parameter=None)
 
 .. autoattribute:: Model.node
+
+.. automethod:: Model.new_nest
+
+.. py:method:: Model.new_node
+
+	an alias for :meth:`new_nest`
 
 .. autoattribute:: Model.link(up_id, down_id)
 

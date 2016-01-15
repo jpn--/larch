@@ -136,6 +136,7 @@ namespace etk {
 		bool ping();
 	};
 	
+	std::string full_precision_hex(const double& x);
 	
 }
 

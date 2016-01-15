@@ -6,7 +6,30 @@ from .xhtml import XHTML, XML_Builder
 import os.path
 from .temporaryfile import TemporaryFile
 
-def roll(m, filename=None, loglevel=baselogging.INFO, cats='-', **format):
+def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', **format):
+	"""Estimate a model and generate a report.
+	
+	This method rolls together model estimation, reporting, and saving results
+	into a single handy function.
+	
+	Parameters
+	----------
+	filename : str, optional
+		The filename into which the output report will be saved.  If not given,
+		a temporary file will be created.  If the given file already exists, a
+		new file will be created with a number appended to the base filename.
+	loglevel : int, optional
+		The log level that will be used while estimating the model.  Smaller numbers
+		result in a more verbose log, the contents of which appear at the end of
+		the HTML report. See the standard Python :mod:`logging` module for more details.
+	cats : list of str, or '-' or '+'
+		A list of report sections to include in the report. The default is '-', which
+		includes a minimal list of report setions. Giving '+' will dump every available
+		report section, which could be a lot and might take a lot of time (and 
+		computer memory) to compute.
+	
+	"""
+	m = self
 	local_log = False
 	log = m.logger()
 	if log is None:

@@ -180,23 +180,23 @@ class TxtModelReporter():
 		x += ["-"]
 		i = ers[0]['iteration']
 		if not math.isnan(i):
-			x += ["Number of Iterations \t{0}".format(i,**format)]
+			x += ["Number of Iterations    \t{0}".format(i,**format)]
 		q = ers[0]
 		try:
 			#seconds = q['endTimeSec']+q['endTimeUSec']/1000000.0-q['startTimeSec']-q['startTimeUSec']/1000000.0
 			seconds = ers[0]['total_duration_seconds']
 			tformat = "{}\t{}".format(*format_seconds(seconds))
-			x += ["Running Time         \t{0}".format(tformat,**format)]
+			x += ["Running Time            \t{0}".format(tformat,**format)]
 		except KeyError:
 			x += ["Running Time:".format(**format)]
 		for label, dur in zip(ers[0]['process_label'],ers[0]['process_durations']):
-			x += ["- {0:19s}\t{1}".format(label,dur,**format)]
+			x += ["- {0:22s}\t{1}".format(label,dur,**format)]
 		i = ers[0]['notes']
 		if i is not '':
-			x += ["Notes                \t{0}".format(i,**format)]
+			x += ["Notes                   \t{0}".format(i,**format)]
 		i = ers[0]['results']
 		if i is not '':
-			x += ["Results              \t{0}".format(i,**format)]
+			x += ["Results                 \t{0}".format(i,**format)]
 		return x
 
 	# Data Summary
