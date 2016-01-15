@@ -25,6 +25,7 @@ from scipy.optimize import OptimizeResult, OptimizeWarning
 from enum import Enum
 from ...core import LarchError, runstats
 import warnings
+import os
 
 if os.environ.get('READTHEDOCS', None) != 'True':
 	warnings.filterwarnings(action="ignore", message='.*Unknown solver options.*', category=OptimizeWarning, module='', lineno=0)
