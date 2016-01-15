@@ -1,31 +1,31 @@
-from docx import *
+import docx
 from docx.enum.style import WD_STYLE_TYPE
 from ..utilities import category, pmath, rename
 from ..core import LarchError, ParameterAlias
 
 
 def _append_to_document(self, other_doc):
-	while not isinstance(other_doc, document.Document) and hasattr(other_doc, '_parent'):
+	while not isinstance(other_doc, docx.document.Document) and hasattr(other_doc, '_parent'):
 		other_doc = other_doc._parent
-	if not isinstance(other_doc, document.Document):
+	if not isinstance(other_doc, docx.document.Document):
 		raise larch.LarchError('other_doc is not a docx.Document or a part thereof')
 	for element in other_doc._body._element:
 		self._body._element.append(element)
 	return self
 
-document.Document.append = _append_to_document
+docx.document.Document.append = _append_to_document
 
 
 
 def document_larchstyle():
-	document = Document()
+	document = docx.Document()
 
 	monospaced_small = document.styles.add_style('Monospaced Small',WD_STYLE_TYPE.TABLE)
 	monospaced_small.base_style = document.styles['Normal']
 	monospaced_small.font.name = 'Courier New'
-	monospaced_small.font.size = shared.Pt(9)
-	monospaced_small.paragraph_format.space_before = shared.Pt(0)
-	monospaced_small.paragraph_format.space_after  = shared.Pt(0)
+	monospaced_small.font.size = docx.shared.Pt(9)
+	monospaced_small.paragraph_format.space_before = docx.shared.Pt(0)
+	monospaced_small.paragraph_format.space_after  = docx.shared.Pt(0)
 	monospaced_small.paragraph_format.line_spacing = 1.0
 
 	return document
