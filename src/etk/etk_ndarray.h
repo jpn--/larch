@@ -198,6 +198,10 @@ namespace etk {
 		std::string printrows(unsigned rstart, const unsigned& rfinish) const;
 		std::string printall() const;
 
+		std::string printrow_hex(const unsigned& r) const;
+		std::string printrows_hex(unsigned rstart, const unsigned& rfinish) const;
+		std::string printall_hex() const;
+
 	};
 
 

@@ -26,6 +26,7 @@
 using namespace etk;
 
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <climits>
 #include <cstring>
@@ -1021,6 +1022,35 @@ std::string ndarray::printrow(const unsigned& r) const
 	return ret.str();
 }
 
+std::string ndarray::printrow_hex(const unsigned& r) const
+{
+	ASSERT_ARRAY_DOUBLE;
+	std::ostringstream ret;
+	ret << std::hexfloat << std::setprecision(15);
+	unsigned x2, x3;
+	char depMarker, colMarker, rowMarker;
+	if (ROWS==0) {
+		return "no rows in array";
+	}
+	if (DEPS==1) {
+		depMarker = ' ';
+		colMarker = '\t';
+		rowMarker = '\n';
+	} else {
+		depMarker = '\t';
+		colMarker = '\n';
+		rowMarker = '\n';
+	}
+	for ( x2=0; x2<COLS; x2++ ) {
+		for ( x3=0; x3<DEPS; x3++ ) {
+			ret << operator()(r,x2,x3) << depMarker;
+		}
+		ret << colMarker;
+	}
+	ret << rowMarker;
+	return ret.str();
+}
+
 std::string ndarray::printrows(unsigned rstart, const unsigned& rfinish) const
 {
 	ASSERT_ARRAY_DOUBLE;
@@ -1037,6 +1067,21 @@ std::string ndarray::printall() const
 	return printrows(0,ROWS);
 }
 
+std::string ndarray::printrows_hex(unsigned rstart, const unsigned& rfinish) const
+{
+	ASSERT_ARRAY_DOUBLE;
+	std::ostringstream ret;
+	for (; rstart < rfinish; rstart++) {
+		ret << printrow_hex(rstart);
+	}
+	return ret.str();
+}
+
+std::string ndarray::printall_hex() const
+{
+	ASSERT_ARRAY_DOUBLE;
+	return printrows_hex(0,ROWS);
+}
 
 
 
