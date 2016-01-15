@@ -1621,7 +1621,7 @@ double elm::Model2::loglike_cached() {
 	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 	_parameter_update();
 
-	double cached_ll = NAN;
+	double cached_ll = -INF;
 	const double* FCurrent_ptr = FCurrent.ptr(0);
 	size_t FCurrent_size = FCurrent.size();
 	if (FCurrent_size && _cached_results.read_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), cached_ll)) {
@@ -1635,10 +1635,13 @@ double elm::Model2::loglike_cached() {
 
 double elm::Model2::loglike_nocache() {
 	
-	double x (NAN);
+	double x (-INF);
 	const double* FCurrent_ptr = FCurrent.ptr();
 	size_t FCurrent_size = FCurrent.size();
 	x = objective();
+	if (isNan(x)) {
+		x = -INF;
+	}
 	_cached_results.set_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), x);
 	
 	return x;
@@ -1656,7 +1659,7 @@ double elm::Model2::loglike() {
 }
 
 double elm::Model2::loglike_cached(std::vector<double> v) {
-	double cached_ll = NAN;
+	double cached_ll = -INF;
 	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
 		return cached_ll;
 	} else {
@@ -1670,6 +1673,9 @@ double elm::Model2::loglike_nocache(std::vector<double> v) {
 	_parameter_update();
 	_parameter_push(v);
 	double x = objective();
+	if (isNan(x)) {
+		x = -INF;
+	}
 	_cached_results.set_cached_loglike(elm::array_compare(v), x);
 	return x;
 }
@@ -1688,6 +1694,9 @@ double elm::Model2::loglike(std::vector<double> v) {
 	_parameter_update();
 	_parameter_push(v);
 	double x = objective();
+	if (isNan(x)) {
+		x = -INF;
+	}
 	_cached_results.set_cached_loglike(elm::array_compare(v), x);
 	return x;
 }
