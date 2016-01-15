@@ -81,6 +81,7 @@ namespace elm {
 		bool force_recalculate;
 		bool teardown_after_estimate;
 		bool weight_autorescale;
+		bool weight_choice_rebalance;
 		bool suspend_xylem_rebuild;
 		bool log_turns;
 		bool enforce_bounds;
@@ -103,6 +104,7 @@ namespace elm {
 			std::string author="Chuck Finley",
 			bool teardown_after_estimate=true,
 			bool weight_autorescale=true,
+			bool weight_choice_rebalance=true,
 			bool suspend_xylem_rebuild=false,
 			bool log_turns=false,
 			bool enforce_bounds=true,
@@ -124,6 +126,7 @@ namespace elm {
 			std::string author="-9",
 			int teardown_after_estimate=-9,
 			int weight_autorescale=-9,
+			int weight_choice_rebalance=-9,
 			int suspend_xylem_rebuild=-9,
 			int log_turns=-9,
 			int enforce_bounds=-9,

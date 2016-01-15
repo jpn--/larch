@@ -45,6 +45,7 @@ elm::model_options_t::model_options_t(
 			std::string author,
 			bool teardown_after_estimate,
 			bool weight_autorescale,
+			bool weight_choice_rebalance,
 			bool suspend_xylem_rebuild,
 			bool log_turns,
 			bool enforce_bounds,
@@ -63,6 +64,7 @@ elm::model_options_t::model_options_t(
 , author                (author)
 , teardown_after_estimate(teardown_after_estimate)
 , weight_autorescale    (weight_autorescale)
+, weight_choice_rebalance(weight_choice_rebalance)
 , suspend_xylem_rebuild (suspend_xylem_rebuild)
 , log_turns             (log_turns)
 , enforce_bounds        (enforce_bounds)
@@ -109,6 +111,7 @@ void elm::model_options_t::__call__(
 			std::string author,
 			int teardown_after_estimate,
 			int weight_autorescale,
+			int weight_choice_rebalance,
 			int suspend_xylem_rebuild,
 			int log_turns,
 			int enforce_bounds,
@@ -128,6 +131,7 @@ void elm::model_options_t::__call__(
 	if (author                  !="-9") (this->author                  = author                  );
 	if (teardown_after_estimate != -9 ) (this->teardown_after_estimate = teardown_after_estimate );
 	if (weight_autorescale      != -9 ) (this->weight_autorescale      = weight_autorescale      );
+	if (weight_choice_rebalance != -9 ) (this->weight_choice_rebalance = weight_choice_rebalance );
 	if (suspend_xylem_rebuild   != -9 ) (this->suspend_xylem_rebuild   = suspend_xylem_rebuild   );
 	if (log_turns               != -9 ) (this->log_turns               = log_turns               );
 	if (enforce_bounds          != -9 ) (this->enforce_bounds          = enforce_bounds          );
@@ -148,6 +152,7 @@ void elm::model_options_t::copy(const model_options_t& other)
 	this->force_recalculate       = other.force_recalculate       ;
 	this->teardown_after_estimate = other.teardown_after_estimate ;
 	this->weight_autorescale      = other.weight_autorescale      ;
+	this->weight_choice_rebalance = other.weight_choice_rebalance ;
 	this->suspend_xylem_rebuild   = other.suspend_xylem_rebuild   ;
 	this->log_turns               = other.log_turns               ;
 	this->enforce_bounds          = other.enforce_bounds          ;
@@ -172,6 +177,7 @@ std::string elm::model_options_t::__repr__() const
 	x << "                  author= "<<author                  <<",\n";
 	x << " teardown_after_estimate= "<<teardown_after_estimate <<",\n";
 	x << "      weight_autorescale= "<<weight_autorescale      <<",\n";
+	x << " weight_choice_rebalance= "<<weight_choice_rebalance <<",\n";
 	x << "   suspend_xylem_rebuild= "<<suspend_xylem_rebuild   <<",\n";
 	x << "               log_turns= "<<log_turns               <<",\n";
 	x << "          enforce_bounds= "<<enforce_bounds          <<",\n";
@@ -196,6 +202,7 @@ std::string elm::model_options_t::_save_buffer() const
 	x << "self.option.author= '"                << author                                  <<"'\n";
 	x << "self.option.teardown_after_estimate= "<<(teardown_after_estimate ?"True":"False")<<"\n";
 	x << "self.weight_autorescale= "            <<(weight_autorescale      ?"True":"False")<<"\n";
+	x << "self.weight_choice_rebalance= "       <<(weight_choice_rebalance ?"True":"False")<<"\n";
 	x << "self.suspend_xylem_rebuild= "         <<(suspend_xylem_rebuild   ?"True":"False")<<"\n";
 	x << "self.log_turns= "                     <<(log_turns               ?"True":"False")<<"\n";
 	x << "self.enforce_bounds= "                <<(enforce_bounds          ?"True":"False")<<"\n";
@@ -219,6 +226,7 @@ std::string elm::model_options_t::__str__() const
 	x << "                  author: "<< author                <<"\n";
 	x << " teardown_after_estimate: "<< teardown_after_estimate<<"\n";
 	x << "      weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
+	x << " weight_choice_rebalance: "<<(weight_choice_rebalance?"True":"False")<<"\n";
 	x << "   suspend_xylem_rebuild: "<<(suspend_xylem_rebuild ?"True":"False")<<"\n";
 	x << "               log_turns: "<<(log_turns             ?"True":"False")<<"\n";
 	x << "          enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
@@ -243,6 +251,7 @@ std::set<std::string> elm::Model2::valid_options()
 	valid_options_init.insert("mute_nan_warnings");
 	valid_options_init.insert("teardown_after_estimate");
 	valid_options_init.insert("weight_autorescale");
+	valid_options_init.insert("weight_choice_rebalance");
 	valid_options_init.insert("suspend_xylem_rebuild");
 	valid_options_init.insert("log_turns");
 	valid_options_init.insert("enforce_bounds");
