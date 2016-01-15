@@ -92,10 +92,69 @@ alts_query = property(lambda self: self.get_alts_query(), lambda self,w: self.se
 idco_query = property(lambda self: self.get_idco_query(), lambda self,w: self.set_idco_query(w), None, _idco_query_doc)
 idca_query = property(lambda self: self.get_idca_query(), lambda self,w: self.set_idca_query(w), None, _idca_query_doc)
 
+def idca_build(self, tablename=None, casecol=None, altcol=None, filter=None):
+	pattern_idca_f = 'SELECT (.*) AS caseid, (.*) AS altid, (.*) FROM (.*) WHERE (.*)'
+	pattern_idca = 'SELECT (.*) AS caseid, (.*) AS altid, (.*) FROM (.*)'
+	import re
+	match = re.match(pattern_idca_f, self.idca_query)
+	if match:
+		_caseid, _altid, _othercols, _tablename, _filters = match.groups()
+	else:
+		match = re.match(pattern_idca, self.idca_query)
+		if match:
+			_caseid, _altid, _othercols, _tablename = match.groups()
+		else:
+			_caseid, _altid, _othercols, _tablename = None, None, None, None
+		_filters = None
+	if tablename is None:
+		tablename = _tablename
+	if casecol is None:
+		casecol = _caseid
+	if altcol is None:
+		altcol = _altid
+	if filter is None:
+		filter = _filters
+	elif not filter:
+		filter = None
+	if _othercols is None:
+		_othercols = '*'
+	if tablename is None or casecol is None or altcol is None:
+		raise TypeError("unable to extract old query values, you must specify new ones")
+	if filter is None:
+		self.idca_query = "SELECT {} AS caseid, {} AS altid, {} FROM {}".format(casecol, altcol, _othercols, tablename)
+	else:
+		self.idca_query = "SELECT {} AS caseid, {} AS altid, {} FROM {} WHERE {}".format(casecol, altcol, _othercols, tablename, filter)
 
-
-
-
+def idco_build(self, tablename=None, casecol=None, filter=None):
+	pattern_idco_f = 'SELECT (.*) AS caseid, (.*) FROM (.*) WHERE (.*)'
+	pattern_idco = 'SELECT (.*) AS caseid, (.*) FROM (.*)'
+	import re
+	match = re.match(pattern_idco_f, self.idco_query)
+	if match:
+		_caseid, _othercols, _tablename, _filters = match.groups()
+	else:
+		match = re.match(pattern_idco, self.idco_query)
+		if match:
+			_caseid, _othercols, _tablename = match.groups()
+		else:
+			_caseid, _othercols, _tablename = None, None, None
+		_filters = None
+	if tablename is None:
+		tablename = _tablename
+	if casecol is None:
+		casecol = _caseid
+	if filter is None:
+		filter = _filters
+	elif not filter:
+		filter = None
+	if _othercols is None:
+		_othercols = '*'
+	if tablename is None or casecol is None:
+		raise TypeError("unable to extract old query values, you must specify new ones")
+	if filter is None:
+		self.idco_query = "SELECT {} AS caseid, {} FROM {}".format(casecol, _othercols, tablename)
+	else:
+		self.idco_query = "SELECT {} AS caseid, {} FROM {} WHERE {}".format(casecol, _othercols, tablename, filter)
 
 
 
@@ -277,10 +336,10 @@ def quality_check(self):
 	return warns
 
 
-spork = lambda self: print("SPORK")
-
-def _spong(self, n):
-	print(n, "_splong!")
+#spork = lambda self: print("SPORK")
+#
+#def _spong(self, n):
+#	print(n, "_splong!")
 
 
 ## Load these methods into core.QuerySetTwoTable
