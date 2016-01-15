@@ -205,20 +205,20 @@ class OptimizeTechnique():
 			self.count_slow += 1
 			r.outcome = outcomes.slow
 			if self.logger:
-				self.logger.log(20,"Ending leg (slow) using {!s} at {!s}".format(self.method_str, r.x))
+				self.logger.log(30,"Ending leg (slow) using {!s} at {!s}".format(self.method_str, r.x))
 			return r
 		elif r.success:
 			self.flag_success = True
 			r.outcome = outcomes.success
 			if self.logger:
-				self.logger.log(20,"Ending leg (success) using {!s} at {!s}".format(self.method_str, r.x))
+				self.logger.log(30,"Ending leg (success) using {!s} at {!s}".format(self.method_str, r.x))
 			return r
 		else:
 			self.count_fail += 1
 			self.flag_fail = True
 			r.outcome = outcomes.fail
 			if self.logger:
-				self.logger.log(20,"Ending leg (fail) using {!s} at {!s}".format(self.method_str, r.x))
+				self.logger.log(30,"Ending leg (fail) using {!s} at {!s}".format(self.method_str, r.x))
 			return r
 #
 #
@@ -251,8 +251,10 @@ class OptimizeResults(OptimizeResult):
             kys = list(self.keys())
             kys.remove('intermediate')
             m = max(map(len, kys)) + 1
-            return '\n'.join([k.rjust(m) + ': ' + repr(v)
-                              for k, v in self.items() if k!='intermediate'])
+            kys = sorted(kys)
+            return '\n'.join([k.rjust(m) + ': ' + repr(self[k]).replace("\n","\n"+(' '*m)+'| ') for k in kys])
+            #return '\n'.join([k.rjust(m) + ': ' + repr(v)
+            #                  for k, v in self.items() if k!='intermediate'])
         else:
             return self.__class__.__name__ + "()"
 
