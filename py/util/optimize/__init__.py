@@ -26,7 +26,8 @@ from enum import Enum
 from ...core import LarchError, runstats
 import warnings
 
-warnings.filterwarnings(action="ignore", message='.*Unknown solver options.*', category=OptimizeWarning, module='', lineno=0)
+if os.environ.get('READTHEDOCS', None) != 'True':
+	warnings.filterwarnings(action="ignore", message='.*Unknown solver options.*', category=OptimizeWarning, module='', lineno=0)
 
 
 
