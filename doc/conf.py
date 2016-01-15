@@ -25,7 +25,10 @@ if on_rtd:
 		def __getattr__(cls, name):
 				return Mock()
 
-	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw', 'larch.model_reporter', ]
+	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw',
+					'larch.model_reporter.docx', 'larch.model_reporter.latex',
+					'larch.model_reporter.txt', 'larch.model_reporter.pdf', 'larch.model_reporter.xhtml',
+	]
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 import larch
