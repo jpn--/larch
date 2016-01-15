@@ -79,7 +79,17 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 		stat.start_process("weight autorescale")
 		model.auto_rescale_weights()
 		stat.write("autoscaled weights {}".format(model.get_weight_scale_factor()))
-		
+	
+	if model.option.weight_choice_rebalance:
+		stat.start_process("weight choice rebalance")
+		ch = model.DataEdit("Choice")
+		ch_tot = ch.sum(1)
+		wg = model.DataEdit("Weight")
+		if not numpy.allclose(ch_tot, 1.0):
+			stat.write("rebalanced weights and choices")
+			wg *= ch_tot
+			ch /= ch_tot[:,numpy.newaxis,:]
+	
 	stat.end_process()
 	constraints = ()
 	if model.option.enforce_constraints:
@@ -213,12 +223,13 @@ def parameter_bounds(model):
 
 
 
-def _build_ineq_constraint(gtslot, ltslot):
+def _build_ineq_constraint(gtslot, ltslot, descrip):
 	from scipy.sparse import coo_matrix
 	constraint = {
 		'type':'ineq',
 		'fun': lambda x: x[gtslot] - x[ltslot] ,
 		'jac': lambda x: coo_matrix(([1,-1],([gtslot,ltslot],[0,0])), shape=(len(x),1)).todense().flatten(),
+		'description': descrip,
 		}
 	return constraint
 
@@ -226,6 +237,7 @@ def _build_ineq_constraint(gtslot, ltslot):
 def network_based_contraints(model):
 	G = model.networkx_digraph()
 	elementals = set(model.alternative_codes())
+	constraint_set = {}
 	constraints = []
 	for n in G.nodes():
 		if n not in elementals and n != model.root_id:
@@ -236,10 +248,16 @@ def network_based_contraints(model):
 				if uppercode != model.root_id:
 					upper = model.parameter_index(model.node[uppercode].param)
 					upper_str = 'x[{}]'.format(model.parameter_index(model.node[uppercode].param))
-					#constraints.append('{} > {}'.format(upper_str,lower_str,))
-					constraints.append(_build_ineq_constraint(upper,lower))
-	return constraints
+					constraint_name = '{} > {}'.format(upper_str,lower_str,)
+					if constraint_name not in constraint_set:
+						constraint_set[constraint_name] = _build_ineq_constraint(upper,lower,constraint_name )
+					#constraints.append(_build_ineq_constraint(upper,lower))
+	return [constraint for constraint_name, constraint in constraint_set.items()]
 
+def evaluate_network_based_contraints(model, x=None):
+	if x is None:
+		x = model.parameter_values()
+	return [c['fun'](x) for c in model.network_based_contraints()]
 
 #Constraints definition (only for COBYLA and SLSQP). Each constraint is defined in a dictionary with fields:
 #type : str
