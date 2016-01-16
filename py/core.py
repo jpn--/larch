@@ -123,6 +123,8 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
 from ._core import LarchError
 from ._core import SQLiteError
 from ._core import FacetError
+from ._core import LarchCacheError
+from ._core import MatrixInverseError
 
 class SwigPyIterator(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2311,6 +2313,57 @@ class VAS_dna(cellcode_infodict):
 VAS_dna_swigregister = _core.VAS_dna_swigregister
 VAS_dna_swigregister(VAS_dna)
 
+class VAS_System(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+
+    def n_elemental(self) -> "unsigned int const &":
+        return _core.VAS_System_n_elemental(self)
+
+    def n_branches(self) -> "unsigned int const &":
+        return _core.VAS_System_n_branches(self)
+
+    def n_edges(self) -> "unsigned int const &":
+        return _core.VAS_System_n_edges(self)
+
+    def alloc_break(self, i: 'unsigned int const &') -> "unsigned int const &":
+        return _core.VAS_System_alloc_break(self, i)
+
+    def n_alloc_break(self) -> "size_t":
+        return _core.VAS_System_n_alloc_break(self)
+
+    def size(self) -> "size_t":
+        return _core.VAS_System_size(self)
+
+    def display(self) -> "std::string":
+        return _core.VAS_System_display(self)
+
+    def display_phenotype(self) -> "std::string":
+        return _core.VAS_System_display_phenotype(self)
+
+    def display_edges(self) -> "std::string":
+        return _core.VAS_System_display_edges(self)
+
+    def elemental_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        return _core.VAS_System_elemental_names(self)
+
+    def elemental_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        return _core.VAS_System_elemental_codes(self)
+
+    def all_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        return _core.VAS_System_all_codes(self)
+
+    def __init__(self):
+        this = _core.new_VAS_System()
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _core.delete_VAS_System
+    __del__ = lambda self: None
+VAS_System_swigregister = _core.VAS_System_swigregister
+VAS_System_swigregister(VAS_System)
+
 class ComponentVector(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -2859,6 +2912,9 @@ class LinearCOBundle_2(object):
     def __repr__(self) -> "std::string":
         return _core.LinearCOBundle_2___repr__(self)
 
+    def __call__(self, upcode: 'elm::cellcode', dncode: 'elm::cellcode') -> "void":
+        return _core.LinearCOBundle_2___call__(self, upcode, dncode)
+
     def size(self) -> "unsigned int":
         return _core.LinearCOBundle_2_size(self)
 
@@ -2882,9 +2938,6 @@ class LinearCOBundle_2(object):
 
     def __len__(self) -> "int":
         return _core.LinearCOBundle_2___len__(self)
-
-    def __call__(self, upcode: 'elm::cellcode', dncode: 'elm::cellcode') -> "void":
-        return _core.LinearCOBundle_2___call__(self, upcode, dncode)
 
     def links(self) -> "::std::vector< elm::cellcodepair,std::allocator< elm::cellcodepair > >":
         return _core.LinearCOBundle_2_links(self)
@@ -3049,8 +3102,11 @@ class model_options_t(object):
     force_recalculate = _swig_property(_core.model_options_t_force_recalculate_get, _core.model_options_t_force_recalculate_set)
     teardown_after_estimate = _swig_property(_core.model_options_t_teardown_after_estimate_get, _core.model_options_t_teardown_after_estimate_set)
     weight_autorescale = _swig_property(_core.model_options_t_weight_autorescale_get, _core.model_options_t_weight_autorescale_set)
+    weight_choice_rebalance = _swig_property(_core.model_options_t_weight_choice_rebalance_get, _core.model_options_t_weight_choice_rebalance_set)
     suspend_xylem_rebuild = _swig_property(_core.model_options_t_suspend_xylem_rebuild_get, _core.model_options_t_suspend_xylem_rebuild_set)
     log_turns = _swig_property(_core.model_options_t_log_turns_get, _core.model_options_t_log_turns_set)
+    enforce_bounds = _swig_property(_core.model_options_t_enforce_bounds_get, _core.model_options_t_enforce_bounds_set)
+    enforce_constraints = _swig_property(_core.model_options_t_enforce_constraints_get, _core.model_options_t_enforce_constraints_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
 
     def __init__(self, *args, **kwargs):
@@ -3098,12 +3154,15 @@ model_options_t_swigregister(model_options_t)
 
 class runstats(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    startTime = _swig_property(_core.runstats_startTime_get, _core.runstats_startTime_set)
-    endTime = _swig_property(_core.runstats_endTime_get, _core.runstats_endTime_set)
     iteration = _swig_property(_core.runstats_iteration_get, _core.runstats_iteration_set)
     results = _swig_property(_core.runstats_results_get, _core.runstats_results_set)
     timestamp = _swig_property(_core.runstats_timestamp_get, _core.runstats_timestamp_set)
+    number_threads = _swig_property(_core.runstats_number_threads_get, _core.runstats_number_threads_set)
+    number_cpu_cores = _swig_property(_core.runstats_number_cpu_cores_get, _core.runstats_number_cpu_cores_set)
     processor = _swig_property(_core.runstats_processor_get, _core.runstats_processor_set)
+    process_label = _swig_property(_core.runstats_process_label_get, _core.runstats_process_label_set)
+    process_starttime = _swig_property(_core.runstats_process_starttime_get, _core.runstats_process_starttime_set)
+    process_endtime = _swig_property(_core.runstats_process_endtime_get, _core.runstats_process_endtime_set)
 
     def elapsed_time(self) -> "double":
         return _core.runstats_elapsed_time(self)
@@ -3120,6 +3179,20 @@ class runstats(object):
             self.this.append(this)
         except:
             self.this = this
+    __swig_destroy__ = _core.delete_runstats
+    __del__ = lambda self: None
+
+    def other(self) -> "PyObject *":
+        return _core.runstats_other(self)
+
+    def set_other(self, other: 'PyObject *') -> "void":
+        return _core.runstats_set_other(self, other)
+
+    def prepend_timing(self, previously: 'runstats') -> "void":
+        return _core.runstats_prepend_timing(self, previously)
+
+    def append_timing(self, subsequently: 'runstats') -> "void":
+        return _core.runstats_append_timing(self, subsequently)
 
     def notes(self) -> "std::string":
         return _core.runstats_notes(self)
@@ -3139,10 +3212,37 @@ class runstats(object):
     def dictionary(self) -> "PyObject *":
         return _core.runstats_dictionary(self)
 
+    def pickled_dictionary(self) -> "std::string":
+        return _core.runstats_pickled_dictionary(self)
+
     def read_from_dictionary(self, dictionary: 'PyObject *') -> "void":
         return _core.runstats_read_from_dictionary(self, dictionary)
-    __swig_destroy__ = _core.delete_runstats
-    __del__ = lambda self: None
+
+    def start_process(self, name: 'std::string const &') -> "void":
+        return _core.runstats_start_process(self, name)
+
+    def end_process(self) -> "void":
+        return _core.runstats_end_process(self)
+
+    def process_duration(self, *args) -> "double":
+        return _core.runstats_process_duration(self, *args)
+
+    def total_duration(self) -> "double":
+        return _core.runstats_total_duration(self)
+
+    def process_duration_fancy(self, *args) -> "std::string":
+        return _core.runstats_process_duration_fancy(self, *args)
+
+    def total_duration_fancy(self) -> "std::string":
+        return _core.runstats_total_duration_fancy(self)
+
+    def __getstate__(self) -> "PyObject *":
+        return _core.runstats___getstate__(self)
+
+    def __setstate__(self, state):
+    	self.__init__()
+    	self.read_from_dictionary(state)
+
 runstats_swigregister = _core.runstats_swigregister
 runstats_swigregister(runstats)
 
@@ -3343,6 +3443,9 @@ class ParameterList(object):
     def unlink_alias(self, alias_name: 'std::string const &') -> "void":
         return _core.ParameterList_unlink_alias(self, alias_name)
 
+    def parameter_index(self, param_name: 'std::string const &') -> "size_t":
+        return _core.ParameterList_parameter_index(self, param_name)
+
     def values(self, *args) -> "void":
         return _core.ParameterList_values(self, *args)
 
@@ -3351,6 +3454,9 @@ class ParameterList(object):
 
     def constraints(self) -> "PyObject *":
         return _core.ParameterList_constraints(self)
+
+    def tearDown(self) -> "void":
+        return _core.ParameterList_tearDown(self)
 
     def freshen(self) -> "void":
         return _core.ParameterList_freshen(self)
@@ -3618,6 +3724,9 @@ sherpa_swigregister(sherpa)
 class Model2(sherpa):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
 
+    def _xylem(self) -> "elm::VAS_System const &":
+        return _core.Model2__xylem(self)
+
     def _get_root_cellcode(self) -> "elm::cellcode":
         return _core.Model2__get_root_cellcode(self)
 
@@ -3657,7 +3766,7 @@ class Model2(sherpa):
         return _core.Model2_provision(self, *args)
 
 
-    def is_provisioned(self, ex: 'bool'=True) -> "int":
+    def is_provisioned(self, ex: 'bool'=False) -> "int":
         return _core.Model2_is_provisioned(self, ex)
 
     def Data(self, label: 'std::string const &') -> "elm::darray const *":
@@ -3666,8 +3775,35 @@ class Model2(sherpa):
     def DataEdit(self, label: 'std::string const &') -> "elm::darray *":
         return _core.Model2_DataEdit(self, label)
 
+    def get_weight_scale_factor(self) -> "double":
+        return _core.Model2_get_weight_scale_factor(self)
+
+    def auto_rescale_weights(self, mean_weight: 'double const &'=1.0) -> "void":
+        return _core.Model2_auto_rescale_weights(self, mean_weight)
+
+    def restore_scale_weights(self) -> "void":
+        return _core.Model2_restore_scale_weights(self)
+
+    def clear_cache(self) -> "void":
+        return _core.Model2_clear_cache(self)
+
     def loglike(self, *args) -> "double":
         return _core.Model2_loglike(self, *args)
+
+    def loglike_cached(self, *args) -> "double":
+        return _core.Model2_loglike_cached(self, *args)
+
+    def loglike_nocache(self, *args) -> "double":
+        return _core.Model2_loglike_nocache(self, *args)
+
+    def loglike_casewise(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_loglike_casewise(self, *args)
+
+    def _gradient_casewise(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2__gradient_casewise(self, *args)
+
+    def finite_diff_gradient(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_finite_diff_gradient(self, *args)
 
     def calc_utility(self, *args) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_calc_utility(self, *args)
@@ -3687,8 +3823,17 @@ class Model2(sherpa):
     def calculate_parameter_covariance(self) -> "void":
         return _core.Model2_calculate_parameter_covariance(self)
 
-    def mnl_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
-        return _core.Model2_mnl_gradient_full_casewise(self)
+    def _mnl_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2__mnl_gradient_full_casewise(self)
+
+    def _ngev_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2__ngev_gradient_full_casewise(self)
+
+    def start_timing(self, name: 'std::string const &') -> "void":
+        return _core.Model2_start_timing(self, name)
+
+    def finish_timing(self) -> "void":
+        return _core.Model2_finish_timing(self)
 
     def alias_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.Model2_alias_names(self)
@@ -3719,9 +3864,15 @@ class Model2(sherpa):
     _string_sender_ptr = _swig_property(_core.Model2__string_sender_ptr_get, _core.Model2__string_sender_ptr_set)
     option = _swig_property(_core.Model2_option_get, _core.Model2_option_set)
 
+    def _maximize_bhhh(self) -> "elm::runstats":
+        return _core.Model2__maximize_bhhh(self)
+
+    def loglike_null(self) -> "double":
+        return _core.Model2_loglike_null(self)
+
     def estimate(self, *args) -> "elm::runstats":
 
-        if self._ref_to_db is not None and self.is_provisioned(False)==0:
+        if self._ref_to_db is not None and self.is_provisioned()==0:
         	self.provision()
         	self.setUpMessage = "autoprovision yes (estimate)"
         	if self.logger(): self.logger().info("autoprovisioned data from database")
@@ -3766,8 +3917,8 @@ class Model2(sherpa):
     def _set_estimation_statistics(self, *args, **kwargs) -> "void":
         return _core.Model2__set_estimation_statistics(self, *args, **kwargs)
 
-    def _set_estimation_run_statistics(self, *args) -> "void":
-        return _core.Model2__set_estimation_run_statistics(self, *args)
+    def _set_estimation_run_statistics_pickle(self, dict: 'PyObject *') -> "void":
+        return _core.Model2__set_estimation_run_statistics_pickle(self, dict)
 
     def prints(self, precision: 'unsigned int const &'=5, cell_width: 'unsigned int const &'=11) -> "std::string":
         return _core.Model2_prints(self, precision, cell_width)
@@ -3831,7 +3982,7 @@ class Model2(sherpa):
 
     def setUp(self, and_load_data: 'bool'=True) -> "void":
 
-        if self._ref_to_db is not None and self.is_provisioned(False)==0:
+        if self._ref_to_db is not None and self.is_provisioned()==0:
         	self.provision()
         	self.setUpMessage = "autoprovision yes (setUp)"
         	if self.logger(): self.logger().info("autoprovisioned data from database")
@@ -3869,6 +4020,33 @@ class Model2(sherpa):
 
 
 
+    def negative_d_loglike(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_negative_d_loglike(self, *args)
+
+    def negative_d_loglike_cached(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_negative_d_loglike_cached(self, *args)
+
+    def negative_d_loglike_nocache(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_negative_d_loglike_nocache(self, *args)
+
+    def bhhh_cached(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
+        return _core.Model2_bhhh_cached(self, *args)
+
+    def bhhh_nocache(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
+        return _core.Model2_bhhh_nocache(self, *args)
+
+    def bhhh(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
+        return _core.Model2_bhhh(self, *args)
+
+    def bhhh_direction(self, *args) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_bhhh_direction(self, *args)
+
+    def bhhh_tolerance(self, *args) -> "double":
+        return _core.Model2_bhhh_tolerance(self, *args)
+
+    def bhhh_tolerance_nocache(self, *args) -> "double":
+        return _core.Model2_bhhh_tolerance_nocache(self, *args)
+
     def Utility(self) -> "etk::ndarray *":
         return _core.Model2_Utility(self)
 
@@ -3905,17 +4083,8 @@ class Model2(sherpa):
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
         return _core.Model2_alternative_codes(self)
 
-    def d_loglike(self, *args) -> "std::vector< double,std::allocator< double > >":
-        return _core.Model2_d_loglike(self, *args)
-
     def d2_loglike(self, *args) -> "void":
         return _core.Model2_d2_loglike(self, *args)
-
-    def negative_loglike(self, *args) -> "double":
-        return _core.Model2_negative_loglike(self, *args)
-
-    def negative_d_loglike(self, *args) -> "std::vector< double,std::allocator< double > >":
-        return _core.Model2_negative_d_loglike(self, *args)
 
     def teardown(self) -> "void":
         return _core.Model2_teardown(self)
