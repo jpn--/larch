@@ -195,11 +195,11 @@ class OptimizeTechnique():
 		if 'ctol_fun' in kwargs and local_kwargs['ctol_fun'] is None:
 			local_kwargs['ctol_fun'] = kwargs['ctol_fun']
 		use_kwargs = {k:v for k,v in kwargs.items() if k not in local_kwargs}
+		local_kwargs.update(use_kwargs)
 		r = self.last_result = minimize_with_watcher(
 			self.fun, x0, args,
 			options=options,
-			**local_kwargs,
-			**use_kwargs
+			**local_kwargs
 		)
 		if hasattr(r,'slow'):
 			self.count_slow += 1
