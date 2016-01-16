@@ -27,6 +27,7 @@ if on_rtd:
 
 	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw',
 					'docx', 'docx.enum', 'docx.enum.style', 'scipy', 'scipy.optimize',
+					'numpy.linalg'
 	]
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
