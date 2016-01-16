@@ -52,7 +52,7 @@ class ModelReporter(docx.DocxModelReporter,
 		
 		if style.lower()=='txt':
 			rpt = self.txt_report(*args, **kwargs)
-			if filename is None:
+			if filename is None and tempfile==False:
 				return rpt
 			else:
 				f = fileopen(None if tempfile else filename, mode='w')
@@ -61,7 +61,7 @@ class ModelReporter(docx.DocxModelReporter,
 				return f
 		if style.lower()=='xml':
 			rpt = self.xhtml_report(*args, raw_xml=True, **kwargs)
-			if filename is None:
+			if filename is None and tempfile==False:
 				return rpt
 			else:
 				f = XHTML("temp" if tempfile else filenext(filename), quickhead=self, **kwargs)
@@ -70,7 +70,7 @@ class ModelReporter(docx.DocxModelReporter,
 				return f
 		if style.lower()=='html':
 			rpt = self.xhtml_report(*args, raw_xml=False, **kwargs)
-			if filename is None:
+			if filename is None and tempfile==False:
 				return rpt
 			else:
 				f = fileopen(None if tempfile else filename, mode='wb')
