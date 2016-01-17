@@ -338,16 +338,19 @@ class Model(Model2, ModelReporter):
 
 	utility = property(__utility_get, __utility_set)
 
-	def note(self, comment):
-		if not hasattr(self,"notes"): self.notes = []
-		def _append_note(x):
-			x = "{}".format(x).replace("\n"," -- ")
-			if x not in self.notes:
-				self.notes += [x,]
-		if isinstance(comment,(list,tuple)):
-			for eachcomment in comment: _append_note(eachcomment)
+	def note(self, comment, isglobal=False):
+		if isglobal:
+			if not hasattr(self,"notes"): self.notes = []
+			def _append_note(x):
+				x = "{}".format(x).replace("\n"," -- ")
+				if x not in self.notes:
+					self.notes += [x,]
+			if isinstance(comment,(list,tuple)):
+				for eachcomment in comment: _append_note(eachcomment)
+			else:
+				_append_note(comment)
 		else:
-			_append_note(comment)
+			self.write_runstats_note(comment)
 
 	def networkx_digraph(self):
 		try:

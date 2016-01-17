@@ -3163,6 +3163,7 @@ class runstats(object):
     process_label = _swig_property(_core.runstats_process_label_get, _core.runstats_process_label_set)
     process_starttime = _swig_property(_core.runstats_process_starttime_get, _core.runstats_process_starttime_set)
     process_endtime = _swig_property(_core.runstats_process_endtime_get, _core.runstats_process_endtime_set)
+    _notes = _swig_property(_core.runstats__notes_get, _core.runstats__notes_set)
 
     def elapsed_time(self) -> "double":
         return _core.runstats_elapsed_time(self)
@@ -3778,7 +3779,7 @@ class Model2(sherpa):
     def get_weight_scale_factor(self) -> "double":
         return _core.Model2_get_weight_scale_factor(self)
 
-    def auto_rescale_weights(self, mean_weight: 'double const &'=1.0) -> "void":
+    def auto_rescale_weights(self, mean_weight: 'double const &'=1.0) -> "std::string":
         return _core.Model2_auto_rescale_weights(self, mean_weight)
 
     def restore_scale_weights(self) -> "void":
@@ -3828,6 +3829,12 @@ class Model2(sherpa):
 
     def _ngev_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2__ngev_gradient_full_casewise(self)
+
+    def write_runstats_note(self, comment: 'std::string const &') -> "void":
+        return _core.Model2_write_runstats_note(self, comment)
+
+    def read_runstats_notes(self) -> "std::string":
+        return _core.Model2_read_runstats_notes(self)
 
     def start_timing(self, name: 'std::string const &') -> "void":
         return _core.Model2_start_timing(self, name)

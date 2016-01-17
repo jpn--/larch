@@ -89,4 +89,8 @@ class ModelReporter(docx.DocxModelReporter,
 		raise LarchError("Format style '{}' is not known, must be one of ['txt', 'docx', 'latex', 'html', 'xml']".format(style))
 
 	
-
+	def report_d(self):
+		"""Shortcut to a diagnostic html report."""
+		y = self.report(style='html', tempfile=True, cats='D')
+		y.view()
+		return y

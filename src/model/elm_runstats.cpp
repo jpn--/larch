@@ -62,7 +62,7 @@ elm::runstats::runstats(long startTimeSec, long startTimeUSec,
 				 int number_threads,
 				 int number_cpu)
 : iteration (iteration)
-, _notes (notes)
+, _notes ()
 , results (results)
 , timestamp (timestamp)
 , processor(processor)
@@ -130,15 +130,16 @@ void elm::runstats::set_other(PyObject* other)
 
 void elm::runstats::prepend_timing(const runstats& previously)
 {
-	
+	_notes.insert(           _notes.begin()           , previously._notes.begin()           , previously._notes.end()           );
 	process_label.insert(    process_label.begin()    , previously.process_label.begin()    , previously.process_label.end()    );
 	process_starttime.insert(process_starttime.begin(), previously.process_starttime.begin(), previously.process_starttime.end());
 	process_endtime.insert(  process_endtime.begin()  , previously.process_endtime.begin()  , previously.process_endtime.end()  );
-
+	
 }
 
 void elm::runstats::append_timing(const runstats& subsequently)
 {
+	_notes.insert(           _notes.end()           , subsequently._notes.begin()           , subsequently._notes.end()           );
 	process_label.insert(    process_label.end()    , subsequently.process_label.begin()    , subsequently.process_label.end()    );
 	process_starttime.insert(process_starttime.end(), subsequently.process_starttime.begin(), subsequently.process_starttime.end());
 	process_endtime.insert(  process_endtime.end()  , subsequently.process_endtime.begin()  , subsequently.process_endtime.end()  );
@@ -163,7 +164,18 @@ void elm::runstats::iter()
 
 std::string elm::runstats::notes() const
 {
-	return _notes;
+	if (_notes.size()==1) {
+		return _notes[0];
+	}
+	if (_notes.size()==0) {
+		return "";
+	}
+	std::string n = _notes[0];
+	for (size_t i=1; i<_notes.size(); i++) {
+		n += "\n"+_notes[i];
+	}
+	
+	return n;
 }
 
 std::string elm::runstats::__repr__() const
@@ -177,22 +189,24 @@ std::string elm::runstats::__repr__() const
 
 void elm::runstats::write(std::string note)
 {
-	if (_notes=="") {
-		_notes = note;
-		return;
-	}
-	_notes += "\n";
-	_notes += note;
+	_notes.push_back(note);
+//	if (_notes=="") {
+//		_notes = note;
+//		return;
+//	}
+//	_notes += "\n";
+//	_notes += note;
 }
 
 void elm::runstats::write(char* note)
 {
-	if (_notes=="") {
-		_notes = note;
-		return;
-	}
-	_notes += "\n";
-	_notes += note;
+	_notes.push_back(note);
+//	if (_notes=="") {
+//		_notes = note;
+//		return;
+//	}
+//	_notes += "\n";
+//	_notes += note;
 }
 
 void elm::runstats::flush()

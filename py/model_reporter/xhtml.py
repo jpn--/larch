@@ -1,7 +1,7 @@
 
 
 from ..utilities import category, pmath, rename
-from ..core import LarchError, ParameterAlias
+from ..core import LarchError, ParameterAlias, IntStringDict
 from io import StringIO
 from ..util.xhtml import XHTML, XML_Builder
 import math
@@ -54,6 +54,11 @@ class XhtmlModelReporter():
 			cats=['title','params','LL','nesting_tree','latest','NOTES']
 		elif cats=='-':
 			cats=['title','params','LL',               'latest','NOTES']
+
+		if cats=='D' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','queryinfo','UTILITYSPEC',]
+		elif cats=='D':
+			cats=['title','params','LL',                        'latest','NOTES','queryinfo','UTILITYSPEC',]
 
 		# make all formatting keys uppercase
 		existing_format_keys = list(format.keys())
@@ -479,6 +484,8 @@ class XhtmlModelReporter():
 					x.td("{0}".format(dur,**format))
 			i = ers[0]['notes']
 			if i is not '':
+				if isinstance(i,list):
+					i = "<br/>".join(i)
 				with x.tr_:
 					x.td("Notes")
 					x.td("{0}".format(i,**format))
@@ -1099,6 +1106,11 @@ class XhtmlModelReporter():
 			x.start("p", {'class':'note'})
 			x.data(note)
 			x.end("p")
+		for note in self.read_runstats_notes().split("\n"):
+			if note:
+				x.start("p", {'class':'note'})
+				x.data(note)
+				x.end("p")
 		return x.close()
 
 	def xhtml_queryinfo(self,**format):
@@ -1143,6 +1155,8 @@ class XhtmlModelReporter():
 
 			try:
 				q = self.db.queries.avail
+				if isinstance(q,IntStringDict):
+					q = dict(q)
 			except AttributeError:
 				pass
 			else:

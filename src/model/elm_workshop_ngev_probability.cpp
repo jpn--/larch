@@ -339,13 +339,25 @@ void elm::workshop_ngev_probability::work(size_t firstcase, size_t numberofcases
 {
 	workshop_ngev_probability_calc(firstcase,numberofcases);
 
-//	_lock = result_mutex;
+//	if (result_mutex) {
+//		std::lock_guard<std::mutex> lock_while_in_scope(*result_mutex);
 //
-//	if (_lock) {
-//		std::lock_guard<std::mutex> lock_while_in_shope(*_lock);
-//		std::cerr << "Finished workshop_ngev_probability ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]\n";
+//		BUGGER_(msg_, "HEX UtilityCoefCA ["<< firstcase <<"] = "<<UtilPacket.Coef_CA->printall_hex());
+//		BUGGER_(msg_, "HEX UtilityCoefCO ["<< firstcase <<"] = "<<UtilPacket.Coef_CO->printall_hex());
+//
+//		BUGGER_(msg_, "HEX Utility       ["<< firstcase <<"] = "<<UtilPacket.Outcome->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Cond_Prob     ["<< firstcase <<"] = "<<Cond_Prob->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Probability   ["<< firstcase <<"] = "<<Probability->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX AdjProbability["<< firstcase <<"] = "<<AdjProbability->printrow_hex(firstcase));
 //	} else {
 //
+//		BUGGER_(msg_, "HEX UtilityCoefCA ["<< firstcase <<"] = "<<UtilPacket.Coef_CA->printall_hex());
+//		BUGGER_(msg_, "HEX UtilityCoefCO ["<< firstcase <<"] = "<<UtilPacket.Coef_CO->printall_hex());
+//
+//		BUGGER_(msg_, "HEX Utility       ["<< firstcase <<"] = "<<UtilPacket.Outcome->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Cond_Prob     ["<< firstcase <<"] = "<<Cond_Prob->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Probability   ["<< firstcase <<"] = "<<Probability->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX AdjProbability["<< firstcase <<"] = "<<AdjProbability->printrow_hex(firstcase));
 //	}
 }
 

@@ -125,7 +125,36 @@ class TestSwissmetroExamples(ELM_TestCase):
 		self.assertAlmostEqual(                     0, M.parameter("ASC_CAR").null_value       ,7)
 		self.assertAlmostEqual(                     0, M.parameter("ASC_CAR").initial_value    ,7)
 
-	def test_swissmetro04transforms(self):		
+	def test_swissmetro02weightedbig(self):
+		from ..examples import load_example
+		load_example(102)
+		from ..examples import model
+		M = model()
+		M.db.queries.weight = "(1.0*(GROUPid==2)+1.2*(GROUPid==3))*88.90991"
+		M.maximize_loglike()
+		self.assertAlmostEqual(   -527374.2593192016 , M.LL()                                  ,3)
+		self.assertAlmostEqual( -0.011196450342598127, M.parameter("B_COST").value             ,6)
+		self.assertAlmostEqual(0.000052009766901624634, M.parameter("B_COST").std_err           ,6)
+		self.assertAlmostEqual(0.000067678573779952661, M.parameter("B_COST").robust_std_err    ,6)
+		self.assertAlmostEqual(                     0, M.parameter("B_COST").null_value        ,6)
+		self.assertAlmostEqual(                     0, M.parameter("B_COST").initial_value     ,6)
+		self.assertAlmostEqual( -0.013215230457827699, M.parameter("B_TIME").value             ,6)
+		self.assertAlmostEqual(0.000056930596508046117, M.parameter("B_TIME").std_err           ,6)
+		self.assertAlmostEqual( 0.00010365818509383274, M.parameter("B_TIME").robust_std_err    ,6)
+		self.assertAlmostEqual(                     0, M.parameter("B_TIME").null_value        ,7)
+		self.assertAlmostEqual(                     0, M.parameter("B_TIME").initial_value     ,7)
+		self.assertAlmostEqual(  -0.7565549063303081, M.parameter("ASC_TRAIN").value          ,6)
+		self.assertAlmostEqual(  0.0056038547832057167, M.parameter("ASC_TRAIN").std_err        ,6)
+		self.assertAlmostEqual(  0.0083257424005508493, M.parameter("ASC_TRAIN").robust_std_err ,6)
+		self.assertAlmostEqual(                     0, M.parameter("ASC_TRAIN").null_value     ,7)
+		self.assertAlmostEqual(                     0, M.parameter("ASC_TRAIN").initial_value  ,7)
+		self.assertAlmostEqual(  -0.1143341869883861 , M.parameter("ASC_CAR").value            ,6)
+		self.assertAlmostEqual(  0.0043151665433859974, M.parameter("ASC_CAR").std_err          ,6)
+		self.assertAlmostEqual(  0.0058311781077102311, M.parameter("ASC_CAR").robust_std_err   ,6)
+		self.assertAlmostEqual(                     0, M.parameter("ASC_CAR").null_value       ,7)
+		self.assertAlmostEqual(                     0, M.parameter("ASC_CAR").initial_value    ,7)
+
+	def test_swissmetro04transforms(self):
 		from ..examples import load_example
 		load_example(104)
 		from ..examples import model

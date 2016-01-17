@@ -317,7 +317,7 @@ std::string __GetWeight(const std::string& varname, bool reweight, Facet* _Data)
 //
 //}
 
-void elm::Model2::auto_rescale_weights(const double& mean_weight)
+std::string elm::Model2::auto_rescale_weights(const double& mean_weight)
 {
 	if (Data_Weight) {
 
@@ -326,10 +326,19 @@ void elm::Model2::auto_rescale_weights(const double& mean_weight)
 		if ((needed_scale_factor > 1.0001) || (needed_scale_factor < 0.9999)) {
 			Data_Weight_rescaled = boosted::make_shared<elm::darray>(*Data_Weight,needed_scale_factor);
 			weight_scale_factor = needed_scale_factor;
-			INFO(msg) << "automatically rescaled weights (total initial weight "<<current_total
+			
+			std::ostringstream s;
+			s << "automatically rescaled weights (total initial weight "<<current_total
 						<<" scaled by "<<weight_scale_factor<<" across "<<Data_Weight->nCases()
 						<<" cases)";
+			
+			INFO(msg) << s.str();
+			return s.str();
+		} else {
+			return "did not automatically rescale weights";
 		}
+	} else {
+		return "no weights to automatically rescale";
 	}
 }
 
@@ -337,6 +346,10 @@ void elm::Model2::restore_scale_weights()
 {
 	Data_Weight_rescaled.reset();
 	weight_scale_factor = 1.0;
+	
+	gradient_dispatcher.reset();
+	probability_dispatcher.reset();
+	loglike_dispatcher.reset();
 }
 
 double elm::Model2::get_weight_scale_factor() const

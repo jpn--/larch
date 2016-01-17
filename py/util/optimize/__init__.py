@@ -79,8 +79,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 
 	if model.option.weight_autorescale:
 		stat.start_process("weight autorescale")
-		model.auto_rescale_weights()
-		stat.write("autoscaled weights {}".format(model.get_weight_scale_factor()))
+		stat.write(model.auto_rescale_weights())
 	
 	if model.option.weight_choice_rebalance:
 		stat.start_process("weight choice rebalance")

@@ -95,7 +95,8 @@ void elm::loglike_w::work(size_t firstcase, size_t numberofcases, boosted::mutex
 	
 	
 	result_mutex->lock();
-//	BUGGER_(msg_, "LogLike["<< firstcase <<"]->["<< firstcase+numberofcases-1 <<"] = "<<LogL_local);
+//	BUGGER_(msg_, "LogLike["<< firstcase <<"]->["<< firstcase+numberofcases-1 <<"] = "<<LogL_local<<" = "<<etk::full_precision_hex(LogL_local));
+
 	*LogL += LogL_local;
 	result_mutex->unlock();
 

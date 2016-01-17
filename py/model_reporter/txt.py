@@ -291,11 +291,14 @@ class TxtModelReporter():
 		return x
 
 	def txt_notes(self,**format): #report_NOTES():
-		if not hasattr(self,"notes"): return []
+		if not hasattr(self,"notes") and self.read_runstats_notes()=="":
+			return []
 		x = ["="]
 		x += ["Notes"]
 		x += ["-"]
 		x += self.notes
+		for n in self.read_runstats_notes().split("\n"):
+			x += n
 		return x
 
 	def txt_utilityspec(self,**format): #report_UTILITYSPEC():

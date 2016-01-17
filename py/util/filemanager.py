@@ -3,6 +3,7 @@ __all__ = ['open_stack', 'next_stack', 'fileopen', 'filenext']
 import os
 import os.path
 from .temporaryfile import TemporaryFile
+import types
 
 def filename_split(filename):
 	pathlocation, basefile = os.path.split(filename)
@@ -132,7 +133,7 @@ def open_stack(filename=None, *arg, format="{basename:s}.{number:03d}{extension:
 
 	"""
 	if filename is None:
-		f = TemporaryFile(suffix=suffix if suffix is not None else '')
+		f = TemporaryFile(suffix=suffix if suffix is not None else '', **kwarg)
 	else:
 		f = open( next_stack(filename, format, suffix) , *arg, **kwarg)
 	if default_webbrowser.lower() == 'chrome':

@@ -362,10 +362,7 @@ runstats elm::Model2::_maximize_bhhh()
 		
 		if (option.weight_autorescale) {
 			_latest_run.start_process("weight autorescale");
-			auto_rescale_weights();
-			ostringstream oss;
-			oss << "autoscaled weights " << weight_scale_factor << "\n";
-			_latest_run._notes += oss.str();
+			write_runstats_note(auto_rescale_weights());
 		}
 		
 		_latest_run.start_process("optimize:bhhh");
@@ -518,10 +515,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		
 		if (option.weight_autorescale) {
 			_latest_run.start_process("weight autorescale");
-			auto_rescale_weights();
-			ostringstream oss;
-			oss << "autoscaled weights " << weight_scale_factor << "\n";
-			_latest_run._notes += oss.str();
+			write_runstats_note(auto_rescale_weights());
 		}
 		
 		_latest_run.start_process("maximize likelihood");
@@ -1758,5 +1752,13 @@ void elm::Model2::finish_timing()
 	_latest_run.end_process();
 }
 
+void elm::Model2::write_runstats_note(const std::string& comment)
+{
+	_latest_run.write(comment);
+}
 
+std::string elm::Model2::read_runstats_notes() const
+{
+	return _latest_run.notes();
+}
 

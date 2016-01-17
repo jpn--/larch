@@ -60,6 +60,8 @@ namespace elm {
 		std::vector<std::string> process_label;
 		std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> > process_starttime;
 		std::vector< std::chrono::time_point<std::chrono::high_resolution_clock> > process_endtime;
+
+		std::vector<std::string> _notes;
 		
 		double elapsed_time() const;
 		double runtime_seconds() const;
@@ -91,7 +93,7 @@ namespace elm {
 		PyObject* _other_attr;
 		
 	private:
-		std::string _notes;
+//		std::string _notes;
 		friend class Model2;
 	public:
 		std::string notes() const;

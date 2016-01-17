@@ -461,10 +461,11 @@ void elm::Model2::mnl_probability()
 		
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_mnl_probability, this);
-		if (!probability_dispatcher) {
-			probability_dispatcher = boosted::make_shared<etk::dispatcher>(option.threads, nCases, workshop_builder);
-		}
-		probability_dispatcher->dispatch(option.threads);
+		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
+//		if (!probability_dispatcher) {
+//			probability_dispatcher = boosted::make_shared<etk::dispatcher>(option.threads, nCases, workshop_builder);
+//		}
+//		probability_dispatcher->dispatch(option.threads);
 		
 	} else {
 		unsigned c;

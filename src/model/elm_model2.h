@@ -297,6 +297,9 @@ namespace elm {
 		etk::bitarray Data_MultiChoice; // For each observations, is the choice unique and binary?
 		
 		boosted::shared_ptr<elm::darray>  Data_Weight_rescaled;
+		
+		
+		
 		inline elm::darray_ptr Data_Weight_active() {return (Data_Weight_rescaled ? Data_Weight_rescaled : Data_Weight);}
 
 
@@ -315,7 +318,7 @@ namespace elm {
 		double weight_scale_factor;
 #endif // ndef SWIG
 		double get_weight_scale_factor() const;
-		void auto_rescale_weights(const double& mean_weight=1.0);
+		std::string auto_rescale_weights(const double& mean_weight=1.0);
 		void restore_scale_weights();
 #ifndef SWIG
 
@@ -550,6 +553,10 @@ namespace elm {
 
 
 #endif // ndef SWIG
+
+	public:
+		void write_runstats_note(const std::string& comment);
+		std::string read_runstats_notes() const;
 
 //////// MARK: TIMING INTERFACE //////////////////////////////////////////////////////
 
