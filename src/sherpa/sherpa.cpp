@@ -37,7 +37,7 @@ double sherpa::objective()
 	OOPS("error(sherpa): default objective");
 	return 0; 
 }
-const etk::memarray& sherpa::gradient()  
+const etk::memarray& sherpa::gradient(const bool& force_recalculate)
 { 
 	negative_finite_diff_gradient_(GLastTurn);
 	return GLastTurn;

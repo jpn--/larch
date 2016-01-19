@@ -3735,6 +3735,9 @@ class Model2(sherpa):
         return _core.Model2__set_root_cellcode(self, r)
     _nCases_recall = _swig_property(_core.Model2__nCases_recall_get, _core.Model2__nCases_recall_set)
 
+    def freshen(self) -> "void":
+        return _core.Model2_freshen(self)
+
     def CoefUtilityCA(self) -> "PyObject *":
         return _core.Model2_CoefUtilityCA(self)
 

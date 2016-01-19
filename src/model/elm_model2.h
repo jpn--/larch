@@ -209,8 +209,6 @@ namespace elm {
 		void pull_coefficients_from_freedoms();
 		void _setUp_coef_and_grad_arrays();
 
-	public:
-		virtual void freshen();
 	
 	protected:
 		etk::ndarray      Coef_UtilityCA  ;
@@ -224,6 +222,9 @@ namespace elm {
 		// holds the calculated parameters themselves
 		
 #endif // ndef SWIG
+
+	public:
+		virtual void freshen();
 	
 	public:
 		PyObject*  CoefUtilityCA() {return Coef_UtilityCA.get_object();}
@@ -357,7 +358,7 @@ namespace elm {
 
 	public:
 		virtual double objective();
-		virtual const etk::memarray& gradient () ;
+		virtual const etk::memarray& gradient (const bool& force_recalculate=false) ;
 
 
 //		virtual void calculate_hessian();

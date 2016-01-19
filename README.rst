@@ -5,7 +5,7 @@ larch
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/released-17%20January%202016-blue.svg
+.. image:: https://img.shields.io/badge/released-19%20January%202016-blue.svg
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 

@@ -1303,7 +1303,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_nocache() {
 	setUp();
 
 	_parameter_update();
-	std::shared_ptr<etk::ndarray> g = make_shared<etk::ndarray>(gradient(), false);
+	std::shared_ptr<etk::ndarray> g = make_shared<etk::ndarray>(gradient(true), false);
 	bool z = true;
 	for (auto i=0; i!=g->size(); i++) {
 		if (g->at(i) != 0.0) {
@@ -1345,7 +1345,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_nocache(const std:
 	
 	std::shared_ptr<etk::ndarray> g;
 	try {
-		g = std::make_shared<etk::ndarray>(gradient(), false);
+		g = std::make_shared<etk::ndarray>(gradient(true), false);
 	} catch (ZeroProbWhenChosen) {
 		g = std::make_shared<etk::ndarray>(dF());
 		for (size_t i=0; i!=g->size(); i++) {

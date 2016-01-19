@@ -638,3 +638,18 @@ class TestMNL(ELM_TestCase):
 		gc = m1.gradient_check(disp=False)
 		self.assertTrue( gc[0] < -6 )
 
+	def test_gradient_holdfast_switching(self):
+		m = Model.Example()
+		m.parameter('ASC_SR2').holdfast = True
+		m.parameter('ASC_SR3P').holdfast = True
+		m.parameter_values((0.0, 0.0, 0.5305777095119981, -1.3804808428294322, 1.1023754107604156, -0.03289104850834897, -0.058267030048137054, -0.015279104463811553, -0.02184376051734762, -0.019312533988295785, -0.06930477008694798, -0.003905346765501799))
+		g = m.d_loglike()
+		self.assertEqual(0, g[0])
+		self.assertEqual(0, g[1])
+		self.assertTrue(0 != g[2])
+		m.parameter('ASC_SR2').holdfast = False
+		m.parameter('ASC_SR3P').holdfast = False
+		g = m.d_loglike_nocache()
+		self.assertTrue(0 != g[0])
+		self.assertTrue(0 != g[1])
+

@@ -68,7 +68,7 @@ class sherpa
 	
 public:
 	virtual double objective();
-	virtual const etk::memarray& gradient();
+	virtual const etk::memarray& gradient(const bool& force_recalculate=false);
 	virtual void calculate_hessian();
 	
 	void negative_finite_diff_gradient_(etk::memarray& fGrad);

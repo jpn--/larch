@@ -1334,9 +1334,9 @@ double elm::Model2::objective ()
 }
 
 
-const etk::memarray& elm::Model2::gradient () 
+const etk::memarray& elm::Model2::gradient (const bool& force_recalculate)
 {
-	if (FatGCurrent == ReadFCurrent() && !option.force_recalculate) {
+	if (FatGCurrent == ReadFCurrent() && !option.force_recalculate && !force_recalculate) {
 		// do nothing, calculations already done
 	} else {
 		if (option.force_finite_diff_grad) {
