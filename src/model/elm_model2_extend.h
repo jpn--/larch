@@ -56,13 +56,13 @@ namespace elm {
 			return $self->Xylem.elemental_codes();
 		}
 		
-		void d2_loglike() {
+		void _compute_d2_loglike() {
 			$self->setUp();
 			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 			$self->_parameter_update();
 			$self->calculate_hessian_and_save();
 		}
-		void d2_loglike(std::vector<double> v) {
+		void _compute_d2_loglike(std::vector<double> v) {
 			$self->setUp();
 			//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
 			$self->_parameter_update();

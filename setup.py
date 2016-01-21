@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.38'
+VERSION = '3.1.41'
 
 
 def read(*filenames, **kwargs):
@@ -515,7 +515,7 @@ else:
 		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz']},
 		  data_files=local_data_files,
 		  install_requires=[
-							"numpy >= 1.8.1",
+							"numpy >= 1.10",
 							"scipy >= 0.14.0",
 							"pandas >= 0.14.1",
 						],
