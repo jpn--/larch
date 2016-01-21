@@ -642,6 +642,7 @@ class TestMNL(ELM_TestCase):
 		m = Model.Example()
 		m.parameter('ASC_SR2').holdfast = True
 		m.parameter('ASC_SR3P').holdfast = True
+		m.setUp()
 		m.parameter_values((0.0, 0.0, 0.5305777095119981, -1.3804808428294322, 1.1023754107604156, -0.03289104850834897, -0.058267030048137054, -0.015279104463811553, -0.02184376051734762, -0.019312533988295785, -0.06930477008694798, -0.003905346765501799))
 		g = m.d_loglike()
 		self.assertEqual(0, g[0])

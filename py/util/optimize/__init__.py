@@ -64,6 +64,16 @@ def _default_optimizers(model):
 			dict(method='SLSQP', options={'ftol':1e-9, }),
 		)
 
+def weight_choice_rebalance(model):
+	ch = model.DataEdit("Choice")
+	ch_tot = ch.sum(1)
+	wg = model.DataEdit("Weight")
+	if not numpy.allclose(ch_tot, 1.0):
+		wg *= ch_tot
+		ch /= ch_tot[:,numpy.newaxis,:]
+		return True
+	return False
+
 def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	stat = runstats()
 	stat.start_process('setup')
@@ -77,19 +87,21 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 		llnull = model.loglike_null()
 		model._set_estimation_statistics(log_like_null=llnull)
 
+	if model.option.weight_choice_rebalance:
+		stat.start_process("weight choice rebalance")
+		if model.weight_choice_rebalance():
+			stat.write("rebalanced weights and choices")
+		#ch = model.DataEdit("Choice")
+		#ch_tot = ch.sum(1)
+		#wg = model.DataEdit("Weight")
+		#if not numpy.allclose(ch_tot, 1.0):
+		#	stat.write("rebalanced weights and choices")
+		#	wg *= ch_tot
+		#	ch /= ch_tot[:,numpy.newaxis,:]
+
 	if model.option.weight_autorescale:
 		stat.start_process("weight autorescale")
 		stat.write(model.auto_rescale_weights())
-	
-	if model.option.weight_choice_rebalance:
-		stat.start_process("weight choice rebalance")
-		ch = model.DataEdit("Choice")
-		ch_tot = ch.sum(1)
-		wg = model.DataEdit("Weight")
-		if not numpy.allclose(ch_tot, 1.0):
-			stat.write("rebalanced weights and choices")
-			wg *= ch_tot
-			ch /= ch_tot[:,numpy.newaxis,:]
 	
 	stat.end_process()
 	constraints = ()
