@@ -484,11 +484,22 @@ class XhtmlModelReporter():
 					x.td("{0}".format(dur,**format))
 			i = ers[0]['notes']
 			if i is not '':
-				if isinstance(i,list):
-					i = "<br/>".join(i)
-				with x.tr_:
-					x.td("Notes")
-					x.td("{0}".format(i,**format))
+				if isinstance(i,list) and len(i)>1:
+					with x.tr_:
+						x.td("Notes")
+						with x.td_:
+							x.data("{0}".format(i[0],**format))
+							for ii in i[1:]:
+								x.simple("br")
+								x.data("{0}".format(ii,**format))
+				elif isinstance(i,list) and len(i)==1:
+					with x.tr_:
+						x.td("Notes")
+						x.td("{0}".format(i[0],**format))
+				else:
+					with x.tr_:
+						x.td("Notes")
+						x.td("{0}".format(i,**format))
 			i = ers[0]['results']
 			if i is not '':
 				with x.tr_:

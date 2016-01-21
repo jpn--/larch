@@ -192,8 +192,14 @@ class TxtModelReporter():
 		for label, dur in zip(ers[0]['process_label'],ers[0]['process_durations']):
 			x += ["- {0:22s}\t{1}".format(label,dur,**format)]
 		i = ers[0]['notes']
-		if i is not '':
-			x += ["Notes                   \t{0}".format(i,**format)]
+		if i is not '' and i is not []:
+			if isinstance(i, list):
+				if len(i)>=1:
+					x += ["Notes                   \t{0}".format(i[0],**format)]
+				for j in range(1,len(i)):
+					x += ["                        \t{0}".format(i[j],**format)]
+			else:
+				x += ["Notes                   \t{0}".format(i,**format)]
 		i = ers[0]['results']
 		if i is not '':
 			x += ["Results                 \t{0}".format(i,**format)]
