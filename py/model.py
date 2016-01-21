@@ -31,7 +31,7 @@ class MetaParameter():
 class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
-	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers
+	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance
 
 	def dir(self):
 		for f in dir(self):
@@ -585,12 +585,21 @@ class Model(Model2, ModelReporter):
 					x[n,j] = p['robust_covariance'][names[j]]
 		return x
 
-	def hessian(self, recalc=False):
+	def hessian(self, values=None, recalc=False):
 		"The hessian matrix at the converged point of the latest estimation"
+		if values:
+			if self.parameter_values() != values:
+				self.parameter_values(values)
+				recalc = True
 		if recalc:
 			self.loglike()
-			self.d2_loglike()
+			self._compute_d2_loglike()
 		return self.hessian_matrix
+
+	negative_d2_loglike = hessian
+
+	def d2_loglike(self, values=None, recalc=False):
+		return -(self.negative_d2_loglike(values=values, recalc=recalc))
 
 	def covariance(self, recalc=False):
 		"The inverse of the hessian matrix at the converged point of the latest estimation"
