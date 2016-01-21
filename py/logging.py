@@ -177,10 +177,12 @@ def spew(level=10):
 
 _easy_logger = None
 
-def easy(level=-1, label="", *, filename=None):
+def easy(level=-1, label="", *, filename=None, file_fmt='[%(name)s] %(message)s'):
 	global _easy_logger
+	if file_fmt is None:
+		file_fmt = _mess_format
 	if filename:
-		scribe_to_file(filename, fmt='[%(name)s] %(message)s')
+		scribe_to_file(filename, fmt=file_fmt)
 	if isinstance(level, str):
 		label_ = level
 		level = label if isinstance(label, int) else -1
