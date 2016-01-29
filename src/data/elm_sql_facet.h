@@ -147,19 +147,12 @@ namespace elm {
 	, public Fountain
 	{
 	public:
-//		virtual elm::caseindex ask_caseids();
 		virtual elm::VAS_dna  ask_dna(const long long& c=0);
-//		virtual elm::datamatrix ask_idco(const std::vector<std::string>& varnames, long long* caseid=nullptr);
-//		virtual elm::datamatrix ask_idca(const std::vector<std::string>& varnames, long long* caseid=nullptr);
-//		virtual elm::datamatrix ask_choice(long long* caseid=nullptr);
-//		virtual elm::datamatrix ask_weight(long long* caseid=nullptr);
-//		virtual elm::datamatrix ask_avail(long long* caseid=nullptr);
 		
 		virtual ~Facet();
 
 	public:
 		std::string window_title;
-		std::string source_filename;
 		std::string working_name;
 		std::string active_facet;
 
@@ -202,22 +195,7 @@ namespace elm {
 		void refresh_queries();
 	
 	public:
-//		std::string get_sql_caseids() const;
-//		std::string get_sql_alts() const;
-//		std::string get_sql_idco() const;
-//		std::string get_sql_idca() const;
-//		std::string get_sql_choice() const;
-//		std::string get_sql_avail() const;
-//		std::string get_sql_weight() const;
-//
-//		void set_sql_caseids(const std::string& qry);
-//		void set_sql_alts(const std::string& qry);
-//		void set_sql_idco(const std::string& qry);
-//		void set_sql_idca(const std::string& qry);
-//		void set_sql_choice(const std::string& qry);
-//		void set_sql_avail(const std::string& qry);
-//		void set_sql_weight(const std::string& qry);
-				
+		
 		Facet(PyObject* pylong_ptr_to_db);
 		
 		void save_facet(std::string name);
@@ -227,60 +205,39 @@ namespace elm {
 		std::vector<std::string> list_facets() const;
 
 	public:
-//		void init_facet_queries();
 
  
 #ifndef SWIG
 	private:
-//		void _init_alts_query();
-//		void _init_idco_query();
-//		void _init_idca_query();
-//		void _init_avail_query();
-//		void _init_choice_query();
-//		void _init_weight_query();
 
 		void _create_facet_table_if_not_exists();
 
 #endif // ndef SWIG
 		
-		
-	public:
-	//	std::vector<unsigned long long> caseids(const unsigned& firstcasenum=0, const unsigned& numberofcases=0) const;
-
-
-
 
 	public:
-//		void refresh();
-
-//		std::string read_setup (const std::string& name, const std::string& defaultvalue="") const;
-//		void        write_setup(const std::string& name, const std::string& value);
 
 		
-		const unsigned& nCases() const ;
-		const unsigned& nAlts() const ;
+		unsigned nCases() const ;
+		unsigned nAlts() const ;
 		
 		std::vector<long long> caseids(const unsigned& firstcasenum=0, const unsigned& numberofcases=0, int no_error_checking=0) const;
 		std::vector<long long> altids() const;
 
-	private:
-		boosted::weak_ptr< std::vector<std::string> >  _alternative_names;
-		boosted::weak_ptr< std::vector<long long>   >  _alternative_codes;
-
 	public:
-		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names() ;
-		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes() ;
-		std::vector<std::string>    alternative_names() const;
-		std::vector<long long>      alternative_codes() const;
+//		virtual boosted::shared_ptr< std::vector<std::string> > cache_alternative_names() ;
+//		virtual boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes() ;
+		virtual std::vector<std::string>    alternative_names() const;
+		virtual std::vector<long long>      alternative_codes() const;
 		
-		std::string    alternative_name(long long) const;
-		long long      alternative_code(std::string) const;
+		virtual std::string    alternative_name(long long) const;
+		virtual long long      alternative_code(std::string) const;
 
-		bool check_ca(const std::string& column) const;
-		bool check_co(const std::string& column) const;
+		virtual bool check_ca(const std::string& column) const;
+		virtual bool check_co(const std::string& column) const;
 
-		std::vector<std::string> variables_ca() const;
-		std::vector<std::string> variables_co() const;
+		virtual std::vector<std::string> variables_ca() const;
+		virtual std::vector<std::string> variables_co() const;
 
 
 #ifndef SWIG
@@ -292,22 +249,11 @@ namespace elm {
 		ScrapePtr get_scrape_wght();
 		ScrapePtr get_scrape_aval();
 
-		VAS_dna alternatives_dna() const;
-
-
 	protected:
 		// Dimensionality
 		unsigned	_nCases;
 		unsigned	_nAlts;
 		
-		VAS_System  _Data_DNA;
-	public:
-		VAS_System* DataDNA(const long long& c=0);
-		
-	public:
-//		caseindex _caseindex;
-		
-//		std::list<datamatrix> _extracts;
 		
 	protected:
 		// Column names of important keys
@@ -333,12 +279,6 @@ namespace elm {
 
 		
 	public:
-//		std::string query_idca(const etk::strvec& columns, long long firstrow=0, long long numrows=0, bool validate=false) const;
-//		std::string query_idco(const etk::strvec& columns, long long firstrow=0, long long numrows=0, bool validate=false) const;
-//		std::string query_alts() const;
-//		std::string query_choice(long long firstrow=0, long long numrows=0) const;
-//		std::string query_avail(long long firstrow=0, long long numrows=0) const;
-//		std::string query_weight(long long firstrow=0, long long numrows=0) const;
 
 		std::string query_idca(const std::vector<std::string>& columns, bool validate=false, long long* caseid=nullptr) const;
 		std::string query_idco(const std::vector<std::string>& columns, bool validate=false, long long* caseid=nullptr) const;
@@ -347,14 +287,6 @@ namespace elm {
 		std::string query_avail(long long* caseid=nullptr) const;
 		std::string query_weight(long long* caseid=nullptr) const;
 
-
-//		std::string build_idca_query() const;
-//		std::string build_idco_query() const;
-//		std::string build_alts_query() const;
-//		std::string build_choice_query() const;
-//		std::string build_avail_query() const;
-//		std::string build_weight_query() const;
-//		std::string build_caseids_query() const;
 
 		std::string qry_idca(const bool& corrected=true) const {return queries_ptr ? queries_ptr->qry_idca(corrected) : OOPS_FACET("queries undefined");}
 		std::string qry_idco(const bool& corrected=true) const {return queries_ptr ? queries_ptr->qry_idco(corrected) : OOPS_FACET("queries undefined");}
@@ -380,9 +312,6 @@ namespace elm {
 		
 		
 	public:
-//		elm::datamatrix matrix_library(size_t n);
-		
-		
 		
 		void _array_idco_reader(const std::string& qry, elm::darray* array, elm::darray* caseids);
 		void _array_idca_reader(const std::string& qry, elm::darray* array, elm::darray* caseids, const std::vector<long long>& altids);

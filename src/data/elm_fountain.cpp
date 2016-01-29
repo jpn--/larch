@@ -24,6 +24,9 @@
 #include "etk.h"
 
 elm::Fountain::Fountain()
+: _alternative_names()
+, _alternative_codes()
+, source_filename()
 {
 
 }
@@ -39,95 +42,101 @@ elm::Fountain::~Fountain()
 
 
 
+unsigned elm::Fountain::nCases() const
+{
+	OOPS("fountain is an abstract base class, use a derived class instead");
+}
 
-//elm::caseindex elm::Fountain::ask_caseids()
-//{
-//	OOPS("Fountain is an abstract base class");
-//}
+unsigned elm::Fountain::nAlts() const
+{
+	OOPS("fountain is an abstract base class, use a derived class instead");
+}
+
+
 
 elm::VAS_dna  elm::Fountain::ask_dna(const long long& c)
 {
 	OOPS("Fountain is an abstract base class");
 }
 
-/*
-elm::datamatrix elm::Fountain::ask_idco(std::vector<std::string> variables)
-{
-	OOPS("Fountain is an abstract base class");
-}
-
-elm::datamatrix elm::Fountain::ask_idca(std::vector<std::string> variables)
-{
-	OOPS("Fountain is an abstract base class");
-}
-
-elm::datamatrix elm::Fountain::ask_choice()
-{
-	OOPS("Fountain is an abstract base class");
-}
-
-elm::datamatrix elm::Fountain::ask_weight()
-{
-	OOPS("Fountain is an abstract base class");
-}
-
-elm::datamatrix elm::Fountain::ask_avail()
-{
-	OOPS("Fountain is an abstract base class");
-}
-*/
-
-
-const unsigned& elm::Fountain::nCases() const
-{
-	OOPS("Fountain is an abstract base class");
-}
-
-const unsigned& elm::Fountain::nAlts() const
-{
-	OOPS("Fountain is an abstract base class");
-}
 
 
 
 
 
 
-
-//const elm::caseindex elm::Fountain::ask_caseids() const
-//{
-//	return const_cast<elm::Fountain*>(this)->ask_caseids();
-//}
 
 const elm::VAS_dna  elm::Fountain::ask_dna(const long long& c) const
 {
 	return const_cast<elm::Fountain*>(this)->ask_dna(c);
 }
 
-/*
-const elm::datamatrix elm::Fountain::ask_idco(std::vector<std::string> variables) const
+
+
+
+boosted::shared_ptr< std::vector<std::string> > elm::Fountain::cache_alternative_names()
 {
-	return const_cast<elm::Fountain*>(this)->ask_idco(variables);
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	
+	if (modthis->_alternative_names.expired()) {
+    	boosted::shared_ptr< std::vector<std::string> > x = boosted::make_shared< std::vector<std::string> >( alternative_names() );
+		modthis->_alternative_names = x;
+		return x;
+	} else {
+		return modthis->_alternative_names.lock();
+	}
 }
 
-const elm::datamatrix elm::Fountain::ask_idca(std::vector<std::string> variables) const
+
+boosted::shared_ptr< std::vector<long long> > elm::Fountain::cache_alternative_codes()
 {
-	return const_cast<elm::Fountain*>(this)->ask_idca(variables);
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	
+	if (modthis->_alternative_codes.expired()) {
+    	boosted::shared_ptr< std::vector<long long> > x = boosted::make_shared< std::vector<long long> >( alternative_codes() );
+		modthis->_alternative_codes = x;
+		return x;
+	} else {
+		return modthis->_alternative_codes.lock();
+	}
 }
 
-const elm::datamatrix elm::Fountain::ask_choice() const
+
+elm::VAS_System* elm::Fountain::DataDNA(const long long& c)
 {
-	return const_cast<elm::Fountain*>(this)->ask_choice();
+	// In the future, the basic data structure may be allowed to vary based on the case
+	return &_Data_DNA;
 }
 
-const elm::datamatrix elm::Fountain::ask_weight() const
+
+elm::VAS_dna elm::Fountain::alternatives_dna() const
 {
-	return const_cast<elm::Fountain*>(this)->ask_weight();
+	std::vector<std::string> the_names (alternative_names());
+	std::vector<elm::cellcode> the_codes (alternative_codes());
+	if (the_names.size() != the_codes.size()) OOPS("vector sizes do not match");
+	VAS_dna output;
+	for (unsigned i=0; i<the_names.size(); i++) {
+		output[the_codes[i]] = VAS_dna_info(the_names[i]);
+	}
+	return output;
 }
 
-const elm::datamatrix elm::Fountain::ask_avail() const
+
+
+std::vector<long long> elm::Fountain::_echo_alternative_codes() const
 {
-	return const_cast<elm::Fountain*>(this)->ask_avail();
+	return this->alternative_codes();
 }
-*/
+
+void elm::Fountain::_director_test()
+{
+	std::cerr << "elm::Fountain::_director_test():\n";
+	
+	std::cerr << " nCases="<<nCases()<<"\n";
+	std::cerr << " nAlts="<<nAlts()<<"\n";
+
+	std::cerr << "end test.\n";
+	
+}
+
 

@@ -41,14 +41,11 @@ elm::Facet::Facet(PyObject* pylong_ptr_to_db)
 , _nCases(0)
 , _nAlts(0)
 , window_title()
-, source_filename()
 , working_name()
 , active_facet()
 //, _caseindex(nullptr)
 , queries(nullptr)
 , queries_ptr(nullptr)
-, _alternative_names()
-, _alternative_codes()
 {
 	try {
 //		load_facet();
@@ -837,97 +834,15 @@ std::vector<std::string> elm::Facet::list_facets() const
 
 
 
-/*
-void elm::Facet::refresh()
-{
-	try {
-//		init_facet_queries();
-	} catch (etk::FacetError) {
-		_nCases = 0;
-		_nAlts = 0;
-		_Data_DNA.clear();
-	}
-	
-	bool d_alts   = (sql_alts  ==_as_loaded_sql_alts  );
-	bool d_idco   = (sql_idco  ==_as_loaded_sql_idco  );
-	bool d_idca   = (sql_idca  ==_as_loaded_sql_idca  );
-	bool d_choice = (sql_choice==_as_loaded_sql_choice);
-	bool d_avail  = (sql_avail ==_as_loaded_sql_avail );
-	bool d_weight = (sql_weight==_as_loaded_sql_weight);
-	_as_loaded_sql_alts   = sql_alts  ;
-	_as_loaded_sql_idco   = sql_idco  ;
-	_as_loaded_sql_idca   = sql_idca  ;
-	_as_loaded_sql_choice = sql_choice;
-	_as_loaded_sql_avail  = sql_avail ;
-	_as_loaded_sql_weight = sql_weight;
-	
-	
-//	if (d_idco) {
-		_nCases = eval_integer("SELECT count(*) FROM "+tbl_idco(),0);
-//	}
-	
-	SQLiteStmtPtr s = sql_statement("");
-	
-//	if (d_alts) {
-		INFO(msg)<< "Reading alternatives..." ;
-		_Data_DNA.clear();
-		s->clear();
-		s->prepare(query_alts())->execute();
-		while (s->status() == SQLITE_ROW) {
-			_Data_DNA.add_cell(s->getInt64(0),s->getText(1));
-			s->execute();
-		}
-		_Data_DNA.regrow();
-		_nAlts = _Data_DNA.n_elemental();
-		INFO(msg)<< "Found "<< _nAlts <<" elemental alternatives." ;
-//	}
-	
-
-//	if (d_idco || !_caseindex) {
-		if (_caseindex) {
-			_caseindex.reset();
-		}
-		
-		_caseindex = caseindex_t::create();
-		_caseindex->add_caseids(caseids(0,0,1));
-//		_nCases = _caseindex->size();
-//	}
-}
-*/
-
-
-//std::string elm::Facet::read_setup(const std::string& name, const std::string& defaultvalue) const
-//{
-//	try{
-//		SQLiteStmtPtr z = sql_statement("SELECT value FROM elm_setup WHERE id==?");
-//		z->bind_text(1,name);
-//		return z->simpleText("",defaultvalue);
-//	} catch (etk::SQLiteError) {
-//		return defaultvalue;
-//	}
-//}
-//void elm::Facet::write_setup(const std::string& name, const std::string& value)
-//{
-//	sql_statement("CREATE TABLE IF NOT EXISTS elm_setup (\n"
-//					  "  id TEXT UNIQUE,\n"
-//				      "  value)"  )->execute();
-//	SQLiteStmtPtr z = sql_statement("INSERT OR REPLACE INTO elm_setup (id, value) VALUES (?,?)");
-//	z->bind_text(1,name);
-//	z->bind_text(2,value);
-//	z->execute_until_done();
-//}
 
 
 
-
-
-
-const unsigned& elm::Facet::nCases() const
+unsigned elm::Facet::nCases() const
 {
 	return _nCases;
 }
 
-const unsigned& elm::Facet::nAlts() const
+unsigned elm::Facet::nAlts() const
 {
 	return _nAlts;
 }
@@ -1012,31 +927,31 @@ long long elm::Facet::alternative_code(std::string name) const
 	return eval_int64(sql.str());
 }
 
-boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_names()
-{
-	elm::Facet* modthis = const_cast<elm::Facet*>(this);
-	
-	if (modthis->_alternative_names.expired()) {
-    	boosted::shared_ptr< std::vector<std::string> > x = boosted::make_shared< std::vector<std::string> >( alternative_names() );
-		modthis->_alternative_names = x;
-		return x;
-	} else {
-		return modthis->_alternative_names.lock();
-	}
-}
-
-boosted::shared_ptr< std::vector<long long> > elm::Facet::cache_alternative_codes() 
-{
-	elm::Facet* modthis = const_cast<elm::Facet*>(this);
-	
-	if (modthis->_alternative_codes.expired()) {
-    	boosted::shared_ptr< std::vector<long long> > x = boosted::make_shared< std::vector<long long> >( alternative_codes() );
-		modthis->_alternative_codes = x;
-		return x;
-	} else {
-		return modthis->_alternative_codes.lock();
-	}
-}
+//boosted::shared_ptr< std::vector<std::string> > elm::Facet::cache_alternative_names()
+//{
+//	elm::Facet* modthis = const_cast<elm::Facet*>(this);
+//	
+//	if (modthis->_alternative_names.expired()) {
+//    	boosted::shared_ptr< std::vector<std::string> > x = boosted::make_shared< std::vector<std::string> >( alternative_names() );
+//		modthis->_alternative_names = x;
+//		return x;
+//	} else {
+//		return modthis->_alternative_names.lock();
+//	}
+//}
+//
+//boosted::shared_ptr< std::vector<long long> > elm::Facet::cache_alternative_codes() 
+//{
+//	elm::Facet* modthis = const_cast<elm::Facet*>(this);
+//	
+//	if (modthis->_alternative_codes.expired()) {
+//    	boosted::shared_ptr< std::vector<long long> > x = boosted::make_shared< std::vector<long long> >( alternative_codes() );
+//		modthis->_alternative_codes = x;
+//		return x;
+//	} else {
+//		return modthis->_alternative_codes.lock();
+//	}
+//}
 
 
 std::vector<std::string> elm::Facet::alternative_names() const
@@ -1092,17 +1007,6 @@ std::vector<elm::cellcode> elm::Facet::alternative_codes() const
 	return altids();
 }
 
-elm::VAS_dna elm::Facet::alternatives_dna() const
-{
-	std::vector<std::string> the_names (alternative_names());
-	std::vector<elm::cellcode> the_codes (alternative_codes());
-	if (the_names.size() != the_codes.size()) OOPS("vector sizes do not match");
-	VAS_dna output;
-	for (unsigned i=0; i<the_names.size(); i++) {
-		output[the_codes[i]] = VAS_dna_info(the_names[i]);
-	}
-	return output;
-}
 
 bool elm::Facet::check_ca(const std::string& column) const
 {
@@ -1130,12 +1034,6 @@ std::vector<std::string> elm::Facet::variables_co() const
 	return column_names("SELECT * FROM "+tbl_idco());
 }
 
-
-elm::VAS_System* elm::Facet::DataDNA(const long long& c)
-{
-	// In the future, the basic data structure may be allowed to vary based on the case
-	return &_Data_DNA;
-}
 
 
 std::string elm::Facet::alias_caseids_caseid() const

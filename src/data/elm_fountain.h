@@ -38,27 +38,49 @@ namespace elm {
 	{
 	
 	  public:
-//		virtual elm::caseindex ask_caseids();
 		virtual elm::VAS_dna   ask_dna(const long long& c=0);
-//		virtual elm::datamatrix ask_idco(std::vector<std::string> variables);
-//		virtual elm::datamatrix ask_idca(std::vector<std::string> variables);
-//		virtual elm::datamatrix ask_choice();
-//		virtual elm::datamatrix ask_weight();
-//		virtual elm::datamatrix ask_avail();
-
-//		virtual const elm::caseindex ask_caseids() const;
 		virtual const elm::VAS_dna   ask_dna(const long long& c=0) const;
-//		virtual const elm::datamatrix ask_idco(std::vector<std::string> variables) const;
-//		virtual const elm::datamatrix ask_idca(std::vector<std::string> variables) const;
-//		virtual const elm::datamatrix ask_choice() const;
-//		virtual const elm::datamatrix ask_weight() const;
-//		virtual const elm::datamatrix ask_avail() const;
 
-		virtual const unsigned& nCases() const;
-		virtual const unsigned& nAlts() const;
+		virtual unsigned nCases() const ;
+		virtual unsigned nAlts() const  ;
+
+#ifndef SWIG
+
+	  protected:
+		boosted::weak_ptr< std::vector<std::string> >  _alternative_names;
+		boosted::weak_ptr< std::vector<long long>   >  _alternative_codes;
+
+	  public:
+		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names();
+		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes();
+
+#endif // ndef SWIG
+
+	  public:
+		virtual std::vector<std::string>    alternative_names() const =0;
+		virtual std::vector<long long>      alternative_codes() const =0;
+		virtual std::string    alternative_name(long long) const      =0;
+		virtual long long      alternative_code(std::string) const    =0;
+
+		virtual bool check_ca(const std::string& column) const =0;
+		virtual bool check_co(const std::string& column) const =0;
+
+		virtual std::vector<std::string> variables_ca() const =0;
+		virtual std::vector<std::string> variables_co() const =0;
 	
 		Fountain();
 		virtual ~Fountain();
+
+		std::string source_filename;
+
+	  protected:
+		elm::VAS_System  _Data_DNA;
+	  public:
+		elm::VAS_System* DataDNA(const long long& c=0);
+		elm::VAS_dna alternatives_dna() const;
+		
+		std::vector<long long>      _echo_alternative_codes() const;
+		void _director_test();
 	};
 	
 };
