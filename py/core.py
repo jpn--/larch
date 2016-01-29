@@ -103,6 +103,13 @@ def _swig_setattr_nondynamic_method(set):
     return set_attr
 
 
+try:
+    import weakref
+    weakref_proxy = weakref.proxy
+except:
+    weakref_proxy = lambda x: x
+
+
 
 
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
@@ -1177,20 +1184,65 @@ class Fountain(object):
     def ask_dna(self, *args) -> "elm::VAS_dna const":
         return _core.Fountain_ask_dna(self, *args)
 
-    def nCases(self) -> "unsigned int const &":
+    def nCases(self) -> "unsigned int":
         return _core.Fountain_nCases(self)
 
-    def nAlts(self) -> "unsigned int const &":
+    def nAlts(self) -> "unsigned int":
         return _core.Fountain_nAlts(self)
 
+    def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        return _core.Fountain_alternative_names(self)
+
+    def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        return _core.Fountain_alternative_codes(self)
+
+    def alternative_name(self, arg0: 'long long') -> "std::string":
+        return _core.Fountain_alternative_name(self, arg0)
+
+    def alternative_code(self, arg0: 'std::string') -> "long long":
+        return _core.Fountain_alternative_code(self, arg0)
+
+    def check_ca(self, column: 'std::string const &') -> "bool":
+        return _core.Fountain_check_ca(self, column)
+
+    def check_co(self, column: 'std::string const &') -> "bool":
+        return _core.Fountain_check_co(self, column)
+
+    def variables_ca(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        return _core.Fountain_variables_ca(self)
+
+    def variables_co(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        return _core.Fountain_variables_co(self)
+
     def __init__(self):
-        this = _core.new_Fountain()
+        if self.__class__ == Fountain:
+            _self = None
+        else:
+            _self = self
+        this = _core.new_Fountain(_self, )
         try:
             self.this.append(this)
         except:
             self.this = this
     __swig_destroy__ = _core.delete_Fountain
     __del__ = lambda self: None
+    source_filename = _swig_property(_core.Fountain_source_filename_get, _core.Fountain_source_filename_set)
+
+    def DataDNA(self, c: 'long long const &'=0) -> "elm::VAS_System *":
+        return _core.Fountain_DataDNA(self, c)
+
+    def alternatives_dna(self) -> "elm::VAS_dna":
+        return _core.Fountain_alternatives_dna(self)
+
+    def _echo_alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        return _core.Fountain__echo_alternative_codes(self)
+
+    def _director_test(self) -> "void":
+        return _core.Fountain__director_test(self)
+    def __disown__(self):
+        self.this.disown()
+        _core.disown_Fountain(self)
+        return weakref_proxy(self)
 Fountain_swigregister = _core.Fountain_swigregister
 Fountain_swigregister(Fountain)
 
@@ -1682,7 +1734,6 @@ class Facet(SQLiteDB, Fountain):
     __swig_destroy__ = _core.delete_Facet
     __del__ = lambda self: None
     window_title = _swig_property(_core.Facet_window_title_get, _core.Facet_window_title_set)
-    source_filename = _swig_property(_core.Facet_source_filename_get, _core.Facet_source_filename_set)
     working_name = _swig_property(_core.Facet_working_name_get, _core.Facet_working_name_set)
     active_facet = _swig_property(_core.Facet_active_facet_get, _core.Facet_active_facet_set)
 
@@ -1714,10 +1765,10 @@ class Facet(SQLiteDB, Fountain):
     def list_facets(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.Facet_list_facets(self)
 
-    def nCases(self) -> "unsigned int const &":
+    def nCases(self) -> "unsigned int":
         return _core.Facet_nCases(self)
 
-    def nAlts(self) -> "unsigned int const &":
+    def nAlts(self) -> "unsigned int":
         return _core.Facet_nAlts(self)
 
     def caseids(self, firstcasenum: 'unsigned int const &'=0, numberofcases: 'unsigned int const &'=0, no_error_checking: 'int'=0) -> "std::vector< long long,std::allocator< long long > >":
@@ -1725,12 +1776,6 @@ class Facet(SQLiteDB, Fountain):
 
     def altids(self) -> "std::vector< long long,std::allocator< long long > >":
         return _core.Facet_altids(self)
-
-    def cache_alternative_names(self) -> "boosted::shared_ptr< std::vector< std::string,std::allocator< std::string > > >":
-        return _core.Facet_cache_alternative_names(self)
-
-    def cache_alternative_codes(self) -> "boosted::shared_ptr< std::vector< long long,std::allocator< long long > > >":
-        return _core.Facet_cache_alternative_codes(self)
 
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.Facet_alternative_names(self)
@@ -1850,6 +1895,7 @@ Facet_swigregister(Facet)
 
 
 from .db import DB
+from .dt import DT
 
 
 _core.ELM_IGNORED_swigconstant(_core)
@@ -3761,7 +3807,7 @@ class Model2(sherpa):
     def provision(self, *args) -> "void":
 
         if len(args)==0:
-        	if hasattr(self,'db') and isinstance(self.db,DB):
+        	if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
         		args = (self.db.provision(self.needs()), )
         	else:
         		raise LarchError('model has no db specified for provisioning')
@@ -3965,30 +4011,17 @@ class Model2(sherpa):
     __swig_destroy__ = _core.delete_Model2
     __del__ = lambda self: None
 
-    def change_data_pointer(self, datafile: 'Facet') -> "void":
-        val = _core.Model2_change_data_pointer(self, datafile)
-
-        try:
-        	self._ref_to_db = datafile
-        except NameError:
-        	self._ref_to_db = args[0]
-        try:
-        	self._pull_graph_from_db()
-        except LarchError:
-        	pass
-
-
-        return val
-
-
-    def delete_data_pointer(self) -> "void":
-        val = _core.Model2_delete_data_pointer(self)
+    def delete_data_fountain(self) -> "void":
+        val = _core.Model2_delete_data_fountain(self)
 
         self._ref_to_db = None
 
 
         return val
 
+
+    def change_data_fountain(self, datafile: 'Fountain') -> "void":
+        return _core.Model2_change_data_fountain(self, datafile)
 
     def setUp(self, and_load_data: 'bool'=True) -> "void":
 
@@ -4011,12 +4044,6 @@ class Model2(sherpa):
 
     def save_buffer(self) -> "std::string":
         return _core.Model2_save_buffer(self)
-
-    def simulate_probability(self, *args) -> "void":
-        return _core.Model2_simulate_probability(self, *args)
-
-    def simulate_choices(self, *args) -> "void":
-        return _core.Model2_simulate_choices(self, *args)
 
     @staticmethod
     def Example(n=1, db=None, pre=False):
@@ -4093,8 +4120,8 @@ class Model2(sherpa):
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
         return _core.Model2_alternative_codes(self)
 
-    def d2_loglike(self, *args) -> "void":
-        return _core.Model2_d2_loglike(self, *args)
+    def _compute_d2_loglike(self, *args) -> "void":
+        return _core.Model2__compute_d2_loglike(self, *args)
 
     def teardown(self) -> "void":
         return _core.Model2_teardown(self)
