@@ -46,6 +46,7 @@ namespace elm {
 	// forward declarations
 	class VAS_Cell;
 	class ComponentGraphDNA;
+	class Fountain;
 
 	#endif // ndef SWIG
 	
@@ -284,7 +285,7 @@ namespace elm {
 		void ungrow();
 		// UNGROW flushes the existing cells and edges, leaving the genome intact.
 		
-		void regrow( ComponentCellcodeMap* nodes=nullptr, LinearCOBundle_2* edges=nullptr, Facet* db=nullptr, elm::cellcode* root=nullptr, etk::logging_service* msg=nullptr );
+		void regrow( ComponentCellcodeMap* nodes=nullptr, LinearCOBundle_2* edges=nullptr, Fountain* db=nullptr, elm::cellcode* root=nullptr, etk::logging_service* msg=nullptr );
 		// REGROW flushes the existing cells and edges, and regrows new ones based
 		//  on the genome.
 

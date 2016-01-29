@@ -626,7 +626,7 @@ void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg
 #define REGROW_LOG BUGGER_
 
 
-void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, Facet* db, elm::cellcode* root, etk::logging_service* msg )
+void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, Fountain* db, elm::cellcode* root, etk::logging_service* msg )
 {
 	boosted::shared_ptr< std::vector<std::string> > _altnames;
 	boosted::shared_ptr< std::vector<long long  > > _altcodes;
