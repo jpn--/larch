@@ -41,23 +41,19 @@ using namespace std;
 
 ComponentGraphDNA elm::Model2::Input_Graph()
 {
-	return ComponentGraphDNA(&Input_LogSum,&Input_Edges,_Data);
+	return ComponentGraphDNA(&Input_LogSum,&Input_Edges,_fountain());
 }
 
 
 void elm::Model2::_setUp_NL()
 {
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
 	INFO(msg)<< "Setting up NL model..." ;
 	
 	// COUNTING
-//	nCases = _Data->nCases(); // set in provisioning
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-//	Params_UtilityCA.resize(Data_UtilityCA->nVars());
-//	Params_UtilityCO.resize(Data_UtilityCO->nVars(),_Data->nAlts());
 	Params_LogSum.resize(nNests+1);
 
 	nThreads = option.threads;
@@ -629,7 +625,7 @@ ELM_RESULTCODE elm::Model2::nest
 	if (result & ELM_CREATED) {
 		if (!option.suspend_xylem_rebuild) {
 			elm::cellcode root = Xylem.root_cellcode();
-			Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+			Xylem.regrow( &Input_LogSum, &Input_Edges, _fountain(), &root, &msg );
 			nElementals = Xylem.n_elemental();
 			nNests = Xylem.n_branches();
 			nNodes = Xylem.size();

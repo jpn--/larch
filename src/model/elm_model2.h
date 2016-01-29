@@ -80,7 +80,7 @@ namespace elm {
 
 
 		#ifdef SWIG
-		%feature("pythonappend") Model2(elm::Facet& datafile) %{
+		%feature("pythonappend") Model2(elm::Fountain& datafile) %{
 			try:
 				self._ref_to_db = args[0]
 			except IndexError:
@@ -103,17 +103,7 @@ namespace elm {
 			from .utilities import dicta
 			self.descriptions = dicta()
 		%}
-		%feature("pythonappend") change_data_pointer(elm::Facet& datafile) %{
-			try:
-				self._ref_to_db = datafile
-			except NameError:
-				self._ref_to_db = args[0]
-			try:
-				self._pull_graph_from_db()
-			except LarchError:
-				pass
-		%}
-		%feature("pythonappend") delete_data_pointer() %{
+		%feature("pythonappend") delete_data_fountain() %{
 			self._ref_to_db = None
 		%}
 		%feature("pythonprepend") setUp %{
@@ -238,7 +228,10 @@ namespace elm {
 //////// MARK: DATA ARRAYS ///////////////////////////////////////////////////////////
 
 	public:
-		Facet* _Data;
+//		Facet* _Data;
+		Fountain* _Fount;
+		inline Fountain* _fountain() {return _Fount;}
+		inline const Fountain* _fountain() const {return _Fount;}
 		// a pointer to the relevant master data object
 
 #endif // ndef SWIG
@@ -252,7 +245,7 @@ namespace elm {
 		%}
 		%feature("pythonprepend") provision %{
 			if len(args)==0:
-				if hasattr(self,'db') and isinstance(self.db,DB):
+				if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
 					args = (self.db.provision(self.needs()), )
 				else:
 					raise LarchError('model has no db specified for provisioning')
@@ -622,35 +615,35 @@ namespace elm {
 
 
 	public:
-		void sim_probability
-			( const std::string& tablename
-			, const std::string& columnnameprefix="prob_"
-			, const std::string& columnnamesuffix=""
-			, bool use_alt_codes=true
-			, bool overwrite=false
-			);
-		void sim_conditional_probability
-			( const std::string& tablename
-			, const std::string& columnnameprefix="cprob_"
-			, const std::string& columnnamesuffix=""
-			, bool use_alt_codes=true
-			, bool overwrite=false
-			);
-		void simulate_conditional_probability
-			( const std::string& tablename
-			, const std::string& columnnameprefix="cprob_"
-			, const std::string& columnnamesuffix=""
-			, bool use_alt_codes=true
-			, bool overwrite=false
-			);
-		void _simulate_choices
-			( const std::string& tablename
-			, const std::string& choicecolumnname="simchoice"
-			, const std::string& casecolumnname="caseid"
-			, const std::string& altcolumnname="altid"
-			, const std::string& choices_per_case_columnname=""
-			, bool overwrite=false
-			);
+//		void sim_probability
+//			( const std::string& tablename
+//			, const std::string& columnnameprefix="prob_"
+//			, const std::string& columnnamesuffix=""
+//			, bool use_alt_codes=true
+//			, bool overwrite=false
+//			);
+//		void sim_conditional_probability
+//			( const std::string& tablename
+//			, const std::string& columnnameprefix="cprob_"
+//			, const std::string& columnnamesuffix=""
+//			, bool use_alt_codes=true
+//			, bool overwrite=false
+//			);
+//		void simulate_conditional_probability
+//			( const std::string& tablename
+//			, const std::string& columnnameprefix="cprob_"
+//			, const std::string& columnnamesuffix=""
+//			, bool use_alt_codes=true
+//			, bool overwrite=false
+//			);
+//		void _simulate_choices
+//			( const std::string& tablename
+//			, const std::string& choicecolumnname="simchoice"
+//			, const std::string& casecolumnname="caseid"
+//			, const std::string& altcolumnname="altid"
+//			, const std::string& choices_per_case_columnname=""
+//			, bool overwrite=false
+//			);
 
 
 
@@ -789,11 +782,11 @@ FOSWIG(	%rename(__repr__) representation; )
 		
 	public:
 		Model2();
-		Model2(elm::Facet& datafile);
+		Model2(elm::Fountain& datafile);
 		~Model2();
 
-		void change_data_pointer(elm::Facet& datafile);
-		void delete_data_pointer();
+		void delete_data_fountain();
+		void change_data_fountain(elm::Fountain& datafile);
 
 	public:
 		void setUp(bool and_load_data=true);
@@ -808,21 +801,21 @@ FOSWIG(	%rename(__repr__) representation; )
 		std::string save_buffer() const;
 			
 	public:
-		void simulate_probability
-			( const std::string& tablename
-			, const std::string& columnnameprefix="prob_"
-			, const std::string& columnnamesuffix=""
-			, bool use_alt_codes=true
-			, bool overwrite=false
-			);
-		void simulate_choices
-			( const std::string& tablename
-			, const std::string& choicecolumnname="simchoice"
-			, const std::string& casecolumnname="caseid"
-			, const std::string& altcolumnname="altid"
-			, const std::string& choices_per_case_columnname=""
-			, bool overwrite=false
-			);
+//		void simulate_probability
+//			( const std::string& tablename
+//			, const std::string& columnnameprefix="prob_"
+//			, const std::string& columnnamesuffix=""
+//			, bool use_alt_codes=true
+//			, bool overwrite=false
+//			);
+//		void simulate_choices
+//			( const std::string& tablename
+//			, const std::string& choicecolumnname="simchoice"
+//			, const std::string& casecolumnname="caseid"
+//			, const std::string& altcolumnname="altid"
+//			, const std::string& choices_per_case_columnname=""
+//			, bool overwrite=false
+//			);
 
 		#ifdef SWIG
 		%pythoncode %{

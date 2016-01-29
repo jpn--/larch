@@ -170,9 +170,9 @@ void elm::ComponentList::receive_utility_ca(const std::string& column_name,
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	push_back( x );
-	if (parentmodel && parentmodel->_Data && column_name!="1") {
+	if (parentmodel && parentmodel->_fountain() && column_name!="1") {
 		if (parentmodel) BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCA data";
-		parentmodel->_Data->check_ca(column_name);
+		parentmodel->_fountain()->check_ca(column_name);
 	}
 	if (parentmodel) {
 		MONITOR(parentmodel->msg) << "success: added "<<column_name;
@@ -196,9 +196,9 @@ void elm::ComponentList::receive_allocation(const std::string& column_name,
 	x.param_name = freedom_name;
 	x.multiplier = freedom_multiplier;
 	push_back( x );
-	if (parentmodel && parentmodel->_Data && column_name!="1") {
+	if (parentmodel && parentmodel->_fountain() && column_name!="1") {
 		if (parentmodel) BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCO data";
-		parentmodel->_Data->check_co(column_name);
+		parentmodel->_fountain()->check_co(column_name);
 	}
 	if (parentmodel) {
 		MONITOR(parentmodel->msg) << "success: added "<<column_name;
@@ -269,17 +269,17 @@ void elm::ComponentList::receive_utility_co_kwd
 	x._altname = alt_name;
 	push_back( x );
 	
-	if (parentmodel && parentmodel->_Data) {
+	if (parentmodel && parentmodel->_fountain()) {
 		BUGGER(parentmodel->msg) << "checking for validity of "<<column_name<<" in idCO data";
-		parentmodel->_Data->check_co(column_name);
+		parentmodel->_fountain()->check_co(column_name);
 		if (!alt_name.empty()) {
-			slot = parentmodel->_Data->DataDNA()->slot_from_name(alt_name);
+			slot = parentmodel->_fountain()->DataDNA()->slot_from_name(alt_name);
 		} else {
 			if (alt_code==cellcode_empty) {
 				OOPS("utility.co input requires that you specify an alternative.");
 			}
-			BUGGER(parentmodel->msg) << "parentmodel->_Data->source_filename=" << parentmodel->_Data->source_filename;
-			slot = parentmodel->_Data->DataDNA()->slot_from_code(alt_code);
+			BUGGER(parentmodel->msg) << "parentmodel->_fountain()->source_filename=" << parentmodel->_fountain()->source_filename;
+			slot = parentmodel->_fountain()->DataDNA()->slot_from_code(alt_code);
 		}
 	}
 
@@ -723,7 +723,7 @@ void elm::LinearCOBundle_2::__call__(elm::cellcode upcode, elm::cellcode dncode)
 
 
 
-elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const LinearCOBundle_2* edges, const Facet* db, const elm::cellcode* root)
+elm::ComponentGraphDNA::ComponentGraphDNA(const ComponentCellcodeMap* nodes, const LinearCOBundle_2* edges, const Fountain* db, const elm::cellcode* root)
 : db(db)
 , nodes(nodes)
 , edges(edges)

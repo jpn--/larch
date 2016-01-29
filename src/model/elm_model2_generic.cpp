@@ -33,7 +33,7 @@ using namespace elm;
 using namespace std;
 
 elm::Model2::Model2()
-: _Data (NULL)
+: _Fount(NULL)
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -72,8 +72,8 @@ elm::Model2::Model2()
 }
 
 
-elm::Model2::Model2(elm::Facet& datafile)
-: _Data (&datafile)
+elm::Model2::Model2(elm::Fountain& datafile)
+: _Fount(&datafile)
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -109,9 +109,11 @@ elm::Model2::Model2(elm::Facet& datafile)
 , _string_sender_ptr(nullptr)
 , hessian_matrix(new etk::symmetric_matrix())
 {
-	Py_INCREF(_Data->apsw_connection);
-	//msg.change_logger_name(logfilename);
-	Xylem.add_dna_sequence(_Data->alternatives_dna());
+	if (_Fount) {
+//		Py_INCREF(_Data->apsw_connection);
+		//msg.change_logger_name(logfilename);
+		Xylem.add_dna_sequence(_Fount->alternatives_dna());
+	}
 }
 
 elm::ParameterList* elm::Model2::_self_as_ParameterListPtr()
@@ -191,23 +193,19 @@ elm::ca_co_packet elm::Model2::allocation_packet()
 
 
 
-
-
-
-void elm::Model2::change_data_pointer(elm::Facet& datafile)
+void elm::Model2::change_data_fountain(elm::Fountain& datafile)
 {
-	if (_Data) {
-		Py_DECREF(_Data->apsw_connection);
-	}
-	_Data = &datafile;
-	if (_Data) {
-		Py_INCREF(_Data->apsw_connection);
-	}
+//	if (_Data) {
+//		Py_DECREF(_Data->apsw_connection);
+//	}
+	_Fount = &datafile;
+//	_Data = nullptr;
+
 	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.clear();
-	Xylem.add_dna_sequence(_Data->alternatives_dna());
+	Xylem.add_dna_sequence(_Fount->alternatives_dna());
 	if (!option.suspend_xylem_rebuild) {
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _Fount, &root, &msg );
 	}
 	
 	nElementals = Xylem.n_elemental();
@@ -216,12 +214,16 @@ void elm::Model2::change_data_pointer(elm::Facet& datafile)
 
 }
 
-void elm::Model2::delete_data_pointer()
+
+
+
+void elm::Model2::delete_data_fountain()
 {
-	if (_Data) {
-		Py_DECREF(_Data->apsw_connection);
-	}
-	_Data = NULL;
+//	if (_Data) {
+//		Py_DECREF(_Data->apsw_connection);
+//	}
+//	_Data = NULL;
+	_Fount = nullptr;
 	Xylem.clear();
 }
 

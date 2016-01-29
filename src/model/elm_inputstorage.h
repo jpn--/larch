@@ -20,6 +20,7 @@ namespace elm {
 	
 	class Model2;
 	class Facet;
+	class Fountain;
 	class ComponentList;
 		
 	struct LinearComponent {
@@ -385,11 +386,11 @@ namespace elm {
 
 	struct ComponentGraphDNA {
 	
-		const Facet* db;
+		const Fountain* db;
 		const ComponentCellcodeMap* nodes;
 		const LinearCOBundle_2* edges;
 		
-		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const LinearCOBundle_2* edges=nullptr, const Facet* db=nullptr, const elm::cellcode* root=nullptr);
+		ComponentGraphDNA(const ComponentCellcodeMap* nodes=nullptr, const LinearCOBundle_2* edges=nullptr, const Fountain* db=nullptr, const elm::cellcode* root=nullptr);
 		ComponentGraphDNA(const ComponentGraphDNA&);
 		bool operator==(const ComponentGraphDNA&) const;
 		

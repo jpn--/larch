@@ -75,7 +75,7 @@ void elm::__identify_additional_needs(const ComponentList& Input_List, etk::strv
 }
 
 
-void __check_validity_of_needs(const etk::strvec& needs, Facet*	_Data, int k, etk::logging_service* msg)
+void __check_validity_of_needs(const etk::strvec& needs, Fountain*	_Data, int k, etk::logging_service* msg)
 {
 	if (!_Data) return;
 
@@ -95,7 +95,7 @@ void __check_validity_of_needs(const etk::strvec& needs, Facet*	_Data, int k, et
 
 void _setUp_linear_data_and_params
 (	ParameterList&			self
- ,	Facet*					_Data
+ ,	Fountain*				_fount
  ,	VAS_System&				Xylem
  ,	ComponentList*			Input_UtilityCA
  ,	LinearCOBundle_1*		Input_UtilityCO
@@ -111,7 +111,7 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCA && Params_UtilityCA) {
 		// First, populate the data_port
 		etk::strvec u_ca = __identify_needs((*Input_UtilityCA));
-		__check_validity_of_needs(u_ca, _Data, IDCA, msg);
+		__check_validity_of_needs(u_ca, _fount, IDCA, msg);
 		
 		// Second, resize the paramArray
 		BUGGER_(msg, "setting Params_?CA size to ("<<u_ca.size()<<")");
@@ -129,10 +129,10 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCO && Params_UtilityCO) {
 		// First, populate the data_port
 		etk::strvec u_co = __identify_needs((*Input_UtilityCO));
-		__check_validity_of_needs(u_co, _Data, IDCO, msg);
+		__check_validity_of_needs(u_co, _fount, IDCO, msg);
 
 		// Second, resize the paramArray
-		auto s = _Data ? _Data->nAlts() : Xylem.n_elemental();
+		auto s = _fount ? _fount->nAlts() : Xylem.n_elemental();
 		BUGGER_(msg, "setting Params_?CO size to ("<<u_co.size()<<","<< s <<")");
 		(*Params_UtilityCO).resize(u_co.size(), s);
 
@@ -222,7 +222,7 @@ void elm::Model2::_setUp_utility_data_and_params()
 
 	_setUp_linear_data_and_params
 	(	*this
-	 ,	_Data
+	 ,	_fountain()
 	 ,	Xylem
 	 ,	&Input_Utility.ca
 	 ,	&Input_Utility.co
@@ -242,7 +242,7 @@ void elm::Model2::_setUp_quantity_data_and_params()
 
 	_setUp_linear_data_and_params
 	(	*this
-	 ,	_Data
+	 ,	_fountain()
 	 ,	Xylem
 	 ,	&Input_QuantityCA
 	 ,	nullptr
@@ -261,7 +261,7 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 
 	_setUp_linear_data_and_params
 	(	*this
-	 ,	_Data
+	 ,	_fountain()
 	 ,	Xylem
 	 ,	&Input_Sampling.ca
 	 ,	&Input_Sampling.co
@@ -287,34 +287,21 @@ void elm::Model2::_setUp_allocation_data_and_params()
 
 
 
-std::string __GetWeight(const std::string& varname, bool reweight, Facet* _Data) {
-	std::string w;	
-	if (reweight) {
-		std::ostringstream sql1;
-		sql1 << "SELECT SUM("<<varname<<") FROM " << _Data->tbl_idco();
-		double average_weight = _Data->sql_statement(sql1)->execute()->getDouble(0); 
-		
-		average_weight /= _Data->nCases();
-		ostringstream sql2;
-		sql2 << "("<<varname<<")/"<<average_weight;
-		w = (sql2.str());
-	} else {
-		w = (varname);
-	}	
-	return w;
-}
-
-//void elm::Model2::_setUp_weight_data()
-//{
-//	if (!_Data) OOPS("A database must be linked to this model to do this.");
-//
-//	if (_Data->unweighted()) {
-//		WARN(msg) << "No weights specified, defaulting to weight=1 for all cases.";
+//std::string __GetWeight(const std::string& varname, bool reweight, Facet* _Data) {
+//	std::string w;	
+//	if (reweight) {
+//		std::ostringstream sql1;
+//		sql1 << "SELECT SUM("<<varname<<") FROM " << _Data->tbl_idco();
+//		double average_weight = _Data->sql_statement(sql1)->execute()->getDouble(0); 
+//		
+//		average_weight /= _Data->nCases();
+//		ostringstream sql2;
+//		sql2 << "("<<varname<<")/"<<average_weight;
+//		w = (sql2.str());
 //	} else {
-//		Data_Weight = _Data->ask_weight();
-//		weight_scale_factor = 1.0;
-//	}
-//
+//		w = (varname);
+//	}	
+//	return w;
 //}
 
 std::string elm::Model2::auto_rescale_weights(const double& mean_weight)
@@ -394,7 +381,7 @@ void elm::Model2::_pull_graph_from_db()
 	BUGGER(msg) << "Rebuilding Xylem network...";
 	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.touch();
-	Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+	Xylem.regrow( &Input_LogSum, &Input_Edges, _fountain(), &root, &msg );
 }
 
 
@@ -438,7 +425,7 @@ void elm::Model2::setUp(bool and_load_data)
 		if (!option.suspend_xylem_rebuild) {
 			elm::cellcode root = Xylem.root_cellcode();
 			Xylem.touch();
-			Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+			Xylem.regrow( &Input_LogSum, &Input_Edges, _fountain(), &root, &msg );
 		}
 		if ((features & MODELFEATURES_ALLOCATION) || (features & MODELFEATURES_QUANTITATIVE)) {
 			_setUp_NGEV();
@@ -466,7 +453,7 @@ void elm::Model2::setUp(bool and_load_data)
 	if ((features & MODELFEATURES_NESTING) && (!option.suspend_xylem_rebuild)) {
 		Xylem.repoint_parameters(*Coef_LogSum, NULL);
 		elm::cellcode root = Xylem.root_cellcode();
-		Xylem.regrow( &Input_LogSum, &Input_Edges, _Data, &root, &msg );
+		Xylem.regrow( &Input_LogSum, &Input_Edges, _fountain(), &root, &msg );
 	}
 	
 	pull_coefficients_from_freedoms();

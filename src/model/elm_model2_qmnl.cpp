@@ -43,18 +43,14 @@ void elm::Model2::_setUp_QMNL()
 {
 	INFO(msg)<< "Setting up QMNL model..." ;
 	
-	if (!_Data) OOPS("A database must be linked to this model to do this.");
+	if (!_fountain()) OOPS("A data fountain must be linked to this model to do this.");
 	
 	// COUNTING
-//	nCases = _Data->nCases();  // instead set this value when provisioning
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-//	Params_UtilityCA.resize(Data_UtilityCA->nVars());
-//	Params_UtilityCO.resize(Data_UtilityCO->nVars(),_Data->nAlts());
-	
-	if (_Data->nAlts()<=0) {
+	if (_fountain()->nAlts()<=0) {
 		OOPS("The number of alternatives given in the data is non-positive");
 	}
 		
