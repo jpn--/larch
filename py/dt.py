@@ -12,27 +12,34 @@ else:
 	_tb_success = True
 
 
-from .core import Fountain
+from .core import Fountain, LarchError
 
-
+class IncompatibleShape(LarchError):
+	pass
 
 
 
 class DT(Fountain):
 
-	def _clear_cached_values(self):
-		del self._nCases
-		del self._nAlts
+	def clear_cached_values(self):
+		try:
+			del self._nCases
+		except AttributeError:
+			pass
+		try:
+			del self._nAlts
+		except AttributeError:
+			pass
 
 	def _try_read_attrib(self, h5name, defaultvalue):
 		attrib = "_"+h5name
 		try:
-			a = getattr(self._h5larchnode._v_attrs, h5name)
+			a = getattr(self.h5top._v_attrs, h5name)
 		except AttributeError:
 			# not available in h5, use default value and try to write that to h5
 			a = defaultvalue
 			try:
-				setattr(self._h5larchnode._v_attrs, h5name, a)
+				setattr(self.h5top._v_attrs, h5name, a)
 			except _tb.exceptions.FileModeError:
 				pass
 		setattr(self, attrib, a)
@@ -40,7 +47,7 @@ class DT(Fountain):
 	def _try_write_attrib(self, h5name, value):
 		setattr(self, "_"+h5name, value)
 		try:
-			setattr(self._h5larchnode._v_attrs, h5name, value)
+			setattr(self.h5top._v_attrs, h5name, value)
 		except _tb.exceptions.FileModeError:
 			pass
 
@@ -59,140 +66,83 @@ class DT(Fountain):
 		self.source_filemode = mode
 		self.source_filename = filename
 		self._h5larchpath = ipath
-		self._h5larchnode = self.h5f._getOrCreatePath(ipath, True)
+		self.h5top = self.h5f._getOrCreatePath(ipath, True)
 		self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
 		self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
-#		self._try_read_attrib('larch_idca_tablename',   "larch_idca")
-#		self._try_read_attrib('larch_idco_tablename',   "larch_idco")
-#		self._try_read_attrib('larch_alts_tablename',   "larch_alts")
-#		self._try_read_attrib('larch_idco_weightcolumn',"1")
-#		self._try_read_attrib('larch_idca_choicecolumn',"none")
-#		self._try_read_attrib('larch_idca_availcolumn', "1")
+		self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
 
 	def __del__(self):
-		print("DEL",repr(self))
 		if self._h5f_own:
 			self.h5f.close()
 
 	def __repr__(self):
 		return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
 
-#	@property
-#	def idca_tablename(self):
-#		return self._larch_idca_tablename
-#
-#	@idca_tablename.setter
-#	def idca_tablename(self, x):
-#		self._try_write_attrib('larch_idca_tablename', x)
-#
-#	@property
-#	def idco_tablename(self):
-#		return self._larch_idco_tablename
-#
-#	@idco_tablename.setter
-#	def idco_tablename(self, x):
-#		self._try_write_attrib('larch_idco_tablename', x)
-#
-#	@property
-#	def alts_tablename(self):
-#		return self._larch_alts_tablename
-#
-#	@alts_tablename.setter
-#	def alts_tablename(self, x):
-#		self._try_write_attrib('larch_alts_tablename', x)
-#
-#
-#	@property
-#	def idco_weightcolumn(self):
-#		return self._larch_idco_weightcolumn
-#
-#	@idco_weightcolumn.setter
-#	def idco_weightcolumn(self, x):
-#		self._try_write_attrib('larch_idco_weightcolumn', x)
-#
-#
-#	@property
-#	def idca_choicecolumn(self):
-#		return self._larch_idca_choicecolumn
-#
-#	@idca_choicecolumn.setter
-#	def idca_choicecolumn(self, x):
-#		self._try_write_attrib('larch_idca_choicecolumn', x)
-#
-#
-#	@property
-#	def idca_availcolumn(self):
-#		return self._larch_idca_availcolumn
-#
-#	@idca_availcolumn.setter
-#	def idca_availcolumn(self, x):
-#		self._try_write_attrib('larch_idca_availcolumn', x)
 
 	def _alternative_codes(self):
-		h5node = self.h5f.get_node(self._h5larchpath+"/alts",'altids')
-		return h5node[:]
+		return self.h5alts.altids[:]
 
 	def _alternative_names(self):
-		h5node = self.h5f.get_node(self._h5larchpath+"/alts",'names')
-		return h5node[:]
+		return self.h5alts.names[:]
 
 	def alternative_codes(self):
-		h5node = self.h5f.get_node(self._h5larchpath+"/alts",'altids')
-		return tuple(int(i) for i in h5node[:])
+		return tuple(int(i) for i in self.h5alts.altids[:])
 
 	def alternative_names(self):
-		h5node = self.h5f.get_node(self._h5larchpath+"/alts",'names')
-		return tuple(str(i) for i in h5node[:])
+		return tuple(str(i) for i in self.h5alts.names[:])
 
 	def alternative_name(self, code):
 		codes = self._alternative_codes()
 		idx = numpy.where(codes==code)[0][0]
-		return self.h5f.get_node(self._h5larchpath+"/alts",'names')[idx]
+		return self.h5alts.names[idx]
 
 	def alternative_code(self, name):
 		names = self._alternative_names()
 		idx = numpy.where(names==name)[0][0]
-		return self.h5f.get_node(self._h5larchpath+"/alts",'altids')[idx]
+		return self.h5alts.altids[idx]
 
 	def nCases(self):
-		try:
-			return self._nCases
-		except AttributeError:
-			tbl = self.h5f.get_node(self._h5larchpath, 'caseids')
-			self._nCases = int(tbl.shape[0])
-			return self._nCases
+		if '_screen_' in self.h5top:
+			screen = numpy.nonzero(self.h5top._screen_[:])[0]
+			return int(screen.shape[0])
+		else:
+			return int(self.h5top.caseids.shape[0])
 
 	def nAlts(self):
-		try:
-			return self._nAlts
-		except AttributeError:
-			tbl = self.h5f.get_node(self._h5larchpath+'/alts', 'altids')
-			self._nAlts = int(tbl.shape[0])
-			return self._nAlts
+		return int(self.h5alts.altids.shape[0])
 
 
 	def _remake_command(self, cmd, screen, dims):
 		## Whoa nelly!
 		from tokenize import tokenize, untokenize, NAME, OP, STRING
 		from io import BytesIO
-		from .util import allowed_math
 		recommand = []
 		g = tokenize(BytesIO(cmd.encode('utf-8')).readline)
 		for toknum, tokval, _, _, _  in g:
-			if toknum == NAME and tokval not in allowed_math:
+			if toknum == NAME and tokval in self.h5idca:
+				if dims==1:
+					raise IncompatibleShape("cannot use idca.{} in an idco expression".format(tokval))
 				# replace NAME tokens
-				partial = [ (NAME, 'h5node'), (OP, '.'), (NAME, tokval), (OP, '['), ]
+				partial = [ (NAME, 'self'), (OP, '.'), (NAME, 'h5idca'), (OP, '.'), (NAME, tokval), (OP, '['), ]
 				if screen is None:
-					partial = partial+[(OP, ':'),]
+					partial += [(OP, ':'),]
 				else:
-					partial = partial+[(NAME, 'screen'),]
+					partial += [(NAME, 'screen'),]
 				if dims>1:
-					partial = partial+[(OP, ','),(OP, ':'),]
-				if dims>2:
-					partial = partial+[(OP, ','),(OP, ':'),]
-				if dims>3:
-					partial = partial+[(OP, ','),(OP, ':'),]
-				recommand.extend(partial+[(OP, ']'), ])
+					partial += [(OP, ','),(OP, ':'),]
+				partial += [(OP, ']'), ]
+				recommand.extend(partial)
+			elif toknum == NAME and tokval in self.h5idco:
+				# replace NAME tokens
+				partial = [ (NAME, 'self'), (OP, '.'), (NAME, 'h5idco'), (OP, '.'), (NAME, tokval), (OP, '['), ]
+				if screen is None:
+					partial += [(OP, ':'),]
+				else:
+					partial += [(NAME, 'screen'),]
+				partial += [(OP, ']'), ]
+				if dims>1:
+					partial += [(OP, '['),(OP, ':'),(OP, ','),(NAME, 'None'),(OP, ']'),]
+				recommand.extend(partial)
 			else:
 				recommand.append((toknum, tokval))
 		return untokenize(recommand).decode('utf-8')
@@ -241,39 +191,32 @@ class DT(Fountain):
 			An int64 array of shape (n_cases,1).
 			
 		"""
-		h5node = self._h5larchnode.idca
-		h5caseid = self._h5larchnode.caseids
-		if screen is None:
+		from numpy import log, exp, log1p, absolute, fabs, sqrt
+		h5node = self.h5top.idca
+		h5caseid = self.h5top.caseids
+		if screen is None and '_screen_' not in self.h5top:
 			n_cases = h5caseid.shape[0]
+		elif screen is None:
+			screen = self.get_screen_indexes()
+			n_cases = screen.shape[0]
 		else:
 			n_cases = screen.shape[0]
 		n_vars = len(vars)
 		n_alts = self.nAlts()
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
 		for varnum,v in enumerate(vars):
+			command = self._remake_command(v,screen,2)
 			try:
-				if dtype in (bool, numpy.bool, numpy.bool_):
-					if isinstance(v,str) and v.lower() in ('true','false'):
-						float_v = dtype(v)
-					elif isinstance(v,(bool, numpy.bool, numpy.bool_)):
-						float_v = dtype(v)
-					else:
-						raise ValueError
+				result[:,:,varnum] = eval( command )
+			except Exception as exc:
+				args = exc.args
+				if not args:
+					arg0 = ''
 				else:
-					float_v = dtype(v)
-			except ValueError:
-				## Whoa nelly!
-				from numpy import log, exp, log1p
-				command = self._remake_command(v,screen,2)
-				try:
-					result[:,:,varnum] = eval( command )
-				except:
-					print("command=",command)
-					raise
-			except:
+					arg0 = args[0]
+				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				exc.args = (arg0,) + args[1:]
 				raise
-			else:
-				result[:,:,varnum] = float_v
 		result = numpy.nan_to_num(result)
 		from .array import Array
 		result = result.view(Array)
@@ -310,29 +253,31 @@ class DT(Fountain):
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
-		h5node = self._h5larchnode.idco
-		h5caseid = self._h5larchnode.caseids
-		if screen is None:
+		from numpy import log, exp, log1p, absolute, fabs, sqrt
+		h5node = self.h5top.idco
+		h5caseid = self.h5top.caseids
+		if screen is None and '_screen_' not in self.h5top:
 			n_cases = h5caseid.shape[0]
+		elif screen is None:
+			screen = self.get_screen_indexes()
+			n_cases = screen.shape[0]
 		else:
 			n_cases = screen.shape[0]
 		n_vars = len(vars)
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
 		for varnum,v in enumerate(vars):
+			command = self._remake_command(v,screen,1)
 			try:
-				float_v = dtype(v)
-			except ValueError:
-				from numpy import log, exp, log1p
-				command = self._remake_command(v,screen,1)
-				try:
-					result[:,varnum] = eval( command )
-				except:
-					print("command=",command)
-					raise
-			except:
+				result[:,varnum] = eval( command )
+			except Exception as exc:
+				args = exc.args
+				if not args:
+					arg0 = ''
+				else:
+					arg0 = args[0]
+				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				exc.args = (arg0,) + args[1:]
 				raise
-			else:
-				result[:,varnum] = float_v
 		result = numpy.nan_to_num(result)
 		from .array import Array
 		result = result.view(Array)
@@ -341,7 +286,7 @@ class DT(Fountain):
 
 	def array_weight(self, *, var=None, **kwargs):
 		try:
-			self.h5f.get_node(self._h5larchpath+"/idco", '_weight_')
+			w = self.h5idco._weight_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idco('1', **kwargs)
 		else:
@@ -352,12 +297,16 @@ class DT(Fountain):
 
 	def array_avail(self, *, var=None, dtype=numpy.bool_, **kwargs):
 		try:
-			self.h5f.get_node(self._h5larchpath+"/idca", '_avail_')
+			av = self.h5idca._avail_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idca('1', dtype=dtype, **kwargs)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
 
+	def get_screen_indexes(self):
+		if '_screen_' not in self.h5top:
+			return None
+		return numpy.nonzero(self.h5top._screen_[:])[0]
 
 	def provision(self, needs):
 		from . import Model
@@ -369,9 +318,7 @@ class DT(Fountain):
 		import numpy
 		provide = {}
 		cases = None
-		screen = None
-		if '_screen_' in self._h5larchnode:
-			screen = numpy.nonzero(self._h5larchnode._screen_[:])[0]
+		screen = self.get_screen_indexes()
 		matched_cases = []
 		#log = self.logger()
 		log = None
@@ -379,23 +326,23 @@ class DT(Fountain):
 			if log:
 				log.info("Provisioning {} data...".format(key))
 			if key=="Avail":
-				provide[key] = self.array_avail(screen=screen)
+				provide[key] = numpy.require(self.array_avail(screen=screen), requirements='C')
 			elif key=="Weight":
-				provide[key] = self.array_weight(screen=screen)
+				provide[key] = numpy.require(self.array_weight(screen=screen), requirements='C')
 			elif key=="Choice":
-				provide[key] = self.array_choice(screen=screen)
+				provide[key] = numpy.require(self.array_choice(screen=screen), requirements='C')
 			elif key[-2:]=="CA":
-				provide[key] = self.array_idca(*req.get_variables(), screen=screen)
+				provide[key] = numpy.require(self.array_idca(*req.get_variables(), screen=screen), requirements='C')
 			elif key[-2:]=="CO":
-				provide[key] = self.array_idco(*req.get_variables(), screen=screen)
+				provide[key] = numpy.require(self.array_idco(*req.get_variables(), screen=screen), requirements='C')
 			elif key=="Allocation":
-				provide[key] = self.array_idco(*req.get_variables(), screen=screen)
+				provide[key] = numpy.require(self.array_idco(*req.get_variables(), screen=screen), requirements='C')
 		if screen is None:
-			provide['caseids'] = self.h5f.get_node(self._h5larchpath+"/caseids")[:]
+			provide['caseids'] = numpy.require(self.h5top.caseids[:], requirements='C')
 		else:
-			provide['caseids'] = self.h5f.get_node(self._h5larchpath+"/caseids")[screen]
+			provide['caseids'] = numpy.require(self.h5top.caseids[screen], requirements='C')
 		if len(provide['caseids'].shape) == 1:
-			provide['caseids'] = provide['caseids'][:,numpy.newaxis]
+			provide['caseids'].shape = provide['caseids'].shape + (1,)
 		if m is not None:
 			return m.provision(provide)
 		else:
@@ -415,10 +362,10 @@ class DT(Fountain):
 		return True
 
 	def variables_ca(self):
-		return tuple(i for i in self.h5f.get_node(self._h5larchpath+'/idca')._v_leaves)
+		return tuple(i for i in self.h5idca._v_leaves)
 
 	def variables_co(self):
-		return tuple(i for i in self.h5f.get_node(self._h5larchpath+'/idco')._v_leaves)
+		return tuple(i for i in self.h5idco._v_leaves)
 
 	@staticmethod
 	def Example(dataset='MTC', filename='{}.h5', temp=True):
@@ -479,10 +426,12 @@ class DT(Fountain):
 		n=0
 		while 1:
 			try:
-				tryname = next_stack(filename, plus=n, allow_natural=True)
+				tryname = next_stack(filename, plus=n, allow_natural=(n==0))
 				h5f = _tb.open_file(tryname, 'w', filters=h5filters, driver="H5FD_CORE", driver_core_backing_store=0 if temp else 1)
 			except ValueError:
 				n += 1
+				if n>1000:
+					raise RuntimeError("cannot open HDF5 at {}".format(filename))
 			else:
 				break
 		larchnode = h5f._getOrCreatePath("/larch", True)
@@ -491,14 +440,16 @@ class DT(Fountain):
 		larchalts = h5f._getOrCreatePath("/larch/alts", True)
 
 		for var_ca in vars_ca:
-			h5var = h5f.create_carray(larchidca, var_ca, _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
-			arr, caseids = edb.array_idca(var_ca)
-			h5var[:,:] = arr.squeeze()
+			if var_ca not in ('caseid', 'casenum', 'IDCASE' ):
+				h5var = h5f.create_carray(larchidca, var_ca, _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
+				arr, caseids = edb.array_idca(var_ca)
+				h5var[:,:] = arr.squeeze()
 
 		for var_co in vars_co:
-			h5var = h5f.create_carray(larchidco, var_co, _tb.Float64Atom(), shape=(edb.nCases(),), filters=h5filters)
-			arr, caseids = edb.array_idco(var_co)
-			h5var[:] = arr.squeeze()
+			if var_co not in ('caseid', 'casenum', 'IDCASE'):
+				h5var = h5f.create_carray(larchidco, var_co, _tb.Float64Atom(), shape=(edb.nCases(),), filters=h5filters)
+				arr, caseids = edb.array_idco(var_co)
+				h5var[:] = arr.squeeze()
 
 		h5avail = h5f.create_carray(larchidca, '_avail_', _tb.BoolAtom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
 		arr, caseids = edb.array_avail()
@@ -532,25 +483,135 @@ class DT(Fountain):
 		return DT(filename, 'w', h5f=h5f)
 
 	def validate_hdf5(self, log=print):
+		import keyword
 		nerrs = 0
-		def zzz(message, valid):
-			global nerrs
-			vld = "ok" if valid else "ERROR"
-			log("{!s:^5}| {}".format(vld, "\n     |  ".join(message.split("\n"))))
-			if not valid:
-				nerrs += 1
+		
+		def zzz(message, invalid):
+			if invalid:
+				log("{!s:^5}\u2502 {}".format('ERROR', "\n \u2503   \u2502   ".join(message.split("\n"))))
+				if invalid is True:
+					invalid_str = "Nope"
+				else:
+					invalid_str = str(invalid)
+				log("{!s:^5}\u2502 {}".format("\u2517\u2501\u25BA", "\n \u2517\u2501\u25BA \u2502 ".join(invalid_str.split("\n"))))
+			else:
+				log("{!s:^5}\u2502 {}".format('ok', "\n     \u2502   ".join(message.split("\n"))))
+			return 0 if not invalid else 1
+
+		def category(catname):
+			log("\u2500"*5+"\u253C"+"\u2500"*84)
+			log("     \u2502 {}".format("\n     \u2502   ".join(catname.split("\n"))))
+
+		## Top lines of display
 		title = "{0} (with mode '{1}')".format(self.source_filename, self.source_filemode)
-		log("========================"+"="*len(title))
+		log("\u2550"*90)
 		log("larch.DT Validation for {}".format( title ))
-		log("------------------------"+"-"*len(title))
-		zzz("There should be a designated `larch` group node under which all other nodes reside.",
-			isinstance(self._h5larchnode, _tb.group.Group))
-		zzz("Under the top node, there should be a group named `idco` to hold that data.",
-			isinstance(self._h5larchnode.idco, _tb.group.Group))
-		zzz("Under the top node, there should be a group named `idca` to hold that data.",
-			isinstance(self._h5larchnode.idca, _tb.group.Group))
-		zzz("Under the top node, there should be an array node named `caseids` containing an\n"
-			"Int64 1 dimensional array.",
-			isinstance(self._h5larchnode.caseids, _tb.array.Array) and isinstance(self._h5larchnode.caseids.atom, _tb.atom.Int64Atom))
-		log("------------------------"+"-"*len(title))
+		log("\u2500"*5+"\u252C"+"\u2500"*84)
+		
+		## TOP
+		nerrs+= zzz("There should be a designated `larch` group node under which all other nodes reside.",
+					not isinstance(self.h5top, _tb.group.Group))
+		
+		## CASEIDS
+		category('CASES')
+		try:
+			caseids_node = self.h5top.caseids
+			caseids_nodeatom = caseids_node.atom
+			caseids_node_dim = len(caseids_node.shape)
+			caseids_node_len = caseids_node.shape[0]
+		except _tb.exceptions.NoSuchNodeError:
+			caseids_node = None
+			caseids_nodeatom = None
+			caseids_node_dim = 0
+			caseids_node_len = 0
+
+		nerrs+= zzz("Under the top node, there must be an array node named `caseids`.",
+					not isinstance(caseids_node, _tb.array.Array))
+
+		nerrs+= zzz("The `caseids` array dtype should be Int64.",
+					not isinstance(caseids_nodeatom, _tb.atom.Int64Atom))
+
+		nerrs+= zzz("The `caseids` array should be 1 dimensional.",
+					caseids_node_dim!=1)
+		
+		nerrs+= zzz("If there may be some data cases that are not to be included in the processing of \n"
+					"the discrete choice model, there should be a node named `_screen_` under the top \n"
+					"node that contains an appropriately sized Bool array indicating the inclusion \n"
+					"status for each case.",
+					'_screen_' in self.h5top
+					and (not isinstance(self.h5top._screen_, _tb.array.Array)
+						or not isinstance(self.h5top._screen_.atom, _tb.atom.BoolAtom)))
+
+		## IDCO
+		category('ALTERNATIVES')
+		nerrs+= zzz("Under the top node, there should be a group named `alts` to hold alternative data.",
+					not isinstance(self.h5top.alts, _tb.group.Group))
+		try:
+			altids_node = self.h5top.alts.altids
+			altids_nodeatom = altids_node.atom
+			altids_node_dim = len(altids_node.shape)
+			altids_node_len = altids_node.shape[0]
+		except _tb.exceptions.NoSuchNodeError:
+			altids_node = None
+			altids_nodeatom = None
+			altids_node_dim = 0
+			altids_node_len = 0
+		nerrs+= zzz("Within the `alts` node, there should be an array node named `altids` to hold the \n"
+					"identifying code numbers of the alternatives.",
+					not isinstance(altids_node, _tb.array.Array) )
+		nerrs+= zzz("The `altids` array dtype should be Int64.",
+					not isinstance(altids_nodeatom, _tb.atom.Int64Atom))
+		nerrs+= zzz("The `altids` array should be one dimensional.",
+					(altids_node_dim!=1))
+
+		try:
+			altnames_node = self.h5top.alts.names
+			altnames_nodeatom = altnames_node.atom
+			altnames_node_len = altnames_node.shape[0]
+		except _tb.exceptions.NoSuchNodeError:
+			altnames_node = None
+			altnames_nodeatom = None
+			altnames_node_len = 0
+
+		nerrs+= zzz("Within the `alts` node, there should also be a VLArray node named `names` to hold \n"
+					"the names of the alternatives.",
+					not isinstance(altnames_node, _tb.vlarray.VLArray))
+		nerrs+= zzz("The `names` node should hold unicode values.",
+					not isinstance(altnames_nodeatom, _tb.atom.VLUnicodeAtom))
+		nerrs+= zzz("The `altids` and `names` arrays should be the same length, and this will be the \n"
+					"number of elemental alternatives represented in the data.",
+					altnames_node_len!=altids_node_len)
+
+		## IDCO
+		category('IDCO FORMAT DATA')
+		nerrs+= zzz("Under the top node, there should be a group named `idco` to hold that data.",
+					not isinstance(self.h5top.idco, _tb.group.Group))
+		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts \n"
+					"with a letter or underscore, and only contains letters, numbers, and underscores) \n"
+					"and not a Python reserved keyword.",
+					[i for i in self.h5idco._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+
+		## IDCA
+		category('IDCA FORMAT DATA')
+		nerrs+= zzz("Under the top node, there should be a group named `idca` to hold that data.",
+					not isinstance(self.h5top.idca, _tb.group.Group))
+		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts \n"
+					"with a letter or underscore, and only contains letters, numbers, and underscores) \n"
+					"and not a Python reserved keyword.",
+					[i for i in self.h5idca._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should \n"
+					"be a node named `_avail_` under `idca` that contains an appropriately sized Bool \n"
+					"array indicating the availability status for each alternative.",
+					'_avail_' in self.h5idca
+					and (not isinstance(self.h5idca._avail_, _tb.array.Array)
+						or not isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)))
+
+		## TECHNICAL
+		category('OTHER TECHNICAL DETAILS')
+		nerrs+= zzz("The set of child node names within `idca` and `idco` should not overlap (i.e. \n"
+					"there should be no node names that appear in both).",
+					set(self.h5idca._v_children.keys()).intersection(self.h5idco._v_children.keys()))
+		
+		## Bottom line of display
+		log("\u2550"*5+"\u2567"+"\u2550"*84)
 		return nerrs
