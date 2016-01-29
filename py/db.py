@@ -1346,7 +1346,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		
 		Other Parameters
 		----------------
-		tablename : str
+		table : str
 			The idca data will be found in this table, view, or self contained query (if
 			the latter, it should be surrounded by parentheses).
 		caseid : str

@@ -4,6 +4,8 @@ from .temporaryfile import TemporaryFile, TemporaryHtml
 
 
 
+allowed_math = ('log', 'exp', 'log1p')
+
 
 def magic3(dtype=None):
 	import numpy
