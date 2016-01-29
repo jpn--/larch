@@ -484,13 +484,20 @@
 			&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_BOOL  )
 			&&(PyArray_TYPE((PyArrayObject*)thearray)!= NPY_INT64 )
 			) {
-			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires all array types to be DOUBLE or BOOL or INT64"));
+			std::string explain = "function requires all array types to be DOUBLE or BOOL or INT64, '";
+			explain+= PyString_ExtractCppString(thekey);
+			explain+= "' is not";
+			PyErr_SetString(ptrToLarchError, const_cast<char*>(explain.c_str()));
 			SWIG_fail;
 		}
 		try {
 			temp[PyString_ExtractCppString(thekey)] = boosted::make_shared<const elm::darray>(thearray);
 		} catch (const std::exception& e) {
-			PyErr_SetString(ptrToLarchError, const_cast<char*>(e.what()));
+			std::string explain = e.what();
+			explain+= "(on '";
+			explain+= PyString_ExtractCppString(thekey);
+			explain+= "')";
+			PyErr_SetString(ptrToLarchError, const_cast<char*>(explain.c_str()));
 			SWIG_fail;
 		}
 		$1 = &temp;

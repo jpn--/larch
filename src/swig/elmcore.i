@@ -2,8 +2,9 @@
 "Larch can be used to estimate discrete choice models."
 %enddef
 
-%module(docstring=DOCSTRING, package="larch") core
+%module(docstring=DOCSTRING, package="larch", directors="1") core
 
+%feature("director") elm::Fountain;
 
 // Fix an error in swig property::setter's
 %pythoncode %{
@@ -269,7 +270,8 @@ namespace etk {
 %include "elm_sql_facet.h"
 %pythoncode %{
 from .db import DB
-%} 
+from .dt import DT
+%}
 
 %include "etk_resultcodes.h"
 
