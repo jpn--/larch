@@ -25,6 +25,7 @@ import nose, unittest
 from nose.tools import *
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
 from ..db import DB
+from ..dt import DT
 from ..model import Model
 from ..core import LarchError, SQLiteError, FacetError, darray_req, LinearComponent
 from ..exceptions import *
@@ -217,3 +218,40 @@ class TestData1(unittest.TestCase):
 		x = ns.attributes_from_code(nn)
 		self.assertEqual( (1, levels_of_service.withstop, carriers.UA, things.Cat), x)
 
+
+	def test_pytables_examples(self):
+		dts = DT.Example('SWISSMETRO')
+		ms = Model.Example(101)
+		ms.db = dts
+		ms.provision()
+		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
+		self.assertAlmostEqual(  -5331.252007380466 , ms.loglike_nocache(x))
+		dt = DT.Example()
+		dt.h5top._screen_[:10] = False
+		rr = dt.array_idca('_avail_*hhinc')
+		self.assertEqual( rr.shape, (5019, 6, 1) )
+		self.assertTrue( numpy.allclose( rr[0], numpy.array([[ 42.5],[ 42.5],[ 42.5],[ 42.5],[ 42.5],[  0. ]]) ))
+		rr1 = dt.array_idca('_avail_')
+		rr2 = dt.array_idca('hhinc')
+		self.assertEqual( rr1.shape, (5019, 6, 1) )
+		self.assertEqual( rr2.shape, (5019, 6, 1) )
+#		m = Model.Example()
+#		m.db = dt
+#		m.utility.ca('exp(log(ivtt))+ovtt+altnum')
+#		m.maximize_loglike()
+#		self.assertAlmostEqual(   -3616.461567801068 , m.loglike())
+#		self.assertEqual(   5019 , m.nCases())
+
+	def test_pytables_examples_validate(self):
+		d1=DT.Example('MTC')
+		self.assertEqual( 0, d1.validate_hdf5(log=(lambda y: None)) )
+		del d1
+		d2=DT.Example('SWISSMETRO')
+		self.assertEqual( 0, d2.validate_hdf5(log=(lambda y: None)) )
+		del d2
+		d3=DT.Example('ITINERARY')
+		self.assertEqual( 0, d3.validate_hdf5(log=(lambda y: None)) )
+		del d3
+		d4=DT.Example('MINI')
+		self.assertEqual( 0, d4.validate_hdf5(log=(lambda y: None)) )
+		del d4
