@@ -64,7 +64,7 @@ def top_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
 		raise LarchError("File %s does not exist"%filename)
 
 
-def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix=None):
+def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix=None, plus=0, allow_natural=False):
 	"""Finds the next file name in this stack that does not yet exist.
 	
 	Parameters
@@ -85,8 +85,17 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 	format : str, optional
 		If given, use this format string to generate new stack file names in a
 		different format.
+	plus : int, optional
+		If given, increase the returned filenumber by this amount more than what
+		is needed to generate a new file.  This can be useful with pytables.
+	allow_natural : bool
+		If true, this function will return the unedited	`filename` parameter
+		if that file does not already exist. Otherwise will always have a 
+		number appended to the name.
 		
 	"""
+	if allow_natural and not os.path.exists(filename):
+		return filename
 	pathlocation, basename, extension = filename_split(filename)
 	if suffix is not None:
 		extension = "."+suffix
@@ -94,7 +103,7 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 	n = 1
 	while os.path.exists(fn(n)):
 		n += 1
-	return fn(n)
+	return fn(n+plus)
 
 
 default_webbrowser = 'chrome'
