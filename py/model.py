@@ -1,5 +1,5 @@
 
-from .core import Model2, LarchError, _core, ParameterAlias
+from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain
 from .array import SymmetricArray
 from .utilities import category, pmath, rename
 import numpy
@@ -182,10 +182,20 @@ class Model(Model2, ModelReporter):
 	"""
 	root_id = property(_core.Model2__get_root_cellcode, _set_rootcode, None, _rootcode_doc)
 
-	def get_data_pointer(self):
+	def _grab_data_fountain(self):
 		return self._ref_to_db
 
-	db = property(get_data_pointer, Model2.change_data_pointer, Model2.delete_data_pointer)
+	def _change_data_fountain(self, datafount):
+		if isinstance(datafount, Fountain):
+			val = _core.Model2_change_data_fountain(self, datafount)
+		self._ref_to_db = datafount
+		try:
+			self._pull_graph_from_db()
+		except LarchError:
+			pass
+		return val
+
+	db = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
 
 	def load(self, filename="@@@", *, echo=False):
 		if filename=="@@@" and isinstance(self,str):
