@@ -55,6 +55,7 @@ try:
 	core.larch_initialize()
 	from . import exceptions
 	from .db import DB
+	from .dt import DT, IncompatibleShape
 	from .core import Parameter
 	from .model import Model, ModelFamily
 	from . import array
