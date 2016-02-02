@@ -66,7 +66,7 @@ class TestData1(unittest.TestCase):
 		self.assertTrue( 'Walk' in AltNames )  
 
 	def test_StoredDict(self):
-		from ..utilities import stored_dict
+		from ..util import stored_dict
 		d = DB()
 		s1 = stored_dict(d,'hello')
 		s1.add('a')
@@ -227,7 +227,7 @@ class TestData1(unittest.TestCase):
 		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
 		self.assertAlmostEqual(  -5331.252007380466 , ms.loglike_nocache(x))
 		dt = DT.Example()
-		dt.h5top._screen_[:10] = False
+		dt.h5top.screen[:10] = False
 		rr = dt.array_idca('_avail_*hhinc')
 		self.assertEqual( rr.shape, (5019, 6, 1) )
 		self.assertTrue( numpy.allclose( rr[0], numpy.array([[ 42.5],[ 42.5],[ 42.5],[ 42.5],[ 42.5],[  0. ]]) ))

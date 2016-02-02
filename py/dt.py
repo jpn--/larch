@@ -102,8 +102,8 @@ class DT(Fountain):
 		return self.h5alts.altids[idx]
 
 	def nCases(self):
-		if '_screen_' in self.h5top:
-			screen = numpy.nonzero(self.h5top._screen_[:])[0]
+		if 'screen' in self.h5top:
+			screen = numpy.nonzero(self.h5top.screen[:])[0]
 			return int(screen.shape[0])
 		else:
 			return int(self.h5top.caseids.shape[0])
@@ -194,7 +194,7 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt
 		h5node = self.h5top.idca
 		h5caseid = self.h5top.caseids
-		if screen is None and '_screen_' not in self.h5top:
+		if screen is None and 'screen' not in self.h5top:
 			n_cases = h5caseid.shape[0]
 		elif screen is None:
 			screen = self.get_screen_indexes()
@@ -256,7 +256,7 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt
 		h5node = self.h5top.idco
 		h5caseid = self.h5top.caseids
-		if screen is None and '_screen_' not in self.h5top:
+		if screen is None and 'screen' not in self.h5top:
 			n_cases = h5caseid.shape[0]
 		elif screen is None:
 			screen = self.get_screen_indexes()
@@ -304,9 +304,9 @@ class DT(Fountain):
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
 
 	def get_screen_indexes(self):
-		if '_screen_' not in self.h5top:
+		if 'screen' not in self.h5top:
 			return None
-		return numpy.nonzero(self.h5top._screen_[:])[0]
+		return numpy.nonzero(self.h5top.screen[:])[0]
 
 	def provision(self, needs):
 		from . import Model
@@ -458,7 +458,7 @@ class DT(Fountain):
 		h5caseids = h5f.create_carray(larchnode, 'caseids', _tb.Int64Atom(), shape=(edb.nCases(),), filters=h5filters)
 		h5caseids[:] = caseids.squeeze()
 
-		h5scrn = h5f.create_carray(larchnode, '_screen_', _tb.BoolAtom(), shape=(edb.nCases(),), filters=h5filters)
+		h5scrn = h5f.create_carray(larchnode, 'screen', _tb.BoolAtom(), shape=(edb.nCases(),), filters=h5filters)
 		h5scrn[:] = True
 
 		h5altids = h5f.create_carray(larchalts, 'altids', _tb.Int64Atom(), shape=(edb.nAlts(),), filters=h5filters, title='elemental alternative code numbers')
@@ -485,28 +485,62 @@ class DT(Fountain):
 	def validate_hdf5(self, log=print):
 		import keyword
 		nerrs = 0
-		
-		def zzz(message, invalid):
-			if invalid:
-				log("{!s:^5}\u2502 {}".format('ERROR', "\n \u2503   \u2502   ".join(message.split("\n"))))
+		isok = None
+		import textwrap
+		blank_wrapper = textwrap.TextWrapper(
+			width=80,
+			tabsize=4,
+			initial_indent=   '     │ ',
+			subsequent_indent='     │ ',
+			)
+		ok_wrapper = textwrap.TextWrapper(
+			width=80,
+			tabsize=4,
+			initial_indent=   ' ok  │ ',
+			subsequent_indent='     │ ',
+			)
+		na_wrapper = textwrap.TextWrapper(
+			width=80,
+			tabsize=4,
+			initial_indent=   ' n/a │ ',
+			subsequent_indent='     │ ',
+			)
+		errmsg_wrapper = textwrap.TextWrapper(
+			width=80,
+			tabsize=4,
+			initial_indent=   'ERROR│ ',
+			subsequent_indent=' ┃   │ ',
+			)
+		errval_wrapper = textwrap.TextWrapper(
+			width=80,
+			tabsize=4,
+			initial_indent=   ' ┗━► │ ',
+			subsequent_indent=' ┗━► │ ',
+			)
+		def zzz(message, invalid, make_na=False):
+			if make_na:
+				log(na_wrapper.fill(message))
+			elif invalid:
+				log(errmsg_wrapper.fill(message))
 				if invalid is True:
 					invalid_str = "Nope"
 				else:
 					invalid_str = str(invalid)
-				log("{!s:^5}\u2502 {}".format("\u2517\u2501\u25BA", "\n \u2517\u2501\u25BA \u2502 ".join(invalid_str.split("\n"))))
+				log(errval_wrapper.fill(invalid_str))
 			else:
-				log("{!s:^5}\u2502 {}".format('ok', "\n     \u2502   ".join(message.split("\n"))))
-			return 0 if not invalid else 1
+				log(ok_wrapper.fill(message))
+			return 0 if not invalid and not make_na else 1
 
 		def category(catname):
-			log("\u2500"*5+"\u253C"+"\u2500"*84)
-			log("     \u2502 {}".format("\n     \u2502   ".join(catname.split("\n"))))
+			log('─────┼'+'─'*74)
+			log(blank_wrapper.fill(catname))
 
 		## Top lines of display
 		title = "{0} (with mode '{1}')".format(self.source_filename, self.source_filemode)
-		log("\u2550"*90)
+		#log("\u2550"*90)
+		log("═"*80)
 		log("larch.DT Validation for {}".format( title ))
-		log("\u2500"*5+"\u252C"+"\u2500"*84)
+		log("─────┬"+"─"*74)
 		
 		## TOP
 		nerrs+= zzz("There should be a designated `larch` group node under which all other nodes reside.",
@@ -517,30 +551,52 @@ class DT(Fountain):
 		try:
 			caseids_node = self.h5top.caseids
 			caseids_nodeatom = caseids_node.atom
+			caseids_node_shape = caseids_node.shape
 			caseids_node_dim = len(caseids_node.shape)
 			caseids_node_len = caseids_node.shape[0]
 		except _tb.exceptions.NoSuchNodeError:
 			caseids_node = None
 			caseids_nodeatom = None
+			caseids_node_shape = ()
 			caseids_node_dim = 0
 			caseids_node_len = 0
 
 		nerrs+= zzz("Under the top node, there must be an array node named `caseids`.",
-					not isinstance(caseids_node, _tb.array.Array))
+					'missing caseids node' if caseids_node is None else
+					isok if isinstance(caseids_node, _tb.array.Array) else
+					'caseids is not an array node')
 
 		nerrs+= zzz("The `caseids` array dtype should be Int64.",
-					not isinstance(caseids_nodeatom, _tb.atom.Int64Atom))
+					isok if isinstance(caseids_nodeatom, _tb.atom.Int64Atom) else "caseids dtype is {!s}".format(caseids_nodeatom))
 
 		nerrs+= zzz("The `caseids` array should be 1 dimensional.",
 					caseids_node_dim!=1)
 		
-		nerrs+= zzz("If there may be some data cases that are not to be included in the processing of \n"
-					"the discrete choice model, there should be a node named `_screen_` under the top \n"
-					"node that contains an appropriately sized Bool array indicating the inclusion \n"
-					"status for each case.",
-					'_screen_' in self.h5top
-					and (not isinstance(self.h5top._screen_, _tb.array.Array)
-						or not isinstance(self.h5top._screen_.atom, _tb.atom.BoolAtom)))
+		nerrs+= zzz("If there may be some data cases that are not to be included in the processing of "
+					"the discrete choice model, there should be a node named `screen` under the top "
+					"node.",
+					None if 'screen' in self.h5top else None,
+					'screen' not in self.h5top)
+
+		# default failure values for screen checking
+		screen_is_array = False
+		screen_is_bool_array = False
+		screen_shape = ()
+		if 'screen' in self.h5top:
+			screen_is_array = isinstance(self.h5top.screen, _tb.array.Array)
+			if screen_is_array:
+				screen_is_bool_array = isinstance(self.h5top.screen.atom, _tb.atom.BoolAtom)
+				screen_shape = self.h5top.screen.shape
+
+		nerrs+= zzz("If it exists `screen` must be a Bool array.",
+					not screen_is_array or not screen_is_bool_array,
+					'screen' not in self.h5top)
+
+		nerrs+= zzz("And `screen` must be have the same shape as `caseids`.",
+					None if screen_shape == caseids_node_shape else "screen is {} while caseids is {}".format(screen_shape, caseids_node_shape),
+					'screen' not in self.h5top
+					)
+
 
 		## IDCO
 		category('ALTERNATIVES')
@@ -556,13 +612,13 @@ class DT(Fountain):
 			altids_nodeatom = None
 			altids_node_dim = 0
 			altids_node_len = 0
-		nerrs+= zzz("Within the `alts` node, there should be an array node named `altids` to hold the \n"
+		nerrs+= zzz("Within the `alts` node, there should be an array node named `altids` to hold the "
 					"identifying code numbers of the alternatives.",
 					not isinstance(altids_node, _tb.array.Array) )
 		nerrs+= zzz("The `altids` array dtype should be Int64.",
-					not isinstance(altids_nodeatom, _tb.atom.Int64Atom))
+					None if isinstance(altids_nodeatom, _tb.atom.Int64Atom) else "altids dtype is {!s}".format(altids_nodeatom))
 		nerrs+= zzz("The `altids` array should be one dimensional.",
-					(altids_node_dim!=1))
+					None if (altids_node_dim==1) else "it has {} dimensions".format(altids_node_dim))
 
 		try:
 			altnames_node = self.h5top.alts.names
@@ -573,12 +629,12 @@ class DT(Fountain):
 			altnames_nodeatom = None
 			altnames_node_len = 0
 
-		nerrs+= zzz("Within the `alts` node, there should also be a VLArray node named `names` to hold \n"
+		nerrs+= zzz("Within the `alts` node, there should also be a VLArray node named `names` to hold "
 					"the names of the alternatives.",
 					not isinstance(altnames_node, _tb.vlarray.VLArray))
 		nerrs+= zzz("The `names` node should hold unicode values.",
 					not isinstance(altnames_nodeatom, _tb.atom.VLUnicodeAtom))
-		nerrs+= zzz("The `altids` and `names` arrays should be the same length, and this will be the \n"
+		nerrs+= zzz("The `altids` and `names` arrays should be the same length, and this will be the "
 					"number of elemental alternatives represented in the data.",
 					altnames_node_len!=altids_node_len)
 
@@ -586,8 +642,8 @@ class DT(Fountain):
 		category('IDCO FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idco` to hold that data.",
 					not isinstance(self.h5top.idco, _tb.group.Group))
-		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts \n"
-					"with a letter or underscore, and only contains letters, numbers, and underscores) \n"
+		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts "
+					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
 					[i for i in self.h5idco._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
 
@@ -595,12 +651,12 @@ class DT(Fountain):
 		category('IDCA FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idca` to hold that data.",
 					not isinstance(self.h5top.idca, _tb.group.Group))
-		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts \n"
-					"with a letter or underscore, and only contains letters, numbers, and underscores) \n"
+		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts "
+					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
 					[i for i in self.h5idca._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
-		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should \n"
-					"be a node named `_avail_` under `idca` that contains an appropriately sized Bool \n"
+		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should "
+					"be a node named `_avail_` under `idca` that contains an appropriately sized Bool "
 					"array indicating the availability status for each alternative.",
 					'_avail_' in self.h5idca
 					and (not isinstance(self.h5idca._avail_, _tb.array.Array)
@@ -608,10 +664,12 @@ class DT(Fountain):
 
 		## TECHNICAL
 		category('OTHER TECHNICAL DETAILS')
-		nerrs+= zzz("The set of child node names within `idca` and `idco` should not overlap (i.e. \n"
+		nerrs+= zzz("The set of child node names within `idca` and `idco` should not overlap (i.e. "
 					"there should be no node names that appear in both).",
 					set(self.h5idca._v_children.keys()).intersection(self.h5idco._v_children.keys()))
 		
 		## Bottom line of display
-		log("\u2550"*5+"\u2567"+"\u2550"*84)
+		log('═════╧'+'═'*74)
 		return nerrs
+
+	validate = validate_hdf5
