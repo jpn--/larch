@@ -39,7 +39,7 @@ def build_apsw():
 		objects = c.compile([source], extra_preargs=compiler_pre_args, output_dir=setup_common.temp_folder())
 		# Create shared library
 		c.link_shared_object(objects, output_file, output_dir=libdir, export_symbols=exports, 
-				 				libraries=['larchsqlite','python3.4'], library_dirs=[libdir, pylibdir],
+				 				libraries=['larchsqlite','python3.5'], library_dirs=[libdir, pylibdir],
 								extra_preargs=linker_pre_args, extra_postargs=linker_post_args)
 	else:
 		print("apparently no need to update",name," at ",os.path.join(libdir, output_file))

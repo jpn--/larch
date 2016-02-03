@@ -394,16 +394,8 @@ else:
 
 
 
-	#lib_sqlite = ('larchsqlite',           {'sources': ['sqlite/sqlite3.c']})
-	#lib_sqlhav = ('larchsqlhaversine',     {'sources': ['sqlite/haversine.c']})
-	#lib_sqlext = ('larchsqlite3extension', {'sources': ['sqlite/extension-functions.c']})
-
-
 
 	shared_libs = [
-	#('larchsqlite',           'sqlite/sqlite3.c'             ,sqlite3_exports,  local_sqlite_extra_postargs, []),
-	#('larchsqlhaversine',     'sqlite/haversine.c'           ,None,             []                         , []),
-	#('larchsqlite3extension', 'sqlite/extension-functions.c' ,None,             []                         , []),
 	('larchsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
 	]
 
@@ -445,16 +437,6 @@ else:
 
 
 
-	#simp = Extension('larch._larch',
-	#				 ['src/larch_hello.i',] + simp_cpp_files,
-	#				 swig_opts=['-modern', '-py3', '-I../include', '-v', '-c++', '-outdir', './py'] + local_swig_opts,
-	#				 libraries=local_libraries+['larchsqlite', ],
-	#				 library_dirs=local_library_dirs+[shlib_folder(),],
-	#				 define_macros=local_macros,
-	#				 include_dirs=local_includedirs + [numpy.get_include(), './src', './src/etk', './src/model', './sqlite', ],
-	#				 extra_compile_args=local_extra_compile_args,
-	#				 extra_link_args=local_extra_link_args,
-	#				 )
 
 	core = Extension('larch._core',
 					 ['src/swig/elmcore.i',] + elm_cpp_files,
