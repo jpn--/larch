@@ -8,7 +8,7 @@
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/released-29%20January%202016-blue.svg
+.. image:: https://img.shields.io/badge/released-02%20February%202016-blue.svg
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
@@ -43,7 +43,7 @@ by running `pip install larch`. Or you can get the source code from
 
 You may also find these links useful:
 
-* `Python <http://www.python.org/>`_ 3.4: http://docs.python.org/3.4/index.html
+* `Python <http://www.python.org/>`_ 3.5: http://docs.python.org/3.5/index.html
 * `NumPy <http://www.numpy.org>`__: http://docs.scipy.org/doc/numpy/
 * `SciPy <http://www.scipy.org>`__: http://docs.scipy.org/doc/scipy/reference/
 * `SQLite <http://www.sqlite.org/>`_: http://www.sqlite.org/docs.html
