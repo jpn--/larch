@@ -95,7 +95,7 @@ else:
 
 	elm_cpp_h_files = list(elm_cpp_fileset)
 
-	from setup_common import lib_folder, shlib_folder, temp_folder
+	from setup_common import lib_folder, shlib_folder
 
 
 
@@ -116,6 +116,7 @@ else:
 		local_sqlite_extra_postargs = []
 		dylib_name_style = "lib{}.so"
 		DEBUG = False
+		buildbase = None
 	elif platform.system() == 'Windows':
 		#old openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
 		openblas = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libopenblas.dll'
@@ -142,7 +143,8 @@ else:
 		local_apsw_compile_args = ['/EHsc']
 		local_extra_link_args =    ['/DEBUG']
 		local_data_files = []
-		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(), 'larchsqlite.lib'), '/DLL',]
+		buildbase = "Z:\LarchBuild"
+		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(buildbase), 'larchsqlite.lib'), '/DLL',]
 		dylib_name_style = "{}.dll"
 		DEBUG = False
 	#	raise Exception("TURN OFF multithreading in OpenBLAS")
@@ -162,51 +164,24 @@ else:
 		local_sqlite_extra_postargs = []
 		dylib_name_style = "{}.so"
 		DEBUG = False
+		buildbase = None
 
 
 	from setup_sqlite import build_sqlite
-	build_sqlite()
+	build_sqlite(buildbase)
 
 
-#	shared_libs = [
-#	('larchsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
-#	]
-#
-#
 	from distutils.ccompiler import new_compiler
 
 	# Create compiler with default options
 	c = new_compiler()
-	c.add_include_dir("./sqlite")
-#
-#	for name, source, exports, extra_postargs, extra_preargs in shared_libs:
-#		
-#		if not isinstance(source,list):
-#			source = [source,]
-#		
-#		need_to_update = False
-#		for eachsource in source:
-#			try:
-#				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(libdir, dylib_name_style.format(name))))
-#			except FileNotFoundError:
-#				need_to_update = True
-#
-#		# change dynamic library install name
-#		if platform.system() == 'Darwin':
-#			extra_postargs += ['-install_name', '@loader_path/{}'.format(c.library_filename(name,'shared'))]
-#			extra_preargs  += ['-arch', 'i386', '-arch', 'x86_64']
-#
-#		if need_to_update:
-#			# Compile into .o files
-#			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros, output_dir=temp_folder())
-#			# Create shared library
-#			c.link_shared_lib(objects, name, output_dir=libdir, export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
+#	c.add_include_dir("./sqlite")
 
 
 	if openblas is not None:
-		shutil.copyfile(os.path.join('Z:/Larch',*openblas), os.path.join(shlib_folder(),openblas[-1]))
+		shutil.copyfile(os.path.join('Z:/Larch',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
 	for dll in mingw64_libs:
-		shutil.copyfile(os.path.join('Z:/Larch',*(mingw64_path+(dll,))), os.path.join(shlib_folder(),dll))
+		shutil.copyfile(os.path.join('Z:/Larch',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
 
 
 
@@ -226,7 +201,7 @@ else:
 								incl('src/swig'),
 								incl('sqlite'), ] + local_swig_opts,
 					 libraries=local_libraries+['larchsqlite', ],
-					 library_dirs=local_library_dirs+[shlib_folder(),],
+					 library_dirs=local_library_dirs+[shlib_folder(buildbase),],
 					 define_macros=local_macros,
 					 include_dirs=local_includedirs + [numpy.get_include(),
 													   file_at('src'),
@@ -251,7 +226,7 @@ else:
 	apsw = Extension('larch.apsw',
 					 [file_at('sqlite/apsw/apsw.c'),],
 					 libraries=['larchsqlite', ],
-					 library_dirs=[shlib_folder(),],
+					 library_dirs=[shlib_folder(buildbase),],
 					 define_macros=local_macros+[('EXPERIMENTAL','1')],
 					 include_dirs= [ file_at('sqlite'), file_at('sqlite/apsw'), ],
 					 extra_compile_args=local_apsw_compile_args,
@@ -260,7 +235,7 @@ else:
 
 
 	import build_configuration
-	build_configuration.write_build_info(build_dir=lib_folder(), packagename="larch")
+	build_configuration.write_build_info(build_dir=lib_folder(buildbase), packagename="larch")
 
 
 
