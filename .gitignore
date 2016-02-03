@@ -25,3 +25,5 @@ src/larch.py
 local/*
 
 src/sandbox/sandbox.py
+
+py/version/__init__.py
