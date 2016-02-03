@@ -9,8 +9,11 @@ def distutils_dir_name(dname):
                     version=sys.version_info)
 
 def lib_folder():
-	return os.path.join('build', distutils_dir_name('lib'))
+	return os.path.join(os.environ.get('PROJECT_DIR', ''), 'build', distutils_dir_name('lib'))
+
+def temp_folder():
+	return os.path.join(os.environ.get('PROJECT_DIR', ''), 'build', distutils_dir_name('temp'))
 
 def shlib_folder():
-	return os.path.join('build', distutils_dir_name('lib'), 'larch')
+	return os.path.join(os.environ.get('PROJECT_DIR', ''), 'build', distutils_dir_name('lib'), 'larch')
 

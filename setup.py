@@ -103,19 +103,7 @@ else:
 
 	elm_cpp_h_files = list(elm_cpp_fileset)
 
-
-	def distutils_dir_name(dname):
-		"""Returns the name of a distutils build directory"""
-		f = "{dirname}.{platform}-{version[0]}.{version[1]}"
-		return f.format(dirname=dname,
-						platform=sysconfig.get_platform(),
-						version=sys.version_info)
-
-	def lib_folder():
-		return os.path.join('build', distutils_dir_name('lib'))
-
-	def shlib_folder():
-		return os.path.join('build', distutils_dir_name('lib'), 'larch')
+	from setup_common import lib_folder, shlib_folder, temp_folder
 
 
 	sqlite3_exports=[
@@ -445,7 +433,7 @@ else:
 
 		if need_to_update:
 			# Compile into .o files
-			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros,)
+			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros, output_dir=temp_folder())
 			# Create shared library
 			c.link_shared_lib(objects, name, output_dir=libdir, export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
 

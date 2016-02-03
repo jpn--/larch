@@ -13,7 +13,7 @@ def build_apsw():
 	linker_post_args = []
 	
 	libdir = setup_common.shlib_folder()
-	pylibdir = '/Library/Frameworks/Python.framework/Versions/3.4/lib'
+	pylibdir = '/Library/Frameworks/Python.framework/Versions/3.5/lib'
 	
 	print("building",name,"...")
 
@@ -36,7 +36,7 @@ def build_apsw():
 
 	if need_to_update:
 		# Compile into .o files
-		objects = c.compile([source], extra_preargs=compiler_pre_args)
+		objects = c.compile([source], extra_preargs=compiler_pre_args, output_dir=setup_common.temp_folder())
 		# Create shared library
 		c.link_shared_object(objects, output_file, output_dir=libdir, export_symbols=exports, 
 				 				libraries=['larchsqlite','python3.4'], library_dirs=[libdir, pylibdir],
