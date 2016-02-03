@@ -13,6 +13,8 @@ win/*
 LarchTest.app/*
 build/lib.macosx-10.6-intel-3.4/larch/libelmsqlite.so
 build/lib.macosx-10.6-intel-3.4/larch/apsw.so
+build/lib.macosx-10.6-intel-3.5/larch/libelmsqlite.so
+build/lib.macosx-10.6-intel-3.5/larch/apsw.so
 Larch.xcodeproj/xcuserdata/jpn.xcuserdatad/xcschemes/xcschememanagement.plist
 larch.egg-info*
 wheelhouse*
