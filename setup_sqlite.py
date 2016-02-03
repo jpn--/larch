@@ -263,6 +263,7 @@ if platform.system() == 'Darwin':
 	local_sqlite_extra_postargs = []
 	dylib_name_style = "lib{}.so"
 	DEBUG = False
+	buildbase = None
 elif platform.system() == 'Windows':
 	#old openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
 	openblas = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libopenblas.dll'
@@ -292,6 +293,7 @@ elif platform.system() == 'Windows':
 	local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(), 'larchsqlite.lib'), '/DLL',]
 	dylib_name_style = "{}.dll"
 	DEBUG = False
+	buildbase = "Z:\LarchBuild"
 #	raise Exception("TURN OFF multithreading in OpenBLAS")
 else:
 	openblas = None
@@ -309,6 +311,7 @@ else:
 	local_sqlite_extra_postargs = []
 	dylib_name_style = "{}.so"
 	DEBUG = False
+	buildbase = None
 
 
 
@@ -321,12 +324,12 @@ shared_libs = [
 
 
 
-def build_sqlite():
+def build_sqlite(basepath=buildbase):
 	from distutils.ccompiler import new_compiler
 
 	# Create compiler with default options
 	c = new_compiler()
-	c.add_include_dir("./sqlite")
+	c.add_include_dir(file_at('sqlite'))
 
 	for name, source, exports, extra_postargs, extra_preargs in shared_libs:
 		
@@ -336,7 +339,7 @@ def build_sqlite():
 		need_to_update = False
 		for eachsource in source:
 			try:
-				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(shlib_folder(), dylib_name_style.format(name))))
+				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(shlib_folder(basepath), dylib_name_style.format(name))))
 			except FileNotFoundError:
 				need_to_update = True
 
@@ -347,9 +350,9 @@ def build_sqlite():
 
 		if need_to_update:
 			# Compile into .o files
-			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros, output_dir=temp_folder())
+			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros, output_dir=temp_folder(basepath))
 			# Create shared library
-			c.link_shared_lib(objects, name, output_dir=shlib_folder(), export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
+			c.link_shared_lib(objects, name, output_dir=shlib_folder(basepath), export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
 
 
 if __name__=="__main__":
