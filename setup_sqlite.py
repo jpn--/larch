@@ -2,8 +2,14 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.1.43'
+VERSION = '3.1.47'
 
+usedir = os.path.dirname(__file__)
+if sys.path[0] != usedir:
+	sys.path.insert(0, usedir)
+
+def file_at(*arg):
+	return os.path.join(usedir, *arg)
 
 
 import numpy
@@ -309,7 +315,7 @@ else:
 
 
 shared_libs = [
-('larchsqlite', ['sqlite/sqlite3.c','sqlite/haversine.c','sqlite/bonus.c'] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
+('larchsqlite', [file_at('sqlite','sqlite3.c'),file_at('sqlite','haversine.c'),file_at('sqlite','bonus.c')] ,sqlite3_exports,  local_sqlite_extra_postargs, []),
 ]
 
 

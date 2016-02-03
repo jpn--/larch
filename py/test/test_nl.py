@@ -654,6 +654,10 @@ class TestNL(ELM_TestCase):
 			self.assertNearlyEqual(x_c,x_o)
 
 		m.option.enforce_constraints = True
+		try:
+			import networkx
+		except ImportError:
+			self.skipTest('networkx package not installed')
 		r2 = m.maximize_loglike('SLSQP')
 		self.assertNearlyEqual(-3623.8414797211444, r2.loglike)
 		self.assertNearlyEqual(-7309.600971749633, r2.loglike_null)
