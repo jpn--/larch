@@ -21,3 +21,5 @@ Icon
 src/larch.py
 *.bat
 local/*
+
+src/sandbox/sandbox.py
