@@ -478,11 +478,11 @@ class DT(Fountain):
 
 		wgt = edb.queries.weight
 		if wgt:
-			h5f.create_soft_link(larchidca, '_weight_', target='/larch/idco/'+wgt)
+			h5f.create_soft_link(larchidco, '_weight_', target='/larch/idco/'+wgt)
 
 		return DT(filename, 'w', h5f=h5f)
 
-	def validate_hdf5(self, log=print):
+	def validate_hdf5(self, log=print, errlog=None):
 		import keyword
 		nerrs = 0
 		isok = None
@@ -514,9 +514,12 @@ class DT(Fountain):
 		errval_wrapper = textwrap.TextWrapper(
 			width=80,
 			tabsize=4,
-			initial_indent=   ' ┗━► │ ',
-			subsequent_indent=' ┗━► │ ',
+			initial_indent=   ' ┣━► │ ',
+			subsequent_indent=' ┣━► │ ',
 			)
+		def rreplace(_s, _old, _new):
+			_li = _s.rsplit(_old, 1)
+			return _new.join(_li)
 		def zzz(message, invalid, make_na=False):
 			if make_na:
 				log(na_wrapper.fill(message))
@@ -526,14 +529,17 @@ class DT(Fountain):
 					invalid_str = "Nope"
 				else:
 					invalid_str = str(invalid)
-				log(errval_wrapper.fill(invalid_str))
+				log(rreplace(errval_wrapper.fill(invalid_str),'┣','┗'))
 			else:
 				log(ok_wrapper.fill(message))
-			return 0 if not invalid and not make_na else 1
+			return 0 if (not invalid) or make_na else 1
 
 		def category(catname):
 			log('─────┼'+'─'*74)
 			log(blank_wrapper.fill(catname))
+
+		def subcategory(catname):
+			log('     ├ '+'{:┄<73}'.format(catname+' '))
 
 		## Top lines of display
 		title = "{0} (with mode '{1}')".format(self.source_filename, self.source_filemode)
@@ -572,6 +578,7 @@ class DT(Fountain):
 		nerrs+= zzz("The `caseids` array should be 1 dimensional.",
 					caseids_node_dim!=1)
 		
+		subcategory('Case Filtering')
 		nerrs+= zzz("If there may be some data cases that are not to be included in the processing of "
 					"the discrete choice model, there should be a node named `screen` under the top "
 					"node.",
@@ -598,7 +605,7 @@ class DT(Fountain):
 					)
 
 
-		## IDCO
+		## ALTS
 		category('ALTERNATIVES')
 		nerrs+= zzz("Under the top node, there should be a group named `alts` to hold alternative data.",
 					not isinstance(self.h5top.alts, _tb.group.Group))
@@ -646,6 +653,35 @@ class DT(Fountain):
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
 					[i for i in self.h5idco._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+		
+		idco_child_incorrect_sized = {}
+		for idco_child in self.h5idco._v_children.keys():
+			try:
+				if self.h5idco._v_children[idco_child].shape[0] != caseids_node_len:
+					idco_child_incorrect_sized[idco_child] = self.h5idco._v_children[idco_child].shape
+			except:
+				idco_child_incorrect_sized[idco_child] = 'exception'
+		nerrs+= zzz("Every child node in `idco` must be an array node with shape the same as `caseids`.",
+					idco_child_incorrect_sized)
+		
+
+		## WEIGHT
+		subcategory('Case Weights')
+		try:
+			weightnode = self.h5idco._weight_
+		except _tb.exceptions.NoSuchNodeError:
+			weightnode = None
+			weightnode_atom = None
+		else:
+			weightnode_atom = weightnode.atom
+		nerrs+= zzz("If the cases are to have non uniform weights, then there should a `_weight_` node "
+					"(or a name link to a node) within the `idco` group.",
+					isok if weightnode else None,
+					'_weight_' not in self.h5idco)
+		nerrs+= zzz("If weights are given, they should be of Float64 dtype.",
+					isok if isinstance(weightnode_atom, _tb.atom.Float64Atom) else "_weight_ dtype is {!s}".format(weightnode_atom),
+					'_weight_' not in self.h5idco)
+
 
 		## IDCA
 		category('IDCA FORMAT DATA')
@@ -655,6 +691,21 @@ class DT(Fountain):
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
 					[i for i in self.h5idca._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+
+		idca_child_incorrect_sized = {}
+		for idca_child in self.h5idca._v_children.keys():
+			try:
+				if self.h5idca._v_children[idca_child].shape[0] != caseids_node_len or \
+				   self.h5idca._v_children[idca_child].shape[1] != altids_node_len:
+					idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child].shape
+			except:
+				idca_child_incorrect_sized[idca_child] = 'exception'
+		nerrs+= zzz("Every child node in `idca` must be an array node with the first dimension the "
+					"same as the length of `caseids`, and the second dimension the same as the length "
+					"of `altids`.",
+					idca_child_incorrect_sized)
+
+		subcategory('Alternative Availability')
 		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should "
 					"be a node named `_avail_` under `idca` that contains an appropriately sized Bool "
 					"array indicating the availability status for each alternative.",
@@ -670,6 +721,9 @@ class DT(Fountain):
 		
 		## Bottom line of display
 		log('═════╧'+'═'*74)
+		
+		if errlog is not None and nerrs>0:
+			self.validate_hdf5(log=errlog)
 		return nerrs
 
 	validate = validate_hdf5

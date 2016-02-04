@@ -179,8 +179,8 @@ class CheeseShop(object):
         return os.path.abspath('%s/pkg_list.pkl' % self.yolk_dir)
 
 
-    def query_versions_pypi_larch(self):
-        v = self.package_releases('larch')
+    def query_versions_pypi_larch(self, package='larch'):
+        v = self.package_releases(package)
         #print(v)
         return v
 
@@ -317,6 +317,9 @@ def filter_url(pkg_type, url):
         if url.lower().endswith(".egg"):
             return url
 
+
+def pypi_version(package='larch'):
+	return CheeseShop().query_versions_pypi_larch(package)[0]
 
 if __name__ == '__main__':
 	

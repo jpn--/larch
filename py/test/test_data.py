@@ -244,14 +244,14 @@ class TestData1(unittest.TestCase):
 
 	def test_pytables_examples_validate(self):
 		d1=DT.Example('MTC')
-		self.assertEqual( 0, d1.validate_hdf5(log=(lambda y: None)) )
+		self.assertEqual( 0, d1.validate_hdf5(log=(lambda y: None), errlog=print) )
 		del d1
 		d2=DT.Example('SWISSMETRO')
-		self.assertEqual( 0, d2.validate_hdf5(log=(lambda y: None)) )
+		self.assertEqual( 0, d2.validate_hdf5(log=(lambda y: None), errlog=print) )
 		del d2
 		d3=DT.Example('ITINERARY')
-		self.assertEqual( 0, d3.validate_hdf5(log=(lambda y: None)) )
+		self.assertEqual( 0, d3.validate_hdf5(log=(lambda y: None), errlog=print) )
 		del d3
 		d4=DT.Example('MINI')
-		self.assertEqual( 0, d4.validate_hdf5(log=(lambda y: None)) )
+		self.assertEqual( 0, d4.validate_hdf5(log=(lambda y: None), errlog=print) )
 		del d4

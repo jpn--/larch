@@ -1,7 +1,12 @@
 
 import setup_common
 from distutils.ccompiler import new_compiler
-import os, platform, distutils
+import os, platform, distutils, sys
+
+libdir = setup_common.shlib_folder()
+
+if __name__=="__main__" and len(sys.argv)>1:
+	libdir = sys.argv[1]
 
 def build_apsw():
 
@@ -12,7 +17,6 @@ def build_apsw():
 	linker_pre_args = ['-arch', 'i386', '-arch', 'x86_64']
 	linker_post_args = []
 	
-	libdir = setup_common.shlib_folder()
 	pylibdir = '/Library/Frameworks/Python.framework/Versions/3.5/lib'
 	
 	print("building",name,"...")

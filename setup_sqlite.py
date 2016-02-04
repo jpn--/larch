@@ -1,3 +1,6 @@
+
+
+
 import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
@@ -356,7 +359,11 @@ def build_sqlite(basepath=buildbase):
 
 
 if __name__=="__main__":
+	print("building larchsqlite...")
 	try:
+		import sys
+		if len(sys.argv)>1:
+			shlib_folder = lambda x: sys.argv[1]
 		build_sqlite()
 	except:
 		exit(-1)
