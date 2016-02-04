@@ -1,6 +1,6 @@
 ######################################################### encoding: utf-8 ######
 #
-#  ELM is free, open source software to estimate discrete choice models.
+#  Larch is free, open source software to estimate discrete choice models.
 #  
 #  Copyright 2007-2015 Jeffrey Newman
 #

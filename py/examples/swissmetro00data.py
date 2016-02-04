@@ -29,7 +29,7 @@ from .. import larch
 
 def data(): # Define a function to create a data object.
 	# Data object
-	#	ELM comes pre-loaded with several free example data sets, including the 
+	#	Larch comes pre-loaded with several free example data sets, including the 
 	#	SWISSMETRO data set that is used as the example data for BIOGEME.
 	#	The SWISSMETRO data set contains an idCO (case only) data table as the master 
 	#	table. The example data also contains a SQL view that represents the 

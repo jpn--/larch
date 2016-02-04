@@ -42,7 +42,7 @@ iterations and raise an Exception if they differ significantly.";
 "Calculate the null model log likelihood in conjunction with an estimation.";
 
 %feature("docstring") elm::model_options_t::threads
-"For certain easy to parallel-ize calculations, ELM will create this many worker \
+"For certain easy to parallel-ize calculations, Larch will create this many worker \
 threads. The default value is the number of processor cores on your computer, and \
 it is recommended that you not change this value.";
 

@@ -70,7 +70,7 @@ const int elm::minor_version = 3;
 std::string elm::version()
 {
 	std::ostringstream ret;
-	ret << "ELM Core version "<<elm::major_version<<"."<<elm::minor_version;
+	ret << "Larch Core version "<<elm::major_version<<"."<<elm::minor_version;
 	ret << " (Hangman " << build_configuration() << ") built using "<< __COMPILER__ <<" "<< __VERSION__;
 	ret << " on " << __DATE__ << " at " << __TIME__;
 	return ret.str();
