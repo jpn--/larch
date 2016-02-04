@@ -27,3 +27,11 @@ local/*
 src/sandbox/sandbox.py
 
 py/version/__init__.py
+
+elm_swig_external.h
+
+py/core.py
+
+src/swig/elmcore_wrap.cpp
+
+src/swig/elmcore_wrap.h
