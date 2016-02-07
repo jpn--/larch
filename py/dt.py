@@ -548,9 +548,18 @@ class DT(Fountain):
 		log("larch.DT Validation for {}".format( title ))
 		log("─────┬"+"─"*74)
 		
+		
+		def isinstance_(obj, things):
+			try:
+				obj = obj.dereference()
+			except AttributeError:
+				pass
+			return isinstance(obj, things)
+		
+		
 		## TOP
 		nerrs+= zzz("There should be a designated `larch` group node under which all other nodes reside.",
-					not isinstance(self.h5top, _tb.group.Group))
+					not isinstance_(self.h5top, _tb.group.Group))
 		
 		## CASEIDS
 		category('CASES')
@@ -569,7 +578,7 @@ class DT(Fountain):
 
 		nerrs+= zzz("Under the top node, there must be an array node named `caseids`.",
 					'missing caseids node' if caseids_node is None else
-					isok if isinstance(caseids_node, _tb.array.Array) else
+					isok if isinstance_(caseids_node, _tb.array.Array) else
 					'caseids is not an array node')
 
 		nerrs+= zzz("The `caseids` array dtype should be Int64.",
@@ -590,7 +599,7 @@ class DT(Fountain):
 		screen_is_bool_array = False
 		screen_shape = ()
 		if 'screen' in self.h5top:
-			screen_is_array = isinstance(self.h5top.screen, _tb.array.Array)
+			screen_is_array = isinstance_(self.h5top.screen, _tb.array.Array)
 			if screen_is_array:
 				screen_is_bool_array = isinstance(self.h5top.screen.atom, _tb.atom.BoolAtom)
 				screen_shape = self.h5top.screen.shape
@@ -608,7 +617,7 @@ class DT(Fountain):
 		## ALTS
 		category('ALTERNATIVES')
 		nerrs+= zzz("Under the top node, there should be a group named `alts` to hold alternative data.",
-					not isinstance(self.h5top.alts, _tb.group.Group))
+					not isinstance_(self.h5top.alts, _tb.group.Group))
 		try:
 			altids_node = self.h5top.alts.altids
 			altids_nodeatom = altids_node.atom
@@ -621,7 +630,7 @@ class DT(Fountain):
 			altids_node_len = 0
 		nerrs+= zzz("Within the `alts` node, there should be an array node named `altids` to hold the "
 					"identifying code numbers of the alternatives.",
-					not isinstance(altids_node, _tb.array.Array) )
+					not isinstance_(altids_node, _tb.array.Array) )
 		nerrs+= zzz("The `altids` array dtype should be Int64.",
 					None if isinstance(altids_nodeatom, _tb.atom.Int64Atom) else "altids dtype is {!s}".format(altids_nodeatom))
 		nerrs+= zzz("The `altids` array should be one dimensional.",
@@ -638,7 +647,7 @@ class DT(Fountain):
 
 		nerrs+= zzz("Within the `alts` node, there should also be a VLArray node named `names` to hold "
 					"the names of the alternatives.",
-					not isinstance(altnames_node, _tb.vlarray.VLArray))
+					not isinstance_(altnames_node, _tb.vlarray.VLArray))
 		nerrs+= zzz("The `names` node should hold unicode values.",
 					not isinstance(altnames_nodeatom, _tb.atom.VLUnicodeAtom))
 		nerrs+= zzz("The `altids` and `names` arrays should be the same length, and this will be the "
@@ -648,7 +657,7 @@ class DT(Fountain):
 		## IDCO
 		category('IDCO FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idco` to hold that data.",
-					not isinstance(self.h5top.idco, _tb.group.Group))
+					not isinstance_(self.h5top.idco, _tb.group.Group))
 		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
@@ -686,7 +695,7 @@ class DT(Fountain):
 		## IDCA
 		category('IDCA FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idca` to hold that data.",
-					not isinstance(self.h5top.idca, _tb.group.Group))
+					not isinstance_(self.h5top.idca, _tb.group.Group))
 		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
@@ -706,12 +715,46 @@ class DT(Fountain):
 					idca_child_incorrect_sized)
 
 		subcategory('Alternative Availability')
+		if '_avail_' in self.h5idca:
+			_av_exists = True
+			_av_is_array = isinstance_(self.h5idca._avail_, _tb.array.Array)
+			_av_atom_bool = isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)
+		else:
+			_av_exists = False
+			_av_is_array = None
+			_av_atom_bool = None
+
 		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should "
-					"be a node named `_avail_` under `idca` that contains an appropriately sized Bool "
+					"be a node named `_avail_` under `idca`.",
+					isok if _av_exists else 'node is missing',
+					not _av_exists)
+		nerrs+= zzz("If given, it should contain an appropriately sized Bool "
 					"array indicating the availability status for each alternative.",
-					'_avail_' in self.h5idca
-					and (not isinstance(self.h5idca._avail_, _tb.array.Array)
-						or not isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)))
+					isok if _av_is_array and _av_atom_bool else
+					'not an array' if not _av_is_array else
+					'not a bool array',
+					not _av_exists)
+
+		subcategory('Chosen Alternatives')
+		if '_choice_' in self.h5idca:
+			_ch_exists = True
+			_ch_is_array = isinstance_(self.h5idca._choice_, _tb.array.Array)
+			_ch_atom_float = isinstance(self.h5idca._choice_.atom, _tb.atom.Float64Atom)
+		else:
+			_ch_exists = False
+			_ch_is_array = None
+			_ch_atom_float = None
+		
+		nerrs+= zzz("There should be a node named `_choice_` under `idca`.",
+					isok if _ch_exists else 'the node is missing')
+		nerrs+= zzz("It should be a Float64 "
+					"array indicating the chosen-ness for each alternative. "
+					"Typically, this will take a value of 1.0 for the alternative that is "
+					"chosen and 0.0 otherwise, although it is possible to have other values, "
+					"including non-integer values, in some applications.",
+					isok if _ch_is_array and _ch_atom_float else
+					'not an array' if not _ch_is_array else
+					'not a Float64 array')
 
 		## TECHNICAL
 		category('OTHER TECHNICAL DETAILS')
@@ -727,3 +770,139 @@ class DT(Fountain):
 		return nerrs
 
 	validate = validate_hdf5
+
+
+
+	def import_idco(self, filepath_or_buffer, caseid_column=None, *args, **kwargs):
+		import pandas
+		df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
+		for col in df.columns:
+			col_array = df[col].values
+			h5var = h5f.create_carray(self.h5idco, col, _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+			h5var[:] = col_array
+		if caseid_column is not None and 'caseids' in self.h5top:
+			raise LarchError("caseids already exist, not setting new ones")
+		if caseid_column is not None and 'caseids' not in self.h5top:
+			if caseid_column not in df.columns:
+				for col in df.columns:
+					if col.casefold() == caseid_column.casefold():
+						caseid_column = col
+						break
+			if caseid_column not in df.columns:
+				raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
+			proposed_caseids_node = self.h5idco._v_children[caseid_column]
+			if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
+				col_array = df[caseid_column].values.astype('int64')
+				if not numpy.all(col_array==df[caseid_column].values):
+					raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
+				h5var = h5f.create_carray(self.h5idco, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+				h5var[:] = col_array
+				caseid_column = caseid_column+'_int64'
+				proposed_caseids_node = self.h5idco._v_children[caseid_column]
+			self.h5f.create_soft_link(self.h5top, 'caseids', target=self.h5idco._v_pathname+'/'+caseid_column)
+
+
+
+	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e1000):
+		import pandas
+		casealtreader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, usecols=[caseid_col,altid_col])
+		caseids = numpy.array([], dtype='int64')
+		altids = numpy.array([], dtype='int64')
+		for chunk in casealtreader:
+			caseids = numpy.union1d(caseids, chunk[caseid_col].values)
+			altids = numpy.union1d(altids, chunk[altid_col].values)
+
+
+		if 'caseids' not in self.h5top:
+			self.h5f.create_carray(self.h5top, 'caseids', obj=caseids)
+		else:
+			if not numpy.all(caseids==self.h5top.caseids[:]):
+				raise LarchError ('caseids exist but do not match the imported data')
+
+		if 'altids' not in self.h5alts:
+			h5altids = self.h5f.create_carray(self.h5alts, 'altids', obj=altids, title='elemental alternative code numbers')
+		else:
+			if not numpy.all(numpy.in1d(altids, self.h5alts.altids[:], True)):
+				raise LarchError ('altids exist but do not match the imported data')
+			else:
+				altids = self.h5alts.altids[:]
+		if 'names' not in self.h5alts:
+			h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+			for an in self.h5alts.altids[:]:
+				h5altnames.append( 'a'+str(an) )
+
+		caseidmap = {i:n for n,i in enumerate(caseids)}
+		altidmap = {i:n for n,i in enumerate(altids)}
+
+		try:
+			filepath_or_buffer.seek(0)
+		except AttributeError:
+			pass
+
+		colreader = pandas.read_csv(filepath_or_buffer, nrows=1000 )
+		force_float_columns = {}
+		h5arr = {}
+		for col in colreader.columns:
+			if col in (caseid_col, altid_col): continue
+			if force_int_as_float and colreader[col].dtype == numpy.int64:
+				atom_dtype = _tb.atom.Float64Atom()
+				force_float_columns[col] = numpy.float64
+			else:
+				atom_dtype = _tb.Atom.from_dtype(colreader[col].dtype)
+			h5arr[col] = self.h5f.create_carray(self.h5idca, col, atom_dtype, shape=(caseids.shape[0], altids.shape[0]))
+		if '_present_' not in colreader.columns:
+			h5arr['_present_'] = self.h5f.create_carray(self.h5idca, '_present_', _tb.atom.BoolAtom(), shape=(caseids.shape[0], altids.shape[0]))
+
+		try:
+			filepath_or_buffer.seek(0)
+		except AttributeError:
+			pass
+
+		reader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, dtype=force_float_columns, engine='c')
+		for chunk in reader:
+			casemap = chunk[caseid_col].map(caseidmap)
+			altmap = chunk[altid_col].map(altidmap)
+			for col in chunk.columns:
+				if col in (caseid_col, altid_col): continue
+				h5arr[col][casemap.values,altmap.values] = chunk[col].values
+			if '_present_' not in chunk.columns:
+				h5arr['_present_'][casemap.values,altmap.values] = True
+
+		self.h5f.create_soft_link(self.h5idca, '_avail_', target=self.h5idca._v_pathname+'/_present_')
+
+		if choice_col:
+			if isinstance(self.h5idca._v_children[choice_col].atom, _tb.atom.Float64Atom):
+				self.h5f.create_soft_link(self.h5idca, '_choice_', target=self.h5idca._v_pathname+'/'+choice_col)
+			else:
+				self.h5f.create_carray(self.h5idca, '_choice_', obj=self.h5idca._v_children[choice_col][:].astype('Float64'))
+
+
+	def check_if_idca_is_idco(self, idca_var, return_data=False):
+		if idca_var not in self.h5idca:
+			raise LarchError("'{}' is not an idca variable".format(idca_var))
+		arr = self.h5idca._v_children[idca_var][:]
+		if '_avail_' in self.h5idca:
+			av = self.h5idca._avail_[:]
+			arr[~av] = numpy.nan
+		result = (numpy.nanstd(arr, axis=1).sum()==0)
+		if return_data:
+			return result, arr, av
+		return result
+		
+	def crack_idca(self, idca_var=None):
+		if idca_var is None:
+			return
+		result, arr, av = self.check_if_idca_is_idco(idca_var, return_data=True)
+		if result:
+			newarr = numpy.nanmean(arr, axis=1)
+			self.h5f.create_carray(self.h5idco, idca_var, obj=newarr)
+			self.h5idca._v_children[idca_var]._f_remove()
+
+
+
+
+
+
+
+
+

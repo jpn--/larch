@@ -638,7 +638,6 @@ class TestNL(ELM_TestCase):
 		automobile = m.new_nest("automobile", children=[1,shareride])
 		motorized = m.new_nest("motorized", children=[automobile,4])
 
-		m.logger(1)
 		r1 = m.maximize_loglike('SLSQP')
 
 		self.assertNearlyEqual(-7309.600971749682,  r1.loglike_null)
