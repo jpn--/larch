@@ -79,8 +79,8 @@ namespace elm {
 		elm::VAS_System* DataDNA(const long long& c=0);
 		elm::VAS_dna alternatives_dna() const;
 		
-		std::vector<long long>      _echo_alternative_codes() const;
-		void _director_test();
+		void _refresh_dna(const std::vector<std::string>& a_names, const std::vector<long long>& a_codes);
+
 	};
 	
 };

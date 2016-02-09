@@ -39,7 +39,17 @@ elm::Fountain::~Fountain()
 
 
 
+void elm::Fountain::_refresh_dna(const std::vector<std::string>& a_names, const std::vector<long long>& a_codes)
+{
 
+	size_t n_a = a_codes.size();
+	
+	_Data_DNA.clear();
+	for (size_t i=0; i<n_a; i++) {
+		_Data_DNA.add_cell(a_codes[i],a_names[i]);
+	}
+	_Data_DNA.regrow();
+}
 
 
 unsigned elm::Fountain::nCases() const
@@ -122,21 +132,5 @@ elm::VAS_dna elm::Fountain::alternatives_dna() const
 }
 
 
-
-std::vector<long long> elm::Fountain::_echo_alternative_codes() const
-{
-	return this->alternative_codes();
-}
-
-void elm::Fountain::_director_test()
-{
-	std::cerr << "elm::Fountain::_director_test():\n";
-	
-	std::cerr << " nCases="<<nCases()<<"\n";
-	std::cerr << " nAlts="<<nAlts()<<"\n";
-
-	std::cerr << "end test.\n";
-	
-}
 
 
