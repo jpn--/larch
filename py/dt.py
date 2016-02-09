@@ -12,12 +12,60 @@ else:
 	_tb_success = True
 
 
+
+
 from .core import Fountain, LarchError
+import warnings
 
 class IncompatibleShape(LarchError):
 	pass
 
+class HDF5Warning(UserWarning):
+    pass
 
+
+class LocalAttributeSet(object):
+	_hdf5_attrs = ('CLASS','FILTERS','TITLE','VERSION')
+	def __init__(self, *args, **kwargs):
+		self._h5_expr = _tb.attributeset.AttributeSet(*args, **kwargs)
+		self._local_expr = dict()
+	def __setattr__(self, attr, value):
+		if attr in ('_h5_expr','_local_expr'):
+			object.__setattr__(self, attr, value)
+		else:
+			try:
+				self._h5_expr.__setattr__(attr,value)
+			except _tb.exceptions.FileModeError:
+				self._local_expr[attr] = value
+				warnings.warn("The HDF5 is not writable so '{}' will not be saved beyond this session.".format(attr), HDF5Warning, stacklevel=2)
+	def __getattr__(self, attr):
+		if attr in self._local_expr:
+			return self._local_expr[attr]
+		else:
+			if attr in self._hdf5_attrs:
+				raise AttributeError("'{}' is a HDF5 attribute and cannot used by larch.".format(attr))
+			return self._h5_expr.__getattr__(attr)
+	def __delattr__(self, attr):
+		try:
+			del self.local_expr[attr]
+		except KeyError:
+			pass
+		self._h5_expr.__delattr__(attr)
+	def __repr__(self):
+		h5attr = self._h5_expr._f_list()
+		loc_attr = self._local_expr.keys()
+		ret = "{} attributes:".format(self._h5_expr._v__nodepath)
+		for i in h5attr:
+			ret += "\n  {!s}".format(i)
+		for i in loc_attr:
+			ret += "\n  {!s} (local only)".format(i)
+		return ret
+	def __contains__(self, key):
+		return key in self._local_expr or (key in self._h5_expr and key not in self._hdf5_attrs)
+	def __iter__(self):
+		return iter(sorted(self._local_expr.keys()) + sorted(i for i in self._h5_expr._v_attrnames if i not in self._hdf5_attrs))
+	def __len__(self):
+		return len(self._local_expr) + len([i for i in self._h5_expr._v_attrnames if i not in self._hdf5_attrs])
 
 class DT(Fountain):
 
@@ -51,6 +99,9 @@ class DT(Fountain):
 		except _tb.exceptions.FileModeError:
 			pass
 
+	def _refresh_alts(self):
+		self._refresh_dna(self.alternative_names(), self.alternative_codes())
+
 	def __init__(self, filename, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
@@ -70,6 +121,10 @@ class DT(Fountain):
 		self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
 		self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
 		self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
+		self.h5expr = self.get_or_create_group(self.h5top, 'expr')._v_attrs
+		self.expr = LocalAttributeSet(self.h5top.expr)
+		self._refresh_alts()
+
 
 	def __del__(self):
 		if self._h5f_own:
@@ -78,18 +133,77 @@ class DT(Fountain):
 	def __repr__(self):
 		return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
 
+	def create_group(self, *arg, **kwargs):
+		return self.h5f.create_group(*arg, **kwargs)
+	def create_array(self, *arg, **kwargs):
+		return self.h5f.create_array(*arg, **kwargs)
+	def create_carray(self, *arg, **kwargs):
+		return self.h5f.create_carray(*arg, **kwargs)
+	def create_earray(self, *arg, **kwargs):
+		return self.h5f.create_earray(*arg, **kwargs)
+	def create_external_link(self, *arg, **kwargs):
+		return self.h5f.create_external_link(*arg, **kwargs)
+	def create_hard_link(self, *arg, **kwargs):
+		return self.h5f.create_hard_link(*arg, **kwargs)
+	def create_soft_link(self, *arg, **kwargs):
+		return self.h5f.create_soft_link(*arg, **kwargs)
+
+	def get_or_create_group(self, where, name=None, title='', filters=None, createparents=False):
+		try:
+			return self.h5f.get_node(where, name=name)
+		except _tb.NoSuchNodeError:
+			if name is not None:
+				return self.h5f.create_group(where, name, title=title, filters=filters, createparents=createparents)
+			else:
+				raise
+
+	def _is_larch_array(self, where, name=None):
+		n = self.h5f.get_node(where, name)
+		try:
+			n = n.dereference()
+		except AttributeError:
+			pass
+		if isinstance(n, _tb.array.Array):
+			return True
+		if isinstance(n, _tb.group.Group):
+			if '_index_' in n and '_values_' in n:
+				return True
+		return False
+
+	def _is_mapped_larch_array(self, where, name=None):
+		n = self.h5f.get_node(where, name)
+		try:
+			n = n.dereference()
+		except AttributeError:
+			pass
+		if isinstance(n, _tb.group.Group):
+			if '_index_' in n and '_values_' in n:
+				return True
+		return False
 
 	def _alternative_codes(self):
-		return self.h5alts.altids[:]
+		try:
+			return self.h5alts.altids[:]
+		except _tb.exceptions.NoSuchNodeError:
+			return numpy.empty(0, dtype=numpy.int64)
 
 	def _alternative_names(self):
-		return self.h5alts.names[:]
+		try:
+			return self.h5alts.names[:]
+		except _tb.exceptions.NoSuchNodeError:
+			return numpy.empty(0, dtype=str)
 
 	def alternative_codes(self):
-		return tuple(int(i) for i in self.h5alts.altids[:])
+		try:
+			return tuple(int(i) for i in self.h5alts.altids[:])
+		except _tb.exceptions.NoSuchNodeError:
+			return ()
 
 	def alternative_names(self):
-		return tuple(str(i) for i in self.h5alts.names[:])
+		try:
+			return tuple(str(i) for i in self.h5alts.names[:])
+		except _tb.exceptions.NoSuchNodeError:
+			return ()
 
 	def alternative_name(self, code):
 		codes = self._alternative_codes()
@@ -100,6 +214,21 @@ class DT(Fountain):
 		names = self._alternative_names()
 		idx = numpy.where(names==name)[0][0]
 		return self.h5alts.altids[idx]
+
+	def alternatives(self, format=list):
+		'''The alternatives of the data.
+		
+		When format==list or 'list', returns a list of (code,name) tuples.
+		When format==dict or 'dict', returns a dictionary with codes as keys
+		and names as values
+		'''
+		if format==list or format=='list':
+			return list(zip(self.alternative_codes(), self.alternative_names()))
+		if format==dict or format=='dict':
+			return {i:j for i,j in zip(self.alternative_codes(), self.alternative_names())}
+		if format=='reversedict':
+			return {j:i for i,j in zip(self.alternative_codes(), self.alternative_names())}
+		raise TypeError('only allows list or dict')
 
 	def nCases(self):
 		if 'screen' in self.h5top:
@@ -115,6 +244,11 @@ class DT(Fountain):
 	def _remake_command(self, cmd, screen, dims):
 		## Whoa nelly!
 		from tokenize import tokenize, untokenize, NAME, OP, STRING
+		DOT = (OP, '.')
+		COLON = (OP, ':')
+		COMMA = (OP, ',')
+		OBRAC = (OP, '[')
+		CBRAC = (OP, ']')
 		from io import BytesIO
 		recommand = []
 		g = tokenize(BytesIO(cmd.encode('utf-8')).readline)
@@ -122,30 +256,62 @@ class DT(Fountain):
 			if toknum == NAME and tokval in self.h5idca:
 				if dims==1:
 					raise IncompatibleShape("cannot use idca.{} in an idco expression".format(tokval))
-				# replace NAME tokens
-				partial = [ (NAME, 'self'), (OP, '.'), (NAME, 'h5idca'), (OP, '.'), (NAME, tokval), (OP, '['), ]
-				if screen is None:
-					partial += [(OP, ':'),]
+				if self._is_mapped_larch_array(self.h5idca, tokval):
+					# replace NAME tokens
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+								OBRAC,
+								(NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
+								CBRAC, ]
+					if screen is None:
+						partial += [OBRAC,COLON,]
+					else:
+						partial += [OBRAC,(NAME, 'screen'),]
+					if dims>1:
+						partial += [COMMA,COLON,]
+					partial += [CBRAC, ]
+					recommand.extend(partial)
 				else:
-					partial += [(NAME, 'screen'),]
-				if dims>1:
-					partial += [(OP, ','),(OP, ':'),]
-				partial += [(OP, ']'), ]
-				recommand.extend(partial)
+					# replace NAME tokens
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), OBRAC, ]
+					if screen is None:
+						partial += [COLON,]
+					else:
+						partial += [(NAME, 'screen'),]
+					if dims>1:
+						partial += [COMMA,COLON,]
+					partial += [CBRAC, ]
+					recommand.extend(partial)
 			elif toknum == NAME and tokval in self.h5idco:
-				# replace NAME tokens
-				partial = [ (NAME, 'self'), (OP, '.'), (NAME, 'h5idco'), (OP, '.'), (NAME, tokval), (OP, '['), ]
-				if screen is None:
-					partial += [(OP, ':'),]
+				if self._is_mapped_larch_array(self.h5idco, tokval):
+					# replace NAME tokens
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+								OBRAC,
+								(NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
+								CBRAC, ]
+					if screen is None:
+						partial += [OBRAC,COLON,CBRAC,]
+					else:
+						partial += [OBRAC,(NAME, 'screen'),CBRAC,]
+					if dims>1:
+						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
+					recommand.extend(partial)
 				else:
-					partial += [(NAME, 'screen'),]
-				partial += [(OP, ']'), ]
-				if dims>1:
-					partial += [(OP, '['),(OP, ':'),(OP, ','),(NAME, 'None'),(OP, ']'),]
+					# replace NAME tokens
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), ]
+					if screen is None:
+						partial += [OBRAC,COLON,CBRAC,]
+					else:
+						partial += [OBRAC,(NAME, 'screen'),CBRAC,]
+					if dims>1:
+						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
+					recommand.extend(partial)
+			elif toknum == NAME and tokval in self.expr:
+				partial = [ (NAME, 'self'), DOT, (NAME, 'expr'), DOT, (NAME, tokval), ]
 				recommand.extend(partial)
 			else:
 				recommand.append((toknum, tokval))
-		return untokenize(recommand).decode('utf-8')
+		ret = untokenize(recommand).decode('utf-8')
+		return ret
 
 
 
@@ -356,16 +522,52 @@ class DT(Fountain):
 		return column in self.h5idco._v_leaves
 
 	def check_ca(self, column):
+		if self._check_ca_natural(column):
+			return True
+		if self._check_co_natural(column):
+			return True
+		try:
+			command = self._remake_command(column,None,2)
+			eval( command )
+		except:
+			return False
 		return True
 
 	def check_co(self, column):
+		if self._check_co_natural(column):
+			return True
+		try:
+			command = self._remake_command(column,None,1)
+			eval( command )
+		except:
+			return False
 		return True
 
 	def variables_ca(self):
-		return tuple(i for i in self.h5idca._v_leaves)
+		return tuple(i for i in self.h5idca._v_children)
 
 	def variables_co(self):
-		return tuple(i for i in self.h5idco._v_leaves)
+		return tuple(i for i in self.h5idco._v_children)
+
+	@staticmethod
+	def ExampleDirectory():
+		'''Returns the directory location of the example data files.
+		
+		Larch comes with a few example data sets, which are used in documentation
+		and testing. It is important that you do not edit the original data.
+		'''
+		import os.path
+		TEST_DIR = os.path.join(os.path.split(__file__)[0],"data_warehouse")
+		if not os.path.exists(TEST_DIR):
+			uplevels = 0
+			uppath = ""
+			while uplevels < 20 and not os.path.exists(TEST_DIR):
+				uppath = uppath+ ".."+os.sep
+				uplevels += 1
+				TEST_DIR = os.path.join(os.path.split(__file__)[0],uppath+"data_warehouse")
+		if os.path.exists(TEST_DIR):
+			return TEST_DIR	
+		raise LarchError("cannot locate 'data_warehouse' examples directory")
 
 	@staticmethod
 	def Example(dataset='MTC', filename='{}.h5', temp=True):
@@ -391,11 +593,14 @@ class DT(Fountain):
 			An open connection to the HDF5 example data.
 		
 		'''
-		from .db import DB
-		edb = DB.Example(dataset)
+
+		import os.path
+		example_h5files = {
+		  'MTC':os.path.join(DT.ExampleDirectory(),"MTCWork.h5"),
+		  }
 
 		h5filters = _tb.Filters(complevel=5)
-		
+
 		try:
 			filename_ = filename.format(dataset)
 		except:
@@ -403,25 +608,6 @@ class DT(Fountain):
 		else:
 			filename = filename_
 
-		descrip_larch = {}
-		descrip_alts = {
-			'altid': _tb.Int64Col(pos=1, dflt=-999),
-			'name': _tb.StringCol(itemsize=127, pos=2, dflt=""),
-		}
-		descrip_co = {}
-		descrip_ca = {}
-		vars_co = edb.variables_co()
-		vars_ca = edb.variables_ca()
-		for i in vars_co:
-			if i == 'caseid':
-				descrip_co[i] = _tb.Int64Col(pos=len(descrip_co), dflt=-999)
-			else:
-				descrip_co[i] = _tb.Float64Col(pos=len(descrip_co), dflt=numpy.nan)
-		for i in vars_ca:
-			if i in ('caseid','altid'):
-				descrip_ca[i] = _tb.Int64Col(pos=len(descrip_ca), dflt=-999)
-			else:
-				descrip_ca[i] = _tb.Float64Col(pos=len(descrip_ca), dflt=numpy.nan)
 		from .util.filemanager import next_stack
 		n=0
 		while 1:
@@ -434,51 +620,81 @@ class DT(Fountain):
 					raise RuntimeError("cannot open HDF5 at {}".format(filename))
 			else:
 				break
-		larchnode = h5f._getOrCreatePath("/larch", True)
-		larchidca = h5f._getOrCreatePath("/larch/idca", True)
-		larchidco = h5f._getOrCreatePath("/larch/idco", True)
-		larchalts = h5f._getOrCreatePath("/larch/alts", True)
 
-		for var_ca in vars_ca:
-			if var_ca not in ('caseid', 'casenum', 'IDCASE' ):
-				h5var = h5f.create_carray(larchidca, var_ca, _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
-				arr, caseids = edb.array_idca(var_ca)
-				h5var[:,:] = arr.squeeze()
+		if dataset.upper() in example_h5files:
 
-		for var_co in vars_co:
-			if var_co not in ('caseid', 'casenum', 'IDCASE'):
-				h5var = h5f.create_carray(larchidco, var_co, _tb.Float64Atom(), shape=(edb.nCases(),), filters=h5filters)
-				arr, caseids = edb.array_idco(var_co)
-				h5var[:] = arr.squeeze()
+			h5f_orig = _tb.open_file(example_h5files[dataset.upper()])
+			h5f_orig.get_node('/larch')._f_copy_children(h5f._getOrCreatePath("/larch", True), overwrite=True, recursive=True, createparents=False)
+		else:
 
-		h5avail = h5f.create_carray(larchidca, '_avail_', _tb.BoolAtom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
-		arr, caseids = edb.array_avail()
-		h5avail[:,:] = arr.squeeze()
+			from .db import DB
+			edb = DB.Example(dataset)
 
-		h5caseids = h5f.create_carray(larchnode, 'caseids', _tb.Int64Atom(), shape=(edb.nCases(),), filters=h5filters)
-		h5caseids[:] = caseids.squeeze()
+			descrip_larch = {}
+			descrip_alts = {
+				'altid': _tb.Int64Col(pos=1, dflt=-999),
+				'name': _tb.StringCol(itemsize=127, pos=2, dflt=""),
+			}
+			descrip_co = {}
+			descrip_ca = {}
+			vars_co = edb.variables_co()
+			vars_ca = edb.variables_ca()
+			for i in vars_co:
+				if i == 'caseid':
+					descrip_co[i] = _tb.Int64Col(pos=len(descrip_co), dflt=-999)
+				else:
+					descrip_co[i] = _tb.Float64Col(pos=len(descrip_co), dflt=numpy.nan)
+			for i in vars_ca:
+				if i in ('caseid','altid'):
+					descrip_ca[i] = _tb.Int64Col(pos=len(descrip_ca), dflt=-999)
+				else:
+					descrip_ca[i] = _tb.Float64Col(pos=len(descrip_ca), dflt=numpy.nan)
 
-		h5scrn = h5f.create_carray(larchnode, 'screen', _tb.BoolAtom(), shape=(edb.nCases(),), filters=h5filters)
-		h5scrn[:] = True
+			larchnode = h5f._getOrCreatePath("/larch", True)
+			larchidca = h5f._getOrCreatePath("/larch/idca", True)
+			larchidco = h5f._getOrCreatePath("/larch/idco", True)
+			larchalts = h5f._getOrCreatePath("/larch/alts", True)
 
-		h5altids = h5f.create_carray(larchalts, 'altids', _tb.Int64Atom(), shape=(edb.nAlts(),), filters=h5filters, title='elemental alternative code numbers')
-		h5altids[:] = edb.alternative_codes()
+			for var_ca in vars_ca:
+				if var_ca not in ('caseid', 'casenum', 'IDCASE' ):
+					h5var = h5f.create_carray(larchidca, var_ca, _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
+					arr, caseids = edb.array_idca(var_ca)
+					h5var[:,:] = arr.squeeze()
 
-		h5altnames = h5f.create_vlarray(larchalts, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
-		for an in edb.alternative_names():
-			h5altnames.append( an )
-		
-		try:
-			ch_ca = edb.queries.get_choice_ca()
-			h5f.create_soft_link(larchidca, '_choice_', target='/larch/idca/'+ch_ca)
-		except AttributeError:
-			h5ch = h5f.create_carray(larchidca, '_choice_', _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
-			arr, caseids = edb.array_choice()
-			h5ch[:,:] = arr.squeeze()
+			for var_co in vars_co:
+				if var_co not in ('caseid', 'casenum', 'IDCASE'):
+					h5var = h5f.create_carray(larchidco, var_co, _tb.Float64Atom(), shape=(edb.nCases(),), filters=h5filters)
+					arr, caseids = edb.array_idco(var_co)
+					h5var[:] = arr.squeeze()
 
-		wgt = edb.queries.weight
-		if wgt:
-			h5f.create_soft_link(larchidco, '_weight_', target='/larch/idco/'+wgt)
+			h5avail = h5f.create_carray(larchidca, '_avail_', _tb.BoolAtom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
+			arr, caseids = edb.array_avail()
+			h5avail[:,:] = arr.squeeze()
+
+			h5caseids = h5f.create_carray(larchnode, 'caseids', _tb.Int64Atom(), shape=(edb.nCases(),), filters=h5filters)
+			h5caseids[:] = caseids.squeeze()
+
+			h5scrn = h5f.create_carray(larchnode, 'screen', _tb.BoolAtom(), shape=(edb.nCases(),), filters=h5filters)
+			h5scrn[:] = True
+
+			h5altids = h5f.create_carray(larchalts, 'altids', _tb.Int64Atom(), shape=(edb.nAlts(),), filters=h5filters, title='elemental alternative code numbers')
+			h5altids[:] = edb.alternative_codes()
+
+			h5altnames = h5f.create_vlarray(larchalts, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
+			for an in edb.alternative_names():
+				h5altnames.append( an )
+			
+			try:
+				ch_ca = edb.queries.get_choice_ca()
+				h5f.create_soft_link(larchidca, '_choice_', target='/larch/idca/'+ch_ca)
+			except AttributeError:
+				h5ch = h5f.create_carray(larchidca, '_choice_', _tb.Float64Atom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
+				arr, caseids = edb.array_choice()
+				h5ch[:,:] = arr.squeeze()
+
+			wgt = edb.queries.weight
+			if wgt:
+				h5f.create_soft_link(larchidco, '_weight_', target='/larch/idco/'+wgt)
 
 		return DT(filename, 'w', h5f=h5f)
 
@@ -665,12 +881,19 @@ class DT(Fountain):
 		
 		idco_child_incorrect_sized = {}
 		for idco_child in self.h5idco._v_children.keys():
-			try:
-				if self.h5idco._v_children[idco_child].shape[0] != caseids_node_len:
-					idco_child_incorrect_sized[idco_child] = self.h5idco._v_children[idco_child].shape
-			except:
-				idco_child_incorrect_sized[idco_child] = 'exception'
-		nerrs+= zzz("Every child node in `idco` must be an array node with shape the same as `caseids`.",
+			if isinstance_(self.h5idco._v_children[idco_child], _tb.group.Group):
+				if '_index_' not in self.h5idco._v_children[idco_child] or '_values_' not in self.h5idco._v_children[idco_child]:
+					idco_child_incorrect_sized[idco_child] = 'invalid group'
+			else:
+				try:
+					if self.h5idco._v_children[idco_child].shape[0] != caseids_node_len:
+						idco_child_incorrect_sized[idco_child] = self.h5idco._v_children[idco_child].shape
+				except:
+					idco_child_incorrect_sized[idco_child] = 'exception'
+		nerrs+= zzz("Every child node in `idco` must be (1) an array node with shape the same as `caseids`, "
+					"or (2) a group node with child nodes `_index_` as an array with the correct shape and "
+					"an integer dtype, and `_values_` such that _values_[_index_] reconstructs the desired "
+					"data array.",
 					idco_child_incorrect_sized)
 		
 
@@ -899,8 +1122,18 @@ class DT(Fountain):
 			self.h5idca._v_children[idca_var]._f_remove()
 
 
-
-
+	def info(self, log=print):
+		log("Variables:")
+		log("  idco:")
+		for i in sorted(self.variables_co()):
+			log("    {}".format(i))
+		log("  idca:")
+		for i in sorted(self.variables_ca()):
+			log("    {}".format(i))
+		if len(self.expr):
+			log("Expr:")
+			for i in self.expr:
+				log("    {}".format(i))
 
 
 
