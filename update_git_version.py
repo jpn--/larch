@@ -17,11 +17,13 @@ def execfile(filename):
 
 
 
-
-if sys.version_info[0] >= 3:
-	ver = subprocess.check_output(['git','describe','--tags','--long']).decode("utf-8").strip()
-else:
-	ver = subprocess.check_output(['git','describe','--tags','--long']).strip()
+try:
+	if sys.version_info[0] >= 3:
+		ver = subprocess.check_output(['git','describe','--tags','--long']).decode("utf-8").strip()
+	else:
+		ver = subprocess.check_output(['git','describe','--tags','--long']).strip()
+except subprocess.CalledProcessError:
+	ver = '3.1.55'
 
 if ver[0].lower() == 'v':
 	ver = ver[1:]

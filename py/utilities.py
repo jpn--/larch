@@ -36,6 +36,10 @@ def uid():
 	_uidn += 1
 	return "rx{}".format(_uidn)
 
+from .util.persistent import stored_dict
+from .util.temporaryfile import TemporaryFile, TemporaryHtml
+from .util.attribute_dict import dicta
+from .util.pmath import category, rename
 
 
 def random_sample(a, size=None, replace=False, p=None):
@@ -79,7 +83,6 @@ def random_sample(a, size=None, replace=False, p=None):
 
 
 
-from .util.temporaryfile import TemporaryFile, TemporaryHtml
 
 
 def webpage(content, *, file=None, title=None):
@@ -138,7 +141,6 @@ def path_shrink_until_exists(pth):
 		pth = os.path.normpath( os.path.join(pth,"..") )
 	return pth
 
-from .util.attribute_dict import dicta
 
 
 from collections import OrderedDict
@@ -526,7 +528,6 @@ def globt(*arg, **kwarg):
 	return sorted(glob.glob(*arg, **kwarg),  key=lambda x: os.stat(x).st_mtime)
 
 
-from .util.pmath import category, rename
 
 
 class pmath():
