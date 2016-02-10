@@ -4043,13 +4043,13 @@ class Model2(sherpa):
         return _core.Model2_save_buffer(self)
 
     @staticmethod
-    def Example(n=1, db=None, pre=False):
+    def Example(n=1, d=None, pre=False):
     	from . import examples
     	examples.load_example(n, pre)
-    	if db is None:
+    	if d is None:
     		m = examples.model(examples.data())
     	else:
-    		m = examples.model(db)
+    		m = examples.model(d)
     	return m
 
 

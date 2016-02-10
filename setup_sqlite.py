@@ -293,7 +293,7 @@ elif platform.system() == 'Windows':
 	local_apsw_compile_args = ['/EHsc']
 	local_extra_link_args =    ['/DEBUG']
 	local_data_files = []
-	local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(), 'larchsqlite.lib'), '/DLL',]
+	local_sqlite_extra_postargs = [] #['/IMPLIB:' + os.path.join(shlib_folder(basepath), 'larchsqlite.lib'), '/DLL',]
 	dylib_name_style = "{}.dll"
 	DEBUG = False
 	buildbase = "Z:\LarchBuild"
@@ -351,11 +351,22 @@ def build_sqlite(basepath=buildbase):
 			extra_postargs += ['-install_name', '@loader_path/{}'.format(c.library_filename(name,'shared'))]
 			extra_preargs  += ['-arch', 'i386', '-arch', 'x86_64']
 
+		if platform.system() == 'Windows':
+			extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(basepath), 'larchsqlite.lib'), '/DLL',]
+
+
 		if need_to_update:
+			print("yes need to update")
+			print("temp_folder(basepath)=",temp_folder(basepath))
+			print("shlib_folder(basepath)=",shlib_folder(basepath))
 			# Compile into .o files
 			objects = c.compile(source, extra_preargs=extra_preargs, debug=DEBUG, macros=local_macros, output_dir=temp_folder(basepath))
 			# Create shared library
 			c.link_shared_lib(objects, name, output_dir=shlib_folder(basepath), export_symbols=exports, extra_preargs=extra_preargs, extra_postargs=extra_postargs, debug=DEBUG)
+		else:
+			print("no need to update")
+			print("temp_folder(basepath)=",temp_folder(basepath))
+			print("shlib_folder(basepath)=",shlib_folder(basepath))
 
 
 if __name__=="__main__":

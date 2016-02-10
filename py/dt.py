@@ -20,6 +20,9 @@ import warnings
 class IncompatibleShape(LarchError):
 	pass
 
+class HDF5BadFormat(LarchError):
+	pass
+
 class HDF5Warning(UserWarning):
     pass
 
@@ -117,11 +120,26 @@ class DT(Fountain):
 		self.source_filemode = mode
 		self.source_filename = filename
 		self._h5larchpath = ipath
-		self.h5top = self.h5f._getOrCreatePath(ipath, True)
-		self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
-		self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
-		self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
-		self.h5expr = self.get_or_create_group(self.h5top, 'expr')._v_attrs
+		try:
+			self.h5top = self.h5f._getOrCreatePath(ipath, True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the larch root node at '{}' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/idca' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/idco' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/alts' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5expr = self.get_or_create_group(self.h5top, 'expr')._v_attrs
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/expr' does not exist and cannot be created".format(ipath))
 		self.expr = LocalAttributeSet(self.h5top.expr)
 		self._refresh_alts()
 

@@ -10,10 +10,15 @@ structure that interacts data with a set of :class:`Parameter`\ s.
 Creating :class:`Model` Objects
 -------------------------------
 
-.. py:class:: Model(db=None)
+.. py:class:: Model([d])
 	
-	:param db: The source database used to automatically populate model arrays.
-	:type db:  :class:`DB`
+	:param d: The source data used to automatically populate model arrays. This can
+	          be either a :class:`DB` or :class:`DT` object (or another data provider
+	          that inherits from the abstract :class:`Fountain` class). This parameter
+	          can be omitted, in which case data will not be loaded automatically and
+	          validation checks will not be performed when specifying data elements of
+	          the model.
+	:type d:  :class:`Fountain`
 
 	This object represents a discrete choice model. In addition to the methods
 	described below, a :class:`Model` also acts like a list of :class:`Parameter`.
@@ -24,7 +29,7 @@ Creating :class:`Model` Objects
 	Generate an example model object.
 
 	:param number: The code number of the example model to load. Valid numbers
-	               include {1,101,102,104,109,114}.
+	               include {1,17,22,101,102,104,109,111,114}.
 	:type number:  int
 
 	Larch comes with a few example models, which are used in documentation

@@ -80,7 +80,7 @@ namespace elm {
 
 
 		#ifdef SWIG
-		%feature("pythonappend") Model2(elm::Fountain& datafile) %{
+		%feature("pythonappend") Model2(elm::Fountain& d) %{
 			try:
 				self._ref_to_db = args[0]
 			except IndexError:
@@ -92,14 +92,6 @@ namespace elm {
 				self._pull_graph_from_db()
 			except LarchError:
 				pass
-			from .utilities import dicta
-			self.descriptions = dicta()
-		%}
-		%feature("pythonappend") Model2() %{
-			self._ref_to_db = None
-			from .logging import easy_logging_active
-			if easy_logging_active():
-				self.logger(True)
 			from .utilities import dicta
 			self.descriptions = dicta()
 		%}
@@ -782,7 +774,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		
 	public:
 		Model2();
-		Model2(elm::Fountain& datafile);
+		Model2(elm::Fountain& d);
 		~Model2();
 
 		void delete_data_fountain();
@@ -820,13 +812,13 @@ FOSWIG(	%rename(__repr__) representation; )
 		#ifdef SWIG
 		%pythoncode %{
 		@staticmethod
-		def Example(n=1, db=None, pre=False):
+		def Example(n=1, d=None, pre=False):
 			from . import examples
 			examples.load_example(n, pre)
-			if db is None:
+			if d is None:
 				m = examples.model(examples.data())
 			else:
-				m = examples.model(db)
+				m = examples.model(d)
 			return m
             
 		%}
