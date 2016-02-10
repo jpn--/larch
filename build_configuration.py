@@ -59,7 +59,7 @@ def write_build_info(build_dir=None, packagename="larch"):
 	f.write("""
 	build='%s (%s, %s %s)'%(version,day,date,time)
 	from .apsw import apswversion, sqlitelibversion
-	from .utilities import dicta
+	from .util import dicta
 	versions = dicta({
 	'larch':version,
 	'apsw':apswversion(),

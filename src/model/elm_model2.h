@@ -92,7 +92,7 @@ namespace elm {
 				self._pull_graph_from_db()
 			except LarchError:
 				pass
-			from .utilities import dicta
+			from .util import dicta
 			self.descriptions = dicta()
 		%}
 		%feature("pythonappend") delete_data_fountain() %{
