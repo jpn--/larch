@@ -278,11 +278,11 @@ elif platform.system() == 'Windows':
 	local_swig_opts = []
 	local_libraries = ['PYTHON35','libopenblas',]+mingw64_dlls+['PYTHON35',]
 	local_library_dirs = [
-		'Z:/Larch/{0}/{1}'.format(*openblas),
+		'Z:/CommonRepo/{0}/{1}'.format(*openblas),
 	#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
 		]
 	local_includedirs = [
-		'./{0}/include'.format(*openblas),
+		'Z:/CommonRepo/{0}/include'.format(*openblas),
 	#	'C:/local/boost_1_56_0',
 		 ]
 	local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
@@ -296,7 +296,7 @@ elif platform.system() == 'Windows':
 	local_sqlite_extra_postargs = [] #['/IMPLIB:' + os.path.join(shlib_folder(basepath), 'larchsqlite.lib'), '/DLL',]
 	dylib_name_style = "{}.dll"
 	DEBUG = False
-	buildbase = "Z:\LarchBuild"
+	buildbase = None # "Z:\LarchBuild"
 #	raise Exception("TURN OFF multithreading in OpenBLAS")
 else:
 	openblas = None

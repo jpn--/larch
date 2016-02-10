@@ -143,7 +143,7 @@ else:
 		local_apsw_compile_args = ['/EHsc']
 		local_extra_link_args =    ['/DEBUG']
 		local_data_files = []
-		buildbase = "Z:\LarchBuild"
+		buildbase = None # "Z:\LarchBuild"
 		local_sqlite_extra_postargs = ['/IMPLIB:' + os.path.join(shlib_folder(buildbase), 'larchsqlite.lib'), '/DLL',]
 		dylib_name_style = "{}.dll"
 		DEBUG = False
@@ -179,16 +179,12 @@ else:
 
 
 	if openblas is not None:
-		shutil.copyfile(os.path.join('Z:/Larch',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
+		shutil.copyfile(os.path.join('Z:/CommonRepo',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
 	for dll in mingw64_libs:
-		shutil.copyfile(os.path.join('Z:/Larch',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
+		shutil.copyfile(os.path.join('Z:/CommonRepo',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
 
-
-
-
-	core = Extension('larch._core',
-					 [file_at('src/swig/elmcore.i'),] + elm_cpp_files,
-					 swig_opts=['-modern', '-py3',
+	swig_files = [file_at('src/swig/elmcore.i'),]
+	swig_opts = ['-modern', '-py3',
 								#'-I../include',
 								'-v', '-c++', '-outdir', file_at('py'),
 								#'-I../include',
@@ -199,7 +195,14 @@ else:
 								incl('src/vascular'),
 								incl('src/version'),
 								incl('src/swig'),
-								incl('sqlite'), ] + local_swig_opts,
+								incl('sqlite'), ] + local_swig_opts
+#	if platform.system() == 'Windows' and os.path.exists(file_at('src/swig/elmcore_wrap.cpp')) and os.path.exists(file_at('py/core.py')):
+#		swig_opts = []
+#		swig_files = [file_at('src/swig/elmcore_wrap.cpp')]
+
+	core = Extension('larch._core',
+					 swig_files + elm_cpp_files,
+					 swig_opts=swig_opts,
 					 libraries=local_libraries+['larchsqlite', ],
 					 library_dirs=local_library_dirs+[shlib_folder(buildbase),],
 					 define_macros=local_macros,
@@ -215,7 +218,7 @@ else:
 													   file_at('sqlite'), ],
 					 extra_compile_args=local_extra_compile_args,
 					 extra_link_args=local_extra_link_args,
-					 depends=[file_at('src/swig/elmcore.i'),] + elm_cpp_h_files,
+					 depends=swig_files + elm_cpp_h_files,
 					 )
 
 	apsw_extra_link_args = []
