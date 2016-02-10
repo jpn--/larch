@@ -56,6 +56,7 @@ try:
 	from . import exceptions
 	from .db import DB
 	from .dt import DT, IncompatibleShape
+	from .omx import OMX
 	from .core import Parameter
 	from .model import Model, ModelFamily
 	from . import array
