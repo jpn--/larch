@@ -20,7 +20,6 @@
 
 
 #include "elm_model2.h"
-#include "elm_version.h"
 #include <set>
 #include "etk_python.h"
 
