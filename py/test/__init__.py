@@ -84,6 +84,16 @@ def simple():
 	return nose.run(argv=['-','--where='+os.path.split(__file__)[0],'--verbosity=3'])
 
 def run(exit=False):
+	print("<"*30,"larch.test",">"*30)
+	print("FROM:",os.path.split(__file__)[0])
+	try:
+		from ..built import build, versions, build_config
+	except (NameError, ImportError):
+		build, versions, build_config = "",{},""
+	print(versions)
+	print("BUILD:", build)
+	print("CONFIG:", build_config)
+	print(">"*30,"larch.test","<"*30)
 	result = simple()
 	if exit:
 		import sys

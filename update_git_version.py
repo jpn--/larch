@@ -29,7 +29,7 @@ if ver[0].lower() == 'v':
 	ver = ver[1:]
 
 try:
-	version_file = os.path.join(os.environ['PROJECT_DIR'],'py','version','__init__.py')
+	version_file = os.path.join(os.environ['PROJECT_DIR'],'repository','py','version','__init__.py')
 except KeyError:
 	version_file = os.path.join(os.path.dirname(__file__),'py','version','__init__.py')
 

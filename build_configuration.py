@@ -92,3 +92,10 @@ def write_build_info(build_dir=None, packagename="larch"):
 	f.close()
 
 # To update the version, run `git tag -a 3.10a-DEC2014 -m'version 3.0alpha, December 2014'`
+
+
+if __name__=="__main__":
+	import sys
+	print("build_configuration:sys.argv=",sys.argv)
+	if len(sys.argv)>=2:
+		write_build_info(build_dir=sys.argv[1], packagename="larch")

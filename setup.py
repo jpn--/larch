@@ -193,7 +193,6 @@ else:
 								incl('src/data'),
 								incl('src/sherpa'),
 								incl('src/vascular'),
-								incl('src/version'),
 								incl('src/swig'),
 								incl('sqlite'), ] + local_swig_opts
 #	if platform.system() == 'Windows' and os.path.exists(file_at('src/swig/elmcore_wrap.cpp')) and os.path.exists(file_at('py/core.py')):
@@ -213,7 +212,6 @@ else:
 													   file_at('src/data'),
 													   file_at('src/sherpa'),
 													   file_at('src/vascular'),
-													   file_at('src/version'),
 													   file_at('src/swig'),
 													   file_at('sqlite'), ],
 					 extra_compile_args=local_extra_compile_args,
