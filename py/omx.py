@@ -10,6 +10,8 @@ class OMXBadFormat(LarchError):
 class OMXIncompatibleShape(OMXBadFormat):
 	pass
 
+class OMXNonUniqueLookup(LarchError):
+	pass
 
 class OMX(_tb.file.File):
 
@@ -73,5 +75,42 @@ class OMX(_tb.file.File):
 		self.rlookup[name] = label_to_i
 		return label_to_i
 
-
-
+	def lookup_to_index(self, lookupname, arr):
+		"""Convert an array of lookup-able values into indexes.
+		
+		If you have an array of lookup-able values (e.g., TAZ identifiers) and you
+		want to convert them to 0-based indexes for use in accessing matrix data,
+		this is the function for you.
+		
+		Parameters
+		----------
+		lookupname : str
+			The name of the lookup in the open matrix file. This lookup must already
+			exist and have a set of unique lookup values.
+		arr : array-like
+			An array of values that appear in the lookup. This method uses 
+			numpy.digitize to process values, so any target value that appears in `arr` but does
+			not appear in the lookup will be assigned the index of the smallest lookup
+			value that is greater than the target, or the maximum lookup value if no lookup value
+			is greater than the target.
+			
+		Returns
+		-------
+		array
+			An array of index (int) values, with the same shape as `arr`.
+			
+		Raises
+		------
+		OMXNonUniqueLookup
+			When the lookup does not contain a set of unique values, this tool is not appropriate.
+		
+		"""
+		from .util.arraytools import is_sorted_and_unique
+		labels = self.lookup._v_children[name][:]
+		if is_sorted_and_unique(labels):
+			return numpy.digitize(arr, labels, right=True)
+		uniq_labels, uniq_indexes = numpy.unique(labels, return_inverse=True)
+		if len(uniq_labels) != len(labels):
+			raise OMXNonUniqueLookup("lookup '{}' does not have unique labels for each item".format(lookupname))
+		index_malordered = numpy.digitize(arr, uniq_labels, right=True)
+		return uniq_indexes[index_malordered]
