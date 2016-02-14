@@ -239,12 +239,10 @@ else:
 	build_configuration.write_build_info(build_dir=lib_folder(buildbase), packagename="larch")
 
 
-
-
 	setup(name='larch',
 		  version=VERSION,
 		  package_dir = {'larch': file_at('py'), 'larch.examples.doc': file_at('doc/example')},
-		  packages=['larch', 'larch.examples', 'larch.test', 'larch.version', 'larch.util', 'larch.model_reporter', 'larch.util.optimize',],
+		  packages=['larch', 'larch.examples','larch.examples.doc', 'larch.test', 'larch.version', 'larch.util', 'larch.model_reporter', 'larch.util.optimize',],
 		  ext_modules=[core, apsw, ],
 		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz', 'data_warehouse/*.h5'], 'larch.examples.doc':['*.rst']},
 		  data_files=local_data_files,
