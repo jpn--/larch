@@ -427,12 +427,7 @@ void elm::Model2::mnl_probability()
 
 	if (option.threads>=1 && _ELM_USE_THREADS_ && Input_QuantityCA.size()==0) {
 //		BUGGER(msg) << "Using multithreading with "<<option.threads<<" threads in mnl_probability()\n";
-		#ifdef __APPLE__
-//		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-//			[&](){return boosted::make_shared<elm::mnl_prob_w>(
-//			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
-//			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);};
-		#else
+		#ifndef __APPLE__
 //		BUGGER(msg) << "Using non-APPLE compiled\n";
 		openblas_set_num_threads(1);
 		#endif

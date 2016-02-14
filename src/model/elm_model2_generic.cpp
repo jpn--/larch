@@ -110,8 +110,6 @@ elm::Model2::Model2(elm::Fountain& datafile)
 , hessian_matrix(new etk::symmetric_matrix())
 {
 	if (_Fount) {
-//		Py_INCREF(_Data->apsw_connection);
-		//msg.change_logger_name(logfilename);
 		Xylem.add_dna_sequence(_Fount->alternatives_dna());
 	}
 }
@@ -126,67 +124,48 @@ elm::ParameterList* elm::Model2::_self_as_ParameterListPtr()
 
 elm::ca_co_packet elm::Model2::utility_packet()
 {
-	if (true /*Data_UtilityCA->fully_loaded() && Data_UtilityCO->fully_loaded()*/) {
-		BUGGER(msg) << "spawning utility packet fully loaded";
-		return elm::ca_co_packet(&Params_UtilityCA	,
-								 &Params_UtilityCO	,
-								 &Coef_UtilityCA	,
-								 &Coef_UtilityCO	,
-								 Data_UtilityCA		,
-								 Data_UtilityCO		,
-								 &Utility			);
-	} else {
-	/*	BUGGER(msg) << "Data_UtilityCA->fully_loaded = " << Data_UtilityCA->fully_loaded();
-		BUGGER(msg) << "Data_UtilityCO->fully_loaded = " << Data_UtilityCO->fully_loaded();
-		WARN(msg) << "spawning utility packet when data is not fully loaded, things are gonna be slow...";
-		ScrapePtr d_ca = Data_UtilityCA->copy();
-		ScrapePtr d_co = Data_UtilityCO->copy();
-		
-		return elm::ca_co_packet(&Params_UtilityCA	,
-								 &Params_UtilityCO	,
-								 &Coef_UtilityCA	,
-								 &Coef_UtilityCO	,
-								 d_ca		        ,
-								 d_co		        ,
-								 Data_UtilityCA		,
-								 Data_UtilityCO		,
-								 &Utility			);*/
-	}
-	
+	BUGGER(msg) << "spawning utility packet";
+	return elm::ca_co_packet(&Params_UtilityCA	,
+							 &Params_UtilityCO	,
+							 &Coef_UtilityCA	,
+							 &Coef_UtilityCO	,
+							 Data_UtilityCA		,
+							 Data_UtilityCO		,
+							 &Utility			);
 }
 
 elm::ca_co_packet elm::Model2::quantity_packet()
 {
-		return elm::ca_co_packet(&Params_QuantityCA	,
-								 nullptr         	,
-								 &Coef_QuantityCA	,
-								 nullptr         	,
-								 Data_QuantityCA	,
-								 nullptr         	,
-								 &Quantity			);
+	return elm::ca_co_packet(&Params_QuantityCA	,
+							 nullptr         	,
+							 &Coef_QuantityCA	,
+							 nullptr         	,
+							 Data_QuantityCA	,
+							 nullptr         	,
+							 &Quantity			);
 }
 
 
 elm::ca_co_packet elm::Model2::sampling_packet()
 {
-		return elm::ca_co_packet(&Params_SamplingCA	,
-								 &Params_SamplingCO	,
-								 &Coef_SamplingCA	,
-								 &Coef_SamplingCO	,
-								 Data_SamplingCA	,
-								 Data_SamplingCO	,
-								 &SamplingWeight	);
+	return elm::ca_co_packet(&Params_SamplingCA	,
+							 &Params_SamplingCO	,
+							 &Coef_SamplingCA	,
+							 &Coef_SamplingCO	,
+							 Data_SamplingCA	,
+							 Data_SamplingCO	,
+							 &SamplingWeight	);
 }
 
 elm::ca_co_packet elm::Model2::allocation_packet()
 {
-		return elm::ca_co_packet(nullptr	,
-								 &Params_Edges	,
-								 nullptr	,
-								 &Coef_Edges	,
-								 nullptr	,
-								 Data_Allocation	,
-								 &Allocation	);
+	return elm::ca_co_packet(nullptr	,
+							 &Params_Edges	,
+							 nullptr	,
+							 &Coef_Edges	,
+							 nullptr	,
+							 Data_Allocation	,
+							 &Allocation	);
 }
 
 
@@ -195,11 +174,7 @@ elm::ca_co_packet elm::Model2::allocation_packet()
 
 void elm::Model2::change_data_fountain(elm::Fountain& datafile)
 {
-//	if (_Data) {
-//		Py_DECREF(_Data->apsw_connection);
-//	}
 	_Fount = &datafile;
-//	_Data = nullptr;
 
 	elm::cellcode root = Xylem.root_cellcode();
 	Xylem.clear();
@@ -219,10 +194,6 @@ void elm::Model2::change_data_fountain(elm::Fountain& datafile)
 
 void elm::Model2::delete_data_fountain()
 {
-//	if (_Data) {
-//		Py_DECREF(_Data->apsw_connection);
-//	}
-//	_Data = NULL;
 	_Fount = nullptr;
 	Xylem.clear();
 }
@@ -649,7 +620,7 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 		MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
 		hessfull_to_hessfree(&Hess, &temp_free_hess) ;
 		MONITOR(msg) << "HESSIAN squeezed\n" << temp_free_hess.printSquare() ;
-		temp_free_hess.inv();
+		temp_free_hess.inv_bonafide();
 		MONITOR(msg) << "invHESSIAN squeezed\n" << temp_free_hess.printSquare() ;
 		hessfree_to_hessfull(&invHess, &temp_free_hess) ;
 		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
@@ -695,7 +666,7 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 		// invert hessian
 		MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
 		invHess = Hess;
-		invHess.inv();
+		invHess.inv_bonafide();
 		MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 
 		symmetric_matrix unpacked_bhhh;
@@ -776,7 +747,21 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 void elm::Model2::_parameter_push(const std::vector<double>& v)
 {
 	if (v.size() != dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
+		auto df_ = dF();
+		auto pn = parameter_names();
+		std::ostringstream errmsg;
+		errmsg << "You must specify values for exactly the correct number of degrees of freedom (" << df_ << "), you gave " << v.size() << ".";
+		if (df_ < 20) {
+			errmsg << "[";
+			if (pn.size()) {
+				errmsg << pn[0];
+			}
+			for (auto i=1; i<pn.size(); i++) {
+				errmsg << ", " << pn[i];
+			}
+			errmsg << "]";
+		}
+		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
 		if (FInfo[FNames[z]].holdfast) {
@@ -1257,7 +1242,21 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 	
 	_parameter_update();
 	if (v.size() != dF()) {
-		OOPS("You must specify values for exactly the correct number of degrees of freedom (",dF(),"), you gave ",v.size(),".");
+		auto df_ = dF();
+		auto pn = parameter_names();
+		std::ostringstream errmsg;
+		errmsg << "You must specify values for exactly the correct number of degrees of freedom (" << df_ << "), you gave " << v.size() << ".";
+		if (df_ < 20) {
+			errmsg << "[";
+			if (pn.size()) {
+				errmsg << pn[0];
+			}
+			for (auto i=1; i<pn.size(); i++) {
+				errmsg << ", " << pn[i];
+			}
+			errmsg << "]";
+		}
+		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
 		if (FInfo[FNames[z]].holdfast) {

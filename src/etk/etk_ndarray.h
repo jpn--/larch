@@ -223,6 +223,7 @@ namespace etk {
 
 	public:
 		void inv(logging_service* msg_=NULL);
+		void inv_bonafide(logging_service* msg_=NULL);
 		void initialize_identity();
 		std::string printSquare();
 

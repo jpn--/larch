@@ -1134,6 +1134,35 @@ void symmetric_matrix::inv(logging_service* msg_)
 	Py_CLEAR(result);
 }
 
+void symmetric_matrix::inv_bonafide(logging_service* msg_)
+{
+	ASSERT_ARRAY_DOUBLE;
+//	BUGGER_(msg_, "inv received matrix =\n" << printSquare() );
+	copy_uppertriangle_to_lowertriangle();
+//	BUGGER_(msg_, "inv symmetric-ized matrix =\n" << printSquare() );
+	PyObject* linalg = elm::elm_linalg_module; // PyImport_ImportModule("larch.linalg");
+	Py_XINCREF(linalg);
+	if (!linalg) {
+		OOPS("Failed to load larch.linalg");
+	}
+	PyObject* linalg_inv = PyObject_GetAttrString(linalg, "matrix_inverse");
+	if (!linalg_inv) {
+		Py_CLEAR(linalg);
+		OOPS("Failed to find larch.linalg.matrix_inverse");
+	}
+	PyObject* result = PyObject_CallFunctionObjArgs(linalg_inv, pool, NULL);
+	Py_CLEAR(linalg_inv);
+	Py_CLEAR(linalg);
+	if (!result) {
+		//OOPS_MATRIXINVERSE(this, "Failed to get inverse");
+		OOPS("Failed to get inverse");
+	}
+	Py_CLEAR(pool);
+	pool = (PyArrayObject*)result;
+	Py_INCREF(pool);
+	Py_CLEAR(result);
+}
+
 void symmetric_matrix::initialize_identity()
 {
 	ASSERT_ARRAY_DOUBLE;

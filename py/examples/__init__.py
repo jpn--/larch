@@ -48,7 +48,12 @@ examplefiles_pre = {
 	  1:	"mtc01e",
 }
 
+examplefiles_doc = {
+	  1:	"001_mtc.rst",
+}
+
 exampledir = os.path.dirname(__file__)
+exampledocdir = os.path.join(os.path.dirname(__file__),'doc')
 
 from .. import Model, DB, _directory_
 class larch:
@@ -106,3 +111,49 @@ def CheckLL():
 	#assert(round(LL(104),3)==-5423.299)
 	assert(round(LL(109),3)==-5236.900)
 	assert(round(LL(114),3)==-5169.642)
+
+
+def _testcode_iter(sourcefile):
+	active = False
+	with open(sourcefile, 'r') as f:
+		for line in f:
+			line = line.rstrip()
+			if line == '.. testcode::':
+				active = True
+				continue
+			if line == '':
+				continue
+			if line[0] not in (' ','\t'):
+				active = False
+			if active:
+				yield line.strip()
+				continue
+
+def _testcode_parsed(sourcefile):
+	return "\n".join(_testcode_iter(sourcefile))
+
+def _exec_example(sourcefile, d = None):
+	_global = {}
+	_local = {}
+	from .. import larch
+	_global['larch'] = larch
+	if d is None:
+		rawcode = _testcode_parsed(sourcefile)
+		code = compile(rawcode, sourcefile, 'exec')
+		exec(code, _global, _local)
+	else:
+		_local['d'] = d
+		for n, line in enumerate(_testcode_iter(sourcefile)):
+			if len(line)>2 and line[:2]=='d=':
+				continue
+			if len(line)>3 and line[:3]=='d =':
+				continue
+			code = compile(line, sourcefile+":"+str(n), 'exec')
+			exec(code, _global, _local)
+	return _local['m']
+
+def _exec_example_n(n, d=None):
+	if n not in examplefiles_doc:
+		raise KeyError(n)
+	f = os.path.join(exampledocdir, examplefiles_doc[n])
+	return _exec_example(f,d)

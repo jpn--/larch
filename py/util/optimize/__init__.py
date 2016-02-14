@@ -119,7 +119,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	else:
 		ot = model.optimizers(*_default_optimizers(model), ctol=ctol)
 
-	r = _minimize(lambda z: 0, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
+	r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 	r.stats.prepend_timing(stat)
 	ll = model.loglike()
 
@@ -131,6 +131,14 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	if model.option.calc_std_errors:
 		r.stats.start_process("parameter covariance")
 		model.calculate_parameter_covariance()
+		from ...linalg import possible_overspecification
+		overspec = possible_overspecification(model.hessian_matrix)
+		if overspec:
+			r.stats.write("WARNING: Model is possibly over-specified (hessian is nearly singular).")
+			r.possible_overspecification = []
+			for eigval, ox in overspec:
+				paramset = list(numpy.asarray(model.parameter_names())[ox])
+			r.possible_overspecification.append( (eigval, paramset) )
 
 	r.stats.start_process("cleanup")
 	r.stats.number_threads = model.option.threads

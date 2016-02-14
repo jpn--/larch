@@ -809,21 +809,6 @@ FOSWIG(	%rename(__repr__) representation; )
 //			, bool overwrite=false
 //			);
 
-		#ifdef SWIG
-		%pythoncode %{
-		@staticmethod
-		def Example(n=1, d=None, pre=False):
-			from . import examples
-			examples.load_example(n, pre)
-			if d is None:
-				m = examples.model(examples.data())
-			else:
-				m = examples.model(d)
-			return m
-            
-		%}
-		#endif // def SWIG
-
 
 		std::shared_ptr<etk::ndarray> negative_d_loglike() ;
 		std::shared_ptr<etk::ndarray> negative_d_loglike(const std::vector<double>& v) ;

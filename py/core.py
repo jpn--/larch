@@ -4042,18 +4042,6 @@ class Model2(sherpa):
     def save_buffer(self) -> "std::string":
         return _core.Model2_save_buffer(self)
 
-    @staticmethod
-    def Example(n=1, d=None, pre=False):
-    	from . import examples
-    	examples.load_example(n, pre)
-    	if d is None:
-    		m = examples.model(examples.data())
-    	else:
-    		m = examples.model(d)
-    	return m
-
-
-
     def negative_d_loglike(self, *args) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_negative_d_loglike(self, *args)
 

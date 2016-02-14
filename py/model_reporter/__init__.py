@@ -1,7 +1,7 @@
 from . import docx, latex, pdf, txt, xhtml
 import math
 from ..util.xhtml import XHTML, XML_Builder
-
+from ..core import LarchError
 
 class ModelReporter(docx.DocxModelReporter,
 					latex.LatexModelReporter,

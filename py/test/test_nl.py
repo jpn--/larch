@@ -625,6 +625,7 @@ class TestNL(ELM_TestCase):
 	def test_building_nl_sequentially(self):
 
 		m = Model.Example()
+		m.setUp()
 
 		r = m.maximize_loglike('SLSQP')
 		self.assertNearlyEqual(-7309.600971749682,  r.loglike_null)

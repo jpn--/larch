@@ -37,6 +37,22 @@ class Model(Model2, ModelReporter):
 		for f in dir(self):
 			print(" ",f)
 
+	@staticmethod
+	def Example(n=1, d=None, pre=False):
+		from . import examples
+		if not pre:
+			try:
+				return examples._exec_example_n( n, d=d )
+			except KeyError:
+				pass
+		examples.load_example(n, pre)
+		if d is None:
+			m = examples.model(examples.data())
+		else:
+			m = examples.model(d)
+		return m
+
+
 	def parameter_wide(self, name):
 		try:
 			return self.alias(name)
@@ -276,9 +292,9 @@ class Model(Model2, ModelReporter):
 			filename = filename+filename_ext
 			filemaker = lambda: open(filename, 'w')
 		with filemaker() as f:
-			if report:
-				f.write(self.report(lineprefix="#\t", cats=report_cats))
-				f.write("\n\n\n")
+#			if report:
+#				f.write(self.report(lineprefix="#\t", cats=report_cats))
+#				f.write("\n\n\n")
 			import time
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
 			f.write(" on %s\n"%time.strftime("%d %b %Y"))
@@ -332,6 +348,7 @@ class Model(Model2, ModelReporter):
 			raise IOError("the object to copy from must be a larch.Model")
 		inf = numpy.inf
 		nan = numpy.nan
+		_Str = lambda s: (base64.standard_b64decode(s)).decode()
 		code = compile(other.save_buffer(), "model_to_copy", 'exec')
 		exec(code)
 		return self

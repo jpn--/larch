@@ -128,6 +128,8 @@ class OptimizeTechnique():
 		if self.ctol:
 			watcher_args += " [ctol {0}]".format(self.ctol)
 		return "<larch.util.optimize.OptimizeTechnique {}{!s}>".format(self.method, watcher_args)
+	def __repr__(self):
+		return self.__str__()
 	def __init__(self, method, fun, *, slow_len=(), slow_thresh=(), ctol=None, ctol_fun=None, options=None,
 					bhhh=None, init_inv_hess=None, jac=None, logger=None, hess=None):
 		self.fun = fun
@@ -169,7 +171,7 @@ class OptimizeTechnique():
 		self.flag_success = 0
 		self.logger = logger
 		self.flag_last_best_hope = False
-	def __call__(self, fun, x0, args=(), options={}, **kwargs):
+	def __call__(self, ignored_fun, x0, args=(), options={}, **kwargs):
 		if not self.logger and 'logger' in kwargs:
 			self.logger = kwargs['logger']
 		if self.logger:
@@ -263,8 +265,8 @@ class OptimizeResults(OptimizeResult):
 
 
 class OptimizeTechniques():
-	def __init__(self, techniques=[], ctol_fun=None, ctol=1e-6, logger=None, fun=None, jac=None, hess=None, bhhh=None, start_timer=None, end_timer=None):
-		self._techniques = techniques
+	def __init__(self, techniques=None, ctol_fun=None, ctol=1e-6, logger=None, fun=None, jac=None, hess=None, bhhh=None, start_timer=None, end_timer=None):
+		self._techniques = [] if techniques is None else list(techniques)
 		self.meta_iteration = 0
 		self.ctol_fun = ctol_fun
 		self.ctol = ctol
@@ -289,6 +291,8 @@ class OptimizeTechniques():
 		if self._hess is not None and 'hess' not in kwarg:
 			kwarg['hess'] = self._hess
 		self._techniques.append(OptimizeTechnique(*arg, **kwarg))
+	def __len__(self):
+		return len(self._techniques)
 	def __iter__(self):
 		return self
 	def __next__(self):

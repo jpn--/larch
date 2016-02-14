@@ -561,7 +561,7 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 	while (gnorm > gtol) and (k < maxiter):
 		pk = -numpy.dot(Hk, gfk)
 #		
-#		print("\npk=\n",pk,"\n")
+#		print("\n pk=\n",pk,"\n")
 #		print("\n gfk=\n",gfk,"\n")
 #		print("\n Hk=\n",Hk,"\n")
 #		
@@ -571,7 +571,7 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 			warnflag = 3
 			break
 		if status==_LINE_SEARCH_FAIL:
-			warnflag = 3
+			warnflag = 4
 			break
 		if retall:
 			allvecs.append(xkp1)
@@ -611,6 +611,15 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 
 	elif warnflag == 3:
 		msg = "unable to make reasonable improvements due to bounds"
+		if disp:
+			print("Warning: " + msg)
+			print("			Current function value: %f" % fval)
+			print("			Iterations: %d" % k)
+			print("			Function evaluations: %d" % func_calls[0])
+			print("			Gradient evaluations: %d" % grad_calls[0])
+
+	elif warnflag == 4:
+		msg = "unable to make reasonable improvements due to some kind of problem"
 		if disp:
 			print("Warning: " + msg)
 			print("			Current function value: %f" % fval)

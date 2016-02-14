@@ -340,6 +340,22 @@ class TestMTC(ELM_TestCase):
 		self.assertAlmostEqual(  -6347.310737255839,   g[10], delta=.0005 )
 
 
+	def test_model2_mnl_overspecified(self):
+		d = self._db
+		m1 = Model (d)
+		m1.utility.ca("tottime","time")
+		m1.utility.ca("totcost","cost")
+		m1.utility.co("1","DA","con1")
+		m1.utility.co("1","SR2","con2")
+		m1.utility.co("1","SR3+","con3")
+		m1.utility.co("1","Tran","con4")
+		m1.utility.co("1","Bike","con5")
+		m1.utility.co("1","Walk","con6")
+		m1.setUp()
+		r = m1.maximize_loglike()
+		self.assertTrue('possible_overspecification' in r)
+		self.assertTrue(r.possible_overspecification[0][1] == ['con1','con2','con3','con4','con5','con6'])
+		del m1
 
 
 class TestMNL(ELM_TestCase):

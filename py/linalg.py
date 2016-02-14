@@ -29,7 +29,7 @@ def general_inverse(a):
 	try:
 		try:
 			eig = numpy.linalg.eigvalsh(a)
-			if numpy.min(eig) < 0.001:
+			if numpy.min(numpy.abs(eig)) < 0.001:
 				raise numpy.linalg.linalg.LinAlgError()
 			x = numpy.linalg.inv(a)
 			#_Skr.log(5,"normal matrix inverse calculated")
@@ -45,3 +45,16 @@ def general_inverse(a):
 
 def matrix_inverse(a):
 	return pack(numpy.linalg.inv(a))
+
+
+
+def possible_overspecification(a):
+	ret = []
+	eigenvalues,eigenvectors = numpy.linalg.eigh(a)
+	for i in range(len(eigenvalues)):
+		if numpy.abs(eigenvalues[i]) < 0.001:
+			v = eigenvectors[:,i]
+			v = numpy.round(v,7)
+			ret.append( (eigenvalues[i], numpy.where(v)[0])  )
+	return ret
+
