@@ -22,7 +22,7 @@
 import sys
 import os, os.path
 
-__version__ = '3.1.58'
+__version__ = '3.1.59'
 __build_date__ = '14 February 2016'
 
 if os.environ.get('READTHEDOCS', None) == 'True':
