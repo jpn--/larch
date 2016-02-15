@@ -28,6 +28,15 @@ except:
 import larch
 elm = larch
 
+
+import subprocess, numpy
+try:
+	tty_dim = _subprocess.check_output(['stty', 'size']).split()
+	numpy.set_printoptions(linewidth=int(tty_dim[1]))
+except:
+	pass
+
+
 print("<"*36, "LARCH", ">"*36 )
 print(larch.status)
 print(larch.info)
