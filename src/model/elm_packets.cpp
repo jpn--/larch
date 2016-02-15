@@ -68,7 +68,7 @@ void elm::ca_co_packet::logit_partial
 , const double&        U_premultiplier
 )
 {
-	if (Data_CA && Data_CA->nVars()>0 /*&& Data_CA->fully_loaded()*/) {
+	if (Data_CA && Data_CA->nVars()>0) {
 		// Fast Linear Algebra		
 		if (Outcome->size2()==Data_CA->nAlts()) {
 			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
@@ -87,26 +87,6 @@ void elm::ca_co_packet::logit_partial
 							U_premultiplier, Outcome->ptr(firstcase)+a, Outcome->size2() );
 			}
 		}		
-	} else if (Data_CA && Data_CA->nVars()>0) {
-		// Slow case-by-case
-		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
-			if (Outcome->size2()==Data_CA->nAlts()) {
-				cblas_dgemv(CblasRowMajor,CblasNoTrans, 
-							Data_CA->nAlts(), Data_CA->nVars(), 
-							1,
-							Data_CA->values(c,1),Data_CA->nVars(),
-							Coef_CA->ptr(),1,
-							U_premultiplier, Outcome->ptr(c),1);
-			} else {
-				for (unsigned a=0;a<Data_CA->nAlts();a++) 
-					cblas_dgemv(CblasRowMajor,CblasNoTrans,
-								1,Data_CA->nVars(),
-								1, 
-								Data_CA->values(c,1)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-								Coef_CA->ptr(),1, 
-								U_premultiplier, Outcome->ptr(c)+a, Outcome->size2() );
-			}
-		}
 	}
 	if ((Data_CA && Data_CA->nVars()==0) || (!Data_CA)) {
 		if (U_premultiplier) {
@@ -116,13 +96,8 @@ void elm::ca_co_packet::logit_partial
 		}
 	}
 	
-	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
+	if (Data_CO && Data_CO->nVars()>0) {
 		// Fast Linear Algebra
-		
-		// TODO debug
-//		auto Coef_CO_size2= Coef_CO->size2();
-//		auto Outcome_size2 = Outcome->size2();
-//		auto Data_CO_nVars = Data_CO->nVars();
 		
 		if (Coef_CO->size2()>0) {
 		
@@ -135,17 +110,6 @@ void elm::ca_co_packet::logit_partial
 			
 		} else {
 			OOPS("Coef_CO->size2()=",Coef_CO->size2()," while Data_CO->nVars()=",Data_CO->nVars());
-		}
-	} else if (Data_CO && Data_CO->nVars()>0) {
-		// Slow case-by-case
-		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
-			if (Data_CO->nVars())
-				cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
-							1,Coef_CO->size2(), Data_CO->nVars(),
-							1,
-							Data_CO->values(c,1), Data_CO->nVars(),
-							Coef_CO->ptr(), Coef_CO->size2(),
-							1,Outcome->ptr(c),Outcome->size2());
 		}
 	}
 }
