@@ -115,6 +115,14 @@ namespace etk {
 		inline double& at(const int& i, const int& j)  { return operator()(i,j); }
 		inline double& at(const int& i, const int& j, const int& k)  { return operator()(i,j,k); }
 
+	// Location Access (long long)
+		const long long& int64_at(const int& i) const ;
+		const long long& int64_at(const int& i, const int& j) const ;
+		const long long& int64_at(const int& i, const int& j, const int& k) const ;
+		long long& int64_at(const int& i)  ;
+		long long& int64_at(const int& i, const int& j)  ;
+		long long& int64_at(const int& i, const int& j, const int& k)  ;
+
 	// Location Access (bool)
 		const bool& bool_at(const int& i) const ;
 		const bool& bool_at(const int& i, const int& j) const ;

@@ -152,6 +152,7 @@ void ndarray::same_memory_as(ndarray& x)
 #define ASSERT_ARRAY_WRITEABLE if ( !PyArray_ISWRITEABLE(pool) ) OOPS("assert failure, array not writeable")
 #define ASSERT_ARRAY_DOUBLE    if ( PyArray_DESCR(pool)->type_num != NPY_DOUBLE) OOPS("assert failure, not NPY_DOUBLE")
 #define ASSERT_ARRAY_BOOL      if ( PyArray_DESCR(pool)->type_num != NPY_BOOL) OOPS("assert failure, not NPY_BOOL")
+#define ASSERT_ARRAY_INT64     if ( PyArray_DESCR(pool)->type_num != NPY_INT64) OOPS("assert failure, not NPY_INT64")
 
 void ndarray::quick_new(const int& datatype, const char* arrayClass, const int& r,const int& c,const int& s)
 {
@@ -414,6 +415,16 @@ const bool& ndarray::bool_at(const int& r) const
 	return *(const bool*)PyArray_GETPTR1(pool, r);
 }
 
+const long long& ndarray::int64_at(const int& r) const
+{
+	ASSERT_ARRAY_INT64;
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	return *(const long long*)PyArray_GETPTR1(pool, r);
+}
+
+
 const bool& ndarray::bool_at(const int& r, const int& c) const
 {
 	ASSERT_ARRAY_BOOL;
@@ -430,6 +441,24 @@ const bool& ndarray::bool_at(const int& r, const int& c) const
 		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
 	}
 	return *(const bool*)PyArray_GETPTR2(pool, r, c);
+}
+
+const long long& ndarray::int64_at(const int& r, const int& c) const
+{
+	ASSERT_ARRAY_INT64;
+	if (PyArray_NDIM(pool)<2) {
+		if (c==0) {
+			return int64_at(r);
+		}
+		OOPS("2 dim location requested in ndarray with ",PyArray_NDIM(pool)," dim ");
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	}
+	return *(const long long*)PyArray_GETPTR2(pool, r, c);
 }
 
 const double& symmetric_matrix::operator()(const int& r, const int& c) const
@@ -497,6 +526,27 @@ const bool& ndarray::bool_at(const int& r, const int& c, const int& d) const
 		OOPS("const rectangle dep access out of range, asking ",d," but having only ",PyArray_DIM(pool, 2));
 	}
 	return *(const bool*)PyArray_GETPTR3(pool, r, c, d);
+}
+
+const long long& ndarray::int64_at(const int& r, const int& c, const int& d) const
+{
+	ASSERT_ARRAY_INT64;
+	if (PyArray_NDIM(pool)<3) {
+		if (d==0) {
+			return int64_at(r,c);
+		}
+		OOPS("3 dim location requested in ndarray with ",PyArray_NDIM(pool)," dim ");
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	}
+	if (d>=PyArray_DIM(pool, 2)) {
+		OOPS("const rectangle dep access out of range, asking ",d," but having only ",PyArray_DIM(pool, 2));
+	}
+	return *(const long long*)PyArray_GETPTR3(pool, r, c, d);
 }
 
 
@@ -595,6 +645,15 @@ bool& ndarray::bool_at(const int& r)
 	return *( bool*)PyArray_GETPTR1(pool, r);
 }
 
+long long& ndarray::int64_at(const int& r)
+{
+	ASSERT_ARRAY_INT64;
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	return *( long long*)PyArray_GETPTR1(pool, r);
+}
+
 bool& ndarray::bool_at(const int& r, const int& c)
 {
 	ASSERT_ARRAY_BOOL;
@@ -611,6 +670,24 @@ bool& ndarray::bool_at(const int& r, const int& c)
 		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
 	}
 	return *( bool*)PyArray_GETPTR2(pool, r, c);
+}
+
+long long& ndarray::int64_at(const int& r, const int& c)
+{
+	ASSERT_ARRAY_INT64;
+	if (PyArray_NDIM(pool)<2) {
+		if (c==0) {
+			return int64_at(r);
+		}
+		OOPS("2 dim location requested in ndarray with ",PyArray_NDIM(pool)," dim ");
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	}
+	return *( long long*)PyArray_GETPTR2(pool, r, c);
 }
 
 bool& ndarray::bool_at(const int& r, const int& c, const int& d)
@@ -630,6 +707,25 @@ bool& ndarray::bool_at(const int& r, const int& c, const int& d)
 		OOPS("const rectangle dep access out of range, asking ",d," but having only ",PyArray_DIM(pool, 2));
 	}
 	return *( bool*)PyArray_GETPTR3(pool, r, c, d);
+}
+
+long long& ndarray::int64_at(const int& r, const int& c, const int& d)
+{
+	ASSERT_ARRAY_INT64;
+	if (PyArray_NDIM(pool)<3) {
+		if (d==0) return int64_at(r,c);
+		OOPS("3 dim location requested in ndarray with ",PyArray_NDIM(pool)," dim ");
+	}
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	if (c>=PyArray_DIM(pool, 1)) {
+		OOPS("const rectangle col access out of range, asking ",c," but having only ",PyArray_DIM(pool, 1));
+	}
+	if (d>=PyArray_DIM(pool, 2)) {
+		OOPS("const rectangle dep access out of range, asking ",d," but having only ",PyArray_DIM(pool, 2));
+	}
+	return *( long long*)PyArray_GETPTR3(pool, r, c, d);
 }
 
 
