@@ -105,17 +105,21 @@ class DT(Fountain):
 	def _refresh_alts(self):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
-	def __init__(self, filename, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None):
+	def __init__(self, filename, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None, inmemory=False, temp=False):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
 		if h5f is not None:
 			self.h5f = h5f
 			self._h5f_own = False
 		else:
+			kwd = {}
+			if inmemory or temp:
+				kwd['driver']="H5FD_CORE"
+			if temp:
+				kwd['driver_core_backing_store']=0
 			if complevel is not None:
-				self.h5f = _tb.open_file(filename, mode, filters=_tb.Filters(complib=complib, complevel=complevel))
-			else:
-				self.h5f = _tb.open_file(filename, mode)
+				kwd['filters']=_tb.Filters(complib=complib, complevel=complevel)
+			self.h5f = _tb.open_file(filename, mode, **kwd)
 			self._h5f_own = True
 		self.source_filemode = mode
 		self.source_filename = filename
@@ -566,6 +570,72 @@ class DT(Fountain):
 
 	def variables_co(self):
 		return tuple(i for i in self.h5idco._v_children)
+
+
+	def import_db(self, db, ignore_ca=('caseid','altid'), ignore_co=('caseid')):
+
+		descrip_larch = {}
+		descrip_alts = {
+			'altid': _tb.Int64Col(pos=1, dflt=-999),
+			'name': _tb.StringCol(itemsize=127, pos=2, dflt=""),
+		}
+		descrip_co = {}
+		descrip_ca = {}
+		vars_co = db.variables_co()
+		vars_ca = db.variables_ca()
+		for i in vars_co:
+			if i == 'caseid':
+				descrip_co[i] = _tb.Int64Col(pos=len(descrip_co), dflt=-999)
+			else:
+				descrip_co[i] = _tb.Float64Col(pos=len(descrip_co), dflt=numpy.nan)
+		for i in vars_ca:
+			if i in ('caseid','altid'):
+				descrip_ca[i] = _tb.Int64Col(pos=len(descrip_ca), dflt=-999)
+			else:
+				descrip_ca[i] = _tb.Float64Col(pos=len(descrip_ca), dflt=numpy.nan)
+
+		for var_ca in vars_ca:
+			if var_ca not in ignore_ca:
+				h5var = self.h5f.create_carray(self.h5idca, var_ca, _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
+				arr, caseids = db.array_idca(var_ca)
+				h5var[:,:] = arr.squeeze()
+
+		for var_co in vars_co:
+			if var_co not in ignore_co:
+				h5var = self.h5f.create_carray(self.h5idco, var_co, _tb.Float64Atom(), shape=(db.nCases(),), )
+				arr, caseids = db.array_idco(var_co)
+				h5var[:] = arr.squeeze()
+
+		h5avail = self.h5f.create_carray(self.h5idca, '_avail_', _tb.BoolAtom(), shape=(db.nCases(), db.nAlts()), )
+		arr, caseids = db.array_avail()
+		h5avail[:,:] = arr.squeeze()
+
+		h5caseids = self.h5f.create_carray(self.h5top, 'caseids', _tb.Int64Atom(), shape=(db.nCases(),), )
+		h5caseids[:] = caseids.squeeze()
+
+		h5scrn = self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(db.nCases(),), )
+		h5scrn[:] = True
+
+		h5altids = self.h5f.create_carray(self.h5alts, 'altids', _tb.Int64Atom(), shape=(db.nAlts(),), title='elemental alternative code numbers')
+		h5altids[:] = db.alternative_codes()
+
+		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+		for an in db.alternative_names():
+			h5altnames.append( an )
+		
+		try:
+			ch_ca = db.queries.get_choice_ca()
+			self.h5f.create_soft_link(self.h5idca, '_choice_', target='/larch/idca/'+ch_ca)
+		except AttributeError:
+			h5ch = self.h5f.create_carray(self.h5idca, '_choice_', _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
+			arr, caseids = db.array_choice()
+			h5ch[:,:] = arr.squeeze()
+
+		wgt = db.queries.weight
+		if wgt:
+			self.h5f.create_soft_link(self.h5idco, '_weight_', target='/larch/idco/'+wgt)
+
+
 
 	@staticmethod
 	def ExampleDirectory():
