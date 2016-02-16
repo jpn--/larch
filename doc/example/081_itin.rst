@@ -142,19 +142,22 @@ the relevant attributes from the code number.
 .. testcode::
 
 	for hour in departure_hours:
+		prev_hour = departure_hours((hour.value-1)%24)
 		next_hour = departure_hours((hour.value+1)%24)
 		time_nest = m.new_nest(hour.name, param_name="mu_ogev", parent=m.root_id)
 		for carrier in carriers:
 			m.link(time_nest, hour_carrier_nests[hour,carrier])
 			m.link(time_nest, hour_carrier_nests[next_hour,carrier])
-			m.link[time_nest, hour_carrier_nests[next_hour,carrier]](data='1',param='PHI')
+			m.link[time_nest, hour_carrier_nests[next_hour,carrier]](data='1',param='PHI_next')
+			m.link(time_nest, hour_carrier_nests[prev_hour,carrier])
+			m.link[time_nest, hour_carrier_nests[prev_hour,carrier]](data='1',param='PHI_prev')
 
 In this second block, the outermost loop is over departure hour.  Within that, we define the
-next hour (this is easily expandible to include multiple hours in each OGEV nest)
-and a nest to group together the current and next hour.  Then we loop over carriers link the
+previous and next hours (this is easily expandible to include multiple hours in each OGEV nest)
+and a nest to group together the three hours.  Then we loop over carriers link the
 nests we created in the previous block, with one link to each current hour carrier nest, and
 one link to each next hour carrier nest.  We also add a PHI parameter to the second link to
-control the allocation of the hour carrier nests to the OGEV level nests.
+control the allocation of the hour-carrier nests to the OGEV level nests.
 
 
 For this example, since we want it to run quickly, we'll limit the input
@@ -176,7 +179,7 @@ use the automatic parameter constraints (most of the available algorithms cannot
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.maximize_loglike('SLSQP')
+	>>> m.maximize_loglike()
 			  fun: ...
 		  loglike: ...
 	 loglike_null: ...
@@ -191,26 +194,26 @@ use the automatic parameter constraints (most of the available algorithms cannot
 	Model Parameter Estimates
 	------------------------------------------------------------------------------------------------------------------------------
 	Parameter       	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	carrier=2       	 0          	-0.213372   	 nan        	 nan        	 0          
-	carrier=3       	 0          	 0.000186722	 nan        	 nan        	 0          
-	carrier=4       	 0          	-0.058578   	 nan        	 nan        	 0          
-	carrier>=5      	 0          	 0.0477091  	 nan        	 nan        	 0          
-	aver_fare_hy    	 0          	-0.00235239 	 nan        	 nan        	 0          
-	aver_fare_ly    	 0          	-0.000215046	 nan        	 nan        	 0          
-	itin_num_cnxs   	 0          	-0.452021   	 nan        	 nan        	 0          
-	itin_num_directs	 0          	-0.11272    	 nan        	 nan        	 0          
-	mu_carrier      	 1          	 0.857776   	 nan        	 nan        	 1          
-	mu_ogev         	 1          	 0.935943   	 nan        	 nan        	 1          
-	PHI             	 0          	-0.131316   	 nan        	 nan        	 0          
+	carrier=2       	 0          	-0.209455   	 nan        	 nan        	 0          
+	carrier=3       	 0          	 0.00105932 	 nan        	 nan        	 0          
+	carrier=4       	 0          	-0.0576584  	 nan        	 nan        	 0          
+	carrier>=5      	 0          	 0.0459918  	 nan        	 nan        	 0          
+	aver_fare_hy    	 0          	-0.0023113  	 nan        	 nan        	 0          
+	aver_fare_ly    	 0          	-0.000212671	 nan        	 nan        	 0          
+	itin_num_cnxs   	 0          	-0.442487   	 nan        	 nan        	 0          
+	itin_num_directs	 0          	-0.108061   	 nan        	 nan        	 0          
+	mu_carrier      	 1          	 0.84371    	 nan        	 nan        	 1          
+	mu_ogev         	 1          	 0.921534   	 nan        	 nan        	 1          
+	PHI_next        	 0          	 0.738085   	 nan        	 nan        	 0          
+	PHI_prev        	 0          	 0.00228622 	 nan        	 nan        	 0          
 	==============================================================================================================================
 	Model Estimation Statistics
 	------------------------------------------------------------------------------------------------------------------------------
-	Log Likelihood at Convergence     	-6084.66
+	Log Likelihood at Convergence     	-6084.54
 	Log Likelihood at Null Parameters 	-6115.43
 	------------------------------------------------------------------------------------------------------------------------------
 	Rho Squared w.r.t. Null Parameters	0.005
 	==============================================================================================================================
-
 	...
 
 
