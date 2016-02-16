@@ -21,7 +21,7 @@ As usual, we first create the DB objects:
 Our itinerary choice data has a lot of alternatives, but they are not
 ordered or numbered in a regular way; each elemental alternative has
 an arbitrary code number assigned to it, and the code numbers for one case
-are not comparable to another case. But we can renumber the alterantives in
+are not comparable to another case. But we can renumber the alternatives in
 a manner that is more suited for our application, such that based on the code
 number we can programatically extract a few relevant features of the alternative
 that we will want to use in building our Network GEV model.  Suppose for example

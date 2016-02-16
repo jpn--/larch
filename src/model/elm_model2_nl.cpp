@@ -480,6 +480,35 @@ void elm::Model2::ngev_probability()
 }
 
 
+void elm::Model2::ngev_probability_given_utility( etk::ndarray *u)
+{
+
+	pull_coefficients_from_freedoms();
+	
+	if (nThreads<=1) nThreads = 1;
+	 
+	BUGGER(msg) << "Number of threads in ngev_probability =" << nThreads;
+
+
+
+	std::function<std::shared_ptr<workshop> ()> workshop_builder =
+		[&](){return std::make_shared<workshop_ngev_probability_given_utility>(nNodes, u, allocation_packet(), sampling_packet(), quantity_packet()
+								 , Params_LogSum
+								 , Data_Avail
+								 , &Probability
+								 , &Cond_Prob
+								 , &AdjProbability
+								 , &Xylem
+								 , option.mute_nan_warnings
+								 , &msg
+								 );};
+
+	USE_DISPATCH(probability_given_utility_dispatcher,option.threads, u->size1(), workshop_builder);
+	
+}
+
+
+
 void elm::Model2::nl_gradient() 
 {
 	periodic Sup (5);

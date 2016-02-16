@@ -1200,6 +1200,9 @@ class Fountain(object):
     def alternative_code(self, arg0: 'std::string') -> "long long":
         return _core.Fountain_alternative_code(self, arg0)
 
+    def uncache_alternatives(self) -> "void":
+        return _core.Fountain_uncache_alternatives(self)
+
     def check_ca(self, column: 'std::string const &') -> "bool":
         return _core.Fountain_check_ca(self, column)
 
@@ -3866,6 +3869,9 @@ class Model2(sherpa):
 
     def calc_utility_logsums(self, utilitydataco: 'etk::ndarray *', utilitydataca: 'etk::ndarray *'=None, availability: 'etk::ndarray *'=None) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_calc_utility_logsums(self, utilitydataco, utilitydataca, availability)
+
+    def loglike_given_utility(self, u: 'etk::ndarray *') -> "double":
+        return _core.Model2_loglike_given_utility(self, u)
 
     def calculate_parameter_covariance(self) -> "void":
         return _core.Model2_calculate_parameter_covariance(self)

@@ -112,6 +112,68 @@ public:
 
 
 
+
+class workshop_ngev_probability_given_utility
+: public etk::workshop
+{
+
+public:
+	
+	etk::ndarray*  UtilGiven;
+	elm::ca_co_packet AllocPacket;
+	elm::ca_co_packet SampPacket;
+	elm::ca_co_packet QuantPacket;
+	
+	const paramArray* Params_LogSum;
+	
+	elm::darray_ptr Data_Avail;
+
+	etk::memarray_raw Workspace;
+	unsigned nNodes;
+
+	etk::ndarray* Probability;
+	etk::ndarray* Cond_Prob;
+	const VAS_System* Xylem;
+	
+	etk::ndarray* AdjProbability;
+	
+	etk::logging_service* msg_;
+	
+	bool option_mute_nan_warnings;
+	boosted::mutex* _lock;
+
+	workshop_ngev_probability_given_utility
+	(  const unsigned&   nNodes
+	 , etk::ndarray*     UtilGiven
+	 , elm::ca_co_packet AllocPacket
+	 , elm::ca_co_packet SampPacket
+	 , elm::ca_co_packet QuantPacket
+	 , const paramArray& Params_LogSum
+	 , elm::darray_ptr     Data_Avail
+	 ,  etk::ndarray* Probability
+	 ,  etk::ndarray* Cond_Prob
+	 ,	etk::ndarray* AdjProbability
+	 , const VAS_System* Xylem
+	 , const bool& option_mute_nan_warnings
+	 , etk::logging_service* msgr=nullptr
+	 );
+	
+	virtual ~workshop_ngev_probability_given_utility();
+
+	void workshop_ngev_probability_calc
+	( const unsigned&   firstcase
+	 , const unsigned&   numberofcases
+	 );
+	
+	virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);	
+
+	void case_logit_add_sampling(const unsigned& c);
+	
+	
+};
+
+
+
 }
 #endif // __ELM_WORKSHOP_NGEV_PROBABILITY_H__
 

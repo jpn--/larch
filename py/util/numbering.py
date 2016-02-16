@@ -114,6 +114,7 @@ def recode_alts(self, ns, tablename, casecol, newaltcol, *cat_columns, logfreq=2
 		INSERT OR IGNORE INTO {0}
 		SELECT DISTINCT {1}, 'a'||{1} FROM {2};
 		""".format(newaltstable, newaltcol, tablename)
+		db.execute(qry)
 		if self.queries:
 			try:
 				self.queries.alts_query = 'SELECT * FROM {}'.format(newaltstable)
@@ -123,7 +124,7 @@ def recode_alts(self, ns, tablename, casecol, newaltcol, *cat_columns, logfreq=2
 				self.queries.idca_build(altcol=newaltcol)
 			except:
 				pass
-
+	db.uncache_alternatives()
 
 
 

@@ -62,6 +62,8 @@ namespace elm {
 		virtual std::string    alternative_name(long long) const      =0;
 		virtual long long      alternative_code(std::string) const    =0;
 
+		void uncache_alternatives();
+
 		virtual bool check_ca(const std::string& column) const =0;
 		virtual bool check_co(const std::string& column) const =0;
 

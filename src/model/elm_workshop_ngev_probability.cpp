@@ -362,3 +362,236 @@ void elm::workshop_ngev_probability::work(size_t firstcase, size_t numberofcases
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void elm::workshop_ngev_probability_given_utility::case_logit_add_sampling(const unsigned& c)
+{
+	size_t n            = SampPacket.Outcome->size2();
+	double* adjPr       = AdjProbability->ptr(c);
+	const bool* av      = Data_Avail->boolvalues(c,1);
+	
+	double tot = 0.0;
+	const double* origPr = Probability->ptr(c);
+	const double* sampWt = SampPacket.Outcome->ptr(c);
+
+	double* p = adjPr;
+	for (size_t i=0; i<n; i++, origPr++, sampWt++, p++, av++) {
+		if (*av) {
+			*p = (*origPr) * ::exp(*sampWt);
+			tot += *p;
+		} else {
+			*p = 0.0;
+		}
+	}
+	
+	p = adjPr;
+	for (size_t i=0; i<n; i++, p++) {
+		*p /= tot;
+	}
+}
+
+
+
+
+elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_given_utility
+( const unsigned&   nNodes
+, ndarray* UtilGiven
+, elm::ca_co_packet AllocPacket
+, elm::ca_co_packet SampPacket
+, elm::ca_co_packet QuantPacket
+, const paramArray& Params_LogSum
+, elm::darray_ptr     Data_Avail
+,  ndarray* Probability
+,  ndarray* Cond_Prob
+,	etk::ndarray* AdjProbability
+, const VAS_System* Xylem
+, const bool& option_mute_nan_warnings
+, etk::logging_service* msgr
+)
+: nNodes          (nNodes)
+, UtilGiven       (UtilGiven)
+, AllocPacket     (AllocPacket)
+, SampPacket      (SampPacket)
+, QuantPacket     (QuantPacket)
+, Params_LogSum   (&Params_LogSum)
+, Data_Avail      (Data_Avail)
+, Probability     (Probability)
+, Cond_Prob       (Cond_Prob)
+, AdjProbability  (AdjProbability)
+, Xylem           (Xylem)
+, option_mute_nan_warnings (option_mute_nan_warnings)
+, msg_            (msgr)
+{
+	Workspace.resize(nNodes);
+}
+
+elm::workshop_ngev_probability_given_utility::~workshop_ngev_probability_given_utility()
+{
+}
+
+
+void elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_calc
+( const unsigned&   firstcase
+, const unsigned&   numberofcases
+)
+{
+
+	etk::ndarray* Allocation = AllocPacket.Outcome;
+//	elm::darray_ptr Data_Allocation = AllocPacket.Data_CO;
+//	const etk::ndarray* Coef_Allocation = AllocPacket.Coef_CO;
+
+	elm::darray_ptr Data_SamplingCA = SampPacket.Data_CA;
+	elm::darray_ptr Data_SamplingCO = SampPacket.Data_CO;
+	etk::ndarray* SamplingWgt = SampPacket.Outcome;
+	const etk::ndarray* Coef_SamplingCA = SampPacket.Coef_CA;
+	const etk::ndarray* Coef_SamplingCO = SampPacket.Coef_CO;
+
+	unsigned lastcase(firstcase+numberofcases);
+
+
+	unsigned nElementals = Xylem->n_elemental();
+	unsigned warningcount = 0;
+
+	
+	
+
+	AllocPacket.logit_partial(firstcase, numberofcases, 0.0);
+
+	
+	// Change Alpha's to allocations, simple method (Single Path Diverge)
+	if (true /* todo: flag_single_path_diverge*/) {
+		for (size_t c=firstcase; c<lastcase; c++) {
+			for (size_t col=0; col<Allocation->size2(); col++) {
+				double* x = Allocation->ptr(c,col);
+				*x = exp(*x);
+			}
+		}
+		
+//		if (firstcase==0) {
+//			BUGGER_(msg_, "Allocation C[0]: " << Allocation->printrow(0) );
+//		}
+		Allocation->sector_prob_scale_2(Xylem->alloc_breaks(), firstcase, lastcase);
+//		if (firstcase==0) {
+//			BUGGER_(msg_, "Allocation D[0]: " << Allocation->printrow(0) );
+//		}
+	} else {
+		TODO;
+		OOPS("error: not single path divergent, other algorithms not yet implemented");
+	}
+	
+
+	bool use_sampling = SampPacket.relevant();
+	if (use_sampling) {
+		SampPacket.logit_partial(firstcase, numberofcases);
+	}
+	
+	for (unsigned c=firstcase;c<lastcase;c++) {
+
+		
+		__casewise_ngev_utility(UtilGiven->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace);
+		__casewise_ngev_probability(UtilGiven->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem);
+		if (use_sampling) {
+			case_logit_add_sampling(c);
+		}
+		
+//		if (c==0) BUGGER_(msg_, "DEBUG REPORT: caserow "<<c << "\n"
+//								<< "util: " << Utility->printrow(c)
+//								<< "c|pr: " << Cond_Prob->printrow(c)
+//								<< "prob: " << Probability->printrow(c)
+//								<< "bias: " << SamplingWgt->printrow(c)
+//								<< "adjp: " << AdjProbability->printrow(c)
+//								<< "coef-bias-ca: " << SampPacket.Coef_CA->printall()
+//								<< "coef-bias-co: " << SampPacket.Coef_CO->printall()
+//		   );
+
+		// NANCHECK
+		if (!option_mute_nan_warnings) {
+			bool found_nan = false;
+			for (unsigned a=0; a<AdjProbability->size2();a++) {
+				if (isNan((*AdjProbability)(c,a))) {
+					found_nan = true;
+					break;
+				}
+			}
+			if (found_nan) {
+				if (!warningcount) {
+//					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c
+//					  << "\n" << "W..qant: " << QuantPacket.Outcome->printrow(c)
+//					  << "\n" << "W..util: " << Utility->printrow(c)
+//					  << "\n" << "W..allo: " << Allocation->printrow(c)
+//					  << "\n" << "W..c|pr: " << Cond_Prob->printrow(c)
+//					  << "\n" << "W..prob: " << Probability->printrow(c)
+//					  << "\n" << "W..adjp: " << AdjProbability->printrow(c)
+//					   );
+					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c);
+					WARN_(msg_, "W..qnty["<<c<<"]: " << QuantPacket.Outcome->printrow(c));
+					WARN_(msg_, "W..util["<<c<<"]: " << UtilGiven->printrow(c));
+					WARN_(msg_, "W..allo["<<c<<"]: " << Allocation->printrow(c));
+					WARN_(msg_, "W..c|pr["<<c<<"]: " << Cond_Prob->printrow(c));
+					WARN_(msg_, "W..prob["<<c<<"]: " << Probability->printrow(c));
+					WARN_(msg_, "W..adjp["<<c<<"]: " << AdjProbability->printrow(c));
+				}
+				warningcount++;
+			}
+		} // end if NANCHECK
+		
+	}
+
+}
+
+void elm::workshop_ngev_probability_given_utility::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
+{
+	workshop_ngev_probability_calc(firstcase,numberofcases);
+
+//	if (result_mutex) {
+//		std::lock_guard<std::mutex> lock_while_in_scope(*result_mutex);
+//
+//		BUGGER_(msg_, "HEX UtilityCoefCA ["<< firstcase <<"] = "<<UtilPacket.Coef_CA->printall_hex());
+//		BUGGER_(msg_, "HEX UtilityCoefCO ["<< firstcase <<"] = "<<UtilPacket.Coef_CO->printall_hex());
+//
+//		BUGGER_(msg_, "HEX Utility       ["<< firstcase <<"] = "<<UtilPacket.Outcome->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Cond_Prob     ["<< firstcase <<"] = "<<Cond_Prob->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Probability   ["<< firstcase <<"] = "<<Probability->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX AdjProbability["<< firstcase <<"] = "<<AdjProbability->printrow_hex(firstcase));
+//	} else {
+//
+//		BUGGER_(msg_, "HEX UtilityCoefCA ["<< firstcase <<"] = "<<UtilPacket.Coef_CA->printall_hex());
+//		BUGGER_(msg_, "HEX UtilityCoefCO ["<< firstcase <<"] = "<<UtilPacket.Coef_CO->printall_hex());
+//
+//		BUGGER_(msg_, "HEX Utility       ["<< firstcase <<"] = "<<UtilPacket.Outcome->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Cond_Prob     ["<< firstcase <<"] = "<<Cond_Prob->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX Probability   ["<< firstcase <<"] = "<<Probability->printrow_hex(firstcase));
+//		BUGGER_(msg_, "HEX AdjProbability["<< firstcase <<"] = "<<AdjProbability->printrow_hex(firstcase));
+//	}
+}
+
+

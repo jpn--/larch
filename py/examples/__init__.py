@@ -50,6 +50,7 @@ examplefiles_pre = {
 
 examplefiles_doc = {
 	  1:	"001_mtc.rst",
+	  81:	"081_itin.rst",
 }
 
 exampledir = os.path.dirname(__file__)
@@ -88,14 +89,18 @@ def show(n):
 	
 def tell(n):
 	'''Print the raw script of example file number <n>.'''
-	try:
-		module_name = examplefiles[n]
-	except KeyError:
-		from ..core import LarchError
-		raise LarchError("Example no. %i not found"%n)
-	filename = module_name+".py"
-	with open(os.path.join(exampledir,filename)) as f:
-		print(f.read())
+	if n in examplefiles_doc:
+		f = os.path.join(exampledocdir, examplefiles_doc[n])
+		print(_testcode_parsed(f))
+	else:
+		try:
+			module_name = examplefiles[n]
+		except KeyError:
+			from ..core import LarchError
+			raise LarchError("Example no. %i not found"%n)
+		filename = module_name+".py"
+		with open(os.path.join(exampledir,filename)) as f:
+			print(f.read())
 
 def LL(n):
 	'''Return the estimated log likelihood for example file number <n>.'''
@@ -126,7 +131,10 @@ def _testcode_iter(sourcefile):
 			if line[0] not in (' ','\t'):
 				active = False
 			if active:
-				yield line.strip()
+				if line[0]=='\t':
+					yield line[1:]
+				else:
+					yield line[5:]
 				continue
 
 def _testcode_parsed(sourcefile):
@@ -157,3 +165,7 @@ def _exec_example_n(n, d=None):
 		raise KeyError(n)
 	f = os.path.join(exampledocdir, examplefiles_doc[n])
 	return _exec_example(f,d)
+
+
+
+

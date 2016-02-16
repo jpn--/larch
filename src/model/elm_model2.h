@@ -395,6 +395,9 @@ namespace elm {
 		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 
 
+	public:
+		double loglike_given_utility( etk::ndarray* u);
+
 
 #ifdef SWIG
 		// in the swig-exposed verion of this function, always update_freedoms
@@ -419,6 +422,7 @@ namespace elm {
 		void nl_gradient   ();
 
 		void ngev_probability();
+		void ngev_probability_given_utility( etk::ndarray* u);
 		void ngev_gradient   ();
 
 		void calculate_hessian_and_save();
@@ -432,6 +436,7 @@ namespace elm {
 //		std::vector<sidecar*> sidecars;
 
 		boosted::shared_ptr<etk::dispatcher> probability_dispatcher;
+		boosted::shared_ptr<etk::dispatcher> probability_given_utility_dispatcher;
 		boosted::shared_ptr<etk::dispatcher> gradient_dispatcher;
 		boosted::shared_ptr<etk::dispatcher> loglike_dispatcher;
 		

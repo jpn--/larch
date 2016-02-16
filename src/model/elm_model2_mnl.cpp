@@ -550,6 +550,8 @@ void elm::Model2::mnl_probability()
 
 
 
+
+
 //void elm::Model2::simulate_probability
 //( const std::string& tablename
 //, const std::string& columnnameprefix
@@ -1249,6 +1251,42 @@ PyObject* elm::Model2::_get_samplingbiasco() const
 	}
 	return U;
 }
+
+
+
+double elm::Model2::loglike_given_utility( etk::ndarray* u)
+{
+	if (nCases==0) {
+		return 0;
+		OOPS("There are no cases in the current data sample.");
+	}
+	
+	FatGCurrent.initialize(NAN); // tell gradient it needs to recalculate
+
+	BUGGER(msg)<< "Calculating LL given utility" ;
+	double LL_ = 0;
+	
+	pull_coefficients_from_freedoms();
+	freshen(); // TODO : is this really needed here?
+	
+	ngev_probability_given_utility(u);
+	
+	LL_= accumulate_log_likelihood();
+	
+	BUGGER(msg)<< "Model Objective Eval = "<< LL_ ;
+	
+	if (_string_sender_ptr) {
+		ostringstream update;
+		update << "Model Objective Eval = "<< LL_;
+		_string_sender_ptr->write(update.str());
+	}
+	
+	_FCurrent_latest_objective = FCurrent;
+	_FCurrent_latest_objective_value = LL_;
+	return LL_;
+}
+
+
 
 
 

@@ -82,7 +82,11 @@ const elm::VAS_dna  elm::Fountain::ask_dna(const long long& c) const
 }
 
 
-
+void elm::Fountain::uncache_alternatives()
+{
+	_alternative_names.reset();
+	_alternative_codes.reset();
+}
 
 boosted::shared_ptr< std::vector<std::string> > elm::Fountain::cache_alternative_names()
 {
