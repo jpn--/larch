@@ -28,7 +28,10 @@
 #
 ################################################################################
 
-import sys, os.path
+import sys, os.path, glob
+
+exampledir = os.path.dirname(__file__)
+exampledocdir = os.path.join(os.path.dirname(__file__),'doc')
 
 examplefiles = {
 	  1:	"mtc01",
@@ -48,13 +51,22 @@ examplefiles_pre = {
 	  1:	"mtc01e",
 }
 
-examplefiles_doc = {
-	  1:	"001_mtc.rst",
-	  81:	"081_itin.rst",
-}
 
-exampledir = os.path.dirname(__file__)
-exampledocdir = os.path.join(os.path.dirname(__file__),'doc')
+examplefiles_glob = glob.glob(os.path.join(exampledocdir,"[0-9][0-9][0-9]_*.rst"))
+
+
+examplefiles_doc = { int(os.path.basename(g)[:3]): os.path.basename(g) for g in examplefiles_glob }
+#
+#examplefiles_doc = {
+#	  1:	"001_mtc.rst",
+#	  81:	"081_itin.rst",
+#	  82:	"082_itin.rst",
+#}
+#
+
+
+
+
 
 from .. import Model, DB, _directory_
 class larch:
@@ -102,6 +114,15 @@ def tell(n):
 		with open(os.path.join(exampledir,filename)) as f:
 			print(f.read())
 
+def pseudofile(n):
+	import io
+	pf = io.StringIO()
+	if n in examplefiles_doc:
+		f = os.path.join(exampledocdir, examplefiles_doc[n])
+		print(_testcode_parsed(f), file=pf)
+	pf.seek(0)
+	return pf
+
 def LL(n):
 	'''Return the estimated log likelihood for example file number <n>.'''
 	load_example(n)
@@ -147,7 +168,7 @@ def _exec_example(sourcefile, d = None):
 	_global['larch'] = larch
 	if d is None:
 		rawcode = _testcode_parsed(sourcefile)
-		code = compile(rawcode, sourcefile, 'exec')
+		code = compile(rawcode, "<::testcode:{!s}>".format(sourcefile), 'exec')
 		exec(code, _global, _local)
 	else:
 		_local['d'] = d
