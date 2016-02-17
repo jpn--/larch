@@ -187,19 +187,13 @@ void elm::workshop_nl_probability::workshop_nl_probability_calc
 	etk::ndarray* Utility = UtilPacket.Outcome;
 	const etk::ndarray* Coef_UtilityCA = UtilPacket.Coef_CA;
 	const etk::ndarray* Coef_UtilityCO = UtilPacket.Coef_CO;
-//	Data_UtilityCA->load_values(firstcase,numberofcases);
-//	Data_UtilityCO->load_values(firstcase,numberofcases);
 
 	elm::darray_ptr Data_SamplingCA = SampPacket.Data_CA;
 	elm::darray_ptr Data_SamplingCO = SampPacket.Data_CO;
 	etk::ndarray* SamplingWgt = SampPacket.Outcome;
 	const etk::ndarray* Coef_SamplingCA = SampPacket.Coef_CA;
 	const etk::ndarray* Coef_SamplingCO = SampPacket.Coef_CO;
-//	Data_SamplingCA->load_values(firstcase,numberofcases);
-//	Data_SamplingCO->load_values(firstcase,numberofcases);
 	
-//	Data_Avail    ->load_values(firstcase,numberofcases);
-
 	unsigned lastcase(firstcase+numberofcases);
 
 

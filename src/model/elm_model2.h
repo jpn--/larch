@@ -99,7 +99,7 @@ namespace elm {
 			self._ref_to_db = None
 		%}
 		%feature("pythonprepend") setUp %{
-			if self._ref_to_db is not None and self.is_provisioned()==0:
+			if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
 				self.provision()
 				self.setUpMessage = "autoprovision yes (setUp)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
@@ -258,6 +258,8 @@ namespace elm {
 		const elm::darray* Data(const std::string& label);
 		elm::darray* DataEdit(const std::string& label);
 
+		elm::darray_export_map Data_UtilityCE;
+
 #ifndef SWIG
 
 	public:
@@ -273,6 +275,7 @@ namespace elm {
 		elm::darray_ptr  Data_Choice;
 		elm::darray_ptr  Data_Weight;
 		elm::darray_ptr  Data_Avail;
+
 
 	private:
 		void scan_for_multiple_choices();
@@ -396,7 +399,8 @@ namespace elm {
 
 
 	public:
-		double loglike_given_utility( etk::ndarray* u);
+		double loglike_given_utility( );
+		std::shared_ptr<etk::ndarray> negative_d_loglike_given_utility ();
 
 
 #ifdef SWIG
@@ -422,7 +426,7 @@ namespace elm {
 		void nl_gradient   ();
 
 		void ngev_probability();
-		void ngev_probability_given_utility( etk::ndarray* u);
+		void ngev_probability_given_utility();
 		void ngev_gradient   ();
 
 		void calculate_hessian_and_save();
@@ -659,6 +663,7 @@ namespace elm {
 		etk::ndarray* utility(etk::ndarray* params=nullptr);
 
 		ca_co_packet utility_packet();
+		ca_co_packet utility_packet_without_data();
 		ca_co_packet quantity_packet();
 		ca_co_packet sampling_packet();
 		ca_co_packet allocation_packet();

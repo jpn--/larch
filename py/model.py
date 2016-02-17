@@ -1,5 +1,5 @@
 
-from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain
+from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError
 from .array import SymmetricArray
 from .utilities import category, pmath, rename
 import numpy
@@ -301,6 +301,10 @@ class Model(Model2, ModelReporter):
 			f.write(self.save_buffer())
 			blank_attr = set(dir(Model()))
 			blank_attr.remove('descriptions')
+			blank_attr.add('_ce')
+			blank_attr.add('_ce_caseindex')
+			blank_attr.add('_ce_altindex')
+			blank_attr.add('_u_ce')
 			aliens_found = False
 			for a in dir(self):
 				if a not in blank_attr:
@@ -713,29 +717,39 @@ class Model(Model2, ModelReporter):
 		m.estimate()
 		self._set_estimation_statistics(log_like_nil=m.LL())
 
-	def negative_loglike(self, x=None):
-		if x is None:
-			return -(self.loglike())
-		else:
-			return -(self.loglike(x))
+	def negative_loglike(self, *args):
+		z = -(self.loglike(*args))
+		return z
 
-	def d_loglike(self, x=None):
-		if x is None:
-			return -(self.negative_d_loglike())
+	def negative_d_loglike(self, *args):
+		if self.Data_UtilityCE.active():
+			if len(args)>0:
+				self.parameter_values(args[0])
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			z= -(self.d_loglike_given_utility())
 		else:
-			return -(self.negative_d_loglike(x))
+			z= super().negative_d_loglike(*args)
+		return z
 
-	def d_loglike_nocache(self, x=None):
-		if x is None:
-			return -(self.negative_d_loglike_nocache())
-		else:
-			return -(self.negative_d_loglike_nocache(x))
+	def d_loglike(self, *args):
+		if self.Data_UtilityCE.active():
+			if len(args)>0:
+				self.parameter_values(args[0])
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			return self.d_loglike_given_utility()
+		return -(self.negative_d_loglike(*args))
 
-	def d_loglike_cached(self, x=None):
-		if x is None:
-			return -(self.negative_d_loglike_cached())
-		else:
-			return -(self.negative_d_loglike_cached(x))
+	def d_loglike_nocache(self, *args):
+		if self.Data_UtilityCE.active():
+			return self.d_loglike(*args)
+		return -(self.negative_d_loglike_nocache(*args))
+
+	def d_loglike_cached(self, *args):
+		if self.Data_UtilityCE.active():
+			return self.d_loglike(*args)
+		return -(self.negative_d_loglike_cached(*args))
 
 	def negative_loglike_(self, x):
 		'''Same as negative_loglike, but converts NAN to INF'''
@@ -743,6 +757,62 @@ class Model(Model2, ModelReporter):
 		if numpy.isnan(y):
 			y = numpy.inf
 		return y
+
+	def d_loglike_given_utility(self):
+		return -(self.negative_d_loglike_given_utility())
+
+	def setup_utility_ce(self):
+		if len(self.utility.co)>0:
+			raise LarchError('simultaneous use of idce format (packed idca) and idco format utility data is not yet supported')
+		if hasattr(self.db, 'queries'):
+			from .util.arraytools import label_to_index
+			# load data and ids
+			caseids = self.db.array_caseids().squeeze()
+			ca_vars = self.needs()['UtilityCA'].get_variables()
+			ca_vars_str = ", ".join(ca_vars)
+			self._ce = self.db.array("SELECT {} FROM larch_idca".format(ca_vars_str), cte=True)
+			ce_altids = self.db.array("SELECT altid FROM larch_idca", cte=True).astype(int).squeeze()
+			ce_caseids = self.db.array("SELECT caseid FROM larch_idca", cte=True).astype(int).squeeze()
+			# convert ids to indexes
+			self._ce_caseindex = label_to_index(caseids, ce_caseids)
+			self._ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
+			# provision other data, link ce data
+			self.provision_without_utility()
+			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce)
+			# initialize utility
+			self.Utility()[:] = -numpy.inf
+			# dummy utility array
+			self._u_ce = numpy.empty(self._ce.shape[0], dtype=numpy.float64)
+		else:
+			raise LarchError('use of idce format currently requires a linked DB data fountain')
+
+	def loglike(self, *args):
+		if self.Data_UtilityCE.active():
+			if len(args):
+				self.parameter_values(args[0])
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			return self.loglike_given_utility()
+		return super().loglike(*args)
+	
+	def loglike_nocache(self, *args):
+		if self.Data_UtilityCE.active():
+			if len(args):
+				self.parameter_values(args[0])
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			return self.loglike_given_utility()
+		return super().loglike_nocache(*args)
+
+	def loglike_cached(self, *args):
+		if self.Data_UtilityCE.active():
+			if len(args):
+				self.parameter_values(args[0])
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			return self.loglike_given_utility()
+		return super().loglike_cached(*args)
+
 
 	def gradient_check(self, disp=True):
 		try:
@@ -958,6 +1028,23 @@ class Model(Model2, ModelReporter):
 		if isinstance(x,rename):
 			x = x.find_in(self)
 		return super().__setitem__(x, val)
+		
+		
+	def provision_without_utility(self):
+		if not hasattr(self,'db'):
+			raise LarchError('model has no db specified for provisioning')
+		self.tearDown()
+		needs = self.needs()
+		if 'UtilityCA' in needs:
+			del needs['UtilityCA']
+		if 'UtilityCO' in needs:
+			del needs['UtilityCO']
+		provided = self.db.provision(needs)
+		try:
+			self.provision(provided)
+		except ProvisioningError:
+			pass
+		self.setUp(False)
 
 
 class _AllInTheFamily():

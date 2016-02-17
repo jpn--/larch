@@ -119,7 +119,7 @@ class workshop_ngev_probability_given_utility
 
 public:
 	
-	etk::ndarray*  UtilGiven;
+	elm::ca_co_packet UtilGiven;
 	elm::ca_co_packet AllocPacket;
 	elm::ca_co_packet SampPacket;
 	elm::ca_co_packet QuantPacket;
@@ -144,7 +144,7 @@ public:
 
 	workshop_ngev_probability_given_utility
 	(  const unsigned&   nNodes
-	 , etk::ndarray*     UtilGiven
+	 , elm::ca_co_packet UtilGiven
 	 , elm::ca_co_packet AllocPacket
 	 , elm::ca_co_packet SampPacket
 	 , elm::ca_co_packet QuantPacket

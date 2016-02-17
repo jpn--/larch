@@ -212,9 +212,30 @@ namespace elm {
 
 	#endif // ndef SWIG
 
+	typedef std::pair<long long, long long> two_int64;
 
+	class darray_export_map
+	{
+	protected:
+		std::map< two_int64, double* > _pointer_map;
+		std::shared_ptr<etk::ndarray> _data_array;
+		std::shared_ptr<etk::ndarray> _caseindexes;
+		std::shared_ptr<etk::ndarray> _altindexes;
+		
+	public:
+		darray_export_map(etk::ndarray* caseindexes=nullptr, etk::ndarray* altindexes=nullptr, etk::ndarray* data_array=nullptr);
+		~darray_export_map();
 
-
+		void maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array);
+		void clear();
+		
+		const double* get_ptr_at(const long long& caseindex, const long long& altindex) const;
+		void export_into (double* ExportTo, const unsigned& c, const unsigned& a, const unsigned& numberOfVars) const;
+		double get_value_at(const long long& caseindex, const long long& altindex, const long long& varindex) const;
+		inline bool active() const {return bool(_data_array);}
+		inline size_t nvars() const {return _data_array->size2();}
+		inline size_t nrows() const {return _data_array->size1();}
+	};
 
 
 

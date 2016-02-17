@@ -1254,11 +1254,11 @@ PyObject* elm::Model2::_get_samplingbiasco() const
 
 
 
-double elm::Model2::loglike_given_utility( etk::ndarray* u)
+double elm::Model2::loglike_given_utility( )
 {
 	if (nCases==0) {
 		return 0;
-		OOPS("There are no cases in the current data sample.");
+		OOPS("There are no cases in the given utility array.");
 	}
 	
 	FatGCurrent.initialize(NAN); // tell gradient it needs to recalculate
@@ -1269,7 +1269,7 @@ double elm::Model2::loglike_given_utility( etk::ndarray* u)
 	pull_coefficients_from_freedoms();
 	freshen(); // TODO : is this really needed here?
 	
-	ngev_probability_given_utility(u);
+	ngev_probability_given_utility();
 	
 	LL_= accumulate_log_likelihood();
 	
@@ -1283,9 +1283,32 @@ double elm::Model2::loglike_given_utility( etk::ndarray* u)
 	
 	_FCurrent_latest_objective = FCurrent;
 	_FCurrent_latest_objective_value = LL_;
+
+	if (isNan(LL_)) {
+		LL_ = -INF;
+	}
+
 	return LL_;
 }
 
+std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_given_utility ()
+{
+	if (array_compare(_FCurrent_latest_objective.ptr(),_FCurrent_latest_objective.size())
+		!=array_compare(FCurrent.ptr(), FCurrent.size()))
+	{
+		loglike_given_utility();
+	}
+
+	if (option.force_finite_diff_grad) {
+		negative_finite_diff_gradient_(GCurrent);
+	} else {
+		ngev_gradient();
+	}
+	FatGCurrent = ReadFCurrent();
+
+	return make_shared<etk::ndarray>(GCurrent, false);
+
+}
 
 
 

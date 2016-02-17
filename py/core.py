@@ -129,6 +129,7 @@ from ._core import LarchError
 from ._core import SQLiteError
 from ._core import FacetError
 from ._core import LarchCacheError
+from ._core import ProvisioningError
 from ._core import MatrixInverseError
 
 class SwigPyIterator(object):
@@ -3447,6 +3448,45 @@ class darray_req(object):
 darray_req_swigregister = _core.darray_req_swigregister
 darray_req_swigregister(darray_req)
 
+class darray_export_map(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+
+    def __init__(self, caseindexes: 'etk::ndarray *'=None, altindexes: 'etk::ndarray *'=None, data_array: 'etk::ndarray *'=None):
+        this = _core.new_darray_export_map(caseindexes, altindexes, data_array)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _core.delete_darray_export_map
+    __del__ = lambda self: None
+
+    def maplink(self, caseindexes: 'etk::ndarray *', altindexes: 'etk::ndarray *', data_array: 'etk::ndarray *') -> "void":
+        return _core.darray_export_map_maplink(self, caseindexes, altindexes, data_array)
+
+    def clear(self) -> "void":
+        return _core.darray_export_map_clear(self)
+
+    def get_ptr_at(self, caseindex: 'long long const &', altindex: 'long long const &') -> "double const *":
+        return _core.darray_export_map_get_ptr_at(self, caseindex, altindex)
+
+    def export_into(self, ExportTo: 'double *', c: 'unsigned int const &', a: 'unsigned int const &', numberOfVars: 'unsigned int const &') -> "void":
+        return _core.darray_export_map_export_into(self, ExportTo, c, a, numberOfVars)
+
+    def get_value_at(self, caseindex: 'long long const &', altindex: 'long long const &', varindex: 'long long const &') -> "double":
+        return _core.darray_export_map_get_value_at(self, caseindex, altindex, varindex)
+
+    def active(self) -> "bool":
+        return _core.darray_export_map_active(self)
+
+    def nvars(self) -> "size_t":
+        return _core.darray_export_map_nvars(self)
+
+    def nrows(self) -> "size_t":
+        return _core.darray_export_map_nrows(self)
+darray_export_map_swigregister = _core.darray_export_map_swigregister
+darray_export_map_swigregister(darray_export_map)
+
 
 def check_darray(x: 'elm::darray const *') -> "std::string":
     return _core.check_darray(x)
@@ -3824,6 +3864,7 @@ class Model2(sherpa):
 
     def DataEdit(self, label: 'std::string const &') -> "elm::darray *":
         return _core.Model2_DataEdit(self, label)
+    Data_UtilityCE = _swig_property(_core.Model2_Data_UtilityCE_get, _core.Model2_Data_UtilityCE_set)
 
     def get_weight_scale_factor(self) -> "double":
         return _core.Model2_get_weight_scale_factor(self)
@@ -3870,8 +3911,11 @@ class Model2(sherpa):
     def calc_utility_logsums(self, utilitydataco: 'etk::ndarray *', utilitydataca: 'etk::ndarray *'=None, availability: 'etk::ndarray *'=None) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_calc_utility_logsums(self, utilitydataco, utilitydataca, availability)
 
-    def loglike_given_utility(self, u: 'etk::ndarray *') -> "double":
-        return _core.Model2_loglike_given_utility(self, u)
+    def loglike_given_utility(self) -> "double":
+        return _core.Model2_loglike_given_utility(self)
+
+    def negative_d_loglike_given_utility(self) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2_negative_d_loglike_given_utility(self)
 
     def calculate_parameter_covariance(self) -> "void":
         return _core.Model2_calculate_parameter_covariance(self)
@@ -4028,7 +4072,7 @@ class Model2(sherpa):
 
     def setUp(self, and_load_data: 'bool'=True) -> "void":
 
-        if self._ref_to_db is not None and self.is_provisioned()==0:
+        if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
         	self.provision()
         	self.setUpMessage = "autoprovision yes (setUp)"
         	if self.logger(): self.logger().info("autoprovisioned data from database")

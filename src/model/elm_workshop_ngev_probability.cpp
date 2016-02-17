@@ -424,7 +424,7 @@ void elm::workshop_ngev_probability_given_utility::case_logit_add_sampling(const
 
 elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_given_utility
 ( const unsigned&   nNodes
-, ndarray* UtilGiven
+, elm::ca_co_packet UtilGiven
 , elm::ca_co_packet AllocPacket
 , elm::ca_co_packet SampPacket
 , elm::ca_co_packet QuantPacket
@@ -464,6 +464,7 @@ void elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_cal
 , const unsigned&   numberofcases
 )
 {
+	etk::ndarray* Utility = UtilGiven.Outcome;
 
 	etk::ndarray* Allocation = AllocPacket.Outcome;
 //	elm::darray_ptr Data_Allocation = AllocPacket.Data_CO;
@@ -517,8 +518,8 @@ void elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_cal
 	for (unsigned c=firstcase;c<lastcase;c++) {
 
 		
-		__casewise_ngev_utility(UtilGiven->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace);
-		__casewise_ngev_probability(UtilGiven->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem);
+		__casewise_ngev_utility(Utility->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace);
+		__casewise_ngev_probability(Utility->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem);
 		if (use_sampling) {
 			case_logit_add_sampling(c);
 		}
@@ -554,7 +555,7 @@ void elm::workshop_ngev_probability_given_utility::workshop_ngev_probability_cal
 //					   );
 					WARN_(msg_, "WARNING: Probability is NAN for caserow "<<c);
 					WARN_(msg_, "W..qnty["<<c<<"]: " << QuantPacket.Outcome->printrow(c));
-					WARN_(msg_, "W..util["<<c<<"]: " << UtilGiven->printrow(c));
+					WARN_(msg_, "W..util["<<c<<"]: " << UtilGiven.Outcome->printrow(c));
 					WARN_(msg_, "W..allo["<<c<<"]: " << Allocation->printrow(c));
 					WARN_(msg_, "W..c|pr["<<c<<"]: " << Cond_Prob->printrow(c));
 					WARN_(msg_, "W..prob["<<c<<"]: " << Probability->printrow(c));

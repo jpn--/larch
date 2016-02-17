@@ -35,6 +35,7 @@
 #define OOPSCODE_PYTHON    -31202
 #define OOPSCODE_CACHE     -31203
 #define OOPSCODE_SQLITE    -31204
+#define OOPSCODE_PROVISION -31205
 
 
 
@@ -65,6 +66,13 @@ class LarchCacheError: public exception_t {
 public:
 	LarchCacheError (const std::string& d="") throw();
 	virtual ~LarchCacheError() throw() { }
+	virtual const char* what() const throw ();
+};
+
+class ProvisioningError: public exception_t {
+public:
+	ProvisioningError (const std::string& d="") throw();
+	virtual ~ProvisioningError() throw() { }
 	virtual const char* what() const throw ();
 };
 
@@ -147,6 +155,8 @@ bool PythonErrorCheck();
 
 
 #define OOPS_ZEROPROB(...)  throw(etk::ZeroProbWhenChosen(etk::cat(__VA_ARGS__)))
+
+#define OOPS_PROVISIONING(...)  throw(etk::ProvisioningError(etk::cat(__VA_ARGS__)))
 
 #define OOPS_SQLITE(...) throw(etk::SQLiteError(etk::cat("SQLite Error:",get_error_message(),"\n",__VA_ARGS__)))
 #define OOPS_FACET(...) throw(etk::FacetError(etk::cat(__VA_ARGS__)))

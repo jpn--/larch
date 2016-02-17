@@ -105,6 +105,7 @@ static PyObject* ptrToLarchError;  /* add this! */
 static PyObject* ptrToSQLError;  /* add this! */
 static PyObject* ptrToFacetError;  /* add this! */
 static PyObject* ptrToLarchCacheError;  /* add this! */
+static PyObject* ptrToProvisioningError;  /* add this! */
 static PyObject* ptrToMatrixInverseError;  /* add this! */
 %}
 
@@ -118,9 +119,14 @@ static PyObject* ptrToMatrixInverseError;  /* add this! */
     ptrToFacetError = PyErr_NewException("larch.FacetError", NULL, NULL);
     Py_INCREF(ptrToFacetError);
     PyModule_AddObject(m, "FacetError", ptrToFacetError);
+	
     ptrToLarchCacheError = PyErr_NewException("larch.LarchCacheError", NULL, NULL);
     Py_INCREF(ptrToLarchCacheError);
     PyModule_AddObject(m, "LarchCacheError", ptrToLarchCacheError);
+	
+    ptrToProvisioningError = PyErr_NewException("larch.ProvisioningError", NULL, NULL);
+    Py_INCREF(ptrToProvisioningError);
+    PyModule_AddObject(m, "ProvisioningError", ptrToProvisioningError);
 
     ptrToMatrixInverseError = PyErr_NewException("larch.MatrixInverseError", NULL, NULL);
     Py_INCREF(ptrToMatrixInverseError);
@@ -132,6 +138,7 @@ static PyObject* ptrToMatrixInverseError;  /* add this! */
 	from ._core import SQLiteError
 	from ._core import FacetError
 	from ._core import LarchCacheError
+	from ._core import ProvisioningError
 	from ._core import MatrixInverseError
 %}
 
@@ -150,6 +157,9 @@ static PyObject* ptrToMatrixInverseError;  /* add this! */
 		return NULL;
 	} catch (const etk::LarchCacheError& e) {
 		PyErr_SetString(ptrToLarchCacheError, const_cast<char*>(e.what()));
+		return NULL;
+	} catch (const etk::ProvisioningError& e) {
+		PyErr_SetString(ptrToProvisioningError, const_cast<char*>(e.what()));
 		return NULL;
 	} catch (const etk::MatrixInverseError& e) {
 		PyErr_SetObject(ptrToMatrixInverseError, e.the_object());

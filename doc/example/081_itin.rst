@@ -16,7 +16,7 @@ As usual, we first create the DB objects:
 
 .. testcode::
 
-	db = larch.DB.Example('ITINERARY')
+	d = larch.DB.Example('ITINERARY')
 
 Our itinerary choice data has a lot of alternatives, but they are not
 ordered or numbered in a regular way; each elemental alternative has
@@ -69,7 +69,7 @@ numbers.
 
 .. testcode::
 
-	db.recode_alts(ns, 'data_ca', 'casenum', 'ogevitinerarycode',
+	d.recode_alts(ns, 'data_ca', 'casenum', 'ogevitinerarycode',
 		'depart_time/60',
 		newaltstable='ogevitinerarycodes',
 	)
@@ -88,7 +88,7 @@ linear-in-parameters utility function.
 
 .. testcode::
 
-	m = larch.Model(db)
+	m = larch.Model(d)
 
 	vars = [
 		"carrier=2",              
@@ -109,7 +109,7 @@ above.
 
 .. testcode::
 
-	alts = db.alternative_codes()
+	alts = d.alternative_codes()
 
 Then we can build the network by looping over various categories to define
 the nodes.
@@ -155,8 +155,8 @@ We'll also tell the optimization engine to enforce logsum parameter ordering con
 .. testcode::
 
 	filter = 'casenum < 20000'
-	db.queries.idca_build(filter=filter)
-	db.queries.idco_build(filter=filter)
+	d.queries.idca_build(filter=filter)
+	d.queries.idco_build(filter=filter)
 	m.option.calc_std_errors = False
 	m.option.enforce_constraints = False
 	m.option.enforce_bounds = False

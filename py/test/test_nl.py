@@ -668,7 +668,7 @@ class TestNL(ELM_TestCase):
 				 1.00000000e+00,   6.56146997e-01,   1.00000000e+00,
 				 1.00000000e+00]
 		for x_c, x_o in zip (x2_correct, r2.x):
-			self.assertNearlyEqual(x_c,x_o)
+			self.assertNearlyEqual(x_c,x_o, sigfigs=2.5)
 
 
 		self.assertNearlyEqual(-7309.600971749633, m.loglike_nocache([0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1]))
@@ -690,6 +690,19 @@ class TestNL(ELM_TestCase):
 
 
 
+	def test_utility_ce_example80(self):
+		m = Model.Example(80)
+		m.setup_utility_ce()
+		m.parameter_values([-0.13923, 0.00272, 0.02866, 0.029358, -0.00142, -0.0010364, -0.64088,
+							-0.2469074, 0.455194, 0.45519, 0.993614, 0.99361, 1.244206])
+		self.assertNearlyEqual(-6090.183759158203, m.loglike(), sigfigs=8)
+		d_ll_correct = [ -1.24588068e+01,   6.42281963e+00,  -7.69257754e+00,   6.62163599e-01,
+		                 -1.18375540e+03,   6.86147005e+02,   1.45742634e+01,   2.20817939e-01,
+						 -1.42346504e+00,   8.27116755e-01,   2.08385451e+00,   1.10369816e+01,
+						 2.44998020e-01]
+		for x_c, x_o in zip (d_ll_correct, m.d_loglike()):
+			self.assertNearlyEqual(x_c,x_o)
+		self.assertTrue(m.Data("UtilityCA") is None)
 
 
 	

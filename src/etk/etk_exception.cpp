@@ -76,6 +76,18 @@ const char* etk::LarchCacheError::what() const throw () {
 }
 
 
+etk::ProvisioningError::ProvisioningError (const std::string& d) throw()
+: etk::exception_t (OOPSCODE_PROVISION, d)
+{ }
+
+const char* etk::ProvisioningError::what() const throw () {
+	if (_description.empty()) {
+		return "cached value not available";
+	} else {
+		return _description.c_str();
+	}
+}
+
 
 
 

@@ -1236,7 +1236,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 					l.critical(str(arguments))
 			raise
 
-	def array(self, command, arguments=(), *, n_rows=None, n_cols=None, fail_silently=False):
+	def array(self, command, arguments=(), *, n_rows=None, n_cols=None, fail_silently=False, cte=False):
 		'''A convenience function for extracting an array from an SQL query.
 			
 			:param command: A SQLite query.
@@ -1246,14 +1246,14 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			'''
 		import numpy
 		try:
-			cur = self.cursor().execute(command, arguments)
+			cur = self.execute(command, arguments, cte=cte)
 			if n_cols is None:
 				try:
 					n_cols = len(cur.description)
 				except apsw.ExecutionCompleteError:
 					return numpy.zeros([n_rows, 0])
 			if n_rows is None:
-				n_rows = self.value("SELECT count(*) FROM ({})".format(command),arguments)
+				n_rows = self.value("SELECT count(*) FROM ({})".format(command),arguments, cte=cte)
 			ret = numpy.zeros([n_rows, n_cols])
 			n = 0
 			for row in cur:
@@ -1844,6 +1844,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			return m.provision(provide)
 		else:
 			return provide
+
 
 
 	def all_index_names(self):

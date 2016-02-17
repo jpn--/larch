@@ -108,9 +108,9 @@ void elm::Model2::_setUp_NL()
 
 void elm::Model2::_setUp_NGEV()
 {
-	if (!(is_provisioned())) {
-		OOPS("data not provisioned");
-	}
+//	if (!(is_provisioned())) {
+//		OOPS("data not provisioned");
+//	}
 	INFO(msg)<< "Setting up NGEV model..." ;
 	
 	// COUNTING
@@ -132,12 +132,6 @@ void elm::Model2::_setUp_NGEV()
 	unsigned slot;
 	for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
 		slot = Xylem.slot_from_code(m->first);
-	//	multiname itemname (m->second.data_name);
-	//	if (is_cellcode_empty(itemname.node_code)) {
-	//		slot = Xylem.slot_from_name(itemname.alternative);
-	//	} else {
-	//		slot = Xylem.slot_from_code(itemname.node_code);
-	//	}
 		if (slot < Xylem.n_elemental()) {
 			OOPS("pointing to a negative slot");
 		}
@@ -146,24 +140,26 @@ void elm::Model2::_setUp_NGEV()
 	}
 	if (!Params_LogSum[nNests]) Params_LogSum[nNests] = boosted::make_shared<elm::parametex_constant>(1.0);
 
-	
+	if (nCases) {
 		
-	// Allocate Memory	
-	Cond_Prob.resize(nCases,Xylem.n_edges());
-	Probability.resize(nCases,nNodes);
-	Utility.resize(nCases,nNodes);
-	
-	Allocation.resize(nCases,Xylem.n_compet_alloc());
-
-	if (Input_QuantityCA.size()>0) Quantity.resize(nCases,nElementals);
-
-	
-	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
-		AdjProbability.resize(nCases,nElementals);
-		SamplingWeight.resize(nCases,nElementals);
-	} else {
-		AdjProbability.same_memory_as(Probability);
-		SamplingWeight.resize(0);
+		// Allocate Memory
+		Cond_Prob.resize(nCases,Xylem.n_edges());
+		Probability.resize(nCases,nNodes);
+		Utility.resize(nCases,nNodes);
+		
+		Allocation.resize(nCases,Xylem.n_compet_alloc());
+		
+		if (Input_QuantityCA.size()>0) Quantity.resize(nCases,nElementals);
+		
+		
+		if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
+			AdjProbability.resize(nCases,nElementals);
+			SamplingWeight.resize(nCases,nElementals);
+		} else {
+			AdjProbability.same_memory_as(Probability);
+			SamplingWeight.resize(0);
+		}
+		
 	}
 	
 	Workspace.resize(nNodes);
@@ -223,7 +219,9 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 {
 	return boosted::make_shared<workshop_ngev_gradient>(  dF()
 									 , nNodes
-									 , utility_packet(), allocation_packet()
+									 , utility_packet()
+									 , &Data_UtilityCE
+									 , allocation_packet()
 									 , sampling_packet()
 									 , quantity_packet()
 									 , Params_LogSum
@@ -260,7 +258,9 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 	workshop_ngev_gradient w
 			(  dF()
 			 , nNodes
-			 , utility_packet(), allocation_packet()
+			 , utility_packet()
+			 , &Data_UtilityCE
+			 , allocation_packet()
 			 , sampling_packet()
 			 , quantity_packet()
 			 , Params_LogSum
@@ -480,7 +480,7 @@ void elm::Model2::ngev_probability()
 }
 
 
-void elm::Model2::ngev_probability_given_utility( etk::ndarray *u)
+void elm::Model2::ngev_probability_given_utility( )
 {
 
 	pull_coefficients_from_freedoms();
@@ -492,7 +492,7 @@ void elm::Model2::ngev_probability_given_utility( etk::ndarray *u)
 
 
 	std::function<std::shared_ptr<workshop> ()> workshop_builder =
-		[&](){return std::make_shared<workshop_ngev_probability_given_utility>(nNodes, u, allocation_packet(), sampling_packet(), quantity_packet()
+		[&](){return std::make_shared<workshop_ngev_probability_given_utility>(nNodes, utility_packet_without_data(), allocation_packet(), sampling_packet(), quantity_packet()
 								 , Params_LogSum
 								 , Data_Avail
 								 , &Probability
@@ -503,7 +503,7 @@ void elm::Model2::ngev_probability_given_utility( etk::ndarray *u)
 								 , &msg
 								 );};
 
-	USE_DISPATCH(probability_given_utility_dispatcher,option.threads, u->size1(), workshop_builder);
+	USE_DISPATCH(probability_given_utility_dispatcher,option.threads, nCases, workshop_builder);
 	
 }
 

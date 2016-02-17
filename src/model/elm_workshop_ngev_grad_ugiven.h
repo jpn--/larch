@@ -18,8 +18,8 @@
  *  
  */
 
-#ifndef __ELM_WORKSHOP_NGEV_GRADIENT_H__
-#define __ELM_WORKSHOP_NGEV_GRADIENT_H__
+#ifndef __ELM_WORKSHOP_NGEV_GRADIENT_UTILITY_GIVEN_H__
+#define __ELM_WORKSHOP_NGEV_GRADIENT_UTILITY_GIVEN_H__
 
 
 #include <cstring>
@@ -42,7 +42,7 @@ namespace elm {
 
 
 
-class workshop_ngev_gradient
+class workshop_ngev_grad_ugiven
 : public etk::workshop
 {
 
@@ -104,10 +104,8 @@ public:
 	elm::ca_co_packet AllocPacket;
 	elm::ca_co_packet SampPacket;
 	elm::ca_co_packet QuantPacket;
-
-//	workshop_ngev_gradient();
 	
-	workshop_ngev_gradient(
+	workshop_ngev_grad_ugiven(
 	   const unsigned&   dF
 	 , const unsigned&   nNodes
 	 , elm::ca_co_packet UtilPacket
@@ -128,10 +126,10 @@ public:
 	 , etk::logging_service* msgr
 	 );
 	
-	virtual ~workshop_ngev_gradient();
+	virtual ~workshop_ngev_grad_ugiven();
 
-	void workshop_ngev_gradient_do(const unsigned& firstcase, const unsigned& numberofcases);
-	void workshop_ngev_gradient_send();
+	void workshop_ngev_grad_ugiven_do(const unsigned& firstcase, const unsigned& numberofcases);
+	void workshop_ngev_grad_ugiven_send();
 
 	void case_dUtility_dFusedParameters( const unsigned& c );
 	void case_dProbability_dFusedParameters( const unsigned& c );
@@ -147,5 +145,5 @@ public:
 
 
 }
-#endif // __ELM_WORKSHOP_NGEV_GRADIENT_H__
+#endif // __ELM_WORKSHOP_NGEV_GRADIENT_UTILITY_GIVEN_H__
 

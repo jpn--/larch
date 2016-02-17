@@ -28,7 +28,7 @@
 #include "etk_thread.h"
 #include "etk_arraymath.h"
 
-#include "elm_workshop_ngev_gradient.h"
+#include "elm_workshop_ngev_grad_ugiven.h"
 
 using namespace etk;
 using namespace elm;
@@ -36,7 +36,7 @@ using namespace std;
 
 
 
-void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned& c )
+void elm::workshop_ngev_grad_ugiven::case_dUtility_dFusedParameters( const unsigned& c )
 {
 //	if (c==0) BUGGER_(msg_, "case_dUtility_dFusedParameters()" )  ;
 
@@ -67,13 +67,12 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 		// and theta parameters. For other nodes, only mu has a direct effect
 		if (a<Xylem->n_elemental()) {
 			// BETA for SELF (elemental alternatives)
-			if (UtilityCE_map->active()) {
-				if (nCA) {
-					UtilityCE_map->export_into(dUtil.ptr(a), c, a, nCA);
-				}
-			} else {
-				if (nCA) UtilPacket.Data_CA->ExportData(dUtil.ptr(a)    ,c,a,UtilPacket.nAlt());
-				if (nCO) UtilPacket.Data_CO->ExportData(dUtil.ptr(a)+nCA,c,a,UtilPacket.nAlt());
+			if (nCA) {
+				UtilityCE_map->export_into(dUtil.ptr(a), c, a, nCA);
+			}
+			if (nCO) {
+				OOPS("idco variables are not supported alongside idce data");
+				UtilPacket.Data_CO->ExportData(dUtil.ptr(a)+nCA,c,a,UtilPacket.nAlt());
 			}
 
 			// GAMMA on SELF
@@ -170,7 +169,7 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 }
 
 
-void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsigned& c )
+void elm::workshop_ngev_grad_ugiven::case_dProbability_dFusedParameters( const unsigned& c )
 {
 
 	const double*	   Pr = _Probability->ptr(c);
@@ -178,8 +177,6 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 	const double*	   Util = UtilPacket.Outcome->ptr(c);
 	const double*	   Alloc = AllocPacket.relevant()? AllocPacket.Outcome->ptr(c) : nullptr;
 	const VAS_System*  Xylem = _Xylem;
-//	datamatrix      Data_UtilityCA = UtilPacket.Data_CA;
-//	datamatrix      Data_UtilityCO = UtilPacket.Data_CO;
 
 	double*			   scratch = Workspace.ptr();
 	const double*	   Cho = Data_Choice->values(c);
@@ -196,12 +193,6 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 			auto xylem_i_upcell_u = (*Xylem)[i]->upcell(u);
 			auto xylem_i_upcell_u_slot = xylem_i_upcell_u->slot();
 			
-			// if (c==0) std::cerr << "case_dProbability_dFusedParameters\n";
-			// if (c==0) std::cerr << "i="<<i<<"\n";
-			// if (c==0) std::cerr << "u="<<u<<"\n";
-			// if (c==0) std::cerr << "xylem_i_upcell_u_slot="<<xylem_i_upcell_u_slot<<"\n";
-
-
 			// scratch = dUtil[down] - dUtil[up]
 			cblas_dcopy(nPar, dUtil.ptr(i), 1, scratch, 1);
 			cblas_daxpy(nPar, -1, dUtil.ptr(xylem_i_upcell_u_slot), 1, scratch, 1);
@@ -210,19 +201,13 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 			// scratch += X_Phi()[edge] - sum over competes(Alloc[compete]*X_Phi[compete])
 			if (Alloc && (*Xylem)[i]->upedge(u)->is_competitive()) {
 				auto allocslot_upedge_u = (*Xylem)[i]->upedge(u)->alloc_slot();
-				// if (c==0) std::cerr << "allocslot_upedge_u="<<allocslot_upedge_u<<"\n";
-
-				// if (c==0) std::cerr << "WorkspaceX1 "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
 				
 				AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, allocslot_upedge_u, 1.0, xylem_a_upsize);
-				// if (c==0) std::cerr <<  "WorkspaceXa "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
 				for (ou=0; ou<xylem_a_upsize; ou++)  {
 					auto slot = (*Xylem)[i]->upedge(ou)->alloc_slot();
 					AllocPacket.Data_CO->OverlayData(scratch+Offset_Phi, c, slot, -Alloc[slot], xylem_a_upsize);
-					// if (c==0) std::cerr <<  "WorkspaceXb "<<Workspace.printSize()<<"\n" << Workspace.printall()  ;
 				}
 
-				// if (c==0) std::cerr <<  "WorkspaceX2 "<<Workspace.printSize()<<"\n" << Workspace.printall() ;
 				
 				// adjust Mu for hierarchical structure, competitive
 				scratch[xylem_i_upcell_u->mu_offset()+offset_mu()] += (Util[xylem_i_upcell_u_slot]
@@ -257,7 +242,7 @@ void elm::workshop_ngev_gradient::case_dProbability_dFusedParameters( const unsi
 
 
 
-void elm::workshop_ngev_gradient::case_dSamplingFactor_dFusedParameters( const unsigned& c )
+void elm::workshop_ngev_grad_ugiven::case_dSamplingFactor_dFusedParameters( const unsigned& c )
 {
 	
 	size_t nalt = _Xylem->n_elemental();
@@ -275,7 +260,7 @@ void elm::workshop_ngev_gradient::case_dSamplingFactor_dFusedParameters( const u
 
 }
 
-void elm::workshop_ngev_gradient::case_dAdjProbability_dFusedParameters( const unsigned& c )
+void elm::workshop_ngev_grad_ugiven::case_dAdjProbability_dFusedParameters( const unsigned& c )
 {
 
 	size_t nalt = _Xylem->n_elemental();
@@ -316,7 +301,7 @@ void elm::workshop_ngev_gradient::case_dAdjProbability_dFusedParameters( const u
 
 
 
-void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned& c )
+void elm::workshop_ngev_grad_ugiven::case_dLogLike_dFusedParameters( const unsigned& c )
 {
 	double*            dLL = GradT_Fused.ptr();    // [params]
 	const double*      Pr  = _Probability->ptr(c);   // [nodes]
@@ -325,14 +310,9 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 	etk::memarray_raw* dPr = &dProb;
 
 	if (SampPacket.relevant()) {
-//		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.relevant")  ;
 		Pr = _AdjProbability->ptr(c);
 		dPr = &dAdjProb;
-	} else {
-//		if (c==0) BUGGER_(msg_, "case_dLogLike_dFusedParameters->SampPacket.NOTrelevant")  ;
 	}
-
-//	if (c==0) BUGGER_(msg_, "dPr-> "<<dPr->printSize()<<"\n" << dPr->printall())  ;
 
 	unsigned a;
 	for (a=0; a<nA; a++) {
@@ -349,8 +329,6 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 		}
 	}
 	
-//	if (c==0) BUGGER_(msg_, " dProb:" << dProb.printall() << "\n dAdjProb"<<dAdjProb.printall()<<"\n GradT_Fused:\n"<<GradT_Fused.printall());
-	
 }
 
 
@@ -364,7 +342,7 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 
 #define BIGGER(x,y) (x)>(y) ? (x) : (y)
 
-elm::workshop_ngev_gradient::workshop_ngev_gradient
+elm::workshop_ngev_grad_ugiven::workshop_ngev_grad_ugiven
 ( const unsigned&   dF
  , const unsigned&   nNodes
  , elm::ca_co_packet UtilPK
@@ -429,22 +407,14 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 
 
 
-elm::workshop_ngev_gradient::~workshop_ngev_gradient()
+elm::workshop_ngev_grad_ugiven::~workshop_ngev_grad_ugiven()
 {
 }
 
 
-void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
+void elm::workshop_ngev_grad_ugiven::workshop_ngev_grad_ugiven_do(
   const unsigned& firstcase, const unsigned& numberofcases)
 {
-//	BUGGER_(msg_, "Beginning NL gradient calculation ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]");
-
-//	UtilPacket.Data_CA->load_values(firstcase,numberofcases);
-//	UtilPacket.Data_CO->load_values(firstcase,numberofcases);
-//	Data_Choice   ->load_values(firstcase,numberofcases);
-//	if (Data_Weight) {
-//		Data_Weight->load_values(firstcase,numberofcases);
-//	}
 
 	unsigned lastcase = firstcase+numberofcases;
 
@@ -452,10 +422,7 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 	workshopBHHH.initialize();
 	workshopGCurrent.initialize();
 	
-//	BUGGER_(msg_, "in NL gradient, sampling bias is "<< (SampPacket.relevant()? "" : "not ")<< "relevant");
-
 	for (c=firstcase;c<lastcase;c++) {
-		//BUGGER_(msg_, "NL grad ["<<c<<"]");
 		
 		
 		CaseGrad.initialize();    // The CaseGrad holds the gradient for a single case on the freedoms
@@ -510,7 +477,7 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 
 }
 
-void elm::workshop_ngev_gradient::workshop_ngev_gradient_send
+void elm::workshop_ngev_grad_ugiven::workshop_ngev_grad_ugiven_send
 ()
 {
 	if (_lock) {
@@ -518,21 +485,19 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_send
 		*_GCurrent += workshopGCurrent;
 		*_Bhhh += workshopBHHH;
 	} else {
-		OOPS("No lock in workshop_ngev_gradient_send");
+		OOPS("No lock in workshop_ngev_grad_ugiven_send");
 	}
 }
 
 
 
-boosted::mutex workshop_ngev_display_mutex;
 
 
 
-
-void elm::workshop_ngev_gradient::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
+void elm::workshop_ngev_grad_ugiven::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
 {
-	workshop_ngev_gradient_do(firstcase,numberofcases);
+	workshop_ngev_grad_ugiven_do(firstcase,numberofcases);
 	_lock = result_mutex;
-	workshop_ngev_gradient_send();
+	workshop_ngev_grad_ugiven_send();
 }
 

@@ -464,7 +464,7 @@ void elm::darray::ExportData (double* ExportTo, const unsigned& c, const unsigne
 {
 	if (dimty==3) {
 		cblas_dcopy(nVars(),values(c,1)+(a*nVars()),1,ExportTo,1);
-		ExportTo+=nVars();
+		ExportTo+=nVars();  
 	} else if (dimty==2) {
 		memset(ExportTo,0,nVars()*numberOfAlts*sizeof(double));
 		cblas_dcopy(nVars(),values(c,1),1,ExportTo+a,numberOfAlts);
@@ -617,3 +617,87 @@ std::string elm::check_darray(const darray* x)
 	return s.str();
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+elm::darray_export_map::darray_export_map(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array)
+: _pointer_map()
+, _data_array(nullptr)
+, _caseindexes(nullptr)
+, _altindexes(nullptr)
+{
+	maplink(caseindexes, altindexes, data_array);
+}
+
+
+
+elm::darray_export_map::~darray_export_map()
+{
+	clear();
+}
+
+
+void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array)
+{
+	clear();
+	if (caseindexes && altindexes && data_array) {
+		_data_array = std::make_shared<etk::ndarray>(*data_array, true);
+		_caseindexes = std::make_shared<etk::ndarray>(*caseindexes, true);
+		_altindexes = std::make_shared<etk::ndarray>(*altindexes, true);
+		
+		for (size_t i=0; i<data_array->size1(); i++) {
+			_pointer_map[two_int64(caseindexes->int64_at(i),altindexes->int64_at(i))] = _data_array->ptr(i);
+		}
+	}
+}
+
+void elm::darray_export_map::clear()
+{
+	_pointer_map.clear();
+	_data_array .reset();
+	_caseindexes .reset();
+	_altindexes .reset();
+}
+
+
+const double* elm::darray_export_map::get_ptr_at(const long long& caseindex, const long long& altindex) const
+{
+	auto iter = _pointer_map.find(two_int64(caseindex,altindex));
+	if (iter==_pointer_map.end()) {
+		return nullptr;
+	}
+	return iter->second;
+}
+
+
+void elm::darray_export_map::export_into (double* ExportTo, const unsigned& c, const unsigned& a, const unsigned& numberOfVars) const
+{
+	const double* ptr = get_ptr_at(c, a);
+	if (ptr) {
+		cblas_dcopy(numberOfVars, ptr, 1, ExportTo, 1);
+	}
+}
+
+
+
+double elm::darray_export_map::get_value_at(const long long& caseindex, const long long& altindex, const long long& varindex) const
+{
+	const double* ptr = get_ptr_at(caseindex, altindex);
+	if (ptr) {
+		return ptr[varindex];
+	}
+	return NAN;
+}
+
+

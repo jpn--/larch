@@ -34,6 +34,7 @@ using namespace std;
 
 elm::Model2::Model2()
 : _Fount(NULL)
+, Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -74,6 +75,7 @@ elm::Model2::Model2()
 
 elm::Model2::Model2(elm::Fountain& datafile)
 : _Fount(&datafile)
+, Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -131,6 +133,18 @@ elm::ca_co_packet elm::Model2::utility_packet()
 							 &Coef_UtilityCO	,
 							 Data_UtilityCA		,
 							 Data_UtilityCO		,
+							 &Utility			);
+}
+
+elm::ca_co_packet elm::Model2::utility_packet_without_data()
+{
+	BUGGER(msg) << "spawning utility packet without data";
+	return elm::ca_co_packet(&Params_UtilityCA	,
+							 &Params_UtilityCO	,
+							 &Coef_UtilityCA	,
+							 &Coef_UtilityCO	,
+							 nullptr		,
+							 nullptr		,
 							 &Utility			);
 }
 

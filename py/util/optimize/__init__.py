@@ -76,11 +76,12 @@ def weight_choice_rebalance(model):
 
 def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	stat = runstats()
-	stat.start_process('setup')
-	model.tearDown()
-	model.setUp()
-	if not model.is_provisioned() and model._ref_to_db is not None:
-		model.provision()
+	if not model.Data_UtilityCE.active():
+		stat.start_process('setup')
+		model.tearDown()
+		model.setUp()
+		if not model.is_provisioned() and model._ref_to_db is not None:
+			model.provision()
 	x0 = model.parameter_values()
 	if model.option.calc_null_likelihood:
 		stat.start_process('null_likelihood')
@@ -122,6 +123,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 	r.stats.prepend_timing(stat)
 	ll = model.loglike()
+	print("LOGLIKE IS ",ll)
 
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
 		r.stats.start_process("weight unrescale")

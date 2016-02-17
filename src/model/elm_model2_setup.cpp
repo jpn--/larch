@@ -485,7 +485,7 @@ void elm::Model2::tearDown()
 	clear_cache();
 	
 	CaseLogLike.destroy();
-
+	Data_UtilityCE.clear();
 }
 
 
@@ -554,20 +554,28 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 	if (Data_Choice) scan_for_multiple_choices();
 	ret += _subprovision("Weight", Data_Weight, input, need, ncases);
 
-	if (!ret.empty()) {
-		OOPS("provisioning error:",ret);
-	}
 	
 	auto caseiter = ncases.begin();
-	size_t nc = caseiter->second;
-	for (; caseiter!=ncases.end(); caseiter++) {
-		if (nc != caseiter->second) {
-			OOPS("provisioning error: inconsistent numbers or cases");
-		}
-	}
 	
-	nCases = nc;
-	_nCases_recall = nCases;
+	if (caseiter==ncases.end()) {
+		nCases = 0;
+		_nCases_recall = nCases;
+	} else {
+		
+		size_t nc = caseiter->second;
+		for (; caseiter!=ncases.end(); caseiter++) {
+			if (nc != caseiter->second) {
+				OOPS_PROVISIONING("inconsistent numbers or cases");
+			}
+		}
+		
+		nCases = nc;
+		_nCases_recall = nCases;
+		
+	}
+	if (!ret.empty()) {
+		OOPS_PROVISIONING(ret);
+	}
 }
 
 std::map<std::string, darray_req> elm::Model2::needs() const
@@ -713,13 +721,83 @@ elm::darray* elm::Model2::DataEdit(const std::string& label)
 
 const etk::ndarray* elm::Model2::Coef(const std::string& label)
 {
-	if (label=="UtilityCA") return &Coef_UtilityCA;
-	if (label=="UtilityCO") return &Coef_UtilityCO   ;
-	if (label=="SamplingCA") return &Coef_SamplingCA ;
-	if (label=="SamplingCO") return &Coef_SamplingCO ;
-	if (label=="Allocation") return &Coef_Edges ;
+	
+	if (FCurrent.size1()!=dF()) {
+		FCurrent.resize(dF());
+	}
 
+	for (unsigned i=0; i<dF(); i++) {
+		freedom_info* f = &(FInfo[FNames[i]]);
+		FCurrent[i] = f->value;
+	}
+	
+	if (label=="UtilityCA") {
+		if (Params_UtilityCA.length()==0) {
+			_setUp_utility_data_and_params();
+		}
+		Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
+		pull_from_freedoms        (Params_UtilityCA  , *Coef_UtilityCA  , *ReadFCurrent());
+		return &Coef_UtilityCA;
+	}
+	if (label=="UtilityCO") {
+		if (Params_UtilityCO.length()==0) {
+			_setUp_utility_data_and_params();
+		}
+		Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
+		pull_from_freedoms        (Params_UtilityCO  , *Coef_UtilityCO  , *ReadFCurrent());
+		return &Coef_UtilityCO   ;
+	}
+	if (label=="SamplingCA") {
+		if (Params_SamplingCA.length()==0) {
+			_setUp_samplefactor_data_and_params();
+		}
+		Coef_SamplingCA.resize_if_needed(Params_SamplingCA);
+		pull_from_freedoms        (Params_SamplingCA , *Coef_SamplingCA , *ReadFCurrent());
+		return &Coef_SamplingCA ;
+	}
+	if (label=="SamplingCO") {
+		if (Params_SamplingCO.length()==0) {
+			_setUp_samplefactor_data_and_params();
+		}
+		Coef_SamplingCO.resize_if_needed(Params_SamplingCO);
+		pull_from_freedoms        (Params_SamplingCO , *Coef_SamplingCO , *ReadFCurrent());
+		return &Coef_SamplingCO ;
+	}
+	if (label=="Allocation") {
+		if (Params_Edges.length()==0) {
+			_setUp_allocation_data_and_params();
+		}
+		Coef_Edges.resize_if_needed(Params_Edges);
+		pull_from_freedoms        (Params_Edges      , *Coef_Edges      , *ReadFCurrent());
+		return &Coef_Edges ;
+	}
+	if (label=="QuantityCA") {
+		if (Params_SamplingCA.length()==0) {
+			_setUp_quantity_data_and_params();
+		}
+		Coef_QuantityCA.resize_if_needed(Params_QuantityCA);
+		pull_and_exp_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());
+		return &Coef_QuantityCA ;
+	}
+	if (label=="LogSum") {
+		if (Params_LogSum.length()==0) {
+			OOPS("calling Coef('LogSum') currently requires the model is already setup");
+		}
+		Coef_LogSum.resize_if_needed(Params_LogSum);
+		pull_from_freedoms        (Params_LogSum     , *Coef_LogSum     , *ReadFCurrent());
+		return &Coef_LogSum ;
+	}
+	if (label=="QuantLogSum") {
+		if (Params_QuantLogSum.length()==0) {
+			OOPS("calling Coef('QuantLogSum') currently requires the model is already setup");
+		}
+		Coef_QuantLogSum.resize_if_needed(Params_QuantLogSum);
+		pull_from_freedoms        (Params_QuantLogSum, *Coef_QuantLogSum, *ReadFCurrent());
+		return &Coef_QuantLogSum ;
+	}
 	OOPS(label, " is not a valid label for model coefficients");
 	
 }
+
+
 

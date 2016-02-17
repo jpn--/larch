@@ -99,8 +99,11 @@
 		$1 = nullptr;
 	} else {
 		if (PyArray_Check($input)) {
-			if ((PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)) {
-				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL"));
+			if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64)
+				) {
+				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
 				SWIG_fail;
 			}
 			
