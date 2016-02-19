@@ -127,6 +127,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
 		r.stats.start_process("weight unrescale")
 		model.restore_scale_weights()
+		model.clear_cache()
 		ll = model.loglike_nocache()
 
 	if model.option.calc_std_errors:
