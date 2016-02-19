@@ -684,13 +684,22 @@ namespace elm {
 
 //////// MARK: SWIG EXPOSED FUNCS ////////////////////////////////////////////////////////////
 		
+#ifndef SWIG
 	public:
-		etk::symmetric_matrix* hessian_matrix;
+		etk::symmetric_matrix hessian_matrix;
+#endif // ndef SWIG
+
+	public:
+		etk::symmetric_matrix* _get_hessian_array();
+		void _set_hessian_array(etk::symmetric_matrix* in);
+		void _del_hessian_array();
 
 
 	public:
 		std::vector<double> parameter_values() const;
 		void parameter_values(std::vector<double> v);
+		
+		PyObject* parameter_values_as_bytes() const;
 		
 		void utilityca (const std::string& column_name,
 							   std::string freedom_name="", 

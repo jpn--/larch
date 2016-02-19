@@ -3779,9 +3779,6 @@ class sherpa(ParameterList):
         return _core.sherpa_LL(self)
     max_iterations = _swig_property(_core.sherpa_max_iterations_get, _core.sherpa_max_iterations_set)
 
-    def covariance_matrix(self) -> "etk::symmetric_matrix *":
-        return _core.sherpa_covariance_matrix(self)
-
     def robust_covariance_matrix(self) -> "etk::symmetric_matrix *":
         return _core.sherpa_robust_covariance_matrix(self)
 
@@ -3803,6 +3800,24 @@ class sherpa(ParameterList):
 
     def hessfree_to_hessfull(self, full_matrix: 'etk::symmetric_matrix *', free_matrix: 'etk::symmetric_matrix const *') -> "void":
         return _core.sherpa_hessfree_to_hessfull(self, full_matrix, free_matrix)
+
+    def _get_inverse_hessian_array(self) -> "etk::symmetric_matrix *":
+        return _core.sherpa__get_inverse_hessian_array(self)
+
+    def _set_inverse_hessian_array(self, arg2: 'etk::symmetric_matrix *') -> "void":
+        return _core.sherpa__set_inverse_hessian_array(self, arg2)
+
+    def _del_inverse_hessian_array(self) -> "void":
+        return _core.sherpa__del_inverse_hessian_array(self)
+
+    def _get_robust_covar_array(self) -> "etk::symmetric_matrix *":
+        return _core.sherpa__get_robust_covar_array(self)
+
+    def _set_robust_covar_array(self, arg2: 'etk::symmetric_matrix *') -> "void":
+        return _core.sherpa__set_robust_covar_array(self, arg2)
+
+    def _del_robust_covar_array(self) -> "void":
+        return _core.sherpa__del_robust_covar_array(self)
     __swig_destroy__ = _core.delete_sherpa
     __del__ = lambda self: None
 sherpa_swigregister = _core.sherpa_swigregister
@@ -3943,10 +3958,21 @@ class Model2(sherpa):
 
     def probability(self, params: 'etk::ndarray *'=None) -> "etk::ndarray *":
         return _core.Model2_probability(self, params)
-    hessian_matrix = _swig_property(_core.Model2_hessian_matrix_get, _core.Model2_hessian_matrix_set)
+
+    def _get_hessian_array(self) -> "etk::symmetric_matrix *":
+        return _core.Model2__get_hessian_array(self)
+
+    def _set_hessian_array(self, arg2: 'etk::symmetric_matrix *') -> "void":
+        return _core.Model2__set_hessian_array(self, arg2)
+
+    def _del_hessian_array(self) -> "void":
+        return _core.Model2__del_hessian_array(self)
 
     def parameter_values(self, *args) -> "void":
         return _core.Model2_parameter_values(self, *args)
+
+    def parameter_values_as_bytes(self) -> "PyObject *":
+        return _core.Model2_parameter_values_as_bytes(self)
 
     def utilityca(self, *args) -> "void":
         return _core.Model2_utilityca(self, *args)

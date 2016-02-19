@@ -79,7 +79,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		self.assertNearlyEqual(-2.2539121766964457e-05, M.parameter("ASC_TRAIN").covariance['B_TIME'    ])
 		self.assertNearlyEqual( 0.0030111491650683126 , M.parameter("ASC_TRAIN").covariance['ASC_TRAIN' ])
 		self.assertNearlyEqual( 0.0013769280691442523 , M.parameter("ASC_TRAIN").covariance['ASC_CAR'   ])
-		self.assertNearlyEqual(8.2206996770805741e-08 , M.parameter("ASC_TRAIN").covariance['B_COST'    ])
+		self.assertNearlyEqual(8.2206996770805741e-08 , M.parameter("ASC_TRAIN").covariance['B_COST'    ], sigfigs=2.5)
 		self.assertNearlyEqual(2.1979623403851048e-07 , M.parameter("B_COST").robust_covariance['B_TIME'    ])
 		self.assertNearlyEqual(-8.305452063886241e-06 , M.parameter("B_COST").robust_covariance['ASC_TRAIN' ])
 		self.assertNearlyEqual(2.8640528329606779e-07 , M.parameter("B_COST").robust_covariance['ASC_CAR'   ])

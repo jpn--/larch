@@ -402,6 +402,12 @@ void elm::Model2::setUp(bool and_load_data)
 	INFO(msg) << "Setting up the model...";
 
 	if (!option.suspend_xylem_rebuild) _pull_graph_from_db();
+
+	if (Data_UtilityCE.active()) {
+		// Data_UtilityCE is only currently compatible with the full NGEV code.
+		features |= MODELFEATURES_NESTING;
+		features |= MODELFEATURES_ALLOCATION;
+	}
 	
 	if (Xylem.n_branches() > 0) {
 		BUGGER(msg) << "Setting model features to include nesting.";
@@ -427,7 +433,7 @@ void elm::Model2::setUp(bool and_load_data)
 			Xylem.touch();
 			Xylem.regrow( &Input_LogSum, &Input_Edges, _fountain(), &root, &msg );
 		}
-		if ((features & MODELFEATURES_ALLOCATION) || (features & MODELFEATURES_QUANTITATIVE)) {
+		if (features & (MODELFEATURES_ALLOCATION|MODELFEATURES_QUANTITATIVE)) {
 			_setUp_NGEV();
 		} else {
 			_setUp_NL();

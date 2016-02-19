@@ -6,7 +6,7 @@ from .xhtml import XHTML, XML_Builder
 import os.path
 from .temporaryfile import TemporaryFile
 
-def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', **format):
+def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, **format):
 	"""Estimate a model and generate a report.
 	
 	This method rolls together model estimation, reporting, and saving results
@@ -51,6 +51,9 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', **format):
 	if log.getEffectiveLevel() > loglevel:
 		log.setLevel(loglevel)
 	
+	if use_ce:
+		m.setup_utility_ce()
+
 	m.maximize_loglike()
 
 	log.removeHandler(fh)

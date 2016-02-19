@@ -202,9 +202,9 @@ protected:
 protected:	
 	etk::triangle Bhhh;
 	etk::triangle Hess;
-	etk::triangle invHess;
+	etk::symmetric_matrix invHess;
 	etk::triangle invHessTemp;
-	etk::triangle robustCovariance;
+	etk::symmetric_matrix robustCovariance;
 	
 #endif // ndef SWIG
 
@@ -213,7 +213,7 @@ public:
 
 	unsigned max_iterations;
 
-	etk::symmetric_matrix* covariance_matrix();
+//	etk::symmetric_matrix* covariance_matrix();
 	etk::symmetric_matrix* robust_covariance_matrix();
 	
 	///// CONSTRUCTOR /////
@@ -225,6 +225,25 @@ public:
 	size_t count_holdfast();
 	void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
 	void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
+
+
+//#ifdef SWIG
+//	%feature("shadow") _get_inverse_hessian_array() %{
+//	def _get_inverse_hessian_array(self, *args):
+//		val = $action(self, *args)
+//		if not isinstance(val,SymmetricArray):
+//			return val.view(SymmetricArray)
+//		return val
+//	%}
+//#endif // def SWIG
+
+	etk::symmetric_matrix* _get_inverse_hessian_array();
+	void _set_inverse_hessian_array(etk::symmetric_matrix* in);
+	void _del_inverse_hessian_array();
+
+	etk::symmetric_matrix* _get_robust_covar_array();
+	void _set_robust_covar_array(etk::symmetric_matrix* in);
+	void _del_robust_covar_array();
 
 };
 

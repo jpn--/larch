@@ -1306,9 +1306,20 @@ std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_given_utility ()
 	}
 	FatGCurrent = ReadFCurrent();
 
-	return make_shared<etk::ndarray>(GCurrent, false);
+	std::shared_ptr<etk::ndarray> g = make_shared<etk::ndarray>(GCurrent, false);
+
+	etk::symmetric_matrix bhhh (Bhhh, false);
+	bhhh.copy_uppertriangle_to_lowertriangle();
+
+
+	_cached_results.set_cached_grad(elm::array_compare(FCurrent.ptr(), FCurrent.size()), g);
+	_cached_results.set_cached_bhhh(elm::array_compare(FCurrent.ptr(), FCurrent.size()), bhhh);
+
+	return g;
 
 }
+
+
 
 
 

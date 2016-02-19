@@ -560,11 +560,11 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 	gnorm = vecnorm(gfk, ord=norm)
 	while (gnorm > gtol) and (k < maxiter):
 		pk = -numpy.dot(Hk, gfk)
-#		
-#		print("\n pk=\n",pk,"\n")
-#		print("\n gfk=\n",gfk,"\n")
-#		print("\n Hk=\n",Hk,"\n")
-#		
+		
+		print("\n pk=\n",pk,"\n")
+		print("\n gfk=\n",gfk,"\n")
+		print("\n Hk=\n",Hk,"\n")
+		
 		try:
 			status, xkp1, alpha_k, old_fval = _simple_line_search(f, xk, old_fval, pk, 1, 4, 1e-6, 2, 0.5, max_bound=max_bound, min_bound=min_bound, logger=logger)
 		except WantsToViolateBounds as violate:

@@ -68,7 +68,7 @@ elm::Model2::Model2()
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
-, hessian_matrix(new etk::symmetric_matrix())
+, hessian_matrix()
 {
 }
 
@@ -109,7 +109,7 @@ elm::Model2::Model2(elm::Fountain& datafile)
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
-, hessian_matrix(new etk::symmetric_matrix())
+, hessian_matrix()
 {
 	if (_Fount) {
 		Xylem.add_dna_sequence(_Fount->alternatives_dna());
@@ -518,11 +518,6 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		
 		if (option.calc_std_errors) {
 			_latest_run.start_process("parameter covariance");
-			//hessian();
-			//MONITOR(msg) << "HESSIAN\n" << Hess.printSquare() ;
-			//invHess = Hess;
-			//invHess.inv(true);
-			//MONITOR(msg) << "invHESSIAN\n" << invHess.printSquare() ;
 			BUGGER(msg) << "calculate_parameter_covariance...";
 			calculate_parameter_covariance(false);
 			BUGGER(msg) << "calculate_parameter_covariance complete.";
@@ -590,8 +585,8 @@ void elm::Model2::calculate_hessian_and_save()
 	calculate_hessian();
 	
 	// Store hessian for later model user analysis if desired
-	*hessian_matrix = Hess;
-	hessian_matrix->copy_uppertriangle_to_lowertriangle();
+	hessian_matrix = Hess;
+	hessian_matrix.copy_uppertriangle_to_lowertriangle();
 }
 
 
@@ -896,6 +891,10 @@ PyObject* __GetParameterDict(const freedom_info& i)
 	PyDict_SetItemString(P,"holdfast",item);
 	Py_CLEAR(item);
 	
+	if (P && P->ob_refcnt<1) {
+		std::cerr <<"!!!\n";
+	}
+	
 	item = i.getCovariance();
 	if (item) PyDict_SetItemString(P,"covariance",item);
 	Py_CLEAR(item);
@@ -928,6 +927,15 @@ std::vector<double> elm::Model2::parameter_values() const {
 	}
 	return ret;
 }
+
+PyObject* elm::Model2::parameter_values_as_bytes() const {
+	std::vector<double> ret (dF());
+	for (unsigned i=0; i<dF(); i++) {
+		ret[i] = FInfo.find(FNames[i])->second.value;
+	}
+	return PyBytes_FromStringAndSize((char*) &ret[0], dF()*sizeof(double) );
+}
+
 
 
 PyObject* elm::Model2::_get_estimation_statistics () const
@@ -1776,4 +1784,32 @@ std::string elm::Model2::read_runstats_notes() const
 {
 	return _latest_run.notes();
 }
+
+
+
+
+
+etk::symmetric_matrix* elm::Model2::_get_hessian_array()
+{
+
+	if( (!hessian_matrix.pool) || (hessian_matrix.size()==0) ) {
+		hessian_matrix.resize(dF(), dF());
+		hessian_matrix.initialize(NAN);
+	}
+
+	return &hessian_matrix;
+}
+
+void elm::Model2::_set_hessian_array(etk::symmetric_matrix* in)
+{
+	hessian_matrix.same_memory_as(*in);
+}
+
+void elm::Model2::_del_hessian_array()
+{
+	Py_CLEAR(hessian_matrix.pool);
+}
+
+
+
 

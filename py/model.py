@@ -30,6 +30,11 @@ class MetaParameter():
 
 class Model(Model2, ModelReporter):
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		from .util.attribute_dict import function_cache
+		self._cached_results = function_cache()
+
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance
 
@@ -616,29 +621,89 @@ class Model(Model2, ModelReporter):
 					x[n,j] = p['robust_covariance'][names[j]]
 		return x
 
-	def hessian(self, values=None, recalc=False):
-		"The hessian matrix at the converged point of the latest estimation"
-		if values:
-			if self.parameter_values() != values:
-				self.parameter_values(values)
-				recalc = True
-		if recalc:
-			self.loglike()
-			self._compute_d2_loglike()
-		return self.hessian_matrix
+#	def hessian(self, values=None, recalc=False):
+#		"The hessian matrix at the converged point of the latest estimation"
+#		if values:
+#			if self.parameter_values() != values:
+#				self.parameter_values(values)
+#				recalc = True
+#		if recalc:
+#			self.loglike()
+#			self._compute_d2_loglike()
+#		return self.hessian_matrix
+#
 
-	negative_d2_loglike = hessian
+	def d2_loglike(self, *args):
+		z = self.finite_diff_hessian(*args, out=self.hessian_matrix)
+		if self.hessian_matrix is not z:
+			self.hessian_matrix = z
+		return z
 
-	def d2_loglike(self, values=None, recalc=False):
-		return -(self.negative_d2_loglike(values=values, recalc=recalc))
+	def negative_d2_loglike(self, *args):
+		z = numpy.copy(self.finite_diff_hessian(*args, out=self.hessian_matrix))
+		z *= -1
+		return z
 
-	def covariance(self, recalc=False):
-		"The inverse of the hessian matrix at the converged point of the latest estimation"
-		return self.covariance_matrix().view(SymmetricArray)
 
-	def robust_covariance(self, recalc=False):
-		"The sandwich estimator at the converged point of the latest estimation"
-		return self.robust_covariance_matrix()
+	hessian_matrix = property(Model2._get_hessian_array,
+	                                 Model2._set_hessian_array,
+									 Model2._del_hessian_array)
+
+	covariance_matrix = property(Model2._get_inverse_hessian_array,
+	                                 Model2._set_inverse_hessian_array,
+									 Model2._del_inverse_hessian_array)
+
+	robust_covariance_matrix = property(Model2._get_robust_covar_array,
+	                                 Model2._set_robust_covar_array,
+									 Model2._del_robust_covar_array)
+
+	def calculate_parameter_covariance(self):
+		hess = self.negative_d2_loglike()
+		take = numpy.full_like(hess, True, dtype=bool)
+		dense_s = len(self)
+		for i in range(len(self)):
+			if self[i].holdfast or (self[i].value >= self[i].max_value) or (self[i].value <= self[i].min_value):
+				take[i,:] = False
+				take[:,i] = False
+				dense_s -= 1
+		hess_taken = hess[take].reshape(dense_s,dense_s)
+		from .linalg import matrix_inverse
+		invhess = matrix_inverse(hess_taken)
+		self.covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+		self.covariance_matrix[take] = invhess.reshape(-1)
+		for i in range(len(self)):
+			self[i].setCovariance({pname:value for pname,value in zip(self.parameter_names(), self.covariance_matrix[i,:])})
+			self[i].std_err = numpy.sqrt(numpy.abs(self.covariance_matrix[i,i])) * numpy.sign(self.covariance_matrix[i,i])
+		# robust...
+		bhhh_taken = self.bhhh()[take].reshape(dense_s,dense_s)
+		#import scipy.linalg.blas
+		#temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
+		#robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
+		robusto = numpy.dot(numpy.dot(invhess, bhhh_taken),invhess)
+		self.robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+		self.robust_covariance_matrix[take] = robusto.reshape(-1)
+		for i in range(len(self)):
+			self[i].setRobustCovariance({pname:value for pname,value in zip(self.parameter_names(), self.robust_covariance_matrix[i,:])})
+			self[i].robust_std_err = numpy.sqrt(numpy.abs(self.robust_covariance_matrix[i,i])) * numpy.sign(self.robust_covariance_matrix[i,i])
+
+
+
+
+
+
+
+
+
+
+
+
+#	def covariance(self, recalc=False):
+#		"The inverse of the hessian matrix at the converged point of the latest estimation"
+#		return self.covariance_matrix().view(SymmetricArray)
+
+#	def robust_covariance(self, recalc=False):
+#		"The sandwich estimator at the converged point of the latest estimation"
+#		return self.robust_covariance_matrix()
 
 	def parameter_holdfast_mask(self):
 		mask = numpy.ones([len(self),],dtype=bool)
@@ -751,6 +816,16 @@ class Model(Model2, ModelReporter):
 			return self.d_loglike(*args)
 		return -(self.negative_d_loglike_cached(*args))
 
+	def negative_d_loglike_nocache(self, *args):
+		if self.Data_UtilityCE.active():
+			return self.negative_d_loglike(*args)
+		return super().negative_d_loglike_nocache(*args)
+
+	def negative_d_loglike_cached(self, *args):
+		if self.Data_UtilityCE.active():
+			return self.negative_d_loglike(*args)
+		return super().negative_d_loglike_cached(*args)
+
 	def negative_loglike_(self, x):
 		'''Same as negative_loglike, but converts NAN to INF'''
 		y = self.negative_loglike(x)
@@ -760,6 +835,13 @@ class Model(Model2, ModelReporter):
 
 	def d_loglike_given_utility(self):
 		return -(self.negative_d_loglike_given_utility())
+
+	def bhhh(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
+		if self.Data_UtilityCE.active():
+			if len(args)>0:
+				self.parameter_values(args[0])
+			return _core.Model2_bhhh_cached(self)
+		return _core.Model2_bhhh(self, *args)
 
 	def setup_utility_ce(self):
 		if len(self.utility.co)>0:
@@ -779,6 +861,7 @@ class Model(Model2, ModelReporter):
 			# provision other data, link ce data
 			self.provision_without_utility()
 			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce)
+			self.setUp(False)
 			# initialize utility
 			self.Utility()[:] = -numpy.inf
 			# dummy utility array
@@ -794,14 +877,34 @@ class Model(Model2, ModelReporter):
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
 			return self.loglike_given_utility()
 		return super().loglike(*args)
-	
+
+#	def loglike(self, *args):
+#		if len(args):
+#			self.parameter_values(args[0])
+#		pb = self.parameter_values_as_bytes()
+#		try:
+#			return self._cached_results[pb].loglike
+#		except (KeyError,AttributeError):
+#			if self.Data_UtilityCE.active():
+#				numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+#				self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+#				print("LOGLIKE-U")
+#				ll = self.loglike_given_utility()
+#			else:
+#				print("LOGLIKE")
+#				ll = super().loglike(*args)
+#			self._cached_results[pb].loglike = ll
+#			return ll
+
 	def loglike_nocache(self, *args):
 		if self.Data_UtilityCE.active():
 			if len(args):
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			print("LOGLIKE_NOCACHE-U")
 			return self.loglike_given_utility()
+		print("LOGLIKE_NOCACHE")
 		return super().loglike_nocache(*args)
 
 	def loglike_cached(self, *args):
@@ -810,7 +913,9 @@ class Model(Model2, ModelReporter):
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			print("LOGLIKE_CACHE-U")
 			return self.loglike_given_utility()
+		print("LOGLIKE_CACHE")
 		return super().loglike_cached(*args)
 
 
@@ -871,6 +976,26 @@ class Model(Model2, ModelReporter):
 			g[:,n] -= self.loglike_casewise(v2)
 			g[:,n] /= -2*jiggle
 		return g
+
+	def finite_diff_hessian(self, *args, out=None):
+		s = len(self)
+		try:
+			v = numpy.asarray(args[0])
+			assert(v.shape[0]==s)
+		except IndexError:
+			v = numpy.asarray(self.parameter_values())
+		if out is None or out.shape!=(s,s):
+			out = numpy.empty([s,s], dtype=numpy.float64)
+		for n in range(s):
+			jiggle = (self[n].value * 1e-5) or 1e-5;
+			v1 = v.copy()
+			v1[n] += jiggle
+			out[:,n] = self.d_loglike(v1)
+			v1[n] -= jiggle*2
+			out[:,n] -= self.d_loglike(v1)
+			out[:,n] /= (2*jiggle)
+		return out
+
 
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
@@ -1044,7 +1169,9 @@ class Model(Model2, ModelReporter):
 			self.provision(provided)
 		except ProvisioningError:
 			pass
-		self.setUp(False)
+
+
+
 
 
 class _AllInTheFamily():

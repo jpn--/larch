@@ -17,3 +17,16 @@ class dicta(dict):
 			return '\n'.join([k.rjust(m) + ': ' + repr(v) for k, v in self.items()])
 		else:
 			return self.__class__.__name__ + "()"
+
+
+
+
+
+
+
+class function_cache(dict):
+	def __getitem__(self, key):
+		if key not in self:
+			self[key] = z = dicta()
+			return z
+		return super().__getitem__(key)

@@ -123,7 +123,6 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 	r.stats.prepend_timing(stat)
 	ll = model.loglike()
-	print("LOGLIKE IS ",ll)
 
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
 		r.stats.start_process("weight unrescale")

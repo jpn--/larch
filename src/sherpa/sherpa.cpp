@@ -1249,10 +1249,10 @@ sherpa::sherpa(const sherpa& dupe)
 }
 
 
-etk::symmetric_matrix* sherpa::covariance_matrix()
-{
-	return &invHess;
-}
+//etk::symmetric_matrix* sherpa::covariance_matrix()
+//{
+//	return &invHess;
+//}
 
 etk::symmetric_matrix* sherpa::robust_covariance_matrix()
 {
@@ -1360,6 +1360,54 @@ std::string sherpa::ReadFLastTurnAsString() const
 		ret << "," << ReadFLastTurn()[i];
 	}
 	return ret.str().substr(1);
+}
+
+
+
+
+etk::symmetric_matrix* sherpa::_get_inverse_hessian_array()
+{
+
+	if( (!invHess.pool) || (invHess.size()==0) ) {
+		invHess.resize(dF(), dF());
+		invHess.initialize(NAN);
+	}
+
+	return &invHess;
+}
+
+void sherpa::_set_inverse_hessian_array(etk::symmetric_matrix* in)
+{
+	invHess.same_memory_as(*in);
+}
+
+void sherpa::_del_inverse_hessian_array()
+{
+	Py_CLEAR(invHess.pool);
+}
+
+
+
+
+etk::symmetric_matrix* sherpa::_get_robust_covar_array()
+{
+
+	if( (!robustCovariance.pool) || (robustCovariance.size()==0) ) {
+		robustCovariance.resize(dF(), dF());
+		robustCovariance.initialize(NAN);
+	}
+
+	return &robustCovariance;
+}
+
+void sherpa::_set_robust_covar_array(etk::symmetric_matrix* in)
+{
+	robustCovariance.same_memory_as(*in);
+}
+
+void sherpa::_del_robust_covar_array()
+{
+	Py_CLEAR(robustCovariance.pool);
 }
 
 
