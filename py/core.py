@@ -3826,19 +3826,27 @@ class sherpa(ParameterList):
     def _get_parameter_array(self) -> "etk::ndarray *":
         return _core.sherpa__get_parameter_array(self)
 
-    parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
-
-
     def _get_parameter_minbound_array(self) -> "etk::ndarray *":
         return _core.sherpa__get_parameter_minbound_array(self)
-
-    parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
-
 
     def _get_parameter_maxbound_array(self) -> "etk::ndarray *":
         return _core.sherpa__get_parameter_maxbound_array(self)
 
+    def _get_holdfast_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_holdfast_array(self)
+
+    def _get_null_values_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_null_values_array(self)
+
+    def _get_init_values_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_init_values_array(self)
+
+    parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
+    parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
     parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
+    parameter_holdfast_array = property(_get_holdfast_array, None, None, "An array of current holdfast flags")
+    parameter_initial_values_array = property(_get_init_values_array, None, None, "An array of initial parameter values")
+    parameter_null_values_array = property(_get_null_values_array, None, None, "An array of parameter null values")
 
     __swig_destroy__ = _core.delete_sherpa
     __del__ = lambda self: None
@@ -4325,12 +4333,38 @@ class ModelParameter(object):
     def _get_name(self) -> "std::string":
         return _core.ModelParameter__get_name(self)
 
+    def _get_holdfast(self) -> "bool":
+        return _core.ModelParameter__get_holdfast(self)
+
+    def _set_holdfast(self, value: 'bool const &') -> "void":
+        return _core.ModelParameter__set_holdfast(self, value)
+
+    def _del_holdfast(self) -> "void":
+        return _core.ModelParameter__del_holdfast(self)
+
+    def _get_nullvalue(self) -> "double":
+        return _core.ModelParameter__get_nullvalue(self)
+
+    def _set_nullvalue(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_nullvalue(self, value)
+
+    def _get_initvalue(self) -> "double":
+        return _core.ModelParameter__get_initvalue(self)
+
+    def _set_initvalue(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_initvalue(self, value)
+
     value = property(_get_value, _set_value)
+    null_value = property(_get_nullvalue, _set_nullvalue)
+    initial_value = property(_get_initvalue, _set_initvalue)
     minimum = property(_get_min, _set_min, _del_min)
     maximum = property(_get_max, _set_max, _del_max)
+    holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
     std_err = property(_get_std_err, None, None, "the standard error of the estimator")
     robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
     name = property(_get_name, None, None, "the parameter name")
+    def __repr__(self):
+    	return "ModelParameter('{}', value={})".format(self.name, self.value)
 
 ModelParameter_swigregister = _core.ModelParameter_swigregister
 ModelParameter_swigregister(ModelParameter)

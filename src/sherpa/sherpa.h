@@ -172,6 +172,11 @@ protected:
 public:
 	etk::memarray FCurrent;
 	
+public:
+	etk::ndarray FHoldfast;
+	etk::ndarray FNullValues;
+	etk::ndarray FInitValues;
+	
 protected:
 	etk::memarray _FCurrent_latest_objective;
 	double _FCurrent_latest_objective_value;
@@ -251,25 +256,24 @@ public:
 	void _del_robust_covar_array();
 
 	etk::ndarray* _get_parameter_array();
+	etk::ndarray* _get_parameter_minbound_array();
+	etk::ndarray* _get_parameter_maxbound_array();
+	etk::ndarray* _get_holdfast_array();
+	etk::ndarray* _get_null_values_array();
+	etk::ndarray* _get_init_values_array();
+	
 	#ifdef SWIG
 	%pythoncode %{
 	parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
+	parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
+	parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
+	parameter_holdfast_array = property(_get_holdfast_array, None, None, "An array of current holdfast flags")
+	parameter_initial_values_array = property(_get_init_values_array, None, None, "An array of initial parameter values")
+	parameter_null_values_array = property(_get_null_values_array, None, None, "An array of parameter null values")
 	%}
 	#endif // def SWIG
 
-	etk::ndarray* _get_parameter_minbound_array();
-	#ifdef SWIG
-	%pythoncode %{
-	parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
-	%}
-	#endif // def SWIG
-	
-	etk::ndarray* _get_parameter_maxbound_array();
-	#ifdef SWIG
-	%pythoncode %{
-	parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
-	%}
-	#endif // def SWIG
+
 	
 
 };

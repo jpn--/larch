@@ -74,6 +74,53 @@ void elm::ModelParameter::_del_max()
 }
 
 
+bool elm::ModelParameter::_get_holdfast() const
+{
+	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot exceeds allocated size");
+	return model->FHoldfast.bool_at(slot);
+}
+
+void elm::ModelParameter::_set_holdfast(const bool& value)
+{
+	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot exceeds allocated size");
+	model->FHoldfast.bool_at(slot) = value;
+}
+
+void elm::ModelParameter::_del_holdfast()
+{
+	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot exceeds allocated size");
+	model->FHoldfast.bool_at(slot) = false;
+}
+
+
+
+
+
+double elm::ModelParameter::_get_nullvalue() const
+{
+	if (slot>=model->FNullValues.size()) OOPS_IndexError("slot exceeds allocated size");
+	return model->FNullValues[slot];
+}
+
+void elm::ModelParameter::_set_nullvalue(const double& value)
+{
+	if (slot>=model->FNullValues.size()) OOPS_IndexError("slot exceeds allocated size");
+	model->FNullValues[slot] = value;
+}
+
+double elm::ModelParameter::_get_initvalue() const
+{
+	if (slot>=model->FInitValues.size()) OOPS_IndexError("slot exceeds allocated size");
+	return model->FInitValues[slot];
+}
+
+void elm::ModelParameter::_set_initvalue(const double& value)
+{
+	if (slot>=model->FInitValues.size()) OOPS_IndexError("slot exceeds allocated size");
+	model->FInitValues[slot] = value;
+}
+
+
 
 
 

@@ -54,12 +54,26 @@ namespace elm {
 		double _get_robust_std_err() const;
 
 		std::string _get_name() const;
+		
+		bool _get_holdfast() const;
+		void _set_holdfast(const bool& value);
+		void _del_holdfast();
+		
+		double _get_nullvalue() const;
+		void _set_nullvalue(const double& value);
+
+		double _get_initvalue() const;
+		void _set_initvalue(const double& value);
+
 
 		#ifdef SWIG
 		%pythoncode %{
 		value = property(_get_value, _set_value)
+		null_value = property(_get_nullvalue, _set_nullvalue)
+		initial_value = property(_get_initvalue, _set_initvalue)
 		minimum = property(_get_min, _set_min, _del_min)
 		maximum = property(_get_max, _set_max, _del_max)
+		holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
 		std_err = property(_get_std_err, None, None, "the standard error of the estimator")
 		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
 		name = property(_get_name, None, None, "the parameter name")

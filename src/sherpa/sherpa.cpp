@@ -1074,6 +1074,9 @@ void sherpa::resize_allocated_memory()
 	size_t number_of_parameters = FNames.size();
 
 	FCurrent.resize(number_of_parameters);
+	FHoldfast.resize_bool(number_of_parameters);
+	FInitValues.resize(number_of_parameters);
+	FNullValues.resize(number_of_parameters);
 	_FCurrent_latest_objective.resize(number_of_parameters);
 	if (number_of_parameters>0) {
 		_FCurrent_latest_objective[0] = NAN;
@@ -1453,6 +1456,18 @@ etk::ndarray* sherpa::_get_parameter_minbound_array(){
 
 etk::ndarray* sherpa::_get_parameter_maxbound_array(){
 	return &FMax;
+}
+
+etk::ndarray* sherpa::_get_holdfast_array(){
+	return &FHoldfast;
+}
+
+etk::ndarray* sherpa::_get_null_values_array(){
+	return &FNullValues;
+}
+
+etk::ndarray* sherpa::_get_init_values_array(){
+	return &FInitValues;
 }
 
 
