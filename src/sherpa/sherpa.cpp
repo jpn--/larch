@@ -1069,6 +1069,34 @@ void sherpa::refresh_initial_value()
 
 
 
+void sherpa::resize_allocated_memory()
+{
+	size_t number_of_parameters = FNames.size();
+
+	FCurrent.resize(number_of_parameters);
+	_FCurrent_latest_objective.resize(number_of_parameters);
+	if (number_of_parameters>0) {
+		_FCurrent_latest_objective[0] = NAN;
+	}
+	FBest.resize(number_of_parameters);
+	FLastTurn.resize(number_of_parameters);
+	FPrevTurn.resize(number_of_parameters);
+	FMotion.resize(number_of_parameters);
+	FDirection.resize(number_of_parameters);
+	FMax.resize(number_of_parameters);
+	FMin.resize(number_of_parameters);
+	GCurrent.resize(number_of_parameters);
+	FatGCurrent.resize(number_of_parameters);
+	GLastTurn.resize(number_of_parameters);
+	GPrevTurn.resize(number_of_parameters);
+	GMotion.resize(number_of_parameters);
+	Bhhh.resize(number_of_parameters);
+	Hess.resize(number_of_parameters);
+	invHess.resize(number_of_parameters);
+	invHessTemp.resize(number_of_parameters);
+}
+
+
 void sherpa::allocate_memory()
 {
 	if (FCurrent.size1()!=dF()) {
@@ -1408,6 +1436,23 @@ void sherpa::_set_robust_covar_array(etk::symmetric_matrix* in)
 void sherpa::_del_robust_covar_array()
 {
 	Py_CLEAR(robustCovariance.pool);
+}
+
+
+
+
+
+
+etk::ndarray* sherpa::_get_parameter_array(){
+	return &FCurrent;
+}
+
+etk::ndarray* sherpa::_get_parameter_minbound_array(){
+	return &FMin;
+}
+
+etk::ndarray* sherpa::_get_parameter_maxbound_array(){
+	return &FMax;
 }
 
 

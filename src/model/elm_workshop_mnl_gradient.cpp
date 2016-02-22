@@ -37,8 +37,7 @@ using namespace std;
 
 
 elm::workshop_mnl_gradient::workshop_mnl_gradient
-( etk::object*      parent
-, const unsigned&   dF
+( const unsigned&   dF
 , const unsigned&   nElementals
 , const paramArray& Params_UtilityCA
 , const paramArray& Params_UtilityCO
@@ -52,8 +51,7 @@ elm::workshop_mnl_gradient::workshop_mnl_gradient
 , const unsigned&   firstcase
 , const unsigned&   numberofcases
 )
-: etk::subject (parent)
-, dF         (dF)
+: dF         (dF)
 , nElementals(nElementals)
 , Workspace    (nElementals)
 , CaseGrad        (dF)
@@ -217,7 +215,7 @@ void elm::workshop_mnl_gradient::workshop_mnl_gradient_send
 
 void elm::workshop_mnl_gradient::workshop_mnl_gradient_do(const etk::memarray& Probability)  // version 1
 {
-	BUGGER(msg)<< "Beginning MNL Gradient Evaluation" ;
+//	BUGGER(msg)<< "Beginning MNL Gradient Evaluation" ;
 	unsigned c;
 	workshopGCurrent.initialize(0.0);
 	workshopBHHH.initialize(0.0);
@@ -228,7 +226,7 @@ void elm::workshop_mnl_gradient::workshop_mnl_gradient_do(const etk::memarray& P
 			case_gradient_mnl(c,Probability);		
 		}
 	}
-	BUGGER(msg)<< "End MNL Gradient Evaluation" ;
+//	BUGGER(msg)<< "End MNL Gradient Evaluation" ;
 }
 
 

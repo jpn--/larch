@@ -3494,6 +3494,7 @@ check_darray = _core.check_darray
 class ParameterList(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
+    _parameter_name_index = _swig_property(_core.ParameterList__parameter_name_index_get, _core.ParameterList__parameter_name_index_set)
 
     def __init__(self, *args):
         this = _core.new_ParameterList(*args)
@@ -3801,6 +3802,9 @@ class sherpa(ParameterList):
     def hessfree_to_hessfull(self, full_matrix: 'etk::symmetric_matrix *', free_matrix: 'etk::symmetric_matrix const *') -> "void":
         return _core.sherpa_hessfree_to_hessfull(self, full_matrix, free_matrix)
 
+    def resize_allocated_memory(self) -> "void":
+        return _core.sherpa_resize_allocated_memory(self)
+
     def _get_inverse_hessian_array(self) -> "etk::symmetric_matrix *":
         return _core.sherpa__get_inverse_hessian_array(self)
 
@@ -3818,6 +3822,24 @@ class sherpa(ParameterList):
 
     def _del_robust_covar_array(self) -> "void":
         return _core.sherpa__del_robust_covar_array(self)
+
+    def _get_parameter_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_parameter_array(self)
+
+    parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
+
+
+    def _get_parameter_minbound_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_parameter_minbound_array(self)
+
+    parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
+
+
+    def _get_parameter_maxbound_array(self) -> "etk::ndarray *":
+        return _core.sherpa__get_parameter_maxbound_array(self)
+
+    parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
+
     __swig_destroy__ = _core.delete_sherpa
     __del__ = lambda self: None
 sherpa_swigregister = _core.sherpa_swigregister
@@ -3828,6 +3850,12 @@ class Model2(sherpa):
 
     def _xylem(self) -> "elm::VAS_System const &":
         return _core.Model2__xylem(self)
+
+    def _sayweakself(self) -> "void":
+        return _core.Model2__sayweakself(self)
+
+    def _setweakself(self, ref_to_self: 'PyObject *') -> "void":
+        return _core.Model2__setweakself(self, ref_to_self)
 
     def _get_root_cellcode(self) -> "elm::cellcode":
         return _core.Model2__get_root_cellcode(self)
@@ -4188,6 +4216,124 @@ class Model2(sherpa):
         return _core.Model2_teardown(self)
 Model2_swigregister = _core.Model2_swigregister
 Model2_swigregister(Model2)
+
+class autoindex_string(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+
+    def at_index(self, index: 'size_t const &') -> "std::string const &":
+        return _core.autoindex_string_at_index(self, index)
+
+    def __len__(self) -> "size_t":
+        return _core.autoindex_string___len__(self)
+
+    def clear(self) -> "void":
+        return _core.autoindex_string_clear(self)
+
+    def strings(self) -> "std::vector< std::string,std::allocator< std::string > > const &":
+        return _core.autoindex_string_strings(self)
+
+    def drop(self, codex: 'std::string const &') -> "size_t":
+        return _core.autoindex_string_drop(self, codex)
+
+    def __contains__(self, codex: 'std::string const &') -> "bool":
+        return _core.autoindex_string___contains__(self, codex)
+
+    def __init__(self, *args):
+        this = _core.new_autoindex_string(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _core.delete_autoindex_string
+    __del__ = lambda self: None
+
+    def extend(self, init: 'StrVector') -> "void":
+        return _core.autoindex_string_extend(self, init)
+
+    def index_from_string(self, codex: 'std::string const &') -> "size_t":
+        return _core.autoindex_string_index_from_string(self, codex)
+
+    def string_from_index(self, index: 'size_t const &') -> "std::string":
+        return _core.autoindex_string_string_from_index(self, index)
+
+    def __getitem__(self, key):
+    	if isinstance(key, int):
+    		if key<len(self):
+    			if key>=0:
+    				return key
+    			else:
+    				key = len(self)+key
+    				if key<0:
+    					raise IndexError()
+    				return key
+    		else:
+    			raise IndexError()
+    	elif isinstance(key, str):
+    		return self.index_from_string(key)
+    	elif isinstance(key, bytes):
+    		return self.index_from_string(key.decode('utf8'))
+    def __repr__(self):
+    	return "larch.core.autoindex_string(" + repr(self.strings()) + ")"
+
+autoindex_string_swigregister = _core.autoindex_string_swigregister
+autoindex_string_swigregister(autoindex_string)
+
+class ModelParameter(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+
+    def __init__(self, model: 'Model2', slot: 'size_t const &'):
+        this = _core.new_ModelParameter(model, slot)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _core.delete_ModelParameter
+    __del__ = lambda self: None
+
+    def _get_value(self) -> "double":
+        return _core.ModelParameter__get_value(self)
+
+    def _set_value(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_value(self, value)
+
+    def _get_min(self) -> "double":
+        return _core.ModelParameter__get_min(self)
+
+    def _set_min(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_min(self, value)
+
+    def _del_min(self) -> "void":
+        return _core.ModelParameter__del_min(self)
+
+    def _get_max(self) -> "double":
+        return _core.ModelParameter__get_max(self)
+
+    def _set_max(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_max(self, value)
+
+    def _del_max(self) -> "void":
+        return _core.ModelParameter__del_max(self)
+
+    def _get_std_err(self) -> "double":
+        return _core.ModelParameter__get_std_err(self)
+
+    def _get_robust_std_err(self) -> "double":
+        return _core.ModelParameter__get_robust_std_err(self)
+
+    def _get_name(self) -> "std::string":
+        return _core.ModelParameter__get_name(self)
+
+    value = property(_get_value, _set_value)
+    minimum = property(_get_min, _set_min, _del_min)
+    maximum = property(_get_max, _set_max, _del_max)
+    std_err = property(_get_std_err, None, None, "the standard error of the estimator")
+    robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
+    name = property(_get_name, None, None, "the parameter name")
+
+ModelParameter_swigregister = _core.ModelParameter_swigregister
+ModelParameter_swigregister(ModelParameter)
 
 
 from .model import Model

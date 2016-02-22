@@ -282,9 +282,24 @@ void ndarray::resize(const int& r)
 	if (!pool
 		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
 		||	ndim() != 1
-		||	size1() != r
-		)
-	quick_new(NPY_DOUBLE, "Array", r);
+		) {
+		quick_new(NPY_DOUBLE, "Array", r);
+	}
+	
+	else if (size1() != r) {
+		size_t old_r = size1();
+		PyArrayObject* old_pool = pool;
+		Py_INCREF(old_pool);
+		quick_new(NPY_DOUBLE, "Array", r);
+		if (old_r < r) {
+			// copy oldpool values into new pool, extra space is automatically zero
+			memcpy((static_cast<double*>( PyArray_DATA(pool) )), (static_cast<double*>( PyArray_DATA(old_pool) )), sizeof(double)*old_r);
+		} else {
+			// copy oldpool values into new pool, truncating some
+			memcpy((static_cast<double*>( PyArray_DATA(pool) )), (static_cast<double*>( PyArray_DATA(old_pool) )), sizeof(double)*r);
+		}
+		Py_DECREF(old_pool);
+	}
 }
 
 void ndarray::resize(const int& r,const int& c)
@@ -1343,7 +1358,34 @@ void symmetric_matrix::operator= (const symmetric_matrix& that)
 
 void symmetric_matrix::resize(const int& r)
 {
-	quick_new(NPY_DOUBLE, "SymmetricArray", r,r);
+	
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
+		||	ndim() != 2
+		||  size1()!=size2()
+		) {
+		quick_new(NPY_DOUBLE, "SymmetricArray", r,r);
+	}
+	
+	else if (size1() != r) {
+		size_t old_r = size1();
+		PyArrayObject* old_pool = pool;
+		Py_INCREF(old_pool);
+		quick_new(NPY_DOUBLE, "SymmetricArray", r,r);
+		if (old_r < r) {
+			// copy oldpool values into new pool, extra space is automatically zero
+			for (size_t each_row=0; each_row<old_r; each_row++) {
+				memcpy(PyArray_GETPTR2(pool, each_row, 0), PyArray_GETPTR2(old_pool, each_row, 0), sizeof(double)*old_r);
+			}
+		} else {
+			// copy oldpool values into new pool, truncating some
+			for (size_t each_row=0; each_row<r; each_row++) {
+				memcpy(PyArray_GETPTR2(pool, each_row, 0), PyArray_GETPTR2(old_pool, each_row, 0), sizeof(double)*r);
+			}
+		}
+		Py_DECREF(old_pool);
+	}
+	
 }
 
 void symmetric_matrix::resize(const int& r,const int& c)

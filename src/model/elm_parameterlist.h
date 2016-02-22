@@ -35,9 +35,16 @@ namespace elm {
 	#endif // not SWIG
 	{
 
+
+	public:
+		#ifdef SWIG
+		%rename(_parameter_name_index) FNames;
+		#endif // SWIG
+		etk::autoindex_string FNames;
+
+
 	#ifndef SWIG
 	public:
-		etk::autoindex_string FNames;
 		std::map<std::string,freedom_info> FInfo;
 		
 		std::map<std::string,freedom_alias> AliasInfo;

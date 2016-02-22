@@ -34,6 +34,7 @@ using namespace std;
 
 elm::Model2::Model2()
 : _Fount(NULL)
+, weakself (nullptr)
 , Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
@@ -75,6 +76,7 @@ elm::Model2::Model2()
 
 elm::Model2::Model2(elm::Fountain& datafile)
 : _Fount(&datafile)
+, weakself (nullptr)
 , Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
@@ -1785,8 +1787,22 @@ std::string elm::Model2::read_runstats_notes() const
 	return _latest_run.notes();
 }
 
+void elm::Model2::_sayweakself()
+{
+	std::cerr<<"weakself="<<static_cast<void*>(weakself)<<", refcount=";
+	if (weakself) {
+		std::cerr << weakself->ob_refcnt;
+	} else {
+		std::cerr << "na";
+	}
+	std::cerr <<"\n";
+}
 
-
+void elm::Model2::_setweakself(PyObject* ref_to_self)
+{
+	// do not increment or decrement refcounts on old or new values.
+	weakself = ref_to_self;
+}
 
 
 etk::symmetric_matrix* elm::Model2::_get_hessian_array()

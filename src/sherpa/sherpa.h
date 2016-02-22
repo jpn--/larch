@@ -50,6 +50,10 @@
 
 std::string algorithm_name(const char& algo);
 
+namespace elm {
+  class ModelParameter;
+};
+
 
 struct sherpa_result {
 	double starting_obj_value;
@@ -65,6 +69,8 @@ class sherpa
 
 
 #ifndef SWIG
+	
+	friend class elm::ModelParameter;
 	
 public:
 	virtual double objective();
@@ -141,9 +147,6 @@ public:
 	
 	///// MEMORY /////
 	
-public:
-//	etk::autoindex_string FNames;
-//	std::map<std::string,freedom_info> FInfo;
 protected:
 	void _update_freedom_info(const etk::triangle* ihess=NULL, const etk::triangle* robust_covar=NULL);
 	void _update_freedom_info_best();
@@ -187,8 +190,8 @@ protected:
 	etk::memarray FMotion;
 	etk::memarray FDirection;
 	
-	etk::memarray FMax;
-	etk::memarray FMin;
+	etk::ndarray FMax;
+	etk::ndarray FMin;
 	
 protected:
 	etk::memarray GCurrent;
@@ -226,6 +229,8 @@ public:
 	void hessfull_to_hessfree(const etk::symmetric_matrix* full_matrix, etk::symmetric_matrix* free_matrix) ;
 	void hessfree_to_hessfull(etk::symmetric_matrix* full_matrix, const etk::symmetric_matrix* free_matrix) ;
 
+	void resize_allocated_memory();
+
 
 //#ifdef SWIG
 //	%feature("shadow") _get_inverse_hessian_array() %{
@@ -244,6 +249,28 @@ public:
 	etk::symmetric_matrix* _get_robust_covar_array();
 	void _set_robust_covar_array(etk::symmetric_matrix* in);
 	void _del_robust_covar_array();
+
+	etk::ndarray* _get_parameter_array();
+	#ifdef SWIG
+	%pythoncode %{
+	parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
+	%}
+	#endif // def SWIG
+
+	etk::ndarray* _get_parameter_minbound_array();
+	#ifdef SWIG
+	%pythoncode %{
+	parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
+	%}
+	#endif // def SWIG
+	
+	etk::ndarray* _get_parameter_maxbound_array();
+	#ifdef SWIG
+	%pythoncode %{
+	parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
+	%}
+	#endif // def SWIG
+	
 
 };
 

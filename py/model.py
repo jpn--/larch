@@ -34,6 +34,7 @@ class Model(Model2, ModelReporter):
 		super().__init__(*args, **kwargs)
 		from .util.attribute_dict import function_cache
 		self._cached_results = function_cache()
+		self._setweakself(self)
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance
@@ -56,6 +57,22 @@ class Model(Model2, ModelReporter):
 		else:
 			m = examples.model(d)
 		return m
+
+	def px(self, n):
+		if isinstance(n,str):
+			raise LarchError("not implemented")
+		from .core import ModelParameter
+		return ModelParameter(self, n)
+
+
+	def add_parameter(self, name, **kwargs):
+		if name not in self._parameter_name_index:
+			i = self._parameter_name_index[name]
+			self.resize_allocated_memory()
+		par = self.px(i)
+		for key,value in kwargs.items():
+			setattr(par,key,value)
+		return par
 
 
 	def parameter_wide(self, name):

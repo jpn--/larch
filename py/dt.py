@@ -69,6 +69,14 @@ class LocalAttributeSet(object):
 		return iter(sorted(self._local_expr.keys()) + sorted(i for i in self._h5_expr._v_attrnames if i not in self._hdf5_attrs))
 	def __len__(self):
 		return len(self._local_expr) + len([i for i in self._h5_expr._v_attrnames if i not in self._hdf5_attrs])
+	def __getitem__(self, key):
+		return self.__getattr__(key)
+	def __setitem__(self, key, value):
+		return self.__setattr__(key,value)
+	def __delitem__(self, key):
+		return self.__delattr__(key)
+
+
 
 class DT(Fountain):
 
@@ -1224,6 +1232,14 @@ class DT(Fountain):
 				log("    {}".format(i))
 
 
+	@property
+	def namespace(self):
+		space = {}
+		space.update(self.h5idco._v_children.iteritems())
+		space.update(self.h5idca._v_children.iteritems())
+		space.update({i:self.expr[i] for i in self.expr})
+		return space
 
-
+	def Expr(self, expression):
+		return _tb.Expr(expression, uservars=self.namespace)
 

@@ -308,6 +308,18 @@ from .dt import DT
 %include "sherpa_freedom.h"
 %include "sherpa.h"
 %include "elm_model2.h"
+
+%{
+#include "etk_autoindex.h"
+%}
+%include "etk_autoindex.h"
+
+
+%{
+#include "larch_modelparameter.h"
+%}
+%include "larch_modelparameter.h"
+
 %pythoncode %{
 from .model import Model
 %}

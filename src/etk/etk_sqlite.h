@@ -95,7 +95,6 @@ public:
 
 	class database
 	: public database_service 
-	, public subject
 	{
 	
 	const char*		_file_path;		// path to database

@@ -255,3 +255,22 @@ class TestData1(unittest.TestCase):
 		d4=DT.Example('MINI')
 		self.assertEqual( 0, d4.validate_hdf5(log=(lambda y: None), errlog=print) )
 		del d4
+
+
+	def test_autoindex_string(self):
+		from ..core import autoindex_string
+		a = autoindex_string( ['Hello','World!'] )
+		self.assertEqual( 1, a['World!'] )
+		self.assertEqual( 0, a['Hello'] )
+		self.assertEqual( 2, a['Earth!'] )
+		self.assertEqual( 1, a.drop('World!') )
+		self.assertEqual( 1, a['Earth!'] )
+		self.assertEqual( 1, a[-1] )
+		with self.assertRaises(IndexError):
+			a[-3]
+		with self.assertRaises(IndexError):
+			a[3]
+		a.extend(['a','b','c'])
+		self.assertEqual( 5, len(a) )
+		self.assertEqual( 3, a['b'] )
+

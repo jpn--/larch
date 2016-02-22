@@ -249,7 +249,6 @@
 
 
 
-
 /* Convert from Python --> C */
 %typemap(in) etk::ndarray_bool* (boosted::shared_ptr<etk::ndarray_bool> temp) {
 	if ($input == Py_None) {

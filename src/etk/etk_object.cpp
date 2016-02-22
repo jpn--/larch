@@ -37,89 +37,8 @@ etk::object::object(logging_service& ms)
 
 etk::object::~object()
 {
-	//MONITOR(msg)<< "Destroying object:"<<pointer_as_string(this) ;
-	if (_subjects.size()) {		
-		//MONITOR(msg)<<"Deleting "<<int(_subjects.size())<<" subjects..." ;
-		while (_subjects.size()>0) {
-			delete (*( _subjects.begin() ));
-		}
-	}
-}
 
-void etk::object::add_subject(subject* baby)
-{
-	_subjects.insert(baby);
-}
-
-void etk::object::del_subject(subject* baby)
-{
-	_subjects.erase(baby);
-}
-
-void etk::object::print_set()
-{
-	BUGGER_BUFFER(msg) << "OBJECT "<<pointer_as_string(this)<<":{";
-	std::set<subject*>::iterator i = _subjects.begin();
-	if (i!=_subjects.end())  {
-		BUGGER_BUFFER(msg)<<pointer_as_string(*i);
-		for (i++; i!=_subjects.end(); i++) {
-			BUGGER_BUFFER(msg)<<","<<pointer_as_string(*i);
-		}
-	}
-	BUGGER(msg)<<"}" ;
 }
 
 
 
-
-
-etk::subject::subject(object* parent)
-: _object (parent)
-{ 
-	if (_object) {
-		//MONITOR(_object->msg) << "Creating subject:"<<pointer_as_string(this)<<" of object:"<<pointer_as_string(_object) ;
-		_object->add_subject(this);
-		msg = (_object->msg);
-	}
-}
-
-etk::subject::subject(const subject& sibling)
-: _object (sibling._object)
-{ 
-	if (_object) {
-		//MONITOR(_object->msg) << "Creating subject:"<<pointer_as_string(this)<<" of object:"<<pointer_as_string(_object) ;
-		_object->add_subject(this);
-	}
-}
-
-subject& etk::subject::operator=(const subject& sibling)
-{ 
-	if (_object != sibling._object) {
-		_object->del_subject(this);
-		_object = sibling._object;
-	}
-	if (_object) {
-		//MONITOR(_object->msg) << "Creating subject:"<<pointer_as_string(this)<<" of object:"<<pointer_as_string(_object) ;
-		_object->add_subject(this);
-	}
-	return *this;
-}
-
-void etk::subject::reparent(object* parent)
-{
-	if (_object) {
-		_object->del_subject(this);
-	}
-	_object = parent;
-	if (_object) {
-		_object->add_subject(this);
-	}
-}
-
-etk::subject::~subject()
-{
-	if (_object) {
-		//MONITOR(_object->msg) << "Destroying subject:"<<pointer_as_string(this)<<" of object:"<<pointer_as_string(_object) ;
-		_object->del_subject(this);
-	}
-}

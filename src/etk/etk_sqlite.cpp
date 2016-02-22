@@ -30,7 +30,6 @@ using namespace std;
 
 database::database (string file_name_, object* parent, logging_service* m)
 :	database_service ()
-,	subject     (parent)
 ,	_file_path	(new char [file_name_.length()+1])
 ,	_db			(0)
 ,	_statement	(0)

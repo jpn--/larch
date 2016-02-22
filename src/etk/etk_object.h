@@ -27,35 +27,15 @@
 
 namespace etk {
 	
-
-	class object;
-	class subject;
-
 	class object
 	{
-		std::set<subject*> _subjects;	
 	public:
         logging_service msg;
+		
 		object(logging_service* m=NULL);
 		object(logging_service& ms);
+		
 		virtual ~object();	
-		void add_subject(subject* baby);
-		void del_subject(subject* baby);
-		void print_set();
-		friend class subject;
-	};
-
-	class subject
-	{
-		object* _object;	
-	public:
-		logging_service msg;
-		subject(object* parent=0);
-		subject(const subject& sibling);
-		subject& operator=(const subject& sibling);
-		virtual ~subject();
-		void reparent(object* parent);
-		const object* obj() const { return _object; }
 	};
 
 }

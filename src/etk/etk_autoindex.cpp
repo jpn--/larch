@@ -110,33 +110,54 @@ autoindex_int::~autoindex_int()
 
 // STRING
 
-unsigned& autoindex_string::operator[] (const std::string& codex) {
-	std::map<std::string,unsigned>::iterator i;
+size_t& autoindex_string::operator[] (const std::string& codex) {
+	std::map<std::string,size_t>::iterator i;
 	i = _index.find(codex);	
 	if (i!=_index.end()) return (i->second);		
 	size_t j = _index.size();
-	if (_strap) {
-		_codex.at(_strap->at(j)) = codex;
-		if (_strap->at(j) >= _knife) OOPS("autoindex: case is knifed");
-		return (_index.insert( std::pair<std::string,unsigned>(codex, _strap->at(j)) )).first->second;
-	} 
 	_codex.push_back(codex);
 	return (_index.insert( std::pair<std::string,size_t> (codex, j) )).first->second;
 }
 
-const unsigned int& autoindex_string::operator[] (const std::string& codex) const {
-	std::map<std::string,unsigned>::const_iterator i = _index.find(codex);		
+const size_t& autoindex_string::operator[] (const std::string& codex) const {
+	std::map<std::string,size_t>::const_iterator i = _index.find(codex);
 	if (i==_index.end()) OOPS("autoindex: codex %s not found in const autoindex",codex);
 	return (i->second);		
 }
 
-const std::string& autoindex_string::operator[] (const unsigned& index) const {
+const std::string& autoindex_string::operator[] (const size_t& index) const {
 	if (index >= _codex.size()) OOPS("autoindex: index out of range");
 	return _codex[index];
 }
 
-const std::string& autoindex_string::at_index (const unsigned& index) const {
-	if (index >= _codex.size()) OOPS("autoindex: index out of range");
+
+
+
+size_t autoindex_string::index_from_string(const std::string& codex)
+{
+	std::map<std::string,size_t>::iterator i;
+	i = _index.find(codex);	
+	if (i!=_index.end()) return (i->second);		
+	size_t j = _index.size();
+	_codex.push_back(codex);
+	return (_index.insert( std::pair<std::string,size_t> (codex, j) )).first->second;
+}
+
+std::string autoindex_string::string_from_index(const size_t& index) const
+{
+	if (index >= _codex.size()) OOPS_IndexError("autoindex: index out of range");
+	return _codex[index];
+}
+
+
+
+
+
+
+
+
+const std::string& autoindex_string::at_index (const size_t& index) const {
+	if (index >= _codex.size()) OOPS_IndexError("autoindex: index out of range");
 	return _codex[index];
 }
 
@@ -149,52 +170,30 @@ void autoindex_string::clear()
 { 
 	_index.clear(); 
 	_codex.clear();
-	if (_strap) {
-		_strap->clear();
-		delete _strap;
-		_strap =0;
-	}
-	_knife = UINT_MAX;
 }
 
-void autoindex_string::make_strap (const unsigned& n_cases)
-{
-	clear();
-	_strap = new std::vector<unsigned> (n_cases);
-	for (unsigned i=0; i<n_cases; i++) (*_strap)[i]=i;
-	etk::randomizer R;
-	shuffle(*_strap,&R);
-}
 
-void autoindex_string::set_knife (const unsigned& n_cases)
-{
-	_knife = n_cases;
-}
 
-void autoindex_string::set_knife (const double& fraction_cases)
+size_t autoindex_string::drop (const std::string& codex)
 {
-	if (_strap) _knife = unsigned((double)_strap->size() * fraction_cases);
-}
-
-bool autoindex_string::drop (const std::string& codex)
-{
-	std::map<std::string,unsigned>::iterator i;
+	std::map<std::string,size_t>::iterator i;
 	i = _index.find(codex);	
-	if (i==_index.end()) return false; // no drop required
+	if (i==_index.end()) return -1; // no drop required
 	
-	if (_strap) OOPS("autoindex: dropping from strapped autoindex is not supported yet");
+	size_t dropped = i->second;
+	
 	strvec::iterator j = _codex.begin() + i->second;
 	_codex.erase(j);	
 	_index.clear();
-	for (unsigned k=0; k<_codex.size(); k++) {
+	for (size_t k=0; k<_codex.size(); k++) {
 		_index[_codex[k]] = k;
 	}
-	return true;
+	return dropped;
 }
 
 bool autoindex_string::has_key(const std::string& codex) const
 {
-	std::map<std::string,unsigned>::const_iterator i;
+	std::map<std::string,size_t>::const_iterator i;
 	i = _index.find(codex);	
 	if (i==_index.end()) return false; 
 	return true;
@@ -203,9 +202,26 @@ bool autoindex_string::has_key(const std::string& codex) const
 
 
 autoindex_string::autoindex_string()		
-:	_strap	(0)
-,	_knife	(UINT_MAX)
 { }
+
+void autoindex_string::extend(const std::vector<std::string>& init)
+{
+	size_t k = _codex.size();
+	_codex.insert(_codex.end(), init.begin(), init.end());
+	for (; k<_codex.size(); k++) {
+		_index[_codex[k]] = k;
+	}
+}
+
+
+autoindex_string::autoindex_string(const std::vector<std::string>& init)
+: _codex(init)
+{
+	for (size_t k=0; k<_codex.size(); k++) {
+		_index[_codex[k]] = k;
+	}
+}
+
 
 autoindex_string::~autoindex_string()	
 { 

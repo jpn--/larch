@@ -77,8 +77,6 @@ namespace elm {
 	: public sherpa
 	{
 
-
-
 		#ifdef SWIG
 		%feature("pythonappend") Model2(elm::Fountain& d) %{
 			try:
@@ -114,6 +112,9 @@ namespace elm {
 
 
 #ifndef SWIG
+
+	public:
+		PyObject* weakself;
 	
 		friend class elm::ComponentList;
 		
@@ -131,6 +132,9 @@ namespace elm {
 
 	public:
 		const elm::VAS_System& _xylem() {return Xylem;}
+
+		void _sayweakself();
+		void _setweakself(PyObject* ref_to_self);
 
 	public:		
 		elm::cellcode _get_root_cellcode() const;
@@ -790,6 +794,12 @@ FOSWIG(	%rename(__repr__) representation; )
 		
 
 //////// MARK: CONSTRUCTOR ///////////////////////////////////////////////////////////
+
+		#ifdef SWIG
+		%typemap(out) elm::Model2* {
+		   ($1)->weakself = $result = SWIG_NewPointerObj(SWIG_as_voidptr(($1)), $1_descriptor, SWIG_POINTER_NEW |  0 );
+		}
+		#endif // def SWIG
 		
 	public:
 		Model2();

@@ -220,7 +220,6 @@ namespace elm {
 
 
 class workshop_mnl_gradient 
-: public etk::subject 
 {
 
 public:
@@ -257,8 +256,7 @@ public:
 
 
 	workshop_mnl_gradient
-	( etk::object*      parent
-	 , const unsigned&   dF
+	(  const unsigned&   dF
 	 , const unsigned&   nNodes
 	 , const paramArray& Params_UtilityCA
 	 , const paramArray& Params_UtilityCO

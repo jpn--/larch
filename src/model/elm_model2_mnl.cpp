@@ -945,8 +945,7 @@ void elm::Model2::mnl_gradient_v2()
 		
 		
 		workshop_mnl_gradient w
-		(this
-		 , dF()
+		(dF()
 		 , nElementals
 		 , Params_UtilityCA
 		 , Params_UtilityCO
