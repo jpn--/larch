@@ -128,7 +128,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 		r.stats.start_process("weight unrescale")
 		model.restore_scale_weights()
 		model.clear_cache()
-		ll = model.loglike_nocache()
+		ll = model.loglike(from_cache=False)
 
 	if model.option.calc_std_errors:
 		r.stats.start_process("parameter covariance")

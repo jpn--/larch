@@ -34,7 +34,6 @@ using namespace std;
 
 elm::Model2::Model2()
 : _Fount(NULL)
-, weakself (nullptr)
 , Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
@@ -69,14 +68,12 @@ elm::Model2::Model2()
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
-, hessian_matrix()
 {
 }
 
 
 elm::Model2::Model2(elm::Fountain& datafile)
 : _Fount(&datafile)
-, weakself (nullptr)
 , Data_UtilityCE ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
@@ -111,7 +108,6 @@ elm::Model2::Model2(elm::Fountain& datafile)
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
-, hessian_matrix()
 {
 	if (_Fount) {
 		Xylem.add_dna_sequence(_Fount->alternatives_dna());
@@ -791,18 +787,18 @@ void elm::Model2::_parameter_push(const std::vector<double>& v)
 
 void elm::Model2::_parameter_update()
 {
-	size_t FCurrent_size = FCurrent.size();
-	size_t FMax_size = FMax.size();
-	size_t FMin_size = FMin.size();
-	size_t df_z = dF();
-
-	for (unsigned i=0; i<dF(); i++) {
-		freedom_info* f = &(FInfo[FNames[i]]);
-		FCurrent[i] = f->value;
-		FMax[i] = f->max_value;
-		FMin[i] = f->min_value;
-	}
-	freshen();
+//	size_t FCurrent_size = FCurrent.size();
+//	size_t FMax_size = FMax.size();
+//	size_t FMin_size = FMin.size();
+//	size_t df_z = dF();
+//
+//	for (unsigned i=0; i<dF(); i++) {
+//		freedom_info* f = &(FInfo[FNames[i]]);
+//		FCurrent[i] = f->value;
+//		FMax[i] = f->max_value;
+//		FMin[i] = f->min_value;
+//	}
+//	freshen();
 }
 
 void elm::Model2::_parameter_log()
@@ -925,7 +921,7 @@ PyObject* elm::Model2::_get_parameter() const
 std::vector<double> elm::Model2::parameter_values() const {
 	std::vector<double> ret (dF());
 	for (unsigned i=0; i<dF(); i++) {
-		ret[i] = FInfo.find(FNames[i])->second.value;
+		ret[i] = FCurrent[i];
 	}
 	return ret;
 }
@@ -933,7 +929,7 @@ std::vector<double> elm::Model2::parameter_values() const {
 PyObject* elm::Model2::parameter_values_as_bytes() const {
 	std::vector<double> ret (dF());
 	for (unsigned i=0; i<dF(); i++) {
-		ret[i] = FInfo.find(FNames[i])->second.value;
+		ret[i] = FCurrent[i];
 	}
 	return PyBytes_FromStringAndSize((char*) &ret[0], dF()*sizeof(double) );
 }
@@ -1092,67 +1088,18 @@ std::string elm::Model2::save_buffer() const
 	sv << "self.title = "<<__base64encode_wrap(title)<<"\n\n";
 	
 	// save parameter
-//	BUGGER( msg ) << "save parameter";
-	for (auto p=FNames.strings().begin(); p!=FNames.strings().end(); p++) {
-//		BUGGER( msg ) << "save parameter "<<*p;
-		auto i = FInfo.find(*p);
-		if (i==FInfo.end()) {
-    		BUGGER( msg ) << "error in save parameter "<<*p<<", not found in FInfo";
-		} else {
-//    		BUGGER( msg ) << "save parameter "<<*p<<" found in FInfo";
-			auto j = i->second;
-//			BUGGER( msg ) << "j.value=" << j.value;
-			
-			sv << "self.parameter("<<__base64encode_wrap(*p);
-			sv << ","<<AsPyFloat(j.value);
-//			BUGGER( msg ) << "j.null_value=" << j.null_value;
-			sv << ","<<AsPyFloat(j.null_value);
-//			BUGGER( msg ) << "j.initial_value=" << j.initial_value;
-			sv << ","<<AsPyFloat(j.initial_value);
-//			BUGGER( msg ) << "j.max_value=" << j.max_value;
-			sv << ","<<AsPyFloat(j.max_value);
-//			BUGGER( msg ) << "j.min_value=" << j.min_value;
-			sv << ","<<AsPyFloat(j.min_value);
-//			BUGGER( msg ) << "j.std_err=" << j.std_err;
-			sv << ","<<AsPyFloat(j.std_err);
-//			BUGGER( msg ) << "j.robust_std_err=" << j.robust_std_err;
-			sv << ","<<AsPyFloat(j.robust_std_err);
-//			BUGGER( msg ) << "j.holdfast=" << j.holdfast;
-			sv << ","<<j.holdfast;
-			
-			if (j._covar) {
-//				BUGGER( msg ) << "j._covar is not null";
-//				int check = PyMapping_Check(j._covar);
-//				if (check) {
-//				BUGGER( msg ) << "j._covar check "<<check;
-//				BUGGER( msg ) << "j._covar length "<< (int)PyMapping_Size(j._covar);
-//				}
-				PyObject* c = PyObject_Str(j._covar);
-//				BUGGER( msg ) << "next line";
-				if (c) {
-//					BUGGER( msg ) << "j.covariance=";
-//					BUGGER( msg ) << PyString_ExtractCppString(c);
-					sv << ",covariance="<<PyString_ExtractCppString(c);
-				}
-				Py_CLEAR(c);
-			}
-			
-			if (j._robust_covar) {
-//				BUGGER( msg ) << "j._robust_covar is not null";
-//				int check = PyMapping_Check(j._robust_covar);
-//				BUGGER( msg ) << "j._robust_covar check "<<check;
-				PyObject* c = PyObject_Str(j._robust_covar);
-//				BUGGER( msg ) << "next line 2";
-				if (c) {
-//					BUGGER( msg ) << "j.robust_covariance=";
-//					BUGGER( msg ) << PyString_ExtractCppString(c);
-					sv << ",robust_covariance="<<PyString_ExtractCppString(c);
-				}
-				Py_CLEAR(c);
-			}
-			
-			sv << ")\n";
-		}
+//	for (auto p=FNames.strings().begin(); p!=FNames.strings().end(); p++) {
+	for (size_t pn=0; pn<FNames.size(); pn++) {
+		
+		sv << "self.parameter("<<__base64encode_wrap(FNames.string_from_index(pn));
+		sv << ","<<AsPyFloat(FCurrent[pn]);
+		sv << ","<<AsPyFloat(FNullValues[pn]);
+		sv << ","<<AsPyFloat(FInitValues[pn]);
+		sv << ","<<AsPyFloat(FMax[pn]);
+		sv << ","<<AsPyFloat(FMin[pn]);
+		sv << ",holdfast="<< (FHoldfast.bool_at(pn) ? "True":"False");
+		
+		sv << ")\n";
 	}
 	sv << "\n";
 	
@@ -1264,7 +1211,6 @@ std::string elm::Model2::save_buffer() const
 
 void elm::Model2::parameter_values(std::vector<double> v) {
 	
-	_parameter_update();
 	if (v.size() != dF()) {
 		auto df_ = dF();
 		auto pn = parameter_names();
@@ -1283,10 +1229,10 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		if (FInfo[FNames[z]].holdfast) {
-			if (v[z] != FInfo[FNames[z]].value) {
+		if (FHoldfast.bool_at(z)) {
+			if (v[z] != FCurrent[z]) {
 				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+				<< ", it differs from the holdfast value of " <<FCurrent[z];
 			}
 		} else {
 			FCurrent[z] = v[z];
@@ -1326,7 +1272,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_cached(const std::
 
 std::shared_ptr<etk::ndarray> elm::Model2::negative_d_loglike_nocache() {
 	setUp();
-
+	freshen();
 	_parameter_update();
 	std::shared_ptr<etk::ndarray> g = make_shared<etk::ndarray>(gradient(true), false);
 	bool z = true;
@@ -1429,7 +1375,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::_gradient_casewise() {
 
 std::shared_ptr<etk::ndarray> elm::Model2::_gradient_casewise(std::vector<double> v) {
 
-	loglike_nocache(v);
+//	loglike(v);
+	loglike();
 
 	if ((features & MODELFEATURES_ALLOCATION)) {
 		return _ngev_gradient_full_casewise();
@@ -1635,25 +1582,41 @@ double elm::Model2::bhhh_tolerance_nocache(const std::vector<double>& v)
 }
 
 
-double elm::Model2::loglike_cached() {
-	setUp();
-	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	_parameter_update();
+//double elm::Model2::loglike_cached() {
+//	setUp();
+//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+//	_parameter_update();
+//
+//	double cached_ll = -INF;
+//	const double* FCurrent_ptr = FCurrent.ptr(0);
+//	size_t FCurrent_size = FCurrent.size();
+//	if (FCurrent_size && _cached_results.read_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), cached_ll)) {
+//		return cached_ll;
+//	} else {
+//		OOPS_CACHE("there is no cached value for loglike at the current parameters");
+//	}
+//	
+//}
 
-	double cached_ll = -INF;
-	const double* FCurrent_ptr = FCurrent.ptr(0);
-	size_t FCurrent_size = FCurrent.size();
-	if (FCurrent_size && _cached_results.read_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), cached_ll)) {
-		return cached_ll;
-	} else {
-		OOPS_CACHE("there is no cached value for loglike at the current parameters");
-	}
+
+//double elm::Model2::loglike_nocache() {
+//	
+//	double x (-INF);
+//	const double* FCurrent_ptr = FCurrent.ptr();
+//	size_t FCurrent_size = FCurrent.size();
+//	x = objective();
+//	if (isNan(x)) {
+//		x = -INF;
+//	}
+//	_cached_results.set_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), x);
+//	
+//	return x;
+//	
+//}
+
+double elm::Model2::loglike() {
 	
-}
-
-
-double elm::Model2::loglike_nocache() {
-	
+	setUp(false);
 	double x (-INF);
 	const double* FCurrent_ptr = FCurrent.ptr();
 	size_t FCurrent_size = FCurrent.size();
@@ -1665,60 +1628,56 @@ double elm::Model2::loglike_nocache() {
 	
 	return x;
 	
-}
-
-double elm::Model2::loglike() {
-	
-	try {
-		return loglike_cached();
-	} catch (etk::LarchCacheError) {
-		return loglike_nocache();
-	}
+//	try {
+//		return loglike_cached();
+//	} catch (etk::LarchCacheError) {
+//		return loglike_nocache();
+//	}
 	
 }
 
-double elm::Model2::loglike_cached(std::vector<double> v) {
-	double cached_ll = -INF;
-	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
-		return cached_ll;
-	} else {
-		OOPS_CACHE("there is no cached value for loglike at the given parameters");
-	}
-}
-
-double elm::Model2::loglike_nocache(std::vector<double> v) {
-	setUp();
-	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	_parameter_update();
-	_parameter_push(v);
-	double x = objective();
-	if (isNan(x)) {
-		x = -INF;
-	}
-	_cached_results.set_cached_loglike(elm::array_compare(v), x);
-	return x;
-}
-
-double elm::Model2::loglike(std::vector<double> v) {
-	
-	double cached_ll = NAN;
-	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
-		return cached_ll;
-	} else {
-
-	}
-	
-	setUp();
-	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-	_parameter_update();
-	_parameter_push(v);
-	double x = objective();
-	if (isNan(x)) {
-		x = -INF;
-	}
-	_cached_results.set_cached_loglike(elm::array_compare(v), x);
-	return x;
-}
+//double elm::Model2::loglike_cached(std::vector<double> v) {
+//	double cached_ll = -INF;
+//	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
+//		return cached_ll;
+//	} else {
+//		OOPS_CACHE("there is no cached value for loglike at the given parameters");
+//	}
+//}
+//
+//double elm::Model2::loglike_nocache(std::vector<double> v) {
+//	setUp();
+//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+//	_parameter_update();
+//	_parameter_push(v);
+//	double x = objective();
+//	if (isNan(x)) {
+//		x = -INF;
+//	}
+//	_cached_results.set_cached_loglike(elm::array_compare(v), x);
+//	return x;
+//}
+//
+//double elm::Model2::loglike(std::vector<double> v) {
+//	
+//	double cached_ll = NAN;
+//	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
+//		return cached_ll;
+//	} else {
+//
+//	}
+//	
+//	setUp();
+//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
+//	_parameter_update();
+//	_parameter_push(v);
+//	double x = objective();
+//	if (isNan(x)) {
+//		x = -INF;
+//	}
+//	_cached_results.set_cached_loglike(elm::array_compare(v), x);
+//	return x;
+//}
 
 std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
 {
@@ -1743,7 +1702,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
 std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise(std::vector<double> v)
 {
 
-	loglike(v);
+//	loglike(v);
+	loglike();
 	
 	std::shared_ptr<ndarray> ll_casewise = make_shared<ndarray> (nCases);
 	PrToAccum = (sampling_packet().relevant() ? &AdjProbability : &Probability);
@@ -1787,9 +1747,11 @@ std::string elm::Model2::read_runstats_notes() const
 	return _latest_run.notes();
 }
 
-void elm::Model2::_sayweakself()
+void elm::Model2::_sayweakself(const std::string& marker_message)
 {
-	std::cerr<<"weakself="<<static_cast<void*>(weakself)<<", refcount=";
+	Py_ssize_t* refcount_ptr = &weakself->ob_refcnt;
+
+	std::cerr<<marker_message<<" -- weakself="<<static_cast<void*>(weakself)<<", refcount=";
 	if (weakself) {
 		std::cerr << weakself->ob_refcnt;
 	} else {

@@ -114,7 +114,6 @@ namespace elm {
 #ifndef SWIG
 
 	public:
-		PyObject* weakself;
 	
 		friend class elm::ComponentList;
 		
@@ -133,7 +132,7 @@ namespace elm {
 	public:
 		const elm::VAS_System& _xylem() {return Xylem;}
 
-		void _sayweakself();
+		void _sayweakself(const std::string& marker_message="");
 		void _setweakself(PyObject* ref_to_self);
 
 	public:		
@@ -369,11 +368,11 @@ namespace elm {
 		void clear_cache();
 		
 		double loglike();
-		double loglike_cached();
-		double loglike_nocache();
-		double loglike(std::vector<double> v);
-		double loglike_cached(std::vector<double> v);
-		double loglike_nocache(std::vector<double> v);
+//		double loglike_cached();
+//		double loglike_nocache();
+//		double loglike(std::vector<double> v);
+//		double loglike_cached(std::vector<double> v);
+//		double loglike_nocache(std::vector<double> v);
 		std::shared_ptr<etk::ndarray> loglike_casewise();
 		std::shared_ptr<etk::ndarray> loglike_casewise(std::vector<double> v);
 		
@@ -688,11 +687,6 @@ namespace elm {
 
 //////// MARK: SWIG EXPOSED FUNCS ////////////////////////////////////////////////////////////
 		
-#ifndef SWIG
-	public:
-		etk::symmetric_matrix hessian_matrix;
-#endif // ndef SWIG
-
 	public:
 		etk::symmetric_matrix* _get_hessian_array();
 		void _set_hessian_array(etk::symmetric_matrix* in);

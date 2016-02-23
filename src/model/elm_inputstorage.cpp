@@ -11,6 +11,7 @@
 #include "elm_model2.h"
 #include "elm_sql_scrape.h"
 #include "elm_names.h"
+#include "larch_modelparameter.h"
 
 #ifndef SIZE_T_MAX
 #define	SIZE_T_MAX	ULONG_MAX	/* max value for a size_t */

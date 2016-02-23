@@ -227,7 +227,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 //	}
 
 	if (QuantPacket.relevant()) {
-		
+
 		QuantPacket.logit_partial(firstcase, numberofcases);
 		for (size_t c=firstcase; c<lastcase; c++) {
 			cblas_dcopy(nElementals, QuantPacket.Outcome->ptr(c), 1, UtilPacket.Outcome->ptr(c), 1);

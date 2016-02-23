@@ -31,6 +31,7 @@
 #include <iostream>
 #include "etk_thread.h"
 #include "elm_calculations.h"
+#include "larch_modelparameter.h"
 
 using namespace etk;
 using namespace elm;
@@ -289,23 +290,54 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 
 void elm::Model2::nl_probability()
 {
-//	BUGGER(msg) << "Calculate NL probability";
-//	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
-//	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-//	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
-//	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
-//	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
-//	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
-////	if (!Data_UtilityCA) OOPS("data for utility calculation is not loaded, try setUp model first");
-//	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
-//		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
-//	}
-//	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
-//		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
-//	}
-//	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
-//		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
-//	}
+	
+	// COUNTING
+	nElementals = Xylem.n_elemental();
+	nNests = Xylem.n_branches();
+	nNodes = Xylem.size();
+	
+	if (Params_LogSum.size1() != nNests+1) {
+		
+		Params_LogSum.resize(nNests+1);
+		
+		if (!option.suspend_xylem_rebuild) Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+		
+		unsigned slot;
+		for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
+			slot = Xylem.slot_from_code(m->first);
+			if (slot < Xylem.n_elemental()) {
+				OOPS("pointing to a negative slot");
+			}
+			slot -= Xylem.n_elemental();
+			Params_LogSum[slot] = _generate_parameter(m->second.param_name, m->second.multiplier);
+		}
+		if (!Params_LogSum[nNests]) Params_LogSum[nNests] = boosted::make_shared<elm::parametex_constant>(1.0);
+		
+	}
+	
+	// Allocate Memory	
+	Cond_Prob.resize(nCases,Xylem.n_edges());
+	Probability.resize(nCases,nNodes);
+	Utility.resize(nCases,nNodes);
+	
+	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
+		AdjProbability.resize(nCases,nElementals);
+		SamplingWeight.resize(nCases,nElementals);
+	} else {
+		AdjProbability.same_memory_as(Probability);
+		SamplingWeight.resize(0);
+	}
+	
+	Workspace.resize(nNodes);
+		
+
+
+
+
+
+
+
+
 
 	unsigned c,a;
 	unsigned warningcount (0);
@@ -424,23 +456,58 @@ void elm::Model2::nl_probability()
 
 void elm::Model2::ngev_probability()
 {
-//	BUGGER(msg) << "Calculate NGEV probability";
-//	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
-//	BUGGER(msg) << "Coef_UtilityCO\n" << Coef_UtilityCO.printall();
-//	BUGGER(msg) << "Coef_SamplingCA\n" << Coef_SamplingCA.printall();
-//	BUGGER(msg) << "Coef_SamplingCO\n" << Coef_SamplingCO.printall();
-//	BUGGER(msg) << "Coef_LogSum\n" << Coef_LogSum.printall();
-//	BUGGER(msg) << "Coef_Edges\n" << Coef_Edges.printall();
-//	BUGGER(msg) << "Coef_QuantityCA\n" << Coef_QuantityCA.printall();
-//	if (Data_UtilityCA /*->is_loaded_in_range(0,1)*/) {
-//		BUGGER(msg) << "Data_UtilityCA\n" << Data_UtilityCA->printcase(0);
-//	}
-//	if (Data_UtilityCO /*->is_loaded_in_range(0, 1)*/) {
-//		BUGGER(msg) << "Data_UtilityCO\n" << Data_UtilityCO->printcase(0);
-//	}
-//	if (Data_Avail /*->is_loaded_in_range(0, 1)*/) {
-//		BUGGER(msg) << "Data_Avail\n" << Data_Avail->printboolcase(0);
-//	}
+
+
+
+
+
+	// COUNTING
+//	nCases is set in provisioning
+	nElementals = Xylem.n_elemental();
+	nNests = Xylem.n_branches();
+	nNodes = Xylem.size();
+	
+	if (Params_LogSum.size1() != nNests+1) {
+		Params_LogSum.resize(nNests+1);
+		
+		if (!option.suspend_xylem_rebuild) Xylem.regrow(nullptr,nullptr,nullptr,nullptr,&msg);
+		BUGGER(msg) << "_setUp_NL:Xylem:\n" << Xylem.display();
+		
+		unsigned slot;
+		for (ComponentCellcodeMap::iterator m=Input_LogSum.begin(); m!=Input_LogSum.end(); m++) {
+			slot = Xylem.slot_from_code(m->first);
+			if (slot < Xylem.n_elemental()) {
+				OOPS("pointing to a negative slot");
+			}
+			slot -= Xylem.n_elemental();
+			Params_LogSum[slot] = _generate_parameter(m->second.param_name, m->second.multiplier);
+		}
+		if (!Params_LogSum[nNests]) Params_LogSum[nNests] = boosted::make_shared<elm::parametex_constant>(1.0);
+	}
+
+	
+	// Allocate Memory
+	Cond_Prob.resize(nCases,Xylem.n_edges());
+	Probability.resize(nCases,nNodes);
+	Utility.resize(nCases,nNodes);
+	
+	Allocation.resize(nCases,Xylem.n_compet_alloc());
+	
+	if (Input_QuantityCA.size()>0) Quantity.resize(nCases,nElementals);
+	
+	if ( Input_Sampling.ca.size()>0 || Input_Sampling.co.metasize()>0 ) {
+		AdjProbability.resize(nCases,nElementals);
+		SamplingWeight.resize(nCases,nElementals);
+	} else {
+		AdjProbability.same_memory_as(Probability);
+		SamplingWeight.resize(0);
+	}
+	
+	Workspace.resize(nNodes);
+
+
+
+
 
 	unsigned c,a;
 	unsigned warningcount (0);

@@ -43,7 +43,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		from ..examples import model
 		M = model()
 		M.estimate()
-		self.assertNearlyEqual(   -5331.2520069781867 , M.LL())
+		self.assertNearlyEqual(   -5331.2520069781867 , M.loglike(from_cache=2))
 		self.assertNearlyEqual( -0.010837854591997336 , M.parameter("B_COST").value)
 		self.assertNearlyEqual(0.00051830069613924713 , M.parameter("B_COST").std_err)
 		self.assertNearlyEqual(0.00068224682164246908 , M.parameter("B_COST").robust_std_err)
@@ -103,7 +103,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		from ..examples import model
 		M = model()
 		M.estimate()
-		self.assertAlmostEqual(   -5273.7424612016184, M.LL()                                  ,3)
+		self.assertAlmostEqual(   -5273.7424612016184, M.loglike(from_cache=2)                 ,3)
 		self.assertAlmostEqual( -0.011196551959180576, M.parameter("B_COST").value             ,5)
 		self.assertAlmostEqual(0.00052009766901624634, M.parameter("B_COST").std_err           ,5)
 		self.assertAlmostEqual(0.00067678573779952661, M.parameter("B_COST").robust_std_err    ,5)
@@ -131,8 +131,8 @@ class TestSwissmetroExamples(ELM_TestCase):
 		from ..examples import model
 		M = model()
 		M.db.queries.weight = "(1.0*(GROUPid==2)+1.2*(GROUPid==3))*88.90991"
-		M.maximize_loglike()
-		self.assertAlmostEqual(   -527374.2593192016 , M.LL()                                  ,3)
+		r=M.maximize_loglike()
+		self.assertAlmostEqual(   -527374.2593192016 , r['loglike']                            ,3)
 		self.assertAlmostEqual( -0.011196450342598127, M.parameter("B_COST").value             ,6)
 		self.assertAlmostEqual(0.000052009766901624634, M.parameter("B_COST").std_err           ,6)
 		self.assertAlmostEqual(0.000067678573779952661, M.parameter("B_COST").robust_std_err    ,6)
@@ -160,7 +160,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		from ..examples import model
 		M = model()
 		M.estimate()
-		self.assertNearlyEqual(-5423.299182871572, M.LL(), 6)
+		self.assertNearlyEqual(-5423.299182871572, M.loglike(from_cache=2), 6)
 		self.assertNearlyEqual(-1.036332141437882   , M.parameter("B_LOGCOST").value,4)
 		self.assertNearlyEqual(-0.010716067643111737, M.parameter("B_TIME").value,4)
 		self.assertNearlyEqual(-0.8513254051831449  , M.parameter("ASC_TRAIN").value,4)
@@ -183,9 +183,9 @@ class TestSwissmetroExamples(ELM_TestCase):
 		M.setUp()
 		self.assertEqual(['ASC_TRAIN', 'ASC_CAR', 'B_TIME', 'B_COST', 'MU_EXISTING', 'MU_PUBLIC', 'PHI_EXISTING'], M.parameter_names())
 		ll = M.loglike([0.0983, -0.240, -0.00777, -0.00819, 1/2.51, 1/4.11, -0.0200])
-		M.maximize_loglike('SLSQP')
+		r=M.maximize_loglike('SLSQP')
 		self.assertAlmostEqual(       -5214.050277246205, ll                                         ,6)
-		self.assertAlmostEqual(      -5214.0491950955357, M.LL()                                     ,6)
+		self.assertAlmostEqual(      -5214.0491950955357, r['loglike']                               ,6)
 		self.assertAlmostEqual(     -0.00818884966238193, M.parameter("B_COST").value                ,6)
 		self.assertAlmostEqual(     -0.00776847097755905, M.parameter("B_TIME").value                ,6)
 		self.assertAlmostEqual(      0.09827659903600304, M.parameter("ASC_TRAIN").value             ,6)

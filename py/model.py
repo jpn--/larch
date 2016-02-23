@@ -321,6 +321,14 @@ class Model(Model2, ModelReporter):
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
 			f.write(" on %s\n"%time.strftime("%d %b %Y"))
 			f.write(self.save_buffer())
+			
+			f.write("self.covariance_matrix = numpy.loads( base64.standard_b64decode('")
+			f.write( base64.standard_b64encode(self.covariance_matrix.dumps()).decode('utf8') )
+			f.write("'))\n")
+			f.write("self.robust_covariance_matrix = numpy.loads( base64.standard_b64decode('")
+			f.write( base64.standard_b64encode(self.robust_covariance_matrix.dumps()).decode('utf8') )
+			f.write("'))\n")
+			
 			blank_attr = set(dir(Model()))
 			blank_attr.remove('descriptions')
 			blank_attr.add('_ce')
@@ -688,9 +696,9 @@ class Model(Model2, ModelReporter):
 		invhess = matrix_inverse(hess_taken)
 		self.covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.covariance_matrix[take] = invhess.reshape(-1)
-		for i in range(len(self)):
-			self[i].setCovariance({pname:value for pname,value in zip(self.parameter_names(), self.covariance_matrix[i,:])})
-			self[i].std_err = numpy.sqrt(numpy.abs(self.covariance_matrix[i,i])) * numpy.sign(self.covariance_matrix[i,i])
+#		for i in range(len(self)):
+#			self[i].setCovariance({pname:value for pname,value in zip(self.parameter_names(), self.covariance_matrix[i,:])})
+#			self[i].std_err = numpy.sqrt(numpy.abs(self.covariance_matrix[i,i])) * numpy.sign(self.covariance_matrix[i,i])
 		# robust...
 		bhhh_taken = self.bhhh()[take].reshape(dense_s,dense_s)
 		#import scipy.linalg.blas
@@ -699,9 +707,9 @@ class Model(Model2, ModelReporter):
 		robusto = numpy.dot(numpy.dot(invhess, bhhh_taken),invhess)
 		self.robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.robust_covariance_matrix[take] = robusto.reshape(-1)
-		for i in range(len(self)):
-			self[i].setRobustCovariance({pname:value for pname,value in zip(self.parameter_names(), self.robust_covariance_matrix[i,:])})
-			self[i].robust_std_err = numpy.sqrt(numpy.abs(self.robust_covariance_matrix[i,i])) * numpy.sign(self.robust_covariance_matrix[i,i])
+#		for i in range(len(self)):
+#			self[i].setRobustCovariance({pname:value for pname,value in zip(self.parameter_names(), self.robust_covariance_matrix[i,:])})
+#			self[i].robust_std_err = numpy.sqrt(numpy.abs(self.robust_covariance_matrix[i,i])) * numpy.sign(self.robust_covariance_matrix[i,i])
 
 
 
@@ -787,7 +795,7 @@ class Model(Model2, ModelReporter):
 			else:
 				raise LarchError("Model has {} cases where the chosen alternative is unavailable".format(n_clashes))
 		m.estimate()
-		self._set_estimation_statistics(log_like_constants=m.LL())
+		self._set_estimation_statistics(log_like_constants=m.loglike())
 		return m
 
 	def estimate_nil_model(self):
@@ -797,10 +805,28 @@ class Model(Model2, ModelReporter):
 		for a in alts[1:]:
 			m.utility.co('0',a[0],a[1])
 		m.estimate()
-		self._set_estimation_statistics(log_like_nil=m.LL())
+		self._set_estimation_statistics(log_like_nil=m.loglike())
 
-	def negative_loglike(self, *args):
-		z = -(self.loglike(*args))
+	def loglike(self, *args, from_cache=True, to_cache=True):
+		if len(args)>0:
+			self.parameter_values(args[0])
+		if self.Data_UtilityCE.active():
+			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
+			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			return self.loglike_given_utility()
+		if from_cache:
+			try:
+				return self._cached_results[self.parameter_array.tobytes()].loglike
+			except (KeyError, AttributeError):
+				pass
+		# otherwise not cached (or not correctly) so calculate anew
+		ll = super().loglike()
+		if to_cache:
+			self._cached_results[self.parameter_array.tobytes()].loglike = ll
+		return ll
+
+	def negative_loglike(self, *args, **kwargs):
+		z = -(self.loglike(*args, **kwargs))
 		return z
 
 	def negative_d_loglike(self, *args):
@@ -886,54 +912,6 @@ class Model(Model2, ModelReporter):
 		else:
 			raise LarchError('use of idce format currently requires a linked DB data fountain')
 
-	def loglike(self, *args):
-		if self.Data_UtilityCE.active():
-			if len(args):
-				self.parameter_values(args[0])
-			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
-			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
-			return self.loglike_given_utility()
-		return super().loglike(*args)
-
-#	def loglike(self, *args):
-#		if len(args):
-#			self.parameter_values(args[0])
-#		pb = self.parameter_values_as_bytes()
-#		try:
-#			return self._cached_results[pb].loglike
-#		except (KeyError,AttributeError):
-#			if self.Data_UtilityCE.active():
-#				numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
-#				self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
-#				print("LOGLIKE-U")
-#				ll = self.loglike_given_utility()
-#			else:
-#				print("LOGLIKE")
-#				ll = super().loglike(*args)
-#			self._cached_results[pb].loglike = ll
-#			return ll
-
-	def loglike_nocache(self, *args):
-		if self.Data_UtilityCE.active():
-			if len(args):
-				self.parameter_values(args[0])
-			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
-			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
-			print("LOGLIKE_NOCACHE-U")
-			return self.loglike_given_utility()
-		print("LOGLIKE_NOCACHE")
-		return super().loglike_nocache(*args)
-
-	def loglike_cached(self, *args):
-		if self.Data_UtilityCE.active():
-			if len(args):
-				self.parameter_values(args[0])
-			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
-			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
-			print("LOGLIKE_CACHE-U")
-			return self.loglike_given_utility()
-		print("LOGLIKE_CACHE")
-		return super().loglike_cached(*args)
 
 
 	def gradient_check(self, disp=True):
@@ -1170,7 +1148,20 @@ class Model(Model2, ModelReporter):
 		if isinstance(x,rename):
 			x = x.find_in(self)
 		return super().__setitem__(x, val)
-		
+
+	def __delitem__(self, key):
+		dropindex = self._parameter_name_index.drop(key)
+		retain = numpy.ones_like(self.parameter_array, dtype=bool)
+		retain[dropindex] = False
+		self._set_parameter_array( numpy.require(self.parameter_array[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_parameter_minbound_array( numpy.require(self.parameter_minimums[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_parameter_maxbound_array( numpy.require(self.parameter_maximums[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_holdfast_array( numpy.require(self.parameter_holdfast_array[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_null_values_array( numpy.require(self.parameter_null_values_array[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_init_values_array( numpy.require(self.parameter_initial_values_array[retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_robust_covar_array( numpy.require(self._get_robust_covar_array()[retain,:][:,retain], requirements=['A', 'O', 'W', 'C']) )
+		self._set_inverse_hessian_array( numpy.require(self._get_inverse_hessian_array()[retain,:][:,retain], requirements=['A', 'O', 'W', 'C']) )
+		self.hessian_matrix = numpy.require( self.hessian_matrix[retain,:][:,retain], requirements=['A', 'O', 'W', 'C'])
 		
 	def provision_without_utility(self):
 		if not hasattr(self,'db'):
@@ -1187,8 +1178,14 @@ class Model(Model2, ModelReporter):
 		except ProvisioningError:
 			pass
 
-
-
+	def alias(self, *args):
+		if not args:
+			raise NameError('an alias must have a name')
+		name = args[0]
+		z = super().alias(*args)
+		if name in self._parameter_name_index:
+			del self[name]
+		return z
 
 
 class _AllInTheFamily():

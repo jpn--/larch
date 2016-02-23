@@ -151,8 +151,6 @@ class TestMTC(ELM_TestCase):
 		m.utility.co("1","Walk","con6") 
 		with self.assertRaises(Exception):
 			m.utility.co("HHINC","AltNameWhichDoesNotExist")
-		#del m.utility.co[6][-1]
-		del m["HHINC@AltNameWhichDoesNotExist"]
 		with self.assertRaises(Exception):
 			m.utility.co("HHINC",666)
 		del m["HHINC#666"]
@@ -185,7 +183,7 @@ class TestMTC(ELM_TestCase):
 		m.tearDown()
 		m.option.gradient_diagnostic = 2 
 		z = m.estimate()
-		self.assertAlmostEqual( -3626.1862548451313, m.LL())
+		self.assertAlmostEqual( -3626.1862548451313, m.loglike(from_cache=2))
 
 	def test_model2_mnl_with_constant_parameter(self):
 		d = self._db
@@ -434,7 +432,7 @@ class TestMNL(ELM_TestCase):
 		m.option.calc_std_errors=True
 		m.setUp()
 		m.estimate()
-		self.assertAlmostEqual( -5331.252006978, m.LL(), 6 )
+		self.assertAlmostEqual( -5331.252006978, m.loglike(from_cache=2), 6 )
 		self.assertAlmostEqual( -0.7012,   m.parameter("ASC_TRAIN").value,4 )
 		self.assertAlmostEqual( -0.012778, m.parameter("B_TIME").value   ,4 )
 		self.assertAlmostEqual( -0.010838, m.parameter("B_COST").value   ,4 )
@@ -455,9 +453,8 @@ class TestMNL(ELM_TestCase):
 		m.option.calc_std_errors=False
 		m.maximize_loglike()
 		m.loglike()
-		self.assertAlmostEqual( -10547.48518638403, m.LL(), 3 )
 		self.assertAlmostEqual( -10547.48518638403, m.loglike(), 3 )
-		self.assertAlmostEqual( -10547.48518638403, m.loglike_nocache(), 3 )
+		self.assertAlmostEqual( -10547.48518638403, m.loglike(from_cache=False, to_cache=False), 3 )
 
 	def test_automatic_family(self):
 		d = DB.Example('swissmetro')
@@ -479,12 +476,14 @@ class TestMNL(ELM_TestCase):
 		m['SB_TRAIN'].value = 0.1
 		m.root_id = 999
 		m.provision()
+		m.covariance_matrix[1,1] = 9.9
 		m2 = Model.loads(m.save(None))
 		m2.db = m.db
 		m2.provision()
 		self.assertEqual(m.parameter_values(), m2.parameter_values())
 		self.assertEqual(m.parameter_names(), m2.parameter_names())
 		self.assertEqual(m.root_id, m2.root_id)
+		self.assertTrue( numpy.allclose( m.covariance_matrix, m2.covariance_matrix ))
 		self.assertNearlyEqual(m.loglike(), m2.loglike(), 12)
 
 	def test_single_row_probability(self):

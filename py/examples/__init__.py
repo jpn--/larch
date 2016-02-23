@@ -128,7 +128,7 @@ def LL(n):
 	load_example(n)
 	m = model(data())
 	m.estimate()
-	return m.LL()
+	return m.loglike(from_cache=2)
 
 def CheckLL():
 	assert(round(LL(  1),3)==-3626.186)

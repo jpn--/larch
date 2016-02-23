@@ -73,6 +73,9 @@ class sherpa
 	friend class elm::ModelParameter;
 	
 public:
+
+	PyObject* weakself;
+
 	virtual double objective();
 	virtual const etk::memarray& gradient(const bool& force_recalculate=false);
 	virtual void calculate_hessian();
@@ -170,7 +173,7 @@ protected:
 	double ZLastTurn;
 	
 public:
-	etk::memarray FCurrent;
+	etk::ndarray FCurrent;
 	
 public:
 	etk::ndarray FHoldfast;
@@ -213,11 +216,12 @@ protected:
 	etk::symmetric_matrix invHess;
 	etk::triangle invHessTemp;
 	etk::symmetric_matrix robustCovariance;
+	etk::symmetric_matrix hessian_matrix;
 	
 #endif // ndef SWIG
 
 public:
-	double LL() const; 
+//	double LL() const; 
 
 	unsigned max_iterations;
 
@@ -261,6 +265,13 @@ public:
 	etk::ndarray* _get_holdfast_array();
 	etk::ndarray* _get_null_values_array();
 	etk::ndarray* _get_init_values_array();
+
+	void _set_parameter_array(etk::ndarray*);
+	void _set_parameter_minbound_array(etk::ndarray*);
+	void _set_parameter_maxbound_array(etk::ndarray*);
+	void _set_holdfast_array(etk::ndarray*);
+	void _set_null_values_array(etk::ndarray*);
+	void _set_init_values_array(etk::ndarray*);
 	
 	#ifdef SWIG
 	%pythoncode %{
@@ -274,7 +285,32 @@ public:
 	#endif // def SWIG
 
 
-	
+#ifndef SWIG
+	elm::parametexr _generate_parameter(const std::string& freedom_name,
+								   double freedom_multiplier);
+#endif // ndef SWIG
+
+	elm::ModelParameter parameter(const std::string& param_name,
+							   const double& value=NAN,
+							   const double& null_value=NAN,
+							   const double& initial_value=NAN,
+							   const double& max=NAN,
+							   const double& min=NAN,
+							   const double& std_err=NAN,
+							   const double& robust_std_err=NAN,
+							   const int& holdfast=-1,
+							   PyObject* covariance=NULL,
+							   PyObject* robust_covariance=NULL); 
+
+	elm::ModelParameter __getitem__(const std::string& param_name);
+	elm::ModelParameter __getitem__(const int& param_num);
+//	void __setitem__(const std::string& param_name, freedom_info& value);
+//	void __delitem__(const std::string& param_name);
+
+	freedom_alias& alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force=false);
+	freedom_alias& alias(const std::string& alias_name);
+	void del_alias(const std::string& alias_name);
+	void unlink_alias(const std::string& alias_name);
 
 };
 

@@ -27,6 +27,7 @@
 #include "elm_names.h"
 #include <iostream>
 #include "elm_calculations.h"
+#include "larch_modelparameter.h"
 
 #include "elm_workshop_mnl_gradient.h"
 #include "elm_workshop_mnl_prob.h"
@@ -133,7 +134,7 @@ void elm::Model2::pull_coefficients_from_freedoms()
 
 void elm::Model2::freshen()
 {
-
+	setUp(false);
 	allocate_memory();
 	
 	elm::cellcode root = Xylem.root_cellcode();
@@ -162,6 +163,7 @@ void elm::Model2::freshen()
 
 void elm::Model2::calculate_probability()
 {
+
 	if ((features & MODELFEATURES_ALLOCATION)||(features & MODELFEATURES_QUANTITATIVE)) {
 		ngev_probability();
 	} else if ((features & MODELFEATURES_NESTING)) {
@@ -391,7 +393,10 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability 
 
 void elm::Model2::mnl_probability()
 {
+	Probability.resize(nCases,Xylem.n_elemental());
 	Probability.initialize(0.0);
+	CaseLogLike.resize(nCases);
+	Workspace.resize(Xylem.n_elemental());
 	pull_coefficients_from_freedoms();
 	
 //	BUGGER(msg) << "Coef_UtilityCA\n" << Coef_UtilityCA.printall();
@@ -453,10 +458,6 @@ void elm::Model2::mnl_probability()
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_mnl_probability, this);
 		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
-//		if (!probability_dispatcher) {
-//			probability_dispatcher = boosted::make_shared<etk::dispatcher>(option.threads, nCases, workshop_builder);
-//		}
-//		probability_dispatcher->dispatch(option.threads);
 		
 	} else {
 		unsigned c;
@@ -1343,7 +1344,7 @@ double elm::Model2::objective ()
 	double LL_ = 0;
 	
 	pull_coefficients_from_freedoms();
-	freshen(); // TODO : is this really needed here?
+//	freshen(); // TODO : is this really needed here?
 	calculate_probability();
 	
 	LL_= accumulate_log_likelihood();

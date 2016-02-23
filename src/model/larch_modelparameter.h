@@ -23,6 +23,8 @@
 
 #include "etk.h"
 
+class sherpa;
+
 namespace elm {
 
 	class Model2;
@@ -30,12 +32,16 @@ namespace elm {
 	class ModelParameter
 	{
 	protected:
-		Model2* model;
+		sherpa* model;
 		size_t slot;
+	
+	private:
+		PyObject* model_as_pyobject;
 		
 	public:
 	
-		ModelParameter(Model2* model, const size_t& slot);
+		ModelParameter(sherpa* model, const size_t& slot);
+		ModelParameter(const elm::ModelParameter& original);
 		~ModelParameter();
 		
 		double _get_value() const;
@@ -57,6 +63,7 @@ namespace elm {
 		
 		bool _get_holdfast() const;
 		void _set_holdfast(const bool& value);
+		void _set_holdfast(const int& value);
 		void _del_holdfast();
 		
 		double _get_nullvalue() const;
@@ -65,6 +72,11 @@ namespace elm {
 		double _get_initvalue() const;
 		void _set_initvalue(const double& value);
 
+		size_t _get_index() const;
+
+		etk::symmetric_matrix* _get_complete_covariance_matrix() const;
+		
+		PyObject* _get_model();
 
 		#ifdef SWIG
 		%pythoncode %{
@@ -72,13 +84,34 @@ namespace elm {
 		null_value = property(_get_nullvalue, _set_nullvalue)
 		initial_value = property(_get_initvalue, _set_initvalue)
 		minimum = property(_get_min, _set_min, _del_min)
+		min_value = minimum
 		maximum = property(_get_max, _set_max, _del_max)
+		max_value = maximum
 		holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
 		std_err = property(_get_std_err, None, None, "the standard error of the estimator")
 		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
 		name = property(_get_name, None, None, "the parameter name")
+		index = property(_get_index, None, None, "the parameter index within the model")
 		def __repr__(self):
 			return "ModelParameter('{}', value={})".format(self.name, self.value)
+		@property
+		def covariance(self):
+			slot = self.index
+			cov = self._get_complete_covariance_matrix()
+			model = self._get_model()
+			ret = {}
+			for name, val in zip(model.parameter_names(), cov[:,slot]):
+				ret[name] = val
+			return ret
+		@property
+		def robust_covariance(self):
+			slot = self.index
+			model = self._get_model()
+			cov = model.robust_covariance_matrix
+			ret = {}
+			for name, val in zip(model.parameter_names(), cov[:,slot]):
+				ret[name] = val
+			return ret
 		%}
 		#endif // def SWIG
 

@@ -330,7 +330,7 @@ class TestNL(ELM_TestCase):
 		m.link(4, 1)
 		m.link(4, 3)
 		m.estimate()
-		self.assertAlmostEqual( -5236.90001, m.LL(), 4 )
+		self.assertAlmostEqual( -5236.90001, m.loglike(from_cache=2), 4 )
 		self.assertAlmostEqual( -0.51194,   m.parameter("ASC_TRAIN").value,4 )
 		self.assertAlmostEqual( -0.0089868, m.parameter("B_TIME").value   ,4 )
 		self.assertAlmostEqual( -0.0085669, m.parameter("B_COST").value   ,4 )
@@ -371,7 +371,7 @@ class TestNL(ELM_TestCase):
 		m.link(4, 1)
 		m.link(4, 3)
 		m.estimate()
-		self.assertAlmostEqual(	   -5181.7961550603186, m.LL()                          ,7 )
+		self.assertAlmostEqual(	   -5181.7961550603186, m.loglike(from_cache=2)         ,7 )
 		self.assertAlmostEqual(	  -0.53231563866755072, m.parameter("ASC_TRAIN").value  ,7 )
 		self.assertAlmostEqual(	-0.0095924003306561544, m.parameter("B_TIME").value     ,7 )
 		self.assertAlmostEqual(	-0.0089907063608799867, m.parameter("B_COST").value     ,7 )
@@ -408,7 +408,7 @@ class TestNL(ELM_TestCase):
 		m.link(4, 3)
 		m.samplingbias.co("1",1,"SB_TRAIN")
 		m.estimate()
-		self.assertNearlyEqual( -5169.641515645088, m.LL(), 5 )
+		self.assertNearlyEqual( -5169.641515645088, m.loglike(from_cache=2), 5 )
 		self.assertNearlyEqual( -10.25184105080805,   m.parameter("ASC_TRAIN").value, 2 )
 		self.assertNearlyEqual( -0.0112766758, m.parameter("B_TIME").value ,3   )
 		self.assertNearlyEqual( -0.011067, m.parameter("B_COST").value  ,3  )
@@ -671,8 +671,8 @@ class TestNL(ELM_TestCase):
 			self.assertNearlyEqual(x_c,x_o, sigfigs=2.5)
 
 
-		self.assertNearlyEqual(-7309.600971749633, m.loglike_nocache([0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1]))
-		self.assertNearlyEqual(-numpy.inf, m.loglike_nocache([-10,0,0,0,0,0,0,0,0,10,0,0,1,1,1,1]))
+		self.assertNearlyEqual(-7309.600971749633, m.loglike([0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1], from_cache=False))
+		self.assertNearlyEqual(-numpy.inf, m.loglike([-10,0,0,0,0,0,0,0,0,10,0,0,1,1,1,1], from_cache=False))
 
 	def test_cnl_probability_features(self):
 		m = Model.Example(111, DB.Example('swissmetro'))

@@ -147,6 +147,33 @@ void ndarray::same_memory_as(ndarray& x)
 	Py_XINCREF(pool);
 }
 
+void ndarray::same_ccontig_memory_as(ndarray& x)
+{
+	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
+	Py_CLEAR(pool);
+	pool = x.pool;
+	Py_XINCREF(pool);
+
+	if (!PyArray_Check(pool)) {
+		Py_CLEAR(pool);
+		OOPS("Error creating array wrapper, input must be an array. Try reformatting it with larch.array.pack().");
+	}
+	if (!PyArray_ISCONTIGUOUS(pool)) {
+		Py_CLEAR(pool);
+		OOPS("Error creating array wrapper, input array must be C-Contiguous. Try reformatting it with larch.array.pack().");
+	}
+	else if (!PyArray_ISALIGNED(pool)) {
+		Py_CLEAR(pool);
+		OOPS("Error creating array wrapper, input array must be aligned. Try reformatting it with larch.array.pack().");
+	}
+	else if (!PyArray_ISCARRAY_RO(pool)) {
+		std::string errmsg = cat("Error creating array wrapper, flags offered are ",std::hex,PyArray_FLAGS(pool),", flags needed are ",std::hex,NPY_ARRAY_CARRAY_RO);
+		Py_CLEAR(pool);
+		OOPS(errmsg);
+	}
+
+}
+
 
 //    (PyArrayObject*).descr->type_num
 #define ASSERT_ARRAY_WRITEABLE if ( !PyArray_ISWRITEABLE(pool) ) OOPS("assert failure, array not writeable")

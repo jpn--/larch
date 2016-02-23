@@ -178,7 +178,7 @@ size_t autoindex_string::drop (const std::string& codex)
 {
 	std::map<std::string,size_t>::iterator i;
 	i = _index.find(codex);	
-	if (i==_index.end()) return -1; // no drop required
+	if (i==_index.end()) OOPS_KeyError("key '",codex,"' not found"); // no drop required
 	
 	size_t dropped = i->second;
 	

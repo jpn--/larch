@@ -212,7 +212,7 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 					shade = 0
 					for m in models:
 						shade ^= 1
-						f.write('<td colspan="2" class="{0}">{1:0.6g}</td>'.format(shades[shade],m.LL()))
+						f.write('<td colspan="2" class="{0}">{1:0.6g}</td>'.format(shades[shade],m.loglike()))
 				with f.tr():
 					f.write('<td>Log Likelihood at Constants</td>')
 					shade = 0

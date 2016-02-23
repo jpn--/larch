@@ -285,6 +285,11 @@ double sherpa::_line_search_evaluation(double& step)
 {
 	if (PyErr_CheckSignals()) PYTHON_INTERRUPT;
 
+	double* FLastTurn_ptr = FLastTurn.ptr()+1;
+	double* FDirection_ptr = FDirection.ptr()+1;
+	double* FCurrent_ptr = FCurrent.ptr()+1;
+
+
 	FCurrent.projection(FLastTurn,FDirection,step);
 	
 	for (unsigned i=0; i<dF(); i++) {
@@ -303,7 +308,7 @@ double sherpa::_line_search_evaluation(double& step)
 			FCurrent[i] = FMin[i];
 		}
 	}
-	freshen();
+//	freshen();
 	ZCurrent = objective();
 	return _check_for_improvement();
 }
@@ -903,10 +908,10 @@ string sherpa::calculate_errors()
 	return "success";
 }
 
-double sherpa::LL() const
-{
-	return ZCurrent;
-}
+//double sherpa::LL() const
+//{
+//	return ZCurrent;
+//}
 
 const freedom_info* sherpa::get_raw_info (const string& freedom_name) const
 {
@@ -1097,53 +1102,60 @@ void sherpa::resize_allocated_memory()
 	Hess.resize(number_of_parameters);
 	invHess.resize(number_of_parameters);
 	invHessTemp.resize(number_of_parameters);
+	robustCovariance.resize(number_of_parameters);
+	hessian_matrix.resize(number_of_parameters);
+
 }
 
 
 void sherpa::allocate_memory()
 {
-	if (FCurrent.size1()!=dF()) {
-	
-		FCurrent.resize(dF());
-		_FCurrent_latest_objective.resize(dF());
-		if (dF()>0) {
-			_FCurrent_latest_objective[0] = NAN;
-		}
-		FBest.resize(dF());
-		FLastTurn.resize(dF());
-		FPrevTurn.resize(dF());
-		FMotion.resize(dF());
-		FDirection.resize(dF());
-		FMax.resize(dF());
-		FMin.resize(dF());
-		GCurrent.resize(dF());
-		FatGCurrent.resize(dF());
-		GLastTurn.resize(dF());
-		GPrevTurn.resize(dF());
-		GMotion.resize(dF());
-		Bhhh.resize(dF());
-		Hess.resize(dF());
-		invHess.resize(dF());
-		invHessTemp.resize(dF());
-		
-		_initialize();
-	}
+	resize_allocated_memory();
+	_initialize();
+
+
+//	if (FCurrent.size1()!=dF()) {
+//	
+//		FCurrent.resize(dF());
+//		_FCurrent_latest_objective.resize(dF());
+//		if (dF()>0) {
+//			_FCurrent_latest_objective[0] = NAN;
+//		}
+//		FBest.resize(dF());
+//		FLastTurn.resize(dF());
+//		FPrevTurn.resize(dF());
+//		FMotion.resize(dF());
+//		FDirection.resize(dF());
+//		FMax.resize(dF());
+//		FMin.resize(dF());
+//		GCurrent.resize(dF());
+//		FatGCurrent.resize(dF());
+//		GLastTurn.resize(dF());
+//		GPrevTurn.resize(dF());
+//		GMotion.resize(dF());
+//		Bhhh.resize(dF());
+//		Hess.resize(dF());
+//		invHess.resize(dF());
+//		invHessTemp.resize(dF());
+//		
+//		_initialize();
+//	}
 }
 
 void sherpa::_initialize()
 {
-	for (unsigned i=0; i<dF(); i++) {
-		freedom_info* f = &(FInfo[FNames[i]]);
-		FCurrent[i] = f->value;
-		FMax[i] = f->max_value;
-		FMin[i] = f->min_value;
-	}
+//	for (unsigned i=0; i<dF(); i++) {
+//		freedom_info* f = &(FInfo[FNames[i]]);
+//		FCurrent[i] = f->value;
+//		FMax[i] = f->max_value;
+//		FMin[i] = f->min_value;
+//	}
 	FPrevTurn = ReadFCurrent();
 	FLastTurn = ReadFCurrent();
 	FBest = ReadFCurrent();
 	if (isNan(ZBest)) ZBest = -INF;
 	ZCurrent = -INF;
-	freshen();
+//	freshen();
 
 }
 
@@ -1240,7 +1252,8 @@ string sherpa::printStatus(int which, double total_tol) const
 
 
 sherpa::sherpa()
-: ParameterList()
+: weakself(nullptr)
+, ParameterList()
 , flag_gradient_diagnostic (0)
 , flag_hessian_diagnostic (0)
 , ZCurrent (NAN)
@@ -1266,12 +1279,14 @@ sherpa::sherpa()
 , GMotion()
 , FatGCurrent()
 , max_iterations(1000)
+, hessian_matrix()
 {
 	
 }
 
 sherpa::sherpa(const sherpa& dupe)
-: ParameterList(dupe)
+: weakself(nullptr)
+, ParameterList(dupe)
 , flag_gradient_diagnostic (0)
 , flag_hessian_diagnostic (0)
 , max_iterations(dupe.max_iterations)
@@ -1466,8 +1481,241 @@ etk::ndarray* sherpa::_get_null_values_array(){
 	return &FNullValues;
 }
 
+
 etk::ndarray* sherpa::_get_init_values_array(){
 	return &FInitValues;
 }
 
+
+void sherpa::_set_parameter_array(etk::ndarray* replacement){
+	FCurrent.same_ccontig_memory_as(*replacement);
+}
+
+void sherpa::_set_parameter_minbound_array(etk::ndarray* replacement){
+	FMin.same_ccontig_memory_as(*replacement);
+}
+
+void sherpa::_set_parameter_maxbound_array(etk::ndarray* replacement){
+	FMax.same_ccontig_memory_as(*replacement);
+}
+
+void sherpa::_set_holdfast_array(etk::ndarray* replacement){
+	FHoldfast.same_ccontig_memory_as(*replacement);
+}
+
+void sherpa::_set_null_values_array(etk::ndarray* replacement){
+	FNullValues.same_ccontig_memory_as(*replacement);
+}
+
+void sherpa::_set_init_values_array(etk::ndarray* replacement){
+	FInitValues.same_ccontig_memory_as(*replacement);
+}
+
+
+
+
+#include "larch_modelparameter.h"
+
+
+
+elm::ModelParameter sherpa::parameter(const std::string& param_name,
+								   const double& value,
+								   const double& null_value,
+								   const double& initial_value,
+								   const double& max,
+								   const double& min,
+								   const double& std_err,
+								   const double& robust_std_err,
+								   const int& holdfast,
+								   PyObject* covariance,
+								   PyObject* robust_covariance)
+{
+	if (param_name=="") {
+		throw(etk::ParameterNameError("Cannot name a parameter with an empty string."));
+	}
+	
+	size_t prior_size = FNames.size();
+	auto px = elm::ModelParameter(this, FNames[param_name]);
+	if (FNames.size() != prior_size) {
+		tearDown();
+		resize_allocated_memory();
+	}
+	
+	if (FNames.size() > prior_size) {
+		// set default things
+		px._set_min(-INF);
+		px._set_max(INF);
+		px._set_value(0);
+		px._set_nullvalue(0);
+		px._set_initvalue(0);
+	}
+	
+	
+	FInfo[param_name].name = param_name;
+	if (!isNan(value)) {
+		FInfo[param_name].initial_value = value;
+		FInfo[param_name].value = value;
+		px._set_value(value);
+	}
+	if (!isNan(null_value)) {
+		FInfo[param_name].null_value = null_value;
+		px._set_nullvalue(null_value);
+	}
+	if (!isNan(initial_value)) {
+		FInfo[param_name].initial_value = initial_value;
+		px._set_initvalue(initial_value);
+	}
+	if (!isNan(std_err)) {
+		FInfo[param_name].std_err = std_err;
+	}
+	if (!isNan(robust_std_err)) {
+		FInfo[param_name].robust_std_err = robust_std_err;
+	}
+	if (!isNan(min)) {
+		FInfo[param_name].min_value = min;
+		px._set_min(min);
+	}
+	if (!isNan(max)) {
+		FInfo[param_name].max_value = max;
+		px._set_max(max);
+	}
+	if (holdfast>=0) {
+		FInfo[param_name].holdfast = holdfast;
+		px._set_holdfast(holdfast);
+	}
+	if (covariance) {
+		FInfo[param_name].setCovariance(covariance);
+	}
+	if (robust_covariance) {
+		FInfo[param_name].setRobustCovariance(robust_covariance);
+	}
+	return px;
+}
+
+
+#include "larch_modelparameter.h"
+
+
+elm::ModelParameter sherpa::__getitem__(const std::string& param_name)
+{
+//	return parameter(param_name);
+	return elm::ModelParameter(this, FNames[param_name]);
+}
+
+elm::ModelParameter sherpa::__getitem__(const int& param_num)
+{
+	if (param_num > FNames.size()-1) OOPS_IndexError("Parameter number ",param_num," out of range (there are only ",FNames.size()," parameters)");
+	if ((param_num < 0)) {
+		//return parameter(FNames[FNames.size()+param_num]);
+		if (-param_num <= int(FNames.size())) {
+			return elm::ModelParameter(this, FNames.size()+param_num);
+		}
+		OOPS_IndexError("Parameter number ",param_num," out of range (there are only ",FNames.size()," parameters)");
+	}
+	//return parameter(FNames[param_num]);
+	return elm::ModelParameter(this, param_num);
+}
+
+//void sherpa::__setitem__(const std::string& param_name, freedom_info& value)
+//{
+//	parameter(param_name) = value;
+//}
+//
+//void sherpa::__delitem__(const std::string& param_name)
+//{
+//	bool s = FNames.drop(param_name);
+//	FInfo.erase(param_name);
+////	if (!s) OOPS("No parameter named ",param_name," exists.");
+//}
+
+
+
+
+
+freedom_alias& sherpa::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot name an alias with an empty string."));
+	}
+	if (refers_to=="") {
+		throw(etk::ParameterNameError("Cannot refer to a parameter with an empty string."));
+	}
+
+	if (alias_name==refers_to) {
+		throw(etk::ParameterNameError(etk::cat("Cannot create an alias '",refers_to,"' that refers to an existing parameter with the same name.")));
+	}
+	
+	if (!force) {
+		auto iter = FInfo.find(refers_to);
+		if ((iter == FInfo.end()) && (AliasInfo.find(refers_to)==AliasInfo.end())) {
+			throw(etk::ParameterNameError(etk::cat("Cannot refer to parameter '",refers_to,"' that has not been previously defined.")));
+		}
+
+	}
+
+
+
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		AliasInfo.emplace(alias_name,freedom_alias(alias_name, refers_to, multiplier));
+	} else {
+		AliasInfo.at(alias_name) = freedom_alias(alias_name, refers_to, multiplier);
+	}
+
+	
+//	// If the alias_name is a parameter and not self-referential, delete the parameter // now in wrapper...
+//	auto iter2 = FInfo.find(alias_name);
+//	if ((alias_name!=refers_to) && (iter2 != FInfo.end())) {
+//		//__delitem__(alias_name);
+//		throw(etk::ParameterNameError("Cannot name an alias with an existing parameter name."));
+//	}
+	
+	return AliasInfo.at(alias_name);
+}
+
+freedom_alias& sherpa::alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot reference an alias with an empty string."));
+	}
+
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		throw(etk::ParameterNameError(etk::cat("Cannot find an alias named '",alias_name,"'.")));
+	} else {
+		return AliasInfo.at(alias_name);
+	}
+	
+}
+
+void sherpa::del_alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot delete an alias named <empty string>."));
+	}
+	AliasInfo.erase(alias_name);
+}
+
+void sherpa::unlink_alias(const std::string& alias_name)
+{
+	if (alias_name=="") {
+		throw(etk::ParameterNameError("Cannot unlink an alias named <empty string>."));
+	}
+	
+	if (AliasInfo.find(alias_name)==AliasInfo.end()) {
+		throw(etk::ParameterNameError("Cannot unlink an alias that does not exist."));
+	}
+	std::string refers_to = AliasInfo.at(alias_name).refers_to;
+	double multiplier = AliasInfo.at(alias_name).multiplier;
+	
+	parameter(alias_name,
+			  FInfo[refers_to].value*multiplier,
+			  FInfo[refers_to].null_value*multiplier,
+			  FInfo[refers_to].initial_value*multiplier,
+			  FInfo[refers_to].max_value*multiplier,
+			  FInfo[refers_to].min_value*multiplier,
+			  NAN,
+			  NAN,
+			  FInfo[refers_to].holdfast);
+	
+	AliasInfo.erase(alias_name);
+}
 

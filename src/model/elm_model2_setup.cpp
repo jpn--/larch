@@ -94,7 +94,7 @@ void __check_validity_of_needs(const etk::strvec& needs, Fountain*	_Data, int k,
 
 
 void _setUp_linear_data_and_params
-(	ParameterList&			self
+(	sherpa&			self
  ,	Fountain*				_fount
  ,	VAS_System&				Xylem
  ,	ComponentList*			Input_UtilityCA
@@ -163,7 +163,7 @@ void _setUp_linear_data_and_params
 
 
 void _setUp_linear_data_and_params_edges
-(	ParameterList&			self
+(	sherpa&			self
  ,	VAS_System&				Xylem
  ,	LinearCOBundle_2&		Input_Alloc
  ,	paramArray&				Params_Alloc
@@ -452,6 +452,10 @@ void elm::Model2::setUp(bool and_load_data)
 	
 	if (features & MODELFEATURES_ALLOCATION) {
 		_setUp_allocation_data_and_params();
+	}
+
+	if (features & MODELFEATURES_QUANTITATIVE) {
+		_setUp_quantity_data_and_params();
 	}
 	
 	_setUp_coef_and_grad_arrays();

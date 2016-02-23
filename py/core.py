@@ -3503,32 +3503,11 @@ class ParameterList(object):
         except Exception:
             self.this = this
 
-    def parameter(self, *args, **kwargs) -> "freedom_info &":
-        return _core.ParameterList_parameter(self, *args, **kwargs)
-
-    def __getitem__(self, *args) -> "freedom_info &":
-        return _core.ParameterList___getitem__(self, *args)
-
-    def __setitem__(self, param_name: 'std::string const &', value: 'Parameter') -> "void":
-        return _core.ParameterList___setitem__(self, param_name, value)
-
-    def __delitem__(self, param_name: 'std::string const &') -> "void":
-        return _core.ParameterList___delitem__(self, param_name)
-
     def __contains__(self, param_name: 'std::string const &') -> "bool":
         return _core.ParameterList___contains__(self, param_name)
 
     def _len(self) -> "size_t":
         return _core.ParameterList__len(self)
-
-    def alias(self, *args) -> "freedom_alias &":
-        return _core.ParameterList_alias(self, *args)
-
-    def del_alias(self, alias_name: 'std::string const &') -> "void":
-        return _core.ParameterList_del_alias(self, alias_name)
-
-    def unlink_alias(self, alias_name: 'std::string const &') -> "void":
-        return _core.ParameterList_unlink_alias(self, alias_name)
 
     def parameter_index(self, param_name: 'std::string const &') -> "size_t":
         return _core.ParameterList_parameter_index(self, param_name)
@@ -3775,9 +3754,6 @@ sherpa_result_swigregister(sherpa_result)
 class sherpa(ParameterList):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-
-    def LL(self) -> "double":
-        return _core.sherpa_LL(self)
     max_iterations = _swig_property(_core.sherpa_max_iterations_get, _core.sherpa_max_iterations_set)
 
     def robust_covariance_matrix(self) -> "etk::symmetric_matrix *":
@@ -3841,6 +3817,24 @@ class sherpa(ParameterList):
     def _get_init_values_array(self) -> "etk::ndarray *":
         return _core.sherpa__get_init_values_array(self)
 
+    def _set_parameter_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_parameter_array(self, arg2)
+
+    def _set_parameter_minbound_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_parameter_minbound_array(self, arg2)
+
+    def _set_parameter_maxbound_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_parameter_maxbound_array(self, arg2)
+
+    def _set_holdfast_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_holdfast_array(self, arg2)
+
+    def _set_null_values_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_null_values_array(self, arg2)
+
+    def _set_init_values_array(self, arg2: 'etk::ndarray *') -> "void":
+        return _core.sherpa__set_init_values_array(self, arg2)
+
     parameter_array = property(_get_parameter_array, None, None, "An array of current parameter values")
     parameter_minimums = property(_get_parameter_minbound_array, None, None, "An array of minimum parameter values")
     parameter_maximums = property(_get_parameter_maxbound_array, None, None, "An array of maximum parameter values")
@@ -3848,6 +3842,21 @@ class sherpa(ParameterList):
     parameter_initial_values_array = property(_get_init_values_array, None, None, "An array of initial parameter values")
     parameter_null_values_array = property(_get_null_values_array, None, None, "An array of parameter null values")
 
+
+    def parameter(self, *args, **kwargs) -> "elm::ModelParameter":
+        return _core.sherpa_parameter(self, *args, **kwargs)
+
+    def __getitem__(self, *args) -> "elm::ModelParameter":
+        return _core.sherpa___getitem__(self, *args)
+
+    def alias(self, *args) -> "freedom_alias &":
+        return _core.sherpa_alias(self, *args)
+
+    def del_alias(self, alias_name: 'std::string const &') -> "void":
+        return _core.sherpa_del_alias(self, alias_name)
+
+    def unlink_alias(self, alias_name: 'std::string const &') -> "void":
+        return _core.sherpa_unlink_alias(self, alias_name)
     __swig_destroy__ = _core.delete_sherpa
     __del__ = lambda self: None
 sherpa_swigregister = _core.sherpa_swigregister
@@ -3859,8 +3868,8 @@ class Model2(sherpa):
     def _xylem(self) -> "elm::VAS_System const &":
         return _core.Model2__xylem(self)
 
-    def _sayweakself(self) -> "void":
-        return _core.Model2__sayweakself(self)
+    def _sayweakself(self, *args) -> "void":
+        return _core.Model2__sayweakself(self, *args)
 
     def _setweakself(self, ref_to_self: 'PyObject *') -> "void":
         return _core.Model2__setweakself(self, ref_to_self)
@@ -3929,14 +3938,8 @@ class Model2(sherpa):
     def clear_cache(self) -> "void":
         return _core.Model2_clear_cache(self)
 
-    def loglike(self, *args) -> "double":
-        return _core.Model2_loglike(self, *args)
-
-    def loglike_cached(self, *args) -> "double":
-        return _core.Model2_loglike_cached(self, *args)
-
-    def loglike_nocache(self, *args) -> "double":
-        return _core.Model2_loglike_nocache(self, *args)
+    def loglike(self) -> "double":
+        return _core.Model2_loglike(self)
 
     def loglike_casewise(self, *args) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_loglike_casewise(self, *args)
@@ -4291,8 +4294,8 @@ class ModelParameter(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
 
-    def __init__(self, model: 'Model2', slot: 'size_t const &'):
-        this = _core.new_ModelParameter(model, slot)
+    def __init__(self, *args):
+        this = _core.new_ModelParameter(*args)
         try:
             self.this.append(this)
         except Exception:
@@ -4336,8 +4339,8 @@ class ModelParameter(object):
     def _get_holdfast(self) -> "bool":
         return _core.ModelParameter__get_holdfast(self)
 
-    def _set_holdfast(self, value: 'bool const &') -> "void":
-        return _core.ModelParameter__set_holdfast(self, value)
+    def _set_holdfast(self, *args) -> "void":
+        return _core.ModelParameter__set_holdfast(self, *args)
 
     def _del_holdfast(self) -> "void":
         return _core.ModelParameter__del_holdfast(self)
@@ -4354,17 +4357,47 @@ class ModelParameter(object):
     def _set_initvalue(self, value: 'double const &') -> "void":
         return _core.ModelParameter__set_initvalue(self, value)
 
+    def _get_index(self) -> "size_t":
+        return _core.ModelParameter__get_index(self)
+
+    def _get_complete_covariance_matrix(self) -> "etk::symmetric_matrix *":
+        return _core.ModelParameter__get_complete_covariance_matrix(self)
+
+    def _get_model(self) -> "PyObject *":
+        return _core.ModelParameter__get_model(self)
+
     value = property(_get_value, _set_value)
     null_value = property(_get_nullvalue, _set_nullvalue)
     initial_value = property(_get_initvalue, _set_initvalue)
     minimum = property(_get_min, _set_min, _del_min)
+    min_value = minimum
     maximum = property(_get_max, _set_max, _del_max)
+    max_value = maximum
     holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
     std_err = property(_get_std_err, None, None, "the standard error of the estimator")
     robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
     name = property(_get_name, None, None, "the parameter name")
+    index = property(_get_index, None, None, "the parameter index within the model")
     def __repr__(self):
     	return "ModelParameter('{}', value={})".format(self.name, self.value)
+    @property
+    def covariance(self):
+    	slot = self.index
+    	cov = self._get_complete_covariance_matrix()
+    	model = self._get_model()
+    	ret = {}
+    	for name, val in zip(model.parameter_names(), cov[:,slot]):
+    		ret[name] = val
+    	return ret
+    @property
+    def robust_covariance(self):
+    	slot = self.index
+    	model = self._get_model()
+    	cov = model.robust_covariance_matrix
+    	ret = {}
+    	for name, val in zip(model.parameter_names(), cov[:,slot]):
+    		ret[name] = val
+    	return ret
 
 ModelParameter_swigregister = _core.ModelParameter_swigregister
 ModelParameter_swigregister(ModelParameter)

@@ -90,6 +90,7 @@ namespace etk {
 		void bool_initialize(const bool& init=false);
 		void destroy() {Py_CLEAR(pool);}
 		void same_memory_as(ndarray&);
+		void same_ccontig_memory_as(ndarray& x);
 		
 	// Direct Access
 		PyObject*  get_object(bool incref=true) {if (incref) Py_XINCREF(pool); return (PyObject*)pool;}
