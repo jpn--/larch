@@ -131,6 +131,7 @@ elm::ca_co_packet elm::Model2::utility_packet()
 							 &Coef_UtilityCO	,
 							 Data_UtilityCA		,
 							 Data_UtilityCO		,
+							 (Data_UtilityCE_builtin.active() ? &Data_UtilityCE_builtin : nullptr)             ,
 							 &Utility			);
 }
 
@@ -143,6 +144,7 @@ elm::ca_co_packet elm::Model2::utility_packet_without_data()
 							 &Coef_UtilityCO	,
 							 nullptr		,
 							 nullptr		,
+							 nullptr            ,
 							 &Utility			);
 }
 
@@ -154,6 +156,7 @@ elm::ca_co_packet elm::Model2::quantity_packet()
 							 nullptr         	,
 							 Data_QuantityCA	,
 							 nullptr         	,
+							 nullptr            ,
 							 &Quantity			);
 }
 
@@ -166,6 +169,7 @@ elm::ca_co_packet elm::Model2::sampling_packet()
 							 &Coef_SamplingCO	,
 							 Data_SamplingCA	,
 							 Data_SamplingCO	,
+							 nullptr            ,
 							 &SamplingWeight	);
 }
 
@@ -177,6 +181,7 @@ elm::ca_co_packet elm::Model2::allocation_packet()
 							 &Coef_Edges	,
 							 nullptr	,
 							 Data_Allocation	,
+							 nullptr            ,
 							 &Allocation	);
 }
 

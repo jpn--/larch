@@ -88,6 +88,7 @@ namespace etk {
 		~ndarray();
 		void initialize(const double& init=0);
 		void bool_initialize(const bool& init=false);
+		void int64_initialize(const long long& init);
 		void destroy() {Py_CLEAR(pool);}
 		void same_memory_as(ndarray&);
 		void same_ccontig_memory_as(ndarray& x);

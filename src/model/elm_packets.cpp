@@ -31,6 +31,7 @@ elm::ca_co_packet::ca_co_packet(
 			 const etk::ndarray*	Coef_CO		,
 			 elm::darray_ptr		Data_CA		,
 			 elm::darray_ptr		Data_CO		,
+			 const darray_export_map* Data_CE ,
 			 etk::ndarray*		Outcome		)
 : Params_CA	(Params_CA)
 , Params_CO	(Params_CO)
@@ -38,6 +39,7 @@ elm::ca_co_packet::ca_co_packet(
 , Coef_CO	(Coef_CO)
 , Data_CA	(Data_CA)
 , Data_CO	(Data_CO)
+, Data_CE   (Data_CE)
 , Outcome	(Outcome)
 {
 }
@@ -68,34 +70,55 @@ void elm::ca_co_packet::logit_partial
 , const double&        U_premultiplier
 )
 {
-	if (Data_CA && Data_CA->nVars()>0) {
-		// Fast Linear Algebra		
-		if (Outcome->size2()==Data_CA->nAlts()) {
-			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
-						numberofcases * Data_CA->nAlts(), Data_CA->nVars(), 
-						1,
-						Data_CA->values(firstcase,numberofcases),Data_CA->nVars(),
-						Coef_CA->ptr(),1,
-						U_premultiplier, Outcome->ptr(firstcase),1);
-		} else {
-			for (unsigned a=0;a<Data_CA->nAlts();a++) {
-				cblas_dgemv(CblasRowMajor,CblasNoTrans,
-							numberofcases,Data_CA->nVars(),
-							1, 
-							Data_CA->values(firstcase,numberofcases)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-							Coef_CA->ptr(),1, 
-							U_premultiplier, Outcome->ptr(firstcase)+a, Outcome->size2() );
-			}
-		}		
-	}
-	if ((Data_CA && Data_CA->nVars()==0) || (!Data_CA)) {
+	const darray_export_map* Data_CE = nullptr;
+
+	if (Data_CE) {
+
 		if (U_premultiplier) {
 			cblas_dscal(Outcome->size2()*Outcome->size3()*numberofcases, U_premultiplier, Outcome->ptr(firstcase), 1);
 		} else {
 			memset(Outcome->ptr(firstcase), 0, sizeof(double)*Outcome->size2()*Outcome->size3()*numberofcases);
 		}
-	}
+
 	
+		size_t rowmarker = Data_CE->_casestarts->int64_at(firstcase);
+		long long caseindex = Data_CE->_caseindexes->int64_at(rowmarker);
+		while (caseindex < firstcase+numberofcases) {
+			*(Outcome->ptr(caseindex, Data_CE->_altindexes->int64_at(rowmarker))) = cblas_ddot(Data_CE->nvars(), Coef_CA->ptr(), 1, Data_CE->_data_array->ptr(rowmarker), 1);
+			rowmarker++;
+			caseindex = Data_CE->_caseindexes->int64_at(rowmarker);
+		}
+	
+	} else {
+
+		if (Data_CA && Data_CA->nVars()>0) {
+			// Fast Linear Algebra		
+			if (Outcome->size2()==Data_CA->nAlts()) {
+				cblas_dgemv(CblasRowMajor,CblasNoTrans, 
+							numberofcases * Data_CA->nAlts(), Data_CA->nVars(), 
+							1,
+							Data_CA->values(firstcase,numberofcases),Data_CA->nVars(),
+							Coef_CA->ptr(),1,
+							U_premultiplier, Outcome->ptr(firstcase),1);
+			} else {
+				for (unsigned a=0;a<Data_CA->nAlts();a++) {
+					cblas_dgemv(CblasRowMajor,CblasNoTrans,
+								numberofcases,Data_CA->nVars(),
+								1, 
+								Data_CA->values(firstcase,numberofcases)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
+								Coef_CA->ptr(),1, 
+								U_premultiplier, Outcome->ptr(firstcase)+a, Outcome->size2() );
+				}
+			}		
+		}
+		if ((Data_CA && Data_CA->nVars()==0) || (!Data_CA)) {
+			if (U_premultiplier) {
+				cblas_dscal(Outcome->size2()*Outcome->size3()*numberofcases, U_premultiplier, Outcome->ptr(firstcase), 1);
+			} else {
+				memset(Outcome->ptr(firstcase), 0, sizeof(double)*Outcome->size2()*Outcome->size3()*numberofcases);
+			}
+		}
+	}
 	if (Data_CO && Data_CO->nVars()>0) {
 		// Fast Linear Algebra
 		
@@ -130,7 +153,18 @@ bool elm::ca_co_packet::relevant()
 
 size_t elm::ca_co_packet::nAlt() const
 {
-	return (Data_CA ? Data_CA->nAlts() : /*Data_CO->nAlts()*/ Coef_CO->size2());
+	if (Data_CA) {
+		return Data_CA->nAlts();
+	}
+	
+	if (Data_CO) {
+		return Coef_CO->size2();
+	}
+	
+	// else (Data_CE) only...
+	TODO;
+	
+	//return (Data_CA ? Data_CA->nAlts() : /*Data_CO->nAlts()*/ Coef_CO->size2());
 }
 
 
@@ -159,7 +193,11 @@ void elm::ca_co_packet::logit_partial_deriv
 		
 		// First, we calculate the effect of various parameters on the utility
 		// of 'a' directly.
-		if (dUtilCA->size()) Data_CA->ExportData(dUtilCA->ptr(a),c,a,Data_CA->nAlts());
+		if (Data_CE) {
+			if (dUtilCA->size()) Data_CE->export_into(dUtilCA->ptr(a),c,a,Data_CE->nvars());
+		} else {
+			if (dUtilCA->size()) Data_CA->ExportData(dUtilCA->ptr(a),c,a,Data_CA->nAlts());
+		}
 		if (dUtilCO->size()) Data_CO->ExportData(dUtilCO->ptr(a),c,a,Data_CO->nAlts());
 			
 	}

@@ -257,6 +257,8 @@ ndarray::ndarray(const int& r,const int& c,const int& s, const char* arrayType)
 	quick_new(NPY_DOUBLE, arrayType, r, c, s);
 }
 
+
+
 ndarray::ndarray(const ndarray& that, bool use_same_memory)
 : pool (nullptr)
 {
@@ -1079,6 +1081,11 @@ void ndarray::initialize(const double& init)
 void ndarray::bool_initialize(const bool& init)
 {
 		for (unsigned i=0; i<size(); i++) ptr_bool()[i]=init;
+}
+
+void ndarray::int64_initialize(const long long& init)
+{
+	for (unsigned i=0; i<size(); i++) this->int64_at(i)=init;
 }
 
 

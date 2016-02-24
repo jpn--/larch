@@ -169,7 +169,7 @@ namespace elm {
 		//// MARK: Applying Data ///////////////////////////////////////////////////
 
 	public:
-		etk::memarray _repository;
+		etk::ndarray _repository;
 
 	public:
 		etk::readlock _repo_lock;
@@ -216,17 +216,22 @@ namespace elm {
 
 	class darray_export_map
 	{
+	
+		friend class ca_co_packet;
+	
 	protected:
 		std::map< two_int64, double* > _pointer_map;
 		std::shared_ptr<etk::ndarray> _data_array;
 		std::shared_ptr<etk::ndarray> _caseindexes;
 		std::shared_ptr<etk::ndarray> _altindexes;
 		
+		std::shared_ptr<etk::ndarray> _casestarts;
+		
 	public:
-		darray_export_map(etk::ndarray* caseindexes=nullptr, etk::ndarray* altindexes=nullptr, etk::ndarray* data_array=nullptr);
+		darray_export_map(etk::ndarray* caseindexes=nullptr, etk::ndarray* altindexes=nullptr, etk::ndarray* data_array=nullptr, const size_t& max_caseindex=0);
 		~darray_export_map();
 
-		void maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array);
+		void maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex);
 		void clear();
 		
 		const double* get_ptr_at(const long long& caseindex, const long long& altindex) const;

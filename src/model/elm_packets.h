@@ -30,13 +30,14 @@ namespace elm {
 
 	struct ca_co_packet {
 
-		const paramArray*	    Params_CA	;
-		const paramArray*	    Params_CO	;
-		const etk::ndarray*	    Coef_CA		;
-		const etk::ndarray*	    Coef_CO		;
-		elm::darray_ptr		    Data_CA		;
-		elm::darray_ptr		    Data_CO		;
-		etk::ndarray*		    Outcome		;
+		const paramArray*	     Params_CA	;
+		const paramArray*	     Params_CO	;
+		const etk::ndarray*	     Coef_CA    ;
+		const etk::ndarray*	     Coef_CO    ;
+		elm::darray_ptr		     Data_CA    ;
+		elm::darray_ptr		     Data_CO    ;
+		const darray_export_map* Data_CE    ;
+		etk::ndarray*		     Outcome    ;
 		
 		// Constructor
 		ca_co_packet(const paramArray*	Params_CA	,
@@ -45,6 +46,7 @@ namespace elm {
 					 const etk::ndarray*	 Coef_CO	,
 					 elm::darray_ptr		 Data_CA	,
 					 elm::darray_ptr		 Data_CO	,
+					 const darray_export_map* Data_CE ,
 					 etk::ndarray*		Outcome		);
 		~ca_co_packet();
 		

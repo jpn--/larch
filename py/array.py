@@ -123,4 +123,65 @@ class SymmetricArray(Array):
 
 
 
-	
+
+
+
+from scipy.linalg.blas import dgemv, dgemm
+
+
+
+
+
+class DataArrayBundle:
+
+	def __init__(self, model=None, name="Utility"):
+		self.idco = None
+		self.idca = None
+		self.idce = None
+		self.name = name
+		self.model = model
+		self._nameset = tuple("{}{}".format(name,x) for x in ("CA","CO"))
+
+	def _get_needed_data(self, dataprovider):
+		big_needs = self.model.needs()
+		local_needs = {n: big_needs[n] for n in self._nameset if n in big_needs}
+		bucket = dataprovider.provision(local_needs)
+		if self._nameset[0] in bucket:
+			self.idca = bucket[self._nameset[0]]
+		if self._nameset[1] in bucket:
+			self.idco = bucket[self._nameset[1]]
+
+	def linear_result(self, outarray, initializer = 0.0):
+		outarrayshape = outarray.shape
+		while len(outarrayshape)<2:
+			outarrayshape = outarrayshape + (1,)
+		if self.idca is not None:
+			outarray.shape = (outarrayshape[0]*outarrayshape[1],)
+			self_idca_shape = self.idca.shape
+			self.idca.shape = (self.idca.shape[0]*self.idca.shape[1], *self.idca.shape[2:])
+			assert( outarray.shape == self.idca.shape[:1] )
+			zz = dgemv(1.0,self.idca, self.model.Coef(self._nameset[0]), initializer,outarray, overwrite_y=1)
+			print("AA")
+			print("explicit result")
+			print(zz)
+			print("input result")
+			print(outarray)
+			initializer = 1.0
+			self.idca.shape = self_idca_shape
+			outarray.shape = self.idca.shape[:2]
+		if self.idco is not None:
+			coef_co = self.model.Coef(self._nameset[1])
+			print(outarray.shape,"outarray.shape")
+			print(( self.idco.shape[0], coef_co.shape[1]),"( self.idco.shape[0], coef_co.shape[1])")
+			assert( outarray.shape == ( self.idco.shape[0], coef_co.shape[1]) )
+			zz = dgemm(1.0,self.idco, coef_co, initializer,outarray, overwrite_c=1)
+			print("BB")
+			print("explicit result")
+			print(zz)
+			print("input result")
+			print(outarray)
+			initializer = 1.0
+		return outarray
+
+
+

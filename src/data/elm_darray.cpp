@@ -631,13 +631,13 @@ std::string elm::check_darray(const darray* x)
 
 
 
-elm::darray_export_map::darray_export_map(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array)
+elm::darray_export_map::darray_export_map(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex)
 : _pointer_map()
 , _data_array(nullptr)
 , _caseindexes(nullptr)
 , _altindexes(nullptr)
 {
-	maplink(caseindexes, altindexes, data_array);
+	maplink(caseindexes, altindexes, data_array, max_caseindex);
 }
 
 
@@ -648,7 +648,7 @@ elm::darray_export_map::~darray_export_map()
 }
 
 
-void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array)
+void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex)
 {
 	clear();
 	if (caseindexes && altindexes && data_array) {
@@ -656,8 +656,19 @@ void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* al
 		_caseindexes = std::make_shared<etk::ndarray>(*caseindexes, true);
 		_altindexes = std::make_shared<etk::ndarray>(*altindexes, true);
 		
+		_casestarts = std::make_shared<etk::ndarray>("Array", NPY_INT64, max_caseindex);
+		_casestarts->int64_initialize(-1);
+		
+		size_t startmarker = 0;
+		_casestarts->int64_at(startmarker) = 0;
+		
 		for (size_t i=0; i<data_array->size1(); i++) {
 			_pointer_map[two_int64(caseindexes->int64_at(i),altindexes->int64_at(i))] = _data_array->ptr(i);
+			
+			while (startmarker<caseindexes->int64_at(i)) {
+				_casestarts->int64_at(startmarker) = i;
+				startmarker++;
+			}
 		}
 	}
 }

@@ -3452,8 +3452,8 @@ class darray_export_map(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
 
-    def __init__(self, caseindexes: 'etk::ndarray *'=None, altindexes: 'etk::ndarray *'=None, data_array: 'etk::ndarray *'=None):
-        this = _core.new_darray_export_map(caseindexes, altindexes, data_array)
+    def __init__(self, caseindexes: 'etk::ndarray *'=None, altindexes: 'etk::ndarray *'=None, data_array: 'etk::ndarray *'=None, max_caseindex: 'size_t const &'=0):
+        this = _core.new_darray_export_map(caseindexes, altindexes, data_array, max_caseindex)
         try:
             self.this.append(this)
         except Exception:
@@ -3461,8 +3461,8 @@ class darray_export_map(object):
     __swig_destroy__ = _core.delete_darray_export_map
     __del__ = lambda self: None
 
-    def maplink(self, caseindexes: 'etk::ndarray *', altindexes: 'etk::ndarray *', data_array: 'etk::ndarray *') -> "void":
-        return _core.darray_export_map_maplink(self, caseindexes, altindexes, data_array)
+    def maplink(self, caseindexes: 'etk::ndarray *', altindexes: 'etk::ndarray *', data_array: 'etk::ndarray *', max_caseindex: 'size_t const &') -> "void":
+        return _core.darray_export_map_maplink(self, caseindexes, altindexes, data_array, max_caseindex)
 
     def clear(self) -> "void":
         return _core.darray_export_map_clear(self)
@@ -3925,6 +3925,7 @@ class Model2(sherpa):
     def DataEdit(self, label: 'std::string const &') -> "elm::darray *":
         return _core.Model2_DataEdit(self, label)
     Data_UtilityCE = _swig_property(_core.Model2_Data_UtilityCE_get, _core.Model2_Data_UtilityCE_set)
+    Data_UtilityCE_builtin = _swig_property(_core.Model2_Data_UtilityCE_builtin_get, _core.Model2_Data_UtilityCE_builtin_set)
 
     def get_weight_scale_factor(self) -> "double":
         return _core.Model2_get_weight_scale_factor(self)

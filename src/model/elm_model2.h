@@ -262,6 +262,8 @@ namespace elm {
 		elm::darray* DataEdit(const std::string& label);
 
 		elm::darray_export_map Data_UtilityCE;
+		elm::darray_export_map Data_UtilityCE_builtin;
+		
 
 #ifndef SWIG
 

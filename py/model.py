@@ -903,7 +903,7 @@ class Model(Model2, ModelReporter):
 			self._ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
 			# provision other data, link ce data
 			self.provision_without_utility()
-			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce)
+			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce, int(numpy.max(self._ce_caseindex)))
 			self.setUp(False)
 			# initialize utility
 			self.Utility()[:] = -numpy.inf
