@@ -63,7 +63,13 @@ void elm::workshop_nl_gradient::case_dUtility_dFusedParameters( const unsigned& 
 		// and theta parameters. For other nodes, only mu has a direct effect
 		if (a<Xylem->n_elemental()) {
 			// BETA for SELF (elemental alternatives)
-			if (nCA) UtilPacket.Data_CA->ExportData(dUtil.ptr(a),c,a,UtilPacket.Data_CA->nAlts());
+			if (nCA) {
+				if (UtilPacket.Data_CE && UtilPacket.Data_CE->active()) {
+					UtilPacket.Data_CE->export_into(dUtil.ptr(a),c,a,nCA);
+				} else {
+					UtilPacket.Data_CA->ExportData(dUtil.ptr(a),c,a,UtilPacket.Data_CA->nAlts());
+				}
+			}
 			if (nCO) UtilPacket.Data_CO->ExportData(dUtil.ptr(a)+nCA,c,a,UtilPacket.nAlt());
 		} else {
 			// MU for SELF (adjust the kiddies contributions) /////HERE

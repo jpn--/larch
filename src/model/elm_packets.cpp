@@ -70,9 +70,8 @@ void elm::ca_co_packet::logit_partial
 , const double&        U_premultiplier
 )
 {
-	const darray_export_map* Data_CE = nullptr;
-
 	if (Data_CE) {
+
 
 		if (U_premultiplier) {
 			cblas_dscal(Outcome->size2()*Outcome->size3()*numberofcases, U_premultiplier, Outcome->ptr(firstcase), 1);
@@ -86,10 +85,15 @@ void elm::ca_co_packet::logit_partial
 		while (caseindex < firstcase+numberofcases) {
 			*(Outcome->ptr(caseindex, Data_CE->_altindexes->int64_at(rowmarker))) = cblas_ddot(Data_CE->nvars(), Coef_CA->ptr(), 1, Data_CE->_data_array->ptr(rowmarker), 1);
 			rowmarker++;
-			caseindex = Data_CE->_caseindexes->int64_at(rowmarker);
+			if (rowmarker<Data_CE->nrows()) {
+				caseindex = Data_CE->_caseindexes->int64_at(rowmarker);
+			} else {
+				break;
+			}
 		}
 	
 	} else {
+
 
 		if (Data_CA && Data_CA->nVars()>0) {
 			// Fast Linear Algebra		
@@ -193,7 +197,7 @@ void elm::ca_co_packet::logit_partial_deriv
 		
 		// First, we calculate the effect of various parameters on the utility
 		// of 'a' directly.
-		if (Data_CE) {
+		if (Data_CE && Data_CE->active()) {
 			if (dUtilCA->size()) Data_CE->export_into(dUtilCA->ptr(a),c,a,Data_CE->nvars());
 		} else {
 			if (dUtilCA->size()) Data_CA->ExportData(dUtilCA->ptr(a),c,a,Data_CA->nAlts());

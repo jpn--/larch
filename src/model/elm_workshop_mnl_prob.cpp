@@ -26,29 +26,25 @@
 #include "elm_workshop_mnl_prob.h"
 
 
+
+
 elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 							, etk::ndarray* CLL
-							, elm::darray_ptr Data_CA
-							, elm::darray_ptr Data_CO
+							, elm::ca_co_packet UtilPack
 							, elm::darray_ptr Data_AV
 							, elm::darray_ptr Data_Ch
-							, etk::ndarray* Coef_CA
-							, etk::ndarray* Coef_CO
 							, const double& U_premultiplier
 							, etk::logging_service* msgr
 							)
 : Probability(U)
 , CaseLogLike(CLL)
-, Data_CA(Data_CA)
-, Data_CO(Data_CO)
 , Data_AV(Data_AV)
 , Data_Ch(Data_Ch)
-, Coef_CA(Coef_CA)
-, Coef_CO(Coef_CO)
 , U_premultiplier(U_premultiplier)
 , msg_(msgr)
+, UtilPacket(UtilPack)
 {
-//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
+	//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
 }
 
 elm::mnl_prob_w::~mnl_prob_w()
@@ -59,10 +55,12 @@ elm::mnl_prob_w::~mnl_prob_w()
 void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex)
 {
 	unsigned nElementals = 0;
-	if (Data_CA && Data_CA->nVars()>0) {
-		nElementals = Data_CA->nAlts();
-	} else if (Data_CO && Coef_CO->size2()>0) {
-		nElementals = Coef_CO->size2();
+	if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()>0) {
+		nElementals = UtilPacket.Data_CA->nAlts();
+	} else if (UtilPacket.Data_CE && UtilPacket.Data_CE->nalts()>0) {
+		nElementals = UtilPacket.Data_CE->nalts();
+	} else if (UtilPacket.Data_CO && UtilPacket.Coef_CO->size2()>0) {
+		nElementals = UtilPacket.Coef_CO->size2();
 	} else {
 		return;
 		OOPS("no useful data!");
@@ -70,85 +68,89 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 
 	// UTILITY //
 
-	if (Data_CA && Data_CA->nVars()>0 /* && Data_CA->fully_loaded()*/) {
-		// Fast Linear Algebra
-		if (Probability->size2()==Data_CA->nAlts()) {
-			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
-						numberofcases * Data_CA->nAlts(), Data_CA->nVars(), 
-						1,
-						Data_CA->values(firstcase,0),Data_CA->nVars(),
-						Coef_CA->ptr(),1,
-						U_premultiplier, Probability->ptr(firstcase),1);
-		} else {
-			for (unsigned a=0;a<Data_CA->nAlts();a++) {
-				if (Probability->size2()<=0){
-					OOPS("IncY Zero");
-				}
-				cblas_dgemv(CblasRowMajor,CblasNoTrans,
-							numberofcases,Data_CA->nVars(),
-							1, 
-							Data_CA->values(firstcase,0)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-							Coef_CA->ptr(),1, 
-							U_premultiplier, Probability->ptr(firstcase)+a, Probability->size2() );
-			}
-		}		
-	} else if (Data_CA && Data_CA->nVars()>0) {
-		// Slow case-by-case
-		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
-			if (Probability->size2()==Data_CA->nAlts()) {
-				cblas_dgemv(CblasRowMajor,CblasNoTrans, 
-							Data_CA->nAlts(), Data_CA->nVars(), 
-							1,
-							Data_CA->values(c,1),Data_CA->nVars(),
-							Coef_CA->ptr(),1,
-							U_premultiplier, Probability->ptr(c),1);
-			} else {
-				for (unsigned a=0;a<Data_CA->nAlts();a++) {
-					if (Probability->size2()<=0){
-						OOPS("IncY Zero");
-					}
-					cblas_dgemv(CblasRowMajor,CblasNoTrans,
-								1,Data_CA->nVars(),
-								1, 
-								Data_CA->values(c,1)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
-								Coef_CA->ptr(),1, 
-								U_premultiplier, Probability->ptr(c)+a, Probability->size2() );
-				}
-			}
-		}
-	}
-	if (!Data_CA || Data_CA->nVars()==0) {
-		if (U_premultiplier) {
-			cblas_dscal(Probability->size2()*Probability->size3()*numberofcases, U_premultiplier, Probability->ptr(firstcase), 1);
-		} else {
-			memset(Probability->ptr(firstcase), 0, sizeof(double)*Probability->size2()*Probability->size3()*numberofcases);
-		}
-	}
-	
-	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
-		// Fast Linear Algebra		
-		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
-					numberofcases,Coef_CO->size2(), Data_CO->nVars(),
-					1,
-					Data_CO->values_constptr(firstcase), Data_CO->nVars(),
-					Coef_CO->ptr(), Coef_CO->size2(),
-					1,Probability->ptr(firstcase),Probability->size2());
-	} else if (Data_CO && Data_CO->nVars()>0) {
-		// Slow case-by-case
-		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
-			if (Data_CO->nVars())
-				cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
-							1,Coef_CO->size2(), Data_CO->nVars(),
-							1,
-							Data_CO->values(c,1), Data_CO->nVars(),
-							Coef_CO->ptr(), Coef_CO->size2(),
-							1,Probability->ptr(c),Probability->size2());
-		}
-	}
+	UtilPacket.Outcome = Probability;
+	UtilPacket.logit_partial(firstcase, numberofcases);
+
+//	if (Data_CA && Data_CA->nVars()>0 /* && Data_CA->fully_loaded()*/) {
+//		// Fast Linear Algebra
+//		if (Probability->size2()==Data_CA->nAlts()) {
+//			cblas_dgemv(CblasRowMajor,CblasNoTrans, 
+//						numberofcases * Data_CA->nAlts(), Data_CA->nVars(), 
+//						1,
+//						Data_CA->values(firstcase,0),Data_CA->nVars(),
+//						Coef_CA->ptr(),1,
+//						U_premultiplier, Probability->ptr(firstcase),1);
+//		} else {
+//			for (unsigned a=0;a<Data_CA->nAlts();a++) {
+//				if (Probability->size2()<=0){
+//					OOPS("IncY Zero");
+//				}
+//				cblas_dgemv(CblasRowMajor,CblasNoTrans,
+//							numberofcases,Data_CA->nVars(),
+//							1, 
+//							Data_CA->values(firstcase,0)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
+//							Coef_CA->ptr(),1, 
+//							U_premultiplier, Probability->ptr(firstcase)+a, Probability->size2() );
+//			}
+//		}		
+//	} else if (Data_CA && Data_CA->nVars()>0) {
+//		// Slow case-by-case
+//		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
+//			if (Probability->size2()==Data_CA->nAlts()) {
+//				cblas_dgemv(CblasRowMajor,CblasNoTrans, 
+//							Data_CA->nAlts(), Data_CA->nVars(), 
+//							1,
+//							Data_CA->values(c,1),Data_CA->nVars(),
+//							Coef_CA->ptr(),1,
+//							U_premultiplier, Probability->ptr(c),1);
+//			} else {
+//				for (unsigned a=0;a<Data_CA->nAlts();a++) {
+//					if (Probability->size2()<=0){
+//						OOPS("IncY Zero");
+//					}
+//					cblas_dgemv(CblasRowMajor,CblasNoTrans,
+//								1,Data_CA->nVars(),
+//								1, 
+//								Data_CA->values(c,1)+(a*Data_CA->nVars()), Data_CA->nAlts()*Data_CA->nVars(), 
+//								Coef_CA->ptr(),1, 
+//								U_premultiplier, Probability->ptr(c)+a, Probability->size2() );
+//				}
+//			}
+//		}
+//	}
+//	if (!Data_CA || Data_CA->nVars()==0) {
+//		if (U_premultiplier) {
+//			cblas_dscal(Probability->size2()*Probability->size3()*numberofcases, U_premultiplier, Probability->ptr(firstcase), 1);
+//		} else {
+//			memset(Probability->ptr(firstcase), 0, sizeof(double)*Probability->size2()*Probability->size3()*numberofcases);
+//		}
+//	}
+//	
+//	if (Data_CO && Data_CO->nVars()>0 /*&& Data_CO->fully_loaded()*/) {
+//		// Fast Linear Algebra		
+//		cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
+//					numberofcases,Coef_CO->size2(), Data_CO->nVars(),
+//					1,
+//					Data_CO->values_constptr(firstcase), Data_CO->nVars(),
+//					Coef_CO->ptr(), Coef_CO->size2(),
+//					1,Probability->ptr(firstcase),Probability->size2());
+//	} else if (Data_CO && Data_CO->nVars()>0) {
+//		// Slow case-by-case
+//		for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
+//			if (Data_CO->nVars())
+//				cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,
+//							1,Coef_CO->size2(), Data_CO->nVars(),
+//							1,
+//							Data_CO->values(c,1), Data_CO->nVars(),
+//							Coef_CO->ptr(), Coef_CO->size2(),
+//							1,Probability->ptr(c),Probability->size2());
+//		}
+//	}
 
 	// PROBABILITY //
 	
-//	if (firstcase==0) BUGGER_(msg_, "Util[0]="<<Probability->printrow(0));
+//	if (firstcase==0) std::cerr <<"Util[0]="<<Probability->printrow(0) <<"\n";
+	
 	
 	for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
 		double sum_prob = 0.0;

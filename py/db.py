@@ -9,6 +9,9 @@ except ImportError:
 	apsw = Mock()
 	apsw_Connection = utilities.Dummy
 
+import numpy
+
+
 from .core import SQLiteDB, Facet, FacetError, LarchError, QuerySetSimpleCO, QuerySetTwoTable
 from .exceptions import NoResultsError, TooManyResultsError
 from . import logging
@@ -1445,6 +1448,21 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = vars
 		return result, caseids
 
+
+	def arraymap_idce(self, *vars):
+		from .util.arraytools import label_to_index
+		# load data and ids
+		caseids = self.array_caseids().squeeze()
+		ca_vars_str = ", ".join(vars)
+		result_ce = self.array("SELECT {} FROM larch_idca".format(ca_vars_str), cte=True)
+		ce_altids = self.array("SELECT altid FROM larch_idca", cte=True).astype(int).squeeze()
+		ce_caseids = self.array("SELECT caseid FROM larch_idca", cte=True).astype(int).squeeze()
+		# convert ids to indexes
+		result_ce_caseindex = label_to_index(caseids, ce_caseids)
+		result_ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
+		return (result_ce_caseindex, result_ce_altindex, result_ce, len(caseids), len(self.alternative_codes()))
+
+
 	def array_idco(self, *vars, table=None, caseid=None, dtype='float64', sort=True, n_cases=None):
 		"""Extract a set of idco values from the DB based on preset queries.
 		
@@ -1800,7 +1818,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = [var,]
 		return result, caseids
 
-	def provision(self, needs):
+	def provision(self, needs, *, idca_avail_ratio_floor=0.1):
 		from . import Model
 		if isinstance(needs,Model):
 			m = needs
@@ -1813,17 +1831,33 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		n_cases = None
 		matched_cases = []
 		log = self.logger()
+		avail_ratio = 1.0
+		
+		# do avail first, to evaluate the benefit to use IDCE format
+		if "Avail" in needs:
+			if log:
+				log.info("Provisioning {} data...".format(key))
+			provide["Avail"], c = self.array_avail_blind(n_cases=n_cases)
+			if cases is None and c is not None:
+				cases = c
+				matched_cases += ["Avail",]
+				n_cases = cases.shape[0]
+			avail_ratio = numpy.mean(provide["Avail"])
+		
 		for key, req in needs.items():
 			if log:
 				log.info("Provisioning {} data...".format(key))
 			if key=="Avail":
-				provide[key], c = self.array_avail_blind(n_cases=n_cases)
+				continue
 			elif key=="Weight":
 				provide[key], c = self.array_weight(n_cases=n_cases)
 			elif key=="Choice":
 				provide[key], c = self.array_choice(n_cases=n_cases)
 			elif key[-2:]=="CA":
-				provide[key], c = self.array_idca(*req.get_variables(),n_cases=n_cases)
+				if avail_ratio>idca_avail_ratio_floor:
+					provide[key], c = self.array_idca(*req.get_variables(),n_cases=n_cases)
+				else:
+					provide[key[:-2]+"CE"] = self.arraymap_idce(*req.get_variables())
 			elif key[-2:]=="CO":
 				provide[key], c = self.array_idco(*req.get_variables(),n_cases=n_cases)
 			elif key=="Allocation":

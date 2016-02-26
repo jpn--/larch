@@ -87,6 +87,8 @@ namespace elm {
 		bool enforce_bounds;
 		bool enforce_constraints;
 		
+		double idca_avail_ratio_floor;
+		
 		std::string author;
 		
 		// Constructor
@@ -108,7 +110,8 @@ namespace elm {
 			bool suspend_xylem_rebuild=false,
 			bool log_turns=false,
 			bool enforce_bounds=true,
-			bool enforce_contraints=false
+			bool enforce_contraints=false,
+			double idca_avail_ratio_floor=0.1
 		);
 	
 		// Re-constructor
@@ -130,7 +133,8 @@ namespace elm {
 			int suspend_xylem_rebuild=-9,
 			int log_turns=-9,
 			int enforce_bounds=-9,
-			int enforce_contraints=-9
+			int enforce_contraints=-9,
+			double idca_avail_ratio_floor=-9
 		);
 
 		void copy(const model_options_t& other);

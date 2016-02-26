@@ -736,10 +736,10 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 		FCurrent.resize(dF());
 	}
 
-	for (unsigned i=0; i<dF(); i++) {
-		freedom_info* f = &(FInfo[FNames[i]]);
-		FCurrent[i] = f->value;
-	}
+//	for (unsigned i=0; i<dF(); i++) {
+//		freedom_info* f = &(FInfo[FNames[i]]);
+//		FCurrent[i] = f->value;
+//	}
 	
 	if (label=="UtilityCA") {
 		if (Params_UtilityCA.length()==0) {

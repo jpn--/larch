@@ -218,6 +218,7 @@ namespace elm {
 	{
 	
 		friend class ca_co_packet;
+		friend class workshop_mnl_gradient2;
 	
 	protected:
 		std::map< two_int64, double* > _pointer_map;
@@ -227,11 +228,14 @@ namespace elm {
 		
 		std::shared_ptr<etk::ndarray> _casestarts;
 		
+		size_t n_cases;
+		size_t n_alts;
+		
 	public:
-		darray_export_map(etk::ndarray* caseindexes=nullptr, etk::ndarray* altindexes=nullptr, etk::ndarray* data_array=nullptr, const size_t& max_caseindex=0);
+		darray_export_map(etk::ndarray* caseindexes=nullptr, etk::ndarray* altindexes=nullptr, etk::ndarray* data_array=nullptr, const size_t& n_cases=0, const size_t& n_alts=0);
 		~darray_export_map();
 
-		void maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex);
+		void maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& n_cases, const size_t& n_alts);
 		void clear();
 		
 		const double* get_ptr_at(const long long& caseindex, const long long& altindex) const;
@@ -240,6 +244,8 @@ namespace elm {
 		inline bool active() const {return bool(_data_array);}
 		inline size_t nvars() const {return _data_array->size2();}
 		inline size_t nrows() const {return _data_array->size1();}
+		inline const size_t& ncases() const {return n_cases;}
+		inline const size_t& nalts() const {return n_alts;}
 	};
 
 

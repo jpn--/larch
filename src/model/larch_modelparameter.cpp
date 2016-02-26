@@ -15,11 +15,6 @@ elm::ModelParameter::ModelParameter(sherpa* model, const size_t& slot)
 	model_as_pyobject = model->weakself;
 	Py_XINCREF(model_as_pyobject);
 
-//	if (model_as_pyobject) {
-//		std::cerr<<"CREATE  ModelParameter "<<(void*)this<<" on "<< (void*)model_as_pyobject << " refcount="<< model_as_pyobject->ob_refcnt <<"\n";
-//	} else {
-//		std::cerr<<"CREATE  ModelParameter "<<(void*)this<<" on NULLPTR\n";
-//	}
 }
 
 elm::ModelParameter::ModelParameter(const elm::ModelParameter& original)
@@ -31,11 +26,6 @@ elm::ModelParameter::ModelParameter(const elm::ModelParameter& original)
 	
 	Py_XINCREF(model_as_pyobject);
 
-//	if (model_as_pyobject) {
-//		std::cerr<<"CREATE  ModelParameter "<<(void*)this<<" on "<< (void*)model_as_pyobject << " refcount="<< model_as_pyobject->ob_refcnt <<"\n";
-//	} else {
-//		std::cerr<<"CREATE  ModelParameter "<<(void*)this<<" on NULLPTR\n";
-//	}
 }
 
 
@@ -106,28 +96,32 @@ void elm::ModelParameter::_del_max()
 }
 
 
-bool elm::ModelParameter::_get_holdfast() const
+signed char elm::ModelParameter::_get_holdfast() const
 {
 	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot slot ",slot," exceeds allocated size");
-	return model->FHoldfast.bool_at(slot);
+	return model->FHoldfast.int8_at(slot);
 }
 
 void elm::ModelParameter::_set_holdfast(const bool& value)
 {
 	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot slot ",slot," exceeds allocated size");
-	model->FHoldfast.bool_at(slot) = value;
+	if (value) {
+		model->FHoldfast.int8_at(slot) = 1;
+	} else {
+		model->FHoldfast.int8_at(slot) = 0;
+	}
 }
 
-void elm::ModelParameter::_set_holdfast(const int& value)
+void elm::ModelParameter::_set_holdfast(const signed char& value)
 {
 	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot slot ",slot," exceeds allocated size");
-	model->FHoldfast.bool_at(slot) = (value!=0);
+	model->FHoldfast.int8_at(slot) = (value!=0);
 }
 
 void elm::ModelParameter::_del_holdfast()
 {
 	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot slot ",slot," exceeds allocated size");
-	model->FHoldfast.bool_at(slot) = false;
+	model->FHoldfast.int8_at(slot) = 0;
 }
 
 
@@ -172,6 +166,10 @@ double elm::ModelParameter::_get_std_err() const
 	return -sqrt(-x);
 }
 
+double elm::ModelParameter::_get_t_stat() const
+{
+	return (_get_value() - _get_nullvalue()) / _get_std_err();
+}
 
 double elm::ModelParameter::_get_robust_std_err() const
 {

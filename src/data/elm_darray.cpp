@@ -631,13 +631,15 @@ std::string elm::check_darray(const darray* x)
 
 
 
-elm::darray_export_map::darray_export_map(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex)
+elm::darray_export_map::darray_export_map(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& n_cases, const size_t& n_alts)
 : _pointer_map()
 , _data_array(nullptr)
 , _caseindexes(nullptr)
 , _altindexes(nullptr)
+, n_cases(n_cases)
+, n_alts(n_alts)
 {
-	maplink(caseindexes, altindexes, data_array, max_caseindex);
+	maplink(caseindexes, altindexes, data_array, n_cases, n_alts);
 }
 
 
@@ -648,26 +650,28 @@ elm::darray_export_map::~darray_export_map()
 }
 
 
-void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& max_caseindex)
+void elm::darray_export_map::maplink(etk::ndarray* caseindexes, etk::ndarray* altindexes, etk::ndarray* data_array, const size_t& n_cases, const size_t& n_alts)
 {
 	clear();
 	if (caseindexes && altindexes && data_array) {
+		this->n_cases = n_cases;
+		this->n_alts = n_alts;
 		_data_array = std::make_shared<etk::ndarray>(*data_array, true);
 		_caseindexes = std::make_shared<etk::ndarray>(*caseindexes, true);
 		_altindexes = std::make_shared<etk::ndarray>(*altindexes, true);
 		
-		_casestarts = std::make_shared<etk::ndarray>("Array", NPY_INT64, max_caseindex);
+		_casestarts = std::make_shared<etk::ndarray>("Array", NPY_INT64, n_cases);
 		_casestarts->int64_initialize(-1);
 		
-		size_t startmarker = 0;
-		_casestarts->int64_at(startmarker) = 0;
+		size_t caseindexticker = 0;
+		_casestarts->int64_at(caseindexticker) = 0;
 		
-		for (size_t i=0; i<data_array->size1(); i++) {
-			_pointer_map[two_int64(caseindexes->int64_at(i),altindexes->int64_at(i))] = _data_array->ptr(i);
+		for (size_t rowticker=0; rowticker<data_array->size1(); rowticker++) {
+			_pointer_map[two_int64(caseindexes->int64_at(rowticker),altindexes->int64_at(rowticker))] = _data_array->ptr(rowticker);
 			
-			while (startmarker<caseindexes->int64_at(i)) {
-				_casestarts->int64_at(startmarker) = i;
-				startmarker++;
+			while (caseindexticker<caseindexes->int64_at(rowticker)) {
+				caseindexticker++;
+				_casestarts->int64_at(caseindexticker) = rowticker;
 			}
 		}
 	}
@@ -679,6 +683,8 @@ void elm::darray_export_map::clear()
 	_data_array .reset();
 	_caseindexes .reset();
 	_altindexes .reset();
+	n_cases=0;
+	n_alts=0;
 }
 
 

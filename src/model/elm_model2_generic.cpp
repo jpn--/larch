@@ -418,29 +418,32 @@ double elm::Model2::loglike_null()
 {
 	setUp();	
 	
-	std::vector< int > hold_save (dF());
+	std::vector< npy_int8 > hold_save (dF());
+	std::vector< double > value_save (dF());
 	
 	if (option.null_disregards_holdfast) {
 		for (unsigned i=0; i<dF(); i++) {
-			hold_save[i] = FInfo[FNames[i]].holdfast;
-			FInfo[FNames[i]].holdfast = 0;
+			hold_save[i] = FHoldfast.int8_at(i);  // FInfo[FNames[i]].holdfast;
+			FHoldfast.int8_at(i) = 0; //FInfo[FNames[i]].holdfast = 0;
 		}
 	}
 	
 	for (unsigned i=0; i<dF(); i++) {
-		FCurrent[i] = FInfo[FNames[i]].null_value;
+		value_save[i] = FCurrent[i];
+		FCurrent[i] = FNullValues[i]; // FInfo[FNames[i]].null_value;
 	}
-	freshen();
+//	freshen();
 	_LL_null = objective();			
 	for (unsigned i=0; i<dF(); i++) {
-		FCurrent[i] = FInfo[FNames[i]].value;
+		FCurrent[i] = value_save[i];
 	}
 	if (option.null_disregards_holdfast) {
 		for (unsigned i=0; i<dF(); i++) {
-			FInfo[FNames[i]].holdfast = hold_save[i];
+			//FInfo[FNames[i]].holdfast = hold_save[i];
+			FHoldfast.int8_at(i) = hold_save[i];
 		}
 	}
-	freshen();
+//	freshen();
 	
 	return _LL_null;
 }
@@ -478,26 +481,29 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 		if (option.calc_null_likelihood) {
 			_latest_run.start_process("null_likelihood");
 			
-			std::vector< int > hold_save (dF());
+			std::vector< npy_int8 > hold_save (dF());
+			std::vector< double > value_save (dF());
 			
 			if (option.null_disregards_holdfast) {
 				for (unsigned i=0; i<dF(); i++) {
-					hold_save[i] = FInfo[FNames[i]].holdfast;
-					FInfo[FNames[i]].holdfast = 0;
+					hold_save[i] = FHoldfast.int8_at(i);  // FInfo[FNames[i]].holdfast;
+					FHoldfast.int8_at(i) = 0; //FInfo[FNames[i]].holdfast = 0;
 				}
 			}
 			
 			for (unsigned i=0; i<dF(); i++) {
-				FCurrent[i] = FInfo[FNames[i]].null_value;
+				value_save[i] = FCurrent[i];
+				FCurrent[i] = FNullValues[i];  // FInfo[FNames[i]].null_value;
 			}
 			freshen();
 			_LL_null = objective();			
 			for (unsigned i=0; i<dF(); i++) {
-				FCurrent[i] = FInfo[FNames[i]].value;
+				FCurrent[i] = value_save[i];
 			}
 			if (option.null_disregards_holdfast) {
 				for (unsigned i=0; i<dF(); i++) {
-					FInfo[FNames[i]].holdfast = hold_save[i];
+					//FInfo[FNames[i]].holdfast = hold_save[i];
+					FHoldfast.int8_at(i) = hold_save[i];
 				}
 			}
 			freshen();
@@ -776,14 +782,13 @@ void elm::Model2::_parameter_push(const std::vector<double>& v)
 		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		if (FInfo[FNames[z]].holdfast) {
-			if (v[z] != FInfo[FNames[z]].value) {
+		if (FHoldfast.int8_at(z)) {
+			if (v[z] != FCurrent[z]) {
 				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FInfo[FNames[z]].value;
+				<< ", it differs from the holdfast value of " <<FCurrent[z];
 			}
 		} else {
 			FCurrent[z] = v[z];
-			FInfo[FNames[z]].value = v[z];
 		}
 	}
 	freshen();
@@ -810,8 +815,7 @@ void elm::Model2::_parameter_log()
 {
 	MONITOR(msg) << "-- Parameter Values --";
 	for (unsigned i=0; i<dF(); i++) {
-		freedom_info* f = &(FInfo[FNames[i]]);
-		MONITOR(msg) << FNames[i] << ":" << f->value;
+		MONITOR(msg) << FNames[i] << ":" << FCurrent[i];
 	}
 	MONITOR(msg) << "----------------------";
 }
@@ -1102,7 +1106,7 @@ std::string elm::Model2::save_buffer() const
 		sv << ","<<AsPyFloat(FInitValues[pn]);
 		sv << ","<<AsPyFloat(FMax[pn]);
 		sv << ","<<AsPyFloat(FMin[pn]);
-		sv << ",holdfast="<< (FHoldfast.bool_at(pn) ? "True":"False");
+		sv << ",holdfast="<< (FHoldfast.int8_at(pn) ? "True":"False");
 		
 		sv << ")\n";
 	}
@@ -1234,14 +1238,13 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		if (FHoldfast.bool_at(z)) {
+		if (FHoldfast.int8_at(z)) {
 			if (v[z] != FCurrent[z]) {
 				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
 				<< ", it differs from the holdfast value of " <<FCurrent[z];
 			}
 		} else {
 			FCurrent[z] = v[z];
-			FInfo[FNames[z]].value = v[z];
 		}
 	}
 	freshen();

@@ -102,8 +102,9 @@
 			if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
 			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)
 			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT8)
 				) {
-				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64 or INT8"));
 				SWIG_fail;
 			}
 			
@@ -401,8 +402,9 @@
 			if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
 				&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL  )
 				&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64 )
+				&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT8  )
 				) {
-				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64 or INT8"));
 				SWIG_fail;
 			}
 			try {
@@ -428,8 +430,9 @@
 		if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
 			&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL  )
 			&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64 )
+			&&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT8  )
 			) {
-			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64"));
+			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64 or INT8"));
 			SWIG_fail;
 		}
 		try {

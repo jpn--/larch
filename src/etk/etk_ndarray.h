@@ -125,6 +125,10 @@ namespace etk {
 		long long& int64_at(const int& i, const int& j)  ;
 		long long& int64_at(const int& i, const int& j, const int& k)  ;
 
+	// Location Access (int8)
+		const npy_int8& int8_at(const int& i) const ;
+		npy_int8& int8_at(const int& i)  ;
+
 	// Location Access (bool)
 		const bool& bool_at(const int& i) const ;
 		const bool& bool_at(const int& i, const int& j) const ;
@@ -159,6 +163,7 @@ namespace etk {
 		void resize(const int& r);
 		void resize(const int& r,const int& c);
 		void resize(const int& r,const int& c,const int& s);
+		void resize_int8(const int& r);
 		void resize_bool(const int& r);
 		void resize_bool(const int& r,const int& c);
 		void resize_bool(const int& r,const int& c,const int& s);

@@ -3153,6 +3153,7 @@ class model_options_t(object):
     log_turns = _swig_property(_core.model_options_t_log_turns_get, _core.model_options_t_log_turns_set)
     enforce_bounds = _swig_property(_core.model_options_t_enforce_bounds_get, _core.model_options_t_enforce_bounds_set)
     enforce_constraints = _swig_property(_core.model_options_t_enforce_constraints_get, _core.model_options_t_enforce_constraints_set)
+    idca_avail_ratio_floor = _swig_property(_core.model_options_t_idca_avail_ratio_floor_get, _core.model_options_t_idca_avail_ratio_floor_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
 
     def __init__(self, *args, **kwargs):
@@ -3452,8 +3453,8 @@ class darray_export_map(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
 
-    def __init__(self, caseindexes: 'etk::ndarray *'=None, altindexes: 'etk::ndarray *'=None, data_array: 'etk::ndarray *'=None, max_caseindex: 'size_t const &'=0):
-        this = _core.new_darray_export_map(caseindexes, altindexes, data_array, max_caseindex)
+    def __init__(self, caseindexes: 'etk::ndarray *'=None, altindexes: 'etk::ndarray *'=None, data_array: 'etk::ndarray *'=None, n_cases: 'size_t const &'=0, n_alts: 'size_t const &'=0):
+        this = _core.new_darray_export_map(caseindexes, altindexes, data_array, n_cases, n_alts)
         try:
             self.this.append(this)
         except Exception:
@@ -3461,8 +3462,8 @@ class darray_export_map(object):
     __swig_destroy__ = _core.delete_darray_export_map
     __del__ = lambda self: None
 
-    def maplink(self, caseindexes: 'etk::ndarray *', altindexes: 'etk::ndarray *', data_array: 'etk::ndarray *', max_caseindex: 'size_t const &') -> "void":
-        return _core.darray_export_map_maplink(self, caseindexes, altindexes, data_array, max_caseindex)
+    def maplink(self, caseindexes: 'etk::ndarray *', altindexes: 'etk::ndarray *', data_array: 'etk::ndarray *', n_cases: 'size_t const &', n_alts: 'size_t const &') -> "void":
+        return _core.darray_export_map_maplink(self, caseindexes, altindexes, data_array, n_cases, n_alts)
 
     def clear(self) -> "void":
         return _core.darray_export_map_clear(self)
@@ -3484,6 +3485,12 @@ class darray_export_map(object):
 
     def nrows(self) -> "size_t":
         return _core.darray_export_map_nrows(self)
+
+    def ncases(self) -> "size_t const &":
+        return _core.darray_export_map_ncases(self)
+
+    def nalts(self) -> "size_t const &":
+        return _core.darray_export_map_nalts(self)
 darray_export_map_swigregister = _core.darray_export_map_swigregister
 darray_export_map_swigregister(darray_export_map)
 
@@ -4331,13 +4338,16 @@ class ModelParameter(object):
     def _get_std_err(self) -> "double":
         return _core.ModelParameter__get_std_err(self)
 
+    def _get_t_stat(self) -> "double":
+        return _core.ModelParameter__get_t_stat(self)
+
     def _get_robust_std_err(self) -> "double":
         return _core.ModelParameter__get_robust_std_err(self)
 
     def _get_name(self) -> "std::string":
         return _core.ModelParameter__get_name(self)
 
-    def _get_holdfast(self) -> "bool":
+    def _get_holdfast(self) -> "signed char":
         return _core.ModelParameter__get_holdfast(self)
 
     def _set_holdfast(self, *args) -> "void":

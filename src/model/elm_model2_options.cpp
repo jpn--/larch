@@ -48,7 +48,8 @@ elm::model_options_t::model_options_t(
 			bool suspend_xylem_rebuild,
 			bool log_turns,
 			bool enforce_bounds,
-			bool enforce_constraints
+			bool enforce_constraints,
+			double idca_avail_ratio_floor
 		)
 : gradient_diagnostic   (gradient_diagnostic)
 , hessian_diagnostic    (hessian_diagnostic)
@@ -68,6 +69,7 @@ elm::model_options_t::model_options_t(
 , log_turns             (log_turns)
 , enforce_bounds        (enforce_bounds)
 , enforce_constraints   (enforce_constraints)
+, idca_avail_ratio_floor(idca_avail_ratio_floor)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
 //#ifdef __APPLE__
@@ -114,7 +116,8 @@ void elm::model_options_t::__call__(
 			int suspend_xylem_rebuild,
 			int log_turns,
 			int enforce_bounds,
-			int enforce_constraints
+			int enforce_constraints,
+			double idca_avail_ratio_floor
 		)
 {
 	if (gradient_diagnostic     != -9 ) (this->gradient_diagnostic     = gradient_diagnostic     );
@@ -135,6 +138,7 @@ void elm::model_options_t::__call__(
 	if (log_turns               != -9 ) (this->log_turns               = log_turns               );
 	if (enforce_bounds          != -9 ) (this->enforce_bounds          = enforce_bounds          );
 	if (enforce_constraints     != -9 ) (this->enforce_constraints     = enforce_constraints     );
+	if (idca_avail_ratio_floor  != -9 ) (this->idca_avail_ratio_floor  = idca_avail_ratio_floor  );
 }
 
 void elm::model_options_t::copy(const model_options_t& other)
@@ -156,6 +160,7 @@ void elm::model_options_t::copy(const model_options_t& other)
 	this->log_turns               = other.log_turns               ;
 	this->enforce_bounds          = other.enforce_bounds          ;
 	this->enforce_constraints     = other.enforce_constraints     ;
+	this->idca_avail_ratio_floor  = other.idca_avail_ratio_floor  ;
 }
 
 
@@ -181,6 +186,7 @@ std::string elm::model_options_t::__repr__() const
 	x << "               log_turns= "<<log_turns               <<",\n";
 	x << "          enforce_bounds= "<<enforce_bounds          <<",\n";
 	x << "     enforce_constraints= "<<enforce_constraints     <<",\n";
+	x << "  idca_avail_ratio_floor= "<<idca_avail_ratio_floor  <<",\n";
 	x << ")";
 	return x.str();
 }
@@ -200,12 +206,13 @@ std::string elm::model_options_t::_save_buffer() const
 	x << "self.option.save_db_hash= "           <<(save_db_hash            ?"True":"False")<<"\n";
 	x << "self.option.author= '"                << author                                  <<"'\n";
 	x << "self.option.teardown_after_estimate= "<<(teardown_after_estimate ?"True":"False")<<"\n";
-	x << "self.weight_autorescale= "            <<(weight_autorescale      ?"True":"False")<<"\n";
-	x << "self.weight_choice_rebalance= "       <<(weight_choice_rebalance ?"True":"False")<<"\n";
-	x << "self.suspend_xylem_rebuild= "         <<(suspend_xylem_rebuild   ?"True":"False")<<"\n";
-	x << "self.log_turns= "                     <<(log_turns               ?"True":"False")<<"\n";
-	x << "self.enforce_bounds= "                <<(enforce_bounds          ?"True":"False")<<"\n";
-	x << "self.enforce_constraints= "           <<(enforce_constraints     ?"True":"False")<<"\n";
+	x << "self.option.weight_autorescale= "     <<(weight_autorescale      ?"True":"False")<<"\n";
+	x << "self.option.weight_choice_rebalance= "<<(weight_choice_rebalance ?"True":"False")<<"\n";
+	x << "self.option.suspend_xylem_rebuild= "  <<(suspend_xylem_rebuild   ?"True":"False")<<"\n";
+	x << "self.option.log_turns= "              <<(log_turns               ?"True":"False")<<"\n";
+	x << "self.option.enforce_bounds= "         <<(enforce_bounds          ?"True":"False")<<"\n";
+	x << "self.option.enforce_constraints= "    <<(enforce_constraints     ?"True":"False")<<"\n";
+	x << "self.option.idca_avail_ratio_floor= " << idca_avail_ratio_floor                  <<"\n";
 	return x.str();
 }
 
@@ -230,6 +237,7 @@ std::string elm::model_options_t::__str__() const
 	x << "               log_turns: "<<(log_turns             ?"True":"False")<<"\n";
 	x << "          enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
 	x << "     enforce_constraints: "<<(enforce_constraints   ?"True":"False")<<"\n";
+	x << "  idca_avail_ratio_floor: "<<idca_avail_ratio_floor<<"\n";
 	return x.str();
 }
 
@@ -255,6 +263,7 @@ std::set<std::string> elm::Model2::valid_options()
 	valid_options_init.insert("log_turns");
 	valid_options_init.insert("enforce_bounds");
 	valid_options_init.insert("enforce_constraints");
+	valid_options_init.insert("idca_avail_ratio_floor");
 	return valid_options_init;
 }
 

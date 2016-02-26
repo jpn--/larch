@@ -55,7 +55,7 @@ elm::parametexr sherpa::_generate_parameter(const std::string& freedom_name,
 	
 	size_t freedom_number = FNames.index_from_string(fn);
 	
-	if (FHoldfast.bool_at(freedom_number)) {
+	if (FHoldfast.int8_at(freedom_number)) {
 		return boosted::make_shared<elm::parametex_constant>(freedom_multiplier*(FCurrent.at(freedom_number)));
 	}
 	if (freedom_multiplier==1.0) {

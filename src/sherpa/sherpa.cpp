@@ -908,23 +908,20 @@ string sherpa::calculate_errors()
 	return "success";
 }
 
-//double sherpa::LL() const
+//const freedom_info* sherpa::get_raw_info (const string& freedom_name) const
 //{
-//	return ZCurrent;
+//	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
+//	if (i==FInfo.end()) OOPS("error: variable name not found");
+//	return &i->second;
 //}
-
-const freedom_info* sherpa::get_raw_info (const string& freedom_name) const
-{
-	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
-	if (i==FInfo.end()) OOPS("error: variable name not found");
-	return &i->second;
-}
 
 bool sherpa::parameter_exists (const string& freedom_name) const
 {
-	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
-	if (i==FInfo.end()) return false;
-	return true;
+	return FNames.has_key(freedom_name);
+
+//	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
+//	if (i==FInfo.end()) return false;
+//	return true;
 }
 
 freedom_info& sherpa::get_freedom_info (const string& freedom_name)
@@ -936,13 +933,21 @@ freedom_info& sherpa::get_freedom_info (const string& freedom_name)
 
 double sherpa::parameter_value (const string& freedom_name) const
 {
-	return get_raw_info(freedom_name)->value;
+	if (FNames.has_key(freedom_name)) {
+		return FCurrent[ FNames[freedom_name] ];
+	}
+	return NAN;
 }
+
+#include "larch_modelparameter.h"
 
 double sherpa::parameter_stderr(const string& freedom_name) const
 {
-	// TODO;
-	return get_raw_info(freedom_name)->std_err;
+	if (FNames.has_key(freedom_name)) {
+		elm::ModelParameter mp ( const_cast<sherpa*> (this), FNames[freedom_name]);
+		return mp._get_std_err();
+	}
+	return NAN;
 }
 
 void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangle* robust_covar)
@@ -1079,7 +1084,7 @@ void sherpa::resize_allocated_memory()
 	size_t number_of_parameters = FNames.size();
 
 	FCurrent.resize(number_of_parameters);
-	FHoldfast.resize_bool(number_of_parameters);
+	FHoldfast.resize_int8(number_of_parameters);
 	FInitValues.resize(number_of_parameters);
 	FNullValues.resize(number_of_parameters);
 	_FCurrent_latest_objective.resize(number_of_parameters);
@@ -1500,6 +1505,7 @@ void sherpa::_set_parameter_maxbound_array(etk::ndarray* replacement){
 }
 
 void sherpa::_set_holdfast_array(etk::ndarray* replacement){
+	if ( !replacement->pool || PyArray_DESCR(replacement->pool)->type_num != NPY_INT8) OOPS("assert failure, not NPY_INT8");
 	FHoldfast.same_ccontig_memory_as(*replacement);
 }
 
@@ -1581,7 +1587,7 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 	}
 	if (holdfast>=0) {
 		FInfo[param_name].holdfast = holdfast;
-		px._set_holdfast(holdfast);
+		px._set_holdfast((signed char)holdfast);
 	}
 	if (covariance) {
 		FInfo[param_name].setCovariance(covariance);

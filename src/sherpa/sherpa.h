@@ -140,8 +140,8 @@ public:
 	
 	///// RESULTS /////
 	
-protected:
-	const freedom_info* get_raw_info (const std::string& freedom_name) const;
+//protected:
+//	const freedom_info* get_raw_info (const std::string& freedom_name) const;
 public:
 	bool   parameter_exists(const std::string& freedom_name) const;
 	double parameter_value (const std::string& freedom_name) const;

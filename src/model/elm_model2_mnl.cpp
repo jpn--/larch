@@ -385,9 +385,14 @@ std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability ()
 {
 //	BUGGER(msg) << "CALL make_shared_workshop_mnl_probability()\n";
+
 	return boosted::make_shared<elm::mnl_prob_w>(
-			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
-			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);
+			&Probability, &CaseLogLike, utility_packet(), Data_Avail, Data_Choice,
+			0, &msg);
+
+//	return boosted::make_shared<elm::mnl_prob_w>(
+//			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
+//			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);
 }
 
 
@@ -909,66 +914,31 @@ void elm::Model2::mnl_gradient_v2()
 		Bhhh.resize(dF());
 	}
 	Bhhh.initialize(0.0);
-
-	if (nThreads >= 1 && _ELM_USE_THREADS_) {
-
-//		std::cerr << "mnl_gradient_v2 threads\n";
-		
-		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-		[&](){
-			return boosted::make_shared<workshop_mnl_gradient2>
-			(dF()
-			 , nElementals
-			 , utility_packet()
-			 , quantity_packet()
-			 , Data_Choice
-			 , Data_Weight_active()
-			 , &Probability
-			 , &GCurrent
-			 , &Bhhh
-			 , &msg
-			 , &Data_MultiChoice
-			 );
-		};
-		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
-
-		std::ostringstream ret;
-		for (unsigned i=0; i<GCurrent.size(); i++) {
-			ret << "," << GCurrent[i];
-		}
-		INFO(msg) << "MNL Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
-
-	} else {
-		
-		BUGGER(msg)<< "Beginning MNL Gradient single-threaded Evaluation" ;
-
-//		std::cerr << "mnl_gradient_v2 no threads\n";
-		
-		
-		workshop_mnl_gradient w
+	
+	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+	[&](){
+		return boosted::make_shared<workshop_mnl_gradient2>
 		(dF()
 		 , nElementals
-		 , Params_UtilityCA
-		 , Params_UtilityCO
-		 , Params_QuantityCA
-		 , Params_LogSum
-		 , Data_UtilityCA
-		 , Data_UtilityCO
-		 , Data_QuantityCA
+		 , utility_packet()
+		 , quantity_packet()
 		 , Data_Choice
 		 , Data_Weight_active()
-		 , 0
-		 , nCases
+		 , &Probability
+		 , &GCurrent
+		 , &Bhhh
+		 , &msg
+		 , &Data_MultiChoice
 		 );
-		
-		w.workshop_mnl_gradient_do
-		(  Probability
-		 );
-	 
-		w.workshop_mnl_gradient_send
-		(  GCurrent
-		 , Bhhh);
+	};
+	USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
+
+	std::ostringstream ret;
+	for (unsigned i=0; i<GCurrent.size(); i++) {
+		ret << "," << GCurrent[i];
 	}
+	INFO(msg) << "MNL Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
+
 	BUGGER(msg)<< "End MNL Gradient v2 Evaluation" ;
 }
 
@@ -1453,19 +1423,20 @@ string elm::Model2::prints(const unsigned& precision, const unsigned& cell_width
 	ret << std::setw(cell_width) << "t-Stat     " << "\t";
 	ret << std::setw(cell_width) << "NullValue  " << "\n";
 	for (unsigned p=0; p<FNames.size(); p++) {
-		const freedom_info* fi = get_raw_info(FNames[p]);
+		const ModelParameter mp ( const_cast<elm::Model2*>(this), p);
 		ret << std::setw(max_length_freedom_name) << std::left << FNames[p] << std::right << "\t";
-		ret << std::setw(cell_width) << fi->initial_value << "\t";
-		ret << std::setw(cell_width) << fi->value << "\t";
-		ret << std::setw(cell_width) << fi->std_err << "\t";
-		ret << std::setw(cell_width) << fi->t_stat() << "\t";
-		ret << std::setw(cell_width) << fi->null_value << "\n";
+		ret << std::setw(cell_width) << FInitValues[p] << "\t";
+		ret << std::setw(cell_width) << FCurrent[p] << "\t";
+		ret << std::setw(cell_width) << mp._get_std_err() << "\t";
+		ret << std::setw(cell_width) << mp._get_t_stat() << "\t";
+		ret << std::setw(cell_width) << FNullValues[p] << "\n";
 	}
 	for (auto al=AliasInfo.begin(); al !=AliasInfo.end(); al++) {
-		const freedom_info* fi = get_raw_info(al->second.refers_to);
+		const ModelParameter mp ( const_cast<elm::Model2*>(this), FNames[al->second.refers_to]);
+		//const freedom_info* fi = get_raw_info(al->second.refers_to);
 		ret << std::setw(max_length_freedom_name) << std::left << al->first << std::right << "\t";
-		ret << std::setw(cell_width) << fi->initial_value*al->second.multiplier << "\t";
-		ret << std::setw(cell_width) << fi->value*al->second.multiplier << "\t";
+		ret << std::setw(cell_width) << mp._get_initvalue()*al->second.multiplier << "\t";
+		ret << std::setw(cell_width) << mp._get_value()*al->second.multiplier << "\t";
 		ret << "= "<<al->second.refers_to<<" * "<<al->second.multiplier<< "\n";
 	}
 	

@@ -504,7 +504,7 @@ class DT(Fountain):
 			return None
 		return numpy.nonzero(self.h5top.screen[:])[0]
 
-	def provision(self, needs):
+	def provision(self, needs, **kwargs):
 		from . import Model
 		if isinstance(needs,Model):
 			m = needs

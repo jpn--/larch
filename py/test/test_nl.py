@@ -705,7 +705,7 @@ class TestNL(ELM_TestCase):
 		self.assertTrue(m.Data("UtilityCA") is None)
 
 
-	def test_utility_ce_simple(self):
+	def test_utility_ce_manual(self):
 		d = DB.Example('MTC')
 		m = Model(d)
 		m.utility.ca("tottime")
@@ -719,6 +719,40 @@ class TestNL(ELM_TestCase):
 		self.assertNearlyEqual(0.00190891, rm.x[1])
 
 
+	def test_utility_ce_automatic(self):
+		d = DB.Example('MTC')
+		# with idca
+		m = Model(d)
+		m.utility.ca("tottime")
+		m.utility.ca("totcost")
+		m.option.idca_avail_ratio_floor = 0.0
+		rm = m.maximize_loglike()
+		self.assertEqual([('bhhh', 7)], rm.niter)
+		self.assertNearlyEqual(-5902.369810160076, rm.loglike)
+		self.assertNearlyEqual(-5902.369810160076, m.loglike())
+		self.assertNearlyEqual(-0.10022946, rm.x[0])
+		self.assertNearlyEqual(0.00190891, rm.x[1])
+		self.assertTrue(m.Data("UtilityCA") is not None)
+		self.assertTrue(not m.Data_UtilityCE_builtin.active())
 
+		# with idce
+		m2 = Model(d)
+		m2.utility.ca("tottime")
+		m2.utility.ca("totcost")
+		m2.option.idca_avail_ratio_floor = 1.0
+		rm2 = m2.maximize_loglike()
+		self.assertEqual([('bhhh', 7)], rm2.niter)
+		self.assertNearlyEqual(-5902.369810160076, rm2.loglike)
+		self.assertNearlyEqual(-5902.369810160076, m2.loglike())
+		self.assertNearlyEqual(-0.10022946, rm2.x[0])
+		self.assertNearlyEqual(0.00190891, rm2.x[1])
+		self.assertTrue(m2.Data("UtilityCA") is None)
+		self.assertTrue(m2.Data_UtilityCE_builtin.active())
 
+		for z1,z2 in zip(m.d_loglike(), m2.d_loglike()):
+			self.assertNearlyEqual(z1,z2)
+		for z1,z2 in zip(m.d_loglike([0,0]), m2.d_loglike([0,0])):
+			self.assertNearlyEqual(z1,z2)
+		for z1,z2 in zip(m.d_loglike([0.1,0.1]), m2.d_loglike([0.1,0.1])):
+			self.assertNearlyEqual(z1,z2)
 

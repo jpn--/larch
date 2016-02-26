@@ -175,11 +175,17 @@ void ndarray::same_ccontig_memory_as(ndarray& x)
 }
 
 
+inline void _inline_noop() {
+
+}
+
+
 //    (PyArrayObject*).descr->type_num
-#define ASSERT_ARRAY_WRITEABLE if ( !PyArray_ISWRITEABLE(pool) ) OOPS("assert failure, array not writeable")
-#define ASSERT_ARRAY_DOUBLE    if ( PyArray_DESCR(pool)->type_num != NPY_DOUBLE) OOPS("assert failure, not NPY_DOUBLE")
-#define ASSERT_ARRAY_BOOL      if ( PyArray_DESCR(pool)->type_num != NPY_BOOL) OOPS("assert failure, not NPY_BOOL")
-#define ASSERT_ARRAY_INT64     if ( PyArray_DESCR(pool)->type_num != NPY_INT64) OOPS("assert failure, not NPY_INT64")
+#define ASSERT_ARRAY_WRITEABLE if ( !pool || !PyArray_ISWRITEABLE(pool) ) OOPS("assert failure, array not writeable")
+#define ASSERT_ARRAY_DOUBLE    if ( !pool || PyArray_DESCR(pool)->type_num != NPY_DOUBLE) { _inline_noop(); OOPS("assert failure, not NPY_DOUBLE");}
+#define ASSERT_ARRAY_BOOL      if ( !pool || PyArray_DESCR(pool)->type_num != NPY_BOOL) OOPS("assert failure, not NPY_BOOL")
+#define ASSERT_ARRAY_INT64     if ( !pool || PyArray_DESCR(pool)->type_num != NPY_INT64) OOPS("assert failure, not NPY_INT64")
+#define ASSERT_ARRAY_INT8      if ( !pool || PyArray_DESCR(pool)->type_num != NPY_INT8) OOPS("assert failure, not NPY_INT8")
 
 void ndarray::quick_new(const int& datatype, const char* arrayClass, const int& r,const int& c,const int& s)
 {
@@ -354,6 +360,18 @@ void ndarray::resize(const int& r,const int& c,const int& s)
 	quick_new(NPY_DOUBLE, "Array", r,c,s);
 }
 
+void ndarray::resize_int8(const int& r)
+{
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_INT8
+		||	ndim() != 1
+		||	size1() != r
+		)
+	quick_new(NPY_INT8, "Array", r);
+}
+
+
+
 void ndarray::resize_bool(const int& r)
 {
 	if (!pool
@@ -466,6 +484,15 @@ const long long& ndarray::int64_at(const int& r) const
 		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
 	}
 	return *(const long long*)PyArray_GETPTR1(pool, r);
+}
+
+const npy_int8& ndarray::int8_at(const int& r) const
+{
+	ASSERT_ARRAY_INT8;
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	return *(const npy_int8*)PyArray_GETPTR1(pool, r);
 }
 
 
@@ -696,6 +723,15 @@ long long& ndarray::int64_at(const int& r)
 		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
 	}
 	return *( long long*)PyArray_GETPTR1(pool, r);
+}
+
+npy_int8& ndarray::int8_at(const int& r)
+{
+	ASSERT_ARRAY_INT8;
+	if (r>=PyArray_DIM(pool, 0)) {
+		OOPS("const rectangle row access out of range, asking ",r," but having only ",PyArray_DIM(pool, 0));
+	}
+	return *( npy_int8*)PyArray_GETPTR1(pool, r);
 }
 
 bool& ndarray::bool_at(const int& r, const int& c)

@@ -111,9 +111,22 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl
 	cblas_daxpy(nElementals,-1/*wgt*/,Probability.ptr(c),1,*Workspace,1);
 	// idCA
 	//ModelCaseGrad.initialize();
-	if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()) {
-		cblas_dgemv(CblasRowMajor,CblasTrans,nElementals,UtilPacket.Data_CA->nVars(),
-					-1,UtilPacket.Data_CA->values(c,1),UtilPacket.Data_CA->nVars(),*Workspace,1,0,*Grad_UtilityCA,1);
+	
+	if (UtilPacket.Data_CE && UtilPacket.Data_CE->active()) {
+	
+		Grad_UtilityCA.initialize();
+		size_t rowticker = UtilPacket.Data_CE->_casestarts->int64_at(c);
+		while ((rowticker<UtilPacket.Data_CE->_caseindexes->size1()) && (UtilPacket.Data_CE->_caseindexes->int64_at(rowticker)==c) ) {
+			cblas_daxpy(UtilPacket.Data_CE->nvars(), Workspace[UtilPacket.Data_CE->_altindexes->int64_at(rowticker)],
+						UtilPacket.Data_CE->_data_array->ptr(rowticker), 1, *Grad_UtilityCA, 1);
+			rowticker++;
+		}
+	
+	} else {
+		if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()) {
+			cblas_dgemv(CblasRowMajor,CblasTrans,nElementals,UtilPacket.Data_CA->nVars(),
+						-1,UtilPacket.Data_CA->values(c,1),UtilPacket.Data_CA->nVars(),*Workspace,1,0,*Grad_UtilityCA,1);
+		}
 	}
 	// idCO
 	if (UtilPacket.Data_CO && UtilPacket.Data_CO->nVars()) {
@@ -144,7 +157,7 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl_multichoice
  , const etk::memarray& Probability
  )
 {
-//	std::cerr << "MNL Multichoice Case Gradient Evaluation for case "<<c<<"\n" ;
+	//	std::cerr << "MNL Multichoice Case Gradient Evaluation for case "<<c<<"\n" ;
 	double thisWgt;
 	for (unsigned a=0; a<nElementals; a++) {
 		thisWgt = Data_Choice->value(c,a);
@@ -157,9 +170,21 @@ void elm::workshop_mnl_gradient2::case_gradient_mnl_multichoice
 		cblas_daxpy(nElementals,-1/*thisWgt*/,Probability.ptr(c),1,*Workspace,1);
 		// idCA
 		//ModelCaseGrad.initialize();
-		if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()) {
-			cblas_dgemv(CblasRowMajor,CblasTrans,nElementals,UtilPacket.Data_CA->nVars(),
-						-1,UtilPacket.Data_CA->values(c,1),UtilPacket.Data_CA->nVars(),*Workspace,1,0,*Grad_UtilityCA,1);
+		if (UtilPacket.Data_CE && UtilPacket.Data_CE->active()) {
+			
+			Grad_UtilityCA.initialize();
+			size_t rowticker = UtilPacket.Data_CE->_casestarts->int64_at(c);
+			while ((rowticker<UtilPacket.Data_CE->_caseindexes->size1()) && (UtilPacket.Data_CE->_caseindexes->int64_at(rowticker)==c) ) {
+				cblas_daxpy(UtilPacket.Data_CE->nvars(), -Workspace[UtilPacket.Data_CE->_altindexes->int64_at(rowticker)],
+							UtilPacket.Data_CE->_data_array->ptr(rowticker), 1, *Grad_UtilityCA, 1);
+				rowticker++;
+			}
+			
+		} else {
+			if (UtilPacket.Data_CA && UtilPacket.Data_CA->nVars()) {
+				cblas_dgemv(CblasRowMajor,CblasTrans,nElementals,UtilPacket.Data_CA->nVars(),
+							-1,UtilPacket.Data_CA->values(c,1),UtilPacket.Data_CA->nVars(),*Workspace,1,0,*Grad_UtilityCA,1);
+			}
 		}
 		// idCO
 		if (UtilPacket.Data_CO && UtilPacket.Data_CO->nVars()) {

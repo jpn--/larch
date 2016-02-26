@@ -72,7 +72,13 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 					UtilityCE_map->export_into(dUtil.ptr(a), c, a, nCA);
 				}
 			} else {
-				if (nCA) UtilPacket.Data_CA->ExportData(dUtil.ptr(a)    ,c,a,UtilPacket.nAlt());
+				if (nCA) {
+					if (UtilPacket.Data_CE && UtilPacket.Data_CE->active()) {
+						UtilPacket.Data_CE->export_into(dUtil.ptr(a)    ,c,a,nCA);
+					} else {
+						UtilPacket.Data_CA->ExportData(dUtil.ptr(a)    ,c,a,UtilPacket.nAlt());
+					}
+				}
 				if (nCO) UtilPacket.Data_CO->ExportData(dUtil.ptr(a)+nCA,c,a,UtilPacket.nAlt());
 			}
 

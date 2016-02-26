@@ -57,13 +57,14 @@ namespace elm {
 
 
 		double _get_std_err() const;
+		double _get_t_stat() const;
 		double _get_robust_std_err() const;
 
 		std::string _get_name() const;
 		
-		bool _get_holdfast() const;
+		signed char _get_holdfast() const;
 		void _set_holdfast(const bool& value);
-		void _set_holdfast(const int& value);
+		void _set_holdfast(const signed char& value);
 		void _del_holdfast();
 		
 		double _get_nullvalue() const;

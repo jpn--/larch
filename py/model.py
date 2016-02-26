@@ -903,7 +903,7 @@ class Model(Model2, ModelReporter):
 			self._ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
 			# provision other data, link ce data
 			self.provision_without_utility()
-			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce, int(numpy.max(self._ce_caseindex)))
+			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce, len(caseids), len(self.alternative_codes()))
 			self.setUp(False)
 			# initialize utility
 			self.Utility()[:] = -numpy.inf
@@ -1177,6 +1177,33 @@ class Model(Model2, ModelReporter):
 			self.provision(provided)
 		except ProvisioningError:
 			pass
+
+	def provision(self, *args, idca_avail_ratio_floor=None):
+		from .db import DB
+		from .dt import DT
+		if idca_avail_ratio_floor is None:
+			idca_avail_ratio_floor = self.option.idca_avail_ratio_floor
+		if len(args)==0:
+			if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
+				args = (self.db.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor), )
+			else:
+				raise LarchError('model has no db specified for provisioning')
+		otherformats = {}
+		provided = args[0]
+		for key,value in provided.items():
+			if not isinstance(value, numpy.ndarray):
+				otherformats[key] = value
+		for key in otherformats.keys():
+			del provided[key]
+		if "UtilityCE" in otherformats:
+			self.Data_UtilityCE_builtin.maplink(*(otherformats["UtilityCE"]))
+			try:
+				super().provision(provided)
+			except ProvisioningError as err:
+				if "UtilityCA" not in str(err):
+					raise
+		else:
+			super().provision(provided)
 
 	def alias(self, *args):
 		if not args:

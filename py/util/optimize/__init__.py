@@ -79,9 +79,9 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	if not model.Data_UtilityCE.active():
 		stat.start_process('setup')
 		model.tearDown()
-		model.setUp()
 		if not model.is_provisioned() and model._ref_to_db is not None:
-			model.provision()
+			model.provision(idca_avail_ratio_floor = model.option.idca_avail_ratio_floor)
+		model.setUp(False)
 	x0 = model.parameter_values()
 	if model.option.calc_null_likelihood:
 		stat.start_process('null_likelihood')
@@ -92,13 +92,6 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 		stat.start_process("weight choice rebalance")
 		if model.weight_choice_rebalance():
 			stat.write("rebalanced weights and choices")
-		#ch = model.DataEdit("Choice")
-		#ch_tot = ch.sum(1)
-		#wg = model.DataEdit("Weight")
-		#if not numpy.allclose(ch_tot, 1.0):
-		#	stat.write("rebalanced weights and choices")
-		#	wg *= ch_tot
-		#	ch /= ch_tot[:,numpy.newaxis,:]
 
 	if model.option.weight_autorescale:
 		stat.start_process("weight autorescale")

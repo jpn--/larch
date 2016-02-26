@@ -25,6 +25,7 @@
 #include "elm_sql_scrape.h"
 #include "etk_workshop.h"
 #include "elm_darray.h"
+#include "elm_packets.h"
 
 namespace elm {
 
@@ -33,13 +34,13 @@ namespace elm {
 	{
 		etk::ndarray* Probability;
 		etk::ndarray* CaseLogLike;
-		elm::darray_ptr Data_CA;
-		elm::darray_ptr Data_CO;
 		elm::darray_ptr Data_AV;
 		elm::darray_ptr Data_Ch;
-		etk::ndarray* Coef_CA;
-		etk::ndarray* Coef_CO;
 		double        U_premultiplier;
+
+
+		elm::ca_co_packet UtilPacket;
+
 		
 		etk::logging_service* msg_;
 		
@@ -47,12 +48,9 @@ namespace elm {
 		virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);
 		mnl_prob_w(  etk::ndarray* U
 				   , etk::ndarray* CLL
-				   , elm::darray_ptr Data_CA
-				   , elm::darray_ptr Data_CO
+				   , elm::ca_co_packet UtilPack
 				   , elm::darray_ptr Data_AV
 				   , elm::darray_ptr Data_Ch
-				   , etk::ndarray* Coef_CA
-				   , etk::ndarray* Coef_CO
 				   , const double& U_premultiplier
 				   , etk::logging_service* msgr=nullptr
 				   );
