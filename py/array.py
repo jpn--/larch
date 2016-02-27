@@ -126,7 +126,7 @@ class SymmetricArray(Array):
 
 
 
-from scipy.linalg.blas import dgemv, dgemm
+#from scipy.linalg.blas import dgemv, dgemm
 
 
 
