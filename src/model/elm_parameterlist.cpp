@@ -12,13 +12,11 @@
 
 elm::ParameterList::ParameterList()
 : FNames ()
-, FInfo ()
 {
 	
 }
 elm::ParameterList::ParameterList(const elm::ParameterList& dupe)
 : FNames (dupe.FNames)
-, FInfo (dupe.FInfo)
 {
 	
 }
@@ -82,41 +80,6 @@ bool elm::ParameterList::__contains__(const std::string& param_name) const
 	return false;
 }
 
-PyObject* elm::ParameterList::values() const
-{
-	size_t s = FNames.size();
-	etk::ndarray ret (s);
-	for (unsigned i=0; i<s; i++) {
-		ret[i] = FInfo.find(FNames[i])->second.value;
-	}
-	return ret.get_object();
-
-}
-
-std::string elm::ParameterList::values_string()
-{
-	std::ostringstream ret;
-	size_t s = FNames.size();
-	for (unsigned i=0; i<s; i++) {
-		ret << "," << FInfo.find(FNames[i])->second.value;
-	}
-	return ret.str().substr(1);
-}
-
-
-void elm::ParameterList::values(PyObject* obj)
-{
-	Py_XINCREF(obj);
-	if (!PySequence_Check(obj)) OOPS("Setting values requires a sequence");
-	if (PySequence_Length(obj)<FNames.size()) OOPS("Sequence too short for setting values");
-	
-	for (unsigned i=0; i<FNames.size(); i++) {
-		PyObject* item = PySequence_GetItem(obj, i);
-		FInfo.find(FNames[i])->second.value = PyFloat_AsDouble(item);
-		Py_CLEAR(item);
-	}
-	Py_XDECREF(obj);
-}
 
 
 PyObject* elm::ParameterList::zeros() const
@@ -142,21 +105,6 @@ void elm::ParameterList::tearDown()
 
 }
 
-//void elm::ParameterList::covariance(etk::symmetric_matrix* obj)
-//{
-//	if (obj->size1()!=FNames.size()) OOPS("Input covariance must be a square with side equal to number of parameters");
-//	for (unsigned i=0; i<FNames.size(); i++) {
-//		FInfo.find(FNames[i])->second.std_err = sqrt((*obj)(i,i));
-//	}
-//}
-//void elm::ParameterList::robustcovariance(etk::symmetric_matrix* obj)
-//{
-//	if (obj->size1()!=FNames.size()) OOPS("Input covariance must be a square with side equal to number of parameters");
-//	for (unsigned i=0; i<FNames.size(); i++) {
-//		FInfo.find(FNames[i])->second.robust_std_err = sqrt((*obj)(i,i));
-//	}
-//}
-//
 
 
 void elm::ParameterList::freshen()

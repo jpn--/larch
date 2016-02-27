@@ -1934,12 +1934,6 @@ class ParameterLinkArray(three_dim):
 
     def push(self, listorder: 'etk::ndarray *', apporder: 'etk::ndarray const *') -> "void":
         return _core.ParameterLinkArray_push(self, listorder, apporder)
-
-    def pull_field(self, field: 'std::string const &', apporder: 'etk::ndarray *') -> "void":
-        return _core.ParameterLinkArray_pull_field(self, field, apporder)
-
-    def push_field(self, field: 'std::string const &', apporder: 'etk::ndarray const *') -> "void":
-        return _core.ParameterLinkArray_push_field(self, field, apporder)
 ParameterLinkArray_swigregister = _core.ParameterLinkArray_swigregister
 ParameterLinkArray_swigregister(ParameterLinkArray)
 
@@ -3518,9 +3512,6 @@ class ParameterList(object):
 
     def parameter_index(self, param_name: 'std::string const &') -> "size_t":
         return _core.ParameterList_parameter_index(self, param_name)
-
-    def values(self, *args) -> "void":
-        return _core.ParameterList_values(self, *args)
 
     def zeros(self) -> "PyObject *":
         return _core.ParameterList_zeros(self)

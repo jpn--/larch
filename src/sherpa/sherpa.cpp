@@ -908,28 +908,13 @@ string sherpa::calculate_errors()
 	return "success";
 }
 
-//const freedom_info* sherpa::get_raw_info (const string& freedom_name) const
-//{
-//	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
-//	if (i==FInfo.end()) OOPS("error: variable name not found");
-//	return &i->second;
-//}
 
 bool sherpa::parameter_exists (const string& freedom_name) const
 {
 	return FNames.has_key(freedom_name);
 
-//	map<string,freedom_info>::const_iterator i = FInfo.find(freedom_name);
-//	if (i==FInfo.end()) return false;
-//	return true;
 }
 
-freedom_info& sherpa::get_freedom_info (const string& freedom_name)
-{
-	map<string,freedom_info>::iterator i = FInfo.find(freedom_name);
-	if (i==FInfo.end()) OOPS("error: variable name not found");
-	return i->second;
-}
 
 double sherpa::parameter_value (const string& freedom_name) const
 {
@@ -950,131 +935,28 @@ double sherpa::parameter_stderr(const string& freedom_name) const
 	return NAN;
 }
 
-void sherpa::_update_freedom_info(const etk::triangle* ihess, const etk::triangle* robust_covar)
-{
-//	BUGGER(msg) << "sherpa::_update_freedom_info()";
-//	BUGGER(msg) << "dF()="<<dF();
-//	if (ihess) {
-//		BUGGER(msg) << "ihess->size()="<<ihess->size();
-//	} else {
-//		BUGGER(msg) << "ihess not given";
-//	}
-//	if (robust_covar) {
-//		BUGGER(msg) << "robust_covar->size()="<<robust_covar->size();
-//	} else {
-//		BUGGER(msg) << "robust_covar not given";
-//	}
-	
-	double temp;
-	
-	for (unsigned i=0; i<dF(); i++) {
-		FInfo[FNames[i]].value = ReadFCurrent()[i];
-		if (ihess) {
-//			BUGGER(msg) << "Setting std_err "<<i<<" for "<<FNames[i];
-			temp = (*ihess)(i,i);
-			if (temp < 0) {
-				WARN(msg) << "Negative value in covariance diagonal at "<<i;
-				temp = -temp;
-				FInfo[FNames[i]].std_err = -sqrt(temp);
-			} else {
-				FInfo[FNames[i]].std_err = sqrt(temp);
-			}
-			for (unsigned j=0; j<dF(); j++) {
-//				BUGGER(msg) << "Setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
-				if (isNan((*ihess)(i,j))) {
-					dictionary_sd(FInfo[FNames[i]]._covar).set_key_nan(FNames[j]);
-				} else {
-					dictionary_sd(FInfo[FNames[i]]._covar).key(FNames[j]) = (*ihess)(i,j);
-				}
-//				BUGGER(msg) << "Done setting covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j] << " = "<<(*ihess)(i,j);
-			}
-//			BUGGER(msg) << "Done setting std_err "<<i<<" for "<<FNames[i];
-		}
-		if (robust_covar && robust_covar->size()>0) {
-//			BUGGER(msg) << "Setting robust_std_err "<<i<<" for "<<FNames[i];
-			temp = (*robust_covar)(i,i);
-			if (temp < 0) {
-				WARN(msg) << "Negative value in robust covariance diagonal at "<<i;
-				temp = -temp;
-			}
-			FInfo[FNames[i]].robust_std_err = sqrt(temp);
-			for (unsigned j=0; j<dF(); j++) {
-//				BUGGER(msg) << "Setting robust covar "<<i<<","<<j<<" for "<<FNames[i]<<","<<FNames[j]<< " = "<< (*robust_covar)(i,j);
-				dictionary_sd(FInfo[FNames[i]]._robust_covar).key(FNames[j]) = (*robust_covar)(i,j);
-			}
-		}
-	}
-}
 
 
 void sherpa::_update_freedom_info_best()
 {
-//	BUGGER(msg) << "sherpa::_update_freedom_info_best()";
-//	BUGGER(msg) << "dF()="<<dF();
-	
-	double temp;
 	
 	for (unsigned i=0; i<dF(); i++) {
-		FInfo[FNames[i]].value = ReadFBest()[i];
+		FCurrent[i] = ReadFBest()[i];
 	}
 }
 
 
 
 
-string sherpa::add_freedom(const string& param_name, const double& value, const double& nullvalue, 
-						   const double& max, const double& min)
-{
-	unsigned s = FNames[param_name];
-	FInfo[param_name].name = param_name;
-	if (!isNan(value)) {
-		FInfo[param_name].initial_value = value;
-		FInfo[param_name].value = value;
-	}
-	if (!isNan(nullvalue)) {
-		FInfo[param_name].null_value = nullvalue;
-	}
-	if (!isNan(min)) {
-		FInfo[param_name].min_value = min;
-	}
-	if (!isNan(max)) {
-		FInfo[param_name].max_value = max;
-	}
-	if (s == FNames.size()-1) return "success";
-	return "success: updated";
-}
-
-
-string sherpa::add_freedom(const freedom_info& fInfo)
-{
-	unsigned s = FNames[fInfo.name];
-	FInfo[fInfo.name] = fInfo;
-	if (s == FNames.size()-1) return "success";
-	return "success: updated";
-}
-
-string sherpa::remove_freedom(const string& param_name)
-{
-	bool s = FNames.drop(param_name);
-	FInfo.erase(param_name);
-	if (s) return "success";
-	return "ignored";
-}
 
 
 void sherpa::reset_to_initial_value()
 {
-	map<string,freedom_info>::iterator i;
-	for (i=FInfo.begin(); i!=FInfo.end(); i++) {
-		i->second.value = i->second.initial_value;
-	}
+	FCurrent = FInitValues;
 }
 void sherpa::refresh_initial_value()
 {
-	map<string,freedom_info>::iterator i;
-	for (i=FInfo.begin(); i!=FInfo.end(); i++) {
-		i->second.initial_value = i->second.value;
-	}
+	FInitValues = FCurrent;
 }
 
 
@@ -1149,12 +1031,6 @@ void sherpa::allocate_memory()
 
 void sherpa::_initialize()
 {
-//	for (unsigned i=0; i<dF(); i++) {
-//		freedom_info* f = &(FInfo[FNames[i]]);
-//		FCurrent[i] = f->value;
-//		FMax[i] = f->max_value;
-//		FMin[i] = f->min_value;
-//	}
 	FPrevTurn = ReadFCurrent();
 	FLastTurn = ReadFCurrent();
 	FBest = ReadFCurrent();
@@ -1316,7 +1192,7 @@ etk::symmetric_matrix* sherpa::robust_covariance_matrix()
 bool sherpa::any_holdfast()
 {
 	for (size_t hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
+		if (FHoldfast.int8_at(hi)) {
 			return true;
 		}
 	}
@@ -1327,7 +1203,7 @@ size_t sherpa::count_holdfast()
 {
 	size_t n=0;
 	for (size_t hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
+		if (FHoldfast.int8_at(hi)) {
 			n++;
 		}
 	}
@@ -1341,12 +1217,12 @@ void sherpa::hessfull_to_hessfree(const symmetric_matrix* full_matrix, symmetric
 	fi=0;
 	fj=0;
 	for (hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
+		if (FHoldfast.int8_at(hi)) {
 			// do not copy, this row is holdfast
 		} else {
 			fj=0;
 			for (hj=0; hj<dF(); hj++) {
-				if (FInfo[ FNames[hj] ].holdfast) {
+				if (FHoldfast.int8_at(hj)) {
 					// do not copy, this column is holdfast
 				} else {
 					(*free_matrix)(fi,fj) = (*full_matrix)(hi,hj);
@@ -1365,7 +1241,7 @@ void sherpa::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric
 	fi=0;
 	fj=0;
 	for (hi=0; hi<dF(); hi++) {
-		if (FInfo[ FNames[hi] ].holdfast) {
+		if (FHoldfast.int8_at(hi)) {
 			// do not copy, this row is holdfast
 			for (hj=0; hj<dF(); hj++) {
 				(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
@@ -1373,7 +1249,7 @@ void sherpa::hessfree_to_hessfull(symmetric_matrix* full_matrix, const symmetric
 		} else {
 			fj=0;
 			for (hj=0; hj<dF(); hj++) {
-				if (FInfo[ FNames[hj] ].holdfast) {
+				if (FHoldfast.int8_at(hj)) {
 					// do not copy, this column is holdfast
 					(*full_matrix)(hi,hj) = 0.0; //not NAN to avoid robust covariance problems;
 				} else {
@@ -1530,18 +1406,14 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 								   const double& initial_value,
 								   const double& max,
 								   const double& min,
-								   const double& std_err,
-								   const double& robust_std_err,
-								   const int& holdfast,
-								   PyObject* covariance,
-								   PyObject* robust_covariance)
+								   const int& holdfast)
 {
 	if (param_name=="") {
 		throw(etk::ParameterNameError("Cannot name a parameter with an empty string."));
 	}
 	
 	size_t prior_size = FNames.size();
-	auto px = elm::ModelParameter(this, FNames[param_name]);
+	auto px = elm::ModelParameter(this, FNames.index_from_string(param_name));
 	if (FNames.size() != prior_size) {
 		tearDown();
 		resize_allocated_memory();
@@ -1557,43 +1429,24 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 	}
 	
 	
-	FInfo[param_name].name = param_name;
 	if (!isNan(value)) {
-		FInfo[param_name].initial_value = value;
-		FInfo[param_name].value = value;
+		px._set_initvalue(initial_value);
 		px._set_value(value);
 	}
 	if (!isNan(null_value)) {
-		FInfo[param_name].null_value = null_value;
 		px._set_nullvalue(null_value);
 	}
 	if (!isNan(initial_value)) {
-		FInfo[param_name].initial_value = initial_value;
 		px._set_initvalue(initial_value);
 	}
-	if (!isNan(std_err)) {
-		FInfo[param_name].std_err = std_err;
-	}
-	if (!isNan(robust_std_err)) {
-		FInfo[param_name].robust_std_err = robust_std_err;
-	}
 	if (!isNan(min)) {
-		FInfo[param_name].min_value = min;
 		px._set_min(min);
 	}
 	if (!isNan(max)) {
-		FInfo[param_name].max_value = max;
 		px._set_max(max);
 	}
 	if (holdfast>=0) {
-		FInfo[param_name].holdfast = holdfast;
 		px._set_holdfast((signed char)holdfast);
-	}
-	if (covariance) {
-		FInfo[param_name].setCovariance(covariance);
-	}
-	if (robust_covariance) {
-		FInfo[param_name].setRobustCovariance(robust_covariance);
 	}
 	return px;
 }
@@ -1604,7 +1457,6 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 
 elm::ModelParameter sherpa::__getitem__(const std::string& param_name)
 {
-//	return parameter(param_name);
 	return elm::ModelParameter(this, FNames[param_name]);
 }
 
@@ -1618,21 +1470,9 @@ elm::ModelParameter sherpa::__getitem__(const int& param_num)
 		}
 		OOPS_IndexError("Parameter number ",param_num," out of range (there are only ",FNames.size()," parameters)");
 	}
-	//return parameter(FNames[param_num]);
 	return elm::ModelParameter(this, param_num);
 }
 
-//void sherpa::__setitem__(const std::string& param_name, freedom_info& value)
-//{
-//	parameter(param_name) = value;
-//}
-//
-//void sherpa::__delitem__(const std::string& param_name)
-//{
-//	bool s = FNames.drop(param_name);
-//	FInfo.erase(param_name);
-////	if (!s) OOPS("No parameter named ",param_name," exists.");
-//}
 
 
 
@@ -1652,8 +1492,7 @@ freedom_alias& sherpa::alias(const std::string& alias_name, const std::string& r
 	}
 	
 	if (!force) {
-		auto iter = FInfo.find(refers_to);
-		if ((iter == FInfo.end()) && (AliasInfo.find(refers_to)==AliasInfo.end())) {
+		if (!FNames.has_key(refers_to) && (AliasInfo.find(refers_to)==AliasInfo.end())) {
 			throw(etk::ParameterNameError(etk::cat("Cannot refer to parameter '",refers_to,"' that has not been previously defined.")));
 		}
 
@@ -1667,13 +1506,6 @@ freedom_alias& sherpa::alias(const std::string& alias_name, const std::string& r
 		AliasInfo.at(alias_name) = freedom_alias(alias_name, refers_to, multiplier);
 	}
 
-	
-//	// If the alias_name is a parameter and not self-referential, delete the parameter // now in wrapper...
-//	auto iter2 = FInfo.find(alias_name);
-//	if ((alias_name!=refers_to) && (iter2 != FInfo.end())) {
-//		//__delitem__(alias_name);
-//		throw(etk::ParameterNameError("Cannot name an alias with an existing parameter name."));
-//	}
 	
 	return AliasInfo.at(alias_name);
 }
@@ -1711,16 +1543,22 @@ void sherpa::unlink_alias(const std::string& alias_name)
 	}
 	std::string refers_to = AliasInfo.at(alias_name).refers_to;
 	double multiplier = AliasInfo.at(alias_name).multiplier;
+
+	elm::ModelParameter px (this, FNames[refers_to]);
+	double newval = px._get_value()*multiplier;
+	double nullvalue = px._get_nullvalue()*multiplier;
+	double initvalue = px._get_initvalue()*multiplier;
+	double maxvalue = px._get_max()*multiplier;
+	double minvalue = px._get_min()*multiplier;
+	npy_int8 hold = px._get_holdfast();
 	
 	parameter(alias_name,
-			  FInfo[refers_to].value*multiplier,
-			  FInfo[refers_to].null_value*multiplier,
-			  FInfo[refers_to].initial_value*multiplier,
-			  FInfo[refers_to].max_value*multiplier,
-			  FInfo[refers_to].min_value*multiplier,
-			  NAN,
-			  NAN,
-			  FInfo[refers_to].holdfast);
+			  newval,
+			  nullvalue,
+			  initvalue,
+			  maxvalue,
+			  minvalue,
+			  hold);
 	
 	AliasInfo.erase(alias_name);
 }

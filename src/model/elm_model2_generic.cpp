@@ -384,16 +384,16 @@ runstats elm::Model2::_maximize_bhhh()
 	
 	
 	BUGGER(msg) << "updating freedom info...";
-	try {
-		_update_freedom_info(&invHess, &robustCovariance);
-	} SPOO {
-		try {
-			_update_freedom_info();
-		} SPOO {
-			_latest_run.write_result( "error: ", oops.what() );
-			OOPS(oops.what());
-		}
-	}
+//	try {
+//		_update_freedom_info(&invHess, &robustCovariance);
+//	} SPOO {
+//		try {
+//			_update_freedom_info();
+//		} SPOO {
+//			_latest_run.write_result( "error: ", oops.what() );
+//			OOPS(oops.what());
+//		}
+//	}
 	
 	
 	BUGGER(msg) << "record finish time...";
@@ -423,27 +423,26 @@ double elm::Model2::loglike_null()
 	
 	if (option.null_disregards_holdfast) {
 		for (unsigned i=0; i<dF(); i++) {
-			hold_save[i] = FHoldfast.int8_at(i);  // FInfo[FNames[i]].holdfast;
-			FHoldfast.int8_at(i) = 0; //FInfo[FNames[i]].holdfast = 0;
+			hold_save[i] = FHoldfast.int8_at(i);
+			FHoldfast.int8_at(i) = 0;
 		}
 	}
 	
 	for (unsigned i=0; i<dF(); i++) {
 		value_save[i] = FCurrent[i];
-		FCurrent[i] = FNullValues[i]; // FInfo[FNames[i]].null_value;
+		FCurrent[i] = FNullValues[i];
 	}
-//	freshen();
-	_LL_null = objective();			
+
+	_LL_null = objective();
 	for (unsigned i=0; i<dF(); i++) {
 		FCurrent[i] = value_save[i];
 	}
 	if (option.null_disregards_holdfast) {
 		for (unsigned i=0; i<dF(); i++) {
-			//FInfo[FNames[i]].holdfast = hold_save[i];
 			FHoldfast.int8_at(i) = hold_save[i];
 		}
 	}
-//	freshen();
+
 	
 	return _LL_null;
 }
@@ -486,14 +485,14 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 			
 			if (option.null_disregards_holdfast) {
 				for (unsigned i=0; i<dF(); i++) {
-					hold_save[i] = FHoldfast.int8_at(i);  // FInfo[FNames[i]].holdfast;
-					FHoldfast.int8_at(i) = 0; //FInfo[FNames[i]].holdfast = 0;
+					hold_save[i] = FHoldfast.int8_at(i);
+					FHoldfast.int8_at(i) = 0;
 				}
 			}
 			
 			for (unsigned i=0; i<dF(); i++) {
 				value_save[i] = FCurrent[i];
-				FCurrent[i] = FNullValues[i];  // FInfo[FNames[i]].null_value;
+				FCurrent[i] = FNullValues[i];
 			}
 			freshen();
 			_LL_null = objective();			
@@ -502,7 +501,6 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 			}
 			if (option.null_disregards_holdfast) {
 				for (unsigned i=0; i<dF(); i++) {
-					//FInfo[FNames[i]].holdfast = hold_save[i];
 					FHoldfast.int8_at(i) = hold_save[i];
 				}
 			}
@@ -548,17 +546,17 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 	}
 	
 	
-	BUGGER(msg) << "updating freedom info...";
-	try {
-		_update_freedom_info(&invHess, &robustCovariance);
-	} SPOO {
-		try {
-			_update_freedom_info();
-		} SPOO {
-			_latest_run.write_result( "error: ", oops.what() );
-			OOPS(oops.what());
-		}
-	}
+//	BUGGER(msg) << "updating freedom info...";
+//	try {
+//		_update_freedom_info(&invHess, &robustCovariance);
+//	} SPOO {
+//		try {
+//			_update_freedom_info();
+//		} SPOO {
+//			_latest_run.write_result( "error: ", oops.what() );
+//			OOPS(oops.what());
+//		}
+//	}
 	
 	
 	if (option.teardown_after_estimate) {
@@ -599,27 +597,6 @@ void elm::Model2::calculate_hessian_and_save()
 }
 
 
-
-//bool elm::Model2::any_holdfast()
-//{
-//	for (size_t hi=0; hi<dF(); hi++) {
-//		if (FInfo[ FNames[hi] ].holdfast) {
-//			return true;
-//		}
-//	}
-//	return false;
-//}
-//
-//size_t elm::Model2::count_holdfast()
-//{
-//	size_t n=0;
-//	for (size_t hi=0; hi<dF(); hi++) {
-//		if (FInfo[ FNames[hi] ].holdfast) {
-//			n++;
-//		}
-//	}
-//	return n;
-//}
 
 
 void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
@@ -722,14 +699,14 @@ void elm::Model2::calculate_parameter_covariance(bool update_freedoms)
 
 	}
 
-	if (update_freedoms) {
-		BUGGER(msg) << "updating freedom info...";
-		try {
-			_update_freedom_info(&invHess, &robustCovariance);
-		} SPOO {
-			FATAL(msg) << "error in updating standard errors";
-		}
-	}
+//	if (update_freedoms) {
+//		BUGGER(msg) << "updating freedom info...";
+//		try {
+//			_update_freedom_info(&invHess, &robustCovariance);
+//		} SPOO {
+//			FATAL(msg) << "error in updating standard errors";
+//		}
+//	}
 
 }
 
@@ -797,17 +774,6 @@ void elm::Model2::_parameter_push(const std::vector<double>& v)
 
 void elm::Model2::_parameter_update()
 {
-//	size_t FCurrent_size = FCurrent.size();
-//	size_t FMax_size = FMax.size();
-//	size_t FMin_size = FMin.size();
-//	size_t df_z = dF();
-//
-//	for (unsigned i=0; i<dF(); i++) {
-//		freedom_info* f = &(FInfo[FNames[i]]);
-//		FCurrent[i] = f->value;
-//		FMax[i] = f->max_value;
-//		FMin[i] = f->min_value;
-//	}
 //	freshen();
 }
 
@@ -857,44 +823,38 @@ std::vector< std::string > elm::Model2::alias_names() const
 	return x;
 }
 
-PyObject* __GetParameterDict(const freedom_info& i)
+#include "larch_modelparameter.h"
+
+PyObject* __GetParameterDict(const elm::ModelParameter& i)
 {
 	PyObject* P = PyDict_New();
 	PyObject* item (nullptr);
 	
-	item = PyString_FromString(i.name.c_str());
+	item = PyString_FromString(i._get_name().c_str());
 	PyDict_SetItemString(P,"name",item);
 	Py_CLEAR(item);
 
-	item = PyFloat_FromDouble(i.initial_value);
+	item = PyFloat_FromDouble(i._get_initvalue());
 	PyDict_SetItemString(P,"initial_value",item);
 	Py_CLEAR(item);
 
-	item = PyFloat_FromDouble(i.null_value);
+	item = PyFloat_FromDouble(i._get_nullvalue());
 	PyDict_SetItemString(P,"null_value",item);
 	Py_CLEAR(item);
 
-	item = PyFloat_FromDouble(i.value);
+	item = PyFloat_FromDouble(i._get_value());
 	PyDict_SetItemString(P,"value",item);
 	Py_CLEAR(item);
 
-	item = PyFloat_FromDouble(i.std_err);
-	PyDict_SetItemString(P,"std_err",item);
-	Py_CLEAR(item);
-
-	item = PyFloat_FromDouble(i.robust_std_err);
-	PyDict_SetItemString(P,"robust_std_err",item);
-	Py_CLEAR(item);
-
-	item = PyFloat_FromDouble(i.max_value);
+	item = PyFloat_FromDouble(i._get_max());
 	PyDict_SetItemString(P,"max_value",item);
 	Py_CLEAR(item);
 
-	item = PyFloat_FromDouble(i.min_value);
+	item = PyFloat_FromDouble(i._get_min());
 	PyDict_SetItemString(P,"min_value",item);
 	Py_CLEAR(item);
 	
-	item = PyInt_FromLong(i.holdfast);
+	item = PyInt_FromLong((long)i._get_holdfast());
 	PyDict_SetItemString(P,"holdfast",item);
 	Py_CLEAR(item);
 	
@@ -902,14 +862,6 @@ PyObject* __GetParameterDict(const freedom_info& i)
 		std::cerr <<"!!!\n";
 	}
 	
-	item = i.getCovariance();
-	if (item) PyDict_SetItemString(P,"covariance",item);
-	Py_CLEAR(item);
-
-	item = i.getRobustCovariance();
-	if (item) PyDict_SetItemString(P,"robust_covariance",item);
-	Py_CLEAR(item);
-
 	return P;
 }
 
@@ -918,9 +870,7 @@ PyObject* elm::Model2::_get_parameter() const
 {
 	PyObject* U = PyList_New(0);
 	for (unsigned i=0; i<FNames.size(); i++) {
-		std::map<std::string,freedom_info>::const_iterator FInfoIter = FInfo.find(FNames[i]);
-		if (FInfoIter==FInfo.end()) continue;
-		PyObject* z =  __GetParameterDict(FInfoIter->second);
+		PyObject* z =  __GetParameterDict(elm::ModelParameter( const_cast<elm::Model2*>(this), i));
 		PyList_Append(U,z);
 		Py_CLEAR(z);
 	}
@@ -1097,16 +1047,14 @@ std::string elm::Model2::save_buffer() const
 	sv << "self.title = "<<__base64encode_wrap(title)<<"\n\n";
 	
 	// save parameter
-//	for (auto p=FNames.strings().begin(); p!=FNames.strings().end(); p++) {
 	for (size_t pn=0; pn<FNames.size(); pn++) {
-		
 		sv << "self.parameter("<<__base64encode_wrap(FNames.string_from_index(pn));
-		sv << ","<<AsPyFloat(FCurrent[pn]);
-		sv << ","<<AsPyFloat(FNullValues[pn]);
-		sv << ","<<AsPyFloat(FInitValues[pn]);
-		sv << ","<<AsPyFloat(FMax[pn]);
-		sv << ","<<AsPyFloat(FMin[pn]);
-		sv << ",holdfast="<< (FHoldfast.int8_at(pn) ? "True":"False");
+		sv << ", value="<<AsPyFloat(FCurrent[pn]);
+		sv << ", null_value="<<AsPyFloat(FNullValues[pn]);
+		sv << ", initial_value="<<AsPyFloat(FInitValues[pn]);
+		sv << ", max="<<AsPyFloat(FMax[pn]);
+		sv << ", min="<<AsPyFloat(FMin[pn]);
+		sv << ", holdfast="<< (FHoldfast.int8_at(pn) ? "True":"False");
 		
 		sv << ")\n";
 	}

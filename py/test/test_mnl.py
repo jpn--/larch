@@ -183,7 +183,7 @@ class TestMTC(ELM_TestCase):
 		m.tearDown()
 		m.option.gradient_diagnostic = 2 
 		z = m.estimate()
-		self.assertAlmostEqual( -3626.1862548451313, m.loglike(from_cache=2))
+		self.assertAlmostEqual( -3626.1862548451313, m.loglike(cached=2))
 
 	def test_model2_mnl_with_constant_parameter(self):
 		d = self._db
@@ -432,7 +432,7 @@ class TestMNL(ELM_TestCase):
 		m.option.calc_std_errors=True
 		m.setUp()
 		m.estimate()
-		self.assertAlmostEqual( -5331.252006978, m.loglike(from_cache=2), 6 )
+		self.assertAlmostEqual( -5331.252006978, m.loglike(cached=2), 6 )
 		self.assertAlmostEqual( -0.7012,   m.parameter("ASC_TRAIN").value,4 )
 		self.assertAlmostEqual( -0.012778, m.parameter("B_TIME").value   ,4 )
 		self.assertAlmostEqual( -0.010838, m.parameter("B_COST").value   ,4 )
@@ -454,7 +454,7 @@ class TestMNL(ELM_TestCase):
 		m.maximize_loglike()
 		m.loglike()
 		self.assertAlmostEqual( -10547.48518638403, m.loglike(), 3 )
-		self.assertAlmostEqual( -10547.48518638403, m.loglike(from_cache=False, to_cache=False), 3 )
+		self.assertAlmostEqual( -10547.48518638403, m.loglike(cached=False), 3 )
 
 	def test_automatic_family(self):
 		d = DB.Example('swissmetro')

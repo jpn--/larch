@@ -735,11 +735,6 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	if (FCurrent.size1()!=dF()) {
 		FCurrent.resize(dF());
 	}
-
-//	for (unsigned i=0; i<dF(); i++) {
-//		freedom_info* f = &(FInfo[FNames[i]]);
-//		FCurrent[i] = f->value;
-//	}
 	
 	if (label=="UtilityCA") {
 		if (Params_UtilityCA.length()==0) {

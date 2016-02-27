@@ -56,9 +56,7 @@ namespace elm {
 		
 	public:
 		virtual double pullvalue(const double* pullSource) const;
-		virtual double pullfield(const std::string& field) const;
 		virtual void pushvalue(double* pushDest, const double& q) const;
-		virtual void pushfield(const std::string& field, const double& q) const;
 		virtual std::string print() const;
 		virtual std::string smallprint() const;
 		
@@ -72,9 +70,7 @@ namespace elm {
 	public:
 		virtual double freedomScale() const { return _value; }
 		virtual double pullvalue(const double* pullSource) const;
-		virtual double pullfield(const std::string& field) const;
 		virtual void pushvalue(double* pushDest, const double& q) const;
-		virtual void pushfield(const std::string& field, const double& q) const;
 		virtual std::string print() const;
 		virtual std::string smallprint() const;
 		parametex_constant(const double& value); // constructor
@@ -85,9 +81,7 @@ namespace elm {
 	class parametex_equal: public parametex {
 	public:
 		virtual double pullvalue(const double* pullSource) const;
-		virtual double pullfield(const std::string& field) const;
 		virtual void pushvalue(double* pushDest, const double& q) const;
-		virtual void pushfield(const std::string& field, const double& q) const;
 		virtual std::string print() const;
 		virtual std::string smallprint() const;
 		parametex_equal(const std::string& f, elm::ParameterList* mdl); // constructor
@@ -100,9 +94,7 @@ namespace elm {
 	public:
 		virtual double freedomScale() const { return _multiplier; }
 		virtual double pullvalue(const double* pullSource) const;
-		virtual double pullfield(const std::string& field) const;
 		virtual void pushvalue(double* pushDest, const double& q) const;
-		virtual void pushfield(const std::string& field, const double& q) const;
 		virtual std::string print() const;
 		virtual std::string smallprint() const;
 		parametex_scale(const std::string& f, elm::ParameterList* mdl, const double& multiplier); // constructor
@@ -160,9 +152,6 @@ namespace elm {
 		
 		void pull(const etk::ndarray* listorder, etk::ndarray* apporder);
 		void push(etk::ndarray* listorder, const etk::ndarray* apporder);
-
-		void pull_field(const std::string& field, etk::ndarray* apporder);
-		void push_field(const std::string& field, const etk::ndarray* apporder);
 	};
 
 	

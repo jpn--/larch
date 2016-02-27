@@ -35,7 +35,6 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
 
 
 
-
 //%pythoncode %{
 //class LarchError(Exception):
 //	def __str__(self):

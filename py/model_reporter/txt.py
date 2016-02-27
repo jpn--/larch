@@ -109,8 +109,8 @@ class TxtModelReporter():
 		x += ["-"]
 		# Find max length parameter name
 		max_length_freedom_name = 9
-		for p in self._get_parameter():
-			max_length_freedom_name = max(max_length_freedom_name, len(p['name']))
+		for p in self.parameter_names():
+			max_length_freedom_name = max(max_length_freedom_name, len(p))
 		# Write headers
 		y  = "{0:<{1}}".format("Parameter",max_length_freedom_name)
 		y += "\t{:{PARAM_W}}".format("InitValue",**format)
@@ -119,18 +119,19 @@ class TxtModelReporter():
 		y += "\t{:{PARAM_W}}".format("t-Stat",**format)
 		y += "\t{:{PARAM_W}}".format("NullValue",**format)
 		x.append(y)
-		for p in self._get_parameter():
+		for p in self.parameter_names():
+			px = self[p]
 			try:
-				tstat = (p['value'] - p['null_value']) / p['std_err']
+				tstat = (px.value - px.null_value) / px.std_err
 			except ZeroDivisionError:
 				tstat = float('nan')
-			y  = "{0:<{1}}".format(p['name'],max_length_freedom_name)
-			y += "\t{:{PARAM}}".format(p['initial_value'],**format)
-			y += "\t{:{PARAM}}".format(p['value'],**format)
-			y += "\t{:{PARAM}}".format(p['std_err'],**format)
+			y  = "{0:<{1}}".format(p,max_length_freedom_name)
+			y += "\t{:{PARAM}}".format(px.initial_value,**format)
+			y += "\t{:{PARAM}}".format(px.value,**format)
+			y += "\t{:{PARAM}}".format(px.std_err,**format)
 			y += "\t{:{PARAM}}".format(tstat,**format)
-			y += "\t{:{PARAM}}".format(p['null_value'],**format)
-			if p['holdfast']:
+			y += "\t{:{PARAM}}".format(px.null_value,**format)
+			if px.holdfast:
 				y += "\tH"
 				footer.add("H")
 			x.append(y)

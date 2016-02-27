@@ -38,18 +38,10 @@ double elm::parametex::pullvalue(const double* pullSource) const
 {
 	return 0;
 }
-double elm::parametex::pullfield(const std::string& field) const 
-{
-	return 0;
-}
 
 void elm::parametex::pushvalue(double* pushDest, const double& q) const
 {
 	
-}
-void elm::parametex::pushfield(const std::string& field, const double& q) const
-{
-
 }
 
 #include <iomanip>
@@ -86,17 +78,8 @@ double elm::parametex_constant::pullvalue(const double* pullSource) const
 {
 	return _value;
 }
-double elm::parametex_constant::pullfield(const std::string& field) const
-{
-	if (field=="value") return _value;
-	OOPS("not implemented");
-}
 
 void elm::parametex_constant::pushvalue(double* pushDest, const double& q) const
-{
-
-}
-void elm::parametex_constant::pushfield(const std::string& field, const double& q) const
 {
 
 }
@@ -135,21 +118,9 @@ double elm::parametex_equal::pullvalue(const double* pullSource) const
 	if (mdl) return pullSource[mdl->FNames[freedom]];
 	return elm::parametex::pullvalue(pullSource);
 }
-double elm::parametex_equal::pullfield(const std::string& field) const
-{
-	if (field=="value") {
-		if (mdl) return mdl->FInfo[freedom].value;
-		return elm::parametex::pullfield(field);
-	}
-	OOPS("not implemented");
-}
 void elm::parametex_equal::pushvalue(double* pushDest, const double& q) const
 {
 	if (mdl)  pushDest[mdl->FNames[freedom]] += q;
-}
-void elm::parametex_equal::pushfield(const std::string& field, const double& q) const
-{
-	if (mdl)  mdl->FInfo[freedom].value += q;
 }
 
 std::string elm::parametex_equal::print() const
@@ -190,22 +161,10 @@ double elm::parametex_scale::pullvalue(const double* pullSource) const
 	if (mdl) return (_multiplier * pullSource[mdl->FNames[freedom]]);
 	return elm::parametex::pullvalue(pullSource);
 }
-double elm::parametex_scale::pullfield(const std::string& field) const
-{
-	if (field=="value") {
-		if (mdl) return _multiplier * mdl->FInfo[freedom].value;
-		return elm::parametex::pullfield(field);
-	}
-	OOPS("not implemented");
-}
 
 void elm::parametex_scale::pushvalue(double* pushDest, const double& q) const
 {
 	if (mdl)  pushDest[mdl->FNames[freedom]] += (q * _multiplier);
-}
-void elm::parametex_scale::pushfield(const std::string& field, const double& q) const
-{
-	if (mdl)  mdl->FInfo[freedom].value += (q * _multiplier);
 }
 
 std::string elm::parametex_scale::print() const
@@ -365,23 +324,6 @@ void elm::paramArray::pull(const etk::ndarray* listorder, etk::ndarray* apporder
 void elm::paramArray::push(etk::ndarray* listorder, const etk::ndarray* apporder)
 {
 	push_to_freedoms2(*this, apporder->ptr(), listorder->ptr());
-}
-
-void elm::paramArray::pull_field(const std::string& field, etk::ndarray* apporder)
-{
-	for (unsigned i=0; i<length(); i++) {
-		if (z[i]){
-			apporder->operator[](i) = z[i]->pullfield(field);
-		}
-	}
-}
-void elm::paramArray::push_field(const std::string& field, const etk::ndarray* apporder)
-{
-	for (unsigned i=0; i<length(); i++) {
-		if (z[i]){
-			 z[i]->pushfield(field, apporder->operator[](i));
-		}
-	}
 }
 
 

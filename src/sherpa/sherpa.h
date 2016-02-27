@@ -130,28 +130,19 @@ public:
 
 private:
 	void _initial_evaluation();
-
-public:
-	std::string add_freedom(const std::string& param_name, const double& value=NAN, const double& nullvalue=NAN,
-					   const double& max=NAN, const double& min=NAN);
-	std::string add_freedom(const freedom_info& fInfo);
-	std::string remove_freedom(const std::string& param_name);
 	
 	
 	///// RESULTS /////
 	
-//protected:
-//	const freedom_info* get_raw_info (const std::string& freedom_name) const;
 public:
 	bool   parameter_exists(const std::string& freedom_name) const;
 	double parameter_value (const std::string& freedom_name) const;
 	double parameter_stderr(const std::string& freedom_name) const;
-	freedom_info& get_freedom_info (const std::string& freedom_name);
 	
 	///// MEMORY /////
 	
 protected:
-	void _update_freedom_info(const etk::triangle* ihess=NULL, const etk::triangle* robust_covar=NULL);
+//	void _update_freedom_info(const etk::triangle* ihess=NULL, const etk::triangle* robust_covar=NULL);
 	void _update_freedom_info_best();
 	
 public:
@@ -296,11 +287,7 @@ public:
 							   const double& initial_value=NAN,
 							   const double& max=NAN,
 							   const double& min=NAN,
-							   const double& std_err=NAN,
-							   const double& robust_std_err=NAN,
-							   const int& holdfast=-1,
-							   PyObject* covariance=NULL,
-							   PyObject* robust_covariance=NULL); 
+							   const int& holdfast=-1); 
 
 	elm::ModelParameter __getitem__(const std::string& param_name);
 	elm::ModelParameter __getitem__(const int& param_num);

@@ -225,7 +225,7 @@ class TestData1(unittest.TestCase):
 		ms.db = dts
 		ms.provision()
 		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
-		self.assertAlmostEqual(  -5331.252007380466 , ms.loglike(x,from_cache=False))
+		self.assertAlmostEqual(  -5331.252007380466 , ms.loglike(x,cached=False))
 		dt = DT.Example()
 		dt.h5top.screen[:10] = False
 		rr = dt.array_idca('_avail_*hhinc')

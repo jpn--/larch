@@ -45,7 +45,6 @@ namespace elm {
 
 	#ifndef SWIG
 	public:
-		std::map<std::string,freedom_info> FInfo;
 		
 		std::map<std::string,freedom_alias> AliasInfo;
 		
@@ -61,8 +60,8 @@ public:
 	
 	size_t parameter_index(const std::string& param_name) const;
 
-	PyObject* values() const;
-	void values(PyObject*);
+//	PyObject* values() const;
+//	void values(PyObject*);
 	PyObject* zeros() const;
 
 	PyObject* constraints() const;
@@ -71,7 +70,7 @@ public:
 	virtual void freshen();
 	
 	#ifndef SWIG
-	std::string values_string();
+//	std::string values_string();
 	
 	#endif
 };

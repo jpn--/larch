@@ -8,6 +8,8 @@ from .util.xhtml import XHTML, XML_Builder
 import math
 from .model_reporter import ModelReporter
 import base64
+from .util.attribute_dict import function_cache
+
 
 class MetaParameter():
 	def __init__(self, name, value, under, initial_value=None):
@@ -32,7 +34,6 @@ class Model(Model2, ModelReporter):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		from .util.attribute_dict import function_cache
 		self._cached_results = function_cache()
 		self._setweakself(self)
 
@@ -287,6 +288,8 @@ class Model(Model2, ModelReporter):
 				content = pickle.loads(content)
 			except pickle.UnpicklingError:
 				pass
+		if isinstance(content, bytes):
+			content = content.decode('utf8')
 		if isinstance(content, str):
 			if echo: print(content)
 			code = compile(content, "<string>", 'exec')
@@ -646,17 +649,6 @@ class Model(Model2, ModelReporter):
 					x[n,j] = p['robust_covariance'][names[j]]
 		return x
 
-#	def hessian(self, values=None, recalc=False):
-#		"The hessian matrix at the converged point of the latest estimation"
-#		if values:
-#			if self.parameter_values() != values:
-#				self.parameter_values(values)
-#				recalc = True
-#		if recalc:
-#			self.loglike()
-#			self._compute_d2_loglike()
-#		return self.hessian_matrix
-#
 
 	def d2_loglike(self, *args):
 		z = self.finite_diff_hessian(*args, out=self.hessian_matrix)
@@ -696,9 +688,6 @@ class Model(Model2, ModelReporter):
 		invhess = matrix_inverse(hess_taken)
 		self.covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.covariance_matrix[take] = invhess.reshape(-1)
-#		for i in range(len(self)):
-#			self[i].setCovariance({pname:value for pname,value in zip(self.parameter_names(), self.covariance_matrix[i,:])})
-#			self[i].std_err = numpy.sqrt(numpy.abs(self.covariance_matrix[i,i])) * numpy.sign(self.covariance_matrix[i,i])
 		# robust...
 		bhhh_taken = self.bhhh()[take].reshape(dense_s,dense_s)
 		#import scipy.linalg.blas
@@ -707,43 +696,20 @@ class Model(Model2, ModelReporter):
 		robusto = numpy.dot(numpy.dot(invhess, bhhh_taken),invhess)
 		self.robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.robust_covariance_matrix[take] = robusto.reshape(-1)
-#		for i in range(len(self)):
-#			self[i].setRobustCovariance({pname:value for pname,value in zip(self.parameter_names(), self.robust_covariance_matrix[i,:])})
-#			self[i].robust_std_err = numpy.sqrt(numpy.abs(self.robust_covariance_matrix[i,i])) * numpy.sign(self.robust_covariance_matrix[i,i])
 
 
 
 
 
-
-
-
-
-
-
-
-#	def covariance(self, recalc=False):
-#		"The inverse of the hessian matrix at the converged point of the latest estimation"
-#		return self.covariance_matrix().view(SymmetricArray)
-
-#	def robust_covariance(self, recalc=False):
-#		"The sandwich estimator at the converged point of the latest estimation"
-#		return self.robust_covariance_matrix()
 
 	def parameter_holdfast_mask(self):
-		mask = numpy.ones([len(self),],dtype=bool)
-		for n,p in enumerate(self._get_parameter()):
-			if p['holdfast']:
-				mask[n] = 0
-		return mask
+		return self.parameter_holdfast_array.copy()
 
 	def parameter_holdfast_release(self):
-		for n,p in enumerate(self._get_parameter()):
-			p['holdfast'] = False
-	
+		self.parameter_holdfast_array[:] = 0
+
 	def parameter_holdfast_mask_restore(self, mask):
-		for n,p in enumerate(self._get_parameter()):
-			p['holdfast'] = mask[n]
+		self.parameter_holdfast_array[:] = mask[:]
 
 	def rank_check(self, apply_correction=True, zero_correction=False):
 		"""
@@ -770,8 +736,7 @@ class Model(Model2, ModelReporter):
 		return locks
 
 	def parameter_reset_to_initial_values(self):
-		for n,p in enumerate(self._get_parameter()):
-			p['value'] = p['initial_value']
+		self.parameter_array[:] = self.parameter_initial_values_array[:]
 
 	def estimate_constants_only(self, repair='-'):
 		db = self._ref_to_db
@@ -807,21 +772,21 @@ class Model(Model2, ModelReporter):
 		m.estimate()
 		self._set_estimation_statistics(log_like_nil=m.loglike())
 
-	def loglike(self, *args, from_cache=True, to_cache=True):
+	def loglike(self, *args, cached=True):
 		if len(args)>0:
 			self.parameter_values(args[0])
 		if self.Data_UtilityCE.active():
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
 			return self.loglike_given_utility()
-		if from_cache:
+		if cached:
 			try:
 				return self._cached_results[self.parameter_array.tobytes()].loglike
 			except (KeyError, AttributeError):
 				pass
 		# otherwise not cached (or not correctly) so calculate anew
 		ll = super().loglike()
-		if to_cache:
+		if isinstance(self._cached_results, function_cache):
 			self._cached_results[self.parameter_array.tobytes()].loglike = ll
 		return ll
 

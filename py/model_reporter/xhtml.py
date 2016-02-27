@@ -207,26 +207,27 @@ class XhtmlModelReporter():
 			
 			x.tbody
 			
-			for p in self._get_parameter():
+			for p in self.parameter_names():
+				px = self[p]
 				x.tr
 				try:
-					tstat = (p['value'] - p['null_value']) / p['std_err']
+					tstat = (px.value - px.null_value) / px.std_err
 				except ZeroDivisionError:
 					tstat = float('nan')
 				x.start('td')
-				x.simple_anchor("param"+p['name'].replace("#","_hash_"))
-				x.data('{}'.format(p['name']))
+				x.simple_anchor("param"+p.replace("#","_hash_"))
+				x.data('{}'.format(p))
 				x.end('td')
 				if display_inital:
-					x.td("{:{PARAM}}".format(p['initial_value'],**format), {'class':'initial_value'})
-				x.td("{:{PARAM}}".format(p['value'],**format), {'class':'estimated_value'})
-				if p['holdfast']:
+					x.td("{:{PARAM}}".format(px.initial_value,**format), {'class':'initial_value'})
+				x.td("{:{PARAM}}".format(px.value,**format), {'class':'estimated_value'})
+				if px.holdfast:
 					x.td("fixed value", {'colspan':'2','class':'notation'})
-					x.td("{:{PARAM}}".format(p['null_value'],**format), {'class':'null_value'})
+					x.td("{:{PARAM}}".format(px.null_value,**format), {'class':'null_value'})
 				else:
-					x.td("{:{PARAM}}".format(p['std_err'],**format), {'class':'std_err'})
+					x.td("{:{PARAM}}".format(px.std_err,**format), {'class':'std_err'})
 					x.td("{:{TSTAT}}".format(tstat,**format), {'class':'tstat'})
-					x.td("{:{PARAM}}".format(p['null_value'],**format), {'class':'null_value'})
+					x.td("{:{PARAM}}".format(px.null_value,**format), {'class':'null_value'})
 #					if p['holdfast']:
 #						x.td("H", {'class':'footnote_mark'})
 #						footer.add("H")
