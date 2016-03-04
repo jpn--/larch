@@ -72,7 +72,7 @@ void etk::workshop::startwork(etk::dispatcher* dispatcher, boosted::mutex* resul
 
 
 
-etk::dispatcher::dispatcher(int nThreads, size_t nJobs, boosted::function< boosted::shared_ptr<workshop>() > workshop_builder)
+etk::dispatcher::dispatcher(int nThreads, size_t nJobs, workshop_builder_t workshop_builder)
 : nThreads(nThreads)
 , nJobs(nJobs)
 , result_mutex()
@@ -103,7 +103,7 @@ etk::dispatcher::~dispatcher()
 	release();
 }
 
-void etk::dispatcher::dispatch(int nThreads)
+void etk::dispatcher::dispatch(int nThreads, workshop_updater_t* updater)
 {
 	exception_count = 0;
 	zeroprob_exception_count = 0;
@@ -112,10 +112,16 @@ void etk::dispatcher::dispatch(int nThreads)
 			add_thread();
 		}
 	}
-	if (nThreads != -9 && nThreads < threads.size()) {
+	else if (nThreads != -9 && nThreads < threads.size()) {
 		release();
 		for (int i=0; i<nThreads; i++) {
 			add_thread();
+		}
+	}
+	else if (nThreads != -9 && updater) {
+		// update threads
+		for (int i=0; i<workshops.size(); i++) {
+			(*updater)(workshops[i]);
 		}
 	}
 	request_work();

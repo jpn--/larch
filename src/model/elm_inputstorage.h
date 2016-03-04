@@ -200,6 +200,7 @@ namespace elm {
 	
 		size_t metasize() const;
 		std::string __str__() const;
+		std::string __repr__() const;
 		std::vector<std::string> needs() const;
 		elm::ComponentList& add_blank(const elm::cellcode& i);
 		

@@ -268,10 +268,13 @@ class Model(Model2, ModelReporter):
 			self.loaded_from = filename
 			return self
 
-	def loads(self, content="@@@", *, use_base64=False, echo=False):
+	def loads(self, content="@@@", *, use_base64=False, echo=False, d=None):
 		if content=="@@@" and isinstance(self,(str,bytes)):
 			content = self
-			self = Model()
+			if d:
+				self = Model(d)
+			else:
+				self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
 		_Str = lambda s: (base64.standard_b64decode(s)).decode()
@@ -775,7 +778,7 @@ class Model(Model2, ModelReporter):
 	def loglike(self, *args, cached=True):
 		if len(args)>0:
 			self.parameter_values(args[0])
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
 			return self.loglike_given_utility()
@@ -795,7 +798,7 @@ class Model(Model2, ModelReporter):
 		return z
 
 	def negative_d_loglike(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
@@ -806,7 +809,7 @@ class Model(Model2, ModelReporter):
 		return z
 
 	def d_loglike(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
@@ -815,22 +818,22 @@ class Model(Model2, ModelReporter):
 		return -(self.negative_d_loglike(*args))
 
 	def d_loglike_nocache(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			return self.d_loglike(*args)
 		return -(self.negative_d_loglike_nocache(*args))
 
 	def d_loglike_cached(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			return self.d_loglike(*args)
 		return -(self.negative_d_loglike_cached(*args))
 
 	def negative_d_loglike_nocache(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			return self.negative_d_loglike(*args)
 		return super().negative_d_loglike_nocache(*args)
 
 	def negative_d_loglike_cached(self, *args):
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			return self.negative_d_loglike(*args)
 		return super().negative_d_loglike_cached(*args)
 
@@ -845,7 +848,7 @@ class Model(Model2, ModelReporter):
 		return -(self.negative_d_loglike_given_utility())
 
 	def bhhh(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
-		if self.Data_UtilityCE.active():
+		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
 				self.parameter_values(args[0])
 			return _core.Model2_bhhh_cached(self)
@@ -868,7 +871,7 @@ class Model(Model2, ModelReporter):
 			self._ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
 			# provision other data, link ce data
 			self.provision_without_utility()
-			self.Data_UtilityCE.maplink(self._ce_caseindex, self._ce_altindex, self._ce, len(caseids), len(self.alternative_codes()))
+			self.Data_UtilityCE_manual.maplink(self._ce_caseindex, self._ce_altindex, self._ce, len(caseids), len(self.alternative_codes()))
 			self.setUp(False)
 			# initialize utility
 			self.Utility()[:] = -numpy.inf
@@ -1169,6 +1172,10 @@ class Model(Model2, ModelReporter):
 					raise
 		else:
 			super().provision(provided)
+
+	def reprovision(self, *args, idca_avail_ratio_floor=None):
+		self.unprovision()
+		self.provision(*args, idca_avail_ratio_floor=idca_avail_ratio_floor)
 
 	def alias(self, *args):
 		if not args:

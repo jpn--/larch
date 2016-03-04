@@ -2795,7 +2795,6 @@ ComponentCellcodeMap_swigregister(ComponentCellcodeMap)
 
 class LinearCOBundle_1(_base_LinearSubBundle_1):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
     parentmodel = _swig_property(_core.LinearCOBundle_1_parentmodel_get, _core.LinearCOBundle_1_parentmodel_set)
 
     def __init__(self, *args):
@@ -2810,6 +2809,9 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
 
     def __str__(self) -> "std::string":
         return _core.LinearCOBundle_1___str__(self)
+
+    def __repr__(self) -> "std::string":
+        return _core.LinearCOBundle_1___repr__(self)
 
     def needs(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.LinearCOBundle_1_needs(self)
@@ -3879,6 +3881,9 @@ class Model2(sherpa):
         return _core.Model2__set_root_cellcode(self, r)
     _nCases_recall = _swig_property(_core.Model2__nCases_recall_get, _core.Model2__nCases_recall_set)
 
+    def _force_feed(self, forced_features: 'int') -> "void":
+        return _core.Model2__force_feed(self, forced_features)
+
     def freshen(self) -> "void":
         return _core.Model2_freshen(self)
 
@@ -3922,7 +3927,7 @@ class Model2(sherpa):
 
     def DataEdit(self, label: 'std::string const &') -> "elm::darray *":
         return _core.Model2_DataEdit(self, label)
-    Data_UtilityCE = _swig_property(_core.Model2_Data_UtilityCE_get, _core.Model2_Data_UtilityCE_set)
+    Data_UtilityCE_manual = _swig_property(_core.Model2_Data_UtilityCE_manual_get, _core.Model2_Data_UtilityCE_manual_set)
     Data_UtilityCE_builtin = _swig_property(_core.Model2_Data_UtilityCE_builtin_get, _core.Model2_Data_UtilityCE_builtin_set)
 
     def get_weight_scale_factor(self) -> "double":
@@ -3978,6 +3983,12 @@ class Model2(sherpa):
 
     def _ngev_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2__ngev_gradient_full_casewise(self)
+
+    def _ngev_d_prob(self) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2__ngev_d_prob(self)
+
+    def log_likelihood_from_prob(self, probarray: 'etk::ndarray *') -> "double":
+        return _core.Model2_log_likelihood_from_prob(self, probarray)
 
     def write_runstats_note(self, comment: 'std::string const &') -> "void":
         return _core.Model2_write_runstats_note(self, comment)
@@ -4151,6 +4162,9 @@ class Model2(sherpa):
 
     def tearDown(self) -> "void":
         return _core.Model2_tearDown(self)
+
+    def unprovision(self) -> "void":
+        return _core.Model2_unprovision(self)
     title = _swig_property(_core.Model2_title_get, _core.Model2_title_set)
 
     def save_buffer(self) -> "std::string":

@@ -1836,7 +1836,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		# do avail first, to evaluate the benefit to use IDCE format
 		if "Avail" in needs:
 			if log:
-				log.info("Provisioning {} data...".format(key))
+				log.info("Provisioning Avail data...")
 			provide["Avail"], c = self.array_avail_blind(n_cases=n_cases)
 			if cases is None and c is not None:
 				cases = c

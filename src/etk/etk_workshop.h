@@ -47,7 +47,8 @@ namespace etk {
 		workshop(): release_workshop(false) {}
 	};
 
-
+	typedef std::function< std::shared_ptr<workshop>()     >    workshop_builder_t;
+	typedef std::function< void(std::shared_ptr<workshop>) >    workshop_updater_t;
 
 
 	struct job {
@@ -78,7 +79,7 @@ namespace etk {
 		boosted::mutex result_mutex;
 		std::vector< boosted::shared_ptr<workshop> > workshops;
 		std::vector< boosted::shared_ptr<boosted::thread> > threads;
-		boosted::function< boosted::shared_ptr<workshop>() > workshop_builder;
+		workshop_builder_t workshop_builder;
 
 		void add_thread();
 
@@ -101,9 +102,9 @@ namespace etk {
 	  public:
 		int schedule_size;
 		
-		dispatcher(int nThreads, size_t nJobs, boosted::function< boosted::shared_ptr<workshop>() > workshop_builder);
+		dispatcher(int nThreads, size_t nJobs, workshop_builder_t workshop_builder);
 		~dispatcher();
-		void dispatch(int nThreads=-9);
+		void dispatch(int nThreads=-9, workshop_updater_t* updater=nullptr);
 		void release();
 		
 		boosted::mutex exception_mutex;
@@ -120,6 +121,7 @@ namespace etk {
 }
 
 #define USE_DISPATCH(x,threads,...) if (!(x)) {(x)=boosted::make_shared<etk::dispatcher>(threads,__VA_ARGS__);} else {} (x)->dispatch(threads)
+#define UPDATE_AND_DISPATCH(x,threads,updater,...) if (!(x)) {(x)=boosted::make_shared<etk::dispatcher>(threads,__VA_ARGS__);} else {} (x)->dispatch(threads, updater)
 
 
 #endif // __TOOLBOX_WORKSHOPS__

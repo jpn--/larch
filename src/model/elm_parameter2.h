@@ -46,6 +46,7 @@ namespace elm {
 		
 	protected:
 		std::string freedom;
+		size_t freedom_slot;
 		// Each parametex is a transform of a freedom.  The most basic transform is 
 		// equals.  Gradients and values both get transformed.
 	public:

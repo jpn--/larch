@@ -388,13 +388,7 @@ void elm::Model2::_pull_graph_from_db()
 void elm::Model2::setUp(bool and_load_data)
 {
 	
-	// MAYBE THIS IS NOT REALLY NEEDED?
-//	if (is_provisioned()!=1) {
-//		OOPS("data not provisioned");
-//	}
-
-//	BUGGER(msg) << "Setting up the model...";
-	if (_is_setUp>=2 || (_is_setUp>=1 && !and_load_data)) {
+	if (_is_setUp>=1) {
 		BUGGER(msg) << "The model is already set up.";
 		return;
 	}
@@ -403,8 +397,8 @@ void elm::Model2::setUp(bool and_load_data)
 
 	if (!option.suspend_xylem_rebuild) _pull_graph_from_db();
 
-	if (Data_UtilityCE.active()) {
-		// Data_UtilityCE is only currently compatible with the full NGEV code.
+	if (Data_UtilityCE_manual.active()) {
+		// Data_UtilityCE_manual is only currently compatible with the full NGEV code.
 		features |= MODELFEATURES_NESTING;
 		features |= MODELFEATURES_ALLOCATION;
 	}
@@ -472,7 +466,6 @@ void elm::Model2::setUp(bool and_load_data)
 	BUGGER(msg) << "Params_UtilityCO \n" << Params_UtilityCO.__str__();
 	
 	_is_setUp = 1;
-	if (and_load_data) _is_setUp = 2;
 
 	
 }
@@ -495,11 +488,37 @@ void elm::Model2::tearDown()
 	clear_cache();
 	
 	CaseLogLike.destroy();
-	Data_UtilityCE.clear();
+	Data_UtilityCE_manual.clear();
+	
+	Params_UtilityCA  .clear();
+	Params_UtilityCO  .clear();
+	Params_SamplingCA .clear();
+	Params_SamplingCO .clear();
+	Params_QuantityCA .clear();
+	Params_QuantLogSum.clear();
+	Params_LogSum     .clear();
+	Params_Edges      .clear();
+
 }
 
 
 
+void elm::Model2::unprovision()
+{
+	Data_UtilityCA.reset();
+	Data_UtilityCO.reset();
+	Data_SamplingCA.reset();
+	Data_SamplingCO.reset();
+	Data_Allocation.reset();
+	Data_QuantityCA.reset();
+//	Data_QuantLogSum.reset();
+//	Data_LogSum.reset();
+	
+	Data_Choice.reset();
+	Data_Weight.reset();
+	Data_Avail.reset();
+
+}
 
 
 

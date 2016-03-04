@@ -32,7 +32,8 @@ using namespace std;
 elm::parametex::parametex(const string& f, elm::ParameterList* mod) // constructor
 : freedom (f)
 , mdl (mod)
-{ }
+, freedom_slot (mod ? mod->FNames[f] : -1)
+{  }
 
 double elm::parametex::pullvalue(const double* pullSource) const 
 {
@@ -52,7 +53,7 @@ std::string elm::parametex::print() const
 	ret << "Freedom: " << std::setw(20) << std::left << freedom ;
 	ret << "Parameter: "<< std::setw(12) << std::left << "Default";
 	if (mdl) {
-		ret << "Freedom Slot: "<<mdl->FNames[freedom] << "\n";
+		ret << "Freedom Slot: "<<freedom_slot << "\n";
 	} else {
 		ret << "Freedom Slot: n/a\n";
 	}
@@ -115,12 +116,12 @@ elm::parametex_equal::parametex_equal(const string& f, elm::ParameterList* mod) 
 
 double elm::parametex_equal::pullvalue(const double* pullSource) const
 {
-	if (mdl) return pullSource[mdl->FNames[freedom]];
+	if (mdl) return pullSource[freedom_slot];
 	return elm::parametex::pullvalue(pullSource);
 }
 void elm::parametex_equal::pushvalue(double* pushDest, const double& q) const
 {
-	if (mdl)  pushDest[mdl->FNames[freedom]] += q;
+	if (mdl)  pushDest[freedom_slot] += q;
 }
 
 std::string elm::parametex_equal::print() const
@@ -129,7 +130,7 @@ std::string elm::parametex_equal::print() const
 	ret << "Freedom: " << std::setw(20) << std::left << freedom ;
 	ret << "Parameter: "<< std::setw(12) << std::left << "Equal";
 	if (mdl) {
-		ret << "Freedom Slot: "<<mdl->FNames[freedom] << "\n";
+		ret << "Freedom Slot: "<<freedom_slot << "\n";
 	} else {
 		ret << "Freedom Slot: n/a\n";
 	}
@@ -158,13 +159,13 @@ elm::parametex_scale::parametex_scale(const string& f, elm::ParameterList* mod, 
 
 double elm::parametex_scale::pullvalue(const double* pullSource) const
 {
-	if (mdl) return (_multiplier * pullSource[mdl->FNames[freedom]]);
+	if (mdl) return (_multiplier * pullSource[freedom_slot]);
 	return elm::parametex::pullvalue(pullSource);
 }
 
 void elm::parametex_scale::pushvalue(double* pushDest, const double& q) const
 {
-	if (mdl)  pushDest[mdl->FNames[freedom]] += (q * _multiplier);
+	if (mdl)  pushDest[freedom_slot] += (q * _multiplier);
 }
 
 std::string elm::parametex_scale::print() const
@@ -173,7 +174,7 @@ std::string elm::parametex_scale::print() const
 	ret << "Freedom: " << std::setw(20) << std::left << freedom ;
 	ret << "Parameter: "<< std::setw(12) << std::left << "Scale "<< _multiplier;
 	if (mdl) {
-		ret << "Freedom Slot: "<<mdl->FNames[freedom] << "\n";
+		ret << "Freedom Slot: "<<freedom_slot << "\n";
 	} else {
 		ret << "Freedom Slot: n/a\n";
 	}
@@ -184,7 +185,7 @@ std::string elm::parametex_scale::print() const
 	ret << "Freedom: " << freedom << "\n";
 	ret << "Parameter: Scale "<<_multiplier<<"\n";
 	if (mdl) {
-		ret << "Freedom Slot: "<<mdl->FNames[freedom] << "\n";
+		ret << "Freedom Slot: "<<freedom_slot << "\n";
 	} else {
 		ret << "Freedom Slot: n/a\n";
 	}

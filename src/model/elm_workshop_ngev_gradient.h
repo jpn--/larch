@@ -95,6 +95,8 @@ public:
 	etk::symmetric_matrix* _Bhhh;
 	etk::ndarray* _GCurrentCasewise;
 	boosted::mutex* _lock;
+
+	etk::ndarray* export_dProb;
 	
 	int threadnumber;
 	etk::logging_service* msg_;
@@ -126,6 +128,31 @@ public:
 	 , etk::ndarray* GCurrentCasewise
 	 , etk::symmetric_matrix* Bhhh
 	 , etk::logging_service* msgr
+	 , etk::ndarray* export_dProb
+	 , boosted::mutex* use_lock
+	 );
+
+	void rebuild_local_data(
+	   const unsigned&   dF
+	 , const unsigned&   nNodes
+	 , elm::ca_co_packet UtilPacket
+	 , const elm::darray_export_map* UtilCEmap
+	 , elm::ca_co_packet AllocPacket
+	 , elm::ca_co_packet SampPacket
+	 , elm::ca_co_packet QuantPacket
+	 , const paramArray& Params_LogSum
+	 , elm::darray_ptr     Data_Choice
+	 , elm::darray_ptr     Data_Weight
+	 , const etk::memarray* AdjProbability
+	 , const etk::memarray* Probability
+	 , const etk::memarray* Cond_Prob
+	 , const VAS_System* Xylem
+	 , etk::memarray* GCurrent
+	 , etk::ndarray* GCurrentCasewise
+	 , etk::symmetric_matrix* Bhhh
+	 , etk::logging_service* msgr
+	 , etk::ndarray* export_dProb
+	 , boosted::mutex* use_lock
 	 );
 	
 	virtual ~workshop_ngev_gradient();
@@ -144,6 +171,7 @@ public:
 	virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);	
 };
 
+typedef std::function< void(std::shared_ptr<workshop_ngev_gradient>) >    workshop_ngev_gradient_updater_t;
 
 
 }

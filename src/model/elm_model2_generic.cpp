@@ -34,7 +34,7 @@ using namespace std;
 
 elm::Model2::Model2()
 : _Fount(NULL)
-, Data_UtilityCE ()
+, Data_UtilityCE_manual ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -74,7 +74,7 @@ elm::Model2::Model2()
 
 elm::Model2::Model2(elm::Fountain& datafile)
 : _Fount(&datafile)
-, Data_UtilityCE ()
+, Data_UtilityCE_manual ()
 , Data_UtilityCA  (nullptr)
 , Data_UtilityCO  (nullptr)
 , Data_SamplingCA (nullptr)
@@ -1538,37 +1538,6 @@ double elm::Model2::bhhh_tolerance_nocache(const std::vector<double>& v)
 }
 
 
-//double elm::Model2::loglike_cached() {
-//	setUp();
-//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//	_parameter_update();
-//
-//	double cached_ll = -INF;
-//	const double* FCurrent_ptr = FCurrent.ptr(0);
-//	size_t FCurrent_size = FCurrent.size();
-//	if (FCurrent_size && _cached_results.read_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), cached_ll)) {
-//		return cached_ll;
-//	} else {
-//		OOPS_CACHE("there is no cached value for loglike at the current parameters");
-//	}
-//	
-//}
-
-
-//double elm::Model2::loglike_nocache() {
-//	
-//	double x (-INF);
-//	const double* FCurrent_ptr = FCurrent.ptr();
-//	size_t FCurrent_size = FCurrent.size();
-//	x = objective();
-//	if (isNan(x)) {
-//		x = -INF;
-//	}
-//	_cached_results.set_cached_loglike(elm::array_compare(FCurrent_ptr,FCurrent_size), x);
-//	
-//	return x;
-//	
-//}
 
 double elm::Model2::loglike() {
 	
@@ -1584,56 +1553,9 @@ double elm::Model2::loglike() {
 	
 	return x;
 	
-//	try {
-//		return loglike_cached();
-//	} catch (etk::LarchCacheError) {
-//		return loglike_nocache();
-//	}
 	
 }
 
-//double elm::Model2::loglike_cached(std::vector<double> v) {
-//	double cached_ll = -INF;
-//	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
-//		return cached_ll;
-//	} else {
-//		OOPS_CACHE("there is no cached value for loglike at the given parameters");
-//	}
-//}
-//
-//double elm::Model2::loglike_nocache(std::vector<double> v) {
-//	setUp();
-//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//	_parameter_update();
-//	_parameter_push(v);
-//	double x = objective();
-//	if (isNan(x)) {
-//		x = -INF;
-//	}
-//	_cached_results.set_cached_loglike(elm::array_compare(v), x);
-//	return x;
-//}
-//
-//double elm::Model2::loglike(std::vector<double> v) {
-//	
-//	double cached_ll = NAN;
-//	if (_cached_results.read_cached_loglike(elm::array_compare(v), cached_ll)) {
-//		return cached_ll;
-//	} else {
-//
-//	}
-//	
-//	setUp();
-//	//if (!$self->_is_setUp) OOPS("Model is not setup, try calling setUp() first.");
-//	_parameter_update();
-//	_parameter_push(v);
-//	double x = objective();
-//	if (isNan(x)) {
-//		x = -INF;
-//	}
-//	_cached_results.set_cached_loglike(elm::array_compare(v), x);
-//	return x;
-//}
 
 std::shared_ptr<etk::ndarray> elm::Model2::loglike_casewise()
 {
@@ -1721,6 +1643,12 @@ void elm::Model2::_setweakself(PyObject* ref_to_self)
 	// do not increment or decrement refcounts on old or new values.
 	weakself = ref_to_self;
 }
+
+void elm::Model2::_force_feed(int forced_features)
+{
+	features |= forced_features;
+}
+
 
 
 etk::symmetric_matrix* elm::Model2::_get_hessian_array()

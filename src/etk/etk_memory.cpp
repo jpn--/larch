@@ -441,10 +441,12 @@ memarray_raw::~memarray_raw()
 
 void memarray_raw::resize(const unsigned& r, const unsigned& c, const unsigned& d)
 {
-	puddle::resize(r*c*d);
-	rows=r;
-	cols=c;
-	deps=d;
+	if ((rows!=r)||(cols!=c)||(deps!=d)) {
+		puddle::resize(r*c*d);
+		rows=r;
+		cols=c;
+		deps=d;
+	}
 }
 
 

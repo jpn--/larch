@@ -221,7 +221,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 	return boosted::make_shared<workshop_ngev_gradient>(  dF()
 									 , nNodes
 									 , utility_packet()
-									 , &Data_UtilityCE
+									 , &Data_UtilityCE_manual
 									 , allocation_packet()
 									 , sampling_packet()
 									 , quantity_packet()
@@ -236,6 +236,8 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 									 , nullptr
 									 , &Bhhh
 									 , &msg
+									 , nullptr
+									 , nullptr
 									 );
 }
 
@@ -260,7 +262,7 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 			(  dF()
 			 , nNodes
 			 , utility_packet()
-			 , &Data_UtilityCE
+			 , &Data_UtilityCE_manual
 			 , allocation_packet()
 			 , sampling_packet()
 			 , quantity_packet()
@@ -275,6 +277,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 			 , &*gradient_casewise
 			 , &Bhhh
 			 , &msg
+			 , nullptr
+			 , &local_lock
 			 );
 
 	w.work(0, nCases, &local_lock);
@@ -285,6 +289,105 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 }
 
 
+std::shared_ptr<etk::ndarray> elm::Model2::_ngev_d_prob()
+{
+	periodic Sup (5);
+	BUGGER(msg)<< "Beginning NGEV dProb Evaluation" ;
+	_setUp_NGEV();
+	freshen();
+	GCurrent.initialize(0.0);
+	Bhhh.initialize(0.0);
+	
+	std::shared_ptr<ndarray> dPr = make_shared<ndarray> (nCases, nNodes, dF());
+	
+	boosted::mutex local_lock;
+
+
+	workshop_builder_t workshop_builder =
+		[&](){return std::make_shared<workshop_ngev_gradient>(
+		       dF()
+			 , nNodes
+			 , utility_packet()
+			 , &Data_UtilityCE_manual
+			 , allocation_packet()
+			 , sampling_packet()
+			 , quantity_packet()
+			 , Params_LogSum
+			 , Data_Choice
+			 , Data_Weight_active()
+			 , &AdjProbability
+			 , &Probability
+			 , &Cond_Prob
+			 , &Xylem
+			 , &GCurrent
+			 , nullptr
+			 , &Bhhh
+			 , &msg
+			 , &*dPr
+			 , &local_lock
+			 );};
+
+	workshop_updater_t workshop_updater = [&](std::shared_ptr<workshop> w)
+	{
+		workshop_ngev_gradient* ww = dynamic_cast<workshop_ngev_gradient*>(&*w);
+		ww->rebuild_local_data(
+		       dF()
+			 , nNodes
+			 , utility_packet()
+			 , &Data_UtilityCE_manual
+			 , allocation_packet()
+			 , sampling_packet()
+			 , quantity_packet()
+			 , Params_LogSum
+			 , Data_Choice
+			 , Data_Weight_active()
+			 , &AdjProbability
+			 , &Probability
+			 , &Cond_Prob
+			 , &Xylem
+			 , &GCurrent
+			 , nullptr
+			 , &Bhhh
+			 , &msg
+			 , &*dPr
+			 , &local_lock
+			 );
+	};
+
+	
+	UPDATE_AND_DISPATCH(gradient_dispatcher,option.threads, &workshop_updater, nCases, workshop_builder);
+
+
+	
+//	workshop_ngev_gradient w
+//			(  dF()
+//			 , nNodes
+//			 , utility_packet()
+//			 , &Data_UtilityCE_manual
+//			 , allocation_packet()
+//			 , sampling_packet()
+//			 , quantity_packet()
+//			 , Params_LogSum
+//			 , Data_Choice
+//			 , Data_Weight_active()
+//			 , &AdjProbability
+//			 , &Probability
+//			 , &Cond_Prob
+//			 , &Xylem
+//			 , &GCurrent
+//			 , nullptr
+//			 , &Bhhh
+//			 , &msg
+//			 , &*dPr
+//			 , &local_lock
+//			 );
+//
+//	w.work(0, nCases, &local_lock);
+
+	BUGGER(msg)<< "End NGEV dProb Evaluation" ;
+	
+	return dPr;
+}
 
 
 
@@ -635,21 +738,10 @@ void elm::Model2::ngev_gradient()
 	//nThreads=1; /* there may be a bug in the threading */
 	BUGGER(msg)<< "Using "<< nThreads <<" threads" ;
 	
-//	if (nThreads >= 1 && _ELM_USE_THREADS_) {
-
-		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
-			boosted::bind(&elm::Model2::make_shared_workshop_ngev_gradient, this);
-		USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
-		
-//	} else {
-//
-//		boosted::shared_ptr<workshop> local_grad_workshop;
-//		if (!local_grad_workshop) {
-//			local_grad_workshop = make_shared_workshop_ngev_gradient ();
-//		}
-//		local_grad_workshop->work(0, nCases, nullptr);
-//
-//	}
+	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
+		boosted::bind(&elm::Model2::make_shared_workshop_ngev_gradient, this);
+	USE_DISPATCH(gradient_dispatcher,option.threads, nCases, workshop_builder);
+	
 	BUGGER(msg)<< "End NGEV Gradient Evaluation" ;
 
 	std::ostringstream ret;

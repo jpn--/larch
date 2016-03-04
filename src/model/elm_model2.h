@@ -142,6 +142,8 @@ namespace elm {
 	public:		
 		unsigned _nCases_recall;
 
+		void _force_feed(int forced_features);
+
 #ifndef SWIG
 		
 		
@@ -261,7 +263,7 @@ namespace elm {
 		const elm::darray* Data(const std::string& label);
 		elm::darray* DataEdit(const std::string& label);
 
-		elm::darray_export_map Data_UtilityCE;
+		elm::darray_export_map Data_UtilityCE_manual;
 		elm::darray_export_map Data_UtilityCE_builtin;
 		
 
@@ -296,15 +298,6 @@ namespace elm {
 		
 		inline elm::darray_ptr Data_Weight_active() {return (Data_Weight_rescaled ? Data_Weight_rescaled : Data_Weight);}
 
-
-//		elm::darray_ptr Darray_UtilityCA;
-//		elm::darray_ptr Darray_UtilityCO;
-//		elm::darray_ptr Darray_SamplingCA;
-//		elm::darray_ptr Darray_SamplingCO;
-//		
-//		elm::darray_ptr Darray_Choice;
-//		elm::darray_ptr Darray_Weight;
-//		elm::darray_ptr Darray_Avail;
 		
 	
 	public:
@@ -415,6 +408,8 @@ namespace elm {
 
 		std::shared_ptr<etk::ndarray> _mnl_gradient_full_casewise();
 		std::shared_ptr<etk::ndarray> _ngev_gradient_full_casewise();
+
+		std::shared_ptr<etk::ndarray> _ngev_d_prob();
 		
 
 #ifndef SWIG
@@ -467,8 +462,13 @@ namespace elm {
 //		void case_gradient_mnl(const unsigned& c);
 //		void case_gradient_mnl_multichoice(const unsigned& c);
 		double accumulate_log_likelihood() /*const*/;
+
+#endif // ndef SWIG
 		
-	private:
+	public:
+		double log_likelihood_from_prob(etk::ndarray* probarray);
+
+#ifndef SWIG
 		
 		
 //////// MARK: MODEL OPTIONS /////////////////////////////////////////////////////////
@@ -812,6 +812,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		std::string setUpMessage;
 		
 		virtual void tearDown();
+		void unprovision();
 
 		std::string title;
 

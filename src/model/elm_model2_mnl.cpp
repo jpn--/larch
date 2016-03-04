@@ -722,7 +722,7 @@ void elm::Model2::mnl_probability()
 etk::ndarray* elm::Model2::probability(etk::ndarray* params)
 {
 
-	if (_is_setUp<2) setUp();
+	if (_is_setUp<1) setUp();
 
 	if (!params) {
 		_parameter_update();
@@ -785,6 +785,23 @@ boosted::shared_ptr<etk::workshop> elm::Model2::make_shared_workshop_accumulate_
 {
 	return boosted::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
 		Data_Choice, Data_Weight_active(), &accumulate_LogL, nullptr, option.mute_nan_warnings, &msg);
+}
+
+
+double elm::Model2::log_likelihood_from_prob(ndarray* probarray)
+{
+	accumulate_LogL = 0.0;
+
+	PrToAccum = probarray;
+
+	std::function<std::shared_ptr<workshop> ()> workshop_builder =
+		[&](){return std::make_shared<loglike_w>(&PrToAccum, Xylem.n_elemental(),
+		Data_Choice, Data_Weight_active(), &accumulate_LogL, nullptr, option.mute_nan_warnings, &msg);};
+
+	USE_DISPATCH(loglike_dispatcher,option.threads, nCases, workshop_builder);
+	
+	return accumulate_LogL;
+
 }
 
 double elm::Model2::accumulate_log_likelihood() /*const*/

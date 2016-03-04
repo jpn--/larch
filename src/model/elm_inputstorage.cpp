@@ -139,7 +139,18 @@ elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
 std::string elm::ComponentList::__repr__() const
 {
 	std::ostringstream x;
-	x << "<LinearFunction with length "<< size() <<">";
+	x << "<LinearFunction with length "<< size() <<">\n";
+
+	bool plus = false;
+	for (auto i=begin(); i!=end(); i++) {
+		if (plus) {
+			x << "\n  = ";
+		} else {
+			x << "\n  + ";
+		}
+		x << i->__repr__();
+		plus = true;
+	}
 	return x.str();
 }
 
@@ -516,6 +527,18 @@ size_t elm::LinearCOBundle_1::metasize() const {
 
 std::string elm::LinearCOBundle_1::__str__() const {
 	return "<LinearCOBundle_1>";
+}
+
+std::string elm::LinearCOBundle_1::__repr__() const {
+	std::ostringstream x;
+
+	x << "<LinearCOBundle_1>";
+	
+	for (auto iter=begin(); iter!=end(); iter++) {
+		x << "\n ["<<iter->first<<"] = "<<iter->second.__repr__();
+	}
+
+	return x.str();
 }
 
 void elm::LinearCOBundle_1::_call (const elm::cellcode& altcode,

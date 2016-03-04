@@ -1460,7 +1460,14 @@ void symmetric_matrix::resize(const int& r)
 
 void symmetric_matrix::resize(const int& r,const int& c)
 {
-	quick_new(NPY_DOUBLE, "SymmetricArray", r,c);
+	if (!pool
+		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
+		||	ndim() != 2
+		||  size1()!=r
+		||  size2()!=c
+		) {
+		quick_new(NPY_DOUBLE, "SymmetricArray", r,c);
+	}
 }
 
 void symmetric_matrix::resize(const int& r,const int& c,const int& s)

@@ -389,6 +389,8 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
  , etk::ndarray*  GCurrentCasewise
  , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
+ , etk::ndarray* export_dProb
+ , boosted::mutex* use_lock
 )
 : dF         (dF)
 , nNodes     (nNodes)
@@ -427,11 +429,78 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , _GCurrent(GCurrent)
 , _Bhhh(Bhhh)
 , _GCurrentCasewise(GCurrentCasewise)
-, _lock(nullptr)
+, _lock(use_lock)
 , msg_ (msgr)
+, export_dProb(export_dProb)
 {
 }
 
+void elm::workshop_ngev_gradient::rebuild_local_data(
+	const unsigned&   dF
+ ,	const unsigned&   nNodes
+ ,  elm::ca_co_packet UtilPK
+ , const elm::darray_export_map* UtilCEmap
+ , elm::ca_co_packet AllocPK
+ , elm::ca_co_packet SampPK
+ , elm::ca_co_packet QuantPK
+ , const paramArray& Params_LogSum
+ , elm::darray_ptr     Data_Choice
+ , elm::darray_ptr     Data_Weight
+ , const etk::memarray* AdjProbability
+ , const etk::memarray* Probability
+ , const etk::memarray* Cond_Prob
+ , const VAS_System* Xylem
+ , etk::memarray* GCurrent
+ , etk::ndarray*  GCurrentCasewise
+ , etk::symmetric_matrix* Bhhh
+ , etk::logging_service* msgr
+ , etk::ndarray* export_dProb
+ , boosted::mutex* use_lock
+)
+{
+	this->dF         =dF;
+	this->nNodes     =nNodes;
+	this->nCA =UtilPK.Params_CA->length();
+	this->nCO =UtilPK.Params_CO->length();
+	this->nMU =Params_LogSum.length();
+	this->nSA =SampPK.Params_CA->length();
+	this->nSO =SampPK.Params_CO->length();
+	this->nAO =AllocPK.Params_CO->length();
+	this->nQA =QuantPK.Params_CA->length();
+	this->nQL =0;
+	this->nPar=nCA+nCO+nMU+nSA+nSO+nAO+nQA+nQL;
+	
+	this->UtilPacket   =UtilPK;
+	this->UtilityCE_map=UtilCEmap;
+	this->AllocPacket  =AllocPK;
+	this->SampPacket   =SampPK;
+	this->QuantPacket  =QuantPK;
+	
+	this->dUtil        .resize(nNodes,nPar);
+	this->dProb        .resize(nNodes,nPar);
+	this->dSampWgt     .resize(nNodes,nSA+nSO);
+	this->dAdjProb     .resize(nNodes,nPar);
+	this->Workspace       .resize(nPar);
+	this->GradT_Fused     .resize(nPar);
+	this->CaseGrad        .resize(dF);
+	this->workshopBHHH    .resize(dF,dF);
+	this->workshopGCurrent.resize(dF);
+	
+	this->Params_LogSum   =(&Params_LogSum);
+	this->Data_Choice     =(Data_Choice);
+	this->Data_Weight     =(Data_Weight);
+	this->_AdjProbability =(AdjProbability );
+	this->_Probability=(Probability );
+	this->_Quantity   =(QuantPK.Outcome  );
+	this->_Cond_Prob  =( Cond_Prob);
+	this->_Xylem     =(Xylem);
+	this->_GCurrent=(GCurrent);
+	this->_Bhhh=(Bhhh);
+	this->_GCurrentCasewise=(GCurrentCasewise);
+	this->_lock=(use_lock);
+	this->msg_ =(msgr);
+	this->export_dProb=(export_dProb);
+}
 
 
 
@@ -470,6 +539,26 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 
 		case_dUtility_dFusedParameters(c);
 		case_dProbability_dFusedParameters(c);
+		
+		if (export_dProb) {
+			if (_lock) {
+//				std::lock_guard<std::mutex> lock_while_in_shope(*_lock);  //maybe not needed? every thread exports to its own places...
+				for (size_t a=0; a<nNodes; a++) {
+					double* import_loc = dProb.ptr(a);
+					double* export_loc = export_dProb->ptr(c,a);
+					elm::push_to_freedoms2(*UtilPacket.Params_CA  , import_loc          , export_loc);
+					elm::push_to_freedoms2(*UtilPacket.Params_CO  , import_loc+nCA    , export_loc);
+					elm::push_to_freedoms2(*Params_LogSum         , import_loc+offset_mu()         , export_loc);
+					elm::push_to_freedoms2(*SampPacket.Params_CA  , import_loc+offset_sampadj()    , export_loc);
+					elm::push_to_freedoms2(*SampPacket.Params_CO  , import_loc+offset_sampadj()+nSA, export_loc);
+					elm::push_to_freedoms2(*AllocPacket.Params_CO , import_loc+offset_alloc(), export_loc);
+					elm::push_to_freedoms2(*QuantPacket.Params_CA , import_loc+offset_quant(), export_loc);
+				}
+			} else {
+				OOPS("No lock in workshop_ngev_gradient_send");
+			}
+			continue;
+		}
 		
 		if (SampPacket.relevant()) {
 			case_dSamplingFactor_dFusedParameters(c);
