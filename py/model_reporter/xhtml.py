@@ -44,21 +44,23 @@ class XhtmlModelReporter():
 		
 		"""
 
+		if 'cats' in format:
+			cats = format['cats']
 
 		if cats=='*' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES']
+			cats=['title','params','LL','nesting_tree','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options']
 		elif cats=='*':
-			cats=['title','params','LL',               'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES']
+			cats=['title','params','LL',               'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options']
 
 		if cats=='-' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','latest','NOTES']
+			cats=['title','params','LL','nesting_tree','latest','NOTES','options']
 		elif cats=='-':
-			cats=['title','params','LL',               'latest','NOTES']
+			cats=['title','params','LL',               'latest','NOTES','options']
 
 		if cats=='D' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','queryinfo','UTILITYSPEC',]
+			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','options','queryinfo','UTILITYSPEC',]
 		elif cats=='D':
-			cats=['title','params','LL',                        'latest','NOTES','queryinfo','UTILITYSPEC',]
+			cats=['title','params','LL',                        'latest','NOTES','options','queryinfo','UTILITYSPEC',]
 
 		# make all formatting keys uppercase
 		existing_format_keys = list(format.keys())
@@ -1120,6 +1122,18 @@ class XhtmlModelReporter():
 				x.start("p", {'class':'note'})
 				x.data(note)
 				x.end("p")
+		return x.close()
+
+	def xhtml_options(self,**format):
+		x = XML_Builder("div", {'class':"options"})
+		x.h2("Options", anchor=1)
+		with x.block("table"):
+			for opt in sorted(dir(self.option)):
+				if opt[0]=="_" or opt in ('this','thisown','copy'):
+					continue
+				with x.block("tr"):
+					x.td(opt)
+					x.td(str(self.option[opt]))
 		return x.close()
 
 	def xhtml_queryinfo(self,**format):

@@ -36,6 +36,15 @@ class Model(Model2, ModelReporter):
 		super().__init__(*args, **kwargs)
 		self._cached_results = function_cache()
 		self._setweakself(self)
+		if self.option.author == "Chuck Finley":
+			try:
+				import getpass
+				auth = getpass.getuser()
+				if auth:
+					self.option.author = auth
+			except:
+				pass
+
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance
