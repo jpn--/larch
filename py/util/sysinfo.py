@@ -1,4 +1,4 @@
-import platform, subprocess, re, resource
+import platform, subprocess, re
 
 def get_processor_name():
 	"""Get a descriptive name of the CPU on this computer"""
@@ -28,7 +28,7 @@ def get_peak_memory_usage():
 		try:
 			import resource
 			mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-		except ImportError:
+		except:
 			mem = None
 
 	if mem is None:
@@ -38,7 +38,7 @@ def get_peak_memory_usage():
 			import psutil
 			process = psutil.Process(os.getpid())
 			mem = process.memory_info_ex().peak_wset
-		except ImportError:
+		except:
 			mem = None
 
 	if mem is None:
