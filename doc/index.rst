@@ -8,7 +8,7 @@
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/released-04%20March%202016-blue.svg
+.. image:: https://img.shields.io/badge/released-07%20March%202016-blue.svg
     :target: https://pypi.python.org/pypi/larch
     :class: statusbadge
 
