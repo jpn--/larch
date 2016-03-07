@@ -15,8 +15,35 @@ def get_processor_name():
 				return re.sub( ".*model name.*:", "", line,1)
 	return ""
 
+
+
+
+
+
 def get_peak_memory_usage():
-	mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+	mem = None
+
+	if mem is None:
+		# unix
+		try:
+			import resource
+			mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+		except ImportError:
+			mem = None
+
+	if mem is None:
+		# windows
+		try:
+			import os
+			import psutil
+			process = psutil.Process(os.getpid())
+			mem = process.memory_info_ex().peak_wset
+		except ImportError:
+			mem = None
+
+	if mem is None:
+		return "unable to get peak memory usage, must have resource or psutil module installed"
+
 	if mem > 2.0*2**30:
 		return str(mem/2**30) + " GiB"
 	return str(mem/2**20) + " MiB"

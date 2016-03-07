@@ -549,14 +549,11 @@ class XhtmlModelReporter():
 					x.td("Installed Memory")
 					x.td("{0}".format(mem_size,**format))
 			# peak memory usage
-			try:
-				from ..util.sysinfo import get_peak_memory_usage
-				peak = get_peak_memory_usage()
-				with x.tr_:
-					x.td("Peak Memory Usage")
-					x.td("{0}".format(peak,**format))
-			except:
-				pass
+			from ..util.sysinfo import get_peak_memory_usage
+			peak = get_peak_memory_usage()
+			with x.tr_:
+				x.td("Peak Memory Usage")
+				x.td("{0}".format(peak,**format))
 		return x.close()
 
 	def xhtml_data(self,**format):
