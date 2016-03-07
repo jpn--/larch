@@ -250,7 +250,7 @@ else:
 							"numpy >= 1.10",
 							"scipy >= 0.14.0",
 							"pandas >= 0.14.1",
-							"tables >= 3.2.3"
+							"tables >= 3.2.2",
 						],
 		  extras_require = {
 			'docx':  ["python-docx >= 0.8.5",],
