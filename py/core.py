@@ -3754,6 +3754,8 @@ sherpa_result_swigregister(sherpa_result)
 class sherpa(ParameterList):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
+    _LL_current = _swig_property(_core.sherpa__LL_current_get, _core.sherpa__LL_current_set)
+    _LL_best = _swig_property(_core.sherpa__LL_best_get, _core.sherpa__LL_best_set)
     max_iterations = _swig_property(_core.sherpa_max_iterations_get, _core.sherpa_max_iterations_set)
 
     def robust_covariance_matrix(self) -> "etk::symmetric_matrix *":
@@ -3989,6 +3991,9 @@ class Model2(sherpa):
 
     def log_likelihood_from_prob(self, probarray: 'etk::ndarray *') -> "double":
         return _core.Model2_log_likelihood_from_prob(self, probarray)
+    _LL_null = _swig_property(_core.Model2__LL_null_get, _core.Model2__LL_null_set)
+    _LL_nil = _swig_property(_core.Model2__LL_nil_get, _core.Model2__LL_nil_set)
+    _LL_constants = _swig_property(_core.Model2__LL_constants_get, _core.Model2__LL_constants_set)
 
     def write_runstats_note(self, comment: 'std::string const &') -> "void":
         return _core.Model2_write_runstats_note(self, comment)

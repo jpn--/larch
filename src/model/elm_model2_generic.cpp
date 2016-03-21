@@ -1150,6 +1150,11 @@ std::string elm::Model2::save_buffer() const
 		AsPyFloat(_LL_constants) <<","<<
 		AsPyFloat(ZBest) <<
 		")\n";
+	
+	sv << "self._LL_null="<< AsPyFloat(_LL_null) <<"\n";
+	sv << "self._LL_nil="<< AsPyFloat(_LL_nil) <<"\n";
+	sv << "self._LL_constants="<< AsPyFloat(_LL_constants) <<"\n";
+	
 	sv << "self._set_estimation_run_statistics_pickle('"<< _latest_run.pickled_dictionary() <<"')\n";
 
 

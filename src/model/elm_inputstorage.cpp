@@ -139,14 +139,14 @@ elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
 std::string elm::ComponentList::__repr__() const
 {
 	std::ostringstream x;
-	x << "<LinearFunction with length "<< size() <<">\n";
+	x << "<LinearFunction with length "<< size() <<">";
 
 	bool plus = false;
 	for (auto i=begin(); i!=end(); i++) {
 		if (plus) {
-			x << "\n  = ";
-		} else {
 			x << "\n  + ";
+		} else {
+			x << "\n  = ";
 		}
 		x << i->__repr__();
 		plus = true;

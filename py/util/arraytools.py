@@ -45,6 +45,11 @@ def label_to_index(labels, arr):
 		When the lookup does not contain a set of unique values, this tool is not appropriate.
 	
 	"""
+	try:
+		if len(labels)==0:
+			return labels
+	except TypeError:
+		return labels
 	labels = numpy.asarray(labels)
 	if is_sorted_and_unique(labels):
 		return numpy.digitize(arr, labels, right=True)

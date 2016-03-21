@@ -157,10 +157,23 @@ public:
 #define status_GCurrent          0x10
 #define status_FDirectionLarge   0x20
 	std::string printStatus(int which=0x3, double total_tol=0) const;
+
+
+#endif //ndef SWIG
+
+#ifdef SWIG
+%rename(_LL_current) ZCurrent;
+%rename(_LL_best) ZBest;
+#endif //def SWIG
 	
-protected:
+public:
 	double ZCurrent;
 	double ZBest;
+
+#ifndef SWIG
+
+
+protected:
 	double ZLastTurn;
 	
 public:

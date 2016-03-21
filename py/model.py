@@ -772,7 +772,7 @@ class Model(Model2, ModelReporter):
 			else:
 				raise LarchError("Model has {} cases where the chosen alternative is unavailable".format(n_clashes))
 		m.estimate()
-		self._set_estimation_statistics(log_like_constants=m.loglike())
+		self._LL_constants = m.loglike()
 		return m
 
 	def estimate_nil_model(self):
@@ -782,7 +782,7 @@ class Model(Model2, ModelReporter):
 		for a in alts[1:]:
 			m.utility.co('0',a[0],a[1])
 		m.estimate()
-		self._set_estimation_statistics(log_like_nil=m.loglike())
+		self._LL_nil = m.loglike()
 
 	def loglike(self, *args, cached=True):
 		if len(args)>0:
@@ -1012,7 +1012,7 @@ class Model(Model2, ModelReporter):
 				pass
 		if s or True:
 			self.parameter_values(ret.x)
-			self._set_estimation_statistics( -(ret.fun) )
+			self._LL_current =  -(ret.fun) 
 		return ret
 
 	def analyze(self, reportfile=None, css=None, repair=None, est_args=None, est_tight=None, *arg, **kwargs):

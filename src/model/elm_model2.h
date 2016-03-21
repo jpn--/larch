@@ -543,9 +543,6 @@ namespace elm {
 //////// MARK: RECORDED RESULTS //////////////////////////////////////////////////////
 
 	protected:
-		double _LL_null;
-		double _LL_nil;
-		double _LL_constants;
 		runstats _latest_run;
 		
 	public:
@@ -555,6 +552,10 @@ namespace elm {
 #endif // ndef SWIG
 
 	public:
+		double _LL_null;
+		double _LL_nil;
+		double _LL_constants;
+
 		void write_runstats_note(const std::string& comment);
 		std::string read_runstats_notes() const;
 

@@ -86,7 +86,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 	if model.option.calc_null_likelihood:
 		stat.start_process('null_likelihood')
 		llnull = model.loglike_null()
-		model._set_estimation_statistics(log_like_null=llnull)
+		model._LL_null = float(llnull)
 
 	if model.option.weight_choice_rebalance:
 		stat.start_process("weight choice rebalance")
@@ -137,7 +137,9 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}):
 
 	r.stats.start_process("cleanup")
 	r.stats.number_threads = model.option.threads
-	model._set_estimation_statistics(log_like_best=ll, log_like=ll)
+	ll = float(ll)
+	model._LL_best = ll
+	model._LL_current = ll
 	r.loglike = ll
 	if model.option.calc_null_likelihood:
 		r.loglike_null = llnull

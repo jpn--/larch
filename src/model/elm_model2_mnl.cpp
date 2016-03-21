@@ -44,17 +44,17 @@ void elm::Model2::_setUp_MNL()
 {
 	INFO(msg)<< "Setting up MNL model..." ;
 	
-	if (!_fountain()) OOPS("A data fountain must be linked to this model to do this.");
+//	if (!_fountain()) OOPS("A data fountain must be linked to this model to do this.");
 	
 	// COUNTING
 	nElementals = Xylem.n_elemental();
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-	if (_fountain()->nAlts()<=0) {
-		OOPS("The number of alternatives given in the data is non-positive");
-	}
-		
+//	if (_fountain()->nAlts()<=0) {
+//		OOPS("The number of alternatives given in the data is non-positive");
+//	}
+	
 	// Allocate Memory	
 	Probability.resize(nCases,nElementals);
 	CaseLogLike.resize(nCases);

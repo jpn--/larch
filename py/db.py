@@ -280,6 +280,30 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return d
 
 	@staticmethod
+	def NewConnection(source):
+		'''Create a new DB object with a new SQLite connection to the same underlying database.
+		
+		The source connection must be sharable (i.e., have a shared cache).
+		
+		Parameters
+		----------
+		source : str
+			The source DB from which the connection will be derived.
+
+		Returns
+		-------
+		DB
+			An open connection to destination database.
+		
+		'''
+		d = DB(source.working_name)
+		try:
+			d.load_queries()
+		except apsw.SQLError:
+			pass
+		return d
+
+	@staticmethod
 	def ExampleDirectory():
 		'''Returns the directory location of the example data files.
 		
@@ -300,7 +324,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		raise LarchError("cannot locate 'data_warehouse' examples directory")
 	
 	@staticmethod
-	def Example(dataset='MTC'):
+	def Example(dataset='MTC', shared=False):
 		'''Generate an example data object in memory.
 		
 		Larch comes with a few example data sets, which are used in documentation
@@ -312,6 +336,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		----------
 		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'ITINERARY'}
 			Which example dataset should be used.
+		shared : bool
+			If True, the new copy of the database is opened with a shared cache,
+			so additional database connections can share the same in-memory data.
+			Defaults to False.
 			
 		Returns
 		-------
@@ -330,7 +358,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		  }
 		if dataset.upper() not in TEST_DATA:
 			raise LarchError("Example data set %s not found"%dataset)
-		return DB.Copy(TEST_DATA[dataset.upper()])
+		if shared:
+			return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory&cache=shared".format(dataset.lower()))
+		return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory".format(dataset.lower()))
 
 
 	@staticmethod
@@ -1250,13 +1280,13 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		import numpy
 		try:
 			cur = self.execute(command, arguments, cte=cte)
+			if n_rows is None:
+				n_rows = self.value("SELECT count(*) FROM ({})".format(command),arguments, cte=cte)
 			if n_cols is None:
 				try:
 					n_cols = len(cur.description)
 				except apsw.ExecutionCompleteError:
 					return numpy.zeros([n_rows, 0])
-			if n_rows is None:
-				n_rows = self.value("SELECT count(*) FROM ({})".format(command),arguments, cte=cte)
 			ret = numpy.zeros([n_rows, n_cols])
 			n = 0
 			for row in cur:
@@ -1460,7 +1490,11 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		# convert ids to indexes
 		result_ce_caseindex = label_to_index(caseids, ce_caseids)
 		result_ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
-		return (result_ce_caseindex, result_ce_altindex, result_ce, len(caseids), len(self.alternative_codes()))
+		try:
+			len_caseids = len(caseids)
+		except TypeError:
+			len_caseids = 0
+		return (result_ce_caseindex, result_ce_altindex, result_ce, len_caseids, len(self.alternative_codes()))
 
 
 	def array_idco(self, *vars, table=None, caseid=None, dtype='float64', sort=True, n_cases=None):
