@@ -218,7 +218,7 @@ protected:
 	etk::triangle Bhhh;
 	etk::triangle Hess;
 	etk::symmetric_matrix invHess;
-	etk::triangle invHessTemp;
+	etk::symmetric_matrix invHessTemp;
 	etk::symmetric_matrix robustCovariance;
 	etk::symmetric_matrix hessian_matrix;
 	

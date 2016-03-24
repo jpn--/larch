@@ -63,7 +63,7 @@ Then you could incorporate that table into a model report like this:
 	>>> f << report_fileinfo()
 	<larch.util.xhtml.XHTML object at ...>
 	>>> print(f.dump())
-	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Pre-Estimated Example Model</title>...</html>'
+	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>...</html>'
 
 There are a variety of xhtml components that can be used in roll your own report writing:
 

@@ -53,7 +53,7 @@ the automatic calculation of values of time for a model:
 	>>> from larch.roles import P
 	>>> VoT_cents_per_minute = P.tottime / P.totcost
 	>>> VoT_cents_per_minute.value(m)
-	10.43427702270004
+	10.434...
 	>>> print("The implied value of time is", VoT_cents_per_minute.str(m, fmt="{:.1f}¢/minute"))
 	The implied value of time is 10.4¢/minute
 	>>> VoT_dollars_per_hour = (P.tottime * 60) / (P.totcost * 100)

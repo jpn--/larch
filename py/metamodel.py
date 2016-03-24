@@ -6,13 +6,42 @@ from .linalg import general_inverse
 
 class MetaModel(Model):
 
-	def __init__(self):
+	def __init__(self, segment_descriptors=None, submodel_factory=None, args=(),):
+		"""
+		
+		Parameters
+		----------
+		segment_descriptors : iterable
+			A list or other iterable of segment descriptors.
+		submodel_factory : callable
+			This callable, when called with a segment_descriptor as the first argument,
+			and `args` as additional arguments,
+			returns a submodel object that will be used to populate the submodels dict.
+		"""
 		super().__init__()
 		self.sub_model = {}
 		self.sub_weight = {}
 		self.total_weight = 0
 		self.sub_ncases = {}
 		self.total_ncases = 0
+		if segment_descriptors is not None and submodel_factory is not None:
+			for seg_descrip in segment_descriptors:
+				submodel = self.sub_model[seg_descrip] = submodel_factory(seg_descrip, *args)
+				if submodel is None:
+					raise TypeError("submodel_factory must return a sub-model, not None")
+				for subparam in submodel:
+					self.add_parameter(subparam)
+				submodel.option.calc_std_errors = False
+				submodel.option.calc_null_likelihood = False
+				if submodel.db.nCases()==0:
+					m.sub_ncases[seg_descrip] = 0
+					m.sub_weight[seg_descrip] = 0
+					continue
+				self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
+				self.total_weight += partwgt
+				self.sub_ncases[seg_descrip] = partncase = submodel.nCases()
+				self.total_ncases += partncase
+
 
 	@property
 	def scale(self):

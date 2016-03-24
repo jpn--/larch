@@ -1,5 +1,5 @@
 
-from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError
+from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter
 from .array import SymmetricArray
 from .utilities import category, pmath, rename
 import numpy
@@ -71,14 +71,24 @@ class Model(Model2, ModelReporter):
 	def px(self, n):
 		if isinstance(n,str):
 			raise LarchError("not implemented")
-		from .core import ModelParameter
 		return ModelParameter(self, n)
 
 
 	def add_parameter(self, name, **kwargs):
+		if isinstance(name, ModelParameter):
+			mp = name
+			name = mp.name
+			kwargs['value'] = mp.value
+			kwargs['null_value'] = mp.null_value
+			kwargs['initial_value'] = mp.initial_value
+			kwargs['minimum'] = mp.minimum
+			kwargs['maximum'] = mp.maximum
+			kwargs['holdfast'] = mp.holdfast
 		if name not in self._parameter_name_index:
 			i = self._parameter_name_index[name]
 			self.resize_allocated_memory()
+		else:
+			i = self._parameter_name_index[name]
 		par = self.px(i)
 		for key,value in kwargs.items():
 			setattr(par,key,value)

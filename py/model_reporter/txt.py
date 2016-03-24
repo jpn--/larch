@@ -104,7 +104,6 @@ class TxtModelReporter():
 	def txt_param(self, **format): #report_PARAM():
 		x = ["="]
 		footer = set()
-		es = self._get_estimation_statistics()
 		x += ["Model Parameter Estimates"]
 		x += ["-"]
 		# Find max length parameter name
@@ -144,19 +143,18 @@ class TxtModelReporter():
 	# Model Estimation Statistics
 	def txt_ll(self, **format): #def report_LL():
 		x = ["="]
-		es = self._get_estimation_statistics()
 		x += ["Model Estimation Statistics"]
 		x += ["-"]
-		ll = es[0]['log_like']
+		ll = self._LL_best
 		if not math.isnan(ll):
 			x += ["Log Likelihood at Convergence     \t{0:{LL}}".format(ll,**format)]
-		llc = es[0]['log_like_constants']
+		llc = self._LL_constants
 		if not math.isnan(llc):
 			x += ["Log Likelihood at Constants       \t{0:{LL}}".format(llc,**format)]
-		llz = es[0]['log_like_null']
+		llz = self._LL_null
 		if not math.isnan(llz):
 			x += ["Log Likelihood at Null Parameters \t{0:{LL}}".format(llz,**format)]
-		ll0 = es[0]['log_like_nil']
+		ll0 = self._LL_nil
 		if not math.isnan(ll0):
 			x += ["Log Likelihood with No Model      \t{0:{LL}}".format(ll0,**format)]
 		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):

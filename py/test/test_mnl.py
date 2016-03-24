@@ -483,7 +483,7 @@ class TestMNL(ELM_TestCase):
 		self.assertEqual(m.parameter_values(), m2.parameter_values())
 		self.assertEqual(m.parameter_names(), m2.parameter_names())
 		self.assertEqual(m.root_id, m2.root_id)
-		self.assertTrue( numpy.allclose( m.covariance_matrix, m2.covariance_matrix ))
+		self.assertTrue( numpy.allclose(numpy.asarray(m.covariance_matrix),numpy.asarray(m2.covariance_matrix), equal_nan=True) )
 		self.assertNearlyEqual(m.loglike(), m2.loglike(), 12)
 
 	def test_single_row_probability(self):

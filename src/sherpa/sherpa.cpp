@@ -987,10 +987,10 @@ void sherpa::resize_allocated_memory()
 	GMotion.resize(number_of_parameters);
 	Bhhh.resize(number_of_parameters);
 	Hess.resize(number_of_parameters);
-	invHess.resize(number_of_parameters);
-	invHessTemp.resize(number_of_parameters);
-	robustCovariance.resize(number_of_parameters);
-	hessian_matrix.resize(number_of_parameters);
+	invHess.resize_nan(number_of_parameters);
+	invHessTemp.resize_nan(number_of_parameters);
+	robustCovariance.resize_nan(number_of_parameters);
+	hessian_matrix.resize_nan(number_of_parameters);
 
 }
 

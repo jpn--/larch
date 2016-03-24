@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 ================================
-81: OGEV Itinerary Choice
+203: OGEV-NL Itinerary Choice
 ================================
 
 .. testsetup:: *
@@ -10,13 +10,13 @@
 
 
 
-This example is an OGEV itinerary choice model built using the example
+This example is an multi-level OGEV-NL itinerary choice model built using the example
 itinerary choice dataset included with Larch.
 As usual, we first create the DB objects:
 
 .. testcode::
 
-	d = larch.DB.Example('ITINERARY')
+	db = larch.DB.Example('ITINERARY')
 
 Our itinerary choice data has a lot of alternatives, but they are not
 ordered or numbered in a regular way; each elemental alternative has
@@ -24,10 +24,11 @@ an arbitrary code number assigned to it, and the code numbers for one case
 are not comparable to another case. But we can renumber the alternatives in
 a manner that is more suited for our application, such that based on the code
 number we can programatically extract a few relevant features of the alternative
-that we will want to use in building our OGEV model.  Suppose for example
-that we want to test a model which has a departure time of day OGEV structure.  To assign
+that we will want to use in building our OGEV-NL model.  Suppose for example
+that we want to test a model which has a departure time of day OGEV structure with
+carriers nested inside time of day.  To assign
 each alternative into this structure, obviously we'll need to be able to easily
-identify the departure time (here we will group by hours) for each alternative.  To renumber,
+identify the departure time (here we will group by hours) and carrier for each alternative.  To renumber,
 first we will define the relevant categories and values, and establish a numbering
 system using a special object:
 
@@ -61,16 +62,23 @@ system using a special object:
 		h22 = 22
 		h23 = 23
 
+	class carriers(Enum):
+		Robin = 1
+		Cardinal = 2
+		Bluejay = 3
+		Heron = 4 
+		Other = 5
+
 	from larch.util.numbering import numbering_system
-	ns = numbering_system(departure_hours)
+	ns = numbering_system(departure_hours, carriers)
 
 Then we can use a special command on the DB object to assign new alternative
 numbers.
 
 .. testcode::
 
-	d.recode_alts(ns, 'data_ca', 'casenum', 'ogevitinerarycode',
-		'depart_time/60',
+	db.recode_alts(ns, 'data_ca', 'casenum', 'ogevitinerarycode',
+		'depart_time/60', 'MIN(carrier,5)',
 		newaltstable='ogevitinerarycodes',
 	)
 
@@ -88,7 +96,7 @@ linear-in-parameters utility function.
 
 .. testcode::
 
-	m = larch.Model(d)
+	m = larch.Model(db)
 
 	vars = [
 		"carrier=2",              
@@ -109,10 +117,26 @@ above.
 
 .. testcode::
 
-	alts = d.alternative_codes()
+	alts = db.alternative_codes()
 
 Then we can build the network by looping over various categories to define
 the nodes.
+
+.. testcode::
+
+	hour_carrier_nests = {}
+	for hour in departure_hours:
+		for carrier in carriers:
+			n = m.new_nest(hour.name+carrier.name, param_name="mu_carrier")
+			hour_carrier_nests[hour,carrier] = n
+			for a in alts:
+				if ns.code_matches_attributes(a, hour, carrier):
+					m.link(n, a)
+
+In this block, we define a set of nests by hour and carrier, and allocate the elemental alternatives into
+those nests. Note we reuse the same
+`ns` object from when we did the alternative renumbering, as it knows how to quickly extract
+the relevant attributes from the code number.
 
 
 .. testcode::
@@ -121,32 +145,20 @@ the nodes.
 		prev_hour = departure_hours((hour.value-1)%24)
 		next_hour = departure_hours((hour.value+1)%24)
 		time_nest = m.new_nest(hour.name, param_name="mu_ogev", parent=m.root_id)
-		for a in alts:
-			if ns.code_matches_attributes(a, hour):
-				m.link(time_nest, a)
-			if ns.code_matches_attributes(a, next_hour):
-				m.link(time_nest, a)
-				m.link[time_nest, a](data='1',param='PHI_next')
-			if ns.code_matches_attributes(a, prev_hour):
-				m.link(time_nest, a)
-				m.link[time_nest, a](data='1',param='PHI_prev')
+		for carrier in carriers:
+			m.link(time_nest, hour_carrier_nests[hour,carrier])
+			m.link(time_nest, hour_carrier_nests[next_hour,carrier])
+			m.link[time_nest, hour_carrier_nests[next_hour,carrier]](data='1',param='PHI_next')
+			m.link(time_nest, hour_carrier_nests[prev_hour,carrier])
+			m.link[time_nest, hour_carrier_nests[prev_hour,carrier]](data='1',param='PHI_prev')
 
-In this block, the outermost loop is over departure hour.  Within that, we define the
+In this second block, the outermost loop is over departure hour.  Within that, we define the
 previous and next hours (this is easily expandible to include multiple hours in each OGEV nest)
-and a nest to group together the three hours.  Then we loop over alternatives and link each one
-if it matches the target hour, or the next or previous hour.  We also add a PHI parameter to the
-next and previous hour alternatives, to control the allocation of the alternatives to the OGEV
-level nests.  The target hour link has no PHI parameter because it is the reference point.
+and a nest to group together the three hours.  Then we loop over carriers link the
+nests we created in the previous block, with one link to each current hour carrier nest, and
+one link to each next hour carrier nest.  We also add a PHI parameter to the second link to
+control the allocation of the hour-carrier nests to the OGEV level nests.
 
-The PHI parameters replace the ALPHA allocation parameters commonly seen in OGEV models in the
-literature, and are used to recreate the allocation parameters according to:
-
-.. math::
-
-	\alpha_i = \frac{ \exp(\phi_i \cdot Z_i) }{ \sum_j \exp(\phi_j \cdot Z_j) }
-
-where Z is potentially some :ref:`idco` data, although in the example shown here it is simply
-a constant (1).
 
 For this example, since we want it to run quickly, we'll limit the input
 data to only a few cases, and turn off the the automatic calculation of standard errors.
@@ -155,8 +167,8 @@ We'll also tell the optimization engine to enforce logsum parameter ordering con
 .. testcode::
 
 	filter = 'casenum < 20000'
-	d.queries.idca_build(filter=filter)
-	d.queries.idco_build(filter=filter)
+	db.queries.idca_build(filter=filter)
+	db.queries.idco_build(filter=filter)
 	m.option.calc_std_errors = False
 	m.option.enforce_constraints = False
 	m.option.enforce_bounds = False
@@ -167,41 +179,39 @@ use the automatic parameter constraints (most of the available algorithms cannot
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.maximize_loglike()
-			  fun: ...
-		  loglike: ...
-	 loglike_null: ...
-		  message: 'Optimization terminated successfully. ...'
-		           ...
-		  success: True
-				x: array([...])
+	>>> result = m.maximize_loglike('SLSQP', metaoptions={'ftol': 1e-08})
+	>>> result.message
+	'Optimization terminated successfully...
 
-
-	>>> print(m)
-	==============================================================================================================================
+	>>> print(m.report('txt', cats=['params'], param='< 12.3g'))
+	====================================================================================================
 	Model Parameter Estimates
-	------------------------------------------------------------------------------------------------------------------------------
+	----------------------------------------------------------------------------------------------------
 	Parameter       	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	carrier=2       	 0          	-0.208838   	 nan        	 nan        	 0          
-	carrier=3       	 0          	 0.0150558  	 nan        	 nan        	 0          
-	carrier=4       	 0          	-0.0588121  	 nan        	 nan        	 0          
-	carrier>=5      	 0          	 0.0561526  	 nan        	 nan        	 0          
-	aver_fare_hy    	 0          	-0.00228441 	 nan        	 nan        	 0          
-	aver_fare_ly    	 0          	-0.000211637	 nan        	 nan        	 0          
-	itin_num_cnxs   	 0          	-0.44135    	 nan        	 nan        	 0          
-	itin_num_directs	 0          	-0.104465   	 nan        	 nan        	 0          
-	mu_ogev         	 1          	 0.887777   	 nan        	 nan        	 1          
-	PHI_prev        	 0          	 0.0891257  	 nan        	 nan        	 0          
-	PHI_next        	 0          	 1.84926    	 nan        	 nan        	 0          
-	==============================================================================================================================
+	carrier=2       	 0          	-0.209      	 nan        	 nan        	 0          
+	carrier=3       	 0          	 0.00105    	 nan        	 nan        	 0          
+	carrier=4       	 0          	-0.0577     	 nan        	 nan        	 0          
+	carrier>=5      	 0          	 0.046      	 nan        	 nan        	 0          
+	aver_fare_hy    	 0          	-0.00231    	 nan        	 nan        	 0          
+	aver_fare_ly    	 0          	-0.000213   	 nan        	 nan        	 0          
+	itin_num_cnxs   	 0          	-0.442      	 nan        	 nan        	 0          
+	itin_num_directs	 0          	-0.108      	 nan        	 nan        	 0          
+	mu_carrier      	 1          	 0.844      	 nan        	 nan        	 1          
+	mu_ogev         	 1          	 0.922      	 nan        	 nan        	 1          
+	PHI_next        	 0          	 0.737      	 nan        	 nan        	 0          
+	PHI_prev        	 0          	 0.00259    	 nan        	 nan        	 0          
+	====================================================================================================
+
+	>>> print(m.report('txt', cats=['LL']))
+	================================================
 	Model Estimation Statistics
-	------------------------------------------------------------------------------------------------------------------------------
-	Log Likelihood at Convergence     	-6085.30
+	------------------------------------------------
+	Log Likelihood at Convergence     	-6084.54
 	Log Likelihood at Null Parameters 	-6115.43
-	------------------------------------------------------------------------------------------------------------------------------
+	------------------------------------------------
 	Rho Squared w.r.t. Null Parameters	0.005
-	==============================================================================================================================
-	...
+	================================================
+
 
 
 Don't worry that these results don't look great; we used a very tiny dataset here with a
@@ -214,5 +224,5 @@ exercise left for the reader.
 	If you want access to the model in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-estimate copy like this::
 
-		m = larch.Model.Example(81)
+		m = larch.Model.Example(203)
 

@@ -249,6 +249,7 @@ namespace etk {
 
 	// Resizing
 		void resize(const int& r);
+		void resize_nan(const int& r);
 		void resize(const int& r,const int& c);
 		void resize(const int& r,const int& c,const int& s);
 		void resize(etk::three_dim& prototype);

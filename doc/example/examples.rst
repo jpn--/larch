@@ -18,3 +18,11 @@ Examples
 	:glob:
 
 	1*
+
+
+**Itinerary Choice Sample Data**
+
+.. toctree::
+	:glob:
+
+	2*

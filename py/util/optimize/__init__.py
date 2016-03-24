@@ -74,7 +74,9 @@ def weight_choice_rebalance(model):
 		return True
 	return False
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}):
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
+	if metaoptions is not None:
+		options['options'] = metaoptions
 	stat = runstats()
 	if not model.Data_UtilityCE_manual.active():
 		stat.start_process('setup')
