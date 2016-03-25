@@ -56,13 +56,6 @@ examplefiles_glob = glob.glob(os.path.join(exampledocdir,"[0-9][0-9][0-9]_*.rst"
 
 
 examplefiles_doc = { int(os.path.basename(g)[:3]): os.path.basename(g) for g in examplefiles_glob }
-#
-#examplefiles_doc = {
-#	  1:	"001_mtc.rst",
-#	  81:	"081_itin.rst",
-#	  82:	"082_itin.rst",
-#}
-#
 
 
 

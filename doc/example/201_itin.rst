@@ -147,6 +147,19 @@ We'll also tell the optimization engine to enforce logsum parameter ordering con
 	m.option.calc_std_errors = False
 	m.option.enforce_constraints = True
 
+By default, logsum parameters created automatically by the new_nest method have min/max bounds
+set at 0.0/1.0.  But the network GEV can become numerically unstable if these parameters get too close
+to zero, especially when the dataset is small (as it is here in this example). So we can set
+a minimum value a little bit away from zero like this:
+
+.. testcode::
+
+	m['mu_los1'].minimum = 0.01
+	m['mu_carrier1'].minimum = 0.01
+	m['mu_los2'].minimum = 0.01
+	m['mu_carrier2'].minimum = 0.01
+
+
 Now it's time to run it and see what we get.  We'll use the SLSQP algorithm because it can
 use the automatic parameter constraints (most of the available algorithms cannot):
 
@@ -157,35 +170,32 @@ use the automatic parameter constraints (most of the available algorithms cannot
 	>>> result.message
 	'Optimization terminated successfully. [SLSQP]'
 
-	>>> print(m.report('txt', cats=['params'], param='< 12.3g'))
-	====================================================================================================
+	>>> print(m.report('txt', sigfigs=3))
+	=================================================================================================...
 	Model Parameter Estimates
-	----------------------------------------------------------------------------------------------------
+	-------------------------------------------------------------------------------------------------...
 	Parameter       	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	carrier=2       	 0          	-0.203      	 nan        	 nan        	 0          
-	carrier=3       	 0          	 0.0054     	 nan        	 nan        	 0          
-	carrier=4       	 0          	-0.04       	 nan        	 nan        	 0          
-	carrier>=5      	 0          	 0.0294     	 nan        	 nan        	 0          
-	aver_fare_hy    	 0          	-0.00216    	 nan        	 nan        	 0          
-	aver_fare_ly    	 0          	-0.000162   	 nan        	 nan        	 0          
-	itin_num_cnxs   	 0          	-0.477      	 nan        	 nan        	 0          
-	itin_num_directs	 0          	-0.263      	 nan        	 nan        	 0          
-	mu_los1         	 1          	 0.0505     	 nan        	 nan        	 1          
-	mu_carrier1     	 1          	 0.045      	 nan        	 nan        	 1          
-	mu_carrier2     	 1          	 1          	 nan        	 nan        	 1          
-	mu_los2         	 1          	 1          	 nan        	 nan        	 1          
-	PHI             	 0          	 1.21       	 nan        	 nan        	 0          
-	====================================================================================================
-
-	>>> print(m.report('txt', cats=['LL']))
-	================================================
+	carrier=2       	 0.0        	-0.203      	 nan        	 nan        	 0.0        
+	carrier=3       	 0.0        	 0.0054     	 nan        	 nan        	 0.0        
+	carrier=4       	 0.0        	-0.04       	 nan        	 nan        	 0.0        
+	carrier>=5      	 0.0        	 0.0294     	 nan        	 nan        	 0.0        
+	aver_fare_hy    	 0.0        	-0.00216    	 nan        	 nan        	 0.0        
+	aver_fare_ly    	 0.0        	-0.000162   	 nan        	 nan        	 0.0        
+	itin_num_cnxs   	 0.0        	-0.477      	 nan        	 nan        	 0.0        
+	itin_num_directs	 0.0        	-0.263      	 nan        	 nan        	 0.0        
+	mu_los1         	 1.0        	 0.0505     	 nan        	 nan        	 1.0        
+	mu_carrier1     	 1.0        	 0.045      	 nan        	 nan        	 1.0        
+	mu_carrier2     	 1.0        	 1.0        	 nan        	 nan        	 1.0        
+	mu_los2         	 1.0        	 1.0        	 nan        	 nan        	 1.0        
+	PHI             	 0.0        	 1.21       	 nan        	 nan        	 0.0        
+	=================================================================================================...
 	Model Estimation Statistics
-	------------------------------------------------
+	-------------------------------------------------------------------------------------------------...
 	Log Likelihood at Convergence     	-6086.89
 	Log Likelihood at Null Parameters 	-6115.43
-	------------------------------------------------
+	-------------------------------------------------------------------------------------------------...
 	Rho Squared w.r.t. Null Parameters	0.005
-	================================================
+	=================================================================================================...
 
 
 Don't worry that these results don't look great; we used a very tiny dataset here with a

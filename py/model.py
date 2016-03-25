@@ -178,6 +178,9 @@ class Model(Model2, ModelReporter):
 	parameter : str or None
 		The name of the parameter to associate with this nest.  If None, 
 		the `name` is used.
+		
+	Other Parameters
+	----------------
 	parent : int, optional
 		The code number of the parent node of the nest, for which a link
 		will automatically be created.
@@ -517,6 +520,18 @@ class Model(Model2, ModelReporter):
 			An optional label for the branch of the network that this nest is in.
 			The new code will be populated into the set at model.branches[branch].
 
+		Other Parameters
+		----------------
+		parent : int, optional
+			The code number of the parent node of the nest, for which a link
+			will automatically be created.
+		parents : list of ints, optional
+			A list of code numbers for the parent nodes of the nest, for which
+			links will automatically be created.
+		children : list of ints, optional
+			A list of code numbers for the child nodes of the nest, for which
+			links will automatically be created.
+
 		Returns
 		-------
 		int
@@ -524,7 +539,10 @@ class Model(Model2, ModelReporter):
 		
 		Notes
 		-----
-		Other keyword parameters are passed through to the :meth:`nest` creation function.
+		It may be convenient to give all of the parent and child linkages when 
+		calling this function, but it is not necessary, as linkages can be created
+		seperately later.
+		
 			
 		"""
 		if len(self.node.nodes())>0:

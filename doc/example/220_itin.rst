@@ -36,16 +36,11 @@ itinerary choice dataset included with Larch.
 
 	import larch
 	import itertools
-	import numpy
-	import os
-
 	from larch.metamodel import MetaModel
 
 	db = larch.DB.Example('ITINERARY', shared=True)
-
-	casefilter = ""
-	db.queries.idco_query = "SELECT distinct(casenum) AS caseid, 1 as weight FROM data_ca "+casefilter
-	db.queries.idca_query = "SELECT casenum AS caseid, itinerarycode AS altid, * FROM data_ca "+casefilter
+	db.queries.idco_query = "SELECT distinct(casenum) AS caseid, 1 as weight FROM data_ca "
+	db.queries.idca_query = "SELECT casenum AS caseid, itinerarycode AS altid, * FROM data_ca "
 
 
 	dow_set = [0,1]
@@ -73,7 +68,17 @@ itinerary choice dataset included with Larch.
 
 
 We can construct a MetaModel in two general ways: manually (explicitly giving every submodel), or by using a
-submodel factory function.  
+submodel factory function.  Such a function must take a segment descriptor, plus some set of other arguments,
+and return a submodel for the given segment.
+
+Here we show an example of a submodel factory function, which takes the (shared cache) db object, plus lists
+of common and segemented variables, and returns a submodel.  The db object needs to have a shared cache
+because we will use the NewConnection method of the DB class to spawn a new DB object that shares the same
+underlying database.  This lets us have several different database connections, each with its own QuerySet,
+so that each submodel can use a unique data set pulled from the master data.
+
+The advantage of using the submodel factory is that the rest of the set up of the MetaModel can be handled
+automatically.
 
 
 .. testcode::
@@ -82,18 +87,22 @@ submodel factory function.
 
 		# Create a new larch.DB based on the shared DB
 		dx = larch.DB.NewConnection(db)
+
+		# introduce a case filter to apply to the data table, to get the segment
 		casefilter = " WHERE dow=={0} AND direction=='{1}'".format(*segment_desciptor)
 		dx.queries = qry = larch.core.QuerySetTwoTable(dx)
 		qry.idco_query = "SELECT distinct casenum AS caseid, dow, direction FROM data_ca "+casefilter
 		qry.idca_query = "SELECT casenum AS caseid, itinerarycode AS altid, * FROM data_ca "+casefilter
+
+		# The rest of the QuerySet is defined as usual and is the same for all segments
 		qry.alts_query = "SELECT * FROM itinerarycodes "
 		qry.choice = 'pax_count'
 		qry.avail = '1'
 		qry.weight = '1'
+		dx.refresh_queries()
 
 		# Create a new submodel using the filtered data DB
 		submodel = larch.Model(dx)
-		submodel.db.refresh_queries()
 
 		# If the submodel has no cases, skip the rest of setting it up
 		if submodel.db.nCases()==0:
@@ -101,22 +110,20 @@ submodel factory function.
 
 		# Populate the submodel with the common parameters
 		for var in common_vars:
-			submodel.parameter(var)
 			submodel.utility.ca(var)
 
 		# Populate the submodel with the segmented parameters
 		for var in segmented_vars:
 			built_par = var+"_{}_{}".format(*segment_desciptor)
-			submodel.parameter(built_par)
 			submodel.utility.ca(var, built_par)
-
-		# Set up the submodel for use
-		submodel.option.idca_avail_ratio_floor = 0
-		submodel.setUp()
-		submodel.weight_choice_rebalance()
 
 		return submodel
 
+Thst should be all we need to create our metamodel.  Then to actually create the MetaModel object,
+we'll need to give an iterator over all the segements, the submodel factory, and a tuple with
+the arguments for the factory:
+
+.. testcode::
 
 	m = MetaModel( itertools.product(dow_set, type_set), submodel_factory, args=(db, common_vars, segmented_vars) )
 
@@ -188,20 +195,15 @@ that takes a bit of time and we're not interested in those results yet.
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.option.weight_choice_rebalance = False
+	>>> m.option.weight_choice_rebalance = True
 	>>> m.option.calc_std_errors = False
 	>>> r = m.maximize_loglike("SLSQP")
 	>>> print(r)
-			 ctol: 1.351...e-09
-		  loglike: -27540.2525...
-	 loglike_null: -27722.6710...
-		  message: 'Optimization terminated successfully per computed tolerance. [SLSQP]'
-			  nit: 48
-			niter: [('SLSQP', 48)]
-			stats: <larch.core.runstats, success in ...>
-		   status: 0
-		  success: True
-				x: array([-0.14374193,  0.00833003,  0.03251612, ...])
+	ctol: 1.351...e-09
+	loglike: -27540.2525...
+	loglike_null: -27722.6710...
+	message: 'Optimization terminated successfully per computed tolerance. [SLSQP]'
+	...
 
 	>>> print(m)
 	====================================================================================================
@@ -271,7 +273,7 @@ that takes a bit of time and we're not interested in those results yet.
 
 .. tip::
 
-	If you want access to the model in this example without worrying about assembling all the code blocks
+	If you want access to the metamodel in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-estimate copy like this::
 
 		m = larch.Model.Example(220)

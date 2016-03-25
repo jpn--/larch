@@ -3,26 +3,9 @@
 Examples
 ========
 
-**MTC Sample Data**
-
 .. toctree::
-	:glob:
 
-	0*
+	mtc
+	swissmetro
+	itinerary
 
-
-
-**Swissmetro Sample Data**
-
-.. toctree::
-	:glob:
-
-	1*
-
-
-**Itinerary Choice Sample Data**
-
-.. toctree::
-	:glob:
-
-	2*

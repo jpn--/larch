@@ -33,31 +33,66 @@ class MetaModel(Model):
 					self.add_parameter(subparam)
 				submodel.option.calc_std_errors = False
 				submodel.option.calc_null_likelihood = False
+				# TODO: currently something in the metamodel only appears to work with IDCA.  This is a bug to fix
+				submodel.option.idca_avail_ratio_floor = 0
 				if submodel.db.nCases()==0:
 					m.sub_ncases[seg_descrip] = 0
 					m.sub_weight[seg_descrip] = 0
 					continue
-				self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
-				self.total_weight += partwgt
-				self.sub_ncases[seg_descrip] = partncase = submodel.nCases()
-				self.total_ncases += partncase
+				try:
+					self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
+				except:
+					self.sub_weight[seg_descrip] = 0
+				else:
+					self.total_weight += partwgt
+				try:
+					self.sub_ncases[seg_descrip] = partncase = submodel.nCases()
+				except:
+					self.sub_ncases[seg_descrip] = 0
+				else:
+					self.total_ncases += partncase
 
 
 	@property
 	def scale(self):
 		return (1.0*self.total_weight/self.total_ncases)
 
-	def tearDown(self):
-		pass
+	def tearDown(self, *args, **kwargs):
+		for seg_descrip,submodel in self.sub_model.items():
+			submodel.tearDown(*args, **kwargs)
 
-	def setUp(self, *args):
-		pass
+	def setUp(self, *args, **kwargs):
+		self.sub_weight = {}
+		self.total_weight = 0
+		self.sub_ncases = {}
+		self.total_ncases = 0
+		for seg_descrip,submodel in self.sub_model.items():
+			submodel.setUp(*args, **kwargs)
+			submodel.provision()
+			if submodel.db.nCases()==0:
+				submodel.sub_ncases[seg_descrip] = 0
+				submodel.sub_weight[seg_descrip] = 0
+				continue
+			self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
+			self.total_weight += partwgt
+			self.sub_ncases[seg_descrip] = partncase = submodel.nCases()
+			self.total_ncases += partncase
 
+	def weight_choice_rebalance(self, *args, **kwargs):
+		self.total_weight = 0
+		any_rebalance = False
+		for seg_descrip,submodel in self.sub_model.items():
+			any_rebalance |= submodel.weight_choice_rebalance(*args, **kwargs)
+			if submodel.db.nCases()==0:
+				submodel.sub_ncases[seg_descrip] = 0
+				submodel.sub_weight[seg_descrip] = 0
+				continue
+			self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
+			self.total_weight += partwgt
+		return any_rebalance
 
 	def loglike_null(self):
 		return self.loglike(self.parameter_null_values_array)
-
-
 
 	def loglike(self, *args, cached=False):
 		fun = 0

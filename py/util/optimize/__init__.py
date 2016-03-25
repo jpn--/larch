@@ -84,6 +84,12 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 		if not model.is_provisioned() and model._ref_to_db is not None:
 			model.provision(idca_avail_ratio_floor = model.option.idca_avail_ratio_floor)
 		model.setUp(False)
+
+	from ...metamodel import MetaModel
+	if isinstance(model, MetaModel):
+		stat.start_process('setup_meta')
+		model.setUp()
+
 	x0 = model.parameter_values()
 	if model.option.calc_null_likelihood:
 		stat.start_process('null_likelihood')

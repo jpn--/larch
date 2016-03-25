@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-================================
-101: Swissmetro MNL Mode Choice
-================================
+========================================
+109: Swissmetro Nested Logit Mode Choice
+========================================
 
 .. testsetup:: *
 
@@ -11,7 +11,8 @@
 
 
 This example is a mode choice model built using the Swissmetro example dataset.
-First we create the DB and Model objects:
+First we create the DB and Model objects.  When we create the DB object, we will
+redefine the weight value:
 
 .. testcode::
 
@@ -23,7 +24,7 @@ as all; it is merely used in various output report styles.
 
 .. testcode::
 
-	m.title = "swissmetro example 01 (simple logit)"
+	m.title = "swissmetro example 09 (nested logit)"
 
 
 The swissmetro dataset, as with all Biogeme data, is only in `co` format.
@@ -39,55 +40,61 @@ The swissmetro dataset, as with all Biogeme data, is only in `co` format.
 	m.utility.co("SM_CO*(GA==0)",2,"B_COST")
 	m.utility.co("CAR_CO",3,"B_COST")
 
+
+To create a new nest, we can use the new_nest command, although we'll need to know what the
+alternative codes are for the alternatives in our dataset. To find out, we can do:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.db.alternatives()
+	[(1, 'Train'), (2, 'SM'), (3, 'Car')]
+
+
+For this example, we want to nest together the Train and Car modes into a "existing" modes nest.
+It looks like those are modes 1 and 3, so we can use the new_nest command like this:
+
+.. testcode::
+
+	m.new_nest("existing", parent=m.root_id, children=[1,3])
+
+
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.estimate()
-	<larch.core.runstats, success ...
-	>>> m.loglike()
-	-5331.252...
-	>>> m['B_TIME'].value
-	-0.01277...
-	>>> m['B_COST'].value
-	-0.01083...
-	>>> m['ASC_TRAIN'].value
-	-0.7012...
-	>>> m['ASC_CAR'].value
-	-0.1546...
-
-
-
-.. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
-
-	>>> print(m.report('txt', sigfigs=3))
+	>>> result = m.maximize_loglike()
+	>>> print(result.message)
+	Optimization terminated successfully...
+	
+	>>> print(m.report('txt', sigfigs=4))
 	=========================================================================================...
-	swissmetro example 01 (simple logit)
+	swissmetro example 09 (nested logit)
 	=========================================================================================...
 	Model Parameter Estimates
 	-----------------------------------------------------------------------------------------...
 	Parameter	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	ASC_TRAIN	 0.0        	-0.701      	 0.0549     	-12.8       	 0.0        
-	ASC_CAR  	 0.0        	-0.155      	 0.0432     	-3.58       	 0.0        
-	B_TIME   	 0.0        	-0.0128     	 0.000569   	-22.5       	 0.0        
-	B_COST   	 0.0        	-0.0108     	 0.000518   	-20.9       	 0.0        
+	ASC_TRAIN	 0.0        	-0.512      	 0.04518    	-11.33      	 0.0        
+	ASC_CAR  	 0.0        	-0.1672     	 0.03714    	-4.502      	 0.0        
+	B_TIME   	 0.0        	-0.008987   	 0.0005699  	-15.77      	 0.0        
+	B_COST   	 0.0        	-0.008567   	 0.0004627  	-18.51      	 0.0        
+	existing 	 1.0        	 0.4868     	 0.0279     	-18.39      	 1.0        
 	=========================================================================================...
 	Model Estimation Statistics
 	-----------------------------------------------------------------------------------------...
-	Log Likelihood at Convergence     	-5331.25
+	Log Likelihood at Convergence     	-5236.90
 	Log Likelihood at Null Parameters 	-6964.66
 	-----------------------------------------------------------------------------------------...
-	Rho Squared w.r.t. Null Parameters	0.235
+	Rho Squared w.r.t. Null Parameters	0.248
 	=========================================================================================...
 
 	
-
 .. tip::
 
 	If you want access to the model in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-estimate copy like this::
 
-		m = larch.Model.Example(101)
+		m = larch.Model.Example(109)
+
 

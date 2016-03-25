@@ -55,6 +55,8 @@ class TxtModelReporter():
 			each_key = each_key.upper()
 			if each_key not in format:
 				format[each_key] = each_value
+		if "SIGFIGS" in format:
+			format['PARAM'] = "< {}.{}".format(format['PARAM_W'], format['SIGFIGS'])
 
 		x = []
 		

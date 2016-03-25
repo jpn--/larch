@@ -78,9 +78,34 @@ We can then look at some of the attibutes of the imported data:
 	('1', '2', '3', '4', '5', '6')
 
 Larch automatically analyzed the data file to find variables that do not vary within
-cases, and transformed those into |idco| format variables.
+cases, and transformed those into |idco| format variables.  If you would prefer that
+Larch not do this (there are a variety of reasons why you might not want this)
+you can set the keyword argument tablename_co to none:
 
-Also, the set of all possible alternatives is deduced automatically from all the values
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> d1 = larch.DB.CSV_idca("MTCwork.csv.gz", tablename_co=None, caseid="casenum", altid="altnum", choice="chose")
+	>>> d1.variables_ca()
+	('caseid', 'altid', 'casenum', 'altnum', 'chose', 'ivtt', 'ovtt', 'tottime', 'totcost', 'hhid', 'perid', 'numalts', 'dist', 'wkzone', 'hmzone', 'rspopden', 'rsempden', 'wkpopden', 'wkempden', 'vehavdum', 'femdum', 'age', 'drlicdum', 'noncadum', 'numveh', 'hhsize', 'hhinc', 'famtype', 'hhowndum', 'numemphh', 'numadlt', 'nmlt5', 'nm5to11', 'nm12to16', 'wkccbd', 'wknccbd', 'corredis', 'vehbywrk', 'vocc', 'wgt')
+	>>> d1.variables_co()
+	('caseid',)
+	>>> d1.alternative_codes()
+	(1, 2, 3, 4, 5, 6)
+	>>> d1.alternative_names()
+	('1', '2', '3', '4', '5', '6')
+
+In this case the set of variables in the |idco| table isn't actually empty, because that
+table is actually now expressed as a special view of the single |idca| table:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> d1.queries.qry_idco()
+	'SELECT DISTINCT caseid AS caseid FROM (SELECT casenum AS caseid, altnum AS altid, * FROM data)'
+
+
+In either case, the set of all possible alternatives is deduced automatically from all the values
 in the ``altid`` column.  However, the alterative names are not very descriptive when
 they are set automatically, as the csv data file does not have enough information to
 tell what each alternative code number means.
