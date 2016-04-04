@@ -76,6 +76,9 @@ Using :class:`Model` Objects
 	:type values:  array-like, optional
 
 
+.. automethod:: Model.d_loglike([values])
+
+
 
 GEV Network
 -----------

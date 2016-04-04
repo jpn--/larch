@@ -188,14 +188,12 @@ Let's confirm that we got a model that has the parameters we want.
 
 
 Yup, looks good.  We have one of all of the common parameters, plus a set of the segmented parameters for
-each segment.  Now let's estimate our model.  First we'll turn off the weight-choice rebalancing, because
-we already did that manually for each submodel.  We'll also turn off the calculation of standard errors, because
+each segment.  Now let's estimate our model.  We'll turn off the calculation of standard errors, because
 that takes a bit of time and we're not interested in those results yet.
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.option.weight_choice_rebalance = True
 	>>> m.option.calc_std_errors = False
 	>>> r = m.maximize_loglike("SLSQP")
 	>>> print(r)

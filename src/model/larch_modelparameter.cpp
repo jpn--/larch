@@ -115,7 +115,7 @@ void elm::ModelParameter::_set_holdfast(const bool& value)
 void elm::ModelParameter::_set_holdfast(const signed char& value)
 {
 	if (slot>=model->FHoldfast.size()) OOPS_IndexError("slot slot ",slot," exceeds allocated size");
-	model->FHoldfast.int8_at(slot) = (value!=0);
+	model->FHoldfast.int8_at(slot) = value;
 }
 
 void elm::ModelParameter::_del_holdfast()

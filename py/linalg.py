@@ -48,13 +48,28 @@ def matrix_inverse(a):
 
 
 
-def possible_overspecification(a):
+def possible_overspecification(a, holdfast_vector=None):
 	ret = []
-	eigenvalues,eigenvectors = numpy.linalg.eigh(a)
-	for i in range(len(eigenvalues)):
-		if numpy.abs(eigenvalues[i]) < 0.001:
-			v = eigenvectors[:,i]
-			v = numpy.round(v,7)
-			ret.append( (eigenvalues[i], numpy.where(v)[0])  )
+	if holdfast_vector is None:
+		eigenvalues,eigenvectors = numpy.linalg.eigh(a)
+		for i in range(len(eigenvalues)):
+			if numpy.abs(eigenvalues[i]) < 0.001:
+				v = eigenvectors[:,i]
+				v = numpy.round(v,7)
+				ret.append( (eigenvalues[i], numpy.where(v)[0])  )
+	else:
+		a_packed = a[~holdfast_vector.astype(bool),:][:,~holdfast_vector.astype(bool)]
+		eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+#		eigenvalues_unpacked = numpy.ones(a.shape[0])
+#		eigenvectors_unpacked = numpy.zeros(a.shape)
+#		eigenvalues_unpacked[~holdfast_vector.astype(bool)] = eigenvalues_packed
+#		eigenvectors_unpacked[~holdfast_vector.astype(bool),:][:,~holdfast_vector.astype(bool)] = eigenvectors_packed
+		for i in range(len(eigenvalues_packed)):
+			if numpy.abs(eigenvalues_packed[i]) < 0.001:
+				v = eigenvectors_packed[:,i]
+				v = numpy.round(v,7)
+				v_unpacked = numpy.zeros(a.shape[0])
+				v_unpacked[~holdfast_vector.astype(bool)] = v
+				ret.append( (eigenvalues_packed[i], numpy.where(v_unpacked)[0])  )
 	return ret
 

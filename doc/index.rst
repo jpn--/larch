@@ -67,6 +67,7 @@ Contents
 	data
 	data-fundamentals
 	model
+	metamodel
 	parameter
 	roles
 	reporting

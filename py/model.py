@@ -690,14 +690,14 @@ class Model(Model2, ModelReporter):
 		return x
 
 
-	def d2_loglike(self, *args):
-		z = self.finite_diff_hessian(*args, out=self.hessian_matrix)
+	def d2_loglike(self, *args, finite_grad=False):
+		z = self.finite_diff_hessian(*args, out=self.hessian_matrix, finite_grad=finite_grad)
 		if self.hessian_matrix is not z:
 			self.hessian_matrix = z
 		return z
 
-	def negative_d2_loglike(self, *args):
-		z = numpy.copy(self.finite_diff_hessian(*args, out=self.hessian_matrix))
+	def negative_d2_loglike(self, *args, finite_grad=False):
+		z = numpy.copy(self.finite_diff_hessian(*args, out=self.hessian_matrix, finite_grad=finite_grad))
 		z *= -1
 		return z
 
@@ -812,13 +812,26 @@ class Model(Model2, ModelReporter):
 		m.estimate()
 		self._LL_nil = m.loglike()
 
-	def loglike(self, *args, cached=True):
+	def loglike(self, *args, cached=True, holdfast_unmask=0, blp_contraction_threshold=1e-8):
 		if len(args)>0:
-			self.parameter_values(args[0])
+			self.parameter_values(args[0], holdfast_unmask)
 		if self.Data_UtilityCE_manual.active():
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
 			return self.loglike_given_utility()
+		if hasattr(self,'blp_shares_map') and hasattr(self,'logmarketshares') and blp_contraction_threshold is not None:
+			# BLP contraction
+			delta_norm = 1e9
+			while delta_norm > blp_contraction_threshold:
+				pr = self.probability(self.parameter_array)
+				pr_sum = (pr*self.Data("Weight")).sum(0)
+				pr_sum /= pr_sum.sum()
+				delta = self.logmarketshares - numpy.log(pr_sum)
+				self.parameter_array[self.blp_shares_map] += delta
+				delta_norm = numpy.sum(delta**2)	
+			# remean shocks
+			mean_shock = numpy.mean(self.parameter_array[self.blp_shares_map])
+			self.parameter_array[self.blp_shares_map] -= mean_shock
 		if cached:
 			try:
 				return self._cached_results[self.parameter_array.tobytes()].loglike
@@ -829,6 +842,7 @@ class Model(Model2, ModelReporter):
 		if isinstance(self._cached_results, function_cache):
 			self._cached_results[self.parameter_array.tobytes()].loglike = ll
 		return ll
+
 
 	def negative_loglike(self, *args, **kwargs):
 		z = -(self.loglike(*args, **kwargs))
@@ -846,6 +860,25 @@ class Model(Model2, ModelReporter):
 		return z
 
 	def d_loglike(self, *args):
+		"""
+		Find the first derivative of the log likelihood of the model, with respect to the parameters.
+		
+		Parameters
+		----------
+		values : array-like, optional
+			If given, an array-like vector of values should be provided that
+			will replace the current parameter values.  The vector must be exactly
+			as long as the number of parameters in the model (including holdfast
+			parameters).  If any holdfast parameter values differ in the provided
+			`values`, the new values are ignored and a warning is emitted to the
+			model logger.
+			
+		Returns
+		-------
+		array
+			An array of partial first derivatives with respect to the parameters, 
+			thus matching the size of the parameter array.
+		"""
 		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
 				self.parameter_values(args[0])
@@ -977,7 +1010,31 @@ class Model(Model2, ModelReporter):
 			g[:,n] /= -2*jiggle
 		return g
 
-	def finite_diff_hessian(self, *args, out=None):
+	def finite_diff_d_loglike(self, *args, out=None, **kwargs):
+		s = len(self)
+		try:
+			v = numpy.asarray(args[0])
+			assert(v.shape[0]==s)
+		except IndexError:
+			v = numpy.asarray(self.parameter_values())
+		if out is None or out.shape!=(s,):
+			out = numpy.empty([s,], dtype=numpy.float64)
+		for n in range(s):
+			if self.parameter_holdfast_array[n]!=0:
+				continue
+			jiggle = (self[n].value * 1e-5) or 1e-5;
+			v1 = v.copy()
+			v1[n] += jiggle
+			out[n] = self.loglike(v1, **kwargs)
+			v1[n] -= jiggle*2
+			out[n] -= self.loglike(v1, **kwargs)
+			out[n] /= (2*jiggle)
+		return out
+
+	def finite_diff_hessian(self, *args, out=None, finite_grad=False):
+		grad = lambda x: self.d_loglike(x)
+		if finite_grad:
+			grad = lambda x: self.finite_diff_d_loglike(x)
 		s = len(self)
 		try:
 			v = numpy.asarray(args[0])
@@ -987,12 +1044,14 @@ class Model(Model2, ModelReporter):
 		if out is None or out.shape!=(s,s):
 			out = numpy.empty([s,s], dtype=numpy.float64)
 		for n in range(s):
+			if self.parameter_holdfast_array[n]!=0:
+				continue
 			jiggle = (self[n].value * 1e-5) or 1e-5;
 			v1 = v.copy()
 			v1[n] += jiggle
-			out[:,n] = self.d_loglike(v1)
+			out[:,n] = grad(v1)
 			v1[n] -= jiggle*2
-			out[:,n] -= self.d_loglike(v1)
+			out[:,n] -= grad(v1)
 			out[:,n] /= (2*jiggle)
 		return out
 
@@ -1222,6 +1281,21 @@ class Model(Model2, ModelReporter):
 		if name in self._parameter_name_index:
 			del self[name]
 		return z
+
+
+	def setup_blp_contraction(self, shares_map, log_marketshares=None):
+		assert( len(self.alternative_codes()) == len(shares_map) )
+		self.blp_shares_map = shares_map
+		for i in shares_map:
+			self[i].holdfast = 2
+		if log_marketshares is None:
+			ch = self.Data("Choice")
+			shares = ch.sum(0)
+			shares /= shares.sum()
+			self.logmarketshares = numpy.log(shares).squeeze()
+		else:
+			self.logmarketshares = log_marketshares
+
 
 
 class _AllInTheFamily():

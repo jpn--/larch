@@ -8,6 +8,7 @@ class MetaModel(Model):
 
 	def __init__(self, segment_descriptors=None, submodel_factory=None, args=(),):
 		"""
+		Represents a collection of :class:`Model` objects to be estimated simultaneously.
 		
 		Parameters
 		----------
@@ -17,6 +18,8 @@ class MetaModel(Model):
 			This callable, when called with a segment_descriptor as the first argument,
 			and `args` as additional arguments,
 			returns a submodel object that will be used to populate the submodels dict.
+		args : tuple
+			The additional arguments (if any) to be used by `submodel_factory`.
 		"""
 		super().__init__()
 		self.sub_model = {}

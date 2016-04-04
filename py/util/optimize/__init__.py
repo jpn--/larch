@@ -135,7 +135,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 		r.stats.start_process("parameter covariance")
 		model.calculate_parameter_covariance()
 		from ...linalg import possible_overspecification
-		overspec = possible_overspecification(model.hessian_matrix)
+		overspec = possible_overspecification(model.hessian_matrix, model.parameter_holdfast_array)
 		if overspec:
 			r.stats.write("WARNING: Model is possibly over-specified (hessian is nearly singular).")
 			r.possible_overspecification = []

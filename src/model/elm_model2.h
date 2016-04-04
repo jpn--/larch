@@ -698,7 +698,7 @@ namespace elm {
 
 	public:
 		std::vector<double> parameter_values() const;
-		void parameter_values(std::vector<double> v);
+		void parameter_values(std::vector<double> v, const signed char& holdfast_unmask=0);
 		
 		PyObject* parameter_values_as_bytes() const;
 		

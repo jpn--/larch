@@ -760,7 +760,7 @@ void elm::Model2::_parameter_push(const std::vector<double>& v)
 	}
 	for (unsigned z=0; z<v.size(); z++) {
 		if (FHoldfast.int8_at(z)) {
-			if (v[z] != FCurrent[z]) {
+			if ((FHoldfast.int8_at(z)==1) && (v[z] != FCurrent[z])) {
 				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
 				<< ", it differs from the holdfast value of " <<FCurrent[z];
 			}
@@ -1054,7 +1054,7 @@ std::string elm::Model2::save_buffer() const
 		sv << ", initial_value="<<AsPyFloat(FInitValues[pn]);
 		sv << ", max="<<AsPyFloat(FMax[pn]);
 		sv << ", min="<<AsPyFloat(FMin[pn]);
-		sv << ", holdfast="<< (FHoldfast.int8_at(pn) ? "True":"False");
+		sv << ", holdfast="<< int(FHoldfast.int8_at(pn));
 		
 		sv << ")\n";
 	}
@@ -1171,7 +1171,7 @@ std::string elm::Model2::save_buffer() const
 
 
 
-void elm::Model2::parameter_values(std::vector<double> v) {
+void elm::Model2::parameter_values(std::vector<double> v, const signed char& holdfast_unmask) {
 	
 	if (v.size() != dF()) {
 		auto df_ = dF();
@@ -1191,10 +1191,16 @@ void elm::Model2::parameter_values(std::vector<double> v) {
 		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
-		if (FHoldfast.int8_at(z)) {
+		if (FHoldfast.int8_at(z) & (~holdfast_unmask)) {
 			if (v[z] != FCurrent[z]) {
-				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FCurrent[z];
+				if (holdfast_unmask) {
+					WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+					<< ", it differs from the holdfast value of " <<FCurrent[z]
+					<< " under holdfast_unmask "<<holdfast_unmask << " ~ "<< cat(std::bitset<8>(~holdfast_unmask)) << " & "<< cat(std::bitset<8>( FHoldfast.int8_at(z) ))   ;
+				} else {
+					WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+					<< ", it differs from the holdfast value of " <<FCurrent[z];
+				}
 			}
 		} else {
 			FCurrent[z] = v[z];

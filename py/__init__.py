@@ -59,6 +59,7 @@ try:
 	from .omx import OMX
 	from .core import Parameter
 	from .model import Model, ModelFamily
+	from .metamodel import MetaModel
 	from . import array
 	core._set_array_module(array)
 	try:
