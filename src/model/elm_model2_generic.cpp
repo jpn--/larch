@@ -26,6 +26,7 @@
 #include <iostream>
 #include <iomanip>
 #include "elm_workshop_loglike.h"
+#include <bitset>
 
 
 using namespace etk;
