@@ -2,7 +2,7 @@ from .orderedset import OrderedSet
 from .filemanager import *
 from .temporaryfile import TemporaryFile, TemporaryHtml
 from .persistent import stored_dict
-from .attribute_dict import dicta
+from .attribute_dict import dicta, quickdot
 
 allowed_math = ('log', 'exp', 'log1p')
 
