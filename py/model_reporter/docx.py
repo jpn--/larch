@@ -133,7 +133,7 @@ else:
 						self.parameter(par).initial_value,
 						self.parameter(par).value,
 						self.parameter(par).std_err,
-						self.parameter(par).t_stat(),
+						self.parameter(par).t_stat,
 						self.parameter(par).null_value,
 						self.parameter(par).holdfast
 					)
@@ -164,7 +164,7 @@ else:
 									self[p].initial_value,
 									self[p].value,
 									self[p].std_err,
-									self[p].t_stat(),
+									self[p].t_stat,
 									self[p].null_value,
 									self[p].holdfast
 								)
@@ -182,7 +182,7 @@ else:
 										pwide.initial_value,
 										pwide.value,
 										pwide.std_err,
-										pwide.t_stat(),
+										pwide.t_stat,
 										pwide.null_value,
 										pwide.holdfast
 									)

@@ -1,5 +1,5 @@
 
-from ..utilities import category, pmath, rename
+from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias
 from io import StringIO
 import math
@@ -123,7 +123,7 @@ class LatexModelReporter():
 					self.parameter(par).initial_value,
 					self.parameter(par).value,
 					self.parameter(par).std_err,
-					self.parameter(par).t_stat(),
+					self.parameter(par).t_stat,
 					self.parameter(par).null_value,
 					self.parameter(par).holdfast
 				)
@@ -153,7 +153,7 @@ class LatexModelReporter():
 								self[p].initial_value,
 								self[p].value,
 								self[p].std_err,
-								self[p].t_stat(),
+								self[p].t_stat,
 								self[p].null_value,
 								self[p].holdfast
 							)
@@ -171,7 +171,7 @@ class LatexModelReporter():
 									pwide.initial_value,
 									pwide.value,
 									pwide.std_err,
-									pwide.t_stat(),
+									pwide.t_stat,
 									pwide.null_value,
 									pwide.holdfast
 								)
@@ -386,7 +386,7 @@ def latex_simple_joint_report(models, modeltitles, groups, **format):
 					write_param_row(subp)
 			elif isinstance(p,rename):
 				table.write(_tex_text(p.name))
-				for m in models: write_partial_row(m[p].value, m[p].std_err, m[p].t_stat(), m[p].holdfast)
+				for m in models: write_partial_row(m[p].value, m[p].std_err, m[p].t_stat, m[p].holdfast)
 				table.write('\\\\\n')
 			else:
 				table.write(_tex_text(p))
@@ -395,7 +395,7 @@ def latex_simple_joint_report(models, modeltitles, groups, **format):
 					if isinstance(pwide,ParameterAlias):
 						write_partial_row_alias(pwide.value, pwide.refers_to, pwide.multiplier)
 					else:
-						write_partial_row(pwide.value, pwide.std_err, pwide.t_stat(), pwide.holdfast)
+						write_partial_row(pwide.value, pwide.std_err, pwide.t_stat, pwide.holdfast)
 				table.write('\\\\\n')
 			# end def
 

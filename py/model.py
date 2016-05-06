@@ -1,7 +1,7 @@
 
 from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter
 from .array import SymmetricArray
-from .utilities import category, pmath, rename
+from .util.pmath import category, pmath, rename
 import numpy
 import os
 from .util.xhtml import XHTML, XML_Builder

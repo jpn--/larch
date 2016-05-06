@@ -4399,6 +4399,7 @@ class ModelParameter(object):
     robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
     name = property(_get_name, None, None, "the parameter name")
     index = property(_get_index, None, None, "the parameter index within the model")
+    t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator")
     def __repr__(self):
     	return "ModelParameter('{}', value={})".format(self.name, self.value)
     @property

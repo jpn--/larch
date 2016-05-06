@@ -79,6 +79,30 @@ class LocalAttributeSet(object):
 
 
 class DT(Fountain):
+	"""A wrapper for a pytables File used to get data for models.
+
+	This object wraps a :class:`tables.File`, adding a number of methods designed
+	specifically for working with choice-based data used in Larch.
+
+	Parameters
+	----------
+	filename : str or None
+		The filename or `URI <https://www.sqlite.org/c3ref/open.html#urifilenameexamples>`_
+		of the database to open. It must be encoded as a UTF-8 string. (If your
+		string contains only usual English characters you probably don't need
+		to worry about it.) The default is an in-memory database opened with a URI of
+		``file:larchdb?mode=memory``, which is very fast as long as you've got enough
+		memory to store the whole thing.
+	mode : str
+		The mode used to open the H5F file.  Common values are 'a' for append and 'r' 
+		for read only.  See pytables for more detail.
+
+
+	.. warning::
+		The normal constructor creates a :class:`DT` object linked to an existing 
+		HDF5 file. Editing the object edits the file as well. 
+
+	"""
 
 	def clear_cached_values(self):
 		try:
@@ -795,6 +819,21 @@ class DT(Fountain):
 		return DT(filename, 'w', h5f=h5f)
 
 	def validate_hdf5(self, log=print, errlog=None):
+		"""Generate a validation report for this DT.
+		
+		The generated report is fairly detailed and describes each requirement
+		for a valid DT file and whether or not it is met.
+		
+		Parameters
+		----------
+		log : callable
+			Typically "print", but can be replaced with a different callable 
+			to accept a series of unicode strings for each line in the report.
+		errlog : callable or None
+			By default, None.  If not none, the report will print as with `log`
+			but only if there are errors.
+		
+		"""
 		import keyword
 		nerrs = 0
 		isok = None
@@ -1093,6 +1132,26 @@ class DT(Fountain):
 
 
 	def import_idco(self, filepath_or_buffer, caseid_column=None, *args, **kwargs):
+		"""Import an existing CSV or similar file in idco format into this HDF5 file.
+		
+		This function relies on :func:`pandas.read_csv` to read and parse the input data.
+		All arguments other than those described below are passed through to that function.
+		
+		Parameters
+		----------
+		filepath_or_buffer : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		caseid_column : None or str
+			If given, this is the column of the input data file to use as caseids.  It must be 
+			given if the caseids do not already exist in the HDF5 file.  If it is given and
+			the caseids do already exist, a `LarchError` is raised.
+		
+		Raises
+		------
+		LarchError
+			If caseids exist and are also given; or if caseids do not exist and are not given;
+			or if the caseids are no integer values.
+		"""
 		import pandas
 		df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
 		for col in df.columns:
@@ -1123,6 +1182,42 @@ class DT(Fountain):
 
 
 	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e1000):
+		"""Import an existing CSV or similar file in idca format into this HDF5 file.
+		
+		This function relies on :func:`pandas.read_csv` to read and parse the input data.
+		All arguments other than those described below are passed through to that function.
+		
+		Parameters
+		----------
+		filepath_or_buffer : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		caseid_column : None or str
+			If given, this is the column of the input data file to use as caseids.  It must be 
+			given if the caseids do not already exist in the HDF5 file.  If it is given and
+			the caseids do already exist, a `LarchError` is raised.
+		altid_col : None or str
+			If given, this is the column of the input data file to use as altids.  It must be
+			given if the altids do not already exist in the HDF5 file.  If it is given and
+			the altids do already exist, a `LarchError` is raised.
+		choice_col : None or str
+			If given, use this column as the choice indicator.
+		force_int_as_float : bool
+			If True, data columns that appear to be integer values will still be stored as 
+			double precision floats (defaults to True).
+		chunksize : int
+			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
+			chunks can be much faster and less memory intensive than reading the entire file.
+		
+		Raises
+		------
+		LarchError
+			Various errors.
+			
+		Notes
+		-----
+		Chunking may not work on Mac OS X due to a `known bug <http://github.com/pydata/pandas/issues/11793>`_
+		in the pandas.read_csv function.
+		"""
 		import pandas
 		casealtreader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, usecols=[caseid_col,altid_col])
 		caseids = numpy.array([], dtype='int64')

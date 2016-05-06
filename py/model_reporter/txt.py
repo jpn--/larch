@@ -1,7 +1,7 @@
 
 
 
-from ..utilities import category, pmath, rename
+from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias
 from io import StringIO
 from ..util.xhtml import XHTML, XML_Builder

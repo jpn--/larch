@@ -1,6 +1,6 @@
 
 
-from ..utilities import category, pmath, rename
+from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias, IntStringDict
 from io import StringIO
 from ..util.xhtml import XHTML, XML_Builder
@@ -176,6 +176,50 @@ class XhtmlModelReporter():
 		return x.close()
 
 	def xhtml_params(self, groups=None, display_inital=False, **format):
+		"""
+		Generate a div element containing the model parameters in a H1 tag.
+		
+		Parameters
+		----------
+		groups : None or list
+			An ordered list of parameters names and/or categories. If given,
+			this list will be used to order the resulting table.
+		display_inital : bool
+			Should the initial values of the parameters (the starting point 
+			for estimation) be included in the report. Defaults to False.
+		
+		Returns
+		-------
+		larch.util.xhtml.Elem
+			A div containing the model parameters.
+		
+		Example
+		-------
+		>>> from larch.util.pmath import category, rename
+		>>> from larch.util.xhtml import XHTML
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> param_groups = [
+		... 	category('Level of Service',
+		... 			 rename('Total Time', 'tottime'),
+		... 			 rename('Total Cost', 'totcost')  ),
+		... 	category('Alternative Specific Constants',
+		...              'ASC_SR2',
+		...              'ASC_SR3P',
+		...              'ASC_TRAN',
+		...              'ASC_BIKE',
+		...              'ASC_WALK'  ),
+		... 	category('Income',
+		...              'hhinc#2',
+		...              'hhinc#3',
+		...              'hhinc#4',
+		...              'hhinc#5',
+		...              'hhinc#6'   ),
+		... ]
+		>>> with XHTML(quickhead=m) as f:
+		... 	f << m.xhtml_title()
+		... 	f << m.xhtml_params(param_groups)
+		
+		"""
 		# keys fix
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -289,7 +333,7 @@ class XhtmlModelReporter():
 									x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
 								else:
 									x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
-									x.td("{:{TSTAT}}".format(self[p].t_stat(), **format), {'class':'tstat'})
+									x.td("{:{TSTAT}}".format(self[p].t_stat, **format), {'class':'tstat'})
 									x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
 						else:
 							pwide = self.parameter_wide(p)
@@ -311,7 +355,7 @@ class XhtmlModelReporter():
 										x.td("{:{PARAM}}".format(pwide.null_value, **format), {'class':'null_value'})
 									else:
 										x.td("{:{PARAM}}".format(pwide.std_err, **format), {'class':'std_err'})
-										x.td("{:{TSTAT}}".format(pwide.t_stat(), **format), {'class':'tstat'})
+										x.td("{:{TSTAT}}".format(pwide.t_stat, **format), {'class':'tstat'})
 										x.td("{:{PARAM}}".format(pwide.null_value, **format), {'class':'null_value'})
 			with x.block("table"):
 				with x.block("thead"):

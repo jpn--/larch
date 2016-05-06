@@ -1,6 +1,6 @@
 
 
-from .utilities import category
+from .util.pmath import category
 from . import Model
 import os
 from contextlib import contextmanager
@@ -156,7 +156,7 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 						for m in models:
 							shade ^= 1
 							if p in m:
-								f.write('<td class="{0}">{1:0.6g}</td><td class="{0} tstat">({2:0.3g})</td>'.format(shades[shade],m[p].value,m[p].t_stat()))
+								f.write('<td class="{0}">{1:0.6g}</td><td class="{0} tstat">({2:0.3g})</td>'.format(shades[shade],m[p].value,m[p].t_stat))
 							else:
 								f.write('<td class="{0}">{1}</td><td class="{0} tstat">({1})</td>'.format(shades[shade],"---"))
 
