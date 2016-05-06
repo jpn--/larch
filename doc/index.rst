@@ -64,7 +64,6 @@ Contents
 .. toctree::
 	:maxdepth: 4
 
-	data
 	data-fundamentals
 	model
 	metamodel

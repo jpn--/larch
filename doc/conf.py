@@ -149,6 +149,7 @@ intersphinx_mapping = {
 	'numpy': ('http://docs.scipy.org/doc/numpy/', 'numpy_1_9.inv'),
 	'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
 	'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
+	'tables': ('http://www.pytables.org/', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------

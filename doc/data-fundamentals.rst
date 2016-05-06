@@ -78,25 +78,18 @@ simultaneously.
 
 
 
-Using Data in Models
---------------------
+Data in Models
+--------------
 
-The :class:`DB` class primarily presents an interface between python and SQLite. The interface
-between a :class:`DB` and a :class:`Model` is governed by a special attribute of the
-:class:`DB` class:
+Larch offers two basic data file storage formats: SQLite and HDF5.
 
-.. attribute:: DB.queries
-
-	This attribute defines the automatic queries used to provision a :class:`Model` with data.
-	It should be an object that is a specialized subtype of the :class:`core.QuerySet` abstract
-	base class.
-
+If you have experience with earlier version Larch (or its predecessor, ELM) then you have
+been using the SQLite database interface. 
 
 .. toctree::
 
-	queryset
-	queryset_idco
-	queryset_2
+	Using SQLite <databases>
+	Using HDF5 <datatables>
 
 
 

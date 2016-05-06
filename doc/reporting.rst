@@ -65,10 +65,12 @@ Then you could incorporate that table into a model report like this:
 	>>> print(f.dump())
 	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>...</html>'
 
+Instead of printing to the console, you can send it to a file and open in your favorite browser.
 There are a variety of xhtml components that can be used in roll your own report writing:
 
 .. automethod:: Model.xhtml_report
 .. automethod:: Model.xhtml_title
+.. automethod:: Model.xhtml_params
 
 
 
