@@ -57,15 +57,21 @@ Then you could incorporate that table into a model report like this:
 
 	>>> from larch.util.xhtml import XHTML
 	>>> m = larch.Model.Example(1, pre=True)
-	>>> f = XHTML(quickhead=m)
-	>>> f << m.xhtml_title()
-	<larch.util.xhtml.XHTML object at ...>
-	>>> f << report_fileinfo()
-	<larch.util.xhtml.XHTML object at ...>
-	>>> print(f.dump())
+	>>> with XHTML(quickhead=m) as f:
+	...		f << m.xhtml_title()
+	...		f << report_fileinfo()
+	...		f << m.xhtml_params()
+	...		s=(f.dump())
+	>>> print(s)
 	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>...</html>'
 
+
 Instead of printing to the console, you can send it to a file and open in your favorite browser.
+Then it might look like this:
+
+.. image:: reporting1_sm.png
+
+
 There are a variety of xhtml components that can be used in roll your own report writing:
 
 .. automethod:: Model.xhtml_report
