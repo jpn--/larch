@@ -31,7 +31,7 @@ class ModelReporter(docx.DocxModelReporter,
 		Other Parameters
 		----------------
 		filename : str or None
-			If given, then a new stack file is created by :func:`util.open_stack`,
+			If given, then a new stack file is created by :func:`util.filemanager.open_stack`,
 			the output is generated in this file, and the file-like object is 
 			returned.
 		tempfile : bool
