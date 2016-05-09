@@ -28,25 +28,30 @@ XHTML Format
 You can either use the pre-made :meth:`Model.xhtml_report` to generate a
 report on a model, or you can roll your own using a combination of
 xhtml_* components and custom elements.  For example, you might make a
-custom table to hold some facts about your model or data (this example is
-very simple, but you could make it more complex and pull information
-programatically instead of using fixed strings):
+custom table to hold some facts about your model or data:
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> from larch.util.xhtml import XML_Builder
-	>>> def report_fileinfo():
-	...		x = XML_Builder("div", {'class':"file_info"})
-	...		x.h2("File Info", anchor=1)
+	>>> def report_valueoftime(m):
+	...		from larch.roles import P
+	...		VoT_cents_per_minute = P.tottime / P.totcost
+	...		VoT_dollars_per_hour = (P.tottime * 60) / (P.totcost * 100)
+	...		x = XML_Builder("div", {'class':"value_of_time"})
+	...		x.h2("Implied Value of Time", anchor=1)
 	...		with x.block("table"):
 	...			with x.block("tr"):
-	...				x.td("Information 1")
-	...				x.td("Content here")
+	...				x.th("Units")
+	...				x.th("Value")
 	...			with x.block("tr"):
-	...				x.td("Information 2")
-	...				x.td("Content here")
+	...				x.td("cents per minute")
+	...				x.td(VoT_cents_per_minute.str(m, fmt="{:.1f}¢/minute"))
+	...			with x.block("tr"):
+	...				x.td("dollars per hour")
+	...				x.td("VoT_dollars_per_hour.str(m, fmt="${:.2f}/hr")")
 	...		return x.close()
+
 
 Then you could incorporate that table into a model report like this:
 
@@ -57,7 +62,7 @@ Then you could incorporate that table into a model report like this:
 	>>> m = larch.Model.Example(1, pre=True)
 	>>> with XHTML(quickhead=m) as f:
 	...		f << m.xhtml_title()
-	...		f << report_fileinfo()
+	...		f << report_valueoftime(m)
 	...		f << m.xhtml_params()
 	...		s=(f.dump())
 	>>> print(s)
