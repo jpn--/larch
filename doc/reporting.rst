@@ -12,8 +12,6 @@
 Reporting
 =======================
 
-Model Outputs
--------------
 
 .. automethod:: Model.report
 
@@ -77,6 +75,7 @@ There are a variety of xhtml components that can be used in roll your own report
 .. automethod:: Model.xhtml_report
 .. automethod:: Model.xhtml_title
 .. automethod:: Model.xhtml_params
+.. image:: reporting2_sm.png
 
 
 
