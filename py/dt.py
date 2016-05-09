@@ -1061,15 +1061,26 @@ class DT(Fountain):
 
 		idca_child_incorrect_sized = {}
 		for idca_child in self.h5idca._v_children.keys():
-			try:
-				if self.h5idca._v_children[idca_child].shape[0] != caseids_node_len or \
-				   self.h5idca._v_children[idca_child].shape[1] != altids_node_len:
-					idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child].shape
-			except:
-				idca_child_incorrect_sized[idca_child] = 'exception'
-		nerrs+= zzz("Every child node in `idca` must be an array node with the first dimension the "
+			if isinstance_(self.h5idca._v_children[idca_child], _tb.group.Group):
+				if '_index_' not in self.h5idca._v_children[idca_child] or '_values_' not in self.h5idca._v_children[idca_child]:
+					idca_child_incorrect_sized[idca_child] = 'invalid group'
+				else:
+					if self.h5idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
+						idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child]._values_.shape
+			else:
+				try:
+					if self.h5idca._v_children[idca_child].shape[0] != caseids_node_len or \
+					   self.h5idca._v_children[idca_child].shape[1] != altids_node_len:
+						idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child].shape
+				except:
+					idca_child_incorrect_sized[idca_child] = 'exception'
+		nerrs+= zzz("Every child node in `idca` must be (1) an array node with the first dimension the "
 					"same as the length of `caseids`, and the second dimension the same as the length "
-					"of `altids`.",
+					"of `altids`, or (2) a group node with child nodes `_index_` as a 1-dimensional array "
+					"with the same length as the length of `caseids` and "
+					"an integer dtype, and a 2-dimensional `_values_` with the second dimension the same as the length "
+					"of `altids`, such that _values_[_index_] reconstructs the desired "
+					"data array.",
 					idca_child_incorrect_sized)
 
 		subcategory('Alternative Availability')
