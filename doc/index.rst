@@ -65,6 +65,7 @@ Contents
 	:maxdepth: 4
 
 	data-fundamentals
+	data-in-models
 	model
 	metamodel
 	parameter

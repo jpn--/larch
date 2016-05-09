@@ -38,7 +38,71 @@ the correct format for use with the larch DT facility.
 Required HDF5 Structure
 -----------------------
 
-To be used with Larch, the HDF5 file must have a particular structure::
+To be used with Larch, the HDF5 file must have a particular structure.  The group node structure is
+created automatically when you open a new :class:`DT` object with a file that does not already have
+the necessary structure.
+
+.. digraph:: Required_HDF5_Structure
+
+	larch [label="larch", shape="box"];
+	caseids [label="caseids\n shape=(N) ", shape="box", color="#DD0000", style="rounded", penwidth=2];
+	larch -> caseids;
+	screen [label="screen\n shape=(N) ", shape="box", color="#01BB00", style="rounded,dashed", penwidth=2];
+	larch -> screen;
+	idco [label="idco", shape="box"];
+	idco3 [label="...various...\n shape=(N) ", shape="box", style="rounded", penwidth=2];
+	idco2 [label="...various...", shape="box"];
+	idco2i [label="_index_\n shape=(N)", style="rounded", penwidth=2, color="#DD0000", shape="box"];
+	idco2v [label="_values_\n shape=(?)", style="rounded", penwidth=2, shape="box"];
+	idco2 -> idco2i;
+	idco2 -> idco2v;
+	idco -> idco2;
+	wgt [label="_weight_\n shape=(N) ", shape="box", style="rounded,dashed", penwidth=2, color="#0000EE"];
+	larch -> idco [minlen=2];
+	idco -> idco3;
+	idco -> wgt;
+	idca [label="idca", shape="box"];
+	idca3 [label="...various...\n shape=(N,A) ", shape="box", style="rounded", penwidth=2];
+	idca2 [label="...various...", shape="box"];
+	idca2i [label="_index_\n shape=(N)", style="rounded", penwidth=2, color="#DD0000", shape="box"];
+	idca2v [label="_values_\n shape=(?,A)", style="rounded", penwidth=2, shape="box"];
+	idca2 -> idca2i;
+	idca2 -> idca2v;
+	choice [label="_choice_\n shape=(N,A) ", shape="box", style="rounded", color="#0000EE", penwidth=2];
+	avail [label="_avail_\n shape=(N,A) ", shape="box", style="rounded,dashed", color="#01BB00", penwidth=2];
+	larch -> idca [minlen=2];
+	idca -> idca3;
+	idca -> idca2;
+	idca -> choice;
+	idca -> avail;
+	larch -> alts;
+	alts [label="alts", shape="box"];
+	altids [label="altids\n shape=(A) ", shape="box", color="#DD0000", style="rounded", penwidth=2];
+	names [label="names\n shape=(A) ", shape="box", color="#AAAA00", style="rounded", penwidth=2];
+	alts -> altids;
+	alts -> names;
+
+
+.. digraph:: Required_HDF5_Structure_Legend
+
+	subgraph clusterlegend {
+		rank="same";
+		shape="box";
+		style="filled,rounded";
+		color="#EEEEEE";
+		label="Legend";
+		int64 [label="dtype=Int64", color="#DD0000", shape="box", style="rounded", penwidth=2];
+		float64 [label="dtype=Float64", color="#0000EE", shape="box", style="rounded", penwidth=2];
+		unicode [label="dtype=Unicode", color="#AAAA00", shape="box", style="rounded", penwidth=2];
+		bool [label="dtype=Bool", color="#01BB00", shape="box", style="rounded", penwidth=2];
+		optional [label="optional", shape="box", style="rounded,dashed", penwidth=2];
+		Group_Node [label="Group Node", shape="box", rank="sink"];
+		Array_Node [label="Data Node", shape="box", style="rounded", penwidth=2];
+	};
+
+
+
+The details are as follows::
 
 	════════════════════════════════════════════════════════════════════════════════
 	larch.DT Validation for MTC.h5 (with mode 'w')
@@ -50,7 +114,7 @@ To be used with Larch, the HDF5 file must have a particular structure::
 	 >>> │ Under the top node, there must be an array node named `caseids`.
 	 >>> │ The `caseids` array dtype should be Int64.
 	 >>> │ The `caseids` array should be 1 dimensional.
-	     ├ Case Filtering ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+	     ├ Case Filtering ──────────────────────────────────────────────────────────
 	 >>> │ If there may be some data cases that are not to be included in the
 	     │ processing of the discrete choice model, there should be a node named
 	     │ `screen` under the top node.
@@ -80,7 +144,7 @@ To be used with Larch, the HDF5 file must have a particular structure::
 	     │ as `caseids`, or (2) a group node with child nodes `_index_` as an array
 	     │ with the correct shape and an integer dtype, and `_values_` such that
 	     │ _values_[_index_] reconstructs the desired data array.
-	     ├ Case Weights ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+	     ├ Case Weights ────────────────────────────────────────────────────────────
 	 >>> │ If the cases are to have non uniform weights, then there should a
 	     │ `_weight_` node (or a name link to a node) within the `idco` group.
 	 >>> │ If weights are given, they should be of Float64 dtype.
@@ -94,12 +158,12 @@ To be used with Larch, the HDF5 file must have a particular structure::
 	 >>> │ Every child node in `idca` must be an array node with the first dimension
 	     │ the same as the length of `caseids`, and the second dimension the same as
 	     │ the length of `altids`.
-	     ├ Alternative Availability ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+	     ├ Alternative Availability ────────────────────────────────────────────────
 	 >>> │ If there may be some alternatives that are unavailable in some cases,
 	     │ there should be a node named `_avail_` under `idca`.
 	 >>> │ If given, it should contain an appropriately sized Bool array indicating
 	     │ the availability status for each alternative.
-	     ├ Chosen Alternatives ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+	     ├ Chosen Alternatives ─────────────────────────────────────────────────────
 	 >>> │ There should be a node named `_choice_` under `idca`.
 	 >>> │ It should be a Float64 array indicating the chosen-ness for each
 	     │ alternative. Typically, this will take a value of 1.0 for the alternative

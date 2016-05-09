@@ -77,6 +77,7 @@ extensions = [
 	'sphinx.ext.mathjax',
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.doctest',
+	'sphinx.ext.graphviz',
 ]
 
 numpydoc_show_class_members = False
