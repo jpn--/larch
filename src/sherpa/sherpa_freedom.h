@@ -37,12 +37,21 @@ struct freedom_alias {
 	std::string name;
 	std::string refers_to;
 	double multiplier;
+	PyObject* _refers_to_modelparam;
+	
+	PyObject* get_referred_modelparam();
+	void set_referred_modelparam(PyObject*);
+	~freedom_alias();
 	
 	freedom_alias(const std::string& name, const std::string& refers_to, const double& multiplier)
 	: name(name)
 	, refers_to(refers_to)
 	, multiplier(multiplier)
-	{ }
+	, _refers_to_modelparam(Py_None)
+	{
+		Py_INCREF(Py_None);
+	}
+	
 	
 };
 
@@ -104,6 +113,30 @@ public:
 
 
 #ifdef SWIG 
+
+%extend freedom_alias {
+	%pythoncode %{
+		@property
+		def value(self):
+			return self.multiplier * self.get_referred_modelparam().value
+		@property
+		def null_value(self):
+			return self.multiplier * self.get_referred_modelparam().null_value
+		@property
+		def t_stat(self):
+			if self.multiplier == 1:
+				return "= {}".format(self.refers_to)
+			elif self.multiplier == 0:
+				return "= 0"
+			else:
+				return "= {} * {}".format(self.refers_to,self.multiplier)
+		def __getitem__(self, *arg):
+			return self.__getattribute__(*arg)
+		
+	%}
+
+};
+
 %extend freedom_info {
 	std::string __str__(void* z=nullptr) const {
 		return $self->representation(true);			

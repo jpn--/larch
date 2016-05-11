@@ -22,6 +22,23 @@
 #include "sherpa_freedom.h"
 #include <iomanip>
 
+PyObject* freedom_alias::get_referred_modelparam()
+{
+	Py_XINCREF(_refers_to_modelparam);
+	return _refers_to_modelparam;
+}
+void freedom_alias::set_referred_modelparam(PyObject* x)
+{
+	Py_CLEAR(_refers_to_modelparam);
+	_refers_to_modelparam = x;
+	Py_XINCREF(_refers_to_modelparam);
+}
+
+
+freedom_alias::~freedom_alias() {
+	Py_CLEAR(_refers_to_modelparam);
+}
+
 
 freedom_info::freedom_info(const std::string& name,
 						   const double& value,
