@@ -4,6 +4,10 @@ from . import core
 from .core import LinearComponent, LinearFunction
 from .exceptions import LarchError
 
+from .util.pmath import category as Category
+from .util.pmath import rename as Rename
+
+
 _chi = u"\u03C7"
 _beta = u"\u03B2"
 _hahook = u"\u04FC"

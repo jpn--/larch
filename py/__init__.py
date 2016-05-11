@@ -34,7 +34,7 @@ if os.environ.get('READTHEDOCS', None) == 'True':
 
 
 info = """Larch is free, open source software to estimate discrete choice models.
-Copyright 2007-2015 Jeffrey Newman
+Copyright 2007-2016 Jeffrey Newman
 This program is licensed under GPLv3 and comes with ABSOLUTELY NO WARRANTY."""
 
 status = ""
@@ -54,6 +54,7 @@ try:
 	from . import core
 	core.larch_initialize()
 	from . import exceptions
+	from . import examples
 	from .db import DB
 	from .dt import DT, IncompatibleShape
 	from .omx import OMX
@@ -76,6 +77,7 @@ try:
 	except ImportError:
 		from .mock_module import Mock
 		linalg = Mock()
+	
 
 	status += "\nLarch "+build
 	_directory_ = os.path.split(__file__)[0]

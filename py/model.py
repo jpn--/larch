@@ -96,10 +96,30 @@ class Model(Model2, ModelReporter):
 
 
 	def parameter_wide(self, name):
-		try:
-			return self.alias(name)
-		except LarchError:
-			return self.parameter(name)
+		if isinstance(name, rename):
+			found = []
+			if name.name in self:
+				found.append(name.name)
+			for i in name.members:
+				if i in self:
+					found.append(i)
+			if len(found)==0:
+				raise LarchError("model does not contain "+name.name+" nor "+(" nor ".join(found)))
+			elif len(found)==1:
+				return self.parameter_wide(found[0])
+			else:
+				raise LarchError("model contains "+(" and ".join(found)))
+		else:
+			try:
+				ret = self.alias(name)
+#				try:
+#					ret.set_referred_modelparam( self.parameter_wide(ret.refers_to) )
+#				except AttributeError:
+#					pass
+				return ret
+			except LarchError:
+				return self.parameter(name)
+
 
 	def metaparameter(self, name):
 		try:
@@ -1280,6 +1300,7 @@ class Model(Model2, ModelReporter):
 		z = super().alias(*args)
 		if name in self._parameter_name_index:
 			del self[name]
+		z.set_referred_modelparam( self.parameter(z.refers_to) )
 		return z
 
 

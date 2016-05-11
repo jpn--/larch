@@ -55,7 +55,7 @@ def _try_write(self, content):
 			self.write_(str(content).encode('utf-8'))
 
 
-def TemporaryHtml(style=None, *, nohead=False, mode='wb+', **tagheads):
+def TemporaryHtml(style=None, *, nohead=False, mode='wb+', content=None, **tagheads):
 	t = TemporaryFile(suffix='.html', mode=mode)
 	if 'b' in mode:
 		t.write_ = t.write
@@ -67,4 +67,7 @@ def TemporaryHtml(style=None, *, nohead=False, mode='wb+', **tagheads):
 		for tag, content in tagheads.items():
 			t.write("<{0}>{1}</{0}>".format(tag.lower(),content))
 		t.write("</head>")
+	if content is not None:
+		t.write(content)
+		t.view()
 	return t

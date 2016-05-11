@@ -98,7 +98,35 @@ class parameter_category(str): pass
 
 
 
-def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, overwrite=False, spool=True, title=None):
+def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, overwrite=False, spool=True, title=None):
+	"""
+	Generate a combined report on a number of (probably related) models.
+	
+	Parameters
+	----------
+	models_or_filenames : iterable
+		A list of models, given either as `str` containing a path to a file that
+		can be loaded as a :class:`Model`, or pre-loaded :class:`Model` objects.
+	params : iterable
+		An ordered list of parameters names and/or categories. If given,
+		this list will be used to order the resulting table.
+	ratios : iterable
+		An ordered list of factors to evaluate.
+	
+	Other Parameters
+	----------------
+	filename : str
+		The file into which to save the multireport
+	overwrite : bool
+		If `filename` exists, should it be overwritten (default False).
+	spool : bool
+		If `filename` exists, should the report file be spooled into a 
+		similar filename.
+	title : str
+		An optional title for the report.
+	
+	"""
+	
 	
 	models = []
 	for m in models_or_filenames:
@@ -156,7 +184,18 @@ def multireport(models_or_filenames, params=[], ratios=[], *, filename=None, ove
 						for m in models:
 							shade ^= 1
 							if p in m:
-								f.write('<td class="{0}">{1:0.6g}</td><td class="{0} tstat">({2:0.3g})</td>'.format(shades[shade],m[p].value,m[p].t_stat))
+								m_p = m.parameter_wide(p)
+								tstat = m_p.t_stat
+								value = m_p.value
+								try:
+									value = "{:0.6g}".format(value)
+								except ValueError:
+									value = str(value)
+								try:
+									tstat = "{:0.3g}".format(tstat)
+								except ValueError:
+									tstat = str(tstat)
+								f.write('<td class="{0}">{1}</td><td class="{0} tstat">({2})</td>'.format(shades[shade],value,tstat))
 							else:
 								f.write('<td class="{0}">{1}</td><td class="{0} tstat">({1})</td>'.format(shades[shade],"---"))
 

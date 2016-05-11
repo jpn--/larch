@@ -154,7 +154,7 @@ def _testcode_iter(sourcefile):
 def _testcode_parsed(sourcefile):
 	return "\n".join(_testcode_iter(sourcefile))
 
-def _exec_example(sourcefile, d = None):
+def _exec_example(sourcefile, d = None, extract='m'):
 	_global = {}
 	_local = {}
 	from .. import larch
@@ -172,14 +172,29 @@ def _exec_example(sourcefile, d = None):
 				continue
 			code = compile(line, sourcefile+":"+str(n), 'exec')
 			exec(code, _global, _local)
-	return _local['m']
+	if isinstance(extract, str):
+		return _local[extract]
+	else:
+		return tuple(_local[i] for i in extract)
 
-def _exec_example_n(n, d=None):
+def _exec_example_n(n, *arg, **kwarg):
 	if n not in examplefiles_doc:
 		raise KeyError(n)
 	f = os.path.join(exampledocdir, examplefiles_doc[n])
-	return _exec_example(f,d)
+	return _exec_example(f, *arg, **kwarg)
 
-
+def reproduce(n, extract='m'):
+	'''Run an example code section (from the documentation) and give the result.
+	
+	Parameters
+	----------
+	n : int
+		The number of the example to reproduce.
+	extract : str or iterable of str
+		The name of the object of the example to extract.  By default `m`
+		but it any named object that exists in the example namespace can
+		be returned.  Give a list of `str`s to get multiple objects.
+	'''
+	return _exec_example_n(n, extract=extract)
 
 
