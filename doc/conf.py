@@ -266,29 +266,46 @@ htmlhelp_basename = 'larchdoc'
 
 # -- Options for LaTeX output --------------------------------------------------
 
-#latex_elements = {
-## The paper size ('letterpaper' or 'a4paper').
-##'papersize': 'letterpaper',
-#
-## The font size ('10pt', '11pt' or '12pt').
-##'pointsize': '10pt',
-#
-## Additional stuff for the LaTeX preamble.
-#    'preamble': "".join((
-#		'\usepackage{wasysym}',
-#		'\DeclareUnicodeCharacter{00A0}{ }',  # NO-BREAK SPACE
-#        '\DeclareUnicodeCharacter{251C}{+}',  # BOX DRAWINGS LIGHT VERTICAL AND RIGHT
-#        '\DeclareUnicodeCharacter{2514}{+}',  # BOX DRAWINGS LIGHT UP AND RIGHT
-#        '\DeclareUnicodeCharacter{2640}{\\female}',
-#    )),
-#}
+latex_elements = {
+# The paper size ('letterpaper' or 'a4paper').
+#'papersize': 'letterpaper',
+
+# The font size ('10pt', '11pt' or '12pt').
+#'pointsize': '10pt',
+
+hex_values = ('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F')
+
+
+
+
+
+
+# Additional stuff for the LaTeX preamble.
+    'preamble': "".join((
+		'\usepackage{wasysym}',
+		'\DeclareUnicodeCharacter{00A0}{ }',  # NO-BREAK SPACE
+        '\DeclareUnicodeCharacter{251C}{+}',  # BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+        '\DeclareUnicodeCharacter{2514}{+}',  # BOX DRAWINGS LIGHT UP AND RIGHT
+        '\DeclareUnicodeCharacter{2640}{\\female}',
+
+        '\DeclareUnicodeCharacter{2500}{-}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{2502}{|}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{2504}{-}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{251C}{+}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{252C}{+}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{253C}{+}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{2550}{=}',  # BOX DRAWINGS
+        '\DeclareUnicodeCharacter{2567}{=}',  # BOX DRAWINGS
+		
+    )),
+}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
-#latex_documents = [
-#  ('index', 'larch.tex', u'Larch Documentation',
-#   u'Jeffrey Newman', 'manual'),
-#]
+latex_documents = [
+  ('index', 'larch.tex', u'Larch Documentation',
+   u'Jeffrey Newman', 'manual'),
+]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
