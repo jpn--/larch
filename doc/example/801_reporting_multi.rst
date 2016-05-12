@@ -1,4 +1,4 @@
-.. currentmodule:: larch
+.. currentmodule:: larch.report
 
 .. default-domain:: py
 
@@ -16,10 +16,19 @@ Reporting Multiple Models in a Single Consolidated Report
 Larch includes a facility to report multiple models side-by-side
 in a single consolidated report.
 
+
+.. autofunction:: multireport
+
+
+To make the consolidated report reasonably legible, we will
+organize the parameters into :class:`Category` groups, and used the
+:class:`Rename` facility to make sure that the parameter names
+(which might sometimes vary from model to model, even when they
+apply in the same manner) line up correctly.
+
 .. testcode::
 
-	from larch.roles import P, Category, Rename
-	from larch.report import multireport
+	from larch.report import multireport, Category, Rename
 
 	cat_ASC = Category("Alternative Specific Constants", 
 		Rename('Shared Ride 2',  'ASC_SR2' ,           ),
@@ -35,6 +44,7 @@ in a single consolidated report.
 		Rename('Cost / Income',           'costbyincome'),
 		Rename('Motorized IVT',           'motorized_time'),
 		Rename('Motorized OVT / Distance','motorized_ovtbydist'),
+		Rename('Non-Motorized Time',      'nonmotorized_time'),
 	)
 
 	cat_HHIncome = Category("Household Income", 
@@ -74,6 +84,10 @@ in a single consolidated report.
 		Rename('Walk',           'wkcbd_WALK', 'wkcbd_Walk'),
 	)
 
+Having defined all out categories, we can organize them into a single list:
+
+.. testcode::
+
 	cat = [
 		cat_ASC,
 		cat_LOS, 
@@ -82,6 +96,12 @@ in a single consolidated report.
 		cat_EmpDen,
 		cat_CBD,
 	]
+
+
+Then it's just a matter of loading in our models that we will report, and
+generating the multireport.
+
+.. testcode::
 
 	m1 = larch.Model.Example(1)
 	m1.maximize_loglike()

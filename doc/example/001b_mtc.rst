@@ -109,3 +109,10 @@ Let's see what we get:
 
 Exactly the same as before.  Awesome!
 
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.Model.Example('1b')
+

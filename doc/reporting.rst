@@ -6,6 +6,8 @@
 
    import larch
    import os
+   import larch.report
+
 
 
 =======================
@@ -17,7 +19,15 @@ Reporting
 
 
 
+.. currentmodule:: larch.report
+
+.. autoclass:: Category
+
+.. autoclass:: Rename
+
+
 .. toctree::
+	:caption: Reporting Styles
 
 	Text <reporting_txt>
 	HTML <reporting_html>

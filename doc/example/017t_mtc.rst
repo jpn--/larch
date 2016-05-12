@@ -1,17 +1,22 @@
 .. currentmodule:: larch
 
-==============================
-17: Better MTC MNL Mode Choice
-==============================
+=================================
+17t: MTC MNL Mode Choice Using DT
+=================================
 
 .. testsetup:: *
 
    import larch
 
-For this example, we're going to create a richer and more sophisticated
-mode choice model, using the same MTC data.  We'll jump straight to the
-preferred model 17 from the
-`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_.
+For this example, we're going to re-create model 17 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_,
+but using the :class:`DT` data format.
+
+Unlike for the :class:`DB` based model, we won't need to manipulate the data
+in advance of creating our model, because combinations of :ref:`idca`
+and :ref:`idco` variables can be done on-the-fly using broadcasting techniques for
+numpy arrays.
+
 
 To build that model, we are going to have to create some variables that
 we don't already have: cost divided by income, and out of vehicle travel time
@@ -22,32 +27,15 @@ but first we'll set ourselves up to do so efficiently.
 
 .. testcode::
 
-	d = larch.DB.Example('MTC')
-	d.execute("CREATE INDEX IF NOT EXISTS data_co_casenum ON data_co (casenum);")
+	d = larch.DT.Example('MTC')
 
-The index we create here on the :ref:`idco` table will allow SQLite to grab the
-correct row from the data_co table almost instantly (more or less) each time, instead of having
-to search through the whole table for the matching caseid.  Once we have this index, we
-can write a couple UPDATE queries to build our two new :ref:`idca` variables:
-
-.. testcode::
-
-	d.add_column("data_ca", "costbyincome FLOAT")
-	qry1="UPDATE data_ca SET costbyincome = 1.0*totcost/(SELECT hhinc FROM data_co WHERE data_co.casenum=data_ca.casenum)"
-	d.execute(qry1)
-
-	d.add_column("data_ca", "ovtbydist FLOAT")
-	qry2="UPDATE data_ca SET ovtbydist = 1.0*ovtt/(SELECT dist FROM data_co WHERE data_co.casenum=data_ca.casenum)"
-	d.execute(qry2)
-
-In each block, we first add a new column to the data_ca table, and then populate
-that column with the calculated values.  Now we are ready to build our model.
+We don't need to do anything more that open the example DT file and we are ready to build our model.
 
 .. testcode::
 
 	m = larch.Model(d)
 
-	m.utility.ca("costbyincome")
+	m.utility.ca("totcost/hhinc",  "costbyincome")
 
 	m.utility.ca("tottime * (altnum IN (1,2,3,4))", "motorized_time")
 	m.utility.ca("tottime * (altnum IN (5,6))", "nonmotorized_time")
@@ -117,7 +105,7 @@ Having created this model, we can then estimate it:
 	'Optimization terminated successfully...
 
 	>>> m.loglike()
-	-3444.19...
+	-3444.17...
 
 	>>> print(m)
 	====================================================================================================
@@ -166,5 +154,5 @@ Having created this model, we can then estimate it:
 	If you want access to the model in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-estimate copy like this::
 
-		m = larch.Model.Example(17)
+		m = larch.Model.Example('17t')
 
