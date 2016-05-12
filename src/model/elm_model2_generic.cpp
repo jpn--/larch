@@ -205,6 +205,9 @@ void elm::Model2::change_data_fountain(elm::Fountain& datafile)
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 
+	cache_valid_ca.clear();
+	cache_valid_co.clear();
+
 }
 
 
@@ -214,6 +217,9 @@ void elm::Model2::delete_data_fountain()
 {
 	_Fount = nullptr;
 	Xylem.clear();
+
+	cache_valid_ca.clear();
+	cache_valid_co.clear();
 }
 
 

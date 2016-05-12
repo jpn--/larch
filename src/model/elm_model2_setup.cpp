@@ -75,19 +75,35 @@ void elm::__identify_additional_needs(const ComponentList& Input_List, etk::strv
 }
 
 
-void __check_validity_of_needs(const etk::strvec& needs, Fountain*	_Data, int k, etk::logging_service* msg)
+void __check_validity_of_needs(const etk::strvec& needs, Fountain*	_Data, int k, etk::logging_service* msg,
+							   std::set< std::string >* cache_valid_ca=nullptr,
+							   std::set< std::string >* cache_valid_co=nullptr )
 {
 	if (!_Data) return;
 
 	if (k & IDCA) {
 		for (auto i=needs.begin(); i!=needs.end(); i++) {
 			BUGGER_(msg, "checking for validity of "<<*i<<" in idCA data");
-			_Data->check_ca(*i);
+			// First check in the cache if available
+			if (cache_valid_ca && cache_valid_ca->find(*i)!=cache_valid_ca->end()) continue;
+			// Then check the actual data
+			if (_Data->check_ca(*i)) {
+				if (cache_valid_ca) cache_valid_ca->insert(*i);
+			} else {
+				OOPS("check idca ",*i," is invalid");
+			};
 		}
 	} else if (k & IDCO) {
 		for (auto i=needs.begin(); i!=needs.end(); i++) {
 			BUGGER_(msg, "checking for validity of "<<*i<<" in idCO data");
-			_Data->check_co(*i);
+			// First check in the cache if available
+			if (cache_valid_co && cache_valid_co->find(*i)!=cache_valid_co->end()) continue;
+			// Then check the actual data
+			if (_Data->check_co(*i)) {
+				if (cache_valid_co) cache_valid_co->insert(*i);
+			} else {
+				OOPS("check idco ",*i," is invalid");
+			};
 		}
 	}
 }
@@ -102,6 +118,8 @@ void _setUp_linear_data_and_params
  ,	paramArray*				Params_UtilityCA
  ,	paramArray*				Params_UtilityCO
  ,	etk::logging_service*	msg
+ ,  std::set< std::string >* cache_valid_ca=nullptr
+ ,  std::set< std::string >* cache_valid_co=nullptr
 )
 {
 	size_t slot, slot2;
@@ -111,7 +129,7 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCA && Params_UtilityCA) {
 		// First, populate the data_port
 		etk::strvec u_ca = __identify_needs((*Input_UtilityCA));
-		__check_validity_of_needs(u_ca, _fount, IDCA, msg);
+		__check_validity_of_needs(u_ca, _fount, IDCA, msg, cache_valid_ca, cache_valid_co);
 		
 		// Second, resize the paramArray
 		BUGGER_(msg, "setting Params_?CA size to ("<<u_ca.size()<<")");
@@ -129,7 +147,7 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCO && Params_UtilityCO) {
 		// First, populate the data_port
 		etk::strvec u_co = __identify_needs((*Input_UtilityCO));
-		__check_validity_of_needs(u_co, _fount, IDCO, msg);
+		__check_validity_of_needs(u_co, _fount, IDCO, msg, cache_valid_ca, cache_valid_co);
 
 		// Second, resize the paramArray
 		auto s = _fount ? _fount->nAlts() : Xylem.n_elemental();
@@ -229,6 +247,8 @@ void elm::Model2::_setUp_utility_data_and_params()
 	 ,	&Params_UtilityCA
 	 ,	&Params_UtilityCO
 	 ,	&msg
+	 ,  &cache_valid_ca
+	 ,  &cache_valid_co
 	);
 
 	BUGGER(msg) << "Params_UtilityCA \n" << Params_UtilityCA.__str__();
@@ -249,6 +269,8 @@ void elm::Model2::_setUp_quantity_data_and_params()
 	 ,	&Params_QuantityCA
 	 ,	nullptr
 	 ,	&msg
+	 ,  &cache_valid_ca
+	 ,  &cache_valid_co
 	);
 
 	BUGGER(msg) << "Params_QuantityCA \n" << Params_QuantityCA.__str__();
@@ -268,6 +290,8 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 	 ,	&Params_SamplingCA
 	 ,	&Params_SamplingCO
 	 ,	&msg
+	 ,  &cache_valid_ca
+	 ,  &cache_valid_co
 	);
 
 	BUGGER(msg) << "Params_SamplingCA \n" << Params_SamplingCA.__str__();
@@ -499,6 +523,8 @@ void elm::Model2::tearDown()
 	Params_LogSum     .clear();
 	Params_Edges      .clear();
 
+	cache_valid_ca.clear();
+	cache_valid_co.clear();
 }
 
 
@@ -517,6 +543,9 @@ void elm::Model2::unprovision()
 	Data_Choice.reset();
 	Data_Weight.reset();
 	Data_Avail.reset();
+
+	cache_valid_ca.clear();
+	cache_valid_co.clear();
 
 }
 

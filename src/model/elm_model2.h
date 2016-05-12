@@ -187,6 +187,9 @@ namespace elm {
 		paramArray  Params_LogSum     ;
 		paramArray  Params_Edges      ;
 
+		std::set<std::string> cache_valid_ca;
+		std::set<std::string> cache_valid_co;
+
 		// hold the linkages to the freedoms for the various parameters
 		//  used to create the model parmeters at each iteration from the freedoms
 		
