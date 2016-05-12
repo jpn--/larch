@@ -273,13 +273,6 @@ latex_elements = {
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
 
-hex_values = ('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F')
-
-
-
-
-
-
 # Additional stuff for the LaTeX preamble.
     'preamble': "".join((
 		'\usepackage{wasysym}',
