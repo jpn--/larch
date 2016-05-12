@@ -54,7 +54,6 @@ try:
 	from . import core
 	core.larch_initialize()
 	from . import exceptions
-	from . import examples
 	from .db import DB
 	from .dt import DT, IncompatibleShape
 	from .omx import OMX
@@ -77,7 +76,6 @@ try:
 	except ImportError:
 		from .mock_module import Mock
 		linalg = Mock()
-	
 
 	status += "\nLarch "+build
 	_directory_ = os.path.split(__file__)[0]
@@ -85,6 +83,7 @@ try:
 
 	larch = sys.modules[__name__]
 
+	from . import examples
 
 #	import sys
 #	import subprocess
