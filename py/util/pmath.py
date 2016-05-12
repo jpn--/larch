@@ -1,7 +1,18 @@
 
 
 
-class category():
+class Category():
+	'''Defines categories of parameters to be used in report generation.
+	
+	Parameters
+	----------
+	name : str
+		A descriptive category name that will be used to label the category 
+		in a report.
+	members : tuple
+		The various members of this category, which can be parameter names 
+		(as `str`), or other [sub-]`Category` objects.
+	'''
 	def __init__(self, name, *members):
 		self.name = name
 		if len(members)==1 and isinstance(members[0],(list,tuple)):
@@ -18,7 +29,28 @@ class category():
 		return x
 
 
-class rename():
+category = Category  # legacy
+
+class Rename():
+	'''Defines an alternate display name for parameters to be used in report generation.
+	
+	Often the names of parameters actually used in the estimation process are 
+	abbreviated or arcane, especially if some aspect of the source data or legacy
+	models are older and not compatible with longer and more descriptive names.
+	But modern report generation can be enhanced by using those longer and more 
+	descriptive names.  This function allows a descriptive name to be attached to
+	one or more parameters; attaching the same name to different parameters allows
+	those parameters to be linked together and appear on the same line of multi-model
+	reports.	
+	
+	Parameters
+	----------
+	name : str
+		A descriptive name that will be used to label the parameter
+		in a report.
+	members : tuple
+		The various members of this category, which should be parameter names.
+	'''
 	def __init__(self, name, *members):
 		self.name = name
 		if len(members)==1 and isinstance(members[0],(list,tuple)):
@@ -44,7 +76,7 @@ class rename():
 	def __str__(self):
 		return self.name
 
-
+rename = Rename   # legacy
 
 
 
