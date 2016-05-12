@@ -53,11 +53,24 @@ examplefiles_pre = {
 
 
 examplefiles_glob = glob.glob(os.path.join(exampledocdir,"[0-9][0-9][0-9]_*.rst"))
-
+examplefiles_glob_x = glob.glob(os.path.join(exampledocdir,"[0-9][0-9][0-9][a-z]_*.rst"))
 
 examplefiles_doc = { int(os.path.basename(g)[:3]): os.path.basename(g) for g in examplefiles_glob }
+examplefiles_doc.update({ (os.path.basename(g)[:4]): os.path.basename(g) for g in examplefiles_glob_x })
 
+class UnknownExampleCode(KeyError):
+	pass
 
+def get_examplefile(n):
+	if isinstance(n,str):
+		try:
+			n = int(n)
+		except ValueError:
+			n = "{:0>4s}".format(n.casefold())
+	if n in examplefiles_doc:
+		return examplefiles_doc[n]
+	else:
+		raise UnknownExampleCode(n)
 
 
 
@@ -94,10 +107,10 @@ def show(n):
 	
 def tell(n):
 	'''Print the raw script of example file number <n>.'''
-	if n in examplefiles_doc:
-		f = os.path.join(exampledocdir, examplefiles_doc[n])
+	try:
+		f = os.path.join(exampledocdir, get_examplefile(n))
 		print(_testcode_parsed(f))
-	else:
+	except UnknownExampleCode:
 		try:
 			module_name = examplefiles[n]
 		except KeyError:
@@ -110,9 +123,11 @@ def tell(n):
 def pseudofile(n):
 	import io
 	pf = io.StringIO()
-	if n in examplefiles_doc:
-		f = os.path.join(exampledocdir, examplefiles_doc[n])
+	try:
+		f = os.path.join(exampledocdir, get_examplefile(n))
 		print(_testcode_parsed(f), file=pf)
+	except UnknownExampleCode:
+		pass
 	pf.seek(0)
 	return pf
 
@@ -178,9 +193,7 @@ def _exec_example(sourcefile, d = None, extract='m'):
 		return tuple(_local[i] for i in extract)
 
 def _exec_example_n(n, *arg, **kwarg):
-	if n not in examplefiles_doc:
-		raise KeyError(n)
-	f = os.path.join(exampledocdir, examplefiles_doc[n])
+	f = os.path.join(exampledocdir, get_examplefile(n))
 	return _exec_example(f, *arg, **kwarg)
 
 def reproduce(n, extract='m'):
