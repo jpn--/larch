@@ -9,6 +9,10 @@ import math
 from .core import LarchError
 
 
+from .util.pmath import category as Category
+from .util.pmath import rename as Rename
+
+
 class HTML():
 	def __init__(self, filename=None, *, overwrite=False, spool=True, head=None, title=None):
 		if filename is None:
