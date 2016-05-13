@@ -1457,7 +1457,10 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 
 elm::ModelParameter sherpa::__getitem__(const std::string& param_name)
 {
-	return elm::ModelParameter(this, FNames[param_name]);
+	if (FNames.has_key(param_name)) {
+		return elm::ModelParameter(this, FNames[param_name]);
+	}
+	OOPS_KeyError("Parameter ",param_name," not found.");
 }
 
 elm::ModelParameter sherpa::__getitem__(const int& param_num)
