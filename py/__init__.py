@@ -2,7 +2,7 @@
 #
 #  Larch is free, open source software to estimate discrete choice models.
 #  
-#  Copyright 2007-2015 Jeffrey Newman
+#  Copyright 2007-2016 Jeffrey Newman
 #
 #  Larch is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 import sys
 import os, os.path
 
-__version__ = '3.2.8'
-__build_date__ = '04 May 2016'
+__version__ = '3.2.9'
+__build_date__ = '13 May 2016'
 
 if os.environ.get('READTHEDOCS', None) == 'True':
 	# hack for building docs on rtfd

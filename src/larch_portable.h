@@ -1,7 +1,7 @@
 /*
  *  larch_portable.h
  *
- *  Copyright 2007-2015 Jeffrey Newman
+ *  Copyright 2007-2016 Jeffrey Newman
  *
  *  Larch is free software
  *

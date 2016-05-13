@@ -1,7 +1,7 @@
 /*
  *  elm_sql_queryset_simpleco.h
  *
- *  Copyright 2007-2015 Jeffrey Newman
+ *  Copyright 2007-2016 Jeffrey Newman
  *
  *  Larch is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
  *  elm_model.cpp
  *
- *  Copyright 2007-2015 Jeffrey Newman
+ *  Copyright 2007-2016 Jeffrey Newman
  *
 
  *  

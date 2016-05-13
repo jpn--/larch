@@ -55,22 +55,23 @@ For this example, we want to nest together the Train and Car modes into a "exist
 and we want to nest Train and SM together into a "public" modes nest. This creates a structure
 different from a traditional nested logit model, because the Train mode
 is "cross-nested": it appears in more than one nest.  The desired nesting structure then looks
-like this::
+like this:
 
-.. digraph:: Desired Nesting Structure
+.. digraph:: Desired_Nesting_Structure
 
+	bgcolor="transparent"
 	root [label="Root", shape="oval"]
 	train [label="Train", shape=box, style="rounded", penwidth=2]
 	sm [label="SM", shape=box, style="rounded", penwidth=2]
 	car [label="Car", shape=box, style="rounded", penwidth=2]
 	public [label="Public", shape=oval]
 	exist [label="Existing", shape=oval]
-	train -> exist
-	train -> public
-	sm -> public
-	car -> exist
-	exist -> root
-	public -> root
+	exist -> train
+	public -> train
+	public -> sm
+	exist -> car
+	root -> exist
+	root -> public
 
 
 
@@ -90,7 +91,11 @@ that applies only to the "Train" node.
 
 Larch employs a logit-type function to manage this allocation, instead of specifying
 the allocation directly as a parameter.  So, the allocation on the link Public->Train (PT)
-is given by :math:`\alpha_{PT} = \frac{\exp ( \phi_{PT} Z )}{\exp ( \phi_{PT} Z ) + \exp ( \phi_{ET} Z )}`,
+is given by
+
+.. math::
+	\alpha_{PT} = \frac{\exp ( \phi_{PT} Z )}{\exp ( \phi_{PT} Z ) + \exp ( \phi_{ET} Z )},
+
 where :math:`\phi_{PT}` is a vector of zero or more parameters associated with the
 link PT, :math:`\phi_{ET}` is a similar vector of parameters for the link Public->Existing (ET)
 and :math:`Z` is a vector of :ref:`idco` variables.

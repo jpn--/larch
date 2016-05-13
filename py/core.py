@@ -3540,6 +3540,15 @@ class ParameterAlias(object):
     name = _swig_property(_core.ParameterAlias_name_get, _core.ParameterAlias_name_set)
     refers_to = _swig_property(_core.ParameterAlias_refers_to_get, _core.ParameterAlias_refers_to_set)
     multiplier = _swig_property(_core.ParameterAlias_multiplier_get, _core.ParameterAlias_multiplier_set)
+    _refers_to_modelparam = _swig_property(_core.ParameterAlias__refers_to_modelparam_get, _core.ParameterAlias__refers_to_modelparam_set)
+
+    def get_referred_modelparam(self) -> "PyObject *":
+        return _core.ParameterAlias_get_referred_modelparam(self)
+
+    def set_referred_modelparam(self, arg2: 'PyObject *') -> "void":
+        return _core.ParameterAlias_set_referred_modelparam(self, arg2)
+    __swig_destroy__ = _core.delete_ParameterAlias
+    __del__ = lambda self: None
 
     def __init__(self, name: 'std::string const &', refers_to: 'std::string const &', multiplier: 'double const &'):
         this = _core.new_ParameterAlias(name, refers_to, multiplier)
@@ -3547,8 +3556,25 @@ class ParameterAlias(object):
             self.this.append(this)
         except Exception:
             self.this = this
-    __swig_destroy__ = _core.delete_ParameterAlias
-    __del__ = lambda self: None
+
+    @property
+    def value(self):
+    	return self.multiplier * self.get_referred_modelparam().value
+    @property
+    def null_value(self):
+    	return self.multiplier * self.get_referred_modelparam().null_value
+    @property
+    def t_stat(self):
+    	if self.multiplier == 1:
+    		return "= {}".format(self.refers_to)
+    	elif self.multiplier == 0:
+    		return "= 0"
+    	else:
+    		return "= {} * {}".format(self.refers_to,self.multiplier)
+    def __getitem__(self, *arg):
+    	return self.__getattribute__(*arg)
+
+
 ParameterAlias_swigregister = _core.ParameterAlias_swigregister
 ParameterAlias_swigregister(ParameterAlias)
 

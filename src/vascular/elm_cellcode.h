@@ -1,7 +1,7 @@
 /*
  *  elm_cellcode.h
  *
- *  Copyright 2007-2015 Jeffrey Newman
+ *  Copyright 2007-2016 Jeffrey Newman
  *
 Larch is free software: you can redistribute it and/or modify
  *  
