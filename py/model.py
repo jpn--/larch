@@ -1226,7 +1226,16 @@ class Model(Model2, ModelReporter):
 	def __getitem__(self, x):
 		if isinstance(x,rename):
 			x = x.find_in(self)
-		return super().__getitem__(x)
+		try:
+			return super().__getitem__(x)
+		except KeyError:
+			if len(self) < 500:
+				from .util.text_manip import case_insensitive_close_matches
+				did_you_mean_list = case_insensitive_close_matches(x, self.parameter_names())
+				if len(did_you_mean_list)>0:
+					did_you_mean = "Parameter {} not found, did you mean {}?".format(x, " or ".join(did_you_mean_list))
+					raise KeyError(did_you_mean) from None
+			raise
 
 	def __setitem__(self, x, val):
 		if isinstance(x,rename):
