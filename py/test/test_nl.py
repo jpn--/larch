@@ -504,10 +504,10 @@ class TestNL(ELM_TestCase):
 		m['ASC_TRAIN'].value = 0.0983
 		m['B_TIME'].value = -0.00777
 		m['B_COST'].value = -0.00819
-		m['PHI_EXISTING'].value =-0.02
-		m['MU_EXISTING'].value = 1.0/2.51
+		m['phi_et'].value =-0.02
+		m['existing'].value = 1.0/2.51
 		m['ASC_CAR'].value =-0.240
-		m['MU_PUBLIC'].value = 1.0/4.11
+		m['public'].value = 1.0/4.11
 		self.assertNearlyEqual(-5214.049, m.loglike(),sigfigs=6)
 
 	def test_ngev(self):

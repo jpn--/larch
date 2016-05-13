@@ -1,0 +1,159 @@
+.. currentmodule:: larch
+
+==============================================
+111: Swissmetro Cross-Nested Logit Mode Choice
+==============================================
+
+.. testsetup:: *
+
+   import larch
+
+
+
+This example is a mode choice model built using the Swissmetro example dataset.
+First we create the DB and Model objects.  When we create the DB object, we will
+redefine the weight value:
+
+.. testcode::
+
+	d = larch.DB.Example('SWISSMETRO')
+	m = larch.Model(d)
+
+We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.
+
+.. testcode::
+
+	m.title = "swissmetro example 11 (cross nested logit)"
+
+
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+
+.. testcode::
+
+	m.utility.co("1",1,"ASC_TRAIN")
+	m.utility.co("1",3,"ASC_CAR")
+	m.utility.co("TRAIN_TT",1,"B_TIME")
+	m.utility.co("SM_TT",2,"B_TIME")
+	m.utility.co("CAR_TT",3,"B_TIME")
+	m.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
+	m.utility.co("SM_CO*(GA==0)",2,"B_COST")
+	m.utility.co("CAR_CO",3,"B_COST")
+
+
+To create a new nest, we can use the new_nest command, although we'll need to know what the
+alternative codes are for the alternatives in our dataset. To find out, we can do:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.db.alternatives()
+	[(1, 'Train'), (2, 'SM'), (3, 'Car')]
+
+
+For this example, we want to nest together the Train and Car modes into a "existing" modes nest,
+and we want to nest Train and SM together into a "public" modes nest. This creates a structure
+different from a traditional nested logit model, because the Train mode
+is "cross-nested": it appears in more than one nest.  The desired nesting structure then looks
+like this::
+
+.. digraph:: Desired Nesting Structure
+
+	root [label="Root", shape="oval"]
+	train [label="Train", shape=box, style="rounded", penwidth=2]
+	sm [label="SM", shape=box, style="rounded", penwidth=2]
+	car [label="Car", shape=box, style="rounded", penwidth=2]
+	public [label="Public", shape=oval]
+	exist [label="Existing", shape=oval]
+	train -> exist
+	train -> public
+	sm -> public
+	car -> exist
+	exist -> root
+	public -> root
+
+
+
+To do this we can use the new_nest command like this:
+
+.. testcode::
+
+	existing_id = m.new_nest("existing", parent=m.root_id, children=[1,3])
+	public_id = m.new_nest("public", parent=m.root_id, children=[1,2])
+
+The :meth:`new_nest` method returns an identifying code number for the newly
+created nest.  We'll use that code number below.
+
+For a cross-nested model, we need to assign an allocation level to each graph link
+for all entering links of any node that has more than one predecessor.  In this case,
+that applies only to the "Train" node.
+
+Larch employs a logit-type function to manage this allocation, instead of specifying
+the allocation directly as a parameter.  So, the allocation on the link Public->Train (PT)
+is given by :math:`\alpha_{PT} = \frac{\exp ( \phi_{PT} Z )}{\exp ( \phi_{PT} Z ) + \exp ( \phi_{ET} Z )}`,
+where :math:`\phi_{PT}` is a vector of zero or more parameters associated with the
+link PT, :math:`\phi_{ET}` is a similar vector of parameters for the link Public->Existing (ET)
+and :math:`Z` is a vector of :ref:`idco` variables.
+
+If we give our model no other commands, the length of these parameter and data vectors will be zero,
+and the allocation parameters for links PT and ET will default to 0.5 each.  But, we can
+relax this constrained default value by putting some defined parameters into the
+formula:
+
+.. testcode::
+
+	m.link[existing_id, 1](param="phi_et", data="1")
+
+Note that, as for alternative specific constants in the utility function, we leave out
+one of the possibilities (here, we skip ET) to avoid overspecifying the model.
+
+Constructing the allocation parameters like this has a few benefits. It automatically
+ensures that the total allocation for each node to it's incoming links is always 1.  It
+also allows the parameter phi_pt to be estimated as unconstrained, as it can take on any value
+without bound and still produce a properly normalized model.  Lastly, it allows the allocation
+to be a function of the :ref:`idco` data, and not merely a fixed value.  One drawback is
+that there is no statistical test to use on the value of the estimated phi parameters to determine
+if the true value of the alloction should be 1 or 0, because those allocations are
+associated with infinite values for phi.
+
+We can estimate the models and check the results match up with those given by Biogeme:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> result = m.maximize_loglike()
+	>>> print(result.message)
+	Optimization terminated successfully...
+	
+	>>> print(m.report('txt', sigfigs=4))
+	=========================================================================================...
+	swissmetro example 11 (cross nested logit)
+	=========================================================================================...
+	Model Parameter Estimates
+	-----------------------------------------------------------------------------------------...
+	Parameter	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue
+	ASC_TRAIN	 0.0        	 0.09828    	 0.05634    	 1.744      	 0.0        
+	ASC_CAR  	 0.0        	-0.2404     	 0.03844    	-6.255      	 0.0        
+	B_TIME   	 0.0        	-0.007769   	 0.0005576  	-13.93      	 0.0        
+	B_COST   	 0.0        	-0.008189   	 0.000446   	-18.36      	 0.0        
+	existing 	 1.0        	 0.3976     	 0.02761    	-21.82      	 1.0        
+	public   	 1.0        	 0.2431     	 0.03361    	-22.52      	 1.0        
+	phi_pt   	 0.0        	 0.01971    	 0.1157     	 0.1703     	 0.0        
+	=========================================================================================...
+	Model Estimation Statistics
+	-----------------------------------------------------------------------------------------...
+	Log Likelihood at Convergence     	-5214.05
+	Log Likelihood at Null Parameters 	-6964.66
+	-----------------------------------------------------------------------------------------...
+	Rho Squared w.r.t. Null Parameters	0.251
+	=========================================================================================...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.Model.Example(111)
+
+
