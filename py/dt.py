@@ -87,16 +87,25 @@ class DT(Fountain):
 	Parameters
 	----------
 	filename : str or None
-		The filename or `URI <https://www.sqlite.org/c3ref/open.html#urifilenameexamples>`_
-		of the database to open. It must be encoded as a UTF-8 string. (If your
-		string contains only usual English characters you probably don't need
-		to worry about it.) The default is an in-memory database opened with a URI of
-		``file:larchdb?mode=memory``, which is very fast as long as you've got enough
+		The filename of the HDF5/pytables to open. If None (the default) a 
+		named temporary file is created to serve as the backing for an in-memory 
+		HDF5 file, which is very fast as long as you've got enough
 		memory to store the whole thing.
 	mode : str
 		The mode used to open the H5F file.  Common values are 'a' for append and 'r' 
 		for read only.  See pytables for more detail.
-
+	complevel : int
+		The compression level to use for new objects created.  By default no compression
+		is used, but substantial disk savings may be available by using it.
+	inmemory : bool
+		If True (defaults False), the H5FD_CORE driver is used and data will not in general be written
+		to disk until the file is closed, when all accumulated changes will be written
+		in a single batch.  This can be fast if you have sufficent memory but if an error 
+		occurs all your intermediate changes can be lost.
+	temp : bool
+		If True (defaults False), the inmemory switch is activated and no changes will be
+		written to disk when the file is closed. This is automatically set to true if
+		the `filename` is None.
 
 	.. warning::
 		The normal constructor creates a :class:`DT` object linked to an existing 
@@ -137,9 +146,14 @@ class DT(Fountain):
 	def _refresh_alts(self):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
-	def __init__(self, filename, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None, inmemory=False, temp=False):
+	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None, inmemory=False, temp=False):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
+		if filename is None:
+			temp = True
+			from .util.temporaryfile import TemporaryFile
+			self._TemporaryFile = TemporaryFile(suffix='.h5f')
+			filename = self._TemporaryFile.name
 		if h5f is not None:
 			self.h5f = h5f
 			self._h5f_own = False
@@ -1165,30 +1179,41 @@ class DT(Fountain):
 		"""
 		import pandas
 		df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
-		for col in df.columns:
-			col_array = df[col].values
-			h5var = h5f.create_carray(self.h5idco, col, _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
-			h5var[:] = col_array
-		if caseid_column is not None and 'caseids' in self.h5top:
-			raise LarchError("caseids already exist, not setting new ones")
-		if caseid_column is not None and 'caseids' not in self.h5top:
-			if caseid_column not in df.columns:
-				for col in df.columns:
-					if col.casefold() == caseid_column.casefold():
-						caseid_column = col
-						break
-			if caseid_column not in df.columns:
-				raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
-			proposed_caseids_node = self.h5idco._v_children[caseid_column]
-			if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
-				col_array = df[caseid_column].values.astype('int64')
-				if not numpy.all(col_array==df[caseid_column].values):
-					raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
-				h5var = h5f.create_carray(self.h5idco, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+		try:
+			for col in df.columns:
+				col_array = df[col].values
+				try:
+					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+				except ValueError:
+					maxlen = int(df[col].str.len().max())
+					maxlen = max(maxlen,8)
+					col_array = df[col].astype('S{}'.format(maxlen)).values
+					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+				h5var = self.h5f.create_carray(self.h5idco, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
-				caseid_column = caseid_column+'_int64'
+			if caseid_column is not None and 'caseids' in self.h5top:
+				raise LarchError("caseids already exist, not setting new ones")
+			if caseid_column is not None and 'caseids' not in self.h5top:
+				if caseid_column not in df.columns:
+					for col in df.columns:
+						if col.casefold() == caseid_column.casefold():
+							caseid_column = col
+							break
+				if caseid_column not in df.columns:
+					raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
 				proposed_caseids_node = self.h5idco._v_children[caseid_column]
-			self.h5f.create_soft_link(self.h5top, 'caseids', target=self.h5idco._v_pathname+'/'+caseid_column)
+				if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
+					col_array = df[caseid_column].values.astype('int64')
+					if not numpy.all(col_array==df[caseid_column].values):
+						raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
+					h5var = self.h5f.create_carray(self.h5idco, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+					h5var[:] = col_array
+					caseid_column = caseid_column+'_int64'
+					proposed_caseids_node = self.h5idco._v_children[caseid_column]
+				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.h5idco._v_pathname+'/'+caseid_column)
+		except:
+			self._df_exception = df
+			raise
 
 
 

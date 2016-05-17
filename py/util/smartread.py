@@ -1,6 +1,6 @@
 
 
-import gzip, os, csv, struct
+import gzip, os, csv, struct, zipfile, io
 from .. import logging
 
 
@@ -13,6 +13,14 @@ class SmartFileReader(object):
 				f.seek(-4, 2)
 				self._filesize = struct.unpack('I', f.read(4))[0]
 			self.file = gzip.open(file, 'rt', *args, **kwargs)
+		if file[-4:]=='.zip':
+			zf = zipfile.ZipFile(file, 'r')
+			zf_info = zf.infolist()
+			if len(zf_info)!=1:
+				raise TypeError("zip archive files must contain a single member file for SmartFileReader")
+			zf_info = zf_info[0]
+			self.file = zf.open(zf_info.filename, 'r', *args, **kwargs)
+			self._filesize = zf_info.file_size
 		else:
 			self.file = open(file, 'rt', *args, **kwargs)
 			self._filesize = os.fstat(self.file.fileno()).st_size
@@ -25,7 +33,10 @@ class SmartFileReader(object):
 	def __delattr__(self, name):
 		return delattr(self.file, name)
 	def percentread(self):
-		return (float(self.file.tell())/float(self._filesize)*100)
+		try:
+			return (float(self.file.tell())/float(self._filesize)*100)
+		except io.UnsupportedOperation:
+			return 1.0-(float(self.file._left)/float(self._filesize)*100)
 	def __iter__(self):
 		return self.file.__iter__()
 

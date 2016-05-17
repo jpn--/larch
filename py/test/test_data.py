@@ -32,6 +32,7 @@ from ..exceptions import *
 from ..array import Array, ArrayError
 import shutil, os
 import numpy, pandas
+from ..examples import exampledir
 
 class TestSwigCommmands(ELM_TestCase):
 	def test_dictionaries(self):
@@ -309,5 +310,18 @@ class TestData1(unittest.TestCase):
 		self.assertTrue(re.compile(b'<td><a.*></a>Total Cost</td><td.*>-0.00492\s*</td>').search(s) is not None)
 
 
+	def test_pytables_import_with_nulls(self):
+		dt = DT()
+		tinytest = os.path.join( exampledir, 'tinytest.csv' )
+		dt.import_idco(tinytest)
+		self.assertEqual( 2, dt.h5idco.Banana[0] )
+		self.assertTrue( numpy.isnan(dt.h5idco.Banana[1]) )
+		self.assertTrue( numpy.isnan(dt.h5idco.Banana[-1]) )
+		purch = numpy.array([b'Apple', b'Cookie', b'Apple', b'Banana', b'Cookie', b'Apple',
+							b'Apple', b'Cookie', b'Cookie'],
+							dtype='|S8')
+		self.assertEqual( purch, dt.h5idco.Purchase[:] )
+		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
+		self.assertEqual( apple, dt.h5idco.Apple[:] )
 
 

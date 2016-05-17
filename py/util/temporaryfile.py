@@ -34,9 +34,16 @@ def _open_in_chrome_or_something(url):
 	else:
 		webbrowser.get(chrome_path).open(url)
 
+# Trap __exit__ to ensure the file does not get
+# deleted when used in a with statement; to keep temporary files open
+# until intentionally cleaned up
+def _exit_without_closing(self, *arg, **kwarg):
+	return self.file.__exit__(*arg, **kwarg)
+
 
 def TemporaryFile(suffix='', mode='w+', use_chrome=True):
 	t = tempfile.NamedTemporaryFile(suffix=suffix,mode=mode,delete=False)
+	t.__exit__ = types.MethodType( _exit_without_closing, t )
 	if use_chrome:
 		t.view = types.MethodType( lambda self: _open_in_chrome_or_something('file://'+os.path.realpath(self.name)), t )
 	else:
@@ -44,6 +51,7 @@ def TemporaryFile(suffix='', mode='w+', use_chrome=True):
 	global TemporaryBucket
 	TemporaryBucket.append(t)
 	return t
+
 
 def _try_write(self, content):
 	try:
