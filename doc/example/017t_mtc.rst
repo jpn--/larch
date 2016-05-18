@@ -37,18 +37,13 @@ We don't need to do anything more that open the example DT file and we are ready
 
 	m.utility.ca("totcost/hhinc",  "costbyincome")
 
-	m.utility.ca("tottime * (altnum IN (1,2,3,4))", "motorized_time")
-	m.utility.ca("tottime * (altnum IN (5,6))", "nonmotorized_time")
-	m.utility.ca("ovtbydist * (altnum IN (1,2,3,4))", "motorized_ovtbydist")
+	m.utility.ca("tottime * (altnum <= 4)", "motorized_time")
+	m.utility.ca("tottime * (altnum >= 5)", "nonmotorized_time")
+	m.utility.ca("ovtt/dist * (altnum <= 4)", "motorized_ovtbydist")
 
-The costbyincome data is already computed above so we can add it
-to the model very simply.  In our preferred specification, we want to differentiate
-the total travel time by motorized modes (1 to 4) and non-motorized modes (5 and 6),
-which we can do by specifying some math inside the data string. Often the
-data string is just the name of a column as we have seen before, but it can
-also be any valid SQLite expression that can be evaluated on the relevant master
-query (either larch_idca or larch_idco).
-
+The totcost/hhinc data is computed once as a new variable when loading the model data.
+The same for tottime filtered by motorized modes (we harness the convenient fact
+that all the motorized modes have identifying numbers 4 or less), and ovtt/dist.
 
 .. testcode::
 
@@ -105,7 +100,7 @@ Having created this model, we can then estimate it:
 	'Optimization terminated successfully...
 
 	>>> m.loglike()
-	-3444.17...
+	-3444.1...
 
 	>>> print(m)
 	====================================================================================================

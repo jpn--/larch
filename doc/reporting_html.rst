@@ -33,10 +33,10 @@ custom table to hold some facts about your model or data:
 	...				x.th("Value")
 	...			with x.block("tr"):
 	...				x.td("cents per minute")
-	...				x.td(VoT_cents_per_minute.str(m, fmt="{:.1f}¢/minute"))
+	...				x.td(VoT_cents_per_minute.str(m, fmt="{:.1f}\xa2/minute"))
 	...			with x.block("tr"):
 	...				x.td("dollars per hour")
-	...				x.td("VoT_dollars_per_hour.str(m, fmt="${:.2f}/hr")")
+	...				x.td(VoT_dollars_per_hour.str(m, fmt="${:.2f}/hr"))
 	...		return x.close()
 
 
@@ -48,11 +48,11 @@ Then you could incorporate that table into a model report like this:
 	>>> from larch.util.xhtml import XHTML
 	>>> m = larch.Model.Example(1, pre=True)
 	>>> with XHTML(quickhead=m) as f:
-	...		f << m.xhtml_title()
-	...		f << report_valueoftime(m)
-	...		f << m.xhtml_params()
-	...		s=(f.dump())
-	>>> print(s)
+	...		f.append( m.xhtml_title() )
+	...		f.append( report_valueoftime(m) )
+	...		f.append( m.xhtml_params() )
+	...		print(f.dump())
+	...
 	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>...</html>'
 
 
