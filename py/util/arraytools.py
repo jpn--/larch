@@ -58,3 +58,30 @@ def label_to_index(labels, arr):
 		raise NonUniqueLookup("lookup '{}' does not have unique labels for each item".format(lookupname))
 	index_malordered = numpy.digitize(arr, uniq_labels, right=True)
 	return uniq_indexes[index_malordered]
+
+
+
+def labels_to_unique_ids(various_labels, lowest_label_number=1):
+	"""Convert an array or list of various labels to unique sequential integer code numbers.
+	
+	Parameters
+	----------
+	various_labels : array or list
+		A bunch of various labels to re-map.  Duplicates are allowed.
+	lowest_label_number : int
+		The lowest label number returned, by default 1.
+		
+	Returns
+	-------
+	array
+		An array of unique labels, in order.
+	ids
+		An array of integer code numbers, with the same shape as the
+		input `various_labels`.
+	
+	"""
+	ordered_labels, label_numbers = numpy.unique( various_labels, return_inverse=True )
+	label_numbers += lowest_label_number
+	return ordered_labels, label_numbers
+
+
