@@ -32,7 +32,6 @@ from ..exceptions import *
 from ..array import Array, ArrayError
 import shutil, os
 import numpy, pandas
-from ..examples import exampledir
 
 class TestSwigCommmands(ELM_TestCase):
 	def test_dictionaries(self):
@@ -310,9 +309,9 @@ class TestData1(unittest.TestCase):
 		self.assertTrue(re.compile(b'<td><a.*></a>Total Cost</td><td.*>-0.00492\s*</td>').search(s) is not None)
 
 
-	def test_pytables_import_with_nulls(self):
+	def test_pytables_import_idco_with_nulls(self):
 		dt = DT()
-		tinytest = os.path.join( exampledir, 'tinytest.csv' )
+		tinytest = os.path.join( DT.ExampleDirectory(), 'tinytest.csv' )
 		dt.import_idco(tinytest)
 		self.assertEqual( 2, dt.h5idco.Banana[0] )
 		self.assertTrue( numpy.isnan(dt.h5idco.Banana[1]) )
@@ -320,8 +319,29 @@ class TestData1(unittest.TestCase):
 		purch = numpy.array([b'Apple', b'Cookie', b'Apple', b'Banana', b'Cookie', b'Apple',
 							b'Apple', b'Cookie', b'Cookie'],
 							dtype='|S8')
-		self.assertEqual( purch, dt.h5idco.Purchase[:] )
+		self.assertTrue(numpy.array_equal( purch, dt.h5idco.Purchase[:] ))
 		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
-		self.assertEqual( apple, dt.h5idco.Apple[:] )
+		self.assertTrue( numpy.array_equal(apple, dt.h5idco.Apple[:]) )
+
+	def test_pytables_import_idca_with_nulls(self):
+		dt = DT()
+		tinytest = os.path.join( DT.ExampleDirectory(), 'tinytest_idca.csv' )
+		dt.import_idca(tinytest, caseid_col='Customer', altid_col='Product')
+		self.assertTrue(numpy.array_equal( ['Apple','Banana','Cookie'], dt.alternative_names() ))
+		self.assertEqual( 2, dt.h5idca.Price[0,1] )
+		self.assertEqual( 0, dt.h5idca.Price[1,1] ) # missing values are 0 not NAN in idca load
+		self.assertTrue( numpy.isnan(dt.h5idca.Price[-1,1]) )
+		purch = numpy.array([  [ 1.,  0.,  0.],
+							   [ 0.,  0.,  1.],
+							   [ 1.,  0.,  0.],
+							   [ 0.,  1.,  0.],
+							   [ 0.,  0.,  1.],
+							   [ 1.,  0.,  0.],
+							   [ 1.,  0.,  0.],
+							   [ 0.,  0.,  1.],
+							   [ 0.,  0.,  1.]])
+		self.assertTrue(numpy.array_equal( purch, dt.h5idca.Purchased[:] ))
+		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
+		self.assertTrue( numpy.array_equal(apple, dt.h5idca.Price[:,0]) )
 
 
