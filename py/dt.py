@@ -383,16 +383,12 @@ class DT(Fountain):
 
 
 
-	def array_idca(self, *vars, dtype=numpy.float64, screen=None):
-		"""Extract a set of idca values from the DB based on preset queries.
+	def array_idca(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True):
+		"""Extract a set of idca values from the DT.
 		
 		Generally you won't need to specify any parameters to this method beyond the
 		variables to include in the array, as
 		most values are determined automatically from the preset queries.
-		However, if you need to override things for this array without changing
-		the queries more permanently, you can use the input parameters to do so.
-		Note that all override parameters must be called by keyword, not as positional
-		arguments.
 		
 		Parameters
 		----------
@@ -402,27 +398,22 @@ class DT(Fountain):
 		
 		Other Parameters
 		----------------
-		table : str
-			The idca data will be found in this table.
-		ipath : str
-			If given, override the usual internal node path with ipath when looking up the table.
-		caseid : str
-			This sets the column name where the caseids can be found.
-		altid : str
-			This sets the column name where the altids can be found.
-		altcodes : tuple of int
-			This is the set of alternative codes used in the data. The second (middle) dimension 
-			of the result array will match these codes in length and order.
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably 
 			'int64', 'float64', or 'bool'.
+		screen : None or array of bool
+			If given, use this bool array to screen the caseids used to build 
+			the array.
+		strip_nan : bool
+			If True (the default) then NAN values are converted to 0, and INF
+			values are converted to the largest magnitude real number representable
+			in the selected dtype.
+		
 		
 		Returns
 		-------
 		data : ndarray
-			An array with specified dtype, of shape (n_cases,len(altcodes),len(vars)).
-		caseids : ndarray
-			An int64 array of shape (n_cases,1).
+			An array with specified dtype, of shape (n_cases,n_alts,len(vars)).
 			
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt
@@ -451,7 +442,8 @@ class DT(Fountain):
 				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
 				exc.args = (arg0,) + args[1:]
 				raise
-		result = numpy.nan_to_num(result)
+		if strip_nan:
+			result = numpy.nan_to_num(result)
 		from .array import Array
 		result = result.view(Array)
 		result.vars = vars
@@ -459,7 +451,7 @@ class DT(Fountain):
 
 
 
-	def array_idco(self, *vars, dtype=numpy.float64, screen=None):
+	def array_idco(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True):
 		"""Extract a set of idco values from the DB based on preset queries.
 		
 		Generally you won't need to specify any parameters to this method beyond the
@@ -475,6 +467,13 @@ class DT(Fountain):
 		vars : tuple of str
 			A tuple (or other iterable) giving the expressions (often column names, but any valid
 			SQLite expression works) to extract as :ref:`idco` format variables.
+		screen : None or array of bool
+			If given, use this bool array to screen the caseids used to build 
+			the array.
+		strip_nan : bool
+			If True (the default) then NAN values are converted to 0, and INF
+			values are converted to the largest magnitude real number representable
+			in the selected dtype.
 		
 		Other Parameters
 		----------------
@@ -512,7 +511,8 @@ class DT(Fountain):
 				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
 				exc.args = (arg0,) + args[1:]
 				raise
-		result = numpy.nan_to_num(result)
+		if strip_nan:
+			result = numpy.nan_to_num(result)
 		from .array import Array
 		result = result.view(Array)
 		result.vars = vars
@@ -1262,6 +1262,10 @@ class DT(Fountain):
 			caseids = numpy.union1d(caseids, chunk[caseid_col].values)
 			altids = numpy.union1d(altids, chunk[altid_col].values)
 
+		if caseids.dtype != numpy.int64:
+			from .util.arraytools import labels_to_unique_ids
+			case_labels, caseids = labels_to_unique_ids(caseids)
+			caseids = caseids.astype('int64')
 
 		if 'caseids' not in self.h5top:
 			self.h5f.create_carray(self.h5top, 'caseids', obj=caseids)
@@ -1269,7 +1273,11 @@ class DT(Fountain):
 			if not numpy.all(caseids==self.h5top.caseids[:]):
 				raise LarchError ('caseids exist but do not match the imported data')
 
+		alt_labels = None
 		if 'altids' not in self.h5alts:
+			if altids.dtype != numpy.int64:
+				from .util.arraytools import labels_to_unique_ids
+				alt_labels, altids = labels_to_unique_ids(altids)
 			h5altids = self.h5f.create_carray(self.h5alts, 'altids', obj=altids, title='elemental alternative code numbers')
 		else:
 			if not numpy.all(numpy.in1d(altids, self.h5alts.altids[:], True)):
@@ -1278,11 +1286,18 @@ class DT(Fountain):
 				altids = self.h5alts.altids[:]
 		if 'names' not in self.h5alts:
 			h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
-			for an in self.h5alts.altids[:]:
-				h5altnames.append( 'a'+str(an) )
+			if alt_labels is not None:
+				for an in alt_labels:
+					h5altnames.append( str(an) )
+			else:
+				for an in self.h5alts.altids[:]:
+					h5altnames.append( 'a'+str(an) )
 
 		caseidmap = {i:n for n,i in enumerate(caseids)}
 		altidmap = {i:n for n,i in enumerate(altids)}
+		if alt_labels is not None:
+			# if the altids are not integers, we replace the altid map with a labels map
+			altidmap = {i:n for n,i in enumerate(alt_labels)}
 
 		try:
 			filepath_or_buffer.seek(0)
@@ -1309,15 +1324,22 @@ class DT(Fountain):
 			pass
 
 		reader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, dtype=force_float_columns, engine='c')
-		for chunk in reader:
-			casemap = chunk[caseid_col].map(caseidmap)
-			altmap = chunk[altid_col].map(altidmap)
-			for col in chunk.columns:
-				if col in (caseid_col, altid_col): continue
-				h5arr[col][casemap.values,altmap.values] = chunk[col].values
-			if '_present_' not in chunk.columns:
-				h5arr['_present_'][casemap.values,altmap.values] = True
-
+		try:
+			for chunk in reader:
+				casemap = chunk[caseid_col].map(caseidmap)
+				altmap = chunk[altid_col].map(altidmap)
+				for col in chunk.columns:
+					if col in (caseid_col, altid_col): continue
+					h5arr[col][casemap.values,altmap.values] = chunk[col].values
+				if '_present_' not in chunk.columns:
+					h5arr['_present_'][casemap.values,altmap.values] = True
+		except:
+			self._chunk = chunk
+			self._casemap = casemap
+			self._altmap = altmap
+			self._altidmap = altidmap
+			raise
+		
 		self.h5f.create_soft_link(self.h5idca, '_avail_', target=self.h5idca._v_pathname+'/_present_')
 
 		if choice_col:
