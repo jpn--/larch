@@ -216,9 +216,11 @@ class XhtmlModelReporter():
 		...              'hhinc#6'   ),
 		... ]
 		>>> with XHTML(quickhead=m) as f:
-		... 	f << m.xhtml_title()
-		... 	f << m.xhtml_params(param_groups)
-		
+		... 	f.append( m.xhtml_title()  )
+		... 	f.append( m.xhtml_params(param_groups) )
+		... 	print(f.dump())
+		...
+		b'<!DOCTYPE html ...>'
 		"""
 		# keys fix
 		existing_format_keys = list(format.keys())
