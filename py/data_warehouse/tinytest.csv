@@ -1,0 +1,10 @@
+Apple,Banana,Cookie,Purchase
+1,2,3.3,Apple
+1,,0.4,Cookie
+2,NULL,5.2,Apple
+1,2,3.3,Banana
+1,,1,Cookie
+2,NULL,5.2,"Apple"
+1,2,3.3,Apple
+1,,0.4,Cookie
+2,N/A,5.2,"Cookie"
