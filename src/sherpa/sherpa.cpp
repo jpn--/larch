@@ -1428,9 +1428,10 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 		px._set_initvalue(0);
 	}
 	
-	
 	if (!isNan(value)) {
-		px._set_initvalue(initial_value);
+		if (!isNan(px._get_initvalue())) {
+			px._set_initvalue(value);
+		}
 		px._set_value(value);
 	}
 	if (!isNan(null_value)) {
@@ -1448,6 +1449,7 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 	if (holdfast>=0) {
 		px._set_holdfast((signed char)holdfast);
 	}
+	
 	return px;
 }
 

@@ -341,6 +341,16 @@ elm::ComponentList& elm::ComponentList::operator+=(const elm::ComponentList& x)
 	return *this;
 }
 
+void elm::ComponentList::_inplace_add(const elm::LinearComponent& x)
+{
+	push_back(x);
+}
+
+void elm::ComponentList::_inplace_add(const elm::ComponentList& x)
+{
+	insert(end(), x.begin(), x.end());
+}
+
 
 elm::ComponentCellcodeMap::ComponentCellcodeMap(int type, elm::Model2* parentmodel)
 : _receiver_type (type)
@@ -493,9 +503,9 @@ elm::ComponentList& elm::LinearBundle_1::_get_ca()
 	return ca;
 }
 
-elm::LinearCOBundle_1& elm::LinearBundle_1::_get_co()
+elm::LinearCOBundle_1* elm::LinearBundle_1::_get_co()
 {
-	return co;
+	return &co;
 }
 
 
@@ -690,9 +700,9 @@ elm::ComponentList& elm::ComponentListPair::_get_ca()
 	return ca;
 }
 
-elm::ComponentList& elm::ComponentListPair::_get_co()
+elm::ComponentList* elm::ComponentListPair::_get_co()
 {
-	return co;
+	return &co;
 }
 
 

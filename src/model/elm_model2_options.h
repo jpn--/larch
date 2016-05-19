@@ -86,6 +86,7 @@ namespace elm {
 		bool log_turns;
 		bool enforce_bounds;
 		bool enforce_constraints;
+		bool autocreate_parameters;
 		
 		double idca_avail_ratio_floor;
 		
@@ -111,7 +112,8 @@ namespace elm {
 			bool log_turns=false,
 			bool enforce_bounds=true,
 			bool enforce_contraints=false,
-			double idca_avail_ratio_floor=0.1
+			double idca_avail_ratio_floor=0.1,
+			bool autocreate_parameters=true
 		);
 	
 		// Re-constructor
@@ -134,7 +136,8 @@ namespace elm {
 			int log_turns=-9,
 			int enforce_bounds=-9,
 			int enforce_contraints=-9,
-			double idca_avail_ratio_floor=-9
+			double idca_avail_ratio_floor=-9,
+			int autocreate_parameters=-9
 		);
 
 		void copy(const model_options_t& other);

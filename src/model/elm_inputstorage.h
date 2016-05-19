@@ -108,8 +108,23 @@ namespace elm {
 
 		ComponentList operator+(const LinearComponent& x);
 		ComponentList operator+(const ComponentList& x);
+		#ifndef SWIG
 		ComponentList& operator+=(const LinearComponent& x);
 		ComponentList& operator+=(const ComponentList& x);
+		#endif // ndef SWIG
+		
+		void _inplace_add(const LinearComponent& x);
+		void _inplace_add(const ComponentList& x);
+
+		#ifdef SWIG
+		%pythoncode %{
+		def __iadd__(self, other):
+			self._inplace_add(other)
+			return self
+				
+		%}
+		#endif // def SWIG
+
 
 	};
 
@@ -228,6 +243,13 @@ namespace elm {
 				except AttributeError:
 					raise TypeError('cannot identify alternative')
 			self._call(altcode, data, param, multiplier)
+			
+		#def __setitem__(self, key, value):
+		#	try:
+		#		super().__setitem__(self, key, value)
+		#	except NotImplementedError:
+		#		super().__setitem__(self, key, LinearFunction()+value)
+				
 		%}
 		#endif // def SWIG
 		
@@ -254,7 +276,7 @@ namespace elm {
 		void _set_ca(const ComponentList& x);
 		void _set_co(const LinearCOBundle_1& x);
 		ComponentList&  _get_ca();
-		LinearCOBundle_1&       _get_co();
+		LinearCOBundle_1*       _get_co();
 		
 		#ifdef SWIG
 		%pythoncode %{
@@ -305,7 +327,7 @@ namespace elm {
 		void _set_ca(const ComponentList& x);
 		void _set_co(const ComponentList& x);
 		ComponentList&  _get_ca();
-		ComponentList&  _get_co();
+		ComponentList*  _get_co();
 		
 		#ifdef SWIG
 		%pythoncode %{

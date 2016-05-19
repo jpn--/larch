@@ -732,6 +732,41 @@
 
 
 
+
+%typecheck(SWIG_TYPECHECK_POINTER) elm::ComponentList *, elm::ComponentList & {
+
+	// check if input is ComponentList
+	int res = SWIG_ConvertPtr($input, 0, $1_descriptor, 0);
+	$1 = SWIG_CheckState(res);
+	
+//	if (!($1)) {
+//		std::cerr<<"Not A ComponentList";
+//	}
+
+//	// if not, check if input is ParameterRef (can build component)
+//	if (!($1)) {
+//		if (PyUnicode_Check($input) && PyObject_HasAttrString($input, "_role")) {
+//			PyObject* role = PyObject_GetAttrString($input, "_role");
+//			$1 = (PyString_ExtractCppString(role)=="parameter");
+//			Py_CLEAR(role);
+//		}
+//		if ($1 == 0) PyErr_Clear();
+//	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Set the input argument to point to a temporary variable */
 %typemap(in, numinputs=0) elm::darray** result_array (elm::darray* temp) {
 	temp = nullptr;

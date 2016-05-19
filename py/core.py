@@ -2736,8 +2736,14 @@ class LinearFunction(ComponentVector):
     def __add__(self, *args) -> "elm::ComponentList":
         return _core.LinearFunction___add__(self, *args)
 
-    def __iadd__(self, *args) -> "elm::ComponentList &":
-        return _core.LinearFunction___iadd__(self, *args)
+    def _inplace_add(self, *args) -> "void":
+        return _core.LinearFunction__inplace_add(self, *args)
+
+    def __iadd__(self, other):
+    	self._inplace_add(other)
+    	return self
+
+
     __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self: None
 LinearFunction_swigregister = _core.LinearFunction_swigregister
@@ -2840,6 +2846,13 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
     			raise TypeError('cannot identify alternative')
     	self._call(altcode, data, param, multiplier)
 
+    #def __setitem__(self, key, value):
+    #	try:
+    #		super().__setitem__(self, key, value)
+    #	except NotImplementedError:
+    #		super().__setitem__(self, key, LinearFunction()+value)
+
+
     __swig_destroy__ = _core.delete_LinearCOBundle_1
     __del__ = lambda self: None
 LinearCOBundle_1_swigregister = _core.LinearCOBundle_1_swigregister
@@ -2874,7 +2887,7 @@ class LinearBundle_1(object):
     def _get_ca(self) -> "elm::ComponentList &":
         return _core.LinearBundle_1__get_ca(self)
 
-    def _get_co(self) -> "elm::LinearCOBundle_1 &":
+    def _get_co(self) -> "elm::LinearCOBundle_1 *":
         return _core.LinearBundle_1__get_co(self)
 
     ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca(x))
@@ -2922,7 +2935,7 @@ class LinearFunctionPair(object):
     def _get_ca(self) -> "elm::ComponentList &":
         return _core.LinearFunctionPair__get_ca(self)
 
-    def _get_co(self) -> "elm::ComponentList &":
+    def _get_co(self) -> "elm::ComponentList *":
         return _core.LinearFunctionPair__get_co(self)
 
     def _set_ca_1(self,x):
@@ -3149,6 +3162,7 @@ class model_options_t(object):
     log_turns = _swig_property(_core.model_options_t_log_turns_get, _core.model_options_t_log_turns_set)
     enforce_bounds = _swig_property(_core.model_options_t_enforce_bounds_get, _core.model_options_t_enforce_bounds_set)
     enforce_constraints = _swig_property(_core.model_options_t_enforce_constraints_get, _core.model_options_t_enforce_constraints_set)
+    autocreate_parameters = _swig_property(_core.model_options_t_autocreate_parameters_get, _core.model_options_t_autocreate_parameters_set)
     idca_avail_ratio_floor = _swig_property(_core.model_options_t_idca_avail_ratio_floor_get, _core.model_options_t_idca_avail_ratio_floor_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
 

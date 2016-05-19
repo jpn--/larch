@@ -108,6 +108,71 @@ void __check_validity_of_needs(const etk::strvec& needs, Fountain*	_Data, int k,
 	}
 }
 
+#include "larch_modelparameter.h"
+
+
+void _setUp_automatic_default_parameters
+(   sherpa&			        self
+ ,	ComponentList*			Input_UtilityCA
+ ,	LinearCOBundle_1*		Input_UtilityCO
+ ,  const double&           nullvalue=0
+ ,  const bool&             create_parameters=true
+)
+{
+
+	if (Input_UtilityCA) {
+		for (unsigned b=0; b<Input_UtilityCA->size(); b++) {
+			std::string param = (*Input_UtilityCA)[b].param_name;
+			if (!self.__contains__(param)) {
+				if (create_parameters) {
+					self.parameter(param, nullvalue, nullvalue);
+				} else {
+					OOPS_KeyError("Parameter ",param," not found; to create automatically set option.autocreate_parameters = True");
+				}
+			}
+		}
+	}
+	
+	if (Input_UtilityCO) {
+		for (auto top_i=(*Input_UtilityCO).begin(); top_i!=(*Input_UtilityCO).end(); top_i++) {
+			for (auto i=top_i->second.begin(); i!=top_i->second.end(); i++) {
+				std::string param = i->param_name;
+				if (!self.__contains__(param)) {
+					if (create_parameters) {
+						self.parameter(param, nullvalue, nullvalue);
+					} else {
+						OOPS_KeyError("Parameter ",param," not found; to create automatically set option.autocreate_parameters = True");
+					}
+				}
+			}
+		}
+	}
+}
+
+void _setUp_automatic_default_parameters_2
+(   sherpa&			        self
+ ,	LinearCOBundle_2*		Input_UtilityCO
+ ,  const double&           nullvalue=0
+ ,  const bool&             create_parameters=true
+)
+{
+	
+	if (Input_UtilityCO) {
+		for (auto top_i=(*Input_UtilityCO).begin(); top_i!=(*Input_UtilityCO).end(); top_i++) {
+			for (auto i=top_i->second.begin(); i!=top_i->second.end(); i++) {
+				std::string param = i->param_name;
+				if (!self.__contains__(param)) {
+					if (create_parameters) {
+						self.parameter(param, nullvalue, nullvalue);
+					} else {
+						OOPS_KeyError("Parameter ",param," not found; to create automatically set option.autocreate_parameters = True");
+					}
+				}
+			}
+		}
+	}
+}
+
 
 void _setUp_linear_data_and_params
 (	sherpa&			self
@@ -238,6 +303,8 @@ void elm::Model2::_setUp_utility_data_and_params()
 {
 	BUGGER(msg) << "--Params_Utility--\n";
 
+	_setUp_automatic_default_parameters(*this, &Input_Utility.ca,	&Input_Utility.co, 0.0, option.autocreate_parameters);
+
 	_setUp_linear_data_and_params
 	(	*this
 	 ,	_fountain()
@@ -260,6 +327,8 @@ void elm::Model2::_setUp_quantity_data_and_params()
 {
 	BUGGER(msg) << "--Params_Quantity--\n";
 
+	_setUp_automatic_default_parameters(*this, &Input_QuantityCA,	nullptr, 0.0, option.autocreate_parameters);
+
 	_setUp_linear_data_and_params
 	(	*this
 	 ,	_fountain()
@@ -280,6 +349,8 @@ void elm::Model2::_setUp_quantity_data_and_params()
 void elm::Model2::_setUp_samplefactor_data_and_params()
 {
 	BUGGER(msg) << "--Params_Sampling--\n";
+
+	_setUp_automatic_default_parameters(*this, &Input_Sampling.ca,	&Input_Sampling.co, 0.0, option.autocreate_parameters);
 
 	_setUp_linear_data_and_params
 	(	*this
@@ -302,6 +373,8 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 void elm::Model2::_setUp_allocation_data_and_params()
 {
 	BUGGER(msg) << "--Params_Allocation--\n";
+
+	_setUp_automatic_default_parameters_2(*this, &Input_Edges, 0.0, option.autocreate_parameters);
 
 	_setUp_linear_data_and_params_edges(*this, Xylem, Input_Edges, Params_Edges, &msg);
 

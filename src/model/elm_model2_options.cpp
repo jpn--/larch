@@ -49,7 +49,8 @@ elm::model_options_t::model_options_t(
 			bool log_turns,
 			bool enforce_bounds,
 			bool enforce_constraints,
-			double idca_avail_ratio_floor
+			double idca_avail_ratio_floor,
+			bool autocreate_parameters
 		)
 : gradient_diagnostic   (gradient_diagnostic)
 , hessian_diagnostic    (hessian_diagnostic)
@@ -70,6 +71,7 @@ elm::model_options_t::model_options_t(
 , enforce_bounds        (enforce_bounds)
 , enforce_constraints   (enforce_constraints)
 , idca_avail_ratio_floor(idca_avail_ratio_floor)
+, autocreate_parameters (autocreate_parameters)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
 //#ifdef __APPLE__
@@ -117,7 +119,8 @@ void elm::model_options_t::__call__(
 			int log_turns,
 			int enforce_bounds,
 			int enforce_constraints,
-			double idca_avail_ratio_floor
+			double idca_avail_ratio_floor,
+			int autocreate_parameters
 		)
 {
 	if (gradient_diagnostic     != -9 ) (this->gradient_diagnostic     = gradient_diagnostic     );
@@ -139,6 +142,8 @@ void elm::model_options_t::__call__(
 	if (enforce_bounds          != -9 ) (this->enforce_bounds          = enforce_bounds          );
 	if (enforce_constraints     != -9 ) (this->enforce_constraints     = enforce_constraints     );
 	if (idca_avail_ratio_floor  != -9 ) (this->idca_avail_ratio_floor  = idca_avail_ratio_floor  );
+	if (autocreate_parameters   != -9 ) (this->autocreate_parameters   = autocreate_parameters   );
+	
 }
 
 void elm::model_options_t::copy(const model_options_t& other)
@@ -161,6 +166,7 @@ void elm::model_options_t::copy(const model_options_t& other)
 	this->enforce_bounds          = other.enforce_bounds          ;
 	this->enforce_constraints     = other.enforce_constraints     ;
 	this->idca_avail_ratio_floor  = other.idca_avail_ratio_floor  ;
+	this->autocreate_parameters   = other.autocreate_parameters   ;
 }
 
 
@@ -187,6 +193,7 @@ std::string elm::model_options_t::__repr__() const
 	x << "          enforce_bounds= "<<enforce_bounds          <<",\n";
 	x << "     enforce_constraints= "<<enforce_constraints     <<",\n";
 	x << "  idca_avail_ratio_floor= "<<idca_avail_ratio_floor  <<",\n";
+	x << "   autocreate_parameters= "<<autocreate_parameters   <<",\n";
 	x << ")";
 	return x.str();
 }
@@ -213,6 +220,7 @@ std::string elm::model_options_t::_save_buffer() const
 	x << "self.option.enforce_bounds= "         <<(enforce_bounds          ?"True":"False")<<"\n";
 	x << "self.option.enforce_constraints= "    <<(enforce_constraints     ?"True":"False")<<"\n";
 	x << "self.option.idca_avail_ratio_floor= " << idca_avail_ratio_floor                  <<"\n";
+	x << "self.option.autocreate_parameters= "  <<(autocreate_parameters   ?"True":"False")<<"\n";
 	return x.str();
 }
 
@@ -238,6 +246,7 @@ std::string elm::model_options_t::__str__() const
 	x << "          enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
 	x << "     enforce_constraints: "<<(enforce_constraints   ?"True":"False")<<"\n";
 	x << "  idca_avail_ratio_floor: "<<idca_avail_ratio_floor<<"\n";
+	x << "   autocreate_parameters: "<<(autocreate_parameters ?"True":"False")<<"\n";
 	return x.str();
 }
 
@@ -264,6 +273,7 @@ std::set<std::string> elm::Model2::valid_options()
 	valid_options_init.insert("enforce_bounds");
 	valid_options_init.insert("enforce_constraints");
 	valid_options_init.insert("idca_avail_ratio_floor");
+	valid_options_init.insert("autocreate_parameters");
 	return valid_options_init;
 }
 

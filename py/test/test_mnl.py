@@ -669,3 +669,17 @@ class TestMNL(ELM_TestCase):
 		self.assertTrue(0 != g[0])
 		self.assertTrue(0 != g[1])
 
+	def test_biogeme_style_model_spec(self):
+		from ..roles import P,X
+		d = DB.Example('SWISSMETRO')
+		m = Model(d)
+		m.option.autocreate_parameters = False
+		m.utility[1] += P.ASC_TRAIN + P.Time * X.TRAIN_TT + X("TRAIN_CO*(GA==0)") * P.Cost
+		m.utility[2] = P.Time * X.SM_TT + X("SM_CO*(GA==0)") * P.Cost
+		m.utility[3] = P.ASC_CAR + P.Time * X.CAR_TT + X("CAR_CO") * P.Cost
+		with self.assertRaises(KeyError):
+			m.setUp()
+		m.option.autocreate_parameters = True
+		m.setUp()
+		self.assertEqual(-6964.66297919218, m.loglike())
+
