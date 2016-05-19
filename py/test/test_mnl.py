@@ -681,5 +681,5 @@ class TestMNL(ELM_TestCase):
 			m.setUp()
 		m.option.autocreate_parameters = True
 		m.setUp()
-		self.assertEqual(-6964.66297919218, m.loglike())
+		self.assertNearlyEqual(-6964.66297919218, m.loglike(), 7)
 
