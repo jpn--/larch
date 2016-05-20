@@ -2762,6 +2762,9 @@ class ComponentCellcodeMap(object):
     def __repr__(self) -> "std::string":
         return _core.ComponentCellcodeMap___repr__(self)
 
+    def _create(self, *args) -> "void":
+        return _core.ComponentCellcodeMap__create(self, *args)
+
     def size(self) -> "unsigned int":
         return _core.ComponentCellcodeMap_size(self)
 
@@ -2785,9 +2788,6 @@ class ComponentCellcodeMap(object):
 
     def __len__(self) -> "int":
         return _core.ComponentCellcodeMap___len__(self)
-
-    def _create(self, *args) -> "void":
-        return _core.ComponentCellcodeMap__create(self, *args)
 
     def _link(self, parent: 'elm::cellcode const &', child: 'elm::cellcode const &') -> "void":
         return _core.ComponentCellcodeMap__link(self, parent, child)
@@ -2846,11 +2846,17 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
     			raise TypeError('cannot identify alternative')
     	self._call(altcode, data, param, multiplier)
 
-    #def __setitem__(self, key, value):
-    #	try:
-    #		super().__setitem__(self, key, value)
-    #	except NotImplementedError:
-    #		super().__setitem__(self, key, LinearFunction()+value)
+    def __setitem__(self, key, value):
+    	parent = self.parentmodel
+    	if parent is not None and not parent.option.autocreate_parameters:
+    		if isinstance(value, LinearFunction):
+    			for i in value:
+    				if i.param not in parent:
+    					raise KeyError("Parameter '{}' is not found in model and autocreate_parameters is off".format(i.param))
+    		if isinstance(value, LinearComponent):
+    			if value.param not in parent:
+    				raise KeyError("Parameter '{}' is not found in model and autocreate_parameters is off".format(value.param))
+    	return super().__setitem__(key, value)
 
 
     __swig_destroy__ = _core.delete_LinearCOBundle_1
@@ -3550,7 +3556,6 @@ ParameterList.__len__ = lambda self: int(self._len())
 
 class ParameterAlias(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    __repr__ = _swig_repr
     name = _swig_property(_core.ParameterAlias_name_get, _core.ParameterAlias_name_set)
     refers_to = _swig_property(_core.ParameterAlias_refers_to_get, _core.ParameterAlias_refers_to_set)
     multiplier = _swig_property(_core.ParameterAlias_multiplier_get, _core.ParameterAlias_multiplier_set)
@@ -3570,6 +3575,12 @@ class ParameterAlias(object):
             self.this.append(this)
         except Exception:
             self.this = this
+
+    def __repr__(self) -> "std::string":
+        return _core.ParameterAlias___repr__(self)
+
+    def __str__(self) -> "std::string":
+        return _core.ParameterAlias___str__(self)
 
     @property
     def value(self):

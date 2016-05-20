@@ -144,10 +144,15 @@ namespace elm {
 
 		std::string __repr__() const;
 
+		void _create(const std::string& nest_name, const elm::cellcode& nest_code,
+						 std::string param_name="", const double& param_multiplier=1.0);
+
 		#ifdef SWIG
         unsigned int size() const;
         bool empty() const;
         void clear();
+		
+		
 		%extend {
             elm::LinearComponent& __getitem__(const elm::cellcode& key) throw (std::out_of_range) {
                 std::map<elm::cellcode,elm::LinearComponent >::iterator i = self->find(key);
@@ -172,15 +177,6 @@ namespace elm {
             }
 			int __len__() const {
 				return self->size();
-			}
-			void _create(const std::string& nest_name, const elm::cellcode& nest_code,
-						 std::string param_name="", const double& param_multiplier=1.0)
-						  throw (etk::exception_t) {
-				if (self->parentmodel) {
-					self->parentmodel->nest(nest_name, nest_code, param_name, param_multiplier);
-				} else {
-					throw etk::exception_t("not linked to a model");
-				}
 			}
 			void _link(const elm::cellcode& parent, const elm::cellcode& child) {
 				if (self->parentmodel) {
@@ -244,12 +240,18 @@ namespace elm {
 					raise TypeError('cannot identify alternative')
 			self._call(altcode, data, param, multiplier)
 			
-		#def __setitem__(self, key, value):
-		#	try:
-		#		super().__setitem__(self, key, value)
-		#	except NotImplementedError:
-		#		super().__setitem__(self, key, LinearFunction()+value)
-				
+		def __setitem__(self, key, value):
+			parent = self.parentmodel
+			if parent is not None and not parent.option.autocreate_parameters:
+				if isinstance(value, LinearFunction):
+					for i in value:
+						if i.param not in parent:
+							raise KeyError("Parameter '{}' is not found in model and autocreate_parameters is off".format(i.param))
+				if isinstance(value, LinearComponent):
+					if value.param not in parent:
+						raise KeyError("Parameter '{}' is not found in model and autocreate_parameters is off".format(value.param))
+			return super().__setitem__(key, value)
+			
 		%}
 		#endif // def SWIG
 		

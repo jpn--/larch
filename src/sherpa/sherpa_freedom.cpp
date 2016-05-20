@@ -39,6 +39,23 @@ freedom_alias::~freedom_alias() {
 	Py_CLEAR(_refers_to_modelparam);
 }
 
+std::string freedom_alias::__repr__() const
+{
+	if (multiplier == 1.0) {
+		return etk::cat("<larch.core.ParameterAlias: ",name," = ",refers_to," >");
+	} else {
+		return etk::cat("<larch.core.ParameterAlias: ",name," = ",refers_to," * ",multiplier," >");
+	}
+}
+std::string freedom_alias::__str__() const
+{
+	if (multiplier == 1.0) {
+		return etk::cat(name," = ",refers_to);
+	} else {
+		return etk::cat(name," = ",refers_to," * ",multiplier);
+	}
+}
+
 
 freedom_info::freedom_info(const std::string& name,
 						   const double& value,

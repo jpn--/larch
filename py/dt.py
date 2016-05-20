@@ -261,6 +261,27 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			return numpy.empty(0, dtype=str)
 
+	def _set_alternatives(self, altids, alt_labels=None):
+		try:
+			self.h5f.remove_node(self.h5alts, 'altids')
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		try:
+			self.h5f.remove_node(self.h5alts, 'names')
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		# Make new ones
+		altids = numpy.asarray(altids)
+		if altids.dtype != numpy.int64:
+			from .util.arraytools import labels_to_unique_ids
+			alt_labels, altids = labels_to_unique_ids(altids)
+		h5altids = self.h5f.create_carray(self.h5alts, 'altids', obj=altids, title='elemental alternative code numbers')
+		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+		if alt_labels is None:
+			alt_labels = ["a{}".format(a) for a in altids]
+		for an in alt_labels:
+			h5altnames.append( an )
+
 	def alternative_codes(self):
 		try:
 			return tuple(int(i) for i in self.h5alts.altids[:])

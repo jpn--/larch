@@ -9,7 +9,8 @@ import math
 from .model_reporter import ModelReporter
 import base64
 from .util.attribute_dict import function_cache
-
+from .model_shadowmanager import shadow_manager
+from .model_parametermanager import parameter_manager
 
 class MetaParameter():
 	def __init__(self, name, value, under, initial_value=None):
@@ -68,6 +69,10 @@ class Model(Model2, ModelReporter):
 			m = examples.model(d)
 		return m
 
+	@property
+	def shadow_parameter(self):
+		return shadow_manager(self)
+
 	def px(self, n):
 		if isinstance(n,str):
 			raise LarchError("not implemented")
@@ -120,6 +125,12 @@ class Model(Model2, ModelReporter):
 			except LarchError:
 				return self.parameter(name)
 
+	def _parameter_(self, *arg, **kwarg):
+		return super().parameter(*arg, **kwarg)
+
+	@property
+	def parameter(self):
+		return parameter_manager(self)
 
 	def metaparameter(self, name):
 		try:
@@ -569,7 +580,11 @@ class Model(Model2, ModelReporter):
 			max_node = max(self.node.nodes())
 		else:
 			max_node = 0
-		newcode = max(max_node,max(self.alternative_codes()),self.root_id)+1
+		try:
+			max_altcode = max(self.alternative_codes())
+		except ValueError:
+			max_altcode = 100
+		newcode = max(max_node,max_altcode,self.root_id)+1
 		self.node(newcode, nest_name, param_name=param_name, **kwargs)
 		if branch is not None:
 			if not hasattr(self, 'branches'):
@@ -1233,7 +1248,7 @@ class Model(Model2, ModelReporter):
 				from .util.text_manip import case_insensitive_close_matches
 				did_you_mean_list = case_insensitive_close_matches(x, self.parameter_names())
 				if len(did_you_mean_list)>0:
-					did_you_mean = "Parameter {} not found, did you mean {}?".format(x, " or ".join(did_you_mean_list))
+					did_you_mean = "Parameter '{}' not found, did you mean {}?".format(x, " or ".join("'{}'".format(s) for s in did_you_mean_list))
 					raise KeyError(did_you_mean) from None
 			raise
 

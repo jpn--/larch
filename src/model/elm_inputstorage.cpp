@@ -343,11 +343,24 @@ elm::ComponentList& elm::ComponentList::operator+=(const elm::ComponentList& x)
 
 void elm::ComponentList::_inplace_add(const elm::LinearComponent& x)
 {
+	if (parentmodel && !parentmodel->option.autocreate_parameters) {
+		if (!parentmodel->__contains__(x.param_name)) {
+			OOPS_KeyError("Model does not contain parameter '",x.param_name,"' and autocreate_parameters is off");
+		}
+	}
+
 	push_back(x);
 }
 
 void elm::ComponentList::_inplace_add(const elm::ComponentList& x)
 {
+	if (parentmodel && !parentmodel->option.autocreate_parameters) {
+		for (auto i=x.begin(); i!=x.end(); i++) {
+			if (!parentmodel->__contains__(i->param_name)) {
+				OOPS_KeyError("Model does not contain parameter '",i->param_name,"' and autocreate_parameters is off");
+			}
+		}
+	}
 	insert(end(), x.begin(), x.end());
 }
 
@@ -393,6 +406,15 @@ std::string elm::ComponentCellcodeMap::__repr__() const
 }
 
 
+void elm::ComponentCellcodeMap::_create(const std::string& nest_name, const elm::cellcode& nest_code,
+			 std::string param_name, const double& param_multiplier)
+{
+	if (parentmodel) {
+		parentmodel->nest(nest_name, nest_code, param_name, param_multiplier);
+	} else {
+		OOPS("not linked to a model");
+	}
+}
 
 
 
@@ -485,13 +507,38 @@ void elm::LinearBundle_1::_set_co(const elm::LinearCOBundle_1& x)
 	if (co.size()) {
 		parentmodel = co.begin()->second.parentmodel;
 	}
+	
+	if (parentmodel && (!parentmodel->option.autocreate_parameters)) {
+		// parentmodel exists, but autocreate_parameters is off
+		// so check the proposed utility bundle to make sure that no
+		// new parameter names are given in there.
+		
+		for (auto i=x.begin(); i!=x.end(); i++) {
+			for (auto j=i->second.begin(); j!=i->second.end(); j++) {
+				if (!parentmodel->__contains__(j->param_name)) {
+					OOPS_KeyError("Model does not contain parameter '",j->param_name,"', and autocreate_parameters is False");
+				}
+			}
+		}
+		
+	}
+	
 	co.clear();
 	
 	co = x;
 	
 	if (parentmodel) {
+		bool autocreate_params = parentmodel->option.autocreate_parameters;
+		
 		for (auto i=co.begin(); i!=co.end(); i++) {
-		 i->second.parentmodel = parentmodel;
+			i->second.parentmodel = parentmodel;
+			if (autocreate_params) {
+				for (auto j=i->second.begin(); j!=i->second.end(); j++) {
+					if (!parentmodel->__contains__(j->param_name)) {
+						parentmodel->parameter(j->param_name);
+					}
+				}
+			}
 		}
 	}
 	

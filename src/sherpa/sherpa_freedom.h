@@ -52,6 +52,8 @@ struct freedom_alias {
 		Py_INCREF(Py_None);
 	}
 	
+	std::string __repr__() const;
+	std::string __str__() const;
 	
 };
 

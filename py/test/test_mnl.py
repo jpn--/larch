@@ -674,12 +674,37 @@ class TestMNL(ELM_TestCase):
 		d = DB.Example('SWISSMETRO')
 		m = Model(d)
 		m.option.autocreate_parameters = False
+		with self.assertRaises(KeyError):
+			m.utility[1] += P.ASC_TRAIN + P.Time * X.TRAIN_TT + X("TRAIN_CO*(GA==0)") * P.Cost
+		# The position for alt 1 should be created but not assigned
+		self.assertEqual([1], m.utility.co.keys())
+		self.assertEqual(0, len(m.utility.co[1]))
+		m.option.autocreate_parameters = True
 		m.utility[1] += P.ASC_TRAIN + P.Time * X.TRAIN_TT + X("TRAIN_CO*(GA==0)") * P.Cost
 		m.utility[2] = P.Time * X.SM_TT + X("SM_CO*(GA==0)") * P.Cost
 		m.utility[3] = P.ASC_CAR + P.Time * X.CAR_TT + X("CAR_CO") * P.Cost
+		m.option.autocreate_parameters = False
+		# parameters didn't actually get created on the fly before, but they would here
 		with self.assertRaises(KeyError):
 			m.setUp()
 		m.option.autocreate_parameters = True
 		m.setUp()
 		self.assertNearlyEqual(-6964.66297919218, m.loglike(), 7)
+		self.assertNearlyEqual(-53685.10681886514, m.loglike([.1,.1,.1,.1]), 7)
+
+	def test_shadow_parameters(self):
+		from ..roles import P,X
+		d = DB.Example('SWISSMETRO')
+		m = Model(d)
+		m.parameter('Time')
+		m.shadow_parameter['Time1'] = P.Time / 3.5
+		m.shadow_parameter['Time2'] = P.Time * 2
+		m.utility[1] = P.ASC_TRAIN + P.Time * X.TRAIN_TT + X("TRAIN_CO*(GA==0)") * P.Cost
+		m.utility[2] = P.Time1 * X("SM_TT*3.5") + X("SM_CO*(GA==0)") * P.Cost
+		m.utility[3] = P.ASC_CAR + P.Time2 * X("CAR_TT/2.0") + X("CAR_CO") * P.Cost
+		m.provision()
+		self.assertNearlyEqual(-6964.66297919218, m.loglike(), 7)
+		self.assertNearlyEqual(-53685.10681886514, m.loglike([.1,.1,.1,.1]), 7)
+
+
 

@@ -18,13 +18,13 @@ First we create the DB and Model objects:
 	d = larch.DB.Example('MTC')
 	m = larch.Model(d)
 
-ModelObject.utility.co(<idCO data column>,<alternative code>,[<parameter name>])
-Add a linear component to the utility of the indicated alternative.
-The data column is a string and can be any idCO data column or a pre-calculated 
-value derived from one or more idCO data columns, or no data columns at all.
-Note: there is no need to declare a parameter name seperately from this 
-command. Default values will be assumed for parameters that are not previously
-declared.
+Then we can build up the utility function.  We'll use some idco data first, using
+the `utility.co` command.  This command takes two or three arguments: a data column,
+an alternative code, and an (optional) parameter name.  If no parameter name is
+given, one will be created automatically.
+The data column is a string and can be any idCO data column or a pre-calculated
+value derived from one or more idCO data columns, or no data columns at all (e.g.,
+by just giving an integer, as a string, as the name of the column).
 
 .. testcode::
 
@@ -39,26 +39,25 @@ declared.
 	m.utility.co("hhinc",5)
 	m.utility.co("hhinc",6)
 
-ModelObject.utility.ca(<idCA data column>,[<parameter name>])
-Adds a linear component to the utility of the indicated alternative.
-The data column is a string and can be any idCA data column or a pre-calculated 
-value derived from one or more idCA data columns, or no data columns at all.
-Note: there is no need to declare a parameter name seperately from this 
-command. Default values will be assumed for parameters that are not previously
-declared.
+Next we'll use some idca data, with the `utility.ca` command. This command takes
+one or two arguments: a data column,
+an alternative code, and an (optional) parameter name.  If no parameter name is
+given, one will be created automatically.  You can give an integer as the data
+column here as well, but you probably won't want to (as it will create
+problems in parameter estimation if, for an idca variable, there is no variance
+across alternatives.
 
 .. testcode::
 
 	m.utility.ca("tottime")
 	m.utility.ca("totcost")
 
-ModelObject.option
-A structure that defines certain options to be applied when estimating
-models.
+We can specify some model options too.  And let's give our model a descriptive title.
 
 .. testcode::
 
 	m.option.calc_std_errors = True
+	m.title = "MTC Example 1 (Simple MNL)"
 
 
 Having created this model, we can then estimate it:
@@ -72,6 +71,8 @@ Having created this model, we can then estimate it:
 	-3626.18...
 
 	>>> print(m)
+	============================================================================================
+	MTC Example 1 (Simple MNL)
 	============================================================================================
 	Model Parameter Estimates
 	--------------------------------------------------------------------------------------------

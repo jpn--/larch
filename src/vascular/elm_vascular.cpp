@@ -719,8 +719,11 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 		for (std::list<cellcode>::iterator x=nao.begin(); x!=nao.end(); x++) {
 			elm::cellcodeset x_dn = _graph.dn_node_codes(*x);
 			for (std::set<elm::cellcode>::iterator y=x_dn.begin(); y!=x_dn.end(); y++) {
-				if (!KnownNodes.contains(*x) || !KnownNodes.contains(*y)) {
-					OOPS("Unknown code found in edge ",*x," -> ",*y);
+				if (!KnownNodes.contains(*x)) {
+					OOPS("Unknown code ",*x," found in edge ",*x," -> ",*y);
+				}
+				if (!KnownNodes.contains(*y)) {
+					OOPS("Unknown code ",*y," found in edge ",*x," -> ",*y);
 				}
 				_edges.add_back(_anatomy[*x],_anatomy[*y]);
 				_edges[i]._edge_slot = i;
