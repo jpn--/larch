@@ -1,6 +1,5 @@
 
 from .core import ModelParameter
-from .roles import _param_multiply, _param_divide
 
 class ParameterManager:
 	"""Manages parameters for a :class:`Model`.	"""
@@ -18,6 +17,7 @@ class ParameterManager:
 		return self.model.parameter(key)
 
 	def __setitem__(self, key, val):
+		from .roles import _param_multiply, _param_divide
 		if isinstance(val, ModelParameter):
 			return self.model.parameter(key, value=val.value, null_value=val.null_value,
 										initial_value=val.initial_value,

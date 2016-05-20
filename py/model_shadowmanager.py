@@ -1,5 +1,4 @@
 
-from .roles import _param_multiply, _param_divide
 
 
 class shadow_manager:
@@ -11,6 +10,7 @@ class shadow_manager:
 		return self.model.alias(key)
 
 	def __setitem__(self, key, value):
+		from .roles import _param_multiply, _param_divide
 		if isinstance(value, _param_multiply):
 			if isinstance(value._left, (int, float)):
 				number = value._left
