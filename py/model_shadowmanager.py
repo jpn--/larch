@@ -1,5 +1,5 @@
 
-from larch.roles import _param_multiply, _param_divide
+from .roles import _param_multiply, _param_divide
 
 
 class shadow_manager:

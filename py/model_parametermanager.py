@@ -1,6 +1,6 @@
 
 from .core import ModelParameter
-from larch.roles import _param_multiply, _param_divide
+from .roles import _param_multiply, _param_divide
 
 class ParameterManager:
 	"""Manages parameters for a :class:`Model`.	"""
