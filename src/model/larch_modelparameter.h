@@ -81,14 +81,14 @@ namespace elm {
 
 		#ifdef SWIG
 		%pythoncode %{
-		value = property(_get_value, _set_value)
-		null_value = property(_get_nullvalue, _set_nullvalue)
-		initial_value = property(_get_initvalue, _set_initvalue)
-		minimum = property(_get_min, _set_min, _del_min)
+		value = property(_get_value, _set_value, None, "the current value for the parameter")
+		null_value = property(_get_nullvalue, _set_nullvalue, None, "the null value for the parameter (used for null models and t-stats)")
+		initial_value = property(_get_initvalue, _set_initvalue, None, "the initial value of the parameter")
+		minimum = property(_get_min, _set_min, _del_min, "the min bound for the parameter during estimation")
 		min_value = minimum
-		maximum = property(_get_max, _set_max, _del_max)
+		maximum = property(_get_max, _set_max, _del_max, "the max bound for the parameter during estimation")
 		max_value = maximum
-		holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
+		holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast, "a flag indicating if the parameter value should be held fast (constrained to keep its value) during estimation")
 		std_err = property(_get_std_err, None, None, "the standard error of the estimator")
 		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
 		name = property(_get_name, None, None, "the parameter name")
@@ -98,6 +98,7 @@ namespace elm {
 			return "ModelParameter('{}', value={})".format(self.name, self.value)
 		@property
 		def covariance(self):
+			"the covariance of the estimator"
 			slot = self.index
 			cov = self._get_complete_covariance_matrix()
 			model = self._get_model()
@@ -107,6 +108,7 @@ namespace elm {
 			return ret
 		@property
 		def robust_covariance(self):
+			"the robust covariance of the estimator via bhhh sandwich"
 			slot = self.index
 			model = self._get_model()
 			cov = model.robust_covariance_matrix

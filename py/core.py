@@ -2658,6 +2658,9 @@ class LinearComponent(object):
     def __repr__(self) -> "std::string":
         return _core.LinearComponent___repr__(self)
 
+    def __str__(self) -> "std::string":
+        return _core.LinearComponent___str__(self)
+
     def __init__(self, *args, **kwargs):
         this = _core.new_LinearComponent(*args, **kwargs)
         try:
@@ -3603,182 +3606,6 @@ class ParameterAlias(object):
 ParameterAlias_swigregister = _core.ParameterAlias_swigregister
 ParameterAlias_swigregister(ParameterAlias)
 
-class Parameter(object):
-    """
-    This object represents a discrete choice model parameter.
-
-    Parameters
-    ----------
-    name : str
-    	The name of the parameter. This name is used both in commands
-    	that refer to this parameter, as well as in reports. Generally
-    	it is best to choose a short but descriptive name that does
-    	not include any special characters, although any unicode string
-    	should be acceptable.
-    value : float
-    	This value represents the current value of the parameter.
-    null_value : float
-    	This value represents the default value of the parameter, which
-    	would be assumed if no information is available. It is generally
-    	zero, although for some parameters -- notably the logsum parameters
-    	in a nest logit model, but also certain others -- the default value
-    	might be one, or some other value.
-    holdfast : bool
-    	Sets the holdfast attribute. When True, the value of this parameter
-    	is held constant during parameter estimation.
-
-    Other Parameters
-    ----------------
-    initial_value : float
-    	The initial value of the parameter. This is where the
-    	search algorithm began.
-    std_err, robust_std_err : float
-    	This is the standard error of the estimate of this parameter. The
-    	standard error is derived from the curvature of the log likelihood
-    	function at its maximum. The robust standard error of the estimate
-    	is derived from the sandwich estimator.
-    covariance, robust_covariance : dict
-    	These are dictionary with parameter names as keys and floats
-    	as values, representing the (robust) covariance between this estimator
-    	and the other estimators in the model.
-
-    Notes
-    -----
-    It is not usually necessary to define the 'other parameters' explicitly.
-    The values are normally derived as an outcome of the model estimation
-    process, and the ability to set them here is provided to allow
-    the save and load methods to accurately
-    recreate a model with all attributes intact.
-    """
-
-    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    name = _swig_property(_core.Parameter_name_get, _core.Parameter_name_set)
-    value = _swig_property(_core.Parameter_value_get, _core.Parameter_value_set)
-    null_value = _swig_property(_core.Parameter_null_value_get, _core.Parameter_null_value_set)
-    initial_value = _swig_property(_core.Parameter_initial_value_get, _core.Parameter_initial_value_set)
-    std_err = _swig_property(_core.Parameter_std_err_get, _core.Parameter_std_err_set)
-    robust_std_err = _swig_property(_core.Parameter_robust_std_err_get, _core.Parameter_robust_std_err_set)
-    max_value = _swig_property(_core.Parameter_max_value_get, _core.Parameter_max_value_set)
-    min_value = _swig_property(_core.Parameter_min_value_get, _core.Parameter_min_value_set)
-    holdfast = _swig_property(_core.Parameter_holdfast_get, _core.Parameter_holdfast_set)
-    _covar = _swig_property(_core.Parameter__covar_get, _core.Parameter__covar_set)
-    _robust_covar = _swig_property(_core.Parameter__robust_covar_get, _core.Parameter__robust_covar_set)
-
-    def getCovariance(self) -> "PyObject *":
-        return _core.Parameter_getCovariance(self)
-
-    def setCovariance(self, covariance: 'PyObject *') -> "void":
-        return _core.Parameter_setCovariance(self, covariance)
-
-    def getRobustCovariance(self) -> "PyObject *":
-        return _core.Parameter_getRobustCovariance(self)
-
-    def setRobustCovariance(self, covariance: 'PyObject *') -> "void":
-        return _core.Parameter_setRobustCovariance(self, covariance)
-
-    def t_stat(self) -> "double":
-        """
-        Calculates the t statistic against the null value of the parameter. 
-
-        The t statistic is calculated as value - null_value)/std_err.
-        """
-        return _core.Parameter_t_stat(self)
-
-
-    def representation(self, pretty: 'bool'=True) -> "std::string":
-        return _core.Parameter_representation(self, pretty)
-
-    def __init__(self, *args, **kwargs):
-        """
-        __init__(freedom_info self, std::string const & name, double const & value=0, double const & null_value=0, int const & holdfast=0, double const & initial_value, double const & std_err, double const & robust_std_err, double const & min_value, double const & max_value, PyObject * covariance=None, PyObject * robust_covariance=None) -> Parameter
-
-        This object represents a discrete choice model parameter.
-
-        Parameters
-        ----------
-        name : str
-        	The name of the parameter. This name is used both in commands
-        	that refer to this parameter, as well as in reports. Generally
-        	it is best to choose a short but descriptive name that does
-        	not include any special characters, although any unicode string
-        	should be acceptable.
-        value : float
-        	This value represents the current value of the parameter.
-        null_value : float
-        	This value represents the default value of the parameter, which
-        	would be assumed if no information is available. It is generally
-        	zero, although for some parameters -- notably the logsum parameters
-        	in a nest logit model, but also certain others -- the default value
-        	might be one, or some other value.
-        holdfast : bool
-        	Sets the holdfast attribute. When True, the value of this parameter
-        	is held constant during parameter estimation.
-
-        Other Parameters
-        ----------------
-        initial_value : float
-        	The initial value of the parameter. This is where the
-        	search algorithm began.
-        std_err, robust_std_err : float
-        	This is the standard error of the estimate of this parameter. The
-        	standard error is derived from the curvature of the log likelihood
-        	function at its maximum. The robust standard error of the estimate
-        	is derived from the sandwich estimator.
-        covariance, robust_covariance : dict
-        	These are dictionary with parameter names as keys and floats
-        	as values, representing the (robust) covariance between this estimator
-        	and the other estimators in the model.
-
-        Notes
-        -----
-        It is not usually necessary to define the 'other parameters' explicitly.
-        The values are normally derived as an outcome of the model estimation
-        process, and the ability to set them here is provided to allow
-        the save and load methods to accurately
-        recreate a model with all attributes intact.
-        """
-        this = _core.new_Parameter(*args, **kwargs)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _core.delete_Parameter
-    __del__ = lambda self: None
-
-    def update(self, *args) -> "void":
-        return _core.Parameter_update(self, *args)
-
-    def __str__(self, z: 'void *'=None) -> "std::string":
-        return _core.Parameter___str__(self, z)
-
-    def __repr__(self, z: 'void *'=None) -> "std::string":
-        return _core.Parameter___repr__(self, z)
-
-    covariance = _swig_property(getCovariance, setCovariance)
-    robust_covariance = _swig_property(getRobustCovariance, setRobustCovariance)
-    def __getitem__(self, *arg):
-    	return self.__getattribute__(*arg)
-
-    def t_stat_signif(self, df=None):
-    	'''Calulates the significance level of the t-test.
-
-    	When df is not given, the reported value is calculated as
-    	:math:`2(1-\Phi(t))`, with :math:`\Phi(t)` as the CDF of a the standard
-    	normal distribution evaluated at :math:`t`. When df is given, the
-    	t distribution with the indicated number of degrees of freedom is
-    	used in place of the normal diatribution. In most discrete choice modeling
-    	scenarios, the number of degrees of freedom is large enough that the
-    	resulting values are indistinguishable.
-    	'''
-    	import scipy.stats
-    	t = self.t_stat()
-    	if df is None:
-    		return 2.0*scipy.stats.norm.sf(abs(t), loc=0, scale=1)
-    	return 2.0*scipy.stats.t.sf(abs(t), df, loc=0, scale=1)
-
-Parameter_swigregister = _core.Parameter_swigregister
-Parameter_swigregister(Parameter)
-
 
 def algorithm_name(algo: 'char const &') -> "std::string":
     return _core.algorithm_name(algo)
@@ -4438,14 +4265,14 @@ class ModelParameter(object):
     def _get_model(self) -> "PyObject *":
         return _core.ModelParameter__get_model(self)
 
-    value = property(_get_value, _set_value)
-    null_value = property(_get_nullvalue, _set_nullvalue)
-    initial_value = property(_get_initvalue, _set_initvalue)
-    minimum = property(_get_min, _set_min, _del_min)
+    value = property(_get_value, _set_value, None, "the current value for the parameter")
+    null_value = property(_get_nullvalue, _set_nullvalue, None, "the null value for the parameter (used for null models and t-stats)")
+    initial_value = property(_get_initvalue, _set_initvalue, None, "the initial value of the parameter")
+    minimum = property(_get_min, _set_min, _del_min, "the min bound for the parameter during estimation")
     min_value = minimum
-    maximum = property(_get_max, _set_max, _del_max)
+    maximum = property(_get_max, _set_max, _del_max, "the max bound for the parameter during estimation")
     max_value = maximum
-    holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast)
+    holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast, "a flag indicating if the parameter value should be held fast (constrained to keep its value) during estimation")
     std_err = property(_get_std_err, None, None, "the standard error of the estimator")
     robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
     name = property(_get_name, None, None, "the parameter name")
@@ -4455,6 +4282,7 @@ class ModelParameter(object):
     	return "ModelParameter('{}', value={})".format(self.name, self.value)
     @property
     def covariance(self):
+    	"the covariance of the estimator"
     	slot = self.index
     	cov = self._get_complete_covariance_matrix()
     	model = self._get_model()
@@ -4464,6 +4292,7 @@ class ModelParameter(object):
     	return ret
     @property
     def robust_covariance(self):
+    	"the robust covariance of the estimator via bhhh sandwich"
     	slot = self.index
     	model = self._get_model()
     	cov = model.robust_covariance_matrix

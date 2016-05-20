@@ -27,6 +27,16 @@ as all; it is merely used in various output report styles.
 
 	m.title = "swissmetro example 01b (simple logit)"
 
+Unlike Biogeme, the usual way of using Larch does not fill the main namespace
+with all the parameters and data column references as distinct objects.  Instead, we
+can use two master classes to fill those roles.
+
+.. testcode::
+
+	from larch.roles import P,X  # Parameters, Data
+
+All of our parameter references can be written as instances of the P (:class:`roles.ParameterRef`) class,
+and all of our data column references can be written as instances of the X (:class:`roles.DataRef`) class.
 
 The swissmetro dataset, as with all Biogeme data, is only in `co` format.  Which is great,
 because it lets us ignore the `ca` format and just write out the utility functions directly.
@@ -36,15 +46,15 @@ because it lets us ignore the `ca` format and just write out the utility functio
 	from larch.roles import P,X  # Parameters, Data
 	m.utility[1] = ( P.ASC_TRAIN
 	               + P.Time * X.TRAIN_TT
-				   + P.Cost * X("TRAIN_CO*(GA==0)") )
+	               + P.Cost * X("TRAIN_CO*(GA==0)") )
 	m.utility[2] = ( P.Time * X.SM_TT
 	               + P.Cost * X("SM_CO*(GA==0)") )
 	m.utility[3] = ( P.ASC_CAR
 	               + P.Time * X.CAR_TT
-				   + P.Cost * X("CAR_CO") )
+	               + P.Cost * X("CAR_CO") )
 
 Note that when the data field is too complex to be expressed as a single python
-identifier, we can write it as a quoted string instead.
+identifier (variable name), we can write it as a quoted string instead.
 
 We can estimate the models and check the results match up with those given by Biogeme:
 

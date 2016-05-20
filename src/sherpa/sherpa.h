@@ -304,7 +304,6 @@ public:
 
 	elm::ModelParameter __getitem__(const std::string& param_name);
 	elm::ModelParameter __getitem__(const int& param_num);
-//	void __setitem__(const std::string& param_name, freedom_info& value);
 //	void __delitem__(const std::string& param_name);
 
 	freedom_alias& alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force=false);

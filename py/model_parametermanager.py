@@ -2,7 +2,9 @@
 from .core import ModelParameter
 from larch.roles import _param_multiply, _param_divide
 
-class parameter_manager:
+class ParameterManager:
+	"""Manages parameters for a :class:`Model`.	"""
+
 
 	def __init__(self, model):
 		self.model = model
@@ -47,7 +49,7 @@ class parameter_manager:
 
 	def __repr__(self):
 		ret = "═"*80
-		ret += "\nlarch.parameter_manager for {0}".format(self.model.title)
+		ret += "\nlarch.ParameterManager for {0}".format(self.model.title)
 		ret += ("\n────┬"+"─"*75)
 		for n,name in enumerate(self.model.parameter_names()):
 			ret += "\n{:> 3d} │ {}".format(n,name)

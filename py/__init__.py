@@ -57,9 +57,9 @@ try:
 	from .db import DB
 	from .dt import DT, IncompatibleShape
 	from .omx import OMX
-	from .core import Parameter
 	from .model import Model, ModelFamily
 	from .metamodel import MetaModel
+	from .core import ModelParameter
 	from . import array
 	core._set_array_module(array)
 	try:

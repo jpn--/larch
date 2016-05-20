@@ -36,6 +36,7 @@ namespace elm {
 		double			multiplier;
 
 		std::string __repr__() const;
+		std::string __str__() const;
 		
 		LinearComponent(std::string data="", std::string param="", double multiplier=1.0, PyObject* category=nullptr);
 		static LinearComponent Create(PyObject* obj);

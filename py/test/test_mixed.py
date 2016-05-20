@@ -26,7 +26,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "larch.test.test_mixed"
 
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import Parameter, Model, DB, LarchError, SQLiteError, LarchCacheError, QuerySetTwoTable
+from ..core import Model, DB, LarchError, SQLiteError, LarchCacheError, QuerySetTwoTable
 from ..model import ModelFamily
 from ..roles import ParameterRef
 from ..mixed import NormalMixedModel

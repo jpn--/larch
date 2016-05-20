@@ -1049,25 +1049,6 @@ void elm::Model2::hessian_mnl () {  // Inverse Hessian
 
 
 
-/*
-freedom_info& elm::Model2::parameter(const std::string& param_name,
-									 const double& value,
-									 const double& null_value,
-									 const double& initial_value,
-									 const double& std_err,
-									 const double& robust_std_err,
-									 const double& max,
-									 const double& min,
-									 const int& holdfast,
-									 PyObject* covariance,
-									 PyObject* robust_covariance)
-{
-	return add_freedom2(param_name, value, null_value, initial_value,
-						std_err, robust_std_err,
-						max, min, holdfast, covariance, robust_covariance);
-}
-
-*/
 
 
 
@@ -1450,7 +1431,6 @@ string elm::Model2::prints(const unsigned& precision, const unsigned& cell_width
 	}
 	for (auto al=AliasInfo.begin(); al !=AliasInfo.end(); al++) {
 		const ModelParameter mp ( const_cast<elm::Model2*>(this), FNames[al->second.refers_to]);
-		//const freedom_info* fi = get_raw_info(al->second.refers_to);
 		ret << std::setw(max_length_freedom_name) << std::left << al->first << std::right << "\t";
 		ret << std::setw(cell_width) << mp._get_initvalue()*al->second.multiplier << "\t";
 		ret << std::setw(cell_width) << mp._get_value()*al->second.multiplier << "\t";
@@ -1532,13 +1512,5 @@ std::string elm::Model2::representation() const
 	} else {
 		m << " with "<<dF()<<" parameters>";
 	}
-//	
-//	m << "\tparameters=(\n";
-//	for (unsigned i=0; i<dF(); i++) {
-//		const freedom_info* f = get_raw_info(FNames[i]);
-//		m << "\t\t" << f->representation(false) << ",\n";
-//	}
-//	m << "\t)\n";
-//	m << ")";
 	return m.str();
 }

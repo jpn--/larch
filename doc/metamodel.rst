@@ -8,7 +8,7 @@ A :class:`MetaModel` is an object that encapsulates a collection of :class:`Mode
 are to be estimated simultaneously.
 
 The basic tool for analysis in Larch is a discrete choice model.  A model is a
-structure that interacts data with a set of :class:`Parameter`\ s.
+structure that interacts data with a set of :class:`ModelParameter`\ s.
 
 Creating :class:`MetaModel` Objects
 -----------------------------------

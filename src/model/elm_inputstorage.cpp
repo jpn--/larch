@@ -119,6 +119,28 @@ std::string elm::LinearComponent::__repr__() const
 	return x.str();
 }
 
+std::string elm::LinearComponent::__str__() const
+{
+	std::ostringstream x;
+	bool comma = false;
+	if (!param_name.empty()) {
+		if (comma) x << " * ";
+		x<<"P('"<<param_name<<"')";
+		comma = true;
+	}
+	if (!data_name.empty()) {
+		if (comma) x << " * ";
+		x<<"X('"<<data_name<<"')";
+		comma = true;
+	}
+	if (multiplier != 1.0) {
+		if (comma) x << " * ";
+		x<<multiplier;
+		comma = true;
+	}
+	return x.str();
+}
+
 
 elm::ComponentList elm::LinearComponent::operator+(const elm::LinearComponent& other)
 {
@@ -160,8 +182,12 @@ std::string elm::ComponentList::__str__() const
 	bool plus = false;
 	
 	for (auto i=begin(); i!=end(); i++) {
-		if (plus) x << "+";
-		x << i->__repr__();
+		if (plus) {
+			x << "\n  + ";
+		} else {
+			x << "  = ";
+		}
+		x << i->__str__();
 		plus = true;
 	}
 	return x.str();

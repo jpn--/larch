@@ -5,7 +5,7 @@ Logit Models
 =======================
 
 The basic tool for analysis in Larch is a discrete choice model.  A model is a
-structure that interacts data with a set of :class:`Parameter`\ s.
+structure that interacts data with a set of :class:`ModelParameter`\ s.
 
 Creating :class:`Model` Objects
 -------------------------------
@@ -21,7 +21,7 @@ Creating :class:`Model` Objects
 	:type d:  :class:`Fountain`
 
 	This object represents a discrete choice model. In addition to the methods
-	described below, a :class:`Model` also acts like a list of :class:`Parameter`.
+	described below, a :class:`Model` also acts a bit like a list of :class:`ModelParameter`.
 
 
 .. py:method:: Model.Example(number=1)
@@ -36,6 +36,36 @@ Creating :class:`Model` Objects
 	and testing.  Models with numbers greater than 100 are designed to align with
 	the `example models given for Biogeme <http://biogeme.epfl.ch/swissmetro/examples.html>`_.
 
+
+
+
+Adding Parameters
+-----------------
+
+.. py:method:: Model.parameter(name, [value, null_value, initial_value, max, min, holdfast])
+
+	Add a parameter to the model, or access an existing parameter.
+
+	:param name: The name for the parameter to add or access
+	:type name:  str or :class:`larch.roles.ParameterRef`
+	:param value: The value to set for the parameter.  If `initial_value` is not given,
+				  this value is also used as the initial value.  If not given, 0 is assumed.
+	:type value: float (optional)
+	:param null_value: This is the assumed value for a "null" or no information model.  For utility
+						parameters, this is typically 0 (the default).  For logsum parameters, the
+						null value should usually be set to 1.
+	:type null_value:  float (optional)
+	:param initial_value: It is possible to set `initial_value` seperately from the current value.
+							This can be useful to reconstruct an already-estimated model.
+	:type initial_value: float (optional)
+	:param max: If given, set a max bound for the parameter during the estimation process.
+	:type max:  float (optional)
+	:param min: If given, set a min bound for the parameter during the estimation process.
+	:type min:  float (optional)
+	:param holdfast: If nonzero, the parameter will be held fast (constrained) at the current
+						value during estimation.
+	:type holdfast: int (optional)
+	:returns: :class:`ModelParameter`
 
 
 

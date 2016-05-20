@@ -55,7 +55,7 @@ if args.file:
 
 if args.test:
 	import larch.test
-	from larch.core import Parameter, Model, DB, LarchError, SQLiteError
+	from larch.core import Model, DB, LarchError, SQLiteError
 	from larch.model import ModelFamily
 	try:
 		larch.test.run()

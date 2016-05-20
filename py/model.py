@@ -10,7 +10,7 @@ from .model_reporter import ModelReporter
 import base64
 from .util.attribute_dict import function_cache
 from .model_shadowmanager import shadow_manager
-from .model_parametermanager import parameter_manager
+from .model_parametermanager import ParameterManager
 
 class MetaParameter():
 	def __init__(self, name, value, under, initial_value=None):
@@ -130,7 +130,8 @@ class Model(Model2, ModelReporter):
 
 	@property
 	def parameter(self):
-		return parameter_manager(self)
+		"""A :class:`ParameterManager` interface for the model."""
+		return ParameterManager(self)
 
 	def metaparameter(self, name):
 		try:
