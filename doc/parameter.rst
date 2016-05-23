@@ -8,17 +8,23 @@ Model Parameters
 .. py:class:: ModelParameter(model, index)
 
 	A ModelParameter is a reference object, referring to a :class:`Model` and
-	a parameter index.  From this information, a number of parameter atrributes
-	can be accessed and edited.
+	a parameter index.  Unlike a :class:`roles.ParameterRef`, a
+	:class:`ModelParameter` is explicitly bound to a specific :class:`Model`, and
+	edits to attributes of a :class:`ModelParameter` automatically pass through
+	to the underlying :class:`Model`. These attributes support both reading and
+	writing:
 
-	.. autoattribute:: name
-	.. autoattribute:: index
 	.. autoattribute:: value
 	.. autoattribute:: null_value
 	.. autoattribute:: initial_value
 	.. autoattribute:: min_value
 	.. autoattribute:: max_value
 	.. autoattribute:: holdfast
+
+	These attributes are read-only:
+
+	.. autoattribute:: name
+	.. autoattribute:: index
 	.. autoattribute:: t_stat
 	.. autoattribute:: std_err
 	.. autoattribute:: robust_std_err

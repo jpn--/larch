@@ -89,16 +89,16 @@ namespace elm {
 		maximum = property(_get_max, _set_max, _del_max, "the max bound for the parameter during estimation")
 		max_value = maximum
 		holdfast = property(_get_holdfast, _set_holdfast, _del_holdfast, "a flag indicating if the parameter value should be held fast (constrained to keep its value) during estimation")
-		std_err = property(_get_std_err, None, None, "the standard error of the estimator")
-		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich")
-		name = property(_get_name, None, None, "the parameter name")
-		index = property(_get_index, None, None, "the parameter index within the model")
-		t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator")
+		std_err = property(_get_std_err, None, None, "the standard error of the estimator (read-only)")
+		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich (read-only)")
+		name = property(_get_name, None, None, "the parameter name (read-only)")
+		index = property(_get_index, None, None, "the parameter index within the model (read-only)")
+		t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
 		def __repr__(self):
 			return "ModelParameter('{}', value={})".format(self.name, self.value)
 		@property
 		def covariance(self):
-			"the covariance of the estimator"
+			"the covariance of the estimator (read-only)"
 			slot = self.index
 			cov = self._get_complete_covariance_matrix()
 			model = self._get_model()
@@ -108,7 +108,7 @@ namespace elm {
 			return ret
 		@property
 		def robust_covariance(self):
-			"the robust covariance of the estimator via bhhh sandwich"
+			"the robust covariance of the estimator via bhhh sandwich (read-only)"
 			slot = self.index
 			model = self._get_model()
 			cov = model.robust_covariance_matrix

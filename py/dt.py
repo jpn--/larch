@@ -622,6 +622,17 @@ class DT(Fountain):
 			return False
 		return True
 
+	def multi_check_co(self, bucket):
+		"""Scan a list of string or a long string line-by-line to check if the variables are valid."""
+		if isinstance(bucket, str):
+			for b in bucket.split("\n"):
+				ok = self.check_ca(b.strip())
+				if not ok:
+					raise KeyError("Data '{}' not found".format(b.strip()))
+		else:
+			for b in bucket:
+				self.multi_check_ca(b)
+
 	def check_co(self, column):
 		if self._check_co_natural(column):
 			return True
@@ -631,6 +642,17 @@ class DT(Fountain):
 		except:
 			return False
 		return True
+
+	def multi_check_co(self, bucket):
+		"""Scan a list of string or a long string line-by-line to check if the variables are valid."""
+		if isinstance(bucket, str):
+			for b in bucket.split("\n"):
+				ok = self.check_co(b.strip())
+				if not ok:
+					raise KeyError("Data '{}' not found".format(b.strip()))
+		else:
+			for b in bucket:
+				self.multi_check_co(b)
 
 	def variables_ca(self):
 		return tuple(i for i in self.h5idca._v_children)
@@ -1391,6 +1413,83 @@ class DT(Fountain):
 			self.h5f.create_carray(self.h5idco, idca_var, obj=newarr)
 			self.h5idca._v_children[idca_var]._f_remove()
 
+	def new_idco(self, name, expression):
+		"""Create a new :ref:`idco` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		Although using the full expression as a data term in a model might be
+		valid, the whole expression will need to be evaluated every time the data
+		is loaded.  By using this method, you can evaluate the expression just once,
+		and save the resulting array to the file.
+		
+		Note that this command does not (yet) evaluate the expression in kernel
+		using the numexpr module.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idco` variable.
+		expression : str
+			An expression to evaluate as the new variable.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name alreay exists.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idco` data.
+		"""
+		data = self.array_idco(expression).reshape(-1)
+		self.h5f.create_carray(self.h5idco, name, obj=data)
+
+	def new_idca(self, name, expression):
+		"""Create a new :ref:`idca` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		Although using the full expression as a data term in a model might be
+		valid, the whole expression will need to be evaluated every time the data
+		is loaded.  By using this method, you can evaluate the expression just once,
+		and save the resulting array to the file.
+		
+		Note that this command does not (yet) evaluate the expression in kernel
+		using the numexpr module.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idca` variable.
+		expression : str
+			An expression to evaluate as the new variable.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name alreay exists.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idca` or :ref:`idco` data.
+		"""
+		data = self.array_idca(expression).reshape(-1)
+		self.h5f.create_carray(self.h5idca, name, obj=data)
+
+
+	def delete_data(self, name):
+		"""Delete an existing :ref:`idca` or :ref:`idco` variable.
+		
+		If there is a variable of the same name in both idca and idco
+		formats, this method will delete both.
+		
+		"""
+		try:
+			self.h5f.remove_node(self.h5idca, name)
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		try:
+			self.h5f.remove_node(self.h5idco, name)
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+
 
 	def info(self, log=print):
 		log("Variables:")
@@ -1416,4 +1515,5 @@ class DT(Fountain):
 
 	def Expr(self, expression):
 		return _tb.Expr(expression, uservars=self.namespace)
+
 
