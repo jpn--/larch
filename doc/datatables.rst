@@ -155,27 +155,53 @@ The details are as follows::
 	 >>> │ Every child node name in `idca` must be a valid Python identifer (i.e.
 	     │ starts with a letter or underscore, and only contains letters, numbers,
 	     │ and underscores) and not a Python reserved keyword.
-	 >>> │ Every child node in `idca` must be an array node with the first dimension
-	     │ the same as the length of `caseids`, and the second dimension the same as
-	     │ the length of `altids`.
-	     ├ Alternative Availability ────────────────────────────────────────────────
+	 >>> │ Every child node in `idca` must be (1) an array node with the first
+	     │ dimension the same as the length of `caseids`, and the second dimension
+	     │ the same as the length of `altids`, or (2) a group node with child nodes
+	     │ `_index_` as a 1-dimensional array with the same length as the length of
+	     │ `caseids` and an integer dtype, and a 2-dimensional `_values_` with the
+	     │ second dimension the same as the length of `altids`, such that
+	     │ _values_[_index_] reconstructs the desired data array.
+		 ├ Alternative Availability ────────────────────────────────────────────────
 	 >>> │ If there may be some alternatives that are unavailable in some cases,
 	     │ there should be a node named `_avail_` under `idca`.
-	 >>> │ If given, it should contain an appropriately sized Bool array indicating
-	     │ the availability status for each alternative.
-	     ├ Chosen Alternatives ─────────────────────────────────────────────────────
+	 >>> │ If given as an array, it should contain an appropriately sized Bool array
+	     │ indicating the availability status for each alternative.
+	 >>> │ If given as a group, it should have an attribute named `stack` that is a
+	     │ tuple of `idco` expressions indicating the availability status for each
+	     │ alternative. The length and order of `stack` should match that of the
+	     │ altid array.
+		 ├ Chosen Alternatives ────────────────────────────────────────────────────
 	 >>> │ There should be a node named `_choice_` under `idca`.
-	 >>> │ It should be a Float64 array indicating the chosen-ness for each
-	     │ alternative. Typically, this will take a value of 1.0 for the alternative
-	     │ that is chosen and 0.0 otherwise, although it is possible to have other
-	     │ values, including non-integer values, in some applications.
+	 >>> │ If given as an array, it should be a Float64 array indicating the chosen-
+	     │ ness for each alternative. Typically, this will take a value of 1.0 for
+	     │ the alternative that is chosen and 0.0 otherwise, although it is possible
+	     │ to have other values, including non-integer values, in some applications.
+	 >>> │ If given as a group, it should have an attribute named `stack` that is a
+	     │ tuple of `idco` expressions indicating the choice status for each
+	     │ alternative. The length and order of `stack` should match that of the
+	     │ altid array.
 	─────┼──────────────────────────────────────────────────────────────────────────
 	     │ OTHER TECHNICAL DETAILS
 	 >>> │ The set of child node names within `idca` and `idco` should not overlap
 	     │ (i.e. there should be no node names that appear in both).
 	═════╧══════════════════════════════════════════════════════════════════════════
 
+Note that the _choice_ and _avail_ nodes are special, they can be expressed as a
+stack if idco expressions instead of as a single idca array.  To do so, replace the
+array node with a group node, and attach a `stack` attribute that gives the list of
+`idco` expressions.  The list should match the list of alternatives.  One way to do
+this automatically is to use the avail_idco and choice_idco attributes of the
+:class:`DT`.
 
 To check if your file has the correct structure, you can use the validate function:
 
 .. automethod:: DT.validate
+
+
+
+.. autoattribute:: DT.choice_idco
+
+.. autoattribute:: DT.avail_idco
+
+

@@ -1243,7 +1243,7 @@ class DT(Fountain):
 						not _ch_exists)
 		if not _ch_is_array or not _ch_exists:
 			nerrs+= zzz("If given as a group, it should have an attribute named `stack` "
-						"that is a tuple of `idco` expressions indicating the availability "
+						"that is a tuple of `idco` expressions indicating the choice "
 						"status for each alternative. The length and order of `stack` should "
 						"match that of the altid array.",
 						isok if _ch_stack is not None and len(_ch_stack)==altids_node_len else
@@ -1623,6 +1623,19 @@ class DT(Fountain):
 
 	@property
 	def avail_idco(self):
+		"""The stack manager for avail data in idco format.
+		
+		To set a stack of idco expressions to represent availability data, 
+		assign a dictionary to this attribute with keys as alternative codes
+		and values as idco expressions.
+		
+		You can also get and assign individual alternative values using the 
+		usual dictionary operations::
+		
+			DT.avail_idco[key]            # get expression
+			DT.avail_idco[key] = value    # set expression
+			
+		"""
 		return DT_idco_stack_manager(self, '_avail_')
 
 	@avail_idco.setter
@@ -1634,6 +1647,19 @@ class DT(Fountain):
 
 	@property
 	def choice_idco(self):
+		"""The stack manager for choice data in idco format.
+		
+		To set a stack of idco expressions to represent choice data,
+		assign a dictionary to this attribute with keys as alternative codes
+		and values as idco expressions.
+		
+		You can also get and assign individual alternative values using the 
+		usual dictionary operations::
+		
+			DT.choice_idco[key]            # get expression
+			DT.choice_idco[key] = value    # set expression
+			
+		"""
 		return DT_idco_stack_manager(self, '_choice_')
 
 	@choice_idco.setter
