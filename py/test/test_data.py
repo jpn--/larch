@@ -323,7 +323,7 @@ class TestData1(unittest.TestCase):
 		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
 		self.assertTrue( numpy.array_equal(apple, dt.h5idco.Apple[:]) )
 		dt.set_alternatives(['Apple','Banana','Cookie'])
-		dt.set_avail_idco("isfinite(Apple)","isfinite(Banana)","isfinite(Cookie)",)
+		dt.avail_idco("isfinite(Apple)","isfinite(Banana)","isfinite(Cookie)",)
 		av = numpy.array([[ True,  True,  True],
 						   [ True, False,  True],
 						   [ True, False,  True],
@@ -334,7 +334,7 @@ class TestData1(unittest.TestCase):
 						   [ True, False,  True],
 						   [ True, False,  True]], dtype=bool)
 		self.assertTrue(numpy.array_equal( av, dt.array_avail().squeeze() ))
-		dt.set_avail_idco("1",1,0, varname='_built_avail2_')
+		dt.avail_idco("1",1,0, varname='_built_avail2_')
 		av2 = numpy.array( [[ True,  True,  False],
 						   [ True,  True,  False],
 						   [ True,  True,  False],
@@ -345,7 +345,7 @@ class TestData1(unittest.TestCase):
 						   [ True,  True,  False],
 						   [ True,  True,  False]], dtype=bool)
 		self.assertTrue(numpy.array_equal( av2, dt.array_avail().squeeze() ))
-		dt.set_avail_idco(1,"isfinite(Banana)",1)
+		dt.avail_idco(1,"isfinite(Banana)",1)
 		self.assertTrue(numpy.array_equal( av, dt.array_avail().squeeze() ))
 		self.assertFalse(numpy.array_equal( av, dt.array_avail() ))
 		dt.choice_idco = {
@@ -364,6 +364,12 @@ class TestData1(unittest.TestCase):
 						   [ 0.,  0.,  1.],
 						   [ 0.,  0.,  1.]])
 		self.assertTrue(numpy.array_equal( ch, dt.array_choice().squeeze() ))
+		dt.avail_idco = {1:"1",2:1,3:0,}
+		self.assertTrue(numpy.array_equal( av2, dt.array_avail().squeeze() ))
+		dt.avail_idco[3] = 1
+		dt.avail_idco[2] = 'isfinite(Banana)'
+		self.assertTrue(numpy.array_equal( av, dt.array_avail().squeeze() ))
+		
 
 
 	def test_pytables_import_idca_with_nulls(self):
