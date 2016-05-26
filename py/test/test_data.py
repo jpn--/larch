@@ -322,6 +322,49 @@ class TestData1(unittest.TestCase):
 		self.assertTrue(numpy.array_equal( purch, dt.h5idco.Purchase[:] ))
 		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
 		self.assertTrue( numpy.array_equal(apple, dt.h5idco.Apple[:]) )
+		dt.set_alternatives(['Apple','Banana','Cookie'])
+		dt.set_avail_idco("isfinite(Apple)","isfinite(Banana)","isfinite(Cookie)",)
+		av = numpy.array([[ True,  True,  True],
+						   [ True, False,  True],
+						   [ True, False,  True],
+						   [ True,  True,  True],
+						   [ True, False,  True],
+						   [ True, False,  True],
+						   [ True,  True,  True],
+						   [ True, False,  True],
+						   [ True, False,  True]], dtype=bool)
+		self.assertTrue(numpy.array_equal( av, dt.array_avail().squeeze() ))
+		dt.set_avail_idco("1",1,0, varname='_built_avail2_')
+		av2 = numpy.array( [[ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False],
+						   [ True,  True,  False]], dtype=bool)
+		self.assertTrue(numpy.array_equal( av2, dt.array_avail().squeeze() ))
+		dt.set_avail_idco(1,"isfinite(Banana)",1)
+		self.assertTrue(numpy.array_equal( av, dt.array_avail().squeeze() ))
+		self.assertFalse(numpy.array_equal( av, dt.array_avail() ))
+		dt.choice_idco = {
+			1: "Purchase==b'Apple'",
+			2: "Purchase==b'Banana'",
+			3: "Purchase==b'Cookie'",
+			}
+		self.assertTrue( dt.validate(None)==0 )
+		ch = numpy.array([ [ 1.,  0.,  0.],
+						   [ 0.,  0.,  1.],
+						   [ 1.,  0.,  0.],
+						   [ 0.,  1.,  0.],
+						   [ 0.,  0.,  1.],
+						   [ 1.,  0.,  0.],
+						   [ 1.,  0.,  0.],
+						   [ 0.,  0.,  1.],
+						   [ 0.,  0.,  1.]])
+		self.assertTrue(numpy.array_equal( ch, dt.array_choice().squeeze() ))
+
 
 	def test_pytables_import_idca_with_nulls(self):
 		dt = DT()

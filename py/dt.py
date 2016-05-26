@@ -78,6 +78,9 @@ class LocalAttributeSet(object):
 
 
 
+
+
+
 class DT(Fountain):
 	"""A wrapper for a pytables File used to get data for models.
 
@@ -261,7 +264,7 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			return numpy.empty(0, dtype=str)
 
-	def _set_alternatives(self, altids, alt_labels=None):
+	def set_alternatives(self, altids, alt_labels=None):
 		try:
 			self.h5f.remove_node(self.h5alts, 'altids')
 		except _tb.exceptions.NoSuchNodeError:
@@ -340,7 +343,11 @@ class DT(Fountain):
 		CBRAC = (OP, ']')
 		from io import BytesIO
 		recommand = []
-		g = tokenize(BytesIO(cmd.encode('utf-8')).readline)
+		try:
+			cmd_encode = cmd.encode('utf-8')
+		except AttributeError:
+			cmd_encode = str(cmd).encode('utf-8')
+		g = tokenize(BytesIO(cmd_encode).readline)
 		for toknum, tokval, _, _, _  in g:
 			if toknum == NAME and tokval in self.h5idca:
 				if dims==1:
@@ -437,7 +444,7 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,n_alts,len(vars)).
 			
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		h5node = self.h5top.idca
 		h5caseid = self.h5top.caseids
 		if screen is None and 'screen' not in self.h5top:
@@ -472,7 +479,7 @@ class DT(Fountain):
 
 
 
-	def array_idco(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True):
+	def array_idco(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True, explain=False):
 		"""Extract a set of idco values from the DB based on preset queries.
 		
 		Generally you won't need to specify any parameters to this method beyond the
@@ -507,7 +514,7 @@ class DT(Fountain):
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		h5node = self.h5top.idco
 		h5caseid = self.h5top.caseids
 		if screen is None and 'screen' not in self.h5top:
@@ -521,6 +528,8 @@ class DT(Fountain):
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
 		for varnum,v in enumerate(vars):
 			command = self._remake_command(v,screen,1)
+			if explain:
+				print("Evaluating:",str(command))
 			try:
 				result[:,varnum] = eval( command )
 			except Exception as exc:
@@ -547,7 +556,10 @@ class DT(Fountain):
 		else:
 			return self.array_idco('_weight_', **kwargs)
 
-	def array_choice(self, *, var=None, **kwargs):
+	def array_choice(self, **kwargs):
+		if isinstance(self.h5idca._choice_, _tb.Group):
+			stacktuple = self.h5idca._choice_._v_attrs.stack
+			return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
 		return self.array_idca('_choice_', **kwargs)
 
 	def array_avail(self, *, var=None, dtype=numpy.bool_, **kwargs):
@@ -555,6 +567,9 @@ class DT(Fountain):
 			av = self.h5idca._avail_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idca('1', dtype=dtype, **kwargs)
+		if isinstance(self.h5idca._avail_, _tb.Group):
+			stacktuple = self.h5idca._avail_._v_attrs.stack
+			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
 
@@ -615,6 +630,7 @@ class DT(Fountain):
 			return True
 		if self._check_co_natural(column):
 			return True
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		try:
 			command = self._remake_command(column,None,2)
 			eval( command )
@@ -622,7 +638,7 @@ class DT(Fountain):
 			return False
 		return True
 
-	def multi_check_co(self, bucket):
+	def multi_check_ca(self, bucket):
 		"""Scan a list of string or a long string line-by-line to check if the variables are valid."""
 		if isinstance(bucket, str):
 			for b in bucket.split("\n"):
@@ -630,16 +646,24 @@ class DT(Fountain):
 				if not ok:
 					raise KeyError("Data '{}' not found".format(b.strip()))
 		else:
-			for b in bucket:
-				self.multi_check_ca(b)
+			try:
+				bucket_iter = iter(bucket)
+			except TypeError:
+				self.multi_check_ca(str(bucket))
+			else:
+				for b in bucket_iter:
+					self.multi_check_ca(b)
 
-	def check_co(self, column):
+	def check_co(self, column, raise_exception=False):
 		if self._check_co_natural(column):
 			return True
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		try:
 			command = self._remake_command(column,None,1)
 			eval( command )
 		except:
+			if raise_exception:
+				raise
 			return False
 		return True
 
@@ -651,8 +675,13 @@ class DT(Fountain):
 				if not ok:
 					raise KeyError("Data '{}' not found".format(b.strip()))
 		else:
-			for b in bucket:
-				self.multi_check_co(b)
+			try:
+				bucket_iter = iter(bucket)
+			except TypeError:
+				self.multi_check_co(str(bucket))
+			else:
+				for b in bucket_iter:
+					self.multi_check_co(b)
 
 	def variables_ca(self):
 		return tuple(i for i in self.h5idca._v_children)
@@ -892,6 +921,8 @@ class DT(Fountain):
 		
 		"""
 		import keyword
+		if log is None:
+			log = lambda *x: None
 		nerrs = 0
 		isok = None
 		import textwrap
@@ -1120,7 +1151,8 @@ class DT(Fountain):
 		for idca_child in self.h5idca._v_children.keys():
 			if isinstance_(self.h5idca._v_children[idca_child], _tb.group.Group):
 				if '_index_' not in self.h5idca._v_children[idca_child] or '_values_' not in self.h5idca._v_children[idca_child]:
-					idca_child_incorrect_sized[idca_child] = 'invalid group'
+					if idca_child not in ('_avail_','_choice_') or 'stack' not in self.h5idca._v_children[idca_child]._v_attrs:
+						idca_child_incorrect_sized[idca_child] = 'invalid group'
 				else:
 					if self.h5idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
 						idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child]._values_.shape
@@ -1144,7 +1176,14 @@ class DT(Fountain):
 		if '_avail_' in self.h5idca:
 			_av_exists = True
 			_av_is_array = isinstance_(self.h5idca._avail_, _tb.array.Array)
-			_av_atom_bool = isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)
+			if _av_is_array:
+				_av_atom_bool = isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)
+			else:
+				_av_atom_bool = None
+				try:
+					_av_stack = self.h5idca._avail_._v_attrs.stack
+				except:
+					_av_stack = None
 		else:
 			_av_exists = False
 			_av_is_array = None
@@ -1154,33 +1193,63 @@ class DT(Fountain):
 					"be a node named `_avail_` under `idca`.",
 					isok if _av_exists else 'node is missing',
 					not _av_exists)
-		nerrs+= zzz("If given, it should contain an appropriately sized Bool "
-					"array indicating the availability status for each alternative.",
-					isok if _av_is_array and _av_atom_bool else
-					'not an array' if not _av_is_array else
-					'not a bool array',
-					not _av_exists)
+		if _av_is_array:
+			nerrs+= zzz("If given as an array, it should contain an appropriately sized Bool "
+						"array indicating the availability status for each alternative.",
+						isok if _av_is_array and _av_atom_bool else
+						'not an array' if not _av_is_array else
+						'not a bool array',
+						not _av_exists)
+		else:
+			nerrs+= zzz("If given as a group, it should have an attribute named `stack` "
+						"that is a tuple of `idco` expressions indicating the availability "
+						"status for each alternative. The length and order of `stack` should "
+						"match that of the altid array.",
+						isok if _av_stack is not None and len(_av_stack)==altids_node_len else
+						'no stack' if _av_stack is None else
+						'stack is wrong size',
+						not _av_exists)
 
 		subcategory('Chosen Alternatives')
 		if '_choice_' in self.h5idca:
 			_ch_exists = True
 			_ch_is_array = isinstance_(self.h5idca._choice_, _tb.array.Array)
-			_ch_atom_float = isinstance(self.h5idca._choice_.atom, _tb.atom.Float64Atom)
+			if _ch_is_array:
+				_ch_atom_float = isinstance(self.h5idca._choice_.atom, _tb.atom.Float64Atom)
+				_ch_stack = None
+			else:
+				_ch_atom_float = None
+				try:
+					_ch_stack = self.h5idca._choice_._v_attrs.stack
+				except:
+					_ch_stack = None
 		else:
 			_ch_exists = False
 			_ch_is_array = None
 			_ch_atom_float = None
+			_ch_stack = None
 		
 		nerrs+= zzz("There should be a node named `_choice_` under `idca`.",
 					isok if _ch_exists else 'the node is missing')
-		nerrs+= zzz("It should be a Float64 "
-					"array indicating the chosen-ness for each alternative. "
-					"Typically, this will take a value of 1.0 for the alternative that is "
-					"chosen and 0.0 otherwise, although it is possible to have other values, "
-					"including non-integer values, in some applications.",
-					isok if _ch_is_array and _ch_atom_float else
-					'not an array' if not _ch_is_array else
-					'not a Float64 array')
+		if _ch_is_array or not _ch_exists:
+			nerrs+= zzz("If given as an array, it should be a Float64 "
+						"array indicating the chosen-ness for each alternative. "
+						"Typically, this will take a value of 1.0 for the alternative that is "
+						"chosen and 0.0 otherwise, although it is possible to have other values, "
+						"including non-integer values, in some applications.",
+						isok if _ch_is_array and _ch_atom_float else
+						'not an array' if not _ch_is_array else
+						'not a Float64 array',
+						not _ch_exists)
+		if not _ch_is_array or not _ch_exists:
+			nerrs+= zzz("If given as a group, it should have an attribute named `stack` "
+						"that is a tuple of `idco` expressions indicating the availability "
+						"status for each alternative. The length and order of `stack` should "
+						"match that of the altid array.",
+						isok if _ch_stack is not None and len(_ch_stack)==altids_node_len else
+						'no stack' if _ch_stack is None else
+						'stack is wrong size',
+						not _ch_exists)
 
 		## TECHNICAL
 		category('OTHER TECHNICAL DETAILS')
@@ -1254,6 +1323,8 @@ class DT(Fountain):
 					caseid_column = caseid_column+'_int64'
 					proposed_caseids_node = self.h5idco._v_children[caseid_column]
 				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.h5idco._v_pathname+'/'+caseid_column)
+			if caseid_column is None and 'caseids' not in self.h5top:
+				h5var = self.h5f.create_carray(self.h5top, 'caseids', obj=numpy.arange(1, len(df)+1, dtype=numpy.int64))
 		except:
 			self._df_exception = df
 			raise
@@ -1459,18 +1530,21 @@ class DT(Fountain):
 		----------
 		name : str
 			The name of the new :ref:`idca` variable.
-		expression : str
-			An expression to evaluate as the new variable.
+		expression : str or array
+			An expression to evaluate as the new variable, or an array of data.
 			
 		Raises
 		-----
 		tables.exceptions.NodeError
-			If a variable of the same name alreay exists.
+			If a variable of the same name already exists.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
 			the existing :ref:`idca` or :ref:`idco` data.
 		"""
-		data = self.array_idca(expression).reshape(-1)
+		if isinstance(expression, str):
+			data = self.array_idca(expression).reshape(-1)
+		else:
+			data = expression
 		self.h5f.create_carray(self.h5idca, name, obj=data)
 
 
@@ -1489,6 +1563,126 @@ class DT(Fountain):
 			self.h5f.remove_node(self.h5idco, name)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
+
+	def set_avail_idco(self, *cols, varname='_avail_'):
+		"""Set up the :ref:`idca` _avail_ data array from :ref:`idco` variables.
+		
+		The availability array, if used, needs to be in :ref:`idca` format. If
+		your data isn't in that format, it's still easy to create the correct
+		availability array by stacking together the appropriate :ref:`idco` columns.
+		This command simplifies that process.
+		
+		Parameters
+		----------
+		cols : tuple of str
+			The names of the :ref:`idco` expressions that represent availability. 
+			They should be given in exactly the same order as they appear in the
+			alternative codes array.
+		varname : str
+			The name of the new :ref:`idca` variable to create. Defaults to '_avail_'.
+			
+		Raises
+		------
+		tables.exceptions.NodeError
+			If a variable of the name given by `varname` already exists.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idco` data.
+		TypeError
+			If the wrong number of cols arguments is provided; it must exactly match the
+			number of alternatives.
+			
+		Notes
+		-----
+		When the `varname` is given as '_avail_' (the default) the _avail_ node is replaced
+		with a special group node that links to the various alternatives in the :ref:`idco`
+		data, instead of copying them into a new array in the :ref:`idca` data.
+		
+		"""
+		if len(cols)==1 and len(cols[0])==self.nAlts():
+			cols = cols[0]
+		if len(cols) != self.nAlts():
+			raise TypeError('the input columns must exactly match the alternatives, you gave {} but there are {} alternatives'.format(len(cols), self.nAlts()))
+		# Raise an exception when a col is invalid
+		self.multi_check_co(cols)
+		if varname == '_avail_':
+			try:
+				self.h5f.remove_node(self.h5idca, '_avail_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.h5f.create_group(self.h5idca, '_avail_')
+			self.h5idca._avail_._v_attrs.stack = cols
+		else:
+			av = self.array_idco(*cols, dtype=numpy.bool)
+			self.new_idca(varname, av)
+			try:
+				self.h5f.remove_node(self.h5idca, '_avail_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.h5f.create_soft_link(self.h5idca, '_avail_', target=self.h5idca._v_pathname+'/'+varname)
+
+	@property
+	def choice_idco(self):
+		return DT_choice_idco_manager(self)
+
+	@choice_idco.setter
+	def choice_idco(self, value):
+		if not isinstance(value, dict):
+			raise TypeError("assignment to choice_idco must be a dict")
+		for k,v in value.items():
+			self.choice_idco[k] = v
+
+	def set_choice_idco(self, *cols, varname='_choice_'):
+		"""Set up the :ref:`idca` _choice_ data array from :ref:`idco` variables.
+		
+		The choice array needs to be in :ref:`idca` format. If
+		your data isn't in that format, it's still easy to create the correct
+		availability array by stacking together the appropriate :ref:`idco` columns.
+		This command simplifies that process.
+		
+		Parameters
+		----------
+		cols : tuple of str
+			The names of the :ref:`idco` expressions that represent availability. 
+			They should be given in exactly the same order as they appear in the
+			alternative codes array.
+		varname : str
+			The name of the new :ref:`idca` variable to create. Defaults to '_choice_'.
+			
+		Raises
+		------
+		tables.exceptions.NodeError
+			If a variable of the name given by `varname` already exists.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idco` data.
+		TypeError
+			If the wrong number of cols arguments is provided; it must exactly match the
+			number of alternatives.
+		"""
+		if len(cols)==1 and len(cols[0])==self.nAlts():
+			cols = cols[0]
+		if len(cols) != self.nAlts():
+			raise TypeError('the input columns must exactly match the alternatives, you gave {} but there are {} alternatives'.format(len(cols), self.nAlts()))
+		# Raise an exception when a col is invalid
+		self.multi_check_co(cols)
+		cols = list(cols)
+		if varname == '_choice_':
+			try:
+				self.h5f.remove_node(self.h5idca, '_choice_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.h5f.create_group(self.h5idca, '_choice_')
+			self.h5idca._choice_._v_attrs.stack = cols
+		else:
+			ch = self.array_idco(*cols, dtype=numpy.float64)
+			self.new_idca(varname, ch)
+			try:
+				self.h5f.remove_node(self.h5idca, '_choice_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.h5f.create_soft_link(self.h5idca, '_choice_', target=self.h5idca._v_pathname+'/'+varname)
+
 
 
 	def info(self, log=print):
@@ -1517,3 +1711,118 @@ class DT(Fountain):
 		return _tb.Expr(expression, uservars=self.namespace)
 
 
+
+
+
+
+class DT_choice_idco_manager:
+
+	def __init__(self, parent):
+		self.parent = parent
+
+	def _check(self):
+		def isinstance_(obj, things):
+			try:
+				obj = obj.dereference()
+			except AttributeError:
+				pass
+			return isinstance(obj, things)
+		if isinstance_(self.parent.h5idca._choice_, _tb.Array):
+			raise TypeError('The _choice_ is an array, not a stack.')
+		if not isinstance_(self.parent.h5idca._choice_, _tb.Group):
+			raise TypeError('The _choice_ stack is not set up.')
+
+	def _make_zeros(self):
+		def isinstance_(obj, things):
+			try:
+				obj = obj.dereference()
+			except AttributeError:
+				pass
+			return isinstance(obj, things)
+		try:
+			if isinstance_(self.parent.h5idca._choice_, _tb.Array):
+				self.parent.h5f.remove_node(self.parent.h5idca, '_choice_')
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		# create new group if it does not exist
+		try:
+			self.parent.h5f.create_group(self.parent.h5idca, '_choice_')
+		except _tb.exceptions.NodeError:
+			pass
+		else:
+			self.parent.h5idca._choice_._v_attrs.stack = [0]*self.parent.nAlts()
+
+
+	def __call__(self, *cols, varname='_choice_'):
+		"""Set up the :ref:`idca` _choice_ data array from :ref:`idco` variables.
+		
+		The choice array needs to be in :ref:`idca` format. If
+		your data isn't in that format, it's still easy to create the correct
+		availability array by stacking together the appropriate :ref:`idco` columns.
+		This command simplifies that process.
+		
+		Parameters
+		----------
+		cols : tuple of str
+			The names of the :ref:`idco` expressions that represent availability. 
+			They should be given in exactly the same order as they appear in the
+			alternative codes array.
+		varname : str
+			The name of the new :ref:`idca` variable to create. Defaults to '_choice_'.
+			
+		Raises
+		------
+		tables.exceptions.NodeError
+			If a variable of the name given by `varname` already exists.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idco` data.
+		TypeError
+			If the wrong number of cols arguments is provided; it must exactly match the
+			number of alternatives.
+		"""
+		if len(cols)==1 and len(cols[0])==self.parent.nAlts():
+			cols = cols[0]
+		if len(cols) != self.parent.nAlts():
+			raise TypeError('the input columns must exactly match the alternatives, you gave {} but there are {} alternatives'.format(len(cols), self.parent.nAlts()))
+		# Raise an exception when a col is invalid
+		self.parent.multi_check_co(cols)
+		cols = list(cols)
+		if varname == '_choice_':
+			try:
+				self.parent.h5f.remove_node(self.parent.h5idca, '_choice_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.parent.h5f.create_group(self.parent.h5idca, '_choice_')
+			self.parent.h5idca._choice_._v_attrs.stack = cols
+		else:
+			ch = self.parent.array_idco(*cols, dtype=numpy.float64)
+			self.parent.new_idca(varname, ch)
+			try:
+				self.parent.h5f.remove_node(self.parent.h5idca, '_choice_')
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+			self.parent.h5f.create_soft_link(self.parent.h5idca, '_choice_', target=self.parent.h5idca._v_pathname+'/'+varname)
+
+	def __getitem__(self, key):
+		self._check()
+		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
+		if len(slotarray) == 1:
+			return self.parent.h5idca._choice_._v_attrs.stack[slotarray[0]]
+		else:
+			raise KeyError
+
+	def __setitem__(self, key, value):
+		self._make_zeros()
+		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
+		if len(slotarray) == 1:
+			self.parent.h5idca._choice_._v_attrs.stack[slotarray[0]] = value
+		else:
+			raise KeyError
+
+	def __repr__(self):
+		self._check()
+		s = "<choice_idco>"
+		for n,altid in enumerate(self.parent._alternative_codes()):
+			s += "\n  {}: {!r}".format(altid, self[altid])
+		return s

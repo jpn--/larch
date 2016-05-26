@@ -27,9 +27,14 @@ class Role(type):
 
 class DataRef(str, metaclass=Role):
 	def __new__(cls, name):
-		self = super().__new__(cls, name)
-		self._role = 'data'
-		return self
+		if hasattr(str, name):
+			raise NameError("cannot create DataRef with the name of a str method ({})".format(name))
+		try:
+			return getattr(cls,name)
+		except:
+			self = super().__new__(cls, name)
+			self._role = 'data'
+			return self
 	def __repr__(self):
 		s = super().__str__()
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$",s) and not _keyword.iskeyword(s):
@@ -56,7 +61,7 @@ class DataRef(str, metaclass=Role):
 		if isinstance(other, LinearFunction):
 			raise NotImplementedError
 		if isinstance(other, LinearComponent):
-			raise NotImplementedError
+			return LinearComponent(data=str(self * other.data), param=str(other.param))
 		if type(other) is ParameterRef:
 			return LinearComponent(data=str(self), param=str(other))
 		if type(other) is _param_negate:
@@ -66,7 +71,7 @@ class DataRef(str, metaclass=Role):
 		if isinstance(other, LinearFunction):
 			raise NotImplementedError
 		if isinstance(other, LinearComponent):
-			raise NotImplementedError
+			return LinearComponent(data=str(other.data * self), param=str(other.param))
 		if type(other) is ParameterRef:
 			return LinearComponent(data=str(self), param=str(other))
 		if type(other) is _param_negate:
@@ -90,6 +95,13 @@ class DataRef(str, metaclass=Role):
 		return DataRef("({})/({})".format(other,self))
 	def __neg__(self):
 		return DataRef("-({})".format(self))
+	def __eq__(self, other):
+		if isinstance(other, DataRef):
+			if repr(other) == repr(self):
+				return True
+		return False
+	def __hash__(self):
+		return hash(repr(self))
 
 
 
@@ -304,7 +316,13 @@ class ParameterRef(str, metaclass=Role):
 		return _param_divide(other,self)
 	def __neg__(self):
 		return _param_negate(self)
-
+	def __eq__(self, other):
+		if isinstance(other, ParameterRef):
+			if repr(other) == repr(self):
+				return True
+		return False
+	def __hash__(self):
+		return hash(repr(self))
 
 class _param_math_binaryop(ParameterRef):
 	def __new__(cls,left,right):
@@ -458,17 +476,23 @@ def exp(x):
 	if isinstance(x,DataRef):
 		return DataRef("exp({})".format(x))
 	else:
-		return _log(x)
+		return _exp(x)
+
+class CombinedRef(metaclass=Role):
+	def __new__(cls, s):
+		return LinearComponent(DataRef(s), ParameterRef(s))
+
 
 
 globals()[_ParameterRef_repr_txt] = ParameterRef
 globals()[_DataRef_repr_txt] = DataRef
+globals()[_ParameterRef_repr_txt+_DataRef_repr_txt] = CombinedRef
 
 core.ParameterRef = ParameterRef
 core.DataRef = DataRef
 
 
-__all__ = [_ParameterRef_repr_txt, _DataRef_repr_txt]
+__all__ = [_ParameterRef_repr_txt, _DataRef_repr_txt, _ParameterRef_repr_txt+_DataRef_repr_txt]
 
 if __name__=='__main__':
 
