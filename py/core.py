@@ -2859,8 +2859,21 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
     		if isinstance(value, LinearComponent):
     			if value.param not in parent:
     				raise KeyError("Parameter '{}' is not found in model and autocreate_parameters is off".format(value.param))
+    	from .roles import ParameterRef, DataRef
+    	if value is None:
+    		value = LinearFunction()
+    	if isinstance(value, (int,float)):
+    		if value==0:
+    			value = LinearFunction()
+    		else:
+    			raise TypeError("Assigning a nonzero fixed value to a utility function is not supported, try using a holdfast parameter instead")
+    	if isinstance(value, DataRef):
+    		value = LinearComponent(data=str(value))
+    	if isinstance(value, ParameterRef):
+    		value = LinearComponent(param=value, data='1')
+    	if isinstance(value, LinearComponent):
+    		value = LinearFunction() + value
     	return super().__setitem__(key, value)
-
 
     __swig_destroy__ = _core.delete_LinearCOBundle_1
     __del__ = lambda self: None

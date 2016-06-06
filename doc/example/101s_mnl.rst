@@ -1,8 +1,8 @@
 .. currentmodule:: larch
 
-===================================
-101b: Swissmetro MNL, Biogeme Style
-===================================
+=======================================
+101s: Swissmetro MNL, Stacked Variables
+=======================================
 
 .. testsetup:: *
 
@@ -11,13 +11,13 @@
 
 
 This example is a mode choice model built using the Swissmetro example dataset.
-We will use a style for writing the utility functions that is similar to the
-style used in Biogeme.
-First we create the DB and Model objects, as usual:
+We will use a style for writing the utility functions that uses stacked variables,
+which is a feature of the DT data format.
+First we create the DT and Model objects, as usual:
 
 .. testcode::
 
-	d = larch.DB.Example('SWISSMETRO')
+	d = larch.DT.Example('SWISSMETRO')
 	m = larch.Model(d)
 
 We can attach a title to the model. The title does not affect the calculations
@@ -25,7 +25,7 @@ as all; it is merely used in various output report styles.
 
 .. testcode::
 
-	m.title = "swissmetro example 01b (simple logit)"
+	m.title = "swissmetro example 01s (simple logit)"
 
 Unlike Biogeme, the usual way of using Larch does not fill the main namespace
 with all the parameters and data column references as distinct objects.  Instead, we
@@ -38,30 +38,43 @@ can use two master classes to fill those roles.
 All of our parameter references can be written as instances of the P (:class:`roles.ParameterRef`) class,
 and all of our data column references can be written as instances of the X (:class:`roles.DataRef`) class.
 
-The swissmetro dataset, as with all Biogeme data, is only in `co` format.  Which is great,
-because it lets us ignore the `ca` format and just write out the utility functions directly.
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.  But,
+in our model most of the attributes are "generic", i.e. stuff like travel time, which
+varies across alternatives, but for which we'll want to assign the same parameter
+to for each alternative (so that a minute of travel time has the same value no
+matter which alternative it is on).  So, here we will create the generic `ca` format
+variables by stacking the relevant `co` variables.
 
 .. testcode::
 
-	m.utility[1] = ( P.ASC_TRAIN
-	               + P.Time * X.TRAIN_TT
-	               + P.Cost * X("TRAIN_CO*(GA==0)") )
-	m.utility[2] = ( P.Time * X.SM_TT
-	               + P.Cost * X("SM_CO*(GA==0)") )
-	m.utility[3] = ( P.ASC_CAR
-	               + P.Time * X.CAR_TT
-	               + P.Cost * X("CAR_CO") )
+	d.stack_idco('traveltime', {1: X.TRAIN_TT, 2: X.SM_TT, 3: X.CAR_TT})
+	d.stack_idco('cost', {1: X("TRAIN_CO*(GA==0)"), 2: X("SM_CO*(GA==0)"), 3: X("CAR_CO")})
 
-Note that when the data field is too complex to be expressed as a single python
-identifier (variable name), we can write it as a quoted string instead.
+Then we can use these stacked variables in the utility.ca function:
+
+.. testcode::
+
+	m.utility.ca = X.traveltime * P.Time + X.cost * P.Cost
+
+Not all our variables are stack-able; the alternative specific constants are not because
+we want to assign different parameters for each alternative.  So those we'll leave in
+:ref:`idco` format (implicitly):
+
+.. testcode::
+
+	m.utility[1] = P.ASC_TRAIN
+	m.utility[2] = 0
+	m.utility[3] = P.ASC_CAR
+
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.estimate()
-	<larch.core.runstats, success ...
+	>>> result = m.maximize_loglike()
+	>>> print(result.message)
+	Optimization terminated successfully...
 	>>> m.loglike()
 	-5331.252...
 	>>> m['Time'].value
@@ -80,14 +93,14 @@ We can estimate the models and check the results match up with those given by Bi
 
 	>>> print(m.report('txt', sigfigs=3))
 	=========================================================================================...
-	swissmetro example 01b (simple logit)
+	swissmetro example 01s (simple logit)
 	=========================================================================================...
 	Model Parameter Estimates
 	-----------------------------------------------------------------------------------------...
 	Parameter	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue
-	ASC_TRAIN	 0.0        	-0.701      	 0.0549     	-12.8       	 0.0
 	Time     	 0.0        	-0.0128     	 0.000569   	-22.5       	 0.0        
 	Cost     	 0.0        	-0.0108     	 0.000518   	-20.9       	 0.0        
+	ASC_TRAIN	 0.0        	-0.701      	 0.0549     	-12.8       	 0.0
 	ASC_CAR  	 0.0        	-0.155      	 0.0432     	-3.58       	 0.0        
 	=========================================================================================...
 	Model Estimation Statistics
@@ -105,5 +118,5 @@ We can estimate the models and check the results match up with those given by Bi
 	If you want access to the model in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-estimate copy like this::
 
-		m = larch.Model.Example('101b')
+		m = larch.Model.Example('101s')
 

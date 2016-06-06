@@ -460,7 +460,14 @@ class DT(Fountain):
 		for varnum,v in enumerate(vars):
 			command = self._remake_command(v,screen,2)
 			try:
-				result[:,:,varnum] = eval( command )
+				try:
+					result[:,:,varnum] = eval( command )
+				except TypeError as type_err:
+					if v in self.h5idca._v_children and isinstance(self.h5idca._v_children[v], _tb.Group):
+						stacktuple = self.h5idca._v_children[v]._v_attrs.stack
+						result[:,:,varnum] = self.array_idco(*stacktuple, screen=screen, strip_nan=strip_nan)
+					else:
+						raise
 			except Exception as exc:
 				args = exc.args
 				if not args:
@@ -620,7 +627,12 @@ class DT(Fountain):
 
 
 	def _check_ca_natural(self, column):
-		return column in self.h5idca._v_leaves
+		if column in self.h5idca._v_leaves:
+			return True
+		if column in self.h5idca._v_children:
+			colnode = self.h5idca._v_children[column]
+			if isinstance(colnode, _tb.Group) and 'stack' in colnode._v_attrs:
+				return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
 
 	def _check_co_natural(self, column):
 		return column in self.h5idco._v_leaves
@@ -1668,6 +1680,36 @@ class DT(Fountain):
 			raise TypeError("assignment to choice_idco must be a dict")
 		for k,v in value.items():
 			self.choice_idco[k] = v
+
+
+	def stack_idco(self, stackname, vardict=None):
+		"""A stack manager for converting arbitrary data from idco to idca format.
+		
+		Parameters
+		----------
+		stackname : str
+			A name for the :ref:`idca` variable that is created by stacking
+			the various :ref:`idco` variables.
+		vardict : dict
+			Pass a dictionary with keys as alternative codes
+			and values as idco expressions.
+		
+		
+		Notes
+		-----
+		You can also get and assign individual alternative values using the
+		usual dictionary operations::
+		
+			DT.stack_idco('newvarname')[altcode]            # get expression
+			DT.stack_idco('newvarname')[altcode] = value    # set expression
+			
+		"""
+		x = DT_idco_stack_manager(self, stackname)
+		if vardict is not None:
+			for k,v in vardict.items():
+				x[k] = v
+		return x
+	
 
 #	def set_choice_idco(self, *cols, varname='_choice_'):
 #		"""Set up the :ref:`idca` _choice_ data array from :ref:`idco` variables.
