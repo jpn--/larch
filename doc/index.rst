@@ -30,7 +30,8 @@
 	:class: treelogo
 	
 
-This documentation is for the Python interface for Larch.
+This documentation is for the Python interface for Larch. If this is your first go
+with Larch, or the first go on a new computer, you might want to start with :ref:`installation`.
 
 This project is very much under development.  There are plenty of undocumented functions
 and features; use them at your own risk.  Undocumented features may be non-functional, 
@@ -64,6 +65,7 @@ Contents
 .. toctree::
 	:maxdepth: 4
 
+	getting-started
 	data-fundamentals
 	data-in-models
 	model

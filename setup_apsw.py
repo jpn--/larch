@@ -17,7 +17,14 @@ def build_apsw():
 	linker_pre_args = ['-arch', 'i386', '-arch', 'x86_64']
 	linker_post_args = []
 	
-	pylibdir = '/Library/Frameworks/Python.framework/Versions/3.5/lib'
+	if 'anaconda' in sys.executable:
+		pylibdir = os.path.normpath(os.path.join(sys.executable, '..','..','lib'))
+		pylibname = 'python3.5m'
+		compiler_pre_args = [ '-arch', 'x86_64']
+		linker_pre_args = [ '-arch', 'x86_64']
+	else:
+		pylibdir = '/Library/Frameworks/Python.framework/Versions/3.5/lib'
+		pylibname = 'python3.5'
 	
 	print("building",name,"...")
 
@@ -43,7 +50,7 @@ def build_apsw():
 		objects = c.compile([source], extra_preargs=compiler_pre_args, output_dir=setup_common.temp_folder())
 		# Create shared library
 		c.link_shared_object(objects, output_file, output_dir=libdir, export_symbols=exports, 
-				 				libraries=['larchsqlite','python3.5'], library_dirs=[libdir, pylibdir],
+				 				libraries=['larchsqlite',pylibname], library_dirs=[libdir, pylibdir],
 								extra_preargs=linker_pre_args, extra_postargs=linker_post_args)
 	else:
 		print("apparently no need to update",name," at ",os.path.join(libdir, output_file))

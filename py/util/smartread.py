@@ -13,7 +13,7 @@ class SmartFileReader(object):
 				f.seek(-4, 2)
 				self._filesize = struct.unpack('I', f.read(4))[0]
 			self.file = gzip.open(file, 'rt', *args, **kwargs)
-		if file[-4:]=='.zip':
+		elif file[-4:]=='.zip':
 			zf = zipfile.ZipFile(file, 'r')
 			zf_info = zf.infolist()
 			if len(zf_info)!=1:
@@ -36,9 +36,23 @@ class SmartFileReader(object):
 		try:
 			return (float(self.file.tell())/float(self._filesize)*100)
 		except io.UnsupportedOperation:
-			return 1.0-(float(self.file._left)/float(self._filesize)*100)
+			try:
+				return 1.0-(float(self.file._left)/float(self._filesize)*100)
+			except:
+				return 0
 	def __iter__(self):
 		return self.file.__iter__()
+	def bytesread(self):
+		try:
+			b = float(self.file.tell())
+		except:
+			return "error in bytesread"
+		labels = ['B','KB','MB','GB','TB']
+		scale = 0
+		while scale < 4 and b > 1024:
+			b /= 1024
+			scale += 1
+		return "{:.2f}{}".format(b,labels[scale])
 
 
 def interpret_header_name(h):

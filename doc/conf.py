@@ -72,7 +72,8 @@ rst_epilog = """
 extensions = [
 	'sphinx.ext.autodoc',
 #	'numpydoc',
-	'sphinxcontrib.napoleon',
+#	'sphinxcontrib.napoleon',
+	'sphinx.ext.napoleon',
 #	'sphinx.ext.viewcode',
 	'sphinx.ext.mathjax',
 	'sphinx.ext.intersphinx',

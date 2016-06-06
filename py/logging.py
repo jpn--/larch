@@ -211,4 +211,24 @@ def easy_logging_active():
 		return False
 	else:
 		return True
-		
+
+class Flogger:
+	def __init__(self, logger):
+		self.logger = logger
+		self.buffer = ""
+	def __call__(self, base, *args, end="\n", **kwargs):
+		if end=="\n":
+			if isinstance(base,str) and "{" in base:
+				self.logger.critical(self.buffer + base.format(*args,**kwargs))
+			else:
+				self.logger.critical(self.buffer + " ".join( str(i) for i in (base,)+args ))
+			self.buffer = ""
+		else:
+			if isinstance(base,str) and "{" in base:
+				self.buffer += base.format(*args,**kwargs)
+			else:
+				self.buffer += " ".join( str(i) for i in (base,)+args )
+
+def flogger(level=-1, label="", *, filename=None, file_fmt='[%(name)s] %(message)s'):
+	easy(level=level, label=label, filename=filename, file_fmt=file_fmt)
+	return Flogger(getScriber(label))
