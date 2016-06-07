@@ -162,7 +162,7 @@ The details are as follows::
 	     │ `caseids` and an integer dtype, and a 2-dimensional `_values_` with the
 	     │ second dimension the same as the length of `altids`, such that
 	     │ _values_[_index_] reconstructs the desired data array.
-		 ├ Alternative Availability ────────────────────────────────────────────────
+	     ├ Alternative Availability ────────────────────────────────────────────────
 	 >>> │ If there may be some alternatives that are unavailable in some cases,
 	     │ there should be a node named `_avail_` under `idca`.
 	 >>> │ If given as an array, it should contain an appropriately sized Bool array
@@ -171,7 +171,7 @@ The details are as follows::
 	     │ tuple of `idco` expressions indicating the availability status for each
 	     │ alternative. The length and order of `stack` should match that of the
 	     │ altid array.
-		 ├ Chosen Alternatives ────────────────────────────────────────────────────
+	     ├ Chosen Alternatives ────────────────────────────────────────────────────
 	 >>> │ There should be a node named `_choice_` under `idca`.
 	 >>> │ If given as an array, it should be a Float64 array indicating the chosen-
 	     │ ness for each alternative. Typically, this will take a value of 1.0 for

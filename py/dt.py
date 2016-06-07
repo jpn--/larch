@@ -1790,8 +1790,19 @@ class DT(Fountain):
 		return _tb.Expr(expression, uservars=self.namespace)
 
 
+def _close_all_h5():
+	try:
+		self = _tb.file._open_files
+		are_open_files = len(self._handlers) > 0
+		handlers = list(self._handlers)  # make a copy
+		for fileh in handlers:
+			fileh.close()
+	except:
+		pass
 
 
+import atexit as _atexit
+_atexit.register(_close_all_h5)
 
 
 class DT_idco_stack_manager:

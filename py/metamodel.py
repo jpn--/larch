@@ -38,7 +38,7 @@ class MetaModel(Model):
 				submodel.option.calc_null_likelihood = False
 				# TODO: currently something in the metamodel only appears to work with IDCA.  This is a bug to fix
 				submodel.option.idca_avail_ratio_floor = 0
-				if submodel.db.nCases()==0:
+				if submodel.df.nCases()==0:
 					m.sub_ncases[seg_descrip] = 0
 					m.sub_weight[seg_descrip] = 0
 					continue
@@ -72,7 +72,7 @@ class MetaModel(Model):
 		for seg_descrip,submodel in self.sub_model.items():
 			submodel.setUp(*args, **kwargs)
 			submodel.provision()
-			if submodel.db.nCases()==0:
+			if submodel.df.nCases()==0:
 				submodel.sub_ncases[seg_descrip] = 0
 				submodel.sub_weight[seg_descrip] = 0
 				continue
@@ -86,7 +86,7 @@ class MetaModel(Model):
 		any_rebalance = False
 		for seg_descrip,submodel in self.sub_model.items():
 			any_rebalance |= submodel.weight_choice_rebalance(*args, **kwargs)
-			if submodel.db.nCases()==0:
+			if submodel.df.nCases()==0:
 				submodel.sub_ncases[seg_descrip] = 0
 				submodel.sub_weight[seg_descrip] = 0
 				continue

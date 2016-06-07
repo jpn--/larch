@@ -1184,22 +1184,34 @@ class Fountain(object):
         return _core.Fountain_ask_dna(self, *args)
 
     def nCases(self) -> "unsigned int":
+        """The number of cases currently active in this Fountain."""
         return _core.Fountain_nCases(self)
 
+
     def nAlts(self) -> "unsigned int":
+        """The number of alternatives currently active in this Fountain."""
         return _core.Fountain_nAlts(self)
 
+
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        """A vector of the alternative names used by this Fountain."""
         return _core.Fountain_alternative_names(self)
 
+
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        """A vector of the alternative codes (64 bit integers) used by this Fountain."""
         return _core.Fountain_alternative_codes(self)
 
+
     def alternative_name(self, arg0: 'long long') -> "std::string":
+        """Given an alternative code, return the name."""
         return _core.Fountain_alternative_name(self, arg0)
 
+
     def alternative_code(self, arg0: 'std::string') -> "long long":
+        """Given an alternative name, return the code."""
         return _core.Fountain_alternative_code(self, arg0)
+
 
     def uncache_alternatives(self) -> "void":
         return _core.Fountain_uncache_alternatives(self)
@@ -1765,10 +1777,14 @@ class Facet(SQLiteDB, Fountain):
         return _core.Facet_list_facets(self)
 
     def nCases(self) -> "unsigned int":
+        """The number of cases currently active in this Fountain."""
         return _core.Facet_nCases(self)
 
+
     def nAlts(self) -> "unsigned int":
+        """The number of alternatives currently active in this Fountain."""
         return _core.Facet_nAlts(self)
+
 
     def caseids(self, firstcasenum: 'unsigned int const &'=0, numberofcases: 'unsigned int const &'=0, no_error_checking: 'int'=0) -> "std::vector< long long,std::allocator< long long > >":
         return _core.Facet_caseids(self, firstcasenum, numberofcases, no_error_checking)
@@ -1777,16 +1793,24 @@ class Facet(SQLiteDB, Fountain):
         return _core.Facet_altids(self)
 
     def alternative_names(self) -> "std::vector< std::string,std::allocator< std::string > >":
+        """A vector of the alternative names used by this Fountain."""
         return _core.Facet_alternative_names(self)
 
+
     def alternative_codes(self) -> "std::vector< long long,std::allocator< long long > >":
+        """A vector of the alternative codes (64 bit integers) used by this Fountain."""
         return _core.Facet_alternative_codes(self)
 
+
     def alternative_name(self, arg2: 'long long') -> "std::string":
+        """Given an alternative code, return the name."""
         return _core.Facet_alternative_name(self, arg2)
 
+
     def alternative_code(self, arg2: 'std::string') -> "long long":
+        """Given an alternative name, return the code."""
         return _core.Facet_alternative_code(self, arg2)
+
 
     def check_ca(self, column: 'std::string const &') -> "bool":
         return _core.Facet_check_ca(self, column)
@@ -3803,10 +3827,10 @@ class Model2(sherpa):
     def provision(self, *args) -> "void":
 
         if len(args)==0:
-        	if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
-        		args = (self.db.provision(self.needs()), )
+        	if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
+        		args = (self.df.provision(self.needs()), )
         	else:
-        		raise LarchError('model has no db specified for provisioning')
+        		raise LarchError('model has no df specified for provisioning')
 
 
         return _core.Model2_provision(self, *args)

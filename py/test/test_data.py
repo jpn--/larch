@@ -134,7 +134,7 @@ class TestData1(unittest.TestCase):
 		d.queries.idco_query += " WHERE casenum < 100"
 		d.queries.idca_query += " WHERE casenum < 100"
 		m1 = Model.Example()
-		m1.db = d
+		m1.df = d
 		m1.provision()
 		self.assertAlmostEqual( -147.81203484134275, m1.loglike(), delta= 0.000001)
 		self.assertAlmostEqual( -472.8980609887492, m1.loglike((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0)), delta= 0.000001)
@@ -146,7 +146,7 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( ('caseid', 'altid', 'altnum', 'chose', 'ivtt', 'ovtt', 'tottime', 'totcost'), x.variables_ca() )
 		self.assertEqual( ('caseid', 'casenum', 'hhid', 'perid', 'numalts', 'dist', 'wkzone', 'hmzone', 'rspopden', 'rsempden', 'wkpopden', 'wkempden', 'vehavdum', 'femdum', 'age', 'drlicdum', 'noncadum', 'numveh', 'hhsize', 'hhinc', 'famtype', 'hhowndum', 'numemphh', 'numadlt', 'nmlt5', 'nm5to11', 'nm12to16', 'wkccbd', 'wknccbd', 'corredis', 'vehbywrk', 'vocc', 'wgt'), x.variables_co() )
 		m = Model.Example()
-		m.db = x
+		m.df = x
 		m.provision()
 		self.assertAlmostEqual( -147.81203484134275, m.loglike(), delta= 0.000001)
 		self.assertAlmostEqual( -472.8980609887492, m.loglike((-0.01,0,0,0,0.1,0,0,0.1,0,0,0,0)), delta= 0.000001)
@@ -222,7 +222,7 @@ class TestData1(unittest.TestCase):
 	def test_pytables_examples(self):
 		dts = DT.Example('SWISSMETRO')
 		ms = Model.Example(101)
-		ms.db = dts
+		ms.df = dts
 		ms.provision()
 		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
 		self.assertAlmostEqual(  -5331.252007380466 , ms.loglike(x,cached=False))

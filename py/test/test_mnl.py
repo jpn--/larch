@@ -449,7 +449,7 @@ class TestMNL(ELM_TestCase):
 
 	def test_swissmetro_02weight_double(self):
 		m = Model.Example(102, DB.Example('swissmetro'))
-		m.db.queries.weight = '(1.0*(GROUPid==2)+1.2*(GROUPid==3))*0.8890991*2.0'
+		m.df.queries.weight = '(1.0*(GROUPid==2)+1.2*(GROUPid==3))*0.8890991*2.0'
 		m.option.calc_std_errors=False
 		m.maximize_loglike()
 		m.loglike()
@@ -478,7 +478,7 @@ class TestMNL(ELM_TestCase):
 		m.provision()
 		m.covariance_matrix[1,1] = 9.9
 		m2 = Model.loads(m.save(None))
-		m2.db = m.db
+		m2.df = m.df
 		m2.provision()
 		self.assertEqual(m.parameter_values(), m2.parameter_values())
 		self.assertEqual(m.parameter_names(), m2.parameter_names())
@@ -490,12 +490,12 @@ class TestMNL(ELM_TestCase):
 		m = Model.Example()
 		needco = m.utility.co.needs()
 		needca = m.utility.ca.needs()
-		xa = m.db.array_idca(*needca)[0][0:1,:,:]
-		#xa = m.db.ask_idca(needca,1)
-		xo = m.db.array_idco(*needco)[0][0:1,:]
-		#xo = m.db.ask_idco(needco,1)
-		av = m.db.array_avail()[0][0:1,:,:]
-		#av = m.db.ask_avail(1)
+		xa = m.df.array_idca(*needca)[0][0:1,:,:]
+		#xa = m.df.ask_idca(needca,1)
+		xo = m.df.array_idco(*needco)[0][0:1,:]
+		#xo = m.df.ask_idco(needco,1)
+		av = m.df.array_avail()[0][0:1,:,:]
+		#av = m.df.ask_avail(1)
 		self.assertEqual(1, xa.shape[0])
 		self.assertEqual(6, xa.shape[1])
 		self.assertEqual(2, xa.shape[2])
@@ -509,7 +509,7 @@ class TestMNL(ELM_TestCase):
 		pr = numpy.array([[ 0.8174641 ,  0.07770958,  0.01790577,  0.0714228 ,  0.01549774, 0.        ]])
 		m.freshen()
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
-		av = m.db.array_avail_blind()[0][0:1,:,:]
+		av = m.df.array_avail_blind()[0][0:1,:,:]
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
 
 

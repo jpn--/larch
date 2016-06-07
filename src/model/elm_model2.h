@@ -245,10 +245,10 @@ namespace elm {
 		%}
 		%feature("pythonprepend") provision %{
 			if len(args)==0:
-				if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
-					args = (self.db.provision(self.needs()), )
+				if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
+					args = (self.df.provision(self.needs()), )
 				else:
-					raise LarchError('model has no db specified for provisioning')
+					raise LarchError('model has no df specified for provisioning')
 		%}
 		#endif // def SWIG
 		std::map<std::string, elm::darray_req> needs() const;

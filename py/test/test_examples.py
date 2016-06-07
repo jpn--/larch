@@ -130,7 +130,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		load_example(102)
 		from ..examples import model
 		M = model()
-		M.db.queries.weight = "(1.0*(GROUPid==2)+1.2*(GROUPid==3))*88.90991"
+		M.df.queries.weight = "(1.0*(GROUPid==2)+1.2*(GROUPid==3))*88.90991"
 		r=M.maximize_loglike()
 		self.assertAlmostEqual(   -527374.2593192016 , r['loglike']                            ,3)
 		self.assertAlmostEqual( -0.011196450342598127, M.parameter("B_COST").value             ,6)

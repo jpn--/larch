@@ -41,6 +41,11 @@ namespace elm {
 		virtual elm::VAS_dna   ask_dna(const long long& c=0);
 		virtual const elm::VAS_dna   ask_dna(const long long& c=0) const;
 
+		#ifdef SWIG
+		%feature("docstring") nCases "The number of cases currently active in this Fountain."
+		%feature("docstring") nAlts "The number of alternatives currently active in this Fountain."
+		#endif // def SWIG
+
 		virtual unsigned nCases() const ;
 		virtual unsigned nAlts() const  ;
 
@@ -57,6 +62,14 @@ namespace elm {
 #endif // ndef SWIG
 
 	  public:
+		
+		#ifdef SWIG
+		%feature("docstring") alternative_names "A vector of the alternative names used by this Fountain."
+		%feature("docstring") alternative_codes "A vector of the alternative codes (64 bit integers) used by this Fountain."
+		%feature("docstring") alternative_name "Given an alternative code, return the name."
+		%feature("docstring") alternative_code "Given an alternative name, return the code."
+		#endif // def SWIG
+		
 		virtual std::vector<std::string>    alternative_names() const =0;
 		virtual std::vector<long long>      alternative_codes() const =0;
 		virtual std::string    alternative_name(long long) const      =0;

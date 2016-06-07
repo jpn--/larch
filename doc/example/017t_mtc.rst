@@ -71,20 +71,20 @@ in the index-zero position) to add vehicles per worker to the utility function:
 
 .. testcode::
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("vehbywrk",a,"vehbywrk_"+name)
 
 We can also run similar loops over workplace in CBD, etc:
 
 .. testcode::
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("wkccbd+wknccbd",a,"wkcbd_"+name)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("wkempden",a,"wkempden_"+name)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("1",a,"ASC_"+name)
 
 	m.option.calc_std_errors = True

@@ -105,7 +105,7 @@ automatically.
 		submodel = larch.Model(dx)
 
 		# If the submodel has no cases, skip the rest of setting it up
-		if submodel.db.nCases()==0:
+		if submodel.df.nCases()==0:
 			return submodel
 
 		# Populate the submodel with the common parameters

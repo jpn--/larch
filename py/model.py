@@ -288,7 +288,7 @@ class Model(Model2, ModelReporter):
 			pass
 		return val
 
-	db = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
+	df = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
 
 	def load(self, filename="@@@", *, echo=False):
 		if filename=="@@@" and isinstance(self,str):
@@ -630,7 +630,7 @@ class Model(Model2, ModelReporter):
 				avg({0}) AS MEAN,
 				stdev({0}) AS STDEV
 				FROM {1}
-				""".format(u.data, self.db.tbl_idco())
+				""".format(u.data, self.df.tbl_idco())
 			if where:
 				qry += " WHERE {}".format(where)
 			s = db.dataframe(qry)
@@ -1006,15 +1006,15 @@ class Model(Model2, ModelReporter):
 	def setup_utility_ce(self):
 		if len(self.utility.co)>0:
 			raise LarchError('simultaneous use of idce format (packed idca) and idco format utility data is not yet supported')
-		if hasattr(self.db, 'queries'):
+		if hasattr(self.df, 'queries'):
 			from .util.arraytools import label_to_index
 			# load data and ids
-			caseids = self.db.array_caseids().squeeze()
+			caseids = self.df.array_caseids().squeeze()
 			ca_vars = self.needs()['UtilityCA'].get_variables()
 			ca_vars_str = ", ".join(ca_vars)
-			self._ce = self.db.array("SELECT {} FROM larch_idca".format(ca_vars_str), cte=True)
-			ce_altids = self.db.array("SELECT altid FROM larch_idca", cte=True).astype(int).squeeze()
-			ce_caseids = self.db.array("SELECT caseid FROM larch_idca", cte=True).astype(int).squeeze()
+			self._ce = self.df.array("SELECT {} FROM larch_idca".format(ca_vars_str), cte=True)
+			ce_altids = self.df.array("SELECT altid FROM larch_idca", cte=True).astype(int).squeeze()
+			ce_caseids = self.df.array("SELECT caseid FROM larch_idca", cte=True).astype(int).squeeze()
 			# convert ids to indexes
 			self._ce_caseindex = label_to_index(caseids, ce_caseids)
 			self._ce_altindex = label_to_index(self.alternative_codes(), ce_altids)
@@ -1207,7 +1207,10 @@ class Model(Model2, ModelReporter):
 
 		if self.is_provisioned()<=0:
 			self.provision()
-		qc = self.db.queries.quality_check()
+		try:
+			qc = self.df.queries.quality_check()
+		except AttributeError:
+			qc = None
 		
 		clashes = numpy.nonzero( numpy.logical_and(self.Data("Choice"), ~self.Data("Avail")) )
 		n_clashes = len(clashes[0])
@@ -1252,7 +1255,7 @@ class Model(Model2, ModelReporter):
 
 	def utility_full_constants(self):
 		"Add a complete set of alternative specific constants"
-		for code, name in self.db.alternatives()[1:]:
+		for code, name in self.df.alternatives()[1:]:
 			self.utility.co("1",code,name)
 
 	def __contains__(self, x):
@@ -1316,7 +1319,7 @@ class Model(Model2, ModelReporter):
 		self.hessian_matrix = numpy.require( self.hessian_matrix[retain,:][:,retain], requirements=['A', 'O', 'W', 'C'])
 		
 	def provision_without_utility(self):
-		if not hasattr(self,'db'):
+		if not hasattr(self,'df'):
 			raise LarchError('model has no db specified for provisioning')
 		self.tearDown()
 		needs = self.needs()
@@ -1324,7 +1327,7 @@ class Model(Model2, ModelReporter):
 			del needs['UtilityCA']
 		if 'UtilityCO' in needs:
 			del needs['UtilityCO']
-		provided = self.db.provision(needs)
+		provided = self.df.provision(needs)
 		try:
 			self.provision(provided)
 		except ProvisioningError:
@@ -1336,8 +1339,8 @@ class Model(Model2, ModelReporter):
 		if idca_avail_ratio_floor is None:
 			idca_avail_ratio_floor = self.option.idca_avail_ratio_floor
 		if len(args)==0:
-			if hasattr(self,'db') and isinstance(self.db,(DB,DT)):
-				args = (self.db.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor), )
+			if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
+				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor), )
 			else:
 				raise LarchError('model has no db specified for provisioning')
 		otherformats = {}
@@ -1485,30 +1488,30 @@ class ModelFamily(list):
 	def replicate(self, key, newkey=None):
 		source = self[key]
 		m = Model.copy(source)
-		m.db = source.db
+		m.df = source.df
 		self.add(m, newkey)
 		return m
 
 	def spawn(self, newkey=None):
 		"Create a blank model using the same data"
-		m = Model(self.db)
+		m = Model(self.df)
 		self.add(m, newkey)
 		return m
 
-	def _set_db(self, db):
+	def _set_df(self, df):
 		for i in self:
-			i.db = db
+			i.df = df
 
-	def _get_db(self):
+	def _get_df(self):
 		for i in self:
-			if i.db is not None:
-				return i.db
+			if i.df is not None:
+				return i.df
 
-	def _del_db(self):
+	def _del_df(self):
 		for i in self:
-			del i.db
+			del i.df
 
-	db = property(_get_db, _set_db, _del_db)
+	df = property(_get_df, _set_df, _del_df)
 
 	def constants_only_model(self, est=True, logger=False):
 		m = self.spawn("constants_only")

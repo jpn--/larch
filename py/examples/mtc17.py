@@ -59,16 +59,16 @@ def model(d=None): # Define a function to create a data object.
 	m.alias("vehbywrk_SR2","vehbywrk_SR",1.0)
 	m.alias("vehbywrk_SR3+","vehbywrk_SR",1.0)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("vehbywrk",a,"vehbywrk_"+name)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("wkccbd+wknccbd",a,"wkcbd_"+name)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("wkempden",a,"wkempden_"+name)
 
-	for a,name in m.db.alternatives()[1:]:
+	for a,name in m.df.alternatives()[1:]:
 		m.utility.co("1",a,"ASC_"+name)
 
 	m.option.calc_std_errors = True

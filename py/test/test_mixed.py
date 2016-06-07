@@ -50,7 +50,7 @@ class TestMixed(ELM_TestCase):
 	def test_mixed_cnl_model(self):
 		d = self._db
 		m = Model.Example(111, d=d)
-		m.db.queries.idco_query = 'SELECT _rowid_ AS caseid, * FROM data WHERE CHOICE!=0 AND (PURPOSE==1 OR PURPOSE==3) AND _rowid_<=100'
+		m.df.queries.idco_query = 'SELECT _rowid_ AS caseid, * FROM data WHERE CHOICE!=0 AND (PURPOSE==1 OR PURPOSE==3) AND _rowid_<=100'
 		x = numpy.array([ 0.09827949, -0.24044757, -0.0077686 , -0.00818902,  0.39764564,  0.24308742, -0.01971338])
 		m.parameter_array[:] = x[:]
 		m.parameter("B_TIME_S", holdfast=0, value=0.00)
@@ -79,7 +79,7 @@ class TestMixed(ELM_TestCase):
 	def test_mixed_mnl_model(self):
 		d = self._db
 		m = Model.Example(101, d=d)
-		m.db.queries.idco_query = 'SELECT _rowid_ AS caseid, * FROM data WHERE CHOICE!=0 AND (PURPOSE==1 OR PURPOSE==3) AND _rowid_<=100'
+		m.df.queries.idco_query = 'SELECT _rowid_ AS caseid, * FROM data WHERE CHOICE!=0 AND (PURPOSE==1 OR PURPOSE==3) AND _rowid_<=100'
 		x = numpy.array([-0.70122688, -0.15465521, -0.01277806, -0.01083774])
 		m.parameter_array[:] = x[:]
 		m.parameter("B_TIME_S", holdfast=0, value=0.00)
@@ -161,9 +161,9 @@ class TestMixed(ELM_TestCase):
 			m.option.calc_std_errors = False
 			m.option.calc_null_likelihood = False
 
-			m.db.refresh_queries()
+			m.df.refresh_queries()
 			
-			if m.db.nCases()==0:
+			if m.df.nCases()==0:
 				meta.sub_ncases[segment_desciptor] = 0
 				meta.sub_weight[segment_desciptor] = 0
 				continue
@@ -189,7 +189,7 @@ class TestMixed(ELM_TestCase):
 			meta.sub_ncases[segment_desciptor] = partncase = m.nCases()
 			meta.total_ncases += partncase
 
-		consolidated_m.db = db
+		consolidated_m.df = db
 		consolidated_m.option.idca_avail_ratio_floor = 0
 		consolidated_m.setUp()
 		consolidated_m.provision(idca_avail_ratio_floor=0)

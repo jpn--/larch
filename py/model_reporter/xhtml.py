@@ -636,7 +636,7 @@ class XhtmlModelReporter():
 		choices_weighted = numpy.sum(ch*w[:,numpy.newaxis,numpy.newaxis],0)
 		use_weights = bool((self.Data("Weight")!=1).any())
 		try:
-			show_avail = not isinstance(self.db.queries.avail, str)
+			show_avail = not isinstance(self.df.queries.avail, str)
 		except AttributeError:
 			show_avail = False
 		show_descrip = 'alternatives' in self.descriptions
@@ -676,7 +676,7 @@ class XhtmlModelReporter():
 							x.td("{}".format(alt_descrip))
 						if show_avail:
 							try:
-								alt_condition = self.db.queries.avail[altn]
+								alt_condition = self.df.queries.avail[altn]
 							except:
 								alt_condition = "n/a"
 							x.td("{}".format(alt_condition))
@@ -1322,10 +1322,12 @@ class XhtmlModelReporter():
 
 	def xhtml_queryinfo(self,**format):
 		x = XML_Builder("div", {'class':"query_info"})
+		if not isinstance(self.df,DB):
+			return x.close()
 		x.h2("Query Info", anchor=1)
 		with x.block("table"):
 			try:
-				q = self.db.queries.idco_query
+				q = self.df.queries.idco_query
 			except AttributeError:
 				pass
 			else:
@@ -1334,7 +1336,7 @@ class XhtmlModelReporter():
 					x.td(str(q))
 
 			try:
-				q = self.db.queries.idca_query
+				q = self.df.queries.idca_query
 			except AttributeError:
 				pass
 			else:
@@ -1343,7 +1345,7 @@ class XhtmlModelReporter():
 					x.td(str(q))
 
 			try:
-				q = self.db.queries.choice
+				q = self.df.queries.choice
 			except AttributeError:
 				pass
 			else:
@@ -1352,7 +1354,7 @@ class XhtmlModelReporter():
 					x.td(str(q))
 
 			try:
-				q = self.db.queries.weight
+				q = self.df.queries.weight
 			except AttributeError:
 				pass
 			else:
@@ -1361,7 +1363,7 @@ class XhtmlModelReporter():
 					x.td(str(q))
 
 			try:
-				q = self.db.queries.avail
+				q = self.df.queries.avail
 				if isinstance(q,IntStringDict):
 					q = dict(q)
 			except AttributeError:
@@ -1410,9 +1412,12 @@ class XhtmlModelReporter():
 #						print("AVCHEK1",ncode,'-->',numpy.sum(self.Data('Avail'),axis=0)[n,0])
 						if numpy.sum(self.Data('Avail'),axis=0)[n,0]==0: unavailable_nodes.add(ncode)
 				except: raise
-			legible_avail = not isinstance(self.db.queries.avail, str)
+			try:
+				legible_avail = not isinstance(self.df.queries.avail, str)
+			except:
+				legible_avail = False
 			if legible_avail:
-				for ncode,navail in self.db.queries.avail.items():
+				for ncode,navail in self.df.queries.avail.items():
 					try:
 #						print("AVCHEK2",ncode,'-->',navail)
 						if navail=='0': unavailable_nodes.add(ncode)

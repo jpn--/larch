@@ -37,15 +37,15 @@ class PdfModelReporter():
 #						print("AVCHEK1",ncode,'-->',numpy.sum(self.Data('Avail'),axis=0)[n,0])
 						if numpy.sum(self.Data('Avail'),axis=0)[n,0]==0: unavailable_nodes.add(ncode)
 				except: raise
-			if self.db is None:
+			if self.df is None:
 				legible_avail = False
 			else:
 				try:
-					legible_avail = not isinstance(self.db.queries.avail, str)
+					legible_avail = not isinstance(self.df.queries.avail, str)
 				except:
 					legible_avail = False
 			if legible_avail:
-				for ncode,navail in self.db.queries.avail.items():
+				for ncode,navail in self.df.queries.avail.items():
 					try:
 #						print("AVCHEK2",ncode,'-->',navail)
 						if navail=='0': unavailable_nodes.add(ncode)
