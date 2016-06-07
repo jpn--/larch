@@ -635,7 +635,10 @@ class XhtmlModelReporter():
 		altns = self.alternative_codes()
 		choices_weighted = numpy.sum(ch*w[:,numpy.newaxis,numpy.newaxis],0)
 		use_weights = bool((self.Data("Weight")!=1).any())
-		show_avail = not isinstance(self.db.queries.avail, str)
+		try:
+			show_avail = not isinstance(self.db.queries.avail, str)
+		except AttributeError:
+			show_avail = False
 		show_descrip = 'alternatives' in self.descriptions
 		
 		with x.block("table"):
@@ -696,9 +699,9 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCO") is not None:
 			show_descrip = 'data_co' in self.descriptions
 			if bool((self.Data("Weight")!=1).any()):
-				x.h3("idCO Utility (weighted)")
+				x.h3("idCO Utility (weighted)", anchor=1)
 			else:
-				x.h3("idCO Utility")
+				x.h3("idCO Utility", anchor=1)
 
 			means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
 			names = self.needs()["UtilityCO"].get_variables()
@@ -749,57 +752,192 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCA") is not None:
 			show_descrip = 'data_ca' in self.descriptions
 			
-			heads = ["idCA Utility Chosen Alternatives", "idCA Utility Unchosen Alternatives"]
-			
-			for summary_attrib, heading in zip( self.stats_utility_ca_chosen_unchosen(), heads ):
-			
-				x.h3(heading)
+			if len(self.alternative_codes()) >= 30:
+				heads = ["idCA Data, Chosen Alternatives", "idCA Data, Unchosen Alternatives"]
 				
-				means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+				for summary_attrib, heading in zip( self.stats_utility_ca_chosen_unchosen(), heads ):
 				
+					x.h3(heading, anchor=1)
+					
+					means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+					
+					
+					names = self.needs()["UtilityCA"].get_variables()
+					
+					ncols = 6
+					
+					stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
+					titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+					
+					use_p = (numpy.sum(posis)>0)
+					use_n = (numpy.sum(negs)>0)
+					
+					if numpy.sum(posis)>0:
+						stack += [posis,]
+						titles += ["Positives",]
+						ncols += 1
+					if numpy.sum(negs)>0:
+						stack += [negs,]
+						titles += ["Negatives",]
+						ncols += 1
+					if show_descrip:
+						descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
+						stack += [descriptions,]
+						titles += ["Description",]
+						ncols += 1
+					
+					x.table
+					x.thead
+					x.tr
+					for ti in titles:
+						x.th(ti)
+					x.end_tr
+					x.end_thead
+					with x.tbody_:
+						for s in zip(*stack):
+							with x.tr_:
+								for thing,ti in zip(s,titles):
+									if ti=="Description":
+										x.td("{:s}".format(thing), {'class':'strut2'})
+									elif isinstance(thing,str):
+										x.td("{:s}".format(thing))
+									else:
+										x.td("{:<11.7g}".format(thing))
+					x.end_table
+
+			if len(self.alternative_codes()) < 30:
+				import pandas
+				from itertools import count
+				x.h3("idCA Data by Alternative", anchor=1)
 				
+				table_cache = pandas.DataFrame(columns=["altcode","altname","bucket","name","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip"])
 				names = self.needs()["UtilityCA"].get_variables()
+				for acode,aname in self.alternatives().items():
+					bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
+					bucket_types = ["All Avail", "Chosen", "Unchosen"]
+					for summary_attrib, bucket_type in zip( bucket, bucket_types ):
+						means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+						for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count()):
+							newrow = {'altcode':acode, 'altname':aname, 'bucket':bucket_type,
+										'name':s[0], 'mean':s[1], 'stdev':s[2],
+										'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
+										'positives':s[7],'negatives':s[8],'namecounter':s[9],
+							}
+							table_cache = table_cache.append(newrow, ignore_index=True)
+				table_cache.sort_values(['altcode','namecounter','bucket'], inplace=True)
+				table_cache.index = range(len(table_cache))
 				
-				ncols = 6
+				#pre_display_cols
+				#	('Alternative','altname'),
+				#	('Data','name'),
+				display_cols = [
+					('Filter','bucket', "{}"),
+					('Mean',"mean", "{:.5g}"),
+					('Std.Dev.',"stdev", "{:.5g}"),
+					('Minimum',"min", "{}"),
+					('Maximum',"max", "{}"),
+					('Mean (Nonzeros)',"mean_nonzero", "{:.5g}"),
+					('# Zeros',"zeros", "{:.0f}"),
+				]
 				
-				stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-				titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-				
-				use_p = (numpy.sum(posis)>0)
-				use_n = (numpy.sum(negs)>0)
-				
-				if numpy.sum(posis)>0:
-					stack += [posis,]
-					titles += ["Positives",]
-					ncols += 1
-				if numpy.sum(negs)>0:
-					stack += [negs,]
-					titles += ["Negatives",]
-					ncols += 1
-				if show_descrip:
-					descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-					stack += [descriptions,]
-					titles += ["Description",]
-					ncols += 1
+				if table_cache['positives'].sum()>0:
+					display_cols += [('# Positives',"positives", "{:.0f}"),]
+				if table_cache['negatives'].sum()>0:
+					display_cols += [('# Negatives',"negatives", "{:.0f}"),]
 				
 				x.table
 				x.thead
 				x.tr
-				for ti in titles:
-					x.th(ti)
+				x.th('Alternative')
+				x.th('Data')
+				for coltitle,colvalue,_ in display_cols:
+					x.th(coltitle)
 				x.end_tr
 				x.end_thead
 				with x.tbody_:
-					for s in zip(*stack):
-						with x.tr_:
-							for thing,ti in zip(s,titles):
-								if ti=="Description":
-									x.td("{:s}".format(thing), {'class':'strut2'})
-								elif isinstance(thing,str):
-									x.td("{:s}".format(thing))
-								else:
-									x.td("{:<11.7g}".format(thing))
+					for acode,aname in self.alternatives().items():
+						block = table_cache[table_cache['altcode']==acode]
+						block1 = True
+						for rownum in block.index:
+							with x.tr_:
+								try:
+									if block1 or block.loc[rownum-1,'altname']!=block.loc[rownum,'altname']:
+										x.td(aname, {'rowspan':str(3*len(names))})
+									if block1 or block.loc[rownum-1,'name']!=block.loc[rownum,'name']:
+										x.td(block.loc[rownum,'name'], {'rowspan':str(3)})
+									block1 = False
+									for coltitle,colvalue,colfmt in display_cols:
+										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
+								except:
+									print("Exception in Code")
+									print(block)
+									raise
 				x.end_table
+				
+				
+				
+				#####
+#				for acode,aname in self.alternatives().items():
+#					x.h3("For {} Only".format(aname))
+#
+#					heads = ["idCA Utility {}".format(aname), "idCA Utility {} When Chosen".format(aname), "idCA Utility {} When Unchosen".format(aname)]
+#					
+#					bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
+#					
+#					for summary_attrib, heading in zip( bucket, heads ):
+#					
+#						x.h3(heading)
+#						
+#						means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+#						
+#						
+#						names = self.needs()["UtilityCA"].get_variables()
+#						
+#						ncols = 6
+#						
+#						stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
+#						titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+#						
+#						use_p = (numpy.sum(posis)>0)
+#						use_n = (numpy.sum(negs)>0)
+#						
+#						if use_p:
+#							stack += [posis,]
+#							titles += ["Positives",]
+#							ncols += 1
+#						if use_n:
+#							stack += [negs,]
+#							titles += ["Negatives",]
+#							ncols += 1
+#						if show_descrip:
+#							descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
+#							stack += [descriptions,]
+#							titles += ["Description",]
+#							ncols += 1
+#						
+#						x.table
+#						x.thead
+#						x.tr
+#						for ti in titles:
+#							x.th(ti)
+#						x.end_tr
+#						x.end_thead
+#						with x.tbody_:
+#							for s in zip(*stack):
+#								with x.tr_:
+#									for thing,ti in zip(s,titles):
+#										if ti=="Description":
+#											x.td("{:s}".format(thing), {'class':'strut2'})
+#										elif isinstance(thing,str):
+#											x.td("{:s}".format(thing))
+#										else:
+#											try:
+#												x.td("{:<11.7g}".format(thing))
+#											except TypeError:
+#												x.td("{!s}".format(thing))
+#						x.end_table
+#
+#
 
 		return x.close()
 

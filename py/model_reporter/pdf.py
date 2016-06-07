@@ -40,7 +40,10 @@ class PdfModelReporter():
 			if self.db is None:
 				legible_avail = False
 			else:
-				legible_avail = not isinstance(self.db.queries.avail, str)
+				try:
+					legible_avail = not isinstance(self.db.queries.avail, str)
+				except:
+					legible_avail = False
 			if legible_avail:
 				for ncode,navail in self.db.queries.avail.items():
 					try:

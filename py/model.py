@@ -694,6 +694,49 @@ class Model(Model2, ModelReporter):
 		
 		return _compute(x_chosen), _compute(x_unchosen),
 
+	def stats_utility_ca_chosen_unchosen_by_alt(self, altcode):
+		"""
+		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
+		positives,negatives,zeros,mean of nonzero values) on the model's idca data as loaded. Uses weights
+		if available.
+		"""
+		
+		x = self.Data("UtilityCA")
+		ch = self.Data("Choice")
+		av = self.Data("Avail")
+		
+		altslots = numpy.zeros([len(self.alternative_codes())], dtype=bool)
+		# CONVERT altcode to SLOT
+		for anum,acode in enumerate(self.alternative_codes()):
+			if acode == altcode:
+				altslots[anum] = True
+				break
+	
+		ch_asbool = ch.astype(bool).reshape(ch.shape[0],ch.shape[1])
+		ch_asbool[:,~altslots] = False
+		
+		x_chosen = x[ch_asbool]
+		#ch_asbool = ~ch_asbool
+		#ch_asbool[:,~altslots] = False
+		
+		ch_asbool[:,altslots] = ~ch_asbool[:,altslots] & av[:,altslots].squeeze(axis=2)
+		x_unchosen = x[ch_asbool]
+		x_total = x[av[:,altslots].squeeze(),altslots].squeeze()
+
+		def _compute(xxx):
+			mean_ = numpy.mean(xxx,0)
+			stdev_ = numpy.std(xxx,0)
+			mins_ = numpy.amin(xxx,0)
+			maxs_ = numpy.amax(xxx,0)
+			nonzer_ = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx.shape[1]))
+			pos_ = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx.shape[1]))
+			neg_ = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx.shape[1]))
+			zer_ = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx.shape[1]))
+			sumx_ = numpy.sum(xxx,0)
+			mean_nonzer_ = sumx_ / numpy.array(nonzer_)
+			return (mean_,stdev_,mins_,maxs_,nonzer_,pos_,neg_,zer_,mean_nonzer_)
+		
+		return _compute(x_total), _compute(x_chosen), _compute(x_unchosen),
 
 	def parameter_names(self, output_type=list):
 		x = []

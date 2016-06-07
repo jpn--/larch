@@ -5,8 +5,9 @@ from .. import logging
 from .xhtml import XHTML, XML_Builder
 import os.path
 from .temporaryfile import TemporaryFile
+import inspect
 
-def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, **format):
+def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, sourcecode=True, **format):
 	"""Estimate a model and generate a report.
 	
 	This method rolls together model estimation, reporting, and saving results
@@ -27,6 +28,12 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 		includes a minimal list of report setions. Giving '+' will dump every available
 		report section, which could be a lot and might take a lot of time (and 
 		computer memory) to compute.
+	sourcecode : bool
+		If true (the default), this method will attempt to access the source code
+		of the file where this function was called, and insert the contents of
+		that file into a section of the resulting report.  This is done because the
+		source code may be more instructive as to how the model was created,
+		and how different (but related) future models might be created.
 	
 	"""
 	m = self
@@ -63,8 +70,27 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	#m.save(filename)
 	fh.flush()
 
+	# SourceFile grabber
+	try:
+		frame = inspect.stack()[1]
+		sourcefile = inspect.getsourcefile(frame[0])
+	except:
+		sourcefile = None
+	
 	with XHTML(use_filename, quickhead=m) as f:
 		f << m.report(cats=cats, style='xml', **format)
+
+		if sourcefile is not None and os.path.isfile(sourcefile):
+			xsource = XML_Builder("div", {'class':'raw_source'})
+			xsource.h2("Source Code", anchor=1)
+			xsource.data("From: {!s}".format(sourcefile))
+			xsource.simple("hr")
+			xsource.start("pre")
+			with open(sourcefile, 'r') as sf:
+				xsource.data(sf.read())
+			xsource.end("pre")
+			xsource.simple("hr")
+			f.append(xsource.close())
 
 		xlog = XML_Builder("div", {'class':'raw_log'})
 		xlog.h2("Estimation Log", anchor=1)
