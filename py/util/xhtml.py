@@ -312,6 +312,15 @@ class XHTML():
 			return self._f.getvalue() # for BytesIO
 		except AttributeError:
 			return
+
+	def dump_seg(self):
+		xml.etree.ElementTree.ElementTree(self.root).write(self._f, xml_declaration=False, method="html")
+		self._f.flush()
+		try:
+			return self._f.getvalue() # for BytesIO
+		except AttributeError:
+			return
+
 	def view(self):
 		try:
 			self._f.view()
@@ -331,6 +340,11 @@ class XHTML():
 		return self
 
 
+def xhtml_section_bytes(content):
+	import io
+	f = io.BytesIO()
+	xml.etree.ElementTree.ElementTree(content).write(f, xml_declaration=False, method="html")
+	return f.getvalue()
 
 
 def toc_demote_all(elem, demote=1, anchors=True, heads=True):

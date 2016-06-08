@@ -39,3 +39,23 @@ class default_mplstyle():
 	def __exit__(self, exc_type, exc_value, traceback):
 		self._contxt.__exit__(exc_type, exc_value, traceback)
 
+
+
+def spark_histogram(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False):
+	import matplotlib.pyplot as plt
+	n, bins, patches = plt.hist(data, bins, normed=1, facecolor='green', linewidth=0, alpha=1.0)
+	fig = plt.gcf()
+	fig.set_figheight(0.2)
+	fig.set_figwidth(0.75)
+	fig.set_dpi(300)
+	if xlabel: plt.xlabel(xlabel)
+	if ylabel: plt.ylabel(ylabel)
+	if title: plt.title(title)
+	if not xticks: fig.axes[0].get_xaxis().set_ticks([])
+	if not yticks: fig.axes[0].get_yaxis().set_ticks([])
+	if not frame: fig.axes[0].axis('off')
+	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+	ret = plot_as_svg_xhtml(fig)
+	plt.clf()
+	return ret
+

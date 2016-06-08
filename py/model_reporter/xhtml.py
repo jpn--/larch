@@ -3,7 +3,8 @@
 from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias, IntStringDict
 from io import StringIO
-from ..util.xhtml import XHTML, XML_Builder
+from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes
+from ..util.plotting import plot_as_svg_xhtml
 import math
 import numpy
 
@@ -759,7 +760,16 @@ class XhtmlModelReporter():
 				
 					x.h3(heading, anchor=1)
 					
-					means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+					means = summary_attrib.mean
+					stdevs = summary_attrib.stdev
+					mins = summary_attrib.minimum
+					maxs = summary_attrib.maximum
+					nonzers = summary_attrib.n_nonzeros
+					posis = summary_attrib.n_positives
+					negs = summary_attrib.n_negatives
+					zers = summary_attrib.n_zeros
+					mean_nonzer = summary_attrib.mean_nonzero
 					
 					
 					names = self.needs()["UtilityCA"].get_variables()
@@ -806,32 +816,16 @@ class XhtmlModelReporter():
 					x.end_table
 
 			if len(self.alternative_codes()) < 30:
-				import pandas
-				from itertools import count
+				#import pandas
+				#from itertools import count
 				x.h3("idCA Data by Alternative", anchor=1)
-				
-				table_cache = pandas.DataFrame(columns=["altcode","altname","bucket","name","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip"])
-				names = self.needs()["UtilityCA"].get_variables()
-				for acode,aname in self.alternatives().items():
-					bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
-					bucket_types = ["All Avail", "Chosen", "Unchosen"]
-					for summary_attrib, bucket_type in zip( bucket, bucket_types ):
-						means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
-						for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count()):
-							newrow = {'altcode':acode, 'altname':aname, 'bucket':bucket_type,
-										'name':s[0], 'mean':s[1], 'stdev':s[2],
-										'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
-										'positives':s[7],'negatives':s[8],'namecounter':s[9],
-							}
-							table_cache = table_cache.append(newrow, ignore_index=True)
-				table_cache.sort_values(['altcode','namecounter','bucket'], inplace=True)
-				table_cache.index = range(len(table_cache))
+				table_cache = self.stats_utility_ca()
 				
 				#pre_display_cols
 				#	('Alternative','altname'),
 				#	('Data','name'),
 				display_cols = [
-					('Filter','bucket', "{}"),
+					('Filter','filter', "{}"),
 					('Mean',"mean", "{:.5g}"),
 					('Std.Dev.',"stdev", "{:.5g}"),
 					('Minimum',"min", "{}"),
@@ -852,6 +846,7 @@ class XhtmlModelReporter():
 				x.th('Data')
 				for coltitle,colvalue,_ in display_cols:
 					x.th(coltitle)
+				x.th('Histogram')
 				x.end_tr
 				x.end_thead
 				with x.tbody_:
@@ -863,11 +858,13 @@ class XhtmlModelReporter():
 								try:
 									if block1 or block.loc[rownum-1,'altname']!=block.loc[rownum,'altname']:
 										x.td(aname, {'rowspan':str(3*len(names))})
-									if block1 or block.loc[rownum-1,'name']!=block.loc[rownum,'name']:
-										x.td(block.loc[rownum,'name'], {'rowspan':str(3)})
+									if block1 or block.loc[rownum-1,'data']!=block.loc[rownum,'data']:
+										x.td(block.loc[rownum,'data'], {'rowspan':str(3)})
 									block1 = False
 									for coltitle,colvalue,colfmt in display_cols:
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
+									cell = x.start('td')
+									cell.append( block.loc[rownum,'histogram'] )
 								except:
 									print("Exception in Code")
 									print(block)
@@ -876,68 +873,6 @@ class XhtmlModelReporter():
 				
 				
 				
-				#####
-#				for acode,aname in self.alternatives().items():
-#					x.h3("For {} Only".format(aname))
-#
-#					heads = ["idCA Utility {}".format(aname), "idCA Utility {} When Chosen".format(aname), "idCA Utility {} When Unchosen".format(aname)]
-#					
-#					bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
-#					
-#					for summary_attrib, heading in zip( bucket, heads ):
-#					
-#						x.h3(heading)
-#						
-#						means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
-#						
-#						
-#						names = self.needs()["UtilityCA"].get_variables()
-#						
-#						ncols = 6
-#						
-#						stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-#						titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-#						
-#						use_p = (numpy.sum(posis)>0)
-#						use_n = (numpy.sum(negs)>0)
-#						
-#						if use_p:
-#							stack += [posis,]
-#							titles += ["Positives",]
-#							ncols += 1
-#						if use_n:
-#							stack += [negs,]
-#							titles += ["Negatives",]
-#							ncols += 1
-#						if show_descrip:
-#							descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-#							stack += [descriptions,]
-#							titles += ["Description",]
-#							ncols += 1
-#						
-#						x.table
-#						x.thead
-#						x.tr
-#						for ti in titles:
-#							x.th(ti)
-#						x.end_tr
-#						x.end_thead
-#						with x.tbody_:
-#							for s in zip(*stack):
-#								with x.tr_:
-#									for thing,ti in zip(s,titles):
-#										if ti=="Description":
-#											x.td("{:s}".format(thing), {'class':'strut2'})
-#										elif isinstance(thing,str):
-#											x.td("{:s}".format(thing))
-#										else:
-#											try:
-#												x.td("{:<11.7g}".format(thing))
-#											except TypeError:
-#												x.td("{!s}".format(thing))
-#						x.end_table
-#
-#
 
 		return x.close()
 
