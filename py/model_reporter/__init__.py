@@ -38,6 +38,12 @@ class ModelReporter(docx.DocxModelReporter,
 			If True then a new :class:`util.TemporaryFile` is created,
 			the output is generated in this file, and the file-like object is 
 			returned.
+		throw_exceptions : bool
+			If True, exceptions are thrown if raised while generating the report. If 
+			False (the default) tracebacks are printed directly into the report for 
+			each section where an exception is raised.  Setting this to True can be
+			useful for testing.
+
 
 		Raises
 		------

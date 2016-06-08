@@ -346,6 +346,26 @@ def xhtml_section_bytes(content):
 	xml.etree.ElementTree.ElementTree(content).write(f, xml_declaration=False, method="html")
 	return f.getvalue()
 
+def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_source', title="Source Code"):
+	xsource = XML_Builder("div", {'class':classtype})
+	if filename is not None and os.path.isfile(filename):
+		use_filehandle = open(filename, 'r')
+	if filehandle:
+		use_filehandle = filehandle
+	try:
+		xsource.h2(title, anchor=1)
+		if filename is not None:
+			xsource.data("From: {!s}".format(filename))
+		xsource.simple("hr")
+		xsource.start("pre")
+		use_filehandle.seek(0)
+		xsource.data(use_filehandle.read())
+		xsource.end("pre")
+		xsource.simple("hr")
+	finally:
+		if filename is not None and os.path.isfile(filename):
+			use_filehandle.close()
+	return xsource.close()
 
 def toc_demote_all(elem, demote=1, anchors=True, heads=True):
 	for anchor in elem.findall('.//a[@toclevel]'):

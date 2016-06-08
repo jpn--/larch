@@ -23,7 +23,7 @@ XhtmlModelReporter_default_format = {
 class XhtmlModelReporter():
 
 
-	def xhtml_report(self, cats=['title','params','LL','latest'], raw_xml=False, **format):
+	def xhtml_report(self, cats=['title','params','LL','latest'], raw_xml=False, throw_exceptions=False, **format):
 		"""
 		Generate a model report in xhtml format.
 		
@@ -36,6 +36,11 @@ class XhtmlModelReporter():
 			If True, the resulting output is returned as a div :class:`Elem` containing a 
 			subtree of the entire report. Otherwise, the results are compiled into a
 			single bytes object representing a complete html document.
+		throw_exceptions : bool
+			If True, exceptions are thrown if raised while generating the report. If 
+			False (the default) tracebacks are printed directly into the report for 
+			each section where an exception is raised.  Setting this to True can be
+			useful for testing.
 			
 		Returns
 		-------
@@ -86,6 +91,7 @@ class XhtmlModelReporter():
 			try:
 				func = getattr(type(self),"xhtml_"+c.lower())
 			except (KeyError, AttributeError):
+				if throw_exceptions: raise
 				xerr = XML_Builder("div", {'class':'error_report'})
 				xerr.simple("hr")
 				xerr.start("pre")
@@ -99,6 +105,7 @@ class XhtmlModelReporter():
 				if to_append is not None:
 					x.append(to_append)
 			except ImportError as err:
+				if throw_exceptions: raise
 				import traceback, sys
 				xerr = XML_Builder()
 				xerr.simple("hr")
@@ -108,6 +115,7 @@ class XhtmlModelReporter():
 				xerr.simple("hr")
 				x.append(xerr.close())
 			except:
+				if throw_exceptions: raise
 				import traceback, sys
 				xerr = XML_Builder()
 				xerr.simple("hr")
@@ -622,11 +630,14 @@ class XhtmlModelReporter():
 		else:
 			w = numpy.ones([self.nCases()])
 		tot_w = numpy.sum(w)
+		w_expanded = w[:,numpy.newaxis]
+		if len(w_expanded.shape)==2:
+			w_expanded = w[:,numpy.newaxis,numpy.newaxis]
 		# calc avails
 		if self.Data("Avail") is not None:
 			av = self.Data("Avail")
 			avails = numpy.sum(av,0)
-			avails_weighted = numpy.sum(av*w[:,numpy.newaxis,numpy.newaxis],0)
+			avails_weighted = numpy.sum(av*w_expanded,0)
 		else:
 			avails = numpy.ones([self.nAlts()]) * self.nCases()
 			avails_weighted =numpy.ones([self.nAlts()]) * tot_w
@@ -634,7 +645,7 @@ class XhtmlModelReporter():
 		choices_unweighted = numpy.sum(ch,0)
 		alts = self.alternative_names()
 		altns = self.alternative_codes()
-		choices_weighted = numpy.sum(ch*w[:,numpy.newaxis,numpy.newaxis],0)
+		choices_weighted = numpy.sum(ch*w_expanded,0)
 		use_weights = bool((self.Data("Weight")!=1).any())
 		try:
 			show_avail = not isinstance(self.df.queries.avail, str)
@@ -665,8 +676,20 @@ class XhtmlModelReporter():
 						x.td("{:d}".format(altn))
 						x.td("{:<19}".format(alt))
 						if use_weights:
-							x.td("{:<15.7g}".format(availw[0]))
-							x.td("{:<15.7g}".format(choicew[0]))
+							try:
+								x.td("{:<15.7g}".format(availw[0]))
+							except TypeError:
+								try:
+									x.td("{:<15.7g}".format(float(availw[0])))
+								except TypeError:
+									x.td("{}".format(availw[0]))
+							try:
+								x.td("{:<15.7g}".format(choicew[0]))
+							except TypeError:
+								try:
+									x.td("{:<15.7g}".format(float(choicew[0])))
+								except TypeError:
+									x.td("{}".format(choicew[0]))
 						x.td("{:<15.7g}".format(availu[0]))
 						x.td("{:<15.7g}".format(choiceu[0]))
 						if show_descrip:
@@ -700,11 +723,21 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCO") is not None:
 			show_descrip = 'data_co' in self.descriptions
 			if bool((self.Data("Weight")!=1).any()):
-				x.h3("idCO Utility (weighted)", anchor=1)
+				x.h3("idCO Data (weighted)", anchor=1)
 			else:
-				x.h3("idCO Utility", anchor=1)
+				x.h3("idCO Data", anchor=1)
 
-			means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+			#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+			ss = self.stats_utility_co()
+			means = ss.mean
+			stdevs = ss.stdev
+			mins = ss.minimum
+			maxs = ss.maximum
+			nonzers = ss.n_nonzeros
+			posis = ss.n_positives
+			negs = ss.n_negatives
+			zers = ss.n_zeros
+			mean_nonzer = ss.mean_nonzero
 			names = self.needs()["UtilityCO"].get_variables()
 			
 			
@@ -730,6 +763,11 @@ class XhtmlModelReporter():
 				titles += ["Description",]
 				ncols += 1
 			
+			# Histograms
+			stack += [ss.histogram,]
+			titles += ["Histogram",]
+			ncols += 1
+			
 			x.table
 			x.thead
 			x.tr
@@ -743,6 +781,10 @@ class XhtmlModelReporter():
 						for thing,ti in zip(s,titles):
 							if ti=="Description":
 								x.td("{:s}".format(thing), {'class':'strut2'})
+							elif ti=="Histogram":
+								cell = x.start('td')
+								cell.append( thing )
+								x.end('td')
 							elif isinstance(thing,str):
 								x.td("{:s}".format(thing))
 							else:
@@ -753,71 +795,127 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCA") is not None:
 			show_descrip = 'data_ca' in self.descriptions
 			
-			if len(self.alternative_codes()) >= 30:
-				heads = ["idCA Data, Chosen Alternatives", "idCA Data, Unchosen Alternatives"]
+#			if len(self.alternative_codes()) >= -30:
+#				heads = ["idCA Data, All Avail Alternatives", "idCA Data, Chosen Alternatives", "idCA Data, Unchosen Alternatives"]
+#				
+#				for summary_attrib, heading in zip( self.stats_utility_ca_chosen_unchosen(), heads ):
+#				
+#					x.h3(heading, anchor=1)
+#					
+#					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+#					means = summary_attrib.mean
+#					stdevs = summary_attrib.stdev
+#					mins = summary_attrib.minimum
+#					maxs = summary_attrib.maximum
+#					nonzers = summary_attrib.n_nonzeros
+#					posis = summary_attrib.n_positives
+#					negs = summary_attrib.n_negatives
+#					zers = summary_attrib.n_zeros
+#					mean_nonzer = summary_attrib.mean_nonzero
+#					
+#					
+#					names = self.needs()["UtilityCA"].get_variables()
+#					
+#					ncols = 6
+#					
+#					stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
+#					titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+#					
+#					use_p = (numpy.sum(posis)>0)
+#					use_n = (numpy.sum(negs)>0)
+#					
+#					if numpy.sum(posis)>0:
+#						stack += [posis,]
+#						titles += ["Positives",]
+#						ncols += 1
+#					if numpy.sum(negs)>0:
+#						stack += [negs,]
+#						titles += ["Negatives",]
+#						ncols += 1
+#					if show_descrip:
+#						descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
+#						stack += [descriptions,]
+#						titles += ["Description",]
+#						ncols += 1
+#					# Histograms
+#					stack += [summary_attrib.histogram,]
+#					titles += ["Histogram",]
+#					ncols += 1
+#				
+#					x.table
+#					x.thead
+#					x.tr
+#					for ti in titles:
+#						x.th(ti)
+#					x.end_tr
+#					x.end_thead
+#					with x.tbody_:
+#						for s in zip(*stack):
+#							with x.tr_:
+#								for thing,ti in zip(s,titles):
+#									if ti=="Description":
+#										x.td("{:s}".format(thing), {'class':'strut2'})
+#									elif ti=="Histogram":
+#										cell = x.start('td')
+#										cell.append( thing )
+#										x.end('td')
+#									elif isinstance(thing,str):
+#										x.td("{:s}".format(thing))
+#									else:
+#										x.td("{:<11.7g}".format(thing))
+#					x.end_table
+
+			if len(self.alternative_codes()) >= 0:
+				x.h3("idCA Data", anchor=1)
+				table_cache = self.stats_utility_ca(by_alt=False)
 				
-				for summary_attrib, heading in zip( self.stats_utility_ca_chosen_unchosen(), heads ):
+				#pre_display_cols
+				#	('Data','name'),
+				display_cols = [
+					('Filter','filter', "{}"),
+					('Mean',"mean", "{:.5g}"),
+					('Std.Dev.',"stdev", "{:.5g}"),
+					('Minimum',"min", "{}"),
+					('Maximum',"max", "{}"),
+					('Mean (Nonzeros)',"mean_nonzero", "{:.5g}"),
+					('# Zeros',"zeros", "{:.0f}"),
+				]
 				
-					x.h3(heading, anchor=1)
-					
-					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
-					means = summary_attrib.mean
-					stdevs = summary_attrib.stdev
-					mins = summary_attrib.minimum
-					maxs = summary_attrib.maximum
-					nonzers = summary_attrib.n_nonzeros
-					posis = summary_attrib.n_positives
-					negs = summary_attrib.n_negatives
-					zers = summary_attrib.n_zeros
-					mean_nonzer = summary_attrib.mean_nonzero
-					
-					
-					names = self.needs()["UtilityCA"].get_variables()
-					
-					ncols = 6
-					
-					stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-					titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-					
-					use_p = (numpy.sum(posis)>0)
-					use_n = (numpy.sum(negs)>0)
-					
-					if numpy.sum(posis)>0:
-						stack += [posis,]
-						titles += ["Positives",]
-						ncols += 1
-					if numpy.sum(negs)>0:
-						stack += [negs,]
-						titles += ["Negatives",]
-						ncols += 1
-					if show_descrip:
-						descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-						stack += [descriptions,]
-						titles += ["Description",]
-						ncols += 1
-					
-					x.table
-					x.thead
-					x.tr
-					for ti in titles:
-						x.th(ti)
-					x.end_tr
-					x.end_thead
-					with x.tbody_:
-						for s in zip(*stack):
+				if table_cache['positives'].sum()>0:
+					display_cols += [('# Positives',"positives", "{:.0f}"),]
+				if table_cache['negatives'].sum()>0:
+					display_cols += [('# Negatives',"negatives", "{:.0f}"),]
+				
+				x.table
+				x.thead
+				x.tr
+				x.th('Data')
+				for coltitle,colvalue,_ in display_cols:
+					x.th(coltitle)
+				x.th('Histogram')
+				x.end_tr
+				x.end_thead
+				with x.tbody_:
+						block = table_cache
+						block1 = True
+						for rownum in block.index:
 							with x.tr_:
-								for thing,ti in zip(s,titles):
-									if ti=="Description":
-										x.td("{:s}".format(thing), {'class':'strut2'})
-									elif isinstance(thing,str):
-										x.td("{:s}".format(thing))
-									else:
-										x.td("{:<11.7g}".format(thing))
-					x.end_table
+								try:
+									if block1 or block.loc[rownum-1,'data']!=block.loc[rownum,'data']:
+										x.td(block.loc[rownum,'data'], {'rowspan':str(3)})
+									block1 = False
+									for coltitle,colvalue,colfmt in display_cols:
+										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
+									cell = x.start('td')
+									cell.append( block.loc[rownum,'histogram'] )
+									x.end('td')
+								except:
+									print("Exception in Code")
+									print(block)
+									raise
+				x.end_table
 
 			if len(self.alternative_codes()) < 30:
-				#import pandas
-				#from itertools import count
 				x.h3("idCA Data by Alternative", anchor=1)
 				table_cache = self.stats_utility_ca()
 				
@@ -865,6 +963,7 @@ class XhtmlModelReporter():
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
 									cell = x.start('td')
 									cell.append( block.loc[rownum,'histogram'] )
+									x.end('td')
 								except:
 									print("Exception in Code")
 									print(block)

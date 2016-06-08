@@ -649,23 +649,33 @@ class Model(Model2, ModelReporter):
 		if available.
 		"""
 		x = self.Data("UtilityCO")
+		#if bool((self.Data("Weight")!=1).any()):
+		#	w = self.Data("Weight").flatten()
+		#	mean = numpy.average(x, axis=0, weights=w)
+		#	variance = numpy.average((x-mean)**2, axis=0, weights=w)
+		#	stdev = numpy.sqrt(variance)
+		#else:
+		#	mean = numpy.mean(x,0)
+		#	stdev = numpy.std(x,0)
+		#mins = numpy.amin(x,0)
+		#maxs = numpy.amax(x,0)
+		#nonzer = tuple(numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
+		#pos = tuple(int(numpy.sum(x[:,i]>0)) for i in range(x.shape[1]))
+		#neg = tuple(int(numpy.sum(x[:,i]<0)) for i in range(x.shape[1]))
+		#zer = tuple(x[:,i].size-numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
+		#sumx = numpy.sum(x,0)
+		#mean_nonzer = sumx / numpy.array(nonzer)
+		ss = statistical_summary.compute(x)
 		if bool((self.Data("Weight")!=1).any()):
 			w = self.Data("Weight").flatten()
-			mean = numpy.average(x, axis=0, weights=w)
-			variance = numpy.average((x-mean)**2, axis=0, weights=w)
-			stdev = numpy.sqrt(variance)
-		else:
-			mean = numpy.mean(x,0)
-			stdev = numpy.std(x,0)
-		mins = numpy.amin(x,0)
-		maxs = numpy.amax(x,0)
-		nonzer = tuple(numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
-		pos = tuple(int(numpy.sum(x[:,i]>0)) for i in range(x.shape[1]))
-		neg = tuple(int(numpy.sum(x[:,i]<0)) for i in range(x.shape[1]))
-		zer = tuple(x[:,i].size-numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
-		sumx = numpy.sum(x,0)
-		mean_nonzer = sumx / numpy.array(nonzer)
-		return (mean,stdev,mins,maxs,nonzer,pos,neg,zer,mean_nonzer)
+			ss.mean = numpy.average(x, axis=0, weights=w)
+			variance = numpy.average((x-ss.mean)**2, axis=0, weights=w)
+			ss.stdev = numpy.sqrt(variance)
+			w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(x.shape[1])
+			w_nonzero[x==0] = 0
+			ss.mean_nonzero = numpy.average(x, axis=0, weights=w_nonzero)
+		#return (mean,stdev,mins,maxs,nonzer,pos,neg,zer,mean_nonzer)
+		return ss
 		
 	def stats_utility_ca_chosen_unchosen(self):
 		"""
@@ -677,13 +687,22 @@ class Model(Model2, ModelReporter):
 		x = self.Data("UtilityCA")
 		ch = self.Data("Choice")
 		
-		x_chosen = x[ch.astype(bool).reshape(ch.shape[0],ch.shape[1])]
-		x_unchosen = x[~ch.astype(bool).reshape(ch.shape[0],ch.shape[1])]
+		ch_asbool = ch.astype(bool).reshape(ch.shape[0],ch.shape[1])
 		
+		av = self.Data("Avail")
+		ch_asbool &= av.squeeze()
+		x_chosen = x[ch_asbool]
+		
+		ch_asbool = ~ch_asbool & av.squeeze()
+		x_unchosen = x[ch_asbool]
+		
+		x_total = x[av.squeeze()]
+		
+		ss_total = statistical_summary.compute(x_total)
 		ss_chosen = statistical_summary.compute(x_chosen)
 		ss_unchosen = statistical_summary.compute(x_unchosen)
 		
-		return ss_chosen, ss_unchosen
+		return ss_total, ss_chosen, ss_unchosen
 
 	def stats_utility_ca_chosen_unchosen_by_alt(self, altcode, histograms=False):
 		"""
@@ -720,7 +739,7 @@ class Model(Model2, ModelReporter):
 		
 		return ss_total, ss_chosen, ss_unchosen,
 
-	def stats_utility_ca(self):
+	def stats_utility_ca(self, by_alt=True):
 		"""
 		Selected statistics about the idca data.
 		
@@ -735,10 +754,40 @@ class Model(Model2, ModelReporter):
 		"""
 		import pandas
 		from itertools import count
-		table_cache = pandas.DataFrame(columns=["altcode","altname","data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram"])
-		names = self.needs()["UtilityCA"].get_variables()
-		for acode,aname in self.alternatives().items():
-			bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
+		if by_alt:
+			table_cache = pandas.DataFrame(columns=["altcode","altname","data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram"])
+			names = self.needs()["UtilityCA"].get_variables()
+			for acode,aname in self.alternatives().items():
+				bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
+				bucket_types = ["All Avail", "Chosen", "Unchosen"]
+				for summary_attrib, bucket_type in zip( bucket, bucket_types ):
+					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+					means = summary_attrib.mean
+					stdevs = summary_attrib.stdev
+					mins = summary_attrib.minimum
+					maxs = summary_attrib.maximum
+					nonzers = summary_attrib.n_nonzeros
+					posis = summary_attrib.n_positives
+					negs = summary_attrib.n_negatives
+					zers = summary_attrib.n_zeros
+					mean_nonzer = summary_attrib.mean_nonzero
+					histos = summary_attrib.histogram
+					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos):
+						newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
+									'data':s[0], 'mean':s[1], 'stdev':s[2],
+									'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
+									'positives':s[7],'negatives':s[8],'namecounter':s[9],
+									'histogram':s[10],
+						}
+						table_cache = table_cache.append(newrow, ignore_index=True)
+			table_cache.sort_values(['altcode','namecounter','filter'], inplace=True)
+			table_cache.index = range(len(table_cache))
+			return table_cache
+		else:
+			table_cache = pandas.DataFrame(columns=["data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram"])
+			names = self.needs()["UtilityCA"].get_variables()
+			# agg over all alts
+			bucket = self.stats_utility_ca_chosen_unchosen()
 			bucket_types = ["All Avail", "Chosen", "Unchosen"]
 			for summary_attrib, bucket_type in zip( bucket, bucket_types ):
 				#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
@@ -753,16 +802,16 @@ class Model(Model2, ModelReporter):
 				mean_nonzer = summary_attrib.mean_nonzero
 				histos = summary_attrib.histogram
 				for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos):
-					newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
+					newrow = {'filter':bucket_type,
 								'data':s[0], 'mean':s[1], 'stdev':s[2],
 								'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
 								'positives':s[7],'negatives':s[8],'namecounter':s[9],
 								'histogram':s[10],
 					}
 					table_cache = table_cache.append(newrow, ignore_index=True)
-		table_cache.sort_values(['altcode','namecounter','filter'], inplace=True)
-		table_cache.index = range(len(table_cache))
-		return table_cache
+			table_cache.sort_values(['namecounter','filter'], inplace=True)
+			table_cache.index = range(len(table_cache))
+			return table_cache
 
 	def parameter_names(self, output_type=list):
 		x = []

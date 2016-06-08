@@ -24,7 +24,7 @@ TxtModelReporter_default_format = {
 class TxtModelReporter():
 
 
-	def txt_report(self, cats=['title','params','LL','latest'], **format):
+	def txt_report(self, cats=['title','params','LL','latest'], throw_exceptions=False, **format):
 		"""
 		Generate a model report in text format.
 		
@@ -33,6 +33,11 @@ class TxtModelReporter():
 		cats : list of str, or '*'
 			A list of the report components to include. Use '*' to include every
 			possible component for the selected output format.
+		throw_exceptions : bool
+			If True, exceptions are thrown if raised while generating the report. If 
+			False (the default) tracebacks are printed directly into the report for 
+			each section where an exception is raised.  Setting this to True can be
+			useful for testing.
 			
 		Returns
 		-------
@@ -64,12 +69,14 @@ class TxtModelReporter():
 			try:
 				func = getattr(type(self),"txt_"+c.lower())
 			except KeyError:
+				if throw_exceptions: raise
 				x += ["="]
 				x += ["Key Error: No known report section named {}".format(c)]
 				continue
 			try:
 				x += func(self,**format)
 			except:
+				if throw_exceptions: raise
 				import traceback, sys
 				x += ["="]
 				x += ["Error in {}".format(c)]
@@ -261,7 +268,17 @@ class TxtModelReporter():
 			else:
 				x += ["idCO Utility"]
 			x += ["-"]
-			means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+			#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+			ss = self.stats_utility_co()
+			means = ss.mean
+			stdevs = ss.stdev
+			mins = ss.minimum
+			maxs = ss.maximum
+			nonzers = ss.n_nonzeros
+			posis = ss.n_positives
+			negs = ss.n_negatives
+			zers = ss.n_zeros
+			mean_nonzer = ss.mean_nonzero
 			names = self.needs()["UtilityCO"].get_variables()
 			
 			head_fmt = "{0:<19}\t{1:<11}\t{2:<11}\t{3:<11}\t{4:<11}\t{5:<11}\t{5:<11}"

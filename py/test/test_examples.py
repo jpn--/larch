@@ -26,7 +26,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "larch.test.test_examples"
 
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import Model, DB, LarchError, SQLiteError
+from ..core import Model, DB, LarchError, SQLiteError, DT
 
 class TestSwissmetroExamples(ELM_TestCase):
 
@@ -209,4 +209,18 @@ class TestSwissmetroExamples(ELM_TestCase):
 		self.assertAlmostEqual(      0.13902205165039166, M.parameter("PHI_EXISTING").robust_std_err ,6)
 
 
+	def test_html_reporting(self):
+		from ..roles import P, X
+		d = DT.Example('MTC')
+		m = Model(d)
+		alts = d.alternatives()
+		ref_id = alts[0][0]
+		for code, name in alts:
+			if code != ref_id:
+				m.utility.co[code] = X("hhinc")*P("Inc_"+name) + P("ASC_"+name)
+		m.utility.ca = P.Time * X.tottime + P.cost * X.totcost
+		m.roll(filename="None", cats='*', throw_exceptions=True)
+		#
+		m2 = Model.Example(102)
+		m2.roll(filename="None", cats='*', throw_exceptions=True)
 

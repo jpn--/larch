@@ -2,7 +2,7 @@
 
 from ..logging import logging as baselogging
 from .. import logging
-from .xhtml import XHTML, XML_Builder
+from .xhtml import XHTML, XML_Builder, xhtml_rawtext_as_div
 import os.path
 from .temporaryfile import TemporaryFile
 import inspect
@@ -23,9 +23,9 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 		The log level that will be used while estimating the model.  Smaller numbers
 		result in a more verbose log, the contents of which appear at the end of
 		the HTML report. See the standard Python :mod:`logging` module for more details.
-	cats : list of str, or '-' or '+'
+	cats : list of str, or '-' or '*'
 		A list of report sections to include in the report. The default is '-', which
-		includes a minimal list of report setions. Giving '+' will dump every available
+		includes a minimal list of report setions. Giving '*' will dump every available
 		report section, which could be a lot and might take a lot of time (and 
 		computer memory) to compute.
 	sourcecode : bool
@@ -45,6 +45,8 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 
 	if filename is None:
 		use_filename = 'temp'
+	elif filename == "None":
+		use_filename = None
 	else:
 		use_filename = os.path.splitext(filename)[0] + '.html'
 
@@ -71,34 +73,19 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	fh.flush()
 
 	# SourceFile grabber
-	try:
-		frame = inspect.stack()[1]
-		sourcefile = inspect.getsourcefile(frame[0])
-	except:
-		sourcefile = None
+	if sourcecode:
+		try:
+			frame = inspect.stack()[1]
+			sourcefile = inspect.getsourcefile(frame[0])
+		except:
+			sourcefile = None
 	
 	with XHTML(use_filename, quickhead=m) as f:
 		f << m.report(cats=cats, style='xml', **format)
-
-		if sourcefile is not None and os.path.isfile(sourcefile):
-			xsource = XML_Builder("div", {'class':'raw_source'})
-			xsource.h2("Source Code", anchor=1)
-			xsource.data("From: {!s}".format(sourcefile))
-			xsource.simple("hr")
-			xsource.start("pre")
-			with open(sourcefile, 'r') as sf:
-				xsource.data(sf.read())
-			xsource.end("pre")
-			xsource.simple("hr")
-			f.append(xsource.close())
-
-		xlog = XML_Builder("div", {'class':'raw_log'})
-		xlog.h2("Estimation Log", anchor=1)
-		xlog.simple("hr")
-		xlog.start("pre")
-		templog.seek(0)
-		xlog.data(templog.read())
-		xlog.end("pre")
-		xlog.simple("hr")
-		f.append(xlog.close())
-
+		if sourcecode:
+			f << xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code")
+		f << xhtml_rawtext_as_div(filehandle=templog, classtype='raw_log', title="Estimation Log")
+		
+		if use_filename is None:
+			return f.dump()
+			
