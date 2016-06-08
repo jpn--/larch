@@ -186,7 +186,7 @@ class XhtmlModelReporter():
 
 	def xhtml_params(self, groups=None, display_inital=False, **format):
 		"""
-		Generate a div element containing the model parameters in a H1 tag.
+		Generate a div element containing the model parameters in a table.
 		
 		Parameters
 		----------
@@ -393,6 +393,25 @@ class XhtmlModelReporter():
 
 	# Model Estimation Statistics
 	def xhtml_ll(self,**format):
+		"""
+		Generate a div element containing the model estimation statistics.
+		
+		Returns
+		-------
+		larch.util.xhtml.Elem
+			A div containing the model parameters.
+		
+		Example
+		-------
+		>>> from larch.util.xhtml import XHTML
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> with XHTML(quickhead=m) as f:
+		... 	f.append(m.xhtml_title())
+		... 	f.append(m.xhtml_ll())
+		... 	print(f.dump())
+		...
+		b'<!DOCTYPE html ...>'
+		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
@@ -614,6 +633,30 @@ class XhtmlModelReporter():
 		return x.close()
 
 	def xhtml_data(self,**format):
+		"""
+		Generate a div element containing the summary statistics for choice and availability.
+		
+		Note that the choice and availability must be provisioned (loaded into the model)
+		to generate these summary statistics.
+		
+		Returns
+		-------
+		larch.util.xhtml.Elem
+			A div containing the summary statistics for choice and availability.
+		
+		Example
+		-------
+		>>> from larch.util.xhtml import XHTML
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> m.df = larch.DT.Example('MTC')
+		>>> m.provision()
+		>>> with XHTML(quickhead=m) as f:
+		... 	f.append(m.xhtml_title())
+		... 	f.append(m.xhtml_data())
+		... 	print(f.dump())
+		...
+		b'<!DOCTYPE html ...>'
+		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
@@ -709,6 +752,30 @@ class XhtmlModelReporter():
 
 	# Utility Data Summary
 	def xhtml_utilitydata(self,**format):
+		"""
+		Summary statistics for the data used in the utility function.
+		
+		Note that the utility data must be provisioned (loaded into the model)
+		to generate these summary statistics.
+		
+		Returns
+		-------
+		larch.util.xhtml.Elem
+			A div containing the summary statistics for choice and availability.
+		
+		Example
+		-------
+		>>> from larch.util.xhtml import XHTML
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> m.df = larch.DT.Example('MTC')
+		>>> m.provision()
+		>>> with XHTML(quickhead=m) as f:
+		... 	f.append(m.xhtml_title())
+		... 	f.append(m.xhtml_utilitydata())
+		... 	print(f.dump())
+		...
+		b'<!DOCTYPE html ...>'
+		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
@@ -795,75 +862,6 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCA") is not None:
 			show_descrip = 'data_ca' in self.descriptions
 			
-#			if len(self.alternative_codes()) >= -30:
-#				heads = ["idCA Data, All Avail Alternatives", "idCA Data, Chosen Alternatives", "idCA Data, Unchosen Alternatives"]
-#				
-#				for summary_attrib, heading in zip( self.stats_utility_ca_chosen_unchosen(), heads ):
-#				
-#					x.h3(heading, anchor=1)
-#					
-#					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
-#					means = summary_attrib.mean
-#					stdevs = summary_attrib.stdev
-#					mins = summary_attrib.minimum
-#					maxs = summary_attrib.maximum
-#					nonzers = summary_attrib.n_nonzeros
-#					posis = summary_attrib.n_positives
-#					negs = summary_attrib.n_negatives
-#					zers = summary_attrib.n_zeros
-#					mean_nonzer = summary_attrib.mean_nonzero
-#					
-#					
-#					names = self.needs()["UtilityCA"].get_variables()
-#					
-#					ncols = 6
-#					
-#					stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-#					titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-#					
-#					use_p = (numpy.sum(posis)>0)
-#					use_n = (numpy.sum(negs)>0)
-#					
-#					if numpy.sum(posis)>0:
-#						stack += [posis,]
-#						titles += ["Positives",]
-#						ncols += 1
-#					if numpy.sum(negs)>0:
-#						stack += [negs,]
-#						titles += ["Negatives",]
-#						ncols += 1
-#					if show_descrip:
-#						descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-#						stack += [descriptions,]
-#						titles += ["Description",]
-#						ncols += 1
-#					# Histograms
-#					stack += [summary_attrib.histogram,]
-#					titles += ["Histogram",]
-#					ncols += 1
-#				
-#					x.table
-#					x.thead
-#					x.tr
-#					for ti in titles:
-#						x.th(ti)
-#					x.end_tr
-#					x.end_thead
-#					with x.tbody_:
-#						for s in zip(*stack):
-#							with x.tr_:
-#								for thing,ti in zip(s,titles):
-#									if ti=="Description":
-#										x.td("{:s}".format(thing), {'class':'strut2'})
-#									elif ti=="Histogram":
-#										cell = x.start('td')
-#										cell.append( thing )
-#										x.end('td')
-#									elif isinstance(thing,str):
-#										x.td("{:s}".format(thing))
-#									else:
-#										x.td("{:<11.7g}".format(thing))
-#					x.end_table
 
 			if len(self.alternative_codes()) >= 0:
 				x.h3("idCA Data", anchor=1)

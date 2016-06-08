@@ -121,6 +121,15 @@ class XML_Builder(TreeBuilder):
 		yield
 		self.end(tag)
 
+	def dump(self):
+		#import io
+		#f = io.BytesIO()
+		#xml.etree.ElementTree.ElementTree(self.close()).write(f, xml_declaration=False, method="html")
+		#return f.getvalue()
+		return xml.etree.ElementTree.tostring(self.close())
+	def dumps(self):
+		return self.dump().decode()
+
 
 
 class XHTML():

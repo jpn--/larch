@@ -79,5 +79,20 @@ There are a variety of xhtml components that can be used in roll your own report
 	:class: htmlrendering
 
 
+.. automethod:: Model.xhtml_ll
+.. image:: reporting4_render.png
+	:class: htmlrendering
+
+
+.. automethod:: Model.xhtml_data
+.. image:: reporting5_render.png
+	:class: htmlrendering
+
+
+.. automethod:: Model.xhtml_utilitydata
+.. image:: reporting6_render.png
+	:class: htmlrendering
+
+
 
 
