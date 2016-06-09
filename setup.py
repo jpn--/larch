@@ -247,9 +247,9 @@ else:
 		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz', 'data_warehouse/*.h5'], 'larch.examples.doc':['*.rst']},
 		  data_files=local_data_files,
 		  install_requires=[
-							"numpy >= 1.10",
-							"scipy >= 0.14.0",
-							"pandas >= 0.14.1",
+							"numpy >= 1.11",
+							"scipy >= 0.17.0",
+							"pandas >= 0.18",
 							"tables >= 3.2.2",
 						],
 		  extras_require = {
