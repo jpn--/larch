@@ -210,6 +210,10 @@ class TestSwissmetroExamples(ELM_TestCase):
 
 
 	def test_html_reporting(self):
+		try:
+			import networkx
+		except ImportError:
+			self.skipTest('networkx package not installed')
 		from ..roles import P, X
 		d = DT.Example('MTC')
 		m = Model(d)
