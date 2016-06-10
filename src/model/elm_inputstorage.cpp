@@ -806,11 +806,25 @@ std::string elm::LinearCOBundle_2::__repr__() const
 		temp = etk::cat(a->first.dn);
 		if (temp.size() > minwide_code2) minwide_code2 = temp.size();
 	}
+
+	bool any_allocation = false;
+	for (elm::LinearCOBundle_2::const_iterator a=begin(); a!=end(); a++) {
+		if (a->second.size()>0) {
+			any_allocation = true;
+			break;
+		}
+	}
+	
 	
 	for (elm::LinearCOBundle_2::const_iterator a=begin(); a!=end(); a++) {
 		x	<< "\n["<< std::setw(minwide_code1) <<a->first.up<<" --> "
-			<< std::setw(minwide_code2) << std::left << a->first.dn << std::right << "] "
-			<< a->second.__repr__();
+			<< std::setw(minwide_code2) << std::left << a->first.dn << std::right << "] ";
+		if (a->second.size()>0) {
+			x << a->second.__repr__();
+		} else if (any_allocation) {
+			x << "< allocation = 0 >";
+		}
+		
 	}
 	std::string z = x.str();
 	

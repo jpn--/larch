@@ -68,9 +68,9 @@ class XhtmlModelReporter():
 			cats = format['cats']
 
 		if cats=='*' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options']
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options']
 		elif cats=='*':
-			cats=['title','params','LL',               'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options']
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options']
 
 		if cats=='-' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','latest','NOTES','options']
@@ -1433,7 +1433,6 @@ class XhtmlModelReporter():
 
 		return x.close()
 
-
 	def xhtml_nesting_tree(self,**format):
 		try:
 			import pygraphviz as viz
@@ -1459,7 +1458,7 @@ class XhtmlModelReporter():
 		else:
 			G=viz.AGraph(name='Tree',directed=True)
 		for n,name in self.alternatives().items():
-			G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,name))
+			G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,name), style='rounded,solid', shape='box')
 		eG = G.add_subgraph(name='cluster_elemental', nbunch=self.alternative_codes(), color='#cccccc', bgcolor='#eeeeee',
 					   label='Elemental Alternatives', labelloc='b', style='rounded,solid')
 		unavailable_nodes = set()
@@ -1485,9 +1484,9 @@ class XhtmlModelReporter():
 		G.add_node(self.root_id, label="Root")
 		for n in self.node.nodes():
 			if self.node[n]._altname==self.node[n].param:
-				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,self.node[n]._altname,self.node[n].param))
+				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT>>'.format(n,self.node[n]._altname,self.node[n].param), style='rounded,solid', shape='box')
 			else:
-				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT><BR/>µ<SUB>{2}</SUB>>'.format(n,self.node[n]._altname,self.node[n].param))
+				G.add_node(n, label='<{1} <FONT COLOR="#999999">({0})</FONT><BR/>µ<SUB>{2}</SUB>>'.format(n,self.node[n]._altname,self.node[n].param), style='rounded,solid', shape='box')
 		up_nodes = set()
 		down_nodes = set()
 		for i,j in self.link.links():
@@ -1496,7 +1495,8 @@ class XhtmlModelReporter():
 			up_nodes.add(i)
 		all_nodes = set(self.alternative_codes()) | up_nodes | down_nodes
 		for j in all_nodes-down_nodes-unavailable_nodes:
-			G.add_edge(self.root_id,j)
+			if self.root_id != j:
+				G.add_edge(self.root_id,j)
 		pyg_imgdata = BytesIO()
 		G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
 		xx = x.close()
@@ -1505,7 +1505,7 @@ class XhtmlModelReporter():
 
 	def xhtml_nesting_tree_textonly(self,**format):
 		x = XML_Builder("div", {'class':"nesting_text"})
-		x.h2("Nesting Structure", anchor=1)
+		x.h2("Nesting Definition", anchor=1)
 		with x.block("table"):
 			with x.block("tr"):
 				x.th("Root")
