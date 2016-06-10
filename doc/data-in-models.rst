@@ -13,13 +13,6 @@ been using the SQLite database interface.
 
 	Using SQLite <databases>
 	Using HDF5 <datatables>
+	Abstract Data Interface <datafountain>
 
 
-
-The Abstract :class:`Fountain` Base Class
------------------------------------------
-
-.. py:class:: Fountain()
-
-	This object represents a source of data. It is an abstract base class from which both
-	the :class:`DT` and :class:`DB` classes are derived.

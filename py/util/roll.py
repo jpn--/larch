@@ -42,11 +42,16 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	if log is None:
 		local_log = True
 		log = m.logger(1)
+	
+	use_jupyter = False
 
 	if filename is None:
 		use_filename = 'temp'
 	elif filename == "None":
 		use_filename = None
+	elif filename == "jupyter":
+		use_filename = None
+		use_jupyter = True
 	else:
 		use_filename = os.path.splitext(filename)[0] + '.html'
 
@@ -79,13 +84,37 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 			sourcefile = inspect.getsourcefile(frame[0])
 		except:
 			sourcefile = None
-	
-	with XHTML(use_filename, quickhead=m) as f:
+
+	css = None
+	if 'css' in format:
+		css = format['css']
+	elif use_jupyter:
+		css = """
+		.error_report {color:red; font-family:monospace;}
+		table {border-collapse:collapse;}
+		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
+		body { }
+		.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+		a.parameter_reference {font-style: italic; text-decoration: none}
+		.strut2 {min-width:1in}
+		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
+		"""
+
+
+	with XHTML(use_filename, quickhead=m, css=css) as f:
 		f << m.report(cats=cats, style='xml', **format)
 		if sourcecode:
 			f << xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code")
 		f << xhtml_rawtext_as_div(filehandle=templog, classtype='raw_log', title="Estimation Log")
 		
-		if use_filename is None:
+		if use_jupyter:
+			try:
+				from IPython.display import display, HTML
+			except ImportError:
+				pass
+			else:
+				display(HTML(f.dump(toc=False,sign=True).decode()))
+		elif use_filename is None:
 			return f.dump()
-			
+
+	return self

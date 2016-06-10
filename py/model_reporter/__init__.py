@@ -1,4 +1,4 @@
-from . import docx, latex, pdf, txt, xhtml
+from . import docx, latex, pdf, txt, xhtml, alogit
 import math
 from ..util.xhtml import XHTML, XML_Builder
 from ..core import LarchError
@@ -8,6 +8,7 @@ class ModelReporter(docx.DocxModelReporter,
 					xhtml.XhtmlModelReporter,
 					pdf.PdfModelReporter,
 					txt.TxtModelReporter,
+					alogit.AlogitModelReporter,
 					):
 
 	def report(self, style, *args, filename=None, tempfile=False, **kwargs):

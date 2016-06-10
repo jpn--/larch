@@ -92,6 +92,9 @@ namespace elm {
 		std_err = property(_get_std_err, None, None, "the standard error of the estimator (read-only)")
 		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich (read-only)")
 		name = property(_get_name, None, None, "the parameter name (read-only)")
+		@property
+		def name_(self):
+			return self.name.replace(" ","_")
 		index = property(_get_index, None, None, "the parameter index within the model (read-only)")
 		t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
 		def __repr__(self):

@@ -237,6 +237,8 @@ namespace std {
 		def __reduce__(self):
 			args = (dict(self), )
 			return self.__class__, args
+		def __repr__(self):
+			return "<larch.core.IntStringDict>\n"+repr(self.asdict())
 	}
 }
 

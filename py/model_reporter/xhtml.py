@@ -47,7 +47,21 @@ class XhtmlModelReporter():
 		bytes or larch.util.xhtml.Elem
 			The report content. You need to save it to a file on your own,
 			if desired.
+
+		Example
+		-------
 		
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> from larch.util.temporaryfile import TemporaryHtml
+		>>> html = m.xhtml_report()
+		>>> html
+		b'<!DOCTYPE html ...>'
+		
+		
+		.. image:: render_xhtml_report_html.png
+			:class: htmlrendering
+
+
 		"""
 
 		if 'cats' in format:
@@ -227,9 +241,12 @@ class XhtmlModelReporter():
 		>>> with XHTML(quickhead=m) as f:
 		... 	f.append( m.xhtml_title()  )
 		... 	f.append( m.xhtml_params(param_groups) )
-		... 	print(f.dump())
-		...
+		... 	html = f.dump()
+		>>> html
 		b'<!DOCTYPE html ...>'
+		
+		.. image:: render_xhtml_params_html.png
+			:class: htmlrendering
 		"""
 		# keys fix
 		existing_format_keys = list(format.keys())
@@ -408,9 +425,12 @@ class XhtmlModelReporter():
 		>>> with XHTML(quickhead=m) as f:
 		... 	f.append(m.xhtml_title())
 		... 	f.append(m.xhtml_ll())
-		... 	print(f.dump())
-		...
+		... 	html = f.dump()
+		>>> html
 		b'<!DOCTYPE html ...>'
+		
+		.. image:: render_xhtml_ll_html.png
+			:class: htmlrendering
 		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -653,9 +673,12 @@ class XhtmlModelReporter():
 		>>> with XHTML(quickhead=m) as f:
 		... 	f.append(m.xhtml_title())
 		... 	f.append(m.xhtml_data())
-		... 	print(f.dump())
-		...
+		... 	html = f.dump()
+		>>> html
 		b'<!DOCTYPE html ...>'
+		
+		.. image:: render_xhtml_data_html.png
+			:class: htmlrendering
 		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -772,9 +795,12 @@ class XhtmlModelReporter():
 		>>> with XHTML(quickhead=m) as f:
 		... 	f.append(m.xhtml_title())
 		... 	f.append(m.xhtml_utilitydata())
-		... 	print(f.dump())
-		...
+		... 	html = f.dump()
+		>>> html
 		b'<!DOCTYPE html ...>'
+		
+		.. image:: render_xhtml_utilitydata_html.png
+			:class: htmlrendering
 		"""
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -849,7 +875,7 @@ class XhtmlModelReporter():
 							if ti=="Description":
 								x.td("{:s}".format(thing), {'class':'strut2'})
 							elif ti=="Histogram":
-								cell = x.start('td')
+								cell = x.start('td', {'class':'histogram_cell'})
 								cell.append( thing )
 								x.end('td')
 							elif isinstance(thing,str):
@@ -904,7 +930,7 @@ class XhtmlModelReporter():
 									block1 = False
 									for coltitle,colvalue,colfmt in display_cols:
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
-									cell = x.start('td')
+									cell = x.start('td', {'class':'histogram_cell'})
 									cell.append( block.loc[rownum,'histogram'] )
 									x.end('td')
 								except:
@@ -959,7 +985,7 @@ class XhtmlModelReporter():
 									block1 = False
 									for coltitle,colvalue,colfmt in display_cols:
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
-									cell = x.start('td')
+									cell = x.start('td', {'class':'histogram_cell'})
 									cell.append( block.loc[rownum,'histogram'] )
 									x.end('td')
 								except:

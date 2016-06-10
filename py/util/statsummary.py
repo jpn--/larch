@@ -23,7 +23,7 @@ class statistical_summary():
 			setattr(self,kw,val)
 	
 	@staticmethod
-	def compute(xxx):
+	def compute(xxx, histogram_bins='auto'):
 		ss = statistical_summary()
 		ss.mean = numpy.mean(xxx,0)
 		ss.stdev = numpy.std(xxx,0)
@@ -35,5 +35,5 @@ class statistical_summary():
 		ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx.shape[1]))
 		sumx_ = numpy.sum(xxx,0)
 		ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
-		ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins='auto')], 0, xxx).squeeze()
+		ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins)], 0, xxx).squeeze()
 		return ss

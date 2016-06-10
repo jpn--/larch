@@ -97,6 +97,11 @@ namespace elm {
 		void _refresh_dna(const std::vector<std::string>& a_names, const std::vector<long long>& a_codes);
 
 	};
+
+	#ifdef SWIG
+	%include "elm_fountain.i"
+	#endif // def SWIG
+		
 	
 };
 

@@ -262,6 +262,16 @@ class Model(Model2, ModelReporter):
 	def alternatives(self):
 		return {code:name for code,name in zip(self.alternative_codes(),self.alternative_names())}
 
+	def alternative_name(self, code):
+		codes = numpy.asarray(self.alternative_codes())
+		idx = numpy.where(codes==code)[0][0]
+		return self.alternative_names()[idx]
+
+	def alternative_code(self, name):
+		names = numpy.asarray(self.alternative_names())
+		idx = numpy.where(names==name)[0][0]
+		return self.alternative_codes()[idx]
+
 	def _set_rootcode(self, *args):
 		_core.Model2__set_root_cellcode(self, *args)
 		#self.freshen()
@@ -290,6 +300,7 @@ class Model(Model2, ModelReporter):
 		return val
 
 	df = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
+	db = df
 
 	def load(self, filename="@@@", *, echo=False):
 		if filename=="@@@" and isinstance(self,str):
@@ -494,6 +505,11 @@ class Model(Model2, ModelReporter):
 				G.add_edge(self.root_id,n)
 		return G
 
+	@property
+	def graph(self):
+		"A networkx digraph representing the nesting structure"
+		return self.networkx_digraph()
+
 	def nodes_descending_order(self):
 		discovered = []
 		discovered.append(self.root_id)
@@ -649,22 +665,6 @@ class Model(Model2, ModelReporter):
 		if available.
 		"""
 		x = self.Data("UtilityCO")
-		#if bool((self.Data("Weight")!=1).any()):
-		#	w = self.Data("Weight").flatten()
-		#	mean = numpy.average(x, axis=0, weights=w)
-		#	variance = numpy.average((x-mean)**2, axis=0, weights=w)
-		#	stdev = numpy.sqrt(variance)
-		#else:
-		#	mean = numpy.mean(x,0)
-		#	stdev = numpy.std(x,0)
-		#mins = numpy.amin(x,0)
-		#maxs = numpy.amax(x,0)
-		#nonzer = tuple(numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
-		#pos = tuple(int(numpy.sum(x[:,i]>0)) for i in range(x.shape[1]))
-		#neg = tuple(int(numpy.sum(x[:,i]<0)) for i in range(x.shape[1]))
-		#zer = tuple(x[:,i].size-numpy.count_nonzero(x[:,i]) for i in range(x.shape[1]))
-		#sumx = numpy.sum(x,0)
-		#mean_nonzer = sumx / numpy.array(nonzer)
 		ss = statistical_summary.compute(x)
 		if bool((self.Data("Weight")!=1).any()):
 			w = self.Data("Weight").flatten()
@@ -1272,6 +1272,7 @@ class Model(Model2, ModelReporter):
 				.statistics_bridge {text-align:center;}
 				a.parameter_reference {font-style: italic; text-decoration: none}
 				.strut2 {min-width:2in}
+				.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
 				"""
 			xhead.data(css.replace('\n',' ').replace('\t',' '))
 			xhead.end_style()
@@ -1463,6 +1464,29 @@ class Model(Model2, ModelReporter):
 		else:
 			self.logmarketshares = log_marketshares
 
+	def parameter_dataframe(self):
+		"""
+		Return the parameters as a :class:`pandas.DataFrame`.
+		"""
+		import pandas
+		df = pandas.DataFrame(
+				data={
+						'name':self.parameter_names(),
+						'value':self.parameter_array,
+						'holdfast':self.parameter_holdfast_array,
+						'max_value':self.parameter_maximums,
+						'min_value':self.parameter_minimums,
+						'null_value':self.parameter_null_values_array,
+						'std_err':[p.std_err for p in self],
+						't_stat':[p.t_stat for p in self],
+						'robust_std_err':[p.robust_std_err for p in self],
+					},
+				columns = (
+						'name','value','std_err','t_stat','robust_std_err',
+						'null_value','initial_value','min_value','max_value','holdfast',
+					),
+			)
+		return df
 
 
 class _AllInTheFamily():

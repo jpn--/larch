@@ -378,11 +378,14 @@ namespace elm {
 		std::string __repr__() const;
 		void __call__(elm::cellcode upcode, elm::cellcode dncode);
 
+		std::vector< elm::cellcode > downlinks(const elm::cellcode& upcode) const;
 
 		#ifdef SWIG
         unsigned int size() const;
         bool empty() const;
         void clear();
+		
+		
 		%extend {
             elm::EdgeValue& __getitem__(const elm::cellcodepair& key) throw (std::out_of_range) {
                 std::map<elm::cellcodepair, elm::EdgeValue>::iterator i = self->find(key);

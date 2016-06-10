@@ -307,6 +307,10 @@ class DT(Fountain):
 		idx = numpy.where(names==name)[0][0]
 		return self.h5alts.altids[idx]
 
+	def caseids(self):
+		return self.h5top.caseids[:]
+
+
 	def alternatives(self, format=list):
 		'''The alternatives of the data.
 		
@@ -1685,14 +1689,22 @@ class DT(Fountain):
 	def stack_idco(self, stackname, vardict=None):
 		"""A stack manager for converting arbitrary data from idco to idca format.
 		
+		A stack is a new reference in the :ref:`idca` section of the HDF5
+		file, which points to a series of columns in the :ref:`idco` section
+		of the same file.  This allows for the creation of the stack without
+		actually copying the data, and modifications to the :ref:`idco` data 
+		will thus automatically propogate to :ref:`idca` as well.
+		
+		
 		Parameters
 		----------
 		stackname : str
 			A name for the :ref:`idca` variable that is created by stacking
 			the various :ref:`idco` variables.
 		vardict : dict
-			Pass a dictionary with keys as alternative codes
-			and values as idco expressions.
+			Optionally pass a dictionary with keys as alternative codes
+			and values as idco expressions, to initialize (or overwrite)
+			the stack.
 		
 		
 		Notes

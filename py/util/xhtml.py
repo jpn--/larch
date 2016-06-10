@@ -180,6 +180,7 @@ class XHTML():
 		.larch_signature {font-size:80%; width: 170px; font-weight:100; font-style:italic; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
 		a.parameter_reference {font-style: italic; text-decoration: none}
 		.strut2 {min-width:2in}
+		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
 		"""
 
 		if quickhead is not None:
@@ -387,6 +388,7 @@ def toc_demote_all(elem, demote=1, anchors=True, heads=True):
 			head_lvl = int(h.tag[1:])
 			h.tag = 'h{}'.format(head_lvl+demote)
 	return elem
+
 
 
 

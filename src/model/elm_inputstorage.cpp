@@ -824,6 +824,18 @@ void elm::LinearCOBundle_2::__call__(elm::cellcode upcode, elm::cellcode dncode)
 	}
 }
 
+std::vector< elm::cellcode > elm::LinearCOBundle_2::downlinks(const elm::cellcode& upcode) const
+{
+	std::vector< elm::cellcode > ret;
+	
+	for (auto i=begin(); i!=end(); i++) {
+		if (i->first.up==upcode) {
+			ret.push_back(i->first.dn);
+		}
+	}
+	
+	return ret;
+}
 
 
 
