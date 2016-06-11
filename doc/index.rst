@@ -69,8 +69,6 @@ Contents
 	data-fundamentals
 	data-in-models
 	model
-	metamodel
-	parameter
 	roles
 	reporting
 	utilities

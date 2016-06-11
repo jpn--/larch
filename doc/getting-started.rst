@@ -32,7 +32,8 @@ you can go to your command line to get the necessary tools::
 	conda install graphviz
 	pip install pygraphviz
 
-
+Once you've got Larch installed, you might want to jump directly to some :ref:`examples`
+to see how you might use it.
 
 
 

@@ -71,13 +71,3 @@ Data References
 
 
 
-
-----------------------------
-Combinations of References
-----------------------------
-
-.. autoclass:: LinearComponent(data="", param="", multiplier=1.0, category=None)
-
-
-
-.. autoclass:: LinearFunction

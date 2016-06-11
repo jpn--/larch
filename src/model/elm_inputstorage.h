@@ -51,6 +51,23 @@ namespace elm {
 			c,n = x.split(": ")
 			self.altcode = long(c)
 			self.altname = n
+		
+		@property
+		def data(self):
+			from .roles import DataRef
+			return DataRef(self._data)
+		@data.setter
+		def data(self, value):
+			self._data = value
+			
+		@property
+		def param(self):
+			from .roles import ParameterRef
+			return ParameterRef(self._param)
+		@param.setter
+		def param(self, value):
+			self._param = value
+
 		%}
 		#endif // SWIG
 

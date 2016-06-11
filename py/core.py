@@ -2726,26 +2726,33 @@ class LinearComponent(object):
     """
     A combination of a parameter and data.
 
+    This class represents a single term of a linear function, i.e. a parameter
+    multiplied by some data.  The data may be a single column of raw data
+    from a data :class:`Fountain`, or it may be some prescribed function of
+    raw data (e.g. logarithm of cost, or cost divided by income); the principal
+    requirement is that the data function contains only data and no parameters
+    to be estimated, other than the single linear coefficient.
+
     Parameters
     ----------
-    param : str or ParameterRef
+    param : :class:`str` or :class:`.ParameterRef`
     	The name of, or reference to, a parameter.
-    data : str or DataRef
-    	The name of, or reference to, some data.  This may be a column in
-    	a SQLite database, or an expression that can be evaluated, including
+    data : :class:`str` or :class:`.DataRef`
+    	The name of, or reference to, some data.  This may be a raw column in
+    	a data :class:`Fountain`, or an expression that can be evaluated, including
     	a number expressed as a string. To express a constant (i.e. a parameter
     	with no data) give 1.0.
     multiplier : float
     	A convenient method to multiply the data by a constant, which can
     	be given as a float instead of a string.
     category : None or int or string or tuple
-    	Some LinearComponent's apply only ot certain things.
+    	Some LinearComponent's apply only to certain things.
 
     """
 
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    data = _swig_property(_core.LinearComponent_data_get, _core.LinearComponent_data_set)
-    param = _swig_property(_core.LinearComponent_param_get, _core.LinearComponent_param_set)
+    _data = _swig_property(_core.LinearComponent__data_get, _core.LinearComponent__data_set)
+    _param = _swig_property(_core.LinearComponent__param_get, _core.LinearComponent__param_set)
     _altcode = _swig_property(_core.LinearComponent__altcode_get, _core.LinearComponent__altcode_set)
     _altname = _swig_property(_core.LinearComponent__altname_get, _core.LinearComponent__altname_set)
     _upcode = _swig_property(_core.LinearComponent__upcode_get, _core.LinearComponent__upcode_set)
@@ -2774,6 +2781,23 @@ class LinearComponent(object):
     	c,n = x.split(": ")
     	self.altcode = long(c)
     	self.altname = n
+
+    @property
+    def data(self):
+    	from .roles import DataRef
+    	return DataRef(self._data)
+    @data.setter
+    def data(self, value):
+    	self._data = value
+
+    @property
+    def param(self):
+    	from .roles import ParameterRef
+    	return ParameterRef(self._param)
+    @param.setter
+    def param(self, value):
+    	self._param = value
+
 
 
     def __add__(self, other: 'LinearComponent') -> "elm::ComponentList":
@@ -2977,37 +3001,37 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
 LinearCOBundle_1_swigregister = _core.LinearCOBundle_1_swigregister
 LinearCOBundle_1_swigregister(LinearCOBundle_1)
 
-class LinearBundle_1(object):
+class LinearBundle(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    descrip = _swig_property(_core.LinearBundle_1_descrip_get, _core.LinearBundle_1_descrip_set)
+    descrip = _swig_property(_core.LinearBundle_descrip_get, _core.LinearBundle_descrip_set)
 
     def __init__(self, *args):
-        this = _core.new_LinearBundle_1(*args)
+        this = _core.new_LinearBundle(*args)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
 
     def __call__(self, *args) -> "void":
-        return _core.LinearBundle_1___call__(self, *args)
+        return _core.LinearBundle___call__(self, *args)
 
     def clean(self, db: 'Facet') -> "void":
-        return _core.LinearBundle_1_clean(self, db)
+        return _core.LinearBundle_clean(self, db)
 
     def __repr__(self) -> "std::string":
-        return _core.LinearBundle_1___repr__(self)
+        return _core.LinearBundle___repr__(self)
 
     def _set_ca(self, *args) -> "void":
-        return _core.LinearBundle_1__set_ca(self, *args)
+        return _core.LinearBundle__set_ca(self, *args)
 
     def _set_co(self, x: 'LinearCOBundle_1') -> "void":
-        return _core.LinearBundle_1__set_co(self, x)
+        return _core.LinearBundle__set_co(self, x)
 
     def _get_ca(self) -> "elm::ComponentList &":
-        return _core.LinearBundle_1__get_ca(self)
+        return _core.LinearBundle__get_ca(self)
 
     def _get_co(self) -> "elm::LinearCOBundle_1 *":
-        return _core.LinearBundle_1__get_co(self)
+        return _core.LinearBundle__get_co(self)
 
     ca = property(lambda self: self._get_ca(), lambda self,x: self._set_ca(x))
     co = property(lambda self: self._get_co(), lambda self,x: self._set_co(x))
@@ -3020,10 +3044,10 @@ class LinearBundle_1(object):
     	del self._get_co()[key]
 
 
-    __swig_destroy__ = _core.delete_LinearBundle_1
+    __swig_destroy__ = _core.delete_LinearBundle
     __del__ = lambda self: None
-LinearBundle_1_swigregister = _core.LinearBundle_1_swigregister
-LinearBundle_1_swigregister(LinearBundle_1)
+LinearBundle_swigregister = _core.LinearBundle_swigregister
+LinearBundle_swigregister(LinearBundle)
 
 class LinearFunctionPair(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

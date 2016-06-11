@@ -9,9 +9,12 @@
 #define __ELM_INPUTSTORAGE_I__
 
 
+%rename(LinearBundle) elm::LinearBundle_1;
+
+
 %rename(LinearComponent) elm::LinearComponent;
-%rename(data) elm::LinearComponent::data_name;
-%rename(param) elm::LinearComponent::param_name;
+%rename(_data) elm::LinearComponent::data_name;
+%rename(_param) elm::LinearComponent::param_name;
 
 %rename(LinearFunction) elm::ComponentList;
 %rename(LinearFunctionPair) elm::ComponentListPair;
@@ -26,20 +29,27 @@
 %feature("docstring") elm::LinearComponent
 "A combination of a parameter and data.
 
+This class represents a single term of a linear function, i.e. a parameter
+multiplied by some data.  The data may be a single column of raw data
+from a data :class:`Fountain`, or it may be some prescribed function of
+raw data (e.g. logarithm of cost, or cost divided by income); the principal
+requirement is that the data function contains only data and no parameters
+to be estimated, other than the single linear coefficient.
+
 Parameters
 ----------
-param : str or ParameterRef
+param : :class:`str` or :class:`.ParameterRef`
 	The name of, or reference to, a parameter.
-data : str or DataRef
-	The name of, or reference to, some data.  This may be a column in
-	a SQLite database, or an expression that can be evaluated, including
+data : :class:`str` or :class:`.DataRef`
+	The name of, or reference to, some data.  This may be a raw column in
+	a data :class:`Fountain`, or an expression that can be evaluated, including
 	a number expressed as a string. To express a constant (i.e. a parameter
 	with no data) give 1.0.
 multiplier : float
 	A convenient method to multiply the data by a constant, which can
 	be given as a float instead of a string.
 category : None or int or string or tuple
-	Some LinearComponent's apply only ot certain things.
+	Some LinearComponent's apply only to certain things.
 ";
 
 

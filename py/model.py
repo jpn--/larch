@@ -507,7 +507,18 @@ class Model(Model2, ModelReporter):
 
 	@property
 	def graph(self):
-		"A networkx digraph representing the nesting structure"
+		"""A :func:`networkx.DiGraph` representing the nesting structure.
+		
+		You can use this DiGraph to explore the network structure, and use
+		standard networkx tools to describe and iterate over the graph.  Note
+		that this is a read-only attribute; changes to network (nesting) structure
+		must be made using :class:`Model.link` and :class:`Model.nest`.
+		
+		Raises
+		------
+		ImportError
+			If the networkx module is not installed.
+		"""
 		return self.networkx_digraph()
 
 	def nodes_descending_order(self):

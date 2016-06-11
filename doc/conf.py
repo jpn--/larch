@@ -146,12 +146,13 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 intersphinx_mapping = {
-	'python': ('http://docs.python.org/3.4/', 'python_3_4_2.inv'),
+	'python': ('http://docs.python.org/3.5/', None),
 	'apsw': ('http://rogerbinns.github.io/apsw/', 'apsw_3_8_7_3.inv'),
 	'numpy': ('http://docs.scipy.org/doc/numpy/', 'numpy_1_9.inv'),
 	'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
 	'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
 	'tables': ('http://www.pytables.org/', None),
+	'networkx': ('http://networkx.readthedocs.io/en/stable', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------

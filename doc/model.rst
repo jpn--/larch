@@ -131,6 +131,7 @@ Nested logit and Network GEV models have an underlying network structure.
 
 .. autoattribute:: Model.root_id
 
+.. autoattribute:: Model.graph
 
 
 Descriptives
@@ -143,4 +144,13 @@ Descriptives
 	the model.
 
 
+Related Classes
+---------------
+
+.. toctree::
+	:maxdepth: 1
+
+	parameter
+	linear-parts
+	metamodel
 

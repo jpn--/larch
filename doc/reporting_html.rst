@@ -67,8 +67,6 @@ There are a variety of xhtml components that can be used in roll your own report
 
 
 .. automethod:: Model.xhtml_report
-.. image:: reporting3_render.png
-	:class: htmlrendering
 
 
 .. automethod:: Model.xhtml_title
