@@ -121,6 +121,7 @@ namespace elm {
 
 		std::string __str__() const;
 		std::string __repr__() const;
+		std::string __indent_repr__(int indent) const;
 
 		std::vector<std::string> needs() const;
 
@@ -324,8 +325,8 @@ namespace elm {
 			del self._get_co()[key]
 		def __repr__(self):
 			r = self.__baserepr__()
-			r += "\n ca:"+"\n    ".join(repr(self.ca).split("\n"))
-			r += "\n co:"+"\n    ".join(repr(self.co).split("\n"))
+			r += "\n ca: "+"\n     ".join(repr(self.ca).split("\n"))
+			r += "\n co: "+"\n     ".join(repr(self.co).split("\n"))
 			return r
 		%}
 		#endif // def SWIG

@@ -2854,6 +2854,9 @@ class LinearFunction(ComponentVector):
     def __repr__(self) -> "std::string":
         return _core.LinearFunction___repr__(self)
 
+    def __indent_repr__(self, indent: 'int') -> "std::string":
+        return _core.LinearFunction___indent_repr__(self, indent)
+
     def needs(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.LinearFunction_needs(self)
 
@@ -2923,34 +2926,34 @@ class ComponentCellcodeMap(object):
 ComponentCellcodeMap_swigregister = _core.ComponentCellcodeMap_swigregister
 ComponentCellcodeMap_swigregister(ComponentCellcodeMap)
 
-class LinearCOBundle_1(_base_LinearSubBundle_1):
+class LinearCOBundle(_base_LinearSubBundle_1):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    parentmodel = _swig_property(_core.LinearCOBundle_1_parentmodel_get, _core.LinearCOBundle_1_parentmodel_set)
+    parentmodel = _swig_property(_core.LinearCOBundle_parentmodel_get, _core.LinearCOBundle_parentmodel_set)
 
     def __init__(self, *args):
-        this = _core.new_LinearCOBundle_1(*args)
+        this = _core.new_LinearCOBundle(*args)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
 
     def metasize(self) -> "size_t":
-        return _core.LinearCOBundle_1_metasize(self)
+        return _core.LinearCOBundle_metasize(self)
 
     def __str__(self) -> "std::string":
-        return _core.LinearCOBundle_1___str__(self)
+        return _core.LinearCOBundle___str__(self)
 
     def __repr__(self) -> "std::string":
-        return _core.LinearCOBundle_1___repr__(self)
+        return _core.LinearCOBundle___repr__(self)
 
     def needs(self) -> "std::vector< std::string,std::allocator< std::string > >":
-        return _core.LinearCOBundle_1_needs(self)
+        return _core.LinearCOBundle_needs(self)
 
     def add_blank(self, i: 'elm::cellcode const &') -> "elm::ComponentList &":
-        return _core.LinearCOBundle_1_add_blank(self, i)
+        return _core.LinearCOBundle_add_blank(self, i)
 
     def _call(self, *args) -> "void":
-        return _core.LinearCOBundle_1__call(self, *args)
+        return _core.LinearCOBundle__call(self, *args)
 
     def __call__(self, altcode, data, param="", multiplier=1.0):
     	if isinstance(altcode, str) and isinstance(data, int):
@@ -2996,10 +2999,10 @@ class LinearCOBundle_1(_base_LinearSubBundle_1):
     		value = LinearFunction() + value
     	return super().__setitem__(key, value)
 
-    __swig_destroy__ = _core.delete_LinearCOBundle_1
+    __swig_destroy__ = _core.delete_LinearCOBundle
     __del__ = lambda self: None
-LinearCOBundle_1_swigregister = _core.LinearCOBundle_1_swigregister
-LinearCOBundle_1_swigregister(LinearCOBundle_1)
+LinearCOBundle_swigregister = _core.LinearCOBundle_swigregister
+LinearCOBundle_swigregister(LinearCOBundle)
 
 class LinearBundle(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -3025,7 +3028,7 @@ class LinearBundle(object):
     def _set_ca(self, *args) -> "void":
         return _core.LinearBundle__set_ca(self, *args)
 
-    def _set_co(self, x: 'LinearCOBundle_1') -> "void":
+    def _set_co(self, x: 'LinearCOBundle') -> "void":
         return _core.LinearBundle__set_co(self, x)
 
     def _get_ca(self) -> "elm::ComponentList &":
@@ -3045,8 +3048,8 @@ class LinearBundle(object):
     	del self._get_co()[key]
     def __repr__(self):
     	r = self.__baserepr__()
-    	r += "\n ca:"+"\n    ".join(repr(self.ca).split("\n"))
-    	r += "\n co:"+"\n    ".join(repr(self.co).split("\n"))
+    	r += "\n ca: "+"\n     ".join(repr(self.ca).split("\n"))
+    	r += "\n co: "+"\n     ".join(repr(self.co).split("\n"))
     	return r
 
     __swig_destroy__ = _core.delete_LinearBundle

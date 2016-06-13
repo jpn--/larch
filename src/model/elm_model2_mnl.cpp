@@ -1512,5 +1512,14 @@ std::string elm::Model2::representation() const
 	} else {
 		m << " with "<<dF()<<" parameters>";
 	}
+	for (unsigned i=0; i<dF(); i++) {
+		if (i>=10) {
+			break;
+		}
+		m << "\n   "<<i<<": " << FNames[i];
+	}
+	if (dF()>10) {
+		m << "\n   and "<<dF()-10<<" more ";
+	}
 	return m.str();
 }

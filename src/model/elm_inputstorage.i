@@ -10,6 +10,7 @@
 
 
 %rename(LinearBundle) elm::LinearBundle_1;
+%rename(LinearCOBundle) elm::LinearCOBundle_1;
 
 
 %rename(LinearComponent) elm::LinearComponent;

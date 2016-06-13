@@ -176,6 +176,32 @@ std::string elm::ComponentList::__repr__() const
 	return x.str();
 }
 
+std::string elm::ComponentList::__indent_repr__(int indent) const
+{
+	std::ostringstream x;
+	x << "<LinearFunction with length "<< size() <<">";
+
+	bool plus = false;
+	for (auto i=begin(); i!=end(); i++) {
+		if (plus) {
+			x << "\n";
+			for (int j=0; j<indent; j++) {
+				x << " ";
+			}
+			x << "  + ";
+		} else {
+			x << "\n";
+			for (int j=0; j<indent; j++) {
+				x << " ";
+			}
+			x << "  = ";
+		}
+		x << i->__repr__();
+		plus = true;
+	}
+	return x.str();
+}
+
 std::string elm::ComponentList::__str__() const
 {
 	std::ostringstream x;
@@ -475,7 +501,7 @@ void elm::LinearBundle_1::__call__(std::string data, std::string param, const do
 std::string elm::LinearBundle_1::__baserepr__() const
 {
 	std::ostringstream x;
-	x<< "<larch.core.LinearBundle id("<<this<<")>";
+	x<< "<LinearBundle id("<<this<<")>";
 	
 	return x.str();
 }
@@ -610,16 +636,16 @@ size_t elm::LinearCOBundle_1::metasize() const {
 }
 
 std::string elm::LinearCOBundle_1::__str__() const {
-	return "<LinearCOBundle_1>";
+	return "<LinearCOBundle>";
 }
 
 std::string elm::LinearCOBundle_1::__repr__() const {
 	std::ostringstream x;
 
-	x << "<LinearCOBundle_1>";
+	x << "<LinearCOBundle>";
 	
 	for (auto iter=begin(); iter!=end(); iter++) {
-		x << "\n ["<<iter->first<<"] = "<<iter->second.__repr__();
+		x << "\n ["<<iter->first<<"] "<<iter->second.__indent_repr__(4);
 	}
 
 	return x.str();
