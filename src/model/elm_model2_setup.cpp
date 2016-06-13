@@ -482,12 +482,14 @@ void elm::Model2::_pull_graph_from_db()
 }
 
 
-void elm::Model2::setUp(bool and_load_data)
+void elm::Model2::setUp(bool and_load_data, bool force)
 {
 	
-	if (_is_setUp>=1) {
-		BUGGER(msg) << "The model is already set up.";
-		return;
+	if (!force) {
+		if (_is_setUp>=1) {
+			BUGGER(msg) << "The model is already set up.";
+			return;
+		}
 	}
 	
 	INFO(msg) << "Setting up the model...";

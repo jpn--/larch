@@ -1500,6 +1500,92 @@ class Model(Model2, ModelReporter):
 		return df
 
 
+	def reorder_parameters(self, *ordering):
+		"""
+		Reorder the parameters in the model.
+		
+		This method reorders the model parameters as they appear in the model.
+		It should have no material impact on the model results, although it
+		may be convenient for presentation.
+		
+		The ordering is defined by a series of regular expressions (regex). For each
+		regex, all of the parameter names matching that regex are grouped together
+		and moved to the front of the list, retaining their original ordering within
+		the group.  Any subsequent matches for the same parameter are ignored.  All
+		unmatched parameters retain their original ordering and move to the end of
+		the list as a group.
+		
+		Parameters
+		----------
+		ordering : list or tuple of str
+			A list of regex expressions.
+			
+		Examples
+		--------
+		>>> import larch
+		>>> m = larch.Model()
+		>>> m.parameter("A1", value=1)
+		ModelParameter('A1', value=1.0)
+		>>> m.parameter("B1", value=2)
+		ModelParameter('B1', value=2.0)
+		>>> m.parameter("C1", value=3)
+		ModelParameter('C1', value=3.0)
+		>>> m.parameter("A2", value=4)
+		ModelParameter('A2', value=4.0)
+		>>> m.parameter("B2", value=5)
+		ModelParameter('B2', value=5.0)
+		>>> m.parameter("C2", value=6)
+		ModelParameter('C2', value=6.0)
+		>>> m.parameter_names()
+		['A1', 'B1', 'C1', 'A2', 'B2', 'C2']
+		>>> m.parameter_values()
+		(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
+		>>> m.reorder_parameters('A','C')
+		>>> m.parameter_names()
+		['A1', 'A2', 'C1', 'C2', 'B1', 'B2']
+		>>> m.parameter_values()
+		(1.0, 4.0, 3.0, 6.0, 2.0, 5.0)
+		"""
+		self.tearDown()
+		self.setUp(and_load_data=False, force=True)
+		import re
+		names = self.parameter_names()
+		slots = numpy.empty(0, dtype=int)
+		if len(ordering)==1 and isinstance(ordering[0], (tuple,list)):
+			ordering = ordering[0]
+		for regex in tuple(ordering) + ("",):
+			newslots = numpy.where([re.search(regex,x) for x in names])[0]
+			if len(slots):
+				inactive_newslots = numpy.in1d(newslots, slots)
+				newslots = newslots[~inactive_newslots]
+			slots = numpy.append(slots, newslots)
+
+		self.parameter_array[:] = self.parameter_array[slots]
+		self.parameter_holdfast_array[:] = self.parameter_holdfast_array[slots]
+		self.parameter_initial_values_array[:] = self.parameter_initial_values_array[slots]
+		self.parameter_null_values_array[:] = self.parameter_null_values_array[slots]
+		self.parameter_maximums[:] = self.parameter_maximums[slots]
+		self.parameter_minimums[:] = self.parameter_minimums[slots]
+		self.parameter_null_values_array[:] = self.parameter_null_values_array[slots]
+		
+		self.robust_covariance_matrix[:,:] = self.robust_covariance_matrix[slots,:]
+		self.robust_covariance_matrix[:,:] = self.robust_covariance_matrix[:,slots]
+		
+		self.covariance_matrix[:,:] = self.covariance_matrix[slots,:]
+		self.covariance_matrix[:,:] = self.covariance_matrix[:,slots]
+
+		self.hessian_matrix[:,:] = self.hessian_matrix[slots,:]
+		self.hessian_matrix[:,:] = self.hessian_matrix[:,slots]
+		try:
+			self._parameter_name_index.reorder(numpy.asarray(names)[slots])
+		except:
+			print(numpy.asarray(names))
+			print(slots)
+			print(numpy.asarray(names)[slots])
+			raise
+		self.tearDown()
+		self.setUp(and_load_data=False, force=True)
+
 class _AllInTheFamily():
 
 	def __init__(self, this, func):

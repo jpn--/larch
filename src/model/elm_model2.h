@@ -810,7 +810,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		void change_data_fountain(elm::Fountain& datafile);
 
 	public:
-		void setUp(bool and_load_data=true);
+		void setUp(bool and_load_data=true, bool force=false);
 		void _pull_graph_from_db();
 		
 		std::string setUpMessage;

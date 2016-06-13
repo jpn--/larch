@@ -3003,6 +3003,7 @@ LinearCOBundle_1_swigregister(LinearCOBundle_1)
 
 class LinearBundle(object):
     thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     descrip = _swig_property(_core.LinearBundle_descrip_get, _core.LinearBundle_descrip_set)
 
     def __init__(self, *args):
@@ -3018,8 +3019,8 @@ class LinearBundle(object):
     def clean(self, db: 'Facet') -> "void":
         return _core.LinearBundle_clean(self, db)
 
-    def __repr__(self) -> "std::string":
-        return _core.LinearBundle___repr__(self)
+    def __baserepr__(self) -> "std::string":
+        return _core.LinearBundle___baserepr__(self)
 
     def _set_ca(self, *args) -> "void":
         return _core.LinearBundle__set_ca(self, *args)
@@ -3042,7 +3043,11 @@ class LinearBundle(object):
     	self._get_co()[key] = value
     def __delitem__(self, key):
     	del self._get_co()[key]
-
+    def __repr__(self):
+    	r = self.__baserepr__()
+    	r += "\n ca:"+"\n    ".join(repr(self.ca).split("\n"))
+    	r += "\n co:"+"\n    ".join(repr(self.co).split("\n"))
+    	return r
 
     __swig_destroy__ = _core.delete_LinearBundle
     __del__ = lambda self: None
@@ -4165,7 +4170,7 @@ class Model2(sherpa):
     def change_data_fountain(self, datafile: 'Fountain') -> "void":
         return _core.Model2_change_data_fountain(self, datafile)
 
-    def setUp(self, and_load_data: 'bool'=True) -> "void":
+    def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False) -> "void":
 
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
         	self.provision()
@@ -4173,7 +4178,7 @@ class Model2(sherpa):
         	if self.logger(): self.logger().info("autoprovisioned data from database")
 
 
-        return _core.Model2_setUp(self, and_load_data)
+        return _core.Model2_setUp(self, and_load_data, force)
 
 
     def _pull_graph_from_db(self) -> "void":
@@ -4300,6 +4305,9 @@ class autoindex_string(object):
 
     def string_from_index(self, index: 'size_t const &') -> "std::string":
         return _core.autoindex_string_string_from_index(self, index)
+
+    def reorder(self, replacement_list: 'StrVector') -> "void":
+        return _core.autoindex_string_reorder(self, replacement_list)
 
     def __getitem__(self, key):
     	if isinstance(key, int):

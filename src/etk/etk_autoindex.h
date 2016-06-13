@@ -85,6 +85,8 @@ namespace etk {
 		
 		size_t index_from_string(const std::string& codex) ;
 		std::string string_from_index(const size_t& index) const ;
+
+		void reorder(const std::vector<std::string>& replacement_list);
 		
 		#ifdef SWIG
 		%pythoncode %{

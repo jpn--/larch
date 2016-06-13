@@ -6,6 +6,12 @@ Linear Parts
 =============
 
 
+Unlike other discrete choice tools (notably Biogeme), which allow for the
+creation of a variety of arbitrary non-linear functions, Larch relies heavily
+on linear functions.
+
+
+
 .. autoclass:: LinearComponent(data="", param="", multiplier=1.0, category=None)
 
 
@@ -82,12 +88,12 @@ Although not just data by itself:
 
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +IGNORE_EXCEPTION_DETAIL
 
 	>>> lf += X.PlainData
-	Traceback ...
-	NotImplementedError ...
-
+	Traceback (most recent call last):
+	  File "<stdin>", line 1, in <module>
+	NotImplementedError: Wrong number or type of arguments...
 
 
 
@@ -100,7 +106,10 @@ Although not just data by itself:
 	.. py:attribute:: ca
 
 		The `ca` attribute is a single :class:`LinearFunction` that can be
-		applied for all alternatives.
+		applied for all alternatives.  Depending on the data source used,
+		the data used in this function might need to be exclusively from the
+		:ref:`idca` data (e.g. for :class:`DB`), or it could be a combination
+		of :ref:`idca` and :ref:`idco` data (e.g. for :class:`DT`)
 
 	.. py:attribute:: co
 
@@ -109,4 +118,5 @@ Although not just data by itself:
 		for each alternative.  If an alternative is omitted, the implied value
 		of the :class:`LinearFunction` is zero.
 
-
+	As a convenince, the :class:`LinearBundle` object also provides `__getitem__` and
+	`__setitem__` functions that pass through to the `co` attribute.

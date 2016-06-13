@@ -134,14 +134,17 @@ Nested logit and Network GEV models have an underlying network structure.
 .. autoattribute:: Model.graph
 
 
-Descriptives
-------------
+Reporting Tools
+---------------
 
 .. py:attribute:: Model.title
 
 	The is a descriptive title to attach to this model.  It is used in certain reports,
 	and can be set to any string.  It has no bearing on the numerical representation of
 	the model.
+
+.. automethod:: Model.reorder_parameters
+
 
 
 Related Classes

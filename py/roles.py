@@ -99,6 +99,11 @@ class DataRef(str, metaclass=Role):
 		if isinstance(other, DataRef):
 			if repr(other) == repr(self):
 				return True
+		if isinstance(other, ParameterRef):
+			return False
+		if isinstance(other, str):
+			if other == super().__str__():
+				return True
 		return False
 	def __hash__(self):
 		return hash(repr(self))
@@ -319,6 +324,11 @@ class ParameterRef(str, metaclass=Role):
 	def __eq__(self, other):
 		if isinstance(other, ParameterRef):
 			if repr(other) == repr(self):
+				return True
+		if isinstance(other, DataRef):
+			return False
+		if isinstance(other, str):
+			if other == super().__str__():
 				return True
 		return False
 	def __hash__(self):

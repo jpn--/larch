@@ -303,7 +303,7 @@ namespace elm {
 		void __call__(std::string data="", std::string param="", const double& multiplier=1.0);
 		void clean(Facet& db);
 
-		std::string __repr__() const;
+		std::string __baserepr__() const;
 		
 		void _set_ca(const LinearComponent& x);
 		void _set_ca(const ComponentList& x);
@@ -322,7 +322,11 @@ namespace elm {
 			self._get_co()[key] = value
 		def __delitem__(self, key):
 			del self._get_co()[key]
-		
+		def __repr__(self):
+			r = self.__baserepr__()
+			r += "\n ca:"+"\n    ".join(repr(self.ca).split("\n"))
+			r += "\n co:"+"\n    ".join(repr(self.co).split("\n"))
+			return r
 		%}
 		#endif // def SWIG
 

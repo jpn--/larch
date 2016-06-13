@@ -229,3 +229,12 @@ autoindex_string::~autoindex_string()
 }
 
 
+
+void autoindex_string::reorder(const std::vector<std::string>& replacement_list)
+{
+	if (replacement_list.size() != _codex.size()) OOPS_IndexError("can only reorder with same length list");
+	clear();
+	extend(replacement_list);
+}
+
+

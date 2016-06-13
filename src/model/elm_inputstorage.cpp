@@ -472,10 +472,11 @@ void elm::LinearBundle_1::__call__(std::string data, std::string param, const do
 }
 
 
-std::string elm::LinearBundle_1::__repr__() const
+std::string elm::LinearBundle_1::__baserepr__() const
 {
 	std::ostringstream x;
-	x<< "<LinearBundle_1 id("<<this<<")>";
+	x<< "<larch.core.LinearBundle id("<<this<<")>";
+	
 	return x.str();
 }
 
