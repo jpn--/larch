@@ -177,8 +177,10 @@ def quality_check(self):
 	return warns
 
 
-
-
+def __repr__(self):
+	s =  "<larch.core.QuerySetSimpleCO>\n  "
+	s += self.info().replace("\n","\n  ")
+	return s
 
 
 ## Load these methods into core.QuerySetSimpleCO
@@ -186,5 +188,5 @@ def quality_check(self):
 import_these = dict(locals())
 from .core import QuerySetSimpleCO
 for k,f in import_these.items():
-	if len(k)>0 and k[0]!='_':
+	if len(k)>0 and k[0]!='_' or k=='__repr__':
 		setattr(QuerySetSimpleCO,k,f)

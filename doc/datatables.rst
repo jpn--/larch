@@ -20,6 +20,8 @@ example data files.
 
 .. automethod:: DT.Example
 
+.. automethod:: DT.CSV_idco
+
 
 
 Importing Data
@@ -203,5 +205,30 @@ To check if your file has the correct structure, you can use the validate functi
 .. autoattribute:: DT.choice_idco
 
 .. autoattribute:: DT.avail_idco
+
+
+Filtering Cases
+---------------
+
+It is common in discrete choice modeling to apply screening filters to a dataset
+before estimating parameters.  These filters could be used for cleaning purposes
+(e.g. to remove apparently erroneous data) or to estimate a model for only a particular
+subset of observations (e.g. to pull out only home-based work trips from a data file
+that contains trips of many purposes).
+
+.. automethod:: DT.set_screen
+
+.. automethod:: DT.rescreen
+
+.. automethod:: DT.exclude_idco
+
+.. automethod:: DT.exclude_idca
+
+
+
+
+
+
+
 
 

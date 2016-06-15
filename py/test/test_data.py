@@ -393,4 +393,33 @@ class TestData1(unittest.TestCase):
 		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
 		self.assertTrue( numpy.array_equal(apple, dt.h5idca.Price[:,0]) )
 
+	def test_dt_csv_import_with_screen(self):
+		swissmetro_alts = {
+			1:('Train','TRAIN_AV*(SP!=0)'),
+			2:('SM','SM_AV'),
+			3:('Car','CAR_AV*(SP!=0)'),
+		}
+		dd = DT.CSV_idco( os.path.join( DT.ExampleDirectory(), 'swissmetro.csv' ),
+									caseid=None,
+									choice='CHOICE', 
+									weight=None, 
+									savename=None, 
+									alts=swissmetro_alts, 
+									csv_kwargs={} ,
+								)
+		dd.set_screen( exclude_idco=['PURPOSE not in (1,3)', 'CHOICE in (0,)'] )
+		m = Model.Example(101)
+		m.df = dd
+		m.provision()
+		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
+		self.assertAlmostEqual(  -25984.072734772 , m.loglike(x,cached=False))
+		self.assertEqual(  6768 , m.nCases())
+		dd.rescreen( exclude_idco=['+', 'caseid<=10'] )
+		m = Model.Example(101)
+		m.df = dd
+		m.provision()
+		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
+		self.assertAlmostEqual(  -25948.308855204876 , m.loglike(x,cached=False))
+		self.assertEqual(  6758 , m.nCases())
+
 

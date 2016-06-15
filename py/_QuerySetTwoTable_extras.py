@@ -341,12 +341,18 @@ def quality_check(self):
 #def _spong(self, n):
 #	print(n, "_splong!")
 
+def __repr__(self):
+	s =  "<larch.core.QuerySetTwoTable>\n  "
+	s += self.info().replace("\n","\n  ")
+	return s
+
+
 
 ## Load these methods into core.QuerySetTwoTable
 import_these = dict(locals())
 
 from .core import QuerySetTwoTable
-_private_methods = ['_get_choice_plus', '_get_choice', ]
+_private_methods = ['_get_choice_plus', '_get_choice', '__repr__']
 
 for k,f in import_these.items():
 	if len(k)>0 and (k[0]!='_' or k in _private_methods):

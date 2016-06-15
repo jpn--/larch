@@ -14,8 +14,10 @@ else:
 
 
 
-from .core import Fountain, LarchError
+from .core import Fountain, LarchError, IntStringDict
 import warnings
+import numbers
+from .util.aster import asterize
 
 class IncompatibleShape(LarchError):
 	pass
@@ -264,6 +266,20 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			return numpy.empty(0, dtype=str)
 
+	def _alternative_slot(self, code):
+		try:
+			if isinstance(code, numbers.Integral):
+				return numpy.where(self._alternative_codes()==code)[0]
+			elif isinstance(code, (numpy.array,list,tuple) ):
+				if isinstance(code[0], numbers.Integral):
+					return numpy.where( numpy.in1d(self._alternative_codes(), code) )[0]
+				else:
+					return numpy.where( numpy.in1d(self._alternative_names(), code) )[0]
+			else:
+				return numpy.where(self._alternative_names()==code)[0]
+		except IndexError:
+			raise KeyError('code {} not found'.format(code))
+
 	def set_alternatives(self, altids, alt_labels=None):
 		try:
 			self.h5f.remove_node(self.h5alts, 'altids')
@@ -328,7 +344,7 @@ class DT(Fountain):
 
 	def nCases(self):
 		if 'screen' in self.h5top:
-			screen = numpy.nonzero(self.h5top.screen[:])[0]
+			screen = self.get_screen_indexes()
 			return int(screen.shape[0])
 		else:
 			return int(self.h5top.caseids.shape[0])
@@ -352,6 +368,7 @@ class DT(Fountain):
 		except AttributeError:
 			cmd_encode = str(cmd).encode('utf-8')
 		g = tokenize(BytesIO(cmd_encode).readline)
+		screen_token = COLON if screen is None else (NAME, 'screen')
 		for toknum, tokval, _, _, _  in g:
 			if toknum == NAME and tokval in self.h5idca:
 				if dims==1:
@@ -361,22 +378,14 @@ class DT(Fountain):
 					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
 								OBRAC,
 								(NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
-								CBRAC, ]
-					if screen is None:
-						partial += [OBRAC,COLON,]
-					else:
-						partial += [OBRAC,(NAME, 'screen'),]
+								CBRAC, OBRAC, screen_token,]
 					if dims>1:
 						partial += [COMMA,COLON,]
 					partial += [CBRAC, ]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), OBRAC, ]
-					if screen is None:
-						partial += [COLON,]
-					else:
-						partial += [(NAME, 'screen'),]
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), OBRAC, screen_token,]
 					if dims>1:
 						partial += [COMMA,COLON,]
 					partial += [CBRAC, ]
@@ -387,32 +396,29 @@ class DT(Fountain):
 					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
 								OBRAC,
 								(NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
-								CBRAC, ]
-					if screen is None:
-						partial += [OBRAC,COLON,CBRAC,]
-					else:
-						partial += [OBRAC,(NAME, 'screen'),CBRAC,]
+								CBRAC, OBRAC,screen_token,CBRAC,]
 					if dims>1:
 						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), ]
-					if screen is None:
-						partial += [OBRAC,COLON,CBRAC,]
-					else:
-						partial += [OBRAC,(NAME, 'screen'),CBRAC,]
+					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), OBRAC,screen_token,CBRAC,]
 					if dims>1:
 						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
 			elif toknum == NAME and tokval in self.expr:
 				partial = [ (NAME, 'self'), DOT, (NAME, 'expr'), DOT, (NAME, tokval), ]
 				recommand.extend(partial)
+			elif toknum == NAME and tokval in ('caseid','caseids'):
+				partial = [ (NAME, 'self'), DOT, (NAME, 'h5top'), DOT, (NAME, 'caseids'), OBRAC,screen_token,CBRAC, ]
+				recommand.extend(partial)
+			elif toknum == NAME and tokval in ('altids',):
+				partial = [ (NAME, 'self'), DOT, (NAME, 'h5alts'), DOT, (NAME, 'altids'), OBRAC,screen_token,CBRAC, ]
+				recommand.extend(partial)
 			else:
 				recommand.append((toknum, tokval))
 		ret = untokenize(recommand).decode('utf-8')
 		return ret
-
 
 
 	def array_idca(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True):
@@ -433,9 +439,11 @@ class DT(Fountain):
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably 
 			'int64', 'float64', or 'bool'.
-		screen : None or array of bool
+		screen : None or array of bool or 'None'
 			If given, use this bool array to screen the caseids used to build 
-			the array.
+			the array. If None, the default screen defined in the file is used.
+			Pass the string 'None' to explicitly prevent the use of
+			any screen.
 		strip_nan : bool
 			If True (the default) then NAN values are converted to 0, and INF
 			values are converted to the largest magnitude real number representable
@@ -451,8 +459,9 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		h5node = self.h5top.idca
 		h5caseid = self.h5top.caseids
-		if screen is None and 'screen' not in self.h5top:
+		if (screen is None and 'screen' not in self.h5top) or (isinstance(screen, str) and screen=="None"):
 			n_cases = h5caseid.shape[0]
+			screen = None
 		elif screen is None:
 			screen = self.get_screen_indexes()
 			n_cases = screen.shape[0]
@@ -465,7 +474,7 @@ class DT(Fountain):
 			command = self._remake_command(v,screen,2)
 			try:
 				try:
-					result[:,:,varnum] = eval( command )
+					result[:,:,varnum] = eval( asterize(command) )
 				except TypeError as type_err:
 					if v in self.h5idca._v_children and isinstance(self.h5idca._v_children[v], _tb.Group):
 						stacktuple = self.h5idca._v_children[v]._v_attrs.stack
@@ -506,9 +515,11 @@ class DT(Fountain):
 		vars : tuple of str
 			A tuple (or other iterable) giving the expressions (often column names, but any valid
 			SQLite expression works) to extract as :ref:`idco` format variables.
-		screen : None or array of bool
+		screen : None or array of bool or 'None'
 			If given, use this bool array to screen the caseids used to build 
-			the array.
+			the array. If None, the default screen defined in the file is used.
+			Pass the string 'None' to explicitly prevent the use of
+			any screen.
 		strip_nan : bool
 			If True (the default) then NAN values are converted to 0, and INF
 			values are converted to the largest magnitude real number representable
@@ -528,8 +539,9 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		h5node = self.h5top.idco
 		h5caseid = self.h5top.caseids
-		if screen is None and 'screen' not in self.h5top:
+		if (screen is None and 'screen' not in self.h5top) or (isinstance(screen, str) and screen=="None"):
 			n_cases = h5caseid.shape[0]
+			screen = None
 		elif screen is None:
 			screen = self.get_screen_indexes()
 			n_cases = screen.shape[0]
@@ -542,7 +554,7 @@ class DT(Fountain):
 			if explain:
 				print("Evaluating:",str(command))
 			try:
-				result[:,varnum] = eval( command )
+				result[:,varnum] = eval( asterize(command) )
 			except Exception as exc:
 				args = exc.args
 				if not args:
@@ -588,6 +600,122 @@ class DT(Fountain):
 		if 'screen' not in self.h5top:
 			return None
 		return numpy.nonzero(self.h5top.screen[:])[0]
+
+	def set_screen(self, exclude_idco=(), exclude_idca=(), exclude_unavail=False, dynamic=False):
+		"""
+		Set a screen
+		"""
+		if 'screen' in self.h5top:
+			self.h5f.remove_node(self.h5top, 'screen')
+		if dynamic:
+			self.h5f.create_group(self.h5top, 'screen')
+		else:
+			self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+		self.rescreen(exclude_idco, exclude_idca, exclude_unavail)
+
+
+	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None):
+		"""
+		Rebuild the screen based on the indicated exclusion criteria.
+		
+		Parameters
+		----------
+		exclude_idco : iterable of str
+			A sequence of expressions that are evaluated as booleans using
+			:meth:`DT.array_idco`. For each case, if any of these expressions
+			evaluates as true then the entire case is excluded.
+		exclude_idca : iterable of (altcode,str)
+			A sequence of (altcode, expression) tuples, where the expression
+			is evaluated as boolean using :meth:`DT.array_idca`. If the 
+			expression evaluates as true for any alternative matching
+			any of the codes in the altcode part of the tuple (which can be 
+			an integer or an array of integers) then the case is excluded.
+			Note that this excludes the whole case, not just the alternative
+			in question.
+		exclude_unavail : bool
+			If true, then any case with no available alternatives is excluded.
+		exclude_caseids : expr
+		
+			
+		Notes
+		-----
+		Any method parameter can be omitted, in which case the previously used
+		value of that parameter is retained.  To explicitly clear previous screens,
+		pass an empty tuple for each parameter.
+		"""
+		if 'screen' not in self.h5top:
+			raise TypeError('no screen node set, use set_screen instead')
+
+		def inheritable(newseq, oldseq):
+			if newseq is not None:
+				try:
+					inherit = (len(newseq)>1 and newseq[0] == "+")
+				except:
+					inherit = False
+				if inherit:
+					if oldseq in self.h5top.screen._v_attrs:
+						newseq = self.h5top.screen._v_attrs[oldseq] + newseq[1:]
+					else:
+						newseq = newseq[1:]
+				self.h5top.screen._v_attrs[oldseq] = newseq
+				return newseq
+			else:
+				if oldseq in self.h5top.screen._v_attrs:
+					return self.h5top.screen._v_attrs[oldseq]
+
+		exclude_idco = inheritable(exclude_idco, 'exclude_idco')
+		exclude_idca = inheritable(exclude_idca, 'exclude_idca')
+		exclude_unavail = inheritable(exclude_unavail, 'exclude_unavail')
+
+		if isinstance(self.h5top.screen, _tb.Group):
+			return
+
+		if exclude_idco:
+			exclusions = self.array_idco(*exclude_idco, screen="None").any(1)
+		else:
+			exclusions = self.array_idco('0', screen="None", dtype=bool)
+		if exclude_idca:
+			for altnum, expr in exclude_idca:
+				altslot = self._alternative_slot(altnum)
+				exclusions |= self.array_idca(expr, screen="None", dtype=bool)[:,altslot,:].any(1)
+		if exclude_unavail:
+			exclusions |= (~(self.array_avail().any(1)))
+		self.h5top.screen[:] = ~exclusions
+
+	def exclude_idco(self, expr):
+		"""
+		Add an exclusion factor based on idco data.
+		
+		This is primarily a convenience method, which calls `rescreen`.  Future 
+		implementations may be modified to be more efficient.
+		
+		Parameters
+		----------
+		expr : str
+			An expression to evaluate using :meth:`array_idco`, with dtype
+			set to bool. Any cases that evaluate as positive are excluded from
+			the dataset when provisioning.
+		"""
+		self.rescreen(exclude_idco=['+', expr])
+
+	def exclude_idca(self, altids, expr):
+		"""
+		Add an exclusion factor based on idca data.
+
+		This is primarily a convenience method, which calls `rescreen`.  Future
+		implementations may be modified to be more efficient.
+		
+		Parameters
+		----------
+		expr : str
+			An expression to evaluate using :meth:`array_idca`, with dtype
+			set to bool.
+		altids : iterable of int
+			A set of alternative to consider. Any cases for which the expression
+			evaluates as positive for any of the listed altids are excluded from
+			the dataset when provisioning.
+		"""
+		self.rescreen(exclude_idca=['+', (altids, expr)])
 
 	def provision(self, needs, **kwargs):
 		from . import Model
@@ -649,7 +777,7 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		try:
 			command = self._remake_command(column,None,2)
-			eval( command )
+			eval( asterize(command) )
 		except:
 			return False
 		return True
@@ -676,7 +804,7 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		try:
 			command = self._remake_command(column,None,1)
-			eval( command )
+			eval( asterize(command) )
 		except:
 			if raise_exception:
 				raise
@@ -740,10 +868,6 @@ class DT(Fountain):
 				arr, caseids = db.array_idco(var_co)
 				h5var[:] = arr.squeeze()
 
-		h5avail = self.h5f.create_carray(self.h5idca, '_avail_', _tb.BoolAtom(), shape=(db.nCases(), db.nAlts()), )
-		arr, caseids = db.array_avail()
-		h5avail[:,:] = arr.squeeze()
-
 		h5caseids = self.h5f.create_carray(self.h5top, 'caseids', _tb.Int64Atom(), shape=(db.nCases(),), )
 		h5caseids[:] = caseids.squeeze()
 
@@ -757,6 +881,13 @@ class DT(Fountain):
 		for an in db.alternative_names():
 			h5altnames.append( an )
 		
+		if isinstance(db.queries.avail, (dict, IntStringDict)):
+			self.avail_idco = dict(db.queries.avail)
+		else:
+			h5avail = self.h5f.create_carray(self.h5idca, '_avail_', _tb.BoolAtom(), shape=(db.nCases(), db.nAlts()), )
+			arr, caseids = db.array_avail()
+			h5avail[:,:] = arr.squeeze()
+
 		try:
 			ch_ca = db.queries.get_choice_ca()
 			self.h5f.create_soft_link(self.h5idca, '_choice_', target='/larch/idca/'+ch_ca)
@@ -847,10 +978,12 @@ class DT(Fountain):
 
 			h5f_orig = _tb.open_file(example_h5files[dataset.upper()])
 			h5f_orig.get_node('/larch')._f_copy_children(h5f._getOrCreatePath("/larch", True), overwrite=True, recursive=True, createparents=False)
+			self = DT(filename, 'w', h5f=h5f)
 		else:
 
 			from .db import DB
 			edb = DB.Example(dataset)
+			self = DT(filename, 'w', h5f=h5f)
 
 			descrip_larch = {}
 			descrip_alts = {
@@ -889,10 +1022,6 @@ class DT(Fountain):
 					arr, caseids = edb.array_idco(var_co)
 					h5var[:] = arr.squeeze()
 
-			h5avail = h5f.create_carray(larchidca, '_avail_', _tb.BoolAtom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
-			arr, caseids = edb.array_avail()
-			h5avail[:,:] = arr.squeeze()
-
 			h5caseids = h5f.create_carray(larchnode, 'caseids', _tb.Int64Atom(), shape=(edb.nCases(),), filters=h5filters)
 			h5caseids[:] = caseids.squeeze()
 
@@ -906,6 +1035,13 @@ class DT(Fountain):
 			for an in edb.alternative_names():
 				h5altnames.append( an )
 			
+			if isinstance(edb.queries.avail, (dict, IntStringDict)):
+				self.avail_idco = dict(edb.queries.avail)
+			else:
+				h5avail = h5f.create_carray(larchidca, '_avail_', _tb.BoolAtom(), shape=(edb.nCases(), edb.nAlts()), filters=h5filters)
+				arr, caseids = edb.array_avail()
+				h5avail[:,:] = arr.squeeze()
+
 			try:
 				ch_ca = edb.queries.get_choice_ca()
 				h5f.create_soft_link(larchidca, '_choice_', target='/larch/idca/'+ch_ca)
@@ -918,7 +1054,85 @@ class DT(Fountain):
 			if wgt:
 				h5f.create_soft_link(larchidco, '_weight_', target='/larch/idco/'+wgt)
 
-		return DT(filename, 'w', h5f=h5f)
+		return self
+
+
+	@staticmethod
+	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_kwargs={}, complib='zlib', complevel=5, **kwargs):
+		'''Creates a new larch DT based on an :ref:`idco` CSV data file.
+
+		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
+		The reader will attempt to determine the format (csv, tab-delimited, etc) automatically. 
+
+		Parameters
+		----------
+		filename : str
+			File name (absolute or relative) for CSV (or other text-based delimited) source data.
+		caseid : str      
+			Column name that contains the unique case id's. If the data is in idco format, case id's can
+			be generated automatically based on line numbers by setting caseid to None (the default).
+		choice : str or None
+			Column name that contains the id of the alternative that is selected (if applicable). If not
+			given, and if choice is not included in `alts` below, no _choice_ h5f node will be 
+			autogenerated, and it will need to be set manually later.
+		weight : str or None
+			Column name of the weight for each case. If None, defaults to equal weights.
+		savename : str or None
+			If not None, the name of the location to save the HDF5 file that is created.
+		alts : dict
+			A dictionary with keys of alt codes, and values of (alt name, avail column, choice column) tuples.
+			If `choice` is given, the third item in the tuple is ignored and can be omitted.
+			
+		Other Parameters
+		----------------
+		csv_kwargs : dict
+			A dictionary of keyword arguments to pass to :meth:`DT.import_idco` (and by extension
+			to :meth:`pandas.import_csv`).
+		complib : str
+			The compression library to use for the HDF5 file default filter.
+		complevel : int
+			The compression level to use for the HDF5 file default filter.
+
+		Keyword arguments not listed here are passed to the :class:`DT` constructor.
+
+		Returns
+		-------
+		DT
+			An open :class:`DT` file.
+		'''
+		self = DT(filename=savename, **kwargs)
+		self.import_idco(filename, caseid_column=None, **csv_kwargs)
+		
+		h5filters = _tb.Filters(complevel=complevel, complib=complib)
+
+
+		altscodes_seq = sorted(alts)
+
+		h5altids = self.h5f.create_carray(self.h5alts, 'altids', _tb.Int64Atom(), shape=(len(alts),), filters=h5filters, title='elemental alternative code numbers')
+		h5altids[:] = numpy.asarray(altscodes_seq)
+
+		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
+		for an in altscodes_seq:
+			h5altnames.append( alts[an][0] )
+		# Weight
+		if weight:
+			self.h5f.create_soft_link(self.h5idco, '_weight_', target='/larch/idco/'+weight)
+		# Choice
+		try:
+			self.choice_idco = {a:aa[2] for a,aa in alts.items()}
+		except IndexError:
+			if choice is not None:
+				choices = self.array_idco(choice)
+				choices = numpy.digitize(choices, self._alternative_codes(), right=True)
+				ch_array = numpy.zeros((self.nCases(), len(alts)), dtype=numpy.float64)
+				ch_array[:,choices] = 1
+				h5ch = self.h5f.create_carray(self.h5idca, '_choice_', obj=ch_array, filters=h5filters)
+			else:
+				raise
+		# Avail
+		self.avail_idco = {a:aa[1] for a,aa in alts.items()}
+	
+		return self
 
 	def validate_hdf5(self, log=print, errlog=None):
 		"""Generate a validation report for this DT.
@@ -1302,8 +1516,8 @@ class DT(Fountain):
 		Raises
 		------
 		LarchError
-			If caseids exist and are also given; or if caseids do not exist and are not given;
-			or if the caseids are no integer values.
+			If caseids exist and are also given,
+			or if the caseids are not integer values.
 		"""
 		import pandas
 		df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
@@ -1800,6 +2014,42 @@ class DT(Fountain):
 
 	def Expr(self, expression):
 		return _tb.Expr(expression, uservars=self.namespace)
+
+
+	def alogit_control_file(self):
+		"A section of the control file that is related to data operations"
+		import io
+		alo = io.StringIO()
+		from .util.alogit import repackage
+		
+		# Availability
+		av_stack = self.avail_idco
+		try:
+			av_stack._check()
+		except TypeError:
+			alo.write( "- Larch Export Note:\n")
+			alo.write( "-   Avail is not a stack, will be exported explicitly\n")
+			alo.write( "-   The data export will need to include these columns\n")
+			for anum,aname in self.alternatives():
+				alo.write( "Avail(node_{0}) = avail_{0}\n".format(aname.replace(" ","_")) )
+		else:
+			alo.write( "- Larch Export Note:\n")
+			alo.write( "-   Avail is an idco stack, will be exported normally as part of the idco data\n")
+			# we can pass to alogit the same thing (repackaged)
+			for anum,aname in self.alternatives():
+				alo.write( "Avail(node_{0}) = {1}\n".format(aname.replace(" ","_"), repackage(av_stack[anum])) )
+
+		# Other stacks
+		for var in self.h5idca._v_children:
+			var_ = var.replace(" ","_")
+			if isinstance(self.h5idca._v_children[var], _tb.Group) and 'stack' in self.h5idca._v_children[var]._v_attrs:
+				stack = self.stack_idco(var)
+				alo.write("\n\n$array {}(alts)".format(var_))
+				for anum,aname in self.alternatives():
+					alo.write( "\n{2}(node_{0}) = {1}\n".format(aname.replace(" ","_"), repackage(stack[anum]), var_) )
+
+
+		return alo.getvalue()
 
 
 def _close_all_h5():
