@@ -244,7 +244,7 @@ else:
 		  package_dir = {'larch': file_at('py'), 'larch.examples.doc': file_at('doc/example')},
 		  packages=['larch', 'larch.examples','larch.examples.doc', 'larch.test', 'larch.version', 'larch.util', 'larch.model_reporter', 'larch.util.optimize',],
 		  ext_modules=[core, apsw, ],
-		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz', 'data_warehouse/*.h5'], 'larch.examples.doc':['*.rst']},
+		  package_data={'larch':['data_warehouse/*.sqlite', 'data_warehouse/*.csv', 'data_warehouse/*.csv.gz', 'data_warehouse/*.h5', 'data_warehouse/*.h5.gz'], 'larch.examples.doc':['*.rst']},
 		  data_files=local_data_files,
 		  install_requires=[
 							"numpy >= 1.11",

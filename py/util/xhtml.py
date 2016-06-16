@@ -173,8 +173,8 @@ class XHTML():
 		table {border-collapse:collapse;}
 		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
 		body { margin-left: 200px; }
-		.table_of_contents_frame { width: 190px; position: fixed; margin-left: -200px; top:0; padding-top:10px;}
-		.table_of_contents { width: 190px; position: fixed; margin-left: -200px; font-size:85%; }
+		.table_of_contents_frame { width: 187px; position: fixed; margin-left: -200px; top:0; padding-top:10px;}
+		.table_of_contents { width: 187px; position: fixed; margin-left: -200px; font-size:85%; }
 		.table_of_contents_head { font-weight:700; padding-left:25px }
 		.table_of_contents ul { padding-left:25px; }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
@@ -258,8 +258,8 @@ class XHTML():
 		.table_of_contents a:visited { text-decoration: none; }
 		.table_of_contents a:hover { text-decoration: underline; }
 		.table_of_contents a:active { text-decoration: underline; }
-		.table_of_contents_head { font-weight:700; padding-left:25px }
-		.table_of_contents ul { padding-left:25px; }
+		.table_of_contents_head { font-weight:700; padding-left:20px }
+		.table_of_contents ul { padding-left:20px; }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
 		::-webkit-scrollbar {
 			-webkit-appearance: none;

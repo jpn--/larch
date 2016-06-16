@@ -79,3 +79,13 @@ def TemporaryHtml(style=None, *, nohead=False, mode='wb+', content=None, **taghe
 		t.write(content)
 		t.view()
 	return t
+
+
+def TemporaryGzipInflation(gzfile):
+	t = TemporaryFile(mode='wb')
+	import gzip
+	with gzip.open(gzfile, 'rb') as previewfile:
+		t.write(previewfile.read())
+	return t.name
+
+

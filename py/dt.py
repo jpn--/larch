@@ -654,9 +654,9 @@ class DT(Fountain):
 					inherit = False
 				if inherit:
 					if oldseq in self.h5top.screen._v_attrs:
-						newseq = self.h5top.screen._v_attrs[oldseq] + newseq[1:]
+						newseq = list(self.h5top.screen._v_attrs[oldseq]) + list(newseq[1:])
 					else:
-						newseq = newseq[1:]
+						newseq = list(newseq[1:])
 				self.h5top.screen._v_attrs[oldseq] = newseq
 				return newseq
 			else:
@@ -680,7 +680,7 @@ class DT(Fountain):
 				exclusions |= self.array_idca(expr, screen="None", dtype=bool)[:,altslot,:].any(1)
 		if exclude_unavail:
 			exclusions |= (~(self.array_avail().any(1)))
-		self.h5top.screen[:] = ~exclusions
+		self.h5top.screen[:] = ~exclusions.squeeze()
 
 	def exclude_idco(self, expr):
 		"""
@@ -696,6 +696,8 @@ class DT(Fountain):
 			set to bool. Any cases that evaluate as positive are excluded from
 			the dataset when provisioning.
 		"""
+		if 'screen' not in self.h5top:
+			self.set_screen()
 		self.rescreen(exclude_idco=['+', expr])
 
 	def exclude_idca(self, altids, expr):
@@ -715,6 +717,8 @@ class DT(Fountain):
 			evaluates as positive for any of the listed altids are excluded from
 			the dataset when provisioning.
 		"""
+		if 'screen' not in self.h5top:
+			self.set_screen()
 		self.rescreen(exclude_idca=['+', (altids, expr)])
 
 	def provision(self, needs, **kwargs):
@@ -828,10 +832,10 @@ class DT(Fountain):
 					self.multi_check_co(b)
 
 	def variables_ca(self):
-		return tuple(i for i in self.h5idca._v_children)
+		return sorted(tuple(i for i in self.h5idca._v_children))
 
 	def variables_co(self):
-		return tuple(i for i in self.h5idco._v_children)
+		return sorted(tuple(i for i in self.h5idco._v_children))
 
 
 	def import_db(self, db, ignore_ca=('caseid','altid'), ignore_co=('caseid')):
@@ -973,6 +977,10 @@ class DT(Fountain):
 					raise RuntimeError("cannot open HDF5 at {}".format(filename))
 			else:
 				break
+
+		if dataset.upper() == "SWISSMETRO":
+			from .util.temporaryfile import TemporaryGzipInflation
+			return DT(TemporaryGzipInflation(os.path.join(DT.ExampleDirectory(),"swissmetro.h5.gz")))
 
 		if dataset.upper() in example_h5files:
 
@@ -1125,7 +1133,8 @@ class DT(Fountain):
 				choices = self.array_idco(choice)
 				choices = numpy.digitize(choices, self._alternative_codes(), right=True)
 				ch_array = numpy.zeros((self.nCases(), len(alts)), dtype=numpy.float64)
-				ch_array[:,choices] = 1
+				#ch_array[:,choices] = 1 #ERROR
+				ch_array[numpy.arange(ch_array.shape[0]),choices.squeeze()] = 1
 				h5ch = self.h5f.create_carray(self.h5idca, '_choice_', obj=ch_array, filters=h5filters)
 			else:
 				raise
@@ -1381,7 +1390,7 @@ class DT(Fountain):
 		for idca_child in self.h5idca._v_children.keys():
 			if isinstance_(self.h5idca._v_children[idca_child], _tb.group.Group):
 				if '_index_' not in self.h5idca._v_children[idca_child] or '_values_' not in self.h5idca._v_children[idca_child]:
-					if idca_child not in ('_avail_','_choice_') or 'stack' not in self.h5idca._v_children[idca_child]._v_attrs:
+					if 'stack' not in self.h5idca._v_children[idca_child]._v_attrs:
 						idca_child_incorrect_sized[idca_child] = 'invalid group'
 				else:
 					if self.h5idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
@@ -1399,7 +1408,7 @@ class DT(Fountain):
 					"with the same length as the length of `caseids` and "
 					"an integer dtype, and a 2-dimensional `_values_` with the second dimension the same as the length "
 					"of `altids`, such that _values_[_index_] reconstructs the desired "
-					"data array.",
+					"data array, or (3) a group node with a `stack` attribute.",
 					idca_child_incorrect_sized)
 
 		subcategory('Alternative Availability')
@@ -2048,6 +2057,8 @@ class DT(Fountain):
 				for anum,aname in self.alternatives():
 					alo.write( "\n{2}(node_{0}) = {1}\n".format(aname.replace(" ","_"), repackage(stack[anum]), var_) )
 
+		# Exclusions
+		
 
 		return alo.getvalue()
 
@@ -2102,8 +2113,8 @@ class DT_idco_stack_manager:
 			self.parent.h5f.create_group(self.parent.h5idca, self.stacktype)
 		except _tb.exceptions.NodeError:
 			pass
-		else:
-			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = [0]*self.parent.nAlts()
+		if 'stack' not in self.parent.h5idca._v_children[self.stacktype]._v_attrs:
+			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
 
 
 	def __call__(self, *cols, varname=None):
@@ -2166,10 +2177,15 @@ class DT_idco_stack_manager:
 			raise KeyError
 
 	def __setitem__(self, key, value):
-		self._make_zeros()
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack[slotarray[0]] = value
+			if self.stacktype not in self.parent.h5idca._v_children:
+				self._make_zeros()
+			if 'stack' not in self.parent.h5idca._v_children[self.stacktype]._v_attrs:
+				self._make_zeros()
+			tempobj = self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack
+			tempobj[slotarray[0]] = value
+			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = tempobj
 		else:
 			raise KeyError
 

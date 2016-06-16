@@ -412,14 +412,14 @@ class TestData1(unittest.TestCase):
 		m.df = dd
 		m.provision()
 		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
-		self.assertAlmostEqual(  -25984.072734772 , m.loglike(x,cached=False))
+		self.assertAlmostEqual(  -5331.252007380466 , m.loglike(x,cached=False))
 		self.assertEqual(  6768 , m.nCases())
 		dd.rescreen( exclude_idco=['+', 'caseid<=10'] )
 		m = Model.Example(101)
 		m.df = dd
 		m.provision()
 		x = [-0.7012268762617896, -0.15465520761303447, -0.01277806274978315, -0.01083774419411773]
-		self.assertAlmostEqual(  -25948.308855204876 , m.loglike(x,cached=False))
+		self.assertAlmostEqual(  -5324.7532567301105 , m.loglike(x,cached=False))
 		self.assertEqual(  6758 , m.nCases())
 
 
