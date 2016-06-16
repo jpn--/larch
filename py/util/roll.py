@@ -91,6 +91,7 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	elif use_jupyter:
 		css = """
 		.error_report {color:red; font-family:monospace;}
+		body {font-family: "Book Antiqua", "Palatino", serif;}		
 		table {border-collapse:collapse;}
 		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
 		body { }

@@ -169,6 +169,7 @@ class XHTML():
 		self.head << self.style
 		default_css = """
 		.error_report {color:red; font-family:monospace;}
+		body {font-family: "Book Antiqua", "Palatino", serif;}
 		table {border-collapse:collapse;}
 		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
 		body { margin-left: 200px; }
@@ -252,7 +253,11 @@ class XHTML():
 
 	def toc_iframe(self, insert=False):
 		css = """
-		.table_of_contents { font-size:85%; }
+		.table_of_contents { font-size:85%; font-family:"Book Antiqua", "Palatino", serif; }
+		.table_of_contents a:link { text-decoration: none; }
+		.table_of_contents a:visited { text-decoration: none; }
+		.table_of_contents a:hover { text-decoration: underline; }
+		.table_of_contents a:active { text-decoration: underline; }
 		.table_of_contents_head { font-weight:700; padding-left:25px }
 		.table_of_contents ul { padding-left:25px; }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
@@ -271,13 +276,15 @@ class XHTML():
 		
 		BLAH = xml.etree.ElementTree.tostring(xtoc_html.root, method="html", encoding="unicode")
 		
+		
+		
 		toc_elem = Elem(tag='iframe', attrib={
 			'class':'table_of_contents_frame',
-			'style':'''height:calc(100% - 100px); border:none; /*background-color:rgba(255, 255, 200, 0.9);*/
-			  background: -webkit-linear-gradient(rgba(255, 255, 200, 0.9), rgba(255, 255, 255, 0.9)); /* For Safari 5.1 to 6.0 */
-			  background: -o-linear-gradient(rgba(255, 255, 200, 0.9), rgba(255, 255, 255, 0.9)); /* For Opera 11.1 to 12.0 */
-			  background: -moz-linear-gradient(rgba(255, 255, 200, 0.9), rgba(255, 255, 255, 0.9)); /* For Firefox 3.6 to 15 */
-			  background: linear-gradient(rgba(255, 255, 200, 0.9), rgba(255, 255, 255, 0.9)); /* Standard syntax */
+			'style':'''height:calc(100% - 100px); border:none; /*background-color:rgba(128,189,1, 0.95);*/
+			  background: -webkit-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Safari 5.1 to 6.0 */
+			  background: -o-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Opera 11.1 to 12.0 */
+			  background: -moz-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Firefox 3.6 to 15 */
+			  background: linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* Standard syntax */
 			''',
 			'srcdoc':BLAH,
 			})
@@ -289,9 +296,12 @@ class XHTML():
 	def sign(self, insert=False):
 		xsign = XML_Builder("div", {'class':'larch_signature'})
 		from ..version import version
+		from .img import favicon
 		import time
 		xsign.start('p')
-		xsign.data("Larch {}".format(version))
+		xsign.start('img', {'width':"14", 'height':"14", 'src':"data:image/png;base64,{}".format(favicon), 'style':'position:relative;top:2px;' })
+		xsign.end('img')
+		xsign.data(" Larch {}".format(version))
 		xsign.simple('br')
 		xsign.data("Report generated on ")
 		xsign.simple('br', attrib={'class':'noprint'})

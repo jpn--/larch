@@ -43,7 +43,7 @@ class default_mplstyle():
 
 def spark_histogram(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False):
 	import matplotlib.pyplot as plt
-	n, bins, patches = plt.hist(data, bins, normed=1, facecolor='green', linewidth=0, alpha=1.0)
+	n, bins, patches = plt.hist(data, bins, normed=1, facecolor='#1d8bcc', linewidth=0, alpha=1.0)
 	fig = plt.gcf()
 	fig.set_figheight(0.2)
 	fig.set_figwidth(0.75)
