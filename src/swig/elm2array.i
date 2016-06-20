@@ -538,7 +538,10 @@
 		PyTuple_SetItem(py_vars, i, item);
 	}
 	
-	PyObject_SetAttrString($result, "vars", py_vars);
+	int errstatus = PyObject_SetAttrString($result, "vars", py_vars);
+	if (errstatus!=0) {
+		PyErr_Clear();
+	}
 	
 	Py_CLEAR(py_vars);
 
@@ -568,7 +571,10 @@
 		PyTuple_SetItem(py_vars, i, item);
 	}
 	
-	PyObject_SetAttrString($result, "vars", py_vars);
+	int errstatus = PyObject_SetAttrString($result, "vars", py_vars);
+	if (errstatus!=0) {
+		PyErr_Clear();
+	}
 	
 	Py_CLEAR(py_vars);
 
@@ -603,7 +609,10 @@
 		PyTuple_SetItem(py_vars, i, item);
 	}
 	
-	PyObject_SetAttrString($result, "vars", py_vars);
+	int errstatus = PyObject_SetAttrString($result, "vars", py_vars);
+	if (errstatus!=0) {
+		PyErr_Clear();
+	}
 	
 	Py_CLEAR(py_vars);
 
@@ -802,7 +811,11 @@
 			PyTuple_SetItem(py_vars, i, item);
 		}
 		
-		PyObject_SetAttrString(ret1, "vars", py_vars);
+		
+		int errstatus = PyObject_SetAttrString(ret1, "vars", py_vars);
+		if (errstatus!=0) {
+			PyErr_Clear();
+		}
 		
 		Py_CLEAR(py_vars);
 		delete (*$1);
@@ -825,7 +838,11 @@
 			PyTuple_SetItem(py_vars, i, item);
 		}
 		
-		PyObject_SetAttrString(ret2, "vars", py_vars);
+		
+		int errstatus = PyObject_SetAttrString(ret2, "vars", py_vars);
+		if (errstatus!=0) {
+			PyErr_Clear();
+		}
 		
 		Py_CLEAR(py_vars);
 		delete (*$2);

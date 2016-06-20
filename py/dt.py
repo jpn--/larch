@@ -19,6 +19,7 @@ import warnings
 import numbers
 import collections
 from .util.aster import asterize
+import keyword
 
 class IncompatibleShape(LarchError):
 	pass
@@ -152,9 +153,12 @@ class DT(Fountain):
 	def _refresh_alts(self):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
-	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=None, complib='zlib', h5f=None, inmemory=False, temp=False):
+	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=7, complib='zlib', h5f=None, inmemory=False, temp=False):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
+		if isinstance(filename,str):
+			import os
+			filename = os.path.expanduser(filename)
 		if filename is None:
 			temp = True
 			from .util.temporaryfile import TemporaryFile
@@ -178,18 +182,22 @@ class DT(Fountain):
 		self._h5larchpath = ipath
 		try:
 			self.h5top = self.h5f._getOrCreatePath(ipath, True)
+			#self.h5top._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the larch root node at '{}' does not exist and cannot be created".format(ipath))
 		try:
 			self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
+			#self.h5idca._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/idca' does not exist and cannot be created".format(ipath))
 		try:
 			self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
+			#self.h5idco._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/idco' does not exist and cannot be created".format(ipath))
 		try:
 			self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
+			#self.h5alts._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/alts' does not exist and cannot be created".format(ipath))
 		try:
@@ -1102,7 +1110,7 @@ class DT(Fountain):
 
 
 	@staticmethod
-	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_kwargs={}, complib='zlib', complevel=5, **kwargs):
+	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_args=(), csv_kwargs={}, complib='zlib', complevel=5, **kwargs):
 		'''Creates a new larch DT based on an :ref:`idco` CSV data file.
 
 		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
@@ -1129,9 +1137,12 @@ class DT(Fountain):
 			
 		Other Parameters
 		----------------
+		csv_args : tuple
+			A tuple of positional arguments to pass to :meth:`DT.import_idco` (and by extension
+			to :meth:`pandas.import_csv` or :meth:`pandas.import_excel`).
 		csv_kwargs : dict
 			A dictionary of keyword arguments to pass to :meth:`DT.import_idco` (and by extension
-			to :meth:`pandas.import_csv`).
+			to :meth:`pandas.import_csv` or :meth:`pandas.import_excel`).
 		complib : str
 			The compression library to use for the HDF5 file default filter.
 		complevel : int
@@ -1144,8 +1155,12 @@ class DT(Fountain):
 		DT
 			An open :class:`DT` file.
 		'''
-		self = DT(filename=savename, **kwargs)
-		self.import_idco(filename, caseid_column=None, **csv_kwargs)
+		if len(alts)==0:
+			raise ValueError('alternatives must be given for idco import (a future vresion of larch may relax this requirement)')
+		
+		
+		self = DT(filename=savename, complevel=complevel, complib=complib, **kwargs)
+		self.import_idco(filename, *csv_args, caseid_column=None, **csv_kwargs)
 		
 		h5filters = _tb.Filters(complevel=complevel, complib=complib)
 
@@ -1191,7 +1206,6 @@ class DT(Fountain):
 			but only if there are errors.
 		
 		"""
-		import keyword
 		if log is None:
 			log = lambda *x: None
 		nerrs = 0
@@ -1549,6 +1563,8 @@ class DT(Fountain):
 		----------
 		filepath_or_buffer : str or buffer
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
+			If a string is given and the file extension is ".xlsx" then the :func:`pandas.read_excel`
+			function will be used instead.
 		caseid_column : None or str
 			If given, this is the column of the input data file to use as caseids.  It must be 
 			given if the caseids do not already exist in the HDF5 file.  If it is given and
@@ -1561,17 +1577,47 @@ class DT(Fountain):
 			or if the caseids are not integer values.
 		"""
 		import pandas
-		df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
+		from . import logging
+		log = logging.getLogger('DT')
+		log("READING %s",str(filepath_or_buffer))
+		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
+			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
+		else:
+			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
+		log("READING COMPLETE")
 		try:
 			for col in df.columns:
+				log("LOADING %s",col)
 				col_array = df[col].values
 				try:
 					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
 				except ValueError:
-					maxlen = int(df[col].str.len().max())
-					maxlen = max(maxlen,8)
-					col_array = df[col].astype('S{}'.format(maxlen)).values
-					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+					log.warn("  column %s is not an simple compatible datatype",col)
+					try:
+						maxlen = int(df[col].str.len().max())
+					except ValueError:
+						import datetime
+						if isinstance(df[col][0],datetime.time):
+							log.warn("  column %s is datetime.time, converting to Time32",col)
+							tb_atom = _tb.atom.Time32Atom()
+							convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							col_array = df[col].apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
+						else:
+							import __main__
+							__main__.err_df = df
+							raise
+					else:
+						maxlen = max(maxlen,8)
+						log.warn("  column %s, converting to S%d",col,maxlen)
+						col_array = df[col].astype('S{}'.format(maxlen)).values
+						tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+			
+				if not col.isidentifier():
+					log.warn("  column %s is not a valid python identifier, converting to _%s",col,col)
+					col = "_"+col
+				if keyword.iskeyword(col):
+					log.warn("  column %s is a python keyword, converting to _%s",col,col)
+					col = "_"+col
 				h5var = self.h5f.create_carray(self.h5idco, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
 			if caseid_column is not None and 'caseids' in self.h5top:

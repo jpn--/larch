@@ -230,5 +230,6 @@ class Flogger:
 				self.buffer += " ".join( str(i) for i in (base,)+args )
 
 def flogger(level=-1, label="", *, filename=None, file_fmt='[%(name)s] %(message)s'):
+	"This returns a formatted logger that accepts new-style formatting, and sets logging to maximum"
 	easy(level=level, label=label, filename=filename, file_fmt=file_fmt)
 	return Flogger(getScriber(label))

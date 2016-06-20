@@ -228,6 +228,8 @@ class TestSwissmetroExamples(ELM_TestCase):
 			ver = [int(i) for i in numpy.version.version.split('.')]
 			if ver[0] <= 1 and ver[1]<11:
 				self.skipTest('numpy is less than 1.11, reporting features will fail')
+		except:
+			pass
 		m.roll(filename="None", cats='*', throw_exceptions=True)
 		#
 		m2 = Model.Example(102)
