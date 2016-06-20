@@ -36,7 +36,7 @@ You can access a referenced parameter from a model using these methods:
 
 .. automethod:: ParameterRef.valid
 
-.. automethod:: ParameterRef.str
+.. automethod:: ParameterRef.strf
 
 
 Math using Parameter References
@@ -54,10 +54,10 @@ the automatic calculation of values of time for a model:
 	>>> VoT_cents_per_minute = P.tottime / P.totcost
 	>>> VoT_cents_per_minute.value(m)
 	10.434...
-	>>> print("The implied value of time is", VoT_cents_per_minute.str(m, fmt="{:.1f}¢/minute"))
+	>>> print("The implied value of time is", VoT_cents_per_minute.strf(m, fmt="{:.1f}¢/minute"))
 	The implied value of time is 10.4¢/minute
 	>>> VoT_dollars_per_hour = (P.tottime * 60) / (P.totcost * 100)
-	>>> print("The implied value of time is", VoT_dollars_per_hour.str(m, fmt="${:.2f}/hr"))
+	>>> print("The implied value of time is", VoT_dollars_per_hour.strf(m, fmt="${:.2f}/hr"))
 	The implied value of time is $6.26/hr
 
 

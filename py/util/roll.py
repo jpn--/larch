@@ -107,7 +107,9 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 		if sourcecode:
 			f << xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code")
 		f << xhtml_rawtext_as_div(filehandle=templog, classtype='raw_log', title="Estimation Log")
-		
+
+
+
 		if use_jupyter:
 			try:
 				from IPython.display import display, HTML

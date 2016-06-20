@@ -33,10 +33,10 @@ custom table to hold some facts about your model or data:
 	...				x.th("Value")
 	...			with x.block("tr"):
 	...				x.td("cents per minute")
-	...				x.td(VoT_cents_per_minute.str(m, fmt="{:.1f}\xa2/minute"))
+	...				x.td(VoT_cents_per_minute.strf(m, fmt="{:.1f}\xa2/minute"))
 	...			with x.block("tr"):
 	...				x.td("dollars per hour")
-	...				x.td(VoT_dollars_per_hour.str(m, fmt="${:.2f}/hr"))
+	...				x.td(VoT_dollars_per_hour.strf(m, fmt="${:.2f}/hr"))
 	...		return x.close()
 
 

@@ -230,7 +230,7 @@ class ParameterRef(str, metaclass=Role):
 		"""
 		self._default_value = val
 		return self
-	def str(self,m, fmt=None):
+	def strf(self,m, fmt=None):
 		"""
 		Gives the :meth:`value` of the parameter in a given model as a string.
 		
@@ -254,10 +254,16 @@ class ParameterRef(str, metaclass=Role):
 			name as this ParameterRef, and the default_value for this
 			ParameterRef is None.
 		"""
-		if fmt is not None:
-			return fmt.format(self.value(m))
-		else:
-			return self._fmt.format(self.value(m))
+		try:
+			if fmt is not None:
+				return fmt.format(self.value(m))
+			else:
+				return self._fmt.format(self.value(m))
+		except LarchError as err:
+			if "not in model" in str(err):
+				return "NA"
+			else:
+				raise
 	def getname(self):
 		return self._name
 	def valid(self,m):
