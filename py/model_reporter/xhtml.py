@@ -3,11 +3,11 @@
 from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias, IntStringDict
 from io import StringIO
-from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes
+from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes, xhtml_dataframe_as_div
 from ..util.plotting import plot_as_svg_xhtml
 import math
 import numpy
-
+import pandas
 
 
 XhtmlModelReporter_default_format = {
@@ -144,13 +144,28 @@ class XhtmlModelReporter():
 				xerr.end("pre")
 				xerr.simple("hr")
 				x.append(xerr.close())
+
+		try:
+			for extra_section in self._to_add_to_report:
+				x.append(extra_section)
+		except AttributeError:
+			pass
+
 		if raw_xml:
 			return x
 		else:
 			return x.dump()
 
 
-
+	def add_to_report(self, content, title="Other"):
+		try:
+			self._to_add_to_report
+		except AttributeError:
+			self._to_add_to_report = []
+		if isinstance(content, pandas.DataFrame):
+			self._to_add_to_report += [xhtml_dataframe_as_div(content, title=title),]
+		else:
+			self._to_add_to_report += [content,]
 
 	def xhtml_title(self, **format):
 		"""
@@ -476,7 +491,7 @@ class XhtmlModelReporter():
 			x.tr
 			x.td("Log Likelihood at Convergence")
 			x.td("{0:{LL}}".format(ll,**format))
-			x.td("{0:{LL}}".format(ll/self.nCases(),**format))
+			x.td("{0:{LL}}".format(ll/numpy.int64(self.nCases()),**format))
 			if total_weight is not None:
 				x.td("{0:{LL}}".format(ll/total_weight,**format))
 			x.end_tr
@@ -485,7 +500,7 @@ class XhtmlModelReporter():
 			x.tr
 			x.td("Log Likelihood at Constants")
 			x.td("{0:{LL}}".format(llc,**format))
-			x.td("{0:{LL}}".format(llc/self.nCases(),**format))
+			x.td("{0:{LL}}".format(llc/numpy.int64(self.nCases()),**format))
 			if total_weight is not None:
 				x.td("{0:{LL}}".format(llc/total_weight,**format))
 			x.end_tr
@@ -494,7 +509,7 @@ class XhtmlModelReporter():
 			x.tr
 			x.td("Log Likelihood at Null Parameters")
 			x.td("{0:{LL}}".format(llz,**format))
-			x.td("{0:{LL}}".format(llz/self.nCases(),**format))
+			x.td("{0:{LL}}".format(llz/numpy.int64(self.nCases()),**format))
 			if total_weight is not None:
 				x.td("{0:{LL}}".format(llz/total_weight,**format))
 			x.end_tr
@@ -503,7 +518,7 @@ class XhtmlModelReporter():
 			x.tr
 			x.td("Log Likelihood with No Model")
 			x.td("{0:{LL}}".format(ll0,**format))
-			x.td("{0:{LL}}".format(ll0/self.nCases(),**format))
+			x.td("{0:{LL}}".format(ll0/numpy.int64(self.nCases()),**format))
 			if total_weight is not None:
 				x.td("{0:{LL}}".format(ll0/total_weight,**format))
 			x.end_tr

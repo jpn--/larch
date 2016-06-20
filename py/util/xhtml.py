@@ -167,21 +167,40 @@ class XHTML():
 		self.style = Elem(tag="style")
 		self.head << self.title
 		self.head << self.style
+		toc_width = 200
 		default_css = """
 		.error_report {color:red; font-family:monospace;}
 		body {font-family: "Book Antiqua", "Palatino", serif;}
 		table {border-collapse:collapse;}
 		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
-		body { margin-left: 200px; }
-		.table_of_contents_frame { width: 187px; position: fixed; margin-left: -200px; top:0; padding-top:10px;}
-		.table_of_contents { width: 187px; position: fixed; margin-left: -200px; font-size:85%; }
+		body { margin-left: """+str(toc_width)+"""px; }
+		.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px;}
+		.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%; }
 		.table_of_contents_head { font-weight:700; padding-left:25px }
 		.table_of_contents ul { padding-left:25px; }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
-		.larch_signature {font-size:80%; width: 170px; font-weight:100; font-style:italic; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
+		.larch_signature {font-size:80%; width: """+str(toc_width-30)+"""px; font-weight:100; font-style:italic; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
 		a.parameter_reference {font-style: italic; text-decoration: none}
 		.strut2 {min-width:2in}
 		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
+		@media print {
+		   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
+		   /*.table_of_contents { display: none; }*/
+		   @page {
+			  margin: 1in;
+		   }
+		   h1, h2, h3 { page-break-after: avoid; }
+		   img { max-width: 100% !important; }
+		   ul, img, table { page-break-inside: avoid; }
+		   .larch_signature {font-size:80%; width: 100%; font-weight:100; font-style:italic; padding:0; background-color:#fff; position: fixed; bottom: 0;}
+		   .larch_signature img {display:none;}
+		   .larch_signature .noprint {display:none;}
+		   
+    }
+
+
+
+		}
 		"""
 
 		if quickhead is not None:
@@ -221,6 +240,14 @@ class XHTML():
 
 	def toc(self, insert=False):
 		xtoc = XML_Builder("div", {'class':'table_of_contents'})
+		from .img import local_logo
+		logo = local_logo()
+		if logo is not None:
+			if isinstance(logo,bytes):
+				logo = logo.decode()
+			xtoc.start('img', attrib={'width':'150','src':"data:image/png;base64,{}".format(logo),
+									  'style':'display: block; margin-left: auto; margin-right: auto'})
+			xtoc.end('img')
 		xtoc.simple('p', content="Table of Contents", attrib={'class':'table_of_contents_head'})
 #		for node in self.root.findall('.//a[@toclevel]/..'):
 #			anchor = node.find('./a')
@@ -388,6 +415,21 @@ def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_sourc
 			if filename is not None and os.path.isfile(filename):
 				use_filehandle.close()
 	return xsource.close()
+
+
+def xhtml_rawhtml_as_div(contentstring, *, title="And Then", classtype='other_content'):
+	xsource = XML_Builder("div", {'class':classtype})
+	xsource.h2(title, anchor=1)
+	if isinstance(contentstring, bytes):
+		contentstring = contentstring.decode()
+	if isinstance(contentstring, str):
+		content = xml.etree.ElementTree.fromstring(contentstring)
+	else:
+		content = contentstring
+	return (xsource.close() << content)
+
+def xhtml_dataframe_as_div(contentframe, **kwargs):
+	return xhtml_rawhtml_as_div(contentframe.to_html(), **kwargs)
 
 def toc_demote_all(elem, demote=1, anchors=True, heads=True):
 	for anchor in elem.findall('.//a[@toclevel]'):
