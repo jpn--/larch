@@ -1089,7 +1089,7 @@ class DT(Fountain):
 		'''
 		choices = self.array_idco(oldvarname)
 		choices = numpy.digitize(choices, self._alternative_codes(), right=True)
-		ch_array = numpy.zeros((self.nCases(), len(alts)), dtype=numpy.float64)
+		ch_array = numpy.zeros((self.nCases(), len(self._alternative_codes())), dtype=numpy.float64)
 		ch_array[numpy.arange(ch_array.shape[0]),choices.squeeze()] = 1
 		try:
 			self.h5f.remove_node(self.h5idca, newvarname)

@@ -223,6 +223,11 @@ class TestSwissmetroExamples(ELM_TestCase):
 			if code != ref_id:
 				m.utility.co[code] = X("hhinc")*P("Inc_"+name) + P("ASC_"+name)
 		m.utility.ca = P.Time * X.tottime + P.cost * X.totcost
+		import numpy.version
+		try:
+			ver = [int(i) for i in numpy.version.version.split('.')]
+			if ver[0] <= 1 and ver[1]<11:
+				self.skipTest('numpy is less than 1.11, reporting features will fail')
 		m.roll(filename="None", cats='*', throw_exceptions=True)
 		#
 		m2 = Model.Example(102)
