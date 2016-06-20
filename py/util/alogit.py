@@ -24,6 +24,12 @@ def _repackage_comparison(a,op,b):
 		return "ifle({},{})".format(repackage(a),repackage(b))
 	elif isinstance(op,ast.NotEq):
 		return "ifne({},{})".format(repackage(a),repackage(b))
+	elif isinstance(op,ast.In):
+		rights = ",".join(repackage(j) for j in b.elts)
+		return "if(ifeq({},{}))".format(repackage(a), rights)
+	elif isinstance(op,ast.NotIn):
+		rights = ",".join(repackage(j) for j in b.elts)
+		return "not if(ifeq({},{}))".format(repackage(a), rights)
 	else:
 		global errop
 		errop = op

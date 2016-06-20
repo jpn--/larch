@@ -17,6 +17,7 @@ else:
 from .core import Fountain, LarchError, IntStringDict
 import warnings
 import numbers
+import collections
 from .util.aster import asterize
 
 class IncompatibleShape(LarchError):
@@ -1064,6 +1065,41 @@ class DT(Fountain):
 
 		return self
 
+	def idco_code_to_idca_dummy(self, oldvarname, newvarname, complib='zlib', complevel=5):
+		'''
+		Transforms an integer idco variable containing alt codes into an idca dummy variable.
+		
+		This method is particularly useful for cases when the choice is given in this
+		kind of idco format.
+		
+		Parameters
+		----------
+		oldvarname : str
+			The :ref:`idco` variable containing integer alternative codes.
+		newvarname : str
+			The new :ref:`idca` variable to be created.  If it already exists, it will
+			be overwritten.
+			
+		Other Parameters
+		----------------
+		complib : str
+			The compression library to use for the HDF5 file default filter.
+		complevel : int
+			The compression level to use for the HDF5 file default filter.
+		'''
+		choices = self.array_idco(oldvarname)
+		choices = numpy.digitize(choices, self._alternative_codes(), right=True)
+		ch_array = numpy.zeros((self.nCases(), len(alts)), dtype=numpy.float64)
+		ch_array[numpy.arange(ch_array.shape[0]),choices.squeeze()] = 1
+		try:
+			self.h5f.remove_node(self.h5idca, newvarname)
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		
+		h5ch = self.h5f.create_carray(self.h5idca, newvarname, obj=ch_array,
+					filters=_tb.Filters(complevel=complevel, complib=complib))
+
+
 
 	@staticmethod
 	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_kwargs={}, complib='zlib', complevel=5, **kwargs):
@@ -1130,12 +1166,8 @@ class DT(Fountain):
 			self.choice_idco = {a:aa[2] for a,aa in alts.items()}
 		except IndexError:
 			if choice is not None:
-				choices = self.array_idco(choice)
-				choices = numpy.digitize(choices, self._alternative_codes(), right=True)
-				ch_array = numpy.zeros((self.nCases(), len(alts)), dtype=numpy.float64)
-				#ch_array[:,choices] = 1 #ERROR
-				ch_array[numpy.arange(ch_array.shape[0]),choices.squeeze()] = 1
-				h5ch = self.h5f.create_carray(self.h5idca, '_choice_', obj=ch_array, filters=h5filters)
+				self.idco_code_to_idca_dummy(choice, '_choice_', complib=complib, complevel=complevel)
+				self.h5idco._v_attrs.choice_indicator = choice
 			else:
 				raise
 		# Avail
@@ -1803,6 +1835,31 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 
+
+	def export_idco(self, file, **formats):
+		'''Export the :ref:`idco` data to a csv file.
+		
+		Only the :ref:`idco` table is exported, the :ref:`idca` table is ignored.  Future versions
+		of Larch may provide a facility to export idco and idca data together in a 
+		single idco output file.
+		
+		Parameters
+		----------
+		file : str or file-like
+			If a string, this is the file name to give to the `open` command. Otherwise,
+			this object is passed to :class:`csv.writer` directly.
+			
+		Notes
+		-----
+		This method uses a :class:`pandas.DataFrame` object to write the output file, using
+		:meth:`pandas.DataFrame.to_csv`. Any keyword
+		arguments not listed here are passed through to the writer.
+		'''
+		data = self.dataframe_idco(*self.variables_co(), screen="None")
+		data.to_csv(file, index_label='caseid', **formats)
+	
+
+
 #	def set_avail_idco(self, *cols, varname='_avail_'):
 #		"""Set up the :ref:`idca` _avail_ data array from :ref:`idco` variables.
 #		
@@ -2025,12 +2082,23 @@ class DT(Fountain):
 		return _tb.Expr(expression, uservars=self.namespace)
 
 
-	def alogit_control_file(self):
+	def alogit_control_file(self, datafilename="exported_data.csv"):
 		"A section of the control file that is related to data operations"
 		import io
 		alo = io.StringIO()
 		from .util.alogit import repackage
 		
+		# File
+		
+		alo.write("file(name = {})".format(datafilename))
+		alo.write("\ncaseid")
+		for var in self.variables_co():
+			alo.write("\n{}".format(var))
+
+		alo.write("\n\n- end of variable list\n".format(datafilename))
+
+
+
 		# Availability
 		av_stack = self.avail_idco
 		try:
@@ -2050,15 +2118,40 @@ class DT(Fountain):
 
 		# Other stacks
 		for var in self.h5idca._v_children:
+			if var in ('_avail_','_choice_'):
+				continue
 			var_ = var.replace(" ","_")
 			if isinstance(self.h5idca._v_children[var], _tb.Group) and 'stack' in self.h5idca._v_children[var]._v_attrs:
 				stack = self.stack_idco(var)
 				alo.write("\n\n$array {}(alts)".format(var_))
 				for anum,aname in self.alternatives():
-					alo.write( "\n{2}(node_{0}) = {1}\n".format(aname.replace(" ","_"), repackage(stack[anum]), var_) )
+					alo.write( "\n{2}(node_{0}) = {1}".format(aname.replace(" ","_"), repackage(stack[anum]), var_) )
 
 		# Exclusions
-		
+		alo.write( "\n\n- Exclusion Factors:")
+		exclude_number = 1
+		if 'exclude_idco' in self.h5top.screen._v_attrs:
+			for ex_co in self.h5top.screen._v_attrs.exclude_idco:
+				alo.write("\nexclude({}) = {}".format(exclude_number, repackage(ex_co)))
+				exclude_number += 1
+
+		if 'exclude_idca' in self.h5top.screen._v_attrs:
+			for ex_ca in self.h5top.screen._v_attrs.exclude_idca:
+				raise NotImplementedError("excluding based on idca is not yet implemented for alogit export")
+
+		# Choice
+		try:
+			ch_ind = self.h5idco._v_attrs.choice_indicator
+		except AttributeError:
+			alo.write( "\n\n- Choice: not given here\n")
+		else:
+			alo.write( "\n\n- Choice:")
+			max_altcode = self._alternative_codes().max()
+			alt_dict = collections.defaultdict(lambda:0)
+			for anum,aname in zip(self._alternative_codes(), self._alternative_names()):
+				alt_dict[anum] = aname
+			choicelist = ",".join(  "node_{0}".format(alt_dict[i].replace(" ","_")) for i in range(1,max_altcode+1)  )
+			alo.write( "\nchoice = recode({},{})".format(ch_ind,choicelist))
 
 		return alo.getvalue()
 
