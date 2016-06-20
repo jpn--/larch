@@ -1,8 +1,6 @@
 
 
 
-
-
 class AlogitModelReporter():
 
 
@@ -25,6 +23,15 @@ class AlogitModelReporter():
 
 		alo.write( "\n" )
 		
+		try:
+			df_alogit = self.df.alogit_control_file()
+		except:
+			raise
+		else:
+			alo.write(df_alogit)
+
+		alo.write( "\n\n" )
+		
 		for mp in self:
 			alo.write( "$COEFF parameter_{} {} {}\n".format(mp.name_, "=" if mp.holdfast else "#", mp.value) )
 
@@ -38,58 +45,64 @@ class AlogitModelReporter():
 			if nestcode==self.root_id:
 				nest_param = ""
 			else:
-				nest_param = self.nest[nestcode].param.replace(" ","_")
+				nest_param = "parameter_" + self.nest[nestcode].param.replace(" ","_")
 			members = " ".join("node_"+g.node[j]['name'].replace(" ","_") for j in downcodes)
-			alo.write( "$NEST node_{} (parameter_{}) {}\n".format(nestname, nest_param, members) )
+			alo.write( "$NEST node_{} ({}) {}\n".format(nestname, nest_param, members) )
 
 		alo.write( "\n" )
 
 		# Availability
 		# Alogit uses ifeq instead of =, and similar for < > <= >=, so it's easier to
 		# just export the computed availability factors.
-		for aname in self.alternative_names():
-			alo.write( "Avail(node_{0}) = ifeq(avail_{0},1)\n".format(aname.replace(" ","_")) )
+		#for aname in self.alternative_names():
+		#	alo.write( "Avail(node_{0}) = ifeq(avail_{0},1)\n".format(aname.replace(" ","_")) )
 
 		# Choice
 		# We will export a column larchchoice that corresponds to the choice "slot"
 		# in the alternative_names tuple.
 		anames_tuple = tuple(i.replace(" ","_") for i in self.alternative_names())
-		anames = ", ".join(anames_tuple)
-		alo.write( "choice = recode(larchchoice, ())\n".format(anames) )
-
-		alo.write( "\n" )
+		#anames = ", ".join(anames_tuple)
+		#alo.write( "choice = recode(larchchoice, {})\n".format(anames) )
+		#
+		#alo.write( "\n" )
 
 		# Array (idca)
 
-		vars_idca = set(self.df.variables_ca())
-		try:
-			vars_idca.remove('caseid')
-		except KeyError:
-			pass
-		try:
-			vars_idca.remove('altid')
-		except KeyError:
-			pass
-
-		if len(vars_idca):
-			alo.write( "$array" )
-			for idca_name in vars_idca:
-				alo.write(" {}(alts)".format(idca_name.replace(" ","_")))
-			alo.write( "\n" )
-			for idca_name in vars_idca:
-				for aname in anames_tuple:
-					alo.write("\n{0}(node_{1}) = {0}_{1}".format(idca_name.replace(" ","_"), aname, ))
-
-			alo.write( "\n" )
+		#vars_idca = set(self.df.variables_ca())
+		#try:
+		#	vars_idca.remove('caseid')
+		#except KeyError:
+		#	pass
+		#try:
+		#	vars_idca.remove('altid')
+		#except KeyError:
+		#	pass
+		#
+		#if len(vars_idca):
+		#	alo.write( "$array" )
+		#	for idca_name in vars_idca:
+		#		alo.write(" {}(alts)".format(idca_name.replace(" ","_")))
+		#	alo.write( "\n" )
+		#	for idca_name in vars_idca:
+		#		for aname in anames_tuple:
+		#			alo.write("\n{0}(node_{1}) = {0}_{1}".format(idca_name.replace(" ","_"), aname, ))
+		#
+		#	alo.write( "\n" )
 
 		# Utility
 		for aname,acode in zip(anames_tuple, self.alternative_codes()):
-			alo.write( "\nUTIL(node_{}) = 0 +\n".format(aname) )
+			padding_size = 0
+			alo.write( "\nUTIL(node_{}) = ".format(aname) )
 			if acode in self.utility.co:
 				for k in self.utility.co[acode]:
-					alo.write( "     parameter_{} * {} +\n".format(k.param, k.data) )
+					alo.write(" "*padding_size)
+					alo.write( "parameter_{} * {} +\n".format(k.param, k.data) )
+					padding_size = len("UTIL(node_{}) = ".format(aname))
 			for k in self.utility.ca:
+				alo.write(" "*padding_size)
 				alo.write( "     parameter_{} * {} +\n".format(k.param, k.data) )
-			alo.write( "     0\n" )
+				padding_size = len("UTIL(node_{}) = ".format(aname))
+			alo.write(" "*padding_size)
+			alo.write( "0\n" )
 
 		return alo.getvalue()
