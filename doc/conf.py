@@ -27,7 +27,7 @@ if on_rtd:
 
 	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw',
 					'docx', 'docx.enum', 'docx.enum.style', 'scipy', 'scipy.optimize',
-					'numpy.linalg', 'scipy.linalg', 'tables',
+					'numpy.linalg', 'scipy.linalg', 'tables', 'numpy.ma'
 	]
 	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
@@ -37,12 +37,12 @@ import larch
 larch_versions = {
 	'larch': larch.__version__,
 	'build': larch.__build_date__,
-	'pandas': '0.14.1',
+	'pandas': '0.18.0',
 	'apsw': '3.8.8.1-r1',
-	'python': '3.4.0 final',
-	'scipy': '0.15.1',
+	'python': '3.5.0 final',
+	'scipy': '0.17.0',
 	'sqlite': '3.8.8.1',
-	'numpy': '1.9.1',
+	'numpy': '1.11.0',
 	'released': larch.__build_date__.replace(' ', '%20'),
 }
 
