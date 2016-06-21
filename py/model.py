@@ -1267,6 +1267,24 @@ class Model(Model2, ModelReporter):
 			self._LL_current =  -(ret.fun) 
 		return ret
 
+	def data_quality_check(self, repair=None):
+		if self.is_provisioned()<=0:
+			self.provision()
+		clashes = numpy.nonzero( numpy.logical_and(self.Data("Choice"), ~self.Data("Avail")) )
+		n_clashes = len(clashes[0])
+		if n_clashes>0:
+			self.clash = clashes
+			if repair == '+':
+				for i in zip(*clashes):
+					self.DataEdit("Avail")[i] = True
+				self.note("Model had {} cases where the chosen alternative is unavailable, these have been repaired by making it available".format(n_clashes))
+			elif repair == '-':
+				for i in zip(*clashes):
+					self.DataEdit("Choice")[i] = 0
+				self.note("Model had {} cases where the chosen alternative is unavailable, these have been repaired by making it not chosen".format(n_clashes))
+			else:
+				raise LarchError("Model has {} cases where the chosen alternative is unavailable".format(n_clashes))
+
 	def analyze(self, reportfile=None, css=None, repair=None, est_args=None, est_tight=None, *arg, **kwargs):
 		if reportfile is not None:
 			htmlfile = XHTML(reportfile, *arg, **kwargs)
@@ -1314,7 +1332,7 @@ class Model(Model2, ModelReporter):
 			else:
 				raise LarchError("Model has {} cases where the chosen alternative is unavailable".format(n_clashes))
 		
-		if len(qc):
+		if qc is not None and len(qc):
 			self.note(qc)
 		
 		try:

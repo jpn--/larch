@@ -883,20 +883,25 @@ class XhtmlModelReporter():
 				x.th(ti)
 			x.end_tr
 			x.end_thead
-			with x.tbody_:
-				for s in zip(*stack):
-					with x.tr_:
-						for thing,ti in zip(s,titles):
-							if ti=="Description":
-								x.td("{:s}".format(thing), {'class':'strut2'})
-							elif ti=="Histogram":
-								cell = x.start('td', {'class':'histogram_cell'})
-								cell.append( thing )
-								x.end('td')
-							elif isinstance(thing,str):
-								x.td("{:s}".format(thing))
-							else:
-								x.td("{:<11.7g}".format(thing))
+			try:
+				with x.tbody_:
+					for s in zip(*stack):
+						with x.tr_:
+							for thing,ti in zip(s,titles):
+								if ti=="Description":
+									x.td("{:s}".format(thing), {'class':'strut2'})
+								elif ti=="Histogram":
+									cell = x.start('td', {'class':'histogram_cell'})
+									cell.append( thing )
+									x.end('td')
+								elif isinstance(thing,str):
+									x.td("{:s}".format(thing))
+								else:
+									x.td("{:<11.7g}".format(thing))
+			except:
+				for sn,stac in enumerate(stack):
+					print(sn,stac)
+				raise
 			x.end_table
 
 

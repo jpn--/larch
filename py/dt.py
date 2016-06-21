@@ -620,6 +620,7 @@ class DT(Fountain):
 			self.h5f.create_group(self.h5top, 'screen')
 		else:
 			self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+			self.h5top.screen[:] = True
 		self.rescreen(exclude_idco, exclude_idca, exclude_unavail)
 
 

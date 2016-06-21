@@ -36,4 +36,9 @@ class statistical_summary():
 		sumx_ = numpy.sum(xxx,0)
 		ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
 		ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins)], 0, xxx).squeeze()
+		# Make sure that the histogram field is iterable
+#		try:
+#			iter(ss.histogram)
+#		except:
+#			ss.histogram = [ss.histogram, ]
 		return ss
