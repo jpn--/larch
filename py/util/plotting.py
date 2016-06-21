@@ -57,7 +57,22 @@ def hexcolor(color):
 
 
 def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False):
-	
+
+	if isinstance(bins, str):
+		data = numpy.asarray(data)
+		if data.size == 0:
+			# handle empty arrays. Can't determine range, so use 0-1.
+			mn, mx = 0.0, 1.0
+		else:
+			mn, mx = data.min() + 0.0, data.max() + 0.0
+		width = numpy.lib.function_base._hist_bin_selectors[bins](data)
+		if width:
+			bins = int(numpy.ceil((mx - mn) / width))
+		else:
+			bins = 1
+		# The spark graphs get hard to read if the bin slices are too thin, so we will max out at 50 bins
+		if bins > 50:
+			bins = 50
 	try:
 		n, bins, patches = plt.hist(data, bins, normed=1, facecolor=hexcolor('ocean'), linewidth=0, alpha=1.0)
 	except:
@@ -85,6 +100,9 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 
 def spark_pie_maker(data):
 	fig = plt.gcf()
+	fig.set_figheight(0.2)
+	fig.set_figwidth(0.75)
+	fig.set_dpi(300)
 	C_sky = (35,192,241)
 	C_night = (100,120,186)
 	C_forest = (39,182,123)
@@ -94,7 +112,7 @@ def spark_pie_maker(data):
 	plt.pie(data, explode=None, labels=None, colors=[hexcolor('sky'),hexcolor('night'),hexcolor('forest'),hexcolor('ocean')],
 			#autopct='%1.1f%%',
 			shadow=False, startangle=90,
-			wedgeprops={'linewidth':0},
+			wedgeprops={'linewidth':0, 'clip_on':False},
 			frame=False)
 	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
@@ -114,7 +132,7 @@ def spark_histogram(data, *arg, **kwarg):
 	uniq_counts = None
 	if len(uniq)<=5:
 		uniq, uniq_counts = numpy.unique(flat_data, return_counts=True)
-	if uniq_counts is not None and len(uniq_counts)>1:
+	if uniq_counts is not None and len(uniq_counts)<=5:
 		return spark_pie_maker(uniq_counts)
 	return spark_histogram_maker(data, *arg, **kwarg)
 

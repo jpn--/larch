@@ -829,7 +829,42 @@ class XhtmlModelReporter():
 
 
 		if self.Data("UtilityCO") is not None:
-			show_descrip = 'data_co' in self.descriptions
+			
+			description_catalog = {}
+			
+			
+			
+			from ..roles import _data_description_catalog
+			
+			description_catalog.update(_data_description_catalog)
+#			for i in dir(X):
+#				if isinstance(getattr(X,i),X):
+#					description_catalog[i] = getattr(X,i)._descrip
+
+			if 'data_co' in self.descriptions:
+				description_catalog.update(self.descriptions.data_co)
+
+			names = self.needs()["UtilityCO"].get_variables()
+			
+			description_catalog_keys = list(description_catalog.keys())
+			description_catalog_keys.sort(key=len, reverse=True)
+			
+			descriptions = numpy.asarray(names)
+			
+			for dnum, descr in enumerate(descriptions):
+				if descr in description_catalog:
+					descriptions[dnum] = description_catalog[descr]
+				else:
+					for key in description_catalog_keys:
+						if key in descr:
+							descr = descr.replace(key,description_catalog[key])
+					descriptions[dnum] = descr
+			
+			#descriptions = [description_catalog[i] if i in description_catalog else 'n/a' for i in names]
+
+			show_descrip = (numpy.asarray(descriptions)!=numpy.asarray(names)).any()
+
+			#show_descrip = 'data_co' in self.descriptions
 			if bool((self.Data("Weight")!=1).any()):
 				x.h3("idCO Data (weighted)", anchor=1)
 			else:
@@ -846,13 +881,23 @@ class XhtmlModelReporter():
 			negs = ss.n_negatives
 			zers = ss.n_zeros
 			mean_nonzer = ss.mean_nonzero
-			names = self.needs()["UtilityCO"].get_variables()
 			
-			
-			ncols = 6
-			
-			stack = [names,means,stdevs,mins,maxs,zers,mean_nonzer]
-			titles = ["Data","Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+			ncols = 0
+			stack = []
+			titles = []
+
+			if show_descrip:
+				stack += [descriptions,]
+				titles += ["Description",]
+				ncols += 1
+			else:
+				stack += [names,]
+				titles += ["Data",]
+				ncols += 1
+
+			ncols += 5
+			stack += [means,stdevs,mins,maxs,zers,mean_nonzer]
+			titles += ["Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
 			
 			use_p = (numpy.sum(posis)>0)
 			use_n = (numpy.sum(negs)>0)
@@ -865,17 +910,17 @@ class XhtmlModelReporter():
 				stack += [negs,]
 				titles += ["Negatives",]
 				ncols += 1
-			if show_descrip:
-				descriptions = [self.descriptions.data_co[i] if i in self.descriptions.data_co else 'n/a' for i in names]
-				stack += [descriptions,]
-				titles += ["Description",]
-				ncols += 1
-			
+
 			# Histograms
 			stack += [ss.histogram,]
-			titles += ["Histogram",]
+			titles += ["Distrib.",]
 			ncols += 1
-			
+
+			if show_descrip:
+				stack += [names,]
+				titles += ["Data",]
+				ncols += 1
+
 			x.table
 			x.thead
 			x.tr
@@ -890,7 +935,7 @@ class XhtmlModelReporter():
 							for thing,ti in zip(s,titles):
 								if ti=="Description":
 									x.td("{:s}".format(thing), {'class':'strut2'})
-								elif ti=="Histogram":
+								elif ti=="Distrib.":
 									cell = x.start('td', {'class':'histogram_cell'})
 									cell.append( thing )
 									x.end('td')
@@ -936,7 +981,7 @@ class XhtmlModelReporter():
 				x.th('Data')
 				for coltitle,colvalue,_ in display_cols:
 					x.th(coltitle)
-				x.th('Histogram')
+				x.th('Distrib.')
 				x.end_tr
 				x.end_thead
 				with x.tbody_:
@@ -988,7 +1033,7 @@ class XhtmlModelReporter():
 				x.th('Data')
 				for coltitle,colvalue,_ in display_cols:
 					x.th(coltitle)
-				x.th('Histogram')
+				x.th('Distrib.')
 				x.end_tr
 				x.end_thead
 				with x.tbody_:

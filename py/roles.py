@@ -24,17 +24,24 @@ class Role(type):
 		except AttributeError:
 			return cls(key)
 
+_data_description_catalog = {}
+
 
 class DataRef(str, metaclass=Role):
-	def __new__(cls, name):
+	def __new__(cls, name, **kwarg):
 		if hasattr(str, name):
 			raise NameError("cannot create DataRef with the name of a str method ({})".format(name))
+		if name=='_descrip':
+			raise NameError("cannot create DataRef with the name ({})".format(name))
 		try:
 			return getattr(cls,name)
 		except:
 			self = super().__new__(cls, name)
 			self._role = 'data'
 			return self
+	def __init__(self, name, descrip=None):
+		if descrip is not None:
+			_data_description_catalog[self] = descrip
 	def __repr__(self):
 		s = super().__str__()
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$",s) and not _keyword.iskeyword(s):
@@ -106,7 +113,7 @@ class DataRef(str, metaclass=Role):
 				return True
 		return False
 	def __hash__(self):
-		return hash(repr(self))
+		return hash(super().__str__())
 
 
 
