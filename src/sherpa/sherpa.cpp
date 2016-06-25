@@ -1406,7 +1406,8 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 								   const double& initial_value,
 								   const double& max,
 								   const double& min,
-								   const int& holdfast)
+								   const int& holdfast,
+								   const double& tstat)
 {
 	if (param_name=="") {
 		throw(etk::ParameterNameError("Cannot name a parameter with an empty string."));
@@ -1448,6 +1449,10 @@ elm::ModelParameter sherpa::parameter(const std::string& param_name,
 	}
 	if (holdfast>=0) {
 		px._set_holdfast((signed char)holdfast);
+	}
+	
+	if (!isNan(tstat)) {
+		px._set_t_stat(tstat);
 	}
 	
 	return px;

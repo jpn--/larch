@@ -152,7 +152,18 @@ void elm::ModelParameter::_set_initvalue(const double& value)
 	model->FInitValues[slot] = value;
 }
 
+void elm::ModelParameter::_set_std_err(const double& value)
+{
+	if (slot >= model->invHess.size1() || slot >= model->invHess.size2()) OOPS_IndexError("slot ",slot," exceeds allocated covariance array size");
+	model->invHess(slot,slot) = value*value;
+}
 
+
+
+void elm::ModelParameter::_set_t_stat(const double& value)
+{
+	_set_std_err((_get_value() - _get_nullvalue()) / value );
+}
 
 
 

@@ -300,7 +300,8 @@ public:
 							   const double& initial_value=NAN,
 							   const double& max=NAN,
 							   const double& min=NAN,
-							   const int& holdfast=-1); 
+							   const int& holdfast=-1,
+							   const double& tstat=NAN);
 
 	elm::ModelParameter __getitem__(const std::string& param_name);
 	elm::ModelParameter __getitem__(const int& param_num);

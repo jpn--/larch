@@ -7,10 +7,13 @@ from contextlib import contextmanager
 import numpy
 import math
 from .core import LarchError
-
+from .util.xhtml import XML_Builder
 
 from .util.pmath import category as Category
 from .util.pmath import rename as Rename
+
+
+
 
 
 class HTML():
@@ -102,7 +105,7 @@ class parameter_category(str): pass
 
 
 
-def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, overwrite=False, spool=True, title=None):
+def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, overwrite=False, spool=True, title=None, model_titles=None):
 	"""
 	Generate a combined report on a number of (probably related) models.
 	
@@ -152,13 +155,25 @@ def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, ove
 	
 
 	head = """
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,900,700,500italic|Roboto+Mono:400,300,400italic,700,700italic' rel='stylesheet' type='text/css'>
 	<style>
-	table { border-collapse: collapse; font-family: "Helvetica", "Arial", sans-serif; }
-	td.dark, th.dark { background-color: #cccccc; padding: 3px; text-align: center; }
-	td.light, th.light { background-color: #eeeeee; padding: 3px; text-align: center; }
-	td.parameter_category { background-color: #dddddd; font-style: italic; }
-	td.table_category { background-color: #333333; color: #FFFFFF; font-weight: 900; }
-	td.tstat { font-size: 70%; }
+	div.bounding {margin-left:auto; margin-right:auto; padding-left:20px; padding-right:20px; }
+	h1 {font-family: "Book Antiqua", Palatino, serif; }
+	table { border-collapse: collapse;  font-weight:400; text-align:center;  }
+	th {border: 1px solid #999999; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%; font-weight:700;}
+	table {border: 0; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%;}
+	td {border: 1px solid #999999; font-family: "Roboto Mono", "Helvetica", "Arial", sans-serif; font-size:90%;}
+	td:first-child, th:first-child { text-align:left; padding-left:5px;}
+	td.dark, th.dark { background-color: #f0f0f0; padding: 3px; text-align: center; }
+	td.light, th.light { background-color: #f8f8f8; padding: 3px; text-align: center; }
+	td.parameter_category { background-color: #f4f4f4; font-style: italic; font-family: "Roboto","Helvetica", "Arial", sans-serif; font-weight:500;}
+	td.table_category { background-color: #ffffff; color: #000; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
+		border-left:0; border-right:0; padding-top:20px;
+	}
+	th.emptyhead {border: 0;}
+	tr:first-child > td.table_category { padding-top:5px; }
+	td.tstat { font-size: 80%; font-weight: 300;}
+	.larch_signature {font-size:80%; font-weight:100; font-style:italic; font-family: "Book Antiqua", Palatino, serif; }
 	</style>
 	"""
 
@@ -170,6 +185,7 @@ def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, ove
 
 	with HTML(filename, head=head, overwrite=overwrite, spool=spool, title=title) as f:
 		
+		f._f.write('<div class="bounding">')
 		if title: f.h1(title)
 		
 		shades = ['dark','light']
@@ -217,21 +233,26 @@ def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, ove
 						for m in models:
 							shade ^= 1
 							if p in m:
-								f.write('<td class="{0}" colspan="2">{1}</td>'.format(shades[shade],p.str(m)))
+								f.write('<td class="{0}" colspan="2">{1}</td>'.format(shades[shade],p.strf(m)))
 							else:
 								f.write('<td class="{0}" colspan="2">{1}</td>'.format(shades[shade],"---"))
 
 		with f.table():
 			with f.block("thead"):
 				with f.block("tr"):
-					f.write('<th></th>')
+					f.write('<th class="emptyhead"></th>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						if m.title == "Untitled Model" and hasattr(m,"loaded_from"):
 							title = m.loaded_from
 						else:
 							title = m.title
+						if model_titles is not None:
+							try:
+								title = model_titles[m_number]
+							except:
+								pass
 						f.write('<th colspan="2" class="{0}">{1}</th>'.format(shades[shade],title))
 			with f.block("tbody"):
 				# PARAMETER ESTIMATES
@@ -334,10 +355,11 @@ def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, ove
 
 						
 				# RATIOS
-				with f.tr():
-					f.write('<td colspan="{0}" class="table_category">Calculated Factors</td>'.format(len(models)*2+1))
-				for pm in ratios:
-					write_factor_row(pm)
+				if ratios is not None and len(ratios)>0:
+					with f.tr():
+						f.write('<td colspan="{0}" class="table_category">Calculated Factors</td>'.format(len(models)*2+1))
+					for pm in ratios:
+						write_factor_row(pm)
 				
 				
 				
@@ -363,7 +385,337 @@ def multireport(models_or_filenames, params=(), ratios=[], *, filename=None, ove
 #								f.write('<td colspan="2" class="{0}">{1}</td>'.format(shades[shade],i))
 #							except LarchError:
 #								f.write('<td colspan="2" class="{0}">---</td>'.format(shades[shade]))
+
+		xsign = XML_Builder("div", {'class':'larch_signature'})
+		from .version import version
+		from .util.img import favicon
+		import time
+		xsign.start('p')
+		xsign.start('img', {'width':"14", 'height':"14", 'src':"data:image/png;base64,{}".format(favicon), 'style':'position:relative;top:2px;' })
+		xsign.end('img')
+		xsign.data(" Larch {}".format(version))
+		xsign.simple('br')
+		xsign.data("multireport generated on ")
+		xsign.simple('br', attrib={'class':'noprint'})
+		xsign.data(time.strftime("%A %d %B %Y "))
+		xsign.simple('br', attrib={'class':'noprint'})
+		xsign.data(time.strftime("%I:%M:%S %p"))
+		xsign.end('p')
+		xsign.close()
+		f._f.write(xsign.dumps())
+
+		f._f.write('</div>')
 		return f.dump()
 
+
+
+
+
+from .util.xhtml import XHTML, XML_Builder
+
+
+
+def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=None,
+                      overwrite=False, spool=True, title=None, model_titles=None):
+	"""
+	Generate a combined report on a number of (probably related) models.
+	
+	Parameters
+	----------
+	models_or_filenames : iterable
+		A list of models, given either as `str` containing a path to a file that
+		can be loaded as a :class:`Model`, or pre-loaded :class:`Model` objects.
+	params : iterable
+		An ordered list of parameters names and/or categories. If given,
+		this list will be used to order the resulting table.
+	ratios : iterable
+		An ordered list of factors to evaluate.
+	
+	Other Parameters
+	----------------
+	filename : str
+		The file into which to save the multireport
+	overwrite : bool
+		If `filename` exists, should it be overwritten (default False).
+	spool : bool
+		If `filename` exists, should the report file be spooled into a 
+		similar filename.
+	title : str
+		An optional title for the report.
+	
+	"""
+	
+	
+	models = []
+	for m in models_or_filenames:
+		if isinstance(m, str) and os.path.isfile(m):
+			models.append(Model.load(m))
+		elif isinstance(m, Model):
+			models.append(m)
+		else:
+			print("Failed to load {}".format(m))
+
+	listed_parameters = set([p for p in params if not isinstance(p,category)])
+	for p in params:
+		if isinstance(p,category):
+			listed_parameters.update( p.complete_members() )
+	all_parameters = set()
+	for m in models:
+		all_parameters.update(m.parameter_names())
+	unlisted_parameters = all_parameters - listed_parameters
+	
+
+	css = """
+	@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500italic|Roboto+Mono:300,400,700,100);
+
+	h1 {font-family: "Book Antiqua", Palatino, serif; }
+	table { border-collapse: collapse;  font-weight:400; text-align:center;  }
+	th {border: 1px solid #999999; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%; font-weight:700;}
+	table {border: 0; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%;}
+	td {border: 1px solid #999999; font-family: "Roboto Mono", "Helvetica", "Arial", sans-serif; font-size:90%;}
+	td:first-child, th:first-child { text-align:left; padding-left:5px;}
+	td.dark, th.dark { background-color: #ececec; padding: 3px; text-align: center; }
+	td.light, th.light { background-color: #f8f8f8; padding: 3px; text-align: center; }
+	td.parameter_category { background-color: #f2f2f2; font-style: italic; font-family: "Roboto","Helvetica", "Arial", sans-serif; font-weight:500;}
+	td.table_category { background-color: #ffffff; color: #000; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
+		border-left:0; border-right:0; padding-top:20px;
+	}
+	th.emptyhead {border: 0;}
+	tr:first-child > td.table_category { padding-top:5px; }
+	td.tstat { font-size: 70%; font-weight: 100;}
+	.larch_signature {font-size:80%; font-weight:100; font-style:italic; font-family: "Book Antiqua", Palatino, serif; }
+	"""
+
+	def param_appears_in_at_least_one_model(p):
+		if isinstance(p,category) and len(p.members)==0: return True
+		for m in models:
+			if p in m: return True
+		return False
+
+	xhtm = XHTML(filename, extra_css=css, overwrite=overwrite, spool=spool)
+	xhtm.toc_color = 'night'
+
+	xhtm.title.text = title
+
+	f = XML_Builder()
+
+	if title:
+		f.h1(title)
+	
+	shades = ['light','dark',]
+	
+	def write_param_row(p):
+		if p is None: return
+		if param_appears_in_at_least_one_model(p):
+			if isinstance(p,category):
+				with f.tr_:
+					f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
+				for subp in p.members:
+					write_param_row(subp)
+			else:
+				with f.tr_:
+					f.td(str(p))
+					shade = 0
+					for m in models:
+						shade ^= 1
+						if p in m:
+							m_p = m.parameter_wide(p)
+							tstat = m_p.t_stat
+							value = m_p.value
+							try:
+								value = "{:0.6g}".format(value)
+							except ValueError:
+								value = str(value)
+							try:
+								tstat = "{:0.3g}".format(tstat)
+							except ValueError:
+								tstat = str(tstat)
+							f.td(value, {'class':str(shades[shade])})
+							f.td(tstat, {'class':str(shades[shade])})
+						else:
+							f.td("---", {'class':str(shades[shade])})
+							f.td("---", {'class':str(shades[shade])})
+
+	def write_factor_row(p):
+		if p is None: return
+		if param_appears_in_at_least_one_model(p):
+			if isinstance(p,category):
+				with f.tr_:
+					f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
+				for subp in p.members:
+					write_factor_row(subp)
+			else:
+				with f.tr_:
+					f.td(p.getname())
+					shade = 0
+					for m in models:
+						shade ^= 1
+						if p in m:
+							f.td(p.strf(m), {'colspan':"2", 'class':shades[shade]})
+						else:
+							f.td("---", {'colspan':"2", 'class':shades[shade]})
+
+	with f.table_:
+		with f.block("thead"):
+			with f.block("tr"):
+				f.th("", {'class':"emptyhead"})
+				shade = 0
+				for m_number,m in enumerate(models):
+					shade ^= 1
+					if m.title == "Untitled Model" and hasattr(m,"loaded_from"):
+						title = m.loaded_from
+					else:
+						title = m.title
+					if model_titles is not None:
+						try:
+							title = model_titles[m_number]
+						except:
+							pass
+					f.th(title, {'colspan':'2', 'class':shades[shade]})
+		with f.block("tbody"):
+			# PARAMETER ESTIMATES
+			with f.block("tr"):
+				#f.td("Parameter Estimates", {'class':'table_category'})
+				f.start("td",{'class':'table_category'})
+				f.anchor_auto_toc("Parameter Estimates", "2")
+				f.data("Parameter Estimates")
+				f.end("td")
+				shade = 0
+				for m in models:
+					shade ^= 1
+					f.td("Estimate",{'class':'table_category'})
+					f.td("(t\u2011Statistic)",{'class':'table_category tstat'}) # non-breaking hyphen
+			for p in params:
+				write_param_row(p)
+			if len(params)>0 and len(unlisted_parameters)>0:
+				write_param_row(category("Other Parameters"))
+			for p in unlisted_parameters:
+				write_param_row(p)
+			# MODEL STATISTICS
+			with f.tr_:
+				#f.td("Model Statistics", {'colspan':str(len(models)*2+1), 'class':'table_category'})
+				f.start("td",{'colspan':str(len(models)*2+1), 'class':'table_category'})
+				f.anchor_auto_toc("Model Statistics", "2")
+				f.data("Model Statistics")
+				f.end("td")
+			with f.tr_:
+				f.td('Log Likelihood')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					f.td("{:0.6g}".format(ll), {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Log Likelihood at Constants')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llc = es[0]['log_like_constants']
+					if not math.isnan(llc):
+						f.td('{:0.6g}'.format(llc), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Log Likelihood at Null Parameters')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llz = es[0]['log_like_null']
+					if not math.isnan(llz):
+						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Log Likelihood with No Model')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llz = es[0]['log_like_nil']
+					if not math.isnan(llz):
+						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Rho Squared vs. Constants')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llc = es[0]['log_like_constants']
+					if not math.isnan(llc):
+						rsc = 1.0-(ll/llc)
+						f.td('{:0.4g}'.format(rsc), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Rho Squared vs. Null Parameters')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llz = es[0]['log_like_null']
+					if not math.isnan(llz):
+						rsz = 1.0-(ll/llz)
+						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+			with f.tr_:
+				f.td('Rho Squared vs. No Model')
+				shade = 0
+				for m in models:
+					shade ^= 1
+					es = m._get_estimation_statistics()
+					ll = es[0]['log_like']
+					llz = es[0]['log_like_nil']
+					if not math.isnan(llz):
+						rsz = 1.0-(ll/llz)
+						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':shades[shade]})
+					else:
+						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+
+					
+			# RATIOS
+			if ratios is not None and len(ratios)>0:
+				with f.tr_:
+					#f.td('Calculated Factors', {'colspan':str(len(models)*2+1), 'class':"table_category"})
+					f.start("td",{'colspan':str(len(models)*2+1), 'class':'table_category'})
+					f.anchor_auto_toc("Calculated Factors", "2")
+					f.data("Calculated Factors")
+					f.end("td")
+
+				for pm in ratios:
+					write_factor_row(pm)
+#	xsign = XML_Builder("div", {'class':'larch_signature'})
+#	from .version import version
+#	from .util.img import favicon
+#	import time
+#	xsign.start('p')
+#	xsign.start('img', {'width':"14", 'height':"14", 'src':"data:image/png;base64,{}".format(favicon), 'style':'position:relative;top:2px;' })
+#	xsign.end('img')
+#	xsign.data(" Larch {}".format(version))
+#	xsign.simple('br')
+#	xsign.data("multireport generated on ")
+#	xsign.simple('br', attrib={'class':'noprint'})
+#	xsign.data(time.strftime("%A %d %B %Y "))
+#	xsign.simple('br', attrib={'class':'noprint'})
+#	xsign.data(time.strftime("%I:%M:%S %p"))
+#	xsign.end('p')
+#	xsign.close()
+#	f._f.write(xsign.dumps())
+
+	xhtm << f
+	if filename is None:
+		from .util.temporaryfile import TemporaryHtml
+		TemporaryHtml(content=xhtm.dump())
+	return xhtm
 
 

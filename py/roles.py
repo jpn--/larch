@@ -31,9 +31,10 @@ class DataRef(str, metaclass=Role):
 	def __new__(cls, name, **kwarg):
 		if hasattr(str, name):
 			raise NameError("cannot create DataRef with the name of a str method ({})".format(name))
-		if name=='_descrip':
+		if name in ('_descrip', 'descrip', '_role'):
 			raise NameError("cannot create DataRef with the name ({})".format(name))
 		try:
+			raise TypeError("debugging") # The getattr here is not really needed?
 			return getattr(cls,name)
 		except:
 			self = super().__new__(cls, name)
@@ -42,6 +43,15 @@ class DataRef(str, metaclass=Role):
 	def __init__(self, name, descrip=None):
 		if descrip is not None:
 			_data_description_catalog[self] = descrip
+	@property
+	def descrip(self):
+		if self in _data_description_catalog:
+			return _data_description_catalog[self]
+		return None
+	@descrip.setter
+	def descrip(self,value):
+		if value is not None:
+			_data_description_catalog[self] = value
 	def __repr__(self):
 		s = super().__str__()
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$",s) and not _keyword.iskeyword(s):
@@ -514,6 +524,9 @@ globals()[_ParameterRef_repr_txt+_DataRef_repr_txt] = CombinedRef
 core.ParameterRef = ParameterRef
 core.DataRef = DataRef
 
+P = ParameterRef
+X = DataRef
+PX = CombinedRef
 
 __all__ = [_ParameterRef_repr_txt, _DataRef_repr_txt, _ParameterRef_repr_txt+_DataRef_repr_txt]
 

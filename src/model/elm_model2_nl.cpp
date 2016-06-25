@@ -765,6 +765,11 @@ ELM_RESULTCODE elm::Model2::nest
 		if (freedom_name=="") freedom_name = nest_name;
 		// If parameter does not exist, create it using LOGSUM defaults
 		if (!parameter_exists(freedom_name)) {
+		
+			if (!option.autocreate_parameters) {
+				OOPS("Cannot auto-create parameter ",freedom_name," because autocreate_parameters is off");
+			}
+		
 			MONITOR(msg) << "automatically generating "<<freedom_name<<" parameter because it does not already exist";
 			std::string fn = freedom_name;
 			etk::uppercase(fn);

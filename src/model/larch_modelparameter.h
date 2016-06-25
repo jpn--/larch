@@ -56,6 +56,9 @@ namespace elm {
 		void _del_max();
 
 
+		void _set_std_err(const double& value);
+		void _set_t_stat(const double& value);
+
 		double _get_std_err() const;
 		double _get_t_stat() const;
 		double _get_robust_std_err() const;

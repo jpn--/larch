@@ -2,7 +2,7 @@
 
 from ..logging import logging as baselogging
 from .. import logging
-from .xhtml import XHTML, XML_Builder, xhtml_rawtext_as_div
+from .xhtml import XHTML, XML_Builder, xhtml_rawtext_as_div, _default_css
 import os.path
 from .temporaryfile import TemporaryFile
 import inspect
@@ -89,18 +89,9 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	if 'css' in format:
 		css = format['css']
 	elif use_jupyter:
-		css = """
-		.error_report {color:red; font-family:monospace;}
-		body {font-family: "Book Antiqua", "Palatino", serif;}		
-		table {border-collapse:collapse;}
-		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
-		body { }
-		.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
-		a.parameter_reference {font-style: italic; text-decoration: none}
+		css = _default_css + """
 		.strut2 {min-width:1in}
-		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
 		"""
-
 
 	with XHTML(use_filename, quickhead=m, css=css) as f:
 		f << m.report(cats=cats, style='xml', **format)

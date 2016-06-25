@@ -2,6 +2,7 @@ from . import docx, latex, pdf, txt, xhtml, alogit
 import math
 from ..util.xhtml import XHTML, XML_Builder
 from ..core import LarchError
+import os
 
 class ModelReporter(docx.DocxModelReporter,
 					latex.LatexModelReporter,
@@ -80,9 +81,19 @@ class ModelReporter(docx.DocxModelReporter,
 			if filename is None and tempfile==False:
 				return rpt
 			else:
-				f = fileopen(None if tempfile else filename, mode='wb')
+				use_filename = None if tempfile else filename
+				if use_filename is not None:
+					base, ext = os.path.splitext(use_filename)
+					if ext.casefold() not in ('.html','.xhtml','.htm'):
+						use_filename = use_filename + '.html'
+				f = fileopen(use_filename, mode='wb')
 				f.write(rpt)
+				f.flush()
 				f.seek(0)
+				try:
+					f.view()
+				except:
+					pass
 				return f
 
 
@@ -101,3 +112,6 @@ class ModelReporter(docx.DocxModelReporter,
 		y = self.report(style='html', tempfile=True, cats='D')
 		y.view()
 		return y
+
+	def report_html(self, *args, cats='*', **kwargs):
+		self.report(style='html', cats=cats, **kwargs)

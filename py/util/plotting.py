@@ -49,23 +49,39 @@ _color_rgb256['ocean'] = (29,139,204)
 _color_rgb256['night'] = (100,120,186)
 _color_rgb256['forest'] = (39,182,123)
 _color_rgb256['lime'] = (128,189,1)
+_color_rgb256['orange'] = (246,147,0)
 
 def hexcolor(color):
 	c = _color_rgb256[color.casefold()]
-	return "#{}{}{}".format(*(hex(c[i])[-2:] for i in range(3)))
+	return "#{}{}{}".format(*(hex(c[i])[-2:] if c[i]>0 else "00" for i in range(3)))
 
+def strcolor_rgb256(color):
+	c = _color_rgb256[color.casefold()]
+	return "{},{},{}".format(*c)
+
+_threshold_for_dropping_zeros_in_histograms = 0.35
 
 
 def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False):
 
+	data = numpy.asarray(data)
+
+	# Check if data is mostly zeros
+	n_zeros = (data==0).sum()
+	if n_zeros > (data.size) * _threshold_for_dropping_zeros_in_histograms:
+		use_data = data[data!=0]
+		use_color = hexcolor('orange')
+	else:
+		use_data = data
+		use_color = hexcolor('ocean')
+
 	if isinstance(bins, str):
-		data = numpy.asarray(data)
-		if data.size == 0:
+		if use_data.size == 0:
 			# handle empty arrays. Can't determine range, so use 0-1.
 			mn, mx = 0.0, 1.0
 		else:
-			mn, mx = data.min() + 0.0, data.max() + 0.0
-		width = numpy.lib.function_base._hist_bin_selectors[bins](data)
+			mn, mx = use_data.min() + 0.0, use_data.max() + 0.0
+		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data)
 		if width:
 			bins = int(numpy.ceil((mx - mn) / width))
 		else:
@@ -73,8 +89,12 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		# The spark graphs get hard to read if the bin slices are too thin, so we will max out at 50 bins
 		if bins > 50:
 			bins = 50
+		# The spark graphs look weird if the bin slices are too fat, so we will min at 10 bins
+		if bins < 10:
+			bins = 10
+
 	try:
-		n, bins, patches = plt.hist(data, bins, normed=1, facecolor=hexcolor('ocean'), linewidth=0, alpha=1.0)
+		n, bins, patches = plt.hist(use_data, bins, normed=1, facecolor=use_color, linewidth=0, alpha=1.0)
 	except:
 		print("<data>\n",data,"</data>")
 		print("<bins>\n",bins,"</bins>")

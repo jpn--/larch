@@ -2,13 +2,16 @@
 
 from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias, IntStringDict
+from ..dt import DT_idco_stack_manager
 from io import StringIO
-from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes, xhtml_dataframe_as_div
+from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes, xhtml_dataframe_as_div, xhtml_rawtext_as_div
 from ..util.plotting import plot_as_svg_xhtml
 import math
 import numpy
 import pandas
-
+import sys, traceback
+import inspect
+import os
 
 XhtmlModelReporter_default_format = {
 	'LL'         :  '0.2f',
@@ -23,7 +26,7 @@ XhtmlModelReporter_default_format = {
 class XhtmlModelReporter():
 
 
-	def xhtml_report(self, cats=['title','params','LL','latest'], raw_xml=False, throw_exceptions=False, **format):
+	def xhtml_report(self, cats=None, raw_xml=False, throw_exceptions=False, filename=None, **format):
 		"""
 		Generate a model report in xhtml format.
 		
@@ -64,8 +67,11 @@ class XhtmlModelReporter():
 
 		"""
 
-		if 'cats' in format:
+		if 'cats' in format and cats is None:
 			cats = format['cats']
+		
+		if cats is None:
+			cats = ['title','params','LL','latest']
 
 		if cats=='*' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options']
@@ -98,10 +104,10 @@ class XhtmlModelReporter():
 		else:
 			import base64
 			x = XHTML(quickhead=self)
-			
-			
-			
-		for c in cats:
+
+		icats = iter(cats) # do not know why this is important, but crashes sometimes without it
+
+		for c in icats:
 			try:
 				func = getattr(type(self),"xhtml_"+c.lower())
 			except (KeyError, AttributeError):
@@ -120,7 +126,6 @@ class XhtmlModelReporter():
 					x.append(to_append)
 			except ImportError as err:
 				if throw_exceptions: raise
-				import traceback, sys
 				xerr = XML_Builder()
 				xerr.simple("hr")
 				xerr.start("pre", {'class':'error_report'})
@@ -130,7 +135,6 @@ class XhtmlModelReporter():
 				x.append(xerr.close())
 			except:
 				if throw_exceptions: raise
-				import traceback, sys
 				xerr = XML_Builder()
 				xerr.simple("hr")
 				xerr.start("pre", {'class':'error_report'})
@@ -147,25 +151,104 @@ class XhtmlModelReporter():
 
 		try:
 			for extra_section in self._to_add_to_report:
-				x.append(extra_section)
+				try:
+					extra_section_evaluated = extra_section(self)
+				except TypeError:
+					extra_section_evaluated = extra_section
+				
+				if isinstance(extra_section_evaluated, dict) and 'contentframe' in extra_section_evaluated:
+					extra_section_evaluated = xhtml_dataframe_as_div(**extra_section_evaluated)
+				
+				x.append(extra_section_evaluated)
 		except AttributeError:
 			pass
 
+		if filename is not None:
+			from ..util.filemanager import fileopen
+			with fileopen(filename, mode='wb', suffix='html') as f:
+				f.write(x.dump())
+				f.flush()
+				try:
+					f.view()
+				except:
+					pass
+		
 		if raw_xml:
 			return x
-		else:
+		elif filename is None:
 			return x.dump()
 
 
-	def add_to_report(self, content, title="Other"):
+	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):
 		try:
 			self._to_add_to_report
 		except AttributeError:
 			self._to_add_to_report = []
 		if isinstance(content, pandas.DataFrame):
-			self._to_add_to_report += [xhtml_dataframe_as_div(content, title=title),]
+			if isinstance(content.index, pandas.RangeIndex) and numpy.all(content.index==pandas.RangeIndex(0,len(content.index))):
+				if 'index' not in to_html_kwargs:
+					to_html_kwargs['index'] = False
+			self._to_add_to_report += [xhtml_dataframe_as_div(content, title=title, to_html_kwargs=to_html_kwargs),]
 		else:
 			self._to_add_to_report += [content,]
+
+	def add_plain_source_code_to_report(self):
+		try:
+			frame = inspect.stack()[1]
+			sourcefile = inspect.getsourcefile(frame[0])
+		except:
+			sourcefile = None
+		if sourcefile is not None:
+			self._to_add_to_report += [xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code"),]
+
+	def add_source_code_to_report(self, *other_filenames):
+		sourcecode_bucket = []
+		try:
+			frame = inspect.stack()[1]
+			sourcefile = inspect.getsourcefile(frame[0])
+		except:
+			sourcefile = None
+
+		if sourcefile is not None:
+			with open(sourcefile, mode='r') as sf:
+				sourcecode_bucket.append(  (os.path.basename(sourcefile), sf.read())  )
+	
+		for othersource in other_filenames:
+			if os.path.isfile(othersource) and os.path.abspath(othersource)!=sourcefile:
+				with open(othersource, mode='r') as sf:
+					sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+			elif sourcefile is not None and os.path.isfile(os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource))):
+				with open(os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource)), mode='r') as sf:
+					sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+
+		if len(sourcecode_bucket):
+			from pygments import highlight
+			from pygments.lexers import Python3Lexer
+			from pygments.formatters import HtmlFormatter
+			x = XML_Builder("div", {'class':"source_code_section"})
+			x.start('style')
+			x.data( HtmlFormatter(linenos=True).get_style_defs('.highlight') )
+			x.data( "\ndiv.source_code_section h3 {font-style:italic;font-weight: normal;}" )
+			x.data( "\ndiv.highlight {padding:5px;}" )
+			x.data( "\ntd.linenos {border:0; font-color:#aaaaaa;}" )
+			x.data( "\ntd.code {border:0;}" )
+			x.data( "\ntable.highlighttable {border:0; }" )
+			x.end('style')
+			x.h2("Source Code", anchor=1)
+			#x.start('script')
+			#x.data("""$(function() { $( "#source_code_accordion" ).accordion({heightStyle: "content",collapsible: true});});""")
+			#x.end('script')
+			#x.start('div', {'id':'source_code_accordion'})
+			from ..util.xhtml import xhtml_rawhtml_as_div
+			for sourcefilename, sourcecode in sourcecode_bucket:
+				x << xhtml_rawhtml_as_div( highlight(sourcecode, Python3Lexer(), HtmlFormatter(linenos=True)),
+										   title="From: {}".format(sourcefilename),
+										   headinglevel=3,
+										   anchor="{}".format(sourcefilename),
+										   popper=True )
+			#x.end('div')
+			self._to_add_to_report += [x.close(),]
+
 
 	def xhtml_title(self, **format):
 		"""
@@ -368,16 +451,35 @@ class XhtmlModelReporter():
 								x.data('{}'.format(p.name))
 								x.end('td')
 #								x.td('{}'.format(p.name))
-								if display_inital:
-									x.td("{:{PARAM}}".format(self[p].initial_value, **format), {'class':'initial_value'})
-								x.td("{:{PARAM}}".format(self[p].value, **format), {'class':'estimated_value'})
-								if self[p].holdfast:
-									x.td("fixed value", {'colspan':'2', 'class':'notation'})
-									x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
+								try:
+									self_p = self[p]
+								except KeyError:
+									use_shadow_p = True
 								else:
-									x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
-									x.td("{:{TSTAT}}".format(self[p].t_stat, **format), {'class':'tstat'})
-									x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
+									use_shadow_p = False
+								if use_shadow_p:
+									# Parameter not found, try shadow_parameter
+									try:
+										str_p = str(p.find_in(self))
+									except AttributeError:
+										str_p = str(p)
+									self_p = self.shadow_parameter[str_p]
+									if display_inital:
+										x.td("", {'class':'initial_value'})
+									x.td("{:{PARAM}}".format(self_p.value, **format), {'class':'estimated_value'})
+									x.td("{}".format(self_p.t_stat), {'colspan':'3', 'class':'tstat'})
+								else:
+									# Parameter found, use self[p]
+									if display_inital:
+										x.td("{:{PARAM}}".format(self[p].initial_value, **format), {'class':'initial_value'})
+									x.td("{:{PARAM}}".format(self[p].value, **format), {'class':'estimated_value'})
+									if self[p].holdfast:
+										x.td("fixed value", {'colspan':'2', 'class':'notation'})
+										x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
+									else:
+										x.td("{:{PARAM}}".format(self[p].std_err, **format), {'class':'std_err'})
+										x.td("{:{TSTAT}}".format(self[p].t_stat, **format), {'class':'tstat'})
+										x.td("{:{PARAM}}".format(self[p].null_value, **format), {'class':'null_value'})
 						else:
 							pwide = self.parameter_wide(p)
 							if isinstance(pwide,ParameterAlias):
@@ -731,7 +833,10 @@ class XhtmlModelReporter():
 		try:
 			show_avail = not isinstance(self.df.queries.avail, str)
 		except AttributeError:
-			show_avail = False
+			try:
+				show_avail = isinstance(self.df.avail_idco, DT_idco_stack_manager)
+			except AttributeError:
+				show_avail = False
 		show_descrip = 'alternatives' in self.descriptions
 		
 		with x.block("table"):
@@ -783,7 +888,10 @@ class XhtmlModelReporter():
 							try:
 								alt_condition = self.df.queries.avail[altn]
 							except:
-								alt_condition = "n/a"
+								try:
+									alt_condition = self.df.avail_idco[altn]
+								except:
+									alt_condition = "n/a"
 							x.td("{}".format(alt_condition))
 		return x.close()
 
@@ -831,15 +939,8 @@ class XhtmlModelReporter():
 		if self.Data("UtilityCO") is not None:
 			
 			description_catalog = {}
-			
-			
-			
 			from ..roles import _data_description_catalog
-			
 			description_catalog.update(_data_description_catalog)
-#			for i in dir(X):
-#				if isinstance(getattr(X,i),X):
-#					description_catalog[i] = getattr(X,i)._descrip
 
 			if 'data_co' in self.descriptions:
 				description_catalog.update(self.descriptions.data_co)
@@ -913,7 +1014,7 @@ class XhtmlModelReporter():
 
 			# Histograms
 			stack += [ss.histogram,]
-			titles += ["Distrib.",]
+			titles += ["Distribution",]
 			ncols += 1
 
 			if show_descrip:
@@ -935,7 +1036,7 @@ class XhtmlModelReporter():
 							for thing,ti in zip(s,titles):
 								if ti=="Description":
 									x.td("{:s}".format(thing), {'class':'strut2'})
-								elif ti=="Distrib.":
+								elif ti=="Distribution":
 									cell = x.start('td', {'class':'histogram_cell'})
 									cell.append( thing )
 									x.end('td')
@@ -947,6 +1048,11 @@ class XhtmlModelReporter():
 				for sn,stac in enumerate(stack):
 					print(sn,stac)
 				raise
+			x.start('caption')
+			x.data("Graphs are represented as pie charts if the data element has 4 or fewer distinct values.")
+			x.simple('br')
+			x.data("Graphs are orange if the zeroes are numerous and have been excluded.")
+			x.end('caption')
 			x.end_table
 
 
@@ -981,7 +1087,7 @@ class XhtmlModelReporter():
 				x.th('Data')
 				for coltitle,colvalue,_ in display_cols:
 					x.th(coltitle)
-				x.th('Distrib.')
+				x.th('Distribution')
 				x.end_tr
 				x.end_thead
 				with x.tbody_:
@@ -1033,7 +1139,7 @@ class XhtmlModelReporter():
 				x.th('Data')
 				for coltitle,colvalue,_ in display_cols:
 					x.th(coltitle)
-				x.th('Distrib.')
+				x.th('Distribution')
 				x.end_tr
 				x.end_thead
 				with x.tbody_:
@@ -1063,6 +1169,8 @@ class XhtmlModelReporter():
 				
 
 		return x.close()
+
+	xhtml_data_statistics = xhtml_utilitydata
 
 	# Utility Specification Summary for models with idca utility only
 	def xhtml_utilityspec_ca_only(self,**format):
@@ -1342,9 +1450,9 @@ class XhtmlModelReporter():
 
 		for resolved in (True, False):
 			if resolved:
-				headline = "Resolved Probablity"
+				headline = "Resolved Probability"
 			else:
-				headline = "Formulaic Probablity"
+				headline = "Formulaic Probability"
 			x.h3(headline, anchor=1)
 		
 			with x.table_:

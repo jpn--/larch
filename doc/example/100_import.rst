@@ -116,7 +116,9 @@ factors, like this:
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> d.exclude_idco("PURPOSE not in (1,3)")
+	3960
 	>>> d.exclude_idco("CHOICE == 0")
+	0
 	>>> d.nCases()
 	6768
 

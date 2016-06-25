@@ -350,6 +350,9 @@ void ndarray::resize(const int& r,const int& c)
 
 void ndarray::resize(const int& r,const int& c,const int& s)
 {
+	PyArrayObject* holdover = pool;
+	Py_XINCREF(holdover);
+
 	if (!pool
 		|| PyArray_DESCR(pool)->type_num != NPY_DOUBLE
 		||	ndim() != 3
@@ -358,28 +361,54 @@ void ndarray::resize(const int& r,const int& c,const int& s)
 		||	size3() != s
 		)
 	quick_new(NPY_DOUBLE, "Array", r,c,s);
+
+	for (size_t i=0; i<PyArray_SIZE(pool) && i<PyArray_SIZE(holdover); i++) {
+		((double*)PyArray_DATA(pool))[i] = ((double*)PyArray_DATA(holdover))[i];
+	}
+
+	Py_CLEAR(holdover);
 }
 
 void ndarray::resize_int8(const int& r)
 {
+	PyArrayObject* holdover = pool;
+	Py_XINCREF(holdover);
+
 	if (!pool
 		|| PyArray_DESCR(pool)->type_num != NPY_INT8
 		||	ndim() != 1
 		||	size1() != r
 		)
 	quick_new(NPY_INT8, "Array", r);
+
+	for (size_t i=0; i<PyArray_SIZE(pool) && i<PyArray_SIZE(holdover); i++) {
+		((npy_int8*)PyArray_DATA(pool))[i] = ((npy_int8*)PyArray_DATA(holdover))[i];
+	}
+
+	Py_CLEAR(holdover);
+
 }
 
 
 
 void ndarray::resize_bool(const int& r)
 {
+
+	PyArrayObject* holdover = pool;
+	Py_XINCREF(holdover);
+
 	if (!pool
 		|| PyArray_DESCR(pool)->type_num != NPY_BOOL
 		||	ndim() != 1
 		||	size1() != r
 		)
 	quick_new(NPY_BOOL, "Array", r);
+
+	for (size_t i=0; i<PyArray_SIZE(pool) && i<PyArray_SIZE(holdover); i++) {
+		((npy_bool*)PyArray_DATA(pool))[i] = ((npy_bool*)PyArray_DATA(holdover))[i];
+	}
+
+	Py_CLEAR(holdover);
 }
 
 void ndarray::resize_bool(const int& r,const int& c)

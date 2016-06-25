@@ -39,51 +39,59 @@ This program is licensed under GPLv3 and comes with ABSOLUTELY NO WARRANTY."""
 
 status = ""
 
+def execfile(script, dirname=None):
+	import runpy, os, sys
+	if dirname is not None:
+		os.chdir(dirname)
+		sys.path.insert(0,dirname)
+	namespace = runpy.run_path(script)
+	return namespace
+
+
+status += "Python %s" % sys.version
+
+import struct
+status += "\nPython is running in %i bit mode" % ( 8 * struct.calcsize("P"))
 
 try:
-	status += "Python %s" % sys.version
+	from .larch import * # testing...
+except:
+	pass
+from . import logging
+from . import core
+core.larch_initialize()
+from . import exceptions
+from .db import DB
+from .dt import DT, IncompatibleShape
+from .omx import OMX
+from .model import Model, ModelFamily
+from .metamodel import MetaModel
+from .core import ModelParameter
+from . import array
+from . import roles
+core._set_array_module(array)
+try:
+	from .built import build, versions, build_config
+	del built
+except (NameError, ImportError):
+	build, versions, build_config = "",{},""
 
-	import struct
-	status += "\nPython is running in %i bit mode" % ( 8 * struct.calcsize("P"))
+try:
+	from . import linalg
+	core.set_linalg(linalg)
+except AttributeError as err:
+	print(err)
+except ImportError:
+	from .mock_module import Mock
+	linalg = Mock()
 
-	try:
-		from .larch import * # testing...
-	except:
-		pass
-	from . import logging
-	from . import core
-	core.larch_initialize()
-	from . import exceptions
-	from .db import DB
-	from .dt import DT, IncompatibleShape
-	from .omx import OMX
-	from .model import Model, ModelFamily
-	from .metamodel import MetaModel
-	from .core import ModelParameter
-	from . import array
-	core._set_array_module(array)
-	try:
-		from .built import build, versions, build_config
-		del built
-	except (NameError, ImportError):
-		build, versions, build_config = "",{},""
+status += "\nLarch "+build
+_directory_ = os.path.split(__file__)[0]
+status += "\nLoaded from %s" % _directory_
 
-	try:
-		from . import linalg
-		core.set_linalg(linalg)
-	except AttributeError as err:
-		print(err)
-	except ImportError:
-		from .mock_module import Mock
-		linalg = Mock()
+larch = sys.modules[__name__]
 
-	status += "\nLarch "+build
-	_directory_ = os.path.split(__file__)[0]
-	status += "\nLoaded from %s" % _directory_
-
-	larch = sys.modules[__name__]
-
-	from . import examples
+from . import examples
 
 #	import sys
 #	import subprocess
@@ -114,15 +122,8 @@ try:
 #			_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
 
 
-
-except:
-	print ("Exception in initializing Larch")
-	print (status)
-	raise
-
-finally:
-	del sys
-	del os
+del sys
+del os
 #	try:
 #		del array
 #	except NameError:

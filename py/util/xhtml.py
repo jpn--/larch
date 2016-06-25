@@ -7,6 +7,68 @@ from contextlib import contextmanager
 from ..utilities import uid as _uid
 import base64
 
+# @import url(https://fonts.googleapis.com/css?family=Roboto+Mono:400,700,700italic,400italic,100,100italic);
+
+
+_default_css = """
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700);
+
+.error_report {color:red; font-family:monospace;}
+
+body {font-family: "Book Antiqua", "Palatino", serif;}		
+
+table {border-collapse:collapse;}
+
+table, th, td {
+	border: 1px solid #999999; padding:2px; 
+	font-family:"Roboto Mono", monospace;
+	font-size:90%;
+	font-weight:400;
+	}
+
+td.parameter_category {
+	font-family:"Roboto", monospace;
+	font-weight:500;
+	background-color: #f4f4f4; 
+	font-style: italic;
+	}
+
+th {
+	font-family:"Roboto", monospace;
+	font-weight:700;
+	}
+	
+.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+
+a.parameter_reference {font-style: italic; text-decoration: none}
+
+.strut2 {min-width:1in}
+
+.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+
+.raw_log pre {
+	font-family:"Roboto Mono", monospace;
+	font-weight:300;
+	font-size:70%;
+	}
+
+caption {
+    caption-side: bottom;
+	text-align: left;
+	font-family: Roboto;
+	font-style: italic;
+	font-weight: 100;
+	font-size: 80%;
+}
+"""
+
+
+
+
+
+
+
 class Elem(Element):
 	"""Extends :class:`xml.etree.ElementTree.Element`"""
 	def __init__(self, tag, attrib={}, text=None, **extra):
@@ -72,6 +134,9 @@ class XML_Builder(TreeBuilder):
 	def anchor(self, ref, reftxt, cls, toclevel):
 		self.start("a",{'name':ref, 'reftxt':reftxt, 'class':cls, 'toclevel':toclevel})
 		self.end("a")
+	def anchor_auto_toc(self, reftxt, toclevel):
+		self.start("a",{'name':_uid(), 'reftxt':reftxt, 'class':'toc', 'toclevel':str(toclevel)})
+		self.end("a")
 	def simple_anchor(self, ref):
 		self.start("a",{'name':ref})
 		self.end("a")
@@ -130,11 +195,23 @@ class XML_Builder(TreeBuilder):
 	def dumps(self):
 		return self.dump().decode()
 
+	def append(self, arg):
+		div_container = self.start('div')
+		if isinstance(arg, XML_Builder):
+			div_container.append(arg.close())
+		else:
+			div_container.append(arg)
+		self.end('div')
+		
+	def __lshift__(self,other):
+		self.append(other)
+		return self
+
 
 
 class XHTML():
 	"""A class used to conveniently build xhtml documents."""
-	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, view_on_exit=True):
+	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True):
 		self.view_on_exit = view_on_exit
 		self.root = Elem(tag="html", xmlns="http://www.w3.org/1999/xhtml")
 		self.head = Elem(tag="head")
@@ -165,24 +242,42 @@ class XHTML():
 		self._f = filemaker()
 		self.title = Elem(tag="title")
 		self.style = Elem(tag="style")
+		from .img import favicon
+		self.favicon = Elem(tag="link", attrib={'href':"data:image/png;base64,{}".format(favicon),'rel':"shortcut icon",'type':"image/png"})
+
+		if jquery:
+			self.jquery = Elem(tag="script", attrib={
+				'src':"https://code.jquery.com/jquery-3.0.0.min.js",
+				'integrity':"sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=",
+				'crossorigin':"anonymous",
+			})
+			self.head << self.jquery
+
+		if jqueryui:
+			self.jqueryui = Elem(tag="script", attrib={
+				'src':"https://code.jquery.com/ui/1.11.4/jquery-ui.min.js",
+				'integrity':"sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=",
+				'crossorigin':"anonymous",
+			})
+			self.head << self.jqueryui
+
+		self.head << self.favicon
 		self.head << self.title
 		self.head << self.style
 		toc_width = 200
-		default_css = """
-		.error_report {color:red; font-family:monospace;}
-		body {font-family: "Book Antiqua", "Palatino", serif;}
-		table {border-collapse:collapse;}
-		table, th, td {border: 1px solid #999999; padding:2px; font-family:monospace;}
+		self.toc_color = 'lime'
+		default_css = _default_css + """
+			
 		body { margin-left: """+str(toc_width)+"""px; }
 		.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px;}
-		.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%; }
-		.table_of_contents_head { font-weight:700; padding-left:25px }
-		.table_of_contents ul { padding-left:25px; }
+		.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%;}
+		.table_of_contents_head { font-weight:700; padding-left:25px;  }
+		.table_of_contents ul { padding-left:25px;  }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
 		.larch_signature {font-size:80%; width: """+str(toc_width-30)+"""px; font-weight:100; font-style:italic; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
 		a.parameter_reference {font-style: italic; text-decoration: none}
 		.strut2 {min-width:2in}
-		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
+		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
 		@media print {
 		   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
 		   /*.table_of_contents { display: none; }*/
@@ -195,11 +290,7 @@ class XHTML():
 		   .larch_signature {font-size:80%; width: 100%; font-weight:100; font-style:italic; padding:0; background-color:#fff; position: fixed; bottom: 0;}
 		   .larch_signature img {display:none;}
 		   .larch_signature .noprint {display:none;}
-		   
-    }
-
-
-
+		}
 		}
 		"""
 
@@ -209,7 +300,10 @@ class XHTML():
 			except AttributeError:
 				title = "Untitled"
 			if title != '': self.title.text = str(title)
-			if css is None: css = default_css
+			if css is None:
+				css = default_css
+			if extra_css is not None:
+				css += extra_css
 			try:
 				css += quickhead.css
 			except AttributeError:
@@ -217,7 +311,10 @@ class XHTML():
 			self.style.text = css.replace('\n',' ').replace('\t',' ')
 			self.head << Elem(tag="meta", name='pymodel', content=base64.standard_b64encode(quickhead.__getstate__()).decode('ascii'))
 		else:
-			if css is None: css = default_css
+			if css is None:
+				css = default_css
+			if extra_css is not None:
+				css += extra_css
 			self.style.text = css.replace('\n',' ').replace('\t',' ')
 
 
@@ -304,15 +401,15 @@ class XHTML():
 		BLAH = xml.etree.ElementTree.tostring(xtoc_html.root, method="html", encoding="unicode")
 		
 		
-		
+		from .plotting import strcolor_rgb256
 		toc_elem = Elem(tag='iframe', attrib={
 			'class':'table_of_contents_frame',
 			'style':'''height:calc(100% - 100px); border:none; /*background-color:rgba(128,189,1, 0.95);*/
-			  background: -webkit-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Safari 5.1 to 6.0 */
-			  background: -o-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Opera 11.1 to 12.0 */
-			  background: -moz-linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* For Firefox 3.6 to 15 */
-			  background: linear-gradient(rgba(128,189,1, 0.95), rgba(255, 255, 255, 0.95)); /* Standard syntax */
-			''',
+			  background: -webkit-linear-gradient(rgba({0}, 0.95), rgba(255, 255, 255, 0.95)); /* For Safari 5.1 to 6.0 */
+			  background: -o-linear-gradient(rgba({0}, 0.95), rgba(255, 255, 255, 0.95)); /* For Opera 11.1 to 12.0 */
+			  background: -moz-linear-gradient(rgba({0}, 0.95), rgba(255, 255, 255, 0.95)); /* For Firefox 3.6 to 15 */
+			  background: linear-gradient(rgba({0}, 0.95), rgba(255, 255, 255, 0.95)); /* Standard syntax */
+			'''.format(strcolor_rgb256(self.toc_color)),
 			'srcdoc':BLAH,
 			})
 		
@@ -417,19 +514,48 @@ def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_sourc
 	return xsource.close()
 
 
-def xhtml_rawhtml_as_div(contentstring, *, title="And Then", classtype='other_content'):
+def xhtml_rawhtml_as_div(contentstring, *, title="And Then", classtype='other_content', headinglevel=2, anchor=1, popper=False):
 	xsource = XML_Builder("div", {'class':classtype})
-	xsource.h2(title, anchor=1)
+	toggle_id = _uid()
+	xsource.start('script')
+	xsource.data("""
+	$(document).ready(function(){{
+		$("#t1{toggle_id}").click(function(){{
+			$("#d{toggle_id}").toggle("fast");
+		}});
+	}});""".format(toggle_id=toggle_id))
+	xsource.end('script')
+	
+	if headinglevel:
+		if anchor:
+			xsource.anchor(_uid(), anchor if isinstance(anchor, str) else title, 'toc', '{}'.format(headinglevel))
+		xsource.start("h{}".format(headinglevel), {'id':'h'+toggle_id})
+		xsource.data(title+" ")
+		
+		if popper:
+			from .img import eye
+			xsource.start('img',{'id':'t1'+toggle_id, 'src':eye, 'style':'height:24px;vertical-align: text-bottom;'})
+			xsource.end('a')
+		
+		xsource.end("h{}".format(headinglevel))
+
+
+	if popper:
+		div = xsource.start('div', {'id':'d'+toggle_id, 'style':'display:none'})
+	else:
+		div = xsource.start('div', {'id':'d'+toggle_id})
 	if isinstance(contentstring, bytes):
 		contentstring = contentstring.decode()
 	if isinstance(contentstring, str):
 		content = xml.etree.ElementTree.fromstring(contentstring)
 	else:
 		content = contentstring
-	return (xsource.close() << content)
+	div << content
+	xsource.end('div')
+	return xsource.close()
 
-def xhtml_dataframe_as_div(contentframe, **kwargs):
-	return xhtml_rawhtml_as_div(contentframe.to_html(), **kwargs)
+def xhtml_dataframe_as_div(contentframe, to_html_kwargs={}, **kwargs):
+	return xhtml_rawhtml_as_div(contentframe.to_html(**to_html_kwargs), **kwargs)
 
 def toc_demote_all(elem, demote=1, anchors=True, heads=True):
 	for anchor in elem.findall('.//a[@toclevel]'):
