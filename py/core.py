@@ -4371,6 +4371,12 @@ class ModelParameter(object):
     def _del_max(self) -> "void":
         return _core.ModelParameter__del_max(self)
 
+    def _set_std_err(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_std_err(self, value)
+
+    def _set_t_stat(self, value: 'double const &') -> "void":
+        return _core.ModelParameter__set_t_stat(self, value)
+
     def _get_std_err(self) -> "double":
         return _core.ModelParameter__get_std_err(self)
 
