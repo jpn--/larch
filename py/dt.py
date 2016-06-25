@@ -20,6 +20,7 @@ import numbers
 import collections
 from .util.aster import asterize
 import keyword
+import pandas
 
 class IncompatibleShape(LarchError):
 	pass
@@ -29,6 +30,10 @@ class HDF5BadFormat(LarchError):
 
 class HDF5Warning(UserWarning):
     pass
+
+
+_exclusion_summary_columns = ['Data Source', 'Alternatives','# Cases Excluded', ]
+
 
 
 class LocalAttributeSet(object):
@@ -610,7 +615,7 @@ class DT(Fountain):
 			return None
 		return numpy.nonzero(self.h5top.screen[:])[0]
 
-	def set_screen(self, exclude_idco=(), exclude_idca=(), exclude_unavail=False, dynamic=False):
+	def set_screen(self, exclude_idco=(), exclude_idca=(), exclude_unavail=False, exclude_unchoosable=False, dynamic=False):
 		"""
 		Set a screen
 		"""
@@ -621,10 +626,10 @@ class DT(Fountain):
 		else:
 			self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
 			self.h5top.screen[:] = True
-		self.rescreen(exclude_idco, exclude_idca, exclude_unavail)
+		self.rescreen(exclude_idco, exclude_idca, exclude_unavail, exclude_unchoosable)
 
 
-	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None):
+	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=None):
 		"""
 		Rebuild the screen based on the indicated exclusion criteria.
 		
@@ -644,8 +649,9 @@ class DT(Fountain):
 			in question.
 		exclude_unavail : bool
 			If true, then any case with no available alternatives is excluded.
-		exclude_caseids : expr
-		
+		exclude_unchoosable : bool
+			If true, then any case where an unavailable alternative is chosen 
+			is excluded.
 			
 		Notes
 		-----
@@ -655,6 +661,9 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			raise TypeError('no screen node set, use set_screen instead')
+
+		summary = pandas.DataFrame(columns=_exclusion_summary_columns)
+		summary.index.name = "Criteria"
 
 		def inheritable(newseq, oldseq):
 			if newseq is not None:
@@ -676,23 +685,46 @@ class DT(Fountain):
 		exclude_idco = inheritable(exclude_idco, 'exclude_idco')
 		exclude_idca = inheritable(exclude_idca, 'exclude_idca')
 		exclude_unavail = inheritable(exclude_unavail, 'exclude_unavail')
+		exclude_unchoosable = inheritable(exclude_unchoosable, 'exclude_unchoosable')
 
 		if isinstance(self.h5top.screen, _tb.Group):
 			return
 
 		if exclude_idco:
-			exclusions = self.array_idco(*exclude_idco, screen="None").any(1)
+			startcount = 0
+			ex_all = self.array_idco(*exclude_idco, screen="None")
+			for j, ex in enumerate(exclude_idco):
+				n = ex_all[:,:j+1].any(1).sum() - startcount
+				summary.loc[ex,['# Cases Excluded', 'Data Source']] = (n, 'idco')
+				startcount += n
+			exclusions = ex_all.any(1)
 		else:
 			exclusions = self.array_idco('0', screen="None", dtype=bool)
 		if exclude_idca:
 			for altnum, expr in exclude_idca:
 				altslot = self._alternative_slot(altnum)
+				startcount = exclusions.sum()
 				exclusions |= self.array_idca(expr, screen="None", dtype=bool)[:,altslot,:].any(1)
+				n = exclusions.sum() - startcount
+				summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 		if exclude_unavail:
-			exclusions |= (~(self.array_avail().any(1)))
-		self.h5top.screen[:] = ~exclusions.squeeze()
+			startcount = exclusions.sum()
+			exclusions |= (~(self.array_avail(screen="None").any(1)))
+			n = exclusions.sum() - startcount
+			summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+			self.h5top.screen._v_attrs.exclude_result = s
 
-	def exclude_idco(self, expr):
+		if exclude_unchoosable:
+			startcount = exclusions.sum()
+			exclusions |= numpy.logical_and(self.array_choice(screen="None", dtype=bool), ~self.array_avail(screen="None")).any(1).squeeze()
+			n = exclusions.sum() - startcount
+			summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+
+		self.h5top.screen[:] = ~exclusions.squeeze()
+		self.h5top.screen._v_attrs.exclude_result = summary
+
+
+	def exclude_idco(self, expr, count=True):
 		"""
 		Add an exclusion factor based on idco data.
 		
@@ -705,12 +737,31 @@ class DT(Fountain):
 			An expression to evaluate using :meth:`array_idco`, with dtype
 			set to bool. Any cases that evaluate as positive are excluded from
 			the dataset when provisioning.
+		count : bool
+			Count the number of cases impacted by adding the screen.
+			
+		Returns
+		-------
+		int
+			The number of cases excluded as a result of adding this exclusion factor.
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
+		if count:
+			startcount = self.h5top.screen[:].sum()
 		self.rescreen(exclude_idco=['+', expr])
+		if count:
+			n = startcount - self.h5top.screen[:].sum()
+#			if 'exclude_result' not in self.h5top.screen._v_attrs:
+#				s = pandas.DataFrame(columns=_exclusion_summary_columns)
+#				s.index.name = "Criteria"
+#				self.h5top.screen._v_attrs.exclude_result = s
+#			s = self.h5top.screen._v_attrs.exclude_result
+#			s.loc[expr,['# Cases Excluded', 'Data Source']] = (n,'idco')
+#			self.h5top.screen._v_attrs.exclude_result = s
+			return n
 
-	def exclude_idca(self, altids, expr):
+	def exclude_idca(self, altids, expr, count=True):
 		"""
 		Add an exclusion factor based on idca data.
 
@@ -719,17 +770,72 @@ class DT(Fountain):
 		
 		Parameters
 		----------
-		expr : str
-			An expression to evaluate using :meth:`array_idca`, with dtype
-			set to bool.
 		altids : iterable of int
 			A set of alternative to consider. Any cases for which the expression
 			evaluates as positive for any of the listed altids are excluded from
 			the dataset when provisioning.
+		expr : str
+			An expression to evaluate using :meth:`array_idca`, with dtype
+			set to bool.
+		count : bool
+			Count the number of cases impacted by adding the screen.
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
+		if count:
+			startcount = self.h5top.screen[:].sum()
 		self.rescreen(exclude_idca=['+', (altids, expr)])
+		if count:
+			n = startcount - self.h5top.screen[:].sum()
+#			if 'exclude_result' not in self.h5top.screen._v_attrs:
+#				s = pandas.DataFrame(columns=_exclusion_summary_columns)
+#				s.index.name = "Criteria"
+#				self.h5top.screen._v_attrs.exclude_result = s
+#			s = self.h5top.screen._v_attrs.exclude_result
+#			s.loc[expr,['# Cases Excluded', 'Data Source', 'Alternatives']] = (n,'idca', altids)
+#			self.h5top.screen._v_attrs.exclude_result = s
+			return n
+
+	@property
+	def exclude_unchoosable(self):
+		if 'exclude_unchoosable' in self.h5top.screen._v_attrs:
+			return self.h5top.screen._v_attrs.exclude_unchoosable
+		return False
+
+	@exclude_unchoosable.setter
+	def exclude_unchoosable(self, value):
+		value = bool(value)
+		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=value)
+
+	@property
+	def exclude_unavail(self):
+		if 'exclude_unavail' in self.h5top.screen._v_attrs:
+			return self.h5top.screen._v_attrs.exclude_unavail
+		return False
+
+	@exclude_unavail.setter
+	def exclude_unavail(self, value):
+		value = bool(value)
+		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=value, exclude_unchoosable=None)
+
+
+	@property
+	def exclusion_summary(self):
+		'''A dataframe containing a summary of the exclusion factors.'''
+		if 'exclude_result' not in self.h5top.screen._v_attrs:
+			s = pandas.DataFrame(columns=_exclusion_summary_columns)
+			s.index.name = "Criteria"
+			self.h5top.screen._v_attrs.exclude_result = s
+		ex_df = self.h5top.screen._v_attrs.exclude_result
+		try:
+			asfloat = ex_df['Alternatives'].values.astype(float)
+		except:
+			pass
+		else:
+			if numpy.isnan(asfloat).all():
+				del ex_df['Alternatives']
+		#ex_df.reset_index(inplace=True)
+		return ex_df.reset_index()
 
 	def provision(self, needs, **kwargs):
 		from . import Model
@@ -1824,13 +1930,36 @@ class DT(Fountain):
 		Raises
 		-----
 		tables.exceptions.NodeError
-			If a variable of the same name alreay exists.
+			If a variable of the same name already exists.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
 			the existing :ref:`idco` data.
 		"""
-		data = self.array_idco(expression).reshape(-1)
+		data = self.array_idco(expression, screen="None").reshape(-1)
 		self.h5f.create_carray(self.h5idco, name, obj=data)
+
+	def new_idco_from_array(self, name, arr):
+		"""Create a new :ref:`idco` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		If you create an array externally, you can add it to the file easily with
+		this command.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idco` variable.
+		arr : array
+			An array to add as the new variable.  Must have the correct shape.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name already exists.
+		"""
+		if self.h5top.caseids.shape != arr.shape:
+			raise TypeError("new idco array must have shape {!s}".format(self.h5top.caseids.shape))
+		self.h5f.create_carray(self.h5idco, name, obj=arr)
 
 	def new_idca(self, name, expression):
 		"""Create a new :ref:`idca` variable.
@@ -1860,7 +1989,7 @@ class DT(Fountain):
 			the existing :ref:`idca` or :ref:`idco` data.
 		"""
 		if isinstance(expression, str):
-			data = self.array_idca(expression).reshape(-1)
+			data = self.array_idca(expression, screen="None").reshape(-1)
 		else:
 			data = expression
 		self.h5f.create_carray(self.h5idca, name, obj=data)
