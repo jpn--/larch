@@ -26,7 +26,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "larch.test.test_mnl"
 
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import Model, DB, LarchError, SQLiteError, LarchCacheError
+from ..core import Model, DB, DT, LarchError, SQLiteError, LarchCacheError
 from ..model import ModelFamily
 from ..roles import ParameterRef
 
@@ -705,6 +705,65 @@ class TestMNL(ELM_TestCase):
 		m.provision()
 		self.assertNearlyEqual(-6964.66297919218, m.loglike(), 7)
 		self.assertNearlyEqual(-53685.10681886514, m.loglike([.1,.1,.1,.1]), 7)
+
+
+	def test_samplingbias_specifications(self):
+
+		m1 = Model(DT.Example('swissmetro'))
+		m1.title = "swissmetro example 14 (nested logit with sampling bias)"
+		m1.utility.co("1",1,"ASC_TRAIN")
+		m1.utility.co("1",3,"ASC_CAR")
+		m1.utility.co("TRAIN_TT",1,"B_TIME")
+		m1.utility.co("SM_TT",2,"B_TIME")
+		m1.utility.co("CAR_TT",3,"B_TIME")
+		m1.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
+		m1.utility.co("SM_CO*(GA==0)",2,"B_COST")
+		m1.utility.co("CAR_CO",3,"B_COST")
+		m1.nest("existing", 4, "existing") 
+		m1.link(4, 1)
+		m1.link(4, 3)
+		m1.samplingbias.co("1",1,"SB_TRAIN")
+		m1.option.calc_std_errors = False
+		m1.parameter('ASC_TRAIN', value=0.23)
+		m1.parameter('ASC_CAR', value=0.53)
+		m1.parameter('B_TIME', value=-0.21)
+		m1.parameter('B_COST', value=-0.11)
+		m1.parameter('existing', value=0.52, null_value=1)
+		m1.setUp()
+		self.assertNearlyEqual(-28871.037024312292,m1.loglike())
+
+		from ..roles import P,X
+		m2 = Model(DT.Example('swissmetro'))
+		m2.title = "swissmetro example 14 (nested logit with sampling bias)"
+		m2.utility[1] = P.ASC_TRAIN + P.B_TIME * X.TRAIN_TT + P.B_COST * X("TRAIN_CO*(GA==0)")
+		m2.utility[2] =               P.B_TIME * X.SM_TT    + P.B_COST * X("SM_CO*(GA==0)")
+		m2.utility[3] = P.ASC_CAR   + P.B_TIME * X.CAR_TT   + P.B_COST * X("CAR_CO")
+		m2.new_nest("existing", parent=m2.root_id, children=[1,3])
+		m2.samplingbias.co("1",1,"SB_TRAIN")
+		m2.option.calc_std_errors = False
+		m2.parameter('ASC_TRAIN', value=0.23)
+		m2.parameter('ASC_CAR', value=0.53)
+		m2.parameter('B_TIME', value=-0.21)
+		m2.parameter('B_COST', value=-0.11)
+		m2.parameter('existing', value=0.52, null_value=1)
+		m2.setUp()
+		self.assertNearlyEqual(-28871.037024312292,m2.loglike())
+
+		m3 = Model(DT.Example('swissmetro'))
+		m3.title = "swissmetro example 14 (nested logit with sampling bias)"
+		m3.utility[1] = P.ASC_TRAIN + P.B_TIME * X.TRAIN_TT + P.B_COST * X("TRAIN_CO*(GA==0)")
+		m3.utility[2] =               P.B_TIME * X.SM_TT    + P.B_COST * X("SM_CO*(GA==0)")
+		m3.utility[3] = P.ASC_CAR   + P.B_TIME * X.CAR_TT   + P.B_COST * X("CAR_CO")
+		m3.new_nest("existing", parent=m3.root_id, children=[1,3])
+		m3.samplingbias[1] = P.SB_TRAIN
+		m3.option.calc_std_errors = False
+		m3.parameter('ASC_TRAIN', value=0.23)
+		m3.parameter('ASC_CAR', value=0.53)
+		m3.parameter('B_TIME', value=-0.21)
+		m3.parameter('B_COST', value=-0.11)
+		m3.parameter('existing', value=0.52, null_value=1)
+		m3.setUp()
+		self.assertNearlyEqual(-28871.037024312292,m3.loglike())
 
 
 

@@ -100,6 +100,33 @@ class Model(Model2, ModelReporter):
 			setattr(par,key,value)
 		return par
 
+	def _parameter_inclusion_check(self):
+		def is_it_there(x, val=0):
+			if x in self:
+				return
+			if self.option.autocreate_parameters:
+				self.parameter(x, value=val, null_value=val)
+			else:
+				raise KeyError("parameter {} not found, option.autocreate=False".format(x))
+		# utility
+		for i in self.utility.ca:
+			is_it_there(i.param)
+		for j in self.utility.co:
+			for i in self.utility.co[j]:
+				is_it_there(i.param)
+		# samplingbias
+		for i in self.samplingbias.ca:
+			is_it_there(i.param)
+		for j in self.samplingbias.co:
+			for i in self.samplingbias.co[j]:
+				is_it_there(i.param)
+		# nest
+		for n in self.nest.nodes():
+			is_it_there(self.nest[n].param, val=1)
+			
+	def setUp(self, *arg, **kwarg):
+		self._parameter_inclusion_check()
+		super().setUp(*arg, **kwarg)
 
 	def parameter_wide(self, name):
 		if isinstance(name, rename):
@@ -427,7 +454,7 @@ class Model(Model2, ModelReporter):
 							f.write("self.{} = pickle.loads({})\n".format(a,p_obj))
 						except pickle.PickleError:
 							f.write("\n")
-							f.write("self.{} = 'unpicklable object'\n".format(a,p_obj))
+							f.write("self.{} = 'unpicklable object'\n".format(a))
 			try:
 				return f.getvalue()
 			except AttributeError:
@@ -627,6 +654,14 @@ class Model(Model2, ModelReporter):
 
 	def report_(self, **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:
+			f << self.report(cats='*', style='xml')
+
+	def report_1(self, filename="/tmp/larchreport.html", **kwargs):
+		from .util.filemanager import next_stack
+		print("from filename",filename)
+		filename = next_stack(filename,suffix='html')
+		print("to filename", filename)
+		with XHTML(filename, quickhead=self, **kwargs) as f:
 			f << self.report(cats='*', style='xml')
 
 
@@ -1301,7 +1336,7 @@ class Model(Model2, ModelReporter):
 				.statistics_bridge {text-align:center;}
 				a.parameter_reference {font-style: italic; text-decoration: none}
 				.strut2 {min-width:2in}
-				.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:bottom; }
+				.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
 				"""
 			xhead.data(css.replace('\n',' ').replace('\t',' '))
 			xhead.end_style()
