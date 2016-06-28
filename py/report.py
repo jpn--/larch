@@ -131,6 +131,9 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		similar filename.
 	title : str
 		An optional title for the report.
+	model_titles : sequence of str
+		A sequence of model titles to be used to replace (probably shorten) the model 
+		titles used in the report.
 	
 	"""
 	
@@ -253,13 +256,13 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 								title = model_titles[m_number]
 							except:
 								pass
-						f.write('<th colspan="2" class="{0}">{1}</th>'.format(shades[shade],title))
+						f.write('<th colspan="2" class="{0} reportmodel{2}">{1}</th>'.format(shades[shade],title,m_number))
 			with f.block("tbody"):
 				# PARAMETER ESTIMATES
 				with f.block("tr"):
 					f.write('<td class="table_category">Parameter Estimates</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						f.write('<td class="table_category">Estimate</td><td class="table_category tstat">(t-Statistic)</td>'.format(shades[shade]))
 				for p in params:
@@ -274,13 +277,13 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Log Likelihood</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						f.write('<td colspan="2" class="{0}">{1:0.6g}</td>'.format(shades[shade],m.loglike()))
 				with f.tr():
 					f.write('<td>Log Likelihood at Constants</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -292,7 +295,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Log Likelihood at Null Parameters</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -304,7 +307,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Log Likelihood with No Model</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -316,7 +319,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Rho Squared vs. Constants</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -329,7 +332,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Rho Squared vs. Null Parameters</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -342,7 +345,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 				with f.tr():
 					f.write('<td>Rho Squared vs. No Model</td>')
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						es = m._get_estimation_statistics()
 						ll = es[0]['log_like']
@@ -416,7 +419,8 @@ from .util.xhtml import XHTML, XML_Builder
 
 
 def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=None,
-                      overwrite=False, spool=True, title=None, model_titles=None):
+                      overwrite=False, spool=True, title=None, model_titles=None,
+					  css=""):
 	"""
 	Generate a combined report on a number of (probably related) models.
 	
@@ -442,6 +446,9 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 		similar filename.
 	title : str
 		An optional title for the report.
+	model_titles : sequence of str
+		A sequence of model titles to be used to replace (probably shorten) the model 
+		titles used in the report.
 	
 	"""
 	
@@ -484,7 +491,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	tr:first-child > td.table_category { padding-top:5px; }
 	td.tstat { font-size: 70%; font-weight: 100;}
 	.larch_signature {font-size:80%; font-weight:100; font-style:italic; font-family: "Book Antiqua", Palatino, serif; }
-	"""
+	"""+css
 
 	def param_appears_in_at_least_one_model(p):
 		if isinstance(p,category) and len(p.members)==0: return True
@@ -516,7 +523,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 				with f.tr_:
 					f.td(str(p))
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						if p in m:
 							m_p = m.parameter_wide(p)
@@ -530,11 +537,11 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 								tstat = "{:0.3g}".format(tstat)
 							except ValueError:
 								tstat = str(tstat)
-							f.td(value, {'class':str(shades[shade])})
-							f.td(tstat, {'class':str(shades[shade])})
+							f.td(value, {'class':"{} reportmodel{}".format(shades[shade],m_number)})
+							f.td(tstat, {'class':"{} reportmodel{}".format(shades[shade],m_number)})
 						else:
-							f.td("---", {'class':str(shades[shade])})
-							f.td("---", {'class':str(shades[shade])})
+							f.td("---", {'class':"{} reportmodel{}".format(shades[shade],m_number)})
+							f.td("---", {'class':"{} reportmodel{}".format(shades[shade],m_number)})
 
 	def write_factor_row(p):
 		if p is None: return
@@ -548,12 +555,12 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 				with f.tr_:
 					f.td(p.getname())
 					shade = 0
-					for m in models:
+					for m_number,m in enumerate(models):
 						shade ^= 1
 						if p in m:
-							f.td(p.strf(m), {'colspan':"2", 'class':shades[shade]})
+							f.td(p.strf(m), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 						else:
-							f.td("---", {'colspan':"2", 'class':shades[shade]})
+							f.td("---", {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 
 	with f.table_:
 		with f.block("thead"):
@@ -571,7 +578,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 							title = model_titles[m_number]
 						except:
 							pass
-					f.th(title, {'colspan':'2', 'class':shades[shade]})
+					f.th(title, {'colspan':'2', 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 		with f.block("tbody"):
 			# PARAMETER ESTIMATES
 			with f.block("tr"):
@@ -581,10 +588,10 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 				f.data("Parameter Estimates")
 				f.end("td")
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
-					f.td("Estimate",{'class':'table_category'})
-					f.td("(t\u2011Statistic)",{'class':'table_category tstat'}) # non-breaking hyphen
+					f.td("Estimate",{'class':'table_category reportmodel{}'.format(m_number)})
+					f.td("(t\u2011Statistic)",{'class':'table_category tstat reportmodel{}'.format(m_number)}) # non-breaking hyphen
 			for p in params:
 				write_param_row(p)
 			if len(params)>0 and len(unlisted_parameters)>0:
@@ -601,86 +608,86 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 			with f.tr_:
 				f.td('Log Likelihood')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
-					f.td("{:0.6g}".format(ll), {'colspan':"2", 'class':shades[shade]})
+					f.td("{:0.6g}".format(ll), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Log Likelihood at Constants')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llc = es[0]['log_like_constants']
 					if not math.isnan(llc):
-						f.td('{:0.6g}'.format(llc), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.6g}'.format(llc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Log Likelihood at Null Parameters')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llz = es[0]['log_like_null']
 					if not math.isnan(llz):
-						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Log Likelihood with No Model')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llz = es[0]['log_like_nil']
 					if not math.isnan(llz):
-						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Rho Squared vs. Constants')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llc = es[0]['log_like_constants']
 					if not math.isnan(llc):
 						rsc = 1.0-(ll/llc)
-						f.td('{:0.4g}'.format(rsc), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.4g}'.format(rsc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Rho Squared vs. Null Parameters')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llz = es[0]['log_like_null']
 					if not math.isnan(llz):
 						rsz = 1.0-(ll/llz)
-						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 			with f.tr_:
 				f.td('Rho Squared vs. No Model')
 				shade = 0
-				for m in models:
+				for m_number,m in enumerate(models):
 					shade ^= 1
 					es = m._get_estimation_statistics()
 					ll = es[0]['log_like']
 					llz = es[0]['log_like_nil']
 					if not math.isnan(llz):
 						rsz = 1.0-(ll/llz)
-						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':shades[shade]})
+						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 					else:
-						f.td('n/a', {'colspan':"2", 'class':shades[shade]})
+						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 
 					
 			# RATIOS
