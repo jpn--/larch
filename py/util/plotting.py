@@ -75,6 +75,8 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		use_data = data
 		use_color = hexcolor('ocean')
 
+	use_data = use_data[~numpy.isnan(use_data)]
+
 	if isinstance(bins, str):
 		if use_data.size == 0:
 			# handle empty arrays. Can't determine range, so use 0-1.

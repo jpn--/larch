@@ -704,13 +704,13 @@ class Model(Model2, ModelReporter):
 				stats = pandas.concat([stats,s])
 		return stats
 
-	def stats_utility_co(self):
+	def stats_utility_co(self, datapool="UtilityCO"):
 		"""
 		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
 		positives,negatives,zeros,mean of nonzero values) on the model's idco data as loaded. Uses weights
 		if available.
 		"""
-		x = self.Data("UtilityCO")
+		x = self.Data(datapool)
 		ss = statistical_summary.compute(x)
 		if bool((self.Data("Weight")!=1).any()):
 			w = self.Data("Weight").flatten()

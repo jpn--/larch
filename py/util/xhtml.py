@@ -477,7 +477,7 @@ class XHTML():
 		elif isinstance(node, Element):
 			self.body.append(node)
 		else:
-			raise TypeError("must be xml.etree.ElementTree.Element or XML_Builder or TreeBuilder")
+			raise TypeError("must be xml.etree.ElementTree.Element or XML_Builder or TreeBuilder, not {!s}".format(type(node)))
 
 	def __lshift__(self,other):
 		self.append(other)
