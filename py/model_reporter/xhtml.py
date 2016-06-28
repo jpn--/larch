@@ -217,9 +217,16 @@ class XhtmlModelReporter():
 			if os.path.isfile(othersource) and os.path.abspath(othersource)!=sourcefile:
 				with open(othersource, mode='r') as sf:
 					sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
-			elif sourcefile is not None and os.path.isfile(os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource))):
-				with open(os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource)), mode='r') as sf:
-					sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+			elif sourcefile is not None:
+				proposed_file = os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource))
+				if os.path.isfile(proposed_file):
+					with open(proposed_file, mode='r') as sf:
+						sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+				else:
+					proposed_file = os.path.join(os.path.dirname(sourcefile),othersource)
+					if os.path.isfile(proposed_file):
+						with open(proposed_file, mode='r') as sf:
+							sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
 
 		if len(sourcecode_bucket):
 			from pygments import highlight
@@ -933,127 +940,136 @@ class XhtmlModelReporter():
 	
 		x = XML_Builder("div", {'class':"utilitydata_statistics"})
 		if self.Data("Choice") is None: return x.close
-		x.h2("Utility Data Statistics", anchor=1)
+		x.h2("Data Statistics", anchor=1)
 
 
-		if self.Data("UtilityCO") is not None:
-			
-			description_catalog = {}
-			from ..roles import _data_description_catalog
-			description_catalog.update(_data_description_catalog)
+		datapools = {
+			"UtilityCO":("Utility",),
+#			"SamplingCO":("Sampling Bias",),
+		}
 
-			if 'data_co' in self.descriptions:
-				description_catalog.update(self.descriptions.data_co)
 
-			names = self.needs()["UtilityCO"].get_variables()
-			
-			description_catalog_keys = list(description_catalog.keys())
-			description_catalog_keys.sort(key=len, reverse=True)
-			
-			descriptions = numpy.asarray(names)
-			
-			for dnum, descr in enumerate(descriptions):
-				if descr in description_catalog:
-					descriptions[dnum] = description_catalog[descr]
+		for datapool in datapools:
+
+
+			if self.Data(datapool) is not None:
+				
+				description_catalog = {}
+				from ..roles import _data_description_catalog
+				description_catalog.update(_data_description_catalog)
+
+				if 'data_co' in self.descriptions:
+					description_catalog.update(self.descriptions.data_co)
+
+				names = self.needs()[datapool].get_variables()
+				
+				description_catalog_keys = list(description_catalog.keys())
+				description_catalog_keys.sort(key=len, reverse=True)
+				
+				descriptions = numpy.asarray(names)
+				
+				for dnum, descr in enumerate(descriptions):
+					if descr in description_catalog:
+						descriptions[dnum] = description_catalog[descr]
+					else:
+						for key in description_catalog_keys:
+							if key in descr:
+								descr = descr.replace(key,description_catalog[key])
+						descriptions[dnum] = descr
+				
+				#descriptions = [description_catalog[i] if i in description_catalog else 'n/a' for i in names]
+
+				show_descrip = (numpy.asarray(descriptions)!=numpy.asarray(names)).any()
+
+				#show_descrip = 'data_co' in self.descriptions
+				if bool((self.Data("Weight")!=1).any()):
+					x.h3(datapools[datapool][0]+" idCO Data (weighted)", anchor=1)
 				else:
-					for key in description_catalog_keys:
-						if key in descr:
-							descr = descr.replace(key,description_catalog[key])
-					descriptions[dnum] = descr
-			
-			#descriptions = [description_catalog[i] if i in description_catalog else 'n/a' for i in names]
+					x.h3(datapools[datapool][0]+" idCO Data", anchor=1)
 
-			show_descrip = (numpy.asarray(descriptions)!=numpy.asarray(names)).any()
+				#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+				ss = self.stats_utility_co(datapool)
+				means = ss.mean
+				stdevs = ss.stdev
+				mins = ss.minimum
+				maxs = ss.maximum
+				nonzers = ss.n_nonzeros
+				posis = ss.n_positives
+				negs = ss.n_negatives
+				zers = ss.n_zeros
+				mean_nonzer = ss.mean_nonzero
+				
+				ncols = 0
+				stack = []
+				titles = []
 
-			#show_descrip = 'data_co' in self.descriptions
-			if bool((self.Data("Weight")!=1).any()):
-				x.h3("idCO Data (weighted)", anchor=1)
-			else:
-				x.h3("idCO Data", anchor=1)
+				if show_descrip:
+					stack += [descriptions,]
+					titles += ["Description",]
+					ncols += 1
+				else:
+					stack += [names,]
+					titles += ["Data",]
+					ncols += 1
 
-			#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
-			ss = self.stats_utility_co()
-			means = ss.mean
-			stdevs = ss.stdev
-			mins = ss.minimum
-			maxs = ss.maximum
-			nonzers = ss.n_nonzeros
-			posis = ss.n_positives
-			negs = ss.n_negatives
-			zers = ss.n_zeros
-			mean_nonzer = ss.mean_nonzero
-			
-			ncols = 0
-			stack = []
-			titles = []
+				ncols += 5
+				stack += [means,stdevs,mins,maxs,zers,mean_nonzer]
+				titles += ["Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+				
+				use_p = (numpy.sum(posis)>0)
+				use_n = (numpy.sum(negs)>0)
+				
+				if numpy.sum(posis)>0:
+					stack += [posis,]
+					titles += ["Positives",]
+					ncols += 1
+				if numpy.sum(negs)>0:
+					stack += [negs,]
+					titles += ["Negatives",]
+					ncols += 1
 
-			if show_descrip:
-				stack += [descriptions,]
-				titles += ["Description",]
-				ncols += 1
-			else:
-				stack += [names,]
-				titles += ["Data",]
-				ncols += 1
-
-			ncols += 5
-			stack += [means,stdevs,mins,maxs,zers,mean_nonzer]
-			titles += ["Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
-			
-			use_p = (numpy.sum(posis)>0)
-			use_n = (numpy.sum(negs)>0)
-			
-			if numpy.sum(posis)>0:
-				stack += [posis,]
-				titles += ["Positives",]
-				ncols += 1
-			if numpy.sum(negs)>0:
-				stack += [negs,]
-				titles += ["Negatives",]
+				# Histograms
+				stack += [ss.histogram,]
+				titles += ["Distribution",]
 				ncols += 1
 
-			# Histograms
-			stack += [ss.histogram,]
-			titles += ["Distribution",]
-			ncols += 1
+				if show_descrip:
+					stack += [names,]
+					titles += ["Data",]
+					ncols += 1
 
-			if show_descrip:
-				stack += [names,]
-				titles += ["Data",]
-				ncols += 1
-
-			x.table
-			x.thead
-			x.tr
-			for ti in titles:
-				x.th(ti)
-			x.end_tr
-			x.end_thead
-			try:
-				with x.tbody_:
-					for s in zip(*stack):
-						with x.tr_:
-							for thing,ti in zip(s,titles):
-								if ti=="Description":
-									x.td("{:s}".format(thing), {'class':'strut2'})
-								elif ti=="Distribution":
-									cell = x.start('td', {'class':'histogram_cell'})
-									cell.append( thing )
-									x.end('td')
-								elif isinstance(thing,str):
-									x.td("{:s}".format(thing))
-								else:
-									x.td("{:<11.7g}".format(thing))
-			except:
-				for sn,stac in enumerate(stack):
-					print(sn,stac)
-				raise
-			x.start('caption')
-			x.data("Graphs are represented as pie charts if the data element has 4 or fewer distinct values.")
-			x.simple('br')
-			x.data("Graphs are orange if the zeroes are numerous and have been excluded.")
-			x.end('caption')
-			x.end_table
+				x.table
+				x.thead
+				x.tr
+				for ti in titles:
+					x.th(ti)
+				x.end_tr
+				x.end_thead
+				try:
+					with x.tbody_:
+						for s in zip(*stack):
+							with x.tr_:
+								for thing,ti in zip(s,titles):
+									if ti=="Description":
+										x.td("{:s}".format(thing), {'class':'strut2'})
+									elif ti=="Distribution":
+										cell = x.start('td', {'class':'histogram_cell'})
+										cell.append( thing )
+										x.end('td')
+									elif isinstance(thing,str):
+										x.td("{:s}".format(thing))
+									else:
+										x.td("{:<11.7g}".format(thing))
+				except:
+					for sn,stac in enumerate(stack):
+						print(sn,stac)
+					raise
+				x.start('caption')
+				x.data("Graphs are represented as pie charts if the data element has 4 or fewer distinct values.")
+				x.simple('br')
+				x.data("Graphs are orange if the zeroes are numerous and have been excluded.")
+				x.end('caption')
+				x.end_table
 
 
 		if self.Data("UtilityCA") is not None:
@@ -1061,7 +1077,7 @@ class XhtmlModelReporter():
 			
 
 			if len(self.alternative_codes()) >= 0:
-				x.h3("idCA Data", anchor=1)
+				x.h3("Utility idCA Data", anchor=1)
 				table_cache = self.stats_utility_ca(by_alt=False)
 				
 				#pre_display_cols
@@ -1111,7 +1127,7 @@ class XhtmlModelReporter():
 				x.end_table
 
 			if len(self.alternative_codes()) < 30:
-				x.h3("idCA Data by Alternative", anchor=1)
+				x.h3("Utilty idCA Data by Alternative", anchor=1)
 				table_cache = self.stats_utility_ca()
 				
 				#pre_display_cols
@@ -1220,12 +1236,14 @@ class XhtmlModelReporter():
 							if resolved:
 								beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format)
 								if not first_thing:
+									x.simple("br")
 									x.data(" + {}".format(beta_val).replace("+ -","- "))
 								else: # is first thing
 									x.data(beta_val)
 								first_thing = False
 							else:
 								if not first_thing:
+									x.simple("br")
 									x.data(" + ")
 								first_thing = False
 								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
@@ -1351,12 +1369,14 @@ class XhtmlModelReporter():
 								if resolved:
 									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format)
 									if not first_thing:
+										x.simple("br")
 										x.data(" + {}".format(beta_val).replace("+ -","- "))
 									else: # is first thing
 										x.data(beta_val)
 									first_thing = False
 								else:
 									if not first_thing:
+										x.simple("br")
 										x.data(" + ")
 									first_thing = False
 									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
