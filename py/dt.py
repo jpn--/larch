@@ -32,7 +32,7 @@ class HDF5Warning(UserWarning):
     pass
 
 
-_exclusion_summary_columns = ['Data Source', 'Alternatives','# Cases Excluded', ]
+_exclusion_summary_columns = ['Data Source', 'Alternatives','# Cases Excluded','# Cases Remaining', ]
 
 
 
@@ -234,6 +234,8 @@ class DT(Fountain):
 		return self.h5f.create_hard_link(*arg, **kwargs)
 	def create_soft_link(self, *arg, **kwargs):
 		return self.h5f.create_soft_link(*arg, **kwargs)
+	def flush(self, *arg, **kwargs):
+		return self.h5f.flush(*arg, **kwargs)
 
 	def get_or_create_group(self, where, name=None, title='', filters=None, createparents=False):
 		try:
@@ -649,9 +651,10 @@ class DT(Fountain):
 			in question.
 		exclude_unavail : bool
 			If true, then any case with no available alternatives is excluded.
-		exclude_unchoosable : bool
+		exclude_unchoosable : bool or int
 			If true, then any case where an unavailable alternative is chosen 
-			is excluded.
+			is excluded. Set to an integer greater than 1 to increase the 
+			verbosity of the reporting.
 			
 		Notes
 		-----
@@ -714,11 +717,28 @@ class DT(Fountain):
 			summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 			self.h5top.screen._v_attrs.exclude_result = s
 
-		if exclude_unchoosable:
+		if exclude_unchoosable>1:
+			n_total = 0
+			excludors = numpy.logical_and(self.array_choice(screen="None", dtype=bool), ~self.array_avail(screen="None"))
+			for altslot in range(self.nAlts()):
+				startcount = exclusions.sum()
+				exclusions |= excludors[:,altslot].squeeze()
+				n = exclusions.sum() - startcount
+				n_total += n
+				if n:
+					summary.loc["Chosen but Unavailable: {}".format(self.alternative_names()[altslot]),['# Cases Excluded', 'Data Source']] = (n,'n/a')
+			if n_total==0:
+				summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (0,'n/a')
+		elif exclude_unchoosable:
 			startcount = exclusions.sum()
 			exclusions |= numpy.logical_and(self.array_choice(screen="None", dtype=bool), ~self.array_avail(screen="None")).any(1).squeeze()
 			n = exclusions.sum() - startcount
 			summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+
+		if len(summary)>0:
+			summary['# Cases Remaining'][0] = self.h5top.caseids.shape[0] - summary['# Cases Excluded'][0]
+		for rownumber in range(1,len(summary)):
+			summary['# Cases Remaining'][rownumber] = summary['# Cases Remaining'][rownumber-1] - summary['# Cases Excluded'][rownumber]
 
 		self.h5top.screen[:] = ~exclusions.squeeze()
 		self.h5top.screen._v_attrs.exclude_result = summary
@@ -804,7 +824,8 @@ class DT(Fountain):
 
 	@exclude_unchoosable.setter
 	def exclude_unchoosable(self, value):
-		value = bool(value)
+		if not isinstance(value, (bool, int)):
+			value = int(value)
 		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=value)
 
 	@property
@@ -2330,6 +2351,183 @@ class DT(Fountain):
 			alo.write( "\nchoice = recode({},{})".format(ch_ind,choicelist))
 
 		return alo.getvalue()
+
+
+	def seer(self):
+		'''This function is experimental for now. 
+		
+		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
+		positives,negatives,zeros,mean of nonzero values) on the DT's idco data. 
+		
+		Not uses weights yet.
+		'''
+		
+		
+		from .util.xhtml import XHTML, XML_Builder
+		output = XHTML('temp')
+		output.title.text = "Data Summary"
+
+		x = XML_Builder("div", {'class':"data_statistics"})
+
+		description_catalog = {}
+		from .roles import _data_description_catalog
+		description_catalog.update(_data_description_catalog)
+
+		names = self.variables_co()
+		
+		description_catalog_keys = list(description_catalog.keys())
+		description_catalog_keys.sort(key=len, reverse=True)
+		
+		descriptions = numpy.asarray(names)
+		
+		for dnum, descr in enumerate(descriptions):
+			if descr in description_catalog:
+				descriptions[dnum] = description_catalog[descr]
+			else:
+				for key in description_catalog_keys:
+					if key in descr:
+						descr = descr.replace(key,description_catalog[key])
+				descriptions[dnum] = descr
+	
+		show_descrip = (numpy.asarray(descriptions)!=numpy.asarray(names)).any()
+
+		x.h2("idCO Data", anchor=1)
+
+
+		means = []
+		stdevs = []
+		mins = []
+		maxs = []
+		nonzers = []
+		posis = []
+		negs = []
+		zers = []
+		mean_nonzer = []
+		histograms = []
+		
+		from .util.statsummary import statistical_summary
+
+		#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
+		for name in names:
+			print("analyzing",name)
+			try:
+				ss = statistical_summary.compute(self.h5idco._v_children[name][:])
+			except:
+				means += ['err',]
+				stdevs += ['err',]
+				mins += ['err',]
+				maxs += ['err',]
+				nonzers += ['err',]
+				posis += ['err',]
+				negs += ['err',]
+				zers += ['err',]
+				mean_nonzer += ['err',]
+				histograms += ['err',]
+			else:
+				means += [ss.mean,]
+				stdevs += [ss.stdev,]
+				mins += [ss.minimum,]
+				maxs += [ss.maximum,]
+				nonzers += [ss.n_nonzeros,]
+				posis += [ss.n_positives,]
+				negs += [ss.n_negatives,]
+				zers += [ss.n_zeros,]
+				mean_nonzer += [ss.mean_nonzero,]
+				histograms += [ss.histogram,]
+				
+		
+		ncols = 0
+		stack = []
+		titles = []
+
+		if show_descrip:
+			stack += [descriptions,]
+			titles += ["Description",]
+			ncols += 1
+		else:
+			stack += [names,]
+			titles += ["Data",]
+			ncols += 1
+
+		ncols += 5
+		stack += [means,stdevs,mins,maxs,zers,mean_nonzer]
+		titles += ["Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+
+		try:
+			use_p = (numpy.sum(posis)>0)
+		except:
+			use_p = True
+		try:
+			use_n = (numpy.sum(negs)>0)
+		except:
+			use_n = True
+
+		if use_p:
+			stack += [posis,]
+			titles += ["Positives",]
+			ncols += 1
+		if use_n:
+			stack += [negs,]
+			titles += ["Negatives",]
+			ncols += 1
+
+		# Histograms
+		stack += [histograms,]
+		titles += ["Distribution",]
+		ncols += 1
+
+		if show_descrip:
+			stack += [names,]
+			titles += ["Data",]
+			ncols += 1
+
+		x.table
+		x.thead
+		x.tr
+		for ti in titles:
+			x.th(ti)
+		x.end_tr
+		x.end_thead
+		try:
+			with x.tbody_:
+				for s in zip(*stack):
+					with x.tr_:
+						for thing,ti in zip(s,titles):
+							if ti=="Description":
+								x.td("{:s}".format(thing), {'class':'strut2'})
+							elif ti=="Distribution":
+								cell = x.start('td', {'class':'histogram_cell'})
+								try:
+									cell.append( thing )
+								except TypeError:
+									if isinstance(thing, str):
+										cell.text = thing
+									else:
+										raise
+								x.end('td')
+							elif isinstance(thing,str):
+								x.td("{:s}".format(thing))
+							else:
+								try:
+									x.td("{:<11.7g}".format(thing))
+								except TypeError:
+									x.td(str(thing))
+		except:
+			for sn,stac in enumerate(stack):
+				print(sn,stac)
+			raise
+		x.start('caption')
+		x.data("Graphs are represented as pie charts if the data element has 4 or fewer distinct values.")
+		x.simple('br')
+		x.data("Graphs are orange if the zeroes are numerous and have been excluded.")
+		x.end('caption')
+		x.end_table
+
+		output << x
+		output.dump()
+		output.view()
+
+
 
 
 def _close_all_h5():
