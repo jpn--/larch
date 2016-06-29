@@ -170,7 +170,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 	td.dark, th.dark { background-color: #f0f0f0; padding: 3px; text-align: center; }
 	td.light, th.light { background-color: #f8f8f8; padding: 3px; text-align: center; }
 	td.parameter_category { background-color: #f4f4f4; font-style: italic; font-family: "Roboto","Helvetica", "Arial", sans-serif; font-weight:500;}
-	td.table_category { background-color: #ffffff; color: #000; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
+	td.table_category { background-color: #ffffff; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
 		border-left:0; border-right:0; padding-top:20px;
 	}
 	th.emptyhead {border: 0;}
@@ -484,7 +484,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	td.dark, th.dark { background-color: #ececec; padding: 3px; text-align: center; }
 	td.light, th.light { background-color: #f8f8f8; padding: 3px; text-align: center; }
 	td.parameter_category { background-color: #f2f2f2; font-style: italic; font-family: "Roboto","Helvetica", "Arial", sans-serif; font-weight:500;}
-	td.table_category { background-color: #ffffff; color: #000; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
+	td.table_category { background-color: #ffffff; font-weight: 900; font-family: "Roboto","Helvetica", "Arial", sans-serif;
 		border-left:0; border-right:0; padding-top:20px;
 	}
 	th.emptyhead {border: 0;}

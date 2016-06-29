@@ -21,11 +21,13 @@ body {font-family: "Book Antiqua", "Palatino", serif;}
 table {border-collapse:collapse;}
 
 table, th, td {
-	border: 1px solid #999999; padding:2px; 
+	border: 1px solid #999999;
 	font-family:"Roboto Mono", monospace;
 	font-size:90%;
 	font-weight:400;
 	}
+	
+th, td { padding:2px; }
 
 td.parameter_category {
 	font-family:"Roboto", monospace;
@@ -211,7 +213,7 @@ class XML_Builder(TreeBuilder):
 
 class XHTML():
 	"""A class used to conveniently build xhtml documents."""
-	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True):
+	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True, floating_tablehead=True):
 		self.view_on_exit = view_on_exit
 		self.root = Elem(tag="html", xmlns="http://www.w3.org/1999/xhtml")
 		self.head = Elem(tag="head")
@@ -261,6 +263,24 @@ class XHTML():
 			})
 			self.head << self.jqueryui
 
+		if floating_tablehead:
+			self.floatThead = Elem(tag="script", attrib={
+				'src':"https://cdnjs.cloudflare.com/ajax/libs/floatthead/1.4.0/jquery.floatThead.min.js",
+			})
+			self.floatTheadA = Elem(tag="script")
+			self.floatTheadA.text="""
+			$( document ).ready(function() {
+				var $table = $('table.floatinghead');
+				$table.floatThead({ position: 'absolute' });
+				var $tabledf = $('table.dataframe');
+				$tabledf.floatThead({ position: 'absolute' });
+			});
+			"""
+			self.head << self.floatThead
+			self.head << self.floatTheadA
+		
+	
+
 		self.head << self.favicon
 		self.head << self.title
 		self.head << self.style
@@ -269,7 +289,7 @@ class XHTML():
 		default_css = _default_css + """
 			
 		body { margin-left: """+str(toc_width)+"""px; }
-		.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px;}
+		.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px; z-index:2000;}
 		.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%;}
 		.table_of_contents_head { font-weight:700; padding-left:25px;  }
 		.table_of_contents ul { padding-left:25px;  }
@@ -278,6 +298,8 @@ class XHTML():
 		a.parameter_reference {font-style: italic; text-decoration: none}
 		.strut2 {min-width:2in}
 		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+		table.floatinghead thead {background-color:#FFF;}
+		table.dataframe thead {background-color:#FFF;}
 		@media print {
 		   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
 		   /*.table_of_contents { display: none; }*/

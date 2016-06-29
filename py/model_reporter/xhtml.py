@@ -74,9 +74,9 @@ class XhtmlModelReporter():
 			cats = ['title','params','LL','latest']
 
 		if cats=='*' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options']
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options','possible_overspecification']
 		elif cats=='*':
-			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options']
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options','possible_overspecification']
 
 		if cats=='-' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','latest','NOTES','options']
@@ -84,9 +84,9 @@ class XhtmlModelReporter():
 			cats=['title','params','LL',               'latest','NOTES','options']
 
 		if cats=='D' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','options','queryinfo','UTILITYSPEC',]
+			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]
 		elif cats=='D':
-			cats=['title','params','LL',                        'latest','NOTES','options','queryinfo','UTILITYSPEC',]
+			cats=['title','params','LL',                        'latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]
 
 		# make all formatting keys uppercase
 		existing_format_keys = list(format.keys())
@@ -509,7 +509,7 @@ class XhtmlModelReporter():
 										x.td("{:{PARAM}}".format(pwide.std_err, **format), {'class':'std_err'})
 										x.td("{:{TSTAT}}".format(pwide.t_stat, **format), {'class':'tstat'})
 										x.td("{:{PARAM}}".format(pwide.null_value, **format), {'class':'null_value'})
-			with x.block("table"):
+			with x.block("table", {'class':'floatinghead'}):
 				with x.block("thead"):
 					# PARAMETER ESTIMATES
 					with x.block("tr"):
@@ -1038,7 +1038,7 @@ class XhtmlModelReporter():
 					titles += ["Data",]
 					ncols += 1
 
-				x.table
+				x.start('table',{'class':'floatinghead'})
 				x.thead
 				x.tr
 				for ti in titles:
@@ -1069,7 +1069,7 @@ class XhtmlModelReporter():
 				x.simple('br')
 				x.data("Graphs are orange if the zeroes are numerous and have been excluded.")
 				x.end('caption')
-				x.end_table
+				x.end('table')
 
 
 		if self.Data("UtilityCA") is not None:
@@ -1097,7 +1097,7 @@ class XhtmlModelReporter():
 				if table_cache['negatives'].sum()>0:
 					display_cols += [('# Negatives',"negatives", "{:.0f}"),]
 				
-				x.table
+				x.start('table',{'class':'floatinghead'})
 				x.thead
 				x.tr
 				x.th('Data')
@@ -1124,7 +1124,7 @@ class XhtmlModelReporter():
 									print("Exception in Code")
 									print(block)
 									raise
-				x.end_table
+				x.end('table')
 
 			if len(self.alternative_codes()) < 30:
 				x.h3("Utilty idCA Data by Alternative", anchor=1)
@@ -1148,7 +1148,7 @@ class XhtmlModelReporter():
 				if table_cache['negatives'].sum()>0:
 					display_cols += [('# Negatives',"negatives", "{:.0f}"),]
 				
-				x.table
+				x.start('table',{'class':'floatinghead'})
 				x.thead
 				x.tr
 				x.th('Alternative')
@@ -1179,7 +1179,7 @@ class XhtmlModelReporter():
 									print("Exception in Code")
 									print(block)
 									raise
-				x.end_table
+				x.end('table')
 				
 				
 				
@@ -1215,7 +1215,7 @@ class XhtmlModelReporter():
 				headline = "Formulaic Utility"
 			x.h3(headline, anchor=1)
 			
-			with x.table_:
+			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
 					with x.tr_:
 						x.th('Code')
@@ -1350,7 +1350,7 @@ class XhtmlModelReporter():
 				headline = "Formulaic Utility"
 			x.h3(headline, anchor=1)
 			
-			with x.table_:
+			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
 					with x.tr_:
 						x.th('Code')
@@ -1475,7 +1475,7 @@ class XhtmlModelReporter():
 				headline = "Formulaic Probability"
 			x.h3(headline, anchor=1)
 		
-			with x.table_:
+			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
 					with x.tr_:
 						x.th('Code')
@@ -1558,6 +1558,34 @@ class XhtmlModelReporter():
 				x.data(note)
 				x.end("p")
 		return x.close()
+
+
+	def xhtml_possible_overspecification(self,**format):
+		x = XML_Builder("div", {'class':"overspecification"})
+		if not hasattr(self,"possible_overspecification") or len(self.possible_overspecification)==0: return x.close()
+		x.h2("Possible Overspecification", anchor=1)
+
+		x.start('table', {'class':'floatinghead'})
+		x.start('thead')
+		x.start('tr')
+		x.th('Eigenvalue')
+		x.th('Problem Parameters')
+		x.end('tr')
+		x.end('thead')
+		
+		for overspec in self.possible_overspecification:
+			x.start('tr')
+			x.td("{:.4g}".format(overspec[0]))
+			x.start('td')
+			x.data(overspec[1][0])
+			for problem_param in overspec[1][1:]:
+				x.simple('br')
+				x.data(problem_param)
+			x.end('td')
+			x.end('tr')
+		x.end('table')
+		return x.close()
+
 
 	def xhtml_options(self,**format):
 		x = XML_Builder("div", {'class':"options"})

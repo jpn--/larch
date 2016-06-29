@@ -4457,6 +4457,9 @@ class ModelParameter(object):
     	for name, val in zip(model.parameter_names(), cov[:,slot]):
     		ret[name] = val
     	return ret
+    def __call__(self, **kwargs):
+    	for key,val in kwargs.items():
+    		setattr(self,key,val)
 
 ModelParameter_swigregister = _core.ModelParameter_swigregister
 ModelParameter_swigregister(ModelParameter)

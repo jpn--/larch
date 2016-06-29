@@ -142,6 +142,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 			for eigval, ox in overspec:
 				paramset = list(numpy.asarray(model.parameter_names())[ox])
 			r.possible_overspecification.append( (eigval, paramset) )
+			model.possible_overspecification = r.possible_overspecification
 
 	r.stats.start_process("cleanup")
 	r.stats.number_threads = model.option.threads

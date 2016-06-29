@@ -50,10 +50,11 @@ _color_rgb256['night'] = (100,120,186)
 _color_rgb256['forest'] = (39,182,123)
 _color_rgb256['lime'] = (128,189,1)
 _color_rgb256['orange'] = (246,147,0)
+_color_rgb256['red'] = (246,1,0)
 
 def hexcolor(color):
 	c = _color_rgb256[color.casefold()]
-	return "#{}{}{}".format(*(hex(c[i])[-2:] if c[i]>0 else "00" for i in range(3)))
+	return "#{}{}{}".format(*(hex(c[i])[-2:] if c[i]>15 else "0"+hex(c[i])[-1:] for i in range(3)))
 
 def strcolor_rgb256(color):
 	c = _color_rgb256[color.casefold()]
@@ -74,8 +75,23 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 	else:
 		use_data = data
 		use_color = hexcolor('ocean')
+	bgcolor = None
 
 	use_data = use_data[~numpy.isnan(use_data)]
+
+	if use_data.size > 0:
+		data_stdev = use_data.std()
+		data_mean = use_data.mean()
+		data_min = use_data.min()
+		data_max = use_data.max()
+		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
+			bottom = numpy.nanpercentile(use_data,0.5)
+			top = numpy.nanpercentile(use_data,99.5)
+			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
+			if use_color == hexcolor('orange'):
+				use_color = hexcolor('lime')
+			else:
+				use_color = hexcolor('forest')
 
 	if isinstance(bins, str):
 		if use_data.size == 0:
@@ -111,6 +127,11 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 	if not xticks: fig.axes[0].get_xaxis().set_ticks([])
 	if not yticks: fig.axes[0].get_yaxis().set_ticks([])
 	if not frame: fig.axes[0].axis('off')
+
+	if bgcolor is not None:
+		ax = plt.gca()
+		ax.set_axis_bgcolor(bgcolor)
+
 	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
 	ret = plot_as_svg_xhtml(fig)
 	plt.clf()

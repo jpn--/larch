@@ -122,6 +122,9 @@ namespace elm {
 			for name, val in zip(model.parameter_names(), cov[:,slot]):
 				ret[name] = val
 			return ret
+		def __call__(self, **kwargs):
+			for key,val in kwargs.items():
+				setattr(self,key,val)
 		%}
 		#endif // def SWIG
 
