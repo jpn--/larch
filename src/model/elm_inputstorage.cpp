@@ -142,13 +142,22 @@ std::string elm::LinearComponent::__str__() const
 }
 
 
-elm::ComponentList elm::LinearComponent::operator+(const elm::LinearComponent& other)
+elm::ComponentList elm::LinearComponent::operator+(const elm::LinearComponent& other) const
 {
 	elm::ComponentList x (0,nullptr);
 	x.push_back(*this);
 	x.push_back(other);
 	return x;
 }
+
+elm::ComponentList elm::LinearComponent::operator+(const elm::ComponentList& other) const
+{
+	elm::ComponentList x (0,nullptr);
+	x.push_back(*this);
+	x+=other;
+	return x;
+}
+
 
 
 elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
@@ -374,6 +383,20 @@ elm::ComponentList elm::ComponentList::operator+(const elm::LinearComponent& x)
 }
 
 elm::ComponentList elm::ComponentList::operator+(const elm::ComponentList& x)
+{
+	elm::ComponentList n (*this);
+	n.insert(n.end(), x.begin(), x.end());
+	return n;
+}
+
+elm::ComponentList elm::ComponentList::_add(const elm::LinearComponent& x) const
+{
+	elm::ComponentList n (*this);
+	n.push_back(x);
+	return n;
+}
+
+elm::ComponentList elm::ComponentList::_add(const elm::ComponentList& x) const
 {
 	elm::ComponentList n (*this);
 	n.insert(n.end(), x.begin(), x.end());

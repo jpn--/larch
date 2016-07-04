@@ -473,8 +473,17 @@ class XhtmlModelReporter():
 									self_p = self.shadow_parameter[str_p]
 									if display_inital:
 										x.td("", {'class':'initial_value'})
-									x.td("{:{PARAM}}".format(self_p.value, **format), {'class':'estimated_value'})
-									x.td("{}".format(self_p.t_stat), {'colspan':'3', 'class':'tstat'})
+									try:
+										self_p_value = self_p.value
+									except Exception as err:
+										x.td("{}".format(str(err), **format), {'class':'estimated_value'})
+									else:
+										x.td("{:{PARAM}}".format(self_p.value, **format), {'class':'estimated_value'})
+									try:
+										x.td("{}".format(self_p.t_stat), {'colspan':'3', 'class':'tstat'})
+									except Exception as err:
+										x.td("{}".format(str(err), **format), {'colspan':'3', 'class':'tstat'})
+
 								else:
 									# Parameter found, use self[p]
 									if display_inital:
@@ -812,7 +821,7 @@ class XhtmlModelReporter():
 	
 		x = XML_Builder("div", {'class':"data_statistics"})
 		if self.Data("Choice") is None: return x.close
-		x.h2("Choice and Availability Data Statistics", anchor=1)
+		x.h2("Choice and Availability", anchor=1)
 
 		# get weights
 		if bool((self.Data("Weight")!=1).any()):

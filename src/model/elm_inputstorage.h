@@ -68,10 +68,14 @@ namespace elm {
 		def param(self, value):
 			self._param = value
 
+		def __pos__(self):
+			return self
+
 		%}
 		#endif // SWIG
 
-		ComponentList operator+(const LinearComponent& other);
+		ComponentList operator+(const LinearComponent& other) const;
+		ComponentList operator+(const ComponentList& other) const;
 		
 
 	};
@@ -125,9 +129,11 @@ namespace elm {
 
 		std::vector<std::string> needs() const;
 
+		ComponentList _add(const LinearComponent& x) const;
+		ComponentList _add(const ComponentList& x) const;
+		#ifndef SWIG
 		ComponentList operator+(const LinearComponent& x);
 		ComponentList operator+(const ComponentList& x);
-		#ifndef SWIG
 		ComponentList& operator+=(const LinearComponent& x);
 		ComponentList& operator+=(const ComponentList& x);
 		#endif // ndef SWIG
@@ -137,10 +143,13 @@ namespace elm {
 
 		#ifdef SWIG
 		%pythoncode %{
+		def __add__(self, other):
+			return self._add(other)
 		def __iadd__(self, other):
 			self._inplace_add(other)
 			return self
-				
+		def __radd__(self, other):
+			return LinearFunction() + other + self
 		%}
 		#endif // def SWIG
 

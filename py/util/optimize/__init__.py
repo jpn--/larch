@@ -106,7 +106,56 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 		stat.write(model.auto_rescale_weights())
 	
 	stat.end_process()
-	constraints = ()
+	try:
+		model.constraints
+	except AttributeError:
+		constraints = ()
+	else:
+		import ast
+		constraints = {}
+		for eachconstrain in model.constraints:
+			tree = ast.parse(eachconstrain, mode='eval')
+			if not isinstance(tree.body, ast.Compare):
+				raise TypeError("incompatible constraint, must be a comparison: "+eachconstrain)
+			left = tree.body.left
+			i = 0
+			right = tree.body.comparators[i]
+			op = tree.body.ops[i]
+			while i<len(tree.body.comparators):
+				if not isinstance(left, (ast.Name, )):
+					raise TypeError("incompatible constraint: "+eachconstrain)
+				if not isinstance(right, (ast.Name, )):
+					raise TypeError("incompatible constraint: "+eachconstrain)
+			
+				if left.id not in model.parameter_names():
+					if left.id in model.alias_names() and model.shadow_parameter[left.id].multiplier==1:
+						left_id = model.shadow_parameter[left.id].refers_to
+					else:
+						raise KeyError("parameter not found: {} in constraint {}".format(left.id,eachconstrain))
+				else:
+					left_id = left.id
+				
+				if right.id not in model.parameter_names():
+					if right.id in model.alias_names() and model.shadow_parameter[right.id].multiplier==1:
+						right_id = model.shadow_parameter[right.id].refers_to
+					else:
+						raise KeyError("parameter not found: {} in constraint {}".format(right.id,eachconstrain))
+				else:
+					right_id = right.id
+				
+				if isinstance(op, (ast.GtE, )):
+					c = _build_ineq_constraint(model[left_id].index, model[right_id].index, '{}>={}'.format(left_id,right_id))
+				elif isinstance(op, (ast.LtE, )):
+					c = _build_ineq_constraint(model[right_id].index, model[left_id].index, '{}<={}'.format(left_id,right_id))
+				else:
+					raise TypeError("incompatible constraint: "+eachconstrain)
+				constraints[c['description']] = c
+				left = right
+				i += 1
+				if i>=len(tree.body.comparators): break
+				right = tree.body.comparators[i]
+				op = tree.body.ops[i]
+		constraints = tuple(constraints.values())
 	if model.option.enforce_constraints:
 		constraints = model.network_based_contraints()
 	bounds=None
@@ -259,6 +308,28 @@ def _build_ineq_constraint(gtslot, ltslot, descrip):
 		'description': descrip,
 		}
 	return constraint
+
+
+def _build_single_gte_constraint(gtslot, pivot, descrip):
+	from scipy.sparse import coo_matrix
+	constraint = {
+		'type':'ineq',
+		'fun': lambda x: x[gtslot] - pivot ,
+		'jac': lambda x: coo_matrix(([1,],([gtslot,],[0,])), shape=(len(x),1)).todense().flatten(),
+		'description': descrip,
+		}
+	return constraint
+
+def _build_single_lte_constraint(ltslot, pivot, descrip):
+	from scipy.sparse import coo_matrix
+	constraint = {
+		'type':'ineq',
+		'fun': lambda x: pivot - x[ltslot],
+		'jac': lambda x: coo_matrix(([-1,],([ltslot,],[0,])), shape=(len(x),1)).todense().flatten(),
+		'description': descrip,
+		}
+	return constraint
+
 
 
 def network_based_contraints(model):

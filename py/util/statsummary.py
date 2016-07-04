@@ -5,7 +5,7 @@ from .plotting import spark_histogram
 
 class statistical_summary():
 
-	def __init__(self, **kwargs):
+	def __init__(self, xxx=None, *arg, **kwargs):
 		self.mean = None
 		self.stdev = None
 		# Range

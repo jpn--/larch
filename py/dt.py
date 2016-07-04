@@ -211,6 +211,11 @@ class DT(Fountain):
 			raise HDF5BadFormat("the node at '{}/expr' does not exist and cannot be created".format(ipath))
 		self.expr = LocalAttributeSet(self.h5top.expr)
 		self._refresh_alts()
+		# helper for data access
+		from .util.groupnode import GroupNode
+		self.idco = GroupNode(self.h5top, 'idco')
+		self.idca = GroupNode(self.h5top, 'idca')
+
 
 
 	def __del__(self):
@@ -286,7 +291,7 @@ class DT(Fountain):
 		try:
 			if isinstance(code, numbers.Integral):
 				return numpy.where(self._alternative_codes()==code)[0]
-			elif isinstance(code, (numpy.array,list,tuple) ):
+			elif isinstance(code, (numpy.ndarray,list,tuple) ):
 				if isinstance(code[0], numbers.Integral):
 					return numpy.where( numpy.in1d(self._alternative_codes(), code) )[0]
 				else:
@@ -437,6 +442,29 @@ class DT(Fountain):
 		return ret
 
 
+	def process_proposed_screen(self, proposal):
+		if (proposal is None and 'screen' not in self.h5top) or (isinstance(proposal, str) and proposal.casefold() in ("none","all","*")):
+			n_cases = self.h5top.caseids.shape[0]
+			screen = None
+		elif isinstance(proposal, str):
+			proposal = self.array_idco((proposal,), screen="None", dtype=bool)
+			return self.process_proposed_screen(proposal)
+		elif proposal is None:
+			screen = self.get_screen_indexes()
+			n_cases = screen.shape[0]
+		elif isinstance(proposal, numpy.ndarray) and numpy.issubsctype(proposal.dtype, numpy.bool):
+			if proposal.shape != self.h5top.caseids.shape:
+				raise TypeError("Incorrect screen shape, you gave {!s} but this DT has {!s}".format(proposal.shape, self.h5top.caseids.shape))
+			screen = numpy.nonzero(proposal)[0]
+			n_cases = screen.shape[0]
+		elif isinstance(proposal, numpy.ndarray) and numpy.issubsctype(proposal.dtype, numpy.int):
+			screen = proposal
+			n_cases = screen.shape[0]
+		else:
+			raise TypeError("Incorrect screen type, you gave {!s}".format(type(proposal)))
+		return screen, n_cases
+
+
 	def array_idca(self, *vars, dtype=numpy.float64, screen=None, strip_nan=True):
 		"""Extract a set of idca values from the DT.
 		
@@ -473,16 +501,7 @@ class DT(Fountain):
 			
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		h5node = self.h5top.idca
-		h5caseid = self.h5top.caseids
-		if (screen is None and 'screen' not in self.h5top) or (isinstance(screen, str) and screen=="None"):
-			n_cases = h5caseid.shape[0]
-			screen = None
-		elif screen is None:
-			screen = self.get_screen_indexes()
-			n_cases = screen.shape[0]
-		else:
-			n_cases = screen.shape[0]
+		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		n_alts = self.nAlts()
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
@@ -553,16 +572,7 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		h5node = self.h5top.idco
-		h5caseid = self.h5top.caseids
-		if (screen is None and 'screen' not in self.h5top) or (isinstance(screen, str) and screen=="None"):
-			n_cases = h5caseid.shape[0]
-			screen = None
-		elif screen is None:
-			screen = self.get_screen_indexes()
-			n_cases = screen.shape[0]
-		else:
-			n_cases = screen.shape[0]
+		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
 		for varnum,v in enumerate(vars):
@@ -858,7 +868,7 @@ class DT(Fountain):
 		#ex_df.reset_index(inplace=True)
 		return ex_df.reset_index()
 
-	def provision(self, needs, **kwargs):
+	def provision(self, needs, screen=None, **kwargs):
 		from . import Model
 		if isinstance(needs,Model):
 			m = needs
@@ -867,9 +877,7 @@ class DT(Fountain):
 			m = None
 		import numpy
 		provide = {}
-		cases = None
-		screen = self.get_screen_indexes()
-		matched_cases = []
+		screen, n_cases = self.process_proposed_screen(screen)
 		#log = self.logger()
 		log = None
 		for key, req in needs.items():
@@ -1929,7 +1937,7 @@ class DT(Fountain):
 			self.h5f.create_carray(self.h5idco, idca_var, obj=newarr)
 			self.h5idca._v_children[idca_var]._f_remove()
 
-	def new_idco(self, name, expression):
+	def new_idco(self, name, expression, dtype=numpy.float64, overwrite=False):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -1947,16 +1955,22 @@ class DT(Fountain):
 			The name of the new :ref:`idco` variable.
 		expression : str
 			An expression to evaluate as the new variable.
+		dtype : dtype
+			The dtype for the array of new data.
+		overwrite : bool
+			Should the variable be overwritten if it already exists, default to False.
 			
 		Raises
 		-----
 		tables.exceptions.NodeError
-			If a variable of the same name already exists.
+			If a variable of the same name already exists and overwrite is False.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
 			the existing :ref:`idco` data.
 		"""
-		data = self.array_idco(expression, screen="None").reshape(-1)
+		data = self.array_idco(expression, screen="None", dtype=dtype).reshape(-1)
+		if overwrite:
+			self.delete_data(name)
 		self.h5f.create_carray(self.h5idco, name, obj=data)
 
 	def new_idco_from_array(self, name, arr):

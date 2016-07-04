@@ -723,6 +723,8 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	if filename is None:
 		from .util.temporaryfile import TemporaryHtml
 		TemporaryHtml(content=xhtm.dump())
+	else:
+		xhtm.dump()
 	return xhtm
 
 

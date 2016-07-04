@@ -220,7 +220,7 @@ class TxtModelReporter():
 			x += ["Choice and availability data not provisioned"]
 			return x
 		x = ["="]
-		x += ["Choice and Availability Data Statistics"]
+		x += ["Choice and Availability"]
 		x += ["-"]
 		# get weights
 		if bool((self.Data("Weight")!=1).any()):

@@ -216,7 +216,7 @@ class Flogger:
 	def __init__(self, logger):
 		self.logger = logger
 		self.buffer = ""
-	def __call__(self, base, *args, end="\n", **kwargs):
+	def __call__(self, base="", *args, end="\n", **kwargs):
 		if end=="\n":
 			if isinstance(base,str) and "{" in base:
 				self.logger.critical(self.buffer + base.format(*args,**kwargs))

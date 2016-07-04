@@ -112,6 +112,8 @@ class DataRef(str, metaclass=Role):
 		return DataRef("({})/({})".format(other,self))
 	def __neg__(self):
 		return DataRef("-({})".format(self))
+	def __pos__(self):
+		return self
 	def __eq__(self, other):
 		if isinstance(other, DataRef):
 			if repr(other) == repr(self):
@@ -344,6 +346,8 @@ class ParameterRef(str, metaclass=Role):
 		return _param_divide(other,self)
 	def __neg__(self):
 		return _param_negate(self)
+	def __pos__(self):
+		return self
 	def __eq__(self, other):
 		if isinstance(other, ParameterRef):
 			if repr(other) == repr(self):

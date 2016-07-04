@@ -2798,10 +2798,13 @@ class LinearComponent(object):
     def param(self, value):
     	self._param = value
 
+    def __pos__(self):
+    	return self
 
 
-    def __add__(self, other: 'LinearComponent') -> "elm::ComponentList":
-        return _core.LinearComponent___add__(self, other)
+
+    def __add__(self, *args) -> "elm::ComponentList":
+        return _core.LinearComponent___add__(self, *args)
 LinearComponent_swigregister = _core.LinearComponent_swigregister
 LinearComponent_swigregister(LinearComponent)
 
@@ -2860,16 +2863,19 @@ class LinearFunction(ComponentVector):
     def needs(self) -> "std::vector< std::string,std::allocator< std::string > >":
         return _core.LinearFunction_needs(self)
 
-    def __add__(self, *args) -> "elm::ComponentList":
-        return _core.LinearFunction___add__(self, *args)
+    def _add(self, *args) -> "elm::ComponentList":
+        return _core.LinearFunction__add(self, *args)
 
     def _inplace_add(self, *args) -> "void":
         return _core.LinearFunction__inplace_add(self, *args)
 
+    def __add__(self, other):
+    	return self._add(other)
     def __iadd__(self, other):
     	self._inplace_add(other)
     	return self
-
+    def __radd__(self, other):
+    	return LinearFunction() + other + self
 
     __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self: None
