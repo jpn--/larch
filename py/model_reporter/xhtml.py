@@ -88,6 +88,7 @@ class XhtmlModelReporter():
 		elif cats=='D':
 			cats=['title','params','LL',                        'latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]
 
+
 		# make all formatting keys uppercase
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -303,6 +304,51 @@ class XhtmlModelReporter():
 				write_factor_row(p)
 		return x.close()
 
+
+
+	def xhtml_single_parameter_resultpart(self, p, *, with_inital=False,
+										  with_stderr=True, with_tstat=True,
+										  with_nullvalue=True, tstat_parens=False, **format):
+		if p is None: return
+		with_stderr = bool(with_stderr)
+		with_tstat = bool(with_tstat)
+		with_nullvalue = bool(with_nullvalue)
+		x = XML_Builder("div", {'class':"parameter_estimate"})
+		if isinstance(p,rename):
+			try:
+				model_p = self[p]
+			except KeyError:
+				use_shadow_p = True
+			else:
+				use_shadow_p = False
+			if use_shadow_p:
+				# Parameter not found, try shadow_parameter
+				str_p = str(p.find_in(self))
+				shadow_p = self.shadow_parameter[str_p]
+				if display_inital:
+					x.td("", {'class':'initial_value'})
+				try:
+					shadow_p_value = shadow_p.value
+				except Exception as err:
+					x.td("{}".format(str(err), **format), {'class':'estimated_value'})
+				else:
+					x.td("{:{PARAM}}".format(shadow_p.value, **format), {'class':'estimated_value'})
+				try:
+					x.td("{}".format(shadow_p.t_stat), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
+				except Exception as err:
+					x.td("{}".format(str(err), **format), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
+			else:
+				# Parameter found, use model_p
+				if display_inital:
+					x.td("{:{PARAM}}".format(model_p.initial_value, **format), {'class':'initial_value'})
+				x.td("{:{PARAM}}".format(model_p.value, **format), {'class':'estimated_value'})
+				if model_p.holdfast:
+					x.td("fixed value", {'colspan':str(with_stderr+with_tstat), 'class':'notation'})
+				else:
+					x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
+					x.td("{:{TSTAT}}".format(model_p.t_stat, **format), {'class':'tstat'})
+				x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+
 	def xhtml_params(self, groups=None, display_inital=False, **format):
 		"""
 		Generate a div element containing the model parameters in a table.
@@ -366,7 +412,6 @@ class XhtmlModelReporter():
 		if groups is None and hasattr(self, 'parameter_groups'):
 			groups = self.parameter_groups
 		
-		
 		if groups is None:
 			
 			footer = set()
@@ -407,11 +452,6 @@ class XhtmlModelReporter():
 					x.td("{:{PARAM}}".format(px.std_err,**format), {'class':'std_err'})
 					x.td("{:{TSTAT}}".format(tstat,**format), {'class':'tstat'})
 					x.td("{:{PARAM}}".format(px.null_value,**format), {'class':'null_value'})
-#					if p['holdfast']:
-#						x.td("H", {'class':'footnote_mark'})
-#						footer.add("H")
-#					else:
-#						x.td("", {'class':'footnote_mark'})
 				x.end_tr
 			for p in self.alias_names():
 				x.tr
@@ -539,6 +579,120 @@ class XhtmlModelReporter():
 							write_param_row(p)
 		return x.close()
 	xhtml_param = xhtml_parameters = xhtml_params
+
+
+	def xhtml_params_2(self, groups=None, display_inital=False, **format):
+		"""
+		Generate a div element containing the model parameters in a table.
+		
+		Parameters
+		----------
+		groups : None or list
+			An ordered list of parameters names and/or categories. If given,
+			this list will be used to order the resulting table.
+		display_inital : bool
+			Should the initial values of the parameters (the starting point 
+			for estimation) be included in the report. Defaults to False.
+		
+		Returns
+		-------
+		larch.util.xhtml.Elem
+			A div containing the model parameters.
+		
+		Example
+		-------
+		>>> from larch.util.pmath import category, rename
+		>>> from larch.util.xhtml import XHTML
+		>>> m = larch.Model.Example(1, pre=True)
+		>>> param_groups = [
+		... 	category('Level of Service',
+		... 			 rename('Total Time', 'tottime'),
+		... 			 rename('Total Cost', 'totcost')  ),
+		... 	category('Alternative Specific Constants',
+		...              'ASC_SR2',
+		...              'ASC_SR3P',
+		...              'ASC_TRAN',
+		...              'ASC_BIKE',
+		...              'ASC_WALK'  ),
+		... 	category('Income',
+		...              'hhinc#2',
+		...              'hhinc#3',
+		...              'hhinc#4',
+		...              'hhinc#5',
+		...              'hhinc#6'   ),
+		... ]
+		>>> with XHTML(quickhead=m) as f:
+		... 	f.append( m.xhtml_title()  )
+		... 	f.append( m.xhtml_params(param_groups) )
+		... 	html = f.dump()
+		>>> html
+		b'<!DOCTYPE html ...>'
+		
+		.. image:: render_xhtml_params_html.png
+			:class: htmlrendering
+		"""
+		# keys fix
+		existing_format_keys = list(format.keys())
+		for key in existing_format_keys:
+			if key.upper()!=key: format[key.upper()] = format[key]
+		if 'PARAM' not in format: format['PARAM'] = '< 12.4g'
+		if 'TSTAT' not in format: format['TSTAT'] = '0.2f'
+		# build table
+		x = XML_Builder("div", {'class':"parameter_estimates"})
+		x.h2("Model Parameter Estimates", anchor=1)
+		
+		if groups is None and hasattr(self, 'parameter_groups'):
+			groups = self.parameter_groups
+		if groups is None:
+			groups = ()
+			
+		## USING GROUPS
+		listed_parameters = set([p for p in groups if not isinstance(p,category)])
+		for p in groups:
+			if isinstance(p,category):
+				listed_parameters.update( p.complete_members() )
+		unlisted_parameters = (set(self.parameter_names()) | set(self.alias_names())) - listed_parameters
+		n_cols_params = 6 if display_inital else 5
+		
+		def write_param_row(p, *, force=False):
+			if p is None: return
+			if force or (p in self) or (p in self.alias_names()):
+				if isinstance(p,category):
+					with x.block("tr"):
+						x.td(p.name, {'colspan':str(n_cols_params), 'class':"parameter_category"})
+					for subp in p.members:
+						write_param_row(subp)
+				else:
+					if isinstance(p,rename):
+						with x.block("tr"):
+							x.start('td')
+							x.simple_anchor("param"+p.name.replace("#","_hash_"))
+							x.data('{}'.format(p.name))
+							x.end('td')
+							x << self.xhtml_single_parameter_resultpart(p, with_inital=display_inital, **format)
+							
+		with x.block("table", {'class':'floatinghead'}):
+			with x.block("thead"):
+				# PARAMETER ESTIMATES
+				with x.block("tr"):
+					x.th("Parameter")
+					if display_inital:
+						x.th("Initial Value", {'class':'initial_value'})
+					x.th("Estimated Value", {'class':'estimated_value'})
+					x.th("Std Error", {'class':'std_err'})
+					x.th("t-Stat", {'class':'tstat'})
+					x.th("Null Value", {'class':'null_value'})
+			with x.block("tbody"):
+				for p in groups:
+					write_param_row(p)
+				if len(groups)>0 and len(unlisted_parameters)>0:
+					write_param_row(category("Other Parameters"),force=True)
+				if len(unlisted_parameters)>0:
+					for p in unlisted_parameters:
+						write_param_row(p)
+		return x.close()
+
+
 
 
 	# Model Estimation Statistics
@@ -1728,7 +1882,13 @@ class XhtmlModelReporter():
 			if self.root_id != j:
 				G.add_edge(self.root_id,j)
 		pyg_imgdata = BytesIO()
-		G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
+		try:
+			G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
+		except ValueError as err:
+			if 'in path' in str(err):
+				import warnings
+				warnings.warn(str(err)+"; unable to draw nesting tree in report")
+				return self.xhtml_nesting_tree_textonly(**format)
 		xx = x.close()
 		xx << ET.fromstring(pyg_imgdata.getvalue().decode())
 		return xx

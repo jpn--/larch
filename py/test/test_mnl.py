@@ -71,7 +71,7 @@ class TestMTC(ELM_TestCase):
 		self.assertEqual( 1.23, P1.value(m) )
 		self.assertEqual( 2.0,  P2.value(m) )
 		self.assertEqual( 10.0,  P3.value(m) )
-		with self.assertRaises(LarchError):
+		with self.assertRaises(KeyError):
 			P4.value(m)
 
 		self.assertAlmostEqual( 3.23   , (P1+P2).value(m) )

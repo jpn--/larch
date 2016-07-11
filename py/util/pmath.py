@@ -27,6 +27,11 @@ class Category():
 			else:
 				x += [p,]
 		return x
+	def __repr__(self):
+		s= "<larch.util.pmath.Category '{}' at {}>".format(self.name,hex(id(self)))
+#		for mem in self.members:
+#			s+= "\n | "+str(mem).replace("\n","\n | ")
+		return s
 
 
 category = Category  # legacy
@@ -75,6 +80,11 @@ class Rename():
 		return x
 	def __str__(self):
 		return self.name
+	def __repr__(self):
+		s= "<larch.util.pmath.Rename '{}' at {}>".format(self.name,hex(id(self)))
+#		for mem in self.members:
+#			s+= "\n | "+str(mem).replace("\n","\n | ")
+		return s
 
 rename = Rename   # legacy
 

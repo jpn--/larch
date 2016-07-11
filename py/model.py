@@ -9,7 +9,7 @@ import math
 from .model_reporter import ModelReporter
 import base64
 from .util.attribute_dict import function_cache
-from .model_shadowmanager import shadow_manager
+from .model_shadowmanager import shadow_manager, metaparameter_manager
 from .model_parametermanager import ParameterManager
 from .util.statsummary import statistical_summary
 
@@ -161,16 +161,22 @@ class Model(Model2, ModelReporter):
 		"""A :class:`ParameterManager` interface for the model."""
 		return ParameterManager(self)
 
-	def metaparameter(self, name):
-		try:
-			x = self.alias(name)
-		except LarchError:
-			if name not in self.parameter_names():
-				raise LarchError("cannot find '{}' in model".format(name))
-			x = self.parameter(name)
-			return MetaParameter(name, x.value, x, x.initial_value)
-		else:
-			return MetaParameter(name, self.metaparameter(x.refers_to).value * x.multiplier, x, self.metaparameter(x.refers_to).initial_value* x.multiplier)
+	@property
+	def metaparameter(self):
+		"""A metaparameter interface for the model."""
+		return metaparameter_manager(self)
+
+
+#	def metaparameter(self, name):
+#		try:
+#			x = self.alias(name)
+#		except LarchError:
+#			if name not in self.parameter_names():
+#				raise LarchError("cannot find '{}' in model".format(name))
+#			x = self.parameter(name)
+#			return MetaParameter(name, x.value, x, x.initial_value)
+#		else:
+#			return MetaParameter(name, self.metaparameter(x.refers_to).value * x.multiplier, x, self.metaparameter(x.refers_to).initial_value* x.multiplier)
 
 	def param_sum(self,*arg):
 		value = 0
@@ -1511,7 +1517,7 @@ class Model(Model2, ModelReporter):
 		z = super().alias(*args)
 		if name in self._parameter_name_index:
 			del self[name]
-		z.set_referred_modelparam( self.parameter(z.refers_to) )
+		#z.set_referred_modelparam( self.parameter(z.refers_to) )
 		return z
 
 

@@ -107,7 +107,10 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 	
 	stat.end_process()
 	try:
-		model.constraints
+		if model.constraints is None:
+			model.constraints = ()
+		else:
+			raise AttributeError()
 	except AttributeError:
 		constraints = ()
 	else:

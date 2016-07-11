@@ -1488,7 +1488,7 @@ elm::ModelParameter sherpa::__getitem__(const int& param_num)
 
 
 
-freedom_alias& sherpa::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force)
+freedom_alias& sherpa::alias_ref(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force)
 {
 	if (alias_name=="") {
 		throw(etk::ParameterNameError("Cannot name an alias with an empty string."));
@@ -1520,7 +1520,14 @@ freedom_alias& sherpa::alias(const std::string& alias_name, const std::string& r
 	return AliasInfo.at(alias_name);
 }
 
-freedom_alias& sherpa::alias(const std::string& alias_name)
+elm::ModelAlias sherpa::alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force)
+{
+	alias_ref(alias_name, refers_to, multiplier, force);
+	return elm::ModelAlias(this, alias_name);
+}
+
+
+freedom_alias& sherpa::alias_ref(const std::string& alias_name)
 {
 	if (alias_name=="") {
 		throw(etk::ParameterNameError("Cannot reference an alias with an empty string."));
@@ -1533,6 +1540,13 @@ freedom_alias& sherpa::alias(const std::string& alias_name)
 	}
 	
 }
+
+elm::ModelAlias sherpa::alias(const std::string& alias_name)
+{
+	alias_ref(alias_name);
+	return elm::ModelAlias(this, alias_name);
+}
+
 
 void sherpa::del_alias(const std::string& alias_name)
 {

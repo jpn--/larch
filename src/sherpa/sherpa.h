@@ -52,6 +52,7 @@ std::string algorithm_name(const char& algo);
 
 namespace elm {
   class ModelParameter;
+  class ModelAlias;
 };
 
 
@@ -307,8 +308,12 @@ public:
 	elm::ModelParameter __getitem__(const int& param_num);
 //	void __delitem__(const std::string& param_name);
 
-	freedom_alias& alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force=false);
-	freedom_alias& alias(const std::string& alias_name);
+#ifndef SWIG
+	freedom_alias& alias_ref(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force=false);
+	freedom_alias& alias_ref(const std::string& alias_name);
+#endif // ndef SWIG
+	elm::ModelAlias alias(const std::string& alias_name, const std::string& refers_to, const double& multiplier, const bool& force=false);
+	elm::ModelAlias alias(const std::string& alias_name);
 	void del_alias(const std::string& alias_name);
 	void unlink_alias(const std::string& alias_name);
 

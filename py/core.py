@@ -3880,7 +3880,7 @@ class sherpa(ParameterList):
     def __getitem__(self, *args) -> "elm::ModelParameter":
         return _core.sherpa___getitem__(self, *args)
 
-    def alias(self, *args) -> "freedom_alias &":
+    def alias(self, *args) -> "elm::ModelAlias":
         return _core.sherpa_alias(self, *args)
 
     def del_alias(self, alias_name: 'std::string const &') -> "void":
@@ -4469,6 +4469,90 @@ class ModelParameter(object):
 
 ModelParameter_swigregister = _core.ModelParameter_swigregister
 ModelParameter_swigregister(ModelParameter)
+
+class ModelAlias(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _core.new_ModelAlias(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _core.delete_ModelAlias
+    __del__ = lambda self: None
+
+    def _get_value(self) -> "double":
+        return _core.ModelAlias__get_value(self)
+
+    def _get_min(self) -> "double":
+        return _core.ModelAlias__get_min(self)
+
+    def _get_max(self) -> "double":
+        return _core.ModelAlias__get_max(self)
+
+    def _get_std_err(self) -> "std::string":
+        return _core.ModelAlias__get_std_err(self)
+
+    def _get_t_stat(self) -> "std::string":
+        return _core.ModelAlias__get_t_stat(self)
+
+    def _get_robust_std_err(self) -> "std::string":
+        return _core.ModelAlias__get_robust_std_err(self)
+
+    def _get_name(self) -> "std::string":
+        return _core.ModelAlias__get_name(self)
+
+    def _get_holdfast(self) -> "signed char":
+        return _core.ModelAlias__get_holdfast(self)
+
+    def _get_nullvalue(self) -> "double":
+        return _core.ModelAlias__get_nullvalue(self)
+
+    def _get_initvalue(self) -> "double":
+        return _core.ModelAlias__get_initvalue(self)
+
+    def _get_refers_to(self) -> "std::string":
+        return _core.ModelAlias__get_refers_to(self)
+
+    def _set_refers_to(self, other: 'std::string const &') -> "void":
+        return _core.ModelAlias__set_refers_to(self, other)
+
+    def _get_multiplier(self) -> "double":
+        return _core.ModelAlias__get_multiplier(self)
+
+    def _set_multiplier(self, other: 'double const &') -> "void":
+        return _core.ModelAlias__set_multiplier(self, other)
+
+    def _get_model(self) -> "PyObject *":
+        return _core.ModelAlias__get_model(self)
+
+    value = property(_get_value, None, None, "the current value for the parameter")
+    null_value = property(_get_nullvalue, None, None, "the null value for the parameter (used for null models and t-stats)")
+    initial_value = property(_get_initvalue, None, None, "the initial value of the parameter")
+    minimum = property(_get_min, None, None, "the min bound for the parameter during estimation")
+    min_value = minimum
+    maximum = property(_get_max, None, None, "the max bound for the parameter during estimation")
+    max_value = maximum
+    holdfast = property(_get_holdfast, None, None, "a flag indicating if the parameter value should be held fast (constrained to keep its value) during estimation")
+    std_err = property(_get_std_err, None, None, "the standard error of the estimator (read-only)")
+    robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich (read-only)")
+    name = property(_get_name, None, None, "the alias name (read-only)")
+    refers_to = property(_get_refers_to, _set_refers_to, None, "the name of the parameter to which this alias refers")
+    multiplier = property(_get_multiplier, _set_multiplier, None, "the multiplier of the referred parameter")
+    @property
+    def name_(self):
+    	return self.name.replace(" ","_")
+    t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
+    def __repr__(self):
+    	return "ModelAlias('{}', value={})".format(self.name, self.value)
+    def __call__(self, **kwargs):
+    	for key,val in kwargs.items():
+    		setattr(self,key,val)
+
+ModelAlias_swigregister = _core.ModelAlias_swigregister
+ModelAlias_swigregister(ModelAlias)
 
 
 from .model import Model

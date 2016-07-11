@@ -132,6 +132,71 @@ namespace elm {
 
 	};
 	
+	
+	class ModelAlias
+	{
+	protected:
+		sherpa* model;
+		std::string aliasname;
+	
+	private:
+		PyObject* model_as_pyobject;
+		
+	public:
+	
+		ModelAlias(sherpa* model, const std::string& aliasname);
+		ModelAlias(const elm::ModelAlias& original);
+		~ModelAlias();
+		
+		double _get_value() const;
+		double _get_min() const;
+		double _get_max() const;
+		std::string _get_std_err() const;
+		std::string _get_t_stat() const;
+		std::string _get_robust_std_err() const;
+		std::string _get_name() const;
+		signed char _get_holdfast() const;
+		double _get_nullvalue() const;
+		double _get_initvalue() const;
+		
+		std::string _get_refers_to() const;
+		void _set_refers_to(const std::string& other);
+		
+		double _get_multiplier() const;
+		void _set_multiplier(const double& other);
+		
+		PyObject* _get_model();
+
+		#ifdef SWIG
+		%pythoncode %{
+		value = property(_get_value, None, None, "the current value for the parameter")
+		null_value = property(_get_nullvalue, None, None, "the null value for the parameter (used for null models and t-stats)")
+		initial_value = property(_get_initvalue, None, None, "the initial value of the parameter")
+		minimum = property(_get_min, None, None, "the min bound for the parameter during estimation")
+		min_value = minimum
+		maximum = property(_get_max, None, None, "the max bound for the parameter during estimation")
+		max_value = maximum
+		holdfast = property(_get_holdfast, None, None, "a flag indicating if the parameter value should be held fast (constrained to keep its value) during estimation")
+		std_err = property(_get_std_err, None, None, "the standard error of the estimator (read-only)")
+		robust_std_err = property(_get_robust_std_err, None, None, "the robust standard error of the estimator via bhhh sandwich (read-only)")
+		name = property(_get_name, None, None, "the alias name (read-only)")
+		refers_to = property(_get_refers_to, _set_refers_to, None, "the name of the parameter to which this alias refers")
+		multiplier = property(_get_multiplier, _set_multiplier, None, "the multiplier of the referred parameter")
+		@property
+		def name_(self):
+			return self.name.replace(" ","_")
+		t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
+		def __repr__(self):
+			return "ModelAlias('{}', value={})".format(self.name, self.value)
+		def __call__(self, **kwargs):
+			for key,val in kwargs.items():
+				setattr(self,key,val)
+		%}
+		#endif // def SWIG
+
+
+
+	};
 }
 
 

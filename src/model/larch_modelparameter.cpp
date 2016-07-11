@@ -219,3 +219,214 @@ PyObject* elm::ModelParameter::_get_model()
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+elm::ModelAlias::ModelAlias(sherpa* model, const std::string& name)
+: model(model)
+, aliasname(name)
+, model_as_pyobject(nullptr)
+{
+	if (!model) OOPS("cannot create a ModelAlias without a Model");
+	
+	model_as_pyobject = model->weakself;
+	Py_XINCREF(model_as_pyobject);
+
+}
+
+elm::ModelAlias::ModelAlias(const elm::ModelAlias& original)
+: model(original.model)
+, aliasname(original.aliasname)
+, model_as_pyobject(original.model_as_pyobject)
+{
+	if (!original.model) OOPS("cannot create a ModelAlias without a Model");
+	
+	Py_XINCREF(model_as_pyobject);
+
+}
+
+
+elm::ModelAlias::~ModelAlias()
+{
+	Py_CLEAR(model_as_pyobject);
+}
+
+double elm::ModelAlias::_get_value() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_value() * i->second.multiplier;
+	}
+
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+
+double elm::ModelAlias::_get_min() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_min() * i->second.multiplier;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+
+
+
+
+
+
+double elm::ModelAlias::_get_max() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_max() * i->second.multiplier;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+
+signed char elm::ModelAlias::_get_holdfast() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_holdfast();
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+
+
+
+
+
+double elm::ModelAlias::_get_nullvalue() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_nullvalue() * i->second.multiplier;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+double elm::ModelAlias::_get_initvalue() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		return mp._get_initvalue() * i->second.multiplier;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+
+
+
+
+std::string elm::ModelAlias::_get_std_err() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		size_t ref_slot = model->FNames[i->second.refers_to];
+		ModelParameter mp (model, ref_slot);
+		if (i->second.multiplier==1.0) {
+			return etk::cat("= ",mp._get_name());
+		} else {
+			return etk::cat("= ",mp._get_name()," * ",i->second.multiplier);
+		}
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+std::string elm::ModelAlias::_get_t_stat() const
+{
+	return _get_std_err();
+}
+
+std::string elm::ModelAlias::_get_robust_std_err() const
+{
+	return _get_std_err();
+}
+
+
+std::string elm::ModelAlias::_get_name() const
+{
+	return aliasname;
+}
+
+
+PyObject* elm::ModelAlias::_get_model()
+{
+	if (model_as_pyobject) {
+		Py_XINCREF( model_as_pyobject );
+		return model_as_pyobject;
+	} else {
+		Py_RETURN_NONE;
+	}
+}
+
+
+std::string elm::ModelAlias::_get_refers_to() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		return i->second.refers_to;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+void elm::ModelAlias::_set_refers_to(const std::string& other)
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		i->second.refers_to = other;
+	} else
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+double elm::ModelAlias::_get_multiplier() const
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		return i->second.multiplier;
+	}
+	OOPS_KeyError("alias ",aliasname," not found");
+}
+
+void elm::ModelAlias::_set_multiplier(const double& other)
+{
+	auto i = model->AliasInfo.find(aliasname);
+	if (i!=model->AliasInfo.end()) {
+		i->second.multiplier = other;
+	} else
+	OOPS_KeyError("alias ",aliasname," not found");
+}

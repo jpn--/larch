@@ -186,11 +186,11 @@ class ParameterRef(str, metaclass=Role):
 		"""
 		try:
 			v = m.metaparameter(str(self)).value
-		except LarchError:
+		except (LarchError, KeyError):
 			if self._default_value is not None:
 				v = self._default_value
 			else:
-				raise LarchError("parameter {} not in model".format(str(self)))
+				raise
 		return v
 	def name(self, n):
 		"""
