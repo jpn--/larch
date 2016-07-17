@@ -23,7 +23,7 @@ def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
         raise AttributeError("You cannot add attributes to %s" % self)
 
 %}
-
+  
 
 // Fix an error in swigging Py3:
 %{

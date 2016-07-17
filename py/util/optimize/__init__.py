@@ -26,6 +26,7 @@ from enum import Enum
 from ...core import LarchError, runstats
 import warnings
 import os
+import ast
 
 if os.environ.get('READTHEDOCS', None) != 'True':
 	warnings.filterwarnings(action="ignore", message='.*Unknown solver options.*', category=OptimizeWarning, module='', lineno=0)
@@ -53,6 +54,21 @@ def optimizers(model, *arg, ctol=1e-7):
 
 
 def _default_optimizers(model):
+	if hasattr(model, 'constraints') and model.constraints:
+		if hasattr(model, 'use_cobyla'):
+			if model.use_cobyla == 'only':
+				return (
+					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1}),
+				)
+			elif model.use_cobyla:
+				return (
+					dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
+					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1}),
+				)
+		else:
+			return (
+				dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
+			)
 	if model.parameter_bounds() is not None:
 		return (
 			dict(method='SLSQP', options={'ftol':1e-9, }),
@@ -74,7 +90,147 @@ def weight_choice_rebalance(model):
 		return True
 	return False
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
+
+
+class _NameOrNameTimesNumberOrNumber:
+	def __init__(self, a, text_of_a="input"):
+		if not isinstance(a,ast.AST):
+			a = ast.parse(a, mode='eval').body
+		if isinstance(a, ast.Name):
+			self.id = a.id
+			self.n = 1
+		elif isinstance(a, ast.Num):
+			self.id = None
+			self.n = a.n
+		elif isinstance(a, ast.UnaryOp):
+			if isinstance(a.op, ast.USub) and isinstance(a.operand, ast.Num):
+				self.id = None
+				self.n = -(a.operand.n)
+			elif isinstance(a.op, ast.UAdd) and isinstance(a.operand, ast.Num):
+				self.id = None
+				self.n = a.operand.n
+		else:
+			if not isinstance(a, ast.BinOp) or not isinstance(a.op, ast.Mult):
+				raise TypeError("must give a name or a name times a number, in {}".format(text_of_a))
+			
+			lefty = _NameOrNameTimesNumberOrNumber(a.left)
+			righty = _NameOrNameTimesNumberOrNumber(a.right)
+			
+			if lefty.isName() and righty.isNumber():
+				self.id = lefty.id
+				self.n = righty.n
+			elif righty.isName() and lefty.isNumber():
+				self.id = righty.id
+				self.n = lefty.n
+			else:
+				raise TypeError("must give a name or a name times a number, in {}".format(text_of_a))
+	def nom(self):
+		if self.id is None:
+			return "{}".format(self.n)
+		elif self.n==1:
+			return self.id
+		return "{}*{}".format(self.id,self.n)
+	def isNumber(self):
+		if self.id is None:
+			return True
+		return False
+	def getNumber(self):
+		if self.id is None:
+			raise TypeError("not a number")
+		return self.n
+	def isName(self):
+		if self.id is not None and self.n==1:
+			return True
+		return False
+
+def _build_constraints(model, ignore_problems=False, include_bounds=True):
+	if model.option.enforce_constraints:
+		if include_bounds:
+			b_constraints = model._bounds_as_constraints()
+		else:
+			b_constraints = ()
+		try:
+			model.constraints
+		except AttributeError:
+			constraints = ()
+		else:
+			constraints = {}
+			for eachconstrain in model.constraints+b_constraints:
+				tree = ast.parse(eachconstrain, mode='eval')
+				if not isinstance(tree.body, ast.Compare):
+					raise TypeError("incompatible constraint, must be a comparison: "+eachconstrain)
+				left = tree.body.left
+				i = 0
+				right = tree.body.comparators[i]
+				op = tree.body.ops[i]
+				while i<len(tree.body.comparators):
+					
+					try:
+						lefty = _NameOrNameTimesNumberOrNumber(left)
+						righty = _NameOrNameTimesNumberOrNumber(right)
+						
+						if lefty.id is not None and lefty.id not in model.parameter_names():
+							if lefty.id in model.alias_names():
+								lefty_old = lefty.id
+								lefty.id = model.shadow_parameter[lefty_old].refers_to
+								lefty.n *= model.shadow_parameter[lefty_old].multiplier
+							else:
+								raise KeyError("parameter not found: {} in constraint {}".format(lefty.id,eachconstrain))
+
+						if righty.id is not None and righty.id not in model.parameter_names():
+							if righty.id in model.alias_names():
+								righty_old = righty.id
+								righty.id = model.shadow_parameter[righty_old].refers_to
+								righty.n *= model.shadow_parameter[righty_old].multiplier
+							else:
+								raise KeyError("parameter not found: {} in constraint {}".format(righty.id,eachconstrain))
+
+						if isinstance(op, (ast.GtE, ast.Gt )):
+							if lefty.id is None and righty.id is None:
+								raise TypeError("incompatible constraint: "+eachconstrain)
+							elif lefty.id is None and righty.n>0:
+								c = _build_single_lte_constraint(model[righty.id].index, lefty.n/righty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
+							elif lefty.id is None and righty.n<0:
+								c = _build_single_gte_constraint(model[righty.id].index, lefty.n/righty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
+							elif righty.id is None and lefty.n>0:
+								c = _build_single_gte_constraint(model[lefty.id].index, righty.n/lefty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
+							elif righty.id is None and lefty.n<0:
+								c = _build_single_lte_constraint(model[lefty.id].index, righty.n/lefty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
+							else:
+								c = _build_ineq_constraint_scaled(model[lefty.id].index, lefty.n, model[righty.id].index, righty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
+						elif isinstance(op, (ast.LtE, ast.Lt )):
+							if lefty.id is None and righty.id is None:
+								raise TypeError("incompatible constraint: "+eachconstrain)
+							elif lefty.id is None and righty.n>0:
+								c = _build_single_gte_constraint(model[righty.id].index, lefty.n/righty.n, '{}<={}'.format(lefty.nom(),righty.nom()))
+							elif lefty.id is None and righty.n<0:
+								c = _build_single_lte_constraint(model[righty.id].index, lefty.n/righty.n, '{}<={}'.format(lefty.nom(),righty.nom()))
+							elif righty.id is None and lefty.n>0:
+								c = _build_single_lte_constraint(model[lefty.id].index, righty.n/lefty.n, '{}<={}'.format(lefty.nom(),righty.nom()))
+							elif righty.id is None and lefty.n<0:
+								c = _build_single_gte_constraint(model[lefty.id].index, righty.n/lefty.n, '{}<={}'.format(lefty.nom(),righty.nom()))
+							else:
+								c = _build_ineq_constraint_scaled(model[righty.id].index, righty.n, model[lefty.id].index, lefty.n, '{}<={}'.format(lefty.nom(),righty.nom()))
+						else:
+							raise TypeError("incompatible constraint: "+eachconstrain)
+
+						constraints[c['description']] = c
+					except:
+						if not model.option.ignore_bad_constraints:
+							raise
+					left = right
+					i += 1
+					if i>=len(tree.body.comparators): break
+					right = tree.body.comparators[i]
+					op = tree.body.ops[i]
+			constraints = tuple(constraints.values())
+	else:
+		constraints = ()
+	if model.option.enforce_network_constraints:
+		constraints = constraints + tuple(model.network_based_contraints())
+	return constraints
+
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False):
 	if metaoptions is not None:
 		options['options'] = metaoptions
 	stat = runstats()
@@ -107,74 +263,55 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 	
 	stat.end_process()
 	try:
-		if model.constraints is None:
-			model.constraints = ()
-		else:
-			raise AttributeError()
+		use_cobyla = model.use_cobyla
 	except AttributeError:
-		constraints = ()
+		use_cobyla = False
+	if use_cobyla:
+		constraints = model._build_constraints(include_bounds=True)
 	else:
-		import ast
-		constraints = {}
-		for eachconstrain in model.constraints:
-			tree = ast.parse(eachconstrain, mode='eval')
-			if not isinstance(tree.body, ast.Compare):
-				raise TypeError("incompatible constraint, must be a comparison: "+eachconstrain)
-			left = tree.body.left
-			i = 0
-			right = tree.body.comparators[i]
-			op = tree.body.ops[i]
-			while i<len(tree.body.comparators):
-				if not isinstance(left, (ast.Name, )):
-					raise TypeError("incompatible constraint: "+eachconstrain)
-				if not isinstance(right, (ast.Name, )):
-					raise TypeError("incompatible constraint: "+eachconstrain)
-			
-				if left.id not in model.parameter_names():
-					if left.id in model.alias_names() and model.shadow_parameter[left.id].multiplier==1:
-						left_id = model.shadow_parameter[left.id].refers_to
-					else:
-						raise KeyError("parameter not found: {} in constraint {}".format(left.id,eachconstrain))
-				else:
-					left_id = left.id
-				
-				if right.id not in model.parameter_names():
-					if right.id in model.alias_names() and model.shadow_parameter[right.id].multiplier==1:
-						right_id = model.shadow_parameter[right.id].refers_to
-					else:
-						raise KeyError("parameter not found: {} in constraint {}".format(right.id,eachconstrain))
-				else:
-					right_id = right.id
-				
-				if isinstance(op, (ast.GtE, )):
-					c = _build_ineq_constraint(model[left_id].index, model[right_id].index, '{}>={}'.format(left_id,right_id))
-				elif isinstance(op, (ast.LtE, )):
-					c = _build_ineq_constraint(model[right_id].index, model[left_id].index, '{}<={}'.format(left_id,right_id))
-				else:
-					raise TypeError("incompatible constraint: "+eachconstrain)
-				constraints[c['description']] = c
-				left = right
-				i += 1
-				if i>=len(tree.body.comparators): break
-				right = tree.body.comparators[i]
-				op = tree.body.ops[i]
-		constraints = tuple(constraints.values())
-	if model.option.enforce_constraints:
-		constraints = model.network_based_contraints()
+		constraints = model._build_constraints()
+
 	bounds=None
-	if model.option.enforce_bounds:
+	if model.option.enforce_bounds and not use_cobyla:
 		bounds=model.parameter_bounds()
 
-	if bounds or constraints:
-		ctol = None
-
-	if len(arg):
-		ot = model.optimizers(*arg, ctol=ctol)
+	if two_stage_constraints:
+		if len(arg):
+			ot = model.optimizers(*arg, ctol=ctol)
+		else:
+			ot = model.optimizers(*_default_optimizers(model), ctol=ctol)
+		r0 = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=None, constraints=() )
+		print(model)
+		if bounds or constraints:
+			ctol = None
+		if len(arg):
+			ot = model.optimizers(*arg, ctol=ctol)
+		else:
+			ot = model.optimizers(*_default_optimizers(model), ctol=ctol)
+		r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
+		r.prepend(r0)
+		r.stats.prepend_timing(stat)
 	else:
-		ot = model.optimizers(*_default_optimizers(model), ctol=ctol)
+		if bounds or constraints:
+			ctol = None
+		if len(arg):
+			ot = model.optimizers(*arg, ctol=ctol)
+		else:
+			ot = model.optimizers(*_default_optimizers(model), ctol=ctol)
+		r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
+		r.stats.prepend_timing(stat)
+	
+#	try:
+#		r_message = r.intermediate[-1].message
+#	except:
+#		r_message = ""
+#	if r_message == 'Positive directional derivative for linesearch' and len(constraints) and model.option.enforce_constraints:
+#		model.option.enforce_constraints = False
+#		r0 = r
+#		r1 = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=() )
+#		model.option.enforce_constraints = True
+#		r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 
-	r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
-	r.stats.prepend_timing(stat)
 	ll = model.loglike()
 
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
@@ -185,9 +322,13 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 
 	if model.option.calc_std_errors:
 		r.stats.start_process("parameter covariance")
-		model.calculate_parameter_covariance()
+		if len(constraints) == 0:
+			model.calculate_parameter_covariance()
+			holdfasts = model.parameter_holdfast_array
+		else:
+			holdfasts = model._compute_constrained_covariance(constraints=constraints)
 		from ...linalg import possible_overspecification
-		overspec = possible_overspecification(model.hessian_matrix, model.parameter_holdfast_array)
+		overspec = possible_overspecification(model.hessian_matrix, holdfasts)
 		if overspec:
 			r.stats.write("WARNING: Model is possibly over-specified (hessian is nearly singular).")
 			r.possible_overspecification = []
@@ -206,6 +347,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 		r.loglike_null = llnull
 	r.stats.end_process()
 	model._set_estimation_run_statistics_pickle(r.stats.pickled_dictionary())
+	model.maximize_loglike_results = r
 	return r
 
 
@@ -282,6 +424,203 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None):
 #		r.message = "Optimization terminated successfully per BHHH tolerance using {}.".format(method_str)
 #	return r
 
+_LTE = "\u2266"
+_GTE = "\u2267"
+_NoBreakSpace = "\u00A0"
+
+class _abandoned():
+	def __init__(self, to_slot=None, to_name=None, mult=None, fixed_value=None, this_slot=None, this_mult=None, symbol="\u2266"):
+		self.first_slot = this_slot
+		self.first_mult = this_mult
+		self.to_slot = to_slot
+		self.to_name = to_name
+		self.mult = mult
+		self.fixed_value = None
+		if fixed_value is not None:
+			self.fixed_value = float(fixed_value)
+		self.symbol = symbol
+	def get_fixie(self):
+		if self.mult > 0 and self.fixed_value is not None:
+			t = _GTE+_NoBreakSpace+"{}".format(self.mult * (self.fixed_value))
+		elif self.mult > 0:
+			t = _GTE+_NoBreakSpace+"{}".format(self.mult * 0)
+		else:
+			if self.fixed_value is not None:
+				t = _LTE+_NoBreakSpace+"{}".format(self.mult * -(self.fixed_value))
+			else:
+				t = _LTE+_NoBreakSpace+"{}".format(self.mult * 0)
+		return t
+	def __repr__(self):
+		s = "_abandoned...\n"
+		s += "     1st_slot:{!s}".format(self.first_slot)
+		s += "     1st_mult:{!s}".format(self.first_mult)
+		s += "      to_name:{!s}".format(self.to_name)
+		s += "      to_slot:{!s}".format(self.to_slot)
+		s += "      to_name:{!s}".format(self.to_name)
+		s += "         mult:{!s}".format(self.mult)
+		s += "  fixed_value:{!s}".format(self.fixed_value)
+		return s
+
+def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), priority_list=None):
+	# constraints are pre-built by _build_constraints here
+	if len(constraints)==0:
+		return model.d2_loglike(*args), model.bhhh(*args), {}
+	try:
+		priority_list = model.parameter_priority_list
+	except AttributeError:
+		priority_list = {}
+	d2 = numpy.asarray(model.d2_loglike(*args))
+	bh = numpy.asarray(model.bhhh(*args))
+	abandoned_slots = {}
+	for cstrt in constraints:
+		is_active = cstrt['is_active'](model.parameter_array)
+		if not is_active:
+			continue # cstrt not active
+		
+		if ">=" in cstrt['description']:
+			p_hi, p_lo = cstrt['description'].split(">=")
+			op = ">="
+		elif "<=" in cstrt['description']:
+			p_lo, p_hi = cstrt['description'].split("<=")
+			op = "<="
+		else:
+			continue
+		jac = numpy.asarray(cstrt['jac'](model.parameter_array)).ravel()
+		try:
+			hi_slot = numpy.where(numpy.asarray(jac>0).ravel())[0][0]
+		except IndexError:
+			# ineq constraint is against a fixed number, do not merge just drop
+			hi_slot = None
+		try:
+			lo_slot = numpy.where(numpy.asarray(jac<0).ravel())[0][0]
+		except IndexError:
+			# ineq constraint is against a fixed number, do not merge just drop
+			lo_slot = None
+
+		jac_hi = jac[hi_slot]
+		jac_lo = jac[lo_slot]
+
+		mult_1 = -jac_hi/jac_lo
+		hi_slot_1 = hi_slot
+
+		mult_2 = -jac_lo/jac_hi
+		lo_slot_1 = lo_slot
+
+		while hi_slot is not None and hi_slot in abandoned_slots:
+			jac_hi *= abandoned_slots[hi_slot].mult
+			p_hi = abandoned_slots[hi_slot].to_name
+			hi_slot = abandoned_slots[hi_slot].to_slot
+		while lo_slot is not None and lo_slot in abandoned_slots:
+			jac_lo += abandoned_slots[lo_slot].mult
+			p_lo = abandoned_slots[lo_slot].to_name
+			lo_slot = abandoned_slots[lo_slot].to_slot
+
+		keep_hi = True
+		p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
+		p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
+		if p_lo_1.id in priority_list:
+			if not p_hi_1.id in priority_list:
+				keep_hi = False
+			else:
+				if priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+					keep_hi = False
+
+
+		if hi_slot is not None and lo_slot is not None and keep_hi:
+			d2[hi_slot, :] -= d2[lo_slot, :]*jac_hi/jac_lo
+			d2[lo_slot, :] = 0
+			d2[:, hi_slot] -= d2[:, lo_slot]*jac_hi/jac_lo
+			d2[:, lo_slot] = 0
+			bh[hi_slot, :] -= bh[lo_slot, :]*jac_hi/jac_lo
+			bh[lo_slot, :] = 0
+			bh[:, hi_slot] -= bh[:, lo_slot]*jac_hi/jac_lo
+			bh[:, lo_slot] = 0
+			abandoned_slots[lo_slot] = _abandoned(to_slot=hi_slot, to_name=p_hi, mult=-jac_hi/jac_lo, this_slot=hi_slot_1, this_mult=mult_1)
+		elif hi_slot is not None and lo_slot is not None:
+			d2[lo_slot, :] -= d2[hi_slot, :]*jac_lo/jac_hi
+			d2[hi_slot, :] = 0
+			d2[:, lo_slot] -= d2[:, hi_slot]*jac_lo/jac_hi
+			d2[:, hi_slot] = 0
+			bh[lo_slot, :] -= bh[hi_slot, :]*jac_lo/jac_hi
+			bh[hi_slot, :] = 0
+			bh[:, lo_slot] -= bh[:, hi_slot]*jac_lo/jac_hi
+			bh[:, hi_slot] = 0
+			abandoned_slots[hi_slot] = _abandoned(to_slot=lo_slot, to_name=p_lo, mult=-jac_lo/jac_hi, this_slot=lo_slot_1, this_mult=mult_2, symbol=_GTE)
+		elif hi_slot is None and lo_slot is not None:
+			d2[lo_slot, :] = 0
+			d2[:, lo_slot] = 0
+			bh[lo_slot, :] = 0
+			bh[:, lo_slot] = 0
+			abandoned_slots[lo_slot] = _abandoned(mult=jac_lo, fixed_value=p_hi)
+		elif hi_slot is not None and lo_slot is None:
+			d2[hi_slot, :] = 0
+			d2[:, hi_slot] = 0
+			bh[hi_slot, :] = 0
+			bh[:, hi_slot] = 0
+			abandoned_slots[hi_slot] = _abandoned(mult=jac_hi, fixed_value=p_lo)
+	if model.option.enforce_bounds and model.parameter_bounds() is not None:
+		for slot, (min_bound, max_bound) in enumerate(model.parameter_bounds()):
+			if min_bound is not None:
+				if model.parameter_array[slot] - min_bound < 1e-6:
+					d2[slot, :] = 0
+					d2[:, slot] = 0
+					bh[slot, :] = 0
+					bh[:, slot] = 0
+					abandoned_slots[slot] = _abandoned(fixed_value=min_bound, mult=1)
+			if max_bound is not None:
+				if max_bound - model.parameter_array[slot] < 1e-6:
+					d2[slot, :] = 0
+					d2[:, slot] = 0
+					bh[slot, :] = 0
+					bh[:, slot] = 0
+					abandoned_slots[slot] = _abandoned(fixed_value=max_bound, mult=-1)
+	return d2, bh, abandoned_slots
+
+
+
+def _compute_constrained_covariance(model, constraints=()):
+	# constraints are pre-built by _build_constraints here
+	d2, bh, abandoned_slots = model._compute_constrained_d2_loglike_and_bhhh(constraints=constraints)
+	holdfasts = model.parameter_holdfast_array.copy()
+	model.t_stat_replacements = [None] * len(model)
+	for i in abandoned_slots:
+		holdfasts[i] = 1
+		if abandoned_slots[i].first_slot is not None:
+			t = abandoned_slots[i].symbol+_NoBreakSpace+"{}".format(model[int(abandoned_slots[i].first_slot)].name)
+			if abandoned_slots[i].first_mult != 1:
+				t += " * {}".format(abandoned_slots[i].first_mult)
+		elif abandoned_slots[i].to_slot is None:
+			t = abandoned_slots[i].get_fixie()
+		else:
+			t = abandoned_slots[i].symbol+_NoBreakSpace+"{}".format(model[int(abandoned_slots[i].to_slot)].name)
+			if abandoned_slots[i].mult != 1:
+				t += " * {}".format(abandoned_slots[i].mult)
+		model.t_stat_replacements[i] = t
+	hh = holdfasts==0
+	from ...linalg import matrix_inverse
+	robust_covar = numpy.zeros_like(d2)
+	covar = numpy.zeros_like(d2)
+	invhess_squeezed = matrix_inverse(d2[hh,:][:,hh])[:,:]
+	bhhh_squeezed = bh[hh,:][:,hh]
+	result_squeezed = invhess_squeezed @ bhhh_squeezed @ invhess_squeezed
+	robust_covar_i = numpy.zeros([robust_covar.shape[0], invhess_squeezed.shape[1]])
+	covar_i = numpy.zeros([covar.shape[0], invhess_squeezed.shape[1]])
+	robust_covar_i[hh,:] = result_squeezed[:,:]
+	robust_covar[:,hh] = robust_covar_i
+	covar_i[hh,:] = -invhess_squeezed[:,:]
+	covar[:,hh] = covar_i
+	model.covariance_matrix[:,:] = covar
+	model.robust_covariance_matrix[:,:] = robust_covar
+	model.hessian_matrix[:,:] = d2
+	#return covar, robust_covar
+	return holdfasts
+
+
+
+
+
+
+
 def parameter_bounds(model):
 	bounds = []
 	any_finite_bound = False
@@ -300,36 +639,72 @@ def parameter_bounds(model):
 	if any_finite_bound:
 		return bounds
 
+def _bounds_as_constraints(model):
+	bounds_c = []
+	for par in model:
+		min = par.min_value
+		max = par.max_value
+		if numpy.isinf(min):
+			min = None
+		else:
+			bounds_c.append( "{}>={}".format(par.name,min) )
+		if numpy.isinf(max):
+			max = None
+		else:
+			bounds_c.append( "{}<={}".format(par.name,max) )
+	return tuple(bounds_c)
 
 
 def _build_ineq_constraint(gtslot, ltslot, descrip):
 	from scipy.sparse import coo_matrix
+	fun = lambda x: x[gtslot] - x[ltslot]
+	scala = lambda x: (numpy.abs(x[gtslot]) + numpy.abs(x[ltslot]))/2
 	constraint = {
 		'type':'ineq',
-		'fun': lambda x: x[gtslot] - x[ltslot] ,
+		'fun': fun,
 		'jac': lambda x: coo_matrix(([1,-1],([gtslot,ltslot],[0,0])), shape=(len(x),1)).todense().flatten(),
 		'description': descrip,
+		'is_active': lambda x: fun(x)<1e-4*scala(x) ,
+		}
+	return constraint
+
+def _build_ineq_constraint_scaled(gtslot, gtmultiple, ltslot, ltmultiple, descrip):
+	from scipy.sparse import coo_matrix
+	fun = lambda x: (x[gtslot] * gtmultiple) - (x[ltslot] * ltmultiple)
+	scala = lambda x: (numpy.abs(x[gtslot] * gtmultiple) + numpy.abs(x[ltslot] * ltmultiple))/2
+	constraint = {
+		'type':'ineq',
+		'fun': fun ,
+		'jac': lambda x: coo_matrix(([gtmultiple,-ltmultiple],([gtslot,ltslot],[0,0])), shape=(len(x),1)).todense().flatten(),
+		'description': descrip,
+		'is_active': lambda x: fun(x)<1e-4*scala(x) ,
 		}
 	return constraint
 
 
 def _build_single_gte_constraint(gtslot, pivot, descrip):
 	from scipy.sparse import coo_matrix
+	fun = lambda x: x[gtslot] - pivot
+	scala = lambda x: (numpy.abs(x[gtslot]) + numpy.abs(pivot))/2
 	constraint = {
 		'type':'ineq',
-		'fun': lambda x: x[gtslot] - pivot ,
+		'fun': fun ,
 		'jac': lambda x: coo_matrix(([1,],([gtslot,],[0,])), shape=(len(x),1)).todense().flatten(),
 		'description': descrip,
+		'is_active': lambda x: fun(x)<1e-4*scala(x) ,
 		}
 	return constraint
 
 def _build_single_lte_constraint(ltslot, pivot, descrip):
 	from scipy.sparse import coo_matrix
+	fun = lambda x: pivot - x[ltslot]
+	scala = lambda x: (numpy.abs(x[ltslot]) + numpy.abs(pivot))/2
 	constraint = {
 		'type':'ineq',
-		'fun': lambda x: pivot - x[ltslot],
+		'fun': fun,
 		'jac': lambda x: coo_matrix(([-1,],([ltslot,],[0,])), shape=(len(x),1)).todense().flatten(),
 		'description': descrip,
+		'is_active': lambda x: fun(x)<1e-4*scala(x) ,
 		}
 	return constraint
 

@@ -2876,6 +2876,8 @@ class LinearFunction(ComponentVector):
     	return self
     def __radd__(self, other):
     	return LinearFunction() + other + self
+    def __pos__(self):
+    	return self
 
     __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self: None
@@ -3321,8 +3323,10 @@ class model_options_t(object):
     suspend_xylem_rebuild = _swig_property(_core.model_options_t_suspend_xylem_rebuild_get, _core.model_options_t_suspend_xylem_rebuild_set)
     log_turns = _swig_property(_core.model_options_t_log_turns_get, _core.model_options_t_log_turns_set)
     enforce_bounds = _swig_property(_core.model_options_t_enforce_bounds_get, _core.model_options_t_enforce_bounds_set)
+    enforce_network_constraints = _swig_property(_core.model_options_t_enforce_network_constraints_get, _core.model_options_t_enforce_network_constraints_set)
     enforce_constraints = _swig_property(_core.model_options_t_enforce_constraints_get, _core.model_options_t_enforce_constraints_set)
     autocreate_parameters = _swig_property(_core.model_options_t_autocreate_parameters_get, _core.model_options_t_autocreate_parameters_set)
+    ignore_bad_constraints = _swig_property(_core.model_options_t_ignore_bad_constraints_get, _core.model_options_t_ignore_bad_constraints_set)
     idca_avail_ratio_floor = _swig_property(_core.model_options_t_idca_avail_ratio_floor_get, _core.model_options_t_idca_avail_ratio_floor_set)
     author = _swig_property(_core.model_options_t_author_get, _core.model_options_t_author_set)
 
@@ -3363,6 +3367,7 @@ class model_options_t(object):
     	if key not in dir(self) and key not in ['copy', 'this', 'thisown', '_as_dict']:
     		raise TypeError( "cannot create the new attribute '%s' for %s" % (str(key),str(type(self))) )
     	super(model_options_t, self).__setattr__(key, value)
+
 
     __swig_destroy__ = _core.delete_model_options_t
     __del__ = lambda self: None
@@ -3691,9 +3696,6 @@ class ParameterList(object):
 
     def zeros(self) -> "PyObject *":
         return _core.ParameterList_zeros(self)
-
-    def constraints(self) -> "PyObject *":
-        return _core.ParameterList_constraints(self)
 
     def tearDown(self) -> "void":
         return _core.ParameterList_tearDown(self)
@@ -4440,7 +4442,20 @@ class ModelParameter(object):
     def name_(self):
     	return self.name.replace(" ","_")
     index = property(_get_index, None, None, "the parameter index within the model (read-only)")
-    t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
+    def _get_t_stat_or_replacement(self):
+    	if self.holdfast>0:
+    		return "fixed value"
+    	t = self._get_t_stat()
+    	if numpy.isfinite(t):
+    		return t
+    	try:
+    		t1= self._get_model().t_stat_replacements[self._get_index()]
+    		if t1 is None:
+    			t1 = t
+    		return t1
+    	except:
+    		return t
+    t_stat = property(_get_t_stat_or_replacement, None, None, "the t-statistic for the estimator (read-only)")
     def __repr__(self):
     	return "ModelParameter('{}', value={})".format(self.name, self.value)
     @property

@@ -217,7 +217,8 @@ int etk::py_copydict_from_dict(PyObject* d, const std::string& key, PyObject*& v
 		}
 		return ret;
 	} else {
-		ret = PY_DICT_KEY_NOT_FOUND;
+		//ret = PY_DICT_KEY_NOT_FOUND;  // instead of giving an error, just make an empty dict
+		value = PyDict_New();
 	}
 	return ret;
 }

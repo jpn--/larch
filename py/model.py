@@ -49,7 +49,7 @@ class Model(Model2, ModelReporter):
 
 
 	from .util.roll import roll
-	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance
+	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
 
 	def dir(self):
 		for f in dir(self):
@@ -150,7 +150,7 @@ class Model(Model2, ModelReporter):
 #				except AttributeError:
 #					pass
 				return ret
-			except LarchError:
+			except (LarchError, KeyError):
 				return self.parameter(name)
 
 	def _parameter_(self, *arg, **kwarg):
@@ -1514,6 +1514,8 @@ class Model(Model2, ModelReporter):
 		if not args:
 			raise NameError('an alias must have a name')
 		name = args[0]
+		if name in self._parameter_name_index:
+			raise KeyError("overwriting a parameter with an alias is buggy, and not currently allowed")
 		z = super().alias(*args)
 		if name in self._parameter_name_index:
 			del self[name]

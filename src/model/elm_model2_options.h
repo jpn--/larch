@@ -85,8 +85,10 @@ namespace elm {
 		bool suspend_xylem_rebuild;
 		bool log_turns;
 		bool enforce_bounds;
+		bool enforce_network_constraints;
 		bool enforce_constraints;
 		bool autocreate_parameters;
+		bool ignore_bad_constraints;
 		
 		double idca_avail_ratio_floor;
 		
@@ -111,9 +113,11 @@ namespace elm {
 			bool suspend_xylem_rebuild=false,
 			bool log_turns=false,
 			bool enforce_bounds=true,
-			bool enforce_contraints=false,
+			bool enforce_network_constraints=false,
+			bool enforce_constraints=true,
 			double idca_avail_ratio_floor=0.1,
-			bool autocreate_parameters=true
+			bool autocreate_parameters=true,
+			bool ignore_bad_constraints=false
 		);
 	
 		// Re-constructor
@@ -135,9 +139,11 @@ namespace elm {
 			int suspend_xylem_rebuild=-9,
 			int log_turns=-9,
 			int enforce_bounds=-9,
-			int enforce_contraints=-9,
+			int enforce_network_constraints=-9,
+			int enforce_constraints=-9,
 			double idca_avail_ratio_floor=-9,
-			int autocreate_parameters=-9
+			int autocreate_parameters=-9,
+			int ignore_bad_constraints=-9
 		);
 
 		void copy(const model_options_t& other);
@@ -166,6 +172,7 @@ namespace elm {
 				if key not in dir(self) and key not in ['copy', 'this', 'thisown', '_as_dict']:
 					raise TypeError( "cannot create the new attribute '%s' for %s" % (str(key),str(type(self))) )
 				super(model_options_t, self).__setattr__(key, value)
+				
 			%}
 		}
 		#endif // SWIG

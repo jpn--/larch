@@ -86,7 +86,7 @@ def model(d=None): # Define a function to create a data object.
 	d.queries.idca_build(filter=filter)
 	d.queries.idco_build(filter=filter)
 	m.option.calc_std_errors = False
-	m.option.enforce_constraints = True
+	m.option.enforce_network_constraints = True
 	return m
 
 ############################# END OF EXAMPLE FILE ##############################

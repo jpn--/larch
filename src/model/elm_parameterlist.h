@@ -64,7 +64,7 @@ public:
 //	void values(PyObject*);
 	PyObject* zeros() const;
 
-	PyObject* constraints() const;
+//	PyObject* constraints() const;
 	virtual void tearDown();
 
 	virtual void freshen();

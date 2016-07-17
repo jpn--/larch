@@ -99,7 +99,20 @@ namespace elm {
 		def name_(self):
 			return self.name.replace(" ","_")
 		index = property(_get_index, None, None, "the parameter index within the model (read-only)")
-		t_stat = property(_get_t_stat, None, None, "the t-statistic for the estimator (read-only)")
+		def _get_t_stat_or_replacement(self):
+			if self.holdfast>0:
+				return "fixed value"
+			t = self._get_t_stat()
+			if numpy.isfinite(t):
+				return t
+			try:
+				t1= self._get_model().t_stat_replacements[self._get_index()]
+				if t1 is None:
+					t1 = t
+				return t1
+			except:
+				return t
+		t_stat = property(_get_t_stat_or_replacement, None, None, "the t-statistic for the estimator (read-only)")
 		def __repr__(self):
 			return "ModelParameter('{}', value={})".format(self.name, self.value)
 		@property

@@ -102,8 +102,11 @@ class Elem(Element):
 		else:
 			super().append(arg)   
 	def __lshift__(self,other):
-		self.append(other)
+		if other is not None:
+			self.append(other)
 		return self
+	def tostring(self):
+		return xml.etree.ElementTree.tostring(self, encoding="utf8", method="html")
 
 def Anchor_Elem(reftxt, cls, toclevel):
 	return Elem('a', {'name':_uid(), 'reftxt':str(reftxt), 'class':str(cls), 'toclevel':str(toclevel)})
@@ -114,9 +117,11 @@ def TOC_Elem(reftxt, toclevel):
 class XML_Builder(TreeBuilder):
 	"""Extends :class:`xml.etree.ElementTree.TreeBuilder`"""
 	def __init__(self, tag=None, attrib={}, **extra):
-		if tag is None: tag="div"
 		TreeBuilder.__init__(self, Elem)
-		self.start(tag,attrib,**extra)
+		if tag is None:
+			tag="div"
+		if tag is not None:
+			self.start(tag,attrib,**extra)
 	def __getattr__(self, name):
 		if len(name)>2 and name[-1]=="_" and name[-2]!="_" and name[0]!="_":
 			return self.block(name[:-1])

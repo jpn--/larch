@@ -296,9 +296,10 @@ class TestMTC(ELM_TestCase):
 		d = self._db
 		m = Model (d)
 		m.option.calc_std_errors = False
-		m.parameter("cost",-0.01)
+		#m.parameter("cost",-0.01)
 		m.parameter("time",-0.001)
-		m.parameter("con2",0) 
+		m.shadow_parameter.cost = m.parameter.time
+		m.parameter("con2",0)
 		m.parameter("con3",0) 
 		m.parameter("con4",0.1) 
 		m.parameter("con5",0) 
@@ -319,8 +320,7 @@ class TestMTC(ELM_TestCase):
 		m.utility.co("1","SR3+","con3") 
 		m.utility.co("1","Tran","con4") 
 		m.utility.co("1","Bike","con5") 
-		m.utility.co("1","Walk","con6") 
-		m.alias("cost", "time", 1.0)
+		m.utility.co("1","Walk","con6")
 		m.setUp()
 		self.assertAlmostEqual(-27082.08468362813, m.loglike(), delta=0.05)
 		g = m.negative_d_loglike()
@@ -354,6 +354,36 @@ class TestMTC(ELM_TestCase):
 		self.assertTrue('possible_overspecification' in r)
 		self.assertTrue(r.possible_overspecification[0][1] == ['con1','con2','con3','con4','con5','con6'])
 		del m1
+
+	def test_model_constraints(self):
+		m1 = Model.Example(101)
+		m1.constraints = (
+			"B_TIME <= 2*B_COST",
+			"-0.1 >= ASC_CAR >= -0.2",
+			)
+		r1 = m1.maximize_loglike()	
+		rpt = m1.report('html')
+
+		import re
+		self.assertTrue(re.compile(b'<tr><td><a name="paramASC_CAR"></a>ASC_CAR</td><div><td class="estimated_value">-0.1.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;-0.1</td></div></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td><a name="paramB_TIME"></a>B_TIME</td><div><td class="estimated_value">-0.01369.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;B_COST \* 2.0</td></div></tr>').search(rpt) is not None)
+		self.assertNearlyEqual(-5372.042100691588, m1.loglike(), 6)
+		self.assertNearlyEqual(-0.6000136831396538, m1.parameter.ASC_TRAIN.value, 4)
+		self.assertNearlyEqual(-0.00684878, m1.parameter.B_COST.value, 4)
+		self.assertNearlyEqual(0.0440776, m1.parameter.ASC_TRAIN.std_err, 4)
+		self.assertNearlyEqual(0.00022849444855193576, m1.parameter.B_COST.std_err, 4)
+		m2 = Model.Example(101)
+		m2.constraints = (
+			"B_TIME <= 2*B_COST",
+			"0.1 <= ASC_CAR <= 0.2",
+			)
+		r2 = m2.maximize_loglike()
+		rpt = m2.report('html')
+		self.assertTrue(re.compile(b'<tr><td><a name="paramASC_CAR"></a>ASC_CAR</td><div><td class="estimated_value"> 0.1.*</td></div><div><td class="tstat" colspan="3">&#8807;&#160;0.1</td></div></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td><a name="paramB_TIME"></a>B_TIME</td><div><td class="estimated_value">-0.01512.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;B_COST \* 2.0</td></div></tr>').search(rpt) is not None)
+		self.assertNearlyEqual(-5367.619844926963, m2.loglike(), 6)
+		self.assertNearlyEqual(0.043913141010049485, m2.parameter.ASC_TRAIN.std_err, 4)
+		self.assertNearlyEqual(0.00022971180215832523, m2.parameter.B_COST.std_err, 4)
 
 
 class TestMNL(ELM_TestCase):

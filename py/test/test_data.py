@@ -275,7 +275,7 @@ class TestData1(unittest.TestCase):
 		self.assertEqual( 3, a['b'] )
 
 
-	def test_html_reporting(self):
+	def test_html_reporting_2(self):
 		m = Model.Example(1, pre=True)
 		from ..util.pmath import category, rename
 		from ..util.xhtml import XHTML
@@ -306,7 +306,7 @@ class TestData1(unittest.TestCase):
 			s = f.dump()
 		self.assertTrue(re.compile(b'<td.*class="parameter_category".*>Level of Service</td>').search(s) is not None)
 		self.assertTrue(re.compile(b'<td.*class="parameter_category".*>Alternative Specific Constants</td>').search(s) is not None)
-		self.assertTrue(re.compile(b'<td><a.*></a>Total Cost</td><td.*>-0.00492\s*</td>').search(s) is not None)
+		self.assertTrue(re.compile(b'<td><a.*></a>Total Cost</td>.*<td.*>-0.00492\s*</td>').search(s) is not None)
 
 
 	def test_pytables_import_idco_with_nulls(self):

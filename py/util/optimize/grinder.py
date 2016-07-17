@@ -198,9 +198,12 @@ class OptimizeTechnique():
 			local_kwargs['ctol_fun'] = kwargs['ctol_fun']
 		use_kwargs = {k:v for k,v in kwargs.items() if k not in local_kwargs}
 		local_kwargs.update(use_kwargs)
+		use_options = {}
+		use_options.update(self.options)
+		use_options.update(options)
 		r = self.last_result = minimize_with_watcher(
 			self.fun, x0, args,
-			options=options,
+			options=use_options,
 			**local_kwargs
 		)
 		if hasattr(r,'slow'):
@@ -248,21 +251,40 @@ class OptimizeTechnique():
 
 
 class OptimizeResults(OptimizeResult):
-    def __repr__(self):
-        if self.keys():
-            kys = list(self.keys())
-            kys.remove('intermediate')
-            m = max(map(len, kys)) + 1
-            kys = sorted(kys)
-            return '\n'.join([k.rjust(m) + ': ' + repr(self[k]).replace("\n","\n"+(' '*m)+'| ') for k in kys])
-            #return '\n'.join([k.rjust(m) + ': ' + repr(v)
-            #                  for k, v in self.items() if k!='intermediate'])
-        else:
-            return self.__class__.__name__ + "()"
-
-
-
-
+	def __repr__(self):
+		if self.keys():
+			kys = list(self.keys())
+			kys.remove('intermediate')
+			m = max(8,*map(len, kys)) + 1
+			kys = sorted(kys)
+			lines = ['messages'.rjust(m) + ': ' + self.messages.replace("\n","\n"+(' '*m)+'| '),]
+			lines += [k.rjust(m) + ': ' + repr(self[k]).replace("\n","\n"+(' '*m)+'| ') for k in kys]
+			return '\n'.join(lines)
+		else:
+			return self.__class__.__name__ + "()"
+	def prepend(self, previous_results):
+		self.intermediate = previous_results.intermediate + self.intermediate
+		self.nit += previous_results.nit
+		self.niter = previous_results.niter + self.niter
+		self.stats.prepend_timing(previous_results.stats)
+	@property
+	def messages(self):
+		try:
+			s = self.message
+		except AttributeError:
+			s = "messages"
+		s += ":"
+		for x in self.intermediate:
+			s += "\n    "
+			try:
+				s += "{}:".format(x.method)
+			except:
+				pass
+			try:
+				s += str(x.message)
+			except:
+				pass
+		return s
 
 class OptimizeTechniques():
 	def __init__(self, techniques=None, ctol_fun=None, ctol=1e-6, logger=None, fun=None, jac=None, hess=None, bhhh=None, start_timer=None, end_timer=None):
@@ -341,7 +363,8 @@ class OptimizeTechniques():
 				metaresult.status = 0
 				metaresult.success = True
 				metaresult.stats.results = 'success'
-		
+	
+		result = {}
 		for technique in self:
 			metaresult.stats.start_process('optimize:{}'.format(technique.method_str))
 			if self.logger:

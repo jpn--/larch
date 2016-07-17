@@ -145,7 +145,7 @@ We'll also tell the optimization engine to enforce logsum parameter ordering con
 	d.queries.idca_build(filter=filter)
 	d.queries.idco_build(filter=filter)
 	m.option.calc_std_errors = False
-	m.option.enforce_constraints = True
+	m.option.enforce_network_constraints = True
 
 By default, logsum parameters created automatically by the new_nest method have min/max bounds
 set at 0.0/1.0.  But the network GEV can become numerically unstable if these parameters get too close

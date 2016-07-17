@@ -307,13 +307,13 @@ void elm::runstats::read_from_dictionary(PyObject* input_obj)
 	x=etk::py_read_from_dict(P, "timestamp", timestamp);
 	if (x!=0) OOPS("error in reading run_stats timestamp");
 	x=etk::py_read_from_dict(P, "processor", processor);
-	if (x!=0) OOPS("error in reading run_stats processor");
+	if (x!=0) processor="?";
 	x=etk::py_read_from_dict(P, "notes", _notes);
 	if (x!=0) OOPS("error in reading run_stats notes");
 	x=etk::py_read_from_dict(P, "number_threads", number_threads);
-	if (x!=0) OOPS("error in reading run_stats number_threads");
+	if (x!=0) number_threads=-99;
 	x=etk::py_read_from_dict(P, "number_cpu_cores", number_cpu_cores);
-	if (x!=0) OOPS("error in reading run_stats number_cpu_cores");
+	if (x!=0) number_cpu_cores=-99;
 
 	x=etk::py_read_from_dict(P, "process_label", process_label);
 	if (x!=0) OOPS("error in reading run_stats process_label");

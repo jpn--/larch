@@ -314,7 +314,7 @@ class XhtmlModelReporter():
 		with_tstat = bool(with_tstat)
 		with_nullvalue = bool(with_nullvalue)
 		x = XML_Builder("div", {'class':"parameter_estimate"})
-		if isinstance(p,rename):
+		if isinstance(p,(rename,str)):
 			try:
 				model_p = self[p]
 			except KeyError:
@@ -323,9 +323,12 @@ class XhtmlModelReporter():
 				use_shadow_p = False
 			if use_shadow_p:
 				# Parameter not found, try shadow_parameter
-				str_p = str(p.find_in(self))
+				try:
+					str_p = str(p.find_in(self))
+				except AttributeError:
+					str_p = p
 				shadow_p = self.shadow_parameter[str_p]
-				if display_inital:
+				if with_inital:
 					x.td("", {'class':'initial_value'})
 				try:
 					shadow_p_value = shadow_p.value
@@ -339,17 +342,27 @@ class XhtmlModelReporter():
 					x.td("{}".format(str(err), **format), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
 			else:
 				# Parameter found, use model_p
-				if display_inital:
+				if with_inital:
 					x.td("{:{PARAM}}".format(model_p.initial_value, **format), {'class':'initial_value'})
 				x.td("{:{PARAM}}".format(model_p.value, **format), {'class':'estimated_value'})
 				if model_p.holdfast:
 					x.td("fixed value", {'colspan':str(with_stderr+with_tstat), 'class':'notation'})
+					x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
 				else:
-					x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
-					x.td("{:{TSTAT}}".format(model_p.t_stat, **format), {'class':'tstat'})
-				x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+					tstat_p = model_p.t_stat
+					if isinstance(tstat_p,str):
+						x.td("{}".format(tstat_p), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
+					elif tstat_p is None:
+						x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
+						x.td("None", {'class':'tstat'})
+						x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+					else:
+						x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
+						x.td("{:{TSTAT}}".format(tstat_p, **format), {'class':'tstat'})
+						x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+		return x.close()
 
-	def xhtml_params(self, groups=None, display_inital=False, **format):
+	def xhtml_params_oldversion(self, groups=None, display_inital=False, **format):
 		"""
 		Generate a div element containing the model parameters in a table.
 		
@@ -578,10 +591,9 @@ class XhtmlModelReporter():
 						for p in unlisted_parameters:
 							write_param_row(p)
 		return x.close()
-	xhtml_param = xhtml_parameters = xhtml_params
 
 
-	def xhtml_params_2(self, groups=None, display_inital=False, **format):
+	def xhtml_params(self, groups=None, display_inital=False, **format):
 		"""
 		Generate a div element containing the model parameters in a table.
 		
@@ -651,7 +663,14 @@ class XhtmlModelReporter():
 		for p in groups:
 			if isinstance(p,category):
 				listed_parameters.update( p.complete_members() )
-		unlisted_parameters = (set(self.parameter_names()) | set(self.alias_names())) - listed_parameters
+		unlisted_parameters_set = (set(self.parameter_names()) | set(self.alias_names())) - listed_parameters
+		unlisted_parameters = []
+		for pname in self.parameter_names():
+			if pname in unlisted_parameters_set:
+				unlisted_parameters.append(pname)
+		for pname in self.alias_names():
+			if pname in unlisted_parameters_set:
+				unlisted_parameters.append(pname)
 		n_cols_params = 6 if display_inital else 5
 		
 		def write_param_row(p, *, force=False):
@@ -663,13 +682,22 @@ class XhtmlModelReporter():
 					for subp in p.members:
 						write_param_row(subp)
 				else:
-					if isinstance(p,rename):
+					if isinstance(p,(rename, )):
 						with x.block("tr"):
 							x.start('td')
 							x.simple_anchor("param"+p.name.replace("#","_hash_"))
 							x.data('{}'.format(p.name))
 							x.end('td')
-							x << self.xhtml_single_parameter_resultpart(p, with_inital=display_inital, **format)
+							for subelem in self.xhtml_single_parameter_resultpart(p, with_inital=display_inital, **format):
+								x << subelem
+					else:
+						with x.block("tr"):
+							x.start('td')
+							x.simple_anchor("param"+p.replace("#","_hash_"))
+							x.data('{}'.format(p))
+							x.end('td')
+							for subelem in self.xhtml_single_parameter_resultpart(p, with_inital=display_inital, **format):
+								x << subelem
 							
 		with x.block("table", {'class':'floatinghead'}):
 			with x.block("thead"):
@@ -692,6 +720,7 @@ class XhtmlModelReporter():
 						write_param_row(p)
 		return x.close()
 
+	xhtml_param = xhtml_parameters = xhtml_params
 
 
 
@@ -1919,3 +1948,25 @@ class XhtmlModelReporter():
 				x.end("td")
 		return x.close()
 
+	def xhtml_estimation_result(self,**format):
+		try:
+			r = self.maximize_loglike_results
+		except AttributeError:
+			return None
+		x = XML_Builder("div", {'class':"estimation_result"})
+		if r.success:
+			x.h2("Estimation Result", anchor=1)
+		else:
+			x.h2("Estimation Result", anchor=1, attrib={'style':"color:red"})
+		x.start('pre')
+		x.data(repr(r))
+		x.end('pre')
+		return x.close()
+
+	def xhtml_failure(self,**format):
+		try:
+			r = self.maximize_loglike_results
+		except AttributeError:
+			return None
+		if not r.success:
+			return self.xhtml_estimation_result(**format)

@@ -531,11 +531,11 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 							value = m_p.value
 							try:
 								value = "{:0.6g}".format(value)
-							except ValueError:
+							except (ValueError, TypeError):
 								value = str(value)
 							try:
 								tstat = "{:0.3g}".format(tstat)
-							except ValueError:
+							except (ValueError, TypeError):
 								tstat = str(tstat)
 							f.td(value, {'class':"{} reportmodel{}".format(shades[shade],m_number)})
 							f.td(tstat, {'class':"{} reportmodel{}".format(shades[shade],m_number)})

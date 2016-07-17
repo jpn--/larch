@@ -170,7 +170,7 @@ We'll also tell the optimization engine to enforce logsum parameter ordering con
 	db.queries.idca_build(filter=filter)
 	db.queries.idco_build(filter=filter)
 	m.option.calc_std_errors = False
-	m.option.enforce_constraints = False
+	m.option.enforce_network_constraints = False
 	m.option.enforce_bounds = False
 
 Now it's time to run it and see what we get.  We'll use the SLSQP algorithm because it can

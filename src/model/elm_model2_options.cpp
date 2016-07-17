@@ -48,9 +48,11 @@ elm::model_options_t::model_options_t(
 			bool suspend_xylem_rebuild,
 			bool log_turns,
 			bool enforce_bounds,
+			bool enforce_network_constraints,
 			bool enforce_constraints,
 			double idca_avail_ratio_floor,
-			bool autocreate_parameters
+			bool autocreate_parameters,
+			bool ignore_bad_constraints
 		)
 : gradient_diagnostic   (gradient_diagnostic)
 , hessian_diagnostic    (hessian_diagnostic)
@@ -69,9 +71,11 @@ elm::model_options_t::model_options_t(
 , suspend_xylem_rebuild (suspend_xylem_rebuild)
 , log_turns             (log_turns)
 , enforce_bounds        (enforce_bounds)
+, enforce_network_constraints   (enforce_network_constraints)
 , enforce_constraints   (enforce_constraints)
 , idca_avail_ratio_floor(idca_avail_ratio_floor)
 , autocreate_parameters (autocreate_parameters)
+, ignore_bad_constraints(ignore_bad_constraints)
 {
 	boosted::lock_guard<boosted::mutex> LOCK(etk::python_global_mutex);
 //#ifdef __APPLE__
@@ -118,9 +122,11 @@ void elm::model_options_t::__call__(
 			int suspend_xylem_rebuild,
 			int log_turns,
 			int enforce_bounds,
+			int enforce_network_constraints,
 			int enforce_constraints,
 			double idca_avail_ratio_floor,
-			int autocreate_parameters
+			int autocreate_parameters,
+			int ignore_bad_constraints
 		)
 {
 	if (gradient_diagnostic     != -9 ) (this->gradient_diagnostic     = gradient_diagnostic     );
@@ -140,9 +146,11 @@ void elm::model_options_t::__call__(
 	if (suspend_xylem_rebuild   != -9 ) (this->suspend_xylem_rebuild   = suspend_xylem_rebuild   );
 	if (log_turns               != -9 ) (this->log_turns               = log_turns               );
 	if (enforce_bounds          != -9 ) (this->enforce_bounds          = enforce_bounds          );
+	if (enforce_network_constraints     != -9 ) (this->enforce_network_constraints     = enforce_network_constraints     );
 	if (enforce_constraints     != -9 ) (this->enforce_constraints     = enforce_constraints     );
 	if (idca_avail_ratio_floor  != -9 ) (this->idca_avail_ratio_floor  = idca_avail_ratio_floor  );
 	if (autocreate_parameters   != -9 ) (this->autocreate_parameters   = autocreate_parameters   );
+	if (ignore_bad_constraints  != -9 ) (this->ignore_bad_constraints  = ignore_bad_constraints  );
 	
 }
 
@@ -164,9 +172,11 @@ void elm::model_options_t::copy(const model_options_t& other)
 	this->suspend_xylem_rebuild   = other.suspend_xylem_rebuild   ;
 	this->log_turns               = other.log_turns               ;
 	this->enforce_bounds          = other.enforce_bounds          ;
+	this->enforce_network_constraints     = other.enforce_network_constraints     ;
 	this->enforce_constraints     = other.enforce_constraints     ;
 	this->idca_avail_ratio_floor  = other.idca_avail_ratio_floor  ;
 	this->autocreate_parameters   = other.autocreate_parameters   ;
+	this->ignore_bad_constraints  = other.ignore_bad_constraints  ;
 }
 
 
@@ -174,26 +184,28 @@ std::string elm::model_options_t::__repr__() const
 {
 	std::ostringstream x;
 	x << "larch.core.model_options_t(\n";
-	x << "                 threads= "<<threads                 <<",\n";
-	x << "    calc_null_likelihood= "<<calc_null_likelihood    <<",\n";
-	x << "null_disregards_holdfast= "<<null_disregards_holdfast<<",\n";
-	x << "         calc_std_errors= "<<calc_std_errors         <<",\n";
-	x << "     gradient_diagnostic= "<<gradient_diagnostic     <<",\n";
-	x << "      hessian_diagnostic= "<<hessian_diagnostic      <<",\n";
-	x << "       mute_nan_warnings= "<<mute_nan_warnings       <<",\n";
-	x << "  force_finite_diff_grad= "<<force_finite_diff_grad  <<",\n";
-	x << "       force_recalculate= "<<force_recalculate       <<",\n";
-	x << "            save_db_hash= "<<save_db_hash            <<",\n";
-	x << "                  author= "<<author                  <<",\n";
-	x << " teardown_after_estimate= "<<teardown_after_estimate <<",\n";
-	x << "      weight_autorescale= "<<weight_autorescale      <<",\n";
-	x << " weight_choice_rebalance= "<<weight_choice_rebalance <<",\n";
-	x << "   suspend_xylem_rebuild= "<<suspend_xylem_rebuild   <<",\n";
-	x << "               log_turns= "<<log_turns               <<",\n";
-	x << "          enforce_bounds= "<<enforce_bounds          <<",\n";
-	x << "     enforce_constraints= "<<enforce_constraints     <<",\n";
-	x << "  idca_avail_ratio_floor= "<<idca_avail_ratio_floor  <<",\n";
-	x << "   autocreate_parameters= "<<autocreate_parameters   <<",\n";
+	x << "                    threads= "<<threads                 <<",\n";
+	x << "       calc_null_likelihood= "<<calc_null_likelihood    <<",\n";
+	x << "   null_disregards_holdfast= "<<null_disregards_holdfast<<",\n";
+	x << "            calc_std_errors= "<<calc_std_errors         <<",\n";
+	x << "        gradient_diagnostic= "<<gradient_diagnostic     <<",\n";
+	x << "         hessian_diagnostic= "<<hessian_diagnostic      <<",\n";
+	x << "          mute_nan_warnings= "<<mute_nan_warnings       <<",\n";
+	x << "     force_finite_diff_grad= "<<force_finite_diff_grad  <<",\n";
+	x << "          force_recalculate= "<<force_recalculate       <<",\n";
+	x << "               save_db_hash= "<<save_db_hash            <<",\n";
+	x << "                     author= "<<author                  <<",\n";
+	x << "    teardown_after_estimate= "<<teardown_after_estimate <<",\n";
+	x << "         weight_autorescale= "<<weight_autorescale      <<",\n";
+	x << "    weight_choice_rebalance= "<<weight_choice_rebalance <<",\n";
+	x << "      suspend_xylem_rebuild= "<<suspend_xylem_rebuild   <<",\n";
+	x << "                  log_turns= "<<log_turns               <<",\n";
+	x << "             enforce_bounds= "<<enforce_bounds          <<",\n";
+	x << "enforce_network_constraints= "<<enforce_network_constraints <<",\n";
+	x << "        enforce_constraints= "<<enforce_constraints     <<",\n";
+	x << "     idca_avail_ratio_floor= "<<idca_avail_ratio_floor  <<",\n";
+	x << "      autocreate_parameters= "<<autocreate_parameters   <<",\n";
+	x << "     ignore_bad_constraints= "<<ignore_bad_constraints  <<",\n";
 	x << ")";
 	return x.str();
 }
@@ -218,35 +230,39 @@ std::string elm::model_options_t::_save_buffer() const
 	x << "self.option.suspend_xylem_rebuild= "  <<(suspend_xylem_rebuild   ?"True":"False")<<"\n";
 	x << "self.option.log_turns= "              <<(log_turns               ?"True":"False")<<"\n";
 	x << "self.option.enforce_bounds= "         <<(enforce_bounds          ?"True":"False")<<"\n";
+	x << "self.option.enforce_network_constraints= "    <<(enforce_network_constraints     ?"True":"False")<<"\n";
 	x << "self.option.enforce_constraints= "    <<(enforce_constraints     ?"True":"False")<<"\n";
 	x << "self.option.idca_avail_ratio_floor= " << idca_avail_ratio_floor                  <<"\n";
 	x << "self.option.autocreate_parameters= "  <<(autocreate_parameters   ?"True":"False")<<"\n";
+	x << "self.option.ignore_bad_constraints="  <<(ignore_bad_constraints  ?"True":"False")<<"\n";
 	return x.str();
 }
 
 std::string elm::model_options_t::__str__() const
 {
 	std::ostringstream x;
-	x << "                 threads: "<< threads               <<"\n";
-	x << "    calc_null_likelihood: "<<(calc_null_likelihood  ?"True":"False")<<"\n";
-	x << "null_disregards_holdfast: "<<(null_disregards_holdfast  ?"True":"False")<<"\n";
-	x << "         calc_std_errors: "<<(calc_std_errors       ?"True":"False")<<"\n";
-	x << "     gradient_diagnostic: "<< gradient_diagnostic   <<"\n";
-	x << "      hessian_diagnostic: "<< hessian_diagnostic    <<"\n";
-	x << "       mute_nan_warnings: "<<(mute_nan_warnings     ?"True":"False")<<"\n";
-	x << "  force_finite_diff_grad: "<<(force_finite_diff_grad?"True":"False")<<"\n";
-	x << "       force_recalculate: "<<(force_recalculate     ?"True":"False")<<"\n";
-	x << "            save_db_hash: "<<(save_db_hash          ?"True":"False")<<"\n";
-	x << "                  author: "<< author                <<"\n";
-	x << " teardown_after_estimate: "<< teardown_after_estimate<<"\n";
-	x << "      weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
-	x << " weight_choice_rebalance: "<<(weight_choice_rebalance?"True":"False")<<"\n";
-	x << "   suspend_xylem_rebuild: "<<(suspend_xylem_rebuild ?"True":"False")<<"\n";
-	x << "               log_turns: "<<(log_turns             ?"True":"False")<<"\n";
-	x << "          enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
-	x << "     enforce_constraints: "<<(enforce_constraints   ?"True":"False")<<"\n";
-	x << "  idca_avail_ratio_floor: "<<idca_avail_ratio_floor<<"\n";
-	x << "   autocreate_parameters: "<<(autocreate_parameters ?"True":"False")<<"\n";
+	x << "                     threads: "<< threads               <<"\n";
+	x << "        calc_null_likelihood: "<<(calc_null_likelihood  ?"True":"False")<<"\n";
+	x << "    null_disregards_holdfast: "<<(null_disregards_holdfast  ?"True":"False")<<"\n";
+	x << "             calc_std_errors: "<<(calc_std_errors       ?"True":"False")<<"\n";
+	x << "         gradient_diagnostic: "<< gradient_diagnostic   <<"\n";
+	x << "          hessian_diagnostic: "<< hessian_diagnostic    <<"\n";
+	x << "           mute_nan_warnings: "<<(mute_nan_warnings     ?"True":"False")<<"\n";
+	x << "      force_finite_diff_grad: "<<(force_finite_diff_grad?"True":"False")<<"\n";
+	x << "           force_recalculate: "<<(force_recalculate     ?"True":"False")<<"\n";
+	x << "                save_db_hash: "<<(save_db_hash          ?"True":"False")<<"\n";
+	x << "                      author: "<< author                <<"\n";
+	x << "     teardown_after_estimate: "<< teardown_after_estimate<<"\n";
+	x << "          weight_autorescale: "<<(weight_autorescale    ?"True":"False")<<"\n";
+	x << "     weight_choice_rebalance: "<<(weight_choice_rebalance?"True":"False")<<"\n";
+	x << "       suspend_xylem_rebuild: "<<(suspend_xylem_rebuild ?"True":"False")<<"\n";
+	x << "                   log_turns: "<<(log_turns             ?"True":"False")<<"\n";
+	x << "              enforce_bounds: "<<(enforce_bounds        ?"True":"False")<<"\n";
+	x << " enforce_network_constraints: "<<(enforce_network_constraints   ?"True":"False")<<"\n";
+	x << "         enforce_constraints: "<<(enforce_constraints   ?"True":"False")<<"\n";
+	x << "      idca_avail_ratio_floor: "<<idca_avail_ratio_floor<<"\n";
+	x << "       autocreate_parameters: "<<(autocreate_parameters ?"True":"False")<<"\n";
+	x << "      ignore_bad_constraints: "<<(ignore_bad_constraints?"True":"False")<<"\n";
 	return x.str();
 }
 
@@ -271,9 +287,11 @@ std::set<std::string> elm::Model2::valid_options()
 	valid_options_init.insert("suspend_xylem_rebuild");
 	valid_options_init.insert("log_turns");
 	valid_options_init.insert("enforce_bounds");
+	valid_options_init.insert("enforce_network_constraints");
 	valid_options_init.insert("enforce_constraints");
 	valid_options_init.insert("idca_avail_ratio_floor");
 	valid_options_init.insert("autocreate_parameters");
+	valid_options_init.insert("ignore_bad_constraints");
 	return valid_options_init;
 }
 

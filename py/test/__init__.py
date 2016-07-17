@@ -83,6 +83,20 @@ def simple():
 	import nose
 	return nose.run(argv=['-','--where='+os.path.split(__file__)[0],'--verbosity=3'])
 
+def these(*args):
+	import nose
+	if len(args)==0:
+		return simple()
+	else:
+		wh = os.path.split(__file__)[0]
+		print("where=",wh)
+		ts = '--tests={}'.format(",".join(args))
+		ts = " ".join(args)
+		print(ts)
+		return nose.run([ts,'--where='+wh,'--verbosity=3'])
+
+# nosetests /Users/jpn/anaconda/local/larch/test/test_mnl.py:TestMTC.test_model_constraints --verbosity=3
+
 def run(exit=False):
 	print("<"*30,"larch.test",">"*30)
 	print("FROM:",os.path.split(__file__)[0])

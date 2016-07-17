@@ -268,7 +268,7 @@ class ParameterRef(str, metaclass=Role):
 		
 		Raises
 		------
-		LarchError
+		KeyError
 			When the model does not contain a parameter with the same
 			name as this ParameterRef, and the default_value for this
 			ParameterRef is None.
@@ -283,6 +283,8 @@ class ParameterRef(str, metaclass=Role):
 				return "NA"
 			else:
 				raise
+		except KeyError:
+			return "NA"
 	def getname(self):
 		return self._name
 	def valid(self,m):

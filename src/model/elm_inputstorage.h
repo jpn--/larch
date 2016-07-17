@@ -150,6 +150,8 @@ namespace elm {
 			return self
 		def __radd__(self, other):
 			return LinearFunction() + other + self
+		def __pos__(self):
+			return self
 		%}
 		#endif // def SWIG
 

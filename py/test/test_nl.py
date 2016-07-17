@@ -653,7 +653,7 @@ class TestNL(ELM_TestCase):
 		for x_c, x_o in zip (x_correct, r1.x):
 			self.assertNearlyEqual(x_c,x_o)
 
-		m.option.enforce_constraints = True
+		m.option.enforce_network_constraints = True
 		try:
 			import networkx
 		except ImportError:

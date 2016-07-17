@@ -95,10 +95,10 @@ size_t elm::ParameterList::_len() const
 	return FNames.size();
 }
 
-PyObject* elm::ParameterList::constraints() const
-{
-	Py_RETURN_NONE;
-}
+//PyObject* elm::ParameterList::constraints() const
+//{
+//	Py_RETURN_NONE;
+//}
 
 void elm::ParameterList::tearDown()
 {
