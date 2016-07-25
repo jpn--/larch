@@ -516,7 +516,11 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 		if param_appears_in_at_least_one_model(p):
 			if isinstance(p,category):
 				with f.tr_:
-					f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
+					#f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
+					f.start("td", {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
+					f.anchor_auto_toc(p.name, '3')
+					f.data(p.name)
+					f.end("td")
 				for subp in p.members:
 					write_param_row(subp)
 			else:

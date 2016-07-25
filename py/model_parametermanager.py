@@ -14,10 +14,16 @@ class ParameterManager:
 	def __getitem__(self, key):
 		if isinstance(key,int):
 			return self._model[key]
+		if isinstance(key,str):
+			if len(key)==0 or (key[0]=="_" and key[-1]=="_"):
+				raise NameError("invalid parameter name "+key)
 		return self._model.parameter(key)
 
 	def __setitem__(self, key, val):
 		from .roles import _param_multiply, _param_divide
+		if isinstance(key,str):
+			if len(key)==0 or (key[0]=="_" and key[-1]=="_"):
+				raise NameError("invalid parameter name "+key)
 		if isinstance(val, ModelParameter):
 			return self._model.parameter(key, value=val.value, null_value=val.null_value,
 										initial_value=val.initial_value,
@@ -57,7 +63,7 @@ class ParameterManager:
 		if len(aliases):
 			ret += "\n────┼"+"─"*75
 			for n,name in enumerate(self._model.alias_names()):
-				ret += "\n    │ {!s}".format(self._model.alias(name))
+				ret += "\n  @ │ {!s}".format(self._model.alias(name).describe())
 		ret += "\n════╧"+"═"*75
 		return ret
 

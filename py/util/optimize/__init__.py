@@ -64,6 +64,7 @@ def _default_optimizers(model):
 				return (
 					dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
 					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1}),
+					dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
 				)
 		else:
 			return (
@@ -156,6 +157,8 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 		else:
 			constraints = {}
 			for eachconstrain in model.constraints+b_constraints:
+				if eachconstrain is None or eachconstrain=="":
+					continue
 				tree = ast.parse(eachconstrain, mode='eval')
 				if not isinstance(tree.body, ast.Compare):
 					raise TypeError("incompatible constraint, must be a comparison: "+eachconstrain)
@@ -188,6 +191,8 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 						if isinstance(op, (ast.GtE, ast.Gt )):
 							if lefty.id is None and righty.id is None:
 								raise TypeError("incompatible constraint: "+eachconstrain)
+							elif lefty.id is not None and righty.id is not None and (righty.n<0 or lefty.n<0):
+								raise TypeError("incompatible constraint, negative multipliers not yet implemented: "+eachconstrain)
 							elif lefty.id is None and righty.n>0:
 								c = _build_single_lte_constraint(model[righty.id].index, lefty.n/righty.n, '{}>={}'.format(lefty.nom(),righty.nom()))
 							elif lefty.id is None and righty.n<0:
@@ -312,6 +317,9 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 #		model.option.enforce_constraints = True
 #		r = _minimize(lambda z: 0.123999, x0, method=ot, options=options, bounds=bounds, constraints=constraints )
 
+	if model.logger():
+		model.logger().log(30,"Preliminary Results\n{!s}".format(model.art_params().ascii()))
+
 	ll = model.loglike()
 
 	if model.option.weight_autorescale and model.get_weight_scale_factor() != 1.0:
@@ -346,6 +354,22 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	if model.option.calc_null_likelihood:
 		r.loglike_null = llnull
 	r.stats.end_process()
+	# peak memory usage
+	from ..sysinfo import get_peak_memory_usage
+	r.peak_memory_usage = get_peak_memory_usage()
+	# installed memory
+	try:
+		import psutil
+	except ImportError:
+		pass
+	else:
+		mem = psutil.virtual_memory().total
+		if mem >= 2.0*2**30:
+			mem_size = str(mem/2**30) + " GiB"
+		else:
+			mem_size = str(mem/2**20) + " MiB"
+		r.installed_memory = mem_size
+	# save
 	model._set_estimation_run_statistics_pickle(r.stats.pickled_dictionary())
 	model.maximize_loglike_results = r
 	return r

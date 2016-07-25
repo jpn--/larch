@@ -304,9 +304,9 @@ class TestData1(unittest.TestCase):
 			f << m.xhtml_title()
 			f << m.xhtml_params(param_groups)
 			s = f.dump()
-		self.assertTrue(re.compile(b'<td.*class="parameter_category".*>Level of Service</td>').search(s) is not None)
-		self.assertTrue(re.compile(b'<td.*class="parameter_category".*>Alternative Specific Constants</td>').search(s) is not None)
-		self.assertTrue(re.compile(b'<td><a.*></a>Total Cost</td>.*<td.*>-0.00492\s*</td>').search(s) is not None)
+		self.assertTrue(re.compile(b'<td.*class=".*parameter_category".*>Level of Service</td>').search(s) is not None)
+		self.assertTrue(re.compile(b'<td.*class=".*parameter_category".*>Alternative Specific Constants</td>').search(s) is not None)
+		self.assertTrue(re.compile(b'<td.*><a.*></a>Total Cost</td>.*<td.*>-0.00492\s*</td>').search(s) is not None)
 
 
 	def test_pytables_import_idco_with_nulls(self):

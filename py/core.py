@@ -951,8 +951,8 @@ refcounted_swigregister = _core.refcounted_swigregister
 refcounted_swigregister(refcounted)
 
 
-def larch_initialize() -> "void":
-    return _core.larch_initialize()
+def larch_initialize(*args) -> "void":
+    return _core.larch_initialize(*args)
 larch_initialize = _core.larch_initialize
 
 def larch_openblas_get_config() -> "char *":
@@ -2801,6 +2801,20 @@ class LinearComponent(object):
     def __pos__(self):
     	return self
 
+    def __mul__(self,other):
+    	from .roles import DataRef
+    	if isinstance(other,(int,float,DataRef)):
+    		return LinearComponent(data=self.data * other, param=self.param)
+    	else:
+    		raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
+
+    def __rmul__(self,other):
+    	from .roles import DataRef
+    	if isinstance(other,(int,float,DataRef)):
+    		return LinearComponent(data=self.data * other, param=self.param)
+    	else:
+    		raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
+
 
 
     def __add__(self, *args) -> "elm::ComponentList":
@@ -4565,6 +4579,8 @@ class ModelAlias(object):
     def __call__(self, **kwargs):
     	for key,val in kwargs.items():
     		setattr(self,key,val)
+    def describe(self):
+    	return self.name+" "+self._get_std_err()
 
 ModelAlias_swigregister = _core.ModelAlias_swigregister
 ModelAlias_swigregister(ModelAlias)

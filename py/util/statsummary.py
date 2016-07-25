@@ -60,10 +60,11 @@ class statistical_summary():
 			ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
 		sumx_ = numpy.sum(xxx,0)
 		ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+		ss.notes = set()
 		if len(xxx.shape) == 1:
-			ss.histogram = spark_histogram(xxx, bins=histogram_bins)
+			ss.histogram = spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes)
 		else:
-			ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins)], 0, xxx).squeeze()
+			ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins, notetaker=ss.notes)], 0, xxx).squeeze()
 		# Make sure that the histogram field is iterable
 #		try:
 #			iter(ss.histogram)

@@ -658,9 +658,9 @@ class Model(Model2, ModelReporter):
 	
 	new_node = new_nest
 
-	def report_(self, **kwargs):
+	def report_(self, cats='*', **kwargs):
 		with XHTML('temp', quickhead=self, **kwargs) as f:
-			f << self.report(cats='*', style='xml')
+			f << self.report(cats=cats, style='xml')
 
 	def report_1(self, filename="/tmp/larchreport.html", **kwargs):
 		from .util.filemanager import next_stack
@@ -1515,10 +1515,12 @@ class Model(Model2, ModelReporter):
 			raise NameError('an alias must have a name')
 		name = args[0]
 		if name in self._parameter_name_index:
+			#import warnings
+			#warnings.warn("overwriting a parameter with an alias is buggy. ({})".format(name))
 			raise KeyError("overwriting a parameter with an alias is buggy, and not currently allowed")
-		z = super().alias(*args)
 		if name in self._parameter_name_index:
 			del self[name]
+		z = super().alias(*args)
 		#z.set_referred_modelparam( self.parameter(z.refers_to) )
 		return z
 

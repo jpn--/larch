@@ -158,6 +158,16 @@ elm::ComponentList elm::LinearComponent::operator+(const elm::ComponentList& oth
 	return x;
 }
 
+elm::ComponentList elm::LinearComponent::operator+(const int& other) const
+{
+	if (other!=0) {
+		OOPS_NotImplemented("The only fixed value that can be added currently is zero.");
+	}
+	elm::ComponentList x (0,nullptr);
+	x.push_back(*this);
+	return x;
+}
+
 
 
 elm::ComponentList::ComponentList(int type, elm::Model2* parentmodel)
@@ -400,6 +410,15 @@ elm::ComponentList elm::ComponentList::_add(const elm::ComponentList& x) const
 {
 	elm::ComponentList n (*this);
 	n.insert(n.end(), x.begin(), x.end());
+	return n;
+}
+
+elm::ComponentList elm::ComponentList::_add(const int& x) const
+{
+	elm::ComponentList n (*this);
+	if (x!=0) {
+		OOPS_NotImplemented("The only fixed value that can be added currently is zero.");
+	}
 	return n;
 }
 

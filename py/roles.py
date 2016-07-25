@@ -307,18 +307,26 @@ class ParameterRef(str, metaclass=Role):
 			return True
 		return False
 	def __add__(self, other):
+		if other==0:
+			return self
 		if isinstance(other, (DataRef, LinearComponent, LinearFunction)):
 			return LinearComponent(param=str(self),data="1") + other
 		return _param_add(self,other)
 	def __radd__(self, other):
+		if other==0:
+			return self
 		if isinstance(other, (DataRef, LinearComponent, LinearFunction)):
 			return other + LinearComponent(param=str(self),data="1")
 		return _param_add(other,self)
 	def __sub__(self, other):
+		if other==0:
+			return self
 		if isinstance(other, (DataRef, LinearComponent, LinearFunction)):
 			return LinearComponent(param=str(self),data="1") - other
 		return _param_subtract(self,other)
 	def __rsub__(self, other):
+		if other==0:
+			return self
 		if isinstance(other, (DataRef, LinearComponent, LinearFunction)):
 			return other - LinearComponent(param=str(self),data="1")
 		return _param_subtract(other,self)

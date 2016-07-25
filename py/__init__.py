@@ -59,7 +59,11 @@ except:
 	pass
 from . import logging
 from . import core
-core.larch_initialize()
+from .util.sysinfo import get_processor_name as _get_processor_name
+_processor_name = _get_processor_name()
+if isinstance(_processor_name, bytes):
+	_processor_name = _processor_name.decode()
+core.larch_initialize(_processor_name)
 from . import exceptions
 from .db import DB
 from .dt import DT, IncompatibleShape
@@ -121,6 +125,12 @@ from . import examples
 #		if float(_last_version_check_time) + 60*60*24 < _time.time():
 #			_remote_version_checker = subprocess.Popen([sys.executable, os.path.join(_directory_,"version","remote_version_check.py")])
 
+try:
+	import colorama
+except ImportError:
+	pass
+else:
+	colorama.init()
 
 del sys
 del os

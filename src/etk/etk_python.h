@@ -47,7 +47,7 @@ std::string PyString_ExtractCppString(PyObject* pystr) ;
 
 namespace etk {
 
-void initialize_platform();
+void initialize_platform(const std::string& platform_str="");
 void initialize_n_cpu();
 void initialize_pickle();
 
@@ -82,7 +82,7 @@ extern int number_of_cpu;
 extern PyObject* pickle_module;
 extern PyObject* base64_module;
 
-void larch_initialize();
+void larch_initialize(const std::string& platform="");
 
 char* larch_openblas_get_config();
 

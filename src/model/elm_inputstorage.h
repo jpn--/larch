@@ -70,12 +70,27 @@ namespace elm {
 
 		def __pos__(self):
 			return self
+			
+		def __mul__(self,other):
+			from .roles import DataRef
+			if isinstance(other,(int,float,DataRef)):
+				return LinearComponent(data=self.data * other, param=self.param)
+			else:
+				raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
+		
+		def __rmul__(self,other):
+			from .roles import DataRef
+			if isinstance(other,(int,float,DataRef)):
+				return LinearComponent(data=self.data * other, param=self.param)
+			else:
+				raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
 
 		%}
 		#endif // SWIG
 
 		ComponentList operator+(const LinearComponent& other) const;
 		ComponentList operator+(const ComponentList& other) const;
+		ComponentList operator+(const int& other) const;
 		
 
 	};
@@ -131,6 +146,7 @@ namespace elm {
 
 		ComponentList _add(const LinearComponent& x) const;
 		ComponentList _add(const ComponentList& x) const;
+		ComponentList _add(const int& x) const;
 		#ifndef SWIG
 		ComponentList operator+(const LinearComponent& x);
 		ComponentList operator+(const ComponentList& x);

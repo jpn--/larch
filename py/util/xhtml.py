@@ -73,9 +73,10 @@ caption {
 
 class Elem(Element):
 	"""Extends :class:`xml.etree.ElementTree.Element`"""
-	def __init__(self, tag, attrib={}, text=None, **extra):
+	def __init__(self, tag, attrib={}, text=None, tail=None, **extra):
 		Element.__init__(self,tag,attrib,**extra)
 		if text: self.text = text
+		if tail: self.tail = tail
 	def put(self, tag, attrib={}, text=None, **extra):
 		attrib = attrib.copy()
 		attrib.update(extra)
@@ -279,6 +280,9 @@ class XHTML():
 				$table.floatThead({ position: 'absolute' });
 				var $tabledf = $('table.dataframe');
 				$tabledf.floatThead({ position: 'absolute' });
+			});
+			$(window).on("hashchange", function () {
+				window.scrollTo(window.scrollX, window.scrollY - 50);
 			});
 			"""
 			self.head << self.floatThead

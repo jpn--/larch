@@ -38,19 +38,23 @@ int etk::number_of_cpu = 1;
 PyObject* etk::pickle_module = nullptr;
 PyObject* etk::base64_module = nullptr;
 
-void etk::initialize_platform()
+void etk::initialize_platform(const std::string& platform_str)
 {
-	PyObject* platform_module = PyImport_ImportModule("platform");
-	PyObject* platform = PyObject_GetAttrString(platform_module, "processor");
-	PyObject* name = PyObject_CallFunction(platform, "()");
-	discovered_platform_description = PyString_ExtractCppString(name);
-	if (PyErr_Occurred()) {
-		discovered_platform_description = "unidentified processor";
-		PyErr_Clear();
+	if (platform_str=="") {
+		PyObject* platform_module = PyImport_ImportModule("platform");
+		PyObject* platform = PyObject_GetAttrString(platform_module, "processor");
+		PyObject* name = PyObject_CallFunction(platform, "()");
+		discovered_platform_description = PyString_ExtractCppString(name);
+		if (PyErr_Occurred()) {
+			discovered_platform_description = "unidentified processor";
+			PyErr_Clear();
+		}
+		Py_CLEAR(name);
+		Py_CLEAR(platform);
+		Py_CLEAR(platform_module);
+	} else {
+		discovered_platform_description = platform_str;
 	}
-	Py_CLEAR(name);
-	Py_CLEAR(platform);
-	Py_CLEAR(platform_module);
 
 }
 
@@ -456,13 +460,13 @@ void sqlite3_haversine_autoinit();
 
 
 
-void etk::larch_initialize()
+void etk::larch_initialize(const std::string& platform)
 {
 //	std::cerr << "larch_initialize()\n";
 	_larch_init_;
 	sqlite3_bonus_autoinit();
 	sqlite3_haversine_autoinit();
-	initialize_platform();
+	initialize_platform(platform);
 	initialize_n_cpu();
 	initialize_pickle();
 }

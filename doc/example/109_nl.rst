@@ -68,18 +68,18 @@ We can estimate the models and check the results match up with those given by Bi
 	>>> print(result.message)
 	Optimization terminated successfully...
 	
-	>>> print(m.report('txt', sigfigs=4))
+	>>> print(m.report('txt', sigfigs=3))
 	=========================================================================================...
 	swissmetro example 09 (nested logit)
 	=========================================================================================...
 	Model Parameter Estimates
 	-----------------------------------------------------------------------------------------...
 	Parameter	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	ASC_TRAIN	 0.0        	-0.512      	 0.04518    	-11.33      	 0.0        
-	ASC_CAR  	 0.0        	-0.1672     	 0.03714    	-4.502      	 0.0        
-	B_TIME   	 0.0        	-0.008987   	 0.0005699  	-15.77      	 0.0        
-	B_COST   	 0.0        	-0.008567   	 0.0004627  	-18.51      	 0.0        
-	existing 	 1.0        	 0.4868     	 0.0279     	-18.39      	 1.0        
+	ASC_TRAIN	 0.0        	-0.512      	 0.0452     	-11.3       	 0.0
+	ASC_CAR  	 0.0        	-0.167      	 0.0371     	-4.5        	 0.0
+	B_TIME   	 0.0        	-0.00899    	 0.00057    	-15.8       	 0.0
+	B_COST   	 0.0        	-0.00857    	 0.000463   	-18.5       	 0.0
+	existing 	 1.0        	 0.487      	 0.0279     	-18.4       	 1.0
 	=========================================================================================...
 	Model Estimation Statistics
 	-----------------------------------------------------------------------------------------...

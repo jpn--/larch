@@ -204,6 +204,8 @@ namespace elm {
 		def __call__(self, **kwargs):
 			for key,val in kwargs.items():
 				setattr(self,key,val)
+		def describe(self):
+			return self.name+" "+self._get_std_err()
 		%}
 		#endif // def SWIG
 

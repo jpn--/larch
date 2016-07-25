@@ -69,5 +69,8 @@ class GroupNode():
 		return self._v_node.__str__(*arg, **kwarg)
 	def __repr__(self, *arg, **kwarg):
 		return self._v_node.__repr__(*arg, **kwarg)
-
+	def __getitem__(self, key):
+		return self.__getattr__(key)
+	def __setitem__(self, key, value):
+		return self.__setattr__(key,value)
 

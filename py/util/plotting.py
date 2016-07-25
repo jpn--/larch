@@ -63,7 +63,16 @@ def strcolor_rgb256(color):
 _threshold_for_dropping_zeros_in_histograms = 0.35
 
 
-def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False):
+
+_spark_histogram_notes = {
+	hexcolor('orange'): "Histograms are orange if the zeros are numerous and have been excluded.",
+	hexcolor('red'): "Histograms are red if the zeros are numerous and have been excluded, and the displayed range truncates some extreme outliers.",
+	hexcolor('forest'): "Histograms are green if the displayed range truncates some extreme outliers.",
+	hexcolor('ocean'): None,
+}
+
+
+def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None):
 
 	data = numpy.asarray(data)
 
@@ -89,7 +98,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			top = numpy.nanpercentile(use_data,99.5)
 			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
 			if use_color == hexcolor('orange'):
-				use_color = hexcolor('lime')
+				use_color = hexcolor('red')
 			else:
 				use_color = hexcolor('forest')
 
@@ -135,13 +144,17 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
 	ret = plot_as_svg_xhtml(fig)
 	plt.clf()
+
+	if notetaker is not None and use_color!=hexcolor('ocean'):
+		notetaker.add( _spark_histogram_notes[use_color] )
+
 	return ret
 
 
 
 
 
-def spark_pie_maker(data):
+def spark_pie_maker(data, notetaker=None):
 	fig = plt.gcf()
 	fig.set_figheight(0.2)
 	fig.set_figwidth(0.75)
@@ -166,19 +179,106 @@ def spark_pie_maker(data):
 
 
 
-def spark_histogram(data, *arg, **kwarg):
+def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, **kwarg):
 	try:
 		flat_data = data.flatten()
 	except:
 		flat_data = data
 	uniq = numpy.unique(flat_data[:100])
 	uniq_counts = None
-	if len(uniq)<=5:
+	pie_chart_cutoff = int(pie_chart_cutoff)
+	if len(uniq)<=pie_chart_cutoff:
 		uniq, uniq_counts = numpy.unique(flat_data, return_counts=True)
-	if uniq_counts is not None and len(uniq_counts)<=5:
+	if uniq_counts is not None and len(uniq_counts)<=pie_chart_cutoff:
+		if notetaker is not None:
+			notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
 		return spark_pie_maker(uniq_counts)
-	return spark_histogram_maker(data, *arg, **kwarg)
+	return spark_histogram_maker(data, *arg, notetaker=notetaker, **kwarg)
 
 
 
+
+
+
+
+def computed_factor_figure(m, y_funcs, y_labels=None,
+						   max_x=1, min_x=0, header=None,
+                           xaxis_label=None, yaxis_label=None,
+						   logscale_x=False, logscale_f=False, figsize=(6.5,3)):
+	from matplotlib import pyplot as plt
+	import numpy as np
+	with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+		x = np.linspace(min_x, max_x)
+		y = []
+		for yf in y_funcs:
+			y.append( yj(x,m) )
+#		y1 = x*P(var+'1', default_value=0).value(m)+x**2*P(var+'2', default_value=0).value(m)+x**3*P(var+'3', default_value=0).value(m)
+#		if 'LowIncome_{}'.format(var) in m:
+#			y2 = x*P('LowIncome_'+var).value(m)+x**2*P('LowIncome_'+var+'^2', default_value=0).value(m)+x**3*P('LowIncome_'+var+'^3', default_value=0).value(m)
+#		else:
+#			y2 = None
+#		if 'HighIncome_{}'.format(var) in m:
+#			y3 = x*P('HighIncome_'+var).value(m)+x**2*P('HighIncome_'+var+'^2', default_value=0).value(m)+x**3*P('HighIncome_'+var+'^3', default_value=0).value(m)
+#		else:
+#			y3 = None
+		fig = plt.figure(figsize=figsize)
+		ax = plt.subplot(111)
+		ax.set_xlim(min_x,max_x)
+		if logscale_x:
+			ax.set_xscale('log', nonposx='clip', nonposy='clip')
+		if x_label is not None:
+			ax.set_xlabel(xaxis_label)
+		if y_label is not None:
+			ax.set_ylabel(yaxis_label)
+		lgnd_hands = []
+		
+		for n, iy in enumerate(y):
+			if y_labels and len(y_labels)>n:
+				iy_label = y_labels[n]
+			else:
+				iy_label = None
+			l1=plt.plot(x, iy, linewidth=2, label=iy_label)
+			lgnd_hands += l1
+		
+
+#		if y2 is not None:
+#			l2=plt.plot(x, y1+y2, linewidth=2, label='Low Income', color='r')
+#			lgnd_hands += l2
+#		if y3 is not None:
+#			l3=plt.plot(x, y1+y3, linewidth=2, label='High Income', color='g')
+#			lgnd_hands += l3
+#		if y2 is None and y3 is None:
+#			l1=plt.plot(x, y1, linewidth=2, label='All Travelers', color='b')
+#			lgnd_hands += l1
+#		else:
+#			l1=plt.plot(x, y1, linewidth=2, label='Other Incomes', color='b')
+#			lgnd_hands += l1
+		box = ax.get_position()
+		ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+		ax.minorticks_on()
+		#ax.grid(b=True, which='major', color='0.2', linestyle='-', linewidth=0.1)
+
+		hist_vals = None
+		hist_wgts = None
+		# col_n = [n for n,c in enumerate(m.needs()['UtilityCA'].get_variables()) if 'log(attr_' in c][0]
+		# hist_wgts = np.exp(m.Data("UtilityCA")[:,:,col_n].flatten())
+		# col_n = [n for n,c in enumerate(m.needs()['UtilityCA'].get_variables()) if c=='SOV_Distance_AM'][0]
+		# hist_vals = m.Data("UtilityCA")[:,:,col_n].flatten()
+		# ax2 = plt.twinx(ax)
+		# if logscale_f:
+		# 	ax2.set_yscale('log', nonposx='clip', nonposy='clip')
+		# ax2.grid(b=False)
+		# ax2.set_ylabel('Frequency')
+		# ax2.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+		# ax2.set_xlim(0,max_x)
+		# binspace = 50
+		# n,bins,patches = plt.hist(hist_vals, bins=binspace, histtype='stepfilled', normed=False, weights=hist_wgts, color='yellow', facecolor='yellow', label='Frequency among Attractions', linewidth=0.1)
+		# lgnd_hands += [patches[0],]
+		# ax.set_zorder(ax2.get_zorder()+1)
+
+		pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
+		ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
+		ax.patch.set_visible(False)
+		ax.set_xlim(min_x,max_x)
+	return plotting.plot_as_svg_xhtml(plt, header=header, headerlevel=2)
 

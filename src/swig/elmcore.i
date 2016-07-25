@@ -258,7 +258,7 @@ namespace elm {
 %include "etk_refcount.h"
 
 namespace etk {
-	void larch_initialize();
+	void larch_initialize(const std::string& platform="");
 	char* larch_openblas_get_config();
 
 	void load_scipy_blas_functions();

@@ -768,8 +768,8 @@ void elm::Model2::_parameter_push(const std::vector<double>& v)
 	for (unsigned z=0; z<v.size(); z++) {
 		if (FHoldfast.int8_at(z)) {
 			if ((FHoldfast.int8_at(z)==1) && (v[z] != FCurrent[z])) {
-				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-				<< ", it differs from the holdfast value of " <<FCurrent[z];
+//				WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+//				<< ", it differs from the holdfast value of " <<FCurrent[z];
 			}
 		} else {
 			FCurrent[z] = v[z];
@@ -1205,8 +1205,8 @@ void elm::Model2::parameter_values(std::vector<double> v, const signed char& hol
 					<< ", it differs from the holdfast value of " <<FCurrent[z]
 					<< " under holdfast_unmask "<<holdfast_unmask << " ~ "<< cat(std::bitset<8>(~holdfast_unmask)) << " & "<< cat(std::bitset<8>( FHoldfast.int8_at(z) ))   ;
 				} else {
-					WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
-					<< ", it differs from the holdfast value of " <<FCurrent[z];
+//					WARN( msg ) << "WARNING: ignoring the given value of "<<v[z]<<" for " << FNames[z]
+//					<< ", it differs from the holdfast value of " <<FCurrent[z];
 				}
 			}
 		} else {

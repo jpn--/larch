@@ -365,8 +365,8 @@ class TestMTC(ELM_TestCase):
 		rpt = m1.report('html')
 
 		import re
-		self.assertTrue(re.compile(b'<tr><td><a name="paramASC_CAR"></a>ASC_CAR</td><div><td class="estimated_value">-0.1.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;-0.1</td></div></tr>').search(rpt) is not None)
-		self.assertTrue(re.compile(b'<tr><td><a name="paramB_TIME"></a>B_TIME</td><div><td class="estimated_value">-0.01369.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;B_COST \* 2.0</td></div></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td.*><a name="paramASC_CAR"></a>ASC_CAR</td><td class="estimated_value">-0.1.*</td><td class=".*" colspan="3">&#8806;&#160;-0.1</td></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><td class="estimated_value">-0.01369.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td></tr>').search(rpt) is not None)
 		self.assertNearlyEqual(-5372.042100691588, m1.loglike(), 6)
 		self.assertNearlyEqual(-0.6000136831396538, m1.parameter.ASC_TRAIN.value, 4)
 		self.assertNearlyEqual(-0.00684878, m1.parameter.B_COST.value, 4)
@@ -379,8 +379,8 @@ class TestMTC(ELM_TestCase):
 			)
 		r2 = m2.maximize_loglike()
 		rpt = m2.report('html')
-		self.assertTrue(re.compile(b'<tr><td><a name="paramASC_CAR"></a>ASC_CAR</td><div><td class="estimated_value"> 0.1.*</td></div><div><td class="tstat" colspan="3">&#8807;&#160;0.1</td></div></tr>').search(rpt) is not None)
-		self.assertTrue(re.compile(b'<tr><td><a name="paramB_TIME"></a>B_TIME</td><div><td class="estimated_value">-0.01512.*</td></div><div><td class="tstat" colspan="3">&#8806;&#160;B_COST \* 2.0</td></div></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td.*><a name="paramASC_CAR"></a>ASC_CAR</td><td class="estimated_value"> 0.1.*</td><td class=".*" colspan="3">&#8807;&#160;0.1</td></tr>').search(rpt) is not None)
+		self.assertTrue(re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><td class="estimated_value">-0.01512.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td></tr>').search(rpt) is not None)
 		self.assertNearlyEqual(-5367.619844926963, m2.loglike(), 6)
 		self.assertNearlyEqual(0.043913141010049485, m2.parameter.ASC_TRAIN.std_err, 4)
 		self.assertNearlyEqual(0.00022971180215832523, m2.parameter.B_COST.std_err, 4)
