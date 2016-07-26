@@ -1,6 +1,7 @@
 
 import tables as _tb
 import numpy
+import pandas
 from .core import LarchError
 from .util import dicta
 
@@ -45,6 +46,24 @@ class OMX(_tb.file.File):
 	def shape(self):
 		sh = self.root._v_attrs.SHAPE[:]
 		return (sh[0],sh[1])
+
+	@shape.setter
+	def shape(self, x):
+		if self.data._v_nchildren>0:
+			if x[0] != self.shape[0] and x[1] != self.shape[1]:
+				raise OMXIncompatibleShape('this omx has shape {!s} but you want to set {!s}'.format(self.shape, x))
+		if self.data._v_nchildren == 0:
+			shp = numpy.empty(2, dtype=int)
+			shp[0] = x[0]
+			shp[1] = x[1]
+			self.root._v_attrs.SHAPE = shp
+
+	def add_blank_matrix(self, name, atom=None, **kwargs):
+		if atom is None:
+			atom = _tb.Float64Atom()
+		if self.shape == (0,0):
+			raise OMXBadFormat('must set a nonzero shape first')
+		return self.create_carray(self.data, name, atom=atom, shape=self.shape, **kwargs)
 
 	def add_matrix(self, name, obj, **kwargs):
 		if len(obj.shape) != 2:
@@ -114,3 +133,39 @@ class OMX(_tb.file.File):
 			raise OMXNonUniqueLookup("lookup '{}' does not have unique labels for each item".format(lookupname))
 		index_malordered = numpy.digitize(arr, uniq_labels, right=True)
 		return uniq_indexes[index_malordered]
+
+
+	def import_datatable(self, filepath_or_buffer, one_based=True, chunksize=10000, column_map=None):
+		"""Import a table in r,c,x,x,x... format into the matrix.
+		
+		The r and c columns need to be either 0-based or 1-based index values
+		(this may be relaxed in the future). The matrix must already be set up
+		with the correct size before importing the datatable.
+		
+		Parameters
+		----------
+		filepath_or_buffer : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		chunksize : int
+			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
+			chunks can be much faster and less memory intensive than reading the entire file.
+			
+		Notes
+		-----
+		"""
+		reader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize)
+		offset = 1 if one_based else 0
+		
+		if column_map is None:
+			column_map = {i:i for i in chunk.columns}
+		
+		for chunk in reader:
+			r = chunk.values[:,0]-offset
+			c = chunk.values[:,1]-offset
+			for col in chunk.columns:
+				if col in column_map:
+					self.data[column_map[col]][r,c] = chunk[col]
+
+
+
+
