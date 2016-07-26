@@ -19,13 +19,6 @@ File Management
 
 
 
-.. currentmodule:: larch.util.sysinfo
-
-System Info
------------
-
-.. autofunction:: get_processor_name
-
 
 
 
