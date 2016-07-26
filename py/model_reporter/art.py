@@ -158,6 +158,8 @@ class AbstractReportTable():
 					cw = numpy.sum(w[c:c+cellspan[1]])+cellspan[1]-1
 					if catflag:
 						s = s[:-len(leftvert)]+ catleft+" {1:{2}<{0}s}".format(cw-1,self.get_text_iloc(r,c).replace('\t'," ")+" ",cathorizbar)+catright
+					elif self.is_centered_cell(r,c):
+						s += "{1: ^{0}s}".format(cw,self.get_text_iloc(r,c).replace('\t'," "))+othervert
 					else:
 						s += "{1:{0}s}".format(cw,self.get_text_iloc(r,c).replace('\t'," "))+othervert
 					startline = False
@@ -316,6 +318,14 @@ class AbstractReportTable():
 			x += 1
 		return (y,x)
 
+	def is_centered_cell(self,r,c):
+		if pandas.isnull(self.df.iloc[r,c]):
+			return False
+		cls = self.df.iloc[r,c].get('class','')
+		if 'centered_cell' in cls:
+			return True
+		return False
+
 	def get_text_iloc(self,r,c,missing=""):
 		if pandas.isnull(self.df.iloc[r,c]):
 			return missing
@@ -397,7 +407,7 @@ class ArtModelReporter():
 
 	def art_params(self, groups=None, display_inital=False, display_id=False, **format):
 		"""
-		Generate a div element containing the model parameters in a table.
+		Generate a ART containing the model parameters.
 		
 		Parameters
 		----------
@@ -588,7 +598,13 @@ class ArtModelReporter():
 		x.title = "Latest Estimation Run Statistics"
 		x.short_title = "Latest Estimation Run"
 
-		last = self.maximize_loglike_results
+		try:
+			last = self.maximize_loglike_results
+		except AttributeError:
+			x.add_blank_row()
+			x.set_lastrow_iloc(0, "Warning")
+			x.set_lastrow_iloc(2, "Latest estimation run statistics not available")
+			return x
 		try:
 			last_stat = last.stats
 		except AttributeError:
@@ -721,4 +737,130 @@ class ArtModelReporter():
 				x.add_blank_row()
 				x.set_lastrow_iloc(0, "Peak Memory Usage")
 				x.set_lastrow_iloc(2, "{0}".format(peak,**format))
+		return x
+
+
+
+
+
+
+	# Model Estimation Statistics
+	def art_ll(self,**format):
+		"""
+		Generate an ART containing the model estimation statistics.
+		
+		Returns
+		-------
+		AbstractReportTable
+			An ART containing the estimation statistics.
+		"""
+		existing_format_keys = list(format.keys())
+		for key in existing_format_keys:
+			if key.upper()!=key: format[key.upper()] = format[key]
+		if 'LL' not in format: format['LL'] = '0.2f'
+		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
+
+		try:
+			total_weight = float(self.Data("Weight").sum())
+		except:
+			total_weight = None
+		if total_weight is not None:
+			if round(total_weight) == self.nCases():
+				total_weight = None
+	
+		es = self._get_estimation_statistics()
+
+		if total_weight is not None:
+			cols = ["statistic", "aggregate", "per_case", "per_unit_weight"]
+		else:
+			cols = ["statistic", "aggregate", "per_case"]
+
+		x = AbstractReportTable(columns=[cols])
+		x.n_thead_rows = 1
+		x.title = "Model Estimation Statistics"
+		x.short_title = "Estimation Statistics"
+
+		x.add_blank_row()
+		x.set_lastrow_iloc(0, "Statistic")
+		x.set_lastrow_iloc(1, "Aggregate")
+		x.set_lastrow_iloc(2, "Per Case")
+
+		x.add_blank_row()
+		x.set_lastrow_iloc(0, "Number of Cases")
+		x.set_lastrow_iloc(1, self.nCases(), {'class':'statistics_bridge centered_cell'})
+
+
+		if total_weight is not None:
+			x.add_blank_row()
+			x.set_lastrow_iloc(0, "Total Weight")
+			x.set_lastrow_iloc(1, total_weight, {'class':'statistics_bridge centered_cell'})
+
+		ll = es[0]['log_like']
+		if not math.isnan(ll):
+			x.add_blank_row()
+			x.set_lastrow_iloc(0, "Log Likelihood at Convergence")
+			x.set_lastrow_iloc(1, "{0:{LL}}".format(ll,**format))
+			x.set_lastrow_iloc(2, "{0:{LL}}".format(ll/numpy.int64(self.nCases()),**format))
+			if total_weight is not None:
+				x.set_lastrow_iloc(3,"{0:{LL}}".format(ll/total_weight,**format))
+
+		llc = es[0]['log_like_constants']
+		if not math.isnan(llc):
+			x.add_blank_row()
+			x.set_lastrow_iloc(0,"Log Likelihood at Constants")
+			x.set_lastrow_iloc(1,"{0:{LL}}".format(llc,**format))
+			x.set_lastrow_iloc(2,"{0:{LL}}".format(llc/numpy.int64(self.nCases()),**format))
+			if total_weight is not None:
+				x.set_lastrow_iloc(3,"{0:{LL}}".format(llc/total_weight,**format))
+
+		llz = es[0]['log_like_null']
+		if not math.isnan(llz):
+			x.add_blank_row()
+			x.set_lastrow_iloc(0,"Log Likelihood at Null Parameters")
+			x.set_lastrow_iloc(1,"{0:{LL}}".format(llz,**format))
+			x.set_lastrow_iloc(2,"{0:{LL}}".format(llz/numpy.int64(self.nCases()),**format))
+			if total_weight is not None:
+				x.set_lastrow_iloc(3,"{0:{LL}}".format(llz/total_weight,**format))
+
+		ll0 = es[0]['log_like_nil']
+		if not math.isnan(ll0):
+			x.add_blank_row()
+			x.set_lastrow_iloc(0,"Log Likelihood with No Model")
+			x.set_lastrow_iloc(1,"{0:{LL}}".format(ll0,**format))
+			x.set_lastrow_iloc(2,"{0:{LL}}".format(ll0/numpy.int64(self.nCases()),**format))
+			if total_weight is not None:
+				x.set_lastrow_iloc(3,"{0:{LL}}".format(ll0/total_weight,**format))
+
+		if (not math.isnan(llz) or not math.isnan(llc) or not math.isnan(ll0)) and not math.isnan(ll):
+			x.add_blank_row()
+			if not math.isnan(llc):
+				try:
+					rsc = 1.0-(ll/llc)
+				except ZeroDivisionError:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. Constants")
+					x.set_lastrow_iloc(1,"ZeroDivisionError", {'class':'statistics_bridge centered_cell'})
+				else:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. Constants")
+					x.set_lastrow_iloc(1,"{0:{RHOSQ}}".format(rsc,**format), {'class':'statistics_bridge centered_cell'})
+				if not math.isnan(llz) or not math.isnan(ll0): x.add_blank_row()
+
+			if not math.isnan(llz):
+				try:
+					rsz = 1.0-(ll/llz)
+				except ZeroDivisionError:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. Null Parameters")
+					x.set_lastrow_iloc(1,"ZeroDivisionError", {'class':'statistics_bridge centered_cell'})
+				else:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. Null Parameters")
+					x.set_lastrow_iloc(1,"{0:{RHOSQ}}".format(rsz,**format), {'class':'statistics_bridge centered_cell'})
+				if not math.isnan(ll0): x.add_blank_row()
+			if not math.isnan(ll0):
+				try:
+					rs0 = 1.0-(ll/ll0)
+				except ZeroDivisionError:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. No Model")
+					x.set_lastrow_iloc(1,"ZeroDivisionError", {'class':'statistics_bridge centered_cell'})
+				else:
+					x.set_lastrow_iloc(0,"Rho Squared w.r.t. No Model")
+					x.set_lastrow_iloc(1,"{0:{RHOSQ}}".format(rs0,**format), {'class':'statistics_bridge centered_cell'})
 		return x

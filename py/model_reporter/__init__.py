@@ -1,4 +1,4 @@
-from . import docx, latex, pdf, txt, xhtml, alogit, art
+from . import docx, latex, pdf, txt, xhtml, alogit, art, unicode
 import math
 from ..util.xhtml import XHTML, XML_Builder, Elem
 from ..util.pmath import category, pmath, rename
@@ -15,6 +15,7 @@ class ModelReporter(docx.DocxModelReporter,
 					pdf.PdfModelReporter,
 					txt.TxtModelReporter,
 					alogit.AlogitModelReporter,
+					unicode.UnicodeModelReporter,
 					art.ArtModelReporter,
 					):
 
