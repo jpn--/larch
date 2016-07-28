@@ -53,7 +53,12 @@ class SmartFileReader(object):
 			b /= 1024
 			scale += 1
 		return "{:.2f}{}".format(b,labels[scale])
-
+	def progress(self):
+		pct = self.percentread()
+		if pct >0 and pct<100:
+			return "{}%".format(pct)
+		else:
+			return self.bytesread()
 
 def interpret_header_name(h):
 	eL = logging.getScriber("util")

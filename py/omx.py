@@ -45,7 +45,15 @@ class OMX(_tb.file.File):
 	@property
 	def shape(self):
 		sh = self.root._v_attrs.SHAPE[:]
-		return (sh[0],sh[1])
+		proposal = (sh[0],sh[1])
+		if proposal==(0,0) and self.data._v_nchildren>0:
+			first_child_name = next(iter(self.data._v_children.keys()))
+			proposal = self.data._v_children[first_child_name].shape
+			shp = numpy.empty(2, dtype=int)
+			shp[0] = proposal[0]
+			shp[1] = proposal[1]
+			self.root._v_attrs.SHAPE = shp
+		return proposal
 
 	@shape.setter
 	def shape(self, x):
@@ -58,12 +66,26 @@ class OMX(_tb.file.File):
 			shp[1] = x[1]
 			self.root._v_attrs.SHAPE = shp
 
-	def add_blank_matrix(self, name, atom=None, **kwargs):
+	def add_blank_matrix(self, name, atom=None, shape=None, **kwargs):
+		"""
+
+		Note
+		----
+		This method allows you to add a blank matrix of 3 or more dimemsions, only the first 2 must match the OMX.
+
+		"""
+		if name in self.data._v_children:
+			return self.data._v_children[name]
 		if atom is None:
 			atom = _tb.Float64Atom()
 		if self.shape == (0,0):
 			raise OMXBadFormat('must set a nonzero shape first')
-		return self.create_carray(self.data, name, atom=atom, shape=self.shape, **kwargs)
+		if shape is not None:
+			if shape[:2] != self.shape:
+				raise OMXIncompatibleShape('this omx has shape {!s} but you want to set {!s}'.format(self.shape, shape[:2]))
+		else:
+			shape = self.shape
+		return self.create_carray(self.data, name, atom=atom, shape=shape, **kwargs)
 
 	def add_matrix(self, name, obj, **kwargs):
 		if len(obj.shape) != 2:
@@ -135,7 +157,7 @@ class OMX(_tb.file.File):
 		return uniq_indexes[index_malordered]
 
 
-	def import_datatable(self, filepath_or_buffer, one_based=True, chunksize=10000, column_map=None):
+	def import_datatable(self, filepath, one_based=True, chunksize=10000, column_map=None, default_atom='float32', log=None):
 		"""Import a table in r,c,x,x,x... format into the matrix.
 		
 		The r and c columns need to be either 0-based or 1-based index values
@@ -144,28 +166,128 @@ class OMX(_tb.file.File):
 		
 		Parameters
 		----------
-		filepath_or_buffer : str or buffer
+		filepath : str or buffer
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
 		chunksize : int
 			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
 			chunks can be much faster and less memory intensive than reading the entire file.
+		column_map : dict or None
+			If given, this dict maps columns of the input file to OMX tables, with the keys as
+			the columns in the input and the values as the tables in the output.
+		default_atom : str or dtype
+			The default atomic type for imported data when the table does not already exist in this
+			openmatrix.
 			
-		Notes
-		-----
 		"""
-		reader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize)
+		if log is not None: log("START import_datatable")
+		from .util.smartread import SmartFileReader
+		sfr = SmartFileReader(filepath)
+		reader = pandas.read_csv(sfr, chunksize=chunksize)
+		chunk0 = next(pandas.read_csv(filepath, chunksize=10))
 		offset = 1 if one_based else 0
 		
 		if column_map is None:
-			column_map = {i:i for i in chunk.columns}
-		
-		for chunk in reader:
-			r = chunk.values[:,0]-offset
-			c = chunk.values[:,1]-offset
+			column_map = {i:i for i in chunk0.columns}
+
+		if isinstance(default_atom, str):
+			default_atom = _tb.Atom.from_dtype(numpy.dtype(default_atom))
+		elif isinstance(default_atom, numpy.dtype):
+			default_atom = _tb.Atom.from_dtype(default_atom)
+
+		for t in column_map.values():
+			self.add_blank_matrix(t, atom=default_atom)
+
+		for n,chunk in enumerate(reader):
+			if log is not None: log("PROCESSING CHUNK {} [{}]".format(n, sfr.progress()))
+			r = (chunk.iloc[:,0].values-offset)
+			c = (chunk.iloc[:,1].values-offset)
+			
+			if not numpy.issubdtype(r.dtype, numpy.integer):
+				r = r.astype(int)
+			if not numpy.issubdtype(c.dtype, numpy.integer):
+				c = c.astype(int)
+			
 			for col in chunk.columns:
 				if col in column_map:
-					self.data[column_map[col]][r,c] = chunk[col]
+					self.data._v_children[column_map[col]][r,c] = chunk[col].values
+					self.data._v_children[column_map[col]].flush()
+			if log is not None:
+				log("finished processing chunk {} [{}]".format(n, sfr.progress()))
 
+			self.flush()
 
+#			if n>5:
+#				break
+		log("import_datatable({}) complete".format(filepath))
+
+	def import_datatable_3d(self, filepath, one_based=True, chunksize=10000, default_atom='float32', log=None):
+		"""Import a table in r,c,x,x,x... format into the matrix.
+		
+		The r and c columns need to be either 0-based or 1-based index values
+		(this may be relaxed in the future). The matrix must already be set up
+		with the correct size before importing the datatable.
+		
+		Parameters
+		----------
+		filepath : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		chunksize : int
+			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
+			chunks can be much faster and less memory intensive than reading the entire file.
+		default_atom : str or dtype
+			The default atomic type for imported data when the table does not already exist in this
+			openmatrix.
+			
+		"""
+		if log is not None: log("START import_datatable")
+		from .util.smartread import SmartFileReader
+		sfr = SmartFileReader(filepath)
+		reader = pandas.read_csv(sfr, chunksize=chunksize)
+		chunk0 = next(pandas.read_csv(filepath, chunksize=10))
+		offset = 1 if one_based else 0
+		
+		if isinstance(default_atom, str):
+			default_dtype = numpy.dtype(default_atom)
+			default_atom = _tb.Atom.from_dtype(numpy.dtype(default_atom))
+		elif isinstance(default_atom, numpy.dtype):
+			default_dtype = default_atom
+			default_atom = _tb.Atom.from_dtype(default_atom)
+		else:
+			default_dtype = default_atom.dtype
+
+		#self.add_blank_matrix(matrixname, atom=default_atom, shape=self.shape+(len(chunk0.columns)-2,))
+
+		#temp_slug = self.data._v_children[matrixname][:]
+		temp_slug = numpy.zeros( self.shape+(len(chunk0.columns)-2,), dtype=default_dtype )
+
+		for n,chunk in enumerate(reader):
+			if log is not None: log("PROCESSING CHUNK {} [{}]".format(n, sfr.progress()))
+			r = (chunk.iloc[:,0].values-offset)
+			c = (chunk.iloc[:,1].values-offset)
+			
+			if not numpy.issubdtype(r.dtype, numpy.integer):
+				r = r.astype(int)
+			if not numpy.issubdtype(c.dtype, numpy.integer):
+				c = c.astype(int)
+	
+			#print("chunk.values",chunk.values.shape)
+			#print("self.data._v_children[matrixname][r]",self.data._v_children[matrixname][r].shape)
+	
+			temp_slug[r,c] = chunk.values[:,2:]
+			#self.data._v_children[matrixname].flush()
+			if log is not None:
+				log("finished processing chunk {} [{}]".format(n, sfr.progress()))
+
+			self.flush()
+
+#			if n>5:
+#				break
+
+		for cn,colname in enumerate(chunk0.columns[2:]):
+			self.add_blank_matrix(colname, atom=default_atom, shape=self.shape)
+			self.data._v_children[colname][:] = temp_slug[:,:,cn]
+		
+		#self.data._v_children[matrixname][:] = temp_slug[:]
+		log("import_datatable({}) complete".format(filepath))
 
 
