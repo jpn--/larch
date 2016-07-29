@@ -127,14 +127,22 @@ else:
 		mingw64_libs = [i+'.dll' for i in mingw64_dlls]
 		local_swig_opts = []
 		local_libraries = ['PYTHON35','libopenblas',]+mingw64_dlls+['PYTHON35',]
-		local_library_dirs = [
-			'Z:/CommonRepo/{0}/{1}'.format(*openblas),
-		#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
-			]
-		local_includedirs = [
-			'Z:/CommonRepo/{0}/include'.format(*openblas),
-		#	'C:/local/boost_1_56_0',
-			 ]
+		if os.path.exists('Z:/CommonRepo/'):
+			local_library_dirs = [
+				'Z:/CommonRepo/{0}/{1}'.format(*openblas),
+			#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
+				]
+			local_includedirs = [
+				'Z:/CommonRepo/{0}/include'.format(*openblas),
+			#	'C:/local/boost_1_56_0',
+				 ]
+		else:
+			local_library_dirs = [
+				'C:/Users/jnewman/Documents/GitHub/{0}/{1}'.format(*openblas),
+				]
+			local_includedirs = [
+				'C:/Users/jnewman/Documents/GitHub/{0}/include'.format(*openblas),
+				 ]
 		local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
 		local_extra_compile_args = ['/EHsc', '/W0', ]
 		#  for debugging...
@@ -177,11 +185,16 @@ else:
 	c = new_compiler()
 #	c.add_include_dir("./sqlite")
 
-
-	if openblas is not None:
-		shutil.copyfile(os.path.join('Z:/CommonRepo',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
-	for dll in mingw64_libs:
-		shutil.copyfile(os.path.join('Z:/CommonRepo',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
+	if os.path.exists('Z:/CommonRepo'):
+		if openblas is not None:
+			shutil.copyfile(os.path.join('Z:/CommonRepo',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
+		for dll in mingw64_libs:
+			shutil.copyfile(os.path.join('Z:/CommonRepo',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
+	else:
+		if openblas is not None:
+			shutil.copyfile(os.path.join('C:/Users/jnewman/Documents/GitHub',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
+		for dll in mingw64_libs:
+			shutil.copyfile(os.path.join('C:/Users/jnewman/Documents/GitHub',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
 
 	swig_files = [file_at('src/swig/elmcore.i'),]
 	swig_opts = ['-modern', '-py3',
