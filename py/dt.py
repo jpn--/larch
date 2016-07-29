@@ -457,7 +457,7 @@ class DT(Fountain):
 				raise TypeError("Incorrect screen shape, you gave {!s} but this DT has {!s}".format(proposal.shape, self.h5top.caseids.shape))
 			screen = numpy.nonzero(proposal)[0]
 			n_cases = screen.shape[0]
-		elif isinstance(proposal, numpy.ndarray) and numpy.issubsctype(proposal.dtype, numpy.int):
+		elif isinstance(proposal, numpy.ndarray) and numpy.issubdtype(proposal.dtype, numpy.int):
 			screen = proposal
 			n_cases = screen.shape[0]
 		else:
