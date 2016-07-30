@@ -156,7 +156,14 @@ class XhtmlModelReporter():
 					extra_section_evaluated = extra_section(self)
 				except TypeError:
 					extra_section_evaluated = extra_section
-				
+
+				if isinstance(extra_section_evaluated, pandas.DataFrame):
+					if isinstance(extra_section_evaluated.index, pandas.RangeIndex) and numpy.all(extra_section_evaluated.index==pandas.RangeIndex(0,len(extra_section_evaluated.index))):
+						to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':False}
+					else:
+						to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}
+					extra_section_evaluated = xhtml_dataframe_as_div(extra_section_evaluated, title=title, to_html_kwargs=to_html_kwargs)
+
 				if isinstance(extra_section_evaluated, dict) and 'contentframe' in extra_section_evaluated:
 					extra_section_evaluated = xhtml_dataframe_as_div(**extra_section_evaluated)
 				

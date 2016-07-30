@@ -984,9 +984,12 @@ class Model(Model2, ModelReporter):
 	def parameter_reset_to_initial_values(self):
 		self.parameter_array[:] = self.parameter_initial_values_array[:]
 
-	def estimate_constants_only(self, repair='-'):
+	def estimate_constants_only(self, repair='-', using_alts=None):
 		db = self._ref_to_db
-		alts = db.alternatives()
+		if using_alts is None:
+			alts = db.alternatives()
+		else:
+			alts = using_alts
 		m = Model(db)
 		for a in alts[1:]:
 			m.utility.co('1',a[0],a[1])
@@ -1005,7 +1008,7 @@ class Model(Model2, ModelReporter):
 					print("REPAIR - ",i)
 			else:
 				raise LarchError("Model has {} cases where the chosen alternative is unavailable".format(n_clashes))
-		m.estimate()
+		m.maximize_loglike()
 		self._LL_constants = m.loglike()
 		return m
 
@@ -1015,7 +1018,7 @@ class Model(Model2, ModelReporter):
 		m = Model(db)
 		for a in alts[1:]:
 			m.utility.co('0',a[0],a[1])
-		m.estimate()
+		m.maximize_loglike()
 		self._LL_nil = m.loglike()
 
 	def loglike(self, *args, cached=True, holdfast_unmask=0, blp_contraction_threshold=1e-8):

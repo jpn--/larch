@@ -7,6 +7,7 @@ import os
 import pandas
 import numpy
 import itertools
+from ..utilities import uid as _uid
 
 
 
@@ -56,7 +57,7 @@ class AbstractReportTable():
 	def add_blank_row(self):
 		self.df.loc[len(self.df)] = None
 		self._col_width = None
-	def encode_cell_value(self, value, attrib=None, tag='td', anchorlabel=None):
+	def encode_cell_value(self, value, attrib=None, tag='td', anchorlabel=None, auto_toc_level=None):
 		if pandas.isnull(value):
 			return None
 		if attrib is None:
@@ -74,7 +75,10 @@ class AbstractReportTable():
 			e = Elem(tag=tag, text=str(value), attrib=attrib)
 		else:
 			e = Elem(tag=tag, attrib=attrib)
-			e.append(Elem(tag='a', attrib={'name':str(anchorlabel)}, tail=str(value)))
+			if auto_toc_level is None:
+				e.append(Elem(tag='a', attrib={'name':str(anchorlabel)}, tail=str(value)))
+			else:
+				e.append(Elem(tag='a', attrib={'name':_uid(), 'reftxt':str(anchorlabel), 'class':'toc', 'toclevel':str(auto_toc_level)}, tail=str(value)))
 		return e
 	def encode_head_value(self, value, attrib=None):
 		return self.encode_cell_value(value, attrib=attrib, tag='th')
@@ -477,7 +481,7 @@ class ArtModelReporter():
 			if force or (p in self) or (p in self.alias_names()):
 				if isinstance(p,category):
 					x.add_blank_row()
-					x.set_lastrow_iloc(0, p.name, {'class':"parameter_category"})
+					x.set_lastrow_iloc(0, x.encode_cell_value(p.name, auto_toc_level=3, anchorlabel=p.name), {'class':"parameter_category"})
 					for subp in p.members:
 						write_param_row(subp)
 				else:
@@ -864,3 +868,7 @@ class ArtModelReporter():
 					x.set_lastrow_iloc(0,"Rho Squared w.r.t. No Model")
 					x.set_lastrow_iloc(1,"{0:{RHOSQ}}".format(rs0,**format), {'class':'statistics_bridge centered_cell'})
 		return x
+
+
+
+
