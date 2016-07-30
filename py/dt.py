@@ -447,7 +447,7 @@ class DT(Fountain):
 			n_cases = self.h5top.caseids.shape[0]
 			screen = None
 		elif isinstance(proposal, str):
-			proposal = self.array_idco((proposal,), screen="None", dtype=bool)
+			proposal = self.array_idco(proposal, screen="None", dtype=bool).squeeze()
 			return self.process_proposed_screen(proposal)
 		elif proposal is None:
 			screen = self.get_screen_indexes()
