@@ -44,16 +44,48 @@ class colorize:
 
 
 
+class _MergeFrom():
+	def __init__(self, row_offset=0, col_offset=0):
+		self.row_offset = row_offset
+		self.col_offset = col_offset
+
+
 
 class AbstractReportTable():
-	def __init__(self, columns=(), col_classes=()):
+	def __init__(self, columns=('0',), col_classes=(), n_head_rows=1, from_dataframe=None, title=None, short_title=None):
 		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex())
 		self.col_classes = col_classes
-		self.n_thead_rows = 1
+		self.n_thead_rows = n_head_rows
+		self.use_columns_as_thead = False
 		self.silent_first_col_break = False
 		self._col_width = None
-		self.title = None
-		self.short_title = None
+		self.title = title
+		self.short_title = short_title
+		if from_dataframe is not None:
+			self.from_dataframe(from_dataframe)
+
+	def from_dataframe(self, d, keep_index=True, keep_columns=True):
+		temp = d.copy()
+		if keep_index:
+			if isinstance(temp.index, pandas.MultiIndex):
+				for ii in range(len(temp.index.levels)):
+					subname = temp.index.names[ii]
+					temp.insert(ii, subname, temp.index.get_level_values(ii))
+					dupes = (temp[subname].iloc[1:] == temp[subname].iloc[:-1])
+					temp[subname][1:][dupes] = numpy.nan
+			else:
+				newcol = ' '
+				while newcol in temp.columns:
+					newcol = newcol+' '
+				temp.insert(0, ' ', temp.index)
+			temp.index = pandas.RangeIndex(0,len(temp.index))
+		if keep_columns:
+			temp.loc[-1] = temp.columns
+			temp.sort_index(inplace=True)
+			temp.index = pandas.RangeIndex(0,len(temp.index))
+			self.n_thead_rows = 1
+		self.df = temp
+
 	def add_blank_row(self):
 		self.df.loc[len(self.df)] = None
 		self._col_width = None
@@ -62,6 +94,12 @@ class AbstractReportTable():
 			return None
 		if attrib is None:
 			attrib = {}
+		if isinstance(value, _MergeFrom):
+			return value
+		if isinstance(value, numpy.ndarray) and value.shape==():
+			value = value[()]
+		elif isinstance(value, numpy.ndarray):
+			value = str(value)
 		if isinstance(value, Elem):
 			value.tag = tag
 			for k,v in attrib.items():
@@ -96,7 +134,10 @@ class AbstractReportTable():
 
 	def set_lastrow_loc(self, colname, val, attrib=None, anchorlabel=None):
 		rowix = self.df.index[-1]
-		self.df.loc[rowix, colname] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+		if colname not in self.df.columns:
+			self.df[colname] = None
+		newval = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+		self.df.loc[rowix, colname] = newval
 		self._col_width = None
 	def set_lastrow_iloc(self, colnum, val, attrib=None, anchorlabel=None):
 		self.df.iloc[-1, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
@@ -169,7 +210,10 @@ class AbstractReportTable():
 					startline = False
 				elif cellspan == (0,0) and startline:
 					cw = w[c]
-					s += "{1:{0}s}".format(cw,"")+othervert
+					if cw>0:
+						s += "{1:{0}s}".format(cw,"")+othervert
+					else:
+						s += othervert
 				else:
 					startline = False
 			s += "\n"
@@ -271,9 +315,9 @@ class AbstractReportTable():
 				except:
 					pass
 				td = self.encode_cell_value(  self.df.iloc[r,c] , attrib=attrib, tag=celltag )
-				if td is None:
+				if td is None or isinstance(td, _MergeFrom):
 					try:
-						tr[-1].get('colspan','1')
+						tr.findall('./'+celltag)[-1].get('colspan','1')
 					except IndexError:
 						# check if first cell in row, and cell above is same value
 						if c==0:
@@ -282,6 +326,7 @@ class AbstractReportTable():
 								try:
 									tbody[rx-1][0].set('rowspan',str(1-rx))
 									tbody[rx-1][0].set('style','vertical-align:top;')
+									tr << Elem(tag='div', attrib={'class':'dummycell'})
 								except IndexError:
 									tr << self.encode_cell_value(  "" , attrib=attrib, tag=celltag )
 							else:
@@ -290,7 +335,8 @@ class AbstractReportTable():
 							tr << self.encode_cell_value(  "" , attrib=attrib, tag=celltag )
 					else:
 						span += 1
-						tr[-1].set('colspan',str(span))
+						tr.findall('./'+celltag)[-1].set('colspan',str(span))
+						tr << Elem(tag='div', attrib={'class':'dummycell'})
 				else:
 					tr << td
 					span = 1
@@ -306,6 +352,8 @@ class AbstractReportTable():
 				div << table
 				return div.close()
 		return table
+	
+	__xml__ = xml
 
 	def cellspan_iloc(self,r,c):
 		try:
@@ -325,17 +373,21 @@ class AbstractReportTable():
 	def is_centered_cell(self,r,c):
 		if pandas.isnull(self.df.iloc[r,c]):
 			return False
-		cls = self.df.iloc[r,c].get('class','')
-		if 'centered_cell' in cls:
-			return True
+		if isinstance(self.df.iloc[r,c], Elem):
+			cls = self.df.iloc[r,c].get('class','')
+			if 'centered_cell' in cls:
+				return True
 		return False
 
 	def get_text_iloc(self,r,c,missing=""):
 		if pandas.isnull(self.df.iloc[r,c]):
 			return missing
-		txt = (self.df.iloc[r,c].text or "")
-		for subelement in self.df.iloc[r,c]:
-			txt += (subelement.text or "") + (subelement.tail or "")
+		if isinstance(self.df.iloc[r,c], Elem):
+			txt = str(self.df.iloc[r,c].text or "")
+			for subelement in self.df.iloc[r,c]:
+				txt += str(subelement.text or "") + str(subelement.tail or "")
+		else:
+			txt = str(self.df.iloc[r,c])
 		return txt
 
 	def get_implied_text_iloc(self,r,c,missing=""):
@@ -369,12 +421,18 @@ class AbstractReportTable():
 			if pandas.isnull(self.df.iloc[rx,cx]):
 				return missing, 0, 0
 			else:
-				return self.df.iloc[rx,cx].text, rx-r, cx-c
+				if isinstance(self.df.iloc[rx,cx], Elem):
+					return self.df.iloc[rx,cx].text, rx-r, cx-c
+				else:
+					return str(self.df.iloc[rx,cx]), rx-r, cx-c
 		while cx>0 and pandas.isnull(self.df.iloc[r,cx]):
 			cx -= 1
 		if pandas.isnull(self.df.iloc[r,cx]):
 			return missing, 0, 0
-		return self.df.iloc[rx,cx].text, rx-r, cx-c
+		if isinstance(self.df.iloc[rx,cx], Elem):
+			return self.df.iloc[rx,cx].text, rx-r, cx-c
+		else:
+			return str(self.df.iloc[rx,cx]), rx-r, cx-c
 
 	def min_col_widths(self):
 		if self._col_width is not None:
@@ -405,9 +463,48 @@ class AbstractReportTable():
 
 
 
+class AbstractReportTableFactory():
+	"""This class generalizes the ART for both preprocessed and postprocessing tables."""
+	def __init__(self, *, art=None, func=None, args=(), kwargs=None):
+		if art is None and func is None:
+			raise TypeError("art or func must be given")
+		if art is not None and func is not None:
+			raise TypeError("only one of art or func must be given")
+		self.art = art
+		self.func = func
+		self.func_args = args
+		self.func_kwargs = kwargs or {}
+	def __call__(self, m):
+		if self.func is None:
+			candidate = self.art
+		else:
+			candidate = self.func(m, *self.func_args, **self.func_kwargs)
+		if isinstance(candidate, pandas.DataFrame):
+			candidate = AbstractReportTable().from_dataframe(candidate)
+		return candidate
+
+
+
 
 
 class ArtModelReporter():
+
+
+	def art_new(self, handle, factory):
+		try:
+			self._user_defined_arts
+		except AttributeError:
+			self._user_defined_arts = {}
+		if isinstance(factory, AbstractReportTableFactory):
+			self._user_defined_arts[handle] = factory
+		elif isinstance(factory, pandas.DataFrame):
+			self._user_defined_arts[handle] = AbstractReportTableFactory(art=factory)
+		elif callable(factory):
+			self._user_defined_arts[handle] = AbstractReportTableFactory(func=factory)
+		else:
+			self._user_defined_arts[handle] = factory
+
+
 
 	def art_params(self, groups=None, display_inital=False, display_id=False, **format):
 		"""

@@ -152,9 +152,9 @@ class XhtmlModelReporter():
 
 		try:
 			for extra_section in self._to_add_to_report:
-				try:
+				if callable(extra_section):
 					extra_section_evaluated = extra_section(self)
-				except TypeError:
+				else:
 					extra_section_evaluated = extra_section
 
 				if isinstance(extra_section_evaluated, pandas.DataFrame):

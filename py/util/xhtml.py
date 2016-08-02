@@ -74,14 +74,25 @@ caption {
 class Elem(Element):
 	"""Extends :class:`xml.etree.ElementTree.Element`"""
 	def __init__(self, tag, attrib={}, text=None, tail=None, **extra):
-		Element.__init__(self,tag,attrib,**extra)
-		if text: self.text = text
-		if tail: self.tail = tail
+		if isinstance(text, Element):
+			Element.__init__(self,tag,attrib,**extra)
+			for k,v in text.attrib.items():
+				if k not in attrib and k not in extra:
+					self.set(k,v)
+			self.text = text.text
+			if tail:
+				self.tail = text.tail + tail
+			else:
+				self.tail = text.tail
+		else:
+			Element.__init__(self,tag,attrib,**extra)
+			if text: self.text = str(text)
+			if tail: self.tail = str(tail)
 	def put(self, tag, attrib={}, text=None, **extra):
 		attrib = attrib.copy()
 		attrib.update(extra)
 		element = Elem(tag, attrib)
-		if text: element.text = text
+		if text: element.text = str(text)
 		self.append(element)
 		return element
 	def __call__(self, *arg, **attrib):
@@ -507,8 +518,10 @@ class XHTML():
 			self.body.append(node.close())
 		elif isinstance(node, Element):
 			self.body.append(node)
+		elif hasattr(node, '__xml__'):
+			self.body.append(node.__xml__())
 		else:
-			raise TypeError("must be xml.etree.ElementTree.Element or XML_Builder or TreeBuilder, not {!s}".format(type(node)))
+			raise TypeError("must be xml.etree.ElementTree.Element or XML_Builder or TreeBuilder or something with __xml__ defined, not {!s}".format(type(node)))
 
 	def __lshift__(self,other):
 		self.append(other)

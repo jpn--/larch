@@ -50,7 +50,7 @@ class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
-
+	
 	def dir(self):
 		for f in dir(self):
 			print(" ",f)
