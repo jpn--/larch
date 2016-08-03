@@ -566,145 +566,159 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 						else:
 							f.td("---", {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 
-	with f.table_:
-		with f.block("thead"):
-			with f.block("tr"):
-				f.th("", {'class':"emptyhead"})
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					if m.title == "Untitled Model" and hasattr(m,"loaded_from"):
-						title = m.loaded_from
+	f.start('table', {'class':'floatinghead'})
+
+	with f.block("thead"):
+		with f.block("tr"):
+			f.th("", {'class':"emptyhead"})
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				if m.title == "Untitled Model" and hasattr(m,"loaded_from"):
+					title = m.loaded_from
+				else:
+					title = m.title
+				if model_titles is not None:
+					try:
+						title = model_titles[m_number]
+					except:
+						pass
+				if hasattr(m,"loaded_from"):
+					f.start('th', attrib={'colspan':'2', 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+					try:
+						href = os.path.basename(m.loaded_from)
+					except:
+						f.data(title)
 					else:
-						title = m.title
-					if model_titles is not None:
-						try:
-							title = model_titles[m_number]
-						except:
-							pass
+						f.start('a', attrib={'href':href})
+						f.data(title)
+						f.end('a')
+					f.end('th')
+				else:
 					f.th(title, {'colspan':'2', 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-		with f.block("tbody"):
-			# PARAMETER ESTIMATES
-			with f.block("tr"):
-				#f.td("Parameter Estimates", {'class':'table_category'})
-				f.start("td",{'class':'table_category'})
-				f.anchor_auto_toc("Parameter Estimates", "2")
-				f.data("Parameter Estimates")
-				f.end("td")
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					f.td("Estimate",{'class':'table_category reportmodel{}'.format(m_number)})
-					f.td("(t\u2011Statistic)",{'class':'table_category tstat reportmodel{}'.format(m_number)}) # non-breaking hyphen
-			for p in params:
-				write_param_row(p)
-			if len(params)>0 and len(unlisted_parameters)>0:
-				write_param_row(category("Other Parameters"))
-			for p in unlisted_parameters:
-				write_param_row(p)
-			# MODEL STATISTICS
+	with f.block("tbody"):
+		# PARAMETER ESTIMATES
+		with f.block("tr"):
+			#f.td("Parameter Estimates", {'class':'table_category'})
+			f.start("td",{'class':'table_category'})
+			f.anchor_auto_toc("Parameter Estimates", "2")
+			f.data("Parameter Estimates")
+			f.end("td")
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				f.td("Estimate",{'class':'table_category reportmodel{}'.format(m_number)})
+				f.td("(t\u2011Statistic)",{'class':'table_category tstat reportmodel{}'.format(m_number)}) # non-breaking hyphen
+		for p in params:
+			write_param_row(p)
+		if len(params)>0 and len(unlisted_parameters)>0:
+			write_param_row(category("Other Parameters"))
+		for p in unlisted_parameters:
+			write_param_row(p)
+		# MODEL STATISTICS
+		with f.tr_:
+			#f.td("Model Statistics", {'colspan':str(len(models)*2+1), 'class':'table_category'})
+			f.start("td",{'colspan':str(len(models)*2+1), 'class':'table_category'})
+			f.anchor_auto_toc("Model Statistics", "2")
+			f.data("Model Statistics")
+			f.end("td")
+		with f.tr_:
+			f.td('Log Likelihood')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				f.td("{:0.6g}".format(ll), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Log Likelihood at Constants')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llc = es[0]['log_like_constants']
+				if not math.isnan(llc):
+					f.td('{:0.6g}'.format(llc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Log Likelihood at Null Parameters')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llz = es[0]['log_like_null']
+				if not math.isnan(llz):
+					f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Log Likelihood with No Model')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llz = es[0]['log_like_nil']
+				if not math.isnan(llz):
+					f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Rho Squared vs. Constants')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llc = es[0]['log_like_constants']
+				if not math.isnan(llc):
+					rsc = 1.0-(ll/llc)
+					f.td('{:0.4g}'.format(rsc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Rho Squared vs. Null Parameters')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llz = es[0]['log_like_null']
+				if not math.isnan(llz):
+					rsz = 1.0-(ll/llz)
+					f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+		with f.tr_:
+			f.td('Rho Squared vs. No Model')
+			shade = 0
+			for m_number,m in enumerate(models):
+				shade ^= 1
+				es = m._get_estimation_statistics()
+				ll = es[0]['log_like']
+				llz = es[0]['log_like_nil']
+				if not math.isnan(llz):
+					rsz = 1.0-(ll/llz)
+					f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+				else:
+					f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
+
+				
+		# RATIOS
+		if ratios is not None and len(ratios)>0:
 			with f.tr_:
-				#f.td("Model Statistics", {'colspan':str(len(models)*2+1), 'class':'table_category'})
+				#f.td('Calculated Factors', {'colspan':str(len(models)*2+1), 'class':"table_category"})
 				f.start("td",{'colspan':str(len(models)*2+1), 'class':'table_category'})
-				f.anchor_auto_toc("Model Statistics", "2")
-				f.data("Model Statistics")
+				f.anchor_auto_toc("Calculated Factors", "2")
+				f.data("Calculated Factors")
 				f.end("td")
-			with f.tr_:
-				f.td('Log Likelihood')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					f.td("{:0.6g}".format(ll), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Log Likelihood at Constants')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llc = es[0]['log_like_constants']
-					if not math.isnan(llc):
-						f.td('{:0.6g}'.format(llc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Log Likelihood at Null Parameters')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llz = es[0]['log_like_null']
-					if not math.isnan(llz):
-						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Log Likelihood with No Model')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llz = es[0]['log_like_nil']
-					if not math.isnan(llz):
-						f.td('{:0.6g}'.format(llz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Rho Squared vs. Constants')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llc = es[0]['log_like_constants']
-					if not math.isnan(llc):
-						rsc = 1.0-(ll/llc)
-						f.td('{:0.4g}'.format(rsc), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Rho Squared vs. Null Parameters')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llz = es[0]['log_like_null']
-					if not math.isnan(llz):
-						rsz = 1.0-(ll/llz)
-						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-			with f.tr_:
-				f.td('Rho Squared vs. No Model')
-				shade = 0
-				for m_number,m in enumerate(models):
-					shade ^= 1
-					es = m._get_estimation_statistics()
-					ll = es[0]['log_like']
-					llz = es[0]['log_like_nil']
-					if not math.isnan(llz):
-						rsz = 1.0-(ll/llz)
-						f.td('{:0.4g}'.format(rsz), {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
-					else:
-						f.td('n/a', {'colspan':"2", 'class':"{} reportmodel{}".format(shades[shade],m_number)})
 
-					
-			# RATIOS
-			if ratios is not None and len(ratios)>0:
-				with f.tr_:
-					#f.td('Calculated Factors', {'colspan':str(len(models)*2+1), 'class':"table_category"})
-					f.start("td",{'colspan':str(len(models)*2+1), 'class':'table_category'})
-					f.anchor_auto_toc("Calculated Factors", "2")
-					f.data("Calculated Factors")
-					f.end("td")
-
-				for pm in ratios:
-					write_factor_row(pm)
+			for pm in ratios:
+				write_factor_row(pm)
+	f.end('table')
 #	xsign = XML_Builder("div", {'class':'larch_signature'})
 #	from .version import version
 #	from .util.img import favicon
