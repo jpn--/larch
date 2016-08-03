@@ -752,7 +752,19 @@ class ArtModelReporter():
 				x.add_blank_row()
 				x.set_lastrow_iloc(0, "Number of Iterations")
 				x.set_lastrow_iloc(2, last_stat.iteration)
-			
+
+			if len(last.intermediate) > 1:
+				x.add_blank_row()
+				x.set_lastrow_iloc(0, "Log Likelihood")
+				x.set_lastrow_iloc(1, "Final")
+				x.set_lastrow_iloc(2, str(last.loglike))
+				for intermed in last.intermediate:
+					x.add_blank_row()
+					x.set_lastrow_iloc_nondupe(0, "Log Likelihood")
+					x.set_lastrow_iloc(1, intermed.method)
+					x.set_lastrow_iloc(2, str(-intermed.fun))
+
+
 			seconds = last_stat.dictionary()['total_duration_seconds']
 			tformat = "{}\t{}".format(*format_seconds(seconds))
 			x.add_blank_row()

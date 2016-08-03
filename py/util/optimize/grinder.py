@@ -375,7 +375,10 @@ class OptimizeTechniques():
 			try:
 				metaresult.niter.append( (technique.method_str, result.nit) )
 			except AttributeError:
-				pass
+				try:
+					metaresult.niter.append( ("{!s} (nfev)".format(technique.method_str), result.nfev) )
+				except AttributeError:
+					pass
 			metaresult.intermediate.append(result)
 			try:
 				metaresult.intermediate[-1].method = technique.method_str

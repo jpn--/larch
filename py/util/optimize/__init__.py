@@ -62,9 +62,10 @@ def _default_optimizers(model):
 				)
 			elif model.use_cobyla:
 				return (
-					dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
-					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1}),
-					dict(method='SLSQP', options={'ftol':1e-6, 'maxiter':max(len(model)*10, 100)}),
+					dict(method='SLSQP', options={'ftol':1e-7, 'maxiter':max(len(model)*10, 100)}),
+					dict(method='COBYLA', options={'maxiter':min(len(model)*5, 100), 'rhobeg':0.1, 'tol':0.00000001, 'catol':0.00000001}), #likely too tight to actually converge, but will hand off a different point to SLSQP to restart
+					dict(method='SLSQP', options={'ftol':1e-7, 'maxiter':max(len(model)*10, 100)}),
+					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1, 'tol':0.00001, 'catol':0.00001}),
 				)
 		else:
 			return (
@@ -340,9 +341,9 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 		if overspec:
 			r.stats.write("WARNING: Model is possibly over-specified (hessian is nearly singular).")
 			r.possible_overspecification = []
-			for eigval, ox in overspec:
+			for eigval, ox, eigenvec in overspec:
 				paramset = list(numpy.asarray(model.parameter_names())[ox])
-			r.possible_overspecification.append( (eigval, paramset) )
+			r.possible_overspecification.append( (eigval, paramset, eigenvec[ox]) )
 			model.possible_overspecification = r.possible_overspecification
 
 	r.stats.start_process("cleanup")

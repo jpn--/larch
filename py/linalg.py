@@ -51,25 +51,59 @@ def matrix_inverse(a):
 def possible_overspecification(a, holdfast_vector=None):
 	ret = []
 	if holdfast_vector is None:
-		eigenvalues,eigenvectors = numpy.linalg.eigh(a)
-		for i in range(len(eigenvalues)):
-			if numpy.abs(eigenvalues[i]) < 0.001:
-				v = eigenvectors[:,i]
-				v = numpy.round(v,7)
-				ret.append( (eigenvalues[i], numpy.where(v)[0])  )
+		holdfast_vector = numpy.zeros(a.shape[0], dtype=bool)
 	else:
-		a_packed = a[~holdfast_vector.astype(bool),:][:,~holdfast_vector.astype(bool)]
-		eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
-#		eigenvalues_unpacked = numpy.ones(a.shape[0])
-#		eigenvectors_unpacked = numpy.zeros(a.shape)
-#		eigenvalues_unpacked[~holdfast_vector.astype(bool)] = eigenvalues_packed
-#		eigenvectors_unpacked[~holdfast_vector.astype(bool),:][:,~holdfast_vector.astype(bool)] = eigenvectors_packed
-		for i in range(len(eigenvalues_packed)):
-			if numpy.abs(eigenvalues_packed[i]) < 0.001:
-				v = eigenvectors_packed[:,i]
-				v = numpy.round(v,7)
-				v_unpacked = numpy.zeros(a.shape[0])
-				v_unpacked[~holdfast_vector.astype(bool)] = v
-				ret.append( (eigenvalues_packed[i], numpy.where(v_unpacked)[0])  )
+		holdfast_vector = holdfast_vector.astype(bool, copy=True)
+#	if holdfast_vector is None:
+#		eigenvalues,eigenvectors = numpy.linalg.eigh(a)
+#		for i in range(len(eigenvalues)):
+#			if numpy.abs(eigenvalues[i]) < 0.001:
+#				v = eigenvectors[:,i]
+#				v = numpy.round(v,7)
+#				ret.append( (eigenvalues[i], numpy.where(v)[0])  )
+	holdfast_vector |= ((a==0).all(0))
+	a_packed = a[~holdfast_vector,:][:,~holdfast_vector]
+	eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	for i in range(len(eigenvalues_packed)):
+		if numpy.abs(eigenvalues_packed[i]) < 0.001:
+			v = eigenvectors_packed[:,i]
+			v = numpy.round(v,7)
+			v_unpacked = numpy.zeros(a.shape[0])
+			v_unpacked[~holdfast_vector.astype(bool)] = v
+			ret.append( (eigenvalues_packed[i], numpy.where(v_unpacked)[0], v_unpacked)  )
 	return ret
+
+
+
+def principal_components(a, holdfast_vector=None, names=None, sort=True):
+	ret = []
+	if holdfast_vector is None:
+		holdfast_vector = numpy.zeros(a.shape[0], dtype=bool)
+	else:
+		holdfast_vector = holdfast_vector.copy()
+	holdfast_vector = holdfast_vector.astype(bool)
+	holdfast_vector |= ((a==0).all(0))
+	a_packed = a[~holdfast_vector,:][:,~holdfast_vector]
+	eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	for i in range(len(eigenvalues_packed)):
+		v = eigenvectors_packed[:,i]
+		v = numpy.round(v,7)
+		v_unpacked = numpy.zeros(a.shape[0])
+		v_unpacked[~holdfast_vector.astype(bool)] = v
+		v_where = numpy.where(v_unpacked)[0]
+		if sort:
+			sorting = numpy.argsort(numpy.abs(v_unpacked))
+			reversed_sorting = sorting[::-1]
+			v_where_s = numpy.where(v_unpacked[reversed_sorting])[0]
+			if names is None:
+				ret.append( (eigenvalues_packed[i], v_where, v_unpacked[reversed_sorting])  )
+			else:
+				ret.append( (eigenvalues_packed[i], v_where, v_unpacked[reversed_sorting], names[reversed_sorting][v_where_s])  )
+		else:
+			if names is None:
+				ret.append( (eigenvalues_packed[i], v_where, v_unpacked)  )
+			else:
+				ret.append( (eigenvalues_packed[i], v_where, v_unpacked, names[v_where])  )
+	return ret
+
 

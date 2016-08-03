@@ -1839,6 +1839,7 @@ class XhtmlModelReporter():
 		x.start('thead')
 		x.start('tr')
 		x.th('Eigenvalue')
+		x.th('Eigenvector')
 		x.th('Problem Parameters')
 		x.end('tr')
 		x.end('thead')
@@ -1846,6 +1847,12 @@ class XhtmlModelReporter():
 		for overspec in self.possible_overspecification:
 			x.start('tr')
 			x.td("{:.4g}".format(overspec[0]))
+			x.start('td')
+			x.data(str(overspec[2][0]))
+			for problem_param in overspec[2][1:]:
+				x.simple('br')
+				x.data(str(problem_param))
+			x.end('td')
 			x.start('td')
 			x.data(overspec[1][0])
 			for problem_param in overspec[1][1:]:
