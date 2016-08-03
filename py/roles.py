@@ -76,13 +76,18 @@ class DataRef(str, metaclass=Role):
 		return DataRef("({})-({})".format(other,self))
 	def __mul__(self, other):
 		if isinstance(other, LinearFunction):
-			raise NotImplementedError
+			trial = LinearFunction()
+			for component in other:
+				trial += self * component
+			return trial
 		if isinstance(other, LinearComponent):
 			return LinearComponent(data=str(self * other.data), param=str(other.param))
 		if type(other) is ParameterRef:
 			return LinearComponent(data=str(self), param=str(other))
 		if type(other) is _param_negate:
 			return LinearComponent(data=str(-self), param=str(other._orig))
+		if other==0:
+			return 0
 		return DataRef("({})*({})".format(self,other))
 	def __rmul__(self, other):
 		if isinstance(other, LinearFunction):
@@ -93,6 +98,8 @@ class DataRef(str, metaclass=Role):
 			return LinearComponent(data=str(self), param=str(other))
 		if type(other) is _param_negate:
 			return LinearComponent(data=str(-self), param=str(other._orig))
+		if other==0:
+			return 0
 		return DataRef("({})*({})".format(other,self))
 	def __truediv__(self, other):
 		if isinstance(other, LinearFunction):

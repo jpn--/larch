@@ -85,6 +85,13 @@ namespace elm {
 			else:
 				raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
 
+		def __imul__(self,other):
+			from .roles import DataRef
+			if isinstance(other,(int,float,DataRef)):
+				self.data = self.data * other
+			else:
+				raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
+
 		%}
 		#endif // SWIG
 
@@ -168,6 +175,16 @@ namespace elm {
 			return LinearFunction() + other + self
 		def __pos__(self):
 			return self
+		def __mul__(self, other):
+			trial = LinearFunction()
+			for component in self:
+				trial += component * other
+			return trial
+		def __rmul__(self, other):
+			trial = LinearFunction()
+			for component in self:
+				trial += other * component
+			return trial
 		%}
 		#endif // def SWIG
 
