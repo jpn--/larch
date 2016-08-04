@@ -217,6 +217,7 @@ class TestSwissmetroExamples(ELM_TestCase):
 		from ..roles import P, X
 		d = DT.Example('MTC')
 		m = Model(d)
+		m.logger(False)
 		alts = d.alternatives()
 		ref_id = alts[0][0]
 		for code, name in alts:

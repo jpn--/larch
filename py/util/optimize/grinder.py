@@ -351,10 +351,43 @@ class OptimizeTechniques():
 									niter=[], status=-9, success=False, stats=runstats(), intermediate=[])
 		metaresult.stats.timestamp = _time.strftime("%A, %B %d %Y, %I:%M:%S %p")
 		x_n = x0
-		
+
+		def clean_metaresult():
+			for intermed in metaresult.intermediate:
+				try:
+					better = intermed.fun < metaresult.fun
+				except AttributeError:
+					better = False
+				if better:
+					metaresult.fun = intermed.fun
+					metaresult.loglike = -(intermed.fun)
+					try:
+						metaresult.x = intermed.x
+					except AttributeError:
+						metaresult.x = None
+					try:
+						metaresult.jac = intermed.jac
+					except AttributeError:
+						metaresult.jac = None
+					try:
+						metaresult.method = intermed.method
+					except AttributeError:
+						metaresult.method = None
+					try:
+						metaresult.ctol = intermed.ctol
+					except AttributeError:
+						metaresult.ctol = None
+					try:
+						metaresult.message += '†'
+					except AttributeError:
+						pass
+			if "incomplete run" in metaresult.message and metaresult.ctol is not None:
+				metaresult.message = metaresult.message.replace("incomplete run", "convergence tolerance {:.3g}".format(metaresult.ctol))
+			return metaresult
+
 		def complete_metaresult(from_result, successful):
 			metaresult.stats.end_process()
-			for part in ['x', 'fun','jac','hess','hess_inv']:
+			for part in ['x', 'fun','jac','hess','hess_inv','ctol']:
 				if part in from_result:
 					metaresult[part] = from_result[part]
 			metaresult.stats.iteration = sum(i[1] for i in metaresult.niter)
@@ -379,6 +412,11 @@ class OptimizeTechniques():
 					metaresult.niter.append( ("{!s} (nfev)".format(technique.method_str), result.nfev) )
 				except AttributeError:
 					pass
+			if self.ctol_fun:
+				try:
+					result.ctol = self.ctol_fun(result.x)
+				except:
+					result.ctol = 999.999
 			metaresult.intermediate.append(result)
 			try:
 				metaresult.intermediate[-1].method = technique.method_str
@@ -392,15 +430,15 @@ class OptimizeTechniques():
 					metaresult.ctol = actual_utol
 					metaresult.message = "Optimization terminated successfully per computed tolerance. [{}]".format(technique.method_str)
 					complete_metaresult(result, True)
-					return metaresult
+					return clean_metaresult()
 			else:
 				if result.outcome == outcomes.success:
 					metaresult.message = "Optimization terminated successfully. [{}]".format(technique.method_str)
 					complete_metaresult(result, True)
-					return metaresult
+					return clean_metaresult()
 		metaresult.stats.results = 'failed'
 		complete_metaresult(result, False)
-		return metaresult
+		return clean_metaresult()
 
 
 #

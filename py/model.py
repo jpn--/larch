@@ -944,9 +944,23 @@ class Model(Model2, ModelReporter):
 		self.robust_covariance_matrix[take] = robusto.reshape(-1)
 
 
-
-
-
+	def bhhh_tolerance(self, *args, **kwargs):
+		try:
+			constraints = self._built_constraints_cache
+		except AttributeError:
+			constraints = self._build_constraints(include_bounds=True)
+		if len(constraints)==0:
+			return super().bhhh_tolerance(*args, **kwargs)
+		# constraints are pre-built by _build_constraints here
+		try:
+			d2, bh, d1, abandoned_slots = self._compute_constrained_d2_loglike_and_bhhh(constraints=constraints, skip_d2=True)
+		except TypeError:  # intermediate constraints?  TODO fix this
+			return numpy.inf
+		from .linalg import general_inverse as _general_inverse
+		try:
+			return numpy.dot(numpy.dot(d1,_general_inverse(bh)),d1) #, bh, d1
+		except ValueError:
+			return numpy.inf
 
 	def parameter_holdfast_mask(self):
 		return self.parameter_holdfast_array.copy()

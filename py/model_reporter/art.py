@@ -762,7 +762,10 @@ class ArtModelReporter():
 					x.add_blank_row()
 					x.set_lastrow_iloc_nondupe(0, "Log Likelihood")
 					x.set_lastrow_iloc(1, intermed.method)
-					x.set_lastrow_iloc(2, str(-intermed.fun))
+					try:
+						x.set_lastrow_iloc(2, str(-intermed.fun))
+					except AttributeError:
+						x.set_lastrow_iloc(2, str("err: no fun"))
 
 
 			seconds = last_stat.dictionary()['total_duration_seconds']

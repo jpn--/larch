@@ -26,6 +26,8 @@ _Skr = logging.getScriber("linalg")
 def general_inverse(a):
 	"""Find the matrix inverse if possible, otherwise find the pseudo-inverse."""
 	#_Skr.log(5,"call:general_inverse")
+	if not numpy.isfinite(a).all():
+		raise ValueError("nonfinite values in array")
 	try:
 		try:
 			eig = numpy.linalg.eigvalsh(a)

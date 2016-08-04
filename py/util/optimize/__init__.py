@@ -65,7 +65,7 @@ def _default_optimizers(model):
 					dict(method='SLSQP', options={'ftol':1e-7, 'maxiter':max(len(model)*10, 100)}),
 					dict(method='COBYLA', options={'maxiter':min(len(model)*5, 100), 'rhobeg':0.1, 'tol':0.00000001, 'catol':0.00000001}), #likely too tight to actually converge, but will hand off a different point to SLSQP to restart
 					dict(method='SLSQP', options={'ftol':1e-7, 'maxiter':max(len(model)*10, 100)}),
-					dict(method='COBYLA', options={'maxiter':max(len(model)*100, 1000), 'rhobeg':0.1, 'tol':0.00001, 'catol':0.00001}),
+					#dict(method='COBYLA', options={'maxiter':max(len(model)*10, 1000), 'rhobeg':0.1, 'tol':0.00001, 'catol':0.00001}),
 				)
 		else:
 			return (
@@ -277,6 +277,8 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	else:
 		constraints = model._build_constraints()
 
+	model._built_constraints_cache = constraints
+
 	bounds=None
 	if model.option.enforce_bounds and not use_cobyla:
 		bounds=model.parameter_bounds()
@@ -373,6 +375,7 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	# save
 	model._set_estimation_run_statistics_pickle(r.stats.pickled_dictionary())
 	model.maximize_loglike_results = r
+	del model._built_constraints_cache
 	return r
 
 
@@ -486,15 +489,17 @@ class _abandoned():
 		s += "  fixed_value:{!s}".format(self.fixed_value)
 		return s
 
-def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), priority_list=None):
+def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), priority_list=None, skip_d2=False):
 	# constraints are pre-built by _build_constraints here
 	if len(constraints)==0:
-		return model.d2_loglike(*args), model.bhhh(*args), {}
+		return model.d2_loglike(*args), model.bhhh(*args), model.d_loglike(*args), {}
 	try:
 		priority_list = model.parameter_priority_list
 	except AttributeError:
 		priority_list = {}
-	d2 = numpy.asarray(model.d2_loglike(*args))
+	if not skip_d2:
+		d2 = numpy.asarray(model.d2_loglike(*args))
+	d1 = numpy.asarray(model.d_loglike(*args))
 	bh = numpy.asarray(model.bhhh(*args))
 	abandoned_slots = {}
 	for cstrt in constraints:
@@ -531,14 +536,24 @@ def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), prior
 		mult_2 = -jac_lo/jac_hi
 		lo_slot_1 = lo_slot
 
+		loop_detector = set([hi_slot])
 		while hi_slot is not None and hi_slot in abandoned_slots:
 			jac_hi *= abandoned_slots[hi_slot].mult
 			p_hi = abandoned_slots[hi_slot].to_name
 			hi_slot = abandoned_slots[hi_slot].to_slot
+			if hi_slot in loop_detector:
+				raise TypeError('hi_slot loop')
+			else:
+				loop_detector.add(hi_slot)
+		loop_detector = set([lo_slot])
 		while lo_slot is not None and lo_slot in abandoned_slots:
-			jac_lo += abandoned_slots[lo_slot].mult
+			jac_lo *= abandoned_slots[lo_slot].mult
 			p_lo = abandoned_slots[lo_slot].to_name
 			lo_slot = abandoned_slots[lo_slot].to_slot
+			if lo_slot in loop_detector:
+				raise TypeError('lo_slot loop')
+			else:
+				loop_detector.add(lo_slot)
 
 		keep_hi = True
 		p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
@@ -551,61 +566,98 @@ def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), prior
 					keep_hi = False
 
 
+#		if p_hi is not None:
+#			p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
+#		else:
+#			p_hi_1 = None
+#		if p_lo is not None:
+#			p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
+#		else:
+#			p_lo_1 = None
+#
+#		if p_hi_1 is None:
+#			keep_hi = False
+#		else:
+#			if p_lo_1 is not None and p_lo_1.id in priority_list:
+#				if p_hi_1 is not None and not p_hi_1.id in priority_list:
+#					keep_hi = False
+#				else:
+#					if p_hi_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+#						keep_hi = False
+
 		if hi_slot is not None and lo_slot is not None and keep_hi:
-			d2[hi_slot, :] -= d2[lo_slot, :]*jac_hi/jac_lo
-			d2[lo_slot, :] = 0
-			d2[:, hi_slot] -= d2[:, lo_slot]*jac_hi/jac_lo
-			d2[:, lo_slot] = 0
+			if not skip_d2:
+				d2[hi_slot, :] -= d2[lo_slot, :]*jac_hi/jac_lo
+				d2[lo_slot, :] = 0
+				d2[:, hi_slot] -= d2[:, lo_slot]*jac_hi/jac_lo
+				d2[:, lo_slot] = 0
 			bh[hi_slot, :] -= bh[lo_slot, :]*jac_hi/jac_lo
 			bh[lo_slot, :] = 0
 			bh[:, hi_slot] -= bh[:, lo_slot]*jac_hi/jac_lo
 			bh[:, lo_slot] = 0
+			d1[hi_slot] -= d1[lo_slot]*jac_hi/jac_lo
+			d1[lo_slot] = 0
 			abandoned_slots[lo_slot] = _abandoned(to_slot=hi_slot, to_name=p_hi, mult=-jac_hi/jac_lo, this_slot=hi_slot_1, this_mult=mult_1)
 		elif hi_slot is not None and lo_slot is not None:
-			d2[lo_slot, :] -= d2[hi_slot, :]*jac_lo/jac_hi
-			d2[hi_slot, :] = 0
-			d2[:, lo_slot] -= d2[:, hi_slot]*jac_lo/jac_hi
-			d2[:, hi_slot] = 0
+			if not skip_d2:
+				d2[lo_slot, :] -= d2[hi_slot, :]*jac_lo/jac_hi
+				d2[hi_slot, :] = 0
+				d2[:, lo_slot] -= d2[:, hi_slot]*jac_lo/jac_hi
+				d2[:, hi_slot] = 0
 			bh[lo_slot, :] -= bh[hi_slot, :]*jac_lo/jac_hi
 			bh[hi_slot, :] = 0
 			bh[:, lo_slot] -= bh[:, hi_slot]*jac_lo/jac_hi
 			bh[:, hi_slot] = 0
+			d1[lo_slot] -= d1[hi_slot]*jac_lo/jac_hi
+			d1[hi_slot] = 0
 			abandoned_slots[hi_slot] = _abandoned(to_slot=lo_slot, to_name=p_lo, mult=-jac_lo/jac_hi, this_slot=lo_slot_1, this_mult=mult_2, symbol=_GTE)
 		elif hi_slot is None and lo_slot is not None:
-			d2[lo_slot, :] = 0
-			d2[:, lo_slot] = 0
+			if not skip_d2:
+				d2[lo_slot, :] = 0
+				d2[:, lo_slot] = 0
 			bh[lo_slot, :] = 0
 			bh[:, lo_slot] = 0
+			d1[lo_slot] = 0
 			abandoned_slots[lo_slot] = _abandoned(mult=jac_lo, fixed_value=p_hi)
 		elif hi_slot is not None and lo_slot is None:
-			d2[hi_slot, :] = 0
-			d2[:, hi_slot] = 0
+			if not skip_d2:
+				d2[hi_slot, :] = 0
+				d2[:, hi_slot] = 0
 			bh[hi_slot, :] = 0
 			bh[:, hi_slot] = 0
+			d1[hi_slot] = 0
 			abandoned_slots[hi_slot] = _abandoned(mult=jac_hi, fixed_value=p_lo)
 	if model.option.enforce_bounds and model.parameter_bounds() is not None:
 		for slot, (min_bound, max_bound) in enumerate(model.parameter_bounds()):
 			if min_bound is not None:
 				if model.parameter_array[slot] - min_bound < 1e-6:
-					d2[slot, :] = 0
-					d2[:, slot] = 0
+					if not skip_d2:
+						d2[slot, :] = 0
+						d2[:, slot] = 0
 					bh[slot, :] = 0
 					bh[:, slot] = 0
+					d1[slot] = 0
 					abandoned_slots[slot] = _abandoned(fixed_value=min_bound, mult=1)
 			if max_bound is not None:
 				if max_bound - model.parameter_array[slot] < 1e-6:
-					d2[slot, :] = 0
-					d2[:, slot] = 0
+					if not skip_d2:
+						d2[slot, :] = 0
+						d2[:, slot] = 0
 					bh[slot, :] = 0
 					bh[:, slot] = 0
+					d1[slot] = 0
 					abandoned_slots[slot] = _abandoned(fixed_value=max_bound, mult=-1)
-	return d2, bh, abandoned_slots
+	#model.bhhh_constrained = bh
+	#model.d_loglike_constrained = d1
+	if skip_d2:
+		d2 = None
+	return d2, bh, d1, abandoned_slots
 
 
 
 def _compute_constrained_covariance(model, constraints=()):
 	# constraints are pre-built by _build_constraints here
-	d2, bh, abandoned_slots = model._compute_constrained_d2_loglike_and_bhhh(constraints=constraints)
+	d2, bh, d1, abandoned_slots = model._compute_constrained_d2_loglike_and_bhhh(constraints=constraints)
 	holdfasts = model.parameter_holdfast_array.copy()
 	model.t_stat_replacements = [None] * len(model)
 	for i in abandoned_slots:
