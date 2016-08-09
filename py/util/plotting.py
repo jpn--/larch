@@ -120,6 +120,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		if bins < 10:
 			bins = 10
 
+	plt.clf()
 	try:
 		n, bins, patches = plt.hist(use_data, bins, normed=1, facecolor=use_color, linewidth=0, alpha=1.0)
 	except:
@@ -155,6 +156,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 
 
 def spark_pie_maker(data, notetaker=None):
+	plt.clf()
 	fig = plt.gcf()
 	fig.set_figheight(0.2)
 	fig.set_figwidth(0.75)

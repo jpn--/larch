@@ -87,7 +87,7 @@ class OMX(_tb.file.File):
 			shape = self.shape
 		return self.create_carray(self.data, name, atom=atom, shape=shape, **kwargs)
 
-	def add_matrix(self, name, obj, **kwargs):
+	def add_matrix(self, name, obj, *, overwrite=False, **kwargs):
 		if len(obj.shape) != 2:
 			raise OMXIncompatibleShape('all omx arrays must have 2 dimensional shape')
 		if self.data._v_nchildren>0:
@@ -98,6 +98,8 @@ class OMX(_tb.file.File):
 			shp[0] = obj.shape[0]
 			shp[1] = obj.shape[1]
 			self.root._v_attrs.SHAPE = shp
+		if name in self.data._v_children:
+			self.remove_node(self.data, name)
 		return self.create_carray(self.data, name, obj=obj, **kwargs)
 
 	def add_lookup(self, name, obj, **kwargs):
@@ -290,4 +292,20 @@ class OMX(_tb.file.File):
 		#self.data._v_children[matrixname][:] = temp_slug[:]
 		log("import_datatable({}) complete".format(filepath))
 
+	def __getitem__(self, key):
+		if isinstance(key,str):
+			if key in self.data._v_children:
+				return self.data._v_children[key]
+			raise KeyError("matrix named {} not found".format(key))
+		raise TypeError("OMX matrix access must be by name (str)")
+
+	def __getattr__(self, key):
+		try:
+			return super().__getattr__(key)
+		except AttributeError:
+			if key in self.data._v_children and key not in self.lookup._v_children:
+				return self.data._v_children[key]
+			if key not in self.data._v_children and key in self.lookup._v_children:
+				return self.lookup._v_children[key]
+			raise
 

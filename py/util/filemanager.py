@@ -94,6 +94,8 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 		number appended to the name.
 		
 	"""
+	if filename is not None:
+		filename = os.path.expanduser(filename)
 	if allow_natural and not os.path.exists(filename):
 		return filename
 	pathlocation, basename, extension = filename_split(filename)

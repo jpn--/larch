@@ -11,6 +11,7 @@ import base64
 from .util.attribute_dict import function_cache
 from .model_shadowmanager import shadow_manager, metaparameter_manager
 from .model_parametermanager import ParameterManager
+from .model_datamanager import DataManager
 from .util.statsummary import statistical_summary
 
 class MetaParameter():
@@ -165,6 +166,18 @@ class Model(Model2, ModelReporter):
 	def metaparameter(self):
 		"""A metaparameter interface for the model."""
 		return metaparameter_manager(self)
+
+
+	@property
+	def data(self):
+		"""A :class:`DataManager` interface for the model."""
+		return DataManager(self)
+
+	@property
+	def dataedit(self):
+		"""A :class:`DataManager` interface for the model, with editable access to arrays."""
+		return DataManager(self, False)
+
 
 
 #	def metaparameter(self, name):
@@ -335,10 +348,13 @@ class Model(Model2, ModelReporter):
 	df = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
 	db = df
 
-	def load(self, filename="@@@", *, echo=False):
+	def load(self, filename="@@@", *, echo=False, d=None):
 		if filename=="@@@" and isinstance(self,str):
 			filename = self
-			self = Model()
+			if d:
+				self = Model(d)
+			else:
+				self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
 		_Str = lambda s: (base64.standard_b64decode(s)).decode()
@@ -1282,6 +1298,9 @@ class Model(Model2, ModelReporter):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
+	def logsums(self):
+		return self.calc_utility_logsums(self.Data("UtilityCO"),self.Data("UtilityCA"),self.Data("Avail"))
+
 	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), maxiter=1000, disp=True, **kwargs):
 		import scipy.optimize
 		import datetime
@@ -1496,14 +1515,14 @@ class Model(Model2, ModelReporter):
 		except ProvisioningError:
 			pass
 
-	def provision(self, *args, idca_avail_ratio_floor=None):
+	def provision(self, *args, idca_avail_ratio_floor=None, **kwargs):
 		from .db import DB
 		from .dt import DT
 		if idca_avail_ratio_floor is None:
 			idca_avail_ratio_floor = self.option.idca_avail_ratio_floor
 		if len(args)==0:
 			if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
-				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor), )
+				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor, **kwargs), )
 			else:
 				raise LarchError('model has no db specified for provisioning')
 		otherformats = {}

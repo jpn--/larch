@@ -443,6 +443,8 @@ class DT(Fountain):
 
 
 	def process_proposed_screen(self, proposal):
+		if isinstance(proposal, (list,tuple)):
+			proposal = numpy.asarray(proposal)
 		if (proposal is None and 'screen' not in self.h5top) or (isinstance(proposal, str) and proposal.casefold() in ("none","all","*")):
 			n_cases = self.h5top.caseids.shape[0]
 			screen = None
@@ -459,6 +461,9 @@ class DT(Fountain):
 			n_cases = screen.shape[0]
 		elif isinstance(proposal, numpy.ndarray) and numpy.issubdtype(proposal.dtype, numpy.int):
 			screen = proposal
+			n_cases = screen.shape[0]
+		elif isinstance(proposal, int):
+			screen = numpy.array([proposal], dtype=int)
 			n_cases = screen.shape[0]
 		else:
 			raise TypeError("Incorrect screen type, you gave {!s}".format(type(proposal)))
