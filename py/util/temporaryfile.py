@@ -1,5 +1,5 @@
 
-import tempfile, webbrowser, types, os
+import tempfile, webbrowser, types, os, shutil
 
 
 
@@ -10,8 +10,15 @@ def TemporaryBucketCleanUp():
 	for i in TemporaryBucket:
 		try:
 			os.remove(os.path.realpath(i.name))
+		except PermissionError:
+			try:
+				shutil.rmtree(i.name)
+			except:
+				import traceback
+				traceback.print_exc()
 		except:
-			pass
+			import traceback
+			traceback.print_exc()
 	del TemporaryBucket
 
 import atexit
@@ -88,4 +95,22 @@ def TemporaryGzipInflation(gzfile):
 		t.write(previewfile.read())
 	return t.name
 
+_tempdir = None
+
+def TemporaryDirectory(common=True):
+	global _tempdir
+	if common and _tempdir is not None:
+		return _tempdir
+	t = tempfile.mkdtemp()
+	global TemporaryBucket
+	from .attribute_dict import dictal
+	TemporaryBucket.append(dictal(name=t))
+	if common:
+		_tempdir = t
+	return t
+
+def TemporaryCopy(sourcefile):
+	tdir = TemporaryDirectory()
+	shutil.copy2(sourcefile,tdir)
+	return os.path.join(tdir, os.path.basename(sourcefile))
 
