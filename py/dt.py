@@ -347,6 +347,9 @@ class DT(Fountain):
 	def caseids(self):
 		return self.h5top.caseids[:]
 
+	@property
+	def caseindexes(self):
+		return numpy.arange(int(self.h5top.caseids.shape[0]))
 
 	def alternatives(self, format=list):
 		'''The alternatives of the data.
@@ -433,6 +436,9 @@ class DT(Fountain):
 			elif toknum == NAME and tokval in ('caseid','caseids'):
 				partial = [ (NAME, 'self'), DOT, (NAME, 'h5top'), DOT, (NAME, 'caseids'), OBRAC,screen_token,CBRAC, ]
 				recommand.extend(partial)
+			elif toknum == NAME and tokval in ('caseindex','caseindexes'):
+				partial = [ (NAME, 'self'), DOT, (NAME, 'caseindexes'), OBRAC,screen_token,CBRAC, ]
+				recommand.extend(partial)
 			elif toknum == NAME and tokval in ('altids',):
 				partial = [ (NAME, 'self'), DOT, (NAME, 'h5alts'), DOT, (NAME, 'altids'), OBRAC,screen_token,CBRAC, ]
 				recommand.extend(partial)
@@ -445,7 +451,10 @@ class DT(Fountain):
 	def process_proposed_screen(self, proposal):
 		if isinstance(proposal, (list,tuple)):
 			proposal = numpy.asarray(proposal)
-		if (proposal is None and 'screen' not in self.h5top) or (isinstance(proposal, str) and proposal.casefold() in ("none","all","*")):
+		if isinstance(proposal, str) and proposal.casefold() in ("none","all","*"):
+			n_cases = self.h5top.caseids.shape[0]
+			screen = "None"
+		elif (proposal is None and 'screen' not in self.h5top) or (isinstance(proposal, str) and proposal.casefold() in ("none","all","*")):
 			n_cases = self.h5top.caseids.shape[0]
 			screen = None
 		elif isinstance(proposal, str):
@@ -507,6 +516,8 @@ class DT(Fountain):
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		screen, n_cases = self.process_proposed_screen(screen)
+		if isinstance(screen, str) and screen=="None":
+			screen = None
 		n_vars = len(vars)
 		n_alts = self.nAlts()
 		result = numpy.zeros([n_cases,n_alts,n_vars], dtype=dtype)
@@ -579,6 +590,8 @@ class DT(Fountain):
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
+		if isinstance(screen, str) and screen=="None":
+			screen = None
 		result = numpy.zeros([n_cases,n_vars], dtype=dtype)
 		for varnum,v in enumerate(vars):
 			command = self._remake_command(v,screen,1)
@@ -2660,7 +2673,7 @@ class DT_idco_stack_manager:
 		if len(slotarray) == 1:
 			return self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack[slotarray[0]]
 		else:
-			raise KeyError
+			raise KeyError("key {} not found".format(key) )
 
 	def __setitem__(self, key, value):
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
@@ -2673,7 +2686,7 @@ class DT_idco_stack_manager:
 			tempobj[slotarray[0]] = value
 			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = tempobj
 		else:
-			raise KeyError
+			raise KeyError("key {} not found".format(key) )
 
 	def __repr__(self):
 		self._check()
