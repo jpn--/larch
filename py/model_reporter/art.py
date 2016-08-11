@@ -355,6 +355,68 @@ class AbstractReportTable():
 	
 	__xml__ = xml
 
+
+	def to_xlsx(self, workbook, worksheet_name=None, r_top=0, c_left=0,
+	            freeze_panes=True, hide_gridlines=True,
+				metahead=None):
+		
+		if worksheet_name is not None and worksheet_name not in workbook.sheetnames:
+			worksheet = workbook.add_worksheet(worksheet_name)
+		elif worksheet_name is None:
+			worksheet = workbook.add_worksheet(self.short_title)
+		else:
+			worksheet = workbook.get_worksheet_by_name(worksheet_name)
+		
+		title_format = workbook.add_format({'bold': True, 'font_size':16})
+		tablehead = workbook.add_format({'bold': True, 'align':'center'})
+		merged = workbook.add_format({'valign':'top','border':7})
+		merged_tablehead = workbook.add_format({'valign':'top','bold': True, 'align':'center'})
+
+		current_format = (tablehead, merged_tablehead)
+
+		
+		# MetaHeading
+		if metahead is not None:
+			metatitle_format = workbook.add_format({'bold': True, 'font_size':10})
+			worksheet.write(r_top, c_left, metahead, metatitle_format)
+			r_top += 1
+		
+		# Heading
+		worksheet.write(r_top, c_left, self.title, title_format)
+		r_top += 1
+
+		# Content
+		for r,rvalue in enumerate(self.df.index):
+			if (~pandas.isnull(self.df.iloc[r,1:])).sum()==0:
+				catflag = True
+			else:
+				catflag = False
+			if r==self.n_thead_rows:
+				# Have now completed header rows
+				current_format = (merged, merged)
+			startline = True
+			for c,cvalue in enumerate(self.df.columns):
+				cellspan = self.cellspan_iloc(r,c)
+				if cellspan != (0,0):
+					# This is a cell with real content
+					if cellspan == (1,1):
+						worksheet.write(r_top+r, c_left+c, self.get_text_iloc(r,c), current_format[0])
+					else:
+						worksheet.merge_range(r_top+r, c_left+c, r_top+r+cellspan[0]-1, c_left+c+cellspan[1]-1, self.get_text_iloc(r,c), current_format[1])
+				else:
+					startline = False
+		
+		# Col widths
+		wid = self.min_col_widths()
+		for c,w in enumerate(wid):
+			worksheet.set_column(c, c, w)
+		
+		if freeze_panes:
+			worksheet.freeze_panes(r_top+self.n_thead_rows, 0)
+	
+		if hide_gridlines:
+			worksheet.hide_gridlines(2)
+
 	def cellspan_iloc(self,r,c):
 		try:
 			if pandas.isnull(self.df.iloc[r,c]):

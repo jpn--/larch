@@ -309,3 +309,9 @@ class OMX(_tb.file.File):
 				return self.lookup._v_children[key]
 			raise
 
+	def import_omx(self, otherfile, tablenames):
+		oth = OMX(otherfile, mode='r')
+		for tab in tablenames:
+			self.add_matrix(tab, oth.data._v_children[tab][:])
+
+
