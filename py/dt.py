@@ -913,7 +913,7 @@ class DT(Fountain):
 				provide[key] = numpy.require(self.array_idco(*req.get_variables(), screen=screen), requirements='C')
 			elif key=="Allocation":
 				provide[key] = numpy.require(self.array_idco(*req.get_variables(), screen=screen), requirements='C')
-		if screen is None:
+		if screen is None or (isinstance(screen,str) and screen=="None"):
 			provide['caseids'] = numpy.require(self.h5top.caseids[:], requirements='C')
 		else:
 			provide['caseids'] = numpy.require(self.h5top.caseids[screen], requirements='C')
