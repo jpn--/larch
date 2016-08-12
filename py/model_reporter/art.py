@@ -358,7 +358,7 @@ class AbstractReportTable():
 
 	def to_xlsx(self, workbook, worksheet_name=None, r_top=0, c_left=0,
 	            freeze_panes=True, hide_gridlines=True,
-				metahead=None):
+				metahead=None, buffercol=True):
 		
 		if worksheet_name is not None and worksheet_name not in workbook.sheetnames:
 			worksheet = workbook.add_worksheet(worksheet_name)
@@ -368,12 +368,18 @@ class AbstractReportTable():
 			worksheet = workbook.get_worksheet_by_name(worksheet_name)
 		
 		title_format = workbook.add_format({'bold': True, 'font_size':16})
+		category_format = workbook.add_format({'bold': True, 'italic':True, 'bg_color':'#f4f4f4','border':1, 'border_color':'#AAAAAA',})
 		tablehead = workbook.add_format({'bold': True, 'align':'center'})
-		merged = workbook.add_format({'valign':'top','border':7})
+		merged = workbook.add_format({'valign':'top', 'border':1, 'border_color':'#AAAAAA'})
 		merged_tablehead = workbook.add_format({'valign':'top','bold': True, 'align':'center'})
+		foot_format = workbook.add_format({'italic': True, 'font_size':10})
 
 		current_format = (tablehead, merged_tablehead)
 
+		# Buffer Column
+		if buffercol:
+			worksheet.set_column(c_left, c_left, 1)
+			c_left += 1
 		
 		# MetaHeading
 		if metahead is not None:
@@ -402,20 +408,35 @@ class AbstractReportTable():
 					if cellspan == (1,1):
 						worksheet.write(r_top+r, c_left+c, self.get_text_iloc(r,c), current_format[0])
 					else:
-						worksheet.merge_range(r_top+r, c_left+c, r_top+r+cellspan[0]-1, c_left+c+cellspan[1]-1, self.get_text_iloc(r,c), current_format[1])
+						worksheet.merge_range(r_top+r, c_left+c, r_top+r+cellspan[0]-1, c_left+c+cellspan[1]-1, self.get_text_iloc(r,c), category_format if catflag else current_format[1])
 				else:
 					startline = False
-		
+
 		# Col widths
 		wid = self.min_col_widths()
 		for c,w in enumerate(wid):
-			worksheet.set_column(c, c, w)
+			worksheet.set_column(c+c_left, c+c_left, w)
 		
 		if freeze_panes:
 			worksheet.freeze_panes(r_top+self.n_thead_rows, 0)
 	
 		if hide_gridlines:
 			worksheet.hide_gridlines(2)
+
+		r_top += len(self.df.index)
+
+		from ..util.img import favicon_raw
+		from io import BytesIO
+		from ..version import version
+		import time
+		worksheet.write(r_top+1, c_left, "      Larch {}".format(version), foot_format)
+		worksheet.insert_image(r_top+1, c_left, "larch_favicon.png",
+								{'image_data': BytesIO(favicon_raw),
+								 'x_scale':0.5, 'y_scale':0.5,
+								 'x_offset':    2, 'y_offset':    2,})
+		worksheet.write(r_top+2, c_left, "Report generated on "+time.strftime("%A %d %B %Y ")+time.strftime("%I:%M:%S %p"), foot_format)
+
+
 
 	def cellspan_iloc(self,r,c):
 		try:

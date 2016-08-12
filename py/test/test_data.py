@@ -313,15 +313,15 @@ class TestData1(unittest.TestCase):
 		dt = DT()
 		tinytest = os.path.join( DT.ExampleDirectory(), 'tinytest.csv' )
 		dt.import_idco(tinytest)
-		self.assertEqual( 2, dt.h5idco.Banana[0] )
-		self.assertTrue( numpy.isnan(dt.h5idco.Banana[1]) )
-		self.assertTrue( numpy.isnan(dt.h5idco.Banana[-1]) )
+		self.assertEqual( 2, dt.idco.Banana[0] )
+		self.assertTrue( numpy.isnan(dt.idco.Banana[1]) )
+		self.assertTrue( numpy.isnan(dt.idco.Banana[-1]) )
 		purch = numpy.array([b'Apple', b'Cookie', b'Apple', b'Banana', b'Cookie', b'Apple',
 							b'Apple', b'Cookie', b'Cookie'],
 							dtype='|S8')
-		self.assertTrue(numpy.array_equal( purch, dt.h5idco.Purchase[:] ))
+		self.assertTrue(numpy.array_equal( purch, dt.idco.Purchase[:] ))
 		apple = numpy.array([1, 1, 2, 1, 1, 2, 1, 1, 2])
-		self.assertTrue( numpy.array_equal(apple, dt.h5idco.Apple[:]) )
+		self.assertTrue( numpy.array_equal(apple, dt.idco.Apple[:]) )
 		dt.set_alternatives(['Apple','Banana','Cookie'])
 		dt.avail_idco("isfinite(Apple)","isfinite(Banana)","isfinite(Cookie)",)
 		av = numpy.array([[ True,  True,  True],

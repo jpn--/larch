@@ -21,6 +21,7 @@ import collections
 from .util.aster import asterize
 import keyword
 import pandas
+import os
 
 class IncompatibleShape(LarchError):
 	pass
@@ -86,6 +87,13 @@ class LocalAttributeSet(object):
 		return self.__delattr__(key)
 
 
+
+def _pytables_link_dereference(i):
+	if isinstance(i, _tb.link.ExternalLink):
+		i = i()
+	if isinstance(i, _tb.link.SoftLink):
+		i = i.dereference()
+	return i
 
 
 
@@ -217,13 +225,17 @@ class DT(Fountain):
 		self.idca = GroupNode(self.h5top, 'idca')
 
 
-
 	def __del__(self):
 		if self._h5f_own:
 			self.h5f.close()
 
 	def __repr__(self):
 		return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
+
+	@property
+	def h5caseids(self):
+		return _pytables_link_dereference(self.h5top.caseids)
+
 
 	def create_group(self, *arg, **kwargs):
 		return self.h5f.create_group(*arg, **kwargs)
@@ -252,11 +264,19 @@ class DT(Fountain):
 				raise
 
 	def _is_larch_array(self, where, name=None):
-		n = self.h5f.get_node(where, name)
+		where1 = _pytables_link_dereference(where)
 		try:
-			n = n.dereference()
-		except AttributeError:
-			pass
+			n = self.h5f.get_node(where1, name)
+		except _tb.exceptions.NoSuchNodeError:
+			if name in where1:
+				n = where1._v_children[name]
+			else:
+				raise
+		n = _pytables_link_dereference(n)
+#		try:
+#			n = n.dereference()
+#		except AttributeError:
+#			pass
 		if isinstance(n, _tb.array.Array):
 			return True
 		if isinstance(n, _tb.group.Group):
@@ -265,11 +285,19 @@ class DT(Fountain):
 		return False
 
 	def _is_mapped_larch_array(self, where, name=None):
-		n = self.h5f.get_node(where, name)
+		where1 = _pytables_link_dereference(where)
 		try:
-			n = n.dereference()
-		except AttributeError:
-			pass
+			n = self.h5f.get_node(where1, name)
+		except _tb.exceptions.NoSuchNodeError:
+			if name in where1:
+				n = where1._v_children[name]
+			else:
+				raise
+		n = _pytables_link_dereference(n)
+#		try:
+#			n = n.dereference()
+#		except AttributeError:
+#			pass
 		if isinstance(n, _tb.group.Group):
 			if '_index_' in n and '_values_' in n:
 				return True
@@ -347,9 +375,16 @@ class DT(Fountain):
 	def caseids(self):
 		return self.h5top.caseids[:]
 
+	def array_caseids(self, screen=None):
+		screen, n_cases = self.process_proposed_screen(screen)
+		if isinstance(screen, str) and screen=="None":
+			return self.h5top.caseids[:]
+		return self.h5top.caseids[screen]
+
 	@property
 	def caseindexes(self):
-		return numpy.arange(int(self.h5top.caseids.shape[0]))
+		return numpy.arange(int(self.h5caseids.shape[0]))
+	
 
 	def alternatives(self, format=list):
 		'''The alternatives of the data.
@@ -371,7 +406,7 @@ class DT(Fountain):
 			screen = self.get_screen_indexes()
 			return int(screen.shape[0])
 		else:
-			return int(self.h5top.caseids.shape[0])
+			return int(self.h5caseids.shape[0])
 
 	def nAlts(self):
 		return int(self.h5alts.altids.shape[0])
@@ -414,19 +449,19 @@ class DT(Fountain):
 						partial += [COMMA,COLON,]
 					partial += [CBRAC, ]
 					recommand.extend(partial)
-			elif toknum == NAME and tokval in self.h5idco:
-				if self._is_mapped_larch_array(self.h5idco, tokval):
+			elif toknum == NAME and tokval in self.idco:
+				if self._is_mapped_larch_array(self.idco._v_node, tokval):
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
 								OBRAC,
-								(NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
+								(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
 								CBRAC, OBRAC,screen_token,CBRAC,]
 					if dims>1:
 						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idco'), DOT, (NAME, tokval), OBRAC,screen_token,CBRAC,]
+					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), OBRAC,screen_token,CBRAC,]
 					if dims>1:
 						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
@@ -452,10 +487,10 @@ class DT(Fountain):
 		if isinstance(proposal, (list,tuple)):
 			proposal = numpy.asarray(proposal)
 		if isinstance(proposal, str) and proposal.casefold() in ("none","all","*"):
-			n_cases = self.h5top.caseids.shape[0]
+			n_cases = self.h5caseids.shape[0]
 			screen = "None"
 		elif (proposal is None and 'screen' not in self.h5top) or (isinstance(proposal, str) and proposal.casefold() in ("none","all","*")):
-			n_cases = self.h5top.caseids.shape[0]
+			n_cases = self.h5caseids.shape[0]
 			screen = None
 		elif isinstance(proposal, str):
 			proposal = self.array_idco(proposal, screen="None", dtype=bool).squeeze()
@@ -464,8 +499,8 @@ class DT(Fountain):
 			screen = self.get_screen_indexes()
 			n_cases = screen.shape[0]
 		elif isinstance(proposal, numpy.ndarray) and numpy.issubsctype(proposal.dtype, numpy.bool):
-			if proposal.shape != self.h5top.caseids.shape:
-				raise TypeError("Incorrect screen shape, you gave {!s} but this DT has {!s}".format(proposal.shape, self.h5top.caseids.shape))
+			if proposal.shape != self.h5caseids.shape:
+				raise TypeError("Incorrect screen shape, you gave {!s} but this DT has {!s}".format(proposal.shape, self.h5caseids.shape))
 			screen = numpy.nonzero(proposal)[0]
 			n_cases = screen.shape[0]
 		elif isinstance(proposal, numpy.ndarray) and numpy.issubdtype(proposal.dtype, numpy.int):
@@ -597,6 +632,9 @@ class DT(Fountain):
 			command = self._remake_command(v,screen,1)
 			if explain:
 				print("Evaluating:",str(command))
+				if screen is not None:
+					print("    screen type:",type(screen))
+					print("         screen:",screen)
 			try:
 				result[:,varnum] = eval( asterize(command) )
 			except Exception as exc:
@@ -615,9 +653,69 @@ class DT(Fountain):
 		result.vars = vars
 		return result
 
+
+	def dataframe_idco(self, *vars, screen=None, strip_nan=True, explain=False):
+		"""Extract a set of idco values from the DT.
+			
+		Parameters
+		----------
+		vars : tuple of str
+			A tuple (or other iterable) giving the expressions (often column names, but any valid
+			expression works) to extract as :ref:`idco` format variables.
+		screen : None or array of bool or 'None'
+			If given, use this bool array to screen the caseids used to build 
+			the array. If None, the default screen defined in the file is used.
+			Pass the string 'None' to explicitly prevent the use of
+			any screen.
+		strip_nan : bool
+			If True (the default) then NAN values are converted to 0, and INF
+			values are converted to the largest magnitude real number representable
+			in the selected dtype.
+			
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		screen, n_cases = self.process_proposed_screen(screen)
+		n_vars = len(vars)
+		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)
+		result = pandas.DataFrame(index=self.array_caseids(screen))
+		if isinstance(screen, str) and screen=="None":
+			screen = None
+		for varnum,v in enumerate(vars):
+			command = self._remake_command(v,screen,1)
+			if explain:
+				print("Evaluating:",str(command))
+				if screen is not None:
+					print("    screen type:",type(screen))
+					print("         screen:",screen)
+			try:
+				tempvalue = eval( asterize(command) )
+				if tempvalue.dtype.kind=='S':
+					tempvalue = tempvalue.astype(str)
+				result[v] = tempvalue
+			except Exception as exc:
+				args = exc.args
+				if not args:
+					arg0 = ''
+				else:
+					arg0 = args[0]
+				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				exc.args = (arg0,) + args[1:]
+				raise
+			if strip_nan:
+				try:
+					result[v] = numpy.nan_to_num(result[v])
+				except:
+					pass
+		return result
+
+
+
 	def array_weight(self, *, var=None, **kwargs):
 		try:
-			w = self.h5idco._weight_
+			w = self.idco._weight_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idco('1', **kwargs)
 		else:
@@ -764,7 +862,7 @@ class DT(Fountain):
 			summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 
 		if len(summary)>0:
-			summary['# Cases Remaining'][0] = self.h5top.caseids.shape[0] - summary['# Cases Excluded'][0]
+			summary['# Cases Remaining'][0] = self.h5caseids.shape[0] - summary['# Cases Excluded'][0]
 		for rownumber in range(1,len(summary)):
 			summary['# Cases Remaining'][rownumber] = summary['# Cases Remaining'][rownumber-1] - summary['# Cases Excluded'][rownumber]
 
@@ -914,9 +1012,9 @@ class DT(Fountain):
 			elif key=="Allocation":
 				provide[key] = numpy.require(self.array_idco(*req.get_variables(), screen=screen), requirements='C')
 		if screen is None or (isinstance(screen,str) and screen=="None"):
-			provide['caseids'] = numpy.require(self.h5top.caseids[:], requirements='C')
+			provide['caseids'] = numpy.require(self.h5caseids[:], requirements='C')
 		else:
-			provide['caseids'] = numpy.require(self.h5top.caseids[screen], requirements='C')
+			provide['caseids'] = numpy.require(self.h5caseids[screen], requirements='C')
 		if len(provide['caseids'].shape) == 1:
 			provide['caseids'].shape = provide['caseids'].shape + (1,)
 		if m is not None:
@@ -934,7 +1032,7 @@ class DT(Fountain):
 				return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
 
 	def _check_co_natural(self, column):
-		return column in self.h5idco._v_leaves
+		return column in self.idco._v_leaves
 
 	def check_ca(self, column):
 		if self._check_ca_natural(column):
@@ -998,7 +1096,7 @@ class DT(Fountain):
 		return sorted(tuple(i for i in self.h5idca._v_children))
 
 	def variables_co(self):
-		return sorted(tuple(i for i in self.h5idco._v_children))
+		return sorted(tuple(i for i in self.idco._v_children))
 
 
 	def import_db(self, db, ignore_ca=('caseid','altid'), ignore_co=('caseid')):
@@ -1031,7 +1129,7 @@ class DT(Fountain):
 
 		for var_co in vars_co:
 			if var_co not in ignore_co:
-				h5var = self.h5f.create_carray(self.h5idco, var_co, _tb.Float64Atom(), shape=(db.nCases(),), )
+				h5var = self.h5f.create_carray(self.idco._v_node, var_co, _tb.Float64Atom(), shape=(db.nCases(),), )
 				arr, caseids = db.array_idco(var_co)
 				h5var[:] = arr.squeeze()
 
@@ -1065,7 +1163,7 @@ class DT(Fountain):
 
 		wgt = db.queries.weight
 		if wgt:
-			self.h5f.create_soft_link(self.h5idco, '_weight_', target='/larch/idco/'+wgt)
+			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+wgt)
 
 
 
@@ -1329,14 +1427,14 @@ class DT(Fountain):
 			h5altnames.append( alts[an][0] )
 		# Weight
 		if weight:
-			self.h5f.create_soft_link(self.h5idco, '_weight_', target='/larch/idco/'+weight)
+			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+weight)
 		# Choice
 		try:
 			self.choice_idco = {a:aa[2] for a,aa in alts.items()}
 		except IndexError:
 			if choice is not None:
 				self.idco_code_to_idca_dummy(choice, '_choice_', complib=complib, complevel=complevel)
-				self.h5idco._v_attrs.choice_indicator = choice
+				self.idco._v_attrs.choice_indicator = choice
 			else:
 				raise
 		# Avail
@@ -1428,10 +1526,11 @@ class DT(Fountain):
 		
 		
 		def isinstance_(obj, things):
-			try:
-				obj = obj.dereference()
-			except AttributeError:
-				pass
+			obj = _pytables_link_dereference(obj)
+#			try:
+#				obj = obj.dereference()
+#			except AttributeError:
+#				pass
 			return isinstance(obj, things)
 		
 		
@@ -1442,7 +1541,7 @@ class DT(Fountain):
 		## CASEIDS
 		category('CASES')
 		try:
-			caseids_node = self.h5top.caseids
+			caseids_node = self.h5caseids
 			caseids_nodeatom = caseids_node.atom
 			caseids_node_shape = caseids_node.shape
 			caseids_node_dim = len(caseids_node.shape)
@@ -1539,17 +1638,17 @@ class DT(Fountain):
 		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
-					[i for i in self.h5idco._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+					[i for i in self.idco._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
 		
 		idco_child_incorrect_sized = {}
-		for idco_child in self.h5idco._v_children.keys():
-			if isinstance_(self.h5idco._v_children[idco_child], _tb.group.Group):
-				if '_index_' not in self.h5idco._v_children[idco_child] or '_values_' not in self.h5idco._v_children[idco_child]:
+		for idco_child in self.idco._v_children.keys():
+			if isinstance_(self.idco._v_children[idco_child], _tb.group.Group):
+				if '_index_' not in self.idco._v_children[idco_child] or '_values_' not in self.idco._v_children[idco_child]:
 					idco_child_incorrect_sized[idco_child] = 'invalid group'
 			else:
 				try:
-					if self.h5idco._v_children[idco_child].shape[0] != caseids_node_len:
-						idco_child_incorrect_sized[idco_child] = self.h5idco._v_children[idco_child].shape
+					if self.idco._v_children[idco_child].shape[0] != caseids_node_len:
+						idco_child_incorrect_sized[idco_child] = self.idco._v_children[idco_child].shape
 				except:
 					idco_child_incorrect_sized[idco_child] = 'exception'
 		nerrs+= zzz("Every child node in `idco` must be (1) an array node with shape the same as `caseids`, "
@@ -1562,7 +1661,7 @@ class DT(Fountain):
 		## WEIGHT
 		subcategory('Case Weights')
 		try:
-			weightnode = self.h5idco._weight_
+			weightnode = self.idco._weight_
 		except _tb.exceptions.NoSuchNodeError:
 			weightnode = None
 			weightnode_atom = None
@@ -1571,10 +1670,10 @@ class DT(Fountain):
 		nerrs+= zzz("If the cases are to have non uniform weights, then there should a `_weight_` node "
 					"(or a name link to a node) within the `idco` group.",
 					isok if weightnode else None,
-					'_weight_' not in self.h5idco)
+					'_weight_' not in self.idco)
 		nerrs+= zzz("If weights are given, they should be of Float64 dtype.",
 					isok if isinstance(weightnode_atom, _tb.atom.Float64Atom) else "_weight_ dtype is {!s}".format(weightnode_atom),
-					'_weight_' not in self.h5idco)
+					'_weight_' not in self.idco)
 
 
 		## IDCA
@@ -1627,6 +1726,7 @@ class DT(Fountain):
 			_av_exists = False
 			_av_is_array = None
 			_av_atom_bool = None
+			_av_stack = None
 
 		nerrs+= zzz("If there may be some alternatives that are unavailable in some cases, there should "
 					"be a node named `_avail_` under `idca`.",
@@ -1694,7 +1794,7 @@ class DT(Fountain):
 		category('OTHER TECHNICAL DETAILS')
 		nerrs+= zzz("The set of child node names within `idca` and `idco` should not overlap (i.e. "
 					"there should be no node names that appear in both).",
-					set(self.h5idca._v_children.keys()).intersection(self.h5idco._v_children.keys()))
+					set(self.h5idca._v_children.keys()).intersection(self.idco._v_children.keys()))
 		
 		## Bottom line of display
 		log('═════╧'+'═'*74)
@@ -1772,7 +1872,7 @@ class DT(Fountain):
 				if keyword.iskeyword(col):
 					log.warn("  column %s is a python keyword, converting to _%s",col,col)
 					col = "_"+col
-				h5var = self.h5f.create_carray(self.h5idco, col, tb_atom, shape=col_array.shape)
+				h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
 			if caseid_column is not None and 'caseids' in self.h5top:
 				raise LarchError("caseids already exist, not setting new ones")
@@ -1784,16 +1884,16 @@ class DT(Fountain):
 							break
 				if caseid_column not in df.columns:
 					raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
-				proposed_caseids_node = self.h5idco._v_children[caseid_column]
+				proposed_caseids_node = self.idco._v_children[caseid_column]
 				if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
 					col_array = df[caseid_column].values.astype('int64')
 					if not numpy.all(col_array==df[caseid_column].values):
 						raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
-					h5var = self.h5f.create_carray(self.h5idco, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+					h5var = self.h5f.create_carray(self.idco._v_node, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
 					h5var[:] = col_array
 					caseid_column = caseid_column+'_int64'
-					proposed_caseids_node = self.h5idco._v_children[caseid_column]
-				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.h5idco._v_pathname+'/'+caseid_column)
+					proposed_caseids_node = self.idco._v_children[caseid_column]
+				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.idco._v_pathname+'/'+caseid_column)
 			if caseid_column is None and 'caseids' not in self.h5top:
 				h5var = self.h5f.create_carray(self.h5top, 'caseids', obj=numpy.arange(1, len(df)+1, dtype=numpy.int64))
 		except:
@@ -1855,7 +1955,7 @@ class DT(Fountain):
 		if 'caseids' not in self.h5top:
 			self.h5f.create_carray(self.h5top, 'caseids', obj=caseids)
 		else:
-			if not numpy.all(caseids==self.h5top.caseids[:]):
+			if not numpy.all(caseids==self.h5caseids[:]):
 				raise LarchError ('caseids exist but do not match the imported data')
 
 		alt_labels = None
@@ -1952,7 +2052,7 @@ class DT(Fountain):
 		result, arr, av = self.check_if_idca_is_idco(idca_var, return_data=True)
 		if result:
 			newarr = numpy.nanmean(arr, axis=1)
-			self.h5f.create_carray(self.h5idco, idca_var, obj=newarr)
+			self.h5f.create_carray(self.idco._v_node, idca_var, obj=newarr)
 			self.h5idca._v_children[idca_var]._f_remove()
 
 	def new_idco(self, name, expression, dtype=numpy.float64, overwrite=False):
@@ -1989,7 +2089,7 @@ class DT(Fountain):
 		data = self.array_idco(expression, screen="None", dtype=dtype).reshape(-1)
 		if overwrite:
 			self.delete_data(name)
-		self.h5f.create_carray(self.h5idco, name, obj=data)
+		self.h5f.create_carray(self.idco._v_node, name, obj=data)
 
 	def new_idco_from_array(self, name, arr):
 		"""Create a new :ref:`idco` variable.
@@ -2010,9 +2110,9 @@ class DT(Fountain):
 		tables.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
-		if self.h5top.caseids.shape != arr.shape:
-			raise TypeError("new idco array must have shape {!s}".format(self.h5top.caseids.shape))
-		self.h5f.create_carray(self.h5idco, name, obj=arr)
+		if self.h5caseids.shape != arr.shape:
+			raise TypeError("new idco array must have shape {!s}".format(self.h5caseids.shape))
+		self.h5f.create_carray(self.idco._v_node, name, obj=arr)
 
 	def new_idca(self, name, expression):
 		"""Create a new :ref:`idca` variable.
@@ -2047,6 +2147,29 @@ class DT(Fountain):
 			data = expression
 		self.h5f.create_carray(self.h5idca, name, obj=data)
 
+	def new_idca_from_array(self, name, arr):
+		"""Create a new :ref:`idca` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		If you create an array externally, you can add it to the file easily with
+		this command.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idca` variable.
+		arr : array
+			An array to add as the new variable.  Must have the correct shape.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name already exists.
+		"""
+		if self.h5caseids.shape[0] != arr.shape[0]:
+			raise TypeError("new idca array must have shape with {!s} cases".format(self.h5caseids.shape))
+		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
+
 
 	def delete_data(self, name):
 		"""Delete an existing :ref:`idca` or :ref:`idco` variable.
@@ -2060,12 +2183,12 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 		try:
-			self.h5f.remove_node(self.h5idco, name)
+			self.h5f.remove_node(self.idco._v_node, name)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 
 
-	def export_idco(self, file, **formats):
+	def export_idco(self, file, varnames=None, **formats):
 		'''Export the :ref:`idco` data to a csv file.
 		
 		Only the :ref:`idco` table is exported, the :ref:`idca` table is ignored.  Future versions
@@ -2077,6 +2200,8 @@ class DT(Fountain):
 		file : str or file-like
 			If a string, this is the file name to give to the `open` command. Otherwise,
 			this object is passed to :class:`csv.writer` directly.
+		varnames : sequence of str, or None
+			The variables to export.  If None, all regular variables are exported.
 			
 		Notes
 		-----
@@ -2084,7 +2209,16 @@ class DT(Fountain):
 		:meth:`pandas.DataFrame.to_csv`. Any keyword
 		arguments not listed here are passed through to the writer.
 		'''
-		data = self.dataframe_idco(*self.variables_co(), screen="None")
+		if varnames is None:
+			data = self.dataframe_idco(*self.variables_co(), screen="None")
+		else:
+			data = self.dataframe_idco(*varnames, screen="None")
+		try:
+			if os.path.splitext(file)[1] == '.gz':
+				if 'compression' not in formats:
+					formats['compression'] = 'gzip'
+		except:
+			pass
 		data.to_csv(file, index_label='caseid', **formats)
 	
 
@@ -2302,7 +2436,7 @@ class DT(Fountain):
 	@property
 	def namespace(self):
 		space = {}
-		space.update(self.h5idco._v_children.iteritems())
+		space.update(self.idco._v_children.iteritems())
 		space.update(self.h5idca._v_children.iteritems())
 		space.update({i:self.expr[i] for i in self.expr})
 		return space
@@ -2370,7 +2504,7 @@ class DT(Fountain):
 
 		# Choice
 		try:
-			ch_ind = self.h5idco._v_attrs.choice_indicator
+			ch_ind = self.idco._v_attrs.choice_indicator
 		except AttributeError:
 			alo.write( "\n\n- Choice: not given here\n")
 		else:
@@ -2443,7 +2577,7 @@ class DT(Fountain):
 		for name in names:
 			print("analyzing",name)
 			try:
-				ss = statistical_summary.compute(self.h5idco._v_children[name][:])
+				ss = statistical_summary.compute(self.idco._v_children[name][:])
 			except:
 				means += ['err',]
 				stdevs += ['err',]
@@ -2585,10 +2719,11 @@ class DT_idco_stack_manager:
 
 	def _check(self):
 		def isinstance_(obj, things):
-			try:
-				obj = obj.dereference()
-			except AttributeError:
-				pass
+			obj = _pytables_link_dereference(obj)
+#			try:
+#				obj = obj.dereference()
+#			except AttributeError:
+#				pass
 			return isinstance(obj, things)
 		if isinstance_(self.parent.h5idca._v_children[self.stacktype], _tb.Array):
 			raise TypeError('The {} is an array, not a stack.'.format(self.stacktype))
@@ -2597,10 +2732,11 @@ class DT_idco_stack_manager:
 
 	def _make_zeros(self):
 		def isinstance_(obj, things):
-			try:
-				obj = obj.dereference()
-			except AttributeError:
-				pass
+			obj = _pytables_link_dereference(obj)
+#			try:
+#				obj = obj.dereference()
+#			except AttributeError:
+#				pass
 			return isinstance(obj, things)
 		try:
 			if isinstance_(self.parent.h5idca._v_children[self.stacktype], _tb.Array):

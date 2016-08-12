@@ -40,13 +40,21 @@ def _uniques(self, slicer=None, counts=False):
 		return pandas.Series(x[1],x[0])
 	return numpy.unique(self[slicer])
 
+def _pytables_link_dereference(i):
+	if isinstance(i, tables.link.ExternalLink):
+		i = i()
+	if isinstance(i, tables.link.SoftLink):
+		i = i.dereference()
+	return i
+
 
 class GroupNode():
 	def __init__(self, parentnode, name=None, *arg, **kwarg):
 		if name is None:
 			name = parentnode._v_name
 			parentnode = parentnode._v_parent
-		super().__setattr__('_v_node', parentnode._v_file.get_node(parentnode, name))
+		n = _pytables_link_dereference(parentnode._v_file.get_node(parentnode, name))
+		super().__setattr__('_v_node', n)
 	def __getattr__(self, attr):
 		try:
 			if attr=='_v_node':
