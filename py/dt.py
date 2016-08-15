@@ -2422,17 +2422,69 @@ class DT(Fountain):
 
 
 	def info(self, log=print):
-		log("Variables:")
-		log("  idco:")
+		v_names = []
+		v_dtypes = []
+		v_ftypes = []
+		v_filenames = []
 		for i in sorted(self.variables_co()):
-			log("    {}".format(i))
-		log("  idca:")
+			v_names.append(str(i))
+			if isinstance(self.idco[i], _tb.Group):
+				v_dtypes.append(str(self.idco[i]._values_.dtype))
+			else:
+				v_dtypes.append(str(self.idco[i].dtype))
+			v_ftypes.append('idco')
+			v_filenames.append(self.idco[i]._v_file.filename)
 		for i in sorted(self.variables_ca()):
-			log("    {}".format(i))
+			v_names.append(str(i))
+			if isinstance(self.idca[i], _tb.Group):
+				v_dtypes.append(str(self.idca[i]._values_.dtype))
+			else:
+				v_dtypes.append(str(self.idca[i].dtype))
+			v_ftypes.append('idca')
+			v_filenames.append(self.idca[i]._v_file.filename)
+		section = None
+		max_v_name_len = 8
+		for v_name in v_names:
+			if len(v_name) > max_v_name_len:
+				max_v_name_len = len(v_name)
+		max_v_dtype_len = 7
+		for v_dtype in v_dtypes:
+			if len(v_dtype) > max_v_dtype_len:
+				max_v_dtype_len = len(v_dtype)
+		selfname = self.h5f.filename
+		show_filenames = False
+		for v_filename in v_filenames:
+			if v_filename!=selfname:
+				show_filenames = True
+				break
+		show_filenames = True
+		## Header
+		if not show_filenames:
+			log("----{0}\t{1}".format("-"*max_v_name_len, "-"*max_v_dtype_len))
+			log("    {1:{0}s}\t{3:{2}s}".format(max_v_name_len, "VARIABLE", max_v_dtype_len, "DTYPE"))
+			log("----{0}\t{1}".format("-"*max_v_name_len, "-"*max_v_dtype_len))
+		else:
+			log("----{0}\t{1}\t{2}".format("-"*max_v_name_len, "-"*max_v_dtype_len, "-"*12))
+			log("    {1:{0}s}\t{3:{2}s}\t{4}".format(max_v_name_len, "VARIABLE", max_v_dtype_len, "DTYPE", "FILE"))
+			log("----{0}\t{1}\t{2}".format("-"*max_v_name_len, "-"*max_v_dtype_len, "-"*12))
+		## Content
+		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
+			if v_ftype != section:
+				log("  {}:".format(v_ftype))
+				section = v_ftype
+			if not show_filenames:
+				log("    {1:{0}s}\t{3:{2}s}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype))
+			else:
+				log("    {1:{0}s}\t{3:{2}s}\t{4}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype, v_filename))
 		if len(self.expr):
 			log("Expr:")
 			for i in self.expr:
 				log("    {}".format(i))
+		## Footer
+		if not show_filenames:
+			log("----{0}\t{1}".format("-"*max_v_name_len, "-"*max_v_dtype_len))
+		else:
+			log("----{0}\t{1}\t{2}".format("-"*max_v_name_len, "-"*max_v_dtype_len, "-"*12))
 
 
 	@property
