@@ -38,3 +38,23 @@ class DataManager:
 
 	def needs(self):
 		return dictal(self._model.needs())
+
+
+
+class WorkspaceManager:
+	"""Manages computational arrays for a :class:`Model`."""
+
+	def __init__(self, model):
+		self._model = model
+
+	@property
+	def probability(self):
+		return self._model.Probability()
+
+	@property
+	def utility(self):
+		if m.Utility().shape == (0,):
+			raise TypeError("this model did not allocate a seperate utility computational array")
+		return self._model.Utility()
+
+

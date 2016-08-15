@@ -86,6 +86,12 @@ class AbstractReportTable():
 			self.n_thead_rows = 1
 		self.df = temp
 
+	@classmethod
+	def FromDataFrame(cls, *arg, title=None, short_title=None, **kwarg):
+		x = cls(title=title, short_title=short_title)
+		x.from_dataframe(*arg, **kwarg)
+		return x
+
 	def add_blank_row(self):
 		self.df.loc[len(self.df)] = None
 		self._col_width = None

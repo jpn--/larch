@@ -48,7 +48,7 @@ def _pytables_link_dereference(i):
 	return i
 
 
-class GroupNode():
+class GroupNodeV1():
 	def __init__(self, parentnode, name=None, *arg, **kwarg):
 		if name is None:
 			name = parentnode._v_name
@@ -82,4 +82,90 @@ class GroupNode():
 		return self.__getattr__(key)
 	def __setitem__(self, key, value):
 		return self.__setattr__(key,value)
+
+
+
+
+def _get_children_including_extern(node):
+	kids = set(node._v_children.keys())
+	extern_n = 1
+	while "_extern_{}".format(extern_n) in kids:
+		extern_deref = _pytables_link_dereference(node._v_children["_extern_{}".format(extern_n)])
+		kids.remove("_extern_{}".format(extern_n))
+		kids |= _get_children_including_extern(extern_deref)
+		extern_n += 1
+	return kids
+
+
+
+class GroupNode():
+	def __init__(self, parentnode, name=None, *arg, **kwarg):
+		if name is None:
+			name = parentnode._v_name
+			parentnode = parentnode._v_parent
+		n = _pytables_link_dereference(parentnode._v_file.get_node(parentnode, name))
+		super().__setattr__('_v_node', n)
+	def __getattr__(self, attr):
+		if attr=='_v_node':
+			return super().__getattr__('_v_node')
+		extern_did_you_mean_list = set()
+		try:
+			try:
+				x = getattr(self._v_node, attr)
+			except tables.exceptions.NoSuchNodeError:
+				extern_n = 1
+				while True:
+					if "_extern_{}".format(extern_n) not in self._v_node:
+						raise
+					extern_deref = _pytables_link_dereference(self._v_node._v_children["_extern_{}".format(extern_n)])
+					if attr in extern_deref:
+						x = getattr(extern_deref, attr)
+						break
+					else:
+						extern_did_you_mean_list |= extern_deref._v_children.keys()
+					extern_n += 1
+		except tables.exceptions.NoSuchNodeError as err:
+			from larch.util.text_manip import case_insensitive_close_matches
+			did_you_mean_list = case_insensitive_close_matches(attr, self._v_node._v_children.keys()|extern_did_you_mean_list)
+			if len(did_you_mean_list)>0:
+				did_you_mean = str(err)+"\nDid you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
+				raise tables.exceptions.NoSuchNodeError(did_you_mean) from None
+			raise
+		if len(attr)<=3 or attr[0]!='_' or attr[2]!='_':
+			x.uniques = types.MethodType( _uniques, x )
+		return _pytables_link_dereference(x)
+	def __setattr__(self, attr, val):
+		return setattr(self._v_node, attr, val)
+	def __contains__(self, arg):
+		if self._v_node.__contains__(arg):
+			return True
+		extern_n = 1
+		while "_extern_{}".format(extern_n) in self._v_node._v_children:
+			extern_deref = _pytables_link_dereference(self._v_node._v_children["_extern_{}".format(extern_n)])
+			if arg in _get_children_including_extern(extern_deref):
+				return True
+			extern_n += 1
+		return False
+	def __str__(self, *arg, **kwarg):
+		return self._v_node.__str__(*arg, **kwarg)
+	def __repr__(self, *arg, **kwarg):
+		return self._v_node.__repr__(*arg, **kwarg)
+	def __getitem__(self, key):
+		return self.__getattr__(key)
+	def __setitem__(self, key, value):
+		return self.__setattr__(key,value)
+	@property
+	def _v_children_keys_including_extern(self):
+		return _get_children_including_extern(self)
+
+	def add_external_data(self, link):
+		if ":/" not in link:
+			raise TypeError("must give link as filename:/path/to/node")
+		extern_n = 1
+		while '_extern_{}'.format(extern_n) in self._v_node:
+			extern_n += 1
+		self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
+
+
+
 

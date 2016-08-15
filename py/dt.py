@@ -22,6 +22,7 @@ from .util.aster import asterize
 import keyword
 import pandas
 import os
+from .util.groupnode import GroupNode
 
 class IncompatibleShape(LarchError):
 	pass
@@ -218,11 +219,11 @@ class DT(Fountain):
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/expr' does not exist and cannot be created".format(ipath))
 		self.expr = LocalAttributeSet(self.h5top.expr)
-		self._refresh_alts()
 		# helper for data access
-		from .util.groupnode import GroupNode
 		self.idco = GroupNode(self.h5top, 'idco')
 		self.idca = GroupNode(self.h5top, 'idca')
+		self.alts = GroupNode(self.h5top, 'alts')
+		self._refresh_alts()
 
 
 	def __del__(self):
@@ -253,6 +254,12 @@ class DT(Fountain):
 		return self.h5f.create_soft_link(*arg, **kwargs)
 	def flush(self, *arg, **kwargs):
 		return self.h5f.flush(*arg, **kwargs)
+
+	def remove_node_if_exists(self, *arg, **kwargs):
+		try:
+			return self.h5f.remove_node(*arg, **kwargs)
+		except _tb.exceptions.NoSuchNodeError:
+			return
 
 	def get_or_create_group(self, where, name=None, title='', filters=None, createparents=False):
 		try:
@@ -285,14 +292,17 @@ class DT(Fountain):
 		return False
 
 	def _is_mapped_larch_array(self, where, name=None):
-		where1 = _pytables_link_dereference(where)
-		try:
-			n = self.h5f.get_node(where1, name)
-		except _tb.exceptions.NoSuchNodeError:
-			if name in where1:
-				n = where1._v_children[name]
-			else:
-				raise
+		if isinstance(where, GroupNode):
+			n = where[name]
+		else:
+			where1 = _pytables_link_dereference(where)
+			try:
+				n = self.h5f.get_node(where1, name)
+			except _tb.exceptions.NoSuchNodeError:
+				if name in where1:
+					n = where1._v_children[name]
+				else:
+					raise
 		n = _pytables_link_dereference(n)
 #		try:
 #			n = n.dereference()
@@ -305,13 +315,13 @@ class DT(Fountain):
 
 	def _alternative_codes(self):
 		try:
-			return self.h5alts.altids[:]
+			return self.alts.altids[:]
 		except _tb.exceptions.NoSuchNodeError:
 			return numpy.empty(0, dtype=numpy.int64)
 
 	def _alternative_names(self):
 		try:
-			return self.h5alts.names[:]
+			return self.alts.names[:]
 		except _tb.exceptions.NoSuchNodeError:
 			return numpy.empty(0, dtype=str)
 
@@ -330,21 +340,15 @@ class DT(Fountain):
 			raise KeyError('code {} not found'.format(code))
 
 	def set_alternatives(self, altids, alt_labels=None):
-		try:
-			self.h5f.remove_node(self.h5alts, 'altids')
-		except _tb.exceptions.NoSuchNodeError:
-			pass
-		try:
-			self.h5f.remove_node(self.h5alts, 'names')
-		except _tb.exceptions.NoSuchNodeError:
-			pass
+		self.remove_node_if_exists(self.alts._v_node, 'altids')
+		self.remove_node_if_exists(self.alts._v_node, 'names')
 		# Make new ones
 		altids = numpy.asarray(altids)
 		if altids.dtype != numpy.int64:
 			from .util.arraytools import labels_to_unique_ids
 			alt_labels, altids = labels_to_unique_ids(altids)
-		h5altids = self.h5f.create_carray(self.h5alts, 'altids', obj=altids, title='elemental alternative code numbers')
-		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+		h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', obj=altids, title='elemental alternative code numbers')
+		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
 		if alt_labels is None:
 			alt_labels = ["a{}".format(a) for a in altids]
 		for an in alt_labels:
@@ -352,14 +356,14 @@ class DT(Fountain):
 
 	def alternative_codes(self):
 		try:
-			q = self.h5alts.altids[:]
+			q = self.alts.altids[:]
 			return tuple(int(i) for i in q)
 		except _tb.exceptions.NoSuchNodeError:
 			return ()
 
 	def alternative_names(self):
 		try:
-			q = self.h5alts.names[:]
+			q = self.alts.names[:]
 			return tuple(str(i) for i in q)
 		except _tb.exceptions.NoSuchNodeError:
 			return ()
@@ -367,21 +371,21 @@ class DT(Fountain):
 	def alternative_name(self, code):
 		codes = self._alternative_codes()
 		idx = numpy.where(codes==code)[0][0]
-		return self.h5alts.names[idx]
+		return self.alts.names[idx]
 
 	def alternative_code(self, name):
 		names = self._alternative_names()
 		idx = numpy.where(names==name)[0][0]
-		return self.h5alts.altids[idx]
+		return self.alts.altids[idx]
 
 	def caseids(self):
-		return self.h5top.caseids[:]
+		return _pytables_link_dereference(self.h5top.caseids)[:]
 
 	def array_caseids(self, screen=None):
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
-			return self.h5top.caseids[:]
-		return self.h5top.caseids[screen]
+			return _pytables_link_dereference(self.h5top.caseids)[:]
+		return _pytables_link_dereference(self.h5top.caseids)[screen]
 
 	@property
 	def caseindexes(self):
@@ -411,7 +415,7 @@ class DT(Fountain):
 			return int(self.h5caseids.shape[0])
 
 	def nAlts(self):
-		return int(self.h5alts.altids.shape[0])
+		return int(self.alts.altids.shape[0])
 
 
 	def _remake_command(self, cmd, screen, dims):
@@ -431,14 +435,14 @@ class DT(Fountain):
 		g = tokenize(BytesIO(cmd_encode).readline)
 		screen_token = COLON if screen is None else (NAME, 'screen')
 		for toknum, tokval, _, _, _  in g:
-			if toknum == NAME and tokval in self.h5idca:
+			if toknum == NAME and tokval in self.idca:
 				if dims==1:
 					raise IncompatibleShape("cannot use idca.{} in an idco expression".format(tokval))
-				if self._is_mapped_larch_array(self.h5idca, tokval):
+				if self._is_mapped_larch_array(self.idca, tokval):
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+					partial = [ (NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
 								OBRAC,
-								(NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
+								(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
 								CBRAC, OBRAC, screen_token,]
 					if dims>1:
 						partial += [COMMA,COLON,]
@@ -446,13 +450,13 @@ class DT(Fountain):
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'h5idca'), DOT, (NAME, tokval), OBRAC, screen_token,]
+					partial = [ (NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), OBRAC, screen_token,]
 					if dims>1:
 						partial += [COMMA,COLON,]
 					partial += [CBRAC, ]
 					recommand.extend(partial)
 			elif toknum == NAME and tokval in self.idco:
-				if self._is_mapped_larch_array(self.idco._v_node, tokval):
+				if self._is_mapped_larch_array(self.idco, tokval):
 					# replace NAME tokens
 					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
 								OBRAC,
@@ -471,13 +475,13 @@ class DT(Fountain):
 				partial = [ (NAME, 'self'), DOT, (NAME, 'expr'), DOT, (NAME, tokval), ]
 				recommand.extend(partial)
 			elif toknum == NAME and tokval in ('caseid','caseids'):
-				partial = [ (NAME, 'self'), DOT, (NAME, 'h5top'), DOT, (NAME, 'caseids'), OBRAC,screen_token,CBRAC, ]
+				partial = [ (NAME, 'self'), DOT, (NAME, 'h5caseids'), OBRAC,screen_token,CBRAC, ]
 				recommand.extend(partial)
 			elif toknum == NAME and tokval in ('caseindex','caseindexes'):
 				partial = [ (NAME, 'self'), DOT, (NAME, 'caseindexes'), OBRAC,screen_token,CBRAC, ]
 				recommand.extend(partial)
 			elif toknum == NAME and tokval in ('altids',):
-				partial = [ (NAME, 'self'), DOT, (NAME, 'h5alts'), DOT, (NAME, 'altids'), OBRAC,screen_token,CBRAC, ]
+				partial = [ (NAME, 'self'), DOT, (NAME, 'alts'), DOT, (NAME, 'altids'), OBRAC,screen_token,CBRAC, ]
 				recommand.extend(partial)
 			else:
 				recommand.append((toknum, tokval))
@@ -564,8 +568,8 @@ class DT(Fountain):
 				try:
 					result[:,:,varnum] = eval( asterize(command) )
 				except TypeError as type_err:
-					if v in self.h5idca._v_children and isinstance(self.h5idca._v_children[v], _tb.Group):
-						stacktuple = self.h5idca._v_children[v]._v_attrs.stack
+					if v in self.idca._v_children and isinstance(self.idca._v_children[v], _tb.Group):
+						stacktuple = self.idca._v_children[v]._v_attrs.stack
 						result[:,:,varnum] = self.array_idco(*stacktuple, screen=screen, strip_nan=strip_nan)
 					else:
 						raise
@@ -724,18 +728,18 @@ class DT(Fountain):
 			return self.array_idco('_weight_', **kwargs)
 
 	def array_choice(self, **kwargs):
-		if isinstance(self.h5idca._choice_, _tb.Group):
-			stacktuple = self.h5idca._choice_._v_attrs.stack
+		if isinstance(self.idca._choice_, _tb.Group):
+			stacktuple = self.idca._choice_._v_attrs.stack
 			return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
 		return self.array_idca('_choice_', **kwargs)
 
 	def array_avail(self, *, var=None, dtype=numpy.bool_, **kwargs):
 		try:
-			av = self.h5idca._avail_
+			av = self.idca._avail_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idca('1', dtype=dtype, **kwargs)
-		if isinstance(self.h5idca._avail_, _tb.Group):
-			stacktuple = self.h5idca._avail_._v_attrs.stack
+		if isinstance(self.idca._avail_, _tb.Group):
+			stacktuple = self.idca._avail_._v_attrs.stack
 			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
@@ -1026,10 +1030,10 @@ class DT(Fountain):
 
 
 	def _check_ca_natural(self, column):
-		if column in self.h5idca._v_leaves:
+		if column in self.idca._v_leaves:
 			return True
-		if column in self.h5idca._v_children:
-			colnode = self.h5idca._v_children[column]
+		if column in self.idca._v_children:
+			colnode = self.idca._v_children[column]
 			if isinstance(colnode, _tb.Group) and 'stack' in colnode._v_attrs:
 				return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
 
@@ -1095,10 +1099,10 @@ class DT(Fountain):
 					self.multi_check_co(b)
 
 	def variables_ca(self):
-		return sorted(tuple(i for i in self.h5idca._v_children))
+		return sorted(tuple(i for i in self.idca._v_children_keys_including_extern))
 
 	def variables_co(self):
-		return sorted(tuple(i for i in self.idco._v_children))
+		return sorted(tuple(i for i in self.idco._v_children_keys_including_extern))
 
 
 	def import_db(self, db, ignore_ca=('caseid','altid'), ignore_co=('caseid')):
@@ -1125,7 +1129,7 @@ class DT(Fountain):
 
 		for var_ca in vars_ca:
 			if var_ca not in ignore_ca:
-				h5var = self.h5f.create_carray(self.h5idca, var_ca, _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
+				h5var = self.h5f.create_carray(self.idca._v_node, var_ca, _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
 				arr, caseids = db.array_idca(var_ca)
 				h5var[:,:] = arr.squeeze()
 
@@ -1141,25 +1145,25 @@ class DT(Fountain):
 		h5scrn = self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(db.nCases(),), )
 		h5scrn[:] = True
 
-		h5altids = self.h5f.create_carray(self.h5alts, 'altids', _tb.Int64Atom(), shape=(db.nAlts(),), title='elemental alternative code numbers')
+		h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', _tb.Int64Atom(), shape=(db.nAlts(),), title='elemental alternative code numbers')
 		h5altids[:] = db.alternative_codes()
 
-		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
 		for an in db.alternative_names():
 			h5altnames.append( an )
 		
 		if isinstance(db.queries.avail, (dict, IntStringDict)):
 			self.avail_idco = dict(db.queries.avail)
 		else:
-			h5avail = self.h5f.create_carray(self.h5idca, '_avail_', _tb.BoolAtom(), shape=(db.nCases(), db.nAlts()), )
+			h5avail = self.h5f.create_carray(self.idca._v_node, '_avail_', _tb.BoolAtom(), shape=(db.nCases(), db.nAlts()), )
 			arr, caseids = db.array_avail()
 			h5avail[:,:] = arr.squeeze()
 
 		try:
 			ch_ca = db.queries.get_choice_ca()
-			self.h5f.create_soft_link(self.h5idca, '_choice_', target='/larch/idca/'+ch_ca)
+			self.h5f.create_soft_link(self.idca._v_node, '_choice_', target='/larch/idca/'+ch_ca)
 		except AttributeError:
-			h5ch = self.h5f.create_carray(self.h5idca, '_choice_', _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
+			h5ch = self.h5f.create_carray(self.idca._v_node, '_choice_', _tb.Float64Atom(), shape=(db.nCases(), db.nAlts()), )
 			arr, caseids = db.array_choice()
 			h5ch[:,:] = arr.squeeze()
 
@@ -1354,11 +1358,11 @@ class DT(Fountain):
 		ch_array = numpy.zeros((self.nCases(), len(self._alternative_codes())), dtype=numpy.float64)
 		ch_array[numpy.arange(ch_array.shape[0]),choices.squeeze()] = 1
 		try:
-			self.h5f.remove_node(self.h5idca, newvarname)
+			self.h5f.remove_node(self.idca._v_node, newvarname)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 		
-		h5ch = self.h5f.create_carray(self.h5idca, newvarname, obj=ch_array,
+		h5ch = self.h5f.create_carray(self.idca._v_node, newvarname, obj=ch_array,
 					filters=_tb.Filters(complevel=complevel, complib=complib))
 
 
@@ -1421,10 +1425,10 @@ class DT(Fountain):
 
 		altscodes_seq = sorted(alts)
 
-		h5altids = self.h5f.create_carray(self.h5alts, 'altids', _tb.Int64Atom(), shape=(len(alts),), filters=h5filters, title='elemental alternative code numbers')
+		h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', _tb.Int64Atom(), shape=(len(alts),), filters=h5filters, title='elemental alternative code numbers')
 		h5altids[:] = numpy.asarray(altscodes_seq)
 
-		h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
+		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
 		for an in altscodes_seq:
 			h5altnames.append( alts[an][0] )
 		# Weight
@@ -1685,22 +1689,22 @@ class DT(Fountain):
 		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
-					[i for i in self.h5idca._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
+					[i for i in self.idca._v_children.keys() if not i.isidentifier() or keyword.iskeyword(i)])
 
 		idca_child_incorrect_sized = {}
-		for idca_child in self.h5idca._v_children.keys():
-			if isinstance_(self.h5idca._v_children[idca_child], _tb.group.Group):
-				if '_index_' not in self.h5idca._v_children[idca_child] or '_values_' not in self.h5idca._v_children[idca_child]:
-					if 'stack' not in self.h5idca._v_children[idca_child]._v_attrs:
+		for idca_child in self.idca._v_children.keys():
+			if isinstance_(self.idca._v_children[idca_child], _tb.group.Group):
+				if '_index_' not in self.idca._v_children[idca_child] or '_values_' not in self.idca._v_children[idca_child]:
+					if 'stack' not in self.idca._v_children[idca_child]._v_attrs:
 						idca_child_incorrect_sized[idca_child] = 'invalid group'
 				else:
-					if self.h5idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
-						idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child]._values_.shape
+					if self.idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
+						idca_child_incorrect_sized[idca_child] = self.idca._v_children[idca_child]._values_.shape
 			else:
 				try:
-					if self.h5idca._v_children[idca_child].shape[0] != caseids_node_len or \
-					   self.h5idca._v_children[idca_child].shape[1] != altids_node_len:
-						idca_child_incorrect_sized[idca_child] = self.h5idca._v_children[idca_child].shape
+					if self.idca._v_children[idca_child].shape[0] != caseids_node_len or \
+					   self.idca._v_children[idca_child].shape[1] != altids_node_len:
+						idca_child_incorrect_sized[idca_child] = self.idca._v_children[idca_child].shape
 				except:
 					idca_child_incorrect_sized[idca_child] = 'exception'
 		nerrs+= zzz("Every child node in `idca` must be (1) an array node with the first dimension the "
@@ -1713,15 +1717,15 @@ class DT(Fountain):
 					idca_child_incorrect_sized)
 
 		subcategory('Alternative Availability')
-		if '_avail_' in self.h5idca:
+		if '_avail_' in self.idca:
 			_av_exists = True
-			_av_is_array = isinstance_(self.h5idca._avail_, _tb.array.Array)
+			_av_is_array = isinstance_(self.idca._avail_, _tb.array.Array)
 			if _av_is_array:
-				_av_atom_bool = isinstance(self.h5idca._avail_.atom, _tb.atom.BoolAtom)
+				_av_atom_bool = isinstance(self.idca._avail_.atom, _tb.atom.BoolAtom)
 			else:
 				_av_atom_bool = None
 				try:
-					_av_stack = self.h5idca._avail_._v_attrs.stack
+					_av_stack = self.idca._avail_._v_attrs.stack
 				except:
 					_av_stack = None
 		else:
@@ -1752,16 +1756,16 @@ class DT(Fountain):
 						not _av_exists)
 
 		subcategory('Chosen Alternatives')
-		if '_choice_' in self.h5idca:
+		if '_choice_' in self.idca:
 			_ch_exists = True
-			_ch_is_array = isinstance_(self.h5idca._choice_, _tb.array.Array)
+			_ch_is_array = isinstance_(self.idca._choice_, _tb.array.Array)
 			if _ch_is_array:
-				_ch_atom_float = isinstance(self.h5idca._choice_.atom, _tb.atom.Float64Atom)
+				_ch_atom_float = isinstance(self.idca._choice_.atom, _tb.atom.Float64Atom)
 				_ch_stack = None
 			else:
 				_ch_atom_float = None
 				try:
-					_ch_stack = self.h5idca._choice_._v_attrs.stack
+					_ch_stack = self.idca._choice_._v_attrs.stack
 				except:
 					_ch_stack = None
 		else:
@@ -1796,7 +1800,7 @@ class DT(Fountain):
 		category('OTHER TECHNICAL DETAILS')
 		nerrs+= zzz("The set of child node names within `idca` and `idco` should not overlap (i.e. "
 					"there should be no node names that appear in both).",
-					set(self.h5idca._v_children.keys()).intersection(self.idco._v_children.keys()))
+					set(self.idca._v_children.keys()).intersection(self.idco._v_children.keys()))
 		
 		## Bottom line of display
 		log('═════╧'+'═'*74)
@@ -1961,23 +1965,23 @@ class DT(Fountain):
 				raise LarchError ('caseids exist but do not match the imported data')
 
 		alt_labels = None
-		if 'altids' not in self.h5alts:
+		if 'altids' not in self.alts:
 			if altids.dtype != numpy.int64:
 				from .util.arraytools import labels_to_unique_ids
 				alt_labels, altids = labels_to_unique_ids(altids)
-			h5altids = self.h5f.create_carray(self.h5alts, 'altids', obj=altids, title='elemental alternative code numbers')
+			h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', obj=altids, title='elemental alternative code numbers')
 		else:
-			if not numpy.all(numpy.in1d(altids, self.h5alts.altids[:], True)):
+			if not numpy.all(numpy.in1d(altids, self.alts.altids[:], True)):
 				raise LarchError ('altids exist but do not match the imported data')
 			else:
-				altids = self.h5alts.altids[:]
-		if 'names' not in self.h5alts:
-			h5altnames = self.h5f.create_vlarray(self.h5alts, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+				altids = self.alts.altids[:]
+		if 'names' not in self.alts:
+			h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
 			if alt_labels is not None:
 				for an in alt_labels:
 					h5altnames.append( str(an) )
 			else:
-				for an in self.h5alts.altids[:]:
+				for an in self.alts.altids[:]:
 					h5altnames.append( 'a'+str(an) )
 
 		caseidmap = {i:n for n,i in enumerate(caseids)}
@@ -2001,9 +2005,9 @@ class DT(Fountain):
 				force_float_columns[col] = numpy.float64
 			else:
 				atom_dtype = _tb.Atom.from_dtype(colreader[col].dtype)
-			h5arr[col] = self.h5f.create_carray(self.h5idca, col, atom_dtype, shape=(caseids.shape[0], altids.shape[0]))
+			h5arr[col] = self.h5f.create_carray(self.idca._v_node, col, atom_dtype, shape=(caseids.shape[0], altids.shape[0]))
 		if '_present_' not in colreader.columns:
-			h5arr['_present_'] = self.h5f.create_carray(self.h5idca, '_present_', _tb.atom.BoolAtom(), shape=(caseids.shape[0], altids.shape[0]))
+			h5arr['_present_'] = self.h5f.create_carray(self.idca._v_node, '_present_', _tb.atom.BoolAtom(), shape=(caseids.shape[0], altids.shape[0]))
 
 		try:
 			filepath_or_buffer.seek(0)
@@ -2027,21 +2031,21 @@ class DT(Fountain):
 			self._altidmap = altidmap
 			raise
 		
-		self.h5f.create_soft_link(self.h5idca, '_avail_', target=self.h5idca._v_pathname+'/_present_')
+		self.h5f.create_soft_link(self.idca._v_node, '_avail_', target=self.idca._v_node._v_pathname+'/_present_')
 
 		if choice_col:
-			if isinstance(self.h5idca._v_children[choice_col].atom, _tb.atom.Float64Atom):
-				self.h5f.create_soft_link(self.h5idca, '_choice_', target=self.h5idca._v_pathname+'/'+choice_col)
+			if isinstance(self.idca._v_children[choice_col].atom, _tb.atom.Float64Atom):
+				self.h5f.create_soft_link(self.idca._v_node, '_choice_', target=self.idca._v_pathname+'/'+choice_col)
 			else:
-				self.h5f.create_carray(self.h5idca, '_choice_', obj=self.h5idca._v_children[choice_col][:].astype('Float64'))
+				self.h5f.create_carray(self.idca._v_node, '_choice_', obj=self.idca._v_children[choice_col][:].astype('Float64'))
 
 
 	def check_if_idca_is_idco(self, idca_var, return_data=False):
-		if idca_var not in self.h5idca:
+		if idca_var not in self.idca:
 			raise LarchError("'{}' is not an idca variable".format(idca_var))
-		arr = self.h5idca._v_children[idca_var][:]
-		if '_avail_' in self.h5idca:
-			av = self.h5idca._avail_[:]
+		arr = self.idca._v_children[idca_var][:]
+		if '_avail_' in self.idca:
+			av = self.idca._avail_[:]
 			arr[~av] = numpy.nan
 		result = (numpy.nanstd(arr, axis=1).sum()==0)
 		if return_data:
@@ -2055,7 +2059,7 @@ class DT(Fountain):
 		if result:
 			newarr = numpy.nanmean(arr, axis=1)
 			self.h5f.create_carray(self.idco._v_node, idca_var, obj=newarr)
-			self.h5idca._v_children[idca_var]._f_remove()
+			self.idca._v_children[idca_var]._f_remove()
 
 	def new_idco(self, name, expression, dtype=numpy.float64, overwrite=False):
 		"""Create a new :ref:`idco` variable.
@@ -2147,7 +2151,7 @@ class DT(Fountain):
 			data = self.array_idca(expression, screen="None").reshape(-1)
 		else:
 			data = expression
-		self.h5f.create_carray(self.h5idca, name, obj=data)
+		self.h5f.create_carray(self.idca._v_node, name, obj=data)
 
 	def new_idca_from_array(self, name, arr):
 		"""Create a new :ref:`idca` variable.
@@ -2181,7 +2185,7 @@ class DT(Fountain):
 		
 		"""
 		try:
-			self.h5f.remove_node(self.h5idca, name)
+			self.h5f.remove_node(self.idca._v_node, name)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 		try:
@@ -2268,19 +2272,19 @@ class DT(Fountain):
 #		self.multi_check_co(cols)
 #		if varname == '_avail_':
 #			try:
-#				self.h5f.remove_node(self.h5idca, '_avail_')
+#				self.h5f.remove_node(self.idca._v_node, '_avail_')
 #			except _tb.exceptions.NoSuchNodeError:
 #				pass
-#			self.h5f.create_group(self.h5idca, '_avail_')
-#			self.h5idca._avail_._v_attrs.stack = cols
+#			self.h5f.create_group(self.idca._v_node, '_avail_')
+#			self.idca._avail_._v_attrs.stack = cols
 #		else:
 #			av = self.array_idco(*cols, dtype=numpy.bool)
 #			self.new_idca(varname, av)
 #			try:
-#				self.h5f.remove_node(self.h5idca, '_avail_')
+#				self.h5f.remove_node(self.idca._v_node, '_avail_')
 #			except _tb.exceptions.NoSuchNodeError:
 #				pass
-#			self.h5f.create_soft_link(self.h5idca, '_avail_', target=self.h5idca._v_pathname+'/'+varname)
+#			self.h5f.create_soft_link(self.idca._v_node, '_avail_', target=self.idca._v_node._v_pathname+'/'+varname)
 
 	@property
 	def avail_idco(self):
@@ -2405,19 +2409,19 @@ class DT(Fountain):
 #		cols = list(cols)
 #		if varname == '_choice_':
 #			try:
-#				self.h5f.remove_node(self.h5idca, '_choice_')
+#				self.h5f.remove_node(self.idca._v_node, '_choice_')
 #			except _tb.exceptions.NoSuchNodeError:
 #				pass
-#			self.h5f.create_group(self.h5idca, '_choice_')
-#			self.h5idca._choice_._v_attrs.stack = cols
+#			self.h5f.create_group(self.idca._v_node, '_choice_')
+#			self.idca._v_node._choice_._v_attrs.stack = cols
 #		else:
 #			ch = self.array_idco(*cols, dtype=numpy.float64)
 #			self.new_idca(varname, ch)
 #			try:
-#				self.h5f.remove_node(self.h5idca, '_choice_')
+#				self.h5f.remove_node(self.idca._v_node, '_choice_')
 #			except _tb.exceptions.NoSuchNodeError:
 #				pass
-#			self.h5f.create_soft_link(self.h5idca, '_choice_', target=self.h5idca._v_pathname+'/'+varname)
+#			self.h5f.create_soft_link(self.idca._v_node, '_choice_', target=self.idca._v_node._v_pathname+'/'+varname)
 #
 
 
@@ -2429,7 +2433,12 @@ class DT(Fountain):
 		for i in sorted(self.variables_co()):
 			v_names.append(str(i))
 			if isinstance(self.idco[i], _tb.Group):
-				v_dtypes.append(str(self.idco[i]._values_.dtype))
+				if '_values_' in self.idco[i]:
+					v_dtypes.append(str(self.idco[i]._values_.dtype))
+				elif 'stack' in self.idco[i]._v_attrs:
+					v_dtypes.append('<stack>')
+				else:
+					v_dtypes.append('¿group?')
 			else:
 				v_dtypes.append(str(self.idco[i].dtype))
 			v_ftypes.append('idco')
@@ -2491,7 +2500,7 @@ class DT(Fountain):
 	def namespace(self):
 		space = {}
 		space.update(self.idco._v_children.iteritems())
-		space.update(self.h5idca._v_children.iteritems())
+		space.update(self.idca._v_children.iteritems())
 		space.update({i:self.expr[i] for i in self.expr})
 		return space
 
@@ -2534,11 +2543,11 @@ class DT(Fountain):
 				alo.write( "Avail(node_{0}) = {1}\n".format(aname.replace(" ","_"), repackage(av_stack[anum])) )
 
 		# Other stacks
-		for var in self.h5idca._v_children:
+		for var in self.idca._v_children:
 			if var in ('_avail_','_choice_'):
 				continue
 			var_ = var.replace(" ","_")
-			if isinstance(self.h5idca._v_children[var], _tb.Group) and 'stack' in self.h5idca._v_children[var]._v_attrs:
+			if isinstance(self.idca._v_children[var], _tb.Group) and 'stack' in self.idca._v_children[var]._v_attrs:
 				stack = self.stack_idco(var)
 				alo.write("\n\n$array {}(alts)".format(var_))
 				for anum,aname in self.alternatives():
@@ -2779,9 +2788,9 @@ class DT_idco_stack_manager:
 #			except AttributeError:
 #				pass
 			return isinstance(obj, things)
-		if isinstance_(self.parent.h5idca._v_children[self.stacktype], _tb.Array):
+		if isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Array):
 			raise TypeError('The {} is an array, not a stack.'.format(self.stacktype))
-		if not isinstance_(self.parent.h5idca._v_children[self.stacktype], _tb.Group):
+		if not isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Group):
 			raise TypeError('The {} stack is not set up.'.format(self.stacktype))
 
 	def _make_zeros(self):
@@ -2793,17 +2802,17 @@ class DT_idco_stack_manager:
 #				pass
 			return isinstance(obj, things)
 		try:
-			if isinstance_(self.parent.h5idca._v_children[self.stacktype], _tb.Array):
-				self.parent.h5f.remove_node(self.parent.h5idca, self.stacktype)
+			if isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Array):
+				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
 		except (_tb.exceptions.NoSuchNodeError, KeyError):
 			pass
 		# create new group if it does not exist
 		try:
-			self.parent.h5f.create_group(self.parent.h5idca, self.stacktype)
+			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
 		except _tb.exceptions.NodeError:
 			pass
-		if 'stack' not in self.parent.h5idca._v_children[self.stacktype]._v_attrs:
-			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
+		if 'stack' not in self.parent.idca._v_children[self.stacktype]._v_attrs:
+			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
 
 
 	def __call__(self, *cols, varname=None):
@@ -2843,38 +2852,38 @@ class DT_idco_stack_manager:
 		cols = list(cols)
 		if varname is None:
 			try:
-				self.parent.h5f.remove_node(self.parent.h5idca, self.stacktype)
+				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
 			except _tb.exceptions.NoSuchNodeError:
 				pass
-			self.parent.h5f.create_group(self.parent.h5idca, self.stacktype)
-			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = cols
+			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
+			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = cols
 		else:
 			ch = self.parent.array_idco(*cols, dtype=numpy.float64)
 			self.parent.new_idca(varname, ch)
 			try:
-				self.parent.h5f.remove_node(self.parent.h5idca, self.stacktype)
+				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
 			except _tb.exceptions.NoSuchNodeError:
 				pass
-			self.parent.h5f.create_soft_link(self.parent.h5idca, self.stacktype, target=self.parent.h5idca._v_pathname+'/'+varname)
+			self.parent.h5f.create_soft_link(self.parent.idca._v_node, self.stacktype, target=self.parent.idca._v_pathname+'/'+varname)
 
 	def __getitem__(self, key):
 		self._check()
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			return self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack[slotarray[0]]
+			return self.parent.idca._v_children[self.stacktype]._v_attrs.stack[slotarray[0]]
 		else:
 			raise KeyError("key {} not found".format(key) )
 
 	def __setitem__(self, key, value):
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			if self.stacktype not in self.parent.h5idca._v_children:
+			if self.stacktype not in self.parent.idca._v_children:
 				self._make_zeros()
-			if 'stack' not in self.parent.h5idca._v_children[self.stacktype]._v_attrs:
+			if 'stack' not in self.parent.idca._v_children[self.stacktype]._v_attrs:
 				self._make_zeros()
-			tempobj = self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack
+			tempobj = self.parent.idca._v_children[self.stacktype]._v_attrs.stack
 			tempobj[slotarray[0]] = value
-			self.parent.h5idca._v_children[self.stacktype]._v_attrs.stack = tempobj
+			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = tempobj
 		else:
 			raise KeyError("key {} not found".format(key) )
 
@@ -2884,3 +2893,82 @@ class DT_idco_stack_manager:
 		for n,altid in enumerate(self.parent._alternative_codes()):
 			s += "\n  {}: {!r}".format(altid, self[altid])
 		return s
+
+
+
+
+
+def DTx(filename=None, *, idco=None, idca=None, caseids=None, alts=None, **kwargs):
+	if idco is None and idca is None:
+		raise TypeError('one of idca or idco sources must be given')
+	d = DT(filename, **kwargs)
+	got_caseids = False
+	got_alts = False
+	if caseids is not None:
+		d.remove_node_if_exists(d.h5top, 'caseids')
+		if ":/" not in caseids:
+			tag_caseids = caseids + ":/larch/caseids"
+		else:
+			tag_caseids = caseids
+		d.create_external_link(d.h5top, 'caseids', tag_caseids)
+		got_caseids = True
+
+	def swap_alts(tag_alts):
+		try:
+			d.alts.altids._f_rename('altids_pending_delete')
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		try:
+			d.alts.names._f_rename('names_pending_delete')
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		d.alts.add_external_data(tag_alts)
+		if 'names' in d.alts:
+			d.remove_node_if_exists(d.alts._v_node, 'names_pending_delete')
+		if 'altids' in d.alts:
+			d.remove_node_if_exists(d.alts._v_node, 'altids_pending_delete')
+		return True
+
+	if alts is not None:
+		if ":/" not in alts:
+			tag_alts = alts + ":/larch/alts"
+		else:
+			tag_alts = alts
+		got_alts = swap_alts(tag_alts)
+	if idca is not None:
+		if ":/" not in idca:
+			tag_idca = idca + ":/larch/idca"
+			tag_caseids = idca + ":/larch/caseids"
+			tag_alts = idca + ":/larch/alts"
+		else:
+			tag_idca = idca
+			tag_caseids = None
+			tag_alts = None
+		d.idca.add_external_data(tag_idca)
+		if not got_caseids and tag_caseids is not None:
+			d.remove_node_if_exists(d.h5top, 'caseids')
+			d.create_external_link(d.h5top, 'caseids', tag_caseids)
+			got_caseids = True
+		if not got_alts and tag_alts is not None:
+			got_alts = swap_alts(tag_alts)
+	if idco is not None:
+		if ":/" not in idco:
+			tag_idco = idco + ":/larch/idco"
+			tag_caseids = idco + ":/larch/caseids"
+			tag_alts = idco + ":/larch/alts"
+		else:
+			tag_idco = idco
+			tag_caseids = None
+			tag_alts = None
+		d.idco.add_external_data(tag_idco)
+		if not got_caseids and tag_caseids is not None:
+			d.remove_node_if_exists(d.h5top, 'caseids')
+			d.create_external_link(d.h5top, 'caseids', tag_caseids)
+			got_caseids = True
+		if not got_alts and tag_alts is not None:
+			got_alts = swap_alts(tag_alts)
+	return d
+
+
+
+

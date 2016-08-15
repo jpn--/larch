@@ -11,7 +11,7 @@ import base64
 from .util.attribute_dict import function_cache
 from .model_shadowmanager import shadow_manager, metaparameter_manager
 from .model_parametermanager import ParameterManager
-from .model_datamanager import DataManager
+from .model_datamanager import DataManager, WorkspaceManager
 from .util.statsummary import statistical_summary
 
 class MetaParameter():
@@ -178,6 +178,12 @@ class Model(Model2, ModelReporter):
 		"""A :class:`DataManager` interface for the model, with editable access to arrays."""
 		return DataManager(self, False)
 
+	@property
+	def workspace(self):
+		"""A :class:`WorkspaceManager` interface for the model."""
+		return WorkspaceManager(self)
+
+	work = workspace
 
 
 #	def metaparameter(self, name):
