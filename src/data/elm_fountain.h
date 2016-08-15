@@ -52,12 +52,18 @@ namespace elm {
 #ifndef SWIG
 
 	  protected:
-		boosted::weak_ptr< std::vector<std::string> >  _alternative_names;
-		boosted::weak_ptr< std::vector<long long>   >  _alternative_codes;
+		mutable boosted::weak_ptr< const std::vector<std::string> >  _alternative_names_cached;
+		mutable boosted::weak_ptr< const std::vector<long long>   >  _alternative_codes_cached;
 
 	  public:
-		boosted::shared_ptr< std::vector<std::string> > cache_alternative_names();
-		boosted::shared_ptr< std::vector<long long>   > cache_alternative_codes();
+		boosted::shared_ptr< const std::vector<std::string> > cache_alternative_names() const ;
+		boosted::shared_ptr< const std::vector<long long>   > cache_alternative_codes() const ;
+
+		size_t alternative_slot_from_name(const std::string&) const;
+		size_t alternative_slot_from_code(const long long&) const;
+		
+		int alternative_code_from_name(const std::string&, long long&) const;
+		int alternative_name_from_code(const long long&, std::string&) const;
 
 #endif // ndef SWIG
 

@@ -60,7 +60,8 @@ class GroupNode():
 			if attr=='_v_node':
 				return super().__getattr__('_v_node')
 			x = getattr(self._v_node, attr)
-			x.uniques = types.MethodType( _uniques, x )
+			if len(attr)<=3 or attr[0]!='_' or attr[2]!='_':
+				x.uniques = types.MethodType( _uniques, x )
 			return x
 		except tables.exceptions.NoSuchNodeError as err:
 			from larch.util.text_manip import case_insensitive_close_matches

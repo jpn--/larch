@@ -80,6 +80,13 @@ namespace elm {
 		#ifdef SWIG
 		%feature("pythonappend") Model2(elm::Fountain& d) %{
 			try:
+				from . import _autoinit_loggers
+			except:
+				pass
+			else:
+				if _autoinit_loggers:
+					self.logger(1)
+			try:
 				self._ref_to_db = args[0]
 			except IndexError:
 				self._ref_to_db = None

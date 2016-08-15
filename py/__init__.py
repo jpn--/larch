@@ -93,6 +93,8 @@ status += "\nLarch "+build
 _directory_ = os.path.split(__file__)[0]
 status += "\nLoaded from %s" % _directory_
 
+_autoinit_loggers = True
+
 larch = sys.modules[__name__]
 
 from . import examples

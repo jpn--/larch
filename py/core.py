@@ -4182,6 +4182,13 @@ class Model2(sherpa):
             self.this = this
 
         try:
+        	from . import _autoinit_loggers
+        except:
+        	pass
+        else:
+        	if _autoinit_loggers:
+        		self.logger(1)
+        try:
         	self._ref_to_db = args[0]
         except IndexError:
         	self._ref_to_db = None

@@ -960,9 +960,10 @@ std::string elm::ComponentGraphDNA::node_name(const elm::cellcode& node_code) co
 	
 	// Look in db
 	if (db) {
-		size_t k = etk::find_first(node_code, db->alternative_codes());
-		if (k != SIZE_T_MAX) {
-			return db->alternative_names()[k];
+		std::string ret;
+		int k = db->alternative_name_from_code(node_code, ret);
+		if (k) {
+			return ret;
 		}
 	}
 	
@@ -984,9 +985,10 @@ elm::cellcode elm::ComponentGraphDNA::node_code(const std::string& node_name) co
 	
 	// Look in db
 	if (db) {
-		size_t k = etk::find_first(node_name, db->alternative_names());
-		if (k != SIZE_T_MAX) {
-			return db->alternative_codes()[k];
+		elm::cellcode ret;
+		int k = db->alternative_code_from_name(node_name, ret);
+		if (k) {
+			return ret;
 		}
 	}
 	
@@ -999,7 +1001,7 @@ elm::cellcodeset elm::ComponentGraphDNA::elemental_codes() const
 	elm::cellcodeset ret;
 	
 	if (db) {
-		std::vector<elm::cellcode> x = db->alternative_codes();
+		std::vector<elm::cellcode> x ( *db->cache_alternative_codes() );
 		ret.insert(x.begin(), x.end());
 		return ret;
 	}
@@ -1101,8 +1103,20 @@ std::vector<std::string> elm::ComponentGraphDNA::nest_node_names() const
 elm::cellcodeset elm::ComponentGraphDNA::dn_node_codes(const elm::cellcode& node_code) const
 {
 	elm::cellcodeset ret;
+
+	if (db) {
+//		std::vector<elm::cellcode> x ( *db->cache_alternative_codes_c() );
+		auto ac = db->cache_alternative_codes();
+		for (auto y=ac->begin(); y!=ac->end(); y++) {
+			if (*y==node_code) return ret;
+		}
+//		ret.insert(x.begin(), x.end());
+//		return ret;
+	} else {
+		if (elemental_codes().count(node_code)) return ret;
+	}
+
 	
-	if (elemental_codes().count(node_code)) return ret;
 	
 	if (edges) {
 		if (node_code==0) {
@@ -1263,6 +1277,7 @@ std::list<elm::cellcode> elm::ComponentGraphDNA::branches_ascending_order(etk::l
 	cellcodeset Elementals = elemental_codes();
 	SORTING_LOG(msg, "  there are "<<Elementals.size()<<" elemental_codes");
 	cellcodeset all = all_node_codes();
+	cellcodeset elements = elemental_codes();
 	SORTING_LOG(msg, "  there are "<<all.size()<<" all_node_codes");
 	ComponentCellcodeMap::const_iterator b;
 	std::list<elm::cellcode> Branches;
@@ -1271,8 +1286,12 @@ std::list<elm::cellcode> elm::ComponentGraphDNA::branches_ascending_order(etk::l
 	std::map< elm::cellcode, elm::cellcodeset > down_nodes;
 	SORTING_LOG(msg, "Mapping all down nodes...");
 	for (std::set<elm::cellcode>::iterator a=all.begin(); a!=all.end(); a++) {
-		down_nodes[*a] = dn_node_codes(*a);
-		SORTING_LOG(msg, "  all down nodes for "<< *a << " (there are "<< down_nodes[*a].size() <<")...");
+		if (elements.count(*a)) {
+			down_nodes[*a] = cellcodeset();
+		} else {
+			down_nodes[*a] = dn_node_codes(*a);
+			SORTING_LOG(msg, "  all down nodes for "<< *a << " (there are "<< down_nodes[*a].size() <<")...");
+		}
 	}
 	
 	// Sort Branches into an ascending order

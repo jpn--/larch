@@ -628,8 +628,8 @@ void VAS_System::root_cellcode(const elm::cellcode& r, etk::logging_service* msg
 
 void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, Fountain* db, elm::cellcode* root, etk::logging_service* msg )
 {
-	boosted::shared_ptr< std::vector<std::string> > _altnames;
-	boosted::shared_ptr< std::vector<long long  > > _altcodes;
+	boosted::shared_ptr< const std::vector<std::string> > _altnames;
+	boosted::shared_ptr< const std::vector<long long  > > _altcodes;
 	
 	if (db) {
 		_altnames = db->cache_alternative_names();
@@ -698,6 +698,7 @@ void VAS_System::regrow( ComponentCellcodeMap* nodes, LinearCOBundle_2* edges, F
 	REGROW_LOG(msg, "Building anatomy and name cells...");
 	if (_graph.valid()) {
 		for ( i=0; i<_cells.size(); i++) {
+			REGROW_LOG(msg, cat("     anatomy for ",_cells[i].code()));
 			_anatomy[_cells[i].code()] = &(_cells[i]);
 			_cells[i]._cell_name = _graph.node_name(_cells[i].code());
 		}

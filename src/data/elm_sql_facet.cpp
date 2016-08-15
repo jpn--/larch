@@ -884,7 +884,7 @@ std::vector<elm::caseid_t> elm::Facet::caseids(const unsigned& firstcasenum, con
 
 std::vector<elm::cellcode> elm::Facet::altids() const
 {
-	if (!_alternative_codes.expired()) { return *(_alternative_codes.lock()); }
+	if (!_alternative_codes_cached.expired()) { return *(_alternative_codes_cached.lock()); }
 
 	if (!queries_ptr) OOPS_FACET("queries not defined");
 		
@@ -956,7 +956,7 @@ long long elm::Facet::alternative_code(std::string name) const
 
 std::vector<std::string> elm::Facet::alternative_names() const
 {
-	if (!_alternative_names.expired()) { return *(_alternative_names.lock()); }
+	if (!_alternative_names_cached.expired()) { return *(_alternative_names_cached.lock()); }
 
 	if (!queries_ptr) OOPS_FACET("queries not defined");
 	std::ostringstream sql;
@@ -1003,7 +1003,7 @@ std::string elm::Facet::alternative_name(long long code) const
 
 std::vector<elm::cellcode> elm::Facet::alternative_codes() const
 {
-	if (!_alternative_codes.expired()) { return *(_alternative_codes.lock()); }
+	if (!_alternative_codes_cached.expired()) { return *(_alternative_codes_cached.lock()); }
 	return altids();
 }
 

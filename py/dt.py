@@ -352,13 +352,15 @@ class DT(Fountain):
 
 	def alternative_codes(self):
 		try:
-			return tuple(int(i) for i in self.h5alts.altids[:])
+			q = self.h5alts.altids[:]
+			return tuple(int(i) for i in q)
 		except _tb.exceptions.NoSuchNodeError:
 			return ()
 
 	def alternative_names(self):
 		try:
-			return tuple(str(i) for i in self.h5alts.names[:])
+			q = self.h5alts.names[:]
+			return tuple(str(i) for i in q)
 		except _tb.exceptions.NoSuchNodeError:
 			return ()
 
@@ -1434,7 +1436,7 @@ class DT(Fountain):
 		except IndexError:
 			if choice is not None:
 				self.idco_code_to_idca_dummy(choice, '_choice_', complib=complib, complevel=complevel)
-				self.idco._v_attrs.choice_indicator = choice
+				self.idco._v_node._v_attrs.choice_indicator = choice
 			else:
 				raise
 		# Avail
@@ -2504,7 +2506,7 @@ class DT(Fountain):
 
 		# Choice
 		try:
-			ch_ind = self.idco._v_attrs.choice_indicator
+			ch_ind = self.idco._v_node._v_attrs.choice_indicator
 		except AttributeError:
 			alo.write( "\n\n- Choice: not given here\n")
 		else:

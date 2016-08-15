@@ -24,8 +24,8 @@
 #include "etk.h"
 
 elm::Fountain::Fountain()
-: _alternative_names()
-, _alternative_codes()
+: _alternative_names_cached()
+, _alternative_codes_cached()
 , source_filename()
 {
 
@@ -84,35 +84,71 @@ const elm::VAS_dna  elm::Fountain::ask_dna(const long long& c) const
 
 void elm::Fountain::uncache_alternatives()
 {
-	_alternative_names.reset();
-	_alternative_codes.reset();
+	_alternative_names_cached.reset();
+	_alternative_codes_cached.reset();
 }
 
-boosted::shared_ptr< std::vector<std::string> > elm::Fountain::cache_alternative_names()
+
+
+boosted::shared_ptr< const std::vector<std::string> > elm::Fountain::cache_alternative_names() const
 {
-	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
 	
-	if (modthis->_alternative_names.expired()) {
-    	boosted::shared_ptr< std::vector<std::string> > x = boosted::make_shared< std::vector<std::string> >( alternative_names() );
-		modthis->_alternative_names = x;
+	if (_alternative_names_cached.expired()) {
+    	boosted::shared_ptr< const std::vector<std::string> > x = boosted::make_shared< const std::vector<std::string> >( alternative_names() );
+		_alternative_names_cached = x;
 		return x;
 	} else {
-		return modthis->_alternative_names.lock();
+		return _alternative_names_cached.lock();
 	}
 }
 
 
-boosted::shared_ptr< std::vector<long long> > elm::Fountain::cache_alternative_codes()
+boosted::shared_ptr< const std::vector<long long> > elm::Fountain::cache_alternative_codes() const
 {
-	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
 	
-	if (modthis->_alternative_codes.expired()) {
-    	boosted::shared_ptr< std::vector<long long> > x = boosted::make_shared< std::vector<long long> >( alternative_codes() );
-		modthis->_alternative_codes = x;
+	if (_alternative_codes_cached.expired()) {
+    	boosted::shared_ptr< const std::vector<long long> > x = boosted::make_shared< const std::vector<long long> >( alternative_codes() );
+		_alternative_codes_cached = x;
 		return x;
 	} else {
-		return modthis->_alternative_codes.lock();
+		return _alternative_codes_cached.lock();
 	}
+}
+
+
+
+size_t elm::Fountain::alternative_slot_from_name(const std::string& node_name) const
+{
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	return etk::find_first(node_name, *modthis->cache_alternative_names());
+}
+
+size_t elm::Fountain::alternative_slot_from_code(const long long& node_code) const
+{
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	return etk::find_first(node_code, *modthis->cache_alternative_codes());
+}
+
+int elm::Fountain::alternative_code_from_name(const std::string& node_name, long long& node_code) const
+{
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	size_t k = etk::find_first(node_name, *modthis->cache_alternative_names());
+	if (k != SIZE_T_MAX) {
+		node_code = (*modthis->cache_alternative_codes())[k];
+		return 1;
+	}
+	return 0;
+}
+
+int elm::Fountain::alternative_name_from_code(const long long& node_code, std::string& output) const
+{
+	elm::Fountain* modthis = const_cast<elm::Fountain*>(this);
+	size_t k =  etk::find_first(node_code, *modthis->cache_alternative_codes());
+	if (k != SIZE_T_MAX) {
+		output = (*modthis->cache_alternative_names())[k];
+		return 1;
+	}
+	return 0;
 }
 
 
