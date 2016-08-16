@@ -309,9 +309,13 @@ class OMX(_tb.file.File):
 				return self.lookup._v_children[key]
 			raise
 
-	def import_omx(self, otherfile, tablenames):
+	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
 		oth = OMX(otherfile, mode='r')
+		if tablenames=='*':
+			tablenames = oth.data._v_children.keys()
 		for tab in tablenames:
-			self.add_matrix(tab, oth.data._v_children[tab][:])
-
+			if rowslicer is None and colslicer is None:
+				self.add_matrix(tab, oth.data._v_children[tab][:])
+			else:
+				self.add_matrix(tab, oth.data._v_children[tab][rowslicer,colslicer])
 

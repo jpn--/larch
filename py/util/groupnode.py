@@ -133,7 +133,10 @@ class GroupNode():
 			raise
 		if len(attr)<=3 or attr[0]!='_' or attr[2]!='_':
 			x.uniques = types.MethodType( _uniques, x )
-		return _pytables_link_dereference(x)
+		ret = _pytables_link_dereference(x)
+		if isinstance(ret, tables.Group):
+			ret = GroupNode(ret)
+		return ret
 	def __setattr__(self, attr, val):
 		return setattr(self._v_node, attr, val)
 	def __contains__(self, arg):
@@ -165,6 +168,21 @@ class GroupNode():
 		while '_extern_{}'.format(extern_n) in self._v_node:
 			extern_n += 1
 		self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
+
+
+	def add_external_omx(self, omx_filename, rowindexnode, prefix=""):
+		self._v_file.create_external_link(self._v_file.root, 'temp_omx', omx_filename+":/")
+		temp_omx = self._v_file.root.temp_omx()
+		for vname in temp_omx.data._v_children:
+			try:
+				vgrp = self._v_file.create_group(self._v_node, prefix+vname)
+			except _tb.exceptions.NodeError:
+				import warnings
+				warnings.warn('the name "{}" already exists'.format(prefix+vname))
+			else:
+				self._v_file.create_hard_link(vgrp, '_index_', rowindexnode)
+				self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
+
 
 
 

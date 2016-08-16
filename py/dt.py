@@ -286,7 +286,7 @@ class DT(Fountain):
 #			pass
 		if isinstance(n, _tb.array.Array):
 			return True
-		if isinstance(n, _tb.group.Group):
+		if isinstance(n, (_tb.group.Group,GroupNode)):
 			if '_index_' in n and '_values_' in n:
 				return True
 		return False
@@ -308,7 +308,7 @@ class DT(Fountain):
 #			n = n.dereference()
 #		except AttributeError:
 #			pass
-		if isinstance(n, _tb.group.Group):
+		if isinstance(n, (_tb.group.Group,GroupNode)):
 			if '_index_' in n and '_values_' in n:
 				return True
 		return False
@@ -426,6 +426,8 @@ class DT(Fountain):
 		COMMA = (OP, ',')
 		OBRAC = (OP, '[')
 		CBRAC = (OP, ']')
+		OPAR = (OP, '(')
+		CPAR = (OP, ')')
 		from io import BytesIO
 		recommand = []
 		try:
@@ -440,13 +442,20 @@ class DT(Fountain):
 					raise IncompatibleShape("cannot use idca.{} in an idco expression".format(tokval))
 				if self._is_mapped_larch_array(self.idca, tokval):
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
-								OBRAC,
-								(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
-								CBRAC, OBRAC, screen_token,]
-					if dims>1:
-						partial += [COMMA,COLON,]
-					partial += [CBRAC, ]
+					partial = [(NAME, 'select_with_repeated'),
+						OPAR,
+						(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'), COMMA,
+						(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
+						(NAME, 'None') if screen is None else (NAME, 'screen'),
+						CPAR,
+					]
+#					partial = [ (NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+#								OBRAC,
+#								(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,screen_token,CBRAC,
+#								]
+#					if dims>1:
+#						partial += [COMMA,COLON,]
+#					partial += [CBRAC, ]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
@@ -458,12 +467,19 @@ class DT(Fountain):
 			elif toknum == NAME and tokval in self.idco:
 				if self._is_mapped_larch_array(self.idco, tokval):
 					# replace NAME tokens
-					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
-								OBRAC,
-								(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,COLON,CBRAC,
-								CBRAC, OBRAC,screen_token,CBRAC,]
-					if dims>1:
-						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
+					partial = [(NAME, 'select_with_repeated'),
+						OPAR,
+						(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'), COMMA,
+						(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
+						(NAME, 'None') if screen is None else (NAME, 'screen'),
+						CPAR,
+					]
+#					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
+#								OBRAC,
+#								(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,screen_token,CBRAC,
+#								CBRAC,]
+#					if dims>1:
+#						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
@@ -556,6 +572,7 @@ class DT(Fountain):
 			
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from .util.pytables_addon import select_with_repeated
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
 			screen = None
@@ -568,7 +585,7 @@ class DT(Fountain):
 				try:
 					result[:,:,varnum] = eval( asterize(command) )
 				except TypeError as type_err:
-					if v in self.idca._v_children and isinstance(self.idca._v_children[v], _tb.Group):
+					if v in self.idca._v_children and isinstance(self.idca._v_children[v], (_tb.Group,GroupNode)) and 'stack' in self.idca._v_children[v]._v_attrs:
 						stacktuple = self.idca._v_children[v]._v_attrs.stack
 						result[:,:,varnum] = self.array_idco(*stacktuple, screen=screen, strip_nan=strip_nan)
 					else:
@@ -629,6 +646,7 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from .util.pytables_addon import select_with_repeated
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		if isinstance(screen, str) and screen=="None":
@@ -683,6 +701,7 @@ class DT(Fountain):
 		pandas.DataFrame
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from .util.pytables_addon import select_with_repeated
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)
@@ -728,7 +747,7 @@ class DT(Fountain):
 			return self.array_idco('_weight_', **kwargs)
 
 	def array_choice(self, **kwargs):
-		if isinstance(self.idca._choice_, _tb.Group):
+		if isinstance(self.idca._choice_, (_tb.Group,GroupNode)):
 			stacktuple = self.idca._choice_._v_attrs.stack
 			return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
 		return self.array_idca('_choice_', **kwargs)
@@ -738,7 +757,7 @@ class DT(Fountain):
 			av = self.idca._avail_
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idca('1', dtype=dtype, **kwargs)
-		if isinstance(self.idca._avail_, _tb.Group):
+		if isinstance(self.idca._avail_, (_tb.Group,GroupNode)):
 			stacktuple = self.idca._avail_._v_attrs.stack
 			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
@@ -822,7 +841,7 @@ class DT(Fountain):
 		exclude_unavail = inheritable(exclude_unavail, 'exclude_unavail')
 		exclude_unchoosable = inheritable(exclude_unchoosable, 'exclude_unchoosable')
 
-		if isinstance(self.h5top.screen, _tb.Group):
+		if isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			return
 
 		if exclude_idco:
@@ -1034,7 +1053,7 @@ class DT(Fountain):
 			return True
 		if column in self.idca._v_children:
 			colnode = self.idca._v_children[column]
-			if isinstance(colnode, _tb.Group) and 'stack' in colnode._v_attrs:
+			if isinstance(colnode, (_tb.Group,GroupNode)) and 'stack' in colnode._v_attrs:
 				return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
 
 	def _check_co_natural(self, column):
@@ -1046,6 +1065,7 @@ class DT(Fountain):
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from .util.pytables_addon import select_with_repeated
 		try:
 			command = self._remake_command(column,None,2)
 			eval( asterize(command) )
@@ -1073,6 +1093,7 @@ class DT(Fountain):
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from .util.pytables_addon import select_with_repeated
 		try:
 			command = self._remake_command(column,None,1)
 			eval( asterize(command) )
@@ -1542,7 +1563,7 @@ class DT(Fountain):
 		
 		## TOP
 		nerrs+= zzz("There should be a designated `larch` group node under which all other nodes reside.",
-					not isinstance_(self.h5top, _tb.group.Group))
+					not isinstance_(self.h5top, (_tb.group.Group,GroupNode)))
 		
 		## CASEIDS
 		category('CASES')
@@ -1600,7 +1621,7 @@ class DT(Fountain):
 		## ALTS
 		category('ALTERNATIVES')
 		nerrs+= zzz("Under the top node, there should be a group named `alts` to hold alternative data.",
-					not isinstance_(self.h5top.alts, _tb.group.Group))
+					not isinstance_(self.h5top.alts, (_tb.group.Group,GroupNode)))
 		try:
 			altids_node = self.h5top.alts.altids
 			altids_nodeatom = altids_node.atom
@@ -1640,7 +1661,7 @@ class DT(Fountain):
 		## IDCO
 		category('IDCO FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idco` to hold that data.",
-					not isinstance_(self.h5top.idco, _tb.group.Group))
+					not isinstance_(self.h5top.idco, (_tb.group.Group,GroupNode)))
 		nerrs+= zzz("Every child node name in `idco` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
@@ -1648,7 +1669,7 @@ class DT(Fountain):
 		
 		idco_child_incorrect_sized = {}
 		for idco_child in self.idco._v_children.keys():
-			if isinstance_(self.idco._v_children[idco_child], _tb.group.Group):
+			if isinstance_(self.idco._v_children[idco_child], (_tb.group.Group,GroupNode)):
 				if '_index_' not in self.idco._v_children[idco_child] or '_values_' not in self.idco._v_children[idco_child]:
 					idco_child_incorrect_sized[idco_child] = 'invalid group'
 			else:
@@ -1685,7 +1706,7 @@ class DT(Fountain):
 		## IDCA
 		category('IDCA FORMAT DATA')
 		nerrs+= zzz("Under the top node, there should be a group named `idca` to hold that data.",
-					not isinstance_(self.h5top.idca, _tb.group.Group))
+					not isinstance_(self.h5top.idca, (_tb.group.Group,GroupNode)))
 		nerrs+= zzz("Every child node name in `idca` must be a valid Python identifer (i.e. starts "
 					"with a letter or underscore, and only contains letters, numbers, and underscores) "
 					"and not a Python reserved keyword.",
@@ -1693,7 +1714,7 @@ class DT(Fountain):
 
 		idca_child_incorrect_sized = {}
 		for idca_child in self.idca._v_children.keys():
-			if isinstance_(self.idca._v_children[idca_child], _tb.group.Group):
+			if isinstance_(self.idca._v_children[idca_child], (_tb.group.Group,GroupNode)):
 				if '_index_' not in self.idca._v_children[idca_child] or '_values_' not in self.idca._v_children[idca_child]:
 					if 'stack' not in self.idca._v_children[idca_child]._v_attrs:
 						idca_child_incorrect_sized[idca_child] = 'invalid group'
@@ -2432,25 +2453,31 @@ class DT(Fountain):
 		v_filenames = []
 		for i in sorted(self.variables_co()):
 			v_names.append(str(i))
-			if isinstance(self.idco[i], _tb.Group):
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)):
 				if '_values_' in self.idco[i]:
-					v_dtypes.append(str(self.idco[i]._values_.dtype))
-				elif 'stack' in self.idco[i]._v_attrs:
+					v_dtypes.append(str(_pytables_link_dereference(self.idco[i]._values_).dtype))
+				elif 'stack' in _pytables_link_dereference(self.idco[i])._v_attrs:
 					v_dtypes.append('<stack>')
 				else:
 					v_dtypes.append('¿group?')
 			else:
-				v_dtypes.append(str(self.idco[i].dtype))
+				v_dtypes.append(str(_pytables_link_dereference(self.idco[i]).dtype))
 			v_ftypes.append('idco')
-			v_filenames.append(self.idco[i]._v_file.filename)
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)) and '_values_' in self.idco[i]:
+				v_filenames.append(self.idco[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idco[i]._v_file.filename)
 		for i in sorted(self.variables_ca()):
 			v_names.append(str(i))
-			if isinstance(self.idca[i], _tb.Group):
-				v_dtypes.append(str(self.idca[i]._values_.dtype))
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)):
+				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
 			else:
-				v_dtypes.append(str(self.idca[i].dtype))
+				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
 			v_ftypes.append('idca')
-			v_filenames.append(self.idca[i]._v_file.filename)
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)) and '_values_' in self.idca[i]:
+				v_filenames.append(self.idca[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idca[i]._v_file.filename)
 		section = None
 		max_v_name_len = 8
 		for v_name in v_names:
@@ -2547,7 +2574,7 @@ class DT(Fountain):
 			if var in ('_avail_','_choice_'):
 				continue
 			var_ = var.replace(" ","_")
-			if isinstance(self.idca._v_children[var], _tb.Group) and 'stack' in self.idca._v_children[var]._v_attrs:
+			if isinstance(self.idca._v_children[var], (_tb.Group,GroupNode)) and 'stack' in self.idca._v_children[var]._v_attrs:
 				stack = self.stack_idco(var)
 				alo.write("\n\n$array {}(alts)".format(var_))
 				for anum,aname in self.alternatives():
@@ -2790,7 +2817,7 @@ class DT_idco_stack_manager:
 			return isinstance(obj, things)
 		if isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Array):
 			raise TypeError('The {} is an array, not a stack.'.format(self.stacktype))
-		if not isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Group):
+		if not isinstance_(self.parent.idca._v_children[self.stacktype], (_tb.Group,GroupNode)):
 			raise TypeError('The {} stack is not set up.'.format(self.stacktype))
 
 	def _make_zeros(self):
