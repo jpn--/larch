@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.3.2'
+VERSION = '3.3.5'
 
 
 
@@ -72,7 +72,7 @@ else:
 		os.environ['CLANG_CXX_LIBRARY'] = 'libc++'
 		os.environ['CLANG_CXX_LANGUAGE_STANDARD'] = 'gnu++0x'
 
-	# To update the version, run `git tag -a 3.3.2 -m'version 3.3.2, May 2016'`
+	# To update the version, run `git tag -a 3.3.5 -m'version 3.3.5, August 2016'`
 
 
 
