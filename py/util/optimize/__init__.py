@@ -88,7 +88,7 @@ def weight_choice_rebalance(model):
 	wg = model.DataEdit("Weight")
 	if not numpy.allclose(ch_tot, 1.0):
 		wg *= ch_tot
-		ch /= ch_tot[:,numpy.newaxis,:]
+		ch /= (ch_tot[:,numpy.newaxis,:] + (ch_tot[:,numpy.newaxis,:]==0))
 		return True
 	return False
 

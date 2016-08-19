@@ -134,6 +134,11 @@ except ImportError:
 else:
 	colorama.init()
 
+def _add_path(*arg):
+	import sys, os
+	sys.path.append(os.path.join(os.path.expanduser('~'), *arg))
+
+
 del sys
 del os
 #	try:

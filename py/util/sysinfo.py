@@ -1,4 +1,4 @@
-import platform, subprocess, re
+import platform, subprocess, re, os
 
 def get_processor_name():
 	"""Get a descriptive name of the CPU on this computer"""
@@ -47,3 +47,22 @@ def get_peak_memory_usage():
 	if mem > 2.0*2**30:
 		return str(mem/2**30) + " GiB"
 	return str(mem/2**20) + " MiB"
+
+
+
+
+
+def get_terminal_width(default=120, set_numpy=True):
+	try:
+		rows, columns = os.popen('stty size', 'r').read().split()
+		columns = int(columns)
+	except:
+		columns = default
+	if set_numpy:
+		import numpy
+		numpy.set_printoptions(linewidth=max(int(columns),50))
+	return columns
+
+
+
+

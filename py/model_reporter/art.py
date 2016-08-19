@@ -51,7 +51,50 @@ class _MergeFrom():
 
 
 
+class AbstractReportTables():
+	def __init__(self, *arg, newlist=None):
+		if newlist is None:
+			self.arts = [a for a in arg]
+		else:
+			self.arts = [a for a in arg] + newlist
+	def __add__(self, other):
+		if isinstance(other, AbstractReportTables):
+			return AbstractReportTables(newlist=self.arts+other.arts)
+		if isinstance(other, AbstractReportTable):
+			return AbstractReportTables(newlist=self.arts+[other])
+		raise TypeError
+	def __iadd__(self, other):
+		if isinstance(other, AbstractReportTables):
+			self.arts+=other.arts
+			return self
+		if isinstance(other, AbstractReportTable):
+			self.arts+=[other,]
+			return self
+		raise TypeError
+
+	def __xml__(self):
+		div = XML_Builder("div")
+		for a in self.arts:
+			div << a.xml()
+		return div.close()
+
+	def _repr_html_(self):
+		return self.__xml__().tostring().decode()
+
+	def __repr__(self):
+		return "\n\n".join(repr(a) for a in self.arts)
+
+
 class AbstractReportTable():
+
+	def __add__(self, other):
+		if isinstance(other, AbstractReportTables):
+			return AbstractReportTables(newlist=[self,]+other.arts)
+		if isinstance(other, AbstractReportTable):
+			return AbstractReportTables(newlist=[self, other])
+		raise TypeError
+	
+
 	def __init__(self, columns=('0',), col_classes=(), n_head_rows=1, from_dataframe=None, title=None, short_title=None):
 		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex())
 		self.col_classes = col_classes
@@ -133,6 +176,11 @@ class AbstractReportTable():
 		for n,s in enumerate(str_content):
 			self.df.iloc[-1,n] = self.encode_cell_value(s)
 	def addrow_map_of_strings(self, str_content, attrib={}):
+		self.add_blank_row()
+		rowix = self.df.index[-1]
+		for key,val in str_content.items():
+			self.df.loc[rowix, key] = self.encode_cell_value(val)
+	def addrow_kwd_strings(self, **str_content):
 		self.add_blank_row()
 		rowix = self.df.index[-1]
 		for key,val in str_content.items():
@@ -361,6 +409,8 @@ class AbstractReportTable():
 	
 	__xml__ = xml
 
+	def _repr_html_(self):
+		return self.__xml__().tostring().decode()
 
 	def to_xlsx(self, workbook, worksheet_name=None, r_top=0, c_left=0,
 	            freeze_panes=True, hide_gridlines=True,
@@ -550,7 +600,7 @@ class AbstractReportTable():
 
 
 
-
+ART = AbstractReportTable
 
 class AbstractReportTableFactory():
 	"""This class generalizes the ART for both preprocessed and postprocessing tables."""
@@ -871,8 +921,10 @@ class ArtModelReporter():
 				
 			i = last_stat.notes()
 			if i is not '':
+				if isinstance(i,str):
+					i = i.split("\n")
 				if isinstance(i,list):
-					if ii in i:
+					for ii in i:
 						x.add_blank_row()
 						x.set_lastrow_iloc_nondupe(0, "Notes")
 						x.set_lastrow_iloc(2, str(ii))

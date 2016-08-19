@@ -66,6 +66,25 @@ class OMX(_tb.file.File):
 			shp[1] = x[1]
 			self.root._v_attrs.SHAPE = shp
 
+	def add_blank_lookup(self, name, atom=None, shape=None, **kwargs):
+		if name in self.lookup._v_children:
+			return self.lookup._v_children[name]
+		if atom is None:
+			atom = _tb.Float64Atom()
+		if self.shape == (0,0) and shape is None:
+			raise OMXBadFormat('must set a nonzero shape first or give a shape')
+		if shape is not None:
+			if shape != self.shape[0] and shape != self.shape[1]:
+				if self.shape[0]==0 and self.shape[1]==0:
+					self.shape = (shape,shape)
+				else:
+					raise OMXIncompatibleShape('this omx has shape {!s} but you want to set {!s}'.format(self.shape, shape))
+		else:
+			if self.shape[0] != self.shape[1]:
+				raise OMXIncompatibleShape('this omx has shape {!s} but you did not pick one'.format(self.shape))
+			shape = self.shape[0]
+		return self.create_carray(self.lookup, name, atom=atom, shape=numpy.atleast_1d(shape), **kwargs)
+
 	def add_blank_matrix(self, name, atom=None, shape=None, **kwargs):
 		"""
 
@@ -159,6 +178,71 @@ class OMX(_tb.file.File):
 		return uniq_indexes[index_malordered]
 
 
+
+
+	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None):
+		"""Import a table in r,c,x,x,x... format into the matrix.
+		
+		The r and c columns need to be either 0-based or 1-based index values
+		(this may be relaxed in the future). The matrix must already be set up
+		with the correct size before importing the datatable.
+		
+		Parameters
+		----------
+		filepath : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		chunksize : int
+			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
+			chunks can be much faster and less memory intensive than reading the entire file.
+		column_map : dict or None
+			If given, this dict maps columns of the input file to OMX tables, with the keys as
+			the columns in the input and the values as the tables in the output.
+			
+		"""
+		if log is not None: log("START import_datatable")
+		from .util.smartread import SmartFileReader
+		sfr = SmartFileReader(filepath)
+		reader = pandas.read_csv(sfr, chunksize=chunksize)
+		chunk0 = next(pandas.read_csv(filepath, chunksize=1000))
+		
+		if n_rows is None:
+			n_rows = sum(1 for line in open(filepath, mode='r'))-1
+		
+		if column_map is None:
+			column_map = {i:i for i in chunk0.columns}
+		try:
+			for tsource,tresult in column_map.items():
+				use_dtype = chunk0[tsource].dtype
+				if use_dtype.kind=='O':
+					use_dtype = chunk0[tsource].astype('S').dtype
+				self.add_blank_lookup(tresult, atom=_tb.Atom.from_dtype(use_dtype), shape=n_rows)
+		except ValueError:
+			raise
+			import traceback
+			traceback.print_exc()
+			return chunk0
+
+		start_ix = 0
+
+		for n,chunk in enumerate(reader):
+			if log is not None:
+				log("PROCESSING CHUNK {} [{}]".format(n, sfr.progress()))
+			
+			for col in chunk.columns:
+				if col in column_map:
+					self.lookup._v_children[column_map[col]][start_ix:start_ix+len(chunk)] = chunk[col].values
+					self.lookup._v_children[column_map[col]].flush()
+			if log is not None:
+				log("finished processing chunk {} [{}]".format(n, sfr.progress()))
+
+			self.flush()
+		if log is not None: log("import_datatable({}) complete".format(filepath))
+
+
+
+
+
+
 	def import_datatable(self, filepath, one_based=True, chunksize=10000, column_map=None, default_atom='float32', log=None):
 		"""Import a table in r,c,x,x,x... format into the matrix.
 		
@@ -228,6 +312,8 @@ class OMX(_tb.file.File):
 		The r and c columns need to be either 0-based or 1-based index values
 		(this may be relaxed in the future). The matrix must already be set up
 		with the correct size before importing the datatable.
+		
+		This method is more memory intensive but much faster than the non-3d version. 
 		
 		Parameters
 		----------
@@ -300,14 +386,14 @@ class OMX(_tb.file.File):
 		raise TypeError("OMX matrix access must be by name (str)")
 
 	def __getattr__(self, key):
-		try:
-			return super().__getattr__(key)
-		except AttributeError:
+#		try:
+#			return super().__getattr__(key)
+#		except AttributeError:
 			if key in self.data._v_children and key not in self.lookup._v_children:
 				return self.data._v_children[key]
 			if key not in self.data._v_children and key in self.lookup._v_children:
 				return self.lookup._v_children[key]
-			raise
+			raise AttributeError('key {} not found'.format(key))
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
 		oth = OMX(otherfile, mode='r')
@@ -318,4 +404,22 @@ class OMX(_tb.file.File):
 				self.add_matrix(tab, oth.data._v_children[tab][:])
 			else:
 				self.add_matrix(tab, oth.data._v_children[tab][rowslicer,colslicer])
+
+	def info(self):
+		from .model_reporter.art import ART
+		## Header
+		a = ART(columns=('TABLE','DTYPE'), n_head_rows=1, title="OMX ({},{}) @ {}".format(self.shape[0],self.shape[1],self.filename), short_title=None)
+		a.addrow_kwd_strings(TABLE="Table", DTYPE="dtype")
+		## Content
+		if len(self.data._v_children):
+			a.add_blank_row()
+			a.set_lastrow_iloc(0, a.encode_cell_value("DATA"), {'class':"parameter_category"})
+		for v_name in sorted(self.data._v_children):
+			a.addrow_kwd_strings(TABLE=v_name, DTYPE=self.data._v_children[v_name].dtype)
+		if len(self.lookup._v_children):
+			a.add_blank_row()
+			a.set_lastrow_iloc(0, a.encode_cell_value("LOOKUP"), {'class':"parameter_category"})
+		for v_name in sorted(self.lookup._v_children):
+			a.addrow_kwd_strings(TABLE=v_name, DTYPE=self.lookup._v_children[v_name].dtype)
+		return a
 

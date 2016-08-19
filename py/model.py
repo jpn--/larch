@@ -828,8 +828,9 @@ class Model(Model2, ModelReporter):
 		"""
 		import pandas
 		from itertools import count
+		footnotes = set()
 		if by_alt:
-			table_cache = pandas.DataFrame(columns=["altcode","altname","data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram"])
+			table_cache = pandas.DataFrame(columns=["altcode","altname","data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram",])
 			names = self.needs()["UtilityCA"].get_variables()
 			for acode,aname in self.alternatives().items():
 				bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
@@ -846,7 +847,8 @@ class Model(Model2, ModelReporter):
 					zers = summary_attrib.n_zeros
 					mean_nonzer = summary_attrib.mean_nonzero
 					histos = summary_attrib.histogram
-					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos):
+					footnotes |= summary_attrib.notes
+					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos,):
 						newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
 									'data':s[0], 'mean':s[1], 'stdev':s[2],
 									'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
@@ -856,9 +858,9 @@ class Model(Model2, ModelReporter):
 						table_cache = table_cache.append(newrow, ignore_index=True)
 			table_cache.sort_values(['altcode','namecounter','filter'], inplace=True)
 			table_cache.index = range(len(table_cache))
-			return table_cache
+			return table_cache, footnotes
 		else:
-			table_cache = pandas.DataFrame(columns=["data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram"])
+			table_cache = pandas.DataFrame(columns=["data","filter","mean","stdev","min","max","zeros","mean_nonzero","positives","negatives","descrip","histogram",])
 			names = self.needs()["UtilityCA"].get_variables()
 			# agg over all alts
 			bucket = self.stats_utility_ca_chosen_unchosen()
@@ -875,7 +877,8 @@ class Model(Model2, ModelReporter):
 				zers = summary_attrib.n_zeros
 				mean_nonzer = summary_attrib.mean_nonzero
 				histos = summary_attrib.histogram
-				for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos):
+				footnotes |= summary_attrib.notes
+				for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos,):
 					newrow = {'filter':bucket_type,
 								'data':s[0], 'mean':s[1], 'stdev':s[2],
 								'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
@@ -885,7 +888,7 @@ class Model(Model2, ModelReporter):
 					table_cache = table_cache.append(newrow, ignore_index=True)
 			table_cache.sort_values(['namecounter','filter'], inplace=True)
 			table_cache.index = range(len(table_cache))
-			return table_cache
+			return table_cache, footnotes
 
 	def parameter_names(self, output_type=list):
 		x = []
@@ -984,6 +987,33 @@ class Model(Model2, ModelReporter):
 		except ValueError:
 			return numpy.inf
 
+	def _bhhh_simple_direction(self, *args, **kwargs):
+		from .linalg import general_inverse as _general_inverse
+		try:
+			constraints = self._built_constraints_cache
+		except AttributeError:
+			constraints = self._build_constraints(include_bounds=True)
+		if len(constraints)==0:
+			return numpy.dot(self.d_loglike(*args),_general_inverse(self.bhhh(*args)))
+		# constraints are pre-built by _build_constraints here
+		try:
+			d2, bh, d1, abandoned_slots = self._compute_constrained_d2_loglike_and_bhhh(constraints=constraints, skip_d2=True)
+		except TypeError:  # intermediate constraints?  TODO fix this
+			raise
+		try:
+			return numpy.dot(d1,_general_inverse(bh))
+		except ValueError:
+			raise
+
+	def _bhhh_simple_step(self, steplen=1.0, printer=None):
+		direction = self._bhhh_simple_direction()
+		self.parameter_array[:] = self.parameter_array[:] + direction
+		val = self.loglike()
+		if printer is not None:
+			printer("simple step to:\n"+self._parameter_report())
+			printer("LL={}".format(val))
+		return val
+
 	def parameter_holdfast_mask(self):
 		return self.parameter_holdfast_array.copy()
 
@@ -1057,8 +1087,34 @@ class Model(Model2, ModelReporter):
 		m.maximize_loglike()
 		self._LL_nil = m.loglike()
 
+
+	def doctor(self):
+		doc = []
+		def spot_a_nan(arr, label, none_is_ok=True):
+			if arr is None:
+				if not none_is_ok:
+					doc.append("{} is None".format(label))
+			else:
+				nans = numpy.isnan(arr)
+				if numpy.any(nans):
+					first = tuple(i[0] for i in numpy.where(nans))
+					doc.append("{} is NaN at {}".format(label,str(first)))
+		spot_a_nan(self.data.choice, "data.choice", none_is_ok=False)
+		spot_a_nan(self.data.utilityco, "data.utilityco")
+		spot_a_nan(self.data.utilityca, "data.utilityca")
+		spot_a_nan(self.work.probability, "work.probability")
+		if doc:
+			from .util.doctor import warn
+			warn( "larch.Model.doctor says\n"+"\n".join(doc) )
+			return "\n".join(doc)
+		else:
+			return "ok"
+
+
 	def loglike(self, *args, cached=True, holdfast_unmask=0, blp_contraction_threshold=1e-8):
 		if len(args)>0:
+			if numpy.any(numpy.isnan(args[0])):
+				return -numpy.inf
 			self.parameter_values(args[0], holdfast_unmask)
 		if self.Data_UtilityCE_manual.active():
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
@@ -1072,6 +1128,7 @@ class Model(Model2, ModelReporter):
 				pr_sum = (pr*self.Data("Weight")).sum(0)
 				pr_sum /= pr_sum.sum()
 				delta = self.logmarketshares - numpy.log(pr_sum)
+				delta[numpy.isnan(delta)] = 0
 				self.parameter_array[self.blp_shares_map] += delta
 				delta_norm = numpy.sum(delta**2)	
 			# remean shocks
@@ -1086,6 +1143,9 @@ class Model(Model2, ModelReporter):
 		ll = super().loglike()
 		if isinstance(self._cached_results, function_cache):
 			self._cached_results[self.parameter_array.tobytes()].loglike = ll
+		if numpy.isnan(ll):
+			self.doctor()
+			ll = -numpy.inf
 		return ll
 
 
@@ -1096,6 +1156,8 @@ class Model(Model2, ModelReporter):
 	def negative_d_loglike(self, *args):
 		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
+				if numpy.any(numpy.isnan(args[0])):
+					return numpy.full(self.parameter_array.shape, numpy.nan)
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
@@ -1104,7 +1166,7 @@ class Model(Model2, ModelReporter):
 			z= super().negative_d_loglike(*args)
 		return z
 
-	def d_loglike(self, *args):
+	def d_loglike(self, *args, cached=True):
 		"""
 		Find the first derivative of the log likelihood of the model, with respect to the parameters.
 		
@@ -1126,28 +1188,45 @@ class Model(Model2, ModelReporter):
 		"""
 		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
+				if numpy.any(numpy.isnan(args[0])):
+					return numpy.full(self.parameter_array.shape, numpy.nan)
 				self.parameter_values(args[0])
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
 			return self.d_loglike_given_utility()
-		return -(self.negative_d_loglike(*args))
+		if not cached:
+			return -(self.negative_d_loglike_nocache(*args))
+		else:
+			return -(self.negative_d_loglike(*args))
 
 	def d_loglike_nocache(self, *args):
+		if len(args)>0:
+			if numpy.any(numpy.isnan(args[0])):
+				return numpy.full(self.parameter_array.shape, numpy.nan)
 		if self.Data_UtilityCE_manual.active():
 			return self.d_loglike(*args)
 		return -(self.negative_d_loglike_nocache(*args))
 
 	def d_loglike_cached(self, *args):
+		if len(args)>0:
+			if numpy.any(numpy.isnan(args[0])):
+				return numpy.full(self.parameter_array.shape, numpy.nan)
 		if self.Data_UtilityCE_manual.active():
 			return self.d_loglike(*args)
 		return -(self.negative_d_loglike_cached(*args))
 
 	def negative_d_loglike_nocache(self, *args):
+		if len(args)>0:
+			if numpy.any(numpy.isnan(args[0])):
+				return numpy.full(self.parameter_array.shape, numpy.nan)
 		if self.Data_UtilityCE_manual.active():
 			return self.negative_d_loglike(*args)
 		return super().negative_d_loglike_nocache(*args)
 
 	def negative_d_loglike_cached(self, *args):
+		if len(args)>0:
+			if numpy.any(numpy.isnan(args[0])):
+				return numpy.full(self.parameter_array.shape, numpy.nan)
 		if self.Data_UtilityCE_manual.active():
 			return self.negative_d_loglike(*args)
 		return super().negative_d_loglike_cached(*args)
@@ -1690,6 +1769,12 @@ class Model(Model2, ModelReporter):
 			raise
 		self.tearDown()
 		self.setUp(and_load_data=False, force=True)
+
+
+	def _simple_bhhh_direction(self):
+		b = self.bhhh()
+		from .linalg import general_inverse
+
 
 class _AllInTheFamily():
 

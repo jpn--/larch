@@ -22,6 +22,7 @@ from .util.aster import asterize
 import keyword
 import pandas
 import os
+import re
 from .util.groupnode import GroupNode
 
 class IncompatibleShape(LarchError):
@@ -2446,7 +2447,83 @@ class DT(Fountain):
 #
 
 
-	def info(self, log=print):
+	def info(self):
+		v_names = []
+		v_dtypes = []
+		v_ftypes = []
+		v_filenames = []
+		for i in sorted(self.variables_co()):
+			v_names.append(str(i))
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)):
+				if '_values_' in self.idco[i]:
+					v_dtypes.append(str(_pytables_link_dereference(self.idco[i]._values_).dtype))
+				elif 'stack' in _pytables_link_dereference(self.idco[i])._v_attrs:
+					v_dtypes.append('<stack>')
+				else:
+					v_dtypes.append('¿group?')
+			else:
+				v_dtypes.append(str(_pytables_link_dereference(self.idco[i]).dtype))
+			v_ftypes.append('idco')
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)) and '_values_' in self.idco[i]:
+				v_filenames.append(self.idco[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idco[i]._v_file.filename)
+		for i in sorted(self.variables_ca()):
+			v_names.append(str(i))
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)):
+				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+			else:
+				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
+			v_ftypes.append('idca')
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)) and '_values_' in self.idca[i]:
+				v_filenames.append(self.idca[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idca[i]._v_file.filename)
+		section = None
+		max_v_name_len = 8
+		for v_name in v_names:
+			if len(v_name) > max_v_name_len:
+				max_v_name_len = len(v_name)
+		max_v_dtype_len = 7
+		for v_dtype in v_dtypes:
+			if len(v_dtype) > max_v_dtype_len:
+				max_v_dtype_len = len(v_dtype)
+		selfname = self.h5f.filename
+		show_filenames = False
+		for v_filename in v_filenames:
+			if v_filename!=selfname:
+				show_filenames = True
+				break
+		show_filenames = True
+		
+		from .model_reporter.art import ART
+		
+		## Header
+		if not show_filenames:
+			a = ART(columns=('VAR','DTYPE'), n_head_rows=1, title="DT Content", short_title=None)
+			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype")
+		else:
+			a = ART(columns=('VAR','DTYPE','FILE'), n_head_rows=1, title="DT Content", short_title=None)
+			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype", FILE="Source File")
+		## Content
+		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
+			if v_ftype != section:
+				a.add_blank_row()
+				a.set_lastrow_iloc(0, a.encode_cell_value(v_ftype), {'class':"parameter_category"})
+				section = v_ftype
+			if not show_filenames:
+				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype)
+			else:
+				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype, FILE=v_filename)
+		if len(self.expr):
+			a.addrow_seq_of_strings(["Expr",])
+			for i in self.expr:
+				a.addrow_seq_of_strings([i,])
+		return a
+
+
+
+	def info_to_log(self, log=print):
 		v_names = []
 		v_dtypes = []
 		v_ftypes = []
@@ -2925,10 +3002,40 @@ class DT_idco_stack_manager:
 
 
 
-def DTx(filename=None, *, idco=None, idca=None, caseids=None, alts=None, **kwargs):
-	if idco is None and idca is None:
-		raise TypeError('one of idca or idco sources must be given')
-	d = DT(filename, **kwargs)
+def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
+	"""Build a new DT with externally linked data.
+	
+	Parameters
+	----------
+	filename : str or None
+		The name of the new DT file to create.  If None, a temporary file is created.
+	idco{n} : str
+		A file path to a DT file containing idco variables to link.  `n` can be any number.
+		If the same variable name appears multiple times, the highest numbered source file
+		is the one that survives.
+		Must be passed as a keyword argument.
+	idca{n} : str
+		A file path to a DT file containing idca variables to link.  `n` can be any number.
+		If the same variable name appears multiple times, the highest numbered source file
+		is the one that survives.
+		Must be passed as a keyword argument.
+	
+	"""
+	dt_init_kwargs = {}
+	idco_kwargs = {}
+	idca_kwargs = {}
+	for kwd,kwarg in kwargs.items():
+		if re.match('idco[0-9]*$',kwd):
+			idco_kwargs[kwd] = kwarg
+		elif re.match('idca[0-9]*$',kwd):
+			idca_kwargs[kwd] = kwarg
+		else:
+			dt_init_kwargs[kwd] = kwarg
+
+	if len(idco_kwargs)==0 and len(idca_kwargs)==0:
+		raise TypeError('at least one idca or idco source must be given')
+
+	d = DT(filename, **dt_init_kwargs)
 	got_caseids = False
 	got_alts = False
 	if caseids is not None:
@@ -2962,38 +3069,43 @@ def DTx(filename=None, *, idco=None, idca=None, caseids=None, alts=None, **kwarg
 		else:
 			tag_alts = alts
 		got_alts = swap_alts(tag_alts)
-	if idca is not None:
-		if ":/" not in idca:
-			tag_idca = idca + ":/larch/idca"
-			tag_caseids = idca + ":/larch/caseids"
-			tag_alts = idca + ":/larch/alts"
-		else:
-			tag_idca = idca
-			tag_caseids = None
-			tag_alts = None
-		d.idca.add_external_data(tag_idca)
-		if not got_caseids and tag_caseids is not None:
-			d.remove_node_if_exists(d.h5top, 'caseids')
-			d.create_external_link(d.h5top, 'caseids', tag_caseids)
-			got_caseids = True
-		if not got_alts and tag_alts is not None:
-			got_alts = swap_alts(tag_alts)
-	if idco is not None:
-		if ":/" not in idco:
-			tag_idco = idco + ":/larch/idco"
-			tag_caseids = idco + ":/larch/caseids"
-			tag_alts = idco + ":/larch/alts"
-		else:
-			tag_idco = idco
-			tag_caseids = None
-			tag_alts = None
-		d.idco.add_external_data(tag_idco)
-		if not got_caseids and tag_caseids is not None:
-			d.remove_node_if_exists(d.h5top, 'caseids')
-			d.create_external_link(d.h5top, 'caseids', tag_caseids)
-			got_caseids = True
-		if not got_alts and tag_alts is not None:
-			got_alts = swap_alts(tag_alts)
+
+	for idca_kw in sorted(idca_kwargs):
+		idca = idca_kwargs[idca_kw]
+		if idca is not None:
+			if ":/" not in idca:
+				tag_idca = idca + ":/larch/idca"
+				tag_caseids = idca + ":/larch/caseids"
+				tag_alts = idca + ":/larch/alts"
+			else:
+				tag_idca = idca
+				tag_caseids = None
+				tag_alts = None
+			d.idca.add_external_data(tag_idca)
+			if not got_caseids and tag_caseids is not None:
+				d.remove_node_if_exists(d.h5top, 'caseids')
+				d.create_external_link(d.h5top, 'caseids', tag_caseids)
+				got_caseids = True
+			if not got_alts and tag_alts is not None:
+				got_alts = swap_alts(tag_alts)
+	for idco_kw in sorted(idco_kwargs):
+		idco = idco_kwargs[idco_kw]
+		if idco is not None:
+			if ":/" not in idco:
+				tag_idco = idco + ":/larch/idco"
+				tag_caseids = idco + ":/larch/caseids"
+				tag_alts = idco + ":/larch/alts"
+			else:
+				tag_idco = idco
+				tag_caseids = None
+				tag_alts = None
+			d.idco.add_external_data(tag_idco)
+			if not got_caseids and tag_caseids is not None:
+				d.remove_node_if_exists(d.h5top, 'caseids')
+				d.create_external_link(d.h5top, 'caseids', tag_caseids)
+				got_caseids = True
+			if not got_alts and tag_alts is not None:
+				got_alts = swap_alts(tag_alts)
 	return d
 
 

@@ -157,7 +157,14 @@ def _minimize_bfgs_1(fun, x0, args=(), jac=None, callback=None,
 		Hk = I
 	else:
 		if callable(hess):
-			Hk = hess(x0)
+			try:
+				Hk = hess(x0)
+			except ValueError as valerr:
+				result = OptimizeResult(fun=numpy.inf, jac=gfk, hess_inv=None, nfev=func_calls[0],
+										njev=grad_calls[0], status=9,
+										success=False, message="error in bhhh", x=x0,
+										nit=k)
+				return result
 		else:
 			Hk = hess
 	old_fval = f(x0)
@@ -309,7 +316,14 @@ def _minimize_bhhh_wolfe(fun, x0, args=(), jac=None, callback=None,
 	if hess is None:
 		raise LarchError('BHHH algorithm requires a BHHH function!')
 	else:
-		Hk = hess(x0)
+		try:
+			Hk = hess(x0)
+		except ValueError as valerr:
+			result = OptimizeResult(fun=numpy.inf, jac=gfk, hess_inv=None, nfev=func_calls[0],
+									njev=grad_calls[0], status=9,
+									success=False, message="error in bhhh", x=x0,
+									nit=k)
+			return result
 	old_fval = f(x0)
 	old_old_fval = None
 	xk = x0
@@ -351,14 +365,28 @@ def _minimize_bhhh_wolfe(fun, x0, args=(), jac=None, callback=None,
 			# wrong.
 			warnflag = 2
 			break
-
-		Hk = hess(xk)
+		
+		try:
+			Hk = hess(xk)
+		except ValueError:
+			warnflag = 3
+			break
+			
 
 	fval = old_fval
 	if numpy.isnan(fval):
 		# This can happen if the first call to f returned NaN;
 		# the loop is then never entered.
 		warnflag = 2
+
+	if warnflag == 3:
+		msg = "error in bhhh"
+		if disp:
+			print("Warning: " + msg)
+			print("			Current function value: %f" % fval)
+			print("			Iterations: %d" % k)
+			print("			Function evaluations: %d" % func_calls[0])
+			print("			Gradient evaluations: %d" % grad_calls[0])
 
 	if warnflag == 2:
 		msg = _status_message['pr_loss']
@@ -550,7 +578,15 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 	if hess is None:
 		raise LarchError('BHHH algorithm requires a BHHH function!')
 	else:
-		Hk = hess(x0)
+		try:
+			Hk = hess(x0)
+		except ValueError as valerr:
+			result = OptimizeResult(fun=numpy.inf, jac=gfk, hess_inv=None, nfev=func_calls[0],
+									njev=grad_calls[0], status=9,
+									success=False, message="error in bhhh", x=x0,
+									nit=k)
+			return result
+
 	old_fval = f(x0)
 	old_old_fval = None
 	xk = x0
@@ -592,7 +628,11 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 			warnflag = 2
 			break
 
-		Hk = hess(xk)
+		try:
+			Hk = hess(xk)
+		except ValueError:
+			warnflag = 5
+			break
 
 	fval = old_fval
 	if numpy.isnan(fval):
@@ -620,6 +660,15 @@ def _minimize_bhhh_simple(fun, x0, args=(), jac=None, callback=None,
 
 	elif warnflag == 4:
 		msg = "unable to make reasonable improvements due to some kind of problem"
+		if disp:
+			print("Warning: " + msg)
+			print("			Current function value: %f" % fval)
+			print("			Iterations: %d" % k)
+			print("			Function evaluations: %d" % func_calls[0])
+			print("			Gradient evaluations: %d" % grad_calls[0])
+
+	elif warnflag == 5:
+		msg = "error in bhhh"
 		if disp:
 			print("Warning: " + msg)
 			print("			Current function value: %f" % fval)

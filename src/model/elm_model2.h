@@ -548,7 +548,6 @@ namespace elm {
 		void _parameter_update();
 		void _parameter_push(const std::vector<double>& v);
 		void _parameter_log();
-		std::string _parameter_report() const;
 
 //////// MARK: RECORDED RESULTS //////////////////////////////////////////////////////
 
@@ -560,6 +559,9 @@ namespace elm {
 
 
 #endif // ndef SWIG
+
+	public:
+		std::string _parameter_report() const;
 
 	public:
 		double _LL_null;

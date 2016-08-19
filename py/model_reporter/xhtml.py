@@ -1348,7 +1348,7 @@ class XhtmlModelReporter():
 
 			if len(self.alternative_codes()) >= 0:
 				x.h3("Utility idCA Data", anchor=1)
-				table_cache = self.stats_utility_ca(by_alt=False)
+				table_cache, footnotes = self.stats_utility_ca(by_alt=False)
 				
 				#pre_display_cols
 				#	('Data','name'),
@@ -1394,11 +1394,16 @@ class XhtmlModelReporter():
 									print("Exception in Code")
 									print(block)
 									raise
+				x.start('caption')
+				for fn, footnote in enumerate(sorted(footnotes)):
+					if fn: x.simple('br')
+					x.data(footnote)
+				x.end('caption')
 				x.end('table')
 
 			if len(self.alternative_codes()) < 30:
 				x.h3("Utilty idCA Data by Alternative", anchor=1)
-				table_cache = self.stats_utility_ca()
+				table_cache, footnotes = self.stats_utility_ca()
 				
 				#pre_display_cols
 				#	('Alternative','altname'),
@@ -1417,6 +1422,8 @@ class XhtmlModelReporter():
 					display_cols += [('# Positives',"positives", "{:.0f}"),]
 				if table_cache['negatives'].sum()>0:
 					display_cols += [('# Negatives',"negatives", "{:.0f}"),]
+	
+				footnotes = set()
 				
 				x.start('table',{'class':'floatinghead'})
 				x.thead
@@ -1449,6 +1456,11 @@ class XhtmlModelReporter():
 									print("Exception in Code")
 									print(block)
 									raise
+				x.start('caption')
+				for fn, footnote in enumerate(sorted(footnotes)):
+					if fn: x.simple('br')
+					x.data(footnote)
+				x.end('caption')
 				x.end('table')
 				
 				

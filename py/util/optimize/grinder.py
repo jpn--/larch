@@ -108,6 +108,10 @@ def minimize_with_watcher(fun, x0, args=(), *, slow_len=(), slow_thresh=(), ctol
 		r.message = "Optimization terminated successfully per computed tolerance"
 		if logger:
 			logger.log(30,"{} [{}]".format(suc.describe(),method_str))
+#	except Exception as err:
+#		r = OptimizeResult(message=str(err), success=False)
+#		if logger:
+#			logger.log(30,"{} [{}]".format(r.message,method_str))
 	else:
 		if logger:
 			logger.log(30,"{} [{}]".format(r.message,method_str))

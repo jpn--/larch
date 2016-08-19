@@ -1198,6 +1198,9 @@ void elm::Model2::parameter_values(std::vector<double> v, const signed char& hol
 		OOPS(errmsg.str());
 	}
 	for (unsigned z=0; z<v.size(); z++) {
+		if (isNan(FCurrent[z])) {
+			FCurrent[z] = v[z];
+		} else
 		if (FHoldfast.int8_at(z) & (~holdfast_unmask)) {
 			if (v[z] != FCurrent[z]) {
 				if (holdfast_unmask) {

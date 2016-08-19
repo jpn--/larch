@@ -4053,6 +4053,9 @@ class Model2(sherpa):
 
     def log_likelihood_from_prob(self, probarray: 'etk::ndarray *') -> "double":
         return _core.Model2_log_likelihood_from_prob(self, probarray)
+
+    def _parameter_report(self) -> "std::string":
+        return _core.Model2__parameter_report(self)
     _LL_null = _swig_property(_core.Model2__LL_null_get, _core.Model2__LL_null_set)
     _LL_nil = _swig_property(_core.Model2__LL_nil_get, _core.Model2__LL_nil_set)
     _LL_constants = _swig_property(_core.Model2__LL_constants_get, _core.Model2__LL_constants_set)

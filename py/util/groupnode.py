@@ -170,18 +170,34 @@ class GroupNode():
 		self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
-	def add_external_omx(self, omx_filename, rowindexnode, prefix=""):
-		self._v_file.create_external_link(self._v_file.root, 'temp_omx', omx_filename+":/")
-		temp_omx = self._v_file.root.temp_omx()
-		for vname in temp_omx.data._v_children:
-			try:
-				vgrp = self._v_file.create_group(self._v_node, prefix+vname)
-			except _tb.exceptions.NodeError:
-				import warnings
-				warnings.warn('the name "{}" already exists'.format(prefix+vname))
-			else:
-				self._v_file.create_hard_link(vgrp, '_index_', rowindexnode)
-				self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
+	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1):
+		temp_num = 1
+		while 'temp_omx_{}'.format(temp_num) in self._v_file.root._v_children:
+			temp_num += 1
+		self._v_file.create_external_link(self._v_file.root, 'temp_omx_{}'.format(temp_num), omx_filename+":/")
+		temp_omx = lambda: self._v_file.root._v_children['temp_omx_{}'.format(temp_num)]()
+		if 'data' in temp_omx():
+			for vname in sorted(temp_omx().data._v_children):
+				try:
+					vgrp = self._v_file.create_group(self._v_node, prefix+vname)
+				except tables.exceptions.NodeError:
+					import warnings
+					warnings.warn('the name "{}" already exists'.format(prefix+vname))
+				else:
+					self._v_file.create_hard_link(vgrp, '_index_', rowindexnode)
+					self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
+		if 'lookup' in temp_omx():
+			for lname in sorted(temp_omx().lookup._v_children):
+				if temp_omx().lookup._v_children[lname].shape == (n_alts,):
+					full_lname = (prefix+lname).replace(' ','_').replace('-','_')
+					try:
+						vgrp = self._v_file.create_group(self._v_node, full_lname)
+					except tables.exceptions.NodeError:
+						import warnings
+						warnings.warn('the name "{}" already exists'.format(full_lname))
+					else:
+						self._v_file.create_carray(vgrp, '_index_', shape=(n_alts,), atom=tables.Int32Atom()) # zeros
+						self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/lookup/"+lname)
 
 
 
