@@ -234,5 +234,6 @@ class TestSwissmetroExamples(ELM_TestCase):
 		m.roll(filename="None", cats='*', throw_exceptions=True)
 		#
 		m2 = Model.Example(102)
+		m2.logger(False)
 		m2.roll(filename="None", cats='*', throw_exceptions=True)
 

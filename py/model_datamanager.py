@@ -1,5 +1,5 @@
 from .util.attribute_dict import dictal
-
+from .util.text_manip import case_insensitive_close_matches
 
 class DataManager:
 	"""Manages data for a :class:`Model`."""
@@ -39,6 +39,29 @@ class DataManager:
 	def needs(self):
 		return dictal(self._model.needs())
 
+	@property
+	def utilityco_vars(self):
+		return self._model.needs()['UtilityCO'].get_variables()
+
+	@property
+	def utilityca_vars(self):
+		return self._model.needs()['UtilityCA'].get_variables()
+
+	def utilityco_varindex(self, var):
+		vars = self._model.needs()['UtilityCO'].get_variables()
+		try:
+			return vars.index(var)
+		except ValueError:
+			case_insensitive_close_matches(var, vars, excpt=KeyError)
+
+	def utilityca_varindex(self, var):
+		vars = self._model.needs()['UtilityCA'].get_variables()
+		try:
+			return vars.index(var)
+		except ValueError:
+			case_insensitive_close_matches(var, vars, excpt=KeyError)
+
+
 
 
 class WorkspaceManager:
@@ -53,7 +76,7 @@ class WorkspaceManager:
 
 	@property
 	def utility(self):
-		if m.Utility().shape == (0,):
+		if self._model.Utility().shape == (0,):
 			raise TypeError("this model did not allocate a seperate utility computational array")
 		return self._model.Utility()
 

@@ -13,7 +13,7 @@ def supercasefold(s):
 	
 	
 	
-def case_insensitive_close_matches(word, possibilities, n=3, cutoff=0.6):
+def case_insensitive_close_matches(word, possibilities, n=3, cutoff=0.6, excpt=None):
     """Use SequenceMatcher to return list of the best "good enough" matches.
 
     word is a sequence for which close matches are desired (typically a
@@ -60,4 +60,11 @@ def case_insensitive_close_matches(word, possibilities, n=3, cutoff=0.6):
     # Move the best scorers to head of list
     result = _nlargest(n, result)
     # Strip scores for the best n matches
-    return [x for score, x in result]
+    ret = [x for score, x in result]
+    if not excpt is None:
+        did_you_mean = "'{}' not found, did you mean {}?".format(word, " or ".join("'{}'".format(s) for s in ret))
+        raise excpt(did_you_mean)
+    return ret
+
+
+

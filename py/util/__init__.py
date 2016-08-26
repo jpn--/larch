@@ -4,6 +4,8 @@ from .temporaryfile import TemporaryFile, TemporaryHtml
 from .persistent import stored_dict
 from .attribute_dict import dicta, quickdot
 
+from . import categorize
+
 allowed_math = ('log', 'exp', 'log1p')
 
 

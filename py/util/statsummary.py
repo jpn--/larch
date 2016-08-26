@@ -21,6 +21,7 @@ class statistical_summary():
 		self.mean_nonzero = None
 		# Figures
 		self.histogram = None
+		self.notes = set()
 		for kw,val in kwargs.items():
 			setattr(self,kw,val)
 
@@ -39,40 +40,60 @@ class statistical_summary():
 			s += "\n unique values: {}".format(repr(self.unique_values).replace("\n","\n                "))
 		return s
 
+	def empty(self):
+		if self.mean is None and \
+			self.stdev is None and \
+			self.minimum is None and \
+			self.maximum is None and \
+			self.n_positives is None and \
+			self.n_negatives is None and \
+			self.n_zeros is None and \
+			self.n_nonzeros is None and \
+			self.unique_values is None and \
+			self.mean_nonzero is None and \
+			self.histogram is None and \
+			len(self.notes)==0: return True
+		return False
+
 	@staticmethod
-	def compute(xxx, histogram_bins='auto', count_uniques=False):
-		ss = statistical_summary()
-		ss.mean = numpy.mean(xxx,0)
-		ss.stdev = numpy.std(xxx,0)
-		ss.minimum = numpy.amin(xxx,0)
-		ss.maximum = numpy.amax(xxx,0)
-		try:
-			xxx_shape_1 = xxx.shape[1]
-		except IndexError:
-			ss.n_nonzeros = numpy.count_nonzero(xxx)
-			ss.n_positives = int(numpy.sum(xxx>0))
-			ss.n_negatives = int(numpy.sum(xxx<0))
-			ss.n_zeros = xxx.size-ss.n_nonzeros
+	def compute(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x):
+		if len(xxx)==0:
+			return statistical_summary()
 		else:
-			ss.n_nonzeros = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
-			ss.n_positives = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1))
-			ss.n_negatives = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1))
-			ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
-		sumx_ = numpy.sum(xxx,0)
-		ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
-		ss.notes = set()
-		if len(xxx.shape) == 1:
-			ss.histogram = [spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),]
-		else:
-			ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins, notetaker=ss.notes)], 0, xxx).squeeze()
-		# Make sure that the histogram field is iterable
-		if isinstance(ss.histogram, numpy.ndarray):
-			ss.histogram = numpy.atleast_1d(ss.histogram)
-#		try:
-#			iter(ss.histogram)
-#		except:
-#			ss.histogram = [ss.histogram, ]
-		if count_uniques:
-			q1,q2 = numpy.unique(xxx, return_counts=True)
-			ss.unique_values = pandas.Series(q2,q1)
-		return ss
+			ss = statistical_summary()
+			ss.mean = dimzer( numpy.mean(xxx,0) )
+			ss.stdev = dimzer( numpy.std(xxx,0) )
+			ss.minimum = dimzer( numpy.amin(xxx,0) )
+			ss.maximum = dimzer( numpy.amax(xxx,0) )
+			try:
+				xxx_shape_1 = xxx.shape[1]
+			except IndexError:
+				ss.n_nonzeros = dimzer( numpy.count_nonzero(xxx) )
+				ss.n_positives = dimzer( int(numpy.sum(xxx>0)) )
+				ss.n_negatives = dimzer( int(numpy.sum(xxx<0)) )
+				ss.n_zeros = dimzer( xxx.size-ss.n_nonzeros )
+				ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),)
+			else:
+				ss.n_nonzeros = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
+				ss.n_positives = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1))
+				ss.n_negatives = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1))
+				ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
+				ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes) for i in range(xxx_shape_1))
+			sumx_ = dimzer( numpy.sum(xxx,0) )
+			ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+#			if len(xxx.shape) == 1:
+#				ss.histogram = [spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),]
+#			else:
+#				ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins, notetaker=ss.notes)], 0, xxx).squeeze()
+			
+			# Make sure that the histogram field is iterable
+			if isinstance(ss.histogram, numpy.ndarray):
+				ss.histogram = numpy.atleast_1d(ss.histogram)
+	#		try:
+	#			iter(ss.histogram)
+	#		except:
+	#			ss.histogram = [ss.histogram, ]
+			if count_uniques:
+				q1,q2 = numpy.unique(xxx, return_counts=True)
+				ss.unique_values = pandas.Series(q2,q1)
+			return ss

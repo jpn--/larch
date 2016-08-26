@@ -4,6 +4,7 @@ import os
 import os.path
 from .temporaryfile import TemporaryFile
 import types
+import glob
 
 def filename_split(filename):
 	pathlocation, basefile = os.path.split(filename)
@@ -155,3 +156,29 @@ def open_stack(filename=None, *arg, format="{basename:s}.{number:03d}{extension:
 
 fileopen = open_stack
 filenext = next_stack
+
+
+
+
+
+
+
+
+def latest_matching(pattern):
+	"Get the most recently modified file matching the glob pattern"
+	files = glob.glob(pattern)
+	filetimes = []
+	propose = None
+	propose_mtime = 0
+	for file in files:
+		(mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(file)
+		#print (file,"last modified: %s" % time.ctime(mtime))
+		if mtime > propose_mtime:
+			propose_mtime = mtime
+			propose = file
+	return propose
+
+
+
+
+

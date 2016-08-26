@@ -88,11 +88,12 @@ class Elem(Element):
 			Element.__init__(self,tag,attrib,**extra)
 			if text: self.text = str(text)
 			if tail: self.tail = str(tail)
-	def put(self, tag, attrib={}, text=None, **extra):
+	def put(self, tag, attrib={}, text=None, tail=None, **extra):
 		attrib = attrib.copy()
 		attrib.update(extra)
 		element = Elem(tag, attrib)
 		if text: element.text = str(text)
+		if tail: element.tail = str(tail)
 		self.append(element)
 		return element
 	def __call__(self, *arg, **attrib):

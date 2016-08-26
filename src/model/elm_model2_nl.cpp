@@ -774,7 +774,7 @@ ELM_RESULTCODE elm::Model2::nest
 			std::string fn = freedom_name;
 			etk::uppercase(fn);
 			if (fn!="CONSTANT") {
-				parameter(freedom_name,1,1,1,1,0);
+				parameter(freedom_name,1,1,1,1,1e-5); // min set to slightly above 0
 			}
 			result |= ELM_UPDATED;
 		}

@@ -19,6 +19,7 @@ import warnings
 import numbers
 import collections
 from .util.aster import asterize
+from .util.naming import make_valid_identifier
 import keyword
 import pandas
 import os
@@ -414,6 +415,10 @@ class DT(Fountain):
 			return int(screen.shape[0])
 		else:
 			return int(self.h5caseids.shape[0])
+
+	def nAllCases(self):
+		"""The total number of cases, ignoring any screens."""
+		return int(self.h5caseids.shape[0])
 
 	def nAlts(self):
 		return int(self.alts.altids.shape[0])
@@ -854,20 +859,20 @@ class DT(Fountain):
 				startcount += n
 			exclusions = ex_all.any(1)
 		else:
-			exclusions = self.array_idco('0', screen="None", dtype=bool)
+			exclusions = self.array_idco('0', screen="None", dtype=bool).squeeze()
 		if exclude_idca:
 			for altnum, expr in exclude_idca:
 				altslot = self._alternative_slot(altnum)
 				startcount = exclusions.sum()
-				exclusions |= self.array_idca(expr, screen="None", dtype=bool)[:,altslot,:].any(1)
+				exclusions |= self.array_idca(expr, screen="None", dtype=bool)[:,altslot,:].any(1).squeeze()
 				n = exclusions.sum() - startcount
 				summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 		if exclude_unavail:
 			startcount = exclusions.sum()
-			exclusions |= (~(self.array_avail(screen="None").any(1)))
+			exclusions |= (~(self.array_avail(screen="None").any(1))).squeeze()
 			n = exclusions.sum() - startcount
 			summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
-			self.h5top.screen._v_attrs.exclude_result = s
+			#self.h5top.screen._v_attrs.exclude_result = s
 
 		if exclude_unchoosable>1:
 			n_total = 0
@@ -886,6 +891,15 @@ class DT(Fountain):
 			exclusions |= numpy.logical_and(self.array_choice(screen="None", dtype=bool), ~self.array_avail(screen="None")).any(1).squeeze()
 			n = exclusions.sum() - startcount
 			summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+
+		## always exclude where there are no choices
+		startcount = exclusions.sum()
+		nochoices = self.array_choice(screen="None", dtype=float).sum(1)==0
+		exclusions |= nochoices.squeeze()
+		n = exclusions.sum() - startcount
+		if n:
+			summary.loc["No Chosen Alternatives",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+		
 
 		if len(summary)>0:
 			summary['# Cases Remaining'][0] = self.h5caseids.shape[0] - summary['# Cases Excluded'][0]
@@ -978,7 +992,10 @@ class DT(Fountain):
 	def exclude_unchoosable(self, value):
 		if not isinstance(value, (bool, int)):
 			value = int(value)
-		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=value)
+		try:
+			self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=value)
+		except TypeError:
+			self.set_screen(exclude_unchoosable=value)
 
 	@property
 	def exclude_unavail(self):
@@ -989,7 +1006,10 @@ class DT(Fountain):
 	@exclude_unavail.setter
 	def exclude_unavail(self, value):
 		value = bool(value)
-		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=value, exclude_unchoosable=None)
+		try:
+			self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=value, exclude_unchoosable=None)
+		except TypeError:
+			self.set_screen(exclude_unavail=value)
 
 
 	@property
@@ -1047,6 +1067,63 @@ class DT(Fountain):
 			return m.provision(provide)
 		else:
 			return provide
+
+#	def provision_fat(self, needs, screen=None, fat=1, zero_out=('Choice',), **kwargs):
+#		if not isinstance(screen, int):
+#			raise NotImplementedError('provision_fat requires a single integer screen, but {} was given'.format(type(screen)))
+#		candidate = self.provision(needs, screen=numpy.full(fat, screen, dtype=int), **kwargs)
+#		for z in zero_out:
+#			if z in candidate:
+#				candidate[z][:] = 0
+#		return candidate
+
+	def provision_fat(self, needs, screen=None, fat=1, **kwargs):
+		if not isinstance(screen, int):
+			raise NotImplementedError('provision_fat requires a single integer screen, but {} was given'.format(type(screen)))
+		from . import Model
+		if isinstance(needs,Model):
+			m = needs
+			needs = m.needs()
+		else:
+			m = None
+		import numpy
+		provide = {}
+		screen, n_cases = self.process_proposed_screen(screen)
+		#log = self.logger()
+		log = None
+		for key, req in needs.items():
+			if log:
+				log.info("Provisioning {} data...".format(key))
+			if key=="Avail":
+				val = self.array_avail(screen=screen)
+				fatval = numpy.broadcast_to(val[0], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+			elif key=="Weight":
+				val = self.array_weight(screen=screen)
+				fatval = numpy.broadcast_to(val[0, :], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+			elif key=="Choice":
+				val = self.array_choice(screen=screen)
+				fatval = numpy.broadcast_to(val[0, :], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+			elif key[-2:]=="CA":
+				val = self.array_idca(*req.get_variables(), screen=screen)
+				fatval = numpy.broadcast_to(val[0], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+			elif key[-2:]=="CO":
+				val = self.array_idco(*req.get_variables(), screen=screen)
+				fatval = numpy.broadcast_to(val[0, :], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+			elif key=="Allocation":
+				val = self.array_idco(*req.get_variables(), screen=screen)
+				fatval = numpy.broadcast_to(val[0, :], (fat,) + val.shape[1:])
+				provide[key] = numpy.require(  fatval, requirements='C')
+		provide['caseids'] = numpy.require(numpy.atleast_2d( self.h5caseids[screen] ), requirements='C')
+		if m is not None:
+			return m.provision(provide)
+		else:
+			return provide
+
 
 
 	def _check_ca_natural(self, column):
@@ -1893,13 +1970,13 @@ class DT(Fountain):
 						log.warn("  column %s, converting to S%d",col,maxlen)
 						col_array = df[col].astype('S{}'.format(maxlen)).values
 						tb_atom = _tb.Atom.from_dtype(col_array.dtype)
-			
-				if not col.isidentifier():
-					log.warn("  column %s is not a valid python identifier, converting to _%s",col,col)
-					col = "_"+col
-				if keyword.iskeyword(col):
-					log.warn("  column %s is a python keyword, converting to _%s",col,col)
-					col = "_"+col
+				col = make_valid_identifier(col)
+#				if not col.isidentifier():
+#					log.warn("  column %s is not a valid python identifier, converting to _%s",col,col)
+#					col = "_"+col
+#				if keyword.iskeyword(col):
+#					log.warn("  column %s is a python keyword, converting to _%s",col,col)
+#					col = "_"+col
 				h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
 			if caseid_column is not None and 'caseids' in self.h5top:
@@ -2083,7 +2160,7 @@ class DT(Fountain):
 			self.h5f.create_carray(self.idco._v_node, idca_var, obj=newarr)
 			self.idca._v_children[idca_var]._f_remove()
 
-	def new_idco(self, name, expression, dtype=numpy.float64, overwrite=False):
+	def new_idco(self, name, expression, dtype=numpy.float64, *, overwrite=False):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2119,7 +2196,7 @@ class DT(Fountain):
 			self.delete_data(name)
 		self.h5f.create_carray(self.idco._v_node, name, obj=data)
 
-	def new_idco_from_array(self, name, arr):
+	def new_idco_from_array(self, name, arr, *, overwrite=False):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2130,8 +2207,10 @@ class DT(Fountain):
 		----------
 		name : str
 			The name of the new :ref:`idco` variable.
-		arr : array
+		arr : ndarray
 			An array to add as the new variable.  Must have the correct shape.
+		overwrite : bool
+			Should the variable be overwritten if it already exists, default to False.
 			
 		Raises
 		-----
@@ -2140,6 +2219,8 @@ class DT(Fountain):
 		"""
 		if self.h5caseids.shape != arr.shape:
 			raise TypeError("new idco array must have shape {!s}".format(self.h5caseids.shape))
+		if overwrite:
+			self.delete_data(name)
 		self.h5f.create_carray(self.idco._v_node, name, obj=arr)
 
 	def new_idca(self, name, expression):
@@ -2186,7 +2267,7 @@ class DT(Fountain):
 		----------
 		name : str
 			The name of the new :ref:`idca` variable.
-		arr : array
+		arr : ndarray
 			An array to add as the new variable.  Must have the correct shape.
 			
 		Raises
@@ -2471,7 +2552,13 @@ class DT(Fountain):
 		for i in sorted(self.variables_ca()):
 			v_names.append(str(i))
 			if isinstance(self.idca[i], (_tb.Group,GroupNode)):
-				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+				try:
+					v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+				except _tb.exceptions.NoSuchNodeError:
+					if 'stack' in _pytables_link_dereference(self.idca[i]._v_attrs):
+						v_dtypes.append('<stack>')
+					else:
+						raise
 			else:
 				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
 			v_ftypes.append('idca')
@@ -2547,7 +2634,13 @@ class DT(Fountain):
 		for i in sorted(self.variables_ca()):
 			v_names.append(str(i))
 			if isinstance(self.idca[i], (_tb.Group,GroupNode)):
-				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+				try:
+					v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+				except _tb.exceptions.NoSuchNodeError:
+					if 'stack' in _pytables_link_dereference(self.idca[i]._v_attrs):
+						v_dtypes.append('<stack>')
+					else:
+						raise
 			else:
 				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
 			v_ftypes.append('idca')
@@ -2892,9 +2985,9 @@ class DT_idco_stack_manager:
 #			except AttributeError:
 #				pass
 			return isinstance(obj, things)
-		if isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Array):
+		if isinstance_(self.parent.idca[self.stacktype], _tb.Array):
 			raise TypeError('The {} is an array, not a stack.'.format(self.stacktype))
-		if not isinstance_(self.parent.idca._v_children[self.stacktype], (_tb.Group,GroupNode)):
+		if not isinstance_(self.parent.idca[self.stacktype], (_tb.Group,GroupNode)):
 			raise TypeError('The {} stack is not set up.'.format(self.stacktype))
 
 	def _make_zeros(self):
@@ -2906,7 +2999,7 @@ class DT_idco_stack_manager:
 #				pass
 			return isinstance(obj, things)
 		try:
-			if isinstance_(self.parent.idca._v_children[self.stacktype], _tb.Array):
+			if isinstance_(self.parent.idca[self.stacktype], _tb.Array):
 				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
 		except (_tb.exceptions.NoSuchNodeError, KeyError):
 			pass
@@ -2915,8 +3008,8 @@ class DT_idco_stack_manager:
 			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
 		except _tb.exceptions.NodeError:
 			pass
-		if 'stack' not in self.parent.idca._v_children[self.stacktype]._v_attrs:
-			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
+		if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
+			self.parent.idca[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
 
 
 	def __call__(self, *cols, varname=None):
@@ -2960,7 +3053,7 @@ class DT_idco_stack_manager:
 			except _tb.exceptions.NoSuchNodeError:
 				pass
 			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
-			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = cols
+			self.parent.idca[self.stacktype]._v_attrs.stack = cols
 		else:
 			ch = self.parent.array_idco(*cols, dtype=numpy.float64)
 			self.parent.new_idca(varname, ch)
@@ -2974,20 +3067,20 @@ class DT_idco_stack_manager:
 		self._check()
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			return self.parent.idca._v_children[self.stacktype]._v_attrs.stack[slotarray[0]]
+			return self.parent.idca[self.stacktype]._v_attrs.stack[slotarray[0]]
 		else:
 			raise KeyError("key {} not found".format(key) )
 
 	def __setitem__(self, key, value):
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			if self.stacktype not in self.parent.idca._v_children:
+			if self.stacktype not in self.parent.idca:
 				self._make_zeros()
-			if 'stack' not in self.parent.idca._v_children[self.stacktype]._v_attrs:
+			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
 				self._make_zeros()
-			tempobj = self.parent.idca._v_children[self.stacktype]._v_attrs.stack
+			tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
 			tempobj[slotarray[0]] = value
-			self.parent.idca._v_children[self.stacktype]._v_attrs.stack = tempobj
+			self.parent.idca[self.stacktype]._v_attrs.stack = tempobj
 		else:
 			raise KeyError("key {} not found".format(key) )
 
@@ -3081,7 +3174,12 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 				tag_idca = idca
 				tag_caseids = None
 				tag_alts = None
-			d.idca.add_external_data(tag_idca)
+			newnode = _pytables_link_dereference(d.idca.add_external_data(tag_idca))
+			for subnodename in newnode._v_children:
+				subnode = newnode._v_children[subnodename]
+				if isinstance(subnode, _tb.group.Group) and 'stack' in subnode._v_attrs:
+					localnewnode = d.idca.add_group_node(subnodename)
+					localnewnode._v_attrs['stack'] = subnode._v_attrs['stack']
 			if not got_caseids and tag_caseids is not None:
 				d.remove_node_if_exists(d.h5top, 'caseids')
 				d.create_external_link(d.h5top, 'caseids', tag_caseids)
@@ -3099,7 +3197,7 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 				tag_idco = idco
 				tag_caseids = None
 				tag_alts = None
-			d.idco.add_external_data(tag_idco)
+			newnode = _pytables_link_dereference(d.idco.add_external_data(tag_idco))
 			if not got_caseids and tag_caseids is not None:
 				d.remove_node_if_exists(d.h5top, 'caseids')
 				d.create_external_link(d.h5top, 'caseids', tag_caseids)

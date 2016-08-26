@@ -233,7 +233,7 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 	else:
 		constraints = ()
 	if model.option.enforce_network_constraints:
-		constraints = constraints + tuple(model.network_based_contraints())
+		constraints = constraints + tuple(model.network_based_constraints())
 	return constraints
 
 def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False):
@@ -787,7 +787,7 @@ def _build_single_lte_constraint(ltslot, pivot, descrip):
 
 
 
-def network_based_contraints(model):
+def network_based_constraints(model):
 	G = model.networkx_digraph()
 	elementals = set(model.alternative_codes())
 	constraint_set = {}
@@ -807,10 +807,10 @@ def network_based_contraints(model):
 					#constraints.append(_build_ineq_constraint(upper,lower))
 	return [constraint for constraint_name, constraint in constraint_set.items()]
 
-def evaluate_network_based_contraints(model, x=None):
+def evaluate_network_based_constraints(model, x=None):
 	if x is None:
 		x = model.parameter_values()
-	return [c['fun'](x) for c in model.network_based_contraints()]
+	return [c['fun'](x) for c in model.network_based_constraints()]
 
 #Constraints definition (only for COBYLA and SLSQP). Each constraint is defined in a dictionary with fields:
 #type : str

@@ -16,6 +16,19 @@ class OMXNonUniqueLookup(LarchError):
 
 class OMX(_tb.file.File):
 
+	def __repr__(self):
+		s = "<larch.omx.OMX> {}".format(self.filename)
+		s += "\n |  shape:{}".format(self.shape)
+		if len(self.data._v_children):
+			s += "\n |  data:"
+		for i in sorted(self.data._v_children.keys()):
+			s += "\n |    {} ({})".format(i, self.data._v_children[i].dtype)
+		if len(self.lookup._v_children):
+			s += "\n |  lookup:"
+		for i in sorted(self.lookup._v_children.keys()):
+			s += "\n |    {} ({} {})".format(i, self.lookup._v_children[i].shape[0], self.lookup._v_children[i].dtype)
+		return s
+
 	def __init__(self, *arg, complevel=5, complib='zlib', **kwarg):
 		if 'filters' in kwarg:
 			super().__init__(*arg, **kwarg)
@@ -377,6 +390,27 @@ class OMX(_tb.file.File):
 		
 		#self.data._v_children[matrixname][:] = temp_slug[:]
 		log("import_datatable({}) complete".format(filepath))
+
+	@classmethod
+	def import_dbf(cls, dbffile, omxfile, shape, o, d, cols, smallest_zone_number=1):
+		try:
+			from simpledbf import Dbf5
+		except ImportError:
+			raise
+		dbf = Dbf5(dbffile, codec='utf-8')
+		tempstore = {c:numpy.zeros(shape, dtype=numpy.float32) for c in cols}
+		for df in dbf.to_dataframe(chunksize=shape[1]):
+			oz = df[o].values.astype(int)-smallest_zone_number
+			dz = df[d].values.astype(int)-smallest_zone_number
+			for c in cols:
+				tempstore[c][oz,dz] = df[c].values
+		omx = cls(omxfile, mode='a')
+		for c in cols:
+			omx.add_matrix(c, tempstore[c])
+		omx.flush()
+		return omx
+
+
 
 	def __getitem__(self, key):
 		if isinstance(key,str):

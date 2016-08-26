@@ -72,7 +72,56 @@ _spark_histogram_notes = {
 }
 
 
-def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None):
+def spark_histogram_rangefinder(data, bins):
+	data = numpy.asarray(data)
+
+	# Check if data is mostly zeros
+	n_zeros = (data==0).sum()
+	if n_zeros > (data.size) * _threshold_for_dropping_zeros_in_histograms:
+		use_data = data[data!=0]
+		use_color = hexcolor('orange')
+	else:
+		use_data = data
+		use_color = hexcolor('ocean')
+
+	use_data = use_data[~numpy.isnan(use_data)]
+
+	if use_data.size > 0:
+		data_stdev = use_data.std()
+		data_mean = use_data.mean()
+		data_min = use_data.min()
+		data_max = use_data.max()
+		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
+			bottom = numpy.nanpercentile(use_data,0.5)
+			top = numpy.nanpercentile(use_data,99.5)
+			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
+			if use_color == hexcolor('orange'):
+				use_color = hexcolor('red')
+			else:
+				use_color = hexcolor('forest')
+
+	if isinstance(bins, str):
+		if use_data.size == 0:
+			# handle empty arrays. Can't determine range, so use 0-1.
+			mn, mx = 0.0, 1.0
+		else:
+			mn, mx = use_data.min() + 0.0, use_data.max() + 0.0
+		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data)
+		if width:
+			bins = int(numpy.ceil((mx - mn) / width))
+		else:
+			bins = 1
+		# The spark graphs get hard to read if the bin slices are too thin, so we will max out at 50 bins
+		if bins > 50:
+			bins = 50
+		# The spark graphs look weird if the bin slices are too fat, so we will min at 10 bins
+		if bins < 10:
+			bins = 10
+
+	return bottom, top, use_color, bins
+
+
+def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None, prerange=None):
 
 	data = numpy.asarray(data)
 
@@ -119,6 +168,11 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		# The spark graphs look weird if the bin slices are too fat, so we will min at 10 bins
 		if bins < 10:
 			bins = 10
+
+#	if prerange is None:
+#		bottom, top, use_color, bins = spark_histogram_rangefinder(use_data, bins)
+#	else:
+#		bottom, top, use_color, bins = prerange
 
 	plt.clf()
 	try:
@@ -181,7 +235,9 @@ def spark_pie_maker(data, notetaker=None):
 
 
 
-def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, **kwarg):
+def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=None, **kwarg):
+	if prerange is not None:
+		return spark_histogram_maker(data, *arg, notetaker=notetaker, prerange=prerange, **kwarg)
 	try:
 		flat_data = data.flatten()
 	except:

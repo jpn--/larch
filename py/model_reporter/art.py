@@ -2,6 +2,7 @@ from . import docx, latex, pdf, txt, xhtml, alogit
 import math
 from ..util.xhtml import XHTML, XML_Builder, Elem
 from ..util.pmath import category, pmath, rename
+from ..util.categorize import CategorizerLabel, Categorizer, Renamer
 from ..core import LarchError
 import os
 import pandas
@@ -41,6 +42,9 @@ class colorize:
 	@classmethod
 	def green(cls, x):
 		return cls._GREEN +  str(x) + cls._END
+	@classmethod
+	def darkcyan(cls, x):
+		return cls._DARKCYAN + str(x) + cls._END
 
 
 
@@ -52,12 +56,16 @@ class _MergeFrom():
 
 
 class AbstractReportTables():
-	def __init__(self, *arg, newlist=None):
+	def __init__(self, *arg, newlist=None, title=None, short_title=None):
 		if newlist is None:
 			self.arts = [a for a in arg]
 		else:
 			self.arts = [a for a in arg] + newlist
+		self.title = title
+		self.short_title = short_title
 	def __add__(self, other):
+		if other is None:
+			return AbstractReportTables(newlist=self.arts)
 		if isinstance(other, AbstractReportTables):
 			return AbstractReportTables(newlist=self.arts+other.arts)
 		if isinstance(other, AbstractReportTable):
@@ -70,19 +78,35 @@ class AbstractReportTables():
 		if isinstance(other, AbstractReportTable):
 			self.arts+=[other,]
 			return self
+		if other is None:
+			return self
 		raise TypeError
 
-	def __xml__(self):
+	def __xml__(self, table_attrib=None, headlevel=2):
 		div = XML_Builder("div")
-		for a in self.arts:
-			div << a.xml()
+		if self.title is None:
+			for a in self.arts:
+				div << a.xml(table_attrib=table_attrib)
+		else:
+			div.h2(self.title, anchor=self.short_title or self.title)
+			for a in self.arts:
+				div << a.xml(table_attrib=table_attrib, headlevel=headlevel+1)
 		return div.close()
+
+	xml = __xml__
 
 	def _repr_html_(self):
 		return self.__xml__().tostring().decode()
 
 	def __repr__(self):
 		return "\n\n".join(repr(a) for a in self.arts)
+
+
+class SkipReportTable:
+	def __init__(self, *arg, **kwarg):
+		pass
+	def xml(self, *arg, **kwarg):
+		return None
 
 
 class AbstractReportTable():
@@ -92,6 +116,8 @@ class AbstractReportTable():
 			return AbstractReportTables(newlist=[self,]+other.arts)
 		if isinstance(other, AbstractReportTable):
 			return AbstractReportTables(newlist=[self, other])
+		if other is None:
+			return AbstractReportTables(newlist=[self, ])
 		raise TypeError
 	
 
@@ -104,6 +130,7 @@ class AbstractReportTable():
 		self._col_width = None
 		self.title = title
 		self.short_title = short_title
+		self.footnotes = []
 		if from_dataframe is not None:
 			self.from_dataframe(from_dataframe)
 
@@ -219,6 +246,8 @@ class AbstractReportTable():
 		else:
 			s = ""
 		s += self.unicodebox()
+		for footnote in self.footnotes:
+			s += "\n {}".format(colorize.darkcyan(footnote))
 		return s
 
 	def _dividing_line(self, leftend="+", rightend="+", splitpoint="+", linechar="─"):
@@ -231,6 +260,8 @@ class AbstractReportTable():
 		else:
 			s = ""
 		s += self.unicodebox()
+		for footnote in self.footnotes:
+			s += "\n {}".format(footnote)
 		return s
 
 	def _text_output(self, topleft   ='┌', topsplit   ='┬', topright   ='┐',
@@ -239,6 +270,7 @@ class AbstractReportTable():
 						   leftvert  ='│', othervert  ='│',
 						   horizbar='─',
 						   catleft='╞', catright='╡', cathorizbar='═',
+						   suppress_internal_newlines=True,
 						   ):
 		s = self._dividing_line(leftend=topleft, rightend=topright, splitpoint=topsplit, linechar=horizbar)+"\n"
 		w = self.min_col_widths()
@@ -255,12 +287,16 @@ class AbstractReportTable():
 				cellspan = self.cellspan_iloc(r,c)
 				if cellspan != (0,0):
 					cw = numpy.sum(w[c:c+cellspan[1]])+cellspan[1]-1
-					if catflag:
-						s = s[:-len(leftvert)]+ catleft+" {1:{2}<{0}s}".format(cw-1,self.get_text_iloc(r,c).replace('\t'," ")+" ",cathorizbar)+catright
-					elif self.is_centered_cell(r,c):
-						s += "{1: ^{0}s}".format(cw,self.get_text_iloc(r,c).replace('\t'," "))+othervert
+					if suppress_internal_newlines:
+						thistext = self.get_text_iloc(r,c).replace('\t'," ").replace('\n'," ")
 					else:
-						s += "{1:{0}s}".format(cw,self.get_text_iloc(r,c).replace('\t'," "))+othervert
+						thistext = self.get_text_iloc(r,c).replace('\t'," ")
+					if catflag:
+						s = s[:-len(leftvert)]+ catleft+" {1:{2}<{0}s}".format(cw-1,thistext+" ",cathorizbar)+catright
+					elif self.is_centered_cell(r,c):
+						s += "{1: ^{0}s}".format(cw,thistext)+othervert
+					else:
+						s += "{1:{0}s}".format(cw,thistext)+othervert
 					startline = False
 				elif cellspan == (0,0) and startline:
 					cw = w[c]
@@ -373,7 +409,9 @@ class AbstractReportTable():
 					try:
 						tr.findall('./'+celltag)[-1].get('colspan','1')
 					except IndexError:
+						# There are no previous cells matching celltag
 						# check if first cell in row, and cell above is same value
+						upper_colspan = 1
 						if c==0:
 							rc_text, rx, cx = self.get_implied_text_iloc(r,c)
 							if rx<0:
@@ -395,6 +433,12 @@ class AbstractReportTable():
 					tr << td
 					span = 1
 			r += 1
+		if len(self.footnotes):
+			sorted_footnotes = sorted(self.footnotes)
+			caption = table.put('caption', text=sorted_footnotes[0])
+			for footnote in sorted_footnotes[1:]:
+				caption.put('br', tail=footnote)
+
 		if headlevel is not None and self.title is not None:
 			try:
 				headlevel = int(headlevel)
@@ -402,7 +446,7 @@ class AbstractReportTable():
 				pass
 			else:
 				div = XML_Builder("div")
-				div.h2(self.title, anchor=self.short_title or self.title)
+				div.hn(headlevel, self.title, anchor=self.short_title or self.title)
 				div << table
 				return div.close()
 		return table
@@ -598,13 +642,15 @@ class AbstractReportTable():
 		else:
 			return w
 
+	def __call__(self, m):
+		return self
 
 
 ART = AbstractReportTable
 
 class AbstractReportTableFactory():
 	"""This class generalizes the ART for both preprocessed and postprocessing tables."""
-	def __init__(self, *, art=None, func=None, args=(), kwargs=None):
+	def __init__(self, *, art=None, func=None, args=(), kwargs=None, title=None, short_title=None):
 		if art is None and func is None:
 			raise TypeError("art or func must be given")
 		if art is not None and func is not None:
@@ -613,13 +659,22 @@ class AbstractReportTableFactory():
 		self.func = func
 		self.func_args = args
 		self.func_kwargs = kwargs or {}
+		self.title = title
+		self.short_title = short_title or title
 	def __call__(self, m):
 		if self.func is None:
 			candidate = self.art
 		else:
 			candidate = self.func(m, *self.func_args, **self.func_kwargs)
 		if isinstance(candidate, pandas.DataFrame):
-			candidate = AbstractReportTable().from_dataframe(candidate)
+			candidate = AbstractReportTable.FromDataFrame(candidate)
+		if candidate is None:
+			print('candidate is None')
+			return None
+		if candidate.title is None and self.title is not None:
+			candidate.title = self.title
+		if candidate.short_title is None and self.short_title is not None:
+			candidate.short_title = self.short_title
 		return candidate
 
 
@@ -629,29 +684,28 @@ class AbstractReportTableFactory():
 class ArtModelReporter():
 
 
-	def art_new(self, handle, factory):
+	def art_new(self, handle, factory, title=None, short_title=None):
 		try:
 			self._user_defined_arts
 		except AttributeError:
 			self._user_defined_arts = {}
 		if isinstance(factory, AbstractReportTableFactory):
-			self._user_defined_arts[handle] = factory
+			self._user_defined_arts[handle.lower()] = factory
 		elif isinstance(factory, pandas.DataFrame):
-			self._user_defined_arts[handle] = AbstractReportTableFactory(art=factory)
+			self._user_defined_arts[handle.lower()] = AbstractReportTableFactory(art=factory, title=title, short_title=short_title)
 		elif callable(factory):
-			self._user_defined_arts[handle] = AbstractReportTableFactory(func=factory)
+			self._user_defined_arts[handle.lower()] = AbstractReportTableFactory(func=factory, title=title, short_title=short_title)
 		else:
-			self._user_defined_arts[handle] = factory
+			self._user_defined_arts[handle.lower()] = factory
 
 
-
-	def art_params(self, groups=None, display_inital=False, display_id=False, **format):
+	def _art_params_categorize(self, groups, display_inital=False, display_id=False, **format):
 		"""
 		Generate a ART containing the model parameters.
 		
 		Parameters
 		----------
-		groups : None or list
+		groups : Categorizer
 			An ordered list of parameters names and/or categories. If given,
 			this list will be used to order the resulting table.
 		display_inital : bool
@@ -689,12 +743,107 @@ class ArtModelReporter():
 		x.silent_first_col_break = True
 		x.title = "Model Parameter Estimates"
 		x.short_title="Parameter Estimates"
+		
+		## USING GROUPS
+		namelist = self.parameter_names() + list(self.alias_names())
+		present_order = groups.match(namelist)[1]
+				
+		n_cols_params = 6 if display_inital else 5
+		if display_id:
+			n_cols_params += 1
+		
+		def write_param_row(p, *, force=False):
+			if p is None: return
+			if isinstance(p, CategorizerLabel):
+				x.add_blank_row()
+				x.set_lastrow_iloc(0, x.encode_cell_value(p.label, auto_toc_level=3, anchorlabel=p.label), {'class':"parameter_category"})
+			else:
+				if isinstance(p, Renamer):
+					p_name = p.label
+					p_decode = p.decode(namelist)
+				else:
+					p_name = p
+					p_decode = p
+				if p_decode is None:
+					return
+				x.add_blank_row()
+				if "#" in p_name:
+					p_name1, p_name2 = p_name.split("#",1)
+					x.set_lastrow_iloc_nondupe(0, p_name1, )
+					x.set_lastrow_iloc(1, p_name2, anchorlabel="param"+p_name2.replace("#","_hash_"))
+				elif ":" in p_name:
+					p_name1, p_name2 = p_name.split(":",1)
+					x.set_lastrow_iloc_nondupe(0, p_name1, )
+					x.set_lastrow_iloc(1, p_name2, anchorlabel="param"+p_name2.replace("#","_hash_"))
+				else:
+					x.set_lastrow_loc('Parameter', p_name, anchorlabel="param"+p_name.replace("#","_hash_"))
+				self.art_single_parameter_resultpart(x,p_decode, with_inital=display_inital, **format)
+				if display_id:
+					x.set_lastrow_loc('id', p_decode)
+					
+		x.addrow_seq_of_strings(columns)
+		for p in present_order.unpack():
+			write_param_row(p)
+		return x
 
+
+
+
+	def art_params(self, groups=None, display_inital=False, display_id=False, **format):
+		"""
+		Generate a ART containing the model parameters.
+		
+		Parameters
+		----------
+		groups : None or list
+			An ordered list of parameters names and/or categories. If given,
+			this list will be used to order the resulting table.
+		display_inital : bool
+			Should the initial values of the parameters (the starting point 
+			for estimation) be included in the report. Defaults to False.
+		display_id : bool
+			Should the actual parameter names be shown in an id column.
+			Defaults to False.  This can be useful if the groups include 
+			renaming.
+		
+		Returns
+		-------
+		AbstractReportTable
+			An ART containing the model parameters.
+		
+		"""
 		if groups is None and hasattr(self, 'parameter_groups'):
 			groups = self.parameter_groups
 		if groups is None:
 			groups = ()
 			
+		if isinstance(groups, Categorizer):
+			return self._art_params_categorize(groups, display_inital=display_inital, display_id=display_id, **format)
+
+
+		# keys fix
+		existing_format_keys = list(format.keys())
+		for key in existing_format_keys:
+			if key.upper()!=key: format[key.upper()] = format[key]
+		if 'PARAM' not in format: format['PARAM'] = '< 10.4g'
+		if 'TSTAT' not in format: format['TSTAT'] = ' 0.2f'
+		# build table
+
+		columns = ["Parameter", None, "Estimated Value", "Std Error", "t-Stat", "Null Value"]
+		col_classes = ['param_label','param_label', 'estimated_value', 'std_err', 'tstat', 'null_value']
+		if display_inital:
+			columns.insert(1,"Initial Value")
+			col_classes.insert(1,'initial_value')
+		if display_id:
+			columns.append('id')
+			col_classes.append('id')
+
+		x = AbstractReportTable(columns=columns, col_classes=col_classes)
+		x.silent_first_col_break = True
+		x.title = "Model Parameter Estimates"
+		x.short_title="Parameter Estimates"
+
+
 		## USING GROUPS
 		listed_parameters = set([p for p in groups if not isinstance(p,category)])
 		for p in groups:
@@ -765,7 +914,7 @@ class ArtModelReporter():
 		with_nullvalue = bool(with_nullvalue)
 		#x = XML_Builder("div", {'class':"parameter_estimate"})
 		x= ART
-		if isinstance(p,(rename,str)):
+		if isinstance(p,(rename,Renamer,str)):
 			try:
 				model_p = self[p]
 			except KeyError:
@@ -924,10 +1073,17 @@ class ArtModelReporter():
 				if isinstance(i,str):
 					i = i.split("\n")
 				if isinstance(i,list):
-					for ii in i:
-						x.add_blank_row()
-						x.set_lastrow_iloc_nondupe(0, "Notes")
-						x.set_lastrow_iloc(2, str(ii))
+					if len(i)>1:
+						for inum, ii in enumerate(i):
+							x.add_blank_row()
+							x.set_lastrow_iloc_nondupe(0, "Notes")
+							x.set_lastrow_iloc(1, "({})".format(inum))
+							x.set_lastrow_iloc(2, str(ii))
+					else:
+						for ii in i:
+							x.add_blank_row()
+							x.set_lastrow_iloc_nondupe(0, "Notes")
+							x.set_lastrow_iloc(2, str(ii))
 				else:
 					x.add_blank_row()
 					x.set_lastrow_iloc_nondupe(0, "Notes")
@@ -1123,5 +1279,19 @@ class ArtModelReporter():
 		return x
 
 
+	def art_excludedcases(self, **format):
+		try:
+			return AbstractReportTable.FromDataFrame(self.df.exclusion_summary, title='Excluded Cases')
+		except AttributeError:
+			return SkipReportTable()
 
+	def art_datasummary(self, **format):
+		not_too_many_alts = (self.nAlts() < 20)
+		a = AbstractReportTables(title="Various Data Statistics", short_title="Data Stats")
+		a += self.art_stats_utility_co()
+		if not_too_many_alts:
+			a += self.art_stats_utility_co_by_alt()
+		if not_too_many_alts:
+			a += self.art_stats_utility_ca_by_alt()
+		return a
 

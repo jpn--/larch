@@ -2,6 +2,7 @@
 from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter
 from .array import SymmetricArray
 from .util.pmath import category, pmath, rename
+from .util.categorize import Renamer
 import numpy
 import os
 from .util.xhtml import XHTML, XML_Builder
@@ -50,7 +51,7 @@ class Model(Model2, ModelReporter):
 
 
 	from .util.roll import roll
-	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_contraints, evaluate_network_based_contraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
+	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
 	
 	def dir(self):
 		for f in dir(self):
@@ -739,7 +740,7 @@ class Model(Model2, ModelReporter):
 		if available.
 		"""
 		x = self.Data(datapool)
-		ss = statistical_summary.compute(x)
+		ss = statistical_summary.compute(x, dimzer=numpy.atleast_1d)
 		if bool((self.Data("Weight")!=1).any()):
 			w = self.Data("Weight").flatten()
 			ss.mean = numpy.average(x, axis=0, weights=w)
@@ -750,7 +751,57 @@ class Model(Model2, ModelReporter):
 			ss.mean_nonzero = numpy.average(x, axis=0, weights=w_nonzero)
 		#return (mean,stdev,mins,maxs,nonzer,pos,neg,zer,mean_nonzer)
 		return ss
-		
+
+
+	def art_stats_utility_co(self, title="Utility idCO Data"):
+		from .util.analytics import basic_idco_variable_analysis
+		needs = self.needs()
+		if 'UtilityCO' in needs:
+			return basic_idco_variable_analysis(
+				self.data.utilityco,
+				needs['UtilityCO'].get_variables(),
+				title=title,
+				)
+
+
+	def art_stats_utility_co_by_alt(self, title="Utility idCO Data by Alternative"):
+		from .util.analytics import basic_variable_analysis_by_alt
+		needs = self.needs()
+		if 'UtilityCO' in needs:
+			picks = set()
+			for i in self.utility.co:
+				for j in self.utility.co[i]:
+					try:
+						float(j.data)
+					except ValueError:
+						picks.add((i,j.data))
+			return basic_variable_analysis_by_alt(
+				arr=self.data.utilityco,
+				ch=self.data.choice,
+				av=self.data.avail,
+				names=self.needs()['UtilityCO'].get_variables(),
+				altcodes=self.alternative_codes(),
+				altnames=self.alternative_names(),
+				picks=picks,
+				title=title,
+				)
+
+	def art_stats_utility_ca_by_alt(self, title="Utility idCA Data by Alternative"):
+		from .util.analytics import basic_variable_analysis_by_alt
+		needs = self.needs()
+		if 'UtilityCA' in needs:
+			return basic_variable_analysis_by_alt(
+				arr=self.data.utilityca,
+				ch=self.data.choice,
+				av=self.data.avail,
+				names=needs['UtilityCA'].get_variables(),
+				altcodes=self.alternative_codes(),
+				altnames=self.alternative_names(),
+				picks=None,
+				title=title,
+				)
+
+
 	def stats_utility_ca_chosen_unchosen(self):
 		"""
 		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
@@ -772,9 +823,9 @@ class Model(Model2, ModelReporter):
 		
 		x_total = x[av.squeeze()]
 		
-		ss_total = statistical_summary.compute(x_total)
-		ss_chosen = statistical_summary.compute(x_chosen)
-		ss_unchosen = statistical_summary.compute(x_unchosen)
+		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d)
 		
 		return ss_total, ss_chosen, ss_unchosen
 
@@ -807,9 +858,9 @@ class Model(Model2, ModelReporter):
 		x_unchosen = x[ch_asbool]
 		x_total = x[av[:,altslots].squeeze(),altslots].squeeze()
 		
-		ss_total = statistical_summary.compute(x_total)
-		ss_chosen = statistical_summary.compute(x_chosen)
-		ss_unchosen = statistical_summary.compute(x_unchosen)
+		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d)
 		
 		return ss_total, ss_chosen, ss_unchosen,
 
@@ -837,6 +888,8 @@ class Model(Model2, ModelReporter):
 				bucket_types = ["All Avail", "Chosen", "Unchosen"]
 				for summary_attrib, bucket_type in zip( bucket, bucket_types ):
 					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
+					if summary_attrib.empty():
+						continue
 					means = summary_attrib.mean
 					stdevs = summary_attrib.stdev
 					mins = summary_attrib.minimum
@@ -849,6 +902,8 @@ class Model(Model2, ModelReporter):
 					histos = summary_attrib.histogram
 					footnotes |= summary_attrib.notes
 					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos,):
+#						if s[1]==0 and numpy.isnan(s[6]):
+#							continue
 						newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
 									'data':s[0], 'mean':s[1], 'stdev':s[2],
 									'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
@@ -1006,12 +1061,21 @@ class Model(Model2, ModelReporter):
 			raise
 
 	def _bhhh_simple_step(self, steplen=1.0, printer=None):
+		current = self.parameter_array.copy()
+		current_ll = self.loglike()
 		direction = self._bhhh_simple_direction()
-		self.parameter_array[:] = self.parameter_array[:] + direction
-		val = self.loglike()
+		while True:
+			self.parameter_array[:] = current[:] + direction*steplen
+			val = self.loglike()
+			if val > current_ll: break
+			steplen *= 0.5
+			if steplen < 0.01: break
 		if printer is not None:
-			printer("simple step to:\n"+self._parameter_report())
+			printer("simple step {} to:\n".format(steplen)+self._parameter_report())
 			printer("LL={}".format(val))
+		if val < current_ll:
+			self.parameter_array[:] = current[:]
+			raise RuntimeError()
 		return val
 
 	def parameter_holdfast_mask(self):
@@ -1241,11 +1305,13 @@ class Model(Model2, ModelReporter):
 	def d_loglike_given_utility(self):
 		return -(self.negative_d_loglike_given_utility())
 
-	def bhhh(self, *args) -> "std::shared_ptr< etk::symmetric_matrix >":
+	def bhhh(self, *args, cached=True) -> "std::shared_ptr< etk::symmetric_matrix >":
 		if self.Data_UtilityCE_manual.active():
 			if len(args)>0:
 				self.parameter_values(args[0])
 			return _core.Model2_bhhh_cached(self)
+		if not cached:
+			return self.bhhh_nocache(*args)
 		return _core.Model2_bhhh(self, *args)
 
 	def setup_utility_ce(self):
@@ -1555,6 +1621,11 @@ class Model(Model2, ModelReporter):
 	def __getitem__(self, x):
 		if isinstance(x,rename):
 			x = x.find_in(self)
+		if isinstance(x,Renamer):
+			x0 = x.decode(self.parameter_names())
+			if x0 is None:
+				x0 = x.decode(self.alias_names())
+			x = x0
 		try:
 			return super().__getitem__(x)
 		except KeyError:
@@ -1626,6 +1697,10 @@ class Model(Model2, ModelReporter):
 					raise
 		else:
 			super().provision(provided)
+
+	def provision_fat(self, fat=1, screen=None):
+		self.provision(self.df.provision_fat(needs=self.needs(),screen=screen,fat=fat))
+		self.setUp(False)
 
 	def reprovision(self, *args, idca_avail_ratio_floor=None):
 		self.unprovision()

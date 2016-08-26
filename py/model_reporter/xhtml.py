@@ -66,6 +66,11 @@ class XhtmlModelReporter():
 
 
 		"""
+		try:
+			self._user_defined_arts
+		except AttributeError:
+			self._user_defined_arts = {}
+
 
 		if 'cats' in format and cats is None:
 			cats = format['cats']
@@ -74,9 +79,14 @@ class XhtmlModelReporter():
 			cats = ['title','params','LL','latest']
 
 		if cats=='*' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options','possible_overspecification']
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options','possible_overspecification', 'excludedcases'] + list(self._user_defined_arts)
 		elif cats=='*':
-			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options','possible_overspecification']
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options','possible_overspecification', 'excludedcases'] + list(self._user_defined_arts)
+
+		if cats=='**' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
+		elif cats=='**':
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
 
 		if cats=='-' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','latest','NOTES','options']
@@ -110,7 +120,14 @@ class XhtmlModelReporter():
 
 		for c in icats:
 			try:
-				func = getattr(type(self),"xhtml_"+c.lower())
+				if c.lower() in self._user_defined_arts:
+					func = lambda mm, **kwargs: self._user_defined_arts[c.lower()](mm).xml({'class':'floatinghead'})
+				else:
+					try:
+						func = getattr(type(self),"xhtml_"+c.lower())
+					except (KeyError, AttributeError):
+						func_art = getattr(type(self),"art_"+c.lower())
+						func = lambda mm, **kwargs: func_art(mm).xml({'class':'floatinghead'})
 			except (KeyError, AttributeError):
 				if throw_exceptions: raise
 				xerr = XML_Builder("div", {'class':'error_report'})
@@ -206,13 +223,17 @@ class XhtmlModelReporter():
 			sourcefile = inspect.getsourcefile(frame[0])
 		except:
 			sourcefile = None
+		try:
+			self._to_add_to_report
+		except AttributeError:
+			self._to_add_to_report = []
 		if sourcefile is not None:
 			self._to_add_to_report += [xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code"),]
 
-	def add_source_code_to_report(self, *other_filenames):
+	def add_source_code_to_report(self, *other_filenames, frame_offset=0):
 		sourcecode_bucket = []
 		try:
-			frame = inspect.stack()[1]
+			frame = inspect.stack()[1+frame_offset]
 			sourcefile = inspect.getsourcefile(frame[0])
 		except:
 			sourcefile = None
@@ -236,6 +257,10 @@ class XhtmlModelReporter():
 						with open(proposed_file, mode='r') as sf:
 							sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
 
+		try:
+			self._to_add_to_report
+		except AttributeError:
+			self._to_add_to_report = []
 		if len(sourcecode_bucket):
 			from pygments import highlight
 			from pygments.lexers import Python3Lexer
@@ -1349,6 +1374,7 @@ class XhtmlModelReporter():
 			if len(self.alternative_codes()) >= 0:
 				x.h3("Utility idCA Data", anchor=1)
 				table_cache, footnotes = self.stats_utility_ca(by_alt=False)
+				names = self.needs()['UtilityCA'].get_variables()
 				
 				#pre_display_cols
 				#	('Data','name'),
@@ -1402,8 +1428,9 @@ class XhtmlModelReporter():
 				x.end('table')
 
 			if len(self.alternative_codes()) < 30:
-				x.h3("Utilty idCA Data by Alternative", anchor=1)
+				x.h3("Utility idCA Data by Alternative", anchor=1)
 				table_cache, footnotes = self.stats_utility_ca()
+				names = self.needs()['UtilityCA'].get_variables()
 				
 				#pre_display_cols
 				#	('Alternative','altname'),

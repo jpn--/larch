@@ -149,17 +149,22 @@ class GroupNode():
 				return True
 			extern_n += 1
 		return False
-	def __str__(self, *arg, **kwarg):
-		return self._v_node.__str__(*arg, **kwarg)
 	def __repr__(self, *arg, **kwarg):
-		return self._v_node.__repr__(*arg, **kwarg)
+		return "<larch.DT:GroupNode> "+self._v_node._v_pathname+"\n  ".join(self._v_children_keys_including_extern)
 	def __getitem__(self, key):
 		return self.__getattr__(key)
 	def __setitem__(self, key, value):
 		return self.__setattr__(key,value)
+	
+	def add_group_node(self, name):
+		return self._v_file.create_group(self._v_node, name)
+	
 	@property
 	def _v_children_keys_including_extern(self):
 		return _get_children_including_extern(self)
+
+	def __dir__(self):
+		return super().__dir__() + list(_get_children_including_extern(self))
 
 	def add_external_data(self, link):
 		if ":/" not in link:
@@ -167,7 +172,7 @@ class GroupNode():
 		extern_n = 1
 		while '_extern_{}'.format(extern_n) in self._v_node:
 			extern_n += 1
-		self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
+		return self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
 	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1):
