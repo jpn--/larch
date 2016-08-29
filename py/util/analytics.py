@@ -146,8 +146,8 @@ def _make_buckets(arr, ch, av, for_altcode, altcodes):
 	x_total = arr[av[:,altslots].squeeze(),altslots].squeeze()
 	
 	ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
-	ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d)
-	ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d)
+	ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
+	ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 	
 	return ss_total, ss_chosen, ss_unchosen,
 

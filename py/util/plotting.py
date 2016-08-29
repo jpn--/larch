@@ -121,43 +121,74 @@ def spark_histogram_rangefinder(data, bins):
 	return bottom, top, use_color, bins
 
 
-def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None, prerange=None):
+def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None, prerange=None, duo_filter=None, data_for_bins=None):
 
 	data = numpy.asarray(data)
+	if data_for_bins is None:
+		use_data_for_bins = data
+	else:
+		use_data_for_bins = numpy.asarray(data_for_bins)
+	if duo_filter is not None: duo_filter = numpy.asarray(duo_filter)
 
 	# Check if data is mostly zeros
-	n_zeros = (data==0).sum()
-	if n_zeros > (data.size) * _threshold_for_dropping_zeros_in_histograms:
+	n_zeros = (use_data_for_bins==0).sum()
+	if n_zeros > (use_data_for_bins.size) * _threshold_for_dropping_zeros_in_histograms:
+		if duo_filter is not None: use_duo_filter = duo_filter[data!=0]
 		use_data = data[data!=0]
+		use_data_for_bins = use_data_for_bins[use_data_for_bins!=0]
 		use_color = hexcolor('orange')
 	else:
+		if duo_filter is not None: use_duo_filter = duo_filter
 		use_data = data
 		use_color = hexcolor('ocean')
 	bgcolor = None
 
+	if duo_filter is not None: use_duo_filter = use_duo_filter[~numpy.isnan(use_data)]
 	use_data = use_data[~numpy.isnan(use_data)]
 
-	if use_data.size > 0:
-		data_stdev = use_data.std()
-		data_mean = use_data.mean()
-		data_min = use_data.min()
-		data_max = use_data.max()
+	if use_data_for_bins.size > 0:
+		data_stdev = use_data_for_bins.std()
+		data_mean = use_data_for_bins.mean()
+		data_min = use_data_for_bins.min()
+		data_max = use_data_for_bins.max()
 		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
-			bottom = numpy.nanpercentile(use_data,0.5)
-			top = numpy.nanpercentile(use_data,99.5)
+			bottom = numpy.nanpercentile(use_data_for_bins,0.5)
+			top = numpy.nanpercentile(use_data_for_bins,99.5)
+			if duo_filter is not None:
+				use_duo_filter = use_duo_filter[(use_data>bottom) & (use_data<top)]
 			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
+			use_data_for_bins = use_data_for_bins[ (use_data_for_bins>bottom) & (use_data_for_bins<top) ]
 			if use_color == hexcolor('orange'):
 				use_color = hexcolor('red')
 			else:
 				use_color = hexcolor('forest')
+		else:
+			bottom = data_min
+			top = data_max
+
+#	if use_data.size > 0:
+#		data_stdev = use_data.std()
+#		data_mean = use_data.mean()
+#		data_min = use_data.min()
+#		data_max = use_data.max()
+#		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
+#			bottom = numpy.nanpercentile(use_data,0.5)
+#			top = numpy.nanpercentile(use_data,99.5)
+#			if duo_filter is not None:
+#				use_duo_filter = use_duo_filter[(use_data>bottom) & (use_data<top)]
+#			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
+#			if use_color == hexcolor('orange'):
+#				use_color = hexcolor('red')
+#			else:
+#				use_color = hexcolor('forest')
 
 	if isinstance(bins, str):
-		if use_data.size == 0:
+		if use_data_for_bins.size == 0:
 			# handle empty arrays. Can't determine range, so use 0-1.
 			mn, mx = 0.0, 1.0
 		else:
-			mn, mx = use_data.min() + 0.0, use_data.max() + 0.0
-		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data)
+			mn, mx = use_data_for_bins.min() + 0.0, use_data_for_bins.max() + 0.0
+		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data_for_bins)
 		if width:
 			bins = int(numpy.ceil((mx - mn) / width))
 		else:
@@ -169,36 +200,72 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		if bins < 10:
 			bins = 10
 
+	try:
+		bins = numpy.linspace(bottom, top, num=bins, endpoint=True, retstep=False, dtype=None)
+	except UnboundLocalError:
+		pass
+
 #	if prerange is None:
 #		bottom, top, use_color, bins = spark_histogram_rangefinder(use_data, bins)
 #	else:
 #		bottom, top, use_color, bins = prerange
 
-	plt.clf()
-	try:
-		n, bins, patches = plt.hist(use_data, bins, normed=1, facecolor=use_color, linewidth=0, alpha=1.0)
-	except:
-		print("<data>\n",data,"</data>")
-		print("<bins>\n",bins,"</bins>")
-		raise
-	fig = plt.gcf()
-	fig.set_figheight(0.2)
-	fig.set_figwidth(0.75)
-	fig.set_dpi(300)
-	if xlabel: plt.xlabel(xlabel)
-	if ylabel: plt.ylabel(ylabel)
-	if title: plt.title(title)
-	if not xticks: fig.axes[0].get_xaxis().set_ticks([])
-	if not yticks: fig.axes[0].get_yaxis().set_ticks([])
-	if not frame: fig.axes[0].axis('off')
+	if duo_filter is None:
+		plt.clf()
+		try:
+			n, bins, patches = plt.hist(use_data, bins, normed=1, facecolor=use_color, linewidth=0, alpha=1.0)
+		except:
+			print("<data>\n",data,"</data>")
+			print("<bins>\n",bins,"</bins>")
+			raise
+		fig = plt.gcf()
+		fig.set_figheight(0.2)
+		fig.set_figwidth(0.75)
+		fig.set_dpi(300)
+		if xlabel: plt.xlabel(xlabel)
+		if ylabel: plt.ylabel(ylabel)
+		if title: plt.title(title)
+		if not xticks: fig.axes[0].get_xaxis().set_ticks([])
+		if not yticks: fig.axes[0].get_yaxis().set_ticks([])
+		if not frame: fig.axes[0].axis('off')
 
-	if bgcolor is not None:
-		ax = plt.gca()
-		ax.set_axis_bgcolor(bgcolor)
+		if bgcolor is not None:
+			ax = plt.gca()
+			ax.set_axis_bgcolor(bgcolor)
 
-	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
-	ret = plot_as_svg_xhtml(fig)
-	plt.clf()
+		plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+		ret = plot_as_svg_xhtml(fig)
+		plt.clf()
+	else:
+		ret = [None,None]
+		for duo in (1,0):
+
+			plt.clf()
+			try:
+				use_filt_data = use_data[use_duo_filter if duo else ~use_duo_filter]
+				n, bins, patches = plt.hist(use_filt_data, bins, normed=1, facecolor=use_color, linewidth=0, alpha=1.0)
+			except:
+				print("<data>\n",data,"</data>")
+				print("<bins>\n",bins,"</bins>")
+				raise
+			fig = plt.gcf()
+			fig.set_figheight(0.2)
+			fig.set_figwidth(0.75)
+			fig.set_dpi(300)
+			if xlabel: plt.xlabel(xlabel)
+			if ylabel: plt.ylabel(ylabel)
+			if title: plt.title(title)
+			if not xticks: fig.axes[0].get_xaxis().set_ticks([])
+			if not yticks: fig.axes[0].get_yaxis().set_ticks([])
+			if not frame: fig.axes[0].axis('off')
+
+			if bgcolor is not None:
+				ax = plt.gca()
+				ax.set_axis_bgcolor(bgcolor)
+
+			plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+			ret[duo] = plot_as_svg_xhtml(fig)
+			plt.clf()
 
 	if notetaker is not None and use_color!=hexcolor('ocean'):
 		notetaker.add( _spark_histogram_notes[use_color] )
@@ -235,9 +302,9 @@ def spark_pie_maker(data, notetaker=None):
 
 
 
-def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=None, **kwarg):
+def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=None, duo_filter=None, data_for_bins=None, **kwarg):
 	if prerange is not None:
-		return spark_histogram_maker(data, *arg, notetaker=notetaker, prerange=prerange, **kwarg)
+		return spark_histogram_maker(data, *arg, notetaker=notetaker, prerange=prerange, duo_filter=duo_filter, data_for_bins=data_for_bins, **kwarg)
 	try:
 		flat_data = data.flatten()
 	except:
@@ -246,12 +313,19 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 	uniq_counts = None
 	pie_chart_cutoff = int(pie_chart_cutoff)
 	if len(uniq)<=pie_chart_cutoff:
-		uniq, uniq_counts = numpy.unique(flat_data, return_counts=True)
+		if duo_filter is not None:
+			uniq0, uniq_counts0 = numpy.unique(flat_data[~duo_filter], return_counts=True)
+			uniq1, uniq_counts1 = numpy.unique(flat_data[duo_filter], return_counts=True)
+		else:
+			uniq, uniq_counts = numpy.unique(flat_data, return_counts=True)
 	if uniq_counts is not None and len(uniq_counts)<=pie_chart_cutoff:
 		if notetaker is not None:
 			notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
-		return spark_pie_maker(uniq_counts)
-	return spark_histogram_maker(data, *arg, notetaker=notetaker, **kwarg)
+		if duo_filter is not None:
+			return spark_pie_maker(uniq_counts0), spark_pie_maker(uniq_counts1)
+		else:
+			return spark_pie_maker(uniq_counts)
+	return spark_histogram_maker(data, *arg, notetaker=notetaker, duo_filter=duo_filter, data_for_bins=data_for_bins, **kwarg)
 
 
 

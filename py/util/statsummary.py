@@ -56,7 +56,53 @@ class statistical_summary():
 		return False
 
 	@staticmethod
-	def compute(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x):
+	def compute(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x, full_xxx=None):
+		if len(xxx)==0:
+			return statistical_summary()
+		else:
+			ss = statistical_summary()
+			ss.mean = dimzer( numpy.mean(xxx,0) )
+			ss.stdev = dimzer( numpy.std(xxx,0) )
+			ss.minimum = dimzer( numpy.amin(xxx,0) )
+			ss.maximum = dimzer( numpy.amax(xxx,0) )
+			try:
+				xxx_shape_1 = xxx.shape[1]
+			except IndexError:
+				ss.n_nonzeros = dimzer( numpy.count_nonzero(xxx) )
+				ss.n_positives = dimzer( int(numpy.sum(xxx>0)) )
+				ss.n_negatives = dimzer( int(numpy.sum(xxx<0)) )
+				ss.n_zeros = dimzer( xxx.size-ss.n_nonzeros )
+				ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx),)
+			else:
+				ss.n_nonzeros = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
+				ss.n_positives = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1))
+				ss.n_negatives = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1))
+				ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
+				if full_xxx is None:
+					ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None) for i in range(xxx_shape_1))
+				else:
+					ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i]) for i in range(xxx_shape_1))
+			sumx_ = dimzer( numpy.sum(xxx,0) )
+			ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+#			if len(xxx.shape) == 1:
+#				ss.histogram = [spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),]
+#			else:
+#				ss.histogram = numpy.apply_along_axis(lambda x:[spark_histogram(x, bins=histogram_bins, notetaker=ss.notes)], 0, xxx).squeeze()
+			
+			# Make sure that the histogram field is iterable
+			if isinstance(ss.histogram, numpy.ndarray):
+				ss.histogram = numpy.atleast_1d(ss.histogram)
+	#		try:
+	#			iter(ss.histogram)
+	#		except:
+	#			ss.histogram = [ss.histogram, ]
+			if count_uniques:
+				q1,q2 = numpy.unique(xxx, return_counts=True)
+				ss.unique_values = pandas.Series(q2,q1)
+			return ss
+
+	@staticmethod
+	def compute_v3(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x, xxt=None):
 		if len(xxx)==0:
 			return statistical_summary()
 		else:
@@ -97,3 +143,76 @@ class statistical_summary():
 				q1,q2 = numpy.unique(xxx, return_counts=True)
 				ss.unique_values = pandas.Series(q2,q1)
 			return ss
+
+
+
+
+	@classmethod
+	def compute_v2(cls, xxx, histogram_bins='auto', count_uniques=False, duo_filter=None):
+		axis=0
+		if len(xxx)==0:
+			return cls()
+		else:
+			if duo_filter is None:
+				ss = cls()
+				ss.mean = numpy.atleast_1d( numpy.mean(xxx,axis) )
+				ss.stdev = numpy.atleast_1d( numpy.std(xxx,axis) )
+				ss.minimum = numpy.atleast_1d( numpy.amin(xxx,axis) )
+				ss.maximum = numpy.atleast_1d( numpy.amax(xxx,axis) )
+				try:
+					xxx_shape_1 = xxx.shape[1]
+				except IndexError:
+					# xxx is one dimensional
+					ss.n_nonzeros = numpy.atleast_1d( numpy.count_nonzero(xxx) )
+					ss.n_positives = numpy.atleast_1d( int(numpy.sum(xxx>0)) )
+					ss.n_negatives = numpy.atleast_1d( int(numpy.sum(xxx<0)) )
+					ss.n_zeros = numpy.atleast_1d( xxx.size-ss.n_nonzeros )
+					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, duo_filter=duo_filter),)
+				else:
+					ss.n_nonzeros = numpy.asarray([numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1)])
+					ss.n_positives = numpy.asarray(tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1)))
+					ss.n_negatives = numpy.asarray(tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1)))
+					ss.n_zeros = numpy.asarray(tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1)))
+					ss.histogram = (tuple(
+						spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, duo_filter=duo_filter)
+						for i in range(xxx_shape_1))
+					)
+				sumx_ = numpy.atleast_1d( numpy.sum(xxx,axis) )
+				ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+				if count_uniques:
+					q1,q2 = numpy.unique(xxx, return_counts=True)
+					ss.unique_values = pandas.Series(q2,q1)
+				return ss
+			else:
+				ss = cls()
+				ss.mean = numpy.atleast_1d( numpy.mean(xxx[duo_filter],axis) ), numpy.atleast_1d( numpy.mean(xxx[~duo_filter],axis) )
+				ss.stdev = numpy.atleast_1d( numpy.std(xxx[duo_filter],axis) ), numpy.atleast_1d( numpy.std(xxx[~duo_filter],axis) )
+				ss.minimum = numpy.atleast_1d( numpy.amin(xxx[duo_filter],axis) ), numpy.atleast_1d( numpy.amin(xxx[~duo_filter],axis) )
+				ss.maximum = numpy.atleast_1d( numpy.amax(xxx[duo_filter],axis) ), numpy.atleast_1d( numpy.amax(xxx[~duo_filter],axis) )
+				try:
+					xxx_shape_1 = xxx.shape[1]
+				except IndexError:
+					# xxx is one dimensional
+					ss.n_nonzeros = numpy.atleast_1d( numpy.count_nonzero(xxx[duo_filter]) ), numpy.atleast_1d( numpy.count_nonzero(xxx[~duo_filter]) )
+					ss.n_positives = numpy.atleast_1d( int(numpy.sum(xxx[duo_filter]>0)) ), numpy.atleast_1d( int(numpy.sum(xxx[~duo_filter]>0)) )
+					ss.n_negatives = numpy.atleast_1d( int(numpy.sum(xxx[duo_filter]<0)) ), numpy.atleast_1d( int(numpy.sum(xxx[~duo_filter]<0)) )
+					ss.n_zeros = numpy.atleast_1d( xxx[duo_filter].size-ss.n_nonzeros[0] ), numpy.atleast_1d( xxx[~duo_filter].size-ss.n_nonzeros[1] )
+					htemp = spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, duo_filter=duo_filter)
+					ss.histogram = (htemp[0],), (htemp[1],)
+				else:
+					ss.n_nonzeros  = numpy.asarray([numpy.count_nonzero(xxx[duo_filter,i]) for i in range(xxx_shape_1)]), numpy.asarray([numpy.count_nonzero(xxx[~duo_filter,i]) for i in range(xxx_shape_1)])
+					ss.n_positives = numpy.asarray(tuple(int(numpy.sum(xxx[duo_filter,i]>0)) for i in range(xxx_shape_1))), numpy.asarray(tuple(int(numpy.sum(xxx[~duo_filter,i]>0)) for i in range(xxx_shape_1)))
+					ss.n_negatives = numpy.asarray(tuple(int(numpy.sum(xxx[duo_filter,i]<0)) for i in range(xxx_shape_1))), numpy.asarray(tuple(int(numpy.sum(xxx[~duo_filter,i]<0)) for i in range(xxx_shape_1)))
+					ss.n_zeros = numpy.asarray(tuple(xxx[duo_filter,i].size-numpy.count_nonzero(xxx[duo_filter,i]) for i in range(xxx_shape_1))), numpy.asarray(tuple(xxx[~duo_filter,i].size-numpy.count_nonzero(xxx[~duo_filter,i]) for i in range(xxx_shape_1)))
+					htemps = tuple(
+						spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, duo_filter=duo_filter)
+						for i in range(xxx_shape_1))
+					ss.histogram = [h[0] for h in htemps], [h[1] for h in htemps]
+				sumx_ = numpy.atleast_1d( numpy.sum(xxx[duo_filter],axis) ), numpy.atleast_1d( numpy.sum(xxx[~duo_filter],axis) )
+				ss.mean_nonzero = sumx_[0] / numpy.asarray(ss.n_nonzeros[0]), sumx_[1] / numpy.asarray(ss.n_nonzeros[1])
+				if count_uniques:
+					q1,q2 = numpy.unique(xxx[duo_filter], return_counts=True)
+					q3,q4 = numpy.unique(xxx[~duo_filter], return_counts=True)
+					ss.unique_values = pandas.Series(q2,q1), pandas.Series(q4,q3)
+				return ss
+

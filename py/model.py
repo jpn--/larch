@@ -824,8 +824,8 @@ class Model(Model2, ModelReporter):
 		x_total = x[av.squeeze()]
 		
 		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
-		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d)
-		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		
 		return ss_total, ss_chosen, ss_unchosen
 
@@ -859,8 +859,8 @@ class Model(Model2, ModelReporter):
 		x_total = x[av[:,altslots].squeeze(),altslots].squeeze()
 		
 		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
-		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d)
-		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		
 		return ss_total, ss_chosen, ss_unchosen,
 
@@ -887,6 +887,8 @@ class Model(Model2, ModelReporter):
 				bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
 				bucket_types = ["All Avail", "Chosen", "Unchosen"]
 				for summary_attrib, bucket_type in zip( bucket, bucket_types ):
+					if bucket_type=="All Avail":
+						continue
 					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
 					if summary_attrib.empty():
 						continue
@@ -921,6 +923,8 @@ class Model(Model2, ModelReporter):
 			bucket = self.stats_utility_ca_chosen_unchosen()
 			bucket_types = ["All Avail", "Chosen", "Unchosen"]
 			for summary_attrib, bucket_type in zip( bucket, bucket_types ):
+				if bucket_type=="All Avail":
+					continue
 				#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
 				means = summary_attrib.mean
 				stdevs = summary_attrib.stdev
