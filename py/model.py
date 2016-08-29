@@ -786,6 +786,18 @@ class Model(Model2, ModelReporter):
 				title=title,
 				)
 
+	def art_stats_utility_ca(self, title="Utility idCA Data"):
+		from .util.analytics import basic_idca_variable_analysis
+		needs = self.needs()
+		if 'UtilityCA' in needs:
+			return basic_idca_variable_analysis(
+				self.data.utilityca,
+				needs['UtilityCA'].get_variables(),
+				self.data.avail,
+				title=title,
+				)
+
+
 	def art_stats_utility_ca_by_alt(self, title="Utility idCA Data by Alternative"):
 		from .util.analytics import basic_variable_analysis_by_alt
 		needs = self.needs()
@@ -823,11 +835,10 @@ class Model(Model2, ModelReporter):
 		
 		x_total = x[av.squeeze()]
 		
-		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
 		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		
-		return ss_total, ss_chosen, ss_unchosen
+		return ss_chosen, ss_unchosen
 
 	def stats_utility_ca_chosen_unchosen_by_alt(self, altcode, histograms=False):
 		"""
@@ -858,11 +869,10 @@ class Model(Model2, ModelReporter):
 		x_unchosen = x[ch_asbool]
 		x_total = x[av[:,altslots].squeeze(),altslots].squeeze()
 		
-		ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
 		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 		
-		return ss_total, ss_chosen, ss_unchosen,
+		return ss_chosen, ss_unchosen,
 
 	def stats_utility_ca(self, by_alt=True):
 		"""
@@ -885,11 +895,8 @@ class Model(Model2, ModelReporter):
 			names = self.needs()["UtilityCA"].get_variables()
 			for acode,aname in self.alternatives().items():
 				bucket = self.stats_utility_ca_chosen_unchosen_by_alt(acode)
-				bucket_types = ["All Avail", "Chosen", "Unchosen"]
+				bucket_types = ["Chosen", "Unchosen"]
 				for summary_attrib, bucket_type in zip( bucket, bucket_types ):
-					if bucket_type=="All Avail":
-						continue
-					#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
 					if summary_attrib.empty():
 						continue
 					means = summary_attrib.mean
@@ -921,11 +928,8 @@ class Model(Model2, ModelReporter):
 			names = self.needs()["UtilityCA"].get_variables()
 			# agg over all alts
 			bucket = self.stats_utility_ca_chosen_unchosen()
-			bucket_types = ["All Avail", "Chosen", "Unchosen"]
+			bucket_types = ["Chosen", "Unchosen"]
 			for summary_attrib, bucket_type in zip( bucket, bucket_types ):
-				if bucket_type=="All Avail":
-					continue
-				#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = summary_attrib
 				means = summary_attrib.mean
 				stdevs = summary_attrib.stdev
 				mins = summary_attrib.minimum

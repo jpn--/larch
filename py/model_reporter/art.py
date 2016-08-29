@@ -240,6 +240,26 @@ class AbstractReportTable():
 			self.df.iloc[-1, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
 			self._col_width = None
 
+	def set_lastrow_iloc_nondupe_wide(self, colnum, val, attrib=None, anchorlabel=None):
+		try:
+			val_text = val.text
+		except AttributeError:
+			val_text = str(val)
+		prev = -1
+		prev_text = None
+		try:
+			for c in range(colnum):
+				if self.get_text_iloc(prev,c, missing=None) is not None:
+					raise NameError
+			while prev_text is None:
+				prev -= 1
+				prev_text = self.get_text_iloc(prev,colnum, missing=None)
+			if prev_text!=val_text:
+				raise NameError
+		except (NameError, IndexError):
+			self.df.iloc[-1, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+			self._col_width = None
+
 	def __repr__(self):
 		if self.title:
 			s = " {}\n".format(colorize.boldgreen(self.title))
@@ -1289,6 +1309,7 @@ class ArtModelReporter():
 		not_too_many_alts = (self.nAlts() < 20)
 		a = AbstractReportTables(title="Various Data Statistics", short_title="Data Stats")
 		a += self.art_stats_utility_co()
+		a += self.art_stats_utility_ca()
 		if not_too_many_alts:
 			a += self.art_stats_utility_co_by_alt()
 		if not_too_many_alts:

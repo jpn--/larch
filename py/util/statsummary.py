@@ -25,6 +25,29 @@ class statistical_summary():
 		for kw,val in kwargs.items():
 			setattr(self,kw,val)
 
+
+	def __iter__(self):
+		self._iter_n = 0
+		return self
+	
+	def __next__(self):
+		if self.mean is None or self._iter_n > len(self.mean):
+			raise StopIteration
+		s = statistical_summary()
+		s.mean = self.mean[self._iter_n]
+		s.stdev = self.stdev[self._iter_n]
+		s.minimum = self.minimum[self._iter_n]
+		s.maximum = self.maximum[self._iter_n]
+		s.n_positives = self.n_positives[self._iter_n]
+		s.n_negatives = self.n_negatives[self._iter_n]
+		s.n_zeros = self.n_zeros[self._iter_n]
+		s.n_nonzeros = self.n_nonzeros[self._iter_n]
+		s.mean_nonzero = self.mean_nonzero[self._iter_n]
+		s.histogram = self.histogram[self._iter_n]
+		self._iter_n += 1
+		return s
+		
+
 	def __repr__(self):
 		s = "<statistical_summary>"
 		s += "\n          mean: {}".format(self.mean)
@@ -83,7 +106,10 @@ class statistical_summary():
 				else:
 					ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i]) for i in range(xxx_shape_1))
 			sumx_ = dimzer( numpy.sum(xxx,0) )
-			ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+			try:
+				ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+			except ValueError:
+				ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
 #			if len(xxx.shape) == 1:
 #				ss.histogram = [spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),]
 #			else:

@@ -91,9 +91,15 @@ def spark_histogram_rangefinder(data, bins):
 		data_mean = use_data.mean()
 		data_min = use_data.min()
 		data_max = use_data.max()
-		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
-			bottom = numpy.nanpercentile(use_data,0.5)
-			top = numpy.nanpercentile(use_data,99.5)
+		if (data_min < data_mean - 5*data_stdev) or (data_max > data_mean + 5*data_stdev):
+			if (data_min < data_mean - 5*data_stdev):
+				bottom = numpy.nanpercentile(use_data,0.5)
+			else:
+				bottom = data_min
+			if data_max > data_mean + 5*data_stdev:
+				top = numpy.nanpercentile(use_data,99.5)
+			else:
+				top = data_max
 			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
 			if use_color == hexcolor('orange'):
 				use_color = hexcolor('red')
@@ -152,8 +158,14 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		data_min = use_data_for_bins.min()
 		data_max = use_data_for_bins.max()
 		if (data_min < data_mean - 5*data_stdev) or data_max > data_mean + 5*data_stdev:
-			bottom = numpy.nanpercentile(use_data_for_bins,0.5)
-			top = numpy.nanpercentile(use_data_for_bins,99.5)
+			if (data_min < data_mean - 5*data_stdev):
+				bottom = numpy.nanpercentile(use_data_for_bins,0.5)
+			else:
+				bottom = data_min
+			if data_max > data_mean + 5*data_stdev:
+				top = numpy.nanpercentile(use_data_for_bins,99.5)
+			else:
+				top = data_max
 			if duo_filter is not None:
 				use_duo_filter = use_duo_filter[(use_data>bottom) & (use_data<top)]
 			use_data = use_data[ (use_data>bottom) & (use_data<top) ]

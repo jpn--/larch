@@ -114,6 +114,118 @@ def basic_idco_variable_analysis(arr, names, weights=None, description_catalog=N
 
 
 
+def basic_idca_variable_analysis(arr, names, av, weights=None, description_catalog=None, title="Analytics", short_title=None):
+	"""
+	Parameters
+	----------
+	arr : ndarray
+		The data to analyze.  Should have shape (cases, vars)
+	names : sequence of str
+		The names of the variables.  Should have length matching last dim of `arr`
+	"""
+
+	arr_original_shape = arr.shape
+	av = av.reshape(arr.shape[0]*arr.shape[1])
+	arr = arr.reshape(arr.shape[0]*arr.shape[1], arr.shape[2])[av]
+
+	if description_catalog is None:
+		description_catalog = {}
+		from ..roles import _data_description_catalog
+		description_catalog.update(_data_description_catalog)
+	
+	description_catalog_keys = list(description_catalog.keys())
+	description_catalog_keys.sort(key=len, reverse=True)
+	
+	descriptions = numpy.asarray(names)
+	
+	for dnum, descr in enumerate(descriptions):
+		if descr in description_catalog:
+			descriptions[dnum] = description_catalog[descr]
+		else:
+			for key in description_catalog_keys:
+				if key in descr:
+					descr = descr.replace(key,description_catalog[key])
+			descriptions[dnum] = descr
+
+	show_descrip = (numpy.asarray(descriptions)!=numpy.asarray(names)).any()
+
+	use_weighted = weights is not None and bool((weights!=1).any())
+
+	if use_weighted:
+		title += " (weighted)"
+
+	ss = statistical_summary.compute(arr, dimzer=numpy.atleast_1d)
+	if use_weighted:
+		w = numpy.broadcast_to(weights, arr_original_shape).flatten()[av]
+		ss.mean = numpy.average(arr, axis=0, weights=w)
+		variance = numpy.average((arr-ss.mean)**2, axis=0, weights=w)
+		ss.stdev = numpy.sqrt(variance)
+		w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(arr.shape[1])
+		w_nonzero[arr==0] = 0
+		ss.mean_nonzero = numpy.average(arr, axis=0, weights=w_nonzero)
+
+	ncols = 0
+	stack = []
+	titles = []
+
+	if show_descrip:
+		stack += [descriptions,]
+		titles += ["Description",]
+		ncols += 1
+	else:
+		stack += [names,]
+		titles += ["Data",]
+		ncols += 1
+
+	ncols += 5
+	stack += [ss.mean,ss.stdev,ss.minimum,ss.maximum,ss.n_zeros,ss.mean_nonzero]
+	titles += ["Mean","Std.Dev.","Minimum","Maximum","Zeros","Mean(NonZero)"]
+	
+	use_p = (numpy.sum(ss.n_positives)>0)
+	use_n = (numpy.sum(ss.n_negatives)>0)
+	
+	if use_p:
+		stack += [ss.n_positives,]
+		titles += ["Positives",]
+		ncols += 1
+	if use_n:
+		stack += [ss.n_negatives,]
+		titles += ["Negatives",]
+		ncols += 1
+
+	# Histograms
+	stack += [ss.histogram,]
+	titles += ["Distribution",]
+	ncols += 1
+
+	if show_descrip:
+		stack += [names,]
+		titles += ["Data",]
+		ncols += 1
+
+	x = AbstractReportTable(title=title, short_title=short_title, columns=titles)
+	x.addrow_seq_of_strings(titles)
+	for s in zip(*stack):
+		s_formatted = []
+		for si in s:
+			try:
+				is_int = (int(si)==float(si))
+			except:
+				s_formatted += [si,]
+			else:
+				use_fmt = "{:.0f}" if is_int else "{:.5g}"
+				s_formatted += [use_fmt.format(float(si)),]
+		x.addrow_seq_of_strings(s_formatted)
+	
+	for footnote in sorted(ss.notes):
+		x.footnotes.append(footnote)
+	
+	return x
+
+
+
+
+
 def _make_buckets(arr, ch, av, for_altcode, altcodes):
 	"""
 	
@@ -145,11 +257,10 @@ def _make_buckets(arr, ch, av, for_altcode, altcodes):
 	x_unchosen = arr[ch_asbool]
 	x_total = arr[av[:,altslots].squeeze(),altslots].squeeze()
 	
-	ss_total = statistical_summary.compute(x_total, dimzer=numpy.atleast_1d)
 	ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 	ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
 	
-	return ss_total, ss_chosen, ss_unchosen,
+	return ss_chosen, ss_unchosen,
 
 
 
@@ -195,35 +306,44 @@ def basic_variable_analysis_by_alt(arr, ch, av, names, altcodes, altnames, title
 	for acode,aname in zip(altcodes, altnames):
 		if pickcodes is None or acode in pickcodes:
 			bucket = _make_buckets( arr, ch, av, acode, altcodes )
-			bucket_types = ["All Avail", "Chosen", "Unchosen"]
+			bucket_types = ["Chosen", "Unchosen"]
 			for summary_attrib, bucket_type in zip( bucket, bucket_types ):
 				if summary_attrib.empty():
 					continue
-				means = summary_attrib.mean
-				stdevs = summary_attrib.stdev
-				mins = summary_attrib.minimum
-				maxs = summary_attrib.maximum
-				nonzers = summary_attrib.n_nonzeros
-				posis = summary_attrib.n_positives
-				negs = summary_attrib.n_negatives
-				zers = summary_attrib.n_zeros
-				mean_nonzer = summary_attrib.mean_nonzero
-				histos = summary_attrib.histogram
-				footnotes |= summary_attrib.notes
-				try:
-					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos,):
-						if picks is None or (acode,s[0]) in picks:
-							newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
-										'data':s[0], 'mean':s[1], 'stdev':s[2],
-										'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
-										'positives':s[7],'negatives':s[8],'namecounter':s[9],
-										'histogram':s[10],
-							}
-							table_cache = table_cache.append(newrow, ignore_index=True)
-				except:
-					print('names',type(names),names)
-					print('means',type(means),means)
-					raise
+				for name_,n_,sa_ in zip(names,count(),summary_attrib):
+					if picks is None or (acode,name_) in picks:
+						newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
+									'data':name_, 'mean':sa_.mean, 'stdev':sa_.stdev,
+									'min':sa_.minimum,'max':sa_.maximum,'zeros':sa_.n_zeros,'mean_nonzero':sa_.mean_nonzero,
+									'positives':sa_.n_positives,'negatives':sa_.n_negatives,'namecounter':n_,
+									'histogram':sa_.histogram,
+						}
+						table_cache = table_cache.append(newrow, ignore_index=True)
+						footnotes |= summary_attrib.notes
+#				means = summary_attrib.mean
+#				stdevs = summary_attrib.stdev
+#				mins = summary_attrib.minimum
+#				maxs = summary_attrib.maximum
+#				nonzers = summary_attrib.n_nonzeros
+#				posis = summary_attrib.n_positives
+#				negs = summary_attrib.n_negatives
+#				zers = summary_attrib.n_zeros
+#				mean_nonzer = summary_attrib.mean_nonzero
+#				histos = summary_attrib.histogram
+#				footnotes |= summary_attrib.notes
+#				try:
+#					for s in zip(names,means,stdevs,mins,maxs,zers,mean_nonzer,posis,negs,count(),histos,):
+#						if picks is None or (acode,s[0]) in picks:
+#							newrow = {'altcode':acode, 'altname':aname, 'filter':bucket_type,
+#										'data':s[0], 'mean':s[1], 'stdev':s[2],
+#										'min':s[3],'max':s[4],'zeros':s[5],'mean_nonzero':s[6],
+#										'positives':s[7],'negatives':s[8],'namecounter':s[9],
+#										'histogram':s[10],
+#							}
+#							table_cache = table_cache.append(newrow, ignore_index=True)
+#				except:
+#					print('names',type(names),names)
+#					raise
 	table_cache.sort_values(['altcode','namecounter','filter'], inplace=True)
 	table_cache.index = range(len(table_cache))
 
@@ -264,7 +384,7 @@ def basic_variable_analysis_by_alt(arr, ch, av, names, altcodes, altnames, title
 			
 			try:
 				x.set_lastrow_iloc_nondupe(0, aname)
-				x.set_lastrow_iloc_nondupe(1, block.loc[rownum,'data'])
+				x.set_lastrow_iloc_nondupe_wide(1, block.loc[rownum,'data'])
 				cn = 2
 				for coltitle,colvalue,colfmt in display_cols:
 					x.set_lastrow_iloc(cn,colfmt.format( block.loc[rownum,colvalue] ) )

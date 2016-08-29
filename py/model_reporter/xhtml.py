@@ -1409,7 +1409,7 @@ class XhtmlModelReporter():
 							with x.tr_:
 								try:
 									if block1 or block.loc[rownum-1,'data']!=block.loc[rownum,'data']:
-										x.td(block.loc[rownum,'data'], {'rowspan':str(3)})
+										x.td(block.loc[rownum,'data'], {'rowspan':str(2)})
 									block1 = False
 									for coltitle,colvalue,colfmt in display_cols:
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
@@ -1470,9 +1470,9 @@ class XhtmlModelReporter():
 							with x.tr_:
 								try:
 									if block1 or block.loc[rownum-1,'altname']!=block.loc[rownum,'altname']:
-										x.td(aname, {'rowspan':str(3*len(names))})
+										x.td(aname, {'rowspan':str(2*len(names))})
 									if block1 or block.loc[rownum-1,'data']!=block.loc[rownum,'data']:
-										x.td(block.loc[rownum,'data'], {'rowspan':str(3)})
+										x.td(block.loc[rownum,'data'], {'rowspan':str(2)})
 									block1 = False
 									for coltitle,colvalue,colfmt in display_cols:
 										x.td(colfmt.format( block.loc[rownum,colvalue] ) )
