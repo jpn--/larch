@@ -1019,7 +1019,10 @@ class Model(Model2, ModelReporter):
 				dense_s -= 1
 		hess_taken = hess[take].reshape(dense_s,dense_s)
 		from .linalg import matrix_inverse
-		invhess = matrix_inverse(hess_taken)
+		try:
+			invhess = matrix_inverse(hess_taken)
+		except numpy.linalg.linalg.LinAlgError:
+			invhess = numpy.full_like(hess_taken, numpy.nan, dtype=numpy.float64)
 		self.covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.covariance_matrix[take] = invhess.reshape(-1)
 		# robust...

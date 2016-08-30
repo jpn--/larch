@@ -256,6 +256,8 @@ class DT(Fountain):
 		return self.h5f.create_soft_link(*arg, **kwargs)
 	def flush(self, *arg, **kwargs):
 		return self.h5f.flush(*arg, **kwargs)
+	def close(self, *arg, **kwargs):
+		return self.h5f.close(*arg, **kwargs)
 
 	def remove_node_if_exists(self, *arg, **kwargs):
 		try:
@@ -2953,7 +2955,17 @@ class DT(Fountain):
 		output.dump()
 		output.view()
 
+	def link_caseids(self, linkage):
+		self.remove_node_if_exists(self.h5top, 'caseids')
+		if ":/" not in linkage:
+			tag_caseids = linkage + ":/larch/caseids"
+		else:
+			tag_caseids = linkage
+		self.create_external_link(self.h5top, 'caseids', tag_caseids)
 
+	def new_caseids(self, arr):
+		self.remove_node_if_exists(self.h5top, 'caseids')
+		self.h5f.create_carray(self.h5top, 'caseids', obj=arr)
 
 
 def _close_all_h5():
@@ -3090,9 +3102,6 @@ class DT_idco_stack_manager:
 		for n,altid in enumerate(self.parent._alternative_codes()):
 			s += "\n  {}: {!r}".format(altid, self[altid])
 		return s
-
-
-
 
 
 def DTx(filename=None, *, caseids=None, alts=None, **kwargs):

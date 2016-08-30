@@ -1316,3 +1316,5 @@ class ArtModelReporter():
 			a += self.art_stats_utility_ca_by_alt()
 		return a
 
+
+	from ..util.analytics import art_choice_distributions

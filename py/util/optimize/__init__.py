@@ -376,6 +376,8 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	model._set_estimation_run_statistics_pickle(r.stats.pickled_dictionary())
 	model.maximize_loglike_results = r
 	del model._built_constraints_cache
+	if model.logger():
+		model.logger().log(30,"Final Results\n{!s}".format(model.art_params().ascii()))
 	return r
 
 
@@ -677,7 +679,10 @@ def _compute_constrained_covariance(model, constraints=()):
 	from ...linalg import matrix_inverse
 	robust_covar = numpy.zeros_like(d2)
 	covar = numpy.zeros_like(d2)
-	invhess_squeezed = matrix_inverse(d2[hh,:][:,hh])[:,:]
+	try:
+		invhess_squeezed = matrix_inverse(d2[hh,:][:,hh])[:,:]
+	except numpy.linalg.linalg.LinAlgError:
+		invhess_squeezed = numpy.full_like(d2[hh,:][:,hh], numpy.nan, dtype=numpy.float64)
 	bhhh_squeezed = bh[hh,:][:,hh]
 	result_squeezed = invhess_squeezed @ bhhh_squeezed @ invhess_squeezed
 	robust_covar_i = numpy.zeros([robust_covar.shape[0], invhess_squeezed.shape[1]])

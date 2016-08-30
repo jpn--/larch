@@ -83,10 +83,15 @@ class XhtmlModelReporter():
 		elif cats=='*0':
 			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options','possible_overspecification', 'excludedcases'] + list(self._user_defined_arts)
 
-		if cats in ('**', '*') and len(self.node)>0:
+		if cats in ('*',) and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
-		elif cats in ('**', '*'):
+		elif cats in ('*',):
 			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
+
+		if cats in ('**',) and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
+		elif cats in ('**',):
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
 
 		if cats=='-' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','latest','NOTES','options']

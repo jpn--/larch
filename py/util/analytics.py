@@ -3,7 +3,7 @@ import numpy, pandas
 from itertools import count
 from ..model_reporter.art import AbstractReportTable
 from .statsummary import statistical_summary
-
+from ..roles import X
 
 
 def basic_idco_variable_analysis(arr, names, weights=None, description_catalog=None, title="Analytics", short_title=None):
@@ -526,5 +526,109 @@ def basic_variable_analysis_by_alt(arr, ch, av, names, altcodes, altnames, title
 #
 #
 #
+
+
+
+
+
+
+def art_choice_distributions(m, pct_str=True):
+
+	if not m.is_provisioned():
+		m.provision()
+
+	co_label = lambda x: X(x).descrip or x
+
+	ch = m.Data("Choice")
+	df = pandas.DataFrame(index=pandas.MultiIndex.from_product([(), ()], names=['Variable','Value[s]']),
+	                      columns=list(m.alternative_names())+['Count'])
+
+	co_sources = "UtilityCO", "SamplingCO"
+
+	for co_source in co_sources:
+
+		co = m.Data(co_source)
+		if co_source not in m.needs():
+			continue
+		co_names = m.needs()[co_source].get_variables()
+
+		for i in range(co.shape[1]):
+			varlabel = co_label(co_names[i])
+			uniq = numpy.unique(co[:100,i])
+			if len(uniq)<=4:
+				uniq = numpy.unique(co[:,i])
+
+			if len(uniq) == 1:
+				continue
+
+			elif len(uniq) <= 4:
+				if len(uniq)==2 and uniq[0]==0 and uniq[1]==1:
+					# Yes
+					choice_when_uniq = ch[co[:, i] == 1].sum(0)
+					df.loc[(varlabel, 'Yes'), 'Count'] = choice_when_uniq.sum()
+					choice_when_uniq /= choice_when_uniq.sum() / 100
+					df.loc[(varlabel, 'Yes'), :].values[:-1] = choice_when_uniq.squeeze()
+					# No
+					choice_when_uniq = ch[co[:, i] == 0].sum(0)
+					df.loc[(varlabel, 'No'), 'Count'] = choice_when_uniq.sum()
+					choice_when_uniq /= choice_when_uniq.sum() / 100
+					df.loc[(varlabel, 'No'), :].values[:-1] = choice_when_uniq.squeeze()
+				else:
+					for uniqslot in range(len(uniq)):
+						choice_when_uniq = ch[co[:,i]==uniq[uniqslot]].sum(0)
+						df.loc[(varlabel, uniq[uniqslot]),'Count'] = choice_when_uniq.sum()
+						choice_when_uniq /= choice_when_uniq.sum()/100
+						df.loc[(varlabel, uniq[uniqslot]),:].values[:-1] = choice_when_uniq.squeeze()
+
+			else: # more than 4 unique values, report by thirds plus zeros
+				use_zeros = (co[:, i]==0)
+
+
+				highmark = numpy.nanpercentile(co[~use_zeros, i], 66.67)
+				lowmark = numpy.nanpercentile(co[~use_zeros, i], 33.33)
+				choice_when_high = ch[(co[:, i] > highmark)&(~use_zeros)].sum(0)
+				choice_when_mid = ch[(co[:, i] <= highmark) & (co[:, i] >= lowmark)&(~use_zeros)].sum(0)
+				choice_when_low = ch[(co[:, i] < lowmark)&(~use_zeros)].sum(0)
+				choice_when_zero = ch[use_zeros].sum(0)
+				low_label = "< {:.2g}".format(lowmark)
+				mid_label = "{:.2g} to {:.2g}".format(lowmark,highmark)
+				if lowmark==highmark:
+					mid_label = "= {:.2g}".format(lowmark)
+				highlabel = "> {:.2g}".format(highmark)
+				zerolabel = "= 0"
+
+				cnt = choice_when_high.sum()
+				if cnt:
+					df.loc[(varlabel, highlabel), 'Count'] = cnt
+					choice_when_high /= choice_when_high.sum() / 100
+					df.loc[(varlabel, highlabel), :].values[:-1] = choice_when_high.squeeze()
+
+				cnt = choice_when_mid.sum()
+				if cnt:
+					df.loc[(varlabel, mid_label), 'Count'] = cnt
+					choice_when_mid /= choice_when_mid.sum() / 100
+					df.loc[(varlabel, mid_label), :].values[:-1] = choice_when_mid.squeeze()
+
+				cnt = choice_when_low.sum()
+				if cnt:
+					df.loc[(varlabel, low_label), 'Count'] = cnt
+					choice_when_low /= choice_when_low.sum() / 100
+					df.loc[(varlabel, low_label), :].values[:-1] = choice_when_low.squeeze()
+
+				cnt = choice_when_zero.sum()
+				if cnt:
+					df.loc[(varlabel, zerolabel), 'Count'] = cnt
+					choice_when_zero /= choice_when_zero.sum() / 100
+					df.loc[(varlabel, zerolabel), :].values[:-1] = choice_when_zero.squeeze()
+
+	if pct_str:
+		for a in m.alternative_names():
+			df[a] = df[a].apply(lambda x:"{:.2f}%".format(x))
+
+	return AbstractReportTable.FromDataFrame(df, title="Choice Distributions by Data Attributes", short_title="Choice Distributions")
+
+
+
+
 
 
