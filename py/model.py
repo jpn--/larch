@@ -1261,7 +1261,7 @@ class Model(Model2, ModelReporter):
 			self.parameter_array[self.blp_shares_map] -= mean_shock
 		if cached:
 			try:
-				if self.option.log_turns and self.logger(): self.logger().critical("<LL> CACHED "+str(self.parameter_array))
+				if self.option.log_turns and self.logger(): self.logger().critical("<LL> {} <= {!s}".format(self._cached_results[self.parameter_array.tobytes()].loglike, self.parameter_array))
 				return self._cached_results[self.parameter_array.tobytes()].loglike
 			except (KeyError, AttributeError):
 				pass

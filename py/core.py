@@ -4238,13 +4238,19 @@ class Model2(sherpa):
 
     def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False) -> "void":
 
+        if self.logger(): self.logger().log(40, "Model.setUp...")
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
         	self.provision()
         	self.setUpMessage = "autoprovision yes (setUp)"
         	if self.logger(): self.logger().info("autoprovisioned data from database")
 
 
-        return _core.Model2_setUp(self, and_load_data, force)
+        val = _core.Model2_setUp(self, and_load_data, force)
+
+        if self.logger(): self.logger().log(40, "Model.setUp complete")
+
+
+        return val
 
 
     def _pull_graph_from_db(self) -> "void":

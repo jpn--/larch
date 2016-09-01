@@ -104,10 +104,14 @@ namespace elm {
 			self._ref_to_db = None
 		%}
 		%feature("pythonprepend") setUp %{
+			if self.logger(): self.logger().log(40, "Model.setUp...")
 			if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
 				self.provision()
 				self.setUpMessage = "autoprovision yes (setUp)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
+		%}
+		%feature("pythonappend") setUp %{
+			if self.logger(): self.logger().log(40, "Model.setUp complete")
 		%}
 		%feature("pythonprepend") estimate %{
 			if self._ref_to_db is not None and self.is_provisioned()==0:

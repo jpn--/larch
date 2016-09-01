@@ -1577,6 +1577,38 @@ class XhtmlModelReporter():
 								beta_data_value = "*"+str(bracketize(beta.data))
 							x.data(beta_data_value)
 							return x, first_thing
+
+						def add_size_component(beta, resolved, x, first_thing):
+							if resolved:
+								beta_val = "{:{PARAM}}".format(numpy.exp(self.metaparameter(beta.param).value), **format)
+								if not first_thing:
+									x.simple("br")
+									x.data(" + {}".format(beta_val).replace("+ -","- "))
+								else: # is first thing
+									x.data(beta_val)
+								first_thing = False
+							else:
+								if not first_thing:
+									x.simple("br")
+									x.data(" + ")
+								first_thing = False
+								x.data("exp(")
+								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
+								x.data(beta.param)
+								x.end('a')
+								x.data(")")
+								if beta.multiplier != 1.0:
+									x.data("*"+str(beta.multiplier))
+							try:
+								beta_data_value = float(beta.data)
+								if beta_data_value==1.0:
+									beta_data_value=""
+								else:
+									beta_data_value="*"+str(bracketize(beta_data_value))
+							except:
+								beta_data_value = "*"+str(bracketize(beta.data))
+							x.data(beta_data_value)
+							return x, first_thing
 						
 						
 						for beta in self.utility.ca:
@@ -1585,6 +1617,24 @@ class XhtmlModelReporter():
 							for beta in self.utility.co[altcode]:
 								x, first_thing = add_util_component(beta, resolved, x, first_thing)
 						
+						if len(self.quantity):
+							x.simple("br")
+							x.data(" + ")
+							if resolved:
+								theta_val = "{:{PARAM}}".format(self.metaparameter(self.quantity_scale).value, **format)
+								x.data(theta_val)
+							else:
+								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(self.quantity_scale.replace("#","_hash_"))})
+								x.data(self.quantity_scale)
+								x.end('a')
+							x.data(" * log(")
+							x.simple("br")
+							first_thing = True
+							for quant in self.quantity:
+								x, first_thing = add_util_component(quant, resolved, x, first_thing)
+							x.simple("br")
+							x.data(")")
+
 
 						x.end("td")
 			
