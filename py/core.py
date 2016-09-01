@@ -4110,6 +4110,7 @@ class Model2(sherpa):
         return _core.Model2_utilityco(self, *args)
     utility = _swig_property(_core.Model2_utility_get, _core.Model2_utility_set)
     quantity = _swig_property(_core.Model2_quantity_get, _core.Model2_quantity_set)
+    quantity_scale = _swig_property(_core.Model2_quantity_scale_get, _core.Model2_quantity_scale_set)
     nest = _swig_property(_core.Model2_nest_get, _core.Model2_nest_set)
     link = _swig_property(_core.Model2_link_get, _core.Model2_link_set)
     samplingbias = _swig_property(_core.Model2_samplingbias_get, _core.Model2_samplingbias_set)

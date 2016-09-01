@@ -95,7 +95,7 @@ def these(*args):
 		print(ts)
 		return nose.run([ts,'--where='+wh,'--verbosity=3'])
 
-# nosetests /Users/jpn/anaconda/local/larch/test/test_mnl.py:TestMTC.test_model_constraints --verbosity=3
+# nosetests /Users/jpn/anaconda/local/larch/test/test_mnl.py:TestMNL.test_qmnl_with_theta --verbosity=3
 
 def run(exit=False):
 	print("<"*30,"larch.test",">"*30)

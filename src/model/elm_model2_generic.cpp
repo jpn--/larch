@@ -64,6 +64,7 @@ elm::Model2::Model2()
 //, weight_autorescale (false)
 , Input_Utility("utility",this)
 , Input_QuantityCA(COMPONENTLIST_TYPE_UTILITYCA, this)
+, Input_QuantityScale("")
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
 , Input_Sampling("samplingbias",this)
@@ -104,6 +105,7 @@ elm::Model2::Model2(elm::Fountain& datafile)
 //, weight_autorescale (false)
 , Input_Utility("utility",this)
 , Input_QuantityCA(COMPONENTLIST_TYPE_UTILITYCA, this)
+, Input_QuantityScale("")
 , Input_LogSum(COMPONENTLIST_TYPE_LOGSUM, this)
 , Input_Edges(this)
 , Input_Sampling("samplingbias",this)
@@ -1097,6 +1099,13 @@ std::string elm::Model2::save_buffer() const
 	BUGGER( msg ) << "save quantity";
 	for (auto u=Input_QuantityCA.begin(); u!=Input_QuantityCA.end(); u++) {
 		sv << "self.quantity("<<__base64encode_wrap(u->data_name)<<","<<__base64encode_wrap(u->param_name)<<","<<AsPyFloat(u->multiplier)<<")\n";
+	}
+	sv << "\n";
+
+	// save quantity
+	BUGGER( msg ) << "save quantity_scale";
+	if (!Input_QuantityScale.empty()) {
+		sv << "self.quantity_scale = "<<__base64encode_wrap(Input_QuantityScale)<<"\n";
 	}
 	sv << "\n";
 

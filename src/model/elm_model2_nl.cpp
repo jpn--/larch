@@ -207,6 +207,8 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_nl_gradient ()
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability ()
 {return boosted::make_shared<workshop_ngev_probability>(nNodes, utility_packet(), allocation_packet(), sampling_packet(), quantity_packet()
 								 , Params_LogSum
+								 , Params_QuantLogSum
+								 , Coef_QuantLogSum.ptr()
 								 , Data_Avail
 								 , &Probability
 								 , &Cond_Prob
@@ -226,6 +228,8 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 									 , sampling_packet()
 									 , quantity_packet()
 									 , Params_LogSum
+									 , Params_QuantLogSum
+									 , Coef_QuantLogSum.ptr()
 									 , Data_Choice
 									 , Data_Weight_active()
 									 , &AdjProbability
@@ -267,6 +271,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
 			 , sampling_packet()
 			 , quantity_packet()
 			 , Params_LogSum
+			 , Params_QuantLogSum
+			 , Coef_QuantLogSum.ptr()
 			 , Data_Choice
 			 , Data_Weight_active()
 			 , &AdjProbability
@@ -313,6 +319,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_d_prob()
 			 , sampling_packet()
 			 , quantity_packet()
 			 , Params_LogSum
+			 , Params_QuantLogSum
+			 , Coef_QuantLogSum.ptr()
 			 , Data_Choice
 			 , Data_Weight_active()
 			 , &AdjProbability
@@ -339,6 +347,8 @@ std::shared_ptr<etk::ndarray> elm::Model2::_ngev_d_prob()
 			 , sampling_packet()
 			 , quantity_packet()
 			 , Params_LogSum
+			 , Params_QuantLogSum
+			 , Coef_QuantLogSum.ptr()
 			 , Data_Choice
 			 , Data_Weight_active()
 			 , &AdjProbability

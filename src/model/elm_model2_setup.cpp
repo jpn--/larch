@@ -344,6 +344,15 @@ void elm::Model2::_setUp_quantity_data_and_params()
 
 	BUGGER(msg) << "Params_QuantityCA \n" << Params_QuantityCA.__str__();
 
+	if (Input_QuantityCA.size()>0) {
+		Params_QuantLogSum.resize(1);
+		if (Input_QuantityScale.empty()) {
+			Params_QuantLogSum(0) = _generate_parameter("CONSTANT",1.0);
+		} else {
+			Params_QuantLogSum(0) = _generate_parameter(Input_QuantityScale,1.0);
+		}
+	}
+
 }
 
 void elm::Model2::_setUp_samplefactor_data_and_params()

@@ -55,6 +55,7 @@ namespace elm {
 		( const unsigned&      firstcase
 		, const unsigned&      numberofcases
 		, const size_t&        dim2size
+		, const double&        scale
 		);
 		void logit_partial
 		( const unsigned&      firstcase

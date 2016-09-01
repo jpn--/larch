@@ -82,6 +82,7 @@ public:
 	etk::symmetric_matrix workshopBHHH   ;
 
 	const paramArray* Params_LogSum;
+	const paramArray* Params_QuantLogSum;
 	
 	elm::darray_ptr Data_Choice;
 	elm::darray_ptr Data_Weight;
@@ -106,7 +107,8 @@ public:
 	elm::ca_co_packet AllocPacket;
 	elm::ca_co_packet SampPacket;
 	elm::ca_co_packet QuantPacket;
-
+	const double* CoefQuantLogsum;
+	
 //	workshop_ngev_gradient();
 	
 	workshop_ngev_gradient(
@@ -118,6 +120,8 @@ public:
 	 , elm::ca_co_packet SampPacket
 	 , elm::ca_co_packet QuantPacket
 	 , const paramArray& Params_LogSum
+	 , const paramArray& Params_QuantLogSum
+	 , const double* CoefQuantLogsum
 	 , elm::darray_ptr     Data_Choice
 	 , elm::darray_ptr     Data_Weight
 	 , const etk::memarray* AdjProbability
@@ -141,6 +145,8 @@ public:
 	 , elm::ca_co_packet SampPacket
 	 , elm::ca_co_packet QuantPacket
 	 , const paramArray& Params_LogSum
+	 , const paramArray& Params_QuantLogSum
+	 , const double* Coef_QuantLogSum
 	 , elm::darray_ptr     Data_Choice
 	 , elm::darray_ptr     Data_Weight
 	 , const etk::memarray* AdjProbability

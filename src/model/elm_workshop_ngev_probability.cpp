@@ -169,6 +169,8 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , elm::ca_co_packet SampPacket
 , elm::ca_co_packet QuantPacket
 , const paramArray& Params_LogSum
+, const paramArray& Params_QuantLogSum
+, const double* Coef_QuantLogSum
 , elm::darray_ptr     Data_Avail
 ,  ndarray* Probability
 ,  ndarray* Cond_Prob
@@ -183,6 +185,8 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , SampPacket      (SampPacket)
 , QuantPacket     (QuantPacket)
 , Params_LogSum   (&Params_LogSum)
+, Params_QuantLogSum   (&Params_QuantLogSum)
+, Coef_QuantLogSum (Coef_QuantLogSum)
 , Data_Avail      (Data_Avail)
 , Probability     (Probability)
 , Cond_Prob       (Cond_Prob)
@@ -232,7 +236,9 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 		for (size_t c=firstcase; c<lastcase; c++) {
 			cblas_dcopy(nElementals, QuantPacket.Outcome->ptr(c), 1, UtilPacket.Outcome->ptr(c), 1);
 		}
-		UtilPacket.logarithm_partial(firstcase, numberofcases, nElementals);
+		UtilPacket.logarithm_partial(firstcase, numberofcases, nElementals, *Coef_QuantLogSum);
+		// THETA: scale the sizes here.
+		
 		UtilPacket.logit_partial(firstcase, numberofcases, 1.0);
 		
 		

@@ -87,11 +87,11 @@ void elm::workshop_ngev_gradient::case_dUtility_dFusedParameters( const unsigned
 				double* gg = dUtil.ptr(a)+offset_quant();
 				QuantPacket.Data_CA->ExportData(gg,c,a,QuantPacket.Data_CA->nAlts());
 				simple_inplace_element_multiply(nQA, **QuantPacket.Coef_CA, 1, gg, 1);
-				if (nQL>0) {
-					OOPS("Theta not implemented");
-				}
+//				if (nQL>0) {
+//					OOPS("Theta not implemented");
+//				}
 				//(nQL>0?OOPS("Theta not implemented"):1.0)
-				cblas_dscal(nQA,(1.0)/Qnt[a],gg,1);
+				cblas_dscal(nQA,(*CoefQuantLogsum)/Qnt[a],gg,1);
 				
 				if (nQL) {
 					// THETA on SELF
@@ -379,6 +379,8 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
  , elm::ca_co_packet SampPK
  , elm::ca_co_packet QuantPK
  , const paramArray& Params_LogSum
+ , const paramArray& Params_QuantLogSum
+ , const double* CoefQuantLogsum
  , elm::darray_ptr     Data_Choice
  , elm::darray_ptr     Data_Weight
  , const etk::memarray* AdjProbability
@@ -401,8 +403,7 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , nSO (SampPK.Params_CO->length())
 , nAO (AllocPK.Params_CO->length())
 , nQA (QuantPK.Params_CA->length())
-
-, nQL (0)
+, nQL (1)
 , nPar(nCA+nCO+nMU+nSA+nSO+nAO+nQA+nQL)
 , UtilPacket (UtilPK)
 , UtilityCE_map(UtilCEmap)
@@ -419,6 +420,8 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
 , workshopBHHH    (dF,dF)
 , workshopGCurrent(dF)
 , Params_LogSum   (&Params_LogSum)
+, Params_QuantLogSum   (&Params_QuantLogSum)
+, CoefQuantLogsum (CoefQuantLogsum)
 , Data_Choice     (Data_Choice)
 , Data_Weight     (Data_Weight)
 , _AdjProbability(AdjProbability )
@@ -444,6 +447,8 @@ void elm::workshop_ngev_gradient::rebuild_local_data(
  , elm::ca_co_packet SampPK
  , elm::ca_co_packet QuantPK
  , const paramArray& Params_LogSum
+ , const paramArray& Params_QuantLogSum
+ , const double* Coef_QuantLogSum
  , elm::darray_ptr     Data_Choice
  , elm::darray_ptr     Data_Weight
  , const etk::memarray* AdjProbability
@@ -467,7 +472,7 @@ void elm::workshop_ngev_gradient::rebuild_local_data(
 	this->nSO =SampPK.Params_CO->length();
 	this->nAO =AllocPK.Params_CO->length();
 	this->nQA =QuantPK.Params_CA->length();
-	this->nQL =0;
+	this->nQL =1;
 	this->nPar=nCA+nCO+nMU+nSA+nSO+nAO+nQA+nQL;
 	
 	this->UtilPacket   =UtilPK;
@@ -475,6 +480,7 @@ void elm::workshop_ngev_gradient::rebuild_local_data(
 	this->AllocPacket  =AllocPK;
 	this->SampPacket   =SampPK;
 	this->QuantPacket  =QuantPK;
+	this->CoefQuantLogsum = Coef_QuantLogSum;
 	
 	this->dUtil        .resize(nNodes,nPar);
 	this->dProb        .resize(nNodes,nPar);
@@ -487,6 +493,7 @@ void elm::workshop_ngev_gradient::rebuild_local_data(
 	this->workshopGCurrent.resize(dF);
 	
 	this->Params_LogSum   =(&Params_LogSum);
+	this->Params_QuantLogSum   =(&Params_QuantLogSum);
 	this->Data_Choice     =(Data_Choice);
 	this->Data_Weight     =(Data_Weight);
 	this->_AdjProbability =(AdjProbability );
@@ -579,6 +586,7 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 		elm::push_to_freedoms2(*SampPacket.Params_CO  , (*GradT_Fused)+offset_sampadj()+nSA, *CaseGrad);
 		elm::push_to_freedoms2(*AllocPacket.Params_CO , (*GradT_Fused)+offset_alloc(), *CaseGrad);
 		elm::push_to_freedoms2(*QuantPacket.Params_CA , (*GradT_Fused)+offset_quant(), *CaseGrad);
+		elm::push_to_freedoms2(*Params_QuantLogSum    , (*GradT_Fused)+offset_quant()+nQA, *CaseGrad);
 
 //		if (c==0) {
 //			BUGGER_(msg_, "push list:\n"<<z);

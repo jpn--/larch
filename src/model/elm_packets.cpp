@@ -54,11 +54,12 @@ void elm::ca_co_packet::logarithm_partial
 ( const unsigned&      firstcase
 , const unsigned&      numberofcases
 , const size_t&        dim2size
+, const double&        scale
 )
 {
 	for (unsigned c=firstcase; c<firstcase+numberofcases; c++)
 	for (unsigned a=0;a<dim2size;a++) {
-		Outcome->at(c,a) = ::log(Outcome->at(c,a));
+		Outcome->at(c,a) = ::log(Outcome->at(c,a)) * scale;
 	}
 }
 

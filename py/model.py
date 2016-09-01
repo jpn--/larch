@@ -537,6 +537,14 @@ class Model(Model2, ModelReporter):
 
 	quantity = property(__quantity_get, __quantity_set)
 
+	def __quantity_scale_set(self, val):
+		if val not in self:
+			self.parameter(val, value=1.0, min=0.0001, max=1.0)
+		_core.Model2_quantity_scale_set(self, val)
+
+	quantity_scale = property(_core.Model2_quantity_scale_get, __quantity_scale_set)
+
+
 	def note(self, comment, isglobal=False):
 		if isglobal:
 			if not hasattr(self,"notes"): self.notes = []

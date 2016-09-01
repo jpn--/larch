@@ -739,6 +739,7 @@ namespace elm {
 		%}
 		%rename(utility) Input_Utility;
 		%rename(quantity) Input_QuantityCA;
+		%rename(quantity_scale) Input_QuantityScale;
 		%rename(nest) Input_LogSum;
 		%rename(link) Input_Edges;
 		%rename(samplingbias) Input_Sampling;
@@ -746,6 +747,7 @@ namespace elm {
 
 		LinearBundle_1              Input_Utility;
 		ComponentList               Input_QuantityCA ;
+		std::string					Input_QuantityScale;
 		ComponentCellcodeMap        Input_LogSum;
 		LinearCOBundle_2            Input_Edges;
 		LinearBundle_1              Input_Sampling;

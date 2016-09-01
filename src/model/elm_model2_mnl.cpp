@@ -485,6 +485,8 @@ void elm::Model2::mnl_probability()
 
 			__logit_utility(Probability, Data_UtilityCA, Data_UtilityCO, &Coef_UtilityCA, &Coef_UtilityCO, 1);
 			// TODO: scale by theta
+			
+			if (!Input_QuantityScale.empty()) OOPS("quantity_scale not supported here");
 
 
 //			if (Probability.size1()>0) {

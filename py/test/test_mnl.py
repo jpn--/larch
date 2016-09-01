@@ -550,6 +550,48 @@ class TestMNL(ELM_TestCase):
 		av = m.df.array_avail_blind()[0][0:1,:,:]
 		self.assertArrayEqual( pr, m.calc_probability(m.calc_utility(xo,xa,av)) )
 
+	def test_qmnl_with_theta(self):
+		m1 = Model.Example()
+		m1.parameter('quant_cost', value=1)
+		m1.parameter('quant_time', value=2)
+		m1.quantity('totcost+10', 'quant_cost')
+		m1.quantity('tottime',    'quant_time')
+		m1.provision()
+		m2 = Model.Example()
+		m2.parameter('theta', value=1)
+		m2.utility.ca('log(((totcost+10)*exp(1))+(tottime*exp(2)))','theta')
+		m2.provision()
+		self.assertAlmostEqual(-7823.232043623507, m1.loglike(), 7)
+		self.assertAlmostEqual(-7823.232043623507, m2.loglike(), 7)
+
+		m3 = Model.Example()
+		m3.parameter('quant_cost', value=1)
+		m3.parameter('quant_time', value=2)
+		m3.quantity('totcost+10', 'quant_cost')
+		m3.quantity('tottime',    'quant_time')
+		m3.quantity_scale = "theta"
+		m3.parameter.theta(value =0.5)
+		m3.provision()
+
+		m4 = Model.Example()
+		m4.parameter('theta', value=0.5)
+		m4.utility.ca('log(((totcost+10)*exp(1))+(tottime*exp(2)))','theta')
+		m4.provision()
+
+		self.assertAlmostEqual(-7463.852210195056, m3.loglike(), 7)
+		self.assertAlmostEqual(-7463.852210195056, m4.loglike(), 7)
+
+		g1 = m3.gradient_check(disp=False)
+		self.assertTrue( g1[0] < -5 )
+		m3._bhhh_simple_step()
+		g2 = m3.gradient_check(disp=False)
+		self.assertTrue( g2[0] < -5 )
+		m3.parameter_array[-1] = 1.0
+		g3 = m3.gradient_check(disp=False)
+		self.assertTrue( g3[0] < -5 )
+
+
+
 
 
 	def test_qmnl_loglikelihoods_theta1(self):

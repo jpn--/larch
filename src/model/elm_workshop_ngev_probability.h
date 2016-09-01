@@ -63,6 +63,8 @@ public:
 	elm::ca_co_packet QuantPacket;
 	
 	const paramArray* Params_LogSum;
+	const paramArray* Params_QuantLogSum;
+	const double* Coef_QuantLogSum;
 	
 	elm::darray_ptr Data_Avail;
 
@@ -87,6 +89,8 @@ public:
 	 , elm::ca_co_packet SampPacket
 	 , elm::ca_co_packet QuantPacket
 	 , const paramArray& Params_LogSum
+	 , const paramArray& Params_QuantLogSum
+	 , const double* Coef_QuantLogSum
 	 , elm::darray_ptr     Data_Avail
 	 ,  etk::ndarray* Probability
 	 ,  etk::ndarray* Cond_Prob
