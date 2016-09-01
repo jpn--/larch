@@ -23,6 +23,10 @@ class DataManager:
 		return self._access("UtilityCA")
 
 	@property
+	def QuantityCA(self):
+		return self._access("QuantityCA")
+
+	@property
 	def Choice(self):
 		return self._access("Choice")
 
@@ -34,6 +38,7 @@ class DataManager:
 	utilityca = UtilityCA
 	choice = Choice
 	avail = Avail
+	quantity = QuantityCA
 
 
 	def needs(self):
@@ -46,6 +51,10 @@ class DataManager:
 	@property
 	def utilityca_vars(self):
 		return self._model.needs()['UtilityCA'].get_variables()
+
+	@property
+	def quantity_vars(self):
+		return self._model.needs()['QuantityCA'].get_variables()
 
 	def utilityco_varindex(self, var):
 		vars = self._model.needs()['UtilityCO'].get_variables()

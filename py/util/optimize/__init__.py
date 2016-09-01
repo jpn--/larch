@@ -257,6 +257,11 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	if isinstance(model, MetaModel):
 		stat.start_process('setup_meta')
 		model.setUp()
+	
+	try:
+		self.df.cache_alternatives()
+	except:
+		pass
 
 	x0 = model.parameter_values()
 	if model.option.calc_null_likelihood:
@@ -384,6 +389,12 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	del model._built_constraints_cache
 	if model.logger():
 		model.logger().log(30,"Final Results\n{!s}".format(model.art_params().ascii()))
+
+	try:
+		self.df.uncache_alternatives()
+	except:
+		pass
+
 	return r
 
 

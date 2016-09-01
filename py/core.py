@@ -1218,6 +1218,9 @@ class Fountain(object):
     def uncache_alternatives(self) -> "void":
         return _core.Fountain_uncache_alternatives(self)
 
+    def cache_alternatives(self) -> "void":
+        return _core.Fountain_cache_alternatives(self)
+
     def check_ca(self, column: 'std::string const &') -> "bool":
         return _core.Fountain_check_ca(self, column)
 

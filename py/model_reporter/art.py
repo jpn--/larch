@@ -1310,9 +1310,9 @@ class ArtModelReporter():
 		a = AbstractReportTables(title="Various Data Statistics", short_title="Data Stats")
 		a += self.art_stats_utility_co()
 		a += self.art_stats_utility_ca()
+		a += self.art_stats_quantity_ca()
 		if not_too_many_alts:
 			a += self.art_stats_utility_co_by_alt()
-		if not_too_many_alts:
 			a += self.art_stats_utility_ca_by_alt()
 		return a
 

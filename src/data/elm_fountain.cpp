@@ -88,6 +88,11 @@ void elm::Fountain::uncache_alternatives()
 	_alternative_codes_cached.reset();
 }
 
+void elm::Fountain::cache_alternatives()
+{
+	cache_alternative_names();
+	cache_alternative_codes();
+}
 
 
 boosted::shared_ptr< const std::vector<std::string> > elm::Fountain::cache_alternative_names() const
