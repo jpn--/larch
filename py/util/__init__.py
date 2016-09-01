@@ -15,3 +15,9 @@ def magic3(dtype=None):
 		dtype=numpy.float64
 	lo_shu = numpy.asarray([[4,9,2],[3,5,7],[8,1,6]], dtype=dtype)
 	return lo_shu
+
+
+
+import platform
+import os
+computer = os.path.splitext(platform.node())[0]

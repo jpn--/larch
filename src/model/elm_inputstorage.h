@@ -43,6 +43,10 @@ namespace elm {
 		~LinearComponent();
 //		LinearComponent(const LinearComponent& obj);
 
+		ComponentList operator+(const LinearComponent& other) const;
+		ComponentList operator+(const ComponentList& other) const;
+		ComponentList operator+(const int& other) const;
+
 		#ifdef SWIG
 		%pythoncode %{
 		def altcallsign(self):
@@ -70,6 +74,12 @@ namespace elm {
 
 		def __pos__(self):
 			return self
+		
+		_add = __add__
+		def __add__(self, other):
+			if other==():
+				return self
+			return self._add(other)
 			
 		def __mul__(self,other):
 			from .roles import DataRef
@@ -95,9 +105,7 @@ namespace elm {
 		%}
 		#endif // SWIG
 
-		ComponentList operator+(const LinearComponent& other) const;
-		ComponentList operator+(const ComponentList& other) const;
-		ComponentList operator+(const int& other) const;
+		
 		
 
 	};
@@ -167,8 +175,12 @@ namespace elm {
 		#ifdef SWIG
 		%pythoncode %{
 		def __add__(self, other):
+			if other==():
+				return self
 			return self._add(other)
 		def __iadd__(self, other):
+			if other==():
+				return self
 			self._inplace_add(other)
 			return self
 		def __radd__(self, other):

@@ -67,4 +67,31 @@ def case_insensitive_close_matches(word, possibilities, n=3, cutoff=0.6, excpt=N
     return ret
 
 
+def max_len(arg, at_least=0):
+	if len(arg)==0:
+		return at_least
+	try:
+		return max(at_least, *map(len,arg))
+	except:
+		try:
+			return max(at_least, *map(len,*arg))
+		except:
+			print("ERR max_len")
+			print("arg=",arg)
+			print("type(arg)=",type(arg))
+			raise
+
+def grid_str(arg, lineprefix="", linesuffix=""):
+	x = []
+	try:
+		n = 0
+		while 1:
+			x.append(max_len(tuple(i[n] for i in arg)))
+			n += 1
+	except IndexError:
+		n -= 1
+	lines = [ lineprefix+" ".join(t[i].ljust(x[i]) for i in range(len(t)))+linesuffix for t in arg ]
+	return '\n'.join(lines)
+
+
 

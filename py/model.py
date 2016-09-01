@@ -1,5 +1,5 @@
 
-from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter
+from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter, LinearComponent, LinearFunction
 from .array import SymmetricArray
 from .util.pmath import category, pmath, rename
 from .util.categorize import Renamer
@@ -526,6 +526,16 @@ class Model(Model2, ModelReporter):
 		return _core.Model2_utility_set(self,x)
 
 	utility = property(__utility_get, __utility_set)
+
+	def __quantity_get(self):
+		return _core.Model2_quantity_get(self)
+
+	def __quantity_set(self,x):
+		if isinstance(x, LinearComponent):
+			x = LinearFunction() + x
+		return _core.Model2_quantity_set(self,x)
+
+	quantity = property(__quantity_get, __quantity_set)
 
 	def note(self, comment, isglobal=False):
 		if isglobal:

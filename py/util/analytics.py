@@ -621,6 +621,10 @@ def art_choice_distributions(m, pct_str=True):
 					choice_when_zero /= choice_when_zero.sum() / 100
 					df.loc[(varlabel, zerolabel), :].values[:-1] = choice_when_zero.squeeze()
 
+	if len(df)==0:
+		from ..model_reporter.art import SkipReportTable
+		return SkipReportTable()
+
 	if pct_str:
 		for a in m.alternative_names():
 			df[a] = df[a].apply(lambda x:"{:.2f}%".format(x))

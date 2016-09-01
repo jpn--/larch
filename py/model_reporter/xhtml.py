@@ -1073,7 +1073,7 @@ class XhtmlModelReporter():
 		return art.xml({'class':"run_statistics"})
 
 
-	def xhtml_data(self,**format):
+	def xhtml_data(self,max_alts=250,**format):
 		"""
 		Generate a div element containing the summary statistics for choice and availability.
 		
@@ -1101,6 +1101,8 @@ class XhtmlModelReporter():
 		.. image:: render_xhtml_data_html.png
 			:class: htmlrendering
 		"""
+		if self.nAlts()>max_alts:
+			return
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]

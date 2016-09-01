@@ -17,16 +17,19 @@ class OMXNonUniqueLookup(LarchError):
 class OMX(_tb.file.File):
 
 	def __repr__(self):
-		s = "<larch.omx.OMX> {}".format(self.filename)
+		from .util.text_manip import max_len
+		s = "<larch.OMX> {}".format(self.filename)
 		s += "\n |  shape:{}".format(self.shape)
 		if len(self.data._v_children):
 			s += "\n |  data:"
+		just = max_len(self.data._v_children.keys())
 		for i in sorted(self.data._v_children.keys()):
-			s += "\n |    {} ({})".format(i, self.data._v_children[i].dtype)
+			s += "\n |    {0:{2}s} ({1})".format(i, self.data._v_children[i].dtype,just)
 		if len(self.lookup._v_children):
 			s += "\n |  lookup:"
+		just = max_len(self.lookup._v_children.keys())
 		for i in sorted(self.lookup._v_children.keys()):
-			s += "\n |    {} ({} {})".format(i, self.lookup._v_children[i].shape[0], self.lookup._v_children[i].dtype)
+			s += "\n |    {0:{3}s} ({1} {2})".format(i, self.lookup._v_children[i].shape[0], self.lookup._v_children[i].dtype, just)
 		return s
 
 	def __init__(self, *arg, complevel=5, complib='zlib', **kwarg):
@@ -193,7 +196,7 @@ class OMX(_tb.file.File):
 
 
 
-	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None):
+	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None, zone_ix=None, zone_ix1=1):
 		"""Import a table in r,c,x,x,x... format into the matrix.
 		
 		The r and c columns need to be either 0-based or 1-based index values
@@ -210,16 +213,31 @@ class OMX(_tb.file.File):
 		column_map : dict or None
 			If given, this dict maps columns of the input file to OMX tables, with the keys as
 			the columns in the input and the values as the tables in the output.
+		n_rows : int or None
+			If given, this is the number of rows in the source file.  It can be omitted and will 
+			be discovered automatically, but only for source files with consecutive zone numbering.
+		zone_ix : str or None
+			If given, this is the column name in the source file that gives the zone numbers.
+		zone_ix1 : 1 or 0
+			The smallest zone number.  Defaults to 1
+		
 			
 		"""
 		if log is not None: log("START import_datatable")
-		from .util.smartread import SmartFileReader
-		sfr = SmartFileReader(filepath)
-		reader = pandas.read_csv(sfr, chunksize=chunksize)
-		chunk0 = next(pandas.read_csv(filepath, chunksize=1000))
-		
-		if n_rows is None:
-			n_rows = sum(1 for line in open(filepath, mode='r'))-1
+		if isinstance(filepath,str) and filepath.casefold()[-4:]=='.dbf':
+			from simpledbf import Dbf5
+			chunk0 = next(Dbf5(filepath, codec='utf-8').to_dataframe(chunksize=1000))
+			dbf = Dbf5(filepath, codec='utf-8')
+			reader = dbf.to_dataframe(chunksize=chunksize)
+			if n_rows is None:
+				n_rows = dbf.numrec
+		else:
+			from .util.smartread import SmartFileReader
+			sfr = SmartFileReader(filepath)
+			reader = pandas.read_csv(sfr, chunksize=chunksize)
+			chunk0 = next(pandas.read_csv(filepath, chunksize=1000))
+			if n_rows is None:
+				n_rows = sum(1 for line in open(filepath, mode='r'))-1
 		
 		if column_map is None:
 			column_map = {i:i for i in chunk0.columns}
@@ -243,7 +261,10 @@ class OMX(_tb.file.File):
 			
 			for col in chunk.columns:
 				if col in column_map:
-					self.lookup._v_children[column_map[col]][start_ix:start_ix+len(chunk)] = chunk[col].values
+					if zone_ix is not None:
+						self.lookup._v_children[column_map[col]][chunk[zone_ix].values-zone_ix1] = chunk[col].values
+					else:
+						self.lookup._v_children[column_map[col]][start_ix:start_ix+len(chunk)] = chunk[col].values
 					self.lookup._v_children[column_map[col]].flush()
 			if log is not None:
 				log("finished processing chunk {} [{}]".format(n, sfr.progress()))

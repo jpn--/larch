@@ -97,7 +97,13 @@ def weight_choice_rebalance(model):
 class _NameOrNameTimesNumberOrNumber:
 	def __init__(self, a, text_of_a="input"):
 		if not isinstance(a,ast.AST):
-			a = ast.parse(a, mode='eval').body
+			try:
+				a = ast.parse(a, mode='eval').body
+			except TypeError:
+				print('type(a)=',type(a))
+				print('str(a)=',str(a))
+				print('repr(a)=',repr(a))
+				raise
 		if isinstance(a, ast.Name):
 			self.id = a.id
 			self.n = 1
@@ -558,13 +564,19 @@ def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), prior
 				loop_detector.add(lo_slot)
 
 		keep_hi = True
-		p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
-		p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
-		if p_lo_1.id in priority_list:
-			if not p_hi_1.id in priority_list:
+		if p_hi is None:
+			p_hi_1 = None
+		else:
+			p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
+		if p_lo is None:
+			p_lo_1 = None
+		else:
+			p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
+		if p_lo_1 is not None and p_lo_1.id in priority_list:
+			if p_hi_1 is not None and not p_hi_1.id in priority_list:
 				keep_hi = False
 			else:
-				if priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+				if p_hi_1 is not None and p_lo_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
 					keep_hi = False
 
 

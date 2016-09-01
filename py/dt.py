@@ -344,6 +344,19 @@ class DT(Fountain):
 			raise KeyError('code {} not found'.format(code))
 
 	def set_alternatives(self, altids, alt_labels=None):
+		"""Set the alternatives.
+		
+		Parameters
+		----------
+		altids : sequence
+			The altids can be any sequence that can be passed to
+			numpy.asarray to create a 1d array.  
+		altlabels : sequence
+			If (and only if) the altids are given as integers, this parameter can be
+			a sequence of labels for the alternatives.  If the altids are not integers,
+			integers are created automatically, the values given in altids are used as the 
+			labels, and this value is discarded.
+		"""
 		self.remove_node_if_exists(self.alts._v_node, 'altids')
 		self.remove_node_if_exists(self.alts._v_node, 'names')
 		# Make new ones
@@ -450,20 +463,13 @@ class DT(Fountain):
 					raise IncompatibleShape("cannot use idca.{} in an idco expression".format(tokval))
 				if self._is_mapped_larch_array(self.idca, tokval):
 					# replace NAME tokens
-					partial = [(NAME, 'select_with_repeated'),
+					partial = [(NAME, 'select_with_repeated1'),
 						OPAR,
-						(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'), COMMA,
-						(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
+						(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), COMMA, #DOT, (NAME, '_values_'), COMMA,
+						#(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
 						(NAME, 'None') if screen is None else (NAME, 'screen'),
 						CPAR,
 					]
-#					partial = [ (NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
-#								OBRAC,
-#								(NAME, 'self'), DOT, (NAME, 'idca'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,screen_token,CBRAC,
-#								]
-#					if dims>1:
-#						partial += [COMMA,COLON,]
-#					partial += [CBRAC, ]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
@@ -475,19 +481,13 @@ class DT(Fountain):
 			elif toknum == NAME and tokval in self.idco:
 				if self._is_mapped_larch_array(self.idco, tokval):
 					# replace NAME tokens
-					partial = [(NAME, 'select_with_repeated'),
+					partial = [(NAME, 'select_with_repeated1'),
 						OPAR,
-						(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'), COMMA,
-						(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
+						(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), COMMA, #DOT, (NAME, '_values_'), COMMA,
+						#(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'), COMMA,
 						(NAME, 'None') if screen is None else (NAME, 'screen'),
 						CPAR,
 					]
-#					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_values_'),
-#								OBRAC,
-#								(NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), DOT, (NAME, '_index_'),OBRAC,screen_token,CBRAC,
-#								CBRAC,]
-#					if dims>1:
-#						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
 					recommand.extend(partial)
 				else:
 					# replace NAME tokens
@@ -580,7 +580,7 @@ class DT(Fountain):
 			
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		from .util.pytables_addon import select_with_repeated
+		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
 			screen = None
@@ -591,7 +591,17 @@ class DT(Fountain):
 			command = self._remake_command(v,screen,2)
 			try:
 				try:
-					result[:,:,varnum] = eval( asterize(command) )
+					try:
+						result[:,:,varnum] = eval( asterize(command) )
+					except ValueError as value_err:
+						if 'broadcast' in str(value_err):
+							# When the received data does not match the size as expected.
+							# This can happen if there is too much data, for example
+							# when linking against an OMX file with extra zones
+							result[:,:,varnum] = eval( asterize(command) )[:n_cases,:n_alts]
+							warnings.warn("broadcast error with '{}', truncated data".format(command), HDF5Warning, stacklevel=2)
+						else:
+							raise
 				except TypeError as type_err:
 					if v in self.idca._v_children and isinstance(self.idca._v_children[v], (_tb.Group,GroupNode)) and 'stack' in self.idca._v_children[v]._v_attrs:
 						stacktuple = self.idca._v_children[v]._v_attrs.stack
@@ -654,7 +664,7 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		from .util.pytables_addon import select_with_repeated
+		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		if isinstance(screen, str) and screen=="None":
@@ -709,7 +719,7 @@ class DT(Fountain):
 		pandas.DataFrame
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		from .util.pytables_addon import select_with_repeated
+		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)
@@ -1139,17 +1149,19 @@ class DT(Fountain):
 	def _check_co_natural(self, column):
 		return column in self.idco._v_leaves
 
-	def check_ca(self, column):
+	def check_ca(self, column, raise_exception=False):
 		if self._check_ca_natural(column):
 			return True
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		from .util.pytables_addon import select_with_repeated
+		from .util.pytables_addon import validate_with_repeated1
 		try:
-			command = self._remake_command(column,None,2)
+			command = self._remake_command(column,None,2).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
 		except:
+			if raise_exception:
+				raise
 			return False
 		return True
 
@@ -1173,9 +1185,9 @@ class DT(Fountain):
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
-		from .util.pytables_addon import select_with_repeated
+		from .util.pytables_addon import validate_with_repeated1
 		try:
-			command = self._remake_command(column,None,1)
+			command = self._remake_command(column,None,1).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
 		except:
 			if raise_exception:
@@ -1485,14 +1497,15 @@ class DT(Fountain):
 		choice : str or None
 			Column name that contains the id of the alternative that is selected (if applicable). If not
 			given, and if choice is not included in `alts` below, no _choice_ h5f node will be 
-			autogenerated, and it will need to be set manually later.
+			autogenerated, and it will need to be set manually later.  If the choices are
+			given in `alts` (see below) then this value is ignored.
 		weight : str or None
 			Column name of the weight for each case. If None, defaults to equal weights.
 		savename : str or None
 			If not None, the name of the location to save the HDF5 file that is created.
 		alts : dict
 			A dictionary with keys of alt codes, and values of (alt name, avail column, choice column) tuples.
-			If `choice` is given, the third item in the tuple is ignored and can be omitted.
+			The third item in the tuple can be omitted if `choice` is given.
 			
 		Other Parameters
 		----------------
@@ -1913,6 +1926,25 @@ class DT(Fountain):
 	validate = validate_hdf5
 
 
+	@classmethod
+	def import_dbf(cls, dbffile, omxfile, shape, o, d, cols, smallest_zone_number=1):
+		try:
+			from simpledbf import Dbf5
+		except ImportError:
+			raise
+		dbf = Dbf5(dbffile, codec='utf-8')
+		tempstore = {c:numpy.zeros(shape, dtype=numpy.float32) for c in cols}
+		for df in dbf.to_dataframe(chunksize=shape[1]):
+			oz = df[o].values.astype(int)-smallest_zone_number
+			dz = df[d].values.astype(int)-smallest_zone_number
+			for c in cols:
+				tempstore[c][oz,dz] = df[c].values
+		omx = cls(omxfile, mode='a')
+		for c in cols:
+			omx.add_matrix(c, tempstore[c])
+		omx.flush()
+		return omx
+
 
 	def import_idco(self, filepath_or_buffer, caseid_column=None, *args, **kwargs):
 		"""Import an existing CSV or similar file in idco format into this HDF5 file.
@@ -1925,7 +1957,8 @@ class DT(Fountain):
 		filepath_or_buffer : str or buffer
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
 			If a string is given and the file extension is ".xlsx" then the :func:`pandas.read_excel`
-			function will be used instead.
+			function will be used instead, ot if the file extension is ".dbf" then 
+			:func:`simpledbf.Dbf5.to_dataframe` is used.
 		caseid_column : None or str
 			If given, this is the column of the input data file to use as caseids.  It must be 
 			given if the caseids do not already exist in the HDF5 file.  If it is given and
@@ -1943,6 +1976,10 @@ class DT(Fountain):
 		log("READING %s",str(filepath_or_buffer))
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
+		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
+			from simpledbf import Dbf5
+			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
+			df = dbf.to_dataframe()
 		else:
 			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
 		log("READING COMPLETE")
@@ -2281,6 +2318,42 @@ class DT(Fountain):
 			raise TypeError("new idca array must have shape with {!s} cases".format(self.h5caseids.shape))
 		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
 
+	def new_idca_from_keyed_array(self, name, arr_val, arr_index, transpose_values=False):
+		"""Create a new :ref:`idca` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		If you create an array externally, you can add it to the file easily with
+		this command.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idca` variable.
+		arr_val : ndarray
+			An array to add as the new variable _values_.  The 2nd dimension must match the
+			number of alternatives.
+		arr_index : ndarray or pytable node
+			An array to add as the new variable _index_.  It must be 1 dimension and must match the
+			number of caseids.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name already exists.
+		"""
+		if self.h5caseids.shape[0] != arr_index.shape[0]:
+			raise TypeError("new idca array must have shape with {!s} cases".format(self.h5caseids.shape))
+		newgrp = self.h5f.create_group(self.idca._v_node, name)
+		self.h5f.create_carray(newgrp, '_values_', obj=arr_val)
+		if transpose_values:
+			newgrp._v_attrs.transpose_values = True
+		if isinstance(arr_index, numpy.ndarray):
+			self.h5f.create_carray(newgrp, '_index_', obj=arr_index)
+		elif isinstance(arr_index, _tb.array.Array):
+			self.h5f.create_hard_link(newgrp, '_index_', arr_index)
+		else:
+			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
+
 
 	def delete_data(self, name):
 		"""Delete an existing :ref:`idca` or :ref:`idco` variable.
@@ -2530,7 +2603,7 @@ class DT(Fountain):
 #
 
 
-	def info(self):
+	def info(self, extra=False):
 		v_names = []
 		v_dtypes = []
 		v_ftypes = []
@@ -2583,17 +2656,24 @@ class DT(Fountain):
 			if v_filename!=selfname:
 				show_filenames = True
 				break
-		show_filenames = True
-		
+#		show_filenames = True
+
 		from .model_reporter.art import ART
+		
+		if extra:
+			extra_cols = ('SHAPE',)
+		else:
+			extra_cols = ()
 		
 		## Header
 		if not show_filenames:
-			a = ART(columns=('VAR','DTYPE'), n_head_rows=1, title="DT Content", short_title=None)
+			a = ART(columns=('VAR','DTYPE')+extra_cols, n_head_rows=1, title="DT Content", short_title=None)
 			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype")
 		else:
-			a = ART(columns=('VAR','DTYPE','FILE'), n_head_rows=1, title="DT Content", short_title=None)
+			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="DT Content", short_title=None)
 			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype", FILE="Source File")
+		if extra:
+			a.set_lastrow_loc('SHAPE', "Shape")
 		## Content
 		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
 			if v_ftype != section:
@@ -2604,6 +2684,22 @@ class DT(Fountain):
 				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype)
 			else:
 				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype, FILE=v_filename)
+			if extra:
+				the_node = getattr(self,v_ftype)[v_name]
+				if isinstance(the_node, (_tb.Group,GroupNode)):
+					if '_values_' in the_node and '_index_' in the_node:
+						the_shape = _pytables_link_dereference(the_node._index_).shape
+						if 'transpose_values' in the_node._v_attrs:
+							the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape
+						else:
+							the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape[1:]
+					elif 'stack' in _pytables_link_dereference(the_node)._v_attrs:
+						the_shape = '<stack>'
+					else:
+						the_shape = '¿group?'
+				else:
+					the_shape = the_node.shape
+				a.set_lastrow_loc('SHAPE', str(the_shape))
 		if len(self.expr):
 			a.addrow_seq_of_strings(["Expr",])
 			for i in self.expr:
@@ -3122,6 +3218,9 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 		is the one that survives.
 		Must be passed as a keyword argument.
 	
+	Notes
+	-----
+	Every parameter other than `filename` must be passed as a keyword argument.
 	"""
 	dt_init_kwargs = {}
 	idco_kwargs = {}

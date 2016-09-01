@@ -2775,6 +2775,9 @@ class LinearComponent(object):
     __swig_destroy__ = _core.delete_LinearComponent
     __del__ = lambda self: None
 
+    def __add__(self, *args) -> "elm::ComponentList":
+        return _core.LinearComponent___add__(self, *args)
+
     def altcallsign(self):
     	return "%i: %s"%(self.altcode, self.altname)
     def set_from_callsign(self, x):
@@ -2801,6 +2804,12 @@ class LinearComponent(object):
     def __pos__(self):
     	return self
 
+    _add = __add__
+    def __add__(self, other):
+    	if other==():
+    		return self
+    	return self._add(other)
+
     def __mul__(self,other):
     	from .roles import DataRef
     	if isinstance(other,(int,float,DataRef)):
@@ -2823,9 +2832,6 @@ class LinearComponent(object):
     		raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
 
 
-
-    def __add__(self, *args) -> "elm::ComponentList":
-        return _core.LinearComponent___add__(self, *args)
 LinearComponent_swigregister = _core.LinearComponent_swigregister
 LinearComponent_swigregister(LinearComponent)
 
@@ -2891,8 +2897,12 @@ class LinearFunction(ComponentVector):
         return _core.LinearFunction__inplace_add(self, *args)
 
     def __add__(self, other):
+    	if other==():
+    		return self
     	return self._add(other)
     def __iadd__(self, other):
+    	if other==():
+    		return self
     	self._inplace_add(other)
     	return self
     def __radd__(self, other):
