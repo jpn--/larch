@@ -542,7 +542,12 @@ class Model(Model2, ModelReporter):
 			self.parameter(val, value=1.0, min=0.0001, max=1.0)
 		_core.Model2_quantity_scale_set(self, val)
 
-	quantity_scale = property(_core.Model2_quantity_scale_get, __quantity_scale_set)
+	def __quantity_scale_del(self):
+		_core.Model2_quantity_scale_set(self, "CONSTANT")
+	
+	__quantity_scale_doc = "The scale (logsum) coefficient on the quantity term."
+
+	quantity_scale = property(_core.Model2_quantity_scale_get, __quantity_scale_set, __quantity_scale_del, __quantity_scale_doc)
 
 
 	def note(self, comment, isglobal=False):
