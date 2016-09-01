@@ -1212,11 +1212,13 @@ class Model(Model2, ModelReporter):
 	def loglike(self, *args, cached=True, holdfast_unmask=0, blp_contraction_threshold=1e-8):
 		if len(args)>0:
 			if numpy.any(numpy.isnan(args[0])):
+				if self.option.log_turns and self.logger(): self.logger().critical("<LL> Parameters with NaN "+str(self.parameter_array))
 				return -numpy.inf
 			self.parameter_values(args[0], holdfast_unmask)
 		if self.Data_UtilityCE_manual.active():
 			numpy.dot(self._ce,self.Coef("UtilityCA").reshape(-1), out=self._u_ce)
 			self.Utility()[self._ce_caseindex,self._ce_altindex] = self._u_ce
+			if self.option.log_turns and self.logger(): self.logger().critical("<LL> Data_UtilityCE_manual.active "+str(self.parameter_array))
 			return self.loglike_given_utility()
 		if hasattr(self,'blp_shares_map') and hasattr(self,'logmarketshares') and blp_contraction_threshold is not None:
 			# BLP contraction
@@ -1234,6 +1236,7 @@ class Model(Model2, ModelReporter):
 			self.parameter_array[self.blp_shares_map] -= mean_shock
 		if cached:
 			try:
+				if self.option.log_turns and self.logger(): self.logger().critical("<LL> CACHED "+str(self.parameter_array))
 				return self._cached_results[self.parameter_array.tobytes()].loglike
 			except (KeyError, AttributeError):
 				pass
@@ -1244,6 +1247,7 @@ class Model(Model2, ModelReporter):
 		if numpy.isnan(ll):
 			self.doctor()
 			ll = -numpy.inf
+		if self.option.log_turns and self.logger() and self.logger(): self.logger().critical("<LL> {} <- {}".format(ll, str(self.parameter_array)))
 		return ll
 
 
