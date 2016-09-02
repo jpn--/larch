@@ -65,7 +65,10 @@ def possible_overspecification(a, holdfast_vector=None):
 #				ret.append( (eigenvalues[i], numpy.where(v)[0])  )
 	holdfast_vector |= ((a==0).all(0))
 	a_packed = a[~holdfast_vector,:][:,~holdfast_vector]
-	eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	try:
+		eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	except numpy.linalg.linalg.LinAlgError as err:
+		return [('LinAlgError',str(err))]
 	for i in range(len(eigenvalues_packed)):
 		if numpy.abs(eigenvalues_packed[i]) < 0.001:
 			v = eigenvectors_packed[:,i]
@@ -86,7 +89,10 @@ def principal_components(a, holdfast_vector=None, names=None, sort=True):
 	holdfast_vector = holdfast_vector.astype(bool)
 	holdfast_vector |= ((a==0).all(0))
 	a_packed = a[~holdfast_vector,:][:,~holdfast_vector]
-	eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	try:
+		eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
+	except numpy.linalg.linalg.LinAlgError as err:
+		return [('LinAlgError',str(err))]
 	for i in range(len(eigenvalues_packed)):
 		v = eigenvectors_packed[:,i]
 		v = numpy.round(v,7)
