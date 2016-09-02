@@ -355,8 +355,11 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 			r.stats.write("WARNING: Model is possibly over-specified (hessian is nearly singular).")
 			r.possible_overspecification = []
 			for eigval, ox, eigenvec in overspec:
-				paramset = list(numpy.asarray(model.parameter_names())[ox])
-			r.possible_overspecification.append( (eigval, paramset, eigenvec[ox]) )
+				if eigval=='LinAlgError':
+					r.possible_overspecification.append( (eigval, [ox,], ["",]) )
+				else:
+					paramset = list(numpy.asarray(model.parameter_names())[ox])
+					r.possible_overspecification.append( (eigval, paramset, eigenvec[ox]) )
 			model.possible_overspecification = r.possible_overspecification
 
 	r.stats.start_process("cleanup")

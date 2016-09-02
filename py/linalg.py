@@ -68,7 +68,7 @@ def possible_overspecification(a, holdfast_vector=None):
 	try:
 		eigenvalues_packed,eigenvectors_packed = numpy.linalg.eigh(a_packed)
 	except numpy.linalg.linalg.LinAlgError as err:
-		return [('LinAlgError',str(err))]
+		return [('LinAlgError',str(err),'')]
 	for i in range(len(eigenvalues_packed)):
 		if numpy.abs(eigenvalues_packed[i]) < 0.001:
 			v = eigenvectors_packed[:,i]

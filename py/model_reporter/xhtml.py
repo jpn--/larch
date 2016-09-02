@@ -1942,7 +1942,10 @@ class XhtmlModelReporter():
 		
 		for overspec in self.possible_overspecification:
 			x.start('tr')
-			x.td("{:.4g}".format(overspec[0]))
+			try:
+				x.td("{:.4g}".format(overspec[0]))
+			except ValueError:
+				x.td(str(overspec[0]))
 			x.start('td')
 			x.data(str(overspec[2][0]))
 			for problem_param in overspec[2][1:]:
