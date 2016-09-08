@@ -196,7 +196,7 @@ class OMX(_tb.file.File):
 
 
 
-	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None, zone_ix=None, zone_ix1=1):
+	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None, zone_ix=None, zone_ix1=1, drop_zone=None):
 		"""Import a table in r,c,x,x,x... format into the matrix.
 		
 		The r and c columns need to be either 0-based or 1-based index values
@@ -220,7 +220,8 @@ class OMX(_tb.file.File):
 			If given, this is the column name in the source file that gives the zone numbers.
 		zone_ix1 : 1 or 0
 			The smallest zone number.  Defaults to 1
-		
+		drop_zone : int or None
+			If given, zones with this number (typically 0 or -1) will be ignored.
 			
 		"""
 		if log is not None: log("START import_datatable")
@@ -258,6 +259,9 @@ class OMX(_tb.file.File):
 		for n,chunk in enumerate(reader):
 			if log is not None:
 				log("PROCESSING CHUNK {} [{}]".format(n, sfr.progress()))
+			
+			if drop_zone is not None:
+				chunk = chunk[chunk[zone_ix]!=drop_zone]
 			
 			for col in chunk.columns:
 				if col in column_map:

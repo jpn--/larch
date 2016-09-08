@@ -23,6 +23,9 @@ XhtmlModelReporter_default_format = {
 }
 
 
+NonBreakSpace = " "
+
+
 class XhtmlModelReporter():
 
 
@@ -1550,17 +1553,20 @@ class XhtmlModelReporter():
 						
 						def add_util_component(beta, resolved, x, first_thing):
 							if resolved:
-								beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format)
+								beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
 								if not first_thing:
 									x.simple("br")
-									x.data(" + {}".format(beta_val).replace("+ -","- "))
+									x.data("+ {}".format(beta_val).replace("+ -","- "))
 								else: # is first thing
+									x.data(NonBreakSpace*2)
 									x.data(beta_val)
 								first_thing = False
 							else:
 								if not first_thing:
 									x.simple("br")
-									x.data(" + ")
+									x.data("+ ")
+								else:
+									x.data(NonBreakSpace*2)
 								first_thing = False
 								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
 								x.data(beta.param)
@@ -1580,17 +1586,22 @@ class XhtmlModelReporter():
 
 						def add_size_component(beta, resolved, x, first_thing):
 							if resolved:
-								beta_val = "{:{PARAM}}".format(numpy.exp(self.metaparameter(beta.param).value), **format)
+								beta_val = "{:{PARAM}}".format(numpy.exp(self.metaparameter(beta.param).value), **format).strip()
 								if not first_thing:
 									x.simple("br")
-									x.data(" + {}".format(beta_val).replace("+ -","- "))
+									x.data(NonBreakSpace*4)
+									x.data("+ {}".format(beta_val).replace("+ -","- "))
 								else: # is first thing
+									x.data(NonBreakSpace*6)
 									x.data(beta_val)
 								first_thing = False
 							else:
 								if not first_thing:
 									x.simple("br")
-									x.data(" + ")
+									x.data(NonBreakSpace*4)
+									x.data("+ ")
+								else:
+									x.data(NonBreakSpace*6)
 								first_thing = False
 								x.data("exp(")
 								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
@@ -1619,9 +1630,9 @@ class XhtmlModelReporter():
 						
 						if len(self.quantity):
 							x.simple("br")
-							x.data(" + ")
+							x.data("+ ")
 							if resolved:
-								theta_val = "{:{PARAM}}".format(self.metaparameter(self.quantity_scale).value, **format)
+								theta_val = "{:{PARAM}}".format(self.metaparameter(self.quantity_scale).value, **format).strip()
 								x.data(theta_val)
 							else:
 								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(self.quantity_scale.replace("#","_hash_"))})
@@ -1631,7 +1642,7 @@ class XhtmlModelReporter():
 							x.simple("br")
 							first_thing = True
 							for quant in self.quantity:
-								x, first_thing = add_util_component(quant, resolved, x, first_thing)
+								x, first_thing = add_size_component(quant, resolved, x, first_thing)
 							x.simple("br")
 							x.data(")")
 

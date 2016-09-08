@@ -484,6 +484,12 @@ class Model(Model2, ModelReporter):
 						except pickle.PickleError:
 							f.write("\n")
 							f.write("self.{} = 'unpicklable object'\n".format(a))
+						except AttributeError as attr_err:
+							if "Can't pickle local object" in str(attr_err):
+								f.write("\n")
+								f.write("self.{} = 'unpicklable local object'\n".format(a))
+							else:
+								raise
 			try:
 				return f.getvalue()
 			except AttributeError:

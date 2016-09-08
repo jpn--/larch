@@ -363,8 +363,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory".format(dataset.lower()))
 
 
-	@staticmethod
-	def CSV_idco(filename, caseid="_rowid_", choice=None, weight=None, tablename="data", savename=None, alts={}, safety=True):
+	@classmethod
+	def CSV_idco(cls, filename, caseid="_rowid_", choice=None, weight=None, tablename="data", savename=None, alts={}, safety=True):
 		'''Creates a new larch DB based on an :ref:`idco` CSV data file.
 
 		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
@@ -400,7 +400,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			An open connection to the database.
 		'''
 		eL = logging.getScriber("db")
-		d = DB(filename=savename)
+		d = cls(filename=savename)
 		d.queries = QuerySetSimpleCO(d)
 		heads = d.import_csv(filename, table=tablename)
 		if caseid not in heads: caseid = "_rowid_"
@@ -435,8 +435,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		return d
 
 
-	@staticmethod
-	def CSV_idca(filename, caseid=None, altid=None, choice=None, weight=None, avail=None, tablename="data",
+	@classmethod
+	def CSV_idca(cls, filename, caseid=None, altid=None, choice=None, weight=None, avail=None, tablename="data",
 				 tablename_co="_co", savename=None, alts={}, safety=True, index=False):
 		'''Creates a new larch DB based on an :ref:`idca` CSV data file.
 
@@ -492,7 +492,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if tablename_co is not None and tablename_co[0]=="_":
 			tablename_co = tablename+tablename_co
 		eL = logging.getScriber("db")
-		d = DB(filename=savename)
+		d = cls(filename=savename)
 		d.queries = QuerySetTwoTable(d)
 		if tablename_co:
 			heads = d.import_csv(filename, table="larch_temp_import_table", temp=True)
