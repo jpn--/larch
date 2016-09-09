@@ -143,8 +143,8 @@ class OMX(_tb.file.File):
 		if self.data._v_nchildren>0:
 			if obj.shape[0] not in self.shape:
 				raise OMXIncompatibleShape('this omx has shape {!s} but you want to add a lookup with {!s}'.format(self.shape, obj.shape))
-		if self.data._v_nchildren == 0:
-			raise OMXIncompatibleShape("don't add lookup to omx with no data")
+		if self.data._v_nchildren == 0 and self.shape==(0,0):
+			raise OMXIncompatibleShape("don't add lookup to omx with no data and no shape")
 		return self.create_carray(self.lookup, name, obj=obj, **kwargs)
 
 	def get_reverse_lookup(self, name):

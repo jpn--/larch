@@ -1558,8 +1558,11 @@ class XhtmlModelReporter():
 									x.simple("br")
 									x.data("+ {}".format(beta_val).replace("+ -","- "))
 								else: # is first thing
-									x.data(NonBreakSpace*2)
-									x.data(beta_val)
+									if "-" == beta_val[0]:
+										x.data(beta_val.replace("-","- "))
+									else:
+										x.data(NonBreakSpace*2)
+										x.data(beta_val)
 								first_thing = False
 							else:
 								if not first_thing:
@@ -1742,19 +1745,54 @@ class XhtmlModelReporter():
 							
 							first_thing = True
 							
+#							def add_util_component(beta, resolved, x, first_thing):
+#								if resolved:
+#									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
+#									if not first_thing:
+#										x.simple("br")
+#										x.data(" + {}".format(beta_val).replace("+ -","- "))
+#									else: # is first thing
+#										x.data(beta_val.replace("-","- "))
+#									first_thing = False
+#								else:
+#									if not first_thing:
+#										x.simple("br")
+#										x.data(" + ")
+#									first_thing = False
+#									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
+#									x.data(beta.param)
+#									x.end('a')
+#									if beta.multiplier != 1.0:
+#										x.data("*"+str(beta.multiplier))
+#								try:
+#									beta_data_value = float(beta.data)
+#									if beta_data_value==1.0:
+#										beta_data_value=""
+#									else:
+#										beta_data_value="*"+str(bracketize(beta_data_value))
+#								except:
+#									beta_data_value = "*"+str(bracketize(beta.data))
+#								x.data(beta_data_value)
+#								return x, first_thing
 							def add_util_component(beta, resolved, x, first_thing):
 								if resolved:
-									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format)
+									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
 									if not first_thing:
 										x.simple("br")
-										x.data(" + {}".format(beta_val).replace("+ -","- "))
+										x.data("+ {}".format(beta_val).replace("+ -","- "))
 									else: # is first thing
-										x.data(beta_val)
+										if "-" == beta_val[0]:
+											x.data(beta_val.replace("-","- "))
+										else:
+											x.data(NonBreakSpace*2)
+											x.data(beta_val)
 									first_thing = False
 								else:
 									if not first_thing:
 										x.simple("br")
-										x.data(" + ")
+										x.data("+ ")
+									else:
+										x.data(NonBreakSpace*2)
 									first_thing = False
 									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
 									x.data(beta.param)
@@ -1771,7 +1809,7 @@ class XhtmlModelReporter():
 									beta_data_value = "*"+str(bracketize(beta.data))
 								x.data(beta_data_value)
 								return x, first_thing
-							
+
 							
 							for beta in self.utility.ca:
 								x, first_thing = add_util_component(beta, resolved, x, first_thing)

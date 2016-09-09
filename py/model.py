@@ -853,6 +853,19 @@ class Model(Model2, ModelReporter):
 				title=title,
 				)
 
+	def art_stats_utility_ca_by_all(self, title="Utility idCA Data by Choice"):
+		from .util.analytics import basic_variable_analysis_all
+		needs = self.needs()
+		if 'UtilityCA' in needs:
+			return basic_variable_analysis_all(
+				arr=self.data.utilityca,
+				ch=self.data.choice,
+				av=self.data.avail,
+				names=needs['UtilityCA'].get_variables(),
+				picks=None,
+				title=title,
+				)
+
 	def art_stats_quantity_ca_by_alt(self, title="Quantity idCA Data by Alternative"):
 		from .util.analytics import basic_variable_analysis_by_alt
 		needs = self.needs()

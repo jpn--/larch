@@ -1314,6 +1314,8 @@ class ArtModelReporter():
 		if not_too_many_alts:
 			a += self.art_stats_utility_co_by_alt()
 			a += self.art_stats_utility_ca_by_alt()
+		else:
+			a += self.art_stats_utility_ca_by_all()
 		return a
 
 
