@@ -169,7 +169,7 @@ class DT(Fountain):
 	def _refresh_alts(self):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
-	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=7, complib='zlib', h5f=None, inmemory=False, temp=False):
+	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=1, complib='zlib', h5f=None, inmemory=False, temp=False):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
 		if isinstance(filename,str):
@@ -1336,7 +1336,7 @@ class DT(Fountain):
 		  'MTC':os.path.join(DT.ExampleDirectory(),"MTCWork.h5"),
 		  }
 
-		h5filters = _tb.Filters(complevel=5)
+		h5filters = _tb.Filters(complevel=1)
 
 		try:
 			filename_ = filename.format(dataset)
@@ -1444,7 +1444,7 @@ class DT(Fountain):
 
 		return self
 
-	def idco_code_to_idca_dummy(self, oldvarname, newvarname, complib='zlib', complevel=5):
+	def idco_code_to_idca_dummy(self, oldvarname, newvarname, complib='zlib', complevel=1):
 		'''
 		Transforms an integer idco variable containing alt codes into an idca dummy variable.
 		
@@ -1481,7 +1481,7 @@ class DT(Fountain):
 
 
 	@staticmethod
-	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_args=(), csv_kwargs={}, complib='zlib', complevel=5, **kwargs):
+	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_args=(), csv_kwargs={}, complib='zlib', complevel=1, **kwargs):
 		'''Creates a new larch DT based on an :ref:`idco` CSV data file.
 
 		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
@@ -1954,11 +1954,12 @@ class DT(Fountain):
 		
 		Parameters
 		----------
-		filepath_or_buffer : str or buffer
+		filepath_or_buffer : str or buffer or :class:`pandas.DataFrame`
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
 			If a string is given and the file extension is ".xlsx" then the :func:`pandas.read_excel`
 			function will be used instead, ot if the file extension is ".dbf" then 
-			:func:`simpledbf.Dbf5.to_dataframe` is used.
+			:func:`simpledbf.Dbf5.to_dataframe` is used.  Alternatively, you can just pass a pre-loaded
+			:class:`pandas.DataFrame`.
 		caseid_column : None or str
 			If given, this is the column of the input data file to use as caseids.  It must be 
 			given if the caseids do not already exist in the HDF5 file.  If it is given and
@@ -1976,10 +1977,12 @@ class DT(Fountain):
 		log("READING %s",str(filepath_or_buffer))
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
-		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
+		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.dbf':
 			from simpledbf import Dbf5
 			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
 			df = dbf.to_dataframe()
+		elif isinstance(filepath_or_buffer, pandas.DataFrame):
+			df = filepath_or_buffer
 		else:
 			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
 		log("READING COMPLETE")

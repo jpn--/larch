@@ -32,7 +32,7 @@ class OMX(_tb.file.File):
 			s += "\n |    {0:{3}s} ({1} {2})".format(i, self.lookup._v_children[i].shape[0], self.lookup._v_children[i].dtype, just)
 		return s
 
-	def __init__(self, *arg, complevel=5, complib='zlib', **kwarg):
+	def __init__(self, *arg, complevel=1, complib='zlib', **kwarg):
 		if 'filters' in kwarg:
 			super().__init__(*arg, **kwarg)
 		else:
