@@ -82,7 +82,7 @@ class OMX(_tb.file.File):
 			shp[1] = x[1]
 			self.root._v_attrs.SHAPE = shp
 
-	def add_blank_lookup(self, name, atom=None, shape=None, **kwargs):
+	def add_blank_lookup(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
 		if name in self.lookup._v_children:
 			return self.lookup._v_children[name]
 		if atom is None:
@@ -99,9 +99,9 @@ class OMX(_tb.file.File):
 			if self.shape[0] != self.shape[1]:
 				raise OMXIncompatibleShape('this omx has shape {!s} but you did not pick one'.format(self.shape))
 			shape = self.shape[0]
-		return self.create_carray(self.lookup, name, atom=atom, shape=numpy.atleast_1d(shape), **kwargs)
+		return self.create_carray(self.lookup, name, atom=atom, shape=numpy.atleast_1d(shape), filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
-	def add_blank_matrix(self, name, atom=None, shape=None, **kwargs):
+	def add_blank_matrix(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
 		"""
 
 		Note
@@ -120,9 +120,9 @@ class OMX(_tb.file.File):
 				raise OMXIncompatibleShape('this omx has shape {!s} but you want to set {!s}'.format(self.shape, shape[:2]))
 		else:
 			shape = self.shape
-		return self.create_carray(self.data, name, atom=atom, shape=shape, **kwargs)
+		return self.create_carray(self.data, name, atom=atom, shape=shape, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
-	def add_matrix(self, name, obj, *, overwrite=False, **kwargs):
+	def add_matrix(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', **kwargs):
 		if len(obj.shape) != 2:
 			raise OMXIncompatibleShape('all omx arrays must have 2 dimensional shape')
 		if self.data._v_nchildren>0:
@@ -135,9 +135,9 @@ class OMX(_tb.file.File):
 			self.root._v_attrs.SHAPE = shp
 		if name in self.data._v_children:
 			self.remove_node(self.data, name)
-		return self.create_carray(self.data, name, obj=obj, **kwargs)
+		return self.create_carray(self.data, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
-	def add_lookup(self, name, obj, **kwargs):
+	def add_lookup(self, name, obj, complevel=1, complib='zlib', **kwargs):
 		if len(obj.shape) != 1:
 			raise OMXIncompatibleShape('all omx lookups must have 1 dimensional shape')
 		if self.data._v_nchildren>0:
@@ -145,7 +145,37 @@ class OMX(_tb.file.File):
 				raise OMXIncompatibleShape('this omx has shape {!s} but you want to add a lookup with {!s}'.format(self.shape, obj.shape))
 		if self.data._v_nchildren == 0 and self.shape==(0,0):
 			raise OMXIncompatibleShape("don't add lookup to omx with no data and no shape")
-		return self.create_carray(self.lookup, name, obj=obj, **kwargs)
+		return self.create_carray(self.lookup, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
+
+	def change_all_atoms_of_type(self, oldatom, newatom):
+		for name in self.data._v_children:
+			if self.data._v_children[name].dtype == oldatom:
+				print("changing matrix {} from {} to {}".format(name, oldatom, newatom))
+				self.change_atom_type(name, newatom, matrix=True, lookup=False)
+		for name in self.lookup._v_children:
+			if self.lookup._v_children[name].dtype == oldatom:
+				print("changing lookup {} from {} to {}".format(name, oldatom, newatom))
+				self.change_atom_type(name, newatom, matrix=False, lookup=True)
+
+	def change_atom_type(self, name, atom, matrix=True, lookup=True):
+		if isinstance(atom, numpy.dtype):
+			atom = _tb.Atom.from_dtype(atom)
+		elif not isinstance(atom, _tb.atom.Atom):
+			atom = _tb.Atom.from_type(atom)
+		if matrix:
+			if name in self.data._v_children:
+				orig = self.data._v_children[name]
+				neww = self.add_blank_matrix(name+"_temp_atom", atom=atom)
+				for i in range(self.shape[0]):
+					neww[i] = orig[i]
+				neww._f_rename(name, overwrite=True)
+		if lookup:
+			if name in self.lookup._v_children:
+				orig = self.lookup._v_children[name]
+				neww = self.add_blank_lookup(name+"_temp_atom", atom=atom)
+				for i in range(self.shape[0]):
+					neww[i] = orig[i]
+				neww._f_rename(name, overwrite=True)
 
 	def get_reverse_lookup(self, name):
 		labels = self.lookup._v_children[name][:]
@@ -441,18 +471,19 @@ class OMX(_tb.file.File):
 		if isinstance(key,str):
 			if key in self.data._v_children:
 				return self.data._v_children[key]
+			if key in self.lookup._v_children:
+				return self.lookup._v_children[key]
 			raise KeyError("matrix named {} not found".format(key))
 		raise TypeError("OMX matrix access must be by name (str)")
 
 	def __getattr__(self, key):
-#		try:
-#			return super().__getattr__(key)
-#		except AttributeError:
-			if key in self.data._v_children and key not in self.lookup._v_children:
-				return self.data._v_children[key]
-			if key not in self.data._v_children and key in self.lookup._v_children:
-				return self.lookup._v_children[key]
-			raise AttributeError('key {} not found'.format(key))
+		if key in self.data._v_children and key not in self.lookup._v_children:
+			return self.data._v_children[key]
+		if key not in self.data._v_children and key in self.lookup._v_children:
+			return self.lookup._v_children[key]
+		if key in self.data._v_children and key in self.lookup._v_children:
+			raise AttributeError('key {} found in both data and lookup'.format(key))
+		raise AttributeError('key {} not found'.format(key))
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
 		oth = OMX(otherfile, mode='r')
