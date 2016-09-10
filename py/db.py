@@ -724,9 +724,11 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				if len(i) == len(headers):
 					self.execute(stmt,tuple(i))
 					num_rows = num_rows+1
-					if (time.time()-lastlogupdate > 2):
+					if (time.time()-lastlogupdate > 10):
 						eL.info("%i rows imported", num_rows)
 						lastlogupdate = time.time()
+						self.execute("END TRANSACTION;")
+						self.execute("BEGIN TRANSACTION;")
 					if progress_callback is not None and (time.time()-lastscreenupdate > 0.1):
 						lastscreenupdate = time.time()
 						progress_callback(int(smartFile.percentread()))
