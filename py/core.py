@@ -4238,7 +4238,7 @@ class Model2(sherpa):
 
     def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False) -> "void":
 
-        if self.logger(): self.logger().log(40, "Model.setUp...")
+        if self.logger(): self.logger().log(30, "Model.setUp...")
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
         	self.provision()
         	self.setUpMessage = "autoprovision yes (setUp)"
@@ -4247,7 +4247,7 @@ class Model2(sherpa):
 
         val = _core.Model2_setUp(self, and_load_data, force)
 
-        if self.logger(): self.logger().log(40, "Model.setUp complete")
+        if self.logger(): self.logger().log(30, "Model.setUp complete")
 
 
         return val

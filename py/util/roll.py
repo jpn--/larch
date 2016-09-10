@@ -7,7 +7,7 @@ import os.path
 from .temporaryfile import TemporaryFile
 import inspect
 
-def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, sourcecode=True, **format):
+def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, sourcecode=True, maxlik_args=(), **format):
 	"""Estimate a model and generate a report.
 	
 	This method rolls together model estimation, reporting, and saving results
@@ -68,7 +68,7 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 	if use_ce:
 		m.setup_utility_ce()
 
-	m.maximize_loglike()
+	m.maximize_loglike(*maxlik_args)
 
 	log.removeHandler(fh)
 	if local_log:

@@ -1425,17 +1425,30 @@ class Model(Model2, ModelReporter):
 
 
 	def gradient_check(self, disp=True):
-		try:
-			if self.is_provisioned()<=0:
+		from .metamodel import MetaModel
+		if isinstance(self, MetaModel):
+#			for sub in self.sub_model.values():
+#				try:
+#					if sub.is_provisioned()<=0:
+#						sub.provision()
+#				except LarchError:
+#					sub.provision()
+#				sub.setUp()
+			self.setUp()
+		else:
+			try:
+				if self.is_provisioned()<=0:
+					self.provision()
+			except LarchError:
 				self.provision()
-		except LarchError:
-			self.provision()
-		self.setUp()
+			self.setUp()
 		self.loglike()
 		_force_recalculate = self.option.force_recalculate
 		self.option.force_recalculate = True
-		a_grad = self.d_loglike_nocache()
-		fd_grad = self.finite_diff_gradient()
+#		a_grad = self.d_loglike_nocache()
+		a_grad = self.d_loglike(cached=False)
+#		fd_grad = self.finite_diff_gradient()
+		fd_grad = self.finite_diff_d_loglike()
 		self.option.force_recalculate = _force_recalculate
 		namelen = max(len(n) for n in self.parameter_names())
 		namelen = max(namelen,9)

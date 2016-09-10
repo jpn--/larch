@@ -4,6 +4,7 @@ import numpy
 import pandas
 from .core import LarchError
 from .util import dicta
+import warnings
 
 class OMXBadFormat(LarchError):
 	pass
@@ -157,7 +158,7 @@ class OMX(_tb.file.File):
 				print("changing lookup {} from {} to {}".format(name, oldatom, newatom))
 				self.change_atom_type(name, newatom, matrix=False, lookup=True)
 
-	def change_atom_type(self, name, atom, matrix=True, lookup=True):
+	def change_atom_type(self, name, atom, matrix=True, lookup=True, require_smaller=True):
 		if isinstance(atom, numpy.dtype):
 			atom = _tb.Atom.from_dtype(atom)
 		elif not isinstance(atom, _tb.atom.Atom):
@@ -168,14 +169,22 @@ class OMX(_tb.file.File):
 				neww = self.add_blank_matrix(name+"_temp_atom", atom=atom)
 				for i in range(self.shape[0]):
 					neww[i] = orig[i]
-				neww._f_rename(name, overwrite=True)
+				if require_smaller and neww.size_on_disk >= orig.size_on_disk:
+					warnings.warn("abort change_atom_type on {}, {} > {}".format(name, neww.size_on_disk, orig.size_on_disk))
+					neww._f_remove()
+				else:
+					neww._f_rename(name, overwrite=True)
 		if lookup:
 			if name in self.lookup._v_children:
 				orig = self.lookup._v_children[name]
 				neww = self.add_blank_lookup(name+"_temp_atom", atom=atom)
 				for i in range(self.shape[0]):
 					neww[i] = orig[i]
-				neww._f_rename(name, overwrite=True)
+				if require_smaller and neww.size_on_disk >= orig.size_on_disk:
+					warnings.warn("abort change_atom_type on {}, {} > {}".format(name, neww.size_on_disk, orig.size_on_disk))
+					neww._f_remove()
+				else:
+					neww._f_rename(name, overwrite=True)
 
 	def get_reverse_lookup(self, name):
 		labels = self.lookup._v_children[name][:]

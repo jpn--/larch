@@ -115,7 +115,15 @@ class MetaModel(Model):
 	def negative_loglike(self, *args):
 		return -self.loglike(*args)
 
-	def d_loglike(self, *args): 
+	def d_loglike(self, *args, cached=False):
+		"""
+		Calculate the vector of first partial derivative w.r.t. the parameters.
+		
+		Parameters
+		----------
+		cached : bool
+			Ignored in this version.
+		"""
 		if len(args)>0:
 			self.parameter_values(args[0])
 		meta_parameter_values = self.parameter_values()
@@ -154,7 +162,7 @@ class MetaModel(Model):
 			v2[n] -= jiggle
 			g[n] -= self.loglike(v2)
 #			print("n=",n,"   g[n]=",g[n], "   jiggle=",jiggle, "   grad=",g[n] / (-2*jiggle))
-			g[n] /= (-2*jiggle)
+			g[n] /= (2*jiggle)
 #			print("n=",n,"   g![n]=",g[n], )
 		return g
 
