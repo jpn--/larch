@@ -118,10 +118,18 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	from .util.numbering import recode_alts
 
-	def __init__(self, filename=None, readonly=False, load_queries=True):
+	def __init__(self, filename=None, readonly=False, load_queries=True, shared=False):
 		import os.path
 		if filename is None:
 			filename="file:larchdb?mode=memory"
+		if shared:
+			if "file:" not in filename:
+				filename = "file:{}?cache=shared"
+			else:
+				if "?" in filename:
+					filename += "&cache=shared"
+				else:
+					filename += "?cache=shared"
 		# Use apsw to open a SQLite connection
 		if readonly:
 			apsw.Connection.__init__(self, filename, flags=apsw.SQLITE_OPEN_URI|apsw.SQLITE_OPEN_READONLY)
@@ -481,6 +489,13 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		index : bool
 			If true, automatically create indexes for caseids and altids on the :ref:`idca` table,
 			and (if it is created) caseids on the :ref:`idco` table.
+
+		Notes
+		-----
+		If you are importing a HUGE data file, set tablename_co to None, and do any post processing seperately.
+		If it is not None, the initial import is to a temporary file, which greatly speeds the process for
+		small to medium size files but can choke on larger ones, especially if the temporary file location 
+		(usually on the main startup drive) does not have enough space.
 
 		Returns
 		-------

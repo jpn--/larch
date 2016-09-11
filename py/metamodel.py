@@ -70,6 +70,8 @@ class MetaModel(Model):
 		self.sub_ncases = {}
 		self.total_ncases = 0
 		for seg_descrip,submodel in self.sub_model.items():
+			if self.logger():
+				self.logger().log(30, "setUp:{!s}".format(seg_descrip))
 			submodel.setUp(*args, **kwargs)
 			submodel.provision()
 			if submodel.df.nCases()==0:
@@ -110,6 +112,8 @@ class MetaModel(Model):
 #			print(key,"m_fun",m_fun)
 			fun += m_fun
 #		print("   fun",fun)
+		if self.logger():
+			self.logger().log(30, "LL={} <- {}".format(str(fun),str(self.parameter_array)))
 		return float(fun)
 
 	def negative_loglike(self, *args):
@@ -140,6 +144,8 @@ class MetaModel(Model):
 			for local_slot, global_slot in mapping.items():
 				d_ll[global_slot] += m_d_ll[local_slot]
 #		print("d_ll", d_ll)
+		if self.logger():
+			self.logger().log(30, "dLL={}".format(str(d_ll),str(self.parameter_array)))
 		return d_ll
 
 	def negative_d_loglike(self, *args):
