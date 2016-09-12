@@ -163,7 +163,7 @@ class Renamer(Categorizer):
 			yield self
 		raise StopIteration
 
-def QuickCategorizer(categories):
+def QuickCategorizer(*categories):
 	return Categorizer(None, *(Categorizer(c, "{}.*".format(c)) for c in categories))
 
 
