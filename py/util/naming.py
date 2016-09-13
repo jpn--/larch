@@ -1,7 +1,7 @@
 
 import warnings
 import keyword
-
+import re
 
 def make_valid_identifier(x):
 	x = str(x)
@@ -10,12 +10,8 @@ def make_valid_identifier(x):
 		warnings.warn("name {0} is a python keyword, converting to {1}".format(x,y))
 	else:
 		y = x
-	if '.' in y:
-		y = y.replace('.','_')
-	if ':' in y:
-		y = y.replace(':','_')
-	if ',' in y:
-		y = y.replace(',','_')
+	replacer = re.compile('(\W+)')
+	y = replacer.sub("_", y)
 	if not y.isidentifier():
 		y = "_"+y
 	if y!=x:
