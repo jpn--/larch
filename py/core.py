@@ -4633,7 +4633,4 @@ ModelAlias_swigregister = _core.ModelAlias_swigregister
 ModelAlias_swigregister(ModelAlias)
 
 
-from .model import Model
-
-
 

@@ -82,24 +82,24 @@ class XhtmlModelReporter():
 			cats = ['title','params','LL','latest']
 
 		if cats=='*0' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','UTILITYDATA','NOTES','options','possible_overspecification', 'excludedcases'] + list(self._user_defined_arts)
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA', 'excludedcases','UTILITYDATA','NOTES','options','possible_overspecification'] + list(self._user_defined_arts)
 		elif cats=='*0':
-			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','UTILITYDATA','NOTES','options','possible_overspecification', 'excludedcases'] + list(self._user_defined_arts)
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA', 'excludedcases','UTILITYDATA','NOTES','options','possible_overspecification'] + list(self._user_defined_arts)
 
 		if cats in ('*',) and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','excludedcases','NOTES','options','possible_overspecification',  'datasummary'] + list(self._user_defined_arts)
 		elif cats in ('*',):
-			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary'] + list(self._user_defined_arts)
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','excludedcases','NOTES','options','possible_overspecification',  'datasummary'] + list(self._user_defined_arts)
 
 		if cats in ('**',) and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
 		elif cats in ('**',):
-			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','NOTES','options','possible_overspecification', 'excludedcases', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA', 'excludedcases','NOTES','options','possible_overspecification', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
 
 		if cats=='-' and len(self.node)>0:
-			cats=['title','params','LL','nesting_tree','latest','NOTES','options']
+			cats=['title','params','LL','nesting_tree','latest','NOTES','options','possible_overspecification']
 		elif cats=='-':
-			cats=['title','params','LL',               'latest','NOTES','options']
+			cats=['title','params','LL',               'latest','NOTES','options','possible_overspecification']
 
 		if cats=='D' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]

@@ -1,10 +1,10 @@
 from itertools import count
 import numpy
+from .naming import parenthize
 
 
 
-
-def decay_transform(basevar, breaks):
+def smoothed_piecewise_linear(basevar, breaks):
 	from ..roles import X
 	outlen = len(breaks)-1
 	if outlen<2:
@@ -28,3 +28,11 @@ def decay_transform(basevar, breaks):
 	]
 
 	return outs
+
+
+def piecewise_decay(basevar, levels):
+	from ..roles import X
+	for lev in levels:
+		if float(lev) <= 0:
+			raise ValueError("piecewise_decay levels cannot include nonpositive values")
+	return [X("exp(-{}/{})".format(parenthize(basevar, True), parenthize(lev,True)), descrip=basevar+" (Decay{})".format(lev)) for lev in levels]

@@ -6,7 +6,7 @@ from .exceptions import LarchError
 
 from .util.pmath import category as Category
 from .util.pmath import rename as Rename
-
+from .util.naming import parenthize
 
 _chi = u"\u03C7"
 _beta = u"\u03B2"
@@ -61,19 +61,19 @@ class DataRef(str, metaclass=Role):
 	def __add__(self, other):
 		if isinstance(other, (ParameterRef,LinearComponent,LinearFunction)):
 			return LinearComponent(data=str(self), param="CONSTANT") + other
-		return DataRef("({})+({})".format(self,other))
+		return DataRef("{}+{}".format(parenthize(self),parenthize(other, True)))
 	def __radd__(self, other):
 		if isinstance(other, (ParameterRef,LinearComponent,LinearFunction)):
 			return other + LinearComponent(data=str(self), param="CONSTANT")
-		return DataRef("({})+({})".format(other,self))
+		return DataRef("{}+{}".format(parenthize(other),parenthize(self, True)))
 	def __sub__(self, other):
 		if isinstance(other, (ParameterRef,LinearComponent,LinearFunction)):
 			return LinearComponent(data=str(self), param="CONSTANT") - other
-		return DataRef("({})-({})".format(self,other))
+		return DataRef("{}-{}".format(parenthize(self),parenthize(other, True)))
 	def __rsub__(self, other):
 		if isinstance(other, (ParameterRef,LinearComponent,LinearFunction)):
 			return other - LinearComponent(data=str(self), param="CONSTANT")
-		return DataRef("({})-({})".format(other,self))
+		return DataRef("{}-{}".format(parenthize(other),parenthize(self, True)))
 	def __mul__(self, other):
 		if isinstance(other, LinearFunction):
 			trial = LinearFunction()
@@ -88,7 +88,7 @@ class DataRef(str, metaclass=Role):
 			return LinearComponent(data=str(-self), param=str(other._orig))
 		if other==0:
 			return 0
-		return DataRef("({})*({})".format(self,other))
+		return DataRef("{}*{}".format(parenthize(self),parenthize(other, True)))
 	def __rmul__(self, other):
 		if isinstance(other, LinearFunction):
 			raise NotImplementedError
@@ -100,7 +100,7 @@ class DataRef(str, metaclass=Role):
 			return LinearComponent(data=str(-self), param=str(other._orig))
 		if other==0:
 			return 0
-		return DataRef("({})*({})".format(other,self))
+		return DataRef("{}*{}".format(parenthize(other),parenthize(self, True)))
 	def __truediv__(self, other):
 		if isinstance(other, LinearFunction):
 			raise NotImplementedError
@@ -108,7 +108,7 @@ class DataRef(str, metaclass=Role):
 			raise NotImplementedError
 		if isinstance(other, ParameterRef):
 			raise NotImplementedError
-		return DataRef("({})/({})".format(self,other))
+		return DataRef("{}/{}".format(parenthize(self),parenthize(other, True)))
 	def __rtruediv__(self, other):
 		if isinstance(other, LinearFunction):
 			raise NotImplementedError
@@ -116,9 +116,9 @@ class DataRef(str, metaclass=Role):
 			raise NotImplementedError
 		if isinstance(other, ParameterRef):
 			raise NotImplementedError
-		return DataRef("({})/({})".format(other,self))
+		return DataRef("{}/{}".format(parenthize(other),parenthize(self, True)))
 	def __neg__(self):
-		return DataRef("-({})".format(self))
+		return DataRef("-({})".format(self, True))
 	def __pos__(self):
 		return self
 	def __eq__(self, other):
@@ -384,6 +384,8 @@ class ParameterRef(str, metaclass=Role):
 		return False
 	def __hash__(self):
 		return hash(repr(self))
+	def _to_Linear(self):
+		return LinearComponent(param=str(self),data="1")
 
 class _param_math_binaryop(ParameterRef):
 	def __new__(cls,left,right):
@@ -427,6 +429,12 @@ class _param_add(_param_math_binaryop):
 		return x
 	def __repr__(self):
 		return "({} + {})".format(repr(self._left),repr(self._right))
+	def _to_Linear(self):
+		return self._left._to_Linear() + self._right._to_Linear()
+	def __add__(self, other):
+		if isinstance(other, (DataRef, LinearComponent, LinearFunction)):
+			return self._to_Linear() + other
+		return super().__add__(other)
 
 class _param_subtract(_param_math_binaryop):
 	def value(self,m):

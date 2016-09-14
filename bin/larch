@@ -55,8 +55,8 @@ if args.file:
 
 if args.test:
 	import larch.test
-	from larch.core import Model, DB, LarchError, SQLiteError
-	from larch.model import ModelFamily
+	from larch.core import DB, LarchError, SQLiteError
+	from larch.model import Model, ModelFamily
 	try:
 		larch.test.run()
 	except SystemExit as se:

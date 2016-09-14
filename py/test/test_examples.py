@@ -26,7 +26,8 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "larch.test.test_examples"
 
 from ..test import TEST_DATA, ELM_TestCase, DEEP_TEST
-from ..core import Model, DB, LarchError, SQLiteError, DT
+from ..core import LarchError, SQLiteError
+from .. import DB, DT, Model
 
 class TestSwissmetroExamples(ELM_TestCase):
 

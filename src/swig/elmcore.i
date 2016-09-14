@@ -321,8 +321,8 @@ from .dt import DT
 %}
 %include "larch_modelparameter.h"
 
-%pythoncode %{
-from .model import Model
-%}
+//%pythoncode %{
+//from .model import Model
+//%}
  
  
