@@ -1075,6 +1075,14 @@ class Model(Model2, ModelReporter):
 	                                 Model2._set_robust_covar_array,
 									 Model2._del_robust_covar_array)
 
+	@property
+	def correlation_matrix(self):
+		cor = self.covariance_matrix.copy()
+		scale = numpy.sqrt(cor.diagonal())
+		cor /= numpy.outer(scale,scale)
+		cor[numpy.isnan(cor)] = 0
+		return cor
+
 	def calculate_parameter_covariance(self):
 		hess = self.negative_d2_loglike()
 		take = numpy.full_like(hess, True, dtype=bool)
