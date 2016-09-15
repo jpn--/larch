@@ -1302,6 +1302,19 @@ class Model(Model2, ModelReporter):
 		if self.option.log_turns and self.logger() and self.logger(): self.logger().critical("<LL> {} <- {}".format(ll, str(self.parameter_array)))
 		return ll
 
+	def loglike_null(self):
+		# save values
+		value_save = self.parameter_array.copy()
+		if self.option.null_disregards_holdfast:
+			hold_save = self.parameter_holdfast_array.copy()
+			self.parameter_holdfast_array[:] = 0
+		# calc LL
+		self._LL_null = self.loglike(self.parameter_null_values_array)
+		# Restore values
+		self.parameter_array[:] = value_save
+		if self.option.null_disregards_holdfast:
+			self.parameter_holdfast_array[:] = hold_save
+		return self._LL_null
 
 	def negative_loglike(self, *args, **kwargs):
 		z = -(self.loglike(*args, **kwargs))
