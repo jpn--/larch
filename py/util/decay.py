@@ -11,7 +11,7 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 	]
 	s = 1.0/smoothness
 	outs += [
-		X("(log(1+exp({2}({0}-{1}))))/{2}".format(basevar, loc, s), descrip=basevar+" (@{}~{})".format(loc,smoothness)) for loc in breaks
+		X("(log(1+exp({2}*({0}-{1}))))/{2}".format(basevar, loc, s), descrip=basevar+" (@{}~{})".format(loc,smoothness)) for loc in breaks
 	]
 	return outs
 

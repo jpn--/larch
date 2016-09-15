@@ -33,3 +33,5 @@ elm_swig_external.h
 src/swig/elmcore_wrap.cpp
 
 src/swig/elmcore_wrap.h
+
+py/data_warehouse/arc.csv.gz
