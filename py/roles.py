@@ -136,7 +136,7 @@ class DataRef(str, metaclass=Role):
 	def eval(self, namespace=None, *, globals=None, **more_namespace):
 		import numpy
 		use_namespace = {'exp':numpy.exp, 'log':numpy.log, 'log1p':numpy.log1p, 'fabs':numpy.fabs, 'sqrt':numpy.sqrt,
-						 'absolute':numpy.absolute, 'isnan':numpy.isnan, 'isfinite':numpy.isfinite}
+						 'absolute':numpy.absolute, 'isnan':numpy.isnan, 'isfinite':numpy.isfinite, 'logaddexp':numpy.logaddexp, 'fmin':numpy.fmin, 'fmax':numpy.fmax}
 		if namespace is not None:
 			use_namespace.update(namespace)
 		use_namespace.update(more_namespace)

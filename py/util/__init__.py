@@ -7,7 +7,7 @@ from .attribute_dict import dicta, quickdot
 from . import categorize
 from . import decay
 
-allowed_math = ('log', 'exp', 'log1p')
+allowed_math = ('log', 'exp', 'log1p', 'logaddexp')
 
 
 def magic3(dtype=None):

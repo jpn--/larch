@@ -9,9 +9,17 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 	outs = [
 		X(basevar),
 	]
+	if smoothness==0:
+		outs += [
+			X("fmax(0,{0}-{1})".format(basevar, loc), descrip=basevar+" (@{})".format(loc,smoothness)) for loc in breaks
+		]
+		return outs
+	
+	
 	s = 1.0/smoothness
 	outs += [
-		X("(log(1+exp({2}*({0}-{1}))))/{2}".format(basevar, loc, s), descrip=basevar+" (@{}~{})".format(loc,smoothness)) for loc in breaks
+#		X("(log(1+exp({2}*({0}-{1}))))/{2}".format(basevar, loc, s), descrip=basevar+" (@{}~{})".format(loc,smoothness)) for loc in breaks
+		X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(basevar, loc, s), descrip=basevar+" (@{}~{})".format(loc,smoothness)) for loc in breaks
 	]
 	return outs
 
