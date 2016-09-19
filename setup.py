@@ -72,7 +72,7 @@ else:
 		os.environ['CLANG_CXX_LIBRARY'] = 'libc++'
 		os.environ['CLANG_CXX_LANGUAGE_STANDARD'] = 'gnu++0x'
 
-	# To update the version, run `git tag -a 3.3.11 -m'version 3.3.11, August 2016'`
+	# To update the version, run `git tag -a 3.3.11 -m'version 3.3.11, September 2016'`
 
 
 

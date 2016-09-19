@@ -462,7 +462,7 @@ class XHTML():
 
 	def sign(self, insert=False):
 		xsign = XML_Builder("div", {'class':'larch_signature'})
-		from ..version import version
+		from ..built import longversion as version
 		from .img import favicon
 		import time
 		xsign.start('p')

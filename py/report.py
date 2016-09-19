@@ -390,7 +390,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 #								f.write('<td colspan="2" class="{0}">---</td>'.format(shades[shade]))
 
 		xsign = XML_Builder("div", {'class':'larch_signature'})
-		from .version import version
+		from ..built import longversion as version
 		from .util.img import favicon
 		import time
 		xsign.start('p')

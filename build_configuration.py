@@ -54,10 +54,12 @@ def write_build_info(build_dir=None, packagename="larch"):
 	f.write("time='%s'\n"%time.strftime("%I:%M:%S %p %Z"))
 	f.write("date='%s'\n"%time.strftime("%d %b %Y"))
 	f.write("day='%s'\n"%time.strftime("%A"))
+	f.write("ymdh='%s'[3:]\n"%time.strftime("%Y%m%d%H"))
 
-	f.write("from .version import version\n")
+	f.write("from . import __version__ as version\nimport sys\n")
 	f.write("""
 	build='%s (%s, %s %s)'%(version,day,date,time)
+	longversion='%s.%s%s'%(version,ymdh,sys.platform[0])
 	from .apsw import apswversion, sqlitelibversion
 	from .util import dicta
 	versions = dicta({
