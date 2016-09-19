@@ -553,3 +553,127 @@ def computed_factor_figure_v2(m, y_funcs, y_labels=None,
 		return plot_as_svg_xhtml(plt, header=header, headerlevel=2)
 	m.add_to_report(maker)
 
+
+
+
+def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
+							   max_x=1, min_x=0, header=None,
+							   xaxis_label=None, yaxis_label=None,
+							   logscale_x=False, logscale_f=False, figsize=(11,3),
+							   epsilon=0.001, supress_legend=True,
+							   short_header=None, headerlevel=2
+							   ):
+	"""Plots a computed factor and it's derivative.
+	
+	Parameters
+	----------
+	m : Model
+		The model underlying the computed factor.
+	y_funcs : ComputedFactor or sequence of ComputedFactors
+		A list or other sequence of ComputedFactor.  Each ComputedFactor.func should accept two positional
+		parameters given as x,m where x is the array of data values for the relevant attribute, 
+		and m is the model passed to this function.
+	y_labels : sequence of str
+		A set of labels to apply to the y_funcs.  If given, this should match the length of `y_funcs`.
+	xaxis_label : str
+		As expected.
+	yaxis_label : str
+		As expected.
+	"""
+	
+	if isinstance(y_funcs, ComputedFactor):
+		y_funcs = [y_funcs,]
+
+	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x,m) - cf.func(x-epsilon,m))*(1/epsilon)), ) for cf in y_funcs]
+
+	def maker(ref_to_m):
+		from matplotlib import pyplot as plt
+		import numpy as np
+		with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+			x = np.linspace(min_x, max_x)
+			y = []
+			y_labels = []
+			for yf in y_funcs:
+				y.append( yf.func(x,ref_to_m) )
+				y_labels.append( yf.label )
+			fig = plt.figure(figsize=figsize)
+			ax = plt.subplot(121)
+			ax.set_xlim(min_x,max_x)
+			if logscale_x:
+				ax.set_xscale('log', nonposx='clip', nonposy='clip')
+			if xaxis_label is not None:
+				ax.set_xlabel(xaxis_label)
+			if yaxis_label is not None:
+				ax.set_ylabel(yaxis_label)
+			lgnd_hands = []
+			
+			for n, iy in enumerate(y):
+				if y_labels and len(y_labels)>n:
+					iy_label = y_labels[n]
+				else:
+					iy_label = None
+				l1=plt.plot(x, iy, linewidth=2, label=iy_label)
+				lgnd_hands += l1
+			
+			box = ax.get_position()
+			if not supress_legend:
+				ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+			else:
+				ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
+			ax.minorticks_on()
+
+			hist_vals = None
+			hist_wgts = None
+
+			pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
+			if not supress_legend:
+				ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
+			ax.patch.set_visible(False)
+			ax.set_xlim(min_x,max_x)
+
+			# Marginals....
+			dy = []
+			dy_labels = []
+			for yf in dy_funcs:
+				dy.append( yf.func(x,ref_to_m) )
+				dy_labels.append( yf.label )
+			ax = plt.subplot(122)
+			ax.set_xlim(min_x,max_x)
+			if logscale_x:
+				ax.set_xscale('log', nonposx='clip', nonposy='clip')
+			if xaxis_label is not None:
+				ax.set_xlabel(xaxis_label)
+			if yaxis_label is not None:
+				ax.set_ylabel("Marginal "+yaxis_label)
+			lgnd_hands = []
+			
+			for n, iy in enumerate(dy):
+				if dy_labels and len(dy_labels)>n:
+					iy_label = dy_labels[n]
+				else:
+					iy_label = None
+				l1=plt.plot(x, iy, linewidth=2, label=iy_label)
+				lgnd_hands += l1
+			
+			box = ax.get_position()
+			if not supress_legend:
+				ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+			else:
+				ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
+			ax.minorticks_on()
+
+			hist_vals = None
+			hist_wgts = None
+
+			pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
+			if not supress_legend:
+				ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
+			ax.patch.set_visible(False)
+			ax.set_xlim(min_x,max_x)
+
+		if short_header is None:
+			return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel)
+		else:
+			return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
+
+	m.add_to_report(maker)

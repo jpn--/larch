@@ -70,7 +70,7 @@ from .dt import DT, IncompatibleShape
 from .omx import OMX
 from .model import Model, ModelFamily
 from .metamodel import MetaModel
-from .core import ModelParameter
+from .core import ModelParameter, LarchError
 from . import array
 from . import roles
 core._set_array_module(array)

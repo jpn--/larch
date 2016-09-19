@@ -834,6 +834,10 @@ class ArtModelReporter():
 		"""
 		if groups is None and hasattr(self, 'parameter_groups'):
 			groups = self.parameter_groups
+
+		if isinstance(groups, (tuple,list)):
+			groups = Categorizer(*groups)
+
 		if groups is None:
 			groups = ()
 			
@@ -1314,8 +1318,10 @@ class ArtModelReporter():
 		if not_too_many_alts:
 			a += self.art_stats_utility_co_by_alt()
 			a += self.art_stats_utility_ca_by_alt()
+			a += self.art_stats_quantity_ca_by_alt()
 		else:
 			a += self.art_stats_utility_ca_by_all()
+			a += self.art_stats_quantity_ca_by_all()
 		return a
 
 

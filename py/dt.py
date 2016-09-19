@@ -579,7 +579,7 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,n_alts,len(vars)).
 			
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
@@ -615,6 +615,10 @@ class DT(Fountain):
 				else:
 					arg0 = args[0]
 				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				if "max" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
+				if "min" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
 				exc.args = (arg0,) + args[1:]
 				raise
 		if strip_nan:
@@ -663,7 +667,7 @@ class DT(Fountain):
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
@@ -686,6 +690,10 @@ class DT(Fountain):
 				else:
 					arg0 = args[0]
 				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				if "max" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
+				if "min" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
 				exc.args = (arg0,) + args[1:]
 				raise
 		if strip_nan:
@@ -718,7 +726,7 @@ class DT(Fountain):
 		-------
 		pandas.DataFrame
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
@@ -745,6 +753,10 @@ class DT(Fountain):
 				else:
 					arg0 = args[0]
 				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				if "max" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
+				if "min" in command:
+					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
 				exc.args = (arg0,) + args[1:]
 				raise
 			if strip_nan:
@@ -1154,7 +1166,7 @@ class DT(Fountain):
 			return True
 		if self._check_co_natural(column):
 			return True
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import validate_with_repeated1
 		try:
 			command = self._remake_command(column,None,2).replace('select_with_repeated1','validate_with_repeated1')
@@ -1184,7 +1196,7 @@ class DT(Fountain):
 	def check_co(self, column, raise_exception=False):
 		if self._check_co_natural(column):
 			return True
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import validate_with_repeated1
 		try:
 			command = self._remake_command(column,None,1).replace('select_with_repeated1','validate_with_repeated1')

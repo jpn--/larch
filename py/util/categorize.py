@@ -23,20 +23,25 @@ class CategorizerLabel:
 class Categorizer:
 
 	def __init__(self, label, *members, parent=None):
-		self.label = label
-		if len(members)==1 and isinstance(members[0],(list,tuple)):
-			self.members = list(members[0])
+		if isinstance(label, Categorizer):
+			self.label = label.label
+			self.members = label.members
+			self.depth = label.depth
 		else:
-			self.members = list(members)
-		if parent is None:
-			self.depth = 1
-		elif parent==-1:
-			self.depth = 0
-		else:
-			try:
-				self.depth = parent.depth + 1
-			except AttributeError:
+			self.label = label
+			if len(members)==1 and isinstance(members[0],(list,tuple)):
+				self.members = list(members[0])
+			else:
+				self.members = list(members)
+			if parent is None:
 				self.depth = 1
+			elif parent==-1:
+				self.depth = 0
+			else:
+				try:
+					self.depth = parent.depth + 1
+				except AttributeError:
+					self.depth = 1
 		for member in members:
 			try:
 				member.depth = self.depth+1

@@ -71,6 +71,7 @@ class Watcher():
 				tol = numpy.inf
 			except LarchCacheError:
 				tol = numpy.inf
+			if self.logger: self.logger.log(40, "Convergence Measure= %g",tol)
 			if numpy.abs(tol) < self.ctol:
 				if self.logger:
 					self.logger.log(10, "Computed tolerance of %g below threshold of %g",tol,self.ctol)
@@ -191,6 +192,7 @@ class OptimizeTechnique():
 			method_str = self.method_str,
 			logger = self.logger,
 		)
+		
 		if 'ctol' in kwargs and kwargs['ctol'] is not None:
 			if local_kwargs['ctol'] is None:
 				local_kwargs['ctol'] = kwargs['ctol']
@@ -316,6 +318,8 @@ class OptimizeTechniques():
 			kwarg['bhhh'] = self._bhhh
 		if self._hess is not None and 'hess' not in kwarg:
 			kwarg['hess'] = self._hess
+		if self.ctol is not None and 'ctol' not in kwarg:
+			kwarg['ctol'] = self.ctol
 		self._techniques.append(OptimizeTechnique(*arg, **kwarg))
 	def __len__(self):
 		return len(self._techniques)

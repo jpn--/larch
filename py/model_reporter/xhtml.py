@@ -96,6 +96,11 @@ class XhtmlModelReporter():
 		elif cats in ('**',):
 			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA', 'excludedcases','NOTES','options','possible_overspecification', 'datasummary', 'choice_distributions'] + list(self._user_defined_arts)
 
+		if cats in ('*Q',) and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree_textonly','latest','UTILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification',] + list(self._user_defined_arts)
+		elif cats in ('*Q',):
+			cats=['title','params','LL',                        'latest','UTILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification',] + list(self._user_defined_arts)
+
 		if cats=='-' and len(self.node)>0:
 			cats=['title','params','LL','nesting_tree','latest','NOTES','options','possible_overspecification']
 		elif cats=='-':

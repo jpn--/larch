@@ -312,7 +312,8 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 		r.stats.prepend_timing(stat)
 	else:
 		if bounds or constraints:
-			ctol = None
+			if "BHHH" not in arg:
+				ctol = None
 		if len(arg):
 			ot = model.optimizers(*arg, ctol=ctol)
 		else:

@@ -443,6 +443,7 @@ double elm::Model2::loglike_null()
 	}
 
 	_LL_null = objective();
+
 	for (unsigned i=0; i<dF(); i++) {
 		FCurrent[i] = value_save[i];
 	}
@@ -504,7 +505,7 @@ runstats elm::Model2::estimate(std::vector<sherpa_pack>* opts)
 				FCurrent[i] = FNullValues[i];
 			}
 			freshen();
-			_LL_null = objective();			
+			_LL_null = objective();
 			for (unsigned i=0; i<dF(); i++) {
 				FCurrent[i] = value_save[i];
 			}

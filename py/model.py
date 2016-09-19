@@ -881,6 +881,19 @@ class Model(Model2, ModelReporter):
 				title=title,
 				)
 
+	def art_stats_quantity_ca_by_all(self, title="Quantity idCA Data by Choice"):
+		from .util.analytics import basic_variable_analysis_all
+		needs = self.needs()
+		if 'QuantityCA' in needs:
+			return basic_variable_analysis_all(
+				arr=self.data.quantity,
+				ch=self.data.choice,
+				av=self.data.avail,
+				names=needs['QuantityCA'].get_variables(),
+				picks=None,
+				title=title,
+				)
+
 	def stats_utility_ca_chosen_unchosen(self):
 		"""
 		Generate a set of descriptive statistics (mean,stdev,mins,maxs,nonzeros,
