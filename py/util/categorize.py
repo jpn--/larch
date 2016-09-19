@@ -30,9 +30,9 @@ class Categorizer:
 		else:
 			self.label = label
 			if len(members)==1 and isinstance(members[0],(list,tuple)):
-				self.members = list(members[0])
+				self.members = [mem for mem in members[0]]
 			else:
-				self.members = list(members)
+				self.members = [mem for mem in members]
 			if parent is None:
 				self.depth = 1
 			elif parent==-1:

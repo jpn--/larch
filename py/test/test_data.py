@@ -277,27 +277,19 @@ class TestData1(unittest.TestCase):
 
 	def test_html_reporting_2(self):
 		m = Model.Example(1, pre=True)
-		from ..util.pmath import category, rename
+		from ..util.categorize import Categorizer, Renamer
 		from ..util.xhtml import XHTML
 		import re
 		param_groups = [
-			category('Level of Service', 
-					 rename('Total Time', 'tottime'),
-					 rename('Total Cost', 'totcost'),
+			Categorizer('Level of Service',
+					 Renamer('Total Time', 'tottime'),
+					 Renamer('Total Cost', 'totcost'),
 					),
-			category('Alternative Specific Constants', 
-						'ASC_SR2',
-						'ASC_SR3P',
-						'ASC_TRAN',
-						'ASC_BIKE',
-						'ASC_WALK',
+			Categorizer('Alternative Specific Constants',
+						'ASC.*',
 					),
-			category('Income', 
-						'hhinc#2',
-						'hhinc#3',
-						'hhinc#4',
-						'hhinc#5',
-						'hhinc#6',
+			Categorizer('Income',
+						'hhinc.*',
 					),
 		]
 		with XHTML(quickhead=m) as f:

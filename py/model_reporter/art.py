@@ -836,7 +836,7 @@ class ArtModelReporter():
 			groups = self.parameter_groups
 
 		if isinstance(groups, (tuple,list)):
-			groups = Categorizer(*groups)
+			groups = Categorizer(None, *groups)
 
 		if groups is None:
 			groups = ()
