@@ -1113,6 +1113,13 @@ class ArtModelReporter():
 					x.set_lastrow_iloc_nondupe(0, "Notes")
 					x.set_lastrow_iloc(2, str(i))
 
+			import socket
+			fqdn = socket.getfqdn()
+			if fqdn:
+				x.add_blank_row()
+				x.set_lastrow_iloc(0, "Computer")
+				x.set_lastrow_iloc(2, fqdn)
+
 			i = last_stat.processor
 #			try:
 #				from ..util.sysinfo import get_processor_name
