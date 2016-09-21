@@ -23,3 +23,9 @@ def magic3(dtype=None):
 import platform
 import os
 computer = os.path.splitext(platform.node())[0]
+
+
+mplstyle_filepath = os.path.join( os.path.split(__file__)[0], 'larch.mplstyle' )
+
+
+

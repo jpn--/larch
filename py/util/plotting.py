@@ -349,7 +349,7 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 #						   logscale_x=False, logscale_f=False, figsize=(6.5,3)):
 #	from matplotlib import pyplot as plt
 #	import numpy as np
-#	with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+#	with default_mplstyle():
 #		x = np.linspace(min_x, max_x)
 #		y = []
 #		for yf in y_funcs:
@@ -433,7 +433,7 @@ def computed_factor_figure(m, y_funcs, y_labels=None,
 						   logscale_x=False, logscale_f=False, figsize=(6.5,3)):
 	from matplotlib import pyplot as plt
 	import numpy as np
-	with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+	with default_mplstyle():
 		x = np.linspace(min_x, max_x)
 		y = []
 		for yf in y_funcs:
@@ -513,7 +513,7 @@ def computed_factor_figure_v2(m, y_funcs, y_labels=None,
 	def maker(ref_to_m):
 		from matplotlib import pyplot as plt
 		import numpy as np
-		with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+		with default_mplstyle():
 			x = np.linspace(min_x, max_x)
 			y = []
 			y_labels = []
@@ -589,7 +589,7 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 	def maker(ref_to_m):
 		from matplotlib import pyplot as plt
 		import numpy as np
-		with plt.style.context(('/Users/jpn/Dropbox/Larch/py/util/larch.mplstyle')):
+		with default_mplstyle():
 			x = np.linspace(min_x, max_x)
 			y = []
 			y_labels = []
