@@ -102,6 +102,9 @@ namespace elm {
 			else:
 				raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
 
+		def __iter__(self):
+			return iter(LinearFunction() + self)
+
 		%}
 		#endif // SWIG
 

@@ -2834,6 +2834,9 @@ class LinearComponent(object):
     	else:
     		raise TypeError('unsupported operand type(s) for LinearComponent*: {}'.format(type(other)))
 
+    def __iter__(self):
+    	return iter(LinearFunction() + self)
+
 
 LinearComponent_swigregister = _core.LinearComponent_swigregister
 LinearComponent_swigregister(LinearComponent)
