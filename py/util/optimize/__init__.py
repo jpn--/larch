@@ -242,7 +242,26 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 		constraints = constraints + tuple(model.network_based_constraints())
 	return constraints
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False):
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0):
+	"""
+	Maximize the log likelihood of the model.
+	
+	Parameters
+	----------
+	arg : optimizers
+	ctol : float
+		The global convergence tolerance
+	options : dict
+		Options to pass to the outer minimizer
+	metaoptions :
+		Options to pass to the inner minimizers
+	two_stage_constraints : bool
+	pre_bhhh : int
+		How many BHHH steps should be attempted before switching to the other optimizers.
+		No convergence checks are made nor bounds or constraints enforced on these
+		simple pre-steps, but it can be useful to help warm-start other algorithms (esp. SLSQP)
+		that can enforce these things but perform badly with poor starting points.
+	"""
 	if metaoptions is not None:
 		options['options'] = metaoptions
 	stat = runstats()
@@ -252,6 +271,15 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 		if not model.is_provisioned() and model._ref_to_db is not None:
 			model.provision(idca_avail_ratio_floor = model.option.idca_avail_ratio_floor)
 		model.setUp(False)
+
+	if pre_bhhh:
+		stat.start_process('pre_bhhh')
+		while pre_bhhh>0:
+			try:
+				model._bhhh_simple_step()
+			except RuntimeError:
+				pre_bhhh = 0
+			pre_bhhh -= 1
 
 	from ...metamodel import MetaModel
 	if isinstance(model, MetaModel):
