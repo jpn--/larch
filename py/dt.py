@@ -369,7 +369,7 @@ class DT(Fountain):
 		if alt_labels is None:
 			alt_labels = ["a{}".format(a) for a in altids]
 		for an in alt_labels:
-			h5altnames.append( an )
+			h5altnames.append( str(an) )
 
 	def alternative_codes(self):
 		try:
@@ -1275,7 +1275,7 @@ class DT(Fountain):
 
 		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
 		for an in db.alternative_names():
-			h5altnames.append( an )
+			h5altnames.append( str(an) )
 		
 		if isinstance(db.queries.avail, (dict, IntStringDict)):
 			self.avail_idco = dict(db.queries.avail)
@@ -1433,7 +1433,7 @@ class DT(Fountain):
 
 			h5altnames = h5f.create_vlarray(larchalts, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
 			for an in edb.alternative_names():
-				h5altnames.append( an )
+				h5altnames.append( str(an) )
 			
 			if isinstance(edb.queries.avail, (dict, IntStringDict)):
 				self.avail_idco = dict(edb.queries.avail)
@@ -1556,7 +1556,7 @@ class DT(Fountain):
 
 		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
 		for an in altscodes_seq:
-			h5altnames.append( alts[an][0] )
+			h5altnames.append( str(alts[an][0]) )
 		# Weight
 		if weight:
 			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+weight)
@@ -1987,16 +1987,20 @@ class DT(Fountain):
 		from . import logging
 		log = logging.getLogger('DT')
 		log("READING %s",str(filepath_or_buffer))
+		original_source = None
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
+			original_source = filepath_or_buffer
 		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.dbf':
 			from simpledbf import Dbf5
 			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
 			df = dbf.to_dataframe()
+			original_source = filepath_or_buffer
 		elif isinstance(filepath_or_buffer, pandas.DataFrame):
 			df = filepath_or_buffer
 		else:
 			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
+			original_source = filepath_or_buffer
 		log("READING COMPLETE")
 		try:
 			for col in df.columns:
@@ -2033,6 +2037,8 @@ class DT(Fountain):
 #					col = "_"+col
 				h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
+				if original_source:
+					h5var._v_attrs.ORIGINAL_SOURCE = original_source
 			if caseid_column is not None and 'caseids' in self.h5top:
 				raise LarchError("caseids already exist, not setting new ones")
 			if caseid_column is not None and 'caseids' not in self.h5top:
@@ -2250,6 +2256,11 @@ class DT(Fountain):
 			self.delete_data(name)
 		self.h5f.create_carray(self.idco._v_node, name, obj=data)
 
+	def new_blank_idco(self, name, dtype=None):
+		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
+		return self.new_idco_from_array(name, zer)
+
+
 	def new_idco_from_array(self, name, arr, *, overwrite=False):
 		"""Create a new :ref:`idco` variable.
 		
@@ -2275,7 +2286,77 @@ class DT(Fountain):
 			raise TypeError("new idco array must have shape {!s}".format(self.h5caseids.shape))
 		if overwrite:
 			self.delete_data(name)
-		self.h5f.create_carray(self.idco._v_node, name, obj=arr)
+		try:
+			self.h5f.create_carray(self.idco._v_node, name, obj=arr)
+		except ValueError as valerr:
+			if "unknown type" in str(valerr):
+				try:
+					tb_atom = _tb.Atom.from_dtype(arr.dtype)
+				except ValueError:
+					from . import logging
+					log = logging.getLogger('DT')
+					log.warn("  array to create as %s is not an simple compatible datatype",name)
+					try:
+						maxlen = int(len(max(arr.astype(str), key=len)))
+					except ValueError:
+						import datetime
+						if isinstance(arr[0],datetime.time):
+							log.warn("  column %s is datetime.time, converting to Time32",col)
+							tb_atom = _tb.atom.Time32Atom()
+							convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							arr = arr.apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
+						else:
+							import __main__
+							__main__.err_df = df
+							raise
+					else:
+						maxlen = max(maxlen,8)
+						log.warn("  column %s, converting to S%d",name,maxlen)
+						arr = arr.astype('S{}'.format(maxlen))
+						tb_atom = _tb.Atom.from_dtype(arr.dtype)
+				h5var = self.h5f.create_carray(self.idco._v_node, name, tb_atom, shape=arr.shape)
+				h5var[:] = arr
+			else:
+				raise
+
+
+	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None):
+		if isinstance(self_on, str):
+			baseframe = self.dataframe_idco(self_on, screen="None")
+		else:
+			baseframe = self.dataframe_idco(*self_on, screen="None")
+		new_df = pandas.merge(baseframe, other, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
+		for col in new_df.columns:
+			if col not in self.idco:
+				self.new_idco_from_array(col, arr=new_df[col].values)
+				if original_source is not None:
+					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+
+	def merge_into_idco_from_csv(self, filepath_or_buffer, self_on, other_on, dupe_suffix="_copy", original_source=None, **kwargs):
+		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:] == '.xlsx':
+			df = pandas.read_excel(filepath_or_buffer, **kwargs)
+			original_source = filepath_or_buffer
+		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:] == '.dbf':
+			from simpledbf import Dbf5
+			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
+			df = dbf.to_dataframe()
+			original_source = filepath_or_buffer
+		elif isinstance(filepath_or_buffer, pandas.DataFrame):
+			df = filepath_or_buffer
+		else:
+			df = pandas.read_csv(filepath_or_buffer, **kwargs)
+			original_source = filepath_or_buffer
+		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+
+
+
+
+
+
+
+
+
+
 
 	def new_idca(self, name, expression):
 		"""Create a new :ref:`idca` variable.
@@ -2676,7 +2757,7 @@ class DT(Fountain):
 		from .model_reporter.art import ART
 		
 		if extra:
-			extra_cols = ('SHAPE',)
+			extra_cols = ('SHAPE','ORIGINAL_SOURCE')
 		else:
 			extra_cols = ()
 		
@@ -2689,6 +2770,7 @@ class DT(Fountain):
 			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype", FILE="Source File")
 		if extra:
 			a.set_lastrow_loc('SHAPE', "Shape")
+			a.set_lastrow_loc('ORIGINAL_SOURCE', "Original Source")
 		## Content
 		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
 			if v_ftype != section:
@@ -2715,6 +2797,8 @@ class DT(Fountain):
 				else:
 					the_shape = the_node.shape
 				a.set_lastrow_loc('SHAPE', str(the_shape))
+				if 'ORIGINAL_SOURCE' in the_node._v_attrs:
+					a.set_lastrow_loc('ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
 		if len(self.expr):
 			a.addrow_seq_of_strings(["Expr",])
 			for i in self.expr:
@@ -3077,6 +3161,15 @@ class DT(Fountain):
 	def new_caseids(self, arr):
 		self.remove_node_if_exists(self.h5top, 'caseids')
 		self.h5f.create_carray(self.h5top, 'caseids', obj=arr)
+
+	def idco_crosstab(self, rowvar, colvar, rowvals=None, colvals=None):
+		return pandas.crosstab(self.idco[rowvar], self.idco[colvar])
+		if rowvals is None:
+			rowvals = self.idco[rowvar].uniques()
+		if colvals is None:
+			colvals = self.idco[colvar].uniques()
+		tab = numpy.zeros([len(rowvals), len(colvals)])
+
 
 
 def _close_all_h5():
