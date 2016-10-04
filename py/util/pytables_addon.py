@@ -15,7 +15,7 @@ def select_with_repeated1(groupnode, screen=None):
 		if len(unique_selectionlist)==1 and unique_selectionlist[0]==0:
 			return numpy.broadcast_to(valuenode[:], (len(rebuilder), valuenode.shape[0]))
 		else:
-			raise TypeError("transpore_values must be a vector")
+			raise TypeError("transpose_values must be a vector")
 	shapelen = len(valuenode.shape)
 	if shapelen==1:
 		values = valuenode[unique_selectionlist]

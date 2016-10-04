@@ -3,6 +3,7 @@ import tables
 import numpy
 import types
 import pandas
+from .naming import make_valid_identifier
 
 #class GroupNode(tables.group.Group):
 #	def __new__(cls, parentnode, name=None, *arg, **kwarg):
@@ -202,7 +203,7 @@ class GroupNode():
 					# The constructed index is len(caseids) but all zeros.
 					# Each values from the index plucks the entire lookup vector.
 					# The resulting pseudoarray is shape (nCases,nAlts)
-					full_lname = (prefix+lname).replace(' ','_').replace('-','_')
+					full_lname = make_valid_identifier(prefix+lname)
 					try:
 						vgrp = self._v_file.create_group(self._v_node, full_lname)
 					except tables.exceptions.NodeError:
@@ -218,7 +219,7 @@ class GroupNode():
 					# The provided rowindexnode should be len(caseids)
 					# The values from the index pluck single values out of the lookup vector.
 					# The resulting pseudoarray is shape (nCases,)
-					full_lname = (prefix+lname).replace(' ','_').replace('-','_')
+					full_lname = make_valid_identifier(prefix+lname)
 					try:
 						vgrp = self._v_file.create_group(self._v_node, full_lname)
 					except tables.exceptions.NodeError:

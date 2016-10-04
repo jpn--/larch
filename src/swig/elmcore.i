@@ -109,25 +109,25 @@ static PyObject* ptrToMatrixInverseError;  /* add this! */
 %}
 
 %init %{
-    ptrToLarchError = PyErr_NewException("larch.LarchError", NULL, NULL);
+    ptrToLarchError = PyErr_NewException("larch.exceptions.LarchError", NULL, NULL);
     Py_INCREF(ptrToLarchError);
     PyModule_AddObject(m, "LarchError", ptrToLarchError);
-    ptrToSQLError = PyErr_NewException("larch.SQLiteError", NULL, NULL);
+    ptrToSQLError = PyErr_NewException("larch.exceptions.SQLiteError", NULL, NULL);
     Py_INCREF(ptrToSQLError);
     PyModule_AddObject(m, "SQLiteError", ptrToSQLError);
-    ptrToFacetError = PyErr_NewException("larch.FacetError", NULL, NULL);
+    ptrToFacetError = PyErr_NewException("larch.exceptions.FacetError", NULL, NULL);
     Py_INCREF(ptrToFacetError);
     PyModule_AddObject(m, "FacetError", ptrToFacetError);
 	
-    ptrToLarchCacheError = PyErr_NewException("larch.LarchCacheError", NULL, NULL);
+    ptrToLarchCacheError = PyErr_NewException("larch.exceptions.LarchCacheError", NULL, NULL);
     Py_INCREF(ptrToLarchCacheError);
     PyModule_AddObject(m, "LarchCacheError", ptrToLarchCacheError);
 	
-    ptrToProvisioningError = PyErr_NewException("larch.ProvisioningError", NULL, NULL);
+    ptrToProvisioningError = PyErr_NewException("larch.exceptions.ProvisioningError", NULL, NULL);
     Py_INCREF(ptrToProvisioningError);
     PyModule_AddObject(m, "ProvisioningError", ptrToProvisioningError);
 
-    ptrToMatrixInverseError = PyErr_NewException("larch.MatrixInverseError", NULL, NULL);
+    ptrToMatrixInverseError = PyErr_NewException("larch.exceptions.MatrixInverseError", NULL, NULL);
     Py_INCREF(ptrToMatrixInverseError);
     PyModule_AddObject(m, "MatrixInverseError", ptrToMatrixInverseError);
 %}

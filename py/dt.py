@@ -2017,7 +2017,15 @@ class DT(Fountain):
 						if isinstance(df[col][0],datetime.time):
 							log.warn("  column %s is datetime.time, converting to Time32",col)
 							tb_atom = _tb.atom.Time32Atom()
-							convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							#convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							def convert_datetime_time_to_epoch_seconds(tm):
+								try:
+									return tm.hour*3600+ tm.minute*60 + tm.second
+								except:
+									if numpy.isnan(tm):
+										return 0
+									else:
+										raise
 							col_array = df[col].apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
 						else:
 							import __main__
@@ -2283,7 +2291,7 @@ class DT(Fountain):
 			If a variable of the same name already exists.
 		"""
 		if self.h5caseids.shape != arr.shape:
-			raise TypeError("new idco array must have shape {!s}".format(self.h5caseids.shape))
+			raise TypeError("new idco array must have shape {!s} but the array given has shape {!s}".format(self.h5caseids.shape, arr.shape))
 		if overwrite:
 			self.delete_data(name)
 		try:
@@ -2303,7 +2311,15 @@ class DT(Fountain):
 						if isinstance(arr[0],datetime.time):
 							log.warn("  column %s is datetime.time, converting to Time32",col)
 							tb_atom = _tb.atom.Time32Atom()
-							convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							#convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							def convert_datetime_time_to_epoch_seconds(tm):
+								try:
+									return tm.hour*3600+ tm.minute*60 + tm.second
+								except:
+									if numpy.isnan(tm):
+										return 0
+									else:
+										raise
 							arr = arr.apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
 						else:
 							import __main__
@@ -2390,6 +2406,27 @@ class DT(Fountain):
 		else:
 			data = expression
 		self.h5f.create_carray(self.idca._v_node, name, obj=data)
+
+	def new_blank_idca(self, name, nalts=None, dtype=None):
+		"""Create a new blank (all zeros) :ref:`idca` variable.
+			
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idca` variable.
+		nalts : int or None
+			The number of alternatives in the new :ref:`idca` variable.  If not given,
+			the return value of :meth:`nAlts` is used.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name already exists.
+		"""
+		if nalts is None:
+			nalts = self.nAlts()
+		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
+		return self.new_idca_from_array(name, zer)
 
 	def new_idca_from_array(self, name, arr):
 		"""Create a new :ref:`idca` variable.
@@ -3163,12 +3200,84 @@ class DT(Fountain):
 		self.h5f.create_carray(self.h5top, 'caseids', obj=arr)
 
 	def idco_crosstab(self, rowvar, colvar, rowvals=None, colvals=None):
+		"""experimental"""
 		return pandas.crosstab(self.idco[rowvar], self.idco[colvar])
 		if rowvals is None:
 			rowvals = self.idco[rowvar].uniques()
 		if colvals is None:
 			colvals = self.idco[colvar].uniques()
 		tab = numpy.zeros([len(rowvals), len(colvals)])
+
+	@classmethod
+	def Concat(cls, *subs, tags=None, tagname='casesource', **kwargs):
+		self = cls(**kwargs)
+
+		def _getshape1(z):
+			try:
+				return z.shape[1:]
+			except:
+				return (numpy.nan,)
+		
+		idco_lost = {i:set() for i in range(len(subs))}
+		idca_lost = {i:set() for i in range(len(subs))}
+		
+		## caseids
+		mincaseid = [0,]
+		for sub in subs:
+			priormax = numpy.fmax(mincaseid[-1], sub.caseids().max())
+			mincaseid.append(10**numpy.ceil(numpy.log10(priormax+1)))
+		arr = numpy.hstack(sub.caseids()+caseadd for caseadd, sub in zip(mincaseid, subs))
+		self.new_caseids(arr)
+		
+		if tags is not None:
+			if len(tags) != len(subs):
+				raise TypeError('length of tags must equal length of subs')
+			strtags = [str(tag) for tag in tags]
+			taglen = max(len(tag) for tag in strtags)
+			arr = numpy.hstack(numpy.full(sub.nAllCases(), str(tag), dtype='<U{}'.format(taglen)) for tag,sub in zip(tags,subs))
+			self.new_idco_from_array(tagname, arr)
+		
+		for varname in subs[0].idco._v_children_keys_including_extern: # loop over names in the first subDT
+			present = numpy.asarray([(varname in sub.idco) for sub in subs])
+			if numpy.all(present):
+				arr = numpy.hstack(sub.idco[varname][:] for sub in subs)
+				self.new_idco_from_array(varname, arr)
+			else:
+				#warnings.warn('idco variable "{}" in DT {} is lost'.format(varname, 0))
+				idco_lost[0].add(varname)
+
+		for subnum, sub in enumerate(subs[1:]):
+			for varname in sub.idco._v_children_keys_including_extern: # loop over names in the other subDT
+				if varname not in self.idco:
+					#warnings.warn('idco variable "{}" in DT {} is lost'.format(varname, subnum+1))
+					idco_lost[subnum+1].add(varname)
+	
+		for subnum, sub in enumerate(subs):
+			for varname in sub.idca._v_children_keys_including_extern: # loop over names in the this subDT
+				present = numpy.asarray([(varname in sub_.idca) for sub_ in subs])
+				if numpy.all(present):
+					shape0 = _getshape1(subs[0].idca[varname])
+					shapes_match = numpy.asarray([(_getshape1(sub.idca[varname])==shape0) for sub in subs])
+					if numpy.all(shapes_match):
+						if subnum==0:
+							arr = numpy.vstack(sub_.idca[varname][:] for sub_ in subs)
+							self.new_idca_from_array(varname, arr)
+						# else: we did this already for sub 0
+					else:
+						#warnings.warn('idca variable "{}" with shape {} in DT {} is lost'.format(varname, _getshape1(sub.idca[varname]), subnum))
+						idca_lost[subnum].add(  (varname, _getshape1(sub.idca[varname]))  )
+				else:
+					idca_lost[subnum].add(  (varname, _getshape1(sub.idca[varname]))  )
+
+
+		for key,val in idco_lost.items():
+			if len(val):
+				warnings.warn('idco variable lost from DT {}:\n  '.format(key)+"\n  ".join(sorted(val)))
+		for key,val in idca_lost.items():
+			if len(val):
+				warnings.warn('idca variable lost from DT {}:\n  '.format(key)+"\n  ".join(sorted("{} ({})".format(*v) for v in val)))
+				
+		return self
 
 
 
@@ -3306,6 +3415,8 @@ class DT_idco_stack_manager:
 		for n,altid in enumerate(self.parent._alternative_codes()):
 			s += "\n  {}: {!r}".format(altid, self[altid])
 		return s
+
+
 
 
 def DTx(filename=None, *, caseids=None, alts=None, **kwargs):

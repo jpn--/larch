@@ -122,7 +122,7 @@ class AbstractReportTable():
 	
 
 	def __init__(self, columns=('0',), col_classes=(), n_head_rows=1, from_dataframe=None, title=None, short_title=None):
-		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex())
+		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex(0))
 		self.col_classes = col_classes
 		self.n_thead_rows = n_head_rows
 		self.use_columns_as_thead = False

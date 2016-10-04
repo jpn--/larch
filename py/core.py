@@ -2492,6 +2492,12 @@ class VAS_System(object):
     def all_codes(self) -> "std::vector< long long,std::allocator< long long > >":
         return _core.VAS_System_all_codes(self)
 
+    def add_cell(self, *args) -> "int":
+        return _core.VAS_System_add_cell(self, *args)
+
+    def regrow(self) -> "void":
+        return _core.VAS_System_regrow(self)
+
     def __init__(self):
         this = _core.new_VAS_System()
         try:

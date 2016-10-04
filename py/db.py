@@ -861,9 +861,9 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				cur = self.cursor()
 				cur.execute("DROP TABLE %s;" % table)
 				cur.close()
-				create = pandas.io.sql.get_schema(rawdataframe, table, 'sqlite')
+				create = pandas.io.sql.get_schema(rawdataframe, table)
 		else:
-			create = pandas.io.sql.get_schema(rawdataframe, table, 'sqlite')
+			create = pandas.io.sql.get_schema(rawdataframe, table)
 		if create is not None:
 			cur = self.cursor()
 			cur.execute(create)
