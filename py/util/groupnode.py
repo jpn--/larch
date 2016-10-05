@@ -170,6 +170,9 @@ class GroupNode():
 	def add_external_data(self, link):
 		if ":/" not in link:
 			raise TypeError("must give link as filename:/path/to/node")
+		linkfile, linknode = link.split(":/")
+		linkfile = os.path.relpath(linkfile, self.filename)
+		link = linkfile+":/"+linknode
 		extern_n = 1
 		while '_extern_{}'.format(extern_n) in self._v_node:
 			extern_n += 1
@@ -180,6 +183,7 @@ class GroupNode():
 		anything_linked = False
 		if not isinstance(omx_filename, str) and hasattr(omx_filename, 'filename'):
 			omx_filename = omx_filename.filename		
+		omx_filename = os.path.relpath(omx_filename, self.filename)
 		temp_num = 1
 		while 'temp_omx_{}'.format(temp_num) in self._v_file.root._v_children:
 			temp_num += 1
