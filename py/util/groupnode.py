@@ -3,6 +3,7 @@ import tables
 import numpy
 import types
 import pandas
+import os
 from .naming import make_valid_identifier
 
 #class GroupNode(tables.group.Group):
@@ -171,7 +172,7 @@ class GroupNode():
 		if ":/" not in link:
 			raise TypeError("must give link as filename:/path/to/node")
 		linkfile, linknode = link.split(":/")
-		linkfile = os.path.relpath(linkfile, self.filename)
+		linkfile = os.path.relpath(linkfile, self._v_file.filename)
 		link = linkfile+":/"+linknode
 		extern_n = 1
 		while '_extern_{}'.format(extern_n) in self._v_node:
@@ -183,7 +184,7 @@ class GroupNode():
 		anything_linked = False
 		if not isinstance(omx_filename, str) and hasattr(omx_filename, 'filename'):
 			omx_filename = omx_filename.filename		
-		omx_filename = os.path.relpath(omx_filename, self.filename)
+		omx_filename = os.path.relpath(omx_filename, self._v_file.filename)
 		temp_num = 1
 		while 'temp_omx_{}'.format(temp_num) in self._v_file.root._v_children:
 			temp_num += 1
