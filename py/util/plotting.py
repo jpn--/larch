@@ -113,10 +113,13 @@ def spark_histogram_rangefinder(data, bins):
 		else:
 			mn, mx = use_data.min() + 0.0, use_data.max() + 0.0
 		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data)
-		if width:
-			bins = int(numpy.ceil((mx - mn) / width))
-		else:
-			bins = 1
+		try:
+			if width:
+				bins = int(numpy.ceil((mx - mn) / width))
+			else:
+				bins = 1
+		except OverflowError:
+			bins = 10
 		# The spark graphs get hard to read if the bin slices are too thin, so we will max out at 50 bins
 		if bins > 50:
 			bins = 50
@@ -201,10 +204,13 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		else:
 			mn, mx = use_data_for_bins.min() + 0.0, use_data_for_bins.max() + 0.0
 		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data_for_bins)
-		if width:
-			bins = int(numpy.ceil((mx - mn) / width))
-		else:
-			bins = 1
+		try:
+			if width:
+				bins = int(numpy.ceil((mx - mn) / width))
+			else:
+				bins = 1
+		except OverflowError:
+			bins = 10
 		# The spark graphs get hard to read if the bin slices are too thin, so we will max out at 50 bins
 		if bins > 50:
 			bins = 50
