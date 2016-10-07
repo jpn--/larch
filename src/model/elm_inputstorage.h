@@ -200,6 +200,36 @@ namespace elm {
 			for component in self:
 				trial += other * component
 			return trial
+		def evaluate(self, dataspace, model):
+			if len(self)>0:
+				i = self[0]
+				y = i.data.eval(**dataspace) * i.param.default_value(0).value(model)
+			for i in self[1:]:
+				y += i.data.eval(**dataspace) * i.param.default_value(0).value(model)
+			return y
+		def evaluator1d(self, factorlabel='U', dimlabel=None):
+			if dimlabel is None:
+				try:
+					dimlabel = self._dimlabel
+				except AttributeError:
+					raise TypeError('a dimlabel must be given')
+			if dimlabel is None:
+				raise TypeError('a dimlabel must be given')
+			from .util.plotting import ComputedFactor
+			return ComputedFactor( label=factorlabel, func=lambda x,m: self.evaluate({dimlabel:x}, m) )
+		def __contains__(self, val):
+			from .roles import ParameterRef, DataRef
+			if isinstance(val, ParameterRef):
+				for i in self:
+					if i.param==val:
+						return True
+				return False
+			if isinstance(val, DataRef):
+				for i in self:
+					if i.data==val:
+						return True
+				return False
+			raise TypeError("the searched for content must be of type ParameterRef or DataRef")
 		%}
 		#endif // def SWIG
 

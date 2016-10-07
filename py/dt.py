@@ -229,8 +229,11 @@ class DT(Fountain):
 
 
 	def __del__(self):
-		if self._h5f_own:
-			self.h5f.close()
+		try:
+			if self._h5f_own:
+				self.h5f.close()
+		except AttributeError:
+			pass
 
 	def __repr__(self):
 		return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
@@ -2682,6 +2685,12 @@ class DT(Fountain):
 				x[k] = v
 		return x
 	
+	def set_weight(self, wgt, scale=None):
+		if scale is None:
+			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+wgt)
+		else:
+			w = self.array_idco(wgt, screen="None").squeeze() * scale
+			self.new_idco_from_array('_weight_',w)
 
 #	def set_choice_idco(self, *cols, varname='_choice_'):
 #		"""Set up the :ref:`idca` _choice_ data array from :ref:`idco` variables.
@@ -3207,6 +3216,13 @@ class DT(Fountain):
 		if colvals is None:
 			colvals = self.idco[colvar].uniques()
 		tab = numpy.zeros([len(rowvals), len(colvals)])
+
+
+	@classmethod
+	def TempCopy(cls, filename, *args, **kwargs):
+		from .util.temporaryfile import TemporaryCopy
+		return cls(TemporaryCopy(filename), *args, **kwargs)
+
 
 	@classmethod
 	def Concat(cls, *subs, tags=None, tagname='casesource', **kwargs):

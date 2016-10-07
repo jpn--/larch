@@ -1640,13 +1640,17 @@ class XhtmlModelReporter():
 							x.simple("br")
 							x.data("+ ")
 							if resolved:
-								theta_val = "{:{PARAM}}".format(self.metaparameter(self.quantity_scale).value, **format).strip()
-								x.data(theta_val)
+								if self.quantity_scale != "":
+									theta_val = "{:{PARAM}}".format(self.metaparameter(self.quantity_scale).value, **format).strip()
+									x.data(theta_val)
+									x.data(" * ")
 							else:
-								x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(self.quantity_scale.replace("#","_hash_"))})
-								x.data(self.quantity_scale)
-								x.end('a')
-							x.data(" * log(")
+								if self.quantity_scale != "":
+									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(self.quantity_scale.replace("#","_hash_"))})
+									x.data(self.quantity_scale)
+									x.end('a')
+									x.data(" * ")
+							x.data("log(")
 							x.simple("br")
 							first_thing = True
 							for quant in self.quantity:

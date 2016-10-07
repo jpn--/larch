@@ -44,6 +44,7 @@ def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
+	f._dimlabel=basevar
 	return f
 
 
@@ -115,3 +116,26 @@ def piecewise_decay(basevar, levels):
 		if float(lev) <= 0:
 			raise ValueError("piecewise_decay levels cannot include nonpositive values")
 	return [X("exp(-{}/{})".format(parenthize(basevar, True), parenthize(lev,True)), descrip=basevar+" (Decay{})".format(lev)) for lev in levels]
+
+
+def piecewise_decay_function(basevar, levels, keep_linear=False, baseparam=None):
+	from ..roles import P, X
+	from ..core import LinearFunction
+	Xs = piecewise_decay(basevar, levels)
+	if baseparam is None:
+		baseparam = basevar
+	if keep_linear:
+		Ps = [P(baseparam),]
+		Xs = [X(basevar),] + Xs
+	else:
+		Ps = []
+	Ps += [ P("{}_{}".format(baseparam,b)) for b in levels ]
+	f = LinearFunction()
+	for x,p in zip(Xs,Ps):
+		f += x * p
+	f._dimlabel=basevar
+	return f
+
+
+
+

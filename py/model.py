@@ -52,6 +52,7 @@ class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
+	from .util.plotting import computed_factor_figure_with_derivative
 	
 	def dir(self):
 		for f in dir(self):
@@ -1978,6 +1979,33 @@ class Model(Model2, ModelReporter):
 	def _simple_bhhh_direction(self):
 		b = self.bhhh()
 		from .linalg import general_inverse
+
+
+	def suggest(self, paramname, value):
+		"""
+		Suggest a starting value for a parameter.
+		
+		Parameters
+		----------
+		paramname : str
+			The name of the parameter to suggest a value for.  If not already in the model, this method is a no-op.
+		value : numeric
+			The value to suggest
+		"""
+		if paramname not in self:
+			return
+		try:
+			p = self[paramname]
+		except KeyError:
+			# parameter not found in first check, examine utility function to check if the model isn't setUp yet
+			from .roles import ParameterRef
+			p_ref = ParameterRef(paramname)
+			if p_ref in self.utility.ca:
+				self.parameter(p_ref)
+		if not isinstance(p, ModelParameter) or p.holdfast:
+			return
+		p.initial_value = value
+		p.value = value
 
 
 class _AllInTheFamily():

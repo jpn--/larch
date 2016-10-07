@@ -347,8 +347,12 @@ void elm::workshop_ngev_gradient::case_dLogLike_dFusedParameters( const unsigned
 				cblas_daxpy(nPar, -Cho[a]/Pr[a], dPr->ptr(a), 1, dLL, 1);
 			} else {
 				std::ostringstream err;
-				for (unsigned aa=0; aa<nA; aa++) {
-					err << aa << "(ch=" << Cho[aa]<<")pr="<<Pr[aa]<<",";
+				if (nA<25){
+					for (unsigned aa=0; aa<nA; aa++) {
+						err << aa << "(ch=" << Cho[aa]<<")pr="<<Pr[aa]<<",";
+					}
+				} else {
+					err << a << "(ch=" << Cho[a]<<")pr="<<Pr[a];
 				}
 				throw(ZeroProbWhenChosen(cat("Zero probability case_dLogLike_dFusedParameters c=",c,"\n",err.str())));
 			}
