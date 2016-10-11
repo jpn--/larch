@@ -363,9 +363,14 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		  'SWISSMETRO':os.path.join(TEST_DIR,"swissmetro.sqlite"),
 		  'ITINERARY':os.path.join(TEST_DIR,"airmini.sqlite"),
 		  'MINI':os.path.join(TEST_DIR,"mini.sqlite"),
+		  'AIR':os.path.join(TEST_DIR,"arc.csv.gz"),
 		  }
 		if dataset.upper() not in TEST_DATA:
 			raise LarchError("Example data set %s not found"%dataset)
+		if not os.path.exists(TEST_DATA[dataset.upper()]):
+			raise LarchError("Example data set %s not installed at %s"%(dataset,TEST_DATA[dataset.upper()]))
+		if '.csv' in TEST_DATA[dataset.upper()]:
+			return DB.CSV_idca(TEST_DATA[dataset.upper()], tablename_co=None)
 		if shared:
 			return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory&cache=shared".format(dataset.lower()))
 		return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory".format(dataset.lower()))

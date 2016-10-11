@@ -99,7 +99,7 @@ def recode_alts(self, ns, tablename, casecol, newaltcol, *cat_columns, logfreq=2
 			db.execute("begin transaction;")
 			for row in rows:
 				cat_vals = tuple(converter(row[1+i]) for i,converter in enumerate(ns.enumerations))
-				db.execute("UPDATE data_ca SET {}=? WHERE rowid=?".format(newaltcol), (ns.code_from_attributes(ticker[cat_vals],*cat_vals), row[0]))
+				db.execute("UPDATE {} SET {}=? WHERE rowid=?".format(tablename, newaltcol), (ns.code_from_attributes(ticker[cat_vals],*cat_vals), row[0]))
 				ticker[cat_vals] += 1
 			db.execute("end transaction;")
 			reportnum += 1

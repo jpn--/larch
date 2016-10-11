@@ -75,7 +75,7 @@ from . import array
 from . import roles
 core._set_array_module(array)
 try:
-	from .built import build, versions, build_config
+	from .built import build, versions, build_config, longversion
 	del built
 except (NameError, ImportError):
 	build, versions, build_config = "",{},""
@@ -93,7 +93,7 @@ status += "\nLarch "+build
 _directory_ = os.path.split(__file__)[0]
 status += "\nLoaded from %s" % _directory_
 
-_autoinit_loggers = True
+_autoinit_loggers = False
 
 larch = sys.modules[__name__]
 

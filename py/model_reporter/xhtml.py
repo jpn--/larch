@@ -793,25 +793,15 @@ class XhtmlModelReporter():
 		
 		Example
 		-------
-		>>> from larch.util.pmath import category, rename
+		>>> from larch.util.categorize import Categorizer, Renamer
 		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> param_groups = [
-		... 	category('Level of Service',
-		... 			 rename('Total Time', 'tottime'),
-		... 			 rename('Total Cost', 'totcost')  ),
-		... 	category('Alternative Specific Constants',
-		...              'ASC_SR2',
-		...              'ASC_SR3P',
-		...              'ASC_TRAN',
-		...              'ASC_BIKE',
-		...              'ASC_WALK'  ),
-		... 	category('Income',
-		...              'hhinc#2',
-		...              'hhinc#3',
-		...              'hhinc#4',
-		...              'hhinc#5',
-		...              'hhinc#6'   ),
+		... 	Categorizer('Level of Service',
+		... 			    Renamer('Total Time', 'tottime'),
+		... 			    Renamer('Total Cost', 'totcost')  ),
+		... 	Categorizer('Alternative Specific Constants', 'ASC.*'),
+		... 	Categorizer('Income', 'hhinc.*'),
 		... ]
 		>>> with XHTML(quickhead=m) as f:
 		... 	f.append( m.xhtml_title()  )

@@ -2819,6 +2819,11 @@ class LinearComponent(object):
     		return self
     	return self._add(other)
 
+    def __radd__(self, other):
+    	if other==():
+    		return self
+    	return self._add(other)
+
     def __mul__(self,other):
     	from .roles import DataRef
     	if isinstance(other,(int,float,DataRef)):

@@ -462,7 +462,7 @@ class XHTML():
 
 	def sign(self, insert=False):
 		xsign = XML_Builder("div", {'class':'larch_signature'})
-		from ..built import longversion as version
+		from .. import longversion as version
 		from .img import favicon
 		import time
 		xsign.start('p')
@@ -558,6 +558,12 @@ def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_sourc
 				use_filehandle.close()
 	return xsource.close()
 
+def xhtml_log(f, *, classtype='raw_log', title="Log"):
+	if isinstance(f, str):
+		filename, filehandle = f, None
+	else:
+		filename, filehandle = None, f
+	return xhtml_rawtext_as_div(filename=filename, filehandle=filehandle, classtype=classtype, title=title)
 
 def xhtml_rawhtml_as_div(contentstring, *, title="And Then", classtype='other_content', headinglevel=2, anchor=1, popper=False):
 	xsource = XML_Builder("div", {'class':classtype})
