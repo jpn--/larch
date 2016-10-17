@@ -33,3 +33,7 @@ elm_swig_external.h
 src/swig/elmcore_wrap.cpp
 
 src/swig/elmcore_wrap.h
+
+src/.DS_Store
+
+.DS_Store
