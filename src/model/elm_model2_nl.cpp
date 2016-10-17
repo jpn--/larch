@@ -561,9 +561,12 @@ void elm::Model2::nl_probability()
 		WARN(msg) << "W......: and for "<<warningcount-1<<" other cases" ;
 	}
 	}
-	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
-	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
-	BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
+//	BUGGER(msg) << "Utility (case 0)\n" << Utility.printrow(0) ;
+//	BUGGER(msg) << "Probability (case 0)\n" << Probability.printrow(0) ;
+//	BUGGER(msg) << "Utility, Probability (case 0)\n"<<_xylem().display_nodes_skinny(&Utility, &Probability, &Data_Avail)<<"\n";
+	//BUGGER(msg) << "Cond_Prob (case 0)\n" << Cond_Prob.printrow(0) ;
+//	BUGGER(msg) << "Cond_Prob (case 0)\n"<<_xylem().display_edges(&Cond_Prob)<<"\n";
+	
 }
 
 

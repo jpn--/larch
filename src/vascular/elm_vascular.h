@@ -28,6 +28,7 @@
 #include "elm_cellcode.h"
 #include "etk.h"
 #include "elm_inputstorage.h"
+#include "elm_darray.h"
 #endif // ndef SWIG
 
 #ifdef SWIG
@@ -306,7 +307,8 @@ namespace elm {
 		
 		std::string display() const;
 		std::string display_phenotype() const;
-		std::string display_edges() const;
+		std::string display_nodes_skinny(etk::ndarray* valuearray=NULL, etk::ndarray* valuearray2=NULL, darray_ptr* valarr3=NULL) const;
+		std::string display_edges(etk::ndarray* valuearray=NULL) const;
 		std::vector< std::pair<cellcode, cellcode> > list_edges() const;
 		std::vector< std::pair<cellcode, cellcode> > list_edges_dna() const;
 		// DISPLAY prints a representation of the network.

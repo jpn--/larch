@@ -971,24 +971,117 @@ string VAS_System::display() const
 	return disp.str();
 }
 
-string VAS_System::display_edges() const
+string VAS_System::display_nodes_skinny(etk::ndarray* valuearray, etk::ndarray* valuearray2, elm::darray_ptr* valuearr3) const
 {
+	int show_value = -1;
+	if (valuearray) {
+		if (valuearray->size1()==size()) {
+			show_value = 0;
+		}
+		if (valuearray->size2()==size()) {
+			show_value = 1;
+		}
+		if (valuearray->size3()==size()) {
+			show_value = 2;
+		}
+	}
+
+	int show_value2 = -1;
+	if (valuearray2) {
+		if (valuearray2->size1()==size()) {
+			show_value2 = 0;
+		}
+		if (valuearray2->size2()==size()) {
+			show_value2 = 1;
+		}
+		if (valuearray2->size3()==size()) {
+			show_value2 = 2;
+		}
+	}
+
+	ostringstream disp;
+	for (unsigned i=0; i<size(); i++) {
+		disp << "CELL:\t\"" << CELLCODEasCSTR(_cells[i]._cell_code) << "\"\t name:\t" << _cells[i].name() ;
+
+		
+		if (show_value==0) {
+			disp << "\t U:\t" << (valuearray->at(i)) ;
+		}
+		if (show_value==1) {
+			disp << "\t U:\t" << (valuearray->at(0,i)) ;
+		}
+		if (show_value==2) {
+			disp << "\t U:\t" << (valuearray->at(0,0,i));
+		}
+
+
+		if (show_value2==0) {
+			disp << "\t Pr:\t" << (valuearray2->at(i)) ;
+		}
+		if (show_value2==1) {
+			disp << "\t Pr:\t" << (valuearray2->at(0,i)) ;
+		}
+		if (show_value2==2) {
+			disp << "\t Pr:\t" << (valuearray2->at(0,0,i)) ;
+		}
+
+		if (valuearr3) {
+			if (i<n_elemental()) {
+				disp << "\t AV:\t" << ((*valuearr3)->boolvalue(0, i)) ;
+			}
+		}
+
+		disp << "\n";
+	}
+	return disp.str();
+}
+
+string VAS_System::display_edges(etk::ndarray* valuearray) const
+{
+	int show_value = -1;
+	if (valuearray) {
+		if (valuearray->size1()==_edges.size()) {
+			show_value = 0;
+		}
+		if (valuearray->size2()==_edges.size()) {
+			show_value = 1;
+		}
+		if (valuearray->size3()==_edges.size()) {
+			show_value = 2;
+		}
+	}
+
 	ostringstream s;
 	s<< ("Edge\t");
 	s<< ("Up Code       \t");
 	s<< ("Dn Code       \t");
-	s<< ("Allo\n");
+	if (show_value) {
+		s<< ("Allo\t");
+		s<< ("VALUE\n");
+	} else {
+		s<< ("Allo\n");
+	}
 	
 	for (unsigned e=0; e<_edges.size(); e++) {
 		s<< _edges[e].edge_slot() << "\t";
 		s<< _edges[e].u()->code() << "\t";
 		s<< _edges[e].d()->code() << "\t";
 		try {
-			s<< ("-?-\n");
+			s<< ("-?-");
 //			s<< _edges[e].alloc_slot() << "\n";
 		} SPOO {
-			s<< ("---\n");
+			s<< ("---");
 		}
+		if (show_value==0) {
+			s << "\t" << valuearray->at(e);
+		}
+		if (show_value==1) {
+			s << "\t" << valuearray->at(0,e);
+		}
+		if (show_value==2) {
+			s << "\t" << valuearray->at(0,0,e);
+		}
+		s<<"\n";
 	}
 	
 	return s.str();

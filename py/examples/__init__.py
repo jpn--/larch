@@ -174,6 +174,10 @@ def _exec_example(sourcefile, d = None, extract='m'):
 	_local = {}
 	from .. import larch
 	_global['larch'] = larch
+	from ..roles import P,X,PX
+	_global['P'] = P
+	_global['X'] = X
+	_global['PX'] = PX
 	if d is None:
 		rawcode = _testcode_parsed(sourcefile)
 		code = compile(rawcode, "<::testcode:{!s}>".format(sourcefile), 'exec')
