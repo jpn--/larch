@@ -312,7 +312,10 @@ class AbstractReportTable():
 					else:
 						thistext = self.get_text_iloc(r,c).replace('\t'," ")
 					if catflag:
-						s = s[:-len(leftvert)]+ catleft+" {1:{2}<{0}s}".format(cw-1,thistext+" ",cathorizbar)+catright
+						if len(leftvert)>0:
+							s = s[:-len(leftvert)]+ catleft+" {1:{2}<{0}s}".format(cw-1,thistext+" ",cathorizbar)+catright
+						else:
+							s += catleft+" {1:{2}<{0}s}".format(cw-1,thistext+" ",cathorizbar)+catright
 					elif self.is_centered_cell(r,c):
 						s += "{1: ^{0}s}".format(cw,thistext)+othervert
 					else:
@@ -719,7 +722,7 @@ class ArtModelReporter():
 			self._user_defined_arts[handle.lower()] = factory
 
 
-	def _art_params_categorize(self, groups, display_inital=False, display_id=False, **format):
+	def _art_params_categorize(self, groups, display_inital=False, display_id=False, display_null=True, **format):
 		"""
 		Generate a ART containing the model parameters.
 		
@@ -735,6 +738,10 @@ class ArtModelReporter():
 			Should the actual parameter names be shown in an id column.
 			Defaults to False.  This can be useful if the groups include 
 			renaming.
+		display_null : bool
+			Should the null values of the parameters (the reference point
+			for a null model, typically the default no-information value
+			of the parameter) be included in the report. Defaults to True.
 		
 		Returns
 		-------
@@ -750,11 +757,14 @@ class ArtModelReporter():
 		if 'TSTAT' not in format: format['TSTAT'] = ' 0.2f'
 		# build table
 
-		columns = ["Parameter", None, "Estimated Value", "Std Error", "t-Stat", "Null Value"]
-		col_classes = ['param_label','param_label', 'estimated_value', 'std_err', 'tstat', 'null_value']
+		columns = ["Parameter", None, "Estimated Value", "Std Error", "t-Stat"]
+		col_classes = ['param_label','param_label', 'estimated_value', 'std_err', 'tstat']
 		if display_inital:
 			columns.insert(1,"Initial Value")
 			col_classes.insert(1,'initial_value')
+		if display_null:
+			columns.append("Null Value")
+			col_classes.append('null_value')
 		if display_id:
 			columns.append('id')
 			col_classes.append('id')
@@ -797,7 +807,7 @@ class ArtModelReporter():
 					x.set_lastrow_iloc(1, p_name2, anchorlabel="param"+p_name2.replace("#","_hash_"))
 				else:
 					x.set_lastrow_loc('Parameter', p_name, anchorlabel="param"+p_name.replace("#","_hash_"))
-				self.art_single_parameter_resultpart(x,p_decode, with_inital=display_inital, **format)
+				self.art_single_parameter_resultpart(x,p_decode, with_inital=display_inital, with_nullvalue=display_null, **format)
 				if display_id:
 					x.set_lastrow_loc('id', p_decode)
 					
@@ -809,7 +819,7 @@ class ArtModelReporter():
 
 
 
-	def art_params(self, groups=None, display_inital=False, display_id=False, **format):
+	def art_params(self, groups=None, display_inital=False, display_id=False, display_null=True, **format):
 		"""
 		Generate a ART containing the model parameters.
 		
@@ -825,6 +835,10 @@ class ArtModelReporter():
 			Should the actual parameter names be shown in an id column.
 			Defaults to False.  This can be useful if the groups include 
 			renaming.
+		display_null : bool
+			Should the null values of the parameters (the reference point
+			for a null model, typically the default no-information value
+			of the parameter) be included in the report. Defaults to True.
 		
 		Returns
 		-------
@@ -842,7 +856,7 @@ class ArtModelReporter():
 			groups = ()
 			
 		if isinstance(groups, Categorizer):
-			return self._art_params_categorize(groups, display_inital=display_inital, display_id=display_id, **format)
+			return self._art_params_categorize(groups, display_inital=display_inital, display_id=display_id, display_null=display_null, **format)
 
 
 		# keys fix
@@ -853,11 +867,14 @@ class ArtModelReporter():
 		if 'TSTAT' not in format: format['TSTAT'] = ' 0.2f'
 		# build table
 
-		columns = ["Parameter", None, "Estimated Value", "Std Error", "t-Stat", "Null Value"]
-		col_classes = ['param_label','param_label', 'estimated_value', 'std_err', 'tstat', 'null_value']
+		columns = ["Parameter", None, "Estimated Value", "Std Error", "t-Stat", ]
+		col_classes = ['param_label','param_label', 'estimated_value', 'std_err', 'tstat', ]
 		if display_inital:
 			columns.insert(1,"Initial Value")
 			col_classes.insert(1,'initial_value')
+		if display_null:
+			columns.append("Null Value")
+			col_classes.append('null_value')
 		if display_id:
 			columns.append('id')
 			col_classes.append('id')
@@ -881,7 +898,9 @@ class ArtModelReporter():
 		for pname in self.alias_names():
 			if pname in unlisted_parameters_set:
 				unlisted_parameters.append(pname)
-		n_cols_params = 6 if display_inital else 5
+		n_cols_params = 5 if display_inital else 4
+		if display_null:
+			n_cols_params += 1
 		if display_id:
 			n_cols_params += 1
 		
@@ -909,7 +928,7 @@ class ArtModelReporter():
 						x.set_lastrow_iloc(1, p_name2, anchorlabel="param"+p_name2.replace("#","_hash_"))
 					else:
 						x.set_lastrow_loc('Parameter', p_name, anchorlabel="param"+p_name.replace("#","_hash_"))
-					self.art_single_parameter_resultpart(x,p, with_inital=display_inital, **format)
+					self.art_single_parameter_resultpart(x,p, with_inital=display_inital, with_nullvalue=display_null, **format)
 					if display_id:
 						if isinstance(p,(rename, )):
 							p_id = p.find_in(self)
@@ -936,7 +955,6 @@ class ArtModelReporter():
 		with_stderr = bool(with_stderr)
 		with_tstat = bool(with_tstat)
 		with_nullvalue = bool(with_nullvalue)
-		#x = XML_Builder("div", {'class':"parameter_estimate"})
 		x= ART
 		if isinstance(p,(rename,Renamer,str)):
 			try:
@@ -956,41 +974,30 @@ class ArtModelReporter():
 					x.set_lastrow_loc('Initial Value', "")
 				shadow_p_value = shadow_p.value
 				x.set_lastrow_loc('Estimated Value', "{:{PARAM}}".format(shadow_p.value, **format))
-				#x.td("{:{PARAM}}".format(shadow_p.value, **format), {'class':'estimated_value'})
 				x.set_lastrow_loc('Std Error', "{}".format(shadow_p.t_stat))
-				#x.td("{}".format(shadow_p.t_stat), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
 			else:
 				# Parameter found, use model_p
 				if with_inital:
 					x.set_lastrow_loc('Initial Value', "{:{PARAM}}".format(model_p.initial_value, **format))
-					#x.td("{:{PARAM}}".format(model_p.initial_value, **format), {'class':'initial_value'})
 				x.set_lastrow_loc('Estimated Value', "{:{PARAM}}".format(model_p.value, **format))
-				#x.td("{:{PARAM}}".format(model_p.value, **format), {'class':'estimated_value'})
 				if model_p.holdfast:
 					x.set_lastrow_loc('Std Error', "fixed value")
-					#x.td("fixed value", {'colspan':str(with_stderr+with_tstat), 'class':'notation'})
-					x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
-					#x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+					if with_nullvalue:
+						x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
 				else:
 					tstat_p = model_p.t_stat
 					if isinstance(tstat_p,str):
 						x.set_lastrow_loc('Std Error', "{}".format(tstat_p))
-						#x.td("{}".format(tstat_p), {'colspan':str(with_stderr+with_tstat+with_nullvalue), 'class':'tstat'})
 					elif tstat_p is None:
 						x.set_lastrow_loc('Std Error', "{:{PARAM}}".format(model_p.std_err, **format))
-						#x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
 						x.set_lastrow_loc('t-Stat', "None")
-						#x.td("None", {'class':'tstat'})
-						x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
-						#x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
+						if with_nullvalue:
+							x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
 					else:
 						x.set_lastrow_loc('Std Error', "{:{PARAM}}".format(model_p.std_err, **format))
-						#x.td("{:{PARAM}}".format(model_p.std_err, **format), {'class':'std_err'})
 						x.set_lastrow_loc('t-Stat', "{:{TSTAT}}".format(tstat_p, **format))
-						#x.td("{:{TSTAT}}".format(tstat_p, **format), {'class':'tstat'})
-						x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
-						#x.td("{:{PARAM}}".format(model_p.null_value, **format), {'class':'null_value'})
-		#return x.close()
+						if with_nullvalue:
+							x.set_lastrow_loc('Null Value', "{:{PARAM}}".format(model_p.null_value, **format))
 
 
 

@@ -417,9 +417,17 @@ class Model(Model2, ModelReporter):
 		if isinstance(content, bytes):
 			content = content.decode('utf8')
 		if isinstance(content, str):
-			if echo: print(content)
-			code = compile(content, "<string>", 'exec')
-			exec(code)
+			if echo:
+				print("\n".join("{:> 5d}│{}".format(j+1,line) for j,line in enumerate(content.split("\n"))))
+				code = compile(content, "<string>", 'exec')
+				exec(code)
+			elif echo is not 0:
+				try:
+					code = compile(content, "<string>", 'exec')
+					exec(code)
+				except:
+					print("\n".join("{:> 5d}│{}".format(j+1,line) for j,line in enumerate(content.split("\n"))))
+					raise
 		else:
 			raise LarchError("error in loading")
 		return self

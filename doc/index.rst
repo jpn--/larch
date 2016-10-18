@@ -28,7 +28,14 @@
 .. |treelogo| image:: ../img/larch_favicon.png
 	:height: 0.9em
 	:class: treelogo
-	
+
+.. |trophy| image:: ../img/trophy-64.png
+	:class: trophyicon
+
+
+..
+
+	|trophy|  Winner of the `AGIFORS 56th Annual Symposium Best Innovation award <http://agifors.org/Symposium>`__.
 
 This documentation is for the Python interface for Larch. If this is your first go
 with Larch, or the first go on a new computer, you might want to start with :ref:`installation`.
