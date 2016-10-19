@@ -49,18 +49,34 @@ def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 
 
 
-def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=False):
+def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=False, scaling=1):
 	from ..roles import P, X
 	from ..core import LinearFunction
 	if invertpower:
-		Xs = [ X(basevar) if pwr==1 else X("({})**(1/{})".format(basevar,pwr)) for pwr in powers ]
+		if scaling==1:
+			Xs = [ X(basevar) if pwr==1 else X("({})**(1/{})".format(basevar,pwr)) for pwr in powers ]
+		else:
+			Xs = [ X(basevar)/scaling if pwr==1 else X("({})**(1/{})".format(basevar,pwr))/(scaling**(1/pwr)) for pwr in powers ]
 	else:
-		Xs = [ X(basevar) if pwr==1 else X("({})**{}".format(basevar,pwr)) for pwr in powers ]
+		if scaling==1:
+			Xs = [ X(basevar) if pwr==1 else X("({})**{}".format(basevar,pwr)) for pwr in powers ]
+		else:
+			Xs = [ X(basevar)/scaling if pwr==1 else X("({})**{}".format(basevar,pwr))/(scaling**pwr) for pwr in powers ]
 	Ps = [ P(baseparam) if pwr==1 else P("{}_{}".format(baseparam,pwr)) for pwr in powers ]
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
+	f._dimlabel=basevar
 	return f
+
+
+def log_and_linear_function(basevar, baseparam=None):
+	from ..roles import P, X
+	f = P(baseparam)*X(basevar) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
+	f._dimlabel=basevar
+	return f
+
+
 
 def _LinearFunction_evaluate(self, dataspace, model):
 	if len(self)>0:
