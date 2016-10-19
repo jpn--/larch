@@ -683,3 +683,34 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 			return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
 
 	m.add_to_report(maker)
+
+
+
+def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None):
+	"""A figure showing the distribution of a factor across real and modeled observations.
+
+	This is an experimental function, use at your own risk
+
+	Parameters
+	----------
+	m : larch.Model (self)
+	factorarray : ndarray [nCases, nAlts]
+	range : tuple
+	bins : int or str
+	headerlevel : int
+	header : str
+	short_header : str or None
+	"""
+	from matplotlib import pyplot as plt
+	if short_header is None:
+		short_header = header
+	def distance_validation_maker(mod):
+		pr = m.work.probability[:, :mod.nAlts()]
+		ch = m.data.choice.squeeze()
+		plt.clf()
+		plt.hist(distarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True,
+		         range=range)
+		plt.hist(distarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True,
+		         range=range)
+		return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
+	m.add_to_report()

@@ -52,7 +52,8 @@ class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
-	from .util.plotting import computed_factor_figure_with_derivative
+	from .util.plotting import computed_factor_figure_with_derivative, validation_distribution_figure
+	
 	
 	def dir(self):
 		for f in dir(self):
