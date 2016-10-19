@@ -119,8 +119,8 @@ To estimate the likelihood maximizing parameters, again we give:
 .. doctest::
 	:hide: 
 
-	>>> m.parameter('timeperiod=9', value=-0.0796, initial_value=0)
-	ModelParameter('timeperiod=9', value=-0.0796)
+	>>> m.parameter('timeperiod=9', value=-0.07962, initial_value=0)
+	ModelParameter('timeperiod=9', value=-0.07962)
 
 
 .. doctest::
