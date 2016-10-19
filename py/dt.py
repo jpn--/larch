@@ -1331,7 +1331,7 @@ class DT(Fountain):
 		
 		Parameters
 		----------
-		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'ITINERARY'}
+		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'AIR'}
 			Which example dataset should be used.
 		filename : str
 			A filename to open the HDF5 file (even in-memory files need a name).

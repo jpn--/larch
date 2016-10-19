@@ -342,7 +342,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		
 		Parameters
 		----------
-		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'ITINERARY'}
+		dataset : {'MTC', 'SWISSMETRO', 'MINI', 'AIR'}
 			Which example dataset should be used.
 		shared : bool
 			If True, the new copy of the database is opened with a shared cache,
