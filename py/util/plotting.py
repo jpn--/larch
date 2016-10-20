@@ -686,7 +686,7 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 
 
 
-def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None):
+def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False):
 	"""A figure showing the distribution of a factor across real and modeled observations.
 
 	This is an experimental function, use at your own risk
@@ -694,23 +694,40 @@ def validation_distribution_figure(m, factorarray, range, bins, headerlevel, hea
 	Parameters
 	----------
 	m : larch.Model (self)
-	factorarray : ndarray [nCases, nAlts]
+	factorarray : ndarray [nCases, nAlts], or str
+		The array of factors to validate on.  Or give the name of an idca variable.
 	range : tuple
 	bins : int or str
 	headerlevel : int
 	header : str
 	short_header : str or None
 	"""
+	if isinstance(factorarray,str):
+		factorarray = m.df.array_idca(factorarray).squeeze()
+	
 	from matplotlib import pyplot as plt
 	if short_header is None:
 		short_header = header
+
 	def distance_validation_maker(mod):
-		pr = m.work.probability[:, :mod.nAlts()]
-		ch = m.data.choice.squeeze()
+		if mod.data.weight is None:
+			pr = mod.work.probability[:, :mod.nAlts()]
+			ch = mod.data.choice.squeeze()
+		else:
+			pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
+			ch = mod.data.choice.squeeze() * mod.data.weight
 		plt.clf()
-		plt.hist(distarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True,
-		         range=range)
-		plt.hist(distarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True,
-		         range=range)
+		h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled')
+		h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed')
+		#plt.legend(handles=[h1[1],h2[-1]])
+		plt.legend()
 		return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
-	m.add_to_report()
+
+	if to_report:
+		m.add_to_report(distance_validation_maker)
+	if immediate:
+		distance_validation_maker(m)
+		plt.show()
+
+
+

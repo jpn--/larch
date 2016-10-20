@@ -76,6 +76,12 @@ def log_and_linear_function(basevar, baseparam=None):
 	f._dimlabel=basevar
 	return f
 
+def log_and_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
+	from ..roles import P, X
+	f = piecewise_linear_function(basevar, breaks, smoothness, baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
+	f._dimlabel=basevar
+	return f
+
 
 
 def _LinearFunction_evaluate(self, dataspace, model):

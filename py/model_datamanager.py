@@ -34,12 +34,16 @@ class DataManager:
 	def Avail(self):
 		return self._access("Avail")
 
+	@property
+	def Weight(self):
+		return self._access("Weight")
+
 	utilityco = UtilityCO
 	utilityca = UtilityCA
 	choice = Choice
 	avail = Avail
 	quantity = QuantityCA
-
+	weight = Weight
 
 	def needs(self):
 		return dictal(self._model.needs())
