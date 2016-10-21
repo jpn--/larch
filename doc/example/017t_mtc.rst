@@ -35,59 +35,83 @@ We don't need to do anything more that open the example DT file and we are ready
 
 	m = larch.Model(d)
 
-	m.utility.ca("totcost/hhinc",  "costbyincome")
+	m.utility.ca = (
+		+ X("totcost/hhinc") * P("costbyincome")
+		+ X("tottime * (altnum <= 4)") * P("motorized_time")
+		+ X("tottime * (altnum >= 5)") * P("nonmotorized_time")
+		+ X("ovtt/dist * (altnum <= 4)") * P("motorized_ovtbydist")
+	)
 
-	m.utility.ca("tottime * (altnum <= 4)", "motorized_time")
-	m.utility.ca("tottime * (altnum >= 5)", "nonmotorized_time")
-	m.utility.ca("ovtt/dist * (altnum <= 4)", "motorized_ovtbydist")
-
-The totcost/hhinc data is computed once as a new variable when loading the model data.
-The same for tottime filtered by motorized modes (we harness the convenient fact
-that all the motorized modes have identifying numbers 4 or less), and ovtt/dist.
+The "totcost/hhinc" data is computed once as a new variable when loading the model data.
+The same applies for tottime filtered by motorized modes (we harness the convenient fact
+that all the motorized modes have identifying numbers 4 or less), and "ovtt/dist".
 
 .. testcode::
 
-	m.utility.co("hhinc",4)
-	m.utility.co("hhinc",5)
-	m.utility.co("hhinc",6)
+	for a in [4,5,6]:
+		m.utility[a] += X("hhinc") * P("hhinc#{}".format(a))
 
 Since the model we want to create groups together DA, SR2 and SR3+ jointly as
 reference alternatives with respect to income, we can simply omit all of these alternatives
 from the block that applies to **hhinc**.
 
 For vehicles per worker, the preferred model include a joint parameter on SR2 and SR3+,
-but not including DA and not fixed at zero.  Here we might use an alias, which allows
+but not including DA and not fixed at zero.  Here we might use a shadow_parameter (also
+called an alias in some places), which allows
 us to specify one or more parameters that are simply a fixed proportion of another parameter.
-For example, we can say that vehbywrk_SR2 will be equal to 1.0 times vehbywrk_SR.
+For example, we can say that vehbywrk_SR2 will be equal to vehbywrk_SR.
 
 .. testcode::
 
-	m.parameter("vehbywrk_SR")
-	m.alias("vehbywrk_SR2","vehbywrk_SR",1.0)
-	m.alias("vehbywrk_SR3+","vehbywrk_SR",1.0)
+	m.shadow_parameter.vehbywrk_SR2 = m.parameter.vehbywrk_SR
+	m.shadow_parameter["vehbywrk_SR3+"] = m.parameter.vehbywrk_SR
+
+Note that since the name of the second parameter contains a special character, we can't
+just use the dotted version that we used for the first one (Python would complain about invalid syntax).
 
 Having defined these parameter aliases, we can then loop over all alternatives (skipping DA
-in the index-zero position) to add vehicles per worker to the utility function:
+in the index-zero position) to add vehicles per worker, etc. to the utility function:
 
 .. testcode::
 
 	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("vehbywrk",a,"vehbywrk_"+name)
+		m.utility[a] += (
+			+ X("vehbywrk") * P("vehbywrk_"+name)
+			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
+			+ X("wkempden") * P("wkempden_"+name)
+			+ P("ASC_"+name)
+		)
 
-We can also run similar loops over workplace in CBD, etc:
+We want to calculate the standard errors for the model too:
 
 .. testcode::
-
-	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("wkccbd+wknccbd",a,"wkcbd_"+name)
-
-	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("wkempden",a,"wkempden_"+name)
-
-	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("1",a,"ASC_"+name)
 
 	m.option.calc_std_errors = True
+
+
+We didn't explicitly define our parameters first, which is fine; Larch will
+find them in the utility functions (or elsewhere in more complex models).
+But they may be found in a weird order that is hard to read in reports.
+We can define an ordering scheme by assigning to the parameter_groups attribute,
+like this:
+
+.. testcode::
+
+	m.parameter_groups = (
+		"costbyincome",
+		".*time",
+		".*dist",
+		"hhinc.*",
+		"vehbywrk.*",
+		"wkcbd.*",
+		"wkempden.*",
+		"ASC.*",
+	)
+
+Each item in parameter_groups is a regular expression, which will be compared against
+all the parameter names.  Any names that match will be pulled out and put into the
+reporting order sequentially.  Thus if a parameter name would match more than one
+regex, it will appear in the ordering only for the first match.
 
 
 Having created this model, we can then estimate it:
@@ -107,7 +131,7 @@ Having created this model, we can then estimate it:
 	Model Parameter Estimates
 	----------------------------------------------------------------------------------------------------
 	Parameter          	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
-	costbyincome       	 0          	-0.0524213  	 0.0104042  	-5.03849    	 0          
+	costbyincome       	 0          	-0.0524213  	 0.0104042  	-5.03849    	 0
 	motorized_time     	 0          	-0.0201867  	 0.00381463 	-5.2919     	 0          
 	nonmotorized_time  	 0          	-0.045446   	 0.00576857 	-7.87821    	 0          
 	motorized_ovtbydist	 0          	-0.132869   	 0.0196429  	-6.76423    	 0          
@@ -132,7 +156,7 @@ Having created this model, we can then estimate it:
 	ASC_SR3+           	 0          	-3.43374    	 0.151864   	-22.6106    	 0          
 	ASC_Tran           	 0          	-0.684817   	 0.247816   	-2.7634     	 0          
 	ASC_Bike           	 0          	-1.62885    	 0.427399   	-3.81108    	 0          
-	ASC_Walk           	 0          	 0.0682096  	 0.348001   	 0.196004   	 0          
+	ASC_Walk           	 0          	 0.0682096  	 0.348001   	 0.196004   	 0
 	====================================================================================================
 	Model Estimation Statistics
 	----------------------------------------------------------------------------------------------------
