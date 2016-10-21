@@ -8,6 +8,7 @@ from ..util.xhtml import XHTML, XML_Builder
 import math
 import numpy
 from ..utilities import format_seconds
+from ..util.categorize import CategorizerLabel, Categorizer, Renamer
 
 
 TxtModelReporter_default_format = {
@@ -111,6 +112,13 @@ class TxtModelReporter():
 
 	# Model Parameter Estimates
 	def txt_param(self, **format): #report_PARAM():
+		if hasattr(self, 'parameter_groups'):
+			return self.txt_param_grouped(**format)
+		# Add style options if not given
+		for each_key, each_value in TxtModelReporter_default_format.items():
+			each_key = each_key.upper()
+			if each_key not in format:
+				format[each_key] = each_value
 		x = ["="]
 		footer = set()
 		x += ["Model Parameter Estimates"]
@@ -148,6 +156,70 @@ class TxtModelReporter():
 			if 'H' in footer:
 				x += ["H\tParameters held fixed at their initial values (not estimated)"]
 		return x
+
+
+	def txt_param_grouped(self, **format):
+		if hasattr(self, 'parameter_groups'):
+			if isinstance(self.parameter_groups, (tuple,list)):
+				groups = Categorizer(None, *(self.parameter_groups))
+			else:
+				groups = self.parameter_groups
+		else:
+			raise TypeError('model does not define parameter_groups')
+	
+		## USING GROUPS
+		namelist = self.parameter_names() + list(self.alias_names())
+		present_order = groups.match(namelist)[1]
+		
+		# Add style options if not given
+		for each_key, each_value in TxtModelReporter_default_format.items():
+			each_key = each_key.upper()
+			if each_key not in format:
+				format[each_key] = each_value
+		x = ["="]
+		footer = set()
+		x += ["Model Parameter Estimates"]
+		x += ["-"]
+		# Find max length parameter name
+		max_length_freedom_name = 9
+		for p in self.parameter_names():
+			max_length_freedom_name = max(max_length_freedom_name, len(p))
+		# Write headers
+		y  = "{0:<{1}}".format("Parameter",max_length_freedom_name)
+		y += "\t{:{PARAM_W}}".format("InitValue",**format)
+		y += "\t{:{PARAM_W}}".format("FinalValue",**format)
+		y += "\t{:{PARAM_W}}".format("StdError",**format)
+		y += "\t{:{PARAM_W}}".format("t-Stat",**format)
+		y += "\t{:{PARAM_W}}".format("NullValue",**format)
+		x.append(y)
+		for p in present_order.unpack():
+			if isinstance(p, CategorizerLabel):
+				continue # TODO: Put in category labels
+			try:
+				px = self[p]
+			except KeyError:
+				continue # TODO: Put in aliases
+			try:
+				tstat = (px.value - px.null_value) / px.std_err
+			except ZeroDivisionError:
+				tstat = float('nan')
+			y  = "{0:<{1}}".format(p,max_length_freedom_name)
+			y += "\t{:{PARAM}}".format(px.initial_value,**format)
+			y += "\t{:{PARAM}}".format(px.value,**format)
+			y += "\t{:{PARAM}}".format(px.std_err,**format)
+			y += "\t{:{PARAM}}".format(tstat,**format)
+			y += "\t{:{PARAM}}".format(px.null_value,**format)
+			if px.holdfast:
+				y += "\tH"
+				footer.add("H")
+			x.append(y)
+		if len(footer):
+			x += ["-"]
+			if 'H' in footer:
+				x += ["H\tParameters held fixed at their initial values (not estimated)"]
+		return x
+	
+
 
 	# Model Estimation Statistics
 	def txt_ll(self, **format): #def report_LL():
