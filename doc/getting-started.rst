@@ -16,6 +16,11 @@ version of Python 3.5 (64 bit). This comes with everything you'll need to get st
 and the Anaconda folks have helpfully curated a selection of useful tools for you,
 so you don't have the sort through the huge pile of junk that is available for Python.
 
+.. note::
+
+	Python has two versions (2 and 3) that are available and currently maintained.
+	Larch is currently compatible *only* with version 3.
+
 Once you've installed Anaconda, to get Larch you can simply run::
 
 	pip install larch
