@@ -195,6 +195,11 @@ that takes a bit of time and we're not interested in those results yet.
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> m.option.calc_std_errors = False
+
+
+	>>> m.parameter('timeperiod=9_1_west', value=-15, holdfast=True)
+	>>> m.parameter('timeperiod=9_2_west', value=-15, holdfast=True)
+
 	>>> r = m.maximize_loglike("SLSQP")
 	>>> print(r)
 	messages: Optimization terminated successfully per computed tolerance...

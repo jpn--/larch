@@ -109,8 +109,18 @@ def TemporaryDirectory(common=True):
 		_tempdir = t
 	return t
 
-def TemporaryCopy(sourcefile):
+def TemporaryCopy(sourcefile, spool=True):
 	tdir = TemporaryDirectory()
-	shutil.copy2(sourcefile,tdir)
-	return os.path.join(tdir, os.path.basename(sourcefile))
+	basename = os.path.basename(sourcefile)
+	if spool:
+		n = 0
+		vbasename = basename
+		while os.path.exists(os.path.join(tdir,vbasename)):
+			n += 1
+			vbasename = "{0}.{2}{1}".format( *os.path.splitext(basename), n)
+		shutil.copy2(sourcefile,os.path.join(tdir,vbasename))
+		return os.path.join(tdir,vbasename)
+	else:
+		shutil.copy2(sourcefile,tdir)
+		return os.path.join(tdir, os.path.basename(sourcefile))
 

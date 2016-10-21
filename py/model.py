@@ -2016,6 +2016,14 @@ class Model(Model2, ModelReporter):
 		p.initial_value = value
 		p.value = value
 
+	def reference_parameter(self, *args):
+		self.setUp(False, True)
+		for arg in args:
+			if arg in self.parameter_names():
+				self.parameter(arg, holdfast=1)
+				return
+		raise NameError('None of the potential reference parameters was found')
+
 
 class _AllInTheFamily():
 

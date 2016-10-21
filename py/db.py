@@ -243,7 +243,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		raise TypeError('only allows list or dict')
 
 	@staticmethod
-	def Copy(source, destination="file:larchdb?mode=memory"):
+	def Copy(source, destination="file:larchdb?mode=memory", shared=False):
 		'''Create a copy of a database and link it to a DB object.
 
 		It is often desirable to work on a copy of your data, instead of working
@@ -272,6 +272,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			An open connection to destination database.
 		
 		'''
+		if shared and destination=="file:larchdb?mode=memory":
+			destination="file:larchdb?mode=memory&cache=shared"
 		d = DB(destination)
 		d.copy_from_db(source)
 		d.source_filename = source
@@ -370,14 +372,14 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if not os.path.exists(TEST_DATA[dataset.upper()]):
 			raise LarchError("Example data set %s not installed at %s"%(dataset,TEST_DATA[dataset.upper()]))
 		if '.csv' in TEST_DATA[dataset.upper()]:
-			return DB.CSV_idca(TEST_DATA[dataset.upper()], tablename_co=None)
+			return DB.CSV_idca(TEST_DATA[dataset.upper()], tablename_co=None, shared=shared)
 		if shared:
 			return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory&cache=shared".format(dataset.lower()))
 		return DB.Copy(TEST_DATA[dataset.upper()], destination="file:{}?mode=memory".format(dataset.lower()))
 
 
 	@classmethod
-	def CSV_idco(cls, filename, caseid="_rowid_", choice=None, weight=None, tablename="data", savename=None, alts={}, safety=True):
+	def CSV_idco(cls, filename, caseid="_rowid_", choice=None, weight=None, tablename="data", savename=None, alts={}, safety=True, shared=False):
 		'''Creates a new larch DB based on an :ref:`idco` CSV data file.
 
 		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
@@ -413,7 +415,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 			An open connection to the database.
 		'''
 		eL = logging.getScriber("db")
-		d = cls(filename=savename)
+		d = cls(filename=savename, shared=shared)
 		d.queries = QuerySetSimpleCO(d)
 		heads = d.import_csv(filename, table=tablename)
 		if caseid not in heads: caseid = "_rowid_"
@@ -450,7 +452,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 
 	@classmethod
 	def CSV_idca(cls, filename, caseid=None, altid=None, choice=None, weight=None, avail=None, tablename="data",
-				 tablename_co="_co", savename=None, alts={}, safety=True, index=False):
+				 tablename_co="_co", savename=None, alts={}, safety=True, index=False, shared=False):
 		'''Creates a new larch DB based on an :ref:`idca` CSV data file.
 
 		The input data file should be an :ref:`idca` data file, with the first line containing the column headings.
@@ -512,7 +514,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if tablename_co is not None and tablename_co[0]=="_":
 			tablename_co = tablename+tablename_co
 		eL = logging.getScriber("db")
-		d = cls(filename=savename)
+		d = cls(filename=savename, shared=shared)
 		d.queries = QuerySetTwoTable(d)
 		if tablename_co:
 			heads = d.import_csv(filename, table="larch_temp_import_table", temp=True)

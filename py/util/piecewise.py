@@ -34,6 +34,7 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 
 
 def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
+	"""Smoothed piecewise linear function with marginal breakpoints."""
 	from ..roles import P, X
 	from ..core import LinearFunction
 	Xs = smoothed_piecewise_linear(basevar, breaks, smoothness)
@@ -47,6 +48,26 @@ def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	f._dimlabel=basevar
 	return f
 
+def gross_piecewise_linear_function(basevar, breaks, baseparam=None):
+	"""Smoothed piecewise linear function with marginal breakpoints."""
+	if baseparam is None:
+		baseparam = basevar
+	from ..roles import P, X
+	from ..core import LinearFunction
+	Xs = []
+	Ps = []
+	prev_b = 0
+	for b in breaks:
+		Xs += [X("fmin( {1}-{2} , fmax(0,{0}-{2}))".format(basevar, b, prev_b), descrip=basevar+" ({}-{})".format(prev_b,b))]
+		Ps += [P("{0}_{2}_{1}".format(baseparam, b, prev_b))]
+		prev_b = b
+	Xs += [X("fmax(0,{0}-{1})".format(basevar, prev_b), descrip=basevar+" ({}+)".format(prev_b))]
+	Ps += [P("{0}_{1}_up".format(baseparam, prev_b))]
+	f = LinearFunction()
+	for x,p in zip(Xs,Ps):
+		f += x * p
+	f._dimlabel=basevar
+	return f
 
 
 def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=False, scaling=1):
@@ -79,6 +100,12 @@ def log_and_linear_function(basevar, baseparam=None):
 def log_and_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	from ..roles import P, X
 	f = piecewise_linear_function(basevar, breaks, smoothness, baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
+	f._dimlabel=basevar
+	return f
+
+def log_and_gross_piecewise_linear_function(basevar, breaks, baseparam=None):
+	from ..roles import P, X
+	f = gross_piecewise_linear_function(basevar, breaks, baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
 	f._dimlabel=basevar
 	return f
 

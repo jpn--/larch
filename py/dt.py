@@ -2454,6 +2454,41 @@ class DT(Fountain):
 			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
 		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
 
+	def new_idco_from_keyed_array(self, name, arr_val, arr_index):
+		"""Create a new :ref:`idco` variable.
+		
+		Creating a new variable in the data might be convenient in some instances.
+		If you create an array externally, you can add it to the file easily with
+		this command.
+		
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idca` variable.
+		arr_val : ndarray
+			An array to add as the new variable _values_.  The 1st and only dimension must match the
+			number of alternatives.
+		arr_index : ndarray or pytable node
+			An array to add as the new variable _index_.  It must be 1 dimension and must match the
+			number of caseids.
+			
+		Raises
+		-----
+		tables.exceptions.NodeError
+			If a variable of the same name already exists.
+		"""
+		if self.h5caseids.shape[0] != arr_index.shape[0]:
+			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
+		newgrp = self.h5f.create_group(self.idco._v_node, name)
+		self.h5f.create_carray(newgrp, '_values_', obj=arr_val)
+		if isinstance(arr_index, numpy.ndarray):
+			self.h5f.create_carray(newgrp, '_index_', obj=arr_index)
+		elif isinstance(arr_index, _tb.array.Array):
+			self.h5f.create_hard_link(newgrp, '_index_', arr_index)
+		else:
+			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
+
+
 	def new_idca_from_keyed_array(self, name, arr_val, arr_index, transpose_values=False):
 		"""Create a new :ref:`idca` variable.
 		

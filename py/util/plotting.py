@@ -203,7 +203,10 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			mn, mx = 0.0, 1.0
 		else:
 			mn, mx = use_data_for_bins.min() + 0.0, use_data_for_bins.max() + 0.0
-		width = numpy.lib.function_base._hist_bin_selectors[bins](use_data_for_bins)
+		try:
+			width = numpy.lib.function_base._hist_bin_selectors[bins](use_data_for_bins)
+		except IndexError:
+			width = 1
 		try:
 			if width:
 				bins = int(numpy.ceil((mx - mn) / width))
