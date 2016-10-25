@@ -95,7 +95,9 @@ class TxtModelReporter():
 		for i in range(len(x)):
 			if x[i]=='-': x[i]='-'*longest
 			if x[i]=='=': x[i]='='*longest
-
+			if len(x[i])>4:
+				if x[i][:2]=='~~' and x[i][-2:]=='~~':
+					x[i] += '~'*(longest-len(x[i]))
 		s = "\n".join(x)
 		return format['LINEPREFIX'] + s.replace("\n", "\n"+format['LINEPREFIX'])
 
@@ -194,7 +196,9 @@ class TxtModelReporter():
 		x.append(y)
 		for p in present_order.unpack():
 			if isinstance(p, CategorizerLabel):
-				continue # TODO: Put in category labels
+				if p.label:
+					x.append("~~ {} ~~".format(p.label))
+				continue # Put in category label, move to next
 			try:
 				px = self[p]
 			except KeyError:

@@ -35,6 +35,8 @@ We don't need to do anything more that open the example DT file and we are ready
 
 	m = larch.Model(d)
 
+	from larch.roles import P, X
+
 	m.utility.ca = (
 		+ X("totcost/hhinc") * P("costbyincome")
 		+ X("tottime * (altnum <= 4)") * P("motorized_time")

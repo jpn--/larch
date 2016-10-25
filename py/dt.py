@@ -2272,7 +2272,7 @@ class DT(Fountain):
 		return self.new_idco_from_array(name, zer)
 
 
-	def new_idco_from_array(self, name, arr, *, overwrite=False):
+	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2287,6 +2287,8 @@ class DT(Fountain):
 			An array to add as the new variable.  Must have the correct shape.
 		overwrite : bool
 			Should the variable be overwritten if it already exists, default to False.
+		original_cource : str
+			Optionally, give the file name or other description of the source of the data in this array.
 			
 		Raises
 		-----
@@ -2337,6 +2339,8 @@ class DT(Fountain):
 				h5var[:] = arr
 			else:
 				raise
+		if original_source is not None:
+			self.idco[name]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
 	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None):
@@ -2368,9 +2372,49 @@ class DT(Fountain):
 		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
 
 
+	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None):
+		if isinstance(other, pandas.DataFrame):
+			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+		if not isinstance(other, DT):
+			raise TypeError("currently can merge only DT or pandas.DataFrame")
+		# From here, we have a DT
+		if original_source is None:
+			original_source = other.h5f.filename
+		if isinstance(self_on, str):
+			baseframe = self.dataframe_idco(self_on, screen="None")
+		else:
+			baseframe = self.dataframe_idco(*self_on, screen="None")
+		other_df = other.dataframe_idco(*other.idco._v_children_keys_including_extern, screen="None")
+		if other_on is None:
+			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_index=True, how='left', suffixes=('', dupe_suffix))
+		else:
+			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
+		for col in new_df.columns:
+			if col not in self.idco:
+				self.new_idco_from_array(col, arr=new_df[col].values)
+				if original_source is not None:
+					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
-
+	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None):
+		"""
+		Pluck values from an OMX file into new :ref:`idco` variables.
+		
+		Parameters
+		----------
+		other_omx : OMX or str
+			Either an OMX or a filename to an OMX file.
+		"""
+		from .omx import OMX
+		if isinstance(other_omx, str):
+			other_omx = OMX(other_omx)
+		if names is None:
+			names = other_omx.data._v_children
+		for matrix_page in names:
+			self.new_idco_from_array( matrix_page,
+								      other_omx[matrix_page][ self.idco[rowindexes][:], self.idco[colindexes][:] ],
+								      original_source=other_omx.filename  )
+	
 
 
 
@@ -3495,11 +3539,31 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 	dt_init_kwargs = {}
 	idco_kwargs = {}
 	idca_kwargs = {}
+	
+	if isinstance(caseids, DT):
+		_fname = caseids.h5f.filename
+		caseids.close()
+		caseids = _fname
+	if isinstance(alts, DT):
+		_fname = alts.h5f.filename
+		alts.close()
+		alts = _fname
+	
 	for kwd,kwarg in kwargs.items():
 		if re.match('idco[0-9]*$',kwd):
-			idco_kwargs[kwd] = kwarg
+			if isinstance(kwarg, DT):
+				_fname = kwarg.h5f.filename
+				kwarg.close()
+				idco_kwargs[kwd] = _fname
+			else:
+				idco_kwargs[kwd] = kwarg
 		elif re.match('idca[0-9]*$',kwd):
-			idca_kwargs[kwd] = kwarg
+			if isinstance(kwarg, DT):
+				_fname = kwarg.h5f.filename
+				kwarg.close()
+				idca_kwargs[kwd] = _fname
+			else:
+				idca_kwargs[kwd] = kwarg
 		else:
 			dt_init_kwargs[kwd] = kwarg
 
