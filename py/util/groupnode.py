@@ -238,9 +238,11 @@ class GroupNode():
 		if not anything_linked:
 			import warnings
 			from ..omx import OMX
-			omx_repr = repr(OMX(omx_filename))
-			warnings.warn('nothing was linked from file "{}"\n{}'.format(omx_filename, omx_repr), stacklevel=2)
-
+			try:
+				omx_repr = repr(OMX(omx_filename))
+				warnings.warn('nothing was linked from file "{}"\n{}'.format(omx_filename, omx_repr), stacklevel=2)
+			except OSError:
+				warnings.warn('nothing was linked from file "{}"'.format(omx_filename), stacklevel=2)
 
 
 

@@ -2375,6 +2375,8 @@ class DT(Fountain):
 	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None):
 		if isinstance(other, pandas.DataFrame):
 			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+		if isinstance(other, str) and os.path.exists(other):
+			return self.merge_into_idco_from_csv(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
 		if not isinstance(other, DT):
 			raise TypeError("currently can merge only DT or pandas.DataFrame")
 		# From here, we have a DT
@@ -2396,7 +2398,7 @@ class DT(Fountain):
 					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
-	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None):
+	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None, overwrite=False):
 		"""
 		Pluck values from an OMX file into new :ref:`idco` variables.
 		
@@ -2410,10 +2412,33 @@ class DT(Fountain):
 			other_omx = OMX(other_omx)
 		if names is None:
 			names = other_omx.data._v_children
+
+		if isinstance(rowindexes, str):
+			rowarr = self.idco[rowindexes][:]
+		elif isinstance(rowindexes, numpy.ndarray):
+			rowarr = rowindexes
+		elif isinstance(rowindexes, int) and isinstance(colindexes, (str,numpy.ndarray)):
+			rowarr = None # fix in a moment
+		else:
+			raise TypeError('rowindexes must be str, int, or ndarray')
+
+		if isinstance(colindexes, str):
+			colarr = self.idco[colindexes][:]
+		elif isinstance(colindexes, numpy.ndarray):
+			colarr = colindexes
+		elif isinstance(colindexes, int) and rowarr is not None:
+			colarr = numpy.full_like(rowarr, colindexes, dtype=int)
+		else:
+			raise TypeError('colindexes must be str, int, or ndarray')
+
+		if rowarr is None:
+			rowarr = numpy.full_like(clarr, rowindexes, dtype=int)
+
 		for matrix_page in names:
 			self.new_idco_from_array( matrix_page,
-								      other_omx[matrix_page][ self.idco[rowindexes][:], self.idco[colindexes][:] ],
-								      original_source=other_omx.filename  )
+								      other_omx[matrix_page][ rowarr, colarr ],
+								      original_source=other_omx.filename,
+									  overwrite=overwrite  )
 	
 
 
@@ -2475,7 +2500,7 @@ class DT(Fountain):
 		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
 		return self.new_idca_from_array(name, zer)
 
-	def new_idca_from_array(self, name, arr):
+	def new_idca_from_array(self, name, arr, overwrite=False):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2488,6 +2513,8 @@ class DT(Fountain):
 			The name of the new :ref:`idca` variable.
 		arr : ndarray
 			An array to add as the new variable.  Must have the correct shape.
+		overwrite : bool
+			Should the variable be overwritten if it already exists, default to False.
 			
 		Raises
 		-----
@@ -2496,6 +2523,8 @@ class DT(Fountain):
 		"""
 		if self.h5caseids.shape[0] != arr.shape[0]:
 			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
+		if overwrite:
+			self.delete_data(name)
 		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
 
 	def new_idco_from_keyed_array(self, name, arr_val, arr_index):
@@ -2570,19 +2599,26 @@ class DT(Fountain):
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 
 
-	def delete_data(self, name):
+	def delete_data(self, name, recursive=True):
 		"""Delete an existing :ref:`idca` or :ref:`idco` variable.
 		
+		Parameters
+		----------
+		name : str
+			The name of the data node to remove.
+		recursive : bool
+			If the data node is a group, recursively remove all sub-nodes.
+			
 		If there is a variable of the same name in both idca and idco
 		formats, this method will delete both.
 		
 		"""
 		try:
-			self.h5f.remove_node(self.idca._v_node, name)
+			self.h5f.remove_node(self.idca._v_node, name, recursive)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 		try:
-			self.h5f.remove_node(self.idco._v_node, name)
+			self.h5f.remove_node(self.idco._v_node, name, recursive)
 		except _tb.exceptions.NoSuchNodeError:
 			pass
 

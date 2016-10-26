@@ -13,6 +13,7 @@ from .util.attribute_dict import function_cache
 from .model_shadowmanager import shadow_manager, metaparameter_manager
 from .model_parametermanager import ParameterManager
 from .model_datamanager import DataManager, WorkspaceManager
+from .jupyter import JupyterManager
 from .util.statsummary import statistical_summary
 
 class MetaParameter():
@@ -187,6 +188,12 @@ class Model(Model2, ModelReporter):
 		return WorkspaceManager(self)
 
 	work = workspace
+
+	@property
+	def jupyter(self):
+		"""A :class:`JupyterManager` interface for the model."""
+		return JupyterManager(self)
+
 
 
 #	def metaparameter(self, name):

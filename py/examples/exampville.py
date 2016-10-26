@@ -4,25 +4,30 @@
 import numpy, scipy, larch, os
 import scipy.stats
 from numpy import log, exp, log1p
-from ..quicklog import flog
+flog = larch.logging.flogger(level=30, label="exampville")
 
 __all__ = ['builder',]
 
-def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
+def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=None, seed=0):
 
 	flog("EXAMPVILLE Builder (Year 1)")
+	flog("  simulating a survey of {} households",n_HH)
+	flog("  traveling among {} travel analysis zones",nZones)
 
-	if dir is None:
+	if directory is None:
 		from ..util.temporaryfile import TemporaryDirectory
-		dir = TemporaryDirectory()
+		directory = TemporaryDirectory()
 
 	if isinstance(transit_scope, tuple):
 		transit_scope = slice(*transit_scope)
 
-	# The randomizer seed is reset to zero so that we get consistent generated
+	if transit_scope.stop > nZones:
+		raise TypeError('transit_scope too large for nZones')
+
+	# The randomizer seed is reset to zero by default so that we get consistent generated
 	# Exampville survey results.  (High levels of randomness are not very important
 	# here because we just want to demonstrate the models.)
-	numpy.random.seed(0)
+	numpy.random.seed(seed)
 
 	## Zones
 	flog("Zones")
@@ -33,8 +38,20 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 
 	## Skims
 	flog("Skims")
-	distance = scipy.linalg.toeplitz( numpy.arange(nZones, dtype=float)+numpy.random.random(nZones) )
+	distance = numpy.zeros([nZones,nZones])
+	gaps = numpy.random.random(nZones)+1
+	for z in range(nZones):
+		for y in range(z,nZones):
+			distance[y,z] = distance[z,y] = gaps[z:y].sum()
+		distance[z,z] = numpy.random.random()
+
+
 	drivetime = (numpy.random.exponential(1,[nZones,nZones])+1) * distance
+	drivetime[drivetime<2.0] = 2.0
+	hov_time = drivetime.copy()
+	hov_time[:nZones//2,nZones//2:] -= numpy.random.random() * 1.5 + 0.5
+	hov_time[nZones//2:,:nZones//2] -= numpy.random.random() * 1.5 + 0.5
+
 	transit_range = transit_scope.stop-transit_scope.start
 	transittime = numpy.zeros([nZones,nZones])
 	transittime[transit_scope,transit_scope] = (numpy.random.random([transit_range,transit_range])+1) * distance[transit_scope,transit_scope]
@@ -93,6 +110,7 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 	TOURhhidx = numpy.zeros(n_TOUR, dtype=int)
 	TOURdtaz = numpy.zeros(n_TOUR, dtype=int)
 	TOURmode = numpy.zeros(n_TOUR, dtype=int)
+	TOURpurpose = numpy.zeros(n_TOUR, dtype=int)
 
 	# Work tours, then other tours
 	n2 = 0
@@ -101,6 +119,8 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 		TOURperidx[n2:(n2+PERntours[n1])] = PERidx[n1]
 		TOURhh[n2:(n2+PERntours[n1])] = PERhhid[n1]
 		TOURhhidx[n2:(n2+PERntours[n1])] = PERhhidx[n1]
+		TOURpurpose[n2:(n2+PERnworktours[n1])] = 1
+		TOURpurpose[(n2+PERnworktours[n1]):(n2+PERntours[n1])] = 2
 		n2 += PERntours[n1]
 
 
@@ -119,12 +139,12 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 
 	paramCOST = -0.312
 	paramTIME = -0.123
-	paramNMTIME = -0.234
-	paramDIST = -0.00246
+	paramNMTIME = -0.246
+	paramDIST = -0.00357
 	paramLNDIST = -0.00642
 
 	paramMUcar = 0.5
-	paramMUnon= 0.75
+	paramMUnon = 0.75
 	paramMUmot = 0.8
 	paramMUtop = 1.0
 
@@ -136,11 +156,12 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 #		flog('{}',Util[n,:,:])
 		otazi = HHhomezone[TOURhhidx[n]]-1
 		Util[n,:,mDA] += drivetime[otazi,:] * paramTIME + distance[otazi,:] * 0.20 * paramCOST
-		if HHincome[TOURhhidx[n]]<=75000:
+		if HHincome[TOURhhidx[n]]>=75000:
 			Util[n,:,mDA] += 1.0
+			Util[n,:,mTR] -= 0.5
 		Util[n,:,mSR] += drivetime[otazi,:] * paramTIME - 1.0 + distance[otazi,:] * 0.20 * 0.5 * paramCOST
-		Util[n,:,mWA] += 0 + distance[otazi,:] / 2.5 * 60 * paramNMTIME
-		Util[n,:,mBI] += -2.25 + distance[otazi,:] / 12 * 60 * paramNMTIME
+		Util[n,:,mWA] += 1.0 + distance[otazi,:] / 2.5 * 60 * paramNMTIME
+		Util[n,:,mBI] += -1.25 + distance[otazi,:] / 12 * 60 * paramNMTIME
 		Util[n,:,mTR] += -1.5 + transittime[otazi,:] * paramTIME + transitfare[otazi,:] * paramCOST
 		# Destination
 		Util[n,:,:] += distance[otazi,:,None] * paramDIST + log1p(distance[otazi,:,None]) * paramLNDIST
@@ -216,30 +237,31 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 	### Write Out Data
 	flog("Output")
 
-	if not os.path.exists(dir):
-		os.makedirs(dir)
+	if not os.path.exists(directory):
+		os.makedirs(directory)
 
-	omx = larch.OMX(os.path.join(dir,'exampville.omx'), mode='a')
+	omx = larch.OMX(os.path.join(directory,'exampville.omx'), mode='a')
 	omx.shape = (nZones,nZones)
 	omx.add_matrix('DIST', distance)
 	omx.add_matrix('AUTO_TIME', drivetime)
 	omx.add_matrix('RAIL_TIME', transittime)
 	omx.add_matrix('RAIL_FARE', transitfare)
+	omx.add_lookup('TAZID', numpy.arange(1,nZones+1, dtype=int))
 	omx.add_lookup('EMPLOYMENT', zone_employment)
 	omx.add_lookup('EMP_RETAIL', zone_retail)
 	omx.add_lookup('EMP_NONRETAIL', zone_nonretail)
-
-
 	omx.flush()
+	omx.close()
+	omx = larch.OMX(os.path.join(directory,'exampville.omx'), mode='r')
 
-	f_hh = larch.DT(os.path.join(dir,'exampville_hh.h5'), mode='a')
+	f_hh = larch.DT(os.path.join(directory,'exampville_hh.h5'), mode='a')
 	f_hh.new_caseids(HHid)
 	f_hh.new_idco_from_array('INCOME', HHincome)
 	f_hh.new_idco_from_array('HHSIZE', HHsize)
 	f_hh.new_idco_from_array('HOMETAZ', HHhomezone)
 	f_hh.flush()
 
-	f_pp = larch.DT(os.path.join(dir,'exampville_person.h5'), mode='a')
+	f_pp = larch.DT(os.path.join(directory,'exampville_person.h5'), mode='a')
 	f_pp.new_caseids(PERid)
 	f_pp.new_idco_from_array('HHID', PERhhid)
 	f_pp.new_idco_from_array('AGE', PERage)
@@ -249,15 +271,33 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, dir=None):
 	f_pp.new_idco_from_array('N_TOTALTOURS', PERntours)
 	f_pp.flush()
 
-	f_tour = larch.DT(os.path.join(dir,'exampville_tours.h5'), mode='a')
+	f_tour = larch.DT(os.path.join(directory,'exampville_tours.h5'), mode='a')
 	f_tour.new_caseids(TOURid)
 	f_tour.new_idco_from_array('HHID', TOURhh)
 	f_tour.new_idco_from_array('PERSONID', TOURper)
 	f_tour.new_idco_from_array('DTAZ', TOURdtaz)
 	f_tour.new_idco_from_array('TOURMODE', TOURmode)
+	f_tour.idco.TOURMODE.attrs.DICTIONARY = {
+		1:'DA',
+		2:'SR',
+		3:'Walk',
+		4:'Bike',
+		5:'Transit',
+	}
+	f_tour.new_idco_from_array('TOURPURP', TOURpurpose)
+	f_tour.idco.TOURPURP.attrs.DICTIONARY = {
+		1:'Work Tour',
+		2:'Non-Work Tour',
+	}
 	f_tour.flush()
 
-	return dir, omx, f_hh, f_pp, f_tour
+	flog("EXAMPVILLE Completed Builder (Year 1)")
+	flog("   SKIMS  : {}", omx.filename)
+	flog("   HHs    : {}", f_hh.source_filename)
+	flog("   Persons: {}", f_pp.source_filename)
+	flog("   Tours  : {}", f_tour.source_filename)
+
+	return directory, omx, f_hh, f_pp, f_tour
 
 
 

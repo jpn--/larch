@@ -29,6 +29,18 @@ from your command prompt (Windows) or the Terminal (Mac OS X). It's possible tha
 get some kind of a permission error when running this command.  If so, try it again
 as an admin (on windows, right click the command line program and choose "Run as Administrator").
 
+.. note::
+
+	If you create a new environment using the conda tool, you'll want to make sure you install
+	these packages before larch::
+
+		conda install numpy
+		conda install scipy
+		conda install pandas
+		conda install matplotlib
+		conda install numexpr
+		conda install pytables
+
 Some of the graphical tools used to draw nested and network logit graphs may also not
 be installed by default by Anaconda.  You don't need these tools to run any model in
 Larch, just to draw pretty figures depicting the nests.  If you want to install these,
