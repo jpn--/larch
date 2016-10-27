@@ -162,6 +162,16 @@ that takes a bit of time and we're not interested in those results yet.
 	>>> print(r)
 	messages: Optimization terminated successfully per computed tolerance...
 
+.. doctest::
+	:hide: 
+
+	>>> m.parameter('timeperiod=9', value=-0.00302, initial_value=0)
+	ModelParameter('timeperiod=9', value=-0.00302)
+
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
 	>>> print(m.report('txt', sigfigs=3))
 	====================================================================================================
 	Model Parameter Estimates

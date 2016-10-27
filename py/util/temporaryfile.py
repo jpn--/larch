@@ -117,7 +117,8 @@ def TemporaryCopy(sourcefile, spool=True):
 		vbasename = basename
 		while os.path.exists(os.path.join(tdir,vbasename)):
 			n += 1
-			vbasename = "{0}.{2}{1}".format( *os.path.splitext(basename), n)
+			basename_ = os.path.splitext(basename)
+			vbasename = "{0}.{2}{1}".format( basename_[0], basename_[1], n)
 		shutil.copy2(sourcefile,os.path.join(tdir,vbasename))
 		return os.path.join(tdir,vbasename)
 	else:

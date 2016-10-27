@@ -8,7 +8,17 @@ flog = larch.logging.flogger(level=30, label="exampville")
 
 __all__ = ['builder',]
 
+_cache_1 = None
+
+
+
+
+
 def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=None, seed=0):
+
+	global _cache_1
+	if _cache_1 is not None:
+		return _cache_1
 
 	flog("EXAMPVILLE Builder (Year 1)")
 	flog("  simulating a survey of {} households",n_HH)
@@ -297,10 +307,12 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	flog("   Persons: {}", f_pp.source_filename)
 	flog("   Tours  : {}", f_tour.source_filename)
 
+	_cache_1 = (directory, omx, f_hh, f_pp, f_tour)
+
 	return directory, omx, f_hh, f_pp, f_tour
 
 
 
 
-builder = build_year_1
+builder = builder_1 = build_year_1
 

@@ -127,6 +127,12 @@ img.htmlrendering
 	
 }
 
+div[class^='highlight'] pre {
+    line-height: 1.2;
+}
+
+
+
 
 /*
 tt {

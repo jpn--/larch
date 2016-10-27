@@ -2924,10 +2924,10 @@ class DT(Fountain):
 		
 		## Header
 		if not show_filenames:
-			a = ART(columns=('VAR','DTYPE')+extra_cols, n_head_rows=1, title="DT Content", short_title=None)
+			a = ART(columns=('VAR','DTYPE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content")
 			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype")
 		else:
-			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="DT Content", short_title=None)
+			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content")
 			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype", FILE="Source File")
 		if extra:
 			a.set_lastrow_loc('SHAPE', "Shape")
