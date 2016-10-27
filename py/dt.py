@@ -2373,11 +2373,11 @@ class DT(Fountain):
 		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
 
 
-	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None):
+	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, **kwargs):
 		if isinstance(other, pandas.DataFrame):
 			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
 		if isinstance(other, str) and os.path.exists(other):
-			return self.merge_into_idco_from_csv(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+			return self.merge_into_idco_from_csv(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, **kwargs)
 		if not isinstance(other, DT):
 			raise TypeError("currently can merge only DT or pandas.DataFrame")
 		# From here, we have a DT
