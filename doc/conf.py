@@ -81,7 +81,7 @@ extensions = [
 	'sphinx.ext.doctest',
 	'sphinx.ext.graphviz',
 	'nbsphinx',
-	'IPython.sphinxext.ipython_console_highlighting',
+#	'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 numpydoc_show_class_members = False
