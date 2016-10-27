@@ -3,4 +3,3 @@ numpydoc>=0.5
 sphinxcontrib-napoleon>=0.2.9
 sphinx>=1.4
 nbsphinx
-ipykernel
