@@ -2344,7 +2344,7 @@ class DT(Fountain):
 			self.idco[name]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
-	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None):
+	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None):
 		if isinstance(self_on, str):
 			baseframe = self.dataframe_idco(self_on, screen="None")
 		else:
@@ -2352,11 +2352,12 @@ class DT(Fountain):
 		new_df = pandas.merge(baseframe, other, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		for col in new_df.columns:
 			if col not in self.idco:
-				self.new_idco_from_array(col, arr=new_df[col].values)
-				if original_source is not None:
-					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+				if names is not None and col in names:
+					self.new_idco_from_array(col, arr=new_df[col].values)
+					if original_source is not None:
+						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 
-	def merge_into_idco_from_csv(self, filepath_or_buffer, self_on, other_on, dupe_suffix="_copy", original_source=None, **kwargs):
+	def merge_into_idco_from_csv(self, filepath_or_buffer, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:] == '.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, **kwargs)
 			original_source = filepath_or_buffer
@@ -2370,14 +2371,14 @@ class DT(Fountain):
 		else:
 			df = pandas.read_csv(filepath_or_buffer, **kwargs)
 			original_source = filepath_or_buffer
-		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names)
 
 
-	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, **kwargs):
+	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
 		if isinstance(other, pandas.DataFrame):
-			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source)
+			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names)
 		if isinstance(other, str) and os.path.exists(other):
-			return self.merge_into_idco_from_csv(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, **kwargs)
+			return self.merge_into_idco_from_csv(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names, **kwargs)
 		if not isinstance(other, DT):
 			raise TypeError("currently can merge only DT or pandas.DataFrame")
 		# From here, we have a DT
@@ -2394,9 +2395,10 @@ class DT(Fountain):
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		for col in new_df.columns:
 			if col not in self.idco:
-				self.new_idco_from_array(col, arr=new_df[col].values)
-				if original_source is not None:
-					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+				if names is not None and col in names:
+					self.new_idco_from_array(col, arr=new_df[col].values)
+					if original_source is not None:
+						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
 	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None, overwrite=False):

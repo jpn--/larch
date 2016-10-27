@@ -146,9 +146,14 @@ class GroupNode():
 			return True
 		extern_n = 1
 		while "_extern_{}".format(extern_n) in self._v_node._v_children:
-			extern_deref = _pytables_link_dereference(self._v_node._v_children["_extern_{}".format(extern_n)])
-			if arg in _get_children_including_extern(extern_deref):
-				return True
+			try:
+				extern_deref = _pytables_link_dereference(self._v_node._v_children["_extern_{}".format(extern_n)])
+			except OSError as err:
+				import warnings
+				warnings.warn(str(err))
+			else:
+				if arg in _get_children_including_extern(extern_deref):
+					return True
 			extern_n += 1
 		return False
 	def __repr__(self, *arg, **kwarg):
