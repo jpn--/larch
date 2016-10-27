@@ -84,6 +84,9 @@ extensions = [
 #	'IPython.sphinxext.ipython_console_highlighting',
 ]
 
+if not on_rtd:
+	extensions.append('IPython.sphinxext.ipython_console_highlighting')
+
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
 numpydoc_class_members_toctree = False
