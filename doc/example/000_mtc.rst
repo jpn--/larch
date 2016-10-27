@@ -109,3 +109,8 @@ In either case, the set of all possible alternatives is deduced automatically fr
 in the ``altid`` column.  However, the alterative names are not very descriptive when
 they are set automatically, as the csv data file does not have enough information to
 tell what each alternative code number means.
+
+
+
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`

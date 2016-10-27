@@ -236,7 +236,8 @@ class DT(Fountain):
 			pass
 
 	def __repr__(self):
-		return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
+		#return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
+		return self._representation()
 
 	@property
 	def h5caseids(self):
@@ -2966,6 +2967,97 @@ class DT(Fountain):
 				a.addrow_seq_of_strings([i,])
 		return a
 
+
+	def _representation(self):
+		result = [ "<larch.DT> {0}".format(self.source_filename, self.source_filemode),  ]
+		if self.source_filemode=='r':
+			result.append("  > file is opened read-only <")
+		elif self.source_filemode in ('a','w'):
+			result.append("  > file is opened for read/write <")
+		
+		try:
+			nC = self.nCases()
+			nAC = self.nAllCases()
+		except _tb.exceptions.NoSuchNodeError:
+			result.append("  nCases: <missing>")
+		else:
+			if nC==nAC:
+				result.append("  nCases: {}".format(nC))
+			else:
+				result.append("  nCases: {} (only {} are active)".format(nAC,nC))
+
+		try:
+			nA = self.nAlts()
+		except _tb.exceptions.NoSuchNodeError:
+			result.append("  nAlts: <missing>")
+		else:
+			result.append("  nAlts: {}".format(nA))
+		v_names = []
+		v_dtypes = []
+		v_ftypes = []
+		v_filenames = []
+		for i in sorted(self.variables_co()):
+			v_names.append(str(i))
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)):
+				if '_values_' in self.idco[i]:
+					v_dtypes.append(str(_pytables_link_dereference(self.idco[i]._values_).dtype))
+				elif 'stack' in _pytables_link_dereference(self.idco[i])._v_attrs:
+					v_dtypes.append('<stack>')
+				else:
+					v_dtypes.append('¿group?')
+			else:
+				v_dtypes.append(str(_pytables_link_dereference(self.idco[i]).dtype))
+			v_ftypes.append('idco')
+			if isinstance(self.idco[i], (_tb.Group,GroupNode)) and '_values_' in self.idco[i]:
+				v_filenames.append(self.idco[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idco[i]._v_file.filename)
+		for i in sorted(self.variables_ca()):
+			v_names.append(str(i))
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)):
+				try:
+					v_dtypes.append(str(_pytables_link_dereference(self.idca[i]._values_).dtype))
+				except _tb.exceptions.NoSuchNodeError:
+					if 'stack' in _pytables_link_dereference(self.idca[i]._v_attrs):
+						v_dtypes.append('<stack>')
+					else:
+						raise
+			else:
+				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
+			v_ftypes.append('idca')
+			if isinstance(self.idca[i], (_tb.Group,GroupNode)) and '_values_' in self.idca[i]:
+				v_filenames.append(self.idca[i]._values_._v_file.filename)
+			else:
+				v_filenames.append(self.idca[i]._v_file.filename)
+		section = None
+		max_v_name_len = 8
+		for v_name in v_names:
+			if len(v_name) > max_v_name_len:
+				max_v_name_len = len(v_name)
+		max_v_dtype_len = 7
+		for v_dtype in v_dtypes:
+			if len(v_dtype) > max_v_dtype_len:
+				max_v_dtype_len = len(v_dtype)
+		selfname = self.h5f.filename
+		show_filenames = False
+		for v_filename in v_filenames:
+			if v_filename!=selfname:
+				show_filenames = True
+				break
+		## Content
+		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
+			if v_ftype != section:
+				result.append("  {}:".format(v_ftype))
+				section = v_ftype
+			if not show_filenames:
+				result.append("    {1:{0}s}\t{3:{2}s}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype))
+			else:
+				result.append("    {1:{0}s}\t{3:{2}s}\t{4}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype, v_filename))
+		if len(self.expr):
+			result.append("Expr:")
+			for i in self.expr:
+				result.append("    {}".format(i))
+		return "\n |".join(result)
 
 
 	def info_to_log(self, log=print):

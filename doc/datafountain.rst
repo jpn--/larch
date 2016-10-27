@@ -13,15 +13,21 @@ which defines a handful of important interface functions.
 	the :class:`DT` and :class:`DB` classes are derived.
 
 
-	.. automethod:: Fountain.alternative_names
+	.. py:method:: Fountain.alternative_names
 
-	.. automethod:: Fountain.alternative_codes
+		A vector of the alternative names used by this Fountain.
 
-	.. automethod:: Fountain.alternative_name
+	.. py:method:: Fountain.alternative_codes
 
-	.. automethod:: Fountain.alternative_code
+		A vector of the alternative codes (64 bit integers) used by this Fountain.
 
-		
+	.. py:method:: Fountain.alternative_name
+
+		Given an alternative code, return the name.
+
+	.. py:method:: Fountain.alternative_code
+
+		Given an alternative name, return the code.
 
 	.. py:method:: Fountain.array_idco(*vars, dtype='float64')
 
@@ -62,4 +68,10 @@ which defines a handful of important interface functions.
 
 	.. automethod:: Fountain.dataframe_idca
 
+
+
+
+
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
 

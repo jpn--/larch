@@ -53,15 +53,15 @@ larch_versions = {
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
-rst_epilog = """
-.. |larch_build| replace:: %(larch)s, released %(build)s
-.. |apsw_version| replace:: %(apsw)s
-.. |sqlite_version| replace:: %(sqlite)s
-.. |numpy_version| replace:: %(numpy)s
-.. |scipy_version| replace:: %(scipy)s
-.. |idca| replace:: :ref:`idca <idca>`
-.. |idco| replace:: :ref:`idco <idco>`
-""" % larch_versions
+#rst_epilog = """
+#.. |larch_build| replace:: %(larch)s, released %(build)s
+#.. |apsw_version| replace:: %(apsw)s
+#.. |sqlite_version| replace:: %(sqlite)s
+#.. |numpy_version| replace:: %(numpy)s
+#.. |scipy_version| replace:: %(scipy)s
+#.. |idca| replace:: :ref:`idca <idca>`
+#.. |idco| replace:: :ref:`idco <idco>`
+#""" % larch_versions
 
 # -- General configuration -----------------------------------------------------
 
@@ -80,6 +80,8 @@ extensions = [
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.doctest',
 	'sphinx.ext.graphviz',
+	'nbsphinx',
+	'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 numpydoc_show_class_members = False
@@ -124,7 +126,7 @@ release = version
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '**ipynb_checkpoints']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None

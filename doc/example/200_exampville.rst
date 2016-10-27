@@ -45,7 +45,7 @@ We can take a quick peek at what is inside each file:
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> omx
-	<larch.OMX> ...
+	<larch.OMX> .../exampville.omx
 	 |  shape:(15, 15)
 	 |  data:
 	 |    AUTO_TIME (float64)
@@ -58,4 +58,37 @@ We can take a quick peek at what is inside each file:
 	 |    EMP_RETAIL    (15 float64)
 	 |    TAZID         (15 int64)
 
+	>>> f_hh
+	<larch.DT> .../exampville_hh.h5
+	 |  > file is opened for read/write <
+	 |  nCases: 2000
+	 |  nAlts: <missing>
+	 |  idco:
+	 |    HHSIZE  	int64  
+	 |    HOMETAZ 	int64  
+	 |    INCOME  	int64  
 
+	>>> f_pp
+	<larch.DT> .../exampville_person.h5
+	 |  > file is opened for read/write <
+	 |  nCases: 3462
+	 |  nAlts: <missing>
+	 |  idco:
+	 |    AGE         	int64  
+	 |    HHID        	int64  
+	 |    N_OTHERTOURS	int64  
+	 |    N_TOTALTOURS	int64  
+	 |    N_WORKTOURS 	int64  
+	 |    WORKS       	int64  
+
+	>>> f_tour
+	<larch.DT> .../exampville_tours.h5
+	 |  > file is opened for read/write <
+	 |  nCases: 6123
+	 |  nAlts: <missing>
+	 |  idco:
+	 |    DTAZ    	int64  
+	 |    HHID    	int64  
+	 |    PERSONID	int64  
+	 |    TOURMODE	int64  
+	 |    TOURPURP	int64  

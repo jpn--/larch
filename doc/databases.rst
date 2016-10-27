@@ -114,4 +114,6 @@ between a :class:`DB` and a :class:`Model` is governed by a special attribute of
 
 
 
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
 

@@ -182,3 +182,8 @@ In either case, the set of all possible alternatives is deduced automatically fr
 in the ``altid`` column.  You will note that, while the sample case we have peeked at in the beginning
 of the raw data file has 67 alternatives, there are other observations in the file with alternatives numbering
 up to 127.
+
+
+
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`

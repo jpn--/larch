@@ -232,3 +232,9 @@ that contains trips of many purposes).
 
 
 
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
+
+
+
+

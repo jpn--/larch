@@ -506,6 +506,8 @@ class _param_divide(_param_math_binaryop):
 		return x
 	def __repr__(self):
 		return "({} / {})".format(repr(self._left),repr(self._right))
+	def __str__(self):
+		return "({} / {})".format(repr(self._left),repr(self._right))
 
 
 class _param_negate(ParameterRef):

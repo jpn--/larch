@@ -127,3 +127,5 @@ Now we're ready to use our data.
 
 
 
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
