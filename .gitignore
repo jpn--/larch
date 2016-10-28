@@ -21,7 +21,7 @@ wheelhouse*
 Icon
 *.graffle
 src/larch.py
-*.bat
+
 local/*
 
 src/sandbox/sandbox.py

@@ -177,7 +177,13 @@ class GroupNode():
 		if ":/" not in link:
 			raise TypeError("must give link as filename:/path/to/node")
 		linkfile, linknode = link.split(":/")
-		linkfile = os.path.relpath(linkfile, os.path.dirname( self._v_file.filename ))
+		
+		# change to a relative path only if the common path has something more than
+		# the root dir; sharing only the root dir is a hint that one of the files
+		# is a temp file, and the relative path may not be a valid path.
+		if len(os.path.commonpath([linkfile, os.path.dirname( self._v_file.filename )])) > 2:
+			linkfile = os.path.relpath(linkfile, os.path.dirname( self._v_file.filename ))
+
 		link = linkfile+":/"+linknode
 		extern_n = 1
 		while '_extern_{}'.format(extern_n) in self._v_node:

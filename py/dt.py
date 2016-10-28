@@ -2352,7 +2352,7 @@ class DT(Fountain):
 		new_df = pandas.merge(baseframe, other, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		for col in new_df.columns:
 			if col not in self.idco:
-				if names is not None and col in names:
+				if names is None or col in names:
 					self.new_idco_from_array(col, arr=new_df[col].values)
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
@@ -2395,7 +2395,7 @@ class DT(Fountain):
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		for col in new_df.columns:
 			if col not in self.idco:
-				if names is not None and col in names:
+				if names is None or col in names:
 					self.new_idco_from_array(col, arr=new_df[col].values)
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
@@ -3051,7 +3051,7 @@ class DT(Fountain):
 			if v_ftype != section:
 				result.append("  {}:".format(v_ftype))
 				section = v_ftype
-			if not show_filenames:
+			if not show_filenames or v_filename==self.source_filename:
 				result.append("    {1:{0}s}\t{3:{2}s}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype))
 			else:
 				result.append("    {1:{0}s}\t{3:{2}s}\t{4}".format(max_v_name_len, v_name, max_v_dtype_len, v_dtype, v_filename))
