@@ -88,7 +88,7 @@ class AbstractReportTables():
 			for a in self.arts:
 				div << a.xml(table_attrib=table_attrib)
 		else:
-			div.h2(self.title, anchor=self.short_title or self.title)
+			div.h2(self.title, anchor=self.short_title or self.title, attrib={'class':'larch_art'})
 			for a in self.arts:
 				div << a.xml(table_attrib=table_attrib, headlevel=headlevel+1)
 		return div.close()
@@ -469,7 +469,7 @@ class AbstractReportTable():
 				pass
 			else:
 				div = XML_Builder("div")
-				div.hn(headlevel, self.title, anchor=self.short_title or self.title)
+				div.hn(headlevel, self.title, anchor=self.short_title or self.title, attrib={'class':'larch_art'})
 				div << table
 				return div.close()
 		return table

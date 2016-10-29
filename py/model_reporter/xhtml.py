@@ -287,7 +287,7 @@ class XhtmlModelReporter():
 			x.data( "\ntd.code {border:0;}" )
 			x.data( "\ntable.highlighttable {border:0; }" )
 			x.end('style')
-			x.h2("Source Code", anchor=1)
+			x.h2("Source Code", anchor=1, attrib={'class':'larch_art_xhtml'})
 			#x.start('script')
 			#x.data("""$(function() { $( "#source_code_accordion" ).accordion({heightStyle: "content",collapsible: true});});""")
 			#x.end('script')
@@ -327,7 +327,7 @@ class XhtmlModelReporter():
 			if key.upper()!=key: format[key.upper()] = format[key]
 		# build table
 		x = XML_Builder("div", {'class':"computed_factors"})
-		x.h2("Computed Factors", anchor=1)
+		x.h2("Computed Factors", anchor=1, attrib={'class':'larch_art_xhtml'})
 		def write_factor_row(p):
 				if not isinstance(p,category) and not (p in self) and not ignore_na:
 					raise LarchError("factor contains bad components")
@@ -862,7 +862,7 @@ class XhtmlModelReporter():
 	
 		es = self._get_estimation_statistics()
 		x = XML_Builder("div", {'class':"statistics"})
-		x.h2("Model Estimation Statistics", anchor="Estimation Statistics")
+		x.h2("Model Estimation Statistics", anchor="Estimation Statistics", attrib={'class':'larch_art_xhtml'})
 
 		x.table
 		x.tr
@@ -1109,7 +1109,7 @@ class XhtmlModelReporter():
 	
 		x = XML_Builder("div", {'class':"data_statistics"})
 		if self.Data("Choice") is None: return x.close
-		x.h2("Choice and Availability", anchor=1)
+		x.h2("Choice and Availability", anchor=1, attrib={'class':'larch_art_xhtml'})
 
 		# get weights
 		if bool((self.Data("Weight")!=1).any()):
@@ -1237,7 +1237,7 @@ class XhtmlModelReporter():
 	
 		x = XML_Builder("div", {'class':"utilitydata_statistics"})
 		if self.Data("Choice") is None: return x.close
-		x.h2("Data Statistics", anchor=1)
+		x.h2("Data Statistics", anchor=1, attrib={'class':'larch_art_xhtml'})
 
 
 		datapools = {
@@ -1280,9 +1280,9 @@ class XhtmlModelReporter():
 
 				#show_descrip = 'data_co' in self.descriptions
 				if bool((self.Data("Weight")!=1).any()):
-					x.h3(datapools[datapool][0]+" idCO Data (weighted)", anchor=1)
+					x.h3(datapools[datapool][0]+" idCO Data (weighted)", anchor=1, attrib={'class':'larch_art_xhtml'})
 				else:
-					x.h3(datapools[datapool][0]+" idCO Data", anchor=1)
+					x.h3(datapools[datapool][0]+" idCO Data", anchor=1, attrib={'class':'larch_art_xhtml'})
 
 				#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
 				ss = self.stats_utility_co(datapool)
@@ -1377,7 +1377,7 @@ class XhtmlModelReporter():
 			
 
 			if len(self.alternative_codes()) >= 0:
-				x.h3("Utility idCA Data", anchor=1)
+				x.h3("Utility idCA Data", anchor=1, attrib={'class':'larch_art_xhtml'})
 				table_cache, footnotes = self.stats_utility_ca(by_alt=False)
 				names = self.needs()['UtilityCA'].get_variables()
 				
@@ -1433,7 +1433,7 @@ class XhtmlModelReporter():
 				x.end('table')
 
 			if len(self.alternative_codes()) < 30:
-				x.h3("Utility idCA Data by Alternative", anchor=1)
+				x.h3("Utility idCA Data by Alternative", anchor=1, attrib={'class':'larch_art_xhtml'})
 				table_cache, footnotes = self.stats_utility_ca()
 				names = self.needs()['UtilityCA'].get_variables()
 				
@@ -1520,14 +1520,14 @@ class XhtmlModelReporter():
 			return s
 		
 		x = XML_Builder("div", {'class':"utilityspec"})
-		x.h2("Utility Specification", anchor=1)
+		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		
 		for resolved in (True, False):
 			if resolved:
 				headline = "Resolved Utility"
 			else:
 				headline = "Formulaic Utility"
-			x.h3(headline, anchor=1)
+			x.h3(headline, anchor=1, attrib={'class':'larch_art_xhtml'})
 			
 			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
@@ -1720,14 +1720,14 @@ class XhtmlModelReporter():
 			return s
 		
 		x = XML_Builder("div", {'class':"utilityspec"})
-		x.h2("Utility Specification", anchor=1)
+		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		
 		for resolved in (True, False):
 			if resolved:
 				headline = "Resolved Utility"
 			else:
 				headline = "Formulaic Utility"
-			x.h3(headline, anchor=1)
+			x.h3(headline, anchor=1, attrib={'class':'larch_art_xhtml'})
 			
 			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
@@ -1879,7 +1879,7 @@ class XhtmlModelReporter():
 		if 'PARAM' not in format: format['PARAM'] = '0.4g'
 		
 		x = XML_Builder("div", {'class':"probabilityspec"})
-		x.h2("Probability Specification", anchor=1)
+		x.h2("Probability Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		G = self.networkx_digraph()
 
 		for resolved in (True, False):
@@ -1887,7 +1887,7 @@ class XhtmlModelReporter():
 				headline = "Resolved Probability"
 			else:
 				headline = "Formulaic Probability"
-			x.h3(headline, anchor=1)
+			x.h3(headline, anchor=1, attrib={'class':'larch_art_xhtml'})
 		
 			with x.block("table", {'class':'floatinghead'}):
 				with x.thead_:
@@ -1961,7 +1961,7 @@ class XhtmlModelReporter():
 	def xhtml_notes(self,**format):
 		x = XML_Builder("div", {'class':"notes"})
 		if not hasattr(self,"notes"): return x.close()
-		x.h2("Notes", anchor=1)
+		x.h2("Notes", anchor=1, attrib={'class':'larch_art_xhtml'})
 		for note in self.notes:
 			x.start("p", {'class':'note'})
 			x.data(note)
@@ -1977,7 +1977,7 @@ class XhtmlModelReporter():
 	def xhtml_possible_overspecification(self,**format):
 		x = XML_Builder("div", {'class':"overspecification"})
 		if not hasattr(self,"possible_overspecification") or len(self.possible_overspecification)==0: return x.close()
-		x.h2("Possible Overspecification", anchor=1)
+		x.h2("Possible Overspecification", anchor=1, attrib={'class':'larch_art_xhtml'})
 
 		x.start('table', {'class':'floatinghead'})
 		x.start('thead')
@@ -2013,7 +2013,7 @@ class XhtmlModelReporter():
 
 	def xhtml_options(self,**format):
 		x = XML_Builder("div", {'class':"options"})
-		x.h2("Options", anchor=1)
+		x.h2("Options", anchor=1, attrib={'class':'larch_art_xhtml'})
 		with x.block("table"):
 			for opt in sorted(dir(self.option)):
 				if opt[0]=="_" or opt in ('this','thisown','copy'):
@@ -2027,7 +2027,7 @@ class XhtmlModelReporter():
 		x = XML_Builder("div", {'class':"query_info"})
 		if not isinstance(self.df,DB):
 			return x.close()
-		x.h2("Query Info", anchor=1)
+		x.h2("Query Info", anchor=1, attrib={'class':'larch_art_xhtml'})
 		with x.block("table"):
 			try:
 				q = self.df.queries.idco_query
@@ -2093,7 +2093,7 @@ class XhtmlModelReporter():
 			if 'GRAPHHEIGHT' not in format: format['GRAPHHEIGHT'] = 4
 		if 'UNAVAILABLE' not in format: format['UNAVAILABLE'] = True
 		x = XML_Builder("div", {'class':"nesting_graph"})
-		x.h2("Nesting Structure", anchor=1)
+		x.h2("Nesting Structure", anchor=1, attrib={'class':'larch_art_xhtml'})
 		from io import BytesIO
 		import xml.etree.ElementTree as ET
 		ET.register_namespace("","http://www.w3.org/2000/svg")
@@ -2156,7 +2156,7 @@ class XhtmlModelReporter():
 
 	def xhtml_nesting_tree_textonly(self,**format):
 		x = XML_Builder("div", {'class':"nesting_text"})
-		x.h2("Nesting Definition", anchor=1)
+		x.h2("Nesting Definition", anchor=1, attrib={'class':'larch_art_xhtml'})
 		with x.block("table"):
 			with x.block("tr"):
 				x.th("Root")
@@ -2187,9 +2187,9 @@ class XhtmlModelReporter():
 			return None
 		x = XML_Builder("div", {'class':"estimation_result"})
 		if r.success:
-			x.h2("Estimation Result", anchor=1)
+			x.h2("Estimation Result", anchor=1, attrib={'class':'larch_art_xhtml'})
 		else:
-			x.h2("Estimation Result", anchor=1, attrib={'style':"color:red"})
+			x.h2("Estimation Result", anchor=1, attrib={'style':"color:red", 'class':'larch_art_xhtml'})
 		x.start('pre')
 		x.data(repr(r))
 		x.end('pre')

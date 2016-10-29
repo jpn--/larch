@@ -1,3 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700|Roboto+Slab:200,500);
+
+
+
 .fa-home::before, .icon-home::before {
 	display: inline-block !important;
     width: 16px !important;
@@ -150,3 +154,74 @@ tt.descclassname {
 	font-size: 90%;
 }
 */
+
+
+
+
+
+.error_report {color:red; font-family:monospace;}
+
+
+table {border-collapse:collapse;}
+
+table, th, td {
+	border: 1px solid #999999;
+	font-family:"Roboto Mono", monospace;
+	font-size:90%;
+	font-weight:400;
+	}
+	
+th, td { padding:2px; }
+
+td.parameter_category {
+	font-family:"Roboto", monospace;
+	font-weight:500;
+	background-color: #f4f4f4; 
+	font-style: italic;
+	}
+
+th {
+	font-family:"Roboto", monospace;
+	font-weight:700;
+	}
+	
+.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+
+a.parameter_reference {font-style: italic; text-decoration: none}
+
+.strut2 {min-width:1in}
+
+.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+
+.raw_log pre {
+	font-family:"Roboto Mono", monospace;
+	font-weight:300;
+	font-size:70%;
+	}
+
+caption {
+    caption-side: bottom;
+	text-align: left;
+	font-family: Roboto;
+	font-style: italic;
+	font-weight: 100;
+	font-size: 80%;
+}
+
+h2.larch_art, h2.larch_art_xhtml {
+	font-weight: 500;
+	font-family: "Roboto Slab", "ff-tisa-web-pro", "Georgia", Arial, sans-serif;
+	margin-bottom: 3px;
+}
+
+h3.larch_art, h3.larch_art_xhtml {
+	font-weight: 200;
+	font-family: "Roboto Slab", "ff-tisa-web-pro", "Georgia", Arial, sans-serif;
+	margin-bottom: 3px;
+	margin-top: 15px;
+}
+
+h2.larch_art + h3.larch_art, h2.larch_art_xhtml + h3.larch_art_xhtml,
+h2.larch_art + a.toc + h3.larch_art, h2.larch_art_xhtml + a.toc + h3.larch_art_xhtml {
+	margin-top: 5px;
+}

@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 =====================================
-300: Exampville Simulated Data
+200: Exampville Simulated Data
 =====================================
 
 .. testsetup:: *

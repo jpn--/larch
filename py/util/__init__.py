@@ -6,6 +6,7 @@ from .attribute_dict import dicta, quickdot
 
 from . import categorize
 from . import piecewise
+from . import dirs
 
 allowed_math = ('log', 'exp', 'log1p', 'logaddexp')
 

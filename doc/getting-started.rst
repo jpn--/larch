@@ -31,8 +31,22 @@ as an admin (on windows, right click the command line program and choose "Run as
 
 .. note::
 
-	If you create a new environment using the conda tool, you'll want to make sure you install
-	these packages before larch::
+	You might want to create a new conda environment for running larch.  One thing you can try
+	is installing a pre-defined environment from the anaconda cloud.  This method isn't
+	well tested across macOS and Windows platforms yet, but if it works for you it'll be
+	the easist way to get everything (or most of everything) that you might need.  Just go to
+	your command line or the anaconda prompt and enter::
+
+		conda env create jpn/taiga
+
+	(The Taiga is the northern boreal forest environment where larch can be found.)  After you create
+	the environment, activate it::
+
+		[macOS] source activate taiga
+		[Windows] activate taiga
+
+	If instead you create a new blank environment yourself using the conda tool, you'll want to make sure you install
+	at least these packages before larch::
 
 		conda install numpy
 		conda install scipy
