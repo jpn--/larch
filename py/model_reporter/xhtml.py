@@ -278,7 +278,7 @@ class XhtmlModelReporter():
 			from pygments import highlight
 			from pygments.lexers import Python3Lexer
 			from pygments.formatters import HtmlFormatter
-			x = XML_Builder("div", {'class':"source_code_section"})
+			x = XML_Builder("div", {'class':"source_code_section larch_art"})
 			x.start('style')
 			x.data( HtmlFormatter(linenos=True).get_style_defs('.highlight') )
 			x.data( "\ndiv.source_code_section h3 {font-style:italic;font-weight: normal;}" )
@@ -326,7 +326,7 @@ class XhtmlModelReporter():
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
 		# build table
-		x = XML_Builder("div", {'class':"computed_factors"})
+		x = XML_Builder("div", {'class':"computed_factors larch_art"})
 		x.h2("Computed Factors", anchor=1, attrib={'class':'larch_art_xhtml'})
 		def write_factor_row(p):
 				if not isinstance(p,category) and not (p in self) and not ignore_na:
@@ -861,7 +861,7 @@ class XhtmlModelReporter():
 				total_weight = None
 	
 		es = self._get_estimation_statistics()
-		x = XML_Builder("div", {'class':"statistics"})
+		x = XML_Builder("div", {'class':"statistics larch_art"})
 		x.h2("Model Estimation Statistics", anchor="Estimation Statistics", attrib={'class':'larch_art_xhtml'})
 
 		x.table
@@ -1107,7 +1107,7 @@ class XhtmlModelReporter():
 		if 'LL' not in format: format['LL'] = '0.2f'
 		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
 	
-		x = XML_Builder("div", {'class':"data_statistics"})
+		x = XML_Builder("div", {'class':"data_statistics larch_art"})
 		if self.Data("Choice") is None: return x.close
 		x.h2("Choice and Availability", anchor=1, attrib={'class':'larch_art_xhtml'})
 
@@ -1235,7 +1235,7 @@ class XhtmlModelReporter():
 		if 'LL' not in format: format['LL'] = '0.2f'
 		if 'RHOSQ' not in format: format['RHOSQ'] = '0.3f'
 	
-		x = XML_Builder("div", {'class':"utilitydata_statistics"})
+		x = XML_Builder("div", {'class':"utilitydata_statistics larch_art"})
 		if self.Data("Choice") is None: return x.close
 		x.h2("Data Statistics", anchor=1, attrib={'class':'larch_art_xhtml'})
 
@@ -1519,7 +1519,7 @@ class XhtmlModelReporter():
 			if " in " in s.casefold(): return "({})".format(s)
 			return s
 		
-		x = XML_Builder("div", {'class':"utilityspec"})
+		x = XML_Builder("div", {'class':"utilityspec larch_art"})
 		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		
 		for resolved in (True, False):
@@ -1719,7 +1719,7 @@ class XhtmlModelReporter():
 			if " in " in s.casefold(): return "({})".format(s)
 			return s
 		
-		x = XML_Builder("div", {'class':"utilityspec"})
+		x = XML_Builder("div", {'class':"utilityspec larch_art"})
 		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		
 		for resolved in (True, False):
@@ -1878,7 +1878,7 @@ class XhtmlModelReporter():
 			if key.upper()!=key: format[key.upper()] = format[key]
 		if 'PARAM' not in format: format['PARAM'] = '0.4g'
 		
-		x = XML_Builder("div", {'class':"probabilityspec"})
+		x = XML_Builder("div", {'class':"probabilityspec larch_art"})
 		x.h2("Probability Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		G = self.networkx_digraph()
 
@@ -1959,7 +1959,7 @@ class XhtmlModelReporter():
 
 
 	def xhtml_notes(self,**format):
-		x = XML_Builder("div", {'class':"notes"})
+		x = XML_Builder("div", {'class':"notes larch_art"})
 		if not hasattr(self,"notes"): return x.close()
 		x.h2("Notes", anchor=1, attrib={'class':'larch_art_xhtml'})
 		for note in self.notes:
@@ -1975,7 +1975,7 @@ class XhtmlModelReporter():
 
 
 	def xhtml_possible_overspecification(self,**format):
-		x = XML_Builder("div", {'class':"overspecification"})
+		x = XML_Builder("div", {'class':"overspecification larch_art"})
 		if not hasattr(self,"possible_overspecification") or len(self.possible_overspecification)==0: return x.close()
 		x.h2("Possible Overspecification", anchor=1, attrib={'class':'larch_art_xhtml'})
 
@@ -2012,7 +2012,7 @@ class XhtmlModelReporter():
 
 
 	def xhtml_options(self,**format):
-		x = XML_Builder("div", {'class':"options"})
+		x = XML_Builder("div", {'class':"options larch_art"})
 		x.h2("Options", anchor=1, attrib={'class':'larch_art_xhtml'})
 		with x.block("table"):
 			for opt in sorted(dir(self.option)):
@@ -2024,7 +2024,7 @@ class XhtmlModelReporter():
 		return x.close()
 
 	def xhtml_queryinfo(self,**format):
-		x = XML_Builder("div", {'class':"query_info"})
+		x = XML_Builder("div", {'class':"query_info larch_art"})
 		if not isinstance(self.df,DB):
 			return x.close()
 		x.h2("Query Info", anchor=1, attrib={'class':'larch_art_xhtml'})
@@ -2092,7 +2092,7 @@ class XhtmlModelReporter():
 			if 'GRAPHWIDTH' not in format: format['GRAPHWIDTH'] = 6.5
 			if 'GRAPHHEIGHT' not in format: format['GRAPHHEIGHT'] = 4
 		if 'UNAVAILABLE' not in format: format['UNAVAILABLE'] = True
-		x = XML_Builder("div", {'class':"nesting_graph"})
+		x = XML_Builder("div", {'class':"nesting_graph larch_art"})
 		x.h2("Nesting Structure", anchor=1, attrib={'class':'larch_art_xhtml'})
 		from io import BytesIO
 		import xml.etree.ElementTree as ET
@@ -2155,7 +2155,7 @@ class XhtmlModelReporter():
 		return xx
 
 	def xhtml_nesting_tree_textonly(self,**format):
-		x = XML_Builder("div", {'class':"nesting_text"})
+		x = XML_Builder("div", {'class':"nesting_text larch_art"})
 		x.h2("Nesting Definition", anchor=1, attrib={'class':'larch_art_xhtml'})
 		with x.block("table"):
 			with x.block("tr"):
@@ -2185,7 +2185,7 @@ class XhtmlModelReporter():
 			r = self.maximize_loglike_results
 		except AttributeError:
 			return None
-		x = XML_Builder("div", {'class':"estimation_result"})
+		x = XML_Builder("div", {'class':"estimation_result larch_art"})
 		if r.success:
 			x.h2("Estimation Result", anchor=1, attrib={'class':'larch_art_xhtml'})
 		else:

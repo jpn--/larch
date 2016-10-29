@@ -83,7 +83,7 @@ class AbstractReportTables():
 		raise TypeError
 
 	def __xml__(self, table_attrib=None, headlevel=2):
-		div = XML_Builder("div")
+		div = XML_Builder("div", attrib={'class':'larch_art'})
 		if self.title is None:
 			for a in self.arts:
 				div << a.xml(table_attrib=table_attrib)
@@ -466,9 +466,11 @@ class AbstractReportTable():
 			try:
 				headlevel = int(headlevel)
 			except:
-				pass
+				div = XML_Builder("div", attrib={'class':'larch_art'})
+				div << table
+				return div.close()
 			else:
-				div = XML_Builder("div")
+				div = XML_Builder("div", attrib={'class':'larch_art'})
 				div.hn(headlevel, self.title, anchor=self.short_title or self.title, attrib={'class':'larch_art'})
 				div << table
 				return div.close()
