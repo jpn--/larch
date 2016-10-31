@@ -96,6 +96,13 @@ Although not just data by itself:
 	NotImplementedError: Wrong number or type of arguments...
 
 
+Several pre-selected multiple-term functions are available in `larch.util.piecewise`.
+
+.. autofunction:: larch.util.piecewise.log_and_linear_function
+
+
+
+
 
 
 .. py:class:: LinearBundle

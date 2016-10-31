@@ -275,6 +275,10 @@ namespace elm {
 				if container is None:
 					container = '{}'
 				r += LinearComponent(data=i.data, param=container.format(param), multiplier=i.multiplier)
+			try:
+				r._dimlabel = self._dimlabel
+			except AttributeError:
+				pass
 			return r
 
 		def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
@@ -303,6 +307,10 @@ namespace elm {
 				if container is None:
 					container = '{}'
 				r += LinearComponent(data=container.format(data), param=i.param, multiplier=i.multiplier)
+			try:
+				r._dimlabel = self._dimlabel
+			except AttributeError:
+				pass
 			return r
 			
 		def __eq__(self, other):

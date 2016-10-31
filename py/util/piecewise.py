@@ -92,7 +92,40 @@ def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=Fals
 
 
 def log_and_linear_function(basevar, baseparam=None):
+	"""
+	Create a two term LinearFunction for log plus linear.
+	
+	The resulting function looks like :math:`{ \\beta }_1 X + { \\beta }_2 \log ( 1 + X )`.
+	
+	Parameters
+	----------
+	basevar : str
+		The variable to use as the base variable.
+	baseparam : str or None
+		The base parameter name.  If not given, `basevar` is used.
+
+	Returns
+	-------
+	LinearFunction
+		The two term linear function.
+
+	Examples
+	--------
+	>>> f = log_and_linear_function('Aaa')
+	>>> print(f)
+	<LinearFunction with length 2>
+	  = P('Aaa') * X('Aaa')
+	  + P('logAaaP1') * X('log1p(Aaa)')
+	>>> f2 = log_and_linear_function('Aaa','Bbb')
+	>>> f2
+	<LinearFunction with length 2>
+	  = LinearComponent(data='Aaa', param='Bbb')
+	  + LinearComponent(data='log1p(Aaa)', param='logBbbP1')
+	
+	"""
 	from ..roles import P, X
+	if baseparam is None:
+		baseparam = basevar
 	f = P(baseparam)*X(basevar) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
 	f._dimlabel=basevar
 	return f
