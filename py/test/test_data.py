@@ -414,4 +414,12 @@ class TestData1(unittest.TestCase):
 		self.assertAlmostEqual(  -5324.7532567301105 , m.loglike(x,cached=False))
 		self.assertEqual(  6758 , m.nCases())
 
-
+	def test_piecewise_function_reformat(self):
+		from ..roles import P,X
+		q = P.Spam*X.spam + P.Eggs*X.eggs
+		q_p1 = P.Spam_1*X.spam + P.Eggs_1*X.eggs
+		q_d1 = P.Spam*X.spam_1 + P.Eggs*X.eggs_1
+		self.assertEqual (q, q.reformat_param())
+		self.assertEqual (q_p1, q.reformat_param('{}_1'))
+		self.assertEqual (q_d1, q.reformat_data('{}_1'))
+		self.assertEqual (P.Spam*X.spam + P.Spams*X.eggs, q.reformat_param(pattern='Egg', repl='Spam'))

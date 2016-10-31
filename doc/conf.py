@@ -80,9 +80,12 @@ extensions = [
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.doctest',
 	'sphinx.ext.graphviz',
-	'nbsphinx',
+#	'nbsphinx',
 #	'IPython.sphinxext.ipython_console_highlighting',
 ]
+
+if on_rtd:
+	extensions.append('nbsphinx')
 
 if not on_rtd:
 	extensions.append('IPython.sphinxext.ipython_console_highlighting')

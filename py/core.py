@@ -2848,6 +2848,19 @@ class LinearComponent(object):
     def __iter__(self):
     	return iter(LinearFunction() + self)
 
+    def __eq__(self, other):
+    	if isinstance(other, LinearFunction) and len(other)==1:
+    		other = other[0]
+    	if not isinstance(other, LinearComponent):
+    		return False
+    	if self.param != other.param:
+    		return False
+    	if self.data != other.data:
+    		return False
+    	if self.multiplier != other.multiplier:
+    		return False
+    	return True
+
 
 LinearComponent_swigregister = _core.LinearComponent_swigregister
 LinearComponent_swigregister(LinearComponent)
@@ -2966,6 +2979,72 @@ class LinearFunction(ComponentVector):
     				return True
     		return False
     	raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+
+    def reformat_param(self, container=None, pattern=None, repl=None, **kwargs):
+    	"""
+    	Transform all the parameters in the LinearFunction.
+
+    	Parameters
+    	----------
+    	container : str
+    		A format string, into which the previous parameters are formatted.
+    		Use this to append things to the parameter names.
+    	pattern : str
+    	repl : str
+    		Passed to `re.sub` with each existing parameter as the base string
+    		to be searched.
+    	"""
+    	import re
+    	r = LinearFunction()
+    	for i in self:
+    		if pattern is None:
+    			param = i.param
+    		else:
+    			if repl is None:
+    				raise TypeError('must give repl with pattern')
+    			param = re.sub(pattern, repl, i.param, **kwargs)
+    		if container is None:
+    			container = '{}'
+    		r += LinearComponent(data=i.data, param=container.format(param), multiplier=i.multiplier)
+    	return r
+
+    def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
+    	"""
+    	Transform all the data in the LinearFunction.
+
+    	Parameters
+    	----------
+    	container : str
+    		A format string, into which the previous data strings are formatted.
+    		Use this to apply common global transforms to the data.
+    	pattern : str
+    	repl : str
+    		Passed to `re.sub` with each existing data string as the base string
+    		to be searched.
+    	"""
+    	import re
+    	r = LinearFunction()
+    	for i in self:
+    		if pattern is None:
+    			data = i.data
+    		else:
+    			if repl is None:
+    				raise TypeError('must give repl with pattern')
+    			data = re.sub(pattern, repl, i.data, **kwargs)
+    		if container is None:
+    			container = '{}'
+    		r += LinearComponent(data=container.format(data), param=i.param, multiplier=i.multiplier)
+    	return r
+
+    def __eq__(self, other):
+    	if not isinstance(other, LinearFunction):
+    		return False
+    	if len(self) != len(other):
+    		return False
+    	for i,j in zip(self, other):
+    		if i != j: return False
+    	return True
+
 
     __swig_destroy__ = _core.delete_LinearFunction
     __del__ = lambda self: None
