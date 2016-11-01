@@ -38,7 +38,7 @@ def smoothed_piecewise_logarithmic(basevar, breaks, smoothness=1):
 
 	from ..roles import X
 	outs = [
-		X(basevar),
+		X(basevar_l),
 	]
 	
 	if isinstance(smoothness, (int,float)):
@@ -57,7 +57,7 @@ def smoothed_piecewise_logarithmic(basevar, breaks, smoothness=1):
 		return X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(var, loc, smoo), descrip=var+" (@{}~{})".format(loc_label,smoo))
 
 	outs += [
-		maker(basevar, loc, s, loclabel) for loc,s,loclabel in zip(breaks_l, smoothness, breaks)
+		maker(basevar_l, loc, s, loclabel) for loc,s,loclabel in zip(breaks_l, smoothness, breaks)
 	]
 	return outs
 
