@@ -71,8 +71,54 @@ def gross_piecewise_linear_function(basevar, breaks, baseparam=None):
 
 
 def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=False, scaling=1):
+	"""
+	Create a polynomial LinearFunction.
+	
+	The resulting function looks like :math:`{ \\beta }_1 X^{n_1} + { \\beta }_2 X^{n_2} + { \\beta }_3 X^{n_3} + ...`.
+	
+	Note that the function is polynomial only in the data, and the powers are given explicitly.
+	The resulting function is still a linear-in-parameters function of data (and transformed data),
+	and not actually a non-linear function of parameters that will be estimated.
+	
+	Parameters
+	----------
+	basevar : str
+		The variable to use as the base variable.
+	powers : iterable of numbers
+		The powers of the polynomial.  Can be integer or floats.  Explicitly include 1 
+		to include a linear component.
+	baseparam : str or None
+		The base parameter name.  If not given, `basevar` is used.
+	invertpower : bool
+		If True, the inverse (i.e., 1/N) of the `powers` is used.
+	scaling : float
+		A scaling term.  The `basevar` is divided by this term before the power is taken,
+		which can help prevent high power terms becoming unreasonably large.
+
+	Returns
+	-------
+	LinearFunction
+		The polynomial linear function.
+
+	Examples
+	--------
+	>>> from larch.util.piecewise import polynomial_linear_function
+	>>> f = polynomial_linear_function('Aaa', [1,2,3])
+	>>> print(f)
+	  = P('Aaa') * X('Aaa')
+	  + P('(Aaa)**2') * X('Aaa_2')
+	  + P('(Aaa)**3') * X('Aaa_3')
+	>>> f2 = polynomial_linear_function('Aaa', [1,2,3], invertpower=True)
+	>>> print(f2)
+	  = P('Aaa') * X('Aaa')
+	  + P('(Aaa)**(1/2)') * X('Aaa_2')
+	  + P('(Aaa)**(1/3)') * X('Aaa_3')
+	
+	"""
 	from ..roles import P, X
 	from ..core import LinearFunction
+	if baseparam is None:
+		baseparam = basevar
 	if invertpower:
 		if scaling==1:
 			Xs = [ X(basevar) if pwr==1 else X("({})**(1/{})".format(basevar,pwr)) for pwr in powers ]
@@ -111,16 +157,15 @@ def log_and_linear_function(basevar, baseparam=None):
 
 	Examples
 	--------
+	>>> from larch.util.piecewise import log_and_linear_function
 	>>> f = log_and_linear_function('Aaa')
 	>>> print(f)
-	<LinearFunction with length 2>
 	  = P('Aaa') * X('Aaa')
 	  + P('logAaaP1') * X('log1p(Aaa)')
 	>>> f2 = log_and_linear_function('Aaa','Bbb')
-	>>> f2
-	<LinearFunction with length 2>
-	  = LinearComponent(data='Aaa', param='Bbb')
-	  + LinearComponent(data='log1p(Aaa)', param='logBbbP1')
+	>>> print(f2)
+	  = P('Bbb') * X('Aaa')
+	  + P('logBbbP1') * X('log1p(Aaa)')
 	
 	"""
 	from ..roles import P, X
