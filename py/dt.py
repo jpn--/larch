@@ -197,22 +197,22 @@ class DT(Fountain):
 		self.source_filename = filename
 		self._h5larchpath = ipath
 		try:
-			self.h5top = self.h5f._getOrCreatePath(ipath, True)
+			self.h5top = self.h5f._get_or_create_path(ipath, True)
 			#self.h5top._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the larch root node at '{}' does not exist and cannot be created".format(ipath))
 		try:
-			self.h5idca = self.h5f._getOrCreatePath(ipath+'/idca', True)
+			self.h5idca = self.h5f._get_or_create_path(ipath+'/idca', True)
 			#self.h5idca._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/idca' does not exist and cannot be created".format(ipath))
 		try:
-			self.h5idco = self.h5f._getOrCreatePath(ipath+'/idco', True)
+			self.h5idco = self.h5f._get_or_create_path(ipath+'/idco', True)
 			#self.h5idco._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/idco' does not exist and cannot be created".format(ipath))
 		try:
-			self.h5alts = self.h5f._getOrCreatePath(ipath+'/alts', True)
+			self.h5alts = self.h5f._get_or_create_path(ipath+'/alts', True)
 			#self.h5alts._v_filters = _tb.Filters(complib=complib, complevel=complevel)
 		except _tb.exceptions.FileModeError:
 			raise HDF5BadFormat("the node at '{}/alts' does not exist and cannot be created".format(ipath))
@@ -1381,7 +1381,7 @@ class DT(Fountain):
 		if dataset.upper() in example_h5files:
 
 			h5f_orig = _tb.open_file(example_h5files[dataset.upper()])
-			h5f_orig.get_node('/larch')._f_copy_children(h5f._getOrCreatePath("/larch", True), overwrite=True, recursive=True, createparents=False)
+			h5f_orig.get_node('/larch')._f_copy_children(h5f._get_or_create_path("/larch", True), overwrite=True, recursive=True, createparents=False)
 			self = DT(filename, 'w', h5f=h5f)
 		else:
 
@@ -1409,10 +1409,10 @@ class DT(Fountain):
 				else:
 					descrip_ca[i] = _tb.Float64Col(pos=len(descrip_ca), dflt=numpy.nan)
 
-			larchnode = h5f._getOrCreatePath("/larch", True)
-			larchidca = h5f._getOrCreatePath("/larch/idca", True)
-			larchidco = h5f._getOrCreatePath("/larch/idco", True)
-			larchalts = h5f._getOrCreatePath("/larch/alts", True)
+			larchnode = h5f._get_or_create_path("/larch", True)
+			larchidca = h5f._get_or_create_path("/larch/idca", True)
+			larchidco = h5f._get_or_create_path("/larch/idco", True)
+			larchalts = h5f._get_or_create_path("/larch/alts", True)
 
 			for var_ca in vars_ca:
 				if var_ca not in ('caseid', 'casenum', 'IDCASE' ):

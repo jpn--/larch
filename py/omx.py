@@ -39,11 +39,11 @@ class OMX(_tb.file.File):
 		else:
 			super().__init__(*arg, filters=_tb.Filters(complib=complib, complevel=complevel), **kwarg)
 		try:
-			self.data = self._getOrCreatePath("/data", True)
+			self.data = self._get_or_create_path("/data", True)
 		except _tb.exceptions.FileModeError:
 			raise OMXBadFormat("the '/data' node does not exist and cannot be created")
 		try:
-			self.lookup = self._getOrCreatePath("/lookup", True)
+			self.lookup = self._get_or_create_path("/lookup", True)
 		except _tb.exceptions.FileModeError:
 			raise OMXBadFormat("the '/lookup' node does not exist and cannot be created")
 		if 'OMX_VERSION' not in self.root._v_attrs:
