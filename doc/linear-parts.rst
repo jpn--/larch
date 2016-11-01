@@ -100,6 +100,9 @@ Several pre-selected multiple-term functions are available in `larch.util.piecew
 
 .. autofunction:: larch.util.piecewise.log_and_linear_function
 
+.. autofunction:: larch.util.piecewise.polynomial_linear_function
+
+.. autofunction:: larch.util.piecewise.gross_piecewise_linear_function
 
 
 

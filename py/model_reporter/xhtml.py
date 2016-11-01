@@ -12,6 +12,7 @@ import pandas
 import sys, traceback
 import inspect
 import os
+from xml.etree import ElementTree
 
 XhtmlModelReporter_default_format = {
 	'LL'         :  '0.2f',
@@ -232,6 +233,101 @@ class XhtmlModelReporter():
 			return x
 		elif filename is None:
 			return x.dump()
+
+
+
+
+	class XmlManager:
+		"""Manages xml reporting for a :class:`Model`.	"""
+
+		def __init__(self, model, return_xhtml=False):
+			self._model = model
+			self._return_xhtml = return_xhtml
+
+		def __getitem__(self, key):
+			candidate = None
+			if isinstance(key,str):
+				try:
+					art_obj = getattr(self._model, "art_{}".format(key.casefold()))
+					candidate = lambda *arg,**kwarg: art_obj(*arg,**kwarg).__xml__()
+				except AttributeError:
+					pass
+				try:
+					candidate = getattr(self._model, "xhtml_{}".format(key.casefold()))
+				except AttributeError:
+					pass
+				try:
+					candidate = self._model._user_defined_xhtml[key.casefold()]
+				except (AttributeError, KeyError):
+					pass
+				if candidate is None:
+					raise TypeError("xml builder for '{}' not found".format(key.casefold()))
+			else:
+				raise TypeError("invalid item")
+			if self._return_xhtml:
+				return lambda *arg,**kwarg: ElementTree.tostring(candidate(*arg,**kwarg), encoding="utf8", method="html")
+			return candidate
+
+		def __repr__(self):
+			return '<XmlManager>'
+
+		def __str__(self):
+			return repr(self)
+
+		def __getattr__(self, key):
+			if key=='_model':
+				return self.__dict__['_model']
+			return self.__getitem__(key)
+	
+		def __dir__(self):
+			candidates = set()
+			for j in dir(self._model):
+				if len(j)>4 and j[:4]=='art_':
+					candidates.add(j[4:])
+				if len(j)>6 and j[:6]=='xhtml_':
+					candidates.add(j[6:])
+			try:
+				self._model._user_defined_xhtml
+			except AttributeError:
+				pass
+			else:
+				candidates.update(self._user_defined_xhtml.keys())
+			return candidates
+			
+
+	@property
+	def xml(self):
+		"""A :class:`XmlManager` interface for the model."""
+		return XhtmlModelReporter.XmlManager(self)
+
+	@property
+	def html(self):
+		"""A :class:`XmlManager` interface for the model that returns html."""
+		return XhtmlModelReporter.XmlManager(self, True)
+
+
+	def new_xhtml_section(self, caller, name):
+		"""
+		Create a new xhtml report for this model.
+		
+		Parameters
+		----------
+		caller : callable
+			A function to generate the report.  When this functions is called, the first positional argument will be
+			the model instance (as for a class method). Additional positional and keyword arguments are allowed. The
+			caller must also accept (and possibly ignore) any keyword argument, via the double-star keyword form.
+			The caller should return a :class:`larch.util.xhtml.Elem` object, typically a <div>.
+		name : str
+			The name for this report.  It must not conflict with an existing name.
+		"""
+		from .model import Model
+		if 'xhtml_{}'.format(name) in dir(Model):
+			raise TypeError( "the name '{}' conflicts with a regular method in larch.Model".format(name) )
+		try:
+			self._user_defined_xhtml
+		except AttributeError:
+			self._user_defined_xhtml = {}
+	
 
 
 	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):

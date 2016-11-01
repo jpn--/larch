@@ -48,24 +48,115 @@ def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	f._dimlabel=basevar
 	return f
 
+def gross_smooth_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
+	"""Smoothed piecewise linear function with gross breakpoints."""
+	from ..roles import P, X
+	from ..core import LinearFunction
+	Xs = smoothed_piecewise_linear(basevar, breaks, smoothness)
+	if baseparam is None:
+		baseparam = basevar
+	Ps = []
+	prev_b = None
+	for b in breaks:
+		if prev_b is None:
+			Ps += [ P("{}_up_to_{}".format(baseparam,b)) ]
+		else:
+			Ps += [ P("{}_{}_{}".format(baseparam,prev_b,b)) ]
+		prev_b = b
+	Ps += [P("{}_{}_and_up".format(baseparam,prev_b))]
+	f = LinearFunction()
+	n = len(Xs)-1
+	for x1,x2,p in zip(Xs[:-1],Xs[1:],Ps):
+		f += (x1-x2) * p
+	f += Xs[-1] * Ps[-1]
+	f._dimlabel=basevar
+	return f
+
+
+def piecewise_linear_function_with_log_tail(basevar, breaks, smoothness=1, baseparam=None, tail=None):
+	"""Smoothed piecewise linear function with marginal breakpoints and a log tail."""
+	if baseparam is None:
+		baseparam = basevar
+	f = piecewise_linear_function(basevar, breaks, smoothness, baseparam)
+	if tail is None:
+		tail=breaks[-1]
+	from ..roles import P, X
+	f += P('log{0}P1_over{1}'.format(baseparam, tail)) * X('log1p({0})*({0}>{1})'.format(basevar, tail))
+	f._dimlabel=basevar
+	return f
+
+
 def gross_piecewise_linear_function(basevar, breaks, baseparam=None):
-	"""Smoothed piecewise linear function with marginal breakpoints."""
+	"""Piecewise linear function with gross breakpoints.
+	
+	The gross break points version of a piecewise curve is written such that
+	each piece's coefficient represents the gross (entire) slope, not the
+	marginal change in slope relative to the previous segment.  This makes 
+	it so the t-statistics do not reflect the signifigance of change.  On
+	the other hand, constraints for making the slope globally positive or 
+	negative are simpler to construct.
+	
+	Parameters
+	----------
+	basevar : str
+		The variable to use as the base variable.
+	breaks : sequence of floats
+		The break points of the piecewise linear function. Note that 
+		if N breaks are given, there will be N+1 segments.
+	baseparam : str or None
+		The base parameter name.  If not given, `basevar` is used.
+
+	Returns
+	-------
+	LinearFunction
+		The piecewise linear function.
+
+	Examples
+	--------
+	>>> from larch.util.piecewise import gross_piecewise_linear_function
+	>>> f = gross_piecewise_linear_function('Aaa', [1,2,3])
+	>>> print(f)
+	  = P('Aaa_up_to_1') * X('fmin( 1 , Aaa)')
+	  + P('Aaa_1_2') * X('fmin( 2-1 , fmax(0,Aaa-1))')
+	  + P('Aaa_2_3') * X('fmin( 3-2 , fmax(0,Aaa-2))')
+	  + P('Aaa_3_and_up') * X('fmax(0,Aaa-3)')
+	>>> f2 = gross_piecewise_linear_function('Aaa', [1,20,300], baseparam='ParName')
+	>>> print(f2)
+	  = P('ParName_up_to_1') * X('fmin( 1-0 , fmax(0,Aaa-0))')
+	  + P('ParName_1_20') * X('fmin( 20-1 , fmax(0,Aaa-1))')
+	  + P('ParName_20_300') * X('fmin( 300-20 , fmax(0,Aaa-20))')
+	  + P('ParName_300_and_up') * X('fmax(0,Aaa-300)')
+	"""
 	if baseparam is None:
 		baseparam = basevar
 	from ..roles import P, X
 	from ..core import LinearFunction
 	Xs = []
 	Ps = []
-	prev_b = 0
+	prev_b = None
 	for b in breaks:
-		Xs += [X("fmin( {1}-{2} , fmax(0,{0}-{2}))".format(basevar, b, prev_b), descrip=basevar+" ({}-{})".format(prev_b,b))]
-		Ps += [P("{0}_{2}_{1}".format(baseparam, b, prev_b))]
+		if prev_b is None:
+			Xs += [X("fmin( {1} , {0})".format(basevar, b, prev_b), descrip=basevar+" (up to {})".format(b))]
+			Ps += [P("{0}_up_to_{1}".format(baseparam, b))]
+		else:
+			Xs += [X("fmin( {1}-{2} , fmax(0,{0}-{2}))".format(basevar, b, prev_b), descrip=basevar+" ({}-{})".format(prev_b,b))]
+			Ps += [P("{0}_{2}_{1}".format(baseparam, b, prev_b))]
 		prev_b = b
 	Xs += [X("fmax(0,{0}-{1})".format(basevar, prev_b), descrip=basevar+" ({}+)".format(prev_b))]
-	Ps += [P("{0}_{1}_up".format(baseparam, prev_b))]
+	Ps += [P("{0}_{1}_and_up".format(baseparam, prev_b))]
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
+	f._dimlabel=basevar
+	return f
+
+def gross_piecewise_linear_function_with_log_tail(basevar, breaks, baseparam=None):
+	"""Piecewise linear function with gross breakpoints and a log tail."""
+	if baseparam is None:
+		baseparam = basevar
+	f = gross_piecewise_linear_function(basevar, breaks, baseparam)
+	from ..roles import P, X
+	f = sum(f[:-1]) + P('log{0}P1_over{1}'.format(baseparam, breaks[-1])) * X('log1p({0})*({0}>{1})'.format(basevar, breaks[-1]))
 	f._dimlabel=basevar
 	return f
 

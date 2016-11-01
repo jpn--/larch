@@ -593,13 +593,14 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 	if isinstance(y_funcs, ComputedFactor):
 		y_funcs = [y_funcs,]
 
-	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x,m) - cf.func(x-epsilon,m))*(1/epsilon)), ) for cf in y_funcs]
+	# We use the forward derivative here, not backward, because of the ubiquity of zero-bounded piecewise terms in utility functions.
+	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x+epsilon,m) - cf.func(x,m))*(1/epsilon)), ) for cf in y_funcs]
 
 	def maker(ref_to_m):
 		from matplotlib import pyplot as plt
 		import numpy as np
 		with default_mplstyle():
-			x = np.linspace(min_x, max_x)
+			x = np.linspace(min_x, max_x, 200) # Use 200 for extra resolution over default of 50
 			y = []
 			y_labels = []
 			for yf in y_funcs:
@@ -689,7 +690,7 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 
 
 
-def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False):
+def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False, log_scale=False):
 	"""A figure showing the distribution of a factor across real and modeled observations.
 
 	This is an experimental function, use at your own risk
@@ -720,8 +721,8 @@ def validation_distribution_figure(m, factorarray, range, bins, headerlevel, hea
 			pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
 			ch = mod.data.choice.squeeze() * mod.data.weight
 		plt.clf()
-		h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled')
-		h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed')
+		h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled', log=log_scale)
+		h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed', log=log_scale)
 		#plt.legend(handles=[h1[1],h2[-1]])
 		plt.legend()
 		return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
