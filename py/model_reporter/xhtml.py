@@ -182,22 +182,39 @@ class XhtmlModelReporter():
 
 		try:
 			for extra_section in self._to_add_to_report:
-				if callable(extra_section):
-					extra_section_evaluated = extra_section(self)
-				else:
-					extra_section_evaluated = extra_section
-
-				if isinstance(extra_section_evaluated, pandas.DataFrame):
-					if isinstance(extra_section_evaluated.index, pandas.RangeIndex) and numpy.all(extra_section_evaluated.index==pandas.RangeIndex(0,len(extra_section_evaluated.index))):
-						to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':False}
+				try:
+					if callable(extra_section):
+						extra_section_evaluated = extra_section(self)
 					else:
-						to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}
-					extra_section_evaluated = xhtml_dataframe_as_div(extra_section_evaluated, title=title, to_html_kwargs=to_html_kwargs)
+						extra_section_evaluated = extra_section
 
-				if isinstance(extra_section_evaluated, dict) and 'contentframe' in extra_section_evaluated:
-					extra_section_evaluated = xhtml_dataframe_as_div(**extra_section_evaluated)
-				
-				x.append(extra_section_evaluated)
+					if isinstance(extra_section_evaluated, pandas.DataFrame):
+						if isinstance(extra_section_evaluated.index, pandas.RangeIndex) and numpy.all(extra_section_evaluated.index==pandas.RangeIndex(0,len(extra_section_evaluated.index))):
+							to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':False}
+						else:
+							to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}
+						extra_section_evaluated = xhtml_dataframe_as_div(extra_section_evaluated, title=title, to_html_kwargs=to_html_kwargs)
+
+					if isinstance(extra_section_evaluated, dict) and 'contentframe' in extra_section_evaluated:
+						extra_section_evaluated = xhtml_dataframe_as_div(**extra_section_evaluated)
+					
+					x.append(extra_section_evaluated)
+				except:
+					if throw_exceptions: raise
+					xerr = XML_Builder()
+					xerr.simple("hr")
+					xerr.start("pre", {'class':'error_report'})
+					xerr.data("Error in {}".format(c))
+					xerr.simple("br")
+					y = traceback.format_exception(*sys.exc_info())
+					for yy in y:
+						for eachline in yy.split("\n"):
+							xerr.data(eachline)
+							xerr.simple("br")
+					xerr.end("pre")
+					xerr.simple("hr")
+					x.append(xerr.close())
+
 		except AttributeError:
 			pass
 
