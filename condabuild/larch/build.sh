@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pip install larch==3.3.17
+pip install larch==3.3.18
 
 # Add more build steps here, if they are necessary.
 
