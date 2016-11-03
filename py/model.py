@@ -53,7 +53,7 @@ class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
-	from .util.plotting import computed_factor_figure_with_derivative, validation_distribution_figure
+	from .util.plotting import computed_factor_figure_with_derivative, validation_distribution_figure, validation_latlong_figure
 	
 	
 	def dir(self):
@@ -1824,7 +1824,7 @@ class Model(Model2, ModelReporter):
 			idca_avail_ratio_floor = self.option.idca_avail_ratio_floor
 		if len(args)==0:
 			if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
-				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor, **kwargs), )
+				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor, log=self.logger(), **kwargs), )
 			else:
 				raise LarchError('model has no db specified for provisioning')
 		otherformats = {}

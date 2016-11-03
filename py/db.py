@@ -1876,7 +1876,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		result.vars = [var,]
 		return result, caseids
 
-	def provision(self, needs, *, idca_avail_ratio_floor=0.1):
+	def provision(self, needs, *, idca_avail_ratio_floor=0.1, log=None):
 		from . import Model
 		if isinstance(needs,Model):
 			m = needs
@@ -1888,7 +1888,8 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		cases = None
 		n_cases = None
 		matched_cases = []
-		log = self.logger()
+		if log is None:
+			log = self.logger()
 		avail_ratio = 1.0
 		
 		# do avail first, to evaluate the benefit to use IDCE format

@@ -25,6 +25,7 @@ import pandas
 import os
 import re
 from .util.groupnode import GroupNode
+from contextlib import contextmanager
 
 class IncompatibleShape(LarchError):
 	pass
@@ -815,8 +816,7 @@ class DT(Fountain):
 			self.h5top.screen[:] = True
 		self.rescreen(exclude_idco, exclude_idca, exclude_unavail, exclude_unchoosable)
 
-
-	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=None):
+	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=None, dynamic=None):
 		"""
 		Rebuild the screen based on the indicated exclusion criteria.
 		
@@ -848,7 +848,29 @@ class DT(Fountain):
 		pass an empty tuple for each parameter.
 		"""
 		if 'screen' not in self.h5top:
-			raise TypeError('no screen node set, use set_screen instead')
+			if dynamic:
+				self.h5f.create_group(self.h5top, 'screen')
+			else:
+				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+				self.h5top.screen[:] = True
+		elif dynamic is not None:
+			if isinstance(self.h5top.screen, (_tb.Group,GroupNode)) and not dynamic:
+				# changing from dynamic to static
+				self.h5top.screen._f_rename('screen_temp')
+				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+				self.h5top.screen[:] = True
+				for key in self.h5top.screen_temp._v_attrs._v_attrnames:
+					self.h5top.screen._v_attrs[key] = self.h5top.screen_temp._v_attrs[key]
+				self.h5f.remove_node(self.h5top, 'screen_temp')
+			elif not isinstance(self.h5top.screen, (_tb.Group,GroupNode)) and dynamic:
+				# changing from static to dynamic
+				self.h5f.create_group(self.h5top, 'screen_temp')
+				for key in self.h5top.screen._v_attrs._v_attrnames:
+					self.h5top.screen_temp._v_attrs[key] = self.h5top.screen._v_attrs[key]
+				self.h5f.remove_node(self.h5top, 'screen')
+				self.h5top.screen_temp._f_rename('screen')
+
+
 
 		summary = pandas.DataFrame(columns=_exclusion_summary_columns)
 		summary.index.name = "Criteria"
@@ -902,7 +924,7 @@ class DT(Fountain):
 			summary.loc["All Alternatives Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 			#self.h5top.screen._v_attrs.exclude_result = s
 
-		if exclude_unchoosable>1:
+		if exclude_unchoosable is not None and exclude_unchoosable>1:
 			n_total = 0
 			excludors = numpy.logical_and(self.array_choice(screen="None", dtype=bool), ~self.array_avail(screen="None"))
 			for altslot in range(self.nAlts()):
@@ -937,6 +959,11 @@ class DT(Fountain):
 		self.h5top.screen[:] = ~exclusions.squeeze()
 		self.h5top.screen._v_attrs.exclude_result = summary
 
+	@contextmanager
+	def exclude_block(self):
+		self.rescreen(dynamic=True)
+		yield
+		self.rescreen(exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=None, dynamic=False)
 
 	def exclude_idco(self, expr, count=True):
 		"""
@@ -961,10 +988,12 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count:
+		if count and not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
+		else:
+			startcount = None
 		self.rescreen(exclude_idco=['+', expr])
-		if count:
+		if startcount is not None:
 			n = startcount - self.h5top.screen[:].sum()
 #			if 'exclude_result' not in self.h5top.screen._v_attrs:
 #				s = pandas.DataFrame(columns=_exclusion_summary_columns)
@@ -996,10 +1025,12 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count:
+		if count and not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
+		else:
+			startcount = None
 		self.rescreen(exclude_idca=['+', (altids, expr)])
-		if count:
+		if startcount is not None:
 			n = startcount - self.h5top.screen[:].sum()
 #			if 'exclude_result' not in self.h5top.screen._v_attrs:
 #				s = pandas.DataFrame(columns=_exclusion_summary_columns)
@@ -1058,7 +1089,7 @@ class DT(Fountain):
 		#ex_df.reset_index(inplace=True)
 		return ex_df.reset_index()
 
-	def provision(self, needs, screen=None, **kwargs):
+	def provision(self, needs, screen=None, log=None, **kwargs):
 		from . import Model
 		if isinstance(needs,Model):
 			m = needs
@@ -1068,11 +1099,9 @@ class DT(Fountain):
 		import numpy
 		provide = {}
 		screen, n_cases = self.process_proposed_screen(screen)
-		#log = self.logger()
-		log = None
 		for key, req in needs.items():
 			if log:
-				log.info("Provisioning {} data...".format(key))
+				log.log(30,"Provisioning {} data...".format(key))
 			if key=="Avail":
 				provide[key] = numpy.require(self.array_avail(screen=screen), requirements='C')
 			elif key=="Weight":
@@ -1105,7 +1134,7 @@ class DT(Fountain):
 #				candidate[z][:] = 0
 #		return candidate
 
-	def provision_fat(self, needs, screen=None, fat=1, **kwargs):
+	def provision_fat(self, needs, screen=None, fat=1, *, log=None, **kwargs):
 		if not isinstance(screen, int):
 			raise NotImplementedError('provision_fat requires a single integer screen, but {} was given'.format(type(screen)))
 		from . import Model
@@ -1117,8 +1146,6 @@ class DT(Fountain):
 		import numpy
 		provide = {}
 		screen, n_cases = self.process_proposed_screen(screen)
-		#log = self.logger()
-		log = None
 		for key, req in needs.items():
 			if log:
 				log.info("Provisioning {} data...".format(key))

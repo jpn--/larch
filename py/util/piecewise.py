@@ -4,6 +4,72 @@ from .naming import parenthize
 
 
 
+def smoothing_blocks(basevar, turns, smoothness):
+	prev_t, prev_s = None,None
+	if isinstance(smoothness, (int,float)) or len(smoothness)==1 or smoothness is None:
+		smoothness = numpy.full_like(turns, smoothness)
+	Xs = []
+	for t,si in zip(turns, smoothness):
+		if si==0:
+			if prev_t is None:
+				y = "1.0*({0}<{2})".format(basevar, prev_t, t, prev_s, s)
+			else:
+				y = "({0}>{1}) * ({0}<{2})".format(basevar, prev_t, t, prev_s, s)
+		else:
+			s = 1/si
+			if s==1:
+				s_txt = ""
+			else:
+				s_txt = "{}*".format(s)
+			if prev_s==1:
+				ps_txt = ""
+			else:
+				ps_txt = "{}*".format(prev_s)
+
+			if prev_t is None:
+				y = "(1/(1)-(1/(1+exp(-{4}({0}-{2})))))".format(basevar, prev_t, t, ps_txt, s_txt)
+			else:
+				y = "(1/(1+exp(-{3}({0}-{1})))-(1/(1+exp(-{4}({0}-{2})))))".format(basevar, prev_t, t, ps_txt, s_txt)
+		Xs.append(y)
+		prev_t, prev_s = t,s
+	
+	if s==1:
+		s_txt = ""
+	else:
+		s_txt = "{}*".format(s)
+	if prev_s==1:
+		ps_txt = ""
+	else:
+		ps_txt = "{}*".format(prev_s)
+	y = "(1/(1+exp(-{3}({0}-{1}))))".format(basevar, prev_t, t, ps_txt, s_txt)
+	Xs.append(y)
+	return Xs
+
+
+
+def smoothed_piecewise_function(basevar, blockvar, turns, smoothness, baseparam=None):
+	if baseparam is None:
+		baseparam = basevar
+	from ..roles import P, X
+	from ..core import LinearFunction
+	Xs = [X(basevar)*X(x) for x in smoothing_blocks(blockvar, turns, smoothness)]
+	Ps = []
+	prev_b = None
+	for b in turns:
+		if prev_b is None:
+			Ps += [P("{0}_up_to_{1}".format(baseparam, b))]
+		else:
+			Ps += [P("{0}_{2}_{1}".format(baseparam, b, prev_b))]
+		prev_b = b
+	Ps += [P("{0}_{1}_and_up".format(baseparam, prev_b))]
+	f = LinearFunction()
+	for x,p in zip(Xs,Ps):
+		f += x * p
+	f._dimlabel=blockvar
+	return f
+
+
+
 def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 	from ..roles import X
 	outs = [
@@ -14,6 +80,10 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 		smoothness = numpy.full_like( breaks, smoothness )
 	else:
 		smoothness = numpy.asarray(smoothness)
+
+	while len(breaks) > len(smoothness):
+		smoothness = numpy.resize(smoothness,len(smoothness)+1)
+		smoothness[-1] = smoothness[-2]
 
 	smoothness = 1.0/smoothness
 	smoothness[~numpy.isfinite(smoothness)] = 0
@@ -345,13 +415,13 @@ def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=Fals
 	>>> f = polynomial_linear_function('Aaa', [1,2,3])
 	>>> print(f)
 	  = P('Aaa') * X('Aaa')
-	  + P('(Aaa)**2') * X('Aaa_2')
-	  + P('(Aaa)**3') * X('Aaa_3')
+	  + P('Aaa_2') * X('(Aaa)**2')
+	  + P('Aaa_3') * X('(Aaa)**3')
 	>>> f2 = polynomial_linear_function('Aaa', [1,2,3], invertpower=True)
 	>>> print(f2)
 	  = P('Aaa') * X('Aaa')
-	  + P('(Aaa)**(1/2)') * X('Aaa_2')
-	  + P('(Aaa)**(1/3)') * X('Aaa_3')
+	  + P('Aaa_2') * X('(Aaa)**(1/2)')
+	  + P('Aaa_3') * X('(Aaa)**(1/3)')
 	
 	"""
 	from ..roles import P, X
