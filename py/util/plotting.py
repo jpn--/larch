@@ -840,7 +840,7 @@ def validation_latlong_figure(m, lat, lon, headerlevel, header, short_header=Non
 		
 		if scaled_diffs:
 			pr_ch_diff_ = hb2.get_array()-hb1.get_array()
-			pr_ch_scale = numpy.log1p((9*hb1.get_array()+hb2.get_array())/10)
+			pr_ch_scale = numpy.log1p((hb1.get_array()))+1
 			# Get bin centners
 			verts = hb2.get_offsets()
 			binx,biny = numpy.zeros_like(pr_ch_scale), numpy.zeros_like(pr_ch_scale)
@@ -864,6 +864,10 @@ def validation_latlong_figure(m, lat, lon, headerlevel, header, short_header=Non
 				norm = colors.Normalize(vmin=-top, vmax=top)
 			hb.set_norm( norm )
 			ax.set_title('Adjusted Over/Under-Prediction', fontname=headfont)
+			plt.annotate('Raw Difference / (1+log(Observed Count+1))', xycoords='axes fraction', xy=(0.5,0),
+							textcoords='offset points', xytext=(0,-5),
+							horizontalalignment='center', verticalalignment='top',
+							fontsize='small', fontstyle='italic')
 			cb = plt.colorbar(hb, ax=ax, extend='both')
 			cb.set_label(wlabel+'Over / Under', fontname=textfont)
 			for l in cb.ax.yaxis.get_ticklabels():
