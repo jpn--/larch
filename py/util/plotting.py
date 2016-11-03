@@ -840,7 +840,7 @@ def validation_latlong_figure(m, lat, lon, headerlevel, header, short_header=Non
 		
 		if scaled_diffs:
 			pr_ch_diff_ = hb2.get_array()-hb1.get_array()
-			pr_ch_scale = numpy.log1p(hb1.get_array())
+			pr_ch_scale = numpy.log1p((9*hb1.get_array()+hb2.get_array())/10)
 			# Get bin centners
 			verts = hb2.get_offsets()
 			binx,biny = numpy.zeros_like(pr_ch_scale), numpy.zeros_like(pr_ch_scale)
