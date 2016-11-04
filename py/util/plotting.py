@@ -29,6 +29,23 @@ def plot_as_svg_xhtml(pyplot, classname='figure', headerlevel=2, header=None, an
 	xx << ET.fromstring(imgbuffer.getvalue().decode())
 	return xx
 
+def plt_as_svg_xhtml(classname='figure', headerlevel=2, header=None, anchor=1, clf_after=True):
+	import xml.etree.ElementTree as ET
+	ET.register_namespace("","http://www.w3.org/2000/svg")
+	ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
+	imgbuffer = BytesIO()
+	plt.savefig(imgbuffer, dpi=None, facecolor='w', edgecolor='w',
+        orientation='portrait', papertype=None, format='svg',
+        transparent=False, bbox_inches=None, pad_inches=0.1,
+        frameon=None)
+	if clf_after:
+		plt.clf()
+	x = XML_Builder("div", {'class':classname})
+	if header:
+		x.hn(headerlevel, header, anchor=anchor)
+	xx = x.close()
+	xx << ET.fromstring(imgbuffer.getvalue().decode())
+	return xx
 
 
 class default_mplstyle():
@@ -743,139 +760,279 @@ def validation_distribution_figure(m, factorarray, range, bins, headerlevel, hea
 		An array giving lat and lon coordinates for the zonal alternatives.
 	'''
 
-import numpy
 
-def validation_latlong_figure(m, lat, lon, headerlevel, header, short_header=None, 
-                              figsize=(11,3), immediate=False, to_report=True, 
-                              showdiffs='linear', gridsize=60, headfont=('Roboto Slab',), 
-                              textfont=('Roboto',), scaled_diffs=True,
-                              colormap='rainbow'):
+
+def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(11,20), show_diffs='linear', scaled_diffs=True,
+							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
+							colormap='rainbow', tight_layout=True):
 	from matplotlib import pyplot as plt
 	import matplotlib.colors as colors
 	from matplotlib.ticker import LogLocator
 	import matplotlib.cm as cm
-	if short_header is None:
-		short_header = header
-	def map_validation_maker(mod):
-		n_subplots = 2
-		if showdiffs:
-			n_subplots += 1
-		if scaled_diffs:
-			n_subplots += 1
-		plot_n = 1
-		if mod.data.weight is None:
-			pr = mod.work.probability[:, :mod.nAlts()]
-			ch = mod.data.choice.squeeze()
-			wlabel = ""
-		else:
-			pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
-			ch = mod.data.choice.squeeze() * mod.data.weight
-			wlabel = "Weighted "
-		pr_0 = pr.sum(0).flatten()
-		ch_0 = ch.sum(0).flatten()
-		half_vir_blank =  tuple((1-((1-i)*0.2)) for i in cm.viridis(1.0))
-		plt.clf()
-		fig = plt.figure(figsize=figsize)
-		ax1 = plt.subplot(n_subplots,1,plot_n, axisbg=None)
-		plot_n+=1
-		ax1.set_title('Observed', fontname=headfont)
-		hb1 = ax1.hexbin(lon, lat, C=ch_0, gridsize=gridsize, xscale='linear', 
-						 yscale='linear', bins=None, extent=None, cmap=colormap, 
-						 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
-						 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
-		ax1.get_xaxis().set_ticks([])
-		ax1.get_yaxis().set_ticks([])
-		ax2 = plt.subplot(n_subplots,1,plot_n, axisbg=None)
-		plot_n+=1
-		hb2 = ax2.hexbin(lon, lat, C=pr_0, gridsize=gridsize, xscale='linear', 
-						 yscale='linear', bins=None, extent=None, cmap=colormap, 
-						 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
-						 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
-		ax2.get_xaxis().set_ticks([])
-		ax2.get_yaxis().set_ticks([])
-		ax2.set_title('Modeled', fontname=headfont)
-		# Renorm hb1 and hb2 to same scale
-		renorm = colors.LogNorm()
-		vst = numpy.vstack([hb1.get_array(),hb2.get_array()])
-		vst = vst[vst!=0]
-		renorm.autoscale_None( vst )
-		hb1.set_norm( renorm )
-		hb2.set_norm( renorm )
-		# Colorbars
-		cb = plt.colorbar(hb1, ax=ax1, ticks=LogLocator(subs=range(10)))
-		cb.set_label(wlabel+'Counts', fontname=textfont)
-		for l in cb.ax.yaxis.get_ticklabels():
-			l.set_family(textfont)
-		cb = plt.colorbar(hb2, ax=ax2, ticks=LogLocator(subs=range(10)))
-		cb.set_label(wlabel+'Total Prob', fontname=textfont)
-		for l in cb.ax.yaxis.get_ticklabels():
-			l.set_family(textfont)
-		pr_ch_diff = pr_0-ch_0
-		# Diffs plot
-		if showdiffs:
-			ax = plt.subplot(n_subplots,1,plot_n)
-			plot_n+=1
-			hb = ax.hexbin(lon, lat, C=pr_ch_diff, gridsize=gridsize, xscale='linear', 
-						   yscale='linear', bins=None, extent=None, 
-						   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
-						   edgecolors='none', reduce_C_function=numpy.sum, mincnt=None, 
-						   marginals=False, data=None, )
+	n_subplots = 2
+	if show_diffs:
+		n_subplots += 1
+	if scaled_diffs:
+		n_subplots += 1
+	plot_n = 1
+	if mod.data.weight is None:
+		pr = mod.work.probability[:, :mod.nAlts()]
+		ch = mod.data.choice.squeeze()
+		wlabel = ""
+	else:
+		pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
+		ch = mod.data.choice.squeeze() * mod.data.weight
+		wlabel = "Weighted "
+	pr_0 = pr.sum(0).flatten()
+	ch_0 = ch.sum(0).flatten()
+	plt.clf()
+	fig = plt.figure(figsize=figsize, tight_layout=tight_layout)
+
+	def next_subplot(title=None, axisbg=None, ticks_off=True):
+		ax = plt.subplot(n_subplots,1,next_subplot.plot_n, axisbg=axisbg)
+		next_subplot.plot_n+=1
+		if title:
+			ax.set_title(title, fontname=headfont)
+		if ticks_off:
 			ax.get_xaxis().set_ticks([])
 			ax.get_yaxis().set_ticks([])
-			# Re-norm
+		return ax
+
+	next_subplot.plot_n = 1
+
+	ax1 = next_subplot('Observed')
+	hb1 = ax1.hexbin(lon, lat, C=ch_0, gridsize=gridsize, xscale='linear',
+					 yscale='linear', bins=None, extent=extent, cmap=colormap, 
+					 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
+					 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
+
+	ax2 = next_subplot('Modeled')
+	hb2 = ax2.hexbin(lon, lat, C=pr_0, gridsize=gridsize, xscale='linear',
+					 yscale='linear', bins=None, extent=extent, cmap=colormap, 
+					 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
+					 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
+
+	# Renorm hb1 and hb2 to same scale
+	renorm = colors.LogNorm()
+	vst = numpy.vstack([hb1.get_array(),hb2.get_array()])
+	vst = vst[vst!=0]
+	renorm.autoscale_None( vst )
+	hb1.set_norm( renorm )
+	hb2.set_norm( renorm )
+
+	# Colorbars
+	cb = plt.colorbar(hb1, ax=ax1, ticks=LogLocator(subs=range(10)))
+	cb.set_label(wlabel+'Counts', fontname=textfont)
+	for l in cb.ax.yaxis.get_ticklabels():
+		l.set_family(textfont)
+
+	cb = plt.colorbar(hb2, ax=ax2, ticks=LogLocator(subs=range(10)))
+	cb.set_label(wlabel+'Total Prob', fontname=textfont)
+	for l in cb.ax.yaxis.get_ticklabels():
+		l.set_family(textfont)
+
+	# Diffs plots
+	pr_ch_diff = pr_0-ch_0
+	if show_diffs:
+		ax = next_subplot('Raw Over/Under-Prediction')
+		hb = ax.hexbin(lon, lat, C=pr_ch_diff, gridsize=gridsize, xscale='linear',
+					   yscale='linear', bins=None, extent=extent, 
+					   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
+					   edgecolors='none', reduce_C_function=numpy.sum, mincnt=None, 
+					   marginals=False, data=None, )
+
+		# Re-norm
+		mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
+		if show_diffs=='log':
+			norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
+		else:
+			norm = colors.Normalize(vmin=-top, vmax=top)
+		hb.set_norm( norm )
+		cb = plt.colorbar(hb, ax=ax, extend='both')
+		cb.set_label(wlabel+'Over / Under', fontname=textfont)
+		for l in cb.ax.yaxis.get_ticklabels():
+			l.set_family(textfont)
+	else:
+		mid,top = None,None
+
+
+	if scaled_diffs:
+		pr_ch_diff_ = hb2.get_array()-hb1.get_array()
+		pr_ch_scale = numpy.log1p((hb1.get_array()))+1
+		# Get bin centners
+		verts = hb2.get_offsets()
+		binx,biny = numpy.zeros_like(pr_ch_scale), numpy.zeros_like(pr_ch_scale)
+		for offc in range(verts.shape[0]):
+			binx[offc],biny[offc] = verts[offc][0],verts[offc][1]
+
+		ax = next_subplot('Adjusted Over/Under-Prediction')
+		hb = ax.hexbin(binx, biny, C=pr_ch_diff_/pr_ch_scale, gridsize=gridsize,
+					   xscale='linear', yscale='linear', bins=None, extent=extent, 
+					   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
+					   edgecolors='none', reduce_C_function=numpy.mean, mincnt=None, 
+					   marginals=False, data=None, )
+		# Re-norm
+		if mid is None or top is None:
 			mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
-			if showdiffs=='log':
-				norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
-			else:
-				norm = colors.Normalize(vmin=-top, vmax=top)
-			hb.set_norm( norm )
-			ax.set_title('Raw Over/Under-Prediction', fontname=headfont)
-			cb = plt.colorbar(hb, ax=ax, extend='both')
-			cb.set_label(wlabel+'Over / Under', fontname=textfont)
-			for l in cb.ax.yaxis.get_ticklabels():
-				l.set_family(textfont)
+		if show_diffs=='log':
+			norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
 		else:
-			mid,top = None,None
+			norm = colors.Normalize(vmin=-top, vmax=top)
+		hb.set_norm( norm )
+		plt.annotate('Raw Difference / (1+log(Observed Count+1))', xycoords='axes fraction', xy=(0.5,0),
+						textcoords='offset points', xytext=(0,-2),
+						horizontalalignment='center', verticalalignment='top',
+						fontsize='x-small', fontstyle='italic')
+		cb = plt.colorbar(hb, ax=ax, extend='both')
+		cb.set_label(wlabel+'Over / Under', fontname=textfont)
+		for l in cb.ax.yaxis.get_ticklabels():
+			l.set_family(textfont)
 
-		
-		if scaled_diffs:
-			pr_ch_diff_ = hb2.get_array()-hb1.get_array()
-			pr_ch_scale = numpy.log1p((hb1.get_array()))+1
-			# Get bin centners
-			verts = hb2.get_offsets()
-			binx,biny = numpy.zeros_like(pr_ch_scale), numpy.zeros_like(pr_ch_scale)
-			for offc in range(verts.shape[0]):
-				binx[offc],biny[offc] = verts[offc][0],verts[offc][1]
-			ax = plt.subplot(n_subplots,1,plot_n)
-			plot_n+=1
-			hb = ax.hexbin(binx, biny, C=pr_ch_diff_/pr_ch_scale, gridsize=gridsize, 
-						   xscale='linear', yscale='linear', bins=None, extent=None, 
-						   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
-						   edgecolors='none', reduce_C_function=numpy.mean, mincnt=None, 
-						   marginals=False, data=None, )
-			ax.get_xaxis().set_ticks([])
-			ax.get_yaxis().set_ticks([])
-			# Re-norm
-			if mid is None or top is None:
-				mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
-			if showdiffs=='log':
-				norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
-			else:
-				norm = colors.Normalize(vmin=-top, vmax=top)
-			hb.set_norm( norm )
-			ax.set_title('Adjusted Over/Under-Prediction', fontname=headfont)
-			plt.annotate('Raw Difference / (1+log(Observed Count+1))', xycoords='axes fraction', xy=(0.5,0),
-							textcoords='offset points', xytext=(0,-5),
-							horizontalalignment='center', verticalalignment='top',
-							fontsize='small', fontstyle='italic')
-			cb = plt.colorbar(hb, ax=ax, extend='both')
-			cb.set_label(wlabel+'Over / Under', fontname=textfont)
-			for l in cb.ax.yaxis.get_ticklabels():
-				l.set_family(textfont)
-		return None #plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
-	if to_report:
-		m.add_to_report(map_validation_maker)
-	if immediate:
-		map_validation_maker(m)
-		plt.show()
+	return plt_as_svg_xhtml()
 
+
+
+
+def new_xhtml_validation_latlong(self, figurename, lat, lon,
+								 headerlevel, header, short_header=None,
+								 **kwargs):
+	caller = lambda m, *arg, **kw: m.svg_validation_latlong(lat, lon, *arg, **kw)
+	self.new_xhtml_section(caller, figurename)
+
+
+
+
+#def validation_latlong_figure(m, lat, lon, headerlevel, header, short_header=None, 
+#                              figsize=(11,3), immediate=False, to_report=True, 
+#                              showdiffs='linear', gridsize=60, headfont=('Roboto Slab',), 
+#                              textfont=('Roboto',), scaled_diffs=True,
+#                              colormap='rainbow'):
+#	from matplotlib import pyplot as plt
+#	import matplotlib.colors as colors
+#	from matplotlib.ticker import LogLocator
+#	import matplotlib.cm as cm
+#	if short_header is None:
+#		short_header = header
+#	def map_validation_maker(mod):
+#		n_subplots = 2
+#		if showdiffs:
+#			n_subplots += 1
+#		if scaled_diffs:
+#			n_subplots += 1
+#		plot_n = 1
+#		if mod.data.weight is None:
+#			pr = mod.work.probability[:, :mod.nAlts()]
+#			ch = mod.data.choice.squeeze()
+#			wlabel = ""
+#		else:
+#			pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
+#			ch = mod.data.choice.squeeze() * mod.data.weight
+#			wlabel = "Weighted "
+#		pr_0 = pr.sum(0).flatten()
+#		ch_0 = ch.sum(0).flatten()
+#		half_vir_blank =  tuple((1-((1-i)*0.2)) for i in cm.viridis(1.0))
+#		plt.clf()
+#		fig = plt.figure(figsize=figsize)
+#		ax1 = plt.subplot(n_subplots,1,plot_n, axisbg=None)
+#		plot_n+=1
+#		ax1.set_title('Observed', fontname=headfont)
+#		hb1 = ax1.hexbin(lon, lat, C=ch_0, gridsize=gridsize, xscale='linear', 
+#						 yscale='linear', bins=None, extent=None, cmap=colormap, 
+#						 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
+#						 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
+#		ax1.get_xaxis().set_ticks([])
+#		ax1.get_yaxis().set_ticks([])
+#		ax2 = plt.subplot(n_subplots,1,plot_n, axisbg=None)
+#		plot_n+=1
+#		hb2 = ax2.hexbin(lon, lat, C=pr_0, gridsize=gridsize, xscale='linear', 
+#						 yscale='linear', bins=None, extent=None, cmap=colormap, 
+#						 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
+#						 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
+#		ax2.get_xaxis().set_ticks([])
+#		ax2.get_yaxis().set_ticks([])
+#		ax2.set_title('Modeled', fontname=headfont)
+#		# Renorm hb1 and hb2 to same scale
+#		renorm = colors.LogNorm()
+#		vst = numpy.vstack([hb1.get_array(),hb2.get_array()])
+#		vst = vst[vst!=0]
+#		renorm.autoscale_None( vst )
+#		hb1.set_norm( renorm )
+#		hb2.set_norm( renorm )
+#		# Colorbars
+#		cb = plt.colorbar(hb1, ax=ax1, ticks=LogLocator(subs=range(10)))
+#		cb.set_label(wlabel+'Counts', fontname=textfont)
+#		for l in cb.ax.yaxis.get_ticklabels():
+#			l.set_family(textfont)
+#		cb = plt.colorbar(hb2, ax=ax2, ticks=LogLocator(subs=range(10)))
+#		cb.set_label(wlabel+'Total Prob', fontname=textfont)
+#		for l in cb.ax.yaxis.get_ticklabels():
+#			l.set_family(textfont)
+#		pr_ch_diff = pr_0-ch_0
+#		# Diffs plot
+#		if showdiffs:
+#			ax = plt.subplot(n_subplots,1,plot_n)
+#			plot_n+=1
+#			hb = ax.hexbin(lon, lat, C=pr_ch_diff, gridsize=gridsize, xscale='linear', 
+#						   yscale='linear', bins=None, extent=None, 
+#						   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
+#						   edgecolors='none', reduce_C_function=numpy.sum, mincnt=None, 
+#						   marginals=False, data=None, )
+#			ax.get_xaxis().set_ticks([])
+#			ax.get_yaxis().set_ticks([])
+#			# Re-norm
+#			mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
+#			if showdiffs=='log':
+#				norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
+#			else:
+#				norm = colors.Normalize(vmin=-top, vmax=top)
+#			hb.set_norm( norm )
+#			ax.set_title('Raw Over/Under-Prediction', fontname=headfont)
+#			cb = plt.colorbar(hb, ax=ax, extend='both')
+#			cb.set_label(wlabel+'Over / Under', fontname=textfont)
+#			for l in cb.ax.yaxis.get_ticklabels():
+#				l.set_family(textfont)
+#		else:
+#			mid,top = None,None
+#
+#		
+#		if scaled_diffs:
+#			pr_ch_diff_ = hb2.get_array()-hb1.get_array()
+#			pr_ch_scale = numpy.log1p((hb1.get_array()))+1
+#			# Get bin centners
+#			verts = hb2.get_offsets()
+#			binx,biny = numpy.zeros_like(pr_ch_scale), numpy.zeros_like(pr_ch_scale)
+#			for offc in range(verts.shape[0]):
+#				binx[offc],biny[offc] = verts[offc][0],verts[offc][1]
+#			ax = plt.subplot(n_subplots,1,plot_n)
+#			plot_n+=1
+#			hb = ax.hexbin(binx, biny, C=pr_ch_diff_/pr_ch_scale, gridsize=gridsize, 
+#						   xscale='linear', yscale='linear', bins=None, extent=None, 
+#						   cmap='bwr_r', norm=None, alpha=None, linewidths=0.1, 
+#						   edgecolors='none', reduce_C_function=numpy.mean, mincnt=None, 
+#						   marginals=False, data=None, )
+#			ax.get_xaxis().set_ticks([])
+#			ax.get_yaxis().set_ticks([])
+#			# Re-norm
+#			if mid is None or top is None:
+#				mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
+#			if showdiffs=='log':
+#				norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
+#			else:
+#				norm = colors.Normalize(vmin=-top, vmax=top)
+#			hb.set_norm( norm )
+#			ax.set_title('Adjusted Over/Under-Prediction', fontname=headfont)
+#			plt.annotate('Raw Difference / (1+log(Observed Count+1))', xycoords='axes fraction', xy=(0.5,0),
+#							textcoords='offset points', xytext=(0,-5),
+#							horizontalalignment='center', verticalalignment='top',
+#							fontsize='small', fontstyle='italic')
+#			cb = plt.colorbar(hb, ax=ax, extend='both')
+#			cb.set_label(wlabel+'Over / Under', fontname=textfont)
+#			for l in cb.ax.yaxis.get_ticklabels():
+#				l.set_family(textfont)
+#		return None #plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
+#	if to_report:
+#		m.add_to_report(map_validation_maker)
+#	if immediate:
+#		map_validation_maker(m)
+#		plt.show()
+#

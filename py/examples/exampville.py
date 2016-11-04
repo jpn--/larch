@@ -45,6 +45,9 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	pop_weight /= pop_weight.sum()
 	wrk_weight = scipy.stats.binom.pmf(numpy.arange(nZones),nZones-1,.5)
 	wrk_weight /= wrk_weight.sum()
+	
+	zone_lat = (-1)**numpy.arange(nZones)
+	zone_lon = 11+numpy.arange(nZones)
 
 	## Skims
 	flog("Skims")
@@ -260,6 +263,9 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	omx.add_lookup('EMPLOYMENT', zone_employment)
 	omx.add_lookup('EMP_RETAIL', zone_retail)
 	omx.add_lookup('EMP_NONRETAIL', zone_nonretail)
+	omx.add_lookup('LAT', zone_lat)
+	omx.add_lookup('LON', zone_lon)
+
 	omx.flush()
 	omx.close()
 	omx = larch.OMX(os.path.join(directory,'exampville.omx'), mode='r')

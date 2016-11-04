@@ -120,6 +120,8 @@ class Elem(Element):
 		return self
 	def tostring(self):
 		return xml.etree.ElementTree.tostring(self, encoding="utf8", method="html")
+	def _repr_html_(self):
+		return self.tostring().decode()
 
 def Anchor_Elem(reftxt, cls, toclevel):
 	return Elem('a', {'name':_uid(), 'reftxt':str(reftxt), 'class':str(cls), 'toclevel':str(toclevel)})
@@ -214,6 +216,7 @@ class XML_Builder(TreeBuilder):
 		return xml.etree.ElementTree.tostring(self.close())
 	def dumps(self):
 		return self.dump().decode()
+	_repr_html_ = dumps
 
 	def append(self, arg):
 		div_container = self.start('div')
@@ -226,7 +229,6 @@ class XML_Builder(TreeBuilder):
 	def __lshift__(self,other):
 		self.append(other)
 		return self
-
 
 
 class XHTML():

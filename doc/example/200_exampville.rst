@@ -56,6 +56,8 @@ We can take a quick peek at what is inside each file:
 	 |    EMPLOYMENT    (15 float64)
 	 |    EMP_NONRETAIL (15 float64)
 	 |    EMP_RETAIL    (15 float64)
+	 |    LAT           (15 int64)
+	 |    LON           (15 int64)
 	 |    TAZID         (15 int64)
 
 	>>> f_hh

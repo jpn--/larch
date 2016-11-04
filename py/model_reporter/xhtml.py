@@ -320,14 +320,14 @@ class XhtmlModelReporter():
 		name : str
 			The name for this report.  It must not conflict with an existing name.
 		"""
-		from .model import Model
-		if 'xhtml_{}'.format(name) in dir(Model):
+		#from ..model import Model
+		if 'xhtml_{}'.format(name) in dir(self):
 			raise TypeError( "the name '{}' conflicts with a regular method in larch.Model".format(name) )
 		try:
 			self._user_defined_xhtml
 		except AttributeError:
 			self._user_defined_xhtml = {}
-	
+		self._user_defined_xhtml[name] = caller
 
 
 	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):
