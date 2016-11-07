@@ -24,7 +24,7 @@ if on_rtd:
 		@classmethod
 		def __getattr__(cls, name):
 			if name=='_mock_methods':
-				return super().__getattr__(name)
+				return super().__getattr__(cls, name)
 			else:
 				return Mock()
 
