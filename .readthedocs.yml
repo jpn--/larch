@@ -3,7 +3,7 @@ formats:
     - none
     
 conda:
-    file: taiga.yml
+    file: taiga-rtfd.yml
     
 python:
     setup_py_install: true
