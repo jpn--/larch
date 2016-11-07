@@ -15,10 +15,10 @@ def TemporaryBucketCleanUp():
 				shutil.rmtree(i.name)
 			except:
 				import traceback
-				traceback.print_exc()
+				#traceback.print_exc()
 		except:
 			import traceback
-			traceback.print_exc()
+			#traceback.print_exc()
 	del TemporaryBucket
 
 import atexit
