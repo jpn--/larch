@@ -4,3 +4,6 @@ formats:
     
 conda:
     file: taiga.yml
+    
+python:
+    setup_py_install: true
