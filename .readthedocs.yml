@@ -1,0 +1,6 @@
+# Don't build any extra formats
+formats:
+    - none
+    
+conda:
+    file: taiga.yml
