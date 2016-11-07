@@ -77,8 +77,11 @@ Column 2: weight (numeric) a weight associated with each case\n\
 If no weights are given, they are assumed to be all equal.";
 
 
-
-
+import unittest.mock
+if isinstance(apsw_Connection, unittest.mock.MagicMock):
+	class Dummy():
+		pass
+	apsw_Connection = Dummy
 
 
 
