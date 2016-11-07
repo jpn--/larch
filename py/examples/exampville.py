@@ -77,7 +77,7 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	## Households
 	flog("HHs")
 	HHidx = numpy.arange(n_HH, dtype=int)
-	HHid = numpy.asarray([abs(hash(str(i)))%(2**29) for i in HHidx])
+	HHid = numpy.asarray([50000+i for i in HHidx])
 	HHincome = numpy.round( numpy.random.normal(75000,25000,[n_HH,]), -3 ).astype(int)
 	HHsize = numpy.floor(numpy.random.exponential(0.8,[n_HH,])+1+numpy.random.random([n_HH,])).astype(int)
 	HHhomezone = numpy.random.choice(numpy.arange(1,nZones+1), size=[n_HH,], replace=True, p=pop_weight)
@@ -89,7 +89,7 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	flog("People")
 	n_PER = numpy.sum(HHsize)
 	PERidx = numpy.arange(n_PER, dtype=int)
-	PERid = numpy.asarray([abs(hash(str(i)))%(2**29) for i in PERidx])
+	PERid = numpy.asarray([60000+i for i in PERidx])
 	PERhhid = numpy.zeros(n_PER, dtype=int)
 	PERhhidx = numpy.zeros(n_PER, dtype=int)
 	n2 = 0
