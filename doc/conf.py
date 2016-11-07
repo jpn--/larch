@@ -21,10 +21,12 @@ if on_rtd:
 	from unittest.mock import MagicMock
 
 	class Mock(MagicMock):
-#		@classmethod
-#		def __getattr__(cls, name):
-#				return Mock()
-		pass
+		@classmethod
+		def __getattr__(cls, name):
+			if name=='_mock_methods':
+				return super().__getattr__(name)
+			else:
+				return Mock()
 
 	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw',
 					'docx', 'docx.enum', 'docx.enum.style', 'scipy', 'scipy.optimize',
