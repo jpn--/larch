@@ -6,7 +6,7 @@ class dir_maker():
 	def __getattr__(self,key):
 		newdir = os.path.join(self._basedir, key)
 		return dir_maker(newdir)
-	def __call__(self, filename):
+	def __call__(self, filename=''):
 		newfile = os.path.join(self._basedir, filename)
 		try:
 			os.makedirs(self._basedir)
@@ -26,3 +26,6 @@ else:
 
 
 cache = dir_maker(_cache)
+
+project_cache = cache
+

@@ -53,7 +53,7 @@ class Model(Model2, ModelReporter):
 
 	from .util.roll import roll
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
-	from .util.plotting import computed_factor_figure_with_derivative, validation_distribution_figure, new_xhtml_validation_latlong, svg_validation_latlong
+	from .util.plotting import new_xhtml_computed_factor_figure_with_derivative, svg_computed_factor_figure_with_derivative, new_xhtml_validation_distribution, svg_validation_distribution, new_xhtml_validation_latlong, svg_validation_latlong, svg_observations_latlong
 	
 	
 	def dir(self):
@@ -507,6 +507,9 @@ class Model(Model2, ModelReporter):
 								f.write("self.{} = 'unpicklable local object'\n".format(a))
 							else:
 								raise
+						except TypeError as t:
+							t.args = (t.args[0] + "\nobject name {}".format(a),) + t.args[1:]
+							raise t
 			try:
 				return f.getvalue()
 			except AttributeError:
@@ -1817,11 +1820,21 @@ class Model(Model2, ModelReporter):
 		except ProvisioningError:
 			pass
 
-	def provision(self, *args, idca_avail_ratio_floor=None, **kwargs):
+	def provision(self, *args, idca_avail_ratio_floor=None, cache=False, **kwargs):
 		from .db import DB
 		from .dt import DT
 		if idca_avail_ratio_floor is None:
 			idca_avail_ratio_floor = self.option.idca_avail_ratio_floor
+		if len(args)==0:
+			if cache:
+				md5 = self.data.needs_hash()
+				from .util.dirs import project_cache
+				cachefile = project_cache.provisioning(md5+'.npz')
+				if os.path.exists(cachefile):
+					if self.logger():
+						self.logger().log(50,'provisioning from cache at {}'.format(cachefile))
+					args = (dict(numpy.load(cachefile, 'r')),)
+					cache = False # loaded it, so don't overwrite it
 		if len(args)==0:
 			if hasattr(self,'df') and isinstance(self.df,(DB,DT)):
 				args = (self.df.provision(self.needs(), idca_avail_ratio_floor=idca_avail_ratio_floor, log=self.logger(), **kwargs), )
@@ -1843,6 +1856,10 @@ class Model(Model2, ModelReporter):
 					raise
 		else:
 			super().provision(provided)
+		if cache:
+			if self.logger():
+				self.logger().log(50,'caching provisioned data at {}'.format(cachefile))
+			numpy.savez_compressed(cachefile, **provided)
 
 	def provision_fat(self, fat=1, screen=None):
 		self.provision(self.df.provision_fat(needs=self.needs(),screen=screen,fat=fat))

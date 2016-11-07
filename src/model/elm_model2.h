@@ -106,7 +106,7 @@ namespace elm {
 		%feature("pythonprepend") setUp %{
 			if self.logger(): self.logger().log(30, "Model.setUp...")
 			if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
-				self.provision()
+				self.provision(cache=cache)
 				self.setUpMessage = "autoprovision yes (setUp)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
 		%}
@@ -825,7 +825,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		void change_data_fountain(elm::Fountain& datafile);
 
 	public:
-		void setUp(bool and_load_data=true, bool force=false);
+		void setUp(bool and_load_data=true, bool force=false, bool cache=false);
 		void _pull_graph_from_db();
 		
 		std::string setUpMessage;

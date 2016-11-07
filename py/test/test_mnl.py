@@ -367,7 +367,7 @@ class TestMTC(ELM_TestCase):
 
 		import re
 		check1 = (re.compile(b'<tr><td.*><a name="paramASC_CAR"></a>ASC_CAR</td><div class="dummycell"></div><td class="estimated_value">-0.1.*</td><td class=".*" colspan="3">&#8806;&#160;-0.1</td>.*</tr>').search(rpt) is not None)
-		check2 = (re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><div class="dummycell"></div><td class="estimated_value">-0.01369.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td>.*</tr>').search(rpt) is not None)
+		check2 = (re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><div class="dummycell"></div><td class="estimated_value">-0.013.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td>.*</tr>').search(rpt) is not None)
 		if not check1 or not check2:
 			print(rpt)
 		self.assertTrue(check1)
@@ -385,7 +385,7 @@ class TestMTC(ELM_TestCase):
 		r2 = m2.maximize_loglike()
 		rpt = m2.report('html')
 		check3 = (re.compile(b'<tr><td.*><a name="paramASC_CAR"></a>ASC_CAR</td><div class="dummycell"></div><td class="estimated_value"> 0.1.*</td><td class=".*" colspan="3">&#8807;&#160;0.1</td>.*</tr>').search(rpt) is not None)
-		check4 = (re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><div class="dummycell"></div><td class="estimated_value">-0.01512.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td>.*</tr>').search(rpt) is not None)
+		check4 = (re.compile(b'<tr><td.*><a name="paramB_TIME"></a>B_TIME</td><div class="dummycell"></div><td class="estimated_value">-0.015.*</td><td class=".*" colspan="3">&#8806;&#160;B_COST \* 2.0</td>.*</tr>').search(rpt) is not None)
 		if not check3 or not check4:
 			print(rpt)
 		self.assertTrue(check3)

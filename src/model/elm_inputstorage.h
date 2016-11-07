@@ -174,6 +174,7 @@ namespace elm {
 									std::string				param="",
 									const double&			multiplier=1.0);
 
+		std::string __code__() const;
 		std::string __str__() const;
 		std::string __repr__() const;
 		std::string __indent_repr__(int indent) const;
@@ -202,7 +203,11 @@ namespace elm {
 		def __iadd__(self, other):
 			if other==():
 				return self
-			self._inplace_add(other)
+			try:
+				self._inplace_add(other)
+			except NotImplementedError as t:
+				t.args = (t.args[0] + "\n  self is type {}\n  other is type {}".format(type(self),type(other)),) + t.args[1:]
+				raise t
 			return self
 		def __radd__(self, other):
 			return LinearFunction() + other + self
@@ -321,6 +326,24 @@ namespace elm {
 			for i,j in zip(self, other):
 				if i != j: return False
 			return True
+
+
+		def __getstate__(self):
+			state = {}
+			state['code'] = self.__code__()
+			try:
+				state['_dimlabel'] = self._dimlabel
+			except AttributeError:
+				pass
+			return state
+
+		def __setstate__(self, state):
+			from .roles import P,X
+			self.__init__()
+			self += eval(state['code'])
+			if '_dimlabel' in state:
+				self._dimlabel = state['_dimlabel']
+
 			
 		%}
 		#endif // def SWIG

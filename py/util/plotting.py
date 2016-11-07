@@ -38,13 +38,14 @@ def plt_as_svg_xhtml(classname='figure', headerlevel=2, header=None, anchor=1, c
         orientation='portrait', papertype=None, format='svg',
         transparent=False, bbox_inches=None, pad_inches=0.1,
         frameon=None)
-	if clf_after:
-		plt.clf()
 	x = XML_Builder("div", {'class':classname})
 	if header:
 		x.hn(headerlevel, header, anchor=anchor)
 	xx = x.close()
-	xx << ET.fromstring(imgbuffer.getvalue().decode())
+	_cache = ET.fromstring(imgbuffer.getvalue().decode())
+	xx << _cache
+	if clf_after:
+		plt.clf()
 	return xx
 
 
@@ -582,7 +583,7 @@ def computed_factor_figure_v2(m, y_funcs, y_labels=None,
 
 
 
-def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
+def svg_computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 							   max_x=1, min_x=0, header=None,
 							   xaxis_label=None, yaxis_label=None,
 							   logscale_x=False, logscale_f=False, figsize=(11,3),
@@ -613,104 +614,100 @@ def computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 	# We use the forward derivative here, not backward, because of the ubiquity of zero-bounded piecewise terms in utility functions.
 	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x+epsilon,m) - cf.func(x,m))*(1/epsilon)), ) for cf in y_funcs]
 
-	def maker(ref_to_m):
-		from matplotlib import pyplot as plt
-		import numpy as np
-		with default_mplstyle():
-			x = np.linspace(min_x, max_x, 200) # Use 200 for extra resolution over default of 50
-			y = []
-			y_labels = []
-			for yf in y_funcs:
-				y.append( yf.func(x,ref_to_m) )
-				y_labels.append( yf.label )
-			fig = plt.figure(figsize=figsize)
-			ax = plt.subplot(121)
-			ax.set_xlim(min_x,max_x)
-			if logscale_x:
-				ax.set_xscale('log', nonposx='clip', nonposy='clip')
-			if xaxis_label is not None:
-				ax.set_xlabel(xaxis_label)
-			if yaxis_label is not None:
-				ax.set_ylabel(yaxis_label)
-			lgnd_hands = []
-			
-			for n, iy in enumerate(y):
-				if y_labels and len(y_labels)>n:
-					iy_label = y_labels[n]
-				else:
-					iy_label = None
-				l1=plt.plot(x, iy, linewidth=2, label=iy_label)
-				lgnd_hands += l1
-			
-			box = ax.get_position()
-			if not supress_legend:
-				ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+	from matplotlib import pyplot as plt
+	import numpy as np
+	with default_mplstyle():
+		x = np.linspace(min_x, max_x, 200) # Use 200 for extra resolution over default of 50
+		y = []
+		y_labels = []
+		for yf in y_funcs:
+			y.append( yf.func(x,m) )
+			y_labels.append( yf.label )
+		fig = plt.figure(figsize=figsize)
+		ax = plt.subplot(121)
+		ax.set_xlim(min_x,max_x)
+		if logscale_x:
+			ax.set_xscale('log', nonposx='clip', nonposy='clip')
+		if xaxis_label is not None:
+			ax.set_xlabel(xaxis_label)
+		if yaxis_label is not None:
+			ax.set_ylabel(yaxis_label)
+		lgnd_hands = []
+		
+		for n, iy in enumerate(y):
+			if y_labels and len(y_labels)>n:
+				iy_label = y_labels[n]
 			else:
-				ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
-			ax.minorticks_on()
-
-			hist_vals = None
-			hist_wgts = None
-
-			pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
-			if not supress_legend:
-				ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
-			ax.patch.set_visible(False)
-			ax.set_xlim(min_x,max_x)
-
-			# Marginals....
-			dy = []
-			dy_labels = []
-			for yf in dy_funcs:
-				dy.append( yf.func(x,ref_to_m) )
-				dy_labels.append( yf.label )
-			ax = plt.subplot(122)
-			ax.set_xlim(min_x,max_x)
-			if logscale_x:
-				ax.set_xscale('log', nonposx='clip', nonposy='clip')
-			if xaxis_label is not None:
-				ax.set_xlabel(xaxis_label)
-			if yaxis_label is not None:
-				ax.set_ylabel("Marginal "+yaxis_label)
-			lgnd_hands = []
-			
-			for n, iy in enumerate(dy):
-				if dy_labels and len(dy_labels)>n:
-					iy_label = dy_labels[n]
-				else:
-					iy_label = None
-				l1=plt.plot(x, iy, linewidth=2, label=iy_label)
-				lgnd_hands += l1
-			
-			box = ax.get_position()
-			if not supress_legend:
-				ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
-			else:
-				ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
-			ax.minorticks_on()
-
-			hist_vals = None
-			hist_wgts = None
-
-			pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
-			if not supress_legend:
-				ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
-			ax.patch.set_visible(False)
-			ax.set_xlim(min_x,max_x)
-
-		if short_header is None:
-			return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel)
+				iy_label = None
+			l1=plt.plot(x, iy, linewidth=2, label=iy_label)
+			lgnd_hands += l1
+		
+		box = ax.get_position()
+		if not supress_legend:
+			ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
 		else:
-			return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
+			ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
+		ax.minorticks_on()
 
-	m.add_to_report(maker)
+		hist_vals = None
+		hist_wgts = None
+
+		pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
+		if not supress_legend:
+			ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
+		ax.patch.set_visible(False)
+		ax.set_xlim(min_x,max_x)
+
+		# Marginals....
+		dy = []
+		dy_labels = []
+		for yf in dy_funcs:
+			dy.append( yf.func(x,m) )
+			dy_labels.append( yf.label )
+		ax = plt.subplot(122)
+		ax.set_xlim(min_x,max_x)
+		if logscale_x:
+			ax.set_xscale('log', nonposx='clip', nonposy='clip')
+		if xaxis_label is not None:
+			ax.set_xlabel(xaxis_label)
+		if yaxis_label is not None:
+			ax.set_ylabel("Marginal "+yaxis_label)
+		lgnd_hands = []
+		
+		for n, iy in enumerate(dy):
+			if dy_labels and len(dy_labels)>n:
+				iy_label = dy_labels[n]
+			else:
+				iy_label = None
+			l1=plt.plot(x, iy, linewidth=2, label=iy_label)
+			lgnd_hands += l1
+		
+		box = ax.get_position()
+		if not supress_legend:
+			ax.set_position([box.x0, box.y0+0.1, box.width * 0.5, box.height-0.1])
+		else:
+			ax.set_position([box.x0, box.y0+0.1, box.width-0.1, box.height-0.1])
+		ax.minorticks_on()
+
+		hist_vals = None
+		hist_wgts = None
+
+		pushover = 1.05 if hist_vals is None or hist_wgts is None else 1.25
+		if not supress_legend:
+			ax.legend(loc='center left', bbox_to_anchor=(pushover,0.5), handles=lgnd_hands, fontsize=9)
+		ax.patch.set_visible(False)
+		ax.set_xlim(min_x,max_x)
+
+		return plt_as_svg_xhtml(header=header, headerlevel=headerlevel, anchor=short_header or header)
+
+def new_xhtml_computed_factor_figure_with_derivative(self, figurename, y_funcs, header=None, short_header=None, headerlevel=2, autoregister=True, **kwargs):
+	caller = lambda *arg, **kw: self.svg_computed_factor_figure_with_derivative(y_funcs, header=header, short_header=short_header, headerlevel=headerlevel, **kwargs)
+	self.new_xhtml_section(caller, figurename, register=autoregister)
 
 
 
-def validation_distribution_figure(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False, log_scale=False):
+def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False, log_scale=False, figsize=(6.5,3)):
 	"""A figure showing the distribution of a factor across real and modeled observations.
-
-	This is an experimental function, use at your own risk
 
 	Parameters
 	----------
@@ -719,6 +716,7 @@ def validation_distribution_figure(m, factorarray, range, bins, headerlevel, hea
 		The array of factors to validate on.  Or give the name of an idca variable.
 	range : tuple
 	bins : int or str
+		These get passed to plt.hist.
 	headerlevel : int
 	header : str
 	short_header : str or None
@@ -727,44 +725,164 @@ def validation_distribution_figure(m, factorarray, range, bins, headerlevel, hea
 		factorarray = m.df.array_idca(factorarray).squeeze()
 	
 	from matplotlib import pyplot as plt
-	if short_header is None:
-		short_header = header
-
-	def distance_validation_maker(mod):
-		if mod.data.weight is None:
-			pr = mod.work.probability[:, :mod.nAlts()]
-			ch = mod.data.choice.squeeze()
-		else:
-			pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
-			ch = mod.data.choice.squeeze() * mod.data.weight
-		plt.clf()
-		h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled', log=log_scale)
-		h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed', log=log_scale)
-		#plt.legend(handles=[h1[1],h2[-1]])
-		plt.legend()
-		return plot_as_svg_xhtml(plt, header=header, headerlevel=headerlevel, anchor=short_header)
-
-	if to_report:
-		m.add_to_report(distance_validation_maker)
-	if immediate:
-		distance_validation_maker(m)
-		plt.show()
+	mod = m
+	if mod.data.weight is None:
+		pr = mod.work.probability[:, :mod.nAlts()]
+		ch = mod.data.choice.squeeze()
+	else:
+		pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
+		ch = mod.data.choice.squeeze() * mod.data.weight
+	plt.clf()
+	fig = plt.figure(figsize=figsize)
+	h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled', log=log_scale)
+	h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed', log=log_scale)
+	plt.legend()
+	return plt_as_svg_xhtml(header=header, headerlevel=headerlevel, anchor=short_header or header)
 
 
-	'''
-	Validation plots for destination choice.
+
+def new_xhtml_validation_distribution(self, figurename, factorarray,
+								 header=None, headerlevel=2, short_header=None,
+								 autoregister=True,
+								 **kwargs):
+	"""
+	A figure showing the distribution of a factor across real and modeled observations.
 	
 	Parameters
 	----------
-	lat, lon : ndarray[nalts]
-		An array giving lat and lon coordinates for the zonal alternatives.
-	'''
+	figurename : str
+		A name for the mapset
+	factorarray : ndarray [nCases, nAlts], or str
+		The array of factors to validate on.  Or give the name of an idca variable.
+	header : str, optional
+		A header to prepend to the mapset, as a <hN> tag.
+	headerlevel : int, optional
+		The level N in the header tag.
+	short_header : str, optional
+		A shortened version of the header, for the table of contents.
+		
+	Note
+	----
+	Other keyword arguments will be passed through to `svg_validation_distribution`
+	when that function is called at report generation time.
+	"""
+	caller = lambda *arg, **kw: self.svg_validation_distribution(factorarray, *arg, **kw, **kwargs, headerlevel=headerlevel, header=header, short_header=short_header)
+	self.new_xhtml_section(caller, figurename, register=autoregister)
 
 
 
-def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(11,20), show_diffs='linear', scaled_diffs=True,
+def svg_observations_latlong(mod, lat, lon, extent=None, figsize=(6.0,3.0),
 							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
-							colormap='rainbow', tight_layout=True):
+							colormap='rainbow', tight_layout=True,
+							headerlevel=2, header=None, short_header=None):
+	"""
+	A validation mapset for destination choice and similar models.
+	
+	Parameters
+	----------
+	lat, lon : ndarray
+		Latitude and Longitude of the zonal centroids. Should be vectors
+		with length equal to number of alternatives.
+	extent : None or 4-tuple
+		The limits of the map, give as (west_lon,east_lon,south_lat,north_lat).  If 
+		None the limits are found automatically.
+	figsize : tuple
+		The (width,height) for the figure.
+	show_diffs : {'linear', 'log', False}
+		Whether to include a differences map, with linear or log scale.
+	scaled_diffs : bool
+		Include a scaled version of the diffs, scaled by log(obs). This de-emphasizes
+		larger diffs when the total trips to the zone is very large.
+	header : str, optional
+		A header to prepend to the mapset, as a <hN> tag.
+	headerlevel : int, optional
+		The level N in the header tag.
+	short_header : str, optional
+		A shortened version of the header, for the table of contents.
+	"""
+	from matplotlib import pyplot as plt
+	import matplotlib.colors as colors
+	from matplotlib.ticker import LogLocator
+	import matplotlib.cm as cm
+	n_subplots = 1
+	plot_n = 1
+	if mod.data.weight is None:
+		pr = mod.work.probability[:, :mod.nAlts()]
+		ch = mod.data.choice.squeeze()
+		wlabel = ""
+	else:
+		pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
+		ch = mod.data.choice.squeeze() * mod.data.weight
+		wlabel = "Weighted "
+	pr_0 = pr.sum(0).flatten()
+	ch_0 = ch.sum(0).flatten()
+	plt.clf()
+	fig = plt.figure(figsize=figsize, tight_layout=tight_layout)
+
+	def next_subplot(title=None, axisbg=None, ticks_off=True):
+		ax = plt.subplot(n_subplots,1,next_subplot.plot_n, axisbg=axisbg)
+		next_subplot.plot_n+=1
+		if title:
+			ax.set_title(title, fontname=headfont)
+		if ticks_off:
+			ax.get_xaxis().set_ticks([])
+			ax.get_yaxis().set_ticks([])
+		return ax
+
+	next_subplot.plot_n = 1
+
+	ax1 = next_subplot('Observed')
+	hb1 = ax1.hexbin(lon, lat, C=ch_0, gridsize=gridsize, xscale='linear',
+					 yscale='linear', bins=None, extent=extent, cmap=colormap, 
+					 norm=None, alpha=None, linewidths=0.1, edgecolors='none', 
+					 reduce_C_function=numpy.sum, mincnt=None, marginals=False, data=None, )
+
+	# Renorm hb1 and hb2 to same scale
+	renorm = colors.LogNorm()
+	vst = numpy.vstack([hb1.get_array(),])
+	vst = vst[vst!=0]
+	renorm.autoscale_None( vst )
+	hb1.set_norm( renorm )
+
+	# Colorbars
+	cb = plt.colorbar(hb1, ax=ax1, ticks=LogLocator(subs=range(10)))
+	cb.set_label(wlabel+'Counts', fontname=textfont)
+	for l in cb.ax.yaxis.get_ticklabels():
+		l.set_family(textfont)
+
+	return plt_as_svg_xhtml(headerlevel=headerlevel, header=header, anchor=short_header or header, clf_after=False)
+
+
+
+def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_diffs='linear', scaled_diffs=True,
+							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
+							colormap='rainbow', tight_layout=True,
+							headerlevel=2, header=None, short_header=None):
+	"""
+	A validation mapset for destination choice and similar models.
+	
+	Parameters
+	----------
+	lat, lon : ndarray
+		Latitude and Longitude of the zonal centroids. Should be vectors
+		with length equal to number of alternatives.
+	extent : None or 4-tuple
+		The limits of the map, give as (west_lon,east_lon,south_lat,north_lat).  If 
+		None the limits are found automatically.
+	figsize : tuple
+		The (width,height) for the figure.
+	show_diffs : {'linear', 'log', False}
+		Whether to include a differences map, with linear or log scale.
+	scaled_diffs : bool
+		Include a scaled version of the diffs, scaled by log(obs). This de-emphasizes
+		larger diffs when the total trips to the zone is very large.
+	header : str, optional
+		A header to prepend to the mapset, as a <hN> tag.
+	headerlevel : int, optional
+		The level N in the header tag.
+	short_header : str, optional
+		A shortened version of the header, for the table of contents.
+	"""
 	from matplotlib import pyplot as plt
 	import matplotlib.colors as colors
 	from matplotlib.ticker import LogLocator
@@ -842,7 +960,7 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(11,20), show_dif
 					   marginals=False, data=None, )
 
 		# Re-norm
-		mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
+		mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,99])
 		if show_diffs=='log':
 			norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
 		else:
@@ -873,7 +991,7 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(11,20), show_dif
 					   marginals=False, data=None, )
 		# Re-norm
 		if mid is None or top is None:
-			mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,97])
+			mid,top = numpy.percentile(numpy.abs(hb.get_array()),[66,99])
 		if show_diffs=='log':
 			norm = colors.SymLogNorm(linthresh=mid, linscale=0.025, vmin=-top, vmax=top)
 		else:
@@ -888,16 +1006,39 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(11,20), show_dif
 		for l in cb.ax.yaxis.get_ticklabels():
 			l.set_family(textfont)
 
-	return plt_as_svg_xhtml()
+	return plt_as_svg_xhtml(headerlevel=headerlevel, header=header, anchor=short_header or header)
 
 
 
 
 def new_xhtml_validation_latlong(self, figurename, lat, lon,
-								 headerlevel, header, short_header=None,
+								 header=None, headerlevel=2, short_header=None,
+								 autoregister=True,
 								 **kwargs):
-	caller = lambda m, *arg, **kw: m.svg_validation_latlong(lat, lon, *arg, **kw)
-	self.new_xhtml_section(caller, figurename)
+	"""
+	A validation mapset section for destination choice and similar models.
+	
+	Parameters
+	----------
+	figurename : str
+		A name for the mapset
+	lat, lon : ndarray
+		Latitude and Longitude of the zonal centroids. Should be vectors
+		with length equal to number of alternatives.
+	header : str, optional
+		A header to prepend to the mapset, as a <hN> tag.
+	headerlevel : int, optional
+		The level N in the header tag.
+	short_header : str, optional
+		A shortened version of the header, for the table of contents.
+		
+	Note
+	----
+	Other keyword arguments will be passed through to `svg_validation_latlong`
+	when that function is called at report generation time.
+	"""
+	caller = lambda *arg, **kw: self.svg_validation_latlong(lat, lon, *arg, **kw, **kwargs, headerlevel=headerlevel, header=header, short_header=short_header)
+	self.new_xhtml_section(caller, figurename, register=autoregister)
 
 
 

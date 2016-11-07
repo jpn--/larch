@@ -1,5 +1,6 @@
 from .util.attribute_dict import dictal
 from .util.text_manip import case_insensitive_close_matches
+import hashlib
 
 class DataManager:
 	"""Manages data for a :class:`Model`."""
@@ -47,6 +48,23 @@ class DataManager:
 
 	def needs(self):
 		return dictal(self._model.needs())
+
+	def needs_description(self):
+		descrip = "needs:"
+		need= self._model.needs()
+		keys = sorted(need.keys())
+		for k in keys:
+			descrip += "\n  {}:".format(k)
+			vars = need[k].get_variables()
+			for v in vars:
+				descrip += "\n      {}".format(v)
+			descrip += "\n    nAlts:{}".format(need[k].nAlts())
+			descrip += "\n    dimty:{}".format(need[k].dimty)
+			descrip += "\n    dtype:{}".format(need[k].dtype)
+		return descrip
+
+	def needs_hash(self):
+		return hashlib.md5(self.needs_description().encode()).hexdigest()
 
 	@property
 	def utilityco_vars(self):

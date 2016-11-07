@@ -2908,6 +2908,9 @@ class LinearFunction(ComponentVector):
     def receive_utility_co_kwd(self, *args, **kwargs) -> "void":
         return _core.LinearFunction_receive_utility_co_kwd(self, *args, **kwargs)
 
+    def __code__(self) -> "std::string":
+        return _core.LinearFunction___code__(self)
+
     def __str__(self) -> "std::string":
         return _core.LinearFunction___str__(self)
 
@@ -2933,7 +2936,11 @@ class LinearFunction(ComponentVector):
     def __iadd__(self, other):
     	if other==():
     		return self
-    	self._inplace_add(other)
+    	try:
+    		self._inplace_add(other)
+    	except NotImplementedError as t:
+    		t.args = (t.args[0] + "\n  self is type {}\n  other is type {}".format(type(self),type(other)),) + t.args[1:]
+    		raise t
     	return self
     def __radd__(self, other):
     	return LinearFunction() + other + self
@@ -3052,6 +3059,24 @@ class LinearFunction(ComponentVector):
     	for i,j in zip(self, other):
     		if i != j: return False
     	return True
+
+
+    def __getstate__(self):
+    	state = {}
+    	state['code'] = self.__code__()
+    	try:
+    		state['_dimlabel'] = self._dimlabel
+    	except AttributeError:
+    		pass
+    	return state
+
+    def __setstate__(self, state):
+    	from .roles import P,X
+    	self.__init__()
+    	self += eval(state['code'])
+    	if '_dimlabel' in state:
+    		self._dimlabel = state['_dimlabel']
+
 
 
     __swig_destroy__ = _core.delete_LinearFunction
@@ -4367,16 +4392,16 @@ class Model2(sherpa):
     def change_data_fountain(self, datafile: 'Fountain') -> "void":
         return _core.Model2_change_data_fountain(self, datafile)
 
-    def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False) -> "void":
+    def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False, cache: 'bool'=False) -> "void":
 
         if self.logger(): self.logger().log(30, "Model.setUp...")
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
-        	self.provision()
+        	self.provision(cache=cache)
         	self.setUpMessage = "autoprovision yes (setUp)"
         	if self.logger(): self.logger().info("autoprovisioned data from database")
 
 
-        val = _core.Model2_setUp(self, and_load_data, force)
+        val = _core.Model2_setUp(self, and_load_data, force, cache)
 
         if self.logger(): self.logger().log(30, "Model.setUp complete")
 

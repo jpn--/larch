@@ -238,6 +238,23 @@ std::string elm::ComponentList::__str__() const
 	return x.str();
 }
 
+std::string elm::ComponentList::__code__() const
+{
+	std::ostringstream x;
+	bool plus = false;
+	x << "(";
+	for (auto i=begin(); i!=end(); i++) {
+		if (plus) {
+			x << "+";
+		}
+		x << "(" << i->__str__() << ")";
+		plus = true;
+	}
+	x << ")";
+	return x.str();
+}
+
+
 void elm::ComponentList::receive_utility_ca(const std::string& column_name, 
 							    std::string freedom_name, 
 							    const double& freedom_multiplier)

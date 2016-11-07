@@ -491,7 +491,7 @@ void elm::Model2::_pull_graph_from_db()
 }
 
 
-void elm::Model2::setUp(bool and_load_data, bool force)
+void elm::Model2::setUp(bool and_load_data, bool force, bool cache)
 {
 	
 	if (!force) {

@@ -107,6 +107,7 @@ class SkipReportTable:
 		pass
 	def xml(self, *arg, **kwarg):
 		return None
+	__xml__ = xml
 
 
 class AbstractReportTable():

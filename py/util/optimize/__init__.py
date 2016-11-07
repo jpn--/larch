@@ -242,7 +242,7 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 		constraints = constraints + tuple(model.network_based_constraints())
 	return constraints
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0):
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0, cache_data=False):
 	"""
 	Maximize the log likelihood of the model.
 	
@@ -269,8 +269,8 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 		stat.start_process('setup')
 		model.tearDown()
 		if not model.is_provisioned() and model._ref_to_db is not None:
-			model.provision(idca_avail_ratio_floor = model.option.idca_avail_ratio_floor)
-		model.setUp(False)
+			model.provision(idca_avail_ratio_floor = model.option.idca_avail_ratio_floor, cache=cache_data)
+		model.setUp(False, cache=cache_data)
 
 	if pre_bhhh:
 		stat.start_process('pre_bhhh')

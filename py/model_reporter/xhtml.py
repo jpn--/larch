@@ -4,7 +4,7 @@ from ..util.pmath import category, pmath, rename
 from ..core import LarchError, ParameterAlias, IntStringDict
 from ..dt import DT_idco_stack_manager
 from io import StringIO
-from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes, xhtml_dataframe_as_div, xhtml_rawtext_as_div
+from ..util.xhtml import XHTML, XML_Builder, xhtml_section_bytes, xhtml_dataframe_as_div, xhtml_rawtext_as_div, Elem
 from ..util.plotting import plot_as_svg_xhtml
 import math
 import numpy
@@ -24,13 +24,99 @@ XhtmlModelReporter_default_format = {
 }
 
 
+def _reformat_and_default_keys(**format):
+	existing_format_keys = list(format.keys())
+	new_format = {}
+	for key in existing_format_keys:
+		new_format[key.upper()] = format[key]
+	# Add style options if not given
+	for each_key, each_value in XhtmlModelReporter_default_format.items():
+		each_key = each_key.upper()
+		if each_key not in new_format:
+			format[each_key] = each_value
+	return new_format
+
+
+
+
+
+
 NonBreakSpace = " "
 
 
 class XhtmlModelReporter():
 
 
-	def xhtml_report(self, cats=None, raw_xml=False, throw_exceptions=False, filename=None, **format):
+
+	def iter_cats(self, cats):
+		discovered = set()
+		for i in cats:
+			if i=='!':
+				for j in ('title', 'possible_overspecification', 'params', 'll', 'latest'):
+					if j not in discovered: yield j
+					discovered.add(j)
+
+			elif i=='$':
+				for j in (('utilityspec','probabilityspec') if len(self.node)>0 else ('utilityspec',)):
+					if j not in discovered: yield j
+					discovered.add(j)
+
+			elif i=='&':
+				try:
+					reggies = self._registered_xhtml
+				except AttributeError:
+					pass
+				else:
+					for j in reggies:
+						j = j.casefold()
+						if j not in discovered: yield j
+						discovered.add(j)
+			else:
+				if i not in discovered: yield i
+				discovered.add(i)
+		raise StopIteration
+
+
+	def _inflate_cats(self, cats):
+		
+		if cats is None:
+			cats = ['title','params','LL','latest']
+		
+		if cats=='*0' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA', 'excludedcases','UTILITYDATA','NOTES','options','possible_overspecification'] #+ list(self._user_defined_arts)
+		elif cats=='*0':
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA', 'excludedcases','UTILITYDATA','NOTES','options','possible_overspecification'] #+ list(self._user_defined_arts)
+
+		if cats in ('*',) and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA','excludedcases','NOTES','options','possible_overspecification',  'datasummary'] #+ list(self._user_defined_arts)
+		elif cats in ('*',):
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA','excludedcases','NOTES','options','possible_overspecification',  'datasummary'] #+ list(self._user_defined_arts)
+
+		if cats in ('**',) and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','nesting_tree_textonly','latest','UTILITYSPEC','PROBABILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification', 'datasummary', 'choice_distributions'] #+ list(self._user_defined_arts)
+		elif cats in ('**',):
+			cats=['title','params','LL',                                       'latest','UTILITYSPEC',                  'DATA', 'excludedcases','NOTES','options','possible_overspecification', 'datasummary', 'choice_distributions'] #+ list(self._user_defined_arts)
+
+		if cats in ('*Q',) and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree_textonly','latest','UTILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification',] #+ list(self._user_defined_arts)
+		elif cats in ('*Q',):
+			cats=['title','params','LL',                        'latest','UTILITYSPEC','DATA', 'excludedcases','NOTES','options','possible_overspecification',] #+ list(self._user_defined_arts)
+
+		if cats=='-' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree','latest','NOTES','options','possible_overspecification']
+		elif cats=='-':
+			cats=['title','params','LL',               'latest','NOTES','options','possible_overspecification']
+
+		if cats=='D' and len(self.node)>0:
+			cats=['title','params','LL','nesting_tree_textonly','latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]
+		elif cats=='D':
+			cats=['title','params','LL',                        'latest','NOTES','options','queryinfo','UTILITYSPEC','possible_overspecification',]
+
+		cats1 = [*self.iter_cats(cats)]
+		return cats1
+
+
+	def xhtml_report_v0(self, cats=None, raw_xml=False, throw_exceptions=False, filename=None, **format):
 		"""
 		Generate a model report in xhtml format.
 		
@@ -60,7 +146,7 @@ class XhtmlModelReporter():
 		
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> from larch.util.temporaryfile import TemporaryHtml
-		>>> html = m.xhtml_report()
+		>>> html = m.xhtml_report_v0()
 		>>> html
 		b'<!DOCTYPE html ...>'
 		
@@ -235,6 +321,73 @@ class XhtmlModelReporter():
 			return x.dump()
 
 
+	def xhtml_exception(self, c=None):
+		xerr = XML_Builder()
+		xerr.simple("hr")
+		xerr.start("pre", {'class':'error_report'})
+		if c is not None:
+			xerr.data("Error in {}".format(c))
+			xerr.simple("br")
+		y = traceback.format_exception(*sys.exc_info())
+		for yy in y:
+			for eachline in yy.split("\n"):
+				xerr.data(eachline)
+				xerr.simple("br")
+		xerr.end("pre")
+		xerr.simple("hr")
+		return xerr.close()
+
+
+	def xhtml_report(self, cats=None, raw_xml=False, throw_exceptions=False, filename=None, popup=True, **format):
+		format = _reformat_and_default_keys(**format)
+	
+		if raw_xml:
+			from ..util.xhtml import Elem
+			x = Elem('div', {'class':'model_report'})
+		else:
+			import base64
+			x = XHTML(quickhead=self)
+
+		icats = iter(self._inflate_cats(cats)) # do not know why this is important, but crashes sometimes without it
+
+		for c in icats:
+			c_ = c.casefold()
+			
+			# STEP 1: Get the method
+			try:
+				func = self.xml[c]
+			except (KeyError, AttributeError):
+				if throw_exceptions: raise
+				x.append(self.xhtml_exception())
+				continue
+
+			# STEP 2: Call the method
+			try:
+				to_append = func(**format)
+				if to_append is not None:
+					x.append(to_append)
+			except:
+				if throw_exceptions: raise
+				x.append(self.xhtml_exception(c))
+
+
+		if filename is not None:
+			from ..util.filemanager import fileopen
+			with fileopen(filename, mode='wb', suffix='html') as f:
+				f.write(x.dump())
+				f.flush()
+				if popup:
+					try:
+						f.view()
+					except:
+						pass
+		
+		if raw_xml:
+			return x
+		elif filename is None:
+			return x.dump()
+
+
 
 
 	class XmlManager:
@@ -275,8 +428,8 @@ class XhtmlModelReporter():
 			return repr(self)
 
 		def __getattr__(self, key):
-			if key=='_model':
-				return self.__dict__['_model']
+			if key in ('_model', '_return_xhtml'):
+				return self.__dict__[key]
 			return self.__getitem__(key)
 	
 		def __dir__(self):
@@ -293,12 +446,40 @@ class XhtmlModelReporter():
 			else:
 				candidates.update(self._user_defined_xhtml.keys())
 			return candidates
-			
+	
+		def __setattr__(self, key, val):
+			if key[0]=='_':
+				super().__setattr__(key, val)
+			else:
+				self._model.new_xhtml_section(val, key)
+
+		def __setitem__(self, key, val):
+			if key[0]=='_':
+				super().__setitem__(key, val)
+			else:
+				self._model.new_xhtml_section(val, key)
+	
+		def __call__(self, *args, force_Elem=False):
+			div = Elem('div')
+			for arg in self._model.iter_cats(args):
+				if isinstance(arg, Elem):
+					div << arg
+				elif isinstance(arg, str):
+					div << self[arg]()
+				elif inspect.ismethod(arg):
+					div << arg()
+				elif isinstance(arg, list):
+					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
+			if not force_Elem and self._return_xhtml:
+				return ElementTree.tostring(div, encoding="utf8", method="html")
+			return div
 
 	@property
 	def xml(self):
 		"""A :class:`XmlManager` interface for the model."""
 		return XhtmlModelReporter.XmlManager(self)
+
+	xhtml = xml
 
 	@property
 	def html(self):
@@ -306,28 +487,36 @@ class XhtmlModelReporter():
 		return XhtmlModelReporter.XmlManager(self, True)
 
 
-	def new_xhtml_section(self, caller, name):
+	def new_xhtml_section(self, caller, name, register=True):
 		"""
 		Create a new xhtml report for this model.
 		
 		Parameters
 		----------
 		caller : callable
-			A function to generate the report.  When this functions is called, the first positional argument will be
-			the model instance (as for a class method). Additional positional and keyword arguments are allowed. The
+			A function to generate the report.  Positional and keyword arguments are allowed. The
 			caller must also accept (and possibly ignore) any keyword argument, via the double-star keyword form.
 			The caller should return a :class:`larch.util.xhtml.Elem` object, typically a <div>.
 		name : str
 			The name for this report.  It must not conflict with an existing name.
 		"""
 		#from ..model import Model
-		if 'xhtml_{}'.format(name) in dir(self):
+		if 'xhtml_{}'.format(name) in dir(self) or 'art_{}'.format(name) in dir(self):
 			raise TypeError( "the name '{}' conflicts with a regular method in larch.Model".format(name) )
 		try:
 			self._user_defined_xhtml
 		except AttributeError:
 			self._user_defined_xhtml = {}
+		if not callable(caller):
+			raise TypeError( "{} is not callable".format(type(caller)) )
 		self._user_defined_xhtml[name] = caller
+		
+		try:
+			self._registered_xhtml
+		except AttributeError:
+			self._registered_xhtml = []
+		if register:
+			self._registered_xhtml.append(name)
 
 
 	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):

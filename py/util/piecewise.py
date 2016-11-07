@@ -492,7 +492,7 @@ def log_and_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=N
 
 def log_and_gross_piecewise_linear_function(basevar, breaks, baseparam=None):
 	from ..roles import P, X
-	f = gross_piecewise_linear_function(basevar, breaks, baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
+	f = gross_piecewise_linear_function(basevar, breaks=breaks, baseparam=baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
 	f._dimlabel=basevar
 	return f
 

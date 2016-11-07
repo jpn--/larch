@@ -78,7 +78,7 @@ try:
 	from .built import build, versions, build_config, longversion
 	del built
 except (NameError, ImportError):
-	build, versions, build_config = "",{},""
+	build, versions, build_config, longversion = "",{},"",""
 
 try:
 	from . import linalg
