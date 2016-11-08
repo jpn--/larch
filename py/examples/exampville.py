@@ -76,10 +76,10 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 
 	## Households
 	flog("HHs")
-	HHidx = numpy.arange(n_HH, dtype=int)
+	HHidx = numpy.arange(n_HH, dtype=numpy.int64)
 	HHid = numpy.asarray([50000+i for i in HHidx])
-	HHincome = numpy.round( numpy.random.normal(75000,25000,[n_HH,]), -3 ).astype(int)
-	HHsize = numpy.floor(numpy.random.exponential(0.8,[n_HH,])+1+numpy.random.random([n_HH,])).astype(int)
+	HHincome = numpy.round( numpy.random.normal(75000,25000,[n_HH,]), -3 ).astype(numpy.int64)
+	HHsize = numpy.floor(numpy.random.exponential(0.8,[n_HH,])+1+numpy.random.random([n_HH,])).astype(numpy.int64)
 	HHhomezone = numpy.random.choice(numpy.arange(1,nZones+1), size=[n_HH,], replace=True, p=pop_weight)
 
 
@@ -88,17 +88,17 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	## People
 	flog("People")
 	n_PER = numpy.sum(HHsize)
-	PERidx = numpy.arange(n_PER, dtype=int)
+	PERidx = numpy.arange(n_PER, dtype=numpy.int64)
 	PERid = numpy.asarray([60000+i for i in PERidx])
-	PERhhid = numpy.zeros(n_PER, dtype=int)
-	PERhhidx = numpy.zeros(n_PER, dtype=int)
+	PERhhid = numpy.zeros(n_PER, dtype=numpy.int64)
+	PERhhidx = numpy.zeros(n_PER, dtype=numpy.int64)
 	n2 = 0
 	for n1 in range(n_HH):
 		PERhhid[n2:(n2+HHsize[n1])] = HHid[n1]
 		PERhhidx[n2:(n2+HHsize[n1])] = HHidx[n1]
 		n2 += HHsize[n1]
-	PERage = (numpy.random.random(n_PER)*80+5).astype(int)
-	PERworks = ((numpy.random.random(n_PER)>0.2) & (PERage > 16) & (PERage < 70)).astype(int)
+	PERage = (numpy.random.random(n_PER)*80+5).astype(numpy.int64)
+	PERworks = ((numpy.random.random(n_PER)>0.2) & (PERage > 16) & (PERage < 70)).astype(numpy.int64)
 
 	zone_employment = numpy.round( PERworks.sum()*wrk_weight, 0 )+1
 
@@ -116,14 +116,14 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 
 	n_TOUR = PERntours.sum()
 
-	TOURid = numpy.arange(n_TOUR, dtype=int)
-	TOURper = numpy.zeros(n_TOUR, dtype=int)
-	TOURperidx = numpy.zeros(n_TOUR, dtype=int)
-	TOURhh = numpy.zeros(n_TOUR, dtype=int)
-	TOURhhidx = numpy.zeros(n_TOUR, dtype=int)
-	TOURdtaz = numpy.zeros(n_TOUR, dtype=int)
-	TOURmode = numpy.zeros(n_TOUR, dtype=int)
-	TOURpurpose = numpy.zeros(n_TOUR, dtype=int)
+	TOURid = numpy.arange(n_TOUR, dtype=numpy.int64)
+	TOURper = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURperidx = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURhh = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURhhidx = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURdtaz = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURmode = numpy.zeros(n_TOUR, dtype=numpy.int64)
+	TOURpurpose = numpy.zeros(n_TOUR, dtype=numpy.int64)
 
 	# Work tours, then other tours
 	n2 = 0
@@ -259,7 +259,7 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	omx.add_matrix('AUTO_TIME', drivetime)
 	omx.add_matrix('RAIL_TIME', transittime)
 	omx.add_matrix('RAIL_FARE', transitfare)
-	omx.add_lookup('TAZID', numpy.arange(1,nZones+1, dtype=int))
+	omx.add_lookup('TAZID', numpy.arange(1,nZones+1, dtype=numpy.int64))
 	omx.add_lookup('EMPLOYMENT', zone_employment)
 	omx.add_lookup('EMP_RETAIL', zone_retail)
 	omx.add_lookup('EMP_NONRETAIL', zone_nonretail)
