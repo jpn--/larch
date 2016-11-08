@@ -65,7 +65,7 @@ def smoothed_piecewise_function(basevar, blockvar, turns, smoothness, baseparam=
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=blockvar
+	f._x_ident=blockvar
 	return f
 
 
@@ -144,7 +144,7 @@ def piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 def piecewise_logarithmic_function(basevar, breaks, smoothness=1, baseparam=None):
@@ -159,7 +159,7 @@ def piecewise_logarithmic_function(basevar, breaks, smoothness=1, baseparam=None
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -186,7 +186,7 @@ def gross_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=Non
 	for x1,x2,p in zip(Xs[:-1],Xs[1:],Ps):
 		f += (x1-x2) * p
 	f += Xs[-1] * Ps[-1]
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -213,7 +213,7 @@ def gross_piecewise_logarithmic_function(basevar, breaks, smoothness=1, basepara
 	for x1,x2,p in zip(Xs[:-1],Xs[1:],Ps):
 		f += (x1-x2) * p
 	f += Xs[-1] * Ps[-1]
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -233,7 +233,7 @@ def piecewise_linear_function_with_log_tail(basevar, breaks, smoothness=1, basep
 		tail=breaks[-1]
 	from ..roles import P, X
 	f += P('log{0}P1_over{1}'.format(baseparam, tail)) * X('log1p({0})*({0}>{1})'.format(basevar, tail))
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -298,7 +298,7 @@ def nonsmooth_gross_piecewise_linear_function(basevar, breaks, baseparam=None):
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -363,7 +363,7 @@ def nonsmooth_gross_piecewise_logarithmic_function(basevar, breaks, baseparam=No
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -375,7 +375,7 @@ def gross_piecewise_linear_function_with_log_tail(basevar, breaks, baseparam=Non
 	f = gross_piecewise_linear_function(basevar, breaks, baseparam)
 	from ..roles import P, X
 	f = sum(f[:-1]) + P('log{0}P1_over{1}'.format(baseparam, breaks[-1])) * X('log1p({0})*({0}>{1})'.format(basevar, breaks[-1]))
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -442,7 +442,7 @@ def polynomial_linear_function(basevar, powers, baseparam=None, invertpower=Fals
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -481,19 +481,19 @@ def log_and_linear_function(basevar, baseparam=None):
 	if baseparam is None:
 		baseparam = basevar
 	f = P(baseparam)*X(basevar) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 def log_and_piecewise_linear_function(basevar, breaks, smoothness=1, baseparam=None):
 	from ..roles import P, X
 	f = piecewise_linear_function(basevar, breaks, smoothness, baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 def log_and_gross_piecewise_linear_function(basevar, breaks, baseparam=None):
 	from ..roles import P, X
 	f = gross_piecewise_linear_function(basevar, breaks=breaks, baseparam=baseparam) + P("log{}P1".format(baseparam))*X('log1p({})'.format(basevar))
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 
@@ -569,7 +569,7 @@ def piecewise_decay_function(basevar, levels, keep_linear=False, baseparam=None)
 	f = LinearFunction()
 	for x,p in zip(Xs,Ps):
 		f += x * p
-	f._dimlabel=basevar
+	f._x_ident=basevar
 	return f
 
 

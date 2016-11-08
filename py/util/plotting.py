@@ -583,7 +583,7 @@ def computed_factor_figure_v2(m, y_funcs, y_labels=None,
 
 
 
-def svg_computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
+def svg_computed_factor_figure_with_derivative(m, y_funcs,
 							   max_x=1, min_x=0, header=None,
 							   xaxis_label=None, yaxis_label=None,
 							   logscale_x=False, logscale_f=False, figsize=(11,3),
@@ -596,20 +596,21 @@ def svg_computed_factor_figure_with_derivative(m, y_funcs, y_labels=None,
 	----------
 	m : Model
 		The model underlying the computed factor.
-	y_funcs : ComputedFactor or sequence of ComputedFactors
+	y_funcs : LinearFunction or ComputedFactor or sequence of ComputedFactors
 		A list or other sequence of ComputedFactor.  Each ComputedFactor.func should accept two positional
 		parameters given as x,m where x is the array of data values for the relevant attribute, 
 		and m is the model passed to this function.
-	y_labels : sequence of str
-		A set of labels to apply to the y_funcs.  If given, this should match the length of `y_funcs`.
-	xaxis_label : str
-		As expected.
-	yaxis_label : str
-		As expected.
+	xaxis_label, yaxis_label : str
+		As you might expect.
 	"""
 	
+	if isinstance(y_funcs, LinearFunction):
+		y_funcs = y_funcs.evaluator1d()
+
 	if isinstance(y_funcs, ComputedFactor):
 		y_funcs = [y_funcs,]
+
+	y_funcs = [(i.evaluator1d() if isinstance(i,LinearFunction) else i) for i in y_funcs]
 
 	# We use the forward derivative here, not backward, because of the ubiquity of zero-bounded piecewise terms in utility functions.
 	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x+epsilon,m) - cf.func(x,m))*(1/epsilon)), ) for cf in y_funcs]

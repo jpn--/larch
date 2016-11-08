@@ -20,6 +20,7 @@ import numbers
 import collections
 from .util.aster import asterize
 from .util.naming import make_valid_identifier
+from .util.filemanager import path_shrinker
 import keyword
 import pandas
 import os
@@ -2998,7 +2999,7 @@ class DT(Fountain):
 
 
 	def _representation(self):
-		result = [ "<larch.DT> {0}".format(self.source_filename, self.source_filemode),  ]
+		result = [ "<larch.DT> {0}".format(path_shrinker(self.source_filename,40), self.source_filemode),  ]
 		if self.source_filemode=='r':
 			result.append("  > file is opened read-only <")
 		elif self.source_filemode in ('a','w'):

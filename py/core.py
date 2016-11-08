@@ -2941,16 +2941,16 @@ class LinearFunction(ComponentVector):
     	for i in self[1:]:
     		y += i.data.eval(**dataspace) * i.param.default_value(0).value(model)
     	return y
-    def evaluator1d(self, factorlabel='U', dimlabel=None):
-    	if dimlabel is None:
+    def evaluator1d(self, factorlabel='', x_ident=None):
+    	if x_ident is None:
     		try:
-    			dimlabel = self._dimlabel
+    			x_ident = self._x_ident
     		except AttributeError:
-    			raise TypeError('a dimlabel must be given')
-    	if dimlabel is None:
-    		raise TypeError('a dimlabel must be given')
+    			raise TypeError('a x_ident must be given')
+    	if x_ident is None:
+    		raise TypeError('a x_ident must be given')
     	from .util.plotting import ComputedFactor
-    	return ComputedFactor( label=factorlabel, func=lambda x,m: self.evaluate({dimlabel:x}, m) )
+    	return ComputedFactor( label=factorlabel, func=lambda x,m: self.evaluate({x_ident:x}, m) )
     def __contains__(self, val):
     	from .roles import ParameterRef, DataRef
     	if isinstance(val, ParameterRef):
@@ -2992,7 +2992,7 @@ class LinearFunction(ComponentVector):
     			container = '{}'
     		r += LinearComponent(data=i.data, param=container.format(param), multiplier=i.multiplier)
     	try:
-    		r._dimlabel = self._dimlabel
+    		r._x_ident = self._x_ident
     	except AttributeError:
     		pass
     	return r
@@ -3024,7 +3024,7 @@ class LinearFunction(ComponentVector):
     			container = '{}'
     		r += LinearComponent(data=container.format(data), param=i.param, multiplier=i.multiplier)
     	try:
-    		r._dimlabel = self._dimlabel
+    		r._x_ident = self._x_ident
     	except AttributeError:
     		pass
     	return r
@@ -3043,7 +3043,7 @@ class LinearFunction(ComponentVector):
     	state = {}
     	state['code'] = self.__code__()
     	try:
-    		state['_dimlabel'] = self._dimlabel
+    		state['_x_ident'] = self._x_ident
     	except AttributeError:
     		pass
     	return state
@@ -3052,8 +3052,8 @@ class LinearFunction(ComponentVector):
     	from .roles import P,X
     	self.__init__()
     	self += eval(state['code'])
-    	if '_dimlabel' in state:
-    		self._dimlabel = state['_dimlabel']
+    	if '_x_ident' in state:
+    		self._x_ident = state['_x_ident']
 
 
 
