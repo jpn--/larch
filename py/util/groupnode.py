@@ -42,12 +42,43 @@ def _uniques(self, slicer=None, counts=False):
 		return pandas.Series(x[1],x[0])
 	return numpy.unique(self[slicer])
 
+
+
+def _pytables_extlink_dereference(extlink, **kwargs):
+	"""Dereference extlink.target and return the object.
+
+	You can pass all the arguments supported by the :func:`open_file`
+	function (except filename, of course) so as to open the referenced
+	external file.
+	"""
+
+	filename, target = extlink._get_filename_node()
+
+	if not os.path.isabs(filename):
+		# Resolve the external link with respect to the this
+		# file's directory.
+		base_directory = os.path.dirname(extlink._v_file.filename)
+		filename = os.path.join(base_directory, filename)
+
+	if extlink.extfile is None or not extlink.extfile.isopen:
+		extlink.extfile = tables.open_file(filename, **kwargs)
+	else:
+		# XXX: implement better consistency checks
+		assert extlink.extfile.filename == filename
+		assert extlink.extfile.mode == kwargs.get('mode', 'r')
+
+	return extlink.extfile._get_node(target)
+
+
+
+
 def _pytables_link_dereference(i):
 	if isinstance(i, tables.link.ExternalLink):
 		i = i()
 	if isinstance(i, tables.link.SoftLink):
 		i = i.dereference()
 	return i
+
 
 
 class GroupNodeV1():
@@ -174,6 +205,25 @@ class GroupNode():
 		return super().__dir__() + list(_get_children_including_extern(self))
 
 	def add_external_data(self, link):
+		"""
+		Add a linkage to an external data file.
+		
+		The method creates a linkage to an external data file without actually
+		copying the data into the current file.  Instead it creates an HDF5
+		external link node within the current group node, which points to the 
+		equivalent group node in the other file (e.g., in the idco group you would
+		point to the idco group of the other file, not an individual data item).
+		All of the data nodes within the external file will then be automatically
+		and (almost) transparently linked into the current file, from the perspective
+		of the GroupNode object.
+		
+		Parameters
+		----------
+		link : str
+			The location of the external linkage.  Must be given as "filename:/path/to/node"
+			where node is the target group node (not an individual array).s
+			
+		"""
 		if ":/" not in link:
 			raise TypeError("must give link as filename:/path/to/node")
 		linkfile, linknode = link.split(":/")
@@ -181,8 +231,11 @@ class GroupNode():
 		# change to a relative path only if the common path has something more than
 		# the root dir; sharing only the root dir is a hint that one of the files
 		# is a temp file, and the relative path may not be a valid path.
-		if len(os.path.commonpath([linkfile, os.path.dirname( self._v_file.filename )])) > 2:
-			linkfile = os.path.relpath(linkfile, os.path.dirname( self._v_file.filename ))
+		try:
+			if len(os.path.commonpath([linkfile, os.path.dirname( self._v_file.filename )])) > 2:
+				linkfile = os.path.relpath(linkfile, os.path.dirname( self._v_file.filename ))
+		except ValueError:
+			pass
 
 		link = linkfile+":/"+linknode
 		extern_n = 1
