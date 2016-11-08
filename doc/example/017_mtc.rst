@@ -47,11 +47,13 @@ that column with the calculated values.  Now we are ready to build our model.
 
 	m = larch.Model(d)
 
-	m.utility.ca("costbyincome")
-
-	m.utility.ca("tottime * (altnum IN (1,2,3,4))", "motorized_time")
-	m.utility.ca("tottime * (altnum IN (5,6))", "nonmotorized_time")
-	m.utility.ca("ovtbydist * (altnum IN (1,2,3,4))", "motorized_ovtbydist")
+	from larch.roles import P,X
+	m.utility.ca = (
+		+ X("costbyincome") * P("costbyincome")
+		+ X("tottime * (altnum IN (1,2,3,4))") * P("motorized_time")
+		+ X("tottime * (altnum IN (5,6))") * P("nonmotorized_time")
+		+ X("ovtbydist * (altnum IN (1,2,3,4))") * P("motorized_ovtbydist")
+	)
 
 The costbyincome data is already computed above so we can add it
 to the model very simply.  In our preferred specification, we want to differentiate
@@ -64,24 +66,24 @@ query (either larch_idca or larch_idco).
 
 .. testcode::
 
-	m.utility.co("hhinc",4)
-	m.utility.co("hhinc",5)
-	m.utility.co("hhinc",6)
+	m.utility.co[4] = P("hhinc#4") * X("hhinc")
+	m.utility.co[5] = P("hhinc#5") * X("hhinc")
+	m.utility.co[6] = P("hhinc#6") * X("hhinc")
 
 Since the model we want to create groups together DA, SR2 and SR3+ jointly as
 reference alternatives with respect to income, we can simply omit all of these alternatives
 from the block that applies to **hhinc**.
 
 For vehicles per worker, the preferred model include a joint parameter on SR2 and SR3+,
-but not including DA and not fixed at zero.  Here we might use an alias, which allows
+but not including DA and not fixed at zero.  Here we might use a shadow_parameter, which allows
 us to specify one or more parameters that are simply a fixed proportion of another parameter.
 For example, we can say that vehbywrk_SR2 will be equal to 1.0 times vehbywrk_SR.
 
 .. testcode::
 
 	m.parameter("vehbywrk_SR")
-	m.alias("vehbywrk_SR2","vehbywrk_SR",1.0)
-	m.alias("vehbywrk_SR3+","vehbywrk_SR",1.0)
+	m.shadow_parameter.vehbywrk_SR2 = m.parameter.vehbywrk_SR
+	m.shadow_parameter["vehbywrk_SR3+"] = m.parameter.vehbywrk_SR
 
 Having defined these parameter aliases, we can then loop over all alternatives (skipping DA
 in the index-zero position) to add vehicles per worker to the utility function:
@@ -89,22 +91,42 @@ in the index-zero position) to add vehicles per worker to the utility function:
 .. testcode::
 
 	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("vehbywrk",a,"vehbywrk_"+name)
+		m.utility[a] += X("vehbywrk") * P("vehbywrk_"+name)
 
 We can also run similar loops over workplace in CBD, etc:
 
 .. testcode::
 
 	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("wkccbd+wknccbd",a,"wkcbd_"+name)
+		m.utility[a] += X("wkccbd+wknccbd") * P("wkcbd_"+name)
 
 	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("wkempden",a,"wkempden_"+name)
+		m.utility[a] += X("wkempden") * P("wkempden_"+name)
 
 	for a,name in m.df.alternatives()[1:]:
-		m.utility.co("1",a,"ASC_"+name)
+		m.utility[a] += P("ASC_"+name)
 
 	m.option.calc_std_errors = True
+
+
+We didn't explicitly define our parameters first, which is fine; Larch will
+find them in the utility functions (or elsewhere in more complex models).
+But they may be found in a weird order that is hard to read in reports.
+We can define an ordering scheme by assigning to the parameter_groups attribute,
+like this:
+
+.. testcode::
+
+	m.parameter_groups = (
+		"costbyincome",
+		".*time",
+		".*dist",
+		"hhinc.*",
+		"vehbywrk.*",
+		"wkcbd.*",
+		"wkempden.*",
+		"ASC.*",
+	)
 
 
 Having created this model, we can then estimate it:

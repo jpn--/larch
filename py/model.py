@@ -1988,7 +1988,6 @@ class Model(Model2, ModelReporter):
 		self.parameter_null_values_array[:] = self.parameter_null_values_array[slots]
 		self.parameter_maximums[:] = self.parameter_maximums[slots]
 		self.parameter_minimums[:] = self.parameter_minimums[slots]
-		self.parameter_null_values_array[:] = self.parameter_null_values_array[slots]
 		
 		self.robust_covariance_matrix[:,:] = self.robust_covariance_matrix[slots,:]
 		self.robust_covariance_matrix[:,:] = self.robust_covariance_matrix[:,slots]

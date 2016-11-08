@@ -34,7 +34,7 @@ exampledir = os.path.dirname(__file__)
 exampledocdir = os.path.join(os.path.dirname(__file__),'doc')
 
 examplefiles = {
-	  1:	"mtc01",
+#	  1:	"mtc01",
 	 17:	"mtc17",
 	 22:	"mtc22",
 	 80:	"itin80",
@@ -184,12 +184,19 @@ def _exec_example(sourcefile, d = None, extract='m'):
 		exec(code, _global, _local)
 	else:
 		_local['d'] = d
+		prev_line = ""
 		for n, line in enumerate(_testcode_iter(sourcefile)):
 			if len(line)>2 and line[:2]=='d=':
 				continue
 			if len(line)>3 and line[:3]=='d =':
 				continue
-			code = compile(line, sourcefile+":"+str(n), 'exec')
+			try:
+				code = compile(prev_line+line, sourcefile+":"+str(n), 'exec')
+			except SyntaxError as syntax:
+				if 'unexpected EOF' in syntax.msg:
+					prev_line += line+"\n"
+			else:
+				prev_line = ""
 			exec(code, _global, _local)
 	if isinstance(extract, str):
 		return _local[extract]

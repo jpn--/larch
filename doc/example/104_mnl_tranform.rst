@@ -39,11 +39,13 @@ with the Biogeme example, we divide travel time by 100.0.
 
 .. testcode::
 
-	m.utility.co("1",1,"ASC_TRAIN")
-	m.utility.co("1",3,"ASC_CAR")
-	m.utility.co("TRAIN_TT/100.0",1,"B_TIME")
-	m.utility.co("SM_TT/100.0",2,"B_TIME")
-	m.utility.co("CAR_TT/100.0",3,"B_TIME")
+	from larch.roles import P,X
+	m.utility.co[1] = X("1") * P("ASC_TRAIN")
+	m.utility.co[2] = 0
+	m.utility.co[3] = X("1") * P("ASC_CAR")
+	m.utility.co[1] += X("TRAIN_TT/100.0") * P("B_TIME")
+	m.utility.co[2] += X("SM_TT/100.0") * P("B_TIME")
+	m.utility.co[3] += X("CAR_TT/100.0") * P("B_TIME")
 
 
 For this model, we will use the natural log of (cost/100.0), instead of cost.
@@ -53,9 +55,17 @@ zero.
 
 .. testcode::
 
-	m.utility.co("CASE TRAIN_CO*(GA==0) WHEN 0 THEN 0 ELSE LOG((TRAIN_CO/100.0)*(GA==0)) END",1,"B_LOGCOST")
-	m.utility.co("CASE SM_CO*(GA==0) WHEN 0 THEN 0 ELSE LOG((SM_CO/100.0)*(GA==0)) END",2,"B_LOGCOST")
-	m.utility.co("CASE CAR_CO WHEN 0 THEN 0 ELSE LOG(CAR_CO/100.0) END",3,"B_LOGCOST")
+	m.utility.co[1] += X("CASE TRAIN_CO*(GA==0) WHEN 0 THEN 0 ELSE LOG((TRAIN_CO/100.0)*(GA==0)) END") * P("B_LOGCOST")
+	m.utility.co[2] += X("CASE SM_CO*(GA==0) WHEN 0 THEN 0 ELSE LOG((SM_CO/100.0)*(GA==0)) END") * P("B_LOGCOST")
+	m.utility.co[3] += X("CASE CAR_CO WHEN 0 THEN 0 ELSE LOG(CAR_CO/100.0) END") * P("B_LOGCOST")
+
+Larch will find all the parameters in the model, but we'd like to output them in
+a particular order, so we want to reorder the parameters.
+We can use the reorder method to fix this:
+
+.. testcode::
+
+	m.reorder_parameters("ASC", "B_")
 
 We can estimate the models and check the results match up with those given by Biogeme:
 

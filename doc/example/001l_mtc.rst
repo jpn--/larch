@@ -13,7 +13,7 @@
 This example is a mode choice model built using the MTC example dataset.  We will use
 a "legacy" style of coding the utility functions, which is deprecated as of
 larch version 3.3. It still works, but it is not as easy to read and understand as the
-newer style.
+newer style.  If you are learning larch, it's probably best to skip this example.
 
 First we create the DB and Model objects:
 

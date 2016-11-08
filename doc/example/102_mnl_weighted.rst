@@ -32,14 +32,23 @@ The swissmetro dataset, as with all Biogeme data, is only in `co` format.
 
 .. testcode::
 
-	m.utility.co("1",1,"ASC_TRAIN")
-	m.utility.co("1",3,"ASC_CAR")
-	m.utility.co("TRAIN_TT",1,"B_TIME")
-	m.utility.co("SM_TT",2,"B_TIME")
-	m.utility.co("CAR_TT",3,"B_TIME")
-	m.utility.co("TRAIN_CO*(GA==0)",1,"B_COST")
-	m.utility.co("SM_CO*(GA==0)",2,"B_COST")
-	m.utility.co("CAR_CO",3,"B_COST")
+	from larch.roles import P,X
+	m.utility[1] = ( P.ASC_TRAIN
+	               + P.B_TIME * X.TRAIN_TT
+	               + P.B_COST * X("TRAIN_CO*(GA==0)") )
+	m.utility[2] = ( P.B_TIME * X.SM_TT
+	               + P.B_COST * X("SM_CO*(GA==0)") )
+	m.utility[3] = ( P.ASC_CAR
+	               + P.B_TIME * X.CAR_TT
+	               + P.B_COST * X("CAR_CO") )
+
+Larch will find all the parameters in the model, but we'd like to output them in
+a particular order, so we want to reorder the parameters.
+We can use the reorder method to fix this:
+
+.. testcode::
+
+	m.reorder_parameters("ASC", "B_")
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
