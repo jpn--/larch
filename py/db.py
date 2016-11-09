@@ -978,7 +978,7 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 		if isinstance(file, str):
 			if file[-3:].lower()=='.gz':
 				import gzip
-				csvfile = gzip.open(file, 'wt')
+				csvfile = gzip.open(file, 'wt', newline='')
 			else:
 				csvfile = open(file, 'w', newline='')
 		else:
