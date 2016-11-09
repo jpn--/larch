@@ -61,6 +61,18 @@ class XhtmlModelReporter():
 					if j not in discovered: yield j
 					discovered.add(j)
 
+			elif i=='*':
+				j1 = ['title','possible_overspecification','params','LL',
+						'nesting_tree','nesting_tree_textonly','latest',
+						'UTILITYSPEC','PROBABILITYSPEC','DATA','excludedcases',
+						'NOTES','options','datasummary']
+				j2 = ['title','possible_overspecification','params','LL',
+						'latest','UTILITYSPEC','DATA','excludedcases',
+						'NOTES','options','datasummary']
+				for j in (j1 if len(self.node)>0 else j2 ):
+					if j not in discovered: yield j
+					discovered.add(j)
+
 			elif i=='&':
 				try:
 					reggies = self._registered_xhtml
@@ -414,7 +426,14 @@ class XhtmlModelReporter():
 				except (AttributeError, KeyError):
 					pass
 				if candidate is None:
-					raise TypeError("xml builder for '{}' not found".format(key.casefold()))
+					#raise TypeError("xml builder for '{}' not found".format(key.casefold()))
+					import warnings
+					warnings.warn("xml builder for '{}' not found".format(key.casefold()))
+					x = XML_Builder("div", {'class':"no_builder"})
+					x.start('pre', {'class':'error_report', 'style':'padding:10px;background-color:#fff693;color:#c90000;'})
+					x.data("xml builder for '{}' not found".format(key.casefold()))
+					x.end('pre')
+					candidate = x.close()
 			else:
 				raise TypeError("invalid item")
 			if self._return_xhtml:
@@ -459,7 +478,7 @@ class XhtmlModelReporter():
 			else:
 				self._model.new_xhtml_section(val, key)
 	
-		def __call__(self, *args, force_Elem=False):
+		def __call__(self, *args, force_Elem=False, filename=None, view_on_exit=False, **kwarg):
 			div = Elem('div')
 			for arg in self._model.iter_cats(args):
 				if isinstance(arg, Elem):
@@ -470,6 +489,9 @@ class XhtmlModelReporter():
 					div << arg()
 				elif isinstance(arg, list):
 					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
+			if filename is not None:
+				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename, **kwarg) as f:
+					f << div
 			if not force_Elem and self._return_xhtml:
 				return ElementTree.tostring(div, encoding="utf8", method="html")
 			return div
