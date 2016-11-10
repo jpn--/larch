@@ -7,6 +7,46 @@ import os.path
 from .temporaryfile import TemporaryFile
 import inspect
 
+
+
+def session_log(self, loglevel=baselogging.INFO):
+
+
+	m = self
+	self._local_log = False
+	log = m.logger()
+	if log is None:
+		self._local_log = True
+		log = m.logger(1)
+
+	templog = TemporaryFile('log')
+
+	fh = baselogging.StreamHandler(templog)
+	fh.setLevel(loglevel)
+	fh.setFormatter(logging.default_formatter())
+	log.addHandler(fh)
+
+	if log.getEffectiveLevel() > loglevel:
+		log.setLevel(loglevel)
+
+	caller = lambda *arg, **kwarg: xhtml_rawtext_as_div(filehandle=templog, classtype='raw_log', title="Session Log", flushhandle=True, popper=1)
+	self.new_xhtml_section(caller, 'sessionlog', register=True)
+
+
+
+
+def stop_session_log(self):
+
+	try:
+		local_log = self._local_log
+	except AttributeError:
+		local_log = False
+	
+	if local_log:
+		self.logger(0)
+
+
+
 def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False, sourcecode=True, maxlik_args=(), cache_data=False, **format):
 	"""Estimate a model and generate a report.
 	

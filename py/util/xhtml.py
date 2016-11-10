@@ -122,6 +122,35 @@ class Elem(Element):
 		return xml.etree.ElementTree.tostring(self, encoding="utf8", method="html")
 	def _repr_html_(self):
 		return self.tostring().decode()
+	def pprint(self, indent=0, hush=False):
+		dent = "  "*indent
+		if hush and self.tag in ('div','tfoot','a') and not self.text and len(self)==0:
+			if self.tail:
+				return dent+self.tail
+			else:
+				return ""
+		s = "{}<{}>".format(dent,self.tag)
+		if self.text:
+			s += self.text
+		any_subs = False
+		for i in self():
+			if isinstance(i,Elem):
+				sub = i.pprint(indent=indent+1, hush=True)
+				if sub:
+					s += "\n{}".format(sub)
+					any_subs = True
+			else:
+				s += "\n{}{}".format(dent, i)
+				any_subs = True
+		if any_subs:
+			s += "\n{}".format(dent)
+		s += "</{}>".format(self.tag)
+		if self.tail:
+			s += self.tail
+		return s
+#	def __repr__(self):
+#		return "<larch.util.xhtml.Elem>\n"+self.pprint()
+
 
 def Anchor_Elem(reftxt, cls, toclevel):
 	return Elem('a', {'name':_uid(), 'reftxt':str(reftxt), 'class':str(cls), 'toclevel':str(toclevel)})
@@ -252,9 +281,9 @@ class XHTML():
 			if os.path.exists(filename) and not overwrite and spool:
 				filename, filename_ext = os.path.splitext(filename)
 				n = 1
-				while os.path.exists("{} ({}){}".format(filename,n,filename_ext)):
+				while os.path.exists("{}.{:03}{}".format(filename,n,filename_ext)):
 					n += 1
-				filename = "{} ({}){}".format(filename,n,filename_ext)
+				filename = "{}.{:03}{}".format(filename,n,filename_ext)
 			filename, filename_ext = os.path.splitext(filename)
 			if filename_ext=="":
 				filename_ext = ".html"
@@ -557,24 +586,56 @@ def xhtml_section_bytes(content):
 	xml.etree.ElementTree.ElementTree(content).write(f, xml_declaration=False, method="html")
 	return f.getvalue()
 
-def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_source', title="Source Code"):
+def xhtml_rawtext_as_div(*, filename=None, filehandle=None, classtype='raw_source', title="Source Code", flushhandle=False, popper=False, headinglevel=2, anchor=1):
+	toggle_id = _uid()
 	xsource = XML_Builder("div", {'class':classtype})
+	if popper:
+		xsource.start('script')
+		xsource.data("""
+		$(document).ready(function(){{
+			$("#t1{toggle_id}").click(function(){{
+				$("#d{toggle_id}").toggle("fast");
+			}});
+		}});""".format(toggle_id=toggle_id))
+		xsource.end('script')
 	use_filehandle = None
 	if filename is not None and os.path.isfile(filename):
 		use_filehandle = open(filename, 'r')
 	if filehandle:
 		use_filehandle = filehandle
+		if flushhandle:
+			filehandle.flush()
 	if use_filehandle is not None:
 		try:
-			xsource.h2(title, anchor=1)
+
+			if headinglevel:
+				if anchor:
+					xsource.anchor(_uid(), anchor if isinstance(anchor, str) else title, 'toc', '{}'.format(headinglevel))
+				xsource.start("h{}".format(headinglevel), {'id':'h'+toggle_id})
+				xsource.data(title+" ")
+				
+				if popper:
+					from .img import eye
+					xsource.start('img',{'id':'t1'+toggle_id, 'src':eye, 'style':'height:24px;vertical-align: text-bottom;'})
+					xsource.end('a')
+				
+				xsource.end("h{}".format(headinglevel))
+
+			#xsource.h2(title, anchor=1)
+			if popper:
+				div = xsource.start('div', {'id':'d'+toggle_id, 'style':'display:none'})
+			else:
+				div = xsource.start('div', {'id':'d'+toggle_id})
 			if filename is not None:
 				xsource.data("From: {!s}".format(filename))
-			xsource.simple("hr")
-			xsource.start("pre")
+
+			#xsource.simple("hr")
+			xsource.start("pre", {'class':'sessionlog', 'style':'padding:10px;background-color:#eeeeee;overflow:auto; max-width:100%'})
 			use_filehandle.seek(0)
 			xsource.data(use_filehandle.read())
 			xsource.end("pre")
-			xsource.simple("hr")
+			#xsource.simple("hr")
+			xsource.end('div')
 		finally:
 			if filename is not None and os.path.isfile(filename):
 				use_filehandle.close()

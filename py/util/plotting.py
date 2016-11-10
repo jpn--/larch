@@ -604,6 +604,8 @@ def svg_computed_factor_figure_with_derivative(m, y_funcs,
 		As you might expect.
 	"""
 	
+	from ..core import LinearFunction
+	
 	if isinstance(y_funcs, LinearFunction):
 		y_funcs = y_funcs.evaluator1d()
 
