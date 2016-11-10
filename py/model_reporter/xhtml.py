@@ -12,6 +12,7 @@ import pandas
 import sys, traceback
 import inspect
 import os
+import re
 from xml.etree import ElementTree
 
 XhtmlModelReporter_default_format = {
@@ -70,8 +71,9 @@ class XhtmlModelReporter():
 						'latest','UTILITYSPEC','DATA','excludedcases',
 						'NOTES','options','datasummary']
 				for j in (j1 if len(self.node)>0 else j2 ):
-					if j not in discovered: yield j
-					discovered.add(j)
+					if j not in discovered:
+						yield j
+						discovered.add(j)
 
 			elif i=='&':
 				try:
@@ -81,10 +83,33 @@ class XhtmlModelReporter():
 				else:
 					for j in reggies:
 						j = j.casefold()
-						if j not in discovered: yield j
-						discovered.add(j)
+						if j not in discovered:
+							yield j
+							discovered.add(j)
+
+			elif i[0]=='#' and len(i)>1 and i[1]!='#':
+				self.new_xhtml_header(i[1:], headerlevel=2, anchor=1)
+				j = i[1:].replace(' ','_')
+				if j not in discovered:
+					yield j
+					discovered.add(j)
+
+			elif i[0]=='?' and len(i)>1:
+				try:
+					reggies = self._registered_xhtml
+				except AttributeError:
+					pass
+				else:
+					for j in reggies:
+						j = j.casefold()
+						if j not in discovered and re.match(i[1:],j):
+							yield j
+							discovered.add(j)
+
 			else:
-				if i not in discovered: yield i
+				i = i.replace(' ','_')
+				if i not in discovered:
+					yield i
 				discovered.add(i)
 		raise StopIteration
 
@@ -463,7 +488,7 @@ class XhtmlModelReporter():
 			except AttributeError:
 				pass
 			else:
-				candidates.update(self._user_defined_xhtml.keys())
+				candidates.update(i.casefold() for i in self._user_defined_xhtml.keys())
 			return candidates
 	
 		def __setattr__(self, key, val):
@@ -561,7 +586,7 @@ class XhtmlModelReporter():
 			self._user_defined_xhtml = {}
 		if not callable(caller):
 			raise TypeError( "{} is not callable".format(type(caller)) )
-		self._user_defined_xhtml[name] = caller
+		self._user_defined_xhtml[name.casefold()] = caller
 		
 		try:
 			self._registered_xhtml
@@ -570,6 +595,24 @@ class XhtmlModelReporter():
 		if register:
 			self._registered_xhtml.append(name)
 
+
+	def new_xhtml_header(self, headtext, headerlevel=2, anchor=1, name=None):
+		try:
+			self._user_defined_xhtml
+		except AttributeError:
+			self._user_defined_xhtml = {}
+
+		if name is None:
+			name = headtext.casefold().replace(' ','_')
+
+		if name in self._user_defined_xhtml:
+			return
+
+		def caller():
+			x = XML_Builder("div")
+			x.hn(headerlevel, headtext, anchor=anchor)
+			return x.close()
+		self.new_xhtml_section(caller, name, register=False)
 
 	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):
 		try:
@@ -1156,18 +1199,21 @@ class XhtmlModelReporter():
 		... 	Categorizer('Alternative Specific Constants', 'ASC.*'),
 		... 	Categorizer('Income', 'hhinc.*'),
 		... ]
-		>>> html = m.xhtml_params().tostring()
+		>>> elem = m.xhtml_params()
+		>>> elem
+		<larch.util.xhtml.Elem>
+		<div>
+		  <h2>Model Parameter Estimates</h2>
+		  ...
+		</div>
+		>>> html = elem.tostring()
 		>>> html
-		b'<...>'
+		b'<div ...>'
 		
 		.. image:: render_xhtml_params_html.png
 			:class: htmlrendering
 		"""
 		art = self.art_params(groups=groups, display_inital=display_inital, display_id=display_id, **format)
-#		x = XML_Builder("div", {'class':"parameter_estimates"})
-#		x.h2("Model Parameter Estimates", anchor="Parameter Estimates")
-#		x << art.xml({'class':'floatinghead'})
-#		return x.close()
 		return art.xml({'class':'floatinghead parameter_estimates'})
 
 	xhtml_params = xhtml_param = xhtml_parameters = xhtml_artparams

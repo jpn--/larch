@@ -51,7 +51,7 @@ class Model(Model2, ModelReporter):
 				pass
 
 
-	from .util.roll import roll
+	from .util.roll import roll, session_log, stop_session_log
 	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
 	from .util.plotting import new_xhtml_computed_factor_figure_with_derivative, svg_computed_factor_figure_with_derivative, new_xhtml_validation_distribution, svg_validation_distribution, new_xhtml_validation_latlong, svg_validation_latlong, svg_observations_latlong
 	
