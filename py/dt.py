@@ -494,13 +494,12 @@ class DT(Fountain):
 						(NAME, 'None') if screen is None else (NAME, 'screen'),
 						CPAR,
 					]
-					recommand.extend(partial)
 				else:
 					# replace NAME tokens
 					partial = [ (NAME, 'self'), DOT, (NAME, 'idco'), DOT, (NAME, tokval), OBRAC,screen_token,CBRAC,]
-					if dims>1:
-						partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
-					recommand.extend(partial)
+				if dims>1:
+					partial += [OBRAC,COLON,COMMA,(NAME, 'None'),CBRAC,]
+				recommand.extend(partial)
 			elif toknum == NAME and tokval in self.expr:
 				partial = [ (NAME, 'self'), DOT, (NAME, 'expr'), DOT, (NAME, tokval), ]
 				recommand.extend(partial)
