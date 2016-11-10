@@ -266,7 +266,7 @@ class OMX(_tb.file.File):
 		if log is not None: log("START import_datatable")
 		if isinstance(filepath,str) and filepath.casefold()[-4:]=='.dbf':
 			from simpledbf import Dbf5
-			chunk0 = next(Dbf5(filepath, codec='utf-8').to_dataframe(chunksize=1000))
+			chunk0 = next(Dbf5(filepath, codec='utf-8').to_dataframe(chunksize=chunksize))
 			dbf = Dbf5(filepath, codec='utf-8')
 			reader = dbf.to_dataframe(chunksize=chunksize)
 			if n_rows is None:
@@ -275,7 +275,7 @@ class OMX(_tb.file.File):
 			from .util.smartread import SmartFileReader
 			sfr = SmartFileReader(filepath)
 			reader = pandas.read_csv(sfr, chunksize=chunksize)
-			chunk0 = next(pandas.read_csv(filepath, chunksize=1000))
+			chunk0 = next(pandas.read_csv(filepath, chunksize=chunksize))
 			if n_rows is None:
 				n_rows = sum(1 for line in open(filepath, mode='r'))-1
 		
