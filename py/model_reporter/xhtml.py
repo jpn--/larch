@@ -478,7 +478,7 @@ class XhtmlModelReporter():
 			else:
 				self._model.new_xhtml_section(val, key)
 	
-		def __call__(self, *args, force_Elem=False, filename=None, view_on_exit=False, **kwarg):
+		def __call__(self, *args, force_Elem=False, filename=None, view_on_exit=False, return_html=False, **kwarg):
 			div = Elem('div')
 			for arg in self._model.iter_cats(args):
 				if isinstance(arg, Elem):
@@ -489,16 +489,46 @@ class XhtmlModelReporter():
 					div << arg()
 				elif isinstance(arg, list):
 					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
-			if filename is not None:
-				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename, **kwarg) as f:
+			if filename is not None or return_html:
+				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
 					f << div
+					if return_html:
+						temphtml = f.dump()
+					else:
+						temphtml = None
+				if temphtml is not None:
+					return temphtml
 			if not force_Elem and self._return_xhtml:
 				return ElementTree.tostring(div, encoding="utf8", method="html")
 			return div
 
 	@property
 	def xml(self):
-		"""A :class:`XmlManager` interface for the model."""
+		"""A :class:`XmlManager` interface for the model.
+		
+		This method creates an xhtml report on the model. Call it with 
+		any number of string arguments to include those named report sections.
+		
+		All other parameters must be passed as keywords.
+		
+		Other Parameters
+		----------------
+		filename : None or str
+			If None (the default) no file is generated. 
+			Otherwise, this should name a file into which the html
+			report will be written.  If that file already exists it will by default not 
+			be overwritten, instead a new filename will be spooled off the given name.
+		view_on_exit : bool
+			If true, the html file will be [attempted to be] opened in Chrome or your default
+			web broswer.  This feature may not be compatible with all platforms.
+		return_html : bool
+			Return the html report (as bytes) instead of the top level div Elem for the
+			report content.
+			
+		Returns
+		-------
+		Elem or bytes
+		"""
 		return XhtmlModelReporter.XmlManager(self)
 
 	xhtml = xml
@@ -1118,7 +1148,6 @@ class XhtmlModelReporter():
 		Example
 		-------
 		>>> from larch.util.categorize import Categorizer, Renamer
-		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> param_groups = [
 		... 	Categorizer('Level of Service',
@@ -1127,12 +1156,9 @@ class XhtmlModelReporter():
 		... 	Categorizer('Alternative Specific Constants', 'ASC.*'),
 		... 	Categorizer('Income', 'hhinc.*'),
 		... ]
-		>>> with XHTML(quickhead=m) as f:
-		... 	f.append( m.xhtml_title()  )
-		... 	f.append( m.xhtml_params(param_groups) )
-		... 	html = f.dump()
+		>>> html = m.xhtml_params().tostring()
 		>>> html
-		b'<!DOCTYPE html ...>'
+		b'<...>'
 		
 		.. image:: render_xhtml_params_html.png
 			:class: htmlrendering

@@ -240,7 +240,7 @@ class XHTML():
 		self.body = Elem(tag="body")
 		self.root << self.head
 		self.root << self.body
-		if filename is None:
+		if filename is None or filename is False:
 			import io
 			filemaker = lambda: io.BytesIO()
 		elif filename.lower() == "temp":
@@ -481,6 +481,26 @@ class XHTML():
 		if insert:
 			self.body.append(xsign.close())
 		return xsign.close()
+
+	def finalize(self, toc=True, sign=True):
+		if sign:
+			self.sign(True)
+		if toc:
+			self.toc_iframe(True)
+
+		c = self.root.copy()
+
+		if sign:
+			s = self.root.find(".//div[@class='larch_signature']/..")
+			if s is not None:
+				s.remove(s.find(".//div[@class='larch_signature']"))
+		if toc:
+			s = self.root.find(".//div[@class='table_of_contents']/..")
+			if s is not None:
+				s.remove(s.find(".//div[@class='table_of_contents']"))
+		return c
+
+
 	def dump(self, toc=True, sign=True):
 		if sign:
 			self.sign(True)
