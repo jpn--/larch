@@ -4,7 +4,10 @@
 import numpy, scipy, larch, os
 import scipy.stats
 from numpy import log, exp, log1p
-flog = larch.logging.flogger(level=30, label="exampville")
+# flog = larch.logging.flogger(level=30, label="exampville")
+def flog(a0, *arg, **kwarg):
+	pass
+	#print(a0.format(*arg, **kwarg))
 
 __all__ = ['builder',]
 

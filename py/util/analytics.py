@@ -5,7 +5,6 @@ from ..model_reporter.art import AbstractReportTable
 from .statsummary import statistical_summary
 from ..roles import X
 
-
 def basic_idco_variable_analysis(arr, names, weights=None, description_catalog=None, title="Analytics", short_title=None):
 	"""
 	Parameters
@@ -42,15 +41,15 @@ def basic_idco_variable_analysis(arr, names, weights=None, description_catalog=N
 	if use_weighted:
 		title += " (weighted)"
 
-	ss = statistical_summary.compute(arr, dimzer=numpy.atleast_1d)
-	if use_weighted:
-		w = weights.flatten()
-		ss.mean = numpy.average(arr, axis=0, weights=w)
-		variance = numpy.average((arr-ss.mean)**2, axis=0, weights=w)
-		ss.stdev = numpy.sqrt(variance)
-		w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(arr.shape[1])
-		w_nonzero[arr==0] = 0
-		ss.mean_nonzero = numpy.average(arr, axis=0, weights=w_nonzero)
+	ss = statistical_summary.compute(arr, dimzer=numpy.atleast_1d, weights=weights)
+#	if use_weighted:
+#		w = weights.flatten()
+#		ss.mean = numpy.average(arr, axis=0, weights=w)
+#		variance = numpy.average((arr-ss.mean)**2, axis=0, weights=w)
+#		ss.stdev = numpy.sqrt(variance)
+#		w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(arr.shape[1])
+#		w_nonzero[arr==0] = 0
+#		ss.mean_nonzero = numpy.average(arr, axis=0, weights=w_nonzero)
 
 	ncols = 0
 	stack = []
@@ -111,7 +110,14 @@ def basic_idco_variable_analysis(arr, names, weights=None, description_catalog=N
 	return x
 
 
-
+def art_idco_variable_analysis(fountain, names, description_catalog=None, title="Analytics", short_title=None):
+	from .. import Model, DB, DT
+	if isinstance(fountain, Model):
+		fountain = fountain.df
+	if isinstance(fountain, DB):
+		return basic_idco_variable_analysis(fountain.array_idco(*names)[0], names, weights=fountain.array_weight()[0], description_catalog=description_catalog, title=title, short_title=short_title)
+	if isinstance(fountain, DT):
+		return basic_idco_variable_analysis(fountain.array_idco(*names), names, weights=fountain.array_weight(), description_catalog=description_catalog, title=title, short_title=short_title)
 
 
 def basic_idca_variable_analysis(arr, names, av, weights=None, description_catalog=None, title="Analytics", short_title=None):
@@ -154,15 +160,15 @@ def basic_idca_variable_analysis(arr, names, av, weights=None, description_catal
 	if use_weighted:
 		title += " (weighted)"
 
-	ss = statistical_summary.compute(arr, dimzer=numpy.atleast_1d)
-	if use_weighted:
-		w = numpy.broadcast_to(weights, arr_original_shape).flatten()[av]
-		ss.mean = numpy.average(arr, axis=0, weights=w)
-		variance = numpy.average((arr-ss.mean)**2, axis=0, weights=w)
-		ss.stdev = numpy.sqrt(variance)
-		w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(arr.shape[1])
-		w_nonzero[arr==0] = 0
-		ss.mean_nonzero = numpy.average(arr, axis=0, weights=w_nonzero)
+	ss = statistical_summary.compute(arr, dimzer=numpy.atleast_1d, weights=weights)
+#	if use_weighted:
+#		w = numpy.broadcast_to(weights, arr_original_shape).flatten()[av]
+#		ss.mean = numpy.average(arr, axis=0, weights=w)
+#		variance = numpy.average((arr-ss.mean)**2, axis=0, weights=w)
+#		ss.stdev = numpy.sqrt(variance)
+#		w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(arr.shape[1])
+#		w_nonzero[arr==0] = 0
+#		ss.mean_nonzero = numpy.average(arr, axis=0, weights=w_nonzero)
 
 	ncols = 0
 	stack = []

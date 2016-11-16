@@ -789,16 +789,15 @@ class Model(Model2, ModelReporter):
 		if available.
 		"""
 		x = self.Data(datapool)
-		ss = statistical_summary.compute(x, dimzer=numpy.atleast_1d)
-		if bool((self.Data("Weight")!=1).any()):
-			w = self.Data("Weight").flatten()
-			ss.mean = numpy.average(x, axis=0, weights=w)
-			variance = numpy.average((x-ss.mean)**2, axis=0, weights=w)
-			ss.stdev = numpy.sqrt(variance)
-			w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(x.shape[1])
-			w_nonzero[x==0] = 0
-			ss.mean_nonzero = numpy.average(x, axis=0, weights=w_nonzero)
-		#return (mean,stdev,mins,maxs,nonzer,pos,neg,zer,mean_nonzer)
+		ss = statistical_summary.compute(x, dimzer=numpy.atleast_1d, weights=self.Data("Weight"))
+#		if bool((self.Data("Weight")!=1).any()):
+#			w = self.Data("Weight").flatten()
+#			ss.mean = numpy.average(x, axis=0, weights=w)
+#			variance = numpy.average((x-ss.mean)**2, axis=0, weights=w)
+#			ss.stdev = numpy.sqrt(variance)
+#			w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones(x.shape[1])
+#			w_nonzero[x==0] = 0
+#			ss.mean_nonzero = numpy.average(x, axis=0, weights=w_nonzero)
 		return ss
 
 
@@ -923,6 +922,7 @@ class Model(Model2, ModelReporter):
 		
 		x = self.Data("UtilityCA")
 		ch = self.Data("Choice")
+		wgt = self.Data("Weight")
 		
 		ch_asbool = ch.astype(bool).reshape(ch.shape[0],ch.shape[1])
 		
@@ -935,8 +935,8 @@ class Model(Model2, ModelReporter):
 		
 		x_total = x[av.squeeze()]
 		
-		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
-		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total, weights=wgt)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total, weights=wgt)
 		
 		return ss_chosen, ss_unchosen
 
@@ -950,6 +950,7 @@ class Model(Model2, ModelReporter):
 		x = self.Data("UtilityCA")
 		ch = self.Data("Choice")
 		av = self.Data("Avail")
+		wgt = self.Data("Weight")
 		
 		altslots = numpy.zeros([len(self.alternative_codes())], dtype=bool)
 		# CONVERT altcode to SLOT
@@ -969,8 +970,8 @@ class Model(Model2, ModelReporter):
 		x_unchosen = x[ch_asbool]
 		x_total = x[av[:,altslots].squeeze(),altslots].squeeze()
 		
-		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
-		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total)
+		ss_chosen = statistical_summary.compute(x_chosen, dimzer=numpy.atleast_1d, full_xxx=x_total, weights=wgt)
+		ss_unchosen = statistical_summary.compute(x_unchosen, dimzer=numpy.atleast_1d, full_xxx=x_total, weights=wgt)
 		
 		return ss_chosen, ss_unchosen,
 

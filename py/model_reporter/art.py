@@ -1342,4 +1342,10 @@ class ArtModelReporter():
 		return a
 
 
-	from ..util.analytics import art_choice_distributions
+	from ..util.analytics import art_choice_distributions, art_idco_variable_analysis
+
+
+	def new_xhtml_idco_variable_analysis(self, figurename, *names, description_catalog=None, title="Analytics", short_title=None, autoregister=True, **kwargs):
+		caller = lambda *arg, **kw: self.art_idco_variable_analysis(names, description_catalog=description_catalog, title=title, short_title=short_title).__xml__()
+		self.new_xhtml_section(caller, figurename, register=autoregister)
+

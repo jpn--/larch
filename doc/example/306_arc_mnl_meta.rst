@@ -158,7 +158,7 @@ that takes a bit of time and we're not interested in those results yet.
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> m.option.calc_std_errors = False
-	>>> r = m.maximize_loglike("SLSQP")
+	>>> r = m.maximize_loglike("SLSQP", metaoptions={'maxiter': 200})
 	>>> print(r)
 	messages: Optimization terminated successfully per computed tolerance...
 

@@ -92,8 +92,8 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 		if smoo==0:
 			return X("fmax(0,{0}-{1})".format(var, loc), descrip=var+" (@{})".format(loc))
 		if smoo==1:
-			return X("(logaddexp(0,{0}-{1}))".format(var, loc), descrip=var+" (@{}~{})".format(loc,smoo))
-		return X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(var, loc, smoo), descrip=var+" (@{}~{})".format(loc,smoo))
+			return X("(logaddexp(0,{0}-{1}))".format(var, loc), descrip=var+" (@{}~{})".format(loc,numpy.round(smoo,5)))
+		return X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(var, loc, smoo), descrip=var+" (@{}~{})".format(loc,numpy.round(smoo,5)))
 
 
 	outs += [
@@ -123,8 +123,8 @@ def smoothed_piecewise_logarithmic(basevar, breaks, smoothness=1):
 		if smoo==0:
 			return X("fmax(0,{0}-{1})".format(var, loc), descrip=var+" (@{})".format(loc_label))
 		if smoo==1:
-			return X("(logaddexp(0,{0}-{1}))".format(var, loc), descrip=var+" (@{}~{})".format(loc_label,smoo))
-		return X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(var, loc, smoo), descrip=var+" (@{}~{})".format(loc_label,smoo))
+			return X("(logaddexp(0,{0}-{1}))".format(var, loc), descrip=var+" (@{}~{})".format(loc_label,numpy.round(smoo,5)))
+		return X("(logaddexp(0,{2}*({0}-{1})))/{2}".format(var, loc, smoo), descrip=var+" (@{}~{})".format(loc_label,numpy.round(smoo,5)))
 
 	outs += [
 		maker(basevar_l, loc, s, loclabel) for loc,s,loclabel in zip(breaks_l, smoothness, breaks)

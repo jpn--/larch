@@ -423,3 +423,24 @@ class TestData1(unittest.TestCase):
 		self.assertEqual (q_p1, q.reformat_param('{}_1'))
 		self.assertEqual (q_d1, q.reformat_data('{}_1'))
 		self.assertEqual (P.Spam*X.spam + P.Spams*X.eggs, q.reformat_param(pattern='Egg', repl='Spam'))
+
+
+	def test_idco_variable_analysis_weighting(self):
+
+		d = larch.DT.Example()
+		m = larch.Model.Example(d=d)
+		a0 = m.art_idco_variable_analysis(['dist'])
+		self.assertEqual( '5029', a0.get_text_iloc(1,7) )
+
+		d = larch.DT.Example()
+		d.new_idco_from_array('wgtseq', numpy.arange(d.nAllCases(), dtype=numpy.float64))
+		d.set_weight('wgtseq')
+		m = larch.Model.Example(d=d)
+		a1 = m.art_idco_variable_analysis(['dist'])
+		self.assertEqual( '12642906', a1.get_text_iloc(1,7) )
+
+		r = m.maximize_loglike()
+		self.assertAlmostEqual( -8766328.743932359, r.loglike, delta= 0.000001)
+
+
+

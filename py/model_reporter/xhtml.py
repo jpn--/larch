@@ -1201,11 +1201,7 @@ class XhtmlModelReporter():
 		... ]
 		>>> elem = m.xhtml_params()
 		>>> elem
-		<larch.util.xhtml.Elem>
-		<div>
-		  <h2>Model Parameter Estimates</h2>
-		  ...
-		</div>
+		<larch.util.xhtml.Elem 'div' ...>
 		>>> html = elem.tostring()
 		>>> html
 		b'<div ...>'

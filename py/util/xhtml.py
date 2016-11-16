@@ -148,8 +148,8 @@ class Elem(Element):
 		if self.tail:
 			s += self.tail
 		return s
-#	def __repr__(self):
-#		return "<larch.util.xhtml.Elem>\n"+self.pprint()
+	def __repr__(self):
+		return "<larch.util.xhtml.Elem '{}' at {}>".format(self.tag, hex(id(self))) #+self.pprint()
 
 
 def Anchor_Elem(reftxt, cls, toclevel):
