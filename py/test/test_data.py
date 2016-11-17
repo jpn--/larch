@@ -443,4 +443,28 @@ class TestData1(unittest.TestCase):
 		self.assertAlmostEqual( -8766328.743932359, r.loglike, delta= 0.000001)
 
 
+	def test_validation_in_clause(self):
+		d = larch.DT.Example()
+		self.assertTrue( d.check_co('hhsize in (1,2)')                        )
+		self.assertTrue( d.check_ca('ovtt * (numveh==1) * (hhsize in (1,2))') )
+		x = d.array_idca('ovtt * (numveh==1) * (hhsize in (1,2))', 'ovtt', 'numveh', 'hhsize')
+		c1 = numpy.array([[ 10. ,  10. ,   1. ,   1. ],
+						 [ 10. ,  10. ,   1. ,   1. ],
+						 [ 10. ,  10. ,   1. ,   1. ],
+						 [ 14.2,  14.2,   1. ,   1. ],
+						 [ 10. ,  10. ,   1. ,   1. ],
+						 [  0. ,   0. ,   1. ,   1. ]])
+		c0 = numpy.array([[  0. ,   2. ,   4. ,   1. ],
+						 [  0. ,   2. ,   4. ,   1. ],
+						 [  0. ,   2. ,   4. ,   1. ],
+						 [  0. ,  15.2,   4. ,   1. ],
+						 [  0. ,   2. ,   4. ,   1. ],
+						 [  0. ,   0. ,   4. ,   1. ]])
+		self.assertTrue( bool(numpy.all(x[0]==c0)) )
+		self.assertTrue( bool(numpy.all(x[1]==c1)) )
+		x = d.array_idco('hhsize in (1,2)', 'hhsize')
+		self.assertEqual( 1, x[0,0] )
+		self.assertEqual( 1, x[0,1] )
+		self.assertEqual( 0, x[2,0] )
+		self.assertEqual( 5, x[2,1] )
 

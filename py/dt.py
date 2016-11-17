@@ -1202,6 +1202,7 @@ class DT(Fountain):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import validate_with_repeated1
+		from .util.aster import inXd
 		try:
 			command = self._remake_command(column,None,2).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
@@ -1232,6 +1233,7 @@ class DT(Fountain):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import validate_with_repeated1
+		from .util.aster import inXd
 		try:
 			command = self._remake_command(column,None,1).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
