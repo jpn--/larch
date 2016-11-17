@@ -60,8 +60,8 @@ We can estimate the models and check the results match up with those given by Bi
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.estimate()
-	<larch.core.runstats, success ...
+	>>> m.maximize_loglike()
+	messages: Optimization terminated successfully ...
 	>>> m.loglike()
 	-5331.252...
 	>>> m['Time'].value

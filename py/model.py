@@ -1286,7 +1286,12 @@ class Model(Model2, ModelReporter):
 		spot_a_nan(self.data.choice, "data.choice", none_is_ok=False)
 		spot_a_nan(self.data.utilityco, "data.utilityco")
 		spot_a_nan(self.data.utilityca, "data.utilityca")
+		spot_a_nan(self.data.quantity, "data.quantity")
 		spot_a_nan(self.work.probability, "work.probability")
+		try:
+			self.data_quality_check(repair=None, autoprovision=False)
+		except LarchError as err:
+			doc.append(str(err))
 		if doc:
 			from .util.doctor import warn
 			warn( "larch.Model.doctor says\n"+"\n".join(doc) )
@@ -1645,9 +1650,11 @@ class Model(Model2, ModelReporter):
 			self._LL_current =  -(ret.fun) 
 		return ret
 
-	def data_quality_check(self, repair=None):
-		if self.is_provisioned()<=0:
+	def data_quality_check(self, repair=None, autoprovision=True):
+		if self.is_provisioned()<=0 and autoprovision:
 			self.provision()
+		elif self.is_provisioned()<=0 and not autoprovision:
+			return
 		clashes = numpy.nonzero( numpy.logical_and(self.Data("Choice"), ~self.Data("Avail")) )
 		n_clashes = len(clashes[0])
 		if n_clashes>0:

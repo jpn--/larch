@@ -69,8 +69,8 @@ Having created this model, we can then estimate it:
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
-	>>> m.estimate()
-	<larch.core.runstats, success ...
+	>>> m.maximize_loglike()
+	messages: Optimization terminated successfully ...
 	>>> m.loglike()
 	-3626.18...
 
@@ -92,7 +92,7 @@ Having created this model, we can then estimate it:
 	hhinc#5  	 0          	-0.0128081  	 0.00532408 	-2.40568    	 0          
 	hhinc#6  	 0          	-0.00968626 	 0.00303305 	-3.19358    	 0          
 	tottime  	 0          	-0.0513404  	 0.00309941 	-16.5646    	 0          
-	totcost  	 0          	-0.00492036 	 0.000238894	-20.5964    	 0          
+	totcost  	 0          	-0.00492031 	 0.000238894	-20.5962    	 0
 	============================================================================================
 	Model Estimation Statistics
 	--------------------------------------------------------------------------------------------

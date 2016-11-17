@@ -102,7 +102,7 @@ def show(n):
 	'''Show the computed results of example file number <n>.'''
 	load_example(n)
 	m = model(data())
-	m.estimate()
+	m.maximize_loglike()
 	print(m)
 	
 def tell(n):
@@ -135,7 +135,7 @@ def LL(n):
 	'''Return the estimated log likelihood for example file number <n>.'''
 	load_example(n)
 	m = model(data())
-	m.estimate()
+	m.maximize_loglike()
 	return m.loglike(cached=2)
 
 def CheckLL():
