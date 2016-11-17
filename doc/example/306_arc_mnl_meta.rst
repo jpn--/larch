@@ -159,13 +159,11 @@ that takes a bit of time and we're not interested in those results yet.
 
 	>>> m.option.calc_std_errors = False
 	>>> r = m.maximize_loglike("SLSQP", metaoptions={'maxiter': 200})
-	>>> print(r)
-	messages: Optimization terminated successfully per computed tolerance...
 
 .. doctest::
 	:hide: 
 
-	>>> m.parameter('timeperiod=9', value=-0.00302, initial_value=0)
+	>>> m.parameter('timeperiod=9', value=-0.00302, initial_value=0) # the estimate here is a tiny bit unstable 
 	ModelParameter('timeperiod=9', value=-0.00302)
 
 

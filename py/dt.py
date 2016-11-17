@@ -586,6 +586,7 @@ class DT(Fountain):
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
+		from .util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
 			screen = None
@@ -674,6 +675,7 @@ class DT(Fountain):
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
+		from .util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		if isinstance(screen, str) and screen=="None":
@@ -733,6 +735,7 @@ class DT(Fountain):
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
 		from .util.pytables_addon import select_with_repeated1
+		from .util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)

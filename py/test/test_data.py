@@ -427,15 +427,15 @@ class TestData1(unittest.TestCase):
 
 	def test_idco_variable_analysis_weighting(self):
 
-		d = larch.DT.Example()
-		m = larch.Model.Example(d=d)
+		d = DT.Example()
+		m = Model.Example(d=d)
 		a0 = m.art_idco_variable_analysis(['dist'])
 		self.assertEqual( '5029', a0.get_text_iloc(1,7) )
 
-		d = larch.DT.Example()
+		d = DT.Example()
 		d.new_idco_from_array('wgtseq', numpy.arange(d.nAllCases(), dtype=numpy.float64))
 		d.set_weight('wgtseq')
-		m = larch.Model.Example(d=d)
+		m = Model.Example(d=d)
 		a1 = m.art_idco_variable_analysis(['dist'])
 		self.assertEqual( '12642906', a1.get_text_iloc(1,7) )
 
