@@ -444,7 +444,7 @@ class TestData1(unittest.TestCase):
 
 
 	def test_validation_in_clause(self):
-		d = larch.DT.Example()
+		d = DT.Example()
 		self.assertTrue( d.check_co('hhsize in (1,2)')                        )
 		self.assertTrue( d.check_ca('ovtt * (numveh==1) * (hhsize in (1,2))') )
 		x = d.array_idca('ovtt * (numveh==1) * (hhsize in (1,2))', 'ovtt', 'numveh', 'hhsize')
