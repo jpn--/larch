@@ -1273,6 +1273,16 @@ class Model(Model2, ModelReporter):
 
 
 	def doctor(self):
+		"""
+		Analyze the model and data and look for problems.
+		
+		This function will look for problems with your model or the
+		underlying data, and alert you to them.  Exactly what is checked
+		for may vary (generally expand) in future version.  These checks 
+		may be computationally expensive so the are not completed 
+		automatically on every model run, but if you are experiencing
+		difficulty converging or errors in estimation, try this.
+		"""
 		doc = []
 		def spot_a_nan(arr, label, none_is_ok=True):
 			if arr is None:

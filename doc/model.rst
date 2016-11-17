@@ -146,6 +146,12 @@ Reporting Tools
 .. automethod:: Model.reorder_parameters
 
 
+Troubleshooting
+---------------
+
+.. automethod:: Model.doctor
+
+
 
 Related Classes
 ---------------
