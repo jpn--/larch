@@ -1315,7 +1315,7 @@ class Model(Model2, ModelReporter):
 			doc.append(str(err))
 		if doc:
 			from .util.doctor import warn
-			warn( "larch.Model.doctor says\n"+"\n".join(doc) )
+			warn( "\n-> "+"\n-> ".join(doc) )
 			return "\n".join(doc)
 		else:
 			return "ok"
