@@ -1272,7 +1272,7 @@ class Model(Model2, ModelReporter):
 		self._LL_nil = m.loglike()
 
 
-	def doctor(self):
+	def doctor(self, clash=None):
 		"""
 		Analyze the model and data and look for problems.
 		
@@ -1282,6 +1282,17 @@ class Model(Model2, ModelReporter):
 		may be computationally expensive so the are not completed 
 		automatically on every model run, but if you are experiencing
 		difficulty converging or errors in estimation, try this.
+		
+		Parameters
+		----------
+		clash : {None, '+', '-'}
+			When a case has an alternative that is chosen but not available,
+			it can be repaired by making the chosen alternative available ('+')
+			or by making it not chosen ('-') or left alone (None, the default).
+			Note that making it not chosen will quite possibly result in the entire
+			case having no chosen alternative, which can introduce numerical 
+			problems.
+		
 		"""
 		doc = []
 		def spot_a_nan(arr, label, none_is_ok=True):
@@ -1299,7 +1310,7 @@ class Model(Model2, ModelReporter):
 		spot_a_nan(self.data.quantity, "data.quantity")
 		spot_a_nan(self.work.probability, "work.probability")
 		try:
-			self.data_quality_check(repair=None, autoprovision=False)
+			self.data_quality_check(repair=clash, autoprovision=False)
 		except LarchError as err:
 			doc.append(str(err))
 		if doc:
