@@ -50,18 +50,19 @@ You can attach that function to a model using :meth:`Model.new_xhtml_section` li
 	>>> m.new_xhtml_section(lambda: report_valueoftime(m), 'valueoftime')
 
 Now the report section is available under the name 'valueoftime', so you can include it in a
-:meth:`Model.xhtml` report, obtaining either a xhtml section or a fully built html file:
+:meth:`Model.xhtml` or :meth:`Model.html` report, obtaining either a xhtml section or a fully built html file:
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> m.xhtml( 'title', 'params', 'valueoftime' )
 	<larch.util.xhtml.Elem 'div' at ...>
-	>>> m.xhtml( 'title', 'params', 'valueoftime', return_html=True )
+	>>> m.html( 'title', 'params', 'valueoftime' )
 	b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>...</head><body>...</body></html>'
 
 
-Or, using a more complex but lower level python code, you could incorporate that table into a model report like this:
+You probably won't need any more customization of the html output, but if you do you can get it,
+using a more complex but lower level python code. So you could incorporate that table into a model report like this:
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE

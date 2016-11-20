@@ -434,7 +434,7 @@ class XhtmlModelReporter():
 			self._model = model
 			self._return_xhtml = return_xhtml
 
-		def __getitem__(self, key):
+		def _get_item(self, key, html_processor=True):
 			candidate = None
 			if isinstance(key,str):
 				try:
@@ -461,9 +461,12 @@ class XhtmlModelReporter():
 					candidate = x.close()
 			else:
 				raise TypeError("invalid item")
-			if self._return_xhtml:
+			if html_processor and self._return_xhtml:
 				return lambda *arg,**kwarg: ElementTree.tostring(candidate(*arg,**kwarg), encoding="utf8", method="html")
 			return candidate
+
+		def __getitem__(self, key):
+			return self._get_item(key, True)
 
 		def __repr__(self):
 			return '<XmlManager>'
@@ -509,15 +512,15 @@ class XhtmlModelReporter():
 				if isinstance(arg, Elem):
 					div << arg
 				elif isinstance(arg, str):
-					div << self[arg]()
+					div << self._get_item(arg, False)()
 				elif inspect.ismethod(arg):
 					div << arg()
 				elif isinstance(arg, list):
 					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
-			if filename is not None or return_html:
+			if filename is not None or return_html or self._return_xhtml:
 				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
 					f << div
-					if return_html:
+					if return_html or self._return_xhtml:
 						temphtml = f.dump()
 					else:
 						temphtml = None
@@ -1228,10 +1231,9 @@ class XhtmlModelReporter():
 		-------
 		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
-		>>> with XHTML(quickhead=m) as f:
-		... 	f.append(m.xhtml_title())
-		... 	f.append(m.xhtml_ll())
-		... 	html = f.dump()
+		>>> m.xhtml('title', 'll')
+		<larch.util.xhtml.Elem 'div' ...>
+		>>> html = m.html('title', 'll')
 		>>> html
 		b'<!DOCTYPE html ...>'
 		
