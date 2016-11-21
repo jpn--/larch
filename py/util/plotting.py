@@ -1,4 +1,13 @@
 
+
+# Attempt to import the jupyter manager first.
+# This will initialize the matplotlib module correctly before importing it.
+try:
+	from .. import jupyter
+except:
+	pass
+
+
 from io import BytesIO
 from ..util.xhtml import XHTML, XML_Builder
 import os
