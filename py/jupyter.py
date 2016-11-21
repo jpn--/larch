@@ -134,31 +134,38 @@ def ipython_status(magic_matplotlib=True):
 	message_set = set()
 	try:
 		cfg = get_ipython().config
-		get_ipython().magic("matplotlib inline")
-		message_set.add('IPython')
-
-		# Caution: cfg is an IPython.config.loader.Config
-		if cfg['IPKernelApp']:
-			message_set.add('IPython QtConsole')
-
-			try:
-				if cfg['IPKernelApp']['pylab'] == 'inline':
-					message_set.add('pylab inline')
-				else:
-					message_set.add('pylab loaded but not inline')
-			except:
-				message_set.add('pylab not loaded')
-		elif cfg['TerminalIPythonApp']:
-			try:
-				if cfg['TerminalIPythonApp']['pylab'] == 'inline':
-					message_set.add('pylab inline')
-				else:
-					message_set.add('pylab loaded but not inline')
-			except:
-				message_set.add('pylab not loaded')
 	except:
 		message_set.add('Not IPython')
+	else:
+		import IPython
+		try:
+			get_ipython().magic("matplotlib inline")
+		except IPython.core.error.UsageError:
+			message_set.add('IPython inline plotting not available')
+		else:
+			message_set.add('IPython')
+
+			# Caution: cfg is an IPython.config.loader.Config
+			if cfg['IPKernelApp']:
+				message_set.add('IPython QtConsole')
+
+				try:
+					if cfg['IPKernelApp']['pylab'] == 'inline':
+						message_set.add('pylab inline')
+					else:
+						message_set.add('pylab loaded but not inline')
+				except:
+					message_set.add('pylab not loaded')
+			elif cfg['TerminalIPythonApp']:
+				try:
+					if cfg['TerminalIPythonApp']['pylab'] == 'inline':
+						message_set.add('pylab inline')
+					else:
+						message_set.add('pylab loaded but not inline')
+				except:
+					message_set.add('pylab not loaded')
 	return message_set
+
 
 
 if 'IPython' in ipython_status():
