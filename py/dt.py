@@ -820,11 +820,12 @@ class DT(Fountain):
 		"""
 		if 'screen' in self.h5top:
 			self.h5f.remove_node(self.h5top, 'screen')
+		self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+		self.h5top.screen[:] = True
 		if dynamic:
-			self.h5f.create_group(self.h5top, 'screen')
+			self.h5top.screen._v_attrs.dynamic = True
 		else:
-			self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
-			self.h5top.screen[:] = True
+			self.h5top.screen._v_attrs.dynamic = False
 		self.rescreen(exclude_idco, exclude_idca, exclude_unavail, exclude_unchoosable)
 
 	def rescreen(self, exclude_idco=None, exclude_idca=None, exclude_unavail=None, exclude_unchoosable=None, dynamic=None):
@@ -860,26 +861,32 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			if dynamic:
-				self.h5f.create_group(self.h5top, 'screen')
+#				self.h5f.create_group(self.h5top, 'screen')
+				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+				self.h5top.screen[:] = True
+				self.h5top.screen._v_attrs.dynamic = True
 			else:
 				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
 				self.h5top.screen[:] = True
+				self.h5top.screen._v_attrs.dynamic = False
 		elif dynamic is not None:
-			if isinstance(self.h5top.screen, (_tb.Group,GroupNode)) and not dynamic:
+			if not dynamic:
 				# changing from dynamic to static
-				self.h5top.screen._f_rename('screen_temp')
-				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
+				self.h5top.screen._v_attrs.dynamic = False
+#				self.h5top.screen._f_rename('screen_temp')
+#				self.h5f.create_carray(self.h5top, 'screen', _tb.BoolAtom(), shape=(self.nCases(), ))
 				self.h5top.screen[:] = True
-				for key in self.h5top.screen_temp._v_attrs._v_attrnames:
-					self.h5top.screen._v_attrs[key] = self.h5top.screen_temp._v_attrs[key]
-				self.h5f.remove_node(self.h5top, 'screen_temp')
-			elif not isinstance(self.h5top.screen, (_tb.Group,GroupNode)) and dynamic:
+#				for key in self.h5top.screen_temp._v_attrs._v_attrnames:
+#					self.h5top.screen._v_attrs[key] = self.h5top.screen_temp._v_attrs[key]
+#				self.h5f.remove_node(self.h5top, 'screen_temp')
+			elif dynamic:
 				# changing from static to dynamic
-				self.h5f.create_group(self.h5top, 'screen_temp')
-				for key in self.h5top.screen._v_attrs._v_attrnames:
-					self.h5top.screen_temp._v_attrs[key] = self.h5top.screen._v_attrs[key]
-				self.h5f.remove_node(self.h5top, 'screen')
-				self.h5top.screen_temp._f_rename('screen')
+				self.h5top.screen._v_attrs.dynamic = True
+#				self.h5f.create_group(self.h5top, 'screen_temp')
+#				for key in self.h5top.screen._v_attrs._v_attrnames:
+#					self.h5top.screen_temp._v_attrs[key] = self.h5top.screen._v_attrs[key]
+#				self.h5f.remove_node(self.h5top, 'screen')
+#				self.h5top.screen_temp._f_rename('screen')
 
 
 
@@ -908,7 +915,9 @@ class DT(Fountain):
 		exclude_unavail = inheritable(exclude_unavail, 'exclude_unavail')
 		exclude_unchoosable = inheritable(exclude_unchoosable, 'exclude_unchoosable')
 
-		if isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+#		if isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+#			return
+		if self.h5top.screen._v_attrs.dynamic:
 			return
 
 		if exclude_idco:
@@ -1000,7 +1009,7 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count and not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+		if count and not self.h5top.screen._v_attrs.dynamic: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
 		else:
 			startcount = None
@@ -1037,7 +1046,7 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count and not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+		if count and not self.h5top.screen._v_attrs.dynamic: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
 		else:
 			startcount = None
