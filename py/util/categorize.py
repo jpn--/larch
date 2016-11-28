@@ -48,6 +48,15 @@ class Categorizer:
 			except:
 				pass
 
+	@property
+	def name(self):
+		return self.label
+
+	@name.setter
+	def name(self, value):
+		self.label = value
+
+
 	def complete_members(self):
 		x = []
 		for member in self.members:
@@ -100,6 +109,9 @@ class Categorizer:
 		slots = numpy.empty(0, dtype=int)
 		subcat = Categorizer(self.label, parent=-1)
 		for regex in self.members + ([Categorizer(leftovers, ".*"),] if leftovers else []):
+			if isinstance(regex, (tuple,list)):
+				# re-express plain tuple or list as Categorizer (first item is label, other items are regex members)
+				regex = Categorizer(*regex)
 			if isinstance(regex,str):
 				newslots = numpy.where([re.search("^{}$".format(regex),x) for x in sourcelist])[0]
 				newsubcat = []

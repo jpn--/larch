@@ -617,6 +617,19 @@ class XhtmlModelReporter():
 			return x.close()
 		self.new_xhtml_section(caller, name, register=False)
 
+
+	def new_xhtml_from_dataframe(self, content, name, register=True, to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}, title="DataFrame"):
+		if not isinstance(content, pandas.DataFrame) and not callable(content):
+			raise TypeError('new_xhtml_from_dataframe requires a pandas.DataFrame, not {}'.format(str(type(content))))
+		if isinstance(content, pandas.DataFrame) and isinstance(content.index, pandas.RangeIndex) and numpy.all(content.index==pandas.RangeIndex(0,len(content.index))):
+			if 'index' not in to_html_kwargs:
+				to_html_kwargs['index'] = False
+		if callable(content):
+			caller = lambda: xhtml_dataframe_as_div(content(self), title=title, to_html_kwargs=to_html_kwargs)
+		else:
+			caller = lambda: xhtml_dataframe_as_div(content, title=title, to_html_kwargs=to_html_kwargs)
+		self.new_xhtml_section(caller, name, register=register)
+
 	def add_to_report(self, content, title="Other", to_html_kwargs={'justify':'left', 'bold_rows':True, 'index':True}):
 		try:
 			self._to_add_to_report
@@ -701,6 +714,65 @@ class XhtmlModelReporter():
 										   popper=True )
 			#x.end('div')
 			self._to_add_to_report += [x.close(),]
+
+
+
+	def new_xhtml_sourcecode(self, name, *other_filenames, frame_offset=0, register=True):
+		sourcecode_bucket = []
+		try:
+			frame = inspect.stack()[1+frame_offset]
+			sourcefile = inspect.getsourcefile(frame[0])
+		except:
+			sourcefile = None
+
+		if sourcefile is not None:
+			with open(sourcefile, mode='r') as sf:
+				sourcecode_bucket.append(  (os.path.basename(sourcefile), sf.read())  )
+	
+		for othersource in other_filenames:
+			if os.path.isfile(othersource) and os.path.abspath(othersource)!=sourcefile:
+				with open(othersource, mode='r') as sf:
+					sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+			elif sourcefile is not None:
+				proposed_file = os.path.join(os.path.dirname(sourcefile),os.path.basename(othersource))
+				if os.path.isfile(proposed_file):
+					with open(proposed_file, mode='r') as sf:
+						sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+				else:
+					proposed_file = os.path.join(os.path.dirname(sourcefile),othersource)
+					if os.path.isfile(proposed_file):
+						with open(proposed_file, mode='r') as sf:
+							sourcecode_bucket.append(  (os.path.basename(othersource), sf.read())  )
+
+		def caller():
+			x = XML_Builder("div", {'class':"source_code_section larch_art"})
+			if len(sourcecode_bucket):
+				from pygments import highlight
+				from pygments.lexers import Python3Lexer
+				from pygments.formatters import HtmlFormatter
+				x.start('style')
+				x.data( HtmlFormatter(linenos=True).get_style_defs('.highlight') )
+				x.data( "\ndiv.source_code_section h3 {font-style:italic;font-weight: normal;}" )
+				x.data( "\ndiv.highlight {padding:5px;}" )
+				x.data( "\ntd.linenos {border:0; font-color:#aaaaaa;}" )
+				x.data( "\ntd.code {border:0;}" )
+				x.data( "\ntable.highlighttable {border:0; }" )
+				x.end('style')
+				x.h2("Source Code", anchor=1, attrib={'class':'larch_art_xhtml'})
+				#x.start('script')
+				#x.data("""$(function() { $( "#source_code_accordion" ).accordion({heightStyle: "content",collapsible: true});});""")
+				#x.end('script')
+				#x.start('div', {'id':'source_code_accordion'})
+				from ..util.xhtml import xhtml_rawhtml_as_div
+				for sourcefilename, sourcecode in sourcecode_bucket:
+					x << xhtml_rawhtml_as_div( highlight(sourcecode, Python3Lexer(), HtmlFormatter(linenos=True)),
+											   title="From: {}".format(sourcefilename),
+											   headinglevel=3,
+											   anchor="{}".format(sourcefilename),
+											   popper=True )
+				#x.end('div')
+			return x.close()
+		self.new_xhtml_section(caller, name, register=register)
 
 
 	def xhtml_title(self, **format):

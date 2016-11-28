@@ -221,9 +221,14 @@ class GroupNode():
 		----------
 		link : str
 			The location of the external linkage.  Must be given as "filename:/path/to/node"
-			where node is the target group node (not an individual array).s
+			where node is the target group node (not an individual array).
 			
 		"""
+		if isinstance(link, GroupNode):
+			fname = link._v_node._v_file.filename
+			if fname == self._v_node._v_file.filename:
+				raise TypeError('cannot link to external data in same file, try a local link')
+			link = fname +":"+ link._v_node._v_pathname
 		if ":/" not in link:
 			raise TypeError("must give link as filename:/path/to/node")
 		linkfile, linknode = link.split(":/")
@@ -263,7 +268,7 @@ class GroupNode():
 					import warnings
 					warnings.warn('the name "{}" already exists'.format(prefix+vname))
 				else:
-					self._v_file.create_hard_link(vgrp, '_index_', rowindexnode)
+					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode)
 					self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
 					anything_linked = True
 		if 'lookup' in temp_omx():
@@ -296,7 +301,7 @@ class GroupNode():
 						import warnings
 						warnings.warn('the name "{}" already exists'.format(full_lname))
 					else:
-						self._v_file.create_hard_link(vgrp, '_index_', rowindexnode)
+						self._v_file.create_soft_link(vgrp, '_index_', rowindexnode)
 						self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/lookup/"+lname)
 						anything_linked = True
 		if not anything_linked:

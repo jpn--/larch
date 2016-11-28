@@ -279,11 +279,8 @@ class XHTML():
 			if os.path.exists(filename) and not overwrite and not spool:
 				raise IOError("file {0} already exists".format(filename))
 			if os.path.exists(filename) and not overwrite and spool:
-				filename, filename_ext = os.path.splitext(filename)
-				n = 1
-				while os.path.exists("{}.{:03}{}".format(filename,n,filename_ext)):
-					n += 1
-				filename = "{}.{:03}{}".format(filename,n,filename_ext)
+				from .filemanager import next_stack
+				filename = next_stack(filename)
 			filename, filename_ext = os.path.splitext(filename)
 			if filename_ext=="":
 				filename_ext = ".html"

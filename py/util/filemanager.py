@@ -65,7 +65,7 @@ def top_stack_file(filename, format="%(basename)s.%(number)03i%(extension)s"):
 		raise LarchError("File %s does not exist"%filename)
 
 
-def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix=None, plus=0, allow_natural=False):
+def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix=None, plus=0, allow_natural=False, demand_natural=False):
 	"""Finds the next file name in this stack that does not yet exist.
 	
 	Parameters
@@ -81,22 +81,28 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 	----------------
 	suffix : str, optional
 		If given, use this file extension instead of any extension given in the filename
-		argument.  The unsual use case for this parameter is when filename is None,
+		argument.  The usual use case for this parameter is when filename is None,
 		and a temporary file of a particular kind is desired.
 	format : str, optional
 		If given, use this format string to generate new stack file names in a
 		different format.
 	plus : int, optional
 		If given, increase the returned filenumber by this amount more than what
-		is needed to generate a new file.  This can be useful with pytables.
+		is needed to generate a new file.  This can be useful with pytables, which can
+		create pseudo-files that don't appear on disk but should all have unique names.
 	allow_natural : bool
 		If true, this function will return the unedited	`filename` parameter
 		if that file does not already exist. Otherwise will always have a 
 		number appended to the name.
+	demand_natural : bool
+		If true, this function will just throw a FileExistsError instead of spooling
+		if the file already exists.
 		
 	"""
 	if filename is not None:
 		filename = os.path.expanduser(filename)
+	if demand_natural and os.path.exists(filename):
+		raise FileExistsError(filename)
 	if allow_natural and not os.path.exists(filename):
 		return filename
 	pathlocation, basename, extension = filename_split(filename)
@@ -107,6 +113,7 @@ def next_stack(filename, format="{basename:s}.{number:03d}{extension:s}", suffix
 	while os.path.exists(fn(n)):
 		n += 1
 	return fn(n+plus)
+
 
 
 default_webbrowser = 'chrome'

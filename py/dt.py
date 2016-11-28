@@ -106,7 +106,7 @@ def _pytables_link_dereference(i):
 class DT(Fountain):
 	"""A wrapper for a pytables File used to get data for models.
 
-	This object wraps a :class:`tables.File`, adding a number of methods designed
+	This object wraps a :class:`_tb.File`, adding a number of methods designed
 	specifically for working with choice-based data used in Larch.
 
 	Parameters
@@ -236,6 +236,14 @@ class DT(Fountain):
 				self.h5f.close()
 		except AttributeError:
 			pass
+
+
+	def change_mode(self, mode, **kwarg):
+		if not self._h5f_own:
+			raise TypeError("cannot change_mode when do not own the hdf5 file")
+		self.h5f.close()
+		self.__init__(self.source_filename, mode, **kwarg)
+	
 
 	def __repr__(self):
 		#return "<larch.DT mode '{1}' at {0}>".format(self.source_filename, self.source_filemode)
@@ -2289,7 +2297,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists and overwrite is False.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
@@ -2325,7 +2333,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
 		if self.h5caseids.shape != arr.shape:
@@ -2502,7 +2510,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
@@ -2527,7 +2535,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
 		if nalts is None:
@@ -2553,7 +2561,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
 		if self.h5caseids.shape[0] != arr.shape[0]:
@@ -2582,17 +2590,24 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
-		if self.h5caseids.shape[0] != arr_index.shape[0]:
+		if not isinstance(arr_index, str) and self.h5caseids.shape[0] != arr_index.shape[0]:
 			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
 		newgrp = self.h5f.create_group(self.idco._v_node, name)
-		self.h5f.create_carray(newgrp, '_values_', obj=arr_val)
+		# values
+		if isinstance(arr_val, str):
+			self.h5f.create_external_link(newgrp, '_values_', arr_val)
+		else:
+			self.h5f.create_carray(newgrp, '_values_', obj=arr_val)
+		# index
 		if isinstance(arr_index, numpy.ndarray):
 			self.h5f.create_carray(newgrp, '_index_', obj=arr_index)
 		elif isinstance(arr_index, _tb.array.Array):
-			self.h5f.create_hard_link(newgrp, '_index_', arr_index)
+			self.h5f.create_soft_link(newgrp, '_index_', arr_index)
+		elif isinstance(arr_index, str):
+			self.h5f.create_external_link(newgrp, '_index_', arr_index)
 		else:
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 
@@ -2617,7 +2632,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
 		if self.h5caseids.shape[0] != arr_index.shape[0]:
@@ -2629,7 +2644,7 @@ class DT(Fountain):
 		if isinstance(arr_index, numpy.ndarray):
 			self.h5f.create_carray(newgrp, '_index_', obj=arr_index)
 		elif isinstance(arr_index, _tb.array.Array):
-			self.h5f.create_hard_link(newgrp, '_index_', arr_index)
+			self.h5f.create_soft_link(newgrp, '_index_', arr_index)
 		else:
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 
@@ -2712,7 +2727,7 @@ class DT(Fountain):
 #			
 #		Raises
 #		------
-#		tables.exceptions.NodeError
+#		_tb.exceptions.NodeError
 #			If a variable of the name given by `varname` already exists.
 #		NameError
 #			If the expression contains a name that cannot be evaluated from within
@@ -2861,7 +2876,7 @@ class DT(Fountain):
 #			
 #		Raises
 #		------
-#		tables.exceptions.NodeError
+#		_tb.exceptions.NodeError
 #			If a variable of the name given by `varname` already exists.
 #		NameError
 #			If the expression contains a name that cannot be evaluated from within
@@ -3537,6 +3552,133 @@ class DT(Fountain):
 		return self
 
 
+	def consolidate(self, newfile, spool=True):
+		"""
+		Consolidate all data into a single file (convenient for sharing or replication).
+		
+		The abilility to create external file linkages is convenient for model and data
+		development and prototyping, but it may create headaches for data-sharing across
+		systems, as the paths from the main file to alternative files may change.  Future
+		versions of Larch may improve the use of relative vs absolute filenames in linkages,
+		but DT objects are inherently limited by the features and limitations of the pytables
+		package.
+		
+		This method allows for dumping all the data referenced in a DT into a single file.
+		Rather than merging into the current file, data is always pushed to a new file, although
+		this may be relaxed for future versions.
+		
+		Parameters
+		----------
+		newfile : str
+			The pathname of the new DT file to create.
+		spool : bool
+			When true, if `newfile` already exists, an different filename is spooled off it.  When false,
+			if `newfile` already exists an exception is raised.
+		"""
+		if newfile is not None:
+			from .util.filemanager import next_stack
+			newfile = next_stack(newfile, allow_natural=True, demand_natural=not spool)
+		d = self
+		d1 = DT(newfile, mode='a')
+		d1.new_caseids(d.caseids())
+		d1.set_alternatives(d.alts.altids[:], d.alts.names[:])
+		for co in d.idco._v_children_keys_including_extern:
+			if co in d.idco._v_children:
+				# co is a local thing
+				it = d.idco._v_children[co]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idco_from_array(co, d.idco[co][:])
+				elif isinstance(it, _tb.group.Group):
+					co_g = d1.create_group(d1.h5idco, co)
+					# dupe parts separately, keep soft links
+					if isinstance(it._index_, _tb.link.SoftLink):
+						d1.create_soft_link( co_g, '_index_', it._index_.target )
+					elif isinstance(it._index_, _tb.link.ExternalLink):
+						d1.create_carray(co_g, '_index_', obj=it._index_()[:])
+					else:
+						d1.create_carray(co_g, '_index_', obj=it._index_[:])
+					if isinstance(it._values_, _tb.link.SoftLink):
+						d1.create_soft_link( co_g, '_values_', it._values_.target )
+					elif isinstance(it._values_, _tb.link.ExternalLink):
+						d1.create_carray(co_g, '_values_', obj=it._values_()[:])
+					else:
+						d1.create_carray(co_g, '_values_', obj=it._values_[:])
+			else:
+				# co is a external thing
+				it = d.idco[co]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idco_from_array(co, d.idco[co][:])
+				elif isinstance(it, _tb.group.Group):
+					co_g = d1.create_group(d1.h5idco, co)
+					# dupe parts separately, drop all links
+					d1.create_carray(co_g, '_index_', obj=it._index_[:])
+					d1.create_carray(co_g, '_values_', obj=it._values_[:])
+
+		for ca in d.idca._v_children_keys_including_extern:
+			if ca in d.idca._v_children:
+				# ca is a local thing
+				it = d.idca._v_children[ca]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idca_from_array(ca, d.idca[ca][:])
+				elif isinstance(it, _tb.group.Group):
+					ca_g = d1.create_group(d1.h5idca, ca)
+					# dupe parts separately, keep soft links
+					try:
+						if isinstance(it._index_, _tb.link.SoftLink):
+							d1.create_soft_link( ca_g, '_index_', it._index_.target )
+						elif isinstance(it._index_, _tb.link.ExternalLink):
+							d1.create_carray(ca_g, '_index_', obj=it._index_()[:])
+						else:
+							d1.create_carray(ca_g, '_index_', obj=it._index_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					try:
+						if isinstance(it._values_, _tb.link.SoftLink):
+							d1.create_soft_link( ca_g, '_values_', it._values_.target )
+						elif isinstance(it._values_, _tb.link.ExternalLink):
+							d1.create_carray(ca_g, '_values_', obj=it._values_()[:])
+						else:
+							d1.create_carray(ca_g, '_values_', obj=it._values_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					if 'stack' in it._v_attrs:
+						ca_g._v_attrs['stack'] = it._v_attrs['stack']
+		
+			else:
+				# ca is a external thing
+				it = d.idca[ca]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idca_from_array(ca, d.idca[ca][:])
+				elif isinstance(it, _tb.group.Group):
+					ca_g = d1.create_group(d1.h5idca, ca)
+					# dupe parts separately, drop all links
+					try:
+						d1.create_carray(ca_g, '_index_', obj=it._index_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					try:			
+						d1.create_carray(ca_g, '_values_', obj=it._values_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					if 'stack' in it._v_attrs:
+						ca_g._v_attrs['stack'] = it._v_attrs['stack']
+
+		return d1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def _close_all_h5():
 	try:
@@ -3613,7 +3755,7 @@ class DT_idco_stack_manager:
 			
 		Raises
 		------
-		tables.exceptions.NodeError
+		_tb.exceptions.NodeError
 			If a variable of the name given by `varname` already exists.
 		NameError
 			If the expression contains a name that cannot be evaluated from within

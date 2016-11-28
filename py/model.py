@@ -2,7 +2,7 @@
 from .core import Model2, LarchError, _core, ParameterAlias, Facet, Fountain, ProvisioningError, ModelParameter, LinearComponent, LinearFunction
 from .array import SymmetricArray
 from .util.pmath import category, pmath, rename
-from .util.categorize import Renamer
+from .util.categorize import Renamer, Categorizer
 import numpy
 import os
 from .util.xhtml import XHTML, XML_Builder
@@ -448,11 +448,13 @@ class Model(Model2, ModelReporter):
 			if os.path.exists(filename) and not overwrite and not spool:
 				raise IOError("file {0} already exists".format(filename))
 			if os.path.exists(filename) and not overwrite and spool:
-				filename, filename_ext = os.path.splitext(filename)
-				n = 1
-				while os.path.exists("{} ({}){}".format(filename,n,filename_ext)):
-					n += 1
-				filename = "{} ({}){}".format(filename,n,filename_ext)
+#				filename, filename_ext = os.path.splitext(filename)
+#				n = 1
+#				while os.path.exists("{} ({}){}".format(filename,n,filename_ext)):
+#					n += 1
+#				filename = "{} ({}){}".format(filename,n,filename_ext)
+				from .util.filemanager import next_stack
+				filename = next_stack(filename)
 			filename, filename_ext = os.path.splitext(filename)
 			if filename_ext=="":
 				filename_ext = ".py"
@@ -1772,7 +1774,7 @@ class Model(Model2, ModelReporter):
 	def __contains__(self, x):
 		if x is None:
 			return False
-		if isinstance(x,category):
+		if isinstance(x,(category,Categorizer)):
 			for i in x.members:
 				if i in self: return True
 			return False
@@ -1781,7 +1783,7 @@ class Model(Model2, ModelReporter):
 		from .roles import ParameterRef
 		if isinstance(x,ParameterRef):
 			return x.valid(self)
-		if isinstance(x,rename):
+		if isinstance(x,(rename, Renamer)):
 			found = []
 			if x.name in self:
 				found.append(x.name)

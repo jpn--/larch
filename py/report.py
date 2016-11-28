@@ -12,6 +12,7 @@ from .util.xhtml import XML_Builder
 from .util.pmath import category as Category
 from .util.pmath import rename as Rename
 
+from .util.categorize import Categorizer, Renamer
 
 
 
@@ -25,11 +26,8 @@ class HTML():
 			if os.path.exists(filename) and not overwrite and not spool:
 				raise IOError("file {0} already exists".format(filename))
 			if os.path.exists(filename) and not overwrite and spool:
-				filename, filename_ext = os.path.splitext(filename)
-				n = 1
-				while os.path.exists("{} ({}){}".format(filename,n,filename_ext)):
-					n += 1
-				filename = "{} ({}){}".format(filename,n,filename_ext)
+				from .util.filemanager import next_stack
+				filename = next_stack(filename)
 			filename, filename_ext = os.path.splitext(filename)
 			if filename_ext=="":
 				filename_ext = ".html"
@@ -147,9 +145,9 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		else:
 			print("Failed to load {}".format(m))
 
-	listed_parameters = set([p for p in params if not isinstance(p,category)])
+	listed_parameters = set([p for p in params if not isinstance(p,(category,Categorizer))])
 	for p in params:
-		if isinstance(p,category):
+		if isinstance(p,(category,Categorizer)):
 			listed_parameters.update( p.complete_members() )
 	all_parameters = set()
 	for m in models:
@@ -181,7 +179,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 	"""
 
 	def param_appears_in_at_least_one_model(p):
-		if isinstance(p,category) and len(p.members)==0: return True
+		if isinstance(p,(category,Categorizer)) and len(p.members)==0: return True
 		for m in models:
 			if p in m: return True
 		return False
@@ -196,7 +194,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		def write_param_row(p):
 			if p is None: return
 			if param_appears_in_at_least_one_model(p):
-				if isinstance(p,category):
+				if isinstance(p,(category,Categorizer)):
 					with f.tr(): f.write('<td colspan="{0}" class="parameter_category">{1}</td>'.format(len(models)*2+1,p.name))
 					for subp in p.members:
 						write_param_row(subp)
@@ -225,7 +223,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		def write_factor_row(p):
 			if p is None: return
 			if param_appears_in_at_least_one_model(p):
-				if isinstance(p,category):
+				if isinstance(p,(category,Categorizer)):
 					with f.tr(): f.write('<td colspan="{0}" class="parameter_category">{1}</td>'.format(len(models)*2+1,p.name))
 					for subp in p.members:
 						write_factor_row(subp)
@@ -462,9 +460,9 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 		else:
 			print("Failed to load {}".format(m))
 
-	listed_parameters = set([p for p in params if not isinstance(p,category)])
+	listed_parameters = set([p for p in params if not isinstance(p,(category,Categorizer))])
 	for p in params:
-		if isinstance(p,category):
+		if isinstance(p,(category,Categorizer)):
 			listed_parameters.update( p.complete_members() )
 	all_parameters = set()
 	for m in models:
@@ -494,7 +492,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	"""+css
 
 	def param_appears_in_at_least_one_model(p):
-		if isinstance(p,category) and len(p.members)==0: return True
+		if isinstance(p,(category,Categorizer)) and len(p.members)==0: return True
 		for m in models:
 			if p in m: return True
 		return False
@@ -514,7 +512,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	def write_param_row(p):
 		if p is None: return
 		if param_appears_in_at_least_one_model(p):
-			if isinstance(p,category):
+			if isinstance(p,(category,Categorizer)):
 				with f.tr_:
 					#f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
 					f.start("td", {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
@@ -550,7 +548,7 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	def write_factor_row(p):
 		if p is None: return
 		if param_appears_in_at_least_one_model(p):
-			if isinstance(p,category):
+			if isinstance(p,(category,Categorizer)):
 				with f.tr_:
 					f.td(p.name, {'colspan':str(len(models)*2+1), 'class':"parameter_category"})
 				for subp in p.members:
