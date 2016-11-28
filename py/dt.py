@@ -968,7 +968,8 @@ class DT(Fountain):
 			summary['# Cases Remaining'][rownumber] = summary['# Cases Remaining'][rownumber-1] - summary['# Cases Excluded'][rownumber]
 
 		self.h5top.screen[:] = ~exclusions.squeeze()
-		self.h5top.screen._v_attrs.exclude_result = summary
+		self.to_vault('screen.exclude_result', summary)
+		#self.h5top.screen._v_attrs.exclude_result = summary
 
 	@contextmanager
 	def exclude_block(self):
@@ -1085,11 +1086,16 @@ class DT(Fountain):
 	@property
 	def exclusion_summary(self):
 		'''A dataframe containing a summary of the exclusion factors.'''
-		if 'exclude_result' not in self.h5top.screen._v_attrs:
-			s = pandas.DataFrame(columns=_exclusion_summary_columns)
-			s.index.name = "Criteria"
-			self.h5top.screen._v_attrs.exclude_result = s
-		ex_df = self.h5top.screen._v_attrs.exclude_result
+#		if 'exclude_result' not in self.h5top.screen._v_attrs:
+#			s = pandas.DataFrame(columns=_exclusion_summary_columns)
+#			s.index.name = "Criteria"
+#			self.h5top.screen._v_attrs.exclude_result = s
+#		ex_df = self.h5top.screen._v_attrs.exclude_result
+		try:
+			ex_df = self.from_vault('screen.exclude_result')
+		except KeyError:
+			ex_df = pandas.DataFrame(columns=_exclusion_summary_columns)
+			ex_df.index.name = "Criteria"
 		try:
 			asfloat = ex_df['Alternatives'].values.astype(float)
 		except:
@@ -3667,11 +3673,23 @@ class DT(Fountain):
 
 
 
+	def to_vault(self, name, value):
+		vault = self.get_or_create_group(self.h5top, 'vault')
+		name = name.replace('.','_')
+		if name not in vault:
+			vault_bin = self.h5f.createVLArray(vault, name, _tb.ObjectAtom())
+		else:
+			vault_bin = vault._v_children[name]
+		vault_bin.append(value)
 
-
-
-
-
+	def from_vault(self, name, index=-1):
+		vault = self.get_or_create_group(self.h5top, 'vault')
+		name = name.replace('.','_')
+		if name not in vault:
+			raise KeyError(name+' not in vault')
+		else:
+			vault_bin = vault._v_children[name]
+		return vault_bin[index]
 
 
 
