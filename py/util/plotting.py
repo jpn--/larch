@@ -746,8 +746,16 @@ def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header
 		ch = mod.data.choice.squeeze() * mod.data.weight
 	plt.clf()
 	fig = plt.figure(figsize=figsize)
-	h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled', log=log_scale)
-	h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed', log=log_scale)
+	try:
+		h1 = plt.hist(factorarray.flatten(), weights=pr.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Modeled', log=log_scale)
+	except UnboundLocalError:
+		## matplotlib error sometimes here.  a bugfix is likely coming soon, but not yet in 1.5.3
+		pass
+	try:
+		h2 = plt.hist(factorarray.flatten(), weights=ch.flatten(), histtype="stepfilled", bins=bins, alpha=0.7, normed=True, range=range, label='Observed', log=log_scale)
+	except UnboundLocalError:
+		## matplotlib error sometimes here.  a bugfix is likely coming soon, but not yet in 1.5.3
+		pass
 	plt.legend()
 	return plt_as_svg_xhtml(header=header, headerlevel=headerlevel, anchor=short_header or header)
 
