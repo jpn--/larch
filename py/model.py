@@ -365,7 +365,7 @@ class Model(Model2, ModelReporter):
 	db = df
 
 
-	def load_latest(self, filename="@@@", *, **kwarg):
+	def load_latest(self, filename="@@@", **kwarg):
 		'''
 		Load the latest modified version of a file glob.
 		
