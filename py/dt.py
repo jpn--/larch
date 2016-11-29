@@ -617,8 +617,13 @@ class DT(Fountain):
 						else:
 							raise
 				except TypeError as type_err:
-					if v in self.idca._v_children and isinstance(self.idca._v_children[v], (_tb.Group,GroupNode)) and 'stack' in self.idca._v_children[v]._v_attrs:
-						stacktuple = self.idca._v_children[v]._v_attrs.stack
+#					if v in self.idca._v_children and isinstance(self.idca._v_children[v], (_tb.Group,GroupNode)) and 'stack' in self.idca._v_children[v]._v_attrs:
+#						stacktuple = self.idca._v_children[v]._v_attrs.stack
+#						result[:,:,varnum] = self.array_idco(*stacktuple, screen=screen, strip_nan=strip_nan)
+#					else:
+#						raise
+					if v in self.idca._v_children and isinstance(self.idca._v_children[v], (_tb.Group,GroupNode)) and self.in_vault('stack.'+v):
+						stacktuple = self.from_vault('stack.'+v)
 						result[:,:,varnum] = self.array_idco(*stacktuple, screen=screen, strip_nan=strip_nan)
 					else:
 						raise
@@ -794,7 +799,8 @@ class DT(Fountain):
 
 	def array_choice(self, **kwargs):
 		if isinstance(self.idca._choice_, (_tb.Group,GroupNode)):
-			stacktuple = self.idca._choice_._v_attrs.stack
+			##!stacktuple = self.idca._choice_._v_attrs.stack
+			stacktuple = self.from_vault('stack._choice_')
 			return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
 		return self.array_idca('_choice_', **kwargs)
 
@@ -804,7 +810,7 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			return self.array_idca('1', dtype=dtype, **kwargs)
 		if isinstance(self.idca._avail_, (_tb.Group,GroupNode)):
-			stacktuple = self.idca._avail_._v_attrs.stack
+			##!stacktuple = self.idca._avail_._v_attrs.stack
 			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
@@ -1212,8 +1218,10 @@ class DT(Fountain):
 			return True
 		if column in self.idca._v_children:
 			colnode = self.idca._v_children[column]
-			if isinstance(colnode, (_tb.Group,GroupNode)) and 'stack' in colnode._v_attrs:
-				return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
+#			if isinstance(colnode, (_tb.Group,GroupNode)) and 'stack' in colnode._v_attrs:
+#				##!return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
+			if isinstance(colnode, (_tb.Group,GroupNode)) and self.in_vault('stack.'+colnode):
+				return numpy.all([self.check_co(z) for z in self.from_vault('stack.'+colnode)])
 
 	def _check_co_natural(self, column):
 		return column in self.idco._v_leaves
@@ -1910,7 +1918,8 @@ class DT(Fountain):
 			else:
 				_av_atom_bool = None
 				try:
-					_av_stack = self.idca._avail_._v_attrs.stack
+					##!_av_stack = self.idca._avail_._v_attrs.stack
+					_av_stack = self.from_vault('stack._avail_')
 				except:
 					_av_stack = None
 		else:
@@ -1950,7 +1959,9 @@ class DT(Fountain):
 			else:
 				_ch_atom_float = None
 				try:
-					_ch_stack = self.idca._choice_._v_attrs.stack
+					##!_ch_stack = self.idca._choice_._v_attrs.stack
+					_ch_stack = self.from_vault('stack._choice_')
+					self._stackdef_vault
 				except:
 					_ch_stack = None
 		else:
@@ -3680,7 +3691,10 @@ class DT(Fountain):
 
 		return d1
 
-
+	def in_vault(self, name):
+		vault = self.get_or_create_group(self.h5top, 'vault')
+		name = name.replace('.','_')
+		return name in vault
 
 	def to_vault(self, name, value):
 		vault = self.get_or_create_group(self.h5top, 'vault')
@@ -3760,7 +3774,8 @@ class DT_idco_stack_manager:
 		except _tb.exceptions.NodeError:
 			pass
 		if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
-			self.parent.idca[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
+			##self.parent.idca[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
+			self._stackdef_vault = ["0"]*self.parent.nAlts()
 
 
 	def __call__(self, *cols, varname=None):
@@ -3804,7 +3819,8 @@ class DT_idco_stack_manager:
 			except _tb.exceptions.NoSuchNodeError:
 				pass
 			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
-			self.parent.idca[self.stacktype]._v_attrs.stack = cols
+			##self.parent.idca[self.stacktype]._v_attrs.stack = cols
+			self._stackdef_vault = cols
 		else:
 			ch = self.parent.array_idco(*cols, dtype=numpy.float64)
 			self.parent.new_idca(varname, ch)
@@ -3818,7 +3834,9 @@ class DT_idco_stack_manager:
 		self._check()
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			return self.parent.idca[self.stacktype]._v_attrs.stack[slotarray[0]]
+			##return self.parent.idca[self.stacktype]._v_attrs.stack[slotarray[0]]
+			return self._stackdef_vault[slotarray[0]]
+		
 		else:
 			raise KeyError("key {} not found".format(key) )
 
@@ -3829,9 +3847,11 @@ class DT_idco_stack_manager:
 				self._make_zeros()
 			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
 				self._make_zeros()
-			tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
+			##tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
+			tempobj = self._stackdef_vault
 			tempobj[slotarray[0]] = value
-			self.parent.idca[self.stacktype]._v_attrs.stack = tempobj
+			##self.parent.idca[self.stacktype]._v_attrs.stack = tempobj
+			self._stackdef_vault = tempobj
 		else:
 			raise KeyError("key {} not found".format(key) )
 
@@ -3842,8 +3862,14 @@ class DT_idco_stack_manager:
 			s += "\n  {}: {!r}".format(altid, self[altid])
 		return s
 
+	@property
+	def _stackdef_vault(self):
+		return self.parent.from_vault('stack.'+self.stacktype)
 
-
+	@setter._stackdef_vault
+	def _stackdef_vault(self, value):
+		self.parent.to_vault('stack.'+self.stacktype, value)
+	
 
 def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 	"""Build a new DT with externally linked data.
