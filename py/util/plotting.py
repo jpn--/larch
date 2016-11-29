@@ -877,7 +877,8 @@ def svg_observations_latlong(mod, lat, lon, extent=None, figsize=(6.0,3.0),
 def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_diffs='linear', scaled_diffs=True,
 							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
 							colormap='rainbow', tight_layout=True,
-							headerlevel=2, header=None, short_header=None):
+							headerlevel=2, header=None, short_header=None,
+							colormin=None, colormax=None):
 	"""
 	A validation mapset for destination choice and similar models.
 	
@@ -902,6 +903,8 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 		The level N in the header tag.
 	short_header : str, optional
 		A shortened version of the header, for the table of contents.
+	colormin, colormax : numeric
+		If given use these values as the lower (upper) bound of the colormap normalization.
 	"""
 	from matplotlib import pyplot as plt
 	import matplotlib.colors as colors
@@ -954,6 +957,7 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 	renorm = colors.LogNorm()
 	vst = numpy.vstack([hb1.get_array(),hb2.get_array()])
 	vst = vst[vst!=0]
+	renorm.set_clim(vmin=colormin, vmax=colormax)
 	renorm.autoscale_None( vst )
 	hb1.set_norm( renorm )
 	hb2.set_norm( renorm )
