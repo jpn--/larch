@@ -148,7 +148,10 @@ class statistical_summary():
 
 				w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones([1,xxx.shape[1]])
 				w_nonzero[xxx==0] = 0
-				ss.mean_nonzero = numpy.average(xxx, axis=0, weights=w_nonzero)
+				if sum(w_nonzero)==0:
+					ss.mean_nonzero = numpy.zeros_like(ss.mean)
+				else:
+					ss.mean_nonzero = numpy.average(xxx, axis=0, weights=w_nonzero)
 
 				# Make sure that the histogram field is iterable
 				if isinstance(ss.histogram, numpy.ndarray):
