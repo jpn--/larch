@@ -957,7 +957,8 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 	renorm = colors.LogNorm()
 	vst = numpy.vstack([hb1.get_array(),hb2.get_array()])
 	vst = vst[vst!=0]
-	renorm.set_clim(vmin=colormin, vmax=colormax)
+	renorm.vmin=colormin
+	renorm.vmax=colormax
 	renorm.autoscale_None( vst )
 	hb1.set_norm( renorm )
 	hb2.set_norm( renorm )
