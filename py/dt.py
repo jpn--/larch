@@ -3866,7 +3866,7 @@ class DT_idco_stack_manager:
 	def _stackdef_vault(self):
 		return self.parent.from_vault('stack.'+self.stacktype)
 
-	@setter._stackdef_vault
+	@_stackdef_vault.setter
 	def _stackdef_vault(self, value):
 		self.parent.to_vault('stack.'+self.stacktype, value)
 	
