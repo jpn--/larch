@@ -811,6 +811,7 @@ class DT(Fountain):
 			return self.array_idca('1', dtype=dtype, **kwargs)
 		if isinstance(self.idca._avail_, (_tb.Group,GroupNode)):
 			##!stacktuple = self.idca._avail_._v_attrs.stack
+			stacktuple = self.from_vault('stack._avail_')
 			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
@@ -1220,8 +1221,8 @@ class DT(Fountain):
 			colnode = self.idca._v_children[column]
 #			if isinstance(colnode, (_tb.Group,GroupNode)) and 'stack' in colnode._v_attrs:
 #				##!return numpy.all([self.check_co(z) for z in colnode._v_attrs.stack])
-			if isinstance(colnode, (_tb.Group,GroupNode)) and self.in_vault('stack.'+colnode):
-				return numpy.all([self.check_co(z) for z in self.from_vault('stack.'+colnode)])
+			if isinstance(colnode, (_tb.Group,GroupNode)) and self.in_vault('stack.'+column):
+				return numpy.all([self.check_co(z) for z in self.from_vault('stack.'+column)])
 
 	def _check_co_natural(self, column):
 		return column in self.idco._v_leaves
@@ -1889,7 +1890,8 @@ class DT(Fountain):
 			if isinstance_(self.idca._v_children[idca_child], (_tb.group.Group,GroupNode)):
 				if '_index_' not in self.idca._v_children[idca_child] or '_values_' not in self.idca._v_children[idca_child]:
 					if 'stack' not in self.idca._v_children[idca_child]._v_attrs:
-						idca_child_incorrect_sized[idca_child] = 'invalid group'
+						if not self.in_vault('stack.'+idca_child):
+							idca_child_incorrect_sized[idca_child] = 'invalid group'
 				else:
 					if self.idca._v_children[idca_child]._values_.shape[1] != altids_node_len:
 						idca_child_incorrect_sized[idca_child] = self.idca._v_children[idca_child]._values_.shape
@@ -1961,7 +1963,6 @@ class DT(Fountain):
 				try:
 					##!_ch_stack = self.idca._choice_._v_attrs.stack
 					_ch_stack = self.from_vault('stack._choice_')
-					self._stackdef_vault
 				except:
 					_ch_stack = None
 		else:
@@ -3670,6 +3671,7 @@ class DT(Fountain):
 					if 'stack' in it._v_attrs:
 						ca_g._v_attrs['stack'] = it._v_attrs['stack']
 		
+		
 			else:
 				# ca is a external thing
 				it = d.idca[ca]
@@ -3689,12 +3691,24 @@ class DT(Fountain):
 					if 'stack' in it._v_attrs:
 						ca_g._v_attrs['stack'] = it._v_attrs['stack']
 
+		if 'vault' in d.h5top:
+			vault = d1.get_or_create_group(d1.h5top, 'vault')
+			for vt in self.h5top.vault._v_children:
+				d1.to_vault(vt, d.from_vault(vt))
+
 		return d1
 
 	def in_vault(self, name):
 		vault = self.get_or_create_group(self.h5top, 'vault')
 		name = name.replace('.','_')
-		return name in vault
+		if name in vault:
+			return True
+		if 'stack.' in name:
+			try:
+				return 'stack' in self.idca._v_children[name[6:]]._v_attrs
+			except:
+				pass
+		return False
 
 	def to_vault(self, name, value):
 		vault = self.get_or_create_group(self.h5top, 'vault')
@@ -3707,11 +3721,17 @@ class DT(Fountain):
 
 	def from_vault(self, name, index=-1):
 		vault = self.get_or_create_group(self.h5top, 'vault')
-		name = name.replace('.','_')
-		if name not in vault:
-			raise KeyError(name+' not in vault')
+		name_ = name.replace('.','_')
+		if name_ not in vault:
+			# not in vault, check for attrib...
+			if 'stack.' in name:
+				try:
+					return self.idca._v_children[name[6:]]._v_attrs.stack
+				except:
+					pass
+			raise KeyError(name_+' not in vault')
 		else:
-			vault_bin = vault._v_children[name]
+			vault_bin = vault._v_children[name_]
 		return vault_bin[index]
 
 
@@ -3845,7 +3865,7 @@ class DT_idco_stack_manager:
 		if len(slotarray) == 1:
 			if self.stacktype not in self.parent.idca:
 				self._make_zeros()
-			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
+			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs and not self.parent.in_vault('stack.'+self.stacktype):
 				self._make_zeros()
 			##tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
 			tempobj = self._stackdef_vault
