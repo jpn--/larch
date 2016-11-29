@@ -364,6 +364,25 @@ class Model(Model2, ModelReporter):
 	df = property(_grab_data_fountain, _change_data_fountain, Model2.delete_data_fountain)
 	db = df
 
+
+	def load_latest(self, filename="@@@", *, **kwarg):
+		'''
+		Load the latest modified version of a file glob.
+		
+		This function finds the most recently modified file matching the glob pattern
+		and loads it.  This is convenient if you've been estimating a series of models.
+		'''
+		if filename=="@@@" and isinstance(self,str):
+			filename = self
+			if d:
+				self = Model(d)
+			else:
+				self = Model()
+		fileglob = filename
+		from .util.filemanager import latest_matching
+		filename = latest_matching(os.path.expanduser(fileglob))
+		return self.load(filename, **kwarg)
+
 	def load(self, filename="@@@", *, echo=False, d=None):
 		if filename=="@@@" and isinstance(self,str):
 			filename = self
