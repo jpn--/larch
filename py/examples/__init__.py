@@ -28,7 +28,7 @@
 #
 ################################################################################
 
-import sys, os.path, glob
+import sys, os, os.path, glob
 
 exampledir = os.path.dirname(__file__)
 exampledocdir = os.path.join(os.path.dirname(__file__),'doc')
@@ -157,6 +157,8 @@ def _testcode_iter(sourcefile):
 				continue
 			if line == '':
 				continue
+			if line == '\t:hide:':
+				continue
 			if line[0] not in (' ','\t'):
 				active = False
 			if active:
@@ -174,6 +176,8 @@ def _exec_example(sourcefile, d = None, extract='m'):
 	_local = {}
 	from .. import larch
 	_global['larch'] = larch
+	_global['sys'] = sys
+	_global['os'] = os
 	from ..roles import P,X,PX
 	_global['P'] = P
 	_global['X'] = X

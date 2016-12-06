@@ -6,8 +6,8 @@
 
 .. testsetup:: *
 
-   import larch
-   import os
+	import larch
+	import os
 
 .. testcode::
 	:hide:
@@ -154,10 +154,24 @@ for mode choice model estimation.
 		Transit: 'RAIL_TIME>0',
 	}
 
-	# Let's define some variables for clarity.
+Let's define some variables for clarity.  We could in theory call the complete formula
+"DIST / 2.5 * 60 * (DIST<=3)" every time we want to refer to the walk time (given as
+distance in miles, divided by 2.5 miles per hour, times 60 minutes per hour, but only up to 3 miles).
+But it's much easier, and potentially faster, to pre-compute the walk time and use it directly.
+
+.. testcode::
+
 	d.new_idco("WALKTIME", "DIST / 2.5 * 60 * (DIST<=3)") # 2.5 mph, 60 minutes per hour, max 3 miles
 	d.new_idco("BIKETIME", "DIST / 12 * 60 * (DIST<=15)")  # 12 mph, 60 minutes per hour, max 15 miles
 	d.new_idco("CARCOST", "DIST * 0.20")  # 20 cents per mile
+
+
+.. tip::
+
+	If you want access to the data in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-use copy like this::
+
+		d = larch.DT.Example(200)
 
 
 
