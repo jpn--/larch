@@ -23,7 +23,7 @@ try:
 	else:
 		ver = subprocess.check_output(['git','describe','--tags','--long']).strip()
 except subprocess.CalledProcessError:
-	ver = '3.3.20'
+	ver = '3.3.21'
 
 if ver[0].lower() == 'v':
 	ver = ver[1:]
