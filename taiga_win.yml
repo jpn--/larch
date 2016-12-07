@@ -24,7 +24,7 @@ dependencies:
 - wheel=0.29.0=py35_0
 - zlib=1.2.8=vc14_3
 - pip:
-  - larch==3.3.21
+  - larch==3.3.22
   - tables==3.2.2
 
 
