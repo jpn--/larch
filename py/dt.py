@@ -3735,7 +3735,7 @@ class DT(Fountain):
 		vault = self.get_or_create_group(self.h5top, 'vault')
 		name = name.replace('.','_')
 		if name not in vault:
-			vault_bin = self.h5f.createVLArray(vault, name, _tb.ObjectAtom())
+			vault_bin = self.h5f.create_vlarray(vault, name, _tb.ObjectAtom())
 		else:
 			vault_bin = vault._v_children[name]
 		vault_bin.append(value)
