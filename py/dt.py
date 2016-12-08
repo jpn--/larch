@@ -638,6 +638,15 @@ class DT(Fountain):
 					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
 				if "min" in command:
 					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
+				
+				if isinstance(exc, NameError):
+					badname = str(exc).split("'")[1]
+					goodnames = dir()
+					from .util.text_manip import case_insensitive_close_matches
+					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
+					if len(did_you_mean_list)>0:
+						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
+
 				exc.args = (arg0,) + args[1:]
 				raise
 		if strip_nan:
@@ -714,6 +723,15 @@ class DT(Fountain):
 					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
 				if "min" in command:
 					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
+				
+				if isinstance(exc, NameError):
+					badname = str(exc).split("'")[1]
+					goodnames = dir()
+					from .util.text_manip import case_insensitive_close_matches
+					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
+					if len(did_you_mean_list)>0:
+						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
+
 				exc.args = (arg0,) + args[1:]
 				raise
 		if strip_nan:
@@ -773,11 +791,20 @@ class DT(Fountain):
 					arg0 = ''
 				else:
 					arg0 = args[0]
-				arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(command)
+				arg0 = arg0 + '\n'+'within parsed command: "{!s}"'.format(command)
 				if "max" in command:
-					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(command)
+					arg0 = arg0 + '\n'+'(note to get the maximum of arrays use "fmax" not "max")'.format(command)
 				if "min" in command:
-					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(command)
+					arg0 = arg0 + '\n'+'(note to get the maximum of arrays use "fmin" not "min")'.format(command)
+				
+				if isinstance(exc, NameError):
+					badname = str(exc).split("'")[1]
+					goodnames = dir()
+					from .util.text_manip import case_insensitive_close_matches
+					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
+					if len(did_you_mean_list)>0:
+						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
+
 				exc.args = (arg0,) + args[1:]
 				raise
 			if strip_nan:
