@@ -63,6 +63,13 @@ you can go to your command line to get the necessary tools::
 	conda install graphviz
 	pip install pygraphviz
 
+It's possible that pygraphviz still won't want to place nice.  On macOS, you can try this::
+
+	pip install pygraphviz \
+	--install-option="--include-path=/usr/local/include/graphviz/" \
+	--install-option="--library-path=/usr/local/lib/graphviz"
+
+
 Once you've got Larch installed, you might want to jump directly to some :ref:`examples`
 to see how you might use it.
 
