@@ -242,7 +242,7 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 		constraints = constraints + tuple(model.network_based_constraints())
 	return constraints
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0, cache_data=False, sessionlog=False):
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0, cache_data=False, sessionlog=False, sourcecode=None):
 	"""
 	Maximize the log likelihood of the model.
 	
@@ -262,6 +262,13 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 		simple pre-steps, but it can be useful to help warm-start other algorithms (esp. SLSQP)
 		that can enforce these things but perform badly with poor starting points.
 	"""
+	
+	if sourcecode is not None:
+		if isinstance(sourcecode, str):
+			model.new_xhtml_sourcecode(sourcecode, frame_offset=1)
+		else:
+			model.new_xhtml_sourcecode('sourcecode', frame_offset=1)
+	
 	
 	if sessionlog:
 		if isinstance(sessionlog, int) and sessionlog>1:
