@@ -41,6 +41,9 @@ class JupyterManager:
 				xml_obj = getattr(self._model, "xhtml_{}".format(key.casefold()))
 				self._show_xml(xml_obj)
 
+from . import styles
+
+
 
 _default_css_jupyter = """
 
@@ -48,7 +51,7 @@ _default_css_jupyter = """
 
 .error_report {color:red; font-family:monospace;}
 
-div.output_wrapper {font-family: "Book Antiqua", "Palatino", serif;}
+div.output_wrapper {""" + styles.body_font + """}
 
 div.output_wrapper table {border-collapse:collapse;}
 
@@ -73,7 +76,8 @@ div.output_wrapper th {
 	font-weight:700;
 	}
 	
-.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+.larch_signature {""" + styles.signature_font + """ }
+.larch_name_signature {""" + styles.signature_name_font + """}
 
 .larch_head_tag {font-size:150%; font-weight:900; font-family:"Roboto Slab", Verdana;}
 .larch_head_tag_ver {font-size:80%; font-weight:200; font-family:"Roboto Slab", Verdana;}

@@ -6,6 +6,7 @@ from xml.etree.ElementTree import Element, SubElement, TreeBuilder
 from contextlib import contextmanager
 from ..utilities import uid as _uid
 import base64
+from .. import styles
 
 # @import url(https://fonts.googleapis.com/css?family=Roboto+Mono:400,700,700italic,400italic,100,100italic);
 
@@ -16,7 +17,7 @@ _default_css = """
 
 .error_report {color:red; font-family:monospace;}
 
-body {font-family: "Book Antiqua", "Palatino", serif;}		
+body {""" + styles.body_font + """}
 
 table {border-collapse:collapse;}
 
@@ -41,7 +42,8 @@ th {
 	font-weight:700;
 	}
 	
-.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+.larch_signature {""" + styles.signature_font + """}
+.larch_name_signature {""" + styles.signature_name_font + """}
 
 a.parameter_reference {font-style: italic; text-decoration: none}
 
@@ -343,7 +345,8 @@ class XHTML():
 		.table_of_contents_head { font-weight:700; padding-left:25px;  }
 		.table_of_contents ul { padding-left:25px;  }
 		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
-		.larch_signature {font-size:80%; width: """+str(toc_width-30)+"""px; font-weight:100; font-style:italic; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
+		.larch_signature {""" + styles.signature_font + """ width: """+str(toc_width-30)+"""px; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
+		.larch_name_signature {""" + styles.signature_name_font + """}
 		a.parameter_reference {font-style: italic; text-decoration: none}
 		.strut2 {min-width:2in}
 		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
@@ -358,7 +361,8 @@ class XHTML():
 		   h1, h2, h3 { page-break-after: avoid; }
 		   img { max-width: 100% !important; }
 		   ul, img, table { page-break-inside: avoid; }
-		   .larch_signature {font-size:80%; width: 100%; font-weight:100; font-style:italic; padding:0; background-color:#fff; position: fixed; bottom: 0;}
+		   .larch_signature {""" + styles.signature_font + """ padding:0; background-color:#fff; position: fixed; bottom: 0;}
+		   .larch_name_signature {""" + styles.signature_name_font + """}
 		   .larch_signature img {display:none;}
 		   .larch_signature .noprint {display:none;}
 		}
@@ -448,7 +452,7 @@ class XHTML():
 
 	def toc_iframe(self, insert=False):
 		css = """
-		.table_of_contents { font-size:85%; font-family:"Book Antiqua", "Palatino", serif; }
+		.table_of_contents { font-size:85%; """ + styles.body_font + """ }
 		.table_of_contents a:link { text-decoration: none; }
 		.table_of_contents a:visited { text-decoration: none; }
 		.table_of_contents a:hover { text-decoration: underline; }
@@ -496,7 +500,9 @@ class XHTML():
 		xsign.start('p')
 		xsign.start('img', {'width':"14", 'height':"14", 'src':"data:image/png;base64,{}".format(favicon), 'style':'position:relative;top:2px;' })
 		xsign.end('img')
+		xsign.start('span', {'class':'larch_name_signature'})
 		xsign.data(" Larch {}".format(version))
+		xsign.end('span')
 		xsign.simple('br')
 		xsign.data("Report generated on ")
 		xsign.simple('br', attrib={'class':'noprint'})

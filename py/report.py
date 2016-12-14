@@ -154,12 +154,13 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		all_parameters.update(m.parameter_names())
 	unlisted_parameters = all_parameters - listed_parameters
 	
+	from . import styles
 
 	head = """
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,900,700,500italic|Roboto+Mono:400,300,400italic,700,700italic' rel='stylesheet' type='text/css'>
 	<style>
 	div.bounding {margin-left:auto; margin-right:auto; padding-left:20px; padding-right:20px; }
-	h1 {font-family: "Book Antiqua", Palatino, serif; }
+	h1 {""" + styles.body_font + """}
 	table { border-collapse: collapse;  font-weight:400; text-align:center;  }
 	th {border: 1px solid #999999; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%; font-weight:700;}
 	table {border: 0; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%;}
@@ -174,7 +175,8 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 	th.emptyhead {border: 0;}
 	tr:first-child > td.table_category { padding-top:5px; }
 	td.tstat { font-size: 80%; font-weight: 300;}
-	.larch_signature {font-size:80%; font-weight:100; font-style:italic; font-family: "Book Antiqua", Palatino, serif; }
+	.larch_signature {""" + styles.signature_font + """}
+	.larch_name_signature {""" + styles.signature_name_font + """}
 	</style>
 	"""
 
@@ -394,6 +396,9 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 		xsign.start('p')
 		xsign.start('img', {'width':"14", 'height':"14", 'src':"data:image/png;base64,{}".format(favicon), 'style':'position:relative;top:2px;' })
 		xsign.end('img')
+		xsign.start('span', {'class':'larch_name_signature'})
+		xsign.data(" Larch {}".format(version))
+		xsign.end('span')
 		xsign.data(" Larch {}".format(version))
 		xsign.simple('br')
 		xsign.data("multireport generated on ")
@@ -469,11 +474,12 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 		all_parameters.update(m.parameter_names())
 	unlisted_parameters = all_parameters - listed_parameters
 	
+	from . import styles
 
 	css = """
 	@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500italic|Roboto+Mono:300,400,700,100);
 
-	h1 {font-family: "Book Antiqua", Palatino, serif; }
+	h1 {""" + styles.body_font + """}
 	table { border-collapse: collapse;  font-weight:400; text-align:center;  }
 	th {border: 1px solid #999999; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%; font-weight:700;}
 	table {border: 0; font-family: "Roboto", "Helvetica", "Arial", sans-serif; font-size:90%;}
@@ -488,7 +494,8 @@ def multireport_xhtml(models_or_filenames, params=(), ratios=(), *, filename=Non
 	th.emptyhead {border: 0;}
 	tr:first-child > td.table_category { padding-top:5px; }
 	td.tstat { font-size: 70%; font-weight: 100;}
-	.larch_signature {font-size:80%; font-weight:100; font-style:italic; font-family: "Book Antiqua", Palatino, serif; }
+	.larch_signature {""" + styles.signature_font + """}
+	.larch_name_signature {""" + styles.signature_name_font + """}
 	"""+css
 
 	def param_appears_in_at_least_one_model(p):

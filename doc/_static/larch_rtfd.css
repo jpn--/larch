@@ -185,7 +185,7 @@ div.larch_art th {
 	font-weight:700;
 	}
 	
-.larch_signature {font-size:80%; font-weight:100; font-style:italic; }
+.larch_signature {font-size:70%; font-weight:100; font-style:italic; font-family: "Roboto", Helvetica, sans-serif; }
 
 a.parameter_reference {font-style: italic; text-decoration: none}
 
