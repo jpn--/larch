@@ -188,7 +188,7 @@ Now we're ready to go.
 	If you want access to the data in this example without worrying about assembling all the code blocks
 	together on your own, you can load a read-to-use copy like this::
 
-		d = larch.Model.Example(201)
+		m = larch.Model.Example(201)
 
 
 
