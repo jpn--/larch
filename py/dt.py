@@ -2404,7 +2404,7 @@ class DT(Fountain):
 		try:
 			self.h5f.create_carray(self.idco._v_node, name, obj=arr)
 		except ValueError as valerr:
-			if "unknown type" in str(valerr):
+			if "unknown type" in str(valerr) or "unknown kind" in str(valerr):  # changed for pytables 3.3
 				try:
 					tb_atom = _tb.Atom.from_dtype(arr.dtype)
 				except ValueError:
