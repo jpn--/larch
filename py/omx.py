@@ -83,6 +83,30 @@ class OMX(_tb.file.File):
 			shp[1] = x[1]
 			self.root._v_attrs.SHAPE = shp
 
+	def crop(self, shape0, shape1=None, *, complevel=1, complib='zlib'):
+		if isinstance(shape0, (tuple,list)) and len(shape0)==2 and shape1 is None:
+			shape0, shape1 = shape0[0], shape0[1]
+		elif isinstance(shape0, (int)) and shape1 is None:
+			shape1 = shape0
+		start0, start1 = self.shape[0], self.shape[1]
+		if start0==shape0 and start1==shape1:
+			return
+		if shape0 > start0:
+			raise TypeError('crop must shrink the shape, but {} > {} in first dimension'.format(shape0,start0))
+		if shape1 > start1:
+			raise TypeError('crop must shrink the shape, but {} > {} in first dimension'.format(shape1,start1))
+		if shape0!=shape1 and start0==start1:
+			raise TypeError('do not automatically crop a square array into a non-square shape, results may be ambiguous')
+		for i in self.data._v_children:
+			self.add_matrix(i, self.data._v_children[i][:shape0,:shape1], overwrite=True, complevel=complevel, complib=complib, ignore_shape=True)
+		for i in self.lookup._v_children:
+			if self.lookup[i].shape[0] == start0:
+				self.add_lookup(i, self.lookup._v_children[i][:shape0], overwrite=True, complevel=complevel, complib=complib, ignore_shape=True)
+			elif self.lookup[i].shape[1] == start1:
+				self.add_lookup(i, self.lookup._v_children[i][:shape1], overwrite=True, complevel=complevel, complib=complib, ignore_shape=True)
+
+
+
 	def add_blank_lookup(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
 		if name in self.lookup._v_children:
 			return self.lookup._v_children[name]
@@ -123,29 +147,37 @@ class OMX(_tb.file.File):
 			shape = self.shape
 		return self.create_carray(self.data, name, atom=atom, shape=shape, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
-	def add_matrix(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', **kwargs):
-		if len(obj.shape) != 2:
-			raise OMXIncompatibleShape('all omx arrays must have 2 dimensional shape')
-		if self.data._v_nchildren>0:
-			if obj.shape != self.shape:
-				raise OMXIncompatibleShape('this omx has shape {!s} but you want to add {!s}'.format(self.shape, obj.shape))
+	def add_matrix(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', ignore_shape=False, **kwargs):
+		if not ignore_shape:
+			if len(obj.shape) != 2:
+					raise OMXIncompatibleShape('all omx arrays must have 2 dimensional shape')
+			if self.data._v_nchildren>0:
+				if obj.shape != self.shape:
+					raise OMXIncompatibleShape('this omx has shape {!s} but you want to add {!s}'.format(self.shape, obj.shape))
 		if self.data._v_nchildren == 0:
 			shp = numpy.empty(2, dtype=int)
 			shp[0] = obj.shape[0]
 			shp[1] = obj.shape[1]
 			self.root._v_attrs.SHAPE = shp
+		if name in self.data._v_children and not overwrite:
+			raise TypeError('{} exists'.format(name))
 		if name in self.data._v_children:
 			self.remove_node(self.data, name)
 		return self.create_carray(self.data, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
-	def add_lookup(self, name, obj, complevel=1, complib='zlib', **kwargs):
-		if len(obj.shape) != 1:
-			raise OMXIncompatibleShape('all omx lookups must have 1 dimensional shape')
-		if self.data._v_nchildren>0:
-			if obj.shape[0] not in self.shape:
-				raise OMXIncompatibleShape('this omx has shape {!s} but you want to add a lookup with {!s}'.format(self.shape, obj.shape))
+	def add_lookup(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', ignore_shape=False, **kwargs):
+		if not ignore_shape:
+			if len(obj.shape) != 1:
+				raise OMXIncompatibleShape('all omx lookups must have 1 dimensional shape')
+			if self.data._v_nchildren>0:
+				if obj.shape[0] not in self.shape:
+					raise OMXIncompatibleShape('this omx has shape {!s} but you want to add a lookup with {!s}'.format(self.shape, obj.shape))
 		if self.data._v_nchildren == 0 and self.shape==(0,0):
 			raise OMXIncompatibleShape("don't add lookup to omx with no data and no shape")
+		if name in self.lookup._v_children and not overwrite:
+			raise TypeError('{} exists'.format(name))
+		if name in self.lookup._v_children:
+			self.remove_node(self.lookup, name)
 		return self.create_carray(self.lookup, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
 	def change_all_atoms_of_type(self, oldatom, newatom):
