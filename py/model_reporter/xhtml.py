@@ -52,7 +52,21 @@ class XhtmlModelReporter():
 	def iter_cats(self, cats):
 		discovered = set()
 		for i in cats:
-			if i=='!':
+			
+			if isinstance(i, str) and i.casefold()=='help':
+				poss = []
+				poss += ['!           ( title, possible_overspecification, params, LL, latest )']
+				poss += ['$           ( utilityspec, probabilityspec )']
+				poss += ['*           ( everything (almost) )']
+				poss += ['&           ( all registered special sections )']
+				poss += ['#BLAH BLAH  ( A level 2 header )']
+				poss += ['?REGEX      ( search for matches among registered special sections )']
+				for k in dir(self):
+					if len(k)>6 and k[:6]=='xhtml_':
+						poss += [k[6:]]
+				raise TypeError('Possibilities...\n'+'\n'.join(poss))
+			
+			elif i=='!':
 				for j in ('title', 'possible_overspecification', 'params', 'll', 'latest'):
 					if j not in discovered: yield j
 					discovered.add(j)

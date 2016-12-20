@@ -553,9 +553,9 @@ class AbstractReportTable():
 
 		from ..util.img import favicon_raw
 		from io import BytesIO
-		from ..version import version
+		from .. import longversion
 		import time
-		worksheet.write(r_top+1, c_left, "      Larch {}".format(version), foot_format)
+		worksheet.write(r_top+1, c_left, "      Larch {}".format(longversion), foot_format)
 		worksheet.insert_image(r_top+1, c_left, "larch_favicon.png",
 								{'image_data': BytesIO(favicon_raw),
 								 'x_scale':0.5, 'y_scale':0.5,

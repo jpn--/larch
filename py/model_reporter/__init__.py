@@ -1,4 +1,4 @@
-from . import docx, latex, pdf, txt, xhtml, alogit, art, unicode
+from . import docx, latex, pdf, txt, xhtml, alogit, art, unicode, xlsx
 import math
 from ..util.xhtml import XHTML, XML_Builder, Elem
 from ..util.pmath import category, pmath, rename
@@ -17,6 +17,7 @@ class ModelReporter(docx.DocxModelReporter,
 					alogit.AlogitModelReporter,
 					unicode.UnicodeModelReporter,
 					art.ArtModelReporter,
+					xlsx.XlsxModelReporter,
 					):
 
 	def report(self, style, *args, filename=None, tempfile=False, **kwargs):
