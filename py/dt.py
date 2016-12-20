@@ -1595,7 +1595,7 @@ class DT(Fountain):
 
 
 	@staticmethod
-	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_args=(), csv_kwargs={}, complib='zlib', complevel=1, **kwargs):
+	def CSV_idco(filename, caseid=None, choice=None, weight=None, savename=None, alts={}, csv_args=(), csv_kwargs={}, complib='zlib', complevel=1, overwrite=0, **kwargs):
 		'''Creates a new larch DT based on an :ref:`idco` CSV data file.
 
 		The input data file should be an :ref:`idco` data file, with the first line containing the column headings.
@@ -1646,22 +1646,31 @@ class DT(Fountain):
 		
 		
 		self = DT(filename=savename, complevel=complevel, complib=complib, **kwargs)
-		self.import_idco(filename, *csv_args, caseid_column=None, **csv_kwargs)
+		self.import_idco(filename, *csv_args, caseid_column=None, overwrite=overwrite, **csv_kwargs)
 		
 		h5filters = _tb.Filters(complevel=complevel, complib=complib)
 
 
 		altscodes_seq = sorted(alts)
-
+		
+		if overwrite>0 and 'altids' in self.alts._v_node._v_children:
+			self.h5f.remove_node(self.alts._v_node, 'altids', recursive=True)
 		h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', _tb.Int64Atom(), shape=(len(alts),), filters=h5filters, title='elemental alternative code numbers')
+
 		h5altids[:] = numpy.asarray(altscodes_seq)
 
+		if overwrite>0 and 'names' in self.alts._v_node._v_children:
+			self.h5f.remove_node(self.alts._v_node, 'names', recursive=True)
 		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), filters=h5filters, title='elemental alternative names')
 		for an in altscodes_seq:
 			h5altnames.append( str(alts[an][0]) )
+
 		# Weight
 		if weight:
+			if overwrite>0 and '_weight_' in self.idco._v_node._v_children:
+				self.h5f.remove_node(self.idco._v_node, '_weight_', recursive=True)
 			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+weight)
+
 		# Choice
 		try:
 			self.choice_idco = {a:aa[2] for a,aa in alts.items()}
@@ -2063,7 +2072,7 @@ class DT(Fountain):
 		return omx
 
 
-	def import_idco(self, filepath_or_buffer, caseid_column=None, *args, **kwargs):
+	def import_idco(self, filepath_or_buffer, caseid_column=None, overwrite=0, *args, **kwargs):
 		"""Import an existing CSV or similar file in idco format into this HDF5 file.
 		
 		This function relies on :func:`pandas.read_csv` to read and parse the input data.
@@ -2081,6 +2090,10 @@ class DT(Fountain):
 			If given, this is the column of the input data file to use as caseids.  It must be 
 			given if the caseids do not already exist in the HDF5 file.  If it is given and
 			the caseids do already exist, a `LarchError` is raised.
+		overwrite : int
+			If positive, existing data with same name will be overwritten.  If zero (the default)
+			existing data with same name will be not overwritten and tables.exceptions.NodeError
+			will be raised.  If negative, existing data will not be overwritten but no errors will be raised.
 		
 		Raises
 		------
@@ -2142,12 +2155,9 @@ class DT(Fountain):
 						col_array = df[col].astype('S{}'.format(maxlen)).values
 						tb_atom = _tb.Atom.from_dtype(col_array.dtype)
 				col = make_valid_identifier(col)
-#				if not col.isidentifier():
-#					log.warn("  column %s is not a valid python identifier, converting to _%s",col,col)
-#					col = "_"+col
-#				if keyword.iskeyword(col):
-#					log.warn("  column %s is a python keyword, converting to _%s",col,col)
-#					col = "_"+col
+				if overwrite and col in self.idco._v_node._v_children:
+					# delete the old data
+					self.h5f.remove_node(self.idco._v_node, col, recursive=True)
 				h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
 				h5var[:] = col_array
 				if original_source:
