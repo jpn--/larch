@@ -9,7 +9,7 @@
    import larch
 
 
-We begin this example by picking up where we left off on Example 303:
+We begin this example by picking up where we left off on :doc:`Example 303 <303_arc_nl2>`:
 
 .. testcode::
 
