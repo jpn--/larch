@@ -31,6 +31,7 @@ To do this, we can add a second set of carrier-specific constants in a special s
 
 .. testcode::
 
+	from larch.roles import P,X
 	m.samplingbias.ca = sum(P("carrier_bias_{}".format(i))*X("carrier={}".format(i)) for i in [2,3,4,5])
 
 Just like the "normal" carrier-specific constants, we hold out a carrier (#1) as the reference point, and
