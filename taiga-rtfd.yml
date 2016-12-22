@@ -1,6 +1,7 @@
 name: taiga
 channels: !!python/tuple
 - defaults
+- conda-forge
 dependencies:
 - cycler=0.10.0=py35_0
 - decorator=4.0.10=py35_0
@@ -35,6 +36,9 @@ dependencies:
 - wheel=0.29.0=py35_0
 - xz=5.2.2=0
 - zlib=1.2.8=3
+- pandoc
+- nbconvert
+- ipykernel
 - pip:
   - tables==3.3.0
   - nbsphinx
