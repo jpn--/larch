@@ -303,6 +303,9 @@ class OMX(_tb.file.File):
 			reader = dbf.to_dataframe(chunksize=chunksize)
 			if n_rows is None:
 				n_rows = dbf.numrec
+		elif isinstance(filepath,str) and filepath.casefold()[-5:]=='.xlsx':
+			raise NotImplementedError()
+			#reader = pandas.read_excel(sfr, chunksize=chunksize)
 		else:
 			from .util.smartread import SmartFileReader
 			sfr = SmartFileReader(filepath)
@@ -312,7 +315,7 @@ class OMX(_tb.file.File):
 				n_rows = sum(1 for line in open(filepath, mode='r'))-1
 		
 		if column_map is None:
-			column_map = {i:i for i in chunk0.columns}
+			column_map = {i:i.strip() for i in chunk0.columns}
 		try:
 			for tsource,tresult in column_map.items():
 				use_dtype = chunk0[tsource].dtype
