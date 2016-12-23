@@ -185,6 +185,7 @@ void _setUp_linear_data_and_params
  ,	etk::logging_service*	msg
  ,  std::set< std::string >* cache_valid_ca=nullptr
  ,  std::set< std::string >* cache_valid_co=nullptr
+ ,  const bool&				check_validity=true
 )
 {
 	size_t slot, slot2;
@@ -212,7 +213,9 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCO && Params_UtilityCO) {
 		// First, populate the data_port
 		etk::strvec u_co = __identify_needs((*Input_UtilityCO));
-		__check_validity_of_needs(u_co, _fount, IDCO, msg, cache_valid_ca, cache_valid_co);
+		if (check_validity) {
+			__check_validity_of_needs(u_co, _fount, IDCO, msg, cache_valid_ca, cache_valid_co);
+		}
 
 		// Second, resize the paramArray
 		auto s = _fount ? _fount->nAlts() : Xylem.n_elemental();
@@ -299,7 +302,7 @@ void _setUp_linear_data_and_params_edges
 
 
 
-void elm::Model2::_setUp_utility_data_and_params()
+void elm::Model2::_setUp_utility_data_and_params(bool check_validity)
 {
 	BUGGER(msg) << "--Params_Utility--\n";
 
@@ -316,6 +319,7 @@ void elm::Model2::_setUp_utility_data_and_params()
 	 ,	&msg
 	 ,  &cache_valid_ca
 	 ,  &cache_valid_co
+	 ,  check_validity
 	);
 
 	BUGGER(msg) << "Params_UtilityCA \n" << Params_UtilityCA.__str__();
@@ -323,7 +327,7 @@ void elm::Model2::_setUp_utility_data_and_params()
 
 }
 
-void elm::Model2::_setUp_quantity_data_and_params()
+void elm::Model2::_setUp_quantity_data_and_params(bool check_validity)
 {
 	BUGGER(msg) << "--Params_Quantity--\n";
 
@@ -340,6 +344,7 @@ void elm::Model2::_setUp_quantity_data_and_params()
 	 ,	&msg
 	 ,  &cache_valid_ca
 	 ,  &cache_valid_co
+	 ,  check_validity
 	);
 
 	BUGGER(msg) << "Params_QuantityCA \n" << Params_QuantityCA.__str__();
@@ -355,7 +360,7 @@ void elm::Model2::_setUp_quantity_data_and_params()
 
 }
 
-void elm::Model2::_setUp_samplefactor_data_and_params()
+void elm::Model2::_setUp_samplefactor_data_and_params(bool check_validity)
 {
 	BUGGER(msg) << "--Params_Sampling--\n";
 
@@ -372,6 +377,7 @@ void elm::Model2::_setUp_samplefactor_data_and_params()
 	 ,	&msg
 	 ,  &cache_valid_ca
 	 ,  &cache_valid_co
+	 ,  check_validity
 	);
 
 	BUGGER(msg) << "Params_SamplingCA \n" << Params_SamplingCA.__str__();
@@ -491,7 +497,7 @@ void elm::Model2::_pull_graph_from_db()
 }
 
 
-void elm::Model2::setUp(bool and_load_data, bool force, bool cache)
+void elm::Model2::setUp(bool and_load_data, bool force, bool cache, bool check_validity)
 {
 	
 	if (!force) {
@@ -528,7 +534,7 @@ void elm::Model2::setUp(bool and_load_data, bool force, bool cache)
 	}
 	
 	BUGGER(msg) << "Setting up utility parameters...";
-	_setUp_utility_data_and_params();
+	_setUp_utility_data_and_params(check_validity);
 	if (features & MODELFEATURES_NESTING) {
 		if (!option.suspend_xylem_rebuild) {
 			elm::cellcode root = Xylem.root_cellcode();
@@ -549,7 +555,7 @@ void elm::Model2::setUp(bool and_load_data, bool force, bool cache)
 
 	
 	if (Input_Sampling.ca.size() || Input_Sampling.co.metasize()) {
-		_setUp_samplefactor_data_and_params();
+		_setUp_samplefactor_data_and_params(check_validity);
 	}
 	
 	if (features & MODELFEATURES_ALLOCATION) {
@@ -557,7 +563,7 @@ void elm::Model2::setUp(bool and_load_data, bool force, bool cache)
 	}
 
 	if (features & MODELFEATURES_QUANTITATIVE) {
-		_setUp_quantity_data_and_params();
+		_setUp_quantity_data_and_params(check_validity);
 	}
 	
 	_setUp_coef_and_grad_arrays();

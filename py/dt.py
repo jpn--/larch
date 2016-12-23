@@ -251,8 +251,10 @@ class DT(Fountain):
 
 	@property
 	def h5caseids(self):
-		return _pytables_link_dereference(self.h5top.caseids)
-
+		try:
+			return _pytables_link_dereference(self.h5top.caseids)
+		except _tb.exceptions.NoSuchNodeError:
+			return numpy.zeros(0, dtype=numpy.int64)
 
 	def create_group(self, *arg, **kwargs):
 		return self.h5f.create_group(*arg, **kwargs)
@@ -384,6 +386,7 @@ class DT(Fountain):
 			alt_labels = ["a{}".format(a) for a in altids]
 		for an in alt_labels:
 			h5altnames.append( str(an) )
+		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
 	def alternative_codes(self):
 		try:
@@ -410,13 +413,22 @@ class DT(Fountain):
 		return self.alts.altids[idx]
 
 	def caseids(self):
-		return _pytables_link_dereference(self.h5top.caseids)[:]
+		try:
+			return _pytables_link_dereference(self.h5top.caseids)[:]
+		except _tb.exceptions.NoSuchNodeError:
+			return numpy.zeros(0, dtype=numpy.int64)
 
 	def array_caseids(self, screen=None):
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
-			return _pytables_link_dereference(self.h5top.caseids)[:]
-		return _pytables_link_dereference(self.h5top.caseids)[screen]
+			try:
+				return _pytables_link_dereference(self.h5top.caseids)[:]
+			except _tb.exceptions.NoSuchNodeError:
+				return numpy.zeros(0, dtype=numpy.int64)
+		try:
+			return _pytables_link_dereference(self.h5top.caseids)[screen]
+		except _tb.exceptions.NoSuchNodeError:
+			return numpy.zeros(0, dtype=numpy.int64)
 
 	@property
 	def caseindexes(self):
@@ -825,10 +837,13 @@ class DT(Fountain):
 			return self.array_idco('_weight_', **kwargs)
 
 	def array_choice(self, **kwargs):
-		if isinstance(self.idca._choice_, (_tb.Group,GroupNode)):
-			##!stacktuple = self.idca._choice_._v_attrs.stack
-			stacktuple = self.from_vault('stack._choice_')
-			return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
+		try:
+			if isinstance(self.idca._choice_, (_tb.Group,GroupNode)):
+				##!stacktuple = self.idca._choice_._v_attrs.stack
+				stacktuple = self.from_vault('stack._choice_')
+				return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
+		except _tb.NoSuchNodeError:
+			return numpy.zeros([self.nCases(), self.nAlts(), 1], dtype=numpy.float64)
 		return self.array_idca('_choice_', **kwargs)
 
 	def array_avail(self, *, var=None, dtype=numpy.bool_, **kwargs):

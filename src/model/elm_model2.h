@@ -536,9 +536,9 @@ namespace elm {
 //		void _setUp_availability_data();
 //		void _setUp_choice_data();
 //		void _setUp_weight_data();
-		void _setUp_utility_data_and_params();
-		void _setUp_quantity_data_and_params();
-		void _setUp_samplefactor_data_and_params();
+		void _setUp_utility_data_and_params(bool check_validity=true);
+		void _setUp_quantity_data_and_params(bool check_validity=true);
+		void _setUp_samplefactor_data_and_params(bool check_validity=true);
 		void _setUp_allocation_data_and_params();
 		
 		void _setUp_MNL();
@@ -825,7 +825,7 @@ FOSWIG(	%rename(__repr__) representation; )
 		void change_data_fountain(elm::Fountain& datafile);
 
 	public:
-		void setUp(bool and_load_data=true, bool force=false, bool cache=false);
+		void setUp(bool and_load_data=true, bool force=false, bool cache=false, bool check_validity=true);
 		void _pull_graph_from_db();
 		
 		std::string setUpMessage;

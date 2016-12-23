@@ -4370,7 +4370,7 @@ class Model2(sherpa):
     def change_data_fountain(self, datafile: 'Fountain') -> "void":
         return _core.Model2_change_data_fountain(self, datafile)
 
-    def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False, cache: 'bool'=False) -> "void":
+    def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False, cache: 'bool'=False, check_validity: 'bool'=True) -> "void":
 
         if self.logger(): self.logger().log(30, "Model.setUp...")
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
@@ -4379,7 +4379,7 @@ class Model2(sherpa):
         	if self.logger(): self.logger().info("autoprovisioned data from database")
 
 
-        val = _core.Model2_setUp(self, and_load_data, force, cache)
+        val = _core.Model2_setUp(self, and_load_data, force, cache, check_validity)
 
         if self.logger(): self.logger().log(30, "Model.setUp complete")
 

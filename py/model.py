@@ -388,6 +388,7 @@ class Model(Model2, ModelReporter):
 			filename = self
 			if d:
 				self = Model(d)
+				self.setUp(False)
 			else:
 				self = Model()
 		inf = numpy.inf
@@ -405,7 +406,7 @@ class Model(Model2, ModelReporter):
 						if use:
 							for attrname,attrval in attrs:
 								if attrname=='content':
-									self.loads(attrval, use_base64=True, echo=echo)
+									self.loads(attrval, use_base64=True, echo=echo, d=self.df)
 			parser = LarchHTMLParser_ModelLoader()
 			with open(filename) as f:
 				parser.feed(f.read())
@@ -423,6 +424,7 @@ class Model(Model2, ModelReporter):
 			content = self
 			if d:
 				self = Model(d)
+				self.setUp(False)
 			else:
 				self = Model()
 		inf = numpy.inf
@@ -1869,6 +1871,47 @@ class Model(Model2, ModelReporter):
 			self.provision(provided)
 		except ProvisioningError:
 			pass
+
+	def provision_zeros(self, ncases=None, nalts=None, initializer=None, avail_initializer=None):
+		'''
+		Initialize input data arrays with zeros instead of loading from a data file.
+		
+		Parameters
+		----------
+		ncases : int
+			Override the number of cases provisioned.  You probably want to use this.
+		nalts : int
+			Override the nubmer of alternatives provisioned.  
+			Probably you don't want to do this, but just in case.
+		initializer : float64
+			Optionally fill utilityca and utilityco with this value instead of zero.
+		avail_initializer : bool
+			Optionally fill avail with this value instead of False
+		'''
+		need = self.needs()
+		ncases = ncases or self.nCases()
+		if ncases==0:
+			import warnings
+			warnings.warn("ncases is zero in provision_zeros")
+		if nalts==0:
+			import warnings
+			warnings.warn("nalts is zero in provision_zeros")
+		nalts = nalts or self.nAlts()
+		zer = {}
+		_shape = lambda req: (ncases, nalts, req.nVars() or 1) if req.dimty==3 else (ncases, req.nVars() or 1)
+		numpy_dtype_nums = {
+			7: numpy.int64,
+			12: numpy.float64,
+			0: numpy.bool,
+		}
+		for key,val in need.items():
+			if initializer is not None and key in ('UtilityCA','UtilityCO'):
+				zer[key] = numpy.full(_shape(val), initializer, dtype=numpy_dtype_nums[val.dtype])
+			elif avail_initializer is not None and key in ('Avail',):
+				zer[key] = numpy.full(_shape(val), avail_initializer, dtype=numpy_dtype_nums[val.dtype])
+			else:
+				zer[key] = numpy.zeros(_shape(val), dtype=numpy_dtype_nums[val.dtype])
+		self.provision( zer )
 
 	def provision(self, *args, idca_avail_ratio_floor=None, cache=False, **kwargs):
 		from .db import DB
