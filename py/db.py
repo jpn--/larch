@@ -2121,7 +2121,10 @@ class DB(utilities.FrozenClass, Facet, apsw_Connection):
 				file.write('<h3>{} <span class="greysmallcap">table</span></h3>\n'.format(dbtable))
 				self.table_info(dbtable, schema=dbname, file=file, format='html', **kwargs)
 				file.write('<pre class="sql">')
-				file.write( self.value("SELECT sql FROM {}.sqlite_master WHERE name=?".format(dbname),(dbtable,)) )
+				try:
+					file.write( self.value("SELECT sql FROM {}.sqlite_master WHERE name=?".format(dbname),(dbtable,)) )
+				except:
+					file.write( 'EXCEPTION in getting SQL for {}.{}'.format(dbname,dbtable) )
 				file.write('</pre>')
 				if counts:
 					nrows = self.value("SELECT count(*) FROM {}.{}".format(dbname,dbtable))
