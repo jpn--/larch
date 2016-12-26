@@ -85,3 +85,9 @@ def labels_to_unique_ids(various_labels, lowest_label_number=1):
 	return ordered_labels, label_numbers
 
 
+
+def orthogonal_unit_vector(nDims, positionOne, dtype=numpy.float64):
+	z = numpy.zeros(nDims, dtype=dtype)
+	z[positionOne] = 1
+	return z
+
