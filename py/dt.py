@@ -171,6 +171,19 @@ class DT(Fountain):
 	def _refresh_alts(self):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
+	@classmethod
+	def DummyWithAlts(cls, nAlts=None, altcodes=None):
+		if nAlts is None and altcodes is None:
+			raise TypeError('must give number of alts or an array of altcodes')
+		if nAlts is not None and altcodes is not None:
+			raise TypeError('must give either number of alts or an array of altcodes, not both')
+		self = cls()
+		if nAlts is not None:
+			self.set_alternatives(numpy.arange(1,nAlts+1,dtype=numpy.int64))
+		elif altcodes is not None:
+			self.set_alternatives(altcodes)
+		return self
+
 	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=1, complib='zlib', h5f=None, inmemory=False, temp=False):
 		if not _tb_success: raise ImportError("pytables not available")
 		super().__init__()
@@ -386,7 +399,8 @@ class DT(Fountain):
 			alt_labels = ["a{}".format(a) for a in altids]
 		for an in alt_labels:
 			h5altnames.append( str(an) )
-		self._refresh_dna(self.alternative_names(), self.alternative_codes())
+		self._refresh_alts()
+
 
 	def alternative_codes(self):
 		try:
@@ -2383,7 +2397,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		_tb.exceptions.NodeError
+		tables.exceptions.NodeError
 			If a variable of the same name already exists and overwrite is False.
 		NameError
 			If the expression contains a name that cannot be evaluated from within
@@ -2394,9 +2408,9 @@ class DT(Fountain):
 			self.delete_data(name)
 		self.h5f.create_carray(self.idco._v_node, name, obj=data)
 
-	def new_blank_idco(self, name, dtype=None):
+	def new_blank_idco(self, name, dtype=None, overwrite=False):
 		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
-		return self.new_idco_from_array(name, zer)
+		return self.new_idco_from_array(name, zer, overwrite=overwrite)
 
 
 	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None):
@@ -2419,7 +2433,7 @@ class DT(Fountain):
 			
 		Raises
 		-----
-		_tb.exceptions.NodeError
+		tables.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
 		if self.h5caseids.shape != arr.shape:

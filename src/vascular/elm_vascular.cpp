@@ -316,7 +316,9 @@ VAS_Cell* VAS_Cell::dncell(const unsigned& i)
 }
 VAS_Edge* VAS_Cell::upedge(const unsigned& i)
 {
-	if (i >= _ups.size()) OOPS("VAS_Cell::upedge: index ",i," out of range that tops out at ",_ups.size());
+	if (i >= _ups.size()) {
+		OOPS("VAS_Cell::upedge: index ",i," out of range that tops out at ",_ups.size());
+	}
 	return _ups[i];
 }
 VAS_Edge* VAS_Cell::dnedge(const unsigned& i)
@@ -337,7 +339,9 @@ const VAS_Cell* VAS_Cell::dncell(const unsigned& i) const
 }
 const VAS_Edge* VAS_Cell::upedge(const unsigned& i) const 
 {
-	if (i >= _ups.size()) OOPS("VAS_Cell::upedge: index ",i," out of range that tops out at ",_ups.size());
+	if (i >= _ups.size()) {
+		OOPS("VAS_Cell::upedge: index ",i," out of range that tops out at ",_ups.size());
+	}
 	return _ups[i];
 }
 const VAS_Edge* VAS_Cell::dnedge(const unsigned& i) const 

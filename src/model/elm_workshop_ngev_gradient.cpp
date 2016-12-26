@@ -268,13 +268,20 @@ void elm::workshop_ngev_gradient::case_dSamplingFactor_dFusedParameters( const u
 	
 	size_t nalt = _Xylem->n_elemental();
 	const double*	   Pr = _Probability->ptr(c);
-	elm::darray_ptr      Data_CA = SampPacket.Data_CA;
-	elm::darray_ptr      Data_CO = SampPacket.Data_CO;
+	elm::darray_ptr          Data_CA = SampPacket.Data_CA;
+	elm::darray_ptr          Data_CO = SampPacket.Data_CO;
+	const darray_export_map* Data_CE = SampPacket.Data_CE;
 
 	for (int a=0; a<nalt; a++) {
 		if (!Pr[a]) continue;
-		
-		if (nSA) Data_CA->ExportData(dSampWgt.ptr(a),c,a,nalt);
+
+		if (nSA) {
+			if (Data_CE && Data_CE->active()) {
+				Data_CE->export_into(dSampWgt.ptr(a)    ,c,a,nSA);
+			} else {
+				Data_CA->ExportData(dSampWgt.ptr(a)    ,c,a,nalt);
+			}
+		}
 		if (nSO) Data_CO->ExportData(dSampWgt.ptr(a)+nSA,c,a,nalt);
 				
 	}

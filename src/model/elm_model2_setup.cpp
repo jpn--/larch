@@ -195,7 +195,9 @@ void _setUp_linear_data_and_params
 	if (Input_UtilityCA && Params_UtilityCA) {
 		// First, populate the data_port
 		etk::strvec u_ca = __identify_needs((*Input_UtilityCA));
-		__check_validity_of_needs(u_ca, _fount, IDCA, msg, cache_valid_ca, cache_valid_co);
+		if (check_validity) {
+			__check_validity_of_needs(u_ca, _fount, IDCA, msg, cache_valid_ca, cache_valid_co);
+		}
 		
 		// Second, resize the paramArray
 		BUGGER_(msg, "setting Params_?CA size to ("<<u_ca.size()<<")");
@@ -690,7 +692,11 @@ void elm::Model2::provision(const std::map< std::string, boosted::shared_ptr<con
 	std::map<std::string, darray_req> need = needs();
 	std::map<std::string, size_t> ncases;
 	
-	ret += _subprovision("UtilityCA", Data_UtilityCA, input, need, ncases);
+	std::string uca = _subprovision("UtilityCA", Data_UtilityCA, input, need, ncases);
+	if (!Data_UtilityCE_builtin.active()) {
+		ret += uca;
+	}
+	
 	ret += _subprovision("UtilityCO", Data_UtilityCO, input, need, ncases);
 	ret += _subprovision("QuantityCA", Data_QuantityCA, input, need, ncases);
 	ret += _subprovision("SamplingCA", Data_SamplingCA, input, need, ncases);

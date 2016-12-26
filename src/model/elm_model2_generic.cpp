@@ -172,7 +172,7 @@ elm::ca_co_packet elm::Model2::sampling_packet()
 							 &Coef_SamplingCO	,
 							 Data_SamplingCA	,
 							 Data_SamplingCO	,
-							 nullptr            ,
+							 (Data_SamplingCE_builtin.active() ? &Data_SamplingCE_builtin : nullptr)             ,
 							 &SamplingWeight	);
 }
 

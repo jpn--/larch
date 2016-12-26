@@ -4140,6 +4140,7 @@ class Model2(sherpa):
         return _core.Model2_DataEdit(self, label)
     Data_UtilityCE_manual = _swig_property(_core.Model2_Data_UtilityCE_manual_get, _core.Model2_Data_UtilityCE_manual_set)
     Data_UtilityCE_builtin = _swig_property(_core.Model2_Data_UtilityCE_builtin_get, _core.Model2_Data_UtilityCE_builtin_set)
+    Data_SamplingCE_builtin = _swig_property(_core.Model2_Data_SamplingCE_builtin_get, _core.Model2_Data_SamplingCE_builtin_set)
 
     def get_weight_scale_factor(self) -> "double":
         return _core.Model2_get_weight_scale_factor(self)
@@ -4372,7 +4373,7 @@ class Model2(sherpa):
 
     def setUp(self, and_load_data: 'bool'=True, force: 'bool'=False, cache: 'bool'=False, check_validity: 'bool'=True) -> "void":
 
-        if self.logger(): self.logger().log(30, "Model.setUp...")
+        if self.logger(): self.logger().log(20, "Model.setUp...")
         if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
         	self.provision(cache=cache)
         	self.setUpMessage = "autoprovision yes (setUp)"
@@ -4381,7 +4382,7 @@ class Model2(sherpa):
 
         val = _core.Model2_setUp(self, and_load_data, force, cache, check_validity)
 
-        if self.logger(): self.logger().log(30, "Model.setUp complete")
+        if self.logger(): self.logger().log(20, "Model.setUp complete")
 
 
         return val

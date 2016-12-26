@@ -1942,13 +1942,15 @@ class Model(Model2, ModelReporter):
 			del provided[key]
 		if "UtilityCE" in otherformats:
 			self.Data_UtilityCE_builtin.maplink(*(otherformats["UtilityCE"]))
-			try:
-				super().provision(provided)
-			except ProvisioningError as err:
-				if "UtilityCA" not in str(err):
-					raise
-		else:
-			super().provision(provided)
+		if "SamplingCE" in otherformats:
+			self.Data_SamplingCE_builtin.maplink(*(otherformats["SamplingCE"]))
+#			try:
+#				super().provision(provided)
+#			except ProvisioningError as err:
+##				if "UtilityCA" not in str(err):
+#					raise
+#		else:
+		super().provision(provided)
 		if cache:
 			if self.logger():
 				self.logger().log(50,'caching provisioned data at {}'.format(cachefile))

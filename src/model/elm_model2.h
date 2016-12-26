@@ -104,14 +104,14 @@ namespace elm {
 			self._ref_to_db = None
 		%}
 		%feature("pythonprepend") setUp %{
-			if self.logger(): self.logger().log(30, "Model.setUp...")
+			if self.logger(): self.logger().log(20, "Model.setUp...")
 			if self._ref_to_db is not None and self.is_provisioned()==0 and and_load_data:
 				self.provision(cache=cache)
 				self.setUpMessage = "autoprovision yes (setUp)"
 				if self.logger(): self.logger().info("autoprovisioned data from database")
 		%}
 		%feature("pythonappend") setUp %{
-			if self.logger(): self.logger().log(30, "Model.setUp complete")
+			if self.logger(): self.logger().log(20, "Model.setUp complete")
 		%}
 		%feature("pythonprepend") estimate %{
 			if self._ref_to_db is not None and self.is_provisioned()==0:
@@ -279,6 +279,7 @@ namespace elm {
 
 		elm::darray_export_map Data_UtilityCE_manual;
 		elm::darray_export_map Data_UtilityCE_builtin;
+		elm::darray_export_map Data_SamplingCE_builtin;
 		
 
 #ifndef SWIG
