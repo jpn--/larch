@@ -122,8 +122,8 @@ class AbstractReportTable():
 		raise TypeError
 	
 
-	def __init__(self, columns=('0',), col_classes=(), n_head_rows=1, from_dataframe=None, title=None, short_title=None):
-		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex(0))
+	def __init__(self, columns=('0',), col_classes=(), n_head_rows=1, from_dataframe=None, title=None, short_title=None, n_rows=0):
+		self.df = pandas.DataFrame(columns=columns, index=pandas.RangeIndex(n_rows))
 		self.col_classes = col_classes
 		self.n_thead_rows = n_head_rows
 		self.use_columns_as_thead = False
@@ -214,6 +214,19 @@ class AbstractReportTable():
 		for key,val in str_content.items():
 			self.df.loc[rowix, key] = self.encode_cell_value(val)
 
+	def set_jrow_kwd_strings(self, j, **str_content):
+		rowix = self.df.index[j]
+		for key,val in str_content.items():
+			self.df.loc[rowix, key] = self.encode_cell_value(val)
+
+	def set_jrow_loc(self, j, colname, val, attrib=None, anchorlabel=None):
+		rowix = self.df.index[j]
+		if colname not in self.df.columns:
+			self.df[colname] = None
+		newval = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+		self.df.loc[rowix, colname] = newval
+		self._col_width = None
+
 	def set_lastrow_loc(self, colname, val, attrib=None, anchorlabel=None):
 		rowix = self.df.index[-1]
 		if colname not in self.df.columns:
@@ -221,6 +234,12 @@ class AbstractReportTable():
 		newval = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
 		self.df.loc[rowix, colname] = newval
 		self._col_width = None
+
+	def set_jrow_iloc(self, j, colnum, val, attrib=None, anchorlabel=None):
+		self.df.iloc[j, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+		self._col_width = None
+
+
 	def set_lastrow_iloc(self, colnum, val, attrib=None, anchorlabel=None):
 		self.df.iloc[-1, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
 		self._col_width = None

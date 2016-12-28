@@ -2181,16 +2181,25 @@ class DT(Fountain):
 					else:
 						maxlen = max(maxlen,8)
 						log.warn("  column %s, converting to S%d",col,maxlen)
-						col_array = df[col].astype('S{}'.format(maxlen)).values
-						tb_atom = _tb.Atom.from_dtype(col_array.dtype)
-				col = make_valid_identifier(col)
-				if overwrite and col in self.idco._v_node._v_children:
-					# delete the old data
-					self.h5f.remove_node(self.idco._v_node, col, recursive=True)
-				h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
-				h5var[:] = col_array
-				if original_source:
-					h5var._v_attrs.ORIGINAL_SOURCE = original_source
+						try:
+							col_array = df[col].astype('S{}'.format(maxlen)).values
+						except SystemError:
+							log.warn("  SystemError in converting column %s to S%d, data is being discarded",col,maxlen)
+							tb_atom = None
+						except UnicodeEncodeError:
+							log.warn("  UnicodeEncodeError in converting column %s to S%d, data is being discarded",col,maxlen)
+							tb_atom = None
+						else:
+							tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+				if tb_atom is not None:
+					col = make_valid_identifier(col)
+					if overwrite and col in self.idco._v_node._v_children:
+						# delete the old data
+						self.h5f.remove_node(self.idco._v_node, col, recursive=True)
+					h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
+					h5var[:] = col_array
+					if original_source:
+						h5var._v_attrs.ORIGINAL_SOURCE = original_source
 			if caseid_column is not None and 'caseids' in self.h5top:
 				raise LarchError("caseids already exist, not setting new ones")
 			if caseid_column is not None and 'caseids' not in self.h5top:
@@ -3010,7 +3019,7 @@ class DT(Fountain):
 #
 
 
-	def info(self, extra=False):
+	def info(self, extra=False, relative_paths=True):
 		v_names = []
 		v_dtypes = []
 		v_ftypes = []
@@ -3073,27 +3082,32 @@ class DT(Fountain):
 			extra_cols = ('SHAPE','ORIGINAL_SOURCE')
 		else:
 			extra_cols = ()
+
+		rownum = 0
 		
 		## Header
 		if not show_filenames:
-			a = ART(columns=('VAR','DTYPE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content")
-			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype")
+			a = ART(columns=('VAR','DTYPE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content", n_rows=len(v_names)+1)
+			a.set_jrow_kwd_strings(rownum, VAR="Variable", DTYPE="dtype")
 		else:
-			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content")
-			a.addrow_kwd_strings(VAR="Variable", DTYPE="dtype", FILE="Source File")
+			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content", n_rows=len(v_names)+1)
+			a.set_jrow_kwd_strings(rownum, VAR="Variable", DTYPE="dtype", FILE="Source File")
+
 		if extra:
-			a.set_lastrow_loc('SHAPE', "Shape")
-			a.set_lastrow_loc('ORIGINAL_SOURCE', "Original Source")
+			a.set_jrow_loc(rownum, 'SHAPE', "Shape")
+			a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', "Original Source")
+
+
 		## Content
 		for v_name,v_dtype,v_ftype,v_filename in zip(v_names,v_dtypes,v_ftypes,v_filenames):
+			rownum += 1
 			if v_ftype != section:
-				a.add_blank_row()
-				a.set_lastrow_iloc(0, a.encode_cell_value(v_ftype), {'class':"parameter_category"})
+				a.set_jrow_iloc(rownum, 0, a.encode_cell_value(v_ftype), {'class':"parameter_category"})
 				section = v_ftype
 			if not show_filenames:
-				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype)
+				a.set_jrow_kwd_strings(rownum, VAR=v_name, DTYPE=v_dtype)
 			else:
-				a.addrow_kwd_strings(VAR=v_name, DTYPE=v_dtype, FILE=v_filename)
+				a.set_jrow_kwd_strings(rownum, VAR=v_name, DTYPE=v_dtype, FILE=v_filename)
 			if extra:
 				the_node = getattr(self,v_ftype)[v_name]
 				if isinstance(the_node, (_tb.Group,GroupNode)):
@@ -3109,9 +3123,20 @@ class DT(Fountain):
 						the_shape = '¿group?'
 				else:
 					the_shape = the_node.shape
-				a.set_lastrow_loc('SHAPE', str(the_shape))
+				a.set_jrow_loc(rownum, 'SHAPE', str(the_shape))
 				if 'ORIGINAL_SOURCE' in the_node._v_attrs:
-					a.set_lastrow_loc('ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
+					if relative_paths:
+						basedir = os.path.dirname(self.source_filename)
+						path_candidate = os.path.relpath(the_node._v_attrs.ORIGINAL_SOURCE, start=basedir)
+						if len(path_candidate) < len(the_node._v_attrs.ORIGINAL_SOURCE) and os.path.join(*[".."]*4) not in path_candidate:
+							pass
+						else:
+							path_candidate = the_node._v_attrs.ORIGINAL_SOURCE
+						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate))
+					else:
+						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
+		
+		## Content: Expr
 		if len(self.expr):
 			a.addrow_seq_of_strings(["Expr",])
 			for i in self.expr:
