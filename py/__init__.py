@@ -66,7 +66,7 @@ if isinstance(_processor_name, bytes):
 core.larch_initialize(_processor_name)
 from . import exceptions
 from .db import DB
-from .dt import DT, IncompatibleShape
+from .dt import DT, DTL, IncompatibleShape
 from .omx import OMX
 from .model import Model, ModelFamily
 from .metamodel import MetaModel

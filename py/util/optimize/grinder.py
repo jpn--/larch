@@ -71,6 +71,8 @@ class Watcher():
 				tol = numpy.inf
 			except LarchCacheError:
 				tol = numpy.inf
+			except NotImplementedError:
+				tol = numpy.inf
 			if self.logger: self.logger.log(40, "Convergence Measure= %g",tol)
 			if numpy.abs(tol) < self.ctol:
 				if self.logger:
@@ -109,6 +111,10 @@ def minimize_with_watcher(fun, x0, args=(), *, slow_len=(), slow_thresh=(), ctol
 		r.message = "Optimization terminated successfully per computed tolerance"
 		if logger:
 			logger.log(30,"{} [{}]".format(suc.describe(),method_str))
+	except NotImplementedError as err:
+		r = OptimizeResult(message="Not Implemented", success=False, x=x0)
+		if logger:
+			logger.log(30,"{} [{}]".format(r.message,method_str))
 #	except Exception as err:
 #		r = OptimizeResult(message=str(err), success=False)
 #		if logger:
@@ -433,12 +439,19 @@ class OptimizeTechniques():
 			if result.outcome in (outcomes.success, outcomes.slow):
 				self.unfail_all(but=technique)
 			if self.ctol_fun and self.ctol:
-				actual_utol = self.ctol_fun(x_n)
-				if numpy.abs(actual_utol) < self.ctol:
-					metaresult.ctol = actual_utol
-					metaresult.message = "Optimization terminated successfully per computed tolerance. [{}]".format(technique.method_str)
-					complete_metaresult(result, True)
-					return clean_metaresult()
+				try:
+					actual_utol = self.ctol_fun(x_n)
+				except NotImplementedError:
+					if result.outcome == outcomes.success:
+						metaresult.message = "Optimization terminated successfully. [{}]".format(technique.method_str)
+						complete_metaresult(result, True)
+						return clean_metaresult()
+				else:
+					if numpy.abs(actual_utol) < self.ctol:
+						metaresult.ctol = actual_utol
+						metaresult.message = "Optimization terminated successfully per computed tolerance. [{}]".format(technique.method_str)
+						complete_metaresult(result, True)
+						return clean_metaresult()
 			else:
 				if result.outcome == outcomes.success:
 					metaresult.message = "Optimization terminated successfully. [{}]".format(technique.method_str)

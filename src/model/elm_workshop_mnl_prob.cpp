@@ -149,7 +149,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 
 	// PROBABILITY //
 	
-//	if (firstcase==0) std::cerr <<"Util[0]="<<Probability->printrow(0) <<"\n";
+//	if (firstcase==126) std::cerr <<"Util[129]="<<Probability->printrow(129) <<"\n";
 	
 	
 	for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
@@ -187,15 +187,26 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 				Probability->at(c,a) = 0.0;
 			} else {
 				double* p = Probability->ptr(c,a);
+				double what_3 = *p;
 //					std::cerr << "   u["<<a<<"]= "<<*p<<"\n";
 				*p += shifter;
+				double what_2 = *p;
 				double data_ch_value_ca = Data_Ch->value(c,a);
 				if (data_ch_value_ca) {
 					CaseLogLike->at(c) += (*p) * data_ch_value_ca;
 					sum_choice += data_ch_value_ca;
 				}
+				
+				double what_1 = *p;
+				
 				*p = exp(*p);
 				sum_prob += *p;
+
+//				if (isNan(sum_prob)) {
+//					std::cerr << "nan sum_prob\n";
+//				}
+
+
 //					std::cerr << "  Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p<<"\n";
 			}
 		}
@@ -204,8 +215,10 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 //			std::cerr << "  sum_prob="<<sum_prob<<"\n";
 //			std::cerr << "  sum_choice="<<sum_choice<<"\n";
 
-
-	
+//
+//		if (isNan(sum_prob)) {
+//			std::cerr << "nan sum_prob\n";
+//		}
 		
 //		if (c==565) std::cerr << "Data_AV[565,0:3]="<<Data_AV->boolvalue(565,0)<<Data_AV->boolvalue(565,1)<<Data_AV->boolvalue(565,2)<<"\n";
 //		if (c==565) std::cerr << "sum_prob="<<sum_prob<<"\n";

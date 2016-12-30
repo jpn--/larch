@@ -570,6 +570,15 @@ void elm::Model2::setUp(bool and_load_data, bool force, bool cache, bool check_v
 	
 	_setUp_coef_and_grad_arrays();
 	
+	
+	boosted::shared_ptr< const std::vector<long long> > local_alt_codes;
+	boosted::shared_ptr< const std::vector<std::string> > local_alt_names;
+	
+	if (_Fount) {
+		local_alt_codes = _Fount->cache_alternative_codes();
+		local_alt_names = _Fount->cache_alternative_names();
+	}
+	
 	if ((features & MODELFEATURES_NESTING) && (!option.suspend_xylem_rebuild)) {
 		Xylem.repoint_parameters(*Coef_LogSum, NULL);
 		elm::cellcode root = Xylem.root_cellcode();
@@ -882,7 +891,7 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	
 	if (label=="UtilityCA") {
 		if (Params_UtilityCA.length()==0) {
-			_setUp_utility_data_and_params();
+			_setUp_utility_data_and_params(false);
 		}
 		Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 		pull_from_freedoms        (Params_UtilityCA  , *Coef_UtilityCA  , *ReadFCurrent());
@@ -890,7 +899,7 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	}
 	if (label=="UtilityCO") {
 		if (Params_UtilityCO.length()==0) {
-			_setUp_utility_data_and_params();
+			_setUp_utility_data_and_params(false);
 		}
 		Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
 		pull_from_freedoms        (Params_UtilityCO  , *Coef_UtilityCO  , *ReadFCurrent());
@@ -898,7 +907,7 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	}
 	if (label=="SamplingCA") {
 		if (Params_SamplingCA.length()==0) {
-			_setUp_samplefactor_data_and_params();
+			_setUp_samplefactor_data_and_params(false);
 		}
 		Coef_SamplingCA.resize_if_needed(Params_SamplingCA);
 		pull_from_freedoms        (Params_SamplingCA , *Coef_SamplingCA , *ReadFCurrent());
@@ -906,7 +915,7 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	}
 	if (label=="SamplingCO") {
 		if (Params_SamplingCO.length()==0) {
-			_setUp_samplefactor_data_and_params();
+			_setUp_samplefactor_data_and_params(false);
 		}
 		Coef_SamplingCO.resize_if_needed(Params_SamplingCO);
 		pull_from_freedoms        (Params_SamplingCO , *Coef_SamplingCO , *ReadFCurrent());

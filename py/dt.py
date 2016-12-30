@@ -172,7 +172,7 @@ class DT(Fountain):
 		self._refresh_dna(self.alternative_names(), self.alternative_codes())
 
 	@classmethod
-	def DummyWithAlts(cls, nAlts=None, altcodes=None):
+	def DummyWithAlts(cls, nAlts=None, altcodes=None, nCases=None):
 		if nAlts is None and altcodes is None:
 			raise TypeError('must give number of alts or an array of altcodes')
 		if nAlts is not None and altcodes is not None:
@@ -182,6 +182,8 @@ class DT(Fountain):
 			self.set_alternatives(numpy.arange(1,nAlts+1,dtype=numpy.int64))
 		elif altcodes is not None:
 			self.set_alternatives(altcodes)
+		if nCases is not None:
+			self.new_caseids(numpy.arange(nCases))
 		return self
 
 	def __init__(self, filename=None, mode='a', ipath='/larch', complevel=1, complib='zlib', h5f=None, inmemory=False, temp=False):
@@ -476,8 +478,10 @@ class DT(Fountain):
 		return int(self.h5caseids.shape[0])
 
 	def nAlts(self):
-		return int(self.alts.altids.shape[0])
-
+		try:
+			return int(self.alts.altids.shape[0])
+		except _tb.exceptions.NoSuchNodeError:
+			return 0
 
 	def _remake_command(self, cmd, screen, dims):
 		## Whoa nelly!
@@ -857,7 +861,10 @@ class DT(Fountain):
 				stacktuple = self.from_vault('stack._choice_')
 				return numpy.expand_dims(self.array_idco(*stacktuple, **kwargs), axis=-1)
 		except _tb.NoSuchNodeError:
-			return numpy.zeros([self.nCases(), self.nAlts(), 1], dtype=numpy.float64)
+			if "screen" in kwargs and kwargs['screen']=="None":
+				return numpy.zeros([self.nAllCases(), self.nAlts(), 1], dtype=numpy.float64)
+			else:
+				return numpy.zeros([self.nCases(), self.nAlts(), 1], dtype=numpy.float64)
 		return self.array_idca('_choice_', **kwargs)
 
 	def array_avail(self, *, var=None, dtype=numpy.bool_, **kwargs):
@@ -1025,13 +1032,15 @@ class DT(Fountain):
 			n = exclusions.sum() - startcount
 			summary.loc["Chosen Alternative[s] Unavailable",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 
-		## always exclude where there are no choices
+		## always exclude where there are no choices, unless there are no choices in any case (probably because _choice_ is not given at all)
 		startcount = exclusions.sum()
-		nochoices = self.array_choice(screen="None", dtype=float).sum(1)==0
-		exclusions |= nochoices.squeeze()
-		n = exclusions.sum() - startcount
-		if n:
-			summary.loc["No Chosen Alternatives",['# Cases Excluded', 'Data Source']] = (n,'n/a')
+		sum_of_choices = self.array_choice(screen="None", dtype=float).sum(1)
+		if sum_of_choices.sum():
+			nochoices = sum_of_choices==0
+			exclusions |= nochoices.squeeze()
+			n = exclusions.sum() - startcount
+			if n:
+				summary.loc["No Chosen Alternatives",['# Cases Excluded', 'Data Source']] = (n,'n/a')
 		
 
 		if len(summary)>0:
@@ -1072,7 +1081,13 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count and not self.h5top.screen._v_attrs.dynamic: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+		try:
+			dyn = self.h5top.screen._v_attrs.dynamic
+		except AttributeError:
+			dyn = False
+			self.h5top.screen._v_attrs.dynamic = False
+		
+		if count and not dyn: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
 		else:
 			startcount = None
@@ -1109,7 +1124,12 @@ class DT(Fountain):
 		"""
 		if 'screen' not in self.h5top:
 			self.set_screen()
-		if count and not self.h5top.screen._v_attrs.dynamic: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
+		try:
+			dyn = self.h5top.screen._v_attrs.dynamic
+		except AttributeError:
+			dyn = False
+			self.h5top.screen._v_attrs.dynamic = False
+		if count and not dyn: # not isinstance(self.h5top.screen, (_tb.Group,GroupNode)):
 			startcount = self.h5top.screen[:].sum()
 		else:
 			startcount = None
@@ -2966,6 +2986,17 @@ class DT(Fountain):
 			w = self.array_idco(wgt, screen="None").squeeze() * scale
 			self.new_idco_from_array('_weight_',w)
 
+	def set_choice_idca(self, ch):
+		"""
+		Assign an existing idca data item as the choice.
+		
+		Parameters
+		----------
+		ch : str
+			The name of the existing idca variable.
+		"""
+		self.h5f.create_soft_link(self.idca._v_node, '_choice_', target='/larch/idca/'+ch)
+
 #	def set_choice_idco(self, *cols, varname='_choice_'):
 #		"""Set up the :ref:`idca` _choice_ data array from :ref:`idco` variables.
 #		
@@ -3690,6 +3721,123 @@ class DT(Fountain):
 				
 		return self
 
+	def export_screen(self, newfile, spool=True):
+		"""
+		Export all cases currently active (not excluded) into a single new file.
+		
+		This can greatly simplify and speed up loading and processing data, 
+		as only active cases appear in the new file and no screening will be needed.
+		This is especially effective if the screening is well-defined and permanent,
+		so there won't be much need to go back to the original file to change it.
+		
+		Parameters
+		----------
+		newfile : str
+			The pathname of the new DT file to create.
+		spool : bool
+			When true, if `newfile` already exists, an different filename is spooled off it.  When false,
+			if `newfile` already exists an exception is raised.
+		"""
+		if newfile is not None:
+			from .util.filemanager import next_stack
+			newfile = next_stack(newfile, allow_natural=True, demand_natural=not spool)
+		d = self
+		d1 = DT(newfile, mode='a')
+		d1.new_caseids(d.array_caseids())
+		try:
+			d1.set_alternatives(d.alts.altids[:], d.alts.names[:])
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		screen, n_cases = self.process_proposed_screen(None)
+		for co in d.idco._v_children_keys_including_extern:
+			if co in d.idco._v_children:
+				# co is a local thing
+				it = d.idco._v_children[co]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idco_from_array(co, d.idco[co][screen])
+				elif isinstance(it, _tb.group.Group):
+					co_g = d1.create_group(d1.h5idco, co)
+					# dupe parts separately, keep soft links
+					if isinstance(it._index_, _tb.link.SoftLink):
+						d1.create_soft_link( co_g, '_index_', it._index_.target )
+					elif isinstance(it._index_, _tb.link.ExternalLink):
+						d1.create_carray(co_g, '_index_', obj=it._index_()[screen])
+					else:
+						d1.create_carray(co_g, '_index_', obj=it._index_[screen])
+					if isinstance(it._values_, _tb.link.SoftLink):
+						d1.create_soft_link( co_g, '_values_', it._values_.target )
+					elif isinstance(it._values_, _tb.link.ExternalLink):
+						d1.create_carray(co_g, '_values_', obj=it._values_()[:])
+					else:
+						d1.create_carray(co_g, '_values_', obj=it._values_[:])
+			else:
+				# co is a external thing
+				it = d.idco[co]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idco_from_array(co, d.idco[co][screen])
+				elif isinstance(it, _tb.group.Group):
+					co_g = d1.create_group(d1.h5idco, co)
+					# dupe parts separately, drop all links
+					d1.create_carray(co_g, '_index_', obj=it._index_[screen])
+					d1.create_carray(co_g, '_values_', obj=it._values_[:])
+
+		for ca in d.idca._v_children_keys_including_extern:
+			if ca in d.idca._v_children:
+				# ca is a local thing
+				it = d.idca._v_children[ca]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idca_from_array(ca, d.array_idca(ca, dtype=d.idca[ca].dtype))
+				elif isinstance(it, _tb.group.Group):
+					ca_g = d1.create_group(d1.h5idca, ca)
+					# dupe parts separately, keep soft links
+					try:
+						if isinstance(it._index_, _tb.link.SoftLink):
+							d1.create_soft_link( ca_g, '_index_', it._index_.target )
+						elif isinstance(it._index_, _tb.link.ExternalLink):
+							d1.create_carray(ca_g, '_index_', obj=it._index_()[screen])
+						else:
+							d1.create_carray(ca_g, '_index_', obj=it._index_[screen])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					try:
+						if isinstance(it._values_, _tb.link.SoftLink):
+							d1.create_soft_link( ca_g, '_values_', it._values_.target )
+						elif isinstance(it._values_, _tb.link.ExternalLink):
+							d1.create_carray(ca_g, '_values_', obj=it._values_()[:])
+						else:
+							d1.create_carray(ca_g, '_values_', obj=it._values_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					if 'stack' in it._v_attrs:
+						ca_g._v_attrs['stack'] = it._v_attrs['stack']
+		
+		
+			else:
+				# ca is a external thing
+				it = d.idca[ca]
+				if isinstance(it, _tb.array.Array):
+					d1.new_idca_from_array(ca, d.idca[ca][screen])
+				elif isinstance(it, _tb.group.Group):
+					ca_g = d1.create_group(d1.h5idca, ca)
+					# dupe parts separately, drop all links
+					try:
+						d1.create_carray(ca_g, '_index_', obj=it._index_[screen])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					try:			
+						d1.create_carray(ca_g, '_values_', obj=it._values_[:])
+					except _tb.exceptions.NoSuchNodeError:
+						pass
+					if 'stack' in it._v_attrs:
+						ca_g._v_attrs['stack'] = it._v_attrs['stack']
+
+		if 'vault' in d.h5top:
+			vault = d1.get_or_create_group(d1.h5top, 'vault')
+			for vt in self.h5top.vault._v_children:
+				d1.to_vault(vt, d.from_vault(vt))
+
+		return d1
+
 
 	def consolidate(self, newfile, spool=True):
 		"""
@@ -4137,6 +4285,7 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 				got_alts = swap_alts(tag_alts)
 	return d
 
-
+def DTL(source):
+	return DTx(None, idco=source, idca=source)
 
 

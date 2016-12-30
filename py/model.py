@@ -1158,13 +1158,17 @@ class Model(Model2, ModelReporter):
 		self.covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.covariance_matrix[take] = invhess.reshape(-1)
 		# robust...
-		bhhh_taken = self.bhhh()[take].reshape(dense_s,dense_s)
-		#import scipy.linalg.blas
-		#temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
-		#robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
-		robusto = numpy.dot(numpy.dot(invhess, bhhh_taken),invhess)
-		self.robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-		self.robust_covariance_matrix[take] = robusto.reshape(-1)
+		try:
+			bhhh_taken = self.bhhh()[take].reshape(dense_s,dense_s)
+		except NotImplementedError:
+			pass
+		else:
+			#import scipy.linalg.blas
+			#temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
+			#robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
+			robusto = numpy.dot(numpy.dot(invhess, bhhh_taken),invhess)
+			self.robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+			self.robust_covariance_matrix[take] = robusto.reshape(-1)
 
 
 	def bhhh_tolerance(self, *args, **kwargs):
@@ -1529,23 +1533,16 @@ class Model(Model2, ModelReporter):
 
 
 	def gradient_check(self, disp=True):
-		from .metamodel import MetaModel
-		if isinstance(self, MetaModel):
-#			for sub in self.sub_model.values():
-#				try:
-#					if sub.is_provisioned()<=0:
-#						sub.provision()
-#				except LarchError:
-#					sub.provision()
-#				sub.setUp()
-			self.setUp()
-		else:
-			try:
-				if self.is_provisioned()<=0:
-					self.provision()
-			except LarchError:
-				self.provision()
-			self.setUp()
+#		from .metamodel import MetaModel
+#		if isinstance(self, MetaModel):
+#			self.setUp()
+#		else:
+#			try:
+#				if self.is_provisioned()<=0:
+#					self.provision()
+#			except LarchError:
+#				self.provision()
+#			self.setUp()
 		self.loglike()
 		_force_recalculate = self.option.force_recalculate
 		self.option.force_recalculate = True
@@ -1618,6 +1615,7 @@ class Model(Model2, ModelReporter):
 			v1[n] -= jiggle*2
 			out[n] -= self.loglike(v1, **kwargs)
 			out[n] /= (2*jiggle)
+		self.parameter_values(v)
 		return out
 
 	def finite_diff_hessian(self, *args, out=None, finite_grad=False):
@@ -1944,12 +1942,8 @@ class Model(Model2, ModelReporter):
 			self.Data_UtilityCE_builtin.maplink(*(otherformats["UtilityCE"]))
 		if "SamplingCE" in otherformats:
 			self.Data_SamplingCE_builtin.maplink(*(otherformats["SamplingCE"]))
-#			try:
-#				super().provision(provided)
-#			except ProvisioningError as err:
-##				if "UtilityCA" not in str(err):
-#					raise
-#		else:
+		if provided == {}:
+			raise TypeError("nothing provided here")
 		super().provision(provided)
 		if cache:
 			if self.logger():

@@ -143,10 +143,10 @@ void elm::Model2::freshen()
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-	_setUp_utility_data_and_params();
-	_setUp_samplefactor_data_and_params();
+	_setUp_utility_data_and_params(false); // don't recheck validity every time
+	_setUp_samplefactor_data_and_params(false);
 	_setUp_allocation_data_and_params();
-	_setUp_quantity_data_and_params();
+	_setUp_quantity_data_and_params(false);
 
 	Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 	Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
