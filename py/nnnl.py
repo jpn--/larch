@@ -114,11 +114,10 @@ class NNNL(MetaModel):
 
 	### Currently only allows one level NNNL,
 
-	def __init__(self, base_model, normalize=False):
+	def __init__(self, base_model):
 		super().__init__()
 		self.base_model = base_model
 		self.base_data = base_model.df
-		self.normalize = normalize
 		g = base_model.graph
 		for i in base_model.nest.nodes():
 			alts = g.successors(i)
@@ -200,13 +199,9 @@ class NNNL(MetaModel):
 		meta_parameter_values = self.parameter_values()
 		m0 = self.sub_model[self.root_id]
 		for key,m in self.sub_model.items():
-			scale = 1.0
-			if self.normalize and key!=self.root_id:
-				scale_param = self.base_model.nest[key].param
-				scale = self.parameter[scale_param].value
 			for value, name in zip(meta_parameter_values, self.parameter_names()):
 				if name in m:
-					m.parameter(name).value = value / scale
+					m.parameter(name).value = value
 			if key==self.root_id:
 				pass
 			else:
@@ -283,6 +278,33 @@ class NNNL(MetaModel):
 			self.logger().log(30, "dLL={}".format(str(d_ll),str(self.parameter_array)))
 		return d_ll
 
+	def d_loglike_casewise(self, *args, cached=False):
+		"""
+		Calculate the vector of first partial derivative w.r.t. the parameters.
+		
+		Parameters
+		----------
+		cached : bool
+			Ignored in this version.
+		"""
+		if len(args)>0:
+			self.parameter_values(args[0])
+		meta_parameter_values = self.parameter_values()
+		m0 = self.sub_model[self.root_id]
+		d_ll = numpy.zeros([m0.nCases(), len(meta_parameter_values)])
+
+		# deriv with respect to child models
+		for key,m in self.sub_model.items():
+			d_ll += _map_submodel_params_to_grand_params(m, self, -m.d_loglike_casewise())
+
+		# deriv as it changes the logsums
+		for slot,nestcode in enumerate(m0.alternative_codes()):
+			t = (m0.data.choice[:,slot,0]-m0.work.probability[:,slot])[:,None] * _d_logsum_d_param_mnl(self.sub_model[nestcode], self)
+			mu_name = self.base_model.nest[nestcode].param
+			mu = self.parameter_array[ self.parameter_index(mu_name) ]
+			d_ll += t * mu
+
+		return d_ll
 
 
 
@@ -298,6 +320,9 @@ class NNNL(MetaModel):
 		z *= -1
 		return z
 
-	def bhhh(self, *args, cached=True):
-		raise NotImplementedError
-	
+	def bhhh(self, *args):
+		if len(args)>0:
+			self.parameter_values(args[0])
+		dc = self.d_loglike_casewise()
+		return numpy.dot(dc,dc.T)
+
