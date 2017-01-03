@@ -74,13 +74,13 @@ def _map_submodel_params_to_grand_params(m, grand_m, values):
 		with last dim as len(grand_m)
 	'''
 	try:
-		return numpy.dot(values, m._grand_parameter_map)
+		m._grand_parameter_map
 	except AttributeError:
 		arr = numpy.zeros([len(m), len(grand_m)])
 		for m_slot, name in enumerate(m.parameter_names()):
 			arr[m_slot, grand_m.parameter_index(name)] = 1
 		m._grand_parameter_map = arr
-		return numpy.dot(values, m._grand_parameter_map)
+	return numpy.dot(values, m._grand_parameter_map)
 
 def _map_grand_params_to_submodel_params(m, grand_m, values):
 	'''
@@ -100,13 +100,13 @@ def _map_grand_params_to_submodel_params(m, grand_m, values):
 		with last dim as len(m)
 	'''
 	try:
-		return numpy.dot(values, m._grand_parameter_map.T)
+		m._grand_parameter_map
 	except AttributeError:
 		arr = numpy.zeros([len(m), len(grand_m)])
 		for m_slot, name in enumerate(m.parameter_names()):
 			arr[m_slot, grand_m.parameter_index(name)] = 1
 		m._grand_parameter_map = arr
-		return numpy.dot(values, m._grand_parameter_map.T)
+	return numpy.dot(values, m._grand_parameter_map.T)
 
 
 
@@ -116,12 +116,13 @@ class NNNL(MetaModel):
 
 	def __init__(self, base_model):
 		super().__init__()
+		base_model._parameter_inclusion_check()
 		self.base_model = base_model
-		self.base_data = base_model.df
+		self.df = base_model.df
 		g = base_model.graph
 		for i in base_model.nest.nodes():
 			alts = g.successors(i)
-			d = DT.DummyWithAlts(altcodes=alts, nCases=self.base_data.nCases())
+			d = DT.DummyWithAlts(altcodes=alts, nCases=self.df.nCases())
 			self.sub_model[i] = Model(d)
 			self.sub_model[i].utility.ca = base_model.utility.ca
 			for a in alts:
@@ -132,7 +133,7 @@ class NNNL(MetaModel):
 				else:
 					self.sub_model[i].utility.co[a] = x
 		# Root
-		d = DT.DummyWithAlts(nCases=self.base_data.nCases(), altcodes=self.base_model.nest.nodes())
+		d = DT.DummyWithAlts(nCases=self.df.nCases(), altcodes=self.base_model.nest.nodes())
 		m = self.sub_model[self.root_id] = Model(d)
 		for i in base_model.nest.nodes():
 			m.utility.co[i] = base_model.nest[i].param * X(str(base_model.nest[i]._altcode))
@@ -151,10 +152,10 @@ class NNNL(MetaModel):
 
 				self.sub_model[seg_descrip].setUp(False)
 				self.sub_model[seg_descrip].provision({
-					"UtilityCO": numpy.zeros([self.base_data.nCases(),self.sub_model[seg_descrip].nAlts()]),
-					"Avail": numpy.zeros([self.base_data.nCases(),self.sub_model[seg_descrip].nAlts(),1], dtype=bool),
-					"Choice": numpy.zeros([self.base_data.nCases(),self.sub_model[seg_descrip].nAlts(),1]),
-					"Weight": numpy.ones([self.base_data.nCases(),1])
+					"UtilityCO": numpy.zeros([self.df.nCases(),self.sub_model[seg_descrip].nAlts()]),
+					"Avail": numpy.zeros([self.df.nCases(),self.sub_model[seg_descrip].nAlts(),1], dtype=bool),
+					"Choice": numpy.zeros([self.df.nCases(),self.sub_model[seg_descrip].nAlts(),1]),
+					"Weight": numpy.ones([self.df.nCases(),1])
 				})
 			
 			else:
@@ -162,17 +163,17 @@ class NNNL(MetaModel):
 				submodel.setUp(False, False, False, False)
 				needs = submodel.needs()
 				
-				keepalts = numpy.in1d(self.base_data._alternative_codes(), submodel.df._alternative_codes())
+				keepalts = numpy.in1d(self.df._alternative_codes(), submodel.df._alternative_codes())
 				# keepalts is a bool array for masking
 				
 				prov = {}
 				if 'UtilityCA' in needs:
-					prov["UtilityCA"] = pack(self.base_data.array_idca(*needs['UtilityCA'].get_variables())[:,keepalts,:])
+					prov["UtilityCA"] = pack(self.df.array_idca(*needs['UtilityCA'].get_variables())[:,keepalts,:])
 				if 'UtilityCO' in needs:
-					prov["UtilityCO"] = self.base_data.array_idco(*needs['UtilityCO'].get_variables())
-				prov["Weight"] = self.base_data.array_weight()
-				prov["Choice"] = pack(self.base_data.array_choice()[:,keepalts,:])
-				prov["Avail"] = pack(self.base_data.array_avail()[:,keepalts,:])
+					prov["UtilityCO"] = self.df.array_idco(*needs['UtilityCO'].get_variables())
+				prov["Weight"] = self.df.array_weight()
+				prov["Choice"] = pack(self.df.array_choice()[:,keepalts,:])
+				prov["Avail"] = pack(self.df.array_avail()[:,keepalts,:])
 				
 				submodel.provision(prov)
 				
@@ -190,7 +191,8 @@ class NNNL(MetaModel):
 		for key in m0.alternative_codes():
 			m0.dataedit.avail[:,self.m0slots[key]] = (self.sub_model[key].data.avail.sum(1)>0)
 			m0.dataedit.choice[:,self.m0slots[key]] = (self.sub_model[key].data.choice * self.sub_model[key].data.avail).sum(1)
-
+			# set lower level models to feed logsum up
+			self.sub_model[key].top_logsums_out = m0.dataedit.utilityco[:,self.m0slots[key]]
 
 	def loglike(self, *args, cached=False):
 		fun = 0
@@ -209,8 +211,8 @@ class NNNL(MetaModel):
 #				print("LL",key,"=",m_fun)
 				fun += m_fun
 				# push logsums to upper level
-				m0.dataedit.utilityco[:,self.m0slots[key]] = m.logsums()
-		# circle back to root
+				# m0.dataedit.utilityco[:,self.m0slots[key]] = m.logsums() # skip now, happens automatically
+		# circle back to root, which must be last
 		m0.dataedit.utilityco[numpy.isneginf(m0.dataedit.utilityco)] = -1.79769313e+308
 		m_fun = m0.loglike(m0.parameter_values(), cached=cached)
 #		print("LL",self.root_id,"=",m_fun)
@@ -261,13 +263,21 @@ class NNNL(MetaModel):
 			self.parameter_values(args[0])
 		meta_parameter_values = self.parameter_values()
 		d_ll = numpy.zeros(len(meta_parameter_values))
+		for key,m in self.sub_model.items():
+			for value, name in zip(meta_parameter_values, self.parameter_names()):
+				if name in m:
+					m.parameter(name).value = value
 
 		# deriv with respect to child models
-		for key,m in self.sub_model.items():
-			d_ll += _map_submodel_params_to_grand_params(m, self, m.d_loglike())
+		m0 = self.sub_model[self.root_id]
+		for key in m0.alternative_codes():
+			m = self.sub_model[key]
+			d_ll += _map_submodel_params_to_grand_params(m, self, m.d_loglike(cached=cached))
+
+		m0.dataedit.utilityco[numpy.isneginf(m0.dataedit.utilityco)] = -1.79769313e+308
+		d_ll += _map_submodel_params_to_grand_params(m0, self, m0.d_loglike(cached=cached))
 
 		# deriv as it changes the logsums
-		m0 = self.sub_model[self.root_id]
 		for slot,nestcode in enumerate(m0.alternative_codes()):
 			t = (m0.data.choice[:,slot,0]-m0.work.probability[:,slot])[:,None] * _d_logsum_d_param_mnl(self.sub_model[nestcode], self)
 			mu_name = self.base_model.nest[nestcode].param
@@ -275,7 +285,7 @@ class NNNL(MetaModel):
 			d_ll += t.sum(0) * mu
 
 		if self.logger():
-			self.logger().log(30, "dLL={}".format(str(d_ll),str(self.parameter_array)))
+			self.logger().log(30, "dLL={} <- {}".format(str(d_ll),str(self.parameter_array)))
 		return d_ll
 
 	def d_loglike_casewise(self, *args, cached=False):
@@ -324,5 +334,9 @@ class NNNL(MetaModel):
 		if len(args)>0:
 			self.parameter_values(args[0])
 		dc = self.d_loglike_casewise()
-		return numpy.dot(dc,dc.T)
+		return numpy.dot(dc.T,dc)
+
+
+
+
 

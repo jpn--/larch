@@ -4215,6 +4215,15 @@ class Model2(sherpa):
     def log_likelihood_from_prob(self, probarray: 'etk::ndarray *') -> "double":
         return _core.Model2_log_likelihood_from_prob(self, probarray)
 
+    def _get_top_logsums_out(self) -> "PyObject *":
+        return _core.Model2__get_top_logsums_out(self)
+
+    def _set_top_logsums_out(self, arg2: 'PyObject *') -> "void":
+        return _core.Model2__set_top_logsums_out(self, arg2)
+
+    def _del_top_logsums_out(self) -> "void":
+        return _core.Model2__del_top_logsums_out(self)
+
     def _parameter_report(self) -> "std::string":
         return _core.Model2__parameter_report(self)
     _LL_null = _swig_property(_core.Model2__LL_null_get, _core.Model2__LL_null_set)

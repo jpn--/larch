@@ -1649,6 +1649,9 @@ class Model(Model2, ModelReporter):
 	def logsums(self):
 		return self.calc_utility_logsums(self.Data("UtilityCO"),self.Data("UtilityCA"),self.Data("Avail"))
 
+	top_logsums_out = property(Model2._get_top_logsums_out, Model2._set_top_logsums_out,
+							   Model2._del_top_logsums_out, "array to store model logsums upon calculation, (only for MNL at present)")
+
 	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), maxiter=1000, disp=True, **kwargs):
 		import scipy.optimize
 		import datetime
@@ -2097,9 +2100,9 @@ class Model(Model2, ModelReporter):
 		self.setUp(and_load_data=False, force=True)
 
 
-	def _simple_bhhh_direction(self):
-		b = self.bhhh()
-		from .linalg import general_inverse
+#	def _simple_bhhh_direction(self):
+#		b = self.bhhh()
+#		from .linalg import general_inverse
 
 
 	def suggest(self, paramname, value):

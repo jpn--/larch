@@ -191,6 +191,7 @@ namespace etk {
 		void sector_prob_scale_2 (const std::vector<unsigned>& sectors, ndarray* out=nullptr);
 		void sector_prob_scale_2 (const std::vector<unsigned>& sectors, const unsigned& rowbegin, const unsigned& rowend);
 		void logsums_2 (ndarray* out);
+		void logsumexp_2 (ndarray* out, const size_t& siz1, const size_t& siz2);
 		void operator+=(const ndarray& that);
 		void operator-=(const ndarray& that);
 		void operator+=(const memarray_raw& that);
@@ -271,6 +272,10 @@ namespace etk {
 
 
 	};
+
+
+	typedef ndarray ndarray_refcount;
+	
 
 	extern PyObject* array_module;
 	void _set_array_module(PyObject* mod);

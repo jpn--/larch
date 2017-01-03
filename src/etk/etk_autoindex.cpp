@@ -121,7 +121,7 @@ size_t& autoindex_string::operator[] (const std::string& codex) {
 
 const size_t& autoindex_string::operator[] (const std::string& codex) const {
 	std::map<std::string,size_t>::const_iterator i = _index.find(codex);
-	if (i==_index.end()) OOPS("autoindex: codex %s not found in const autoindex",codex);
+	if (i==_index.end()) OOPS("autoindex: codex ",codex," not found in const autoindex");
 	return (i->second);		
 }
 

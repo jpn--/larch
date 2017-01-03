@@ -128,6 +128,59 @@
 	}
 }
 
+
+%typemap(in) PyArrayObject* {
+	if ($input == Py_None) {
+		$1 = nullptr;
+	} else {
+		if (PyArray_Check($input)) {
+			if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT8)
+				) {
+				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+				SWIG_fail;
+			}
+			
+			$1 = (PyArrayObject*) $input;
+			Py_INCREF($1);
+		} else {
+			PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array"));
+			SWIG_fail;
+		}
+	}
+}
+
+
+
+
+
+%typemap(in) etk::ndarray_refcount* (boosted::shared_ptr<etk::ndarray> temp) {
+	if ($input == Py_None) {
+		$1 = nullptr;
+	} else {
+		if (PyArray_Check($input)) {
+			if (  (PyArray_TYPE((PyArrayObject*)$input)!= NPY_DOUBLE)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_BOOL)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT64)
+			    &&(PyArray_TYPE((PyArrayObject*)$input)!= NPY_INT8)
+				) {
+				PyErr_SetString(ptrToLarchError, const_cast<char*>("function requires array type DOUBLE or BOOL or INT64 or INT8"));
+				SWIG_fail;
+			}
+			
+			$1 = $input;
+		} else {
+			temp = boosted::make_shared<etk::ndarray>(PyArray_ContiguousFromAny($input, NPY_DOUBLE, 0, 0));
+			$1 = &(*temp);
+		}
+		Py_INCREF(($1)->pool);
+	}
+}
+
+
+
 %typemap(in) const etk::ndarray* (boosted::shared_ptr<const etk::ndarray> temp) {
 	if ($input == Py_None) {
 		$1 = nullptr;
@@ -176,6 +229,14 @@
 	}
 }
 
+%typemap(out) PyArrayObject* {
+	if (!$1) {
+		Py_RETURN_NONE;
+	} else {
+		$result = (PyObject*) $1;
+		Py_INCREF($result);
+	}
+}
 
 
 

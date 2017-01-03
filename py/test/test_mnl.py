@@ -847,4 +847,21 @@ class TestMNL(ELM_TestCase):
 		self.assertNearlyEqual(-28871.037024312292,m3.loglike())
 
 
+	def test_top_logsum_out(self):
+		m = Model.Example()
+		m.setUp()
+		ls = numpy.arange(m.nCases()*2, dtype=numpy.float64).reshape(-1,2)
+		m.top_logsums_out = ls[:,1]
+		self.assertArrayEqual(numpy.arange(1,5029*2,2),  m.top_logsums_out)
+		self.assertArrayEqual(numpy.arange(0,5029*2,2),  ls[:,0])
+		m.loglike()
+		self.assertNearlyEqual(1.6094379124341003, ls[0,1], 8)
+		self.assertArrayEqual(m.logsums(), ls[:,1])
+		self.assertArrayEqual(numpy.arange(0,5029*2,2),  ls[:,0])
+
+
+
+
+
+
 

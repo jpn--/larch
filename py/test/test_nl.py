@@ -775,13 +775,8 @@ class TestNL(ELM_TestCase):
 		m = NNNL(mx)
 		m.setUp()
 		self.assertNearlyEqual(-136022.9447189486, m.loglike())
-		k = NNNL(mx, normalize=True)
-		k.setUp()
-		self.assertNearlyEqual(-676045.5230709405, k.loglike())
 		mx.setUp()
 		self.assertNearlyEqual(-676045.5230709405, mx.loglike())
 		jj=m.gradient_check()
 		self.assertTrue(jj[0]<-6)
-		kk=k.gradient_check()
-		self.assertTrue(kk[0]<-6)
 

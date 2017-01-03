@@ -35,6 +35,7 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 							, elm::darray_ptr Data_Ch
 							, const double& U_premultiplier
 							, etk::logging_service* msgr
+							, PyArrayObject* logsums_out
 							)
 : Probability(U)
 , CaseLogLike(CLL)
@@ -43,8 +44,16 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 , U_premultiplier(U_premultiplier)
 , msg_(msgr)
 , UtilPacket(UtilPack)
+, logsums_out(logsums_out)
 {
 	//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
+	
+	// check that logsums out is at least the correct size
+	if (logsums_out) {
+		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
+			logsums_out = nullptr;
+		}
+	}
 }
 
 elm::mnl_prob_w::~mnl_prob_w()
@@ -222,6 +231,20 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 		
 //		if (c==565) std::cerr << "Data_AV[565,0:3]="<<Data_AV->boolvalue(565,0)<<Data_AV->boolvalue(565,1)<<Data_AV->boolvalue(565,2)<<"\n";
 //		if (c==565) std::cerr << "sum_prob="<<sum_prob<<"\n";
+
+		double* logsum = nullptr;
+		double fallback_logsum = 0;
+		if (logsums_out) {
+			logsum = (double*) PyArray_GETPTR1(logsums_out, c);
+		} else {
+			logsum = &fallback_logsum;
+		}
+		*logsum = log(sum_prob);
+
+//		if ((firstcase==0) && (c==0)) {
+//			std::cerr << "breaker \n";
+//		}
+
 		if (sum_prob) {
 			for (unsigned a=0;a<nElementals;a++) {
 				Probability->at(c,a) /= sum_prob;
@@ -230,7 +253,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 //				}
 			}
 			if (sum_choice) {
-				CaseLogLike->at(c) -= log(sum_prob) * sum_choice;
+				CaseLogLike->at(c) -= (*logsum) * sum_choice;
 //				if (shifter) {
 //					std::cerr << "  CaseLogLike="<<CaseLogLike->at(c)<<"\n";
 //				}

@@ -38,6 +38,7 @@ namespace elm {
 		elm::darray_ptr Data_Ch;
 		double        U_premultiplier;
 
+		PyArrayObject* logsums_out;
 
 		elm::ca_co_packet UtilPacket;
 
@@ -53,6 +54,7 @@ namespace elm {
 				   , elm::darray_ptr Data_Ch
 				   , const double& U_premultiplier
 				   , etk::logging_service* msgr=nullptr
+				   , PyArrayObject* logsums_out=nullptr
 				   );
 		~mnl_prob_w();
 	}; 
