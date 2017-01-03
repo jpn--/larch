@@ -132,9 +132,11 @@ class DT(Fountain):
 		written to disk when the file is closed. This is automatically set to true if
 		the `filename` is None.
 
+
 	.. warning::
 		The normal constructor creates a :class:`DT` object linked to an existing 
 		HDF5 file. Editing the object edits the file as well. 
+
 
 	"""
 
@@ -477,10 +479,12 @@ class DT(Fountain):
 		"""The total number of cases, ignoring any screens."""
 		return int(self.h5caseids.shape[0])
 
-	def nAlts(self):
+	def nAlts(self, allow_exception=False):
 		try:
 			return int(self.alts.altids.shape[0])
 		except _tb.exceptions.NoSuchNodeError:
+			if allow_exception:
+				raise
 			return 0
 
 	def _remake_command(self, cmd, screen, dims):
@@ -3195,7 +3199,7 @@ class DT(Fountain):
 					result.append("  nCases: {} (only {} are active)".format(nAC,nC))
 
 			try:
-				nA = self.nAlts()
+				nA = self.nAlts(allow_exception=True)
 			except _tb.exceptions.NoSuchNodeError:
 				result.append("  nAlts: <missing>")
 			else:
