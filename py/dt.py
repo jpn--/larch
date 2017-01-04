@@ -2696,8 +2696,9 @@ class DT(Fountain):
 			other_omx = OMX(other_omx)
 		if names is None:
 			names = other_omx.data._v_children
+			names = {n:n for n in names}
 
-		if not isinstance(names, dict):
+		if names is not None and not isinstance(names, dict):
 			names = {n:n for n in names}
 
 		if isinstance(rowindexes, str):
