@@ -246,6 +246,60 @@ class DT(Fountain):
 		self.alts = GroupNode(self.h5top, 'alts')
 		self._refresh_alts()
 
+	def reopen(self, filename=None, mode=None, ipath=None, complevel=1, complib='zlib'):
+		if not _tb_success: raise ImportError("pytables not available")
+		
+		if filename is None:
+			filename = self.source_filename
+		if mode is None:
+			mode = self.source_filemode
+		if ipath is None:
+			ipath = self._h5larchpath
+		
+		if (mode != self.source_filemode ) or (filename != self.source_filename):
+			self.close()
+		
+		if isinstance(filename,str):
+			import os
+			filename = os.path.expanduser(filename)
+
+		kwd = {}
+		if complevel is not None:
+			kwd['filters']=_tb.Filters(complib=complib, complevel=complevel)
+		self.h5f = _tb.open_file(filename, mode, **kwd)
+		self._h5f_own = True
+
+		self.source_filemode = mode
+		self.source_filename = filename
+		self._h5larchpath = ipath
+		try:
+			self.h5top = self.h5f._get_or_create_path(ipath, True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the larch root node at '{}' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5idca = self.h5f._get_or_create_path(ipath+'/idca', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/idca' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5idco = self.h5f._get_or_create_path(ipath+'/idco', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/idco' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5alts = self.h5f._get_or_create_path(ipath+'/alts', True)
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/alts' does not exist and cannot be created".format(ipath))
+		try:
+			self.h5expr = self.get_or_create_group(self.h5top, 'expr')._v_attrs
+		except _tb.exceptions.FileModeError:
+			raise HDF5BadFormat("the node at '{}/expr' does not exist and cannot be created".format(ipath))
+		self.expr = LocalAttributeSet(self.h5top.expr)
+		# helper for data access
+		self.idco = GroupNode(self.h5top, 'idco')
+		self.idca = GroupNode(self.h5top, 'idca')
+		self.alts = GroupNode(self.h5top, 'alts')
+		self._refresh_alts()
+
+
 
 	def __del__(self):
 		try:
@@ -2405,7 +2459,7 @@ class DT(Fountain):
 			self.h5f.create_carray(self.idco._v_node, idca_var, obj=newarr)
 			self.idca._v_children[idca_var]._f_remove()
 
-	def new_idco(self, name, expression, dtype=numpy.float64, *, overwrite=False):
+	def new_idco(self, name, expression, dtype=numpy.float64, *, overwrite=False, title=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2440,13 +2494,16 @@ class DT(Fountain):
 		if overwrite:
 			self.delete_data(name)
 		self.h5f.create_carray(self.idco._v_node, name, obj=data)
+		self.idco[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
+		if title is not None:
+			self.idco[name]._v_attrs.TITLE = title
 
 	def new_blank_idco(self, name, dtype=None, overwrite=False):
 		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
 		return self.new_idco_from_array(name, zer, overwrite=overwrite)
 
 
-	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None):
+	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None, rel_original_source=True, title=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2461,8 +2518,10 @@ class DT(Fountain):
 			An array to add as the new variable.  Must have the correct shape.
 		overwrite : bool
 			Should the variable be overwritten if it already exists, default to False.
-		original_cource : str
+		original_source : str
 			Optionally, give the file name or other description of the source of the data in this array.
+		rel_original_source : bool
+			If true, change the absolute path of the original_source to a relative path viz this file.
 			
 		Raises
 		-----
@@ -2513,24 +2572,57 @@ class DT(Fountain):
 				h5var[:] = arr
 			else:
 				raise
+		if rel_original_source and original_source:
+			basedir = os.path.dirname(self.source_filename)
+			original_source = os.path.relpath(original_source, start=basedir)
 		if original_source is not None:
 			self.idco[name]._v_attrs.ORIGINAL_SOURCE = original_source
+		if title is not None:
+			self.idco[name]._v_attrs.TITLE = title
 
 
 	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None):
+		"""
+		Merge data from a pandas.DataFrame into the idco of this DT.
+		
+		Parameters
+		----------
+		names : None or list or dict
+			If given as a list, only these names will be merged from the other data.  
+			If given as a dict, the keys are the names that will be merged and the 
+			values are the new names in this DT.
+		"""
 		if isinstance(self_on, str):
 			baseframe = self.dataframe_idco(self_on, screen="None")
 		else:
 			baseframe = self.dataframe_idco(*self_on, screen="None")
 		new_df = pandas.merge(baseframe, other, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
+		if names is not None and not isinstance(names, dict):
+			names = {n:n for n in names}
 		for col in new_df.columns:
 			if col not in self.idco:
-				if names is None or col in names:
+				if names is None:
 					self.new_idco_from_array(col, arr=new_df[col].values)
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+				elif col in names:
+					self.new_idco_from_array(names[col], arr=new_df[col].values)
+					if original_source is not None:
+						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
 
 	def merge_into_idco_from_csv(self, filepath_or_buffer, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
+		"""
+		Merge data from a csv file into the idco of this DT.
+		
+		Parameters
+		----------
+		names : None or list or dict
+			If given as a list, only these names will be merged from the other data.  
+			If given as a dict, the keys are the names that will be merged and the 
+			values are the new names in this DT.
+		"""
+		if names is not None and not isinstance(names, dict):
+			names = {n:n for n in names}
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:] == '.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, **kwargs)
 			original_source = filepath_or_buffer
@@ -2548,6 +2640,18 @@ class DT(Fountain):
 
 
 	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
+		"""
+		Merge data into the idco of this DT.
+		
+		Parameters
+		----------
+		names : None or list or dict
+			If given as a list, only these names will be merged from the other data.  
+			If given as a dict, the keys are the names that will be merged and the 
+			values are the new names in this DT.
+		"""
+		if names is not None and not isinstance(names, dict):
+			names = {n:n for n in names}
 		if isinstance(other, pandas.DataFrame):
 			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names)
 		if isinstance(other, str) and os.path.exists(other):
@@ -2568,10 +2672,14 @@ class DT(Fountain):
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		for col in new_df.columns:
 			if col not in self.idco:
-				if names is None or col in names:
+				if names is None:
 					self.new_idco_from_array(col, arr=new_df[col].values)
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+				elif col in names:
+					self.new_idco_from_array(names[col], arr=new_df[col].values)
+					if original_source is not None:
+						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
 
 
 	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None, overwrite=False):
@@ -2588,6 +2696,9 @@ class DT(Fountain):
 			other_omx = OMX(other_omx)
 		if names is None:
 			names = other_omx.data._v_children
+
+		if not isinstance(names, dict):
+			names = {n:n for n in names}
 
 		if isinstance(rowindexes, str):
 			rowarr = self.idco[rowindexes][:]
@@ -2611,7 +2722,7 @@ class DT(Fountain):
 			rowarr = numpy.full_like(clarr, rowindexes, dtype=int)
 
 		for matrix_page in names:
-			self.new_idco_from_array( matrix_page,
+			self.new_idco_from_array( names[matrix_page],
 								      other_omx[matrix_page][ rowarr, colarr ],
 								      original_source=other_omx.filename,
 									  overwrite=overwrite  )
@@ -2622,7 +2733,7 @@ class DT(Fountain):
 
 
 
-	def new_idca(self, name, expression):
+	def new_idca(self, name, expression, title=None):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2648,14 +2759,19 @@ class DT(Fountain):
 		NameError
 			If the expression contains a name that cannot be evaluated from within
 			the existing :ref:`idca` or :ref:`idco` data.
+		title : str
+			Optionally, give a description of the data in this array.
 		"""
 		if isinstance(expression, str):
 			data = self.array_idca(expression, screen="None").reshape(-1)
 		else:
 			data = expression
 		self.h5f.create_carray(self.idca._v_node, name, obj=data)
+		self.idca[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
+		if title is not None:
+			self.idca[name]._v_attrs.TITLE = title
 
-	def new_blank_idca(self, name, nalts=None, dtype=None):
+	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False):
 		"""Create a new blank (all zeros) :ref:`idca` variable.
 			
 		Parameters
@@ -2673,10 +2789,12 @@ class DT(Fountain):
 		"""
 		if nalts is None:
 			nalts = self.nAlts()
+		if not nalts:
+			raise TypeError('number of alts cannot be zero, must be given')
 		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
-		return self.new_idca_from_array(name, zer)
+		return self.new_idca_from_array(name, zer, overwrite=overwrite)
 
-	def new_idca_from_array(self, name, arr, overwrite=False):
+	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2691,6 +2809,12 @@ class DT(Fountain):
 			An array to add as the new variable.  Must have the correct shape.
 		overwrite : bool
 			Should the variable be overwritten if it already exists, default to False.
+		original_source : str
+			Optionally, give the file name or other description of the source of the data in this array.
+		rel_original_source : bool
+			If true, change the absolute path of the original_source to a relative path viz this file.
+		title : str
+			Optionally, give a description of the data in this array.
 			
 		Raises
 		-----
@@ -2702,6 +2826,13 @@ class DT(Fountain):
 		if overwrite:
 			self.delete_data(name)
 		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
+		if rel_original_source and original_source:
+			basedir = os.path.dirname(self.source_filename)
+			original_source = os.path.relpath(original_source, start=basedir)
+		if original_source is not None:
+			self.idca[name]._v_attrs.ORIGINAL_SOURCE = original_source
+		if title is not None:
+			self.idca[name]._v_attrs.TITLE = title
 
 	def new_idco_from_keyed_array(self, name, arr_val, arr_index):
 		"""Create a new :ref:`idco` variable.
@@ -3054,11 +3185,22 @@ class DT(Fountain):
 #
 
 
-	def info(self, extra=False, relative_paths=True):
+	def info(self, extra=None, relative_paths=True):
 		v_names = []
 		v_dtypes = []
 		v_ftypes = []
 		v_filenames = []
+		if extra is None:
+			extra = {}
+		elif isinstance(extra,int):
+			extra = {i for i in range(1,extra+1)}
+		if 1 in extra:
+			extra.add('SHAPE')
+			extra.add('ORIGINAL_SOURCE')
+		if 2 in extra:
+			extra.add('TITLE')
+		if 3 in extra:
+			extra.add('DICTIONARY')
 		for i in sorted(self.variables_co()):
 			v_names.append(str(i))
 			if isinstance(self.idco[i], (_tb.Group,GroupNode)):
@@ -3113,10 +3255,15 @@ class DT(Fountain):
 
 		from .model_reporter.art import ART
 		
-		if extra:
-			extra_cols = ('SHAPE','ORIGINAL_SOURCE')
-		else:
-			extra_cols = ()
+		extra_cols = ()
+		for ex_col in ('SHAPE','ORIGINAL_SOURCE','TITLE','DICTIONARY'):
+			if ex_col in extra:
+				extra_cols = extra_cols + (ex_col,)
+		
+#		if extra:
+#			extra_cols = ('SHAPE','ORIGINAL_SOURCE')
+#		else:
+#			extra_cols = ()
 
 		rownum = 0
 		
@@ -3128,9 +3275,14 @@ class DT(Fountain):
 			a = ART(columns=('VAR','DTYPE','FILE')+extra_cols, n_head_rows=1, title="<larch.DT> "+os.path.basename(selfname), short_title="DT Content", n_rows=len(v_names)+1)
 			a.set_jrow_kwd_strings(rownum, VAR="Variable", DTYPE="dtype", FILE="Source File")
 
-		if extra:
+		if 'SHAPE' in extra:
 			a.set_jrow_loc(rownum, 'SHAPE', "Shape")
+		if 'ORIGINAL_SOURCE' in extra:
 			a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', "Original Source")
+		if 'TITLE' in extra:
+			a.set_jrow_loc(rownum, 'TITLE', "Description")
+		if 'DICTIONARY' in extra:
+			a.set_jrow_loc(rownum, 'DICTIONARY', "Dictionary")
 
 
 		## Content
@@ -3145,32 +3297,41 @@ class DT(Fountain):
 				a.set_jrow_kwd_strings(rownum, VAR=v_name, DTYPE=v_dtype, FILE=v_filename)
 			if extra:
 				the_node = getattr(self,v_ftype)[v_name]
-				if isinstance(the_node, (_tb.Group,GroupNode)):
-					if '_values_' in the_node and '_index_' in the_node:
-						the_shape = _pytables_link_dereference(the_node._index_).shape
-						if 'transpose_values' in the_node._v_attrs:
-							the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape
+				if 'SHAPE' in extra:
+					if isinstance(the_node, (_tb.Group,GroupNode)):
+						if '_values_' in the_node and '_index_' in the_node:
+							the_shape = _pytables_link_dereference(the_node._index_).shape
+							if 'transpose_values' in the_node._v_attrs:
+								the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape
+							else:
+								the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape[1:]
+						elif 'stack' in _pytables_link_dereference(the_node)._v_attrs:
+							the_shape = '<stack>'
 						else:
-							the_shape = the_shape + _pytables_link_dereference(the_node._values_).shape[1:]
-					elif 'stack' in _pytables_link_dereference(the_node)._v_attrs:
-						the_shape = '<stack>'
+							the_shape = '¿group?'
 					else:
-						the_shape = '¿group?'
-				else:
-					the_shape = the_node.shape
-				a.set_jrow_loc(rownum, 'SHAPE', str(the_shape))
-				if 'ORIGINAL_SOURCE' in the_node._v_attrs:
-					if relative_paths:
-						basedir = os.path.dirname(self.source_filename)
-						path_candidate = os.path.relpath(the_node._v_attrs.ORIGINAL_SOURCE, start=basedir)
-						if len(path_candidate) < len(the_node._v_attrs.ORIGINAL_SOURCE) and os.path.join(*[".."]*4) not in path_candidate:
-							pass
+						the_shape = the_node.shape
+					a.set_jrow_loc(rownum, 'SHAPE', str(the_shape))
+				if 'ORIGINAL_SOURCE' in extra:
+					if 'ORIGINAL_SOURCE' in the_node._v_attrs:
+						if relative_paths:
+							basedir = os.path.dirname(self.source_filename)
+							path_candidate = os.path.relpath(the_node._v_attrs.ORIGINAL_SOURCE, start=basedir)
+							if len(path_candidate) < len(the_node._v_attrs.ORIGINAL_SOURCE) and os.path.join(*[".."]*4) not in path_candidate:
+								pass
+							else:
+								path_candidate = the_node._v_attrs.ORIGINAL_SOURCE
+							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate))
 						else:
-							path_candidate = the_node._v_attrs.ORIGINAL_SOURCE
-						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate))
-					else:
-						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
-		
+							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
+				if 'TITLE' in extra:
+					if 'TITLE' in the_node._v_attrs:
+						a.set_jrow_loc(rownum, 'TITLE', the_node._v_attrs.TITLE)
+				if 'DICTIONARY' in extra:
+					if 'DICTIONARY' in the_node._v_attrs:
+						a.set_jrow_loc(rownum, 'DICTIONARY', str(the_node._v_attrs.DICTIONARY))
+
+
 		## Content: Expr
 		if len(self.expr):
 			a.addrow_seq_of_strings(["Expr",])
@@ -3784,6 +3945,11 @@ class DT(Fountain):
 					# dupe parts separately, drop all links
 					d1.create_carray(co_g, '_index_', obj=it._index_[screen])
 					d1.create_carray(co_g, '_values_', obj=it._values_[:])
+			# also copy relevant _v_attr
+			it = d.idco[co]
+			for atr in it._v_attrs._v_attrnames:
+				if atr not in ('CLASS','VERSION',):
+					d1.idco[co]._v_attrs[atr] = it._v_attrs[atr]
 
 		for ca in d.idca._v_children_keys_including_extern:
 			if ca in d.idca._v_children:
@@ -3834,6 +4000,12 @@ class DT(Fountain):
 						pass
 					if 'stack' in it._v_attrs:
 						ca_g._v_attrs['stack'] = it._v_attrs['stack']
+
+			# also copy relevant _v_attr
+			it = d.idca[ca]
+			for atr in it._v_attrs._v_attrnames:
+				if atr not in ('CLASS','VERSION',):
+					d1.idca[ca]._v_attrs[atr] = it._v_attrs[atr]
 
 		if 'vault' in d.h5top:
 			vault = d1.get_or_create_group(d1.h5top, 'vault')
@@ -3998,9 +4170,9 @@ class DT(Fountain):
 			vault_bin = vault._v_children[name_]
 		return vault_bin[index]
 
-
-
-
+	def vault_keys(self):
+		vault = self.get_or_create_group(self.h5top, 'vault')
+		return vault._v_children.keys()
 
 
 
