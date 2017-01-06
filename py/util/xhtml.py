@@ -8,6 +8,9 @@ from ..utilities import uid as _uid
 import base64
 from .. import styles
 
+xml.etree.ElementTree.register_namespace("","http://www.w3.org/2000/svg")
+xml.etree.ElementTree.register_namespace("xlink","http://www.w3.org/1999/xlink")
+
 # @import url(https://fonts.googleapis.com/css?family=Roboto+Mono:400,700,700italic,400italic,100,100italic);
 
 
@@ -404,7 +407,7 @@ class XHTML():
 			if self.view_on_exit:
 				self.view()
 			self._f.close()
-			if self._filename is not None and self._filename.lower()!='temp':
+			if self.view_on_exit and self._filename is not None and self._filename.lower()!='temp':
 				#import webbrowser
 				#webbrowser.open('f ile://'+os.path.realpath(self._filename))
 				from .temporaryfile import _open_in_chrome_or_something

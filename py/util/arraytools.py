@@ -91,3 +91,43 @@ def orthogonal_unit_vector(nDims, positionOne, dtype=numpy.float64):
 	z[positionOne] = 1
 	return z
 
+
+
+
+def is_all_integer(arr):
+	if arr.size < 100:
+		if numpy.all(numpy.equal(numpy.mod(arr, 1), 0)):
+			return True
+	else:
+		if numpy.all(numpy.equal(numpy.mod(arr.ravel()[:100], 1), 0)):
+			if numpy.all(numpy.equal(numpy.mod(arr, 1), 0)):
+				return True
+	return False
+
+
+
+
+def is_all_integer_or_nan(arr):
+	arr_nan = arr[~numpy.isnan(arr)]
+	if arr_nan.size < 100:
+		if numpy.all(numpy.equal(numpy.mod(arr_nan, 1), 0)):
+			return True
+	else:
+		if numpy.all(numpy.equal(numpy.mod(arr_nan.ravel()[:100], 1), 0)):
+			if numpy.all(numpy.equal(numpy.mod(arr_nan, 1), 0)):
+				return True
+	return False
+
+
+
+
+def convert_float_to_int_if_lossless(arr, inttype=numpy.int32):
+	if arr.size < 100:
+		if numpy.all(numpy.equal(numpy.mod(arr, 1), 0)):
+			return arr.astype(inttype)
+	else:
+		if numpy.all(numpy.equal(numpy.mod(arr.ravel()[:100], 1), 0)):
+			if numpy.all(numpy.equal(numpy.mod(arr, 1), 0)):
+				return arr.astype(inttype)
+	return arr
+

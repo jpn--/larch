@@ -14,18 +14,18 @@ else:
 
 
 
-from .core import Fountain, LarchError, IntStringDict
+from ..core import Fountain, LarchError, IntStringDict
 import warnings
 import numbers
 import collections
-from .util.aster import asterize
-from .util.naming import make_valid_identifier
-from .util.filemanager import path_shrinker
+from ..util.aster import asterize
+from ..util.naming import make_valid_identifier
+from ..util.filemanager import path_shrinker
 import keyword
 import pandas
 import os
 import re
-from .util.groupnode import GroupNode
+from ..util.groupnode import GroupNode
 from contextlib import contextmanager
 
 class IncompatibleShape(LarchError):
@@ -196,7 +196,7 @@ class DT(Fountain):
 			filename = os.path.expanduser(filename)
 		if filename is None:
 			temp = True
-			from .util.temporaryfile import TemporaryFile
+			from ..util.temporaryfile import TemporaryFile
 			self._TemporaryFile = TemporaryFile(suffix='.h5f')
 			filename = self._TemporaryFile.name
 		if h5f is not None:
@@ -449,7 +449,7 @@ class DT(Fountain):
 		# Make new ones
 		altids = numpy.asarray(altids)
 		if altids.dtype != numpy.int64:
-			from .util.arraytools import labels_to_unique_ids
+			from ..util.arraytools import labels_to_unique_ids
 			alt_labels, altids = labels_to_unique_ids(altids)
 		h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', obj=altids, title='elemental alternative code numbers')
 		h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
@@ -681,8 +681,8 @@ class DT(Fountain):
 			
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
-		from .util.pytables_addon import select_with_repeated1
-		from .util.aster import inXd
+		from ..util.pytables_addon import select_with_repeated1
+		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		if isinstance(screen, str) and screen=="None":
 			screen = None
@@ -730,7 +730,7 @@ class DT(Fountain):
 				if isinstance(exc, NameError):
 					badname = str(exc).split("'")[1]
 					goodnames = dir()
-					from .util.text_manip import case_insensitive_close_matches
+					from ..util.text_manip import case_insensitive_close_matches
 					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
 					if len(did_you_mean_list)>0:
 						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
@@ -739,7 +739,7 @@ class DT(Fountain):
 				raise
 		if strip_nan:
 			result = numpy.nan_to_num(result)
-		from .array import Array
+		from ..array import Array
 		result = result.view(Array)
 		result.vars = vars
 		return result
@@ -784,8 +784,8 @@ class DT(Fountain):
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
-		from .util.pytables_addon import select_with_repeated1
-		from .util.aster import inXd
+		from ..util.pytables_addon import select_with_repeated1
+		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		if isinstance(screen, str) and screen=="None":
@@ -815,7 +815,7 @@ class DT(Fountain):
 				if isinstance(exc, NameError):
 					badname = str(exc).split("'")[1]
 					goodnames = dir()
-					from .util.text_manip import case_insensitive_close_matches
+					from ..util.text_manip import case_insensitive_close_matches
 					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
 					if len(did_you_mean_list)>0:
 						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
@@ -824,7 +824,7 @@ class DT(Fountain):
 				raise
 		if strip_nan:
 			result = numpy.nan_to_num(result)
-		from .array import Array
+		from ..array import Array
 		result = result.view(Array)
 		result.vars = vars
 		return result
@@ -853,8 +853,8 @@ class DT(Fountain):
 		pandas.DataFrame
 		"""
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
-		from .util.pytables_addon import select_with_repeated1
-		from .util.aster import inXd
+		from ..util.pytables_addon import select_with_repeated1
+		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
 		n_vars = len(vars)
 		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)
@@ -888,7 +888,7 @@ class DT(Fountain):
 				if isinstance(exc, NameError):
 					badname = str(exc).split("'")[1]
 					goodnames = dir()
-					from .util.text_manip import case_insensitive_close_matches
+					from ..util.text_manip import case_insensitive_close_matches
 					did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
 					if len(did_you_mean_list)>0:
 						arg0 = arg0 + '\n'+"did you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
@@ -1257,7 +1257,7 @@ class DT(Fountain):
 		return ex_df.reset_index()
 
 	def provision(self, needs, screen=None, log=None, **kwargs):
-		from . import Model
+		from .. import Model
 		if isinstance(needs,Model):
 			m = needs
 			needs = m.needs()
@@ -1304,7 +1304,7 @@ class DT(Fountain):
 	def provision_fat(self, needs, screen=None, fat=1, *, log=None, **kwargs):
 		if not isinstance(screen, int):
 			raise NotImplementedError('provision_fat requires a single integer screen, but {} was given'.format(type(screen)))
-		from . import Model
+		from .. import Model
 		if isinstance(needs,Model):
 			m = needs
 			needs = m.needs()
@@ -1367,8 +1367,8 @@ class DT(Fountain):
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
-		from .util.pytables_addon import validate_with_repeated1
-		from .util.aster import inXd
+		from ..util.pytables_addon import validate_with_repeated1
+		from ..util.aster import inXd
 		try:
 			command = self._remake_command(column,None,2).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
@@ -1398,8 +1398,8 @@ class DT(Fountain):
 		if self._check_co_natural(column):
 			return True
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
-		from .util.pytables_addon import validate_with_repeated1
-		from .util.aster import inXd
+		from ..util.pytables_addon import validate_with_repeated1
+		from ..util.aster import inXd
 		try:
 			command = self._remake_command(column,None,1).replace('select_with_repeated1','validate_with_repeated1')
 			eval( asterize(command) )
@@ -1546,7 +1546,7 @@ class DT(Fountain):
 		'''
 
 		if isinstance(dataset, int):
-			from .examples import _exec_example_n
+			from ..examples import _exec_example_n
 			try:
 				return _exec_example_n(dataset, extract='d')
 			except:
@@ -1566,7 +1566,7 @@ class DT(Fountain):
 		else:
 			filename = filename_
 
-		from .util.filemanager import next_stack
+		from ..util.filemanager import next_stack
 		n=0
 		while 1:
 			try:
@@ -1580,7 +1580,7 @@ class DT(Fountain):
 				break
 
 		if dataset.upper() == "SWISSMETRO":
-			from .util.temporaryfile import TemporaryGzipInflation
+			from ..util.temporaryfile import TemporaryGzipInflation
 			return DT(TemporaryGzipInflation(os.path.join(DT.ExampleDirectory(),"swissmetro.h5.gz")))
 
 		if dataset.upper() in example_h5files:
@@ -1590,7 +1590,7 @@ class DT(Fountain):
 			self = DT(filename, 'w', h5f=h5f)
 		else:
 
-			from .db import DB
+			from ..db import DB
 			edb = DB.Example(dataset)
 			self = DT(filename, 'w', h5f=h5f)
 
@@ -2209,7 +2209,7 @@ class DT(Fountain):
 			or if the caseids are not integer values.
 		"""
 		import pandas
-		from . import logging
+		from .. import logging
 		log = logging.getLogger('DT')
 		log("READING %s",str(filepath_or_buffer))
 		original_source = None
@@ -2352,7 +2352,7 @@ class DT(Fountain):
 			altids = numpy.union1d(altids, chunk[altid_col].values)
 
 		if caseids.dtype != numpy.int64:
-			from .util.arraytools import labels_to_unique_ids
+			from ..util.arraytools import labels_to_unique_ids
 			case_labels, caseids = labels_to_unique_ids(caseids)
 			caseids = caseids.astype('int64')
 
@@ -2365,7 +2365,7 @@ class DT(Fountain):
 		alt_labels = None
 		if 'altids' not in self.alts:
 			if altids.dtype != numpy.int64:
-				from .util.arraytools import labels_to_unique_ids
+				from ..util.arraytools import labels_to_unique_ids
 				alt_labels, altids = labels_to_unique_ids(altids)
 			h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', obj=altids, title='elemental alternative code numbers')
 		else:
@@ -2498,10 +2498,9 @@ class DT(Fountain):
 		if title is not None:
 			self.idco[name]._v_attrs.TITLE = title
 
-	def new_blank_idco(self, name, dtype=None, overwrite=False):
+	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None):
 		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
-		return self.new_idco_from_array(name, zer, overwrite=overwrite)
-
+		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
 
 	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None, rel_original_source=True, title=None):
 		"""Create a new :ref:`idco` variable.
@@ -2539,7 +2538,7 @@ class DT(Fountain):
 				try:
 					tb_atom = _tb.Atom.from_dtype(arr.dtype)
 				except ValueError:
-					from . import logging
+					from .. import logging
 					log = logging.getLogger('DT')
 					log.warn("  array to create as %s is not an simple compatible datatype",name)
 					try:
@@ -2581,7 +2580,7 @@ class DT(Fountain):
 			self.idco[name]._v_attrs.TITLE = title
 
 
-	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None):
+	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None, log=lambda *x: None,):
 		"""
 		Merge data from a pandas.DataFrame into the idco of this DT.
 		
@@ -2598,17 +2597,31 @@ class DT(Fountain):
 			baseframe = self.dataframe_idco(*self_on, screen="None")
 		new_df = pandas.merge(baseframe, other, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		if names is not None and not isinstance(names, dict):
-			names = {n:n for n in names}
+			if isinstance(names,str):
+				names = {names:names}
+			else:
+				names = {n:n for n in names}
+		anything_imported = False
 		for col in new_df.columns:
 			if col not in self.idco:
 				if names is None:
+					log('importing "{}" into {}'.format(col, self.source_filename))
 					self.new_idco_from_array(col, arr=new_df[col].values)
+					anything_imported = True
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 				elif col in names:
+					log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
 					self.new_idco_from_array(names[col], arr=new_df[col].values)
+					anything_imported = True
 					if original_source is not None:
 						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
+		if not anything_imported:
+			if names is not None:
+				names_warn = '\n  from names:\n    '+'\n    '.join(names.keys())
+			else:
+				names_warn = ''
+			warnings.warn('nothing was imported into {}{}'.format(self.source_filename,names_warn))
 
 	def merge_into_idco_from_csv(self, filepath_or_buffer, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
 		"""
@@ -2622,7 +2635,10 @@ class DT(Fountain):
 			values are the new names in this DT.
 		"""
 		if names is not None and not isinstance(names, dict):
-			names = {n:n for n in names}
+			if isinstance(names,str):
+				names = {names:names}
+			else:
+				names = {n:n for n in names}
 		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:] == '.xlsx':
 			df = pandas.read_excel(filepath_or_buffer, **kwargs)
 			original_source = filepath_or_buffer
@@ -2639,7 +2655,7 @@ class DT(Fountain):
 		return self.merge_into_idco_from_dataframe(df, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names)
 
 
-	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, **kwargs):
+	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, log=lambda *x: None, **kwargs):
 		"""
 		Merge data into the idco of this DT.
 		
@@ -2651,7 +2667,10 @@ class DT(Fountain):
 			values are the new names in this DT.
 		"""
 		if names is not None and not isinstance(names, dict):
-			names = {n:n for n in names}
+			if isinstance(names,str):
+				names = {names:names}
+			else:
+				names = {n:n for n in names}
 		if isinstance(other, pandas.DataFrame):
 			return self.merge_into_idco_from_dataframe(other, self_on, other_on, dupe_suffix=dupe_suffix, original_source=original_source, names=names)
 		if isinstance(other, str) and os.path.exists(other):
@@ -2670,16 +2689,27 @@ class DT(Fountain):
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_index=True, how='left', suffixes=('', dupe_suffix))
 		else:
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
+		anything_imported = False
 		for col in new_df.columns:
 			if col not in self.idco:
 				if names is None:
+					log('importing "{}" into {}'.format(col, self.source_filename))
 					self.new_idco_from_array(col, arr=new_df[col].values)
+					anything_imported = True
 					if original_source is not None:
 						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
 				elif col in names:
+					log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
 					self.new_idco_from_array(names[col], arr=new_df[col].values)
+					anything_imported = True
 					if original_source is not None:
 						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
+		if not anything_imported:
+			if names is not None:
+				names_warn = '\n  from names:\n    '+'\n    '.join(names.keys())
+			else:
+				names_warn = ''
+			warnings.warn('nothing was imported into {}{}'.format(self.source_filename,names_warn))
 
 
 	def pluck_into_idco(self, other_omx, rowindexes, colindexes, names=None, overwrite=False):
@@ -2691,15 +2721,17 @@ class DT(Fountain):
 		other_omx : OMX or str
 			Either an OMX or a filename to an OMX file.
 		"""
-		from .omx import OMX
+		from ..omx import OMX
 		if isinstance(other_omx, str):
 			other_omx = OMX(other_omx)
 		if names is None:
-			names = other_omx.data._v_children
-			names = {n:n for n in names}
+			names = {n:n for n in other_omx.data._v_children}
 
 		if names is not None and not isinstance(names, dict):
-			names = {n:n for n in names}
+			if isinstance(names,str):
+				names = {names:names}
+			else:
+				names = {n:n for n in names}
 
 		if isinstance(rowindexes, str):
 			rowarr = self.idco[rowindexes][:]
@@ -2752,6 +2784,8 @@ class DT(Fountain):
 			The name of the new :ref:`idca` variable.
 		expression : str or array
 			An expression to evaluate as the new variable, or an array of data.
+		title : str
+			Optionally, give a description of the data in this array.
 			
 		Raises
 		-----
@@ -2772,7 +2806,7 @@ class DT(Fountain):
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
 
-	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False):
+	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False, title=None):
 		"""Create a new blank (all zeros) :ref:`idca` variable.
 			
 		Parameters
@@ -2782,6 +2816,8 @@ class DT(Fountain):
 		nalts : int or None
 			The number of alternatives in the new :ref:`idca` variable.  If not given,
 			the return value of :meth:`nAlts` is used.
+		title : str
+			Optionally, give a description of the data to be in this array.
 			
 		Raises
 		-----
@@ -2793,7 +2829,7 @@ class DT(Fountain):
 		if not nalts:
 			raise TypeError('number of alts cannot be zero, must be given')
 		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
-		return self.new_idca_from_array(name, zer, overwrite=overwrite)
+		return self.new_idca_from_array(name, zer, overwrite=overwrite, title=title)
 
 	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None):
 		"""Create a new :ref:`idca` variable.
@@ -2835,7 +2871,7 @@ class DT(Fountain):
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
 
-	def new_idco_from_keyed_array(self, name, arr_val, arr_index):
+	def new_idco_from_keyed_array(self, name, arr_val, arr_index, title=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2852,6 +2888,8 @@ class DT(Fountain):
 		arr_index : ndarray or pytable node
 			An array to add as the new variable _index_.  It must be 1 dimension and must match the
 			number of caseids.
+		title : str
+			Optionally, give a description of the data in this array.
 			
 		Raises
 		-----
@@ -2861,6 +2899,8 @@ class DT(Fountain):
 		if not isinstance(arr_index, str) and self.h5caseids.shape[0] != arr_index.shape[0]:
 			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
 		newgrp = self.h5f.create_group(self.idco._v_node, name)
+		if title is not None:
+			newgrp._v_attrs.TITLE = title
 		# values
 		if isinstance(arr_val, str):
 			self.h5f.create_external_link(newgrp, '_values_', arr_val)
@@ -3229,7 +3269,7 @@ class DT(Fountain):
 					elif self.in_vault( 'stack.'+i ):
 						v_dtypes.append('<stack>')
 					else:
-						raise
+						v_dtypes.append('<missing:_values_>')
 			else:
 				v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
 			v_ftypes.append('idca')
@@ -3254,7 +3294,7 @@ class DT(Fountain):
 				break
 #		show_filenames = True
 
-		from .model_reporter.art import ART
+		from ..model_reporter.art import ART
 		
 		extra_cols = ()
 		for ex_col in ('SHAPE','ORIGINAL_SOURCE','TITLE','DICTIONARY'):
@@ -3544,7 +3584,7 @@ class DT(Fountain):
 		"A section of the control file that is related to data operations"
 		import io
 		alo = io.StringIO()
-		from .util.alogit import repackage
+		from ..util.alogit import repackage
 		
 		# File
 		
@@ -3624,14 +3664,14 @@ class DT(Fountain):
 		'''
 		
 		
-		from .util.xhtml import XHTML, XML_Builder
+		from ..util.xhtml import XHTML, XML_Builder
 		output = XHTML('temp')
 		output.title.text = "Data Summary"
 
 		x = XML_Builder("div", {'class':"data_statistics"})
 
 		description_catalog = {}
-		from .roles import _data_description_catalog
+		from ..roles import _data_description_catalog
 		description_catalog.update(_data_description_catalog)
 
 		names = self.variables_co()
@@ -3666,7 +3706,7 @@ class DT(Fountain):
 		mean_nonzer = []
 		histograms = []
 		
-		from .util.statsummary import statistical_summary
+		from ..util.statsummary import statistical_summary
 
 		#means,stdevs,mins,maxs,nonzers,posis,negs,zers,mean_nonzer = self.stats_utility_co()
 		for name in names:
@@ -3812,7 +3852,7 @@ class DT(Fountain):
 
 	@classmethod
 	def TempCopy(cls, filename, *args, **kwargs):
-		from .util.temporaryfile import TemporaryCopy
+		from ..util.temporaryfile import TemporaryCopy
 		return cls(TemporaryCopy(filename), *args, **kwargs)
 
 
@@ -3905,7 +3945,7 @@ class DT(Fountain):
 			if `newfile` already exists an exception is raised.
 		"""
 		if newfile is not None:
-			from .util.filemanager import next_stack
+			from ..util.filemanager import next_stack
 			newfile = next_stack(newfile, allow_natural=True, demand_natural=not spool)
 		d = self
 		d1 = DT(newfile, mode='a')
@@ -4040,7 +4080,7 @@ class DT(Fountain):
 			if `newfile` already exists an exception is raised.
 		"""
 		if newfile is not None:
-			from .util.filemanager import next_stack
+			from ..util.filemanager import next_stack
 			newfile = next_stack(newfile, allow_natural=True, demand_natural=not spool)
 		d = self
 		d1 = DT(newfile, mode='a')
@@ -4135,47 +4175,8 @@ class DT(Fountain):
 
 		return d1
 
-	def in_vault(self, name):
-		vault = self.get_or_create_group(self.h5top, 'vault')
-		name = name.replace('.','_')
-		if name in vault:
-			return True
-		if 'stack.' in name:
-			try:
-				return 'stack' in self.idca._v_children[name[6:]]._v_attrs
-			except:
-				pass
-		return False
-
-	def to_vault(self, name, value):
-		vault = self.get_or_create_group(self.h5top, 'vault')
-		name = name.replace('.','_')
-		if name not in vault:
-			vault_bin = self.h5f.create_vlarray(vault, name, _tb.ObjectAtom())
-		else:
-			vault_bin = vault._v_children[name]
-		vault_bin.append(value)
-
-	def from_vault(self, name, index=-1):
-		vault = self.get_or_create_group(self.h5top, 'vault')
-		name_ = name.replace('.','_')
-		if name_ not in vault:
-			# not in vault, check for attrib...
-			if 'stack.' in name:
-				try:
-					return self.idca._v_children[name[6:]]._v_attrs.stack
-				except:
-					pass
-			raise KeyError(name_+' not in vault')
-		else:
-			vault_bin = vault._v_children[name_]
-		return vault_bin[index]
-
-	def vault_keys(self):
-		vault = self.get_or_create_group(self.h5top, 'vault')
-		return vault._v_children.keys()
-
-
+	from .vault import in_vault, from_vault, to_vault, vault_keys, wipe_vault
+	from .analyze import look_idco, clear_look_cache
 
 
 def _close_all_h5():
@@ -4193,276 +4194,5 @@ import atexit as _atexit
 _atexit.register(_close_all_h5)
 
 
-class DT_idco_stack_manager:
-
-	def __init__(self, parent, stacktype):
-		self.parent = parent
-		self.stacktype = stacktype
-
-	def _check(self):
-		def isinstance_(obj, things):
-			obj = _pytables_link_dereference(obj)
-#			try:
-#				obj = obj.dereference()
-#			except AttributeError:
-#				pass
-			return isinstance(obj, things)
-		if isinstance_(self.parent.idca[self.stacktype], _tb.Array):
-			raise TypeError('The {} is an array, not a stack.'.format(self.stacktype))
-		if not isinstance_(self.parent.idca[self.stacktype], (_tb.Group,GroupNode)):
-			raise TypeError('The {} stack is not set up.'.format(self.stacktype))
-
-	def _make_zeros(self):
-		def isinstance_(obj, things):
-			obj = _pytables_link_dereference(obj)
-#			try:
-#				obj = obj.dereference()
-#			except AttributeError:
-#				pass
-			return isinstance(obj, things)
-		try:
-			if isinstance_(self.parent.idca[self.stacktype], _tb.Array):
-				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
-		except (_tb.exceptions.NoSuchNodeError, KeyError):
-			pass
-		# create new group if it does not exist
-		try:
-			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
-		except _tb.exceptions.NodeError:
-			pass
-		if 'stack' not in self.parent.idca[self.stacktype]._v_attrs:
-			##self.parent.idca[self.stacktype]._v_attrs.stack = ["0"]*self.parent.nAlts()
-			self._stackdef_vault = ["0"]*self.parent.nAlts()
-
-
-	def __call__(self, *cols, varname=None):
-		"""Set up the :ref:`idca` stack data array from :ref:`idco` variables.
-		
-		The choice array needs to be in :ref:`idca` format. If
-		your data isn't in that format, it's still easy to create the correct
-		availability array by stacking together the appropriate :ref:`idco` columns.
-		This command simplifies that process.
-		
-		Parameters
-		----------
-		cols : tuple of str
-			The names of the :ref:`idco` expressions that represent availability. 
-			They should be given in exactly the same order as they appear in the
-			alternative codes array.
-		varname : str or None
-			The name of the new :ref:`idca` variable to create. Defaults to None.
-			
-		Raises
-		------
-		_tb.exceptions.NodeError
-			If a variable of the name given by `varname` already exists.
-		NameError
-			If the expression contains a name that cannot be evaluated from within
-			the existing :ref:`idco` data.
-		TypeError
-			If the wrong number of cols arguments is provided; it must exactly match the
-			number of alternatives.
-		"""
-		if len(cols)==1 and len(cols[0])==self.parent.nAlts():
-			cols = cols[0]
-		if len(cols) != self.parent.nAlts():
-			raise TypeError('the input columns must exactly match the alternatives, you gave {} but there are {} alternatives'.format(len(cols), self.parent.nAlts()))
-		# Raise an exception when a col is invalid
-		self.parent.multi_check_co(cols)
-		cols = list(cols)
-		if varname is None:
-			try:
-				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
-			except _tb.exceptions.NoSuchNodeError:
-				pass
-			self.parent.h5f.create_group(self.parent.idca._v_node, self.stacktype)
-			##self.parent.idca[self.stacktype]._v_attrs.stack = cols
-			self._stackdef_vault = cols
-		else:
-			ch = self.parent.array_idco(*cols, dtype=numpy.float64)
-			self.parent.new_idca(varname, ch)
-			try:
-				self.parent.h5f.remove_node(self.parent.idca._v_node, self.stacktype)
-			except _tb.exceptions.NoSuchNodeError:
-				pass
-			self.parent.h5f.create_soft_link(self.parent.idca._v_node, self.stacktype, target=self.parent.idca._v_pathname+'/'+varname)
-
-	def __getitem__(self, key):
-		self._check()
-		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
-		if len(slotarray) == 1:
-			##return self.parent.idca[self.stacktype]._v_attrs.stack[slotarray[0]]
-			return self._stackdef_vault[slotarray[0]]
-		
-		else:
-			raise KeyError("key {} not found".format(key) )
-
-	def __setitem__(self, key, value):
-		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
-		if len(slotarray) == 1:
-			if self.stacktype not in self.parent.idca:
-				self._make_zeros()
-			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs and not self.parent.in_vault('stack.'+self.stacktype):
-				self._make_zeros()
-			##tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
-			tempobj = self._stackdef_vault
-			tempobj[slotarray[0]] = value
-			##self.parent.idca[self.stacktype]._v_attrs.stack = tempobj
-			self._stackdef_vault = tempobj
-		else:
-			raise KeyError("key {} not found".format(key) )
-
-	def __repr__(self):
-		self._check()
-		s = "<stack_idco: {}>".format(self.stacktype)
-		for n,altid in enumerate(self.parent._alternative_codes()):
-			s += "\n  {}: {!r}".format(altid, self[altid])
-		return s
-
-	@property
-	def _stackdef_vault(self):
-		return self.parent.from_vault('stack.'+self.stacktype)
-
-	@_stackdef_vault.setter
-	def _stackdef_vault(self, value):
-		self.parent.to_vault('stack.'+self.stacktype, value)
-	
-
-def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
-	"""Build a new DT with externally linked data.
-	
-	Parameters
-	----------
-	filename : str or None
-		The name of the new DT file to create.  If None, a temporary file is created.
-	idco{n} : str
-		A file path to a DT file containing idco variables to link.  `n` can be any number.
-		If the same variable name appears multiple times, the highest numbered source file
-		is the one that survives.
-		Must be passed as a keyword argument.
-	idca{n} : str
-		A file path to a DT file containing idca variables to link.  `n` can be any number.
-		If the same variable name appears multiple times, the highest numbered source file
-		is the one that survives.
-		Must be passed as a keyword argument.
-	
-	Notes
-	-----
-	Every parameter other than `filename` must be passed as a keyword argument.
-	"""
-	dt_init_kwargs = {}
-	idco_kwargs = {}
-	idca_kwargs = {}
-	
-	if isinstance(caseids, DT):
-		_fname = caseids.h5f.filename
-		caseids.close()
-		caseids = _fname
-	if isinstance(alts, DT):
-		_fname = alts.h5f.filename
-		alts.close()
-		alts = _fname
-	
-	for kwd,kwarg in kwargs.items():
-		if re.match('idco[0-9]*$',kwd):
-			if isinstance(kwarg, DT):
-				_fname = kwarg.h5f.filename
-				kwarg.close()
-				idco_kwargs[kwd] = _fname
-			else:
-				idco_kwargs[kwd] = kwarg
-		elif re.match('idca[0-9]*$',kwd):
-			if isinstance(kwarg, DT):
-				_fname = kwarg.h5f.filename
-				kwarg.close()
-				idca_kwargs[kwd] = _fname
-			else:
-				idca_kwargs[kwd] = kwarg
-		else:
-			dt_init_kwargs[kwd] = kwarg
-
-	if len(idco_kwargs)==0 and len(idca_kwargs)==0:
-		raise TypeError('at least one idca or idco source must be given')
-
-	d = DT(filename, **dt_init_kwargs)
-	got_caseids = False
-	got_alts = False
-	if caseids is not None:
-		d.remove_node_if_exists(d.h5top, 'caseids')
-		if ":/" not in caseids:
-			tag_caseids = caseids + ":/larch/caseids"
-		else:
-			tag_caseids = caseids
-		d.create_external_link(d.h5top, 'caseids', tag_caseids)
-		got_caseids = True
-
-	def swap_alts(tag_alts):
-		try:
-			d.alts.altids._f_rename('altids_pending_delete')
-		except _tb.exceptions.NoSuchNodeError:
-			pass
-		try:
-			d.alts.names._f_rename('names_pending_delete')
-		except _tb.exceptions.NoSuchNodeError:
-			pass
-		d.alts.add_external_data(tag_alts)
-		if 'names' in d.alts:
-			d.remove_node_if_exists(d.alts._v_node, 'names_pending_delete')
-		if 'altids' in d.alts:
-			d.remove_node_if_exists(d.alts._v_node, 'altids_pending_delete')
-		return True
-
-	if alts is not None:
-		if ":/" not in alts:
-			tag_alts = alts + ":/larch/alts"
-		else:
-			tag_alts = alts
-		got_alts = swap_alts(tag_alts)
-
-	for idca_kw in sorted(idca_kwargs):
-		idca = idca_kwargs[idca_kw]
-		if idca is not None:
-			if ":/" not in idca:
-				tag_idca = idca + ":/larch/idca"
-				tag_caseids = idca + ":/larch/caseids"
-				tag_alts = idca + ":/larch/alts"
-			else:
-				tag_idca = idca
-				tag_caseids = None
-				tag_alts = None
-			newnode = _pytables_link_dereference(d.idca.add_external_data(tag_idca))
-			for subnodename in newnode._v_children:
-				subnode = newnode._v_children[subnodename]
-				if isinstance(subnode, _tb.group.Group) and 'stack' in subnode._v_attrs:
-					localnewnode = d.idca.add_group_node(subnodename)
-					localnewnode._v_attrs['stack'] = subnode._v_attrs['stack']
-			if not got_caseids and tag_caseids is not None:
-				d.remove_node_if_exists(d.h5top, 'caseids')
-				d.create_external_link(d.h5top, 'caseids', tag_caseids)
-				got_caseids = True
-			if not got_alts and tag_alts is not None:
-				got_alts = swap_alts(tag_alts)
-	for idco_kw in sorted(idco_kwargs):
-		idco = idco_kwargs[idco_kw]
-		if idco is not None:
-			if ":/" not in idco:
-				tag_idco = idco + ":/larch/idco"
-				tag_caseids = idco + ":/larch/caseids"
-				tag_alts = idco + ":/larch/alts"
-			else:
-				tag_idco = idco
-				tag_caseids = None
-				tag_alts = None
-			newnode = _pytables_link_dereference(d.idco.add_external_data(tag_idco))
-			if not got_caseids and tag_caseids is not None:
-				d.remove_node_if_exists(d.h5top, 'caseids')
-				d.create_external_link(d.h5top, 'caseids', tag_caseids)
-				got_caseids = True
-			if not got_alts and tag_alts is not None:
-				got_alts = swap_alts(tag_alts)
-	return d
-
-def DTL(source):
-	return DTx(None, idco=source, idca=source)
-
-
+from .stack_manager import DT_idco_stack_manager
+from .linkage import *

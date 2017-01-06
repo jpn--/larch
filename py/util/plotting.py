@@ -10,6 +10,7 @@ except:
 
 from io import BytesIO
 from ..util.xhtml import XHTML, XML_Builder
+from ..util.arraytools import is_all_integer
 import os
 
 import matplotlib.pyplot as plt
@@ -101,15 +102,21 @@ _spark_histogram_notes = {
 
 def spark_histogram_rangefinder(data, bins):
 	data = numpy.asarray(data)
+	
+	all_integer = issubclass(data.dtype.type, numpy.integer)
+	if not all_integer:
+		all_integer = is_all_integer_or_nan(data)
 
 	# Check if data is mostly zeros
 	n_zeros = (data==0).sum()
 	if n_zeros > (data.size) * _threshold_for_dropping_zeros_in_histograms:
 		use_data = data[data!=0]
 		use_color = hexcolor('orange')
+		zeros_have_been_dropped = True
 	else:
 		use_data = data
 		use_color = hexcolor('ocean')
+		zeros_have_been_dropped = False
 
 	use_data = use_data[~numpy.isnan(use_data)]
 
@@ -118,17 +125,24 @@ def spark_histogram_rangefinder(data, bins):
 		data_mean = use_data.mean()
 		data_min = use_data.min()
 		data_max = use_data.max()
-		if (data_min < data_mean - 5*data_stdev) or (data_max > data_mean + 5*data_stdev):
-			if (data_min < data_mean - 5*data_stdev):
-				bottom = numpy.nanpercentile(use_data,0.5)
-			else:
+		data_has_been_truncated = False
+		bottom = data_min
+		top = data_max
+		if (data_min < (data_mean - 5*data_stdev)):
+			bottom = numpy.nanpercentile(use_data,0.5)
+			if data_min==0 and bottom>0 and not zeros_have_been_dropped:
 				bottom = data_min
-			if data_max > data_mean + 5*data_stdev:
-				top = numpy.nanpercentile(use_data,99.5)
 			else:
+				data_has_been_truncated = True
+		if (data_max > (data_mean + 5*data_stdev)):
+			top = numpy.nanpercentile(use_data,99.5)
+			if data_max==0 and top<0 and not zeros_have_been_dropped:
 				top = data_max
+			else:
+				data_has_been_truncated = True
+		if data_has_been_truncated:
 			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
-			if use_color == hexcolor('orange'):
+			if zeros_have_been_dropped:
 				use_color = hexcolor('red')
 			else:
 				use_color = hexcolor('forest')
@@ -154,10 +168,16 @@ def spark_histogram_rangefinder(data, bins):
 		if bins < 10:
 			bins = 10
 
+	# whatever else, if the data is integer then no more bins than values
+	if all_integer and bins > (top-bottom+1):
+		bins = (top-bottom+1)
+	
 	return bottom, top, use_color, bins
 
-
-def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False, frame=False, notetaker=None, prerange=None, duo_filter=None, data_for_bins=None):
+def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, xticks=False, yticks=False,
+						  frame=False, notetaker=None, prerange=None, duo_filter=None, data_for_bins=None,
+						  figwidth=0.75, figheight=0.2, subplots_adjuster=0,
+						  **silently_ignore_other_kwargs):
 
 	data = numpy.asarray(data)
 	if data_for_bins is None:
@@ -165,6 +185,8 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 	else:
 		use_data_for_bins = numpy.asarray(data_for_bins)
 	if duo_filter is not None: duo_filter = numpy.asarray(duo_filter)
+
+	use_data_for_bins = use_data_for_bins[~numpy.isnan(use_data_for_bins)]
 
 	# Check if data is mostly zeros
 	n_zeros = (use_data_for_bins==0).sum()
@@ -197,9 +219,9 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			else:
 				top = data_max
 			if duo_filter is not None:
-				use_duo_filter = use_duo_filter[(use_data>bottom) & (use_data<top)]
-			use_data = use_data[ (use_data>bottom) & (use_data<top) ]
-			use_data_for_bins = use_data_for_bins[ (use_data_for_bins>bottom) & (use_data_for_bins<top) ]
+				use_duo_filter = use_duo_filter[(use_data>=bottom) & (use_data<=top)]
+			use_data = use_data[ (use_data>=bottom) & (use_data<=top) ]
+			use_data_for_bins = use_data_for_bins[ (use_data_for_bins>=bottom) & (use_data_for_bins<=top) ]
 			if use_color == hexcolor('orange'):
 				use_color = hexcolor('red')
 			else:
@@ -229,10 +251,12 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			# handle empty arrays. Can't determine range, so use 0-1.
 			mn, mx = 0.0, 1.0
 		else:
-			mn, mx = use_data_for_bins.min() + 0.0, use_data_for_bins.max() + 0.0
+			mn, mx = numpy.nanmin(use_data_for_bins) + 0.0, numpy.nanmax(use_data_for_bins) + 0.0
 		try:
 			width = numpy.lib.function_base._hist_bin_selectors[bins](use_data_for_bins)
 		except IndexError:
+			width = 1
+		if numpy.isnan(width):
 			width = 1
 		try:
 			if width:
@@ -266,9 +290,10 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			print("<data>\n",data,"</data>")
 			print("<bins>\n",bins,"</bins>")
 			raise
+
 		fig = plt.gcf()
-		fig.set_figheight(0.2)
-		fig.set_figwidth(0.75)
+		fig.set_figheight(figheight)
+		fig.set_figwidth(figwidth)
 		fig.set_dpi(300)
 		if xlabel: plt.xlabel(xlabel)
 		if ylabel: plt.ylabel(ylabel)
@@ -281,7 +306,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			ax = plt.gca()
 			ax.set_axis_bgcolor(bgcolor)
 
-		plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+		plt.subplots_adjust(left=0+subplots_adjuster, bottom=0+subplots_adjuster, right=1-subplots_adjuster, top=1-subplots_adjuster, wspace=0, hspace=0)
 		ret = plot_as_svg_xhtml(fig)
 		plt.clf()
 	else:
@@ -311,7 +336,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 				ax = plt.gca()
 				ax.set_axis_bgcolor(bgcolor)
 
-			plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+			plt.subplots_adjust(left=0+subplots_adjuster, bottom=0+subplots_adjuster, right=1-subplots_adjuster, top=1-subplots_adjuster, wspace=0, hspace=0)
 			ret[duo] = plot_as_svg_xhtml(fig)
 			plt.clf()
 
@@ -324,26 +349,35 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 
 
 
-def spark_pie_maker(data, notetaker=None):
+def spark_pie_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=None, show_labels=False, shadow=False,
+					subplots_adjuster=0, explode=None, wedge_linewidth=0, tight=False, frame=False,
+					**kwargs):
 	plt.clf()
 	fig = plt.gcf()
-	fig.set_figheight(0.2)
-	fig.set_figwidth(0.75)
+	fig.set_figheight(figheight)
+	fig.set_figwidth(figwidth)
 	fig.set_dpi(300)
 	C_sky = (35,192,241)
 	C_night = (100,120,186)
 	C_forest = (39,182,123)
 	C_ocean = (29,139,204)
 	C_lime = (128,189,1)
+	lab = None
+	if show_labels:
+		lab = [str(i) for i in labels]
 	# The slices will be ordered and plotted counter-clockwise.
-	plt.pie(data, explode=None, labels=None, colors=[hexcolor('sky'),hexcolor('night'),hexcolor('forest'),hexcolor('ocean')],
+	plt.pie(data, explode=None, labels=lab,
+			colors=[hexcolor('sky'),hexcolor('night'),hexcolor('forest'),hexcolor('ocean')],
 			#autopct='%1.1f%%',
-			shadow=False, startangle=90,
-			wedgeprops={'linewidth':0, 'clip_on':False},
-			frame=False)
-	plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+			shadow=shadow, startangle=90,
+			wedgeprops={'linewidth':wedge_linewidth, 'clip_on':False, 'joinstyle':'round'},
+			frame=False,
+			)
+	plt.subplots_adjust(left=0+subplots_adjuster, bottom=0+subplots_adjuster, right=1-subplots_adjuster, top=1-subplots_adjuster, wspace=0, hspace=0)
 	# Set aspect ratio to be equal so that pie is drawn as a circle.
 	plt.axis('equal')
+	#if tight:
+	#	plt.tight_layout()
 	ret = plot_as_svg_xhtml(fig)
 	plt.clf()
 	return ret
@@ -357,22 +391,25 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 		flat_data = data.flatten()
 	except:
 		flat_data = data
-	uniq = numpy.unique(flat_data[:100])
+	
+	flat_data_nonnan = flat_data[~numpy.isnan(flat_data)]
+	
+	uniq = numpy.unique(flat_data_nonnan[:100])
 	uniq_counts = None
 	pie_chart_cutoff = int(pie_chart_cutoff)
 	if len(uniq)<=pie_chart_cutoff:
 		if duo_filter is not None:
-			uniq0, uniq_counts0 = numpy.unique(flat_data[~duo_filter], return_counts=True)
-			uniq1, uniq_counts1 = numpy.unique(flat_data[duo_filter], return_counts=True)
+			uniq0, uniq_counts0 = numpy.unique(flat_data_nonnan[~duo_filter], return_counts=True)
+			uniq1, uniq_counts1 = numpy.unique(flat_data_nonnan[duo_filter], return_counts=True)
 		else:
-			uniq, uniq_counts = numpy.unique(flat_data, return_counts=True)
+			uniq, uniq_counts = numpy.unique(flat_data_nonnan, return_counts=True)
 	if uniq_counts is not None and len(uniq_counts)<=pie_chart_cutoff:
 		if notetaker is not None:
 			notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
 		if duo_filter is not None:
-			return spark_pie_maker(uniq_counts0), spark_pie_maker(uniq_counts1)
+			return spark_pie_maker(uniq_counts0, labels=uniq0, **kwarg), spark_pie_maker(uniq_counts1, labels=uniq1, **kwarg)
 		else:
-			return spark_pie_maker(uniq_counts)
+			return spark_pie_maker(uniq_counts, labels=uniq, **kwarg)
 	return spark_histogram_maker(data, *arg, notetaker=notetaker, duo_filter=duo_filter, data_for_bins=data_for_bins, **kwarg)
 
 
