@@ -28,6 +28,7 @@ def look_idco(self, *names, headlevel=3, spark_kwargs=None, cache=True, regex=No
 		frame=True,
 		xticks=True,
 		pie_chart_cutoff=10,
+		pie_chart_type='bar',
 	)
 	if spark_kwargs is not None:
 		spark_kw.update(spark_kwargs)
@@ -78,6 +79,12 @@ def look_idco(self, *names, headlevel=3, spark_kwargs=None, cache=True, regex=No
 					x.hn(headlevel, name)
 					x.data("Not available")
 					continue
+
+			try:
+				z_dict = self.idco[name]._v_attrs.DICTIONARY
+			except AttributeError:
+				z_dict = None
+
 			if z.dtype.kind == 'S':
 				x.hn(headlevel, name, anchor=name)
 
@@ -90,7 +97,7 @@ def look_idco(self, *names, headlevel=3, spark_kwargs=None, cache=True, regex=No
 				x.data('Text field, summary function not implemented')
 
 			else:
-				ss = statistical_summary.nan_compute(z, spark_kwargs=spark_kw)
+				ss = statistical_summary.nan_compute(z, dictionary=z_dict, spark_kwargs=spark_kw)
 
 				x.hn(headlevel, name, anchor=name)
 

@@ -383,8 +383,39 @@ def spark_pie_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=N
 	return ret
 
 
+def spark_category_bar_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=None, show_labels=False, shadow=False,
+					subplots_adjuster=0, explode=None, linewidth=0, tight=False, frame=False, gap=0.2,
+					**kwargs):
+	plt.clf()
+	fig = plt.gcf()
+	fig.set_figheight(figheight)
+	fig.set_figwidth(figwidth)
+	fig.set_dpi(300)
+	C_sky = (35,192,241)
+	C_night = (100,120,186)
+	C_forest = (39,182,123)
+	C_ocean = (29,139,204)
+	C_lime = (128,189,1)
+	lab = None
+	rotation = 0
+	if show_labels:
+		lab = [str(i) for i in labels]
+		lab_len = max([len(i) for i in lab])
+		lab = ["{0: ^{1}s}".format(i,lab_len) for i in lab]
+		if lab_len>5:
+			rotation=23
+	# The slices will be ordered and plotted counter-clockwise.
+	ind = numpy.arange(len(data))
+	plt.bar(ind+(gap/2.), data, width=1.0-gap, color=hexcolor('night'), linewidth=linewidth)
+	if labels is not None:
+		plt.xticks(ind + 1/2., lab, rotation=rotation)
+	ret = plot_as_svg_xhtml(fig)
+	plt.clf()
+	return ret
 
-def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=None, duo_filter=None, data_for_bins=None, **kwarg):
+
+def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=None, duo_filter=None,
+					data_for_bins=None, pie_chart_type='pie', dictionary=None, **kwarg):
 	if prerange is not None:
 		return spark_histogram_maker(data, *arg, notetaker=notetaker, prerange=prerange, duo_filter=duo_filter, data_for_bins=data_for_bins, **kwarg)
 	try:
@@ -393,7 +424,11 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 		flat_data = data
 	
 	flat_data_nonnan = flat_data[~numpy.isnan(flat_data)]
-	
+
+	spark_pie_or_bar_maker = spark_pie_maker
+	if pie_chart_type == 'bar':
+		spark_pie_or_bar_maker = spark_category_bar_maker
+
 	uniq = numpy.unique(flat_data_nonnan[:100])
 	uniq_counts = None
 	pie_chart_cutoff = int(pie_chart_cutoff)
@@ -401,15 +436,21 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 		if duo_filter is not None:
 			uniq0, uniq_counts0 = numpy.unique(flat_data_nonnan[~duo_filter], return_counts=True)
 			uniq1, uniq_counts1 = numpy.unique(flat_data_nonnan[duo_filter], return_counts=True)
+			if dictionary:
+				uniq0 = [(dictionary[i] if i in dictionary else i) for i in uniq0]
+				uniq1 = [(dictionary[i] if i in dictionary else i) for i in uniq1]
 		else:
 			uniq, uniq_counts = numpy.unique(flat_data_nonnan, return_counts=True)
+			if dictionary:
+				uniq = [(dictionary[i] if i in dictionary else i) for i in uniq]
+
 	if uniq_counts is not None and len(uniq_counts)<=pie_chart_cutoff:
 		if notetaker is not None:
 			notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
 		if duo_filter is not None:
-			return spark_pie_maker(uniq_counts0, labels=uniq0, **kwarg), spark_pie_maker(uniq_counts1, labels=uniq1, **kwarg)
+			return spark_pie_or_bar_maker(uniq_counts0, labels=uniq0, **kwarg), spark_pie_or_bar_maker(uniq_counts1, labels=uniq1, **kwarg)
 		else:
-			return spark_pie_maker(uniq_counts, labels=uniq, **kwarg)
+			return spark_pie_or_bar_maker(uniq_counts, labels=uniq, **kwarg)
 	return spark_histogram_maker(data, *arg, notetaker=notetaker, duo_filter=duo_filter, data_for_bins=data_for_bins, **kwarg)
 
 
