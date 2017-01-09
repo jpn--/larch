@@ -16,6 +16,9 @@ import os
 import matplotlib.pyplot as plt
 import numpy
 
+from matplotlib import rcParams
+rcParams.update({'figure.autolayout': True})
+
 def plot_as_svg_xhtml(pyplot, classname='figure', headerlevel=2, header=None, anchor=1, **format):
 	existing_format_keys = list(format.keys())
 	for key in existing_format_keys:
@@ -384,7 +387,7 @@ def spark_pie_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=N
 
 
 def spark_category_bar_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=None, show_labels=False, shadow=False,
-					subplots_adjuster=0, explode=None, linewidth=0, tight=False, frame=False, gap=0.2,
+					subplots_adjuster=0, explode=None, linewidth=0, tight=False, frame=False, gap=0.2, tilt_thresh=35,
 					**kwargs):
 	plt.clf()
 	fig = plt.gcf()
@@ -398,16 +401,16 @@ def spark_category_bar_maker(data, notetaker=None, figheight=0.2, figwidth=0.75,
 	C_lime = (128,189,1)
 	lab = None
 	rotation = 0
-	if show_labels:
+	if show_labels and labels is not None and len(labels)>0:
 		lab = [str(i) for i in labels]
 		lab_len = max([len(i) for i in lab])
-		lab = ["{0: ^{1}s}".format(i,lab_len) for i in lab]
-		if lab_len>5:
+		if (lab_len*len(lab))>tilt_thresh:
+			lab = ["{0: ^{1}s}".format(i,lab_len) for i in lab]
 			rotation=23
 	# The slices will be ordered and plotted counter-clockwise.
 	ind = numpy.arange(len(data))
 	plt.bar(ind+(gap/2.), data, width=1.0-gap, color=hexcolor('night'), linewidth=linewidth)
-	if labels is not None:
+	if lab is not None:
 		plt.xticks(ind + 1/2., lab, rotation=rotation)
 	ret = plot_as_svg_xhtml(fig)
 	plt.clf()

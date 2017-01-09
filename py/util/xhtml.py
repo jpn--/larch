@@ -155,6 +155,11 @@ class Elem(Element):
 		return s
 	def __repr__(self):
 		return "<larch.util.xhtml.Elem '{}' at {}>".format(self.tag, hex(id(self))) #+self.pprint()
+	def save(self, filename, overwrite=True):
+		if os.path.exists(filename) and not overwrite:
+			raise IOError("file {0} already exists".format(filename))
+		with XHTML(filename, overwrite=overwrite, view_on_exit=False) as f:
+			f << self
 
 
 def Anchor_Elem(reftxt, cls, toclevel):
@@ -253,6 +258,8 @@ class XML_Builder(TreeBuilder):
 	_repr_html_ = dumps
 
 	def append(self, arg):
+		if arg is None:
+			return
 		div_container = self.start('div')
 		if isinstance(arg, XML_Builder):
 			div_container.append(arg.close())
@@ -585,6 +592,15 @@ class XHTML():
 		self.append(other)
 		return self
 
+	def anchor(self, ref, reftxt, cls, toclevel):
+		self.append(Elem(tag="a",attrib={'name':ref, 'reftxt':reftxt, 'class':cls, 'toclevel':toclevel}))
+
+	def hn(self, n, content, attrib=None, anchor=None):
+		if attrib is None:
+			attrib = {}
+		if anchor:
+			self.anchor(_uid(), anchor if isinstance(anchor, str) else content, 'toc', '{}'.format(n))
+		self.append(Elem(tag="h{}".format(n),attrib=attrib,text=content))
 
 def xhtml_section_bytes(content):
 	import io

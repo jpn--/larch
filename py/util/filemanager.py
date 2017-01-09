@@ -5,6 +5,7 @@ import os.path
 from .temporaryfile import TemporaryFile
 import types
 import glob
+import re
 
 def filename_split(filename):
 	pathlocation, basefile = os.path.split(filename)
@@ -217,3 +218,15 @@ def path_shrinker(path, maxlen=20):
 
 
 
+
+def filename_safe(*path, spool=True):
+	"""
+	Convert a proposed filename to a safe filename.
+	"""
+	if len(path)<1:
+		raise TypeError('must give a path')
+	newfile = path[-1]
+	newfile = re.sub('[^\w\s./\\-]', '_', newfile).strip()
+	newfile = re.sub('[-\s]+', '-', newfile)
+	newfile = os.path.join(*(path[:-1]), newfile)
+	return next_stack(newfile, allow_natural=True, demand_natural=not spool)
