@@ -22,8 +22,8 @@
 import sys
 import os, os.path
 
-__version__ = '3.3.22'
-__build_date__ = '07 December 2016'
+__version__ = '3.3.23'
+__build_date__ = '12 January 2017'
 
 if os.environ.get('READTHEDOCS', None) == 'True':
 	# hack for building docs on rtfd

@@ -37,5 +37,5 @@ dependencies:
 - zlib=1.2.8=3
 - pip:
   - tables==3.3.0
-  - larch==3.3.22
+  - larch==3.3.23
 
