@@ -170,6 +170,7 @@ bool PythonErrorCheck();
 #define OOPS_FileNotFound(...) throw(etk::PythonStandardException(PyExc_FileNotFoundError,etk::cat(__VA_ARGS__)))
 #define OOPS_KeyError(...) throw(etk::PythonStandardException(PyExc_KeyError,etk::cat(__VA_ARGS__)))
 #define OOPS_ValueError(...) throw(etk::PythonStandardException(PyExc_ValueError,etk::cat(__VA_ARGS__)))
+#define OOPS_TypeError(...) throw(etk::PythonStandardException(PyExc_TypeError,etk::cat(__VA_ARGS__)))
 #define OOPS_NotImplemented(...) throw(etk::PythonStandardException(PyExc_NotImplementedError,etk::cat(__VA_ARGS__)))
 
 

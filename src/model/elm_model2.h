@@ -483,6 +483,15 @@ namespace elm {
 	public:
 		double log_likelihood_from_prob(etk::ndarray* probarray);
 
+
+	private:
+		PyArrayObject* top_logsums_out;
+
+	public:
+		PyObject* _get_top_logsums_out();
+		void _set_top_logsums_out(PyObject*);
+		void _del_top_logsums_out();
+
 #ifndef SWIG
 		
 		

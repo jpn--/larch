@@ -757,3 +757,26 @@ class TestNL(ELM_TestCase):
 		for z1,z2 in zip(m.d_loglike([0.1,0.1]), m2.d_loglike([0.1,0.1])):
 			self.assertNearlyEqual(z1,z2)
 
+
+	def test_nnnl(self):
+		from ..nnnl import NNNL
+		d = DT.Example()
+		mx = Model.Example(d=d)
+		mx.new_nest('car', children=[1,2,3])
+		mx.new_nest('non', children=[4,5,6])
+		mx.parameter("tottime", value=-0.01)
+		mx.parameter("totcost", value=-0.02)
+		mx.parameter("ASC_SR2", value=-0.2)
+		mx.parameter("ASC_SR2", value=-0.2)
+		mx.parameter("ASC_TRAN", value=0.2)
+		mx.parameter("hhinc#3", value=0.5)
+		mx.parameter("non", value=0.5)
+		mx.parameter("car", value=0.2)
+		m = NNNL(mx)
+		m.setUp()
+		self.assertNearlyEqual(-136022.9447189486, m.loglike())
+		mx.setUp()
+		self.assertNearlyEqual(-676045.5230709405, mx.loglike())
+		jj=m.gradient_check()
+		self.assertTrue(jj[0]<-6)
+

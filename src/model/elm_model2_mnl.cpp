@@ -143,10 +143,10 @@ void elm::Model2::freshen()
 	nNests = Xylem.n_branches();
 	nNodes = Xylem.size();
 	
-	_setUp_utility_data_and_params();
-	_setUp_samplefactor_data_and_params();
+	_setUp_utility_data_and_params(false); // don't recheck validity every time
+	_setUp_samplefactor_data_and_params(false);
 	_setUp_allocation_data_and_params();
-	_setUp_quantity_data_and_params();
+	_setUp_quantity_data_and_params(false);
 
 	Coef_UtilityCA.resize_if_needed(Params_UtilityCA);
 	Coef_UtilityCO.resize_if_needed(Params_UtilityCO);
@@ -291,7 +291,7 @@ std::shared_ptr<ndarray> elm::Model2::_calc_utility(const ndarray* dco, const nd
 		}
 	}
 	
-	std::shared_ptr<ndarray> U = std::make_shared<ndarray>(ncases,nalts);
+	std::shared_ptr<ndarray> U = std::make_shared<ndarray>(ncases,nalts); // possible memory leak here
 		
 	__logit_utility_arrays(*U, dca, dco, Coef_UtilityCA, Coef_UtilityCO, 0);
 
@@ -300,7 +300,9 @@ std::shared_ptr<ndarray> elm::Model2::_calc_utility(const ndarray* dco, const nd
 			if (!av->bool_at(c,a)) (*U)(c,a) = -INF;
 	}
 
-	return U;
+
+	
+	return U; 
 }
 
 std::shared_ptr<ndarray> elm::Model2::calc_probability(ndarray* u) const
@@ -350,10 +352,9 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 	} else {
 		
 		
-		std::shared_ptr<ndarray> PR = std::make_shared<ndarray>(u->size1(), u->size2());
-		*PR = *u;
-		PR->exp();
-		PR->logsums_2(&*LogSum);
+//		std::shared_ptr<ndarray> PR = std::make_shared<ndarray>(u->size1(), u->size2());
+//		*PR = *u;
+		u->logsumexp_2(&*LogSum, u->size1(), u->size2());
 		
 	}
 	
@@ -388,7 +389,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability 
 
 	return boosted::make_shared<elm::mnl_prob_w>(
 			&Probability, &CaseLogLike, utility_packet(), Data_Avail, Data_Choice,
-			0, &msg);
+			0, &msg, top_logsums_out);
 
 //	return boosted::make_shared<elm::mnl_prob_w>(
 //			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,

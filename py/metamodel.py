@@ -170,6 +170,7 @@ class MetaModel(Model):
 #			print("n=",n,"   g[n]=",g[n], "   jiggle=",jiggle, "   grad=",g[n] / (-2*jiggle))
 			g[n] /= (2*jiggle)
 #			print("n=",n,"   g![n]=",g[n], )
+		self.parameter_values(v)
 		return g
 
 

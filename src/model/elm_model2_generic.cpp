@@ -70,6 +70,7 @@ elm::Model2::Model2()
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
+, top_logsums_out(nullptr)
 {
 }
 
@@ -111,6 +112,7 @@ elm::Model2::Model2(elm::Fountain& datafile)
 , Input_Sampling("samplingbias",this)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
+, top_logsums_out(nullptr)
 {
 	if (_Fount) {
 		Xylem.add_dna_sequence(_Fount->alternatives_dna());
@@ -1703,6 +1705,38 @@ void elm::Model2::_del_hessian_array()
 	Py_CLEAR(hessian_matrix.pool);
 }
 
+
+
+
+PyObject* elm::Model2::_get_top_logsums_out()
+{
+	if (!top_logsums_out) {
+		Py_RETURN_NONE;
+	}
+	Py_INCREF(top_logsums_out);
+	return (PyObject*) top_logsums_out;
+}
+
+void elm::Model2::_set_top_logsums_out(PyObject* setval)
+{
+	if (setval == Py_None) {
+		Py_CLEAR(top_logsums_out);
+		return;
+	}
+
+	if (!PyArray_Check(setval)) {
+		OOPS_TypeError("top_logsums_out must be an array");
+	}
+	
+	Py_CLEAR(top_logsums_out);
+	top_logsums_out = (PyArrayObject*) setval;
+	Py_XINCREF(top_logsums_out);
+}
+
+void elm::Model2::_del_top_logsums_out()
+{
+	Py_CLEAR(top_logsums_out);
+}
 
 
 

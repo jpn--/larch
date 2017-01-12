@@ -2964,6 +2964,19 @@ class LinearFunction(ComponentVector):
     				return True
     		return False
     	raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+    def _index_of(self, val):
+    	from .roles import ParameterRef, DataRef
+    	if isinstance(val, ParameterRef):
+    		for n,i in enumerate(self):
+    			if i.param==val:
+    				return n
+    		raise KeyError('ParameterRef not found')
+    	if isinstance(val, DataRef):
+    		for n,i in enumerate(self):
+    			if i.data==val:
+    				return n
+    		raise KeyError('DataRef not found')
+    	raise TypeError("the searched for content must be of type ParameterRef or DataRef")
 
     def reformat_param(self, container=None, pattern=None, repl=None, **kwargs):
     	"""
@@ -4201,6 +4214,15 @@ class Model2(sherpa):
 
     def log_likelihood_from_prob(self, probarray: 'etk::ndarray *') -> "double":
         return _core.Model2_log_likelihood_from_prob(self, probarray)
+
+    def _get_top_logsums_out(self) -> "PyObject *":
+        return _core.Model2__get_top_logsums_out(self)
+
+    def _set_top_logsums_out(self, arg2: 'PyObject *') -> "void":
+        return _core.Model2__set_top_logsums_out(self, arg2)
+
+    def _del_top_logsums_out(self) -> "void":
+        return _core.Model2__del_top_logsums_out(self)
 
     def _parameter_report(self) -> "std::string":
         return _core.Model2__parameter_report(self)

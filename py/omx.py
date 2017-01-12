@@ -539,6 +539,46 @@ class OMX(_tb.file.File):
 			else:
 				self.add_matrix(tab, oth.data._v_children[tab][rowslicer,colslicer])
 
+	@classmethod
+	def change_cols(cls, newfile, otherfile, datanames, lookuprownames, lookupcolnames, newshape, newslicecols=None, oldslicecols=None):
+		"""
+		Read an existing OMX into a new file, remapping columns as appropriate.
+		
+		The new matrix is filled with blanks, and then the values are set by slicing the arrays and assigning
+		the old array to the sliced new. (Sorry if this is confusing.)
+		
+		Parameters
+		----------
+		otherfile
+		datanames
+		lookuprownames
+		lookupcolnames
+		newshape
+		slicecols
+		"""
+		if oldslicecols is None and newslicecols is None:
+			raise TypeError("there is no reason to change cols if you don't slice something")
+		if oldslicecols is None:
+			oldslicecols = slice(None)
+		if newslicecols is None:
+			newslicecols = slice(None)
+		
+		self = cls(newfile, mode='a')
+		self.shape = newshape
+		if isinstance(otherfile, str):
+			otherfile = OMX(otherfile)
+		for name in datanames:
+			n = self.add_blank_matrix(name, atom=otherfile.data._v_children[name].atom, shape=newshape, complevel=1, complib='zlib')
+			n[:, newslicecols] = otherfile.data._v_children[name][:, oldslicecols]
+		for name in lookuprownames:
+			n = self.add_lookup(name, obj=otherfile.lookup._v_children[name][:])
+		for name in lookupcolnames:
+			n = self.add_blank_lookup(name, atom=otherfile.lookup._v_children[name].atom, shape=otherfile.lookup._v_children[name].shape)
+			n[newslicecols] = otherfile.lookup._v_children[name][oldslicecols]
+		self.flush()
+		return self
+		
+
 	def info(self):
 		from .model_reporter.art import ART
 		## Header

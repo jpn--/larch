@@ -79,7 +79,9 @@ class statistical_summary():
 		return False
 
 	@staticmethod
-	def compute(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x, full_xxx=None, weights=None):
+	def compute(xxx, histogram_bins='auto', count_uniques=False, dimzer=lambda x: x, full_xxx=None, weights=None, spark_kwargs=None):
+		if spark_kwargs is None:
+			spark_kwargs = {}
 		if len(xxx)==0:
 			return statistical_summary()
 		else:
@@ -96,16 +98,16 @@ class statistical_summary():
 					ss.n_positives = dimzer( int(numpy.sum(xxx>0)) )
 					ss.n_negatives = dimzer( int(numpy.sum(xxx<0)) )
 					ss.n_zeros = dimzer( xxx.size-ss.n_nonzeros )
-					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx),)
+					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx, **spark_kwargs),)
 				else:
 					ss.n_nonzeros = tuple(numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
 					ss.n_positives = tuple(int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1))
 					ss.n_negatives = tuple(int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1))
 					ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
 					if full_xxx is None:
-						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None) for i in range(xxx_shape_1))
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None, **spark_kwargs) for i in range(xxx_shape_1))
 					else:
-						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i]) for i in range(xxx_shape_1))
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i], **spark_kwargs) for i in range(xxx_shape_1))
 				sumx_ = dimzer( numpy.sum(xxx,0) )
 				try:
 					ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
@@ -134,16 +136,16 @@ class statistical_summary():
 					ss.n_positives = dimzer( (w[xxx>0]) )
 					ss.n_negatives = dimzer( (w[xxx<0]) )
 					ss.n_zeros = dimzer( (w[xxx==0]) )
-					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx),)
+					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx, **spark_kwargs),)
 				else:
 					ss.n_nonzeros = tuple( numpy.sum(w[xxx[:,i]!=0]) for i in range(xxx_shape_1))
 					ss.n_positives = tuple( numpy.sum(w[xxx[:,i]>0]) for i in range(xxx_shape_1))
 					ss.n_negatives = tuple( numpy.sum(w[xxx[:,i]<0]) for i in range(xxx_shape_1))
 					ss.n_zeros = tuple( numpy.sum(w[xxx[:,i]==0]) for i in range(xxx_shape_1))
 					if full_xxx is None:
-						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None) for i in range(xxx_shape_1))
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None, **spark_kwargs) for i in range(xxx_shape_1))
 					else:
-						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i]) for i in range(xxx_shape_1))
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i], **spark_kwargs) for i in range(xxx_shape_1))
 					ss.notes.add('Graphs are unweighted representations.')
 
 				w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones([1,xxx.shape[1]])
@@ -160,6 +162,162 @@ class statistical_summary():
 					q1,q2 = numpy.unique(xxx, return_counts=True)
 					ss.unique_values = pandas.Series(q2,q1)
 				return ss
+
+
+
+
+	@staticmethod
+	def nan_compute(xxx, histogram_bins='auto', count_uniques=False, full_xxx=None, weights=None, spark_kwargs=None, bar_not_pie=True, dictionary=None):
+		"""
+		Compute statistics, ignoring NaNs.
+		
+		Parameters
+		----------
+		xxx : array
+			Input data, 1-d or 2-d
+		"""
+		if spark_kwargs is None:
+			spark_kwargs = {}
+		if len(xxx)==0:
+			return statistical_summary()
+		else:
+			ss = statistical_summary()
+			if weights is None or not bool((weights!=1).any()):
+				if numpy.all(numpy.isnan(xxx)):
+					try:
+						xxx_shape_1 = xxx.shape[1]
+					except IndexError:
+						# input data is 1-d, return only scalars
+						ss.mean = numpy.nan
+						ss.stdev = numpy.nan
+						ss.minimum = numpy.nan
+						ss.maximum = numpy.nan
+						ss.n_nonzeros = 0
+						ss.n_positives = 0
+						ss.n_negatives = 0
+						ss.n_zeros = 0
+						ss.n_nans = int(numpy.sum(numpy.isnan(xxx)))
+						ss.n_values = xxx.shape[0]
+						ss.histogram = None
+						ss.mean_nonzero = numpy.nan
+					else:
+						# input data is 1-d, return tuples
+						ss.mean = numpy.asarray([numpy.nan for i in range(xxx_shape_1)])
+						ss.stdev = numpy.asarray([numpy.nan for i in range(xxx_shape_1)])
+						ss.minimum = numpy.asarray([numpy.nan for i in range(xxx_shape_1)])
+						ss.maximum = numpy.asarray([numpy.nan for i in range(xxx_shape_1)])
+						ss.n_nonzeros = numpy.asarray([0 for i in range(xxx_shape_1)])
+						ss.n_positives = numpy.asarray([0 for i in range(xxx_shape_1)])
+						ss.n_negatives = numpy.asarray([0 for i in range(xxx_shape_1)])
+						ss.n_zeros = numpy.asarray([0 for i in range(xxx_shape_1)])
+						ss.n_nans = numpy.asarray([int(numpy.sum(numpy.isnan(xxx[:,i]))) for i in range(xxx_shape_1)])
+						ss.n_values = xxx.shape[0]
+						ss.histogram = tuple(None for i in range(xxx_shape_1))
+						ss.mean_nonzero = numpy.asarray([numpy.nan for i in range(xxx_shape_1)])
+					
+					# Make sure that the histogram field is iterable
+					if isinstance(ss.histogram, numpy.ndarray):
+						ss.histogram = numpy.atleast_1d(ss.histogram)
+					if count_uniques:
+						q1,q2 = numpy.unique(xxx, return_counts=True)
+						ss.unique_values = pandas.Series([None],[None])
+					return ss
+				else:
+					ss.mean = numpy.nanmean(xxx,0)
+					ss.stdev = numpy.nanstd(xxx,0)
+					ss.minimum = numpy.nanmin(xxx,0)
+					ss.maximum = numpy.nanmax(xxx,0)
+					try:
+						xxx_shape_1 = xxx.shape[1]
+					except IndexError:
+						# input data is 1-d, return only scalars
+						ss.n_nonzeros = numpy.count_nonzero(xxx)
+						ss.n_positives = int(numpy.sum(xxx>0))
+						ss.n_negatives = int(numpy.sum(xxx<0))
+						ss.n_zeros = xxx.size-ss.n_nonzeros
+						ss.n_nans = int(numpy.sum(numpy.isnan(xxx)))
+						ss.n_values = xxx.shape[0]
+						ss.histogram = spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx,
+														bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs)
+					else:
+						# input data is 1-d, return tuples
+						ss.n_nonzeros = numpy.asarray([numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1)])
+						ss.n_positives = numpy.asarray([int(numpy.sum(xxx[:,i]>0)) for i in range(xxx_shape_1)])
+						ss.n_negatives = numpy.asarray([int(numpy.sum(xxx[:,i]<0)) for i in range(xxx_shape_1)])
+						ss.n_zeros = numpy.asarray([xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1)])
+						ss.n_nans = numpy.asarray([int(numpy.sum(numpy.isnan(xxx[:,i]))) for i in range(xxx_shape_1)])
+						ss.n_values = xxx.shape[0]
+						if full_xxx is None:
+							ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None,
+																	bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs) for i in range(xxx_shape_1))
+						else:
+							ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i],
+																	bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs) for i in range(xxx_shape_1))
+					sumx_ = numpy.nansum(xxx,0)
+					try:
+						ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+					except ValueError:
+						ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
+					
+					# Make sure that the histogram field is iterable
+					if isinstance(ss.histogram, numpy.ndarray):
+						ss.histogram = numpy.atleast_1d(ss.histogram)
+					if count_uniques:
+						q1,q2 = numpy.unique(xxx, return_counts=True)
+						ss.unique_values = pandas.Series(q2,q1)
+					return ss
+			else:
+				raise NotImplementedError('weights are not implemented for nan_compute')
+
+				w = weights.flatten()
+				ss.mean = dimzer( numpy.average(xxx, axis=0, weights=w) )
+				variance = numpy.average((xxx-ss.mean)**2, axis=0, weights=w)
+				ss.stdev = dimzer( numpy.average((xxx-ss.mean)**2, axis=0, weights=w) )
+				ss.minimum = dimzer( numpy.amin(xxx[w>0],0) )
+				ss.maximum = dimzer( numpy.amax(xxx[w>0],0) )
+				try:
+					xxx_shape_1 = xxx.shape[1]
+				except IndexError:
+					ss.n_nonzeros = dimzer( (w[xxx!=0]) )
+					ss.n_positives = dimzer( (w[xxx>0]) )
+					ss.n_negatives = dimzer( (w[xxx<0]) )
+					ss.n_zeros = dimzer( (w[xxx==0]) )
+					ss.n_nans = 0 #todo
+					ss.n_values = 0 #todo
+					ss.histogram = (spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx,
+													bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs),)
+				else:
+					ss.n_nonzeros = tuple( numpy.sum(w[xxx[:,i]!=0]) for i in range(xxx_shape_1))
+					ss.n_positives = tuple( numpy.sum(w[xxx[:,i]>0]) for i in range(xxx_shape_1))
+					ss.n_negatives = tuple( numpy.sum(w[xxx[:,i]<0]) for i in range(xxx_shape_1))
+					ss.n_zeros = tuple( numpy.sum(w[xxx[:,i]==0]) for i in range(xxx_shape_1))
+					ss.n_nans = 0 #todo
+					ss.n_values = 0 #todo
+					if full_xxx is None:
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=None,
+																bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs) for i in range(xxx_shape_1))
+					else:
+						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i],
+																bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs) for i in range(xxx_shape_1))
+					ss.notes.add('Graphs are unweighted representations.')
+
+				w_nonzero = w.copy().reshape(w.shape[0],1) * numpy.ones([1,xxx.shape[1]])
+				w_nonzero[xxx==0] = 0
+				if sum(w_nonzero)==0:
+					ss.mean_nonzero = numpy.zeros_like(ss.mean)
+				else:
+					ss.mean_nonzero = numpy.average(xxx, axis=0, weights=w_nonzero)
+
+				# Make sure that the histogram field is iterable
+				if isinstance(ss.histogram, numpy.ndarray):
+					ss.histogram = numpy.atleast_1d(ss.histogram)
+				if count_uniques:
+					q1,q2 = numpy.unique(xxx, return_counts=True)
+					ss.unique_values = pandas.Series(q2,q1)
+				return ss
+
+
+
 
 
 	@staticmethod

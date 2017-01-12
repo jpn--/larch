@@ -35,6 +35,7 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 							, elm::darray_ptr Data_Ch
 							, const double& U_premultiplier
 							, etk::logging_service* msgr
+							, PyArrayObject* logsums_out
 							)
 : Probability(U)
 , CaseLogLike(CLL)
@@ -43,8 +44,16 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 , U_premultiplier(U_premultiplier)
 , msg_(msgr)
 , UtilPacket(UtilPack)
+, logsums_out(logsums_out)
 {
 	//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
+	
+	// check that logsums out is at least the correct size
+	if (logsums_out) {
+		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
+			logsums_out = nullptr;
+		}
+	}
 }
 
 elm::mnl_prob_w::~mnl_prob_w()
@@ -149,7 +158,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 
 	// PROBABILITY //
 	
-//	if (firstcase==0) std::cerr <<"Util[0]="<<Probability->printrow(0) <<"\n";
+//	if (firstcase==126) std::cerr <<"Util[129]="<<Probability->printrow(129) <<"\n";
 	
 	
 	for (unsigned c=firstcase; c<firstcase+numberofcases; c++) {
@@ -187,15 +196,26 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 				Probability->at(c,a) = 0.0;
 			} else {
 				double* p = Probability->ptr(c,a);
+				double what_3 = *p;
 //					std::cerr << "   u["<<a<<"]= "<<*p<<"\n";
 				*p += shifter;
+				double what_2 = *p;
 				double data_ch_value_ca = Data_Ch->value(c,a);
 				if (data_ch_value_ca) {
 					CaseLogLike->at(c) += (*p) * data_ch_value_ca;
 					sum_choice += data_ch_value_ca;
 				}
+				
+				double what_1 = *p;
+				
 				*p = exp(*p);
 				sum_prob += *p;
+
+//				if (isNan(sum_prob)) {
+//					std::cerr << "nan sum_prob\n";
+//				}
+
+
 //					std::cerr << "  Availability for case 0 alt "<<a<<" is YES, exp(Utility)=\t"<<*p<<"\n";
 			}
 		}
@@ -204,11 +224,27 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 //			std::cerr << "  sum_prob="<<sum_prob<<"\n";
 //			std::cerr << "  sum_choice="<<sum_choice<<"\n";
 
-
-	
+//
+//		if (isNan(sum_prob)) {
+//			std::cerr << "nan sum_prob\n";
+//		}
 		
 //		if (c==565) std::cerr << "Data_AV[565,0:3]="<<Data_AV->boolvalue(565,0)<<Data_AV->boolvalue(565,1)<<Data_AV->boolvalue(565,2)<<"\n";
 //		if (c==565) std::cerr << "sum_prob="<<sum_prob<<"\n";
+
+		double* logsum = nullptr;
+		double fallback_logsum = 0;
+		if (logsums_out) {
+			logsum = (double*) PyArray_GETPTR1(logsums_out, c);
+		} else {
+			logsum = &fallback_logsum;
+		}
+		*logsum = log(sum_prob);
+
+//		if ((firstcase==0) && (c==0)) {
+//			std::cerr << "breaker \n";
+//		}
+
 		if (sum_prob) {
 			for (unsigned a=0;a<nElementals;a++) {
 				Probability->at(c,a) /= sum_prob;
@@ -217,7 +253,7 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 //				}
 			}
 			if (sum_choice) {
-				CaseLogLike->at(c) -= log(sum_prob) * sum_choice;
+				CaseLogLike->at(c) -= (*logsum) * sum_choice;
 //				if (shifter) {
 //					std::cerr << "  CaseLogLike="<<CaseLogLike->at(c)<<"\n";
 //				}
