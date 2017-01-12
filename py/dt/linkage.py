@@ -1,5 +1,6 @@
-
+import re
 from . import DT
+from . import _pytables_link_dereference, _tb, numpy
 
 
 def DTx(filename=None, *, caseids=None, alts=None, **kwargs):

@@ -250,6 +250,31 @@ class GroupNode():
 
 
 	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False):
+		'''
+		Add an external linkage from this group to the values in an OMX file.
+		
+		For matrix data tables, this will create a virtual idca keyed array, with the rowindexnode giving the
+		indexes and the external matrix linked with the values.
+		
+		For lookups, set n_lookup equal to the length of the lookups and they will be treated effectively the same
+		as a data table, except with only one value, creating a virtual idco keyed array.
+		
+		Alternatively for lookups, set n_alts equal to the length of the lookups and they will be treated as 
+		a data table with a single row.  The rowindexnode is ignored in this case, as every row is the same, creating
+		a virtual idca keyed array (with just one key).
+		
+		Parameters
+		----------
+		omx_filename : str or OMX
+			Either the path to an OMX file or the open OMX object.
+		rowindexnode : pytables integer-dtype array-type node
+			This should be an existing node in the group (or elsewhere in the hdf5 file). It contains the integer 
+			index values of the rows that will be linked.  If given as None, matrix tables will not be linked.
+		prefix : str
+		n_alts : int
+		n_lookup : int 
+		absolute_path : bool
+		'''
 		anything_linked = False
 		if not isinstance(omx_filename, str) and hasattr(omx_filename, 'filename'):
 			omx_filename = omx_filename.filename		

@@ -28,15 +28,18 @@ def correspond_utilityco(m, grand_m=None):
 	try:
 		return m._correspond_utilityco
 	except AttributeError:
-		arr = numpy.zeros([m.nAlts(), m.data.utilityco.shape[-1], len(grand_m)])
-		for aslot,acode in enumerate(m.alternative_codes()):
-			if acode in m.utility.co:
-				ucoa = m.utility.co[acode]
-				for uco in range(len(ucoa)):
-					slot = grand_m.parameter_index(ucoa[uco].param)
-					uco_slot = m.data.utilityco_varindex(ucoa[uco].data)
-					arr[aslot,uco_slot,slot] = 1
-		m._correspond_utilityco = arr.reshape(-1, len(grand_m))
+		if m.data.utilityco is None:
+			m._correspond_utilityco = None
+		else:
+			arr = numpy.zeros([m.nAlts(), m.data.utilityco.shape[-1], len(grand_m)])
+			for aslot,acode in enumerate(m.alternative_codes()):
+				if acode in m.utility.co:
+					ucoa = m.utility.co[acode]
+					for uco in range(len(ucoa)):
+						slot = grand_m.parameter_index(ucoa[uco].param)
+						uco_slot = m.data.utilityco_varindex(ucoa[uco].data)
+						arr[aslot,uco_slot,slot] = 1
+			m._correspond_utilityco = arr.reshape(-1, len(grand_m))
 		return m._correspond_utilityco
 
 
@@ -53,7 +56,12 @@ def _d_logsum_d_param_mnl(m, grand_m):
 		yco = yco.reshape(yco.shape[0], yco.shape[1]*yco.shape[2])
 	else:
 		yco = numpy.zeros([m.nCases(),0])
-	return numpy.dot(yca,correspond_utilityca(m, grand_m)) + numpy.dot(yco,correspond_utilityco(m, grand_m))
+	yco_1 = correspond_utilityco(m, grand_m)
+	yca_1 = correspond_utilityca(m, grand_m)
+	return (
+		(numpy.dot(yca,yca_1) if yca_1 is not None else 0)
+		+ (numpy.dot(yco,yco_1) if yco_1 is not None else 0)
+	)
 
 
 def _map_submodel_params_to_grand_params(m, grand_m, values):

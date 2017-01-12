@@ -2483,7 +2483,7 @@ class DT(Fountain):
 			Should the variable be overwritten if it already exists, default to False.
 			
 		Raises
-		-----
+		------
 		tables.exceptions.NodeError
 			If a variable of the same name already exists and overwrite is False.
 		NameError
@@ -2523,7 +2523,7 @@ class DT(Fountain):
 			If true, change the absolute path of the original_source to a relative path viz this file.
 			
 		Raises
-		-----
+		------
 		tables.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
@@ -2716,10 +2716,29 @@ class DT(Fountain):
 		"""
 		Pluck values from an OMX file into new :ref:`idco` variables.
 		
+		This method takes O and D index numbers and plucks the individual matrix values at
+		those coordinates. New idco variables will be created in the DT file that contain
+		the plucked values, so that the new variables represent actual arrays and not links to 
+		the original matrix.  The OMX filename is marked as the original source of the data.
+		
 		Parameters
 		----------
 		other_omx : OMX or str
 			Either an OMX or a filename to an OMX file.
+		rowindexes, colindexes : array
+			Zero-based index array for the row (origins) and columns (destinations) that will 
+			be plucked into the new variable.
+		names : str or list or dict
+			If a str, only that single named matrix table in the OMX will be plucked.
+			If a list, all of the named matrix tables in the OMX will be plucked.
+			If a dict, the keys give the matrix tables to pluck from and the values
+			give the new variable names to create in this DT.
+			
+			
+		See Also
+		--------
+		GroupNode.add_external_omx
+		
 		"""
 		from ..omx import OMX
 		if isinstance(other_omx, str):
@@ -4176,7 +4195,7 @@ class DT(Fountain):
 		return d1
 
 	from .vault import in_vault, from_vault, to_vault, vault_keys, wipe_vault
-	from .analyze import look_idco, clear_look_cache, look_site
+	from .analyze import look_idca, look_idco, clear_look_cache, look_site
 
 
 def _close_all_h5():

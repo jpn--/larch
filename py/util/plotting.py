@@ -449,7 +449,10 @@ def spark_histogram(data, *arg, pie_chart_cutoff=4, notetaker=None, prerange=Non
 
 	if uniq_counts is not None and len(uniq_counts)<=pie_chart_cutoff:
 		if notetaker is not None:
-			notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
+			if pie_chart_type=='pie':
+				notetaker.add( "Graphs are represented as pie charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
+			else:
+				notetaker.add( "Graphs are represented as categorical bar charts if the data element has {} or fewer distinct values.".format(pie_chart_cutoff) )
 		if duo_filter is not None:
 			return spark_pie_or_bar_maker(uniq_counts0, labels=uniq0, **kwarg), spark_pie_or_bar_maker(uniq_counts1, labels=uniq1, **kwarg)
 		else:
