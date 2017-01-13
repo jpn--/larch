@@ -492,7 +492,7 @@ class DT(Fountain):
 
 	def array_caseids(self, screen=None):
 		screen, n_cases = self.process_proposed_screen(screen)
-		if isinstance(screen, str) and screen=="None":
+		if (isinstance(screen, str) and screen=="None") or screen is None:
 			try:
 				return _pytables_link_dereference(self.h5top.caseids)[:]
 			except _tb.exceptions.NoSuchNodeError:
@@ -2194,8 +2194,8 @@ class DT(Fountain):
 			:func:`simpledbf.Dbf5.to_dataframe` is used.  Alternatively, you can just pass a pre-loaded
 			:class:`pandas.DataFrame`.
 		caseid_column : None or str
-			If given, this is the column of the input data file to use as caseids.  It must be 
-			given if the caseids do not already exist in the HDF5 file.  If it is given and
+			If given, this is the column of the input data file to use as caseids.  If not given,
+			arbitrary sequential caseids will be created.  If it is given and
 			the caseids do already exist, a `LarchError` is raised.
 		overwrite : int
 			If positive, existing data with same name will be overwritten.  If zero (the default)
@@ -2658,6 +2658,9 @@ class DT(Fountain):
 	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, log=lambda *x: None, **kwargs):
 		"""
 		Merge data into the idco of this DT.
+		
+		Every case in the current (receiving) DT should match one or zero cases in the 
+		imported data.
 		
 		Parameters
 		----------

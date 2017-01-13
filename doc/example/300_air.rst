@@ -32,7 +32,7 @@ current directory).
 	If you want to practice with this example, you can put this file into the
 	current directory by using the command::
 
-		larch.DB.Example().export_idca("arc.csv.gz", exclude={'caseid','altid'})
+		larch.DB.Example('AIR').export_idca("arc.csv.gz", exclude={'caseid','altid'})
 
 
 .. testcode::
