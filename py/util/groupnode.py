@@ -249,7 +249,7 @@ class GroupNode():
 		return self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
-	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False):
+	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False, local_rowindexnode=None):
 		'''
 		Add an external linkage from this group to the values in an OMX file.
 		
@@ -280,12 +280,28 @@ class GroupNode():
 			omx_filename = omx_filename.filename		
 		if not absolute_path:
 			omx_filename = os.path.relpath(omx_filename, os.path.dirname( self._v_file.filename ))
+		
+		if local_rowindexnode is not None and rowindexnode is None:
+			rowindexnode = self[local_rowindexnode]
+		if not rowindexnode._v_isopen:
+			raise TypeError('rowindexnode is closed')
+		
+		def rowindexnode_():
+			nonlocal rowindexnode
+			if rowindexnode is None:
+				return None
+			if rowindexnode._v_isopen:
+				return rowindexnode
+			if local_rowindexnode is not None:
+				return self[local_rowindexnode]
+			raise TypeError('rowindexnode not stable open')
+		
 		temp_num = 1
 		while 'temp_omx_{}'.format(temp_num) in self._v_file.root._v_children:
 			temp_num += 1
 		self._v_file.create_external_link(self._v_file.root, 'temp_omx_{}'.format(temp_num), omx_filename+":/")
 		temp_omx = lambda: self._v_file.root._v_children['temp_omx_{}'.format(temp_num)]()
-		if 'data' in temp_omx() and rowindexnode is not None:
+		if 'data' in temp_omx() and rowindexnode_() is not None:
 			for vname in sorted(temp_omx().data._v_children):
 				try:
 					vgrp = self._v_file.create_group(self._v_node, prefix+vname)
@@ -293,7 +309,7 @@ class GroupNode():
 					import warnings
 					warnings.warn('the name "{}" already exists'.format(prefix+vname))
 				else:
-					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode)
+					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode_())
 					self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
 					anything_linked = True
 		if 'lookup' in temp_omx():
