@@ -1340,6 +1340,13 @@ class Model(Model2, ModelReporter):
 			self.data_quality_check(repair=clash, autoprovision=False)
 		except LarchError as err:
 			doc.append(str(err))
+		
+		ncases_with_zero_choice = int((self.data.choice.sum(1)==0).sum())
+		if ncases_with_zero_choice:
+			first_case_index = numpy.where((self.data.choice.sum(1)==0).squeeze())[0][0]
+			doc.append('there are {} cases without any observed choice, the first of which is at caseindex {}'.format(ncases_with_zero_choice, first_case_index))
+		
+		# report out
 		if doc:
 			from .util.doctor import warn
 			warn( "\n-> "+"\n-> ".join(doc) )
