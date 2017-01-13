@@ -505,6 +505,11 @@ class XhtmlModelReporter():
 			except AttributeError:
 				pass
 			else:
+				try:
+					if self._user_defined_xhtml == 'unpicklable local object':
+						self._user_defined_xhtml = {}
+				except AttributeError:
+					self._user_defined_xhtml = {}
 				candidates.update(i.casefold() for i in self._user_defined_xhtml.keys())
 			return candidates
 	
@@ -598,7 +603,8 @@ class XhtmlModelReporter():
 		if 'xhtml_{}'.format(name) in dir(self) or 'art_{}'.format(name) in dir(self):
 			raise TypeError( "the name '{}' conflicts with a regular method in larch.Model".format(name) )
 		try:
-			self._user_defined_xhtml
+			if self._user_defined_xhtml == 'unpicklable local object':
+				self._user_defined_xhtml = {}
 		except AttributeError:
 			self._user_defined_xhtml = {}
 		if not callable(caller):
@@ -615,7 +621,8 @@ class XhtmlModelReporter():
 
 	def new_xhtml_header(self, headtext, headerlevel=2, anchor=1, name=None):
 		try:
-			self._user_defined_xhtml
+			if self._user_defined_xhtml == 'unpicklable local object':
+				self._user_defined_xhtml = {}
 		except AttributeError:
 			self._user_defined_xhtml = {}
 

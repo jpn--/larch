@@ -111,4 +111,10 @@ class WorkspaceManager:
 			raise TypeError("this model did not allocate a seperate utility computational array")
 		return self._model.Utility()
 
+	@property
+	def quantity(self):
+		if self._model.Quantity().shape == (0,):
+			raise TypeError("this model did not allocate a seperate quantity computational array")
+		return self._model.Quantity()
+
 

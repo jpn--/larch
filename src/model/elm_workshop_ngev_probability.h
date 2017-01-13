@@ -39,6 +39,7 @@ void __casewise_ngev_utility
 , const double* Alloc	// pointer to allocative array [nCompAlloc space]
 , const VAS_System& Xy  // nesting structure
 , double* Work	        // function workspace, [nN]
+, double* top_logsum=nullptr
 ) ;
 
 void __casewise_ngev_probability
@@ -82,6 +83,8 @@ public:
 	bool option_mute_nan_warnings;
 	boosted::mutex* _lock;
 
+	PyArrayObject* logsums_out;
+
 	workshop_ngev_probability
 	(  const unsigned&   nNodes
 	 , elm::ca_co_packet UtilPacket
@@ -98,6 +101,7 @@ public:
 	 , const VAS_System* Xylem
 	 , const bool& option_mute_nan_warnings
 	 , etk::logging_service* msgr=nullptr
+	 , PyArrayObject* logsums_out=nullptr
 	 );
 	
 	virtual ~workshop_ngev_probability();

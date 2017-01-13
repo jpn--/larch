@@ -573,7 +573,7 @@ class OMX(_tb.file.File):
 		for name in lookuprownames:
 			n = self.add_lookup(name, obj=otherfile.lookup._v_children[name][:])
 		for name in lookupcolnames:
-			n = self.add_blank_lookup(name, atom=otherfile.lookup._v_children[name].atom, shape=otherfile.lookup._v_children[name].shape)
+			n = self.add_blank_lookup(name, atom=otherfile.lookup._v_children[name].atom, shape=newshape[1])
 			n[newslicecols] = otherfile.lookup._v_children[name][oldslicecols]
 		self.flush()
 		return self

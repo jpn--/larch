@@ -76,8 +76,19 @@ def _pytables_link_dereference(i):
 	if isinstance(i, tables.link.ExternalLink):
 		i = i()
 	if isinstance(i, tables.link.SoftLink):
-		i = i.dereference()
+		try:
+			i = i.dereference()
+		except tables.NoSuchNodeError:
+			root = i._v_file.root
+			path_parts = i.target.split('/')[1:]
+			g = GroupNode(root)
+			for pth in path_parts:
+				g = g[pth]
+			i = g
 	return i
+
+
+
 
 
 
@@ -164,12 +175,12 @@ class GroupNode():
 				did_you_mean = str(err)+"\nDid you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
 				raise tables.exceptions.NoSuchNodeError(did_you_mean) from None
 			raise
+		x = _pytables_link_dereference(x)
 		if len(attr)<=3 or attr[0]!='_' or attr[2]!='_':
 			x.uniques = types.MethodType( _uniques, x )
-		ret = _pytables_link_dereference(x)
-		if isinstance(ret, tables.Group):
-			ret = GroupNode(ret)
-		return ret
+		if isinstance(x, tables.Group):
+			x = GroupNode(x)
+		return x
 	def __setattr__(self, attr, val):
 		return setattr(self._v_node, attr, val)
 	def __contains__(self, arg):
@@ -249,7 +260,7 @@ class GroupNode():
 		return self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
-	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False):
+	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False, local_rowindexnode=None):
 		'''
 		Add an external linkage from this group to the values in an OMX file.
 		
@@ -280,12 +291,28 @@ class GroupNode():
 			omx_filename = omx_filename.filename		
 		if not absolute_path:
 			omx_filename = os.path.relpath(omx_filename, os.path.dirname( self._v_file.filename ))
+		
+		if local_rowindexnode is not None and rowindexnode is None:
+			rowindexnode = self[local_rowindexnode]
+		if not rowindexnode._v_isopen:
+			raise TypeError('rowindexnode is closed')
+		
+		def rowindexnode_():
+			nonlocal rowindexnode
+			if rowindexnode is None:
+				return None
+			if rowindexnode._v_isopen:
+				return rowindexnode
+			if local_rowindexnode is not None:
+				return self[local_rowindexnode]
+			raise TypeError('rowindexnode not stable open')
+		
 		temp_num = 1
 		while 'temp_omx_{}'.format(temp_num) in self._v_file.root._v_children:
 			temp_num += 1
 		self._v_file.create_external_link(self._v_file.root, 'temp_omx_{}'.format(temp_num), omx_filename+":/")
 		temp_omx = lambda: self._v_file.root._v_children['temp_omx_{}'.format(temp_num)]()
-		if 'data' in temp_omx() and rowindexnode is not None:
+		if 'data' in temp_omx() and rowindexnode_() is not None:
 			for vname in sorted(temp_omx().data._v_children):
 				try:
 					vgrp = self._v_file.create_group(self._v_node, prefix+vname)
@@ -293,7 +320,7 @@ class GroupNode():
 					import warnings
 					warnings.warn('the name "{}" already exists'.format(prefix+vname))
 				else:
-					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode)
+					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode_())
 					self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/data/"+vname)
 					anything_linked = True
 		if 'lookup' in temp_omx():
