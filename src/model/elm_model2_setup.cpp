@@ -931,7 +931,7 @@ const etk::ndarray* elm::Model2::Coef(const std::string& label)
 	}
 	if (label=="QuantityCA") {
 		if (Params_SamplingCA.length()==0) {
-			_setUp_quantity_data_and_params();
+			_setUp_quantity_data_and_params(false);
 		}
 		Coef_QuantityCA.resize_if_needed(Params_QuantityCA);
 		pull_and_exp_from_freedoms(Params_QuantityCA , *Coef_QuantityCA , *ReadFCurrent());

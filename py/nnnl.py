@@ -22,6 +22,19 @@ def correspond_utilityca(m, grand_m=None):
 		m._correspond_utilityca = arr
 		return arr
 
+def correspond_quantity(m, grand_m=None):
+	if grand_m is None:
+		grand_m = m
+	try:
+		return m._correspond_quantity
+	except AttributeError:
+		arr = numpy.zeros([len(m.quantity), len(grand_m)])
+		for uca in range(len(m.quantity)):
+			slot = grand_m.parameter_index(m.quantity[uca].param)
+			arr[uca,slot] = 1
+		m._correspond_quantity = arr
+		return arr
+
 def correspond_utilityco(m, grand_m=None):
 	if grand_m is None:
 		grand_m = m
@@ -47,20 +60,31 @@ def _d_logsum_d_param_mnl(m, grand_m):
 	pr = m.work.probability
 	xca = m.data.utilityca
 	if xca is not None:
-		yca = (pr[:,:,None] * xca).sum(1)
+		yca = (pr[:,:m.nAlts(),None] * xca).sum(1)
 	else:
 		yca = numpy.zeros([m.nCases(),0])
 	xco = m.data.utilityco
 	if xco is not None:
-		yco = (pr[:,:,None] * xco[:,None,:])
+		yco = (pr[:,:m.nAlts(),None] * xco[:,None,:])
 		yco = yco.reshape(yco.shape[0], yco.shape[1]*yco.shape[2])
 	else:
 		yco = numpy.zeros([m.nCases(),0])
 	yco_1 = correspond_utilityco(m, grand_m)
 	yca_1 = correspond_utilityca(m, grand_m)
+	q_1 = correspond_quantity(m, grand_m)
+	
+	z = m.data.quantity  # [cases, alts, datacolumns]
+	if z is not None:
+		egam =	m.Coef("QuantityCA").squeeze() #[ datacolumns ]
+		egz = m.work.quantity # [cases, alts]
+		q = (z * egam[None, None, :] * pr[:,:m.nAlts(),None] / egz[:,:,None] ).sum(1) #[ cases, datacolumns ]
+	else:
+		q = numpy.zeros([m.nCases(),0])
+
 	return (
-		(numpy.dot(yca,yca_1) if yca_1 is not None else 0)
+		+ (numpy.dot(yca,yca_1) if yca_1 is not None else 0)
 		+ (numpy.dot(yco,yco_1) if yco_1 is not None else 0)
+		+ (numpy.dot(q  ,q_1  ) if q_1   is not None else 0)
 	)
 
 
@@ -133,6 +157,7 @@ class NNNL(MetaModel):
 			d = DT.DummyWithAlts(altcodes=alts, nCases=self.df.nCases())
 			self.sub_model[i] = Model(d)
 			self.sub_model[i].utility.ca = base_model.utility.ca
+			self.sub_model[i].quantity = base_model.quantity
 			for a in alts:
 				try:
 					x = base_model.utility.co[a]
@@ -182,6 +207,8 @@ class NNNL(MetaModel):
 				prov["Weight"] = self.df.array_weight()
 				prov["Choice"] = pack(self.df.array_choice()[:,keepalts,:])
 				prov["Avail"] = pack(self.df.array_avail()[:,keepalts,:])
+				if 'QuantityCA' in needs:
+					prov["QuantityCA"] = pack(self.df.array_idca(*needs['QuantityCA'].get_variables())[:,keepalts,:])
 				
 				submodel.provision(prov)
 				
@@ -292,6 +319,10 @@ class NNNL(MetaModel):
 			mu = self.parameter_array[ self.parameter_index(mu_name) ]
 			d_ll += t.sum(0) * mu
 
+		holds = (self.parameter_holdfast_array!=0)
+		if numpy.any(holds):
+			d_ll[holds] = 0
+
 		if self.logger():
 			self.logger().log(30, "dLL={} <- {}".format(str(d_ll),str(self.parameter_array)))
 		return d_ll
@@ -321,6 +352,10 @@ class NNNL(MetaModel):
 			mu_name = self.base_model.nest[nestcode].param
 			mu = self.parameter_array[ self.parameter_index(mu_name) ]
 			d_ll += t * mu
+
+		holds = (self.parameter_holdfast_array!=0)
+		if numpy.any(holds):
+			d_ll[:,holds] = 0
 
 		return d_ll
 

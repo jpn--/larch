@@ -76,8 +76,19 @@ def _pytables_link_dereference(i):
 	if isinstance(i, tables.link.ExternalLink):
 		i = i()
 	if isinstance(i, tables.link.SoftLink):
-		i = i.dereference()
+		try:
+			i = i.dereference()
+		except tables.NoSuchNodeError:
+			root = i._v_file.root
+			path_parts = i.target.split('/')[1:]
+			g = GroupNode(root)
+			for pth in path_parts:
+				g = g[pth]
+			i = g
 	return i
+
+
+
 
 
 
@@ -164,12 +175,12 @@ class GroupNode():
 				did_you_mean = str(err)+"\nDid you mean {}?".format(" or ".join("'{}'".format(s) for s in did_you_mean_list))
 				raise tables.exceptions.NoSuchNodeError(did_you_mean) from None
 			raise
+		x = _pytables_link_dereference(x)
 		if len(attr)<=3 or attr[0]!='_' or attr[2]!='_':
 			x.uniques = types.MethodType( _uniques, x )
-		ret = _pytables_link_dereference(x)
-		if isinstance(ret, tables.Group):
-			ret = GroupNode(ret)
-		return ret
+		if isinstance(x, tables.Group):
+			x = GroupNode(x)
+		return x
 	def __setattr__(self, attr, val):
 		return setattr(self._v_node, attr, val)
 	def __contains__(self, arg):

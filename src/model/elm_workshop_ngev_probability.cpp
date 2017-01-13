@@ -41,6 +41,7 @@ void elm::__casewise_ngev_utility
 , const double* Alloc	// pointer to allocative array [nCompAlloc space]
 , const VAS_System& Xy  // nesting structure
 , double* Work	        // function workspace, [nN]
+, double* top_logsum    // pointer to one value
 ) 
 {
 	unsigned i; 
@@ -84,6 +85,9 @@ void elm::__casewise_ngev_utility
 				U[i] = -INF;
 			}
 		}
+	}
+	if (top_logsum) {
+		*top_logsum = U[Xy.size()-1];
 	}
 }
 
@@ -178,6 +182,8 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , const VAS_System* Xylem
 , const bool& option_mute_nan_warnings
 , etk::logging_service* msgr
+, PyArrayObject* logsums_out
+
 )
 : nNodes          (nNodes)
 , UtilPacket      (UtilPacket)
@@ -194,8 +200,15 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , Xylem           (Xylem)
 , option_mute_nan_warnings (option_mute_nan_warnings)
 , msg_            (msgr)
+, logsums_out	  (logsums_out)
 {
 	Workspace.resize(nNodes);
+	// check that logsums out is at least the correct size
+	if (logsums_out) {
+		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
+			logsums_out = nullptr;
+		}
+	}
 }
 
 elm::workshop_ngev_probability::~workshop_ngev_probability()
@@ -290,7 +303,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 		}
 
 		
-		__casewise_ngev_utility(Utility->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace);
+		__casewise_ngev_utility(Utility->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace, (double*)(logsums_out?PyArray_GETPTR1(logsums_out, c):nullptr));
 		__casewise_ngev_probability(Utility->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem);
 		if (use_sampling) {
 			case_logit_add_sampling(c);

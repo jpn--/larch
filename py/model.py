@@ -119,6 +119,9 @@ class Model(Model2, ModelReporter):
 		for j in self.utility.co:
 			for i in self.utility.co[j]:
 				is_it_there(i.param)
+		# quantity
+		for i in self.quantity:
+			is_it_there(i.param)
 		# samplingbias
 		for i in self.samplingbias.ca:
 			is_it_there(i.param)
@@ -588,7 +591,7 @@ class Model(Model2, ModelReporter):
 
 	def __quantity_scale_set(self, val):
 		if val not in self:
-			self.parameter(val, value=1.0, min=0.0001, max=1.0)
+			self.parameter(val, value=1.0, min=0.0001, max=1.0, null_value=1.0)
 		_core.Model2_quantity_scale_set(self, val)
 
 	def __quantity_scale_del(self):
@@ -1566,7 +1569,7 @@ class Model(Model2, ModelReporter):
 				max_flux_name = name
 		if disp:
 			print(s)
-			return max_flux, name
+			return max_flux, max_flux_name
 		return max_flux, s
 
 
