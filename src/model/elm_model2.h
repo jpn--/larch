@@ -411,6 +411,8 @@ namespace elm {
 		std::shared_ptr<etk::ndarray> calc_utility_logsums(etk::ndarray* utilitydataco, etk::ndarray* utilitydataca=nullptr, etk::ndarray* availability=nullptr) const;
 
 
+		PyObject* d_logsums();
+
 	public:
 		double loglike_given_utility( );
 		std::shared_ptr<etk::ndarray> negative_d_loglike_given_utility ();
@@ -419,11 +421,12 @@ namespace elm {
 #ifdef SWIG
 		// in the swig-exposed verion of this function, always update_freedoms
 		void calculate_parameter_covariance();
+
 #endif
 
 		std::shared_ptr<etk::ndarray> _mnl_gradient_full_casewise();
-		std::shared_ptr<etk::ndarray> _ngev_gradient_full_casewise();
-
+		std::shared_ptr<etk::ndarray> _ngev_gradient_full_casewise(bool singlethread=false);
+		
 		std::shared_ptr<etk::ndarray> _ngev_d_prob();
 		
 
@@ -457,6 +460,7 @@ namespace elm {
 		boosted::shared_ptr<etk::dispatcher> probability_dispatcher;
 		boosted::shared_ptr<etk::dispatcher> probability_given_utility_dispatcher;
 		boosted::shared_ptr<etk::dispatcher> gradient_dispatcher;
+		boosted::shared_ptr<etk::dispatcher> d_logsums_dispatcher;
 		boosted::shared_ptr<etk::dispatcher> loglike_dispatcher;
 		
 		boosted::shared_ptr<etk::workshop> make_shared_workshop_accumulate_loglike ();
@@ -486,14 +490,27 @@ namespace elm {
 
 	private:
 		PyArrayObject* top_logsums_out;
+		PyArrayObject* casewise_grad_buffer;
+		PyArrayObject* casewise_d_logsums;
 
 	public:
 		PyObject* _get_top_logsums_out();
 		void _set_top_logsums_out(PyObject*);
 		void _del_top_logsums_out();
 
+		PyObject* _get_casewise_grad_buffer();
+		void _set_casewise_grad_buffer(PyObject* setval);
+		void _del_casewise_grad_buffer();
+
+		PyObject* _get_casewise_d_logsums();
+		void _set_casewise_d_logsums(PyObject* setval);
+		void _del_casewise_d_logsums();
+
+		bool top_logsums_out_currently_valid() const;
+
 #ifndef SWIG
-		
+
+		void top_logsums_out_recalculated();
 		
 //////// MARK: MODEL OPTIONS /////////////////////////////////////////////////////////
 
@@ -575,7 +592,7 @@ namespace elm {
 #endif // ndef SWIG
 
 	public:
-		std::string _parameter_report() const;
+		std::string _parameter_report(const etk::ndarray* other1=nullptr, const etk::ndarray* other2=nullptr) const;
 
 	public:
 		double _LL_null;

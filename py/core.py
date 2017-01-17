@@ -4194,6 +4194,9 @@ class Model2(sherpa):
     def calc_utility_logsums(self, utilitydataco: 'etk::ndarray *', utilitydataca: 'etk::ndarray *'=None, availability: 'etk::ndarray *'=None) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2_calc_utility_logsums(self, utilitydataco, utilitydataca, availability)
 
+    def d_logsums(self) -> "PyObject *":
+        return _core.Model2_d_logsums(self)
+
     def loglike_given_utility(self) -> "double":
         return _core.Model2_loglike_given_utility(self)
 
@@ -4206,8 +4209,8 @@ class Model2(sherpa):
     def _mnl_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2__mnl_gradient_full_casewise(self)
 
-    def _ngev_gradient_full_casewise(self) -> "std::shared_ptr< etk::ndarray >":
-        return _core.Model2__ngev_gradient_full_casewise(self)
+    def _ngev_gradient_full_casewise(self, singlethread: 'bool'=False) -> "std::shared_ptr< etk::ndarray >":
+        return _core.Model2__ngev_gradient_full_casewise(self, singlethread)
 
     def _ngev_d_prob(self) -> "std::shared_ptr< etk::ndarray >":
         return _core.Model2__ngev_d_prob(self)
@@ -4224,8 +4227,29 @@ class Model2(sherpa):
     def _del_top_logsums_out(self) -> "void":
         return _core.Model2__del_top_logsums_out(self)
 
-    def _parameter_report(self) -> "std::string":
-        return _core.Model2__parameter_report(self)
+    def _get_casewise_grad_buffer(self) -> "PyObject *":
+        return _core.Model2__get_casewise_grad_buffer(self)
+
+    def _set_casewise_grad_buffer(self, setval: 'PyObject *') -> "void":
+        return _core.Model2__set_casewise_grad_buffer(self, setval)
+
+    def _del_casewise_grad_buffer(self) -> "void":
+        return _core.Model2__del_casewise_grad_buffer(self)
+
+    def _get_casewise_d_logsums(self) -> "PyObject *":
+        return _core.Model2__get_casewise_d_logsums(self)
+
+    def _set_casewise_d_logsums(self, setval: 'PyObject *') -> "void":
+        return _core.Model2__set_casewise_d_logsums(self, setval)
+
+    def _del_casewise_d_logsums(self) -> "void":
+        return _core.Model2__del_casewise_d_logsums(self)
+
+    def top_logsums_out_currently_valid(self) -> "bool":
+        return _core.Model2_top_logsums_out_currently_valid(self)
+
+    def _parameter_report(self, other1: 'etk::ndarray const *'=None, other2: 'etk::ndarray const *'=None) -> "std::string":
+        return _core.Model2__parameter_report(self, other1, other2)
     _LL_null = _swig_property(_core.Model2__LL_null_get, _core.Model2__LL_null_set)
     _LL_nil = _swig_property(_core.Model2__LL_nil_get, _core.Model2__LL_nil_set)
     _LL_constants = _swig_property(_core.Model2__LL_constants_get, _core.Model2__LL_constants_set)

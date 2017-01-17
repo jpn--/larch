@@ -94,7 +94,7 @@ public:
 	const VAS_System* _Xylem;
 	etk::memarray* _GCurrent;
 	etk::symmetric_matrix* _Bhhh;
-	etk::ndarray* _GCurrentCasewise;
+	PyArrayObject* _GCurrentCasewise;
 	boosted::mutex* _lock;
 
 	etk::ndarray* export_dProb;
@@ -129,7 +129,8 @@ public:
 	 , const etk::memarray* Cond_Prob
 	 , const VAS_System* Xylem
 	 , etk::memarray* GCurrent
-	 , etk::ndarray* GCurrentCasewise
+//	 , etk::ndarray* GCurrentCasewise
+	 , PyArrayObject* Py_GradientArray
 	 , etk::symmetric_matrix* Bhhh
 	 , etk::logging_service* msgr
 	 , etk::ndarray* export_dProb
@@ -154,7 +155,7 @@ public:
 	 , const etk::memarray* Cond_Prob
 	 , const VAS_System* Xylem
 	 , etk::memarray* GCurrent
-	 , etk::ndarray* GCurrentCasewise
+	 , PyArrayObject* GCurrentCasewise
 	 , etk::symmetric_matrix* Bhhh
 	 , etk::logging_service* msgr
 	 , etk::ndarray* export_dProb

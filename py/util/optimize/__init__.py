@@ -449,6 +449,14 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	if not r_success:
 		warnings.warn("Model.maximize_loglike did not succeed normally, you might try Model.doctor() to see if there are any identified problems", stacklevel=2)
 
+	try:
+		specific_warning_note = model._specific_warning_notes()
+	except AttributeError:
+		pass
+	else:
+		if specific_warning_note:
+			r.stats.write(specific_warning_note)
+
 	return r
 
 

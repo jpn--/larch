@@ -188,6 +188,8 @@ public:
 protected:
 	etk::memarray _FCurrent_latest_objective;
 	double _FCurrent_latest_objective_value;
+
+	etk::ndarray _FCurrent_latest_logsums;
 	
 public:
 	const etk::memarray& ReadFCurrent() const {return FCurrent;};

@@ -352,6 +352,18 @@ bool elm::darray::boolvalue(const unsigned& c, const unsigned& v) const
 	return *(boolvalues(c,1)+v);
 }
 
+
+const double& elm::darray::value_double    (const size_t& c, const size_t& a, const size_t& v) const 
+{
+	return *_repository.ptr(c,a,v);
+}
+const double& elm::darray::value_double    (const size_t& c, const size_t& v) const
+{
+	return *_repository.ptr(c,v);
+}
+
+
+
 double& elm::darray::value_double    (const size_t& c, const size_t& a, const size_t& v)
 {
 	return *_repository.ptr(c,a,v);

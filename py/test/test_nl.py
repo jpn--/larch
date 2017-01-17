@@ -827,3 +827,49 @@ class TestNL(ELM_TestCase):
 		jj=m.gradient_check()
 		self.assertTrue(jj[0]<-5)
 
+	def test_nnnl_save_and_load(self):
+		from ..nnnl import NNNL
+		def puff(shape, s1=1,s2=2,s3=17,s4=100,s5=13,s6=90):
+			z = numpy.zeros(shape)
+			z1 = z.ravel()
+			i = s1
+			j = s2
+			n=0
+			while n<z1.size:
+				z1[n]=(i+j)
+				i *= s3
+				i %= s4
+				j *= s5
+				j %= s6
+				n+=1
+			return z
+		from ..nnnl import NNNL
+		from ..roles import P,X
+		d = DT.Example()
+		d.new_idca_from_array('randSize1', puff([5029, 6],1))
+		d.new_idca_from_array('randSize2', puff([5029, 6],2))
+		d.new_idca_from_array('randSize3', puff([5029, 6],3))
+		mx = Model.Example(d=d)
+		mx.new_nest('car', children=[1,2,3])
+		mx.new_nest('non', children=[4,5,6])
+		mx.parameter("tottime", value=-0.01)
+		mx.parameter("totcost", value=-0.02)
+		mx.parameter("ASC_SR2", value=-0.2)
+		mx.parameter("ASC_SR2", value=-0.2)
+		mx.parameter("ASC_TRAN", value=0.2)
+		mx.parameter("hhinc#3", value=0.5)
+		mx.parameter("non", value=0.5)
+		mx.parameter("car", value=0.2)
+		mx.quantity = (
+			+ P.qAltID * X.altid
+			+ P.qrandSize1 * X.randSize1
+			+ P.qrandSize2 * X.randSize2
+			+ P.qrandSize3 * X.randSize3
+		 )
+		m = NNNL(mx)
+		msave = m.saves()
+		# loading NNNL doesn't work yet
+		#n2 = NNNL.loads(msave)
+
+
+

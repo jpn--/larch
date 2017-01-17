@@ -88,3 +88,10 @@ void elm::Model2::pull_and_exp_from_freedoms(const paramArray& par,       double
 
 
 
+
+
+
+
+
+
+

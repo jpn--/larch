@@ -37,10 +37,23 @@ def _uniques(self, slicer=None, counts=False):
 		slicer = None
 	if slicer is None:
 		slicer = slice(None)
+	action = self[slicer]
+	len_action = len(action)
+	try:
+		action = action[~numpy.isnan(action)]
+	except TypeError:
+		num_nan = 0
+	else:
+		num_nan = len_action-len(action)
 	if counts:
-		x = numpy.unique(self[slicer], return_counts=counts)
-		return pandas.Series(x[1],x[0])
-	return numpy.unique(self[slicer])
+		x = numpy.unique(action, return_counts=counts)
+		y = pandas.Series(x[1],x[0])
+		if num_nan:
+			y[numpy.nan] = num_nan
+		return y
+	if num_nan:
+		numpy.append(action, numpy.nan)
+	return numpy.unique(action)
 
 
 

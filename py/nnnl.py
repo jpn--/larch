@@ -57,35 +57,36 @@ def correspond_utilityco(m, grand_m=None):
 
 
 def _d_logsum_d_param_mnl(m, grand_m):
-	pr = m.work.probability
-	xca = m.data.utilityca
-	if xca is not None:
-		yca = (pr[:,:m.nAlts(),None] * xca).sum(1)
-	else:
-		yca = numpy.zeros([m.nCases(),0])
-	xco = m.data.utilityco
-	if xco is not None:
-		yco = (pr[:,:m.nAlts(),None] * xco[:,None,:])
-		yco = yco.reshape(yco.shape[0], yco.shape[1]*yco.shape[2])
-	else:
-		yco = numpy.zeros([m.nCases(),0])
-	yco_1 = correspond_utilityco(m, grand_m)
-	yca_1 = correspond_utilityca(m, grand_m)
-	q_1 = correspond_quantity(m, grand_m)
-	
-	z = m.data.quantity  # [cases, alts, datacolumns]
-	if z is not None:
-		egam =	m.Coef("QuantityCA").squeeze() #[ datacolumns ]
-		egz = m.work.quantity # [cases, alts]
-		q = (z * egam[None, None, :] * pr[:,:m.nAlts(),None] / egz[:,:,None] ).sum(1) #[ cases, datacolumns ]
-	else:
-		q = numpy.zeros([m.nCases(),0])
-
-	return (
-		+ (numpy.dot(yca,yca_1) if yca_1 is not None else 0)
-		+ (numpy.dot(yco,yco_1) if yco_1 is not None else 0)
-		+ (numpy.dot(q  ,q_1  ) if q_1   is not None else 0)
-	)
+	return _map_submodel_params_to_grand_params(m, grand_m, m.d_logsums())
+#	pr = m.work.probability
+#	xca = m.data.utilityca
+#	if xca is not None:
+#		yca = (pr[:,:m.nAlts(),None] * xca).sum(1)
+#	else:
+#		yca = numpy.zeros([m.nCases(),0])
+#	xco = m.data.utilityco
+#	if xco is not None:
+#		yco = (pr[:,:m.nAlts(),None] * xco[:,None,:])
+#		yco = yco.reshape(yco.shape[0], yco.shape[1]*yco.shape[2])
+#	else:
+#		yco = numpy.zeros([m.nCases(),0])
+#	yco_1 = correspond_utilityco(m, grand_m)
+#	yca_1 = correspond_utilityca(m, grand_m)
+#	q_1 = correspond_quantity(m, grand_m)
+#	
+#	z = m.data.quantity  # [cases, alts, datacolumns]
+#	if z is not None:
+#		egam =	m.Coef("QuantityCA").squeeze() #[ datacolumns ]
+#		egz = m.work.quantity # [cases, alts]
+#		q = (z * egam[None, None, :] * pr[:,:m.nAlts(),None] / egz[:,:,None] ).sum(1) #[ cases, datacolumns ]
+#	else:
+#		q = numpy.zeros([m.nCases(),0])
+#
+#	return (
+#		+ (numpy.dot(yca,yca_1) if yca_1 is not None else 0)
+#		+ (numpy.dot(yco,yco_1) if yco_1 is not None else 0)
+#		+ (numpy.dot(q  ,q_1  ) if q_1   is not None else 0)
+#	)
 
 
 def _map_submodel_params_to_grand_params(m, grand_m, values):
@@ -151,13 +152,19 @@ class NNNL(MetaModel):
 		base_model._parameter_inclusion_check()
 		self.base_model = base_model
 		self.df = base_model.df
+		try:
+			_nCases = self.df.nCases()
+		except AttributeError:
+			_nCases = 1
 		g = base_model.graph
 		for i in base_model.nest.nodes():
 			alts = g.successors(i)
-			d = DT.DummyWithAlts(altcodes=alts, nCases=self.df.nCases())
+			d = DT.DummyWithAlts(altcodes=alts, nCases=_nCases)
 			self.sub_model[i] = Model(d)
 			self.sub_model[i].utility.ca = base_model.utility.ca
 			self.sub_model[i].quantity = base_model.quantity
+			if base_model.quantity_scale:
+				self.sub_model[i].quantity_scale = base_model.quantity_scale
 			for a in alts:
 				try:
 					x = base_model.utility.co[a]
@@ -166,12 +173,22 @@ class NNNL(MetaModel):
 				else:
 					self.sub_model[i].utility.co[a] = x
 		# Root
-		d = DT.DummyWithAlts(nCases=self.df.nCases(), altcodes=self.base_model.nest.nodes())
+		base_nodes = self.base_model.nest.nodes()
+		if not base_nodes:
+			base_nodes = (1,)
+		d = DT.DummyWithAlts(nCases=_nCases, altcodes=base_nodes)
 		m = self.sub_model[self.root_id] = Model(d)
 		for i in base_model.nest.nodes():
 			m.utility.co[i] = base_model.nest[i].param * X(str(base_model.nest[i]._altcode))
-		for p in base_model.parameter:
-			self.parameter[p.name] = p
+		if len(base_model):
+			for p in base_model.parameter:
+				self.parameter[p.name] = p
+
+	def _specific_warning_notes(self):
+		w = "WARNING: This is a non-normalized nested logit (NNNL) model. You must adjust parameter estimates accordingly."
+		import warnings
+		warnings.warn(w, stacklevel=2)
+		return w
 
 	def setUp(self, *args, **kwargs):
 		self.sub_weight = {}
@@ -253,7 +270,7 @@ class NNNL(MetaModel):
 #		print("LL",self.root_id,"=",m_fun)
 		fun += m_fun
 		if self.logger():
-			self.logger().log(30, "LL={} <- {}".format(str(fun),str(self.parameter_array)))
+			self.logger().log(30, "NNNL.LL={} <- {}".format(str(fun),str(self.parameter_array)))
 		return float(fun)
 
 	def loglike_casewise(self, *args, cached=False):
@@ -284,6 +301,14 @@ class NNNL(MetaModel):
 			x[key] = _d_logsum_d_param_mnl(m, self)
 		return x
 
+
+	def probability_roll_up(self):
+		m0 = self.sub_model[self.root_id]
+		for slot,nestcode in enumerate(m0.alternative_codes()):
+			t = m0.work.probability[:,slot]
+			for subslot, altcode in enumerate(self.sub_model[nestcode].alternative_codes()):
+				topslot = self.df._alternative_slot(altcode)
+				self.work.probability[:,topslot] = self.sub_model[nestcode].work.probability[:,subslot] * t
 
 	def d_loglike(self, *args, cached=False):
 		"""
@@ -324,7 +349,7 @@ class NNNL(MetaModel):
 			d_ll[holds] = 0
 
 		if self.logger():
-			self.logger().log(30, "dLL={} <- {}".format(str(d_ll),str(self.parameter_array)))
+			self.logger().log(30, "NNNL.dLL={} <- {}".format(str(d_ll),str(self.parameter_array)))
 		return d_ll
 
 	def d_loglike_casewise(self, *args, cached=False):
@@ -379,7 +404,11 @@ class NNNL(MetaModel):
 		dc = self.d_loglike_casewise()
 		return numpy.dot(dc.T,dc)
 
-
-
+	def logger(self, *args, **kwargs):
+		if args==(1,):
+			args = ('NNNL',)
+		if args==(True,):
+			args = ('NNNL',)
+		return super().logger(*args, **kwargs)
 
 

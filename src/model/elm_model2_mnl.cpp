@@ -33,6 +33,7 @@
 #include "elm_workshop_mnl_prob.h"
 #include "elm_workshop_loglike.h"
 #include "elm_workshop_nl_probability.h"
+#include "elm_workshop_d_logsums.h"
 
 using namespace etk;
 using namespace elm;
@@ -385,15 +386,11 @@ std::shared_ptr<ndarray> elm::Model2::calc_utility_logsums(ndarray* dco, ndarray
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_mnl_probability ()
 {
-//	BUGGER(msg) << "CALL make_shared_workshop_mnl_probability()\n";
 
 	return boosted::make_shared<elm::mnl_prob_w>(
 			&Probability, &CaseLogLike, utility_packet(), Data_Avail, Data_Choice,
-			0, &msg, top_logsums_out);
+			0, &msg, &top_logsums_out);
 
-//	return boosted::make_shared<elm::mnl_prob_w>(
-//			&Probability, &CaseLogLike, Data_UtilityCA, Data_UtilityCO, Data_Avail, Data_Choice,
-//			&Coef_UtilityCA, &Coef_UtilityCO, 0, &msg);
 }
 
 
@@ -464,6 +461,7 @@ void elm::Model2::mnl_probability()
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_mnl_probability, this);
 		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
+		top_logsums_out_recalculated();
 		
 	} else {
 		unsigned c;
@@ -961,6 +959,53 @@ void elm::Model2::mnl_gradient_v2()
 
 	BUGGER(msg)<< "End MNL Gradient v2 Evaluation" ;
 }
+
+
+
+
+
+
+PyObject* elm::Model2::d_logsums()
+{
+	freshen();
+	periodic Sup (5);
+	BUGGER(msg)<< "Beginning d_logsums Evaluation" ;
+	
+	if (!casewise_d_logsums ||
+		(PyArray_NDIM(casewise_d_logsums)!=2) ||
+		(PyArray_DIM(casewise_d_logsums,0)!=nCases) ||
+		(PyArray_DIM(casewise_d_logsums,1)!=dF()))
+	{
+		Py_CLEAR(casewise_d_logsums);
+		npy_intp dims [2];
+		dims[0] = nCases;
+		dims[1] = dF();
+		casewise_d_logsums = (PyArrayObject*)PyArray_SimpleNew(2, &dims[0], NPY_DOUBLE);
+	}
+	
+	boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =(
+	[&](){
+		return boosted::make_shared<d_logsums_w>
+		( &Probability
+				   , utility_packet()
+				   , quantity_packet()
+				   , &msg
+				   , &casewise_d_logsums
+				   , &Params_QuantLogSum
+				   , Coef_QuantLogSum.ptr()
+				   );
+	});
+	
+	
+	USE_DISPATCH(d_logsums_dispatcher,option.threads, nCases, workshop_builder);
+
+	BUGGER(msg)<< "End d_logsums Evaluation" ;
+	return _get_casewise_d_logsums();
+}
+
+
+
+
 
 
 /*

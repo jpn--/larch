@@ -35,7 +35,7 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 							, elm::darray_ptr Data_Ch
 							, const double& U_premultiplier
 							, etk::logging_service* msgr
-							, PyArrayObject* logsums_out
+							, PyArrayObject** logsums_out
 							)
 : Probability(U)
 , CaseLogLike(CLL)
@@ -49,9 +49,9 @@ elm::mnl_prob_w::mnl_prob_w(  etk::ndarray* U
 	//	BUGGER_(msg_, "CONSTRUCT elm::mnl_prob_w::mnl_prob_w()\n");
 	
 	// check that logsums out is at least the correct size
-	if (logsums_out) {
-		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
-			logsums_out = nullptr;
+	if (*logsums_out) {
+		if (PyArray_DIM(*logsums_out, 0) < Probability->size1() ) {
+			Py_CLEAR(*logsums_out);
 		}
 	}
 }
@@ -234,8 +234,8 @@ void elm::mnl_prob_w::work(size_t firstcase, size_t numberofcases, boosted::mute
 
 		double* logsum = nullptr;
 		double fallback_logsum = 0;
-		if (logsums_out) {
-			logsum = (double*) PyArray_GETPTR1(logsums_out, c);
+		if (*logsums_out) {
+			logsum = (double*) PyArray_GETPTR1(*logsums_out, c);
 		} else {
 			logsum = &fallback_logsum;
 		}

@@ -71,6 +71,8 @@ elm::Model2::Model2()
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
 , top_logsums_out(nullptr)
+, casewise_grad_buffer(nullptr)
+, casewise_d_logsums(nullptr)
 {
 }
 
@@ -113,6 +115,8 @@ elm::Model2::Model2(elm::Fountain& datafile)
 , title("Untitled Model")
 , _string_sender_ptr(nullptr)
 , top_logsums_out(nullptr)
+, casewise_grad_buffer(nullptr)
+, casewise_d_logsums(nullptr)
 {
 	if (_Fount) {
 		Xylem.add_dna_sequence(_Fount->alternatives_dna());
@@ -295,7 +299,9 @@ PyObject* elm::Model2::_get_logger () const
 elm::Model2::~Model2()
 { 
 	tearDown();
-	
+	Py_CLEAR(top_logsums_out);
+	Py_CLEAR(casewise_grad_buffer);
+	Py_CLEAR(casewise_d_logsums);
 }
 
 
@@ -798,7 +804,7 @@ void elm::Model2::_parameter_log()
 	MONITOR(msg) << "----------------------";
 }
 
-std::string elm::Model2::_parameter_report() const
+std::string elm::Model2::_parameter_report(const ndarray* other1, const ndarray* other2) const
 {
 	std::ostringstream buff;
 	int pname_width = 9;
@@ -816,7 +822,18 @@ std::string elm::Model2::_parameter_report() const
 		buff.width(pname_width);
 		buff << FNames[i] << "\t";
 		buff.width(18);
-		buff << ReadFCurrent()[i] << "\n";
+		buff << ReadFCurrent()[i];
+		if (other1 && other1->size()>=i+1) {
+			buff << "\t";
+			buff.width(18);
+			buff << (*other1)[i];
+		}
+		if (other2 && other2->size()>=i+1) {
+			buff << "\t";
+			buff.width(18);
+			buff << (*other2)[i];
+		}
+		buff << "\n";
 	}
 	return buff.str();
 }
@@ -1736,6 +1753,91 @@ void elm::Model2::_set_top_logsums_out(PyObject* setval)
 void elm::Model2::_del_top_logsums_out()
 {
 	Py_CLEAR(top_logsums_out);
+}
+
+
+bool elm::Model2::top_logsums_out_currently_valid() const
+{
+	return (_FCurrent_latest_logsums == FCurrent);
+}
+
+void elm::Model2::top_logsums_out_recalculated()
+{
+	if (top_logsums_out) {
+		_FCurrent_latest_logsums = FCurrent;
+	}
+}
+
+
+
+
+
+PyObject* elm::Model2::_get_casewise_grad_buffer()
+{
+	if (!casewise_grad_buffer) {
+		Py_RETURN_NONE;
+	}
+	Py_INCREF(casewise_grad_buffer);
+	return (PyObject*) casewise_grad_buffer;
+}
+
+void elm::Model2::_set_casewise_grad_buffer(PyObject* setval)
+{
+	if (setval == Py_None) {
+		Py_CLEAR(casewise_grad_buffer);
+		return;
+	}
+
+	if (!PyArray_Check(setval)) {
+		OOPS_TypeError("top_logsums_out must be an array");
+	}
+	
+	Py_CLEAR(casewise_grad_buffer);
+	casewise_grad_buffer = (PyArrayObject*) setval;
+	Py_XINCREF(casewise_grad_buffer);
+}
+
+void elm::Model2::_del_casewise_grad_buffer()
+{
+	Py_CLEAR(casewise_grad_buffer);
+}
+
+
+
+
+
+
+
+
+
+PyObject* elm::Model2::_get_casewise_d_logsums()
+{
+	if (!casewise_d_logsums) {
+		Py_RETURN_NONE;
+	}
+	Py_INCREF(casewise_d_logsums);
+	return (PyObject*) casewise_d_logsums;
+}
+
+void elm::Model2::_set_casewise_d_logsums(PyObject* setval)
+{
+	if (setval == Py_None) {
+		Py_CLEAR(casewise_d_logsums);
+		return;
+	}
+
+	if (!PyArray_Check(setval)) {
+		OOPS_TypeError("casewise_d_logsums must be an array");
+	}
+	
+	Py_CLEAR(casewise_d_logsums);
+	casewise_d_logsums = (PyArrayObject*) setval;
+	Py_XINCREF(casewise_d_logsums);
+}
+
+void elm::Model2::_del_casewise_d_logsums()
+{
+	Py_CLEAR(casewise_d_logsums);
 }
 
 

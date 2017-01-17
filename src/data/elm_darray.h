@@ -182,6 +182,9 @@ namespace elm {
 		bool   boolvalue(const unsigned& c, const unsigned& a, const unsigned& v) const;
 		bool   boolvalue(const unsigned& c, const unsigned& v) const;
 
+		const double&    value_double   (const size_t& c, const size_t& a, const size_t& v) const;
+		const double&    value_double   (const size_t& c, const size_t& v) const;
+
 		double&    value_double   (const size_t& c, const size_t& a, const size_t& v);
 		double&    value_double   (const size_t& c, const size_t& v);
 		long long& value_int64    (const size_t& c, const size_t& a, const size_t& v);

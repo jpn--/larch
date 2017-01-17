@@ -449,6 +449,7 @@ void elm::Model2::restore_scale_weights()
 	weight_scale_factor = 1.0;
 	
 	gradient_dispatcher.reset();
+	d_logsums_dispatcher.reset();
 	probability_dispatcher.reset();
 	loglike_dispatcher.reset();
 }
@@ -608,6 +609,7 @@ void elm::Model2::tearDown()
 	
 	probability_dispatcher.reset();
 	gradient_dispatcher.reset();
+	d_logsums_dispatcher.reset();
 	loglike_dispatcher.reset();
 	
 	clear_cache();

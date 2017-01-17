@@ -162,6 +162,12 @@ class Model(Model2, ModelReporter):
 				return self.parameter(name)
 
 	def _parameter_(self, *arg, **kwarg):
+		if 'max_value' in kwarg:
+			kwarg['max'] = kwarg['max_value']
+			del kwarg['max_value']
+		if 'min_value' in kwarg:
+			kwarg['min'] = kwarg['min_value']
+			del kwarg['min_value']
 		return super().parameter(*arg, **kwarg)
 
 	@property
@@ -357,6 +363,8 @@ class Model(Model2, ModelReporter):
 	def _change_data_fountain(self, datafount):
 		if isinstance(datafount, Fountain):
 			val = _core.Model2_change_data_fountain(self, datafount)
+		else:
+			val = None
 		self._ref_to_db = datafount
 		try:
 			self._pull_graph_from_db()
@@ -500,12 +508,17 @@ class Model(Model2, ModelReporter):
 			f.write( base64.standard_b64encode(self.robust_covariance_matrix.dumps()).decode('utf8') )
 			f.write("'))\n")
 			
-			blank_attr = set(dir(Model()))
+			from .nnnl import NNNL
+			if isinstance(self, NNNL):
+				blank_attr = set(dir(NNNL(Model())))
+			else:
+				blank_attr = set(dir(Model()))
 			blank_attr.remove('descriptions')
 			blank_attr.add('_ce')
 			blank_attr.add('_ce_caseindex')
 			blank_attr.add('_ce_altindex')
 			blank_attr.add('_u_ce')
+			blank_attr.add('base_model')
 			aliens_found = False
 			for a in dir(self):
 				if a not in blank_attr:
@@ -521,7 +534,8 @@ class Model(Model2, ModelReporter):
 							f.write("import pickle\n")
 							aliens_found = True
 						try:
-							p_obj = pickle.dumps(getattr(self,a))
+							self_a = getattr(self,a)
+							p_obj = pickle.dumps(self_a)
 							f.write("\n")
 							f.write("self.{} = pickle.loads({})\n".format(a,p_obj))
 						except pickle.PickleError:
@@ -615,6 +629,12 @@ class Model(Model2, ModelReporter):
 				_append_note(comment)
 		else:
 			self.write_runstats_note(comment)
+
+	def _specific_warning_notes(self):
+		w = ""
+		#import warnings
+		#warnings.warn(w, stacklevel=2)
+		return w
 
 	def networkx_digraph(self):
 		try:
@@ -1221,11 +1241,11 @@ class Model(Model2, ModelReporter):
 			steplen *= 0.5
 			if steplen < 0.01: break
 		if printer is not None:
-			printer("simple step {} to:\n".format(steplen)+self._parameter_report())
+			printer("simple step {} to:\n".format(steplen)+self._parameter_report(direction))
 			printer("LL={}".format(val))
 		if val < current_ll:
 			self.parameter_array[:] = current[:]
-			raise RuntimeError()
+			raise RuntimeError("simple step failed {} to:\n".format(steplen)+self._parameter_report(direction)+"\nLL={}".format(val))
 		return val
 
 	def parameter_holdfast_mask(self):
@@ -1391,7 +1411,7 @@ class Model(Model2, ModelReporter):
 				pass
 		# otherwise not cached (or not correctly) so calculate anew
 		ll = super().loglike()
-		if isinstance(self._cached_results, function_cache):
+		if ll and isinstance(self._cached_results, function_cache):
 			self._cached_results[self.parameter_array.tobytes()].loglike = ll
 		if numpy.isnan(ll):
 			self.doctor()
@@ -1561,6 +1581,10 @@ class Model(Model2, ModelReporter):
 #		fd_grad = self.finite_diff_gradient()
 		fd_grad = self.finite_diff_d_loglike()
 		self.option.force_recalculate = _force_recalculate
+		return self._gradient_check_reporter(a_grad, fd_grad, disp=disp)
+
+
+	def _gradient_check_reporter(self, a_grad, fd_grad, disp=True):
 		namelen = max(len(n) for n in self.parameter_names())
 		namelen = max(namelen,9)
 		from .util.flux import flux_mag, flux
@@ -1575,10 +1599,28 @@ class Model(Model2, ModelReporter):
 				max_flux = flx
 				max_flux_name = name
 		if disp:
+			if isinstance(disp,str):
+				print(disp)
 			print(s)
 			return max_flux, max_flux_name
 		return max_flux, s
 
+	def d_logsums_check(self, caserows=(0,1,2), disp=True, agg=True):
+		self.loglike()
+		_force_recalculate = self.option.force_recalculate
+		self.option.force_recalculate = True
+		a_grad = self.d_logsums()
+		fd_grad = self.finite_diff_d_logsums()
+		self.option.force_recalculate = _force_recalculate
+		if disp:
+			ret = [self._gradient_check_reporter(a_grad[c], fd_grad[c], disp="=== CASE ROW {} ===".format(c)) for c in caserows]
+			if agg:
+				ret.append(self._gradient_check_reporter(a_grad.sum(0), fd_grad.sum(0), disp="=== AGGREGATE SUM ==="))
+		else:
+			ret = [self._gradient_check_reporter(a_grad[c], fd_grad[c], disp=False) for c in caserows]
+			if agg:
+				ret.append(self._gradient_check_reporter(a_grad.sum(0), fd_grad.sum(0), disp=False))
+		return ret
 
 	def d_loglike_casewise(self, v=None):
 		if self.option.force_finite_diff_grad:
@@ -1628,6 +1670,30 @@ class Model(Model2, ModelReporter):
 		self.parameter_values(v)
 		return out
 
+	def finite_diff_d_logsums(self, *args, out=None, **kwargs):
+		s = len(self)
+		try:
+			v = numpy.asarray(args[0])
+			assert(v.shape[0]==s)
+		except IndexError:
+			v = numpy.asarray(self.parameter_values())
+		if out is None or out.shape!=(self.nCases(), s,):
+			out = numpy.empty([self.nCases(), s,], dtype=numpy.float64)
+		for n in range(s):
+			if self.parameter_holdfast_array[n]!=0:
+				continue
+			jiggle = (self[n].value * 1e-5) or 1e-5;
+			v1 = v.copy()
+			v1[n] += jiggle
+			self.loglike(v1, cached=False)
+			out[:,n] = self.logsums(**kwargs)
+			v1[n] -= jiggle*2
+			self.loglike(v1, cached=False)
+			out[:,n] -= self.logsums(**kwargs)
+			out[:,n] /= (2*jiggle)
+		self.parameter_values(v)
+		return out
+
 	def finite_diff_hessian(self, *args, out=None, finite_grad=False):
 		grad = lambda x: self.d_loglike(x)
 		if finite_grad:
@@ -1656,11 +1722,42 @@ class Model(Model2, ModelReporter):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def logsums(self):
+	def logsums(self, **kwargs):
+		if self.top_logsums_out is not None:
+			if self.top_logsums_out_currently_valid():
+				return self.top_logsums_out
+			else:
+				raise ValueError('top_logsums are not up to date, re-run loglike')
+		if top_logsums_out is None and (len(self.quantity) or len(self.nest)):
+			raise NotImplementedError('logsums must be saved on the fly for non-MNL models')
+		self.freshen()
 		return self.calc_utility_logsums(self.Data("UtilityCO"),self.Data("UtilityCA"),self.Data("Avail"))
 
 	top_logsums_out = property(Model2._get_top_logsums_out, Model2._set_top_logsums_out,
 							   Model2._del_top_logsums_out, "array to store model logsums upon calculation, (only for MNL at present)")
+
+	@property
+	def preserve_casewise_logsums(self):
+		"""
+		Shall case-wise logsums be preserved when calculating the log likelihood?
+		
+		If you don't need them for anything in particular, there's no reason to use memory to save them.
+		But if you do need them, it's much easier to save them than recreate them.
+		"""
+		return not(top_logsums_out is None)
+	
+	@preserve_casewise_logsums.setter
+	def preserve_casewise_logsums(self, val):
+		if val:
+			if self.top_logsums_out is not None and self.top_logsums_out.shape == (self.nCases(),):
+				pass
+			else:
+				self.top_logsums_out = numpy.zeros(self.nCases())
+		else:
+			del self.top_logsums_out
+
+	casewise_gradient_buffer = property(Model2._get_casewise_grad_buffer, Model2._set_casewise_grad_buffer,
+							   Model2._del_casewise_grad_buffer, "array to store model casewise gradient upon calculation, (only for NGEV at present)")
 
 	def estimate_scipy(self, method='Nelder-Mead', basinhopping=False, constraints=(), maxiter=1000, disp=True, **kwargs):
 		import scipy.optimize

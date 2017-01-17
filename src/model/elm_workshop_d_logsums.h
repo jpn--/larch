@@ -18,8 +18,8 @@
  *  
  */
 
-#ifndef __ELM_WORKSHOP_MNL_PROBABILITY_H__
-#define __ELM_WORKSHOP_MNL_PROBABILITY_H__
+#ifndef __ELM_WORKSHOP_D_LOGSUMS_H__
+#define __ELM_WORKSHOP_D_LOGSUMS_H__
 
 #include "etk.h"
 #include "elm_sql_scrape.h"
@@ -29,38 +29,36 @@
 
 namespace elm {
 
-	class mnl_prob_w
+	class d_logsums_w
 	: public etk::workshop
 	{
 		etk::ndarray* Probability;
-		etk::ndarray* CaseLogLike;
-		elm::darray_ptr Data_AV;
-		elm::darray_ptr Data_Ch;
-		double        U_premultiplier;
 
-		PyArrayObject** logsums_out;
+		PyArrayObject** d_logsums_casewise;
 
 		elm::ca_co_packet UtilPacket;
+		elm::ca_co_packet QuantPacket;
 
+		const paramArray* Params_QuantLogSum;
+		const double* CoefQuantLogsum;
 		
 		etk::logging_service* msg_;
 		
 	public:
 		virtual void work(size_t firstcase, size_t numberofcases, boosted::mutex* result_mutex);
-		mnl_prob_w(  etk::ndarray* U
-				   , etk::ndarray* CLL
+		d_logsums_w(  etk::ndarray* U
 				   , elm::ca_co_packet UtilPack
-				   , elm::darray_ptr Data_AV
-				   , elm::darray_ptr Data_Ch
-				   , const double& U_premultiplier
+				   , elm::ca_co_packet QuantPack
 				   , etk::logging_service* msgr=nullptr
-				   , PyArrayObject** logsums_out=nullptr
+				   , PyArrayObject** d_logsums_casewise=nullptr
+				   , const paramArray* Params_QuantLogSum=nullptr
+				   , const double* CoefQuantLogsum=nullptr
 				   );
-		~mnl_prob_w();
+		~d_logsums_w();
 	}; 
 
 
 
 }
-#endif // __ELM_WORKSHOP_MNL_PROBABILITY_H__
+#endif // __ELM_WORKSHOP_D_LOGSUMS_H__
 

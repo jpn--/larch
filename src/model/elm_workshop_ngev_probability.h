@@ -83,7 +83,7 @@ public:
 	bool option_mute_nan_warnings;
 	boosted::mutex* _lock;
 
-	PyArrayObject* logsums_out;
+	PyArrayObject** logsums_out;
 
 	workshop_ngev_probability
 	(  const unsigned&   nNodes
@@ -101,7 +101,7 @@ public:
 	 , const VAS_System* Xylem
 	 , const bool& option_mute_nan_warnings
 	 , etk::logging_service* msgr=nullptr
-	 , PyArrayObject* logsums_out=nullptr
+	 , PyArrayObject** logsums_out=nullptr
 	 );
 	
 	virtual ~workshop_ngev_probability();

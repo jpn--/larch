@@ -216,7 +216,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability
 								 , &Xylem
 								 , option.mute_nan_warnings
 								 , &msg
-								 , top_logsums_out
+								 , &top_logsums_out
 								 );}
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
@@ -238,7 +238,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 									 , &Cond_Prob
 									 , &Xylem
 									 , &GCurrent
-									 , nullptr
+									 , casewise_grad_buffer
 									 , &Bhhh
 									 , &msg
 									 , nullptr
@@ -250,46 +250,51 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
 
 
 
-std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise()
+std::shared_ptr<etk::ndarray> elm::Model2::_ngev_gradient_full_casewise(bool singlethread)
 {
 	periodic Sup (5);
 	BUGGER(msg)<< "Beginning NGEV Gradient (Full Casewise) Evaluation" ;
 	GCurrent.initialize(0.0);
 	Bhhh.initialize(0.0);
-	
-	std::shared_ptr<ndarray> gradient_casewise = make_shared<ndarray> (nCases, dF());
 
-	BUGGER(msg)<< "Beginning NGEV Gradient full casewise single-threaded Evaluation" ;
+	std::shared_ptr<ndarray> gradient_casewise = make_shared<ndarray> (nCases, dF());	
 	
-	boosted::mutex local_lock;
-	
-	workshop_ngev_gradient w
-			(  dF()
-			 , nNodes
-			 , utility_packet()
-			 , &Data_UtilityCE_manual
-			 , allocation_packet()
-			 , sampling_packet()
-			 , quantity_packet()
-			 , Params_LogSum
-			 , Params_QuantLogSum
-			 , Coef_QuantLogSum.ptr()
-			 , Data_Choice
-			 , Data_Weight_active()
-			 , &AdjProbability
-			 , &Probability
-			 , &Cond_Prob
-			 , &Xylem
-			 , &GCurrent
-			 , &*gradient_casewise
-			 , &Bhhh
-			 , &msg
-			 , nullptr
-			 , &local_lock
-			 );
+	if (singlethread) {
+		BUGGER(msg)<< "Beginning NGEV Gradient full casewise single-threaded Evaluation" ;
+		
+		boosted::mutex local_lock;
+		
+		workshop_ngev_gradient w
+				(  dF()
+				 , nNodes
+				 , utility_packet()
+				 , &Data_UtilityCE_manual
+				 , allocation_packet()
+				 , sampling_packet()
+				 , quantity_packet()
+				 , Params_LogSum
+				 , Params_QuantLogSum
+				 , Coef_QuantLogSum.ptr()
+				 , Data_Choice
+				 , Data_Weight_active()
+				 , &AdjProbability
+				 , &Probability
+				 , &Cond_Prob
+				 , &Xylem
+				 , &GCurrent
+				 , (PyArrayObject*)(gradient_casewise->get_object())
+				 , &Bhhh
+				 , &msg
+				 , nullptr
+				 , &local_lock
+				 );
 
-	w.work(0, nCases, &local_lock);
-
+		w.work(0, nCases, &local_lock);
+	} else {
+		
+		_set_casewise_grad_buffer(gradient_casewise->get_object());
+		ngev_gradient();
+	}
 	BUGGER(msg)<< "End NGEV Gradient Evaluation" ;
 	
 	return gradient_casewise;
@@ -640,6 +645,7 @@ void elm::Model2::ngev_probability()
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_ngev_probability, this);
 		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
+		top_logsums_out_recalculated();
 	
 	} else {
 	
@@ -648,6 +654,7 @@ void elm::Model2::ngev_probability()
 			local_prob_workshop = make_shared_workshop_ngev_probability ();
 		}
 		local_prob_workshop->work(0, nCases, nullptr);
+		top_logsums_out_recalculated();
 	
 	}
 //	BUGGER(msg) << "Quantity (case 0)\n" << Quantity.printrow(0) ;
@@ -764,6 +771,8 @@ void elm::Model2::ngev_gradient()
 	}
 	INFO(msg) << "NGEV Grad->["<< ret.str().substr(1) <<"] (using "<<option.threads<<" threads)";
 }
+
+
 
 
 ELM_RESULTCODE elm::Model2::nest

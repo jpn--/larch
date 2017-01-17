@@ -860,8 +860,32 @@ class TestMNL(ELM_TestCase):
 		self.assertArrayEqual(numpy.arange(0,5029*2,2),  ls[:,0])
 
 
-
-
+	def test_d_logsums_on_quant_model(self):
+		m1 = Model.Example()
+		m1.parameter('quant_cost', value=1)
+		m1.parameter('quant_time', value=2)
+		m1.quantity('totcost+10', 'quant_cost')
+		m1.quantity('tottime',    'quant_time')
+		m1.provision()
+		m1.setUp()
+		m1.loglike()
+		m1.parameter_array[:] += 0.01
+		m1.preserve_casewise_logsums = True
+		gc1 = m1.gradient_check()
+		gc2 = m1.d_logsums_check([0,1,-2,-1])
+		self.assertTrue(gc1[0]<-6)
+		self.assertTrue(gc2[0][0]<-4.5)
+		self.assertTrue(gc2[1][0]<-4.5)
+		self.assertTrue(gc2[2][0]<-4.5)
+		self.assertTrue(gc2[3][0]<-4.5)
+		self.assertTrue(gc2[4][0]<-4.5)
+		checks = m1.d_logsums().sum(0)
+		corrects=[  6.66083012e+02,   4.27163937e+02,   2.16904918e+03,   1.44932987e+02,
+					3.07769623e+02,   3.96511181e+04,   2.52521451e+04,   1.27241287e+05,
+					8.82080562e+03,   1.69530409e+04,   2.26046377e+05,   8.47358123e+05,
+					2.50698880e+03,   2.52206189e+03]
+		for check, correct in zip(checks, corrects):
+			self.assertNearlyEqual(correct,check)
 
 
 

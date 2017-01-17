@@ -399,7 +399,7 @@ elm::workshop_ngev_gradient::workshop_ngev_gradient
  , const etk::memarray* Cond_Prob
  , const VAS_System* Xylem
  , etk::memarray* GCurrent
- , etk::ndarray*  GCurrentCasewise
+ , PyArrayObject*  GCurrentCasewise
  , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
  , etk::ndarray* export_dProb
@@ -467,7 +467,7 @@ void elm::workshop_ngev_gradient::rebuild_local_data(
  , const etk::memarray* Cond_Prob
  , const VAS_System* Xylem
  , etk::memarray* GCurrent
- , etk::ndarray*  GCurrentCasewise
+ , PyArrayObject*  GCurrentCasewise
  , etk::symmetric_matrix* Bhhh
  , etk::logging_service* msgr
  , etk::ndarray* export_dProb
@@ -617,7 +617,8 @@ void elm::workshop_ngev_gradient::workshop_ngev_gradient_do(
 		workshopGCurrent += CaseGrad;
 		
 		if (_GCurrentCasewise) {
-			cblas_dcopy(dF, *CaseGrad, 1, _GCurrentCasewise->ptr(c), 1);
+			cblas_dcopy(dF, *CaseGrad, 1, (double*) PyArray_GETPTR1(_GCurrentCasewise, c) , 1);
+			cblas_dscal(dF, -1, (double*) PyArray_GETPTR1(_GCurrentCasewise, c), 1);
 		}
 	}
 	//BUGGER_(msg_, "Finished NL gradient calculation ["<<firstcase<<"]-["<<firstcase+numberofcases-1<<"]");
