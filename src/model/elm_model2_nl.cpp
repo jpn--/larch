@@ -216,7 +216,7 @@ boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_probability
 								 , &Xylem
 								 , option.mute_nan_warnings
 								 , &msg
-								 , &top_logsums_out
+								 , top_logsums_out
 								 );}
 
 boosted::shared_ptr<workshop> elm::Model2::make_shared_workshop_ngev_gradient ()
