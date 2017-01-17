@@ -644,7 +644,13 @@ void elm::Model2::ngev_probability()
 		
 		boosted::function<boosted::shared_ptr<workshop> ()> workshop_builder =
 			boosted::bind(&elm::Model2::make_shared_workshop_ngev_probability, this);
-		USE_DISPATCH(probability_dispatcher,option.threads, nCases, workshop_builder);
+		
+		workshop_updater_t workshop_updater = [&](std::shared_ptr<workshop> w)
+		{
+			(dynamic_cast<workshop_ngev_probability*>(&*w))->reassign_py_output(top_logsums_out);
+		};
+		
+		UPDATE_AND_DISPATCH(probability_dispatcher,option.threads, &workshop_updater, nCases, workshop_builder);
 		top_logsums_out_recalculated();
 	
 	} else {

@@ -182,7 +182,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , const VAS_System* Xylem
 , const bool& option_mute_nan_warnings
 , etk::logging_service* msgr
-, PyArrayObject** logsums_out
+, PyArrayObject* logsums_out
 
 )
 : nNodes          (nNodes)
@@ -200,19 +200,33 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , Xylem           (Xylem)
 , option_mute_nan_warnings (option_mute_nan_warnings)
 , msg_            (msgr)
-, logsums_out	  (logsums_out)
+, logsums_out     (logsums_out)
 {
 	Workspace.resize(nNodes);
 	// check that logsums out is at least the correct size
-	if (logsums_out && (*logsums_out)) {
-		if (PyArray_DIM(*logsums_out, 0) < Probability->size1() ) {
+	if (logsums_out) {
+		Py_XINCREF(logsums_out);
+		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
 			Py_CLEAR(logsums_out);
+		} else {
+
 		}
 	}
 }
 
 elm::workshop_ngev_probability::~workshop_ngev_probability()
 {
+	Py_CLEAR(logsums_out);
+}
+
+
+void elm::workshop_ngev_probability::reassign_py_output(PyArrayObject* new_logsums_out)
+{
+	Py_CLEAR(logsums_out);
+	if (new_logsums_out) {
+		Py_XINCREF(new_logsums_out);
+		logsums_out = new_logsums_out;
+	}
 }
 
 
@@ -303,7 +317,7 @@ void elm::workshop_ngev_probability::workshop_ngev_probability_calc
 		}
 
 		
-		__casewise_ngev_utility(Utility->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace, (double*)((logsums_out&&(*logsums_out))?PyArray_GETPTR1(*logsums_out, c):nullptr));
+		__casewise_ngev_utility(Utility->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem, *Workspace, (double*)((logsums_out)?PyArray_GETPTR1(logsums_out, c):nullptr));
 		__casewise_ngev_probability(Utility->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), Allocation->size()?Allocation->ptr(c):nullptr, *Xylem);
 		if (use_sampling) {
 			case_logit_add_sampling(c);
