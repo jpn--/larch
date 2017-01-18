@@ -25,7 +25,7 @@ import keyword
 import pandas
 import os
 import re
-from ..util.groupnode import GroupNode
+from .groupnode import GroupNode
 from contextlib import contextmanager
 
 class IncompatibleShape(LarchError):
@@ -1749,8 +1749,16 @@ class DT(Fountain):
 			An open :class:`DT` file.
 		'''
 		if len(alts)==0:
-			raise ValueError('alternatives must be given for idco import (a future vresion of larch may relax this requirement)')
+			raise ValueError('alternatives must be given for idco import (a future version of larch may relax this requirement)')
 		
+		if not isinstance(alts,dict):
+			raise TypeError('alts must be a dict of {altcode as int:(altname as str, availcolumn as str[, choicecolumn as str]) tuples')
+		
+		for altkey,altval in alts.items():
+			if not isinstance(altkey,int):
+				raise TypeError('alts must be a dict of {altcode as int:(altname as str, availcolumn as str[, choicecolumn as str]) tuples')
+			if isinstance(altval,str):
+				raise TypeError('alts must be a dict of {altcode as int:(altname as str, availcolumn as str[, choicecolumn as str]) tuples')
 		
 		self = DT(filename=savename, complevel=complevel, complib=complib, **kwargs)
 		self.import_idco(filename, *csv_args, caseid_column=None, overwrite=overwrite, **csv_kwargs)
@@ -3459,7 +3467,7 @@ class DT(Fountain):
 						elif self.in_vault( 'stack.'+i ):
 							v_dtypes.append('<stack>')
 						else:
-							raise
+							v_dtypes.append('<error>')
 				else:
 					v_dtypes.append(str(_pytables_link_dereference(self.idca[i]).dtype))
 				v_ftypes.append('idca')
@@ -3983,7 +3991,7 @@ class DT(Fountain):
 				it = d.idco._v_children[co]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idco_from_array(co, d.idco[co][screen])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					co_g = d1.create_group(d1.h5idco, co)
 					# dupe parts separately, keep soft links
 					if isinstance(it._index_, _tb.link.SoftLink):
@@ -4003,7 +4011,7 @@ class DT(Fountain):
 				it = d.idco[co]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idco_from_array(co, d.idco[co][screen])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					co_g = d1.create_group(d1.h5idco, co)
 					# dupe parts separately, drop all links
 					d1.create_carray(co_g, '_index_', obj=it._index_[screen])
@@ -4020,7 +4028,7 @@ class DT(Fountain):
 				it = d.idca._v_children[ca]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idca_from_array(ca, d.array_idca(ca, dtype=d.idca[ca].dtype))
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					ca_g = d1.create_group(d1.h5idca, ca)
 					# dupe parts separately, keep soft links
 					try:
@@ -4050,7 +4058,7 @@ class DT(Fountain):
 				it = d.idca[ca]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idca_from_array(ca, d.idca[ca][screen])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					ca_g = d1.create_group(d1.h5idca, ca)
 					# dupe parts separately, drop all links
 					try:
@@ -4114,7 +4122,7 @@ class DT(Fountain):
 				it = d.idco._v_children[co]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idco_from_array(co, d.idco[co][:])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					co_g = d1.create_group(d1.h5idco, co)
 					# dupe parts separately, keep soft links
 					if isinstance(it._index_, _tb.link.SoftLink):
@@ -4134,7 +4142,7 @@ class DT(Fountain):
 				it = d.idco[co]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idco_from_array(co, d.idco[co][:])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					co_g = d1.create_group(d1.h5idco, co)
 					# dupe parts separately, drop all links
 					d1.create_carray(co_g, '_index_', obj=it._index_[:])
@@ -4146,7 +4154,7 @@ class DT(Fountain):
 				it = d.idca._v_children[ca]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idca_from_array(ca, d.idca[ca][:])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					ca_g = d1.create_group(d1.h5idca, ca)
 					# dupe parts separately, keep soft links
 					try:
@@ -4176,7 +4184,7 @@ class DT(Fountain):
 				it = d.idca[ca]
 				if isinstance(it, _tb.array.Array):
 					d1.new_idca_from_array(ca, d.idca[ca][:])
-				elif isinstance(it, _tb.group.Group):
+				elif isinstance(it, (_tb.group.Group,GroupNode)):
 					ca_g = d1.create_group(d1.h5idca, ca)
 					# dupe parts separately, drop all links
 					try:

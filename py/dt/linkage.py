@@ -3,7 +3,7 @@ from . import DT
 from . import _pytables_link_dereference, _tb, numpy
 
 
-def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
+def DTx(filename=None, *, caseids=None, alts=None, include_vault=True, **kwargs):
 	"""Build a new DT with externally linked data.
 	
 	Parameters
@@ -20,6 +20,10 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 		If the same variable name appears multiple times, the highest numbered source file
 		is the one that survives.
 		Must be passed as a keyword argument.
+	include_vault : bool
+		Also copy the vault from all idco and idca linkages.  Linkages are made in 
+		arbitrary order, so overlapping vault names with varying values may give unstable
+		results.
 	
 	Notes
 	-----
@@ -117,6 +121,15 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 				got_caseids = True
 			if not got_alts and tag_alts is not None:
 				got_alts = swap_alts(tag_alts)
+			# vault
+			if include_vault:
+				try:
+					dx = DT(idca, mode='r')
+				except:
+					pass
+				else:
+					for k in dx.vault_keys():
+						d.to_vault(k, dx.from_vault(k))
 	for idco_kw in sorted(idco_kwargs):
 		idco = idco_kwargs[idco_kw]
 		if idco is not None:
@@ -135,6 +148,16 @@ def DTx(filename=None, *, caseids=None, alts=None, **kwargs):
 				got_caseids = True
 			if not got_alts and tag_alts is not None:
 				got_alts = swap_alts(tag_alts)
+			# vault
+			if include_vault:
+				try:
+					dx = DT(idco, mode='r')
+				except:
+					pass
+				else:
+					for k in dx.vault_keys():
+						d.to_vault(k, dx.from_vault(k))
+
 	return d
 
 def DTL(source):

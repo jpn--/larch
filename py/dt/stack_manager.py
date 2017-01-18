@@ -1,6 +1,6 @@
 
 from . import _pytables_link_dereference, _tb, numpy
-
+from .groupnode import GroupNode
 
 class DT_idco_stack_manager:
 
