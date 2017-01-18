@@ -106,8 +106,8 @@ div.output_wrapper caption {
 
 
 def stylesheet():
-	from IPython.display import display, HTML
-	display(HTML("<style>{}</style>".format(_default_css_jupyter)))
+	from IPython.display import display_html, HTML
+	display_html(HTML("<style>{}</style>".format(_default_css_jupyter)))
 
 
 def larch_tag():
@@ -126,9 +126,9 @@ def larch_tag():
 	xsign.start('img', { 'height':"48", 'src':"https://www.camsys.com/sites/default/files/camsys_logo.png", 'style':'float:right;height:40px;margin-top:0' })
 	xsign.end('img')
 	xsign.close()
-	from IPython.display import display, HTML
+	from IPython.display import display_html, HTML
 	s= xsign.dumps()
-	display(HTML(s))
+	display_html(HTML(s))
 
 
 
