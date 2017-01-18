@@ -1,0 +1,92 @@
+.. currentmodule:: larch
+
+======================================================
+22: MTC Motorized and Non-Motorized Nested Mode Choice
+======================================================
+
+.. testsetup:: *
+
+   import larch
+
+For this example, we're going to re-create model 22 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_,
+but using the :class:`DT` data format.
+
+This model is a nested logit model using the same utility function as model 17, so
+we can start with that model and just add the nesting structure.
+
+.. testcode::
+
+	m = larch.Model.Example('17t')
+
+We will create seperate nests for the motorized and non-motorized alternatives.
+
+.. testcode::
+
+	m.new_nest('motorized', param_name='mu_motor', children=[1,2,3,4])
+	m.new_nest('nonmotorized', param_name='mu_nonmotor', children=[5,6])
+
+That's it! We're basically ready to estimate.
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> result = m.maximize_loglike()
+	>>> result.message
+	'Optimization terminated successfully...
+
+	>>> m.loglike()
+	-3441.67...
+
+	>>> print(m)
+	====================================================================================================
+	Model Parameter Estimates
+	----------------------------------------------------------------------------------------------------
+	Parameter          	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
+	costbyincome       	 0          	-0.0386153  	 0.0103681  	-3.72444    	 0          
+	motorized_time     	 0          	-0.014523   	 0.0038659  	-3.7567     	 0          
+	nonmotorized_time  	 0          	-0.0462154  	 0.00539684 	-8.56342    	 0          
+	motorized_ovtbydist	 0          	-0.113797   	 0.0211019  	-5.39273    	 0          
+	hhinc#4            	 0          	-0.00393117 	 0.00161229 	-2.43824    	 0          
+	hhinc#5            	 0          	-0.0100457  	 0.00465075 	-2.16001    	 0          
+	hhinc#6            	 0          	-0.00620761 	 0.00302147 	-2.0545     	 0          
+	vehbywrk_SR        	 0          	-0.225668   	 0.0650538  	-3.46894    	 0          
+	vehbywrk_Tran      	 0          	-0.707055   	 0.149829   	-4.71909    	 0          
+	vehbywrk_Bike      	 0          	-0.734788   	 0.228794   	-3.21157    	 0          
+	vehbywrk_Walk      	 0          	-0.76389    	 0.163386   	-4.67538    	 0          
+	wkcbd_SR2          	 0          	 0.19314    	 0.0961932  	 2.00783    	 0          
+	wkcbd_SR3+         	 0          	 0.780957   	 0.199833   	 3.90805    	 0          
+	wkcbd_Tran         	 0          	 0.921304   	 0.22184    	 4.153      	 0          
+	wkcbd_Bike         	 0          	 0.407706   	 0.327652   	 1.24433    	 0          
+	wkcbd_Walk         	 0          	 0.11414    	 0.236436   	 0.482753   	 0          
+	wkempden_SR2       	 0          	 0.00114897 	 0.000354258	 3.24332    	 0          
+	wkempden_SR3+      	 0          	 0.00163777 	 0.000448762	 3.64953    	 0          
+	wkempden_Tran      	 0          	 0.00223662 	 0.000507294	 4.40892    	 0          
+	wkempden_Bike      	 0          	 0.0016744  	 0.00108733 	 1.53992    	 0          
+	wkempden_Walk      	 0          	 0.00217042 	 0.000762331	 2.84708    	 0          
+	ASC_SR2            	 0          	-1.32502    	 0.254581   	-5.2047     	 0          
+	ASC_SR3+           	 0          	-2.50554    	 0.474884   	-5.2761     	 0          
+	ASC_Tran           	 0          	-0.403551   	 0.221187   	-1.82448    	 0          
+	ASC_Bike           	 0          	-1.20121    	 0.416853   	-2.88162    	 0          
+	ASC_Walk           	 0          	 0.345484   	 0.3578     	 0.965577   	 0          
+	~~ Other ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	mu_motor           	 1          	 0.725782   	 0.134908   	-2.03263    	 1          
+	mu_nonmotor        	 1          	 0.768934   	 0.178508   	-1.29443    	 1          
+	====================================================================================================
+	Model Estimation Statistics
+	----------------------------------------------------------------------------------------------------
+	Log Likelihood at Convergence     	-3441.67
+	Log Likelihood at Null Parameters 	-7309.60
+	----------------------------------------------------------------------------------------------------
+	Rho Squared w.r.t. Null Parameters	0.529
+	====================================================================================================
+	...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.Model.Example(22)
+

@@ -1,0 +1,142 @@
+.. currentmodule:: larch
+
+======================================================
+42: MTC Non-Normalized Nested Mode Choice
+======================================================
+
+.. testsetup:: *
+
+   import larch
+
+For this example, we're going to create a non-normalized version of model 22 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_,
+but using the :class:`DT` data format.
+
+This model is a nested logit model using the same utility function as model 17, so ideally we would
+start with that model and just add the NNNL structure.  Unfortunatly, the automatic NNNL generator
+is a little finnicky and doesn't work with shadow parameters (yet) so we'll have to write out that model
+without them.
+
+.. testcode::
+
+	d = larch.DT.Example('MTC')
+	m = larch.Model(d)
+	from larch.roles import P, X
+	m.utility.ca = (
+		+ X("totcost/hhinc") * P("costbyincome")
+		+ X("tottime * (altnum <= 4)") * P("motorized_time")
+		+ X("tottime * (altnum >= 5)") * P("nonmotorized_time")
+		+ X("ovtt/dist * (altnum <= 4)") * P("motorized_ovtbydist")
+	)
+	for a in [4,5,6]:
+		m.utility[a] += X("hhinc") * P("hhinc#{}".format(a))
+	for a,name in m.df.alternatives()[1:3]:
+		m.utility[a] += (
+			+ X("vehbywrk") * P("vehbywrk_SR")
+			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
+			+ X("wkempden") * P("wkempden_"+name)
+			+ P("ASC_"+name)
+		)
+	for a,name in m.df.alternatives()[3:]:
+		m.utility[a] += (
+			+ X("vehbywrk") * P("vehbywrk_"+name)
+			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
+			+ X("wkempden") * P("wkempden_"+name)
+			+ P("ASC_"+name)
+		)
+
+
+We will create seperate nests for the motorized and non-motorized alternatives.
+
+.. testcode::
+
+	m.new_nest('motorized', param_name='mu', children=[1,2,3,4])
+	m.new_nest('nonmotorized', param_name='mu', children=[5,6])
+
+Now we have a regular "correct" NL model.  But suppose for some reason we want to have a
+NNNL model.  (Contrary to what you may read elsewhere, there are sometimes legitimate computational reasons
+to choose such a model form, some of which will one day will be explained in this
+documentation.)
+
+.. testcode::
+
+	from larch.nnnl import NNNL
+	m = NNNL(m)
+	m.option.calc_std_errors = True
+
+	m.parameter_groups = (
+		"costbyincome",
+		".*time",
+		".*dist",
+		"hhinc.*",
+		"vehbywrk.*",
+		"wkcbd.*",
+		"wkempden.*",
+		"ASC.*",
+	)
+
+This creates a new non-normalized nested logit model.
+
+Having created this model, we can then estimate it:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> result = m.maximize_loglike()
+	>>> result.message
+	'Optimization terminated successfully...
+
+	>>> m.loglike()
+	-3441.6...
+
+	>>> print(m.report('txt', sigfigs=3))
+	====================================================================================================
+	Model Parameter Estimates
+	----------------------------------------------------------------------------------------------------
+	Parameter          	InitValue   	FinalValue  	StdError    	t-Stat      	NullValue   
+	costbyincome       	 0.0        	-0.0531     	 0.0107     	-4.98       	 0.0        
+	motorized_time     	 0.0        	-0.02       	 0.00385    	-5.19       	 0.0        
+	nonmotorized_time  	 0.0        	-0.062      	 0.0114     	-5.45       	 0.0        
+	motorized_ovtbydist	 0.0        	-0.156      	 0.0241     	-6.46       	 0.0        
+	hhinc#4            	 0.0        	-0.00541    	 0.002      	-2.71       	 0.0        
+	hhinc#5            	 0.0        	-0.0135     	 0.00666    	-2.03       	 0.0        
+	hhinc#6            	 0.0        	-0.00826    	 0.00422    	-1.96       	 0.0        
+	vehbywrk_SR        	 0.0        	-0.311      	 0.067      	-4.64       	 0.0        
+	vehbywrk_Tran      	 0.0        	-0.973      	 0.121      	-8.02       	 0.0        
+	vehbywrk_Bike      	 0.0        	-0.984      	 0.337      	-2.92       	 0.0        
+	vehbywrk_Walk      	 0.0        	-1.02       	 0.274      	-3.73       	 0.0        
+	wkcbd_SR2          	 0.0        	 0.266      	 0.124      	 2.15       	 0.0        
+	wkcbd_SR3+         	 0.0        	 1.08       	 0.192      	 5.62       	 0.0        
+	wkcbd_Tran         	 0.0        	 1.27       	 0.168      	 7.55       	 0.0        
+	wkcbd_Bike         	 0.0        	 0.538      	 0.432      	 1.25       	 0.0        
+	wkcbd_Walk         	 0.0        	 0.151      	 0.319      	 0.474      	 0.0        
+	wkempden_SR2       	 0.0        	 0.00158    	 0.00039    	 4.06       	 0.0        
+	wkempden_SR3+      	 0.0        	 0.00226    	 0.000452   	 4.99       	 0.0        
+	wkempden_Tran      	 0.0        	 0.00308    	 0.000364   	 8.46       	 0.0        
+	wkempden_Bike      	 0.0        	 0.00233    	 0.0014     	 1.67       	 0.0        
+	wkempden_Walk      	 0.0        	 0.00295    	 0.000943   	 3.13       	 0.0        
+	ASC_SR2            	 0.0        	-1.83       	 0.107      	-17.0       	 0.0        
+	ASC_SR3+           	 0.0        	-3.45       	 0.153      	-22.6       	 0.0        
+	ASC_Tran           	 0.0        	-0.563      	 0.26       	-2.16       	 0.0        
+	ASC_Bike           	 0.0        	-1.62       	 0.5        	-3.24       	 0.0        
+	ASC_Walk           	 0.0        	 0.437      	 0.479      	 0.912      	 0.0        
+	~~ Other ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	mu                 	 1.0        	 0.742      	 0.104      	-2.47       	 1.0        
+	====================================================================================================
+	Model Estimation Statistics
+	----------------------------------------------------------------------------------------------------
+	Log Likelihood at Convergence     	-3441.69
+	Log Likelihood at Null Parameters 	-7309.60
+	----------------------------------------------------------------------------------------------------
+	Rho Squared w.r.t. Null Parameters	0.529
+	====================================================================================================
+	...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.Model.Example(42)
+
