@@ -186,8 +186,8 @@ class NNNL(MetaModel):
 
 	def _specific_warning_notes(self):
 		w = "WARNING: This is a non-normalized nested logit (NNNL) model. You must adjust parameter estimates accordingly."
-		import warnings
-		warnings.warn(w, stacklevel=2)
+		#import warnings
+		#warnings.warn(w, stacklevel=3)
 		return w
 
 	def setUp(self, *args, **kwargs):
