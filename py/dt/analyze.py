@@ -19,6 +19,11 @@ def clear_look_cache(self):
 
 
 
+def seer(self, big=False):
+	with XHTML(os.path.splitext(self.source_filename)[0]+".info.html", overwrite=True, view_on_exit=True) as f:
+		f.append(self.info(3))
+		if big:
+			f.append(self.look_idco('*'))
 
 
 

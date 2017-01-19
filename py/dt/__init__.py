@@ -4256,7 +4256,7 @@ class DT(Fountain):
 		return d1
 
 	from .vault import in_vault, from_vault, to_vault, vault_keys, wipe_vault
-	from .analyze import look_idca, look_idco, clear_look_cache, look_site
+	from .analyze import look_idca, look_idco, clear_look_cache, look_site, seer
 
 
 def _close_all_h5():
