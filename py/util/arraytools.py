@@ -131,3 +131,43 @@ def convert_float_to_int_if_lossless(arr, inttype=numpy.int32):
 				return arr.astype(inttype)
 	return arr
 
+
+def failable_iter_to_set(iterable, transformer):
+	s = set()
+	for i in iterable:
+		try:
+			s.add(transformer(i))
+		except AttributeError:
+			pass
+	return s
+
+def failable_iter_to_unique(iterable, transformer):
+	s_cache = None
+	for i in iterable:
+		try:
+			s = transformer(i)
+		except AttributeError:
+			pass
+		else:
+			if s_cache is not None:
+				if s_cache!=s:
+					return None
+			else:
+				s_cache = s
+	return s_cache
+
+def unique_successful_transform(iterable, transformer, accept_longest=False):
+	s = failable_iter_to_unique(iterable, transformer)
+	if len(s)==1:
+		return s.pop()
+	if accept_longest:
+		candidate = None
+		candidate_len = 0
+		for i in s:
+			if len(str(i)) > candidate_len:
+				candidate_len = len(str(i))
+				candidate = i
+		return candidate
+	return None
+
+

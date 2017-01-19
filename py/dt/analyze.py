@@ -43,6 +43,9 @@ def look_site(self, directory=None, screen="None"):
 			f_top_table_headrow = f_top_table.put(tag="thead").put(tag="tr")
 			f_top_table_headrow.put(tag="th", text='Variable')
 			f_top_table_headrow.put(tag="th", text='dtype')
+			f_top_table_headrow.put(tag="th", text='shape')
+			f_top_table_headrow.put(tag="th", text='Original Source')
+			f_top_table_headrow.put(tag="th", text='Description')
 			
 			for slot in range(len(names)):
 				
@@ -54,13 +57,42 @@ def look_site(self, directory=None, screen="None"):
 
 				try:
 					z_dtype = self.idco[name].dtype
-				except (TypeError,tables.NoSuchNodeError):
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
 					try:
 						z_dtype = self.idco[name]._values_.dtype
 					except:
 						z_dtype = "?"
 
 				trow.put(tag="td", text=str(z_dtype))
+
+
+				try:
+					z_shape = self.idco[name].shape
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_shape = self.idco[name]._index_.shape[0:1] + self.idco[name]._values_.shape[1:]
+					except:
+						z_shape = "?"
+				trow.put(tag="td", text=str(z_shape))
+				
+				
+				try:
+					z_source = self.idco[name]._v_attrs.ORIGINAL_SOURCE
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_source = self.idco[name]._values_._v_attrs.ORIGINAL_SOURCE
+					except:
+						z_source = "?"
+				trow.put(tag="td", text=str(z_source))
+				
+				try:
+					z_descrip = self.idco[name]._v_attrs.TITLE
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_descrip = self.idco[name]._values_._v_attrs.TITLE
+					except:
+						z_descrip = ""
+				trow.put(tag="td", text=str(z_descrip))
 				
 				with XHTML(fname, overwrite=True, view_on_exit=False) as f:
 					navbar = Elem(tag='span', attrib={'style':'font:Roboto, monospace; font-size:80%; font-weight:900;'}, text='', tail=' ')
@@ -89,6 +121,9 @@ def look_site(self, directory=None, screen="None"):
 			f_top_table_headrow = f_top_table.put(tag="thead").put(tag="tr")
 			f_top_table_headrow.put(tag="th", text='Variable')
 			f_top_table_headrow.put(tag="th", text='dtype')
+			f_top_table_headrow.put(tag="th", text='shape')
+			f_top_table_headrow.put(tag="th", text='Original Source')
+			f_top_table_headrow.put(tag="th", text='Description')
 
 			for slot in range(len(names)):
 				
@@ -99,12 +134,40 @@ def look_site(self, directory=None, screen="None"):
 				trow.put(tag="td").put(tag="a", attrib={'href':'./idca/'+name+".html"}, text=name)
 				try:
 					z_dtype = self.idca[name].dtype
-				except (TypeError,tables.NoSuchNodeError):
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
 					try:
 						z_dtype = self.idca[name]._values_.dtype
 					except:
 						z_dtype = "?"
 				trow.put(tag="td", text=str(z_dtype))
+
+				try:
+					z_shape = self.idca[name].shape
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_shape = self.idca[name]._index_.shape[0:1] + self.idca[name]._values_.shape[1:]
+					except:
+						z_shape = "?"
+				trow.put(tag="td", text=str(z_shape))
+
+				try:
+					z_source = self.idca[name]._v_attrs.ORIGINAL_SOURCE
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_source = self.idca[name]._values_._v_attrs.ORIGINAL_SOURCE
+					except:
+						z_source = "?"
+				trow.put(tag="td", text=str(z_source))
+				
+				try:
+					z_descrip = self.idca[name]._v_attrs.TITLE
+				except (TypeError,tables.NoSuchNodeError,AttributeError):
+					try:
+						z_descrip = self.idca[name]._values_._v_attrs.TITLE
+					except:
+						z_descrip = ""
+				trow.put(tag="td", text=str(z_descrip))
+
 
 				with XHTML(fname, overwrite=True, view_on_exit=False) as f:
 					navbar = Elem(tag='span', attrib={'style':'font:Roboto, monospace; font-size:80%; font-weight:900;'}, text='', tail=' ')

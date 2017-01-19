@@ -2506,11 +2506,44 @@ class DT(Fountain):
 		if title is not None:
 			self.idco[name]._v_attrs.TITLE = title
 
+	def recast_idco(self, name, newtype, invalid_values=()):
+		"""
+		Recast an existing idco variable into a new fundamental dtype.
+		
+		Parameters
+		----------
+		name : str
+			The name of the variable to recast
+		newtype : dtype
+			The new dtype to which the existing values will be coerced
+		invalid_values : tuple
+			Values that are invalid and will be changed to NaN (if the new dtype is 
+			some kind of float, otherwise this is ignored).
+		"""
+		arr = self.idco[name][:].astype(newtype)
+		if arr.dtype.kind=='f':
+			for invalid_value in invalid_values:
+				arr[arr==invalid_value] = numpy.nan
+		attrnames = self.idco[name]._v_attrs._v_attrnames
+		attrs={}
+		for attrname in attrnames:
+			if attrname not in ('CLASS','VERSION'):
+				attrs[attrname] = self.idco[name]._v_attrs[attrname]
+		try:
+			self.h5f.remove_node(self.idco._v_node, name, False)
+		except _tb.exceptions.NoSuchNodeError:
+			pass
+		self.new_idco_from_array(name, arr)
+		for attrname in attrs.keys():
+			self.idco[name]._v_attrs[attrname] = attrs[attrname]
+
+
+
 	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None):
 		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
 		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
 
-	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None, rel_original_source=True, title=None):
+	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None, rel_original_source=True, title=None, dictionary=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2579,13 +2612,15 @@ class DT(Fountain):
 				h5var[:] = arr
 			else:
 				raise
-		if rel_original_source and original_source:
+		if rel_original_source and original_source and original_source[0]!='=':
 			basedir = os.path.dirname(self.source_filename)
 			original_source = os.path.relpath(original_source, start=basedir)
 		if original_source is not None:
 			self.idco[name]._v_attrs.ORIGINAL_SOURCE = original_source
 		if title is not None:
 			self.idco[name]._v_attrs.TITLE = title
+		if dictionary is not None:
+			self.idco[name]._v_attrs.DICTIONARY = dictionary
 
 
 	def merge_into_idco_from_dataframe(self, other, self_on, other_on, dupe_suffix="_copy", original_source=None, names=None, log=lambda *x: None,):
@@ -2861,7 +2896,7 @@ class DT(Fountain):
 		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
 		return self.new_idca_from_array(name, zer, overwrite=overwrite, title=title)
 
-	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None):
+	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None, dictionary=None):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2893,13 +2928,15 @@ class DT(Fountain):
 		if overwrite:
 			self.delete_data(name)
 		self.h5f.create_carray(self.idca._v_node, name, obj=arr)
-		if rel_original_source and original_source:
+		if rel_original_source and original_source and original_source[0]!='=':
 			basedir = os.path.dirname(self.source_filename)
 			original_source = os.path.relpath(original_source, start=basedir)
 		if original_source is not None:
 			self.idca[name]._v_attrs.ORIGINAL_SOURCE = original_source
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
+		if dictionary is not None:
+			self.idca[name]._v_attrs.DICTIONARY = dictionary
 
 	def new_idco_from_keyed_array(self, name, arr_val, arr_index, title=None):
 		"""Create a new :ref:`idco` variable.
@@ -3888,6 +3925,7 @@ class DT(Fountain):
 
 	@classmethod
 	def Concat(cls, *subs, tags=None, tagname='casesource', **kwargs):
+		from ..util.arraytools import failable_iter_to_unique
 		self = cls(**kwargs)
 
 		def _getshape1(z):
@@ -3919,7 +3957,12 @@ class DT(Fountain):
 			present = numpy.asarray([(varname in sub.idco) for sub in subs])
 			if numpy.all(present):
 				arr = numpy.hstack(sub.idco[varname][:] for sub in subs)
-				self.new_idco_from_array(varname, arr)
+
+				title = failable_iter_to_unique(subs, lambda i: i.idco[varname]._v_attrs.TITLE)
+				original_source = failable_iter_to_unique(subs, lambda i: i.idco[varname]._v_attrs.ORIGINAL_SOURCE)
+				dictionary = failable_iter_to_unique(subs, lambda i: i.idco[varname]._v_attrs.DICTIONARY)
+
+				self.new_idco_from_array(varname, arr, title=title, original_source=original_source, dictionary=dictionary)
 			else:
 				#warnings.warn('idco variable "{}" in DT {} is lost'.format(varname, 0))
 				idco_lost[0].add(varname)
@@ -3938,8 +3981,15 @@ class DT(Fountain):
 					shapes_match = numpy.asarray([(_getshape1(sub.idca[varname])==shape0) for sub in subs])
 					if numpy.all(shapes_match):
 						if subnum==0:
-							arr = numpy.vstack(sub_.idca[varname][:] for sub_ in subs)
-							self.new_idca_from_array(varname, arr)
+							try:
+								arr = numpy.vstack(sub_.idca[varname][:] for sub_ in subs)
+							except:
+								idca_lost[subnum].add(  (varname, _getshape1(sub.idca[varname]))  )
+							else:
+								title = failable_iter_to_unique(subs, lambda i: i.idca[varname]._v_attrs.TITLE)
+								original_source = failable_iter_to_unique(subs, lambda i: i.idca[varname]._v_attrs.ORIGINAL_SOURCE)
+								dictionary = failable_iter_to_unique(subs, lambda i: i.idca[varname]._v_attrs.DICTIONARY)
+								self.new_idca_from_array(varname, arr, title=title, original_source=original_source, dictionary=dictionary)
 						# else: we did this already for sub 0
 					else:
 						#warnings.warn('idca variable "{}" with shape {} in DT {} is lost'.format(varname, _getshape1(sub.idca[varname]), subnum))

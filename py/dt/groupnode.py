@@ -219,8 +219,12 @@ class GroupNode():
 	def __repr__(self, *arg, **kwarg):
 		return "<larch.DT:GroupNode> "+self._v_node._v_pathname+"\n  "+"\n  ".join(sorted(self._v_children_keys_including_extern))
 	def __getitem__(self, key):
+		if isinstance(key,slice):
+			raise TypeError('cannot slice a group (yet)')
 		return self.__getattr__(key)
 	def __setitem__(self, key, value):
+		if isinstance(key,slice):
+			raise TypeError('cannot slice a group (yet)')
 		return self.__setattr__(key,value)
 	
 	def add_group_node(self, name):
