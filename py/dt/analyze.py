@@ -27,7 +27,10 @@ def seer(self, big=False):
 
 
 
-def look_site(self, directory=None, screen="None"):
+def look_site(self, directory=None, screen="None", clear_cache=False):
+	
+	if clear_cache:
+		self.clear_look_cache()
 	
 	if directory is None:
 		raise NotImplementedError('give a directory')

@@ -193,8 +193,7 @@ class NNNL(MetaModel):
 	def setUp(self, *args, **kwargs):
 		self.sub_weight = {}
 		self.total_weight = 0
-		self.sub_ncases = {}
-		self.total_ncases = 0
+		self._ncases = 0
 		for seg_descrip,submodel in self.sub_model.items():
 			if self.logger():
 				self.logger().log(30, "setUp:{!s}".format(seg_descrip))
@@ -230,13 +229,12 @@ class NNNL(MetaModel):
 				submodel.provision(prov)
 				
 			if submodel.df.nCases()==0:
-				submodel.sub_ncases[seg_descrip] = 0
+				submodel._ncases = 0
 				submodel.sub_weight[seg_descrip] = 0
 				continue
 			self.sub_weight[seg_descrip] = partwgt = submodel.Data("Weight").sum()
 			self.total_weight += partwgt
-			self.sub_ncases[seg_descrip] = partncase = submodel.nCases()
-			self.total_ncases += partncase
+			self._ncases = partncase = submodel.nCases()
 		# circle back to update choice and avail of upper level
 		m0 =self.sub_model[self.root_id]
 		self.m0slots = { subkey:slot for slot,subkey in enumerate(m0.alternative_codes()) }
@@ -245,6 +243,7 @@ class NNNL(MetaModel):
 			m0.dataedit.choice[:,self.m0slots[key]] = (self.sub_model[key].data.choice * self.sub_model[key].data.avail).sum(1)
 			# set lower level models to feed logsum up
 			self.sub_model[key].top_logsums_out = m0.dataedit.utilityco[:,self.m0slots[key]]
+		self._setUp_NNNL_host(self._ncases)
 
 	def loglike(self, *args, cached=False):
 		fun = 0
@@ -303,11 +302,13 @@ class NNNL(MetaModel):
 
 
 	def probability_roll_up(self):
+		if self.work.probability.shape[1] != self.df.nAlts() or self.work.probability.shape[0] != self.df.nCases():
+			self._setUp_NNNL_host(self._ncases or self.df.nCases())
 		m0 = self.sub_model[self.root_id]
 		for slot,nestcode in enumerate(m0.alternative_codes()):
 			t = m0.work.probability[:,slot]
 			for subslot, altcode in enumerate(self.sub_model[nestcode].alternative_codes()):
-				topslot = self.df._alternative_slot(altcode)
+				topslot = int(self.df._alternative_slot(altcode))
 				self.work.probability[:,topslot] = self.sub_model[nestcode].work.probability[:,subslot] * t
 
 	def d_loglike(self, *args, cached=False):
@@ -411,4 +412,9 @@ class NNNL(MetaModel):
 			args = ('NNNL',)
 		return super().logger(*args, **kwargs)
 
+	def maximize_loglike(self, *args, **kwargs):
+		super().maximize_loglike(*args, **kwargs)
+		self.probability_roll_up()
 
+
+		

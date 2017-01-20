@@ -84,6 +84,57 @@ class Model(Model2, ModelReporter):
 			raise LarchError("not implemented")
 		return ModelParameter(self, n)
 
+	def stash_parameters(self, ticket='generic', stashdir=None):
+		if ticket=='generic' and self.title:
+			ticket = self.title
+		import json
+		if stashdir is None:
+			try:
+				import appdirs
+			except ImportError:
+				raise TypeError("no stashdir given and appdirs not available")
+			else:
+				stashdir = appdirs.user_cache_dir('larch')
+		from .util.filemanager import next_stack
+		os.makedirs(stashdir, exist_ok=True)
+		filename = next_stack(os.path.join(stashdir, 'ticket_{}.json'.format(ticket)))
+		parms={}
+		for p in self:
+			parms[p.name] = p.value
+		with open(filename, 'a') as s:
+			json.dump(parms, s)
+
+	def unstash_parameters(self, ticket='generic', stashdir=None):
+		if ticket=='generic' and self.title:
+			ticket = self.title
+		import json
+		if stashdir is None:
+			try:
+				import appdirs
+			except ImportError:
+				raise TypeError("no stashdir given and appdirs not available")
+			else:
+				stashdir = appdirs.user_cache_dir('larch')
+		from .util.filemanager import latest_matching
+		filename = latest_matching(os.path.join(stashdir, 'ticket_{}.*.json'.format(ticket)))
+		if filename is None:
+			return
+		parms = {}
+		with open(filename, 'r') as s:
+			parms = json.load(s)
+		for p in self:
+			if p.name in parms:
+				val = parms[p.name]
+				if p.holdfast:
+					pass
+				elif val < p.min_value:
+					p.value = p.min_value
+				elif val > p.max_value:
+					p.value = p.max_value
+				else:
+					p.value = val
+
+
 
 	def add_parameter(self, name, **kwargs):
 		if isinstance(name, ModelParameter):

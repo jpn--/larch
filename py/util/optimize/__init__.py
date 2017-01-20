@@ -242,7 +242,7 @@ def _build_constraints(model, ignore_problems=False, include_bounds=True):
 		constraints = constraints + tuple(model.network_based_constraints())
 	return constraints
 
-def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0, cache_data=False, sessionlog=False, sourcecode=None):
+def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_stage_constraints=False, pre_bhhh=0, cache_data=False, sessionlog=False, sourcecode=None, stash='generic'):
 	"""
 	Maximize the log likelihood of the model.
 	
@@ -456,6 +456,9 @@ def maximize_loglike(model, *arg, ctol=1e-6, options={}, metaoptions=None, two_s
 	else:
 		if specific_warning_note:
 			r.stats.write(specific_warning_note)
+
+	if stash:
+		model.stash_parameters(ticket=stash)
 
 	return r
 

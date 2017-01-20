@@ -932,8 +932,11 @@ class DT(Fountain):
 			return self.array_idca('1', dtype=dtype, **kwargs)
 		if isinstance(self.idca._avail_, (_tb.Group,GroupNode)):
 			##!stacktuple = self.idca._avail_._v_attrs.stack
-			stacktuple = self.from_vault('stack._avail_')
-			return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
+			if not self.in_vault('stack._avail_'):
+				return self.array_idca('_avail_', dtype=dtype, **kwargs)
+			else:
+				stacktuple = self.from_vault('stack._avail_')
+				return numpy.expand_dims(self.array_idco(*stacktuple, dtype=dtype, **kwargs), axis=-1)
 		else:
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
 
@@ -2543,6 +2546,18 @@ class DT(Fountain):
 		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
 		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
 
+	def new_seqential_idco(self, name, dtype=None, overwrite=False, title=None):
+		zer = numpy.arange(self.nAllCases(), dtype=dtype or numpy.float64)
+		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
+
+	def new_random_idco(self, name, overwrite=False, title=None, seed=None, generator=None):
+		if seed is not None:
+			numpy.random.seed(seed)
+		if generator is None:
+			generator = lambda x: numpy.random.random(x)
+		zer = generator(self.nAllCases())
+		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
+
 	def new_idco_from_array(self, name, arr, *, overwrite=False, original_source=None, rel_original_source=True, title=None, dictionary=None):
 		"""Create a new :ref:`idco` variable.
 		
@@ -2984,7 +2999,7 @@ class DT(Fountain):
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 
 
-	def new_idca_from_keyed_array(self, name, arr_val, arr_index, transpose_values=False):
+	def new_idca_from_keyed_array(self, name, arr_val, arr_index=None, transpose_values=False, overwrite=False):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2998,17 +3013,21 @@ class DT(Fountain):
 		arr_val : ndarray
 			An array to add as the new variable _values_.  The 2nd dimension must match the
 			number of alternatives.
-		arr_index : ndarray or pytable node
+		arr_index : ndarray or pytable node or None
 			An array to add as the new variable _index_.  It must be 1 dimension and must match the
-			number of caseids.
+			number of caseids.  If None, then arr_val can be 1d and is interpreted as a row vector.
 			
 		Raises
 		-----
 		_tb.exceptions.NodeError
 			If a variable of the same name already exists.
 		"""
-		if self.h5caseids.shape[0] != arr_index.shape[0]:
+		if arr_index is not None and self.h5caseids.shape[0] != arr_index.shape[0]:
 			raise TypeError("new idca array must have shape with {!s} cases, the input array has {!s} cases".format(self.h5caseids.shape[0], arr.shape[0]))
+		if arr_index is None and len(arr_val.shape)==1:
+			arr_val = arr_val.reshape(1,-1)
+		if overwrite:
+			self.delete_data(name)
 		newgrp = self.h5f.create_group(self.idca._v_node, name)
 		self.h5f.create_carray(newgrp, '_values_', obj=arr_val)
 		if transpose_values:
@@ -3017,6 +3036,8 @@ class DT(Fountain):
 			self.h5f.create_carray(newgrp, '_index_', obj=arr_index)
 		elif isinstance(arr_index, _tb.array.Array):
 			self.h5f.create_soft_link(newgrp, '_index_', arr_index)
+		elif arr_index is None:
+			self.h5f.create_carray(newgrp, '_index_', obj=numpy.zeros(self.nAllCases(), dtype=numpy.int8))
 		else:
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 

@@ -4,7 +4,8 @@ import numpy
 import types
 import pandas
 import os
-from ..util.naming import make_valid_identifier
+import warnings
+from ..util.naming import make_valid_identifier, NotAPythonIdentifier
 
 #class GroupNode(tables.group.Group):
 #	def __new__(cls, parentnode, name=None, *arg, **kwarg):
@@ -209,7 +210,6 @@ class GroupNode():
 			try:
 				extern_deref = _pytables_link_dereference(self._v_node._v_children["_extern_{}".format(extern_n)])
 			except OSError as err:
-				import warnings
 				warnings.warn(str(err))
 			else:
 				if arg in _get_children_including_extern(extern_deref):
@@ -282,7 +282,7 @@ class GroupNode():
 		return self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
-	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False, local_rowindexnode=None):
+	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False, local_rowindexnode=None, suppress_identifier_warning=False):
 		'''
 		Add an external linkage from this group to the values in an OMX file.
 		
@@ -339,7 +339,6 @@ class GroupNode():
 				try:
 					vgrp = self._v_file.create_group(self._v_node, prefix+vname)
 				except tables.exceptions.NodeError:
-					import warnings
 					warnings.warn('the name "{}" already exists'.format(prefix+vname))
 				else:
 					self._v_file.create_soft_link(vgrp, '_index_', rowindexnode_())
@@ -352,11 +351,13 @@ class GroupNode():
 					# The constructed index is len(caseids) but all zeros.
 					# Each values from the index plucks the entire lookup vector.
 					# The resulting pseudoarray is shape (nCases,nAlts)
-					full_lname = make_valid_identifier(prefix+lname)
+					with warnings.catch_warnings():
+						if suppress_identifier_warning:
+							warnings.filterwarnings('ignore', category=NotAPythonIdentifier)
+						full_lname = make_valid_identifier(prefix+lname)
 					try:
 						vgrp = self._v_file.create_group(self._v_node, full_lname)
 					except tables.exceptions.NodeError:
-						import warnings
 						warnings.warn('the name "{}" already exists'.format(full_lname))
 					else:
 						self._v_file.create_carray(vgrp, '_index_', shape=_pytables_link_dereference(self._v_file.root.larch.caseids).shape, atom=tables.Int32Atom()) # zeros
@@ -372,14 +373,12 @@ class GroupNode():
 					try:
 						vgrp = self._v_file.create_group(self._v_node, full_lname)
 					except tables.exceptions.NodeError:
-						import warnings
 						warnings.warn('the name "{}" already exists'.format(full_lname))
 					else:
 						self._v_file.create_soft_link(vgrp, '_index_', rowindexnode)
 						self._v_file.create_external_link(vgrp, '_values_', omx_filename+":/lookup/"+lname)
 						anything_linked = True
 		if not anything_linked:
-			import warnings
 			from ..omx import OMX
 			try:
 				omx_repr = repr(OMX(omx_filename))

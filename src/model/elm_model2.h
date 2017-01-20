@@ -508,6 +508,11 @@ namespace elm {
 
 		bool top_logsums_out_currently_valid() const;
 
+
+		void _setUp_NNNL_host(const unsigned& ncases);
+
+
+
 #ifndef SWIG
 
 		void top_logsums_out_recalculated();

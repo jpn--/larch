@@ -4248,6 +4248,9 @@ class Model2(sherpa):
     def top_logsums_out_currently_valid(self) -> "bool":
         return _core.Model2_top_logsums_out_currently_valid(self)
 
+    def _setUp_NNNL_host(self, ncases: 'unsigned int const &') -> "void":
+        return _core.Model2__setUp_NNNL_host(self, ncases)
+
     def _parameter_report(self, other1: 'etk::ndarray const *'=None, other2: 'etk::ndarray const *'=None) -> "std::string":
         return _core.Model2__parameter_report(self, other1, other2)
     _LL_null = _swig_property(_core.Model2__LL_null_get, _core.Model2__LL_null_set)

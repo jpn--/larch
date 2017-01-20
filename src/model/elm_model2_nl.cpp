@@ -46,6 +46,12 @@ ComponentGraphDNA elm::Model2::Input_Graph()
 }
 
 
+void elm::Model2::_setUp_NNNL_host(const unsigned& ncases)
+{
+	Probability.resize(ncases,Xylem.n_elemental());
+}
+
+
 void elm::Model2::_setUp_NL()
 {
 	INFO(msg)<< "Setting up NL model..." ;

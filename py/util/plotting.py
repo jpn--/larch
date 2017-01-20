@@ -720,6 +720,7 @@ def svg_computed_factor_figure_with_derivative(m, y_funcs,
 			y.append( yf.func(x,m) )
 			y_labels.append( yf.label )
 		fig = plt.figure(figsize=figsize)
+		fig.set_tight_layout(False)
 		ax = plt.subplot(121)
 		ax.set_xlim(min_x,max_x)
 		if logscale_x:
@@ -962,7 +963,7 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
 							colormap='rainbow', tight_layout=True,
 							headerlevel=2, header=None, short_header=None,
-							colormin=None, colormax=None):
+							colormin=None, colormax=None, omit_zero_zero=True):
 	"""
 	A validation mapset for destination choice and similar models.
 	
@@ -1024,6 +1025,13 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 		return ax
 
 	next_subplot.plot_n = 1
+
+	if omit_zero_zero:
+		retain = ~((lon==0) & (lat==0))
+		lon = lon[retain]
+		lat = lat[retain]
+		ch_0 = ch_0[retain]
+		pr_0 = pr_0[retain]
 
 	ax1 = next_subplot('Observed')
 	hb1 = ax1.hexbin(lon, lat, C=ch_0, gridsize=gridsize, xscale='linear',

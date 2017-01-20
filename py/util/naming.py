@@ -3,6 +3,12 @@ import warnings
 import keyword
 import re
 
+
+class NotAPythonIdentifier(Warning):
+	pass
+
+
+
 def make_valid_identifier(x):
 	x = str(x)
 	if keyword.iskeyword(x):
@@ -15,7 +21,7 @@ def make_valid_identifier(x):
 	if not y.isidentifier():
 		y = "_"+y
 	if y!=x:
-		warnings.warn("name {0} is not a valid python identifier, converting to {1}".format(x,y), stacklevel=2)
+		warnings.warn("name {0} is not a valid python identifier, converting to {1}".format(x,y), stacklevel=2, category=NotAPythonIdentifier)
 	return y
 
 def parenthize(x, signs_qualify=False):
