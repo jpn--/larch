@@ -416,5 +416,226 @@ class NNNL(MetaModel):
 		super().maximize_loglike(*args, **kwargs)
 		self.probability_roll_up()
 
+	def xhtml_utilityspec(self, *arg, **kwarg):
+		return self.base_model.xhtml_utilityspec(*arg, **kwarg)
 
+
+	# Utility Specification Summary
+	def xhtml_utilityspec(self,**format):
+		if len(self.base_model.utility.co)==0: return self.base_model.xhtml_utilityspec_ca_only(**format)
+		existing_format_keys = list(format.keys())
+		for key in existing_format_keys:
+			if key.upper()!=key: format[key.upper()] = format[key]
+		if 'PARAM' not in format: format['PARAM'] = '0.4g'
 		
+		def bracketize(s):
+			s = s.strip()
+			if len(s)<3: return s
+			if s[0]=="(" and s[-1]==")": return s
+			if "=" in s: return "({})".format(s)
+			if "+" in s: return "({})".format(s)
+			if "-" in s: return "({})".format(s)
+			if " in " in s.casefold(): return "({})".format(s)
+			return s
+		
+		x = XML_Builder("div", {'class':"utilityspec larch_art"})
+		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
+		
+		for resolved in (True, False):
+			if resolved:
+				headline = "Resolved Utility"
+			else:
+				headline = "Formulaic Utility"
+			x.h3(headline, anchor=1, attrib={'class':'larch_art_xhtml'})
+			
+			with x.block("table", {'class':'floatinghead'}):
+				with x.thead_:
+					with x.tr_:
+						x.th('Code')
+						x.th('Alternative')
+						x.th(headline)
+				with x.tbody_:
+					for altcode,altname in self.base_model.alternatives().items():
+						with x.tr_:
+							x.td(str(altcode))
+							x.td(str(altname))
+							x.start("td")
+							
+							first_thing = True
+							
+							def add_util_component(beta, resolved, x, first_thing):
+								if resolved:
+									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
+									if not first_thing:
+										x.simple("br")
+										x.data("+ {}".format(beta_val).replace("+ -","- "))
+									else: # is first thing
+										if "-" == beta_val[0]:
+											x.data(beta_val.replace("-","- "))
+										else:
+											x.data(NonBreakSpace*2)
+											x.data(beta_val)
+									first_thing = False
+								else:
+									if not first_thing:
+										x.simple("br")
+										x.data("+ ")
+									else:
+										x.data(NonBreakSpace*2)
+									first_thing = False
+									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
+									x.data(beta.param)
+									x.end('a')
+									if beta.multiplier != 1.0:
+										x.data("*"+str(beta.multiplier))
+								try:
+									beta_data_value = float(beta.data)
+									if beta_data_value==1.0:
+										beta_data_value=""
+									else:
+										beta_data_value="*"+str(bracketize(beta_data_value))
+								except:
+									beta_data_value = "*"+str(bracketize(beta.data))
+								x.data(beta_data_value)
+								return x, first_thing
+
+							
+							for beta in self.base_model.utility.ca:
+								x, first_thing = add_util_component(beta, resolved, x, first_thing)
+							if altcode in self.base_model.utility.co:
+								for beta in self.base_model.utility.co[altcode]:
+									x, first_thing = add_util_component(beta, resolved, x, first_thing)
+							
+
+							x.end("td")
+				
+					G = self.base_model.networkx_digraph()
+					if len(G.node)>len(self.base_model.alternative_codes())+1:
+						with x.tr_:
+							x.th('Code')
+							x.th('Nest')
+							x.th(headline)
+						for altcode in self.base_model.nodes_ascending_order(exclude_elementals=True):
+							if altcode==self.base_model.root_id:
+								altname = 'ROOT'
+								mu_name = '1'
+							else:
+								altname = self.base_model.nest[altcode]._altname
+								mu_name = self.base_model.nest[altcode].param
+							try:
+								skip_mu = (float(mu_name)==1)
+							except ValueError:
+								skip_mu = False
+							with x.tr_:
+								x.td(str(altcode))
+								x.td(str(altname))
+								x.start("td")
+								if not skip_mu:
+									if resolved:
+										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
+										x.data(beta_val)
+									else:
+										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
+										x.data(mu_name)
+										x.end('a')
+									x.data(" * ")
+								x.data("log(")
+								for i,successorcode in enumerate(G.successors(altcode)):
+									if i>0: x.data("+")
+									successorname = G.node[successorcode]['name']
+									x.data(" exp(Utility[{}]".format(successorname))
+									x.data(") ")
+								
+								x.data(")")
+								x.end("td")
+		return x.close()
+
+
+
+	# Probability Specification Summary
+	def xhtml_probabilityspec(self,**format):
+		existing_format_keys = list(format.keys())
+		for key in existing_format_keys:
+			if key.upper()!=key: format[key.upper()] = format[key]
+		if 'PARAM' not in format: format['PARAM'] = '0.4g'
+		
+		x = XML_Builder("div", {'class':"probabilityspec larch_art"})
+		x.h2("Probability Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
+		G = self.networkx_digraph()
+
+		for resolved in (True, False):
+			if resolved:
+				headline = "Resolved Probability"
+			else:
+				headline = "Formulaic Probability"
+			x.h3(headline, anchor=1, attrib={'class':'larch_art_xhtml'})
+		
+			with x.block("table", {'class':'floatinghead'}):
+				with x.thead_:
+					with x.tr_:
+						x.th('Code')
+						x.th('Alternative')
+						x.th(headline)
+				with x.tbody_:
+					for altcode,altname in self.alternatives().items():
+						with x.tr_:
+							x.td(str(altcode))
+							x.td(str(altname))
+							x.start("td")
+							
+							curr = altcode
+							if G.in_degree(curr) > 1:
+								raise LarchError('xhtml_probabilityspec is not compatible with non-NL models')
+							pred = G.predecessors(curr)[0]
+							
+							curr_name = G.node[curr]['name']
+							pred_name = G.node[pred]['name']
+							mu_name = '1' if pred==self.root_id else self.nest[pred].param
+							try:
+								skip_mu = (float(mu_name)==1)
+							except ValueError:
+								skip_mu = False
+							
+							def add_part():
+								x.data("exp(Utility[{}]".format(curr_name))
+#								if not skip_mu:
+#									x.data("/")
+#									if resolved:
+#										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
+#										x.data(beta_val)
+#									else:
+#										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
+#										x.data(mu_name)
+#										x.end('a')
+								x.data(")/")
+								x.data("exp(Utility[{}]".format(pred_name))
+#								if not skip_mu:
+#									x.data("/")
+#									if resolved:
+#										beta_val = "{:{PARAM}}".format(self.metaparameter(mu_name).value, **format)
+#										x.data(beta_val)
+#									else:
+#										x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(mu_name.replace("#","_hash_"))})
+#										x.data(mu_name)
+#										x.end('a')
+								x.data(")")
+							add_part()
+
+							while pred != self.root_id:
+								curr = pred
+								pred = G.predecessors(curr)[0]
+								curr_name = G.node[curr]['name']
+								pred_name = G.node[pred]['name']
+								mu_name = '1' if pred==self.root_id else self.nest[pred].param
+								try:
+									skip_mu = (float(mu_name)==1)
+								except ValueError:
+									skip_mu = False
+								x.data(" * ")
+								add_part()
+							x.end("td")
+				
+		return x.close()
+
+
+

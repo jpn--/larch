@@ -105,6 +105,7 @@ class Model(Model2, ModelReporter):
 			json.dump(parms, s)
 
 	def unstash_parameters(self, ticket='generic', stashdir=None):
+		self._parameter_inclusion_check()
 		if ticket=='generic' and self.title:
 			ticket = self.title
 		import json
