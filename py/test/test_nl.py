@@ -791,8 +791,11 @@ class TestNL(ELM_TestCase):
 		 'nesting_tree',
 		 '&', ]
 		# make sure no errors are raised in reporting
-		m.xhtml(*cats)
-		m.xhtml('*')
+		import warnings
+		with warnings.catch_warnings():
+			warnings.filterwarnings('ignore')
+			m.xhtml(*cats)
+			m.xhtml('*')
 
 
 	def test_nnnl_quant(self):

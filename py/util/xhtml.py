@@ -118,7 +118,13 @@ class Elem(Element):
 		if isinstance(arg, XML_Builder):
 			super().append(arg.close())   
 		else:
-			super().append(arg)   
+			try:
+				super().append(arg)
+			except TypeError:
+				if callable(arg):
+					super().append(arg())
+				else:
+					raise
 	def __lshift__(self,other):
 		if other is not None:
 			self.append(other)
