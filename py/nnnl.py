@@ -413,8 +413,9 @@ class NNNL(MetaModel):
 		return super().logger(*args, **kwargs)
 
 	def maximize_loglike(self, *args, **kwargs):
-		super().maximize_loglike(*args, **kwargs)
+		result = super().maximize_loglike(*args, **kwargs)
 		self.probability_roll_up()
+		return result
 
 	def xhtml_utilityspec(self, *arg, **kwarg):
 		return self.base_model.xhtml_utilityspec(*arg, **kwarg)

@@ -932,7 +932,7 @@ class DT(Fountain):
 			return self.array_idca('1', dtype=dtype, **kwargs)
 		if isinstance(self.idca._avail_, (_tb.Group,GroupNode)):
 			##!stacktuple = self.idca._avail_._v_attrs.stack
-			if not self.in_vault('stack._avail_'):
+			if (not self.in_vault('stack._avail_')) and ('stack' not in self.idca._avail_._v_attrs):
 				return self.array_idca('_avail_', dtype=dtype, **kwargs)
 			else:
 				stacktuple = self.from_vault('stack._avail_')
