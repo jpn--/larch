@@ -417,12 +417,13 @@ class NNNL(MetaModel):
 		self.probability_roll_up()
 		return result
 
-	def xhtml_utilityspec(self, *arg, **kwarg):
-		return self.base_model.xhtml_utilityspec(*arg, **kwarg)
-
 
 	# Utility Specification Summary
 	def xhtml_utilityspec(self,**format):
+		
+		from .util.xhtml import XML_Builder
+		NonBreakSpace = " "
+
 		if len(self.base_model.utility.co)==0: return self.base_model.xhtml_utilityspec_ca_only(**format)
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
@@ -555,6 +556,9 @@ class NNNL(MetaModel):
 
 	# Probability Specification Summary
 	def xhtml_probabilityspec(self,**format):
+		
+		from .util.xhtml import XML_Builder
+		
 		existing_format_keys = list(format.keys())
 		for key in existing_format_keys:
 			if key.upper()!=key: format[key.upper()] = format[key]
@@ -639,4 +643,9 @@ class NNNL(MetaModel):
 		return x.close()
 
 
+	def xhtml_nesting_tree(self,*arg,**kwarg):
+		return self.base_model.xhtml_nesting_tree(*arg,**kwarg)
+	
+	def xhtml_nesting_tree_textonly(self,*arg,**kwarg):
+		return self.base_model.xhtml_nesting_tree_textonly(*arg,**kwarg)
 

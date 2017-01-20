@@ -779,6 +779,20 @@ class TestNL(ELM_TestCase):
 		self.assertNearlyEqual(-676045.5230709405, mx.loglike())
 		jj=m.gradient_check()
 		self.assertTrue(jj[0]<-6)
+		cats = [ '!',
+		 'sessionlog',
+		 'utilityspec',
+		 'probabilityspec',
+		 'DATA', 
+		 'excludedcases',
+		 'NOTES', 
+		 'options', 
+		 'possible_overspecification',
+		 'nesting_tree',
+		 '&', ]
+		# make sure no errors are raised in reporting
+		m.xhtml(*cats)
+		m.xhtml('*')
 
 
 	def test_nnnl_quant(self):
