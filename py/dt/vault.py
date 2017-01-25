@@ -4,7 +4,9 @@ from . import _tb
 
 
 def in_vault(self, name):
-	vault = self.get_or_create_group(self.h5top, 'vault')
+	vault = self.get_or_create_group(self.h5top, 'vault', skip_on_readonly=True)
+	if vault is None:
+		return False
 	name = name.replace('.','_')
 	if name in vault:
 		return True
@@ -25,7 +27,9 @@ def to_vault(self, name, value):
 	vault_bin.append(value)
 
 def from_vault(self, name, index=-1):
-	vault = self.get_or_create_group(self.h5top, 'vault')
+	vault = self.get_or_create_group(self.h5top, 'vault', skip_on_readonly=True)
+	if vault is None:
+		raise KeyError(name_+' not in vault')
 	name_ = name.replace('.','_')
 	if name_ not in vault:
 		# not in vault, check for attrib...
@@ -40,7 +44,9 @@ def from_vault(self, name, index=-1):
 	return vault_bin[index]
 
 def vault_keys(self):
-	vault = self.get_or_create_group(self.h5top, 'vault')
+	vault = self.get_or_create_group(self.h5top, 'vault', skip_on_readonly=True)
+	if vault is None:
+		return ()
 	return vault._v_children.keys()
 
 def wipe_vault(self, regex='.*'):

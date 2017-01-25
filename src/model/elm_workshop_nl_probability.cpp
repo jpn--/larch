@@ -40,6 +40,7 @@ void elm::__casewise_nl_utility
 ( double* U		        // pointer to utility array [nN space]
 , const VAS_System& Xy  // nesting structure
 , double* Work	        // function workspace, [nN]
+, double* top_logsum_value
 ) 
 {
 	unsigned i; 
@@ -73,6 +74,9 @@ void elm::__casewise_nl_utility
 				U[i] = -INF;
 			}
 		}
+	}
+	if (top_logsum_value) {
+		*top_logsum_value = U[Xy.size()-1];
 	}
 }
 
@@ -156,6 +160,7 @@ elm::workshop_nl_probability::workshop_nl_probability
 , const VAS_System* Xylem
 , const bool& option_mute_nan_warnings
 , etk::logging_service* msgr
+, PyArrayObject* logsums_out_
 )
 : nNodes          (nNodes)
 , UtilPacket      (UtilPacket)
@@ -168,12 +173,31 @@ elm::workshop_nl_probability::workshop_nl_probability
 , Xylem           (Xylem)
 , option_mute_nan_warnings (option_mute_nan_warnings)
 , msg_            (msgr)
+, logsums_out     (logsums_out_)
 {
 	Workspace.resize(nNodes);
+	if (logsums_out) {
+		Py_XINCREF(logsums_out);
+		if (PyArray_DIM(logsums_out, 0) < Probability->size1() ) {
+			Py_CLEAR(logsums_out);
+		} else {
+
+		}
+	}
 }
 
 elm::workshop_nl_probability::~workshop_nl_probability()
 {
+	Py_CLEAR(logsums_out);
+}
+
+void elm::workshop_nl_probability::reassign_py_output(PyArrayObject* new_logsums_out)
+{
+	Py_CLEAR(logsums_out);
+	if (new_logsums_out) {
+		Py_XINCREF(new_logsums_out);
+		logsums_out = new_logsums_out;
+	}
 }
 
 
@@ -216,7 +240,7 @@ void elm::workshop_nl_probability::workshop_nl_probability_calc
 		}
 
 		
-		__casewise_nl_utility(Utility->ptr(c), *Xylem, *Workspace);
+		__casewise_nl_utility(Utility->ptr(c), *Xylem, *Workspace, (double*)((logsums_out)?PyArray_GETPTR1(logsums_out, c):nullptr));
 		__casewise_nl_probability(Utility->ptr(c), Cond_Prob->ptr(c), Probability->ptr(c), *Xylem);
 		if (use_sampling) {
 			case_logit_add_sampling(c);

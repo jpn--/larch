@@ -52,8 +52,29 @@ class Model(Model2, ModelReporter):
 
 
 	from .util.roll import roll, session_log, stop_session_log
-	from .util.optimize import maximize_loglike, parameter_bounds, _scipy_check_grad, network_based_constraints, evaluate_network_based_constraints, optimizers, weight_choice_rebalance, _build_constraints, _compute_constrained_d2_loglike_and_bhhh, _compute_constrained_covariance, _bounds_as_constraints
-	from .util.plotting import new_xhtml_computed_factor_figure_with_derivative, svg_computed_factor_figure_with_derivative, new_xhtml_validation_distribution, svg_validation_distribution, new_xhtml_validation_latlong, svg_validation_latlong, svg_observations_latlong
+	
+	from .util.optimize import (
+		maximize_loglike,
+		parameter_bounds,
+		_scipy_check_grad,
+		network_based_constraints,
+		evaluate_network_based_constraints,
+		optimizers, weight_choice_rebalance,
+		_build_constraints,
+		_compute_constrained_d2_loglike_and_bhhh,
+		_compute_constrained_covariance,
+		_bounds_as_constraints,
+	)
+
+	from .util.plotting import (
+		new_xhtml_computed_factor_figure_with_derivative,
+		svg_computed_factor_figure_with_derivative,
+		new_xhtml_validation_distribution,
+		svg_validation_distribution,
+		new_xhtml_validation_latlong,
+		svg_validation_latlong,
+		svg_observations_latlong,
+	)
 	
 	
 	def dir(self):
@@ -126,11 +147,13 @@ class Model(Model2, ModelReporter):
 		for p in self:
 			if p.name in parms:
 				val = parms[p.name]
-				if p.holdfast:
+				if p.holdfast:                # Don't change fixed parameters
 					pass
-				elif val < p.min_value:
+				elif not numpy.isfinite(val): # Don't load infinte or NaN values
+					pass
+				elif val < p.min_value:       # Enforce min
 					p.value = p.min_value
-				elif val > p.max_value:
+				elif val > p.max_value:       # Enforce max
 					p.value = p.max_value
 				else:
 					p.value = val
@@ -1485,6 +1508,20 @@ class Model(Model2, ModelReporter):
 			self.parameter_holdfast_array[:] = hold_save
 		return self._LL_null
 
+	def set_parameters_to_null(self, disregard_holdfast=None):
+		"""
+		Set the parameters to their null values.
+		
+		Parameters
+		----------
+		disregard_holdfast : bool or None
+		"""
+		if disregard_holdfast or (disregard_holdfast is not False and self.option.null_disregards_holdfast):
+			self.parameter_array[:] = self.parameter_null_values_array[:]
+		else:
+			h = not self.parameter_holdfast_array[:]
+			self.parameter_array[h] = self.parameter_null_values_array[h]
+
 	def negative_loglike(self, *args, **kwargs):
 		z = -(self.loglike(*args, **kwargs))
 		return z
@@ -1774,14 +1811,18 @@ class Model(Model2, ModelReporter):
 	def loglike_c(self):
 		return self._get_estimation_statistics()[0]['log_like_constants']
 
-	def logsums(self, **kwargs):
-		if self.top_logsums_out is not None:
-			if self.top_logsums_out_currently_valid():
-				return self.top_logsums_out
-			else:
-				raise ValueError('top_logsums are not up to date, re-run loglike')
-		if top_logsums_out is None and (len(self.quantity) or len(self.nest)):
-			raise NotImplementedError('logsums must be saved on the fly for non-MNL models')
+	def logsums(self, fresh=False, hardway=False, **kwargs):
+		if not hardway:
+			if fresh:
+				self.preserve_casewise_logsums = True
+				self.loglike(cached=False)
+			if self.top_logsums_out is not None:
+				if self.top_logsums_out_currently_valid():
+					return self.top_logsums_out
+				else:
+					raise ValueError('top_logsums are not up to date, re-run loglike')
+			if self.top_logsums_out is None and (len(self.quantity) or len(self.nest)):
+				raise NotImplementedError('logsums must be saved on the fly for non-MNL models')
 		self.freshen()
 		return self.calc_utility_logsums(self.Data("UtilityCO"),self.Data("UtilityCA"),self.Data("Avail"))
 
@@ -1796,7 +1837,7 @@ class Model(Model2, ModelReporter):
 		If you don't need them for anything in particular, there's no reason to use memory to save them.
 		But if you do need them, it's much easier to save them than recreate them.
 		"""
-		return not(top_logsums_out is None)
+		return not(self.top_logsums_out is None)
 	
 	@preserve_casewise_logsums.setter
 	def preserve_casewise_logsums(self, val):

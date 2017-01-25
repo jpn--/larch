@@ -1368,3 +1368,33 @@ class ArtModelReporter():
 		caller = lambda *arg, **kw: self.art_idco_variable_analysis(names, description_catalog=description_catalog, title=title, short_title=short_title).__xml__()
 		self.new_xhtml_section(caller, figurename, register=autoregister)
 
+
+	def art_simple_parameters(self, foot=None):
+		a = ART(columns=('PARAM','VALUE','GRAD','HOLD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
+		a.set_jrow_kwd_strings(0, PARAM="Parameter", VALUE="Value", GRAD="Gradient", HOLD="Holdfast")
+		names = self.parameter_names()
+
+		try:
+			g = self.negative_d_loglike_cached()
+		except:
+			g = None
+
+		for j in range(len(self)):
+			j1 = j+1
+			a.set_jrow_iloc(j1, 0, names[j], attrib=None, anchorlabel=None)
+			a.set_jrow_iloc(j1, 1, self.parameter_array[j], attrib=None, anchorlabel=None)
+			if g is None:
+				a.set_jrow_iloc(j1, 2, 'N/A', attrib=None, anchorlabel=None)
+			else:
+				a.set_jrow_iloc(j1, 2, g[j], attrib=None, anchorlabel=None)
+			if self.parameter_holdfast_array[j]:
+				a.set_jrow_iloc(j1, 3, self.parameter_holdfast_array[j], attrib=None, anchorlabel=None)
+
+		if isinstance(foot,str):
+			a.footnotes.append(foot)
+		elif isinstance(foot,(tuple,list,set)):
+			for f in foot:
+				a.footnotes.append(f)
+		elif foot is not None:
+			a.footnotes.append(str(foot))
+		return a

@@ -130,6 +130,7 @@ def DTx(filename=None, *, caseids=None, alts=None, include_vault=True, **kwargs)
 				else:
 					for k in dx.vault_keys():
 						d.to_vault(k, dx.from_vault(k))
+					dx.close()
 	for idco_kw in sorted(idco_kwargs):
 		idco = idco_kwargs[idco_kw]
 		if idco is not None:
@@ -157,8 +158,12 @@ def DTx(filename=None, *, caseids=None, alts=None, include_vault=True, **kwargs)
 				else:
 					for k in dx.vault_keys():
 						d.to_vault(k, dx.from_vault(k))
+					dx.close()
 
 	return d
 
 def DTL(source):
+	if isinstance(source, DT):
+		source.change_mode('r')
+		source = source.source_filename
 	return DTx(None, idco=source, idca=source)

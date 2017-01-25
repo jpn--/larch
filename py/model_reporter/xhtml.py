@@ -64,6 +64,8 @@ class XhtmlModelReporter():
 				for k in dir(self):
 					if len(k)>6 and k[:6]=='xhtml_':
 						poss += [k[6:]]
+					if len(k)>4 and k[:4]=='art_':
+						poss += [k[4:]]
 				raise TypeError('Possibilities...\n'+'\n'.join(poss))
 			
 			elif i=='!':

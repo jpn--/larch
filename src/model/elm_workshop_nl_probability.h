@@ -38,6 +38,7 @@ void __casewise_nl_utility
 ( double* U		        // pointer to utility array [nN space]
 , const VAS_System& Xy  // nesting structure
 , double* Work	        // function workspace, [nN]
+, double* top_logsum_value=nullptr
 ) ;
 
 void __casewise_nl_probability
@@ -72,6 +73,10 @@ public:
 	etk::ndarray* AdjProbability;
 	
 	etk::logging_service* msg_;
+
+	PyArrayObject* logsums_out;
+
+	void reassign_py_output(PyArrayObject* new_logsums_out);
 	
 	bool option_mute_nan_warnings;
 
@@ -87,6 +92,7 @@ public:
 	 , const VAS_System* Xylem
 	 , const bool& option_mute_nan_warnings
 	 , etk::logging_service* msgr=nullptr
+	 , PyArrayObject* logsums_out=nullptr
 	 );
 	
 	virtual ~workshop_nl_probability();

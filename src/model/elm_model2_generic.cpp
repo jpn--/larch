@@ -1758,7 +1758,12 @@ void elm::Model2::_del_top_logsums_out()
 
 bool elm::Model2::top_logsums_out_currently_valid() const
 {
-	return (_FCurrent_latest_logsums == FCurrent);
+	bool ret=(_FCurrent_latest_logsums == FCurrent);
+	if (!ret) {
+		std::cerr <<"_FCurrent_latest_logsums:\n" << _FCurrent_latest_logsums.printall() << "\n";
+		std::cerr <<"FCurrent\n" << FCurrent.printall() << "\n";
+	}
+	return ret;
 }
 
 void elm::Model2::top_logsums_out_recalculated()

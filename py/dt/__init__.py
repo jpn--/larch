@@ -310,6 +310,14 @@ class DT(Fountain):
 
 
 	def change_mode(self, mode, **kwarg):
+		"""Change the file mode of the underlying HDF5 file.
+		
+		Can be used to change from read-only to read-write.
+		"""
+		if mode==self.source_filemode:
+			return
+		if mode=='w':
+			raise TypeError("cannot change_mode to w, close the file and delete it")
 		if not self._h5f_own:
 			raise TypeError("cannot change_mode when do not own the hdf5 file")
 		self.h5f.close()
@@ -352,12 +360,16 @@ class DT(Fountain):
 		except _tb.exceptions.NoSuchNodeError:
 			return
 
-	def get_or_create_group(self, where, name=None, title='', filters=None, createparents=False):
+	def get_or_create_group(self, where, name=None, title='', filters=None, createparents=False, skip_on_readonly=False):
 		try:
 			return self.h5f.get_node(where, name=name)
 		except _tb.NoSuchNodeError:
 			if name is not None:
-				return self.h5f.create_group(where, name, title=title, filters=filters, createparents=createparents)
+				try:
+					return self.h5f.create_group(where, name, title=title, filters=filters, createparents=createparents)
+				except _tb.FileModeError:
+					if skip_on_readonly:
+						return
 			else:
 				raise
 
@@ -2542,8 +2554,11 @@ class DT(Fountain):
 
 
 
-	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None):
-		zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
+	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None, initializer=0):
+		if initializer is 0:
+			zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
+		else:
+			zer = numpy.full(self.nAllCases(), initializer, dtype=dtype or numpy.float64)
 		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
 
 	def new_seqential_idco(self, name, dtype=None, overwrite=False, title=None):
@@ -2846,7 +2861,7 @@ class DT(Fountain):
 
 
 
-	def new_idca(self, name, expression, title=None):
+	def new_idca(self, name, expression, title=None, dtype=None):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2864,8 +2879,10 @@ class DT(Fountain):
 			The name of the new :ref:`idca` variable.
 		expression : str or array
 			An expression to evaluate as the new variable, or an array of data.
-		title : str
-			Optionally, give a description of the data in this array.
+		title : str, optional
+			Give a description of the data in this array.
+		dtype : dtype, optional
+			What numpy dtype should the new array should be, defaults to float64.
 			
 		Raises
 		-----
@@ -2878,7 +2895,7 @@ class DT(Fountain):
 			Optionally, give a description of the data in this array.
 		"""
 		if isinstance(expression, str):
-			data = self.array_idca(expression, screen="None").reshape(-1)
+			data = self.array_idca(expression, screen="None", dtype=dtype).squeeze(-1)
 		else:
 			data = expression
 		self.h5f.create_carray(self.idca._v_node, name, obj=data)

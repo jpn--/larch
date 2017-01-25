@@ -58,6 +58,7 @@ def plt_as_svg_xhtml(classname='figure', headerlevel=2, header=None, anchor=1, c
 	_cache = ET.fromstring(imgbuffer.getvalue().decode())
 	xx << _cache
 	if clf_after:
+		plt.close() # stop showing empty windows?
 		plt.clf()
 	return xx
 
@@ -312,6 +313,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 		plt.subplots_adjust(left=0+subplots_adjuster, bottom=0+subplots_adjuster, right=1-subplots_adjuster, top=1-subplots_adjuster, wspace=0, hspace=0)
 		ret = plot_as_svg_xhtml(fig)
 		plt.clf()
+		plt.close() # stop showing empty windows?
 	else:
 		ret = [None,None]
 		for duo in (1,0):
@@ -342,6 +344,7 @@ def spark_histogram_maker(data, bins=20, title=None, xlabel=None, ylabel=None, x
 			plt.subplots_adjust(left=0+subplots_adjuster, bottom=0+subplots_adjuster, right=1-subplots_adjuster, top=1-subplots_adjuster, wspace=0, hspace=0)
 			ret[duo] = plot_as_svg_xhtml(fig)
 			plt.clf()
+			plt.close() # stop showing empty windows?
 
 	if notetaker is not None and use_color!=hexcolor('ocean'):
 		notetaker.add( _spark_histogram_notes[use_color] )
@@ -383,6 +386,7 @@ def spark_pie_maker(data, notetaker=None, figheight=0.2, figwidth=0.75, labels=N
 	#	plt.tight_layout()
 	ret = plot_as_svg_xhtml(fig)
 	plt.clf()
+	plt.close() # stop showing empty windows?
 	return ret
 
 
@@ -413,7 +417,7 @@ def spark_category_bar_maker(data, notetaker=None, figheight=0.2, figwidth=0.75,
 	if lab is not None:
 		plt.xticks(ind + 1/2., lab, rotation=rotation)
 	ret = plot_as_svg_xhtml(fig)
-	plt.clf()
+	plt.close() # stop showing empty windows?
 	return ret
 
 
@@ -552,6 +556,7 @@ def computed_factor_figure(m, y_funcs, y_labels=None,
                            xaxis_label=None, yaxis_label=None,
 						   logscale_x=False, logscale_f=False, figsize=(6.5,3)):
 	from matplotlib import pyplot as plt
+	plt.ioff()
 	import numpy as np
 	with default_mplstyle():
 		x = np.linspace(min_x, max_x)
@@ -632,6 +637,7 @@ def computed_factor_figure_v2(m, y_funcs, y_labels=None,
 	
 	def maker(ref_to_m):
 		from matplotlib import pyplot as plt
+		plt.ioff()
 		import numpy as np
 		with default_mplstyle():
 			x = np.linspace(min_x, max_x)
@@ -711,6 +717,7 @@ def svg_computed_factor_figure_with_derivative(m, y_funcs,
 	dy_funcs = [ComputedFactor(label="∂"+cf.label, func=(lambda x,m: (cf.func(x+epsilon,m) - cf.func(x,m))*(1/epsilon)), ) for cf in y_funcs]
 
 	from matplotlib import pyplot as plt
+	plt.ioff()
 	import numpy as np
 	with default_mplstyle():
 		x = np.linspace(min_x, max_x, 200) # Use 200 for extra resolution over default of 50
@@ -803,7 +810,9 @@ def new_xhtml_computed_factor_figure_with_derivative(self, figurename, y_funcs, 
 
 
 
-def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header, short_header=None, to_report=True, immediate=False, log_scale=False, figsize=(6.5,3)):
+def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header, short_header=None,
+								to_report=True, immediate=False, log_scale=False, figsize=(6.5,3),
+								segmentation=None):
 	"""A figure showing the distribution of a factor across real and modeled observations.
 
 	Parameters
@@ -817,11 +826,17 @@ def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header
 	headerlevel : int
 	header : str
 	short_header : str or None
+	segmentation : ndarray slicer or str, optional
+		If given, this will be used to slice the first dimension of the probability and choice arrays, resulting in
+		a segmented result (i.e. slice to get only observations that coorespond to a particular market segment.)
+		If given as a string, it is first evaluated as a bool idco expression, with the result used as the slicer 
+		(in this case, a bool mask).
 	"""
 	if isinstance(factorarray,str):
 		factorarray = m.df.array_idca(factorarray).squeeze()
 	
 	from matplotlib import pyplot as plt
+	plt.ioff()
 	mod = m
 	if mod.data.weight is None:
 		pr = mod.work.probability[:, :mod.nAlts()]
@@ -829,6 +844,14 @@ def svg_validation_distribution(m, factorarray, range, bins, headerlevel, header
 	else:
 		pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
 		ch = mod.data.choice.squeeze() * mod.data.weight
+	
+	if segmentation is not None:
+		if isinstance(segmentation, str):
+			segmentation = mod.df.array_idco(segmentation, dtype=bool).squeeze()
+		pr = pr[segmentation]
+		ch = ch[segmentation]
+		factorarray = factorarray[segmentation]
+	
 	plt.clf()
 	fig = plt.figure(figsize=figsize)
 	try:
@@ -906,6 +929,7 @@ def svg_observations_latlong(mod, lat, lon, extent=None, figsize=(6.0,3.0),
 		A shortened version of the header, for the table of contents.
 	"""
 	from matplotlib import pyplot as plt
+	plt.ioff()
 	import matplotlib.colors as colors
 	from matplotlib.ticker import LogLocator
 	import matplotlib.cm as cm
@@ -963,7 +987,8 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 							gridsize=60, headfont='Roboto Slab', textfont='Roboto',
 							colormap='rainbow', tight_layout=True,
 							headerlevel=2, header=None, short_header=None,
-							colormin=None, colormax=None, omit_zero_zero=True):
+							colormin=None, colormax=None, omit_zero_zero=True,
+							segmentation=None):
 	"""
 	A validation mapset for destination choice and similar models.
 	
@@ -990,8 +1015,14 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 		A shortened version of the header, for the table of contents.
 	colormin, colormax : numeric
 		If given use these values as the lower (upper) bound of the colormap normalization.
+	segmentation : ndarray slicer or str, optional
+		If given, this will be used to slice the first dimension of the probability and choice arrays, resulting in
+		a segmented result (i.e. slice to get only observations that coorespond to a particular market segment.)
+		If given as a string, it is first evaluated as a bool idco expression, with the result used as the slicer 
+		(in this case, a bool mask).
 	"""
 	from matplotlib import pyplot as plt
+	plt.ioff()
 	import matplotlib.colors as colors
 	from matplotlib.ticker import LogLocator
 	import matplotlib.cm as cm
@@ -1009,6 +1040,13 @@ def svg_validation_latlong(mod, lat, lon, extent=None, figsize=(6.0,10), show_di
 		pr = mod.work.probability[:, :mod.nAlts()] * mod.data.weight
 		ch = mod.data.choice.squeeze() * mod.data.weight
 		wlabel = "Weighted "
+
+	if segmentation is not None:
+		if isinstance(segmentation, str):
+			segmentation = mod.df.array_idco(segmentation, dtype=bool).squeeze()
+		pr = pr[segmentation]
+		ch = ch[segmentation]
+
 	pr_0 = pr.sum(0).flatten()
 	ch_0 = ch.sum(0).flatten()
 	plt.clf()

@@ -59,6 +59,19 @@ class OMX(_tb.file.File):
 		self.rlookup = dicta()
 		self.rlookup._helper = self.get_reverse_lookup
 
+	def change_mode(self, mode, **kwarg):
+		"""Change the file mode of the underlying HDF5 file.
+		
+		Can be used to change from read-only to read-write.
+		"""
+		if mode==self.mode:
+			return
+		if mode=='w':
+			raise TypeError("cannot change_mode to w, close the file and delete it")
+		filename = self.filename
+		self.close()
+		self.__init__(filename, mode, **kwarg)
+
 	@property
 	def shape(self):
 		sh = self.root._v_attrs.SHAPE[:]

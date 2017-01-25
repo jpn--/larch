@@ -182,7 +182,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , const VAS_System* Xylem
 , const bool& option_mute_nan_warnings
 , etk::logging_service* msgr
-, PyArrayObject* logsums_out
+, PyArrayObject* logsums_out_
 
 )
 : nNodes          (nNodes)
@@ -200,7 +200,7 @@ elm::workshop_ngev_probability::workshop_ngev_probability
 , Xylem           (Xylem)
 , option_mute_nan_warnings (option_mute_nan_warnings)
 , msg_            (msgr)
-, logsums_out     (logsums_out)
+, logsums_out     (logsums_out_)
 {
 	Workspace.resize(nNodes);
 	// check that logsums out is at least the correct size
