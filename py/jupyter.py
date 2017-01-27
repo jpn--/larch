@@ -148,11 +148,9 @@ def ipython_status(magic_matplotlib=True):
 #			message_set.add('IPython inline plotting not available')
 #		else:
 		message_set.add('IPython')
-
 		# Caution: cfg is an IPython.config.loader.Config
 		if cfg['IPKernelApp']:
 			message_set.add('IPython QtConsole')
-
 			try:
 				if cfg['IPKernelApp']['pylab'] == 'inline':
 					message_set.add('pylab inline')
@@ -176,7 +174,12 @@ if 'IPython' in ipython_status():
 	try:
 		stylesheet()
 		larch_tag()
+		jupyter_active = True
 	except:
-		pass
+		jupyter_active = False
+	else:
+		jupyter_active = True
+else:
+	jupyter_active = False
 
 

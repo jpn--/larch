@@ -1370,8 +1370,14 @@ class ArtModelReporter():
 
 
 	def art_simple_parameters(self, foot=None):
-		a = ART(columns=('PARAM','VALUE','GRAD','HOLD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
-		a.set_jrow_kwd_strings(0, PARAM="Parameter", VALUE="Value", GRAD="Gradient", HOLD="Holdfast")
+		any_holdfast = numpy.any(self.parameter_holdfast_array)
+		if any_holdfast:
+			a = ART(columns=('PARAM','VALUE','GRAD','HOLD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
+			a.set_jrow_kwd_strings(0, PARAM="Parameter", VALUE=" Value", GRAD=" Gradient", HOLD="Holdfast")
+		else:
+			a = ART(columns=('PARAM','VALUE','GRAD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
+			a.set_jrow_kwd_strings(0, PARAM="Parameter", VALUE=" Value", GRAD=" Gradient")
+
 		names = self.parameter_names()
 
 		try:
@@ -1382,13 +1388,16 @@ class ArtModelReporter():
 		for j in range(len(self)):
 			j1 = j+1
 			a.set_jrow_iloc(j1, 0, names[j], attrib=None, anchorlabel=None)
-			a.set_jrow_iloc(j1, 1, self.parameter_array[j], attrib=None, anchorlabel=None)
+			a.set_jrow_iloc(j1, 1, "{:< 20.12g}".format(self.parameter_array[j]).replace(" "," "), attrib=None, anchorlabel=None)
 			if g is None:
 				a.set_jrow_iloc(j1, 2, 'N/A', attrib=None, anchorlabel=None)
 			else:
-				a.set_jrow_iloc(j1, 2, g[j], attrib=None, anchorlabel=None)
-			if self.parameter_holdfast_array[j]:
-				a.set_jrow_iloc(j1, 3, self.parameter_holdfast_array[j], attrib=None, anchorlabel=None)
+				a.set_jrow_iloc(j1, 2, "{:< 20.12g}".format(g[j]).replace(" "," "), attrib=None, anchorlabel=None)
+			if any_holdfast:
+				if self.parameter_holdfast_array[j]:
+					a.set_jrow_iloc(j1, 3, self.parameter_holdfast_array[j], attrib=None, anchorlabel=None)
+				else:
+					a.set_jrow_iloc(j1, 3, " ", attrib=None, anchorlabel=None)
 
 		if isinstance(foot,str):
 			a.footnotes.append(foot)
@@ -1398,3 +1407,20 @@ class ArtModelReporter():
 		elif foot is not None:
 			a.footnotes.append(str(foot))
 		return a
+
+	def _art_simple_status(self, *arg_ignored, **kwarg_ignored):
+		from ..jupyter import jupyter_active
+		if jupyter_active:
+			try:
+				iterat = self._iteration
+			except AttributeError:
+				self._iteration = iterat = 1
+			else:
+				self._iteration += 1
+			
+			from IPython import display
+			display.clear_output(wait=True)
+			display.display_html(self.art_simple_parameters(foot=[
+				"At iteration {}".format(iterat),
+				"Convergence Tolerance = {}".format(self.bhhh_tolerance()),
+			]))

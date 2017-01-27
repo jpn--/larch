@@ -42,6 +42,7 @@ def optimizers(model, *arg, ctol=1e-7):
 	ot = OptimizeTechniques(ctol=ctol, ctol_fun=model.bhhh_tolerance, logger=model.logger(),
 							fun = model.negative_loglike, bhhh = model.bhhh,
 							jac = model.negative_d_loglike,
+							callback=model._art_simple_status,
 							)
 	for a in arg:
 		if isinstance(a,dict):

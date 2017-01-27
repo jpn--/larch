@@ -8,6 +8,7 @@ from collections import deque
 import numpy
 from ...core import LarchError, LarchCacheError, runstats
 import time as _time
+from ...jupyter import jupyter_active
 
 class outcomes(Enum):
 	success = 1
@@ -91,12 +92,23 @@ class Watcher():
 					raise ProgressTooSlow('average improvement only {:.4g} over {} iterations'.format(-avg,length), x, self.count, slowness=(-avg,length))
 
 
+
 def minimize_with_watcher(fun, x0, args=(), *, slow_len=(), slow_thresh=(), ctol_fun=None, ctol=1e-6, logger=None, callback=None, method_str="default method", options={}, **k):
 	watcher = Watcher(fun, x0, ctol_fun=ctol_fun, ctol=ctol, logger=logger, slow_len=slow_len, slow_thresh=slow_thresh)
 	if callback:
-		new_callback = lambda z: (callback(z), watcher(z), )
+		if 'callback' in options:
+			option_callback = options['callback']
+			new_callback = lambda z: (callback(z), watcher(z), option_callback(z))
+			del options['callback']
+		else:
+			new_callback = lambda z: (callback(z), watcher(z), )
 	else:
-		new_callback = watcher
+		if 'callback' in options:
+			option_callback = options['callback']
+			new_callback = lambda z: (watcher(z), option_callback(z))
+			del options['callback']
+		else:
+			new_callback = lambda z: (watcher(z), )
 	if method_str in ("bhhh","bhhh-wolfe",):
 		options['logger'] = logger
 	try:
@@ -142,12 +154,13 @@ class OptimizeTechnique():
 	def __repr__(self):
 		return self.__str__()
 	def __init__(self, method, fun, *, slow_len=(), slow_thresh=(), ctol=None, ctol_fun=None, options=None,
-					bhhh=None, init_inv_hess=None, jac=None, logger=None, hess=None):
+					bhhh=None, init_inv_hess=None, jac=None, logger=None, hess=None, callback=None):
 		self.fun = fun
 		self.bhhh = bhhh
 		self.init_inv_hess = init_inv_hess
 		self.hess = hess
 		self.method_str = str(method)
+		self.callback = callback
 		self.options = {} if options is None else options
 		if isinstance(method,str) and method.lower()=='bfgs-init':
 			from .algorithms import _minimize_bfgs_1
@@ -197,6 +210,7 @@ class OptimizeTechnique():
 			jac = self.jac,
 			method_str = self.method_str,
 			logger = self.logger,
+			callback = self.callback,
 		)
 		
 		if 'ctol' in kwargs and kwargs['ctol'] is not None:
@@ -299,7 +313,8 @@ class OptimizeResults(OptimizeResult):
 		return s
 
 class OptimizeTechniques():
-	def __init__(self, techniques=None, ctol_fun=None, ctol=1e-6, logger=None, fun=None, jac=None, hess=None, bhhh=None, start_timer=None, end_timer=None):
+	def __init__(self, techniques=None, ctol_fun=None, ctol=1e-6, logger=None, fun=None, jac=None, hess=None, bhhh=None,
+					start_timer=None, end_timer=None, callback=None):
 		self._techniques = [] if techniques is None else list(techniques)
 		self.meta_iteration = 0
 		self.ctol_fun = ctol_fun
@@ -311,6 +326,7 @@ class OptimizeTechniques():
 		self._bhhh = bhhh
 		self._start_timer = start_timer
 		self._end_timer = end_timer
+		self._callback = callback
 	def unfail_all(self, but=None):
 		for i in self._techniques:
 			if i is not but:
@@ -326,6 +342,8 @@ class OptimizeTechniques():
 			kwarg['hess'] = self._hess
 		if self.ctol is not None and 'ctol' not in kwarg:
 			kwarg['ctol'] = self.ctol
+		if self._callback is not None and 'callback' not in kwarg:
+			kwarg['callback'] = self._callback
 		self._techniques.append(OptimizeTechnique(*arg, **kwarg))
 	def __len__(self):
 		return len(self._techniques)
