@@ -3470,6 +3470,8 @@ class DT(Fountain):
 							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate))
 						else:
 							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
+					else:
+						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', '.')
 				if 'TITLE' in extra:
 					if 'TITLE' in the_node._v_attrs:
 						a.set_jrow_loc(rownum, 'TITLE', the_node._v_attrs.TITLE)
