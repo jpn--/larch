@@ -1408,7 +1408,7 @@ class ArtModelReporter():
 			a.footnotes.append(str(foot))
 		return a
 
-	def _art_simple_status(self, *arg_ignored, **kwarg_ignored):
+	def _art_running_status(self, *arg_ignored, **kwarg_ignored):
 		from ..jupyter import jupyter_active
 		if jupyter_active:
 			try:
@@ -1424,3 +1424,12 @@ class ArtModelReporter():
 				"At iteration {}".format(iterat),
 				"Convergence Tolerance = {}".format(self.bhhh_tolerance()),
 			]))
+
+
+	def _display_finalized_status(self, result=None, *arg_ignored, **kwarg_ignored):
+		from ..jupyter import jupyter_active
+		if jupyter_active:
+			from IPython import display
+			display.clear_output(wait=True)
+			display.display_html(self.xhtml('!'))
+
