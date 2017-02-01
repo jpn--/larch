@@ -1444,6 +1444,18 @@ class Model(Model2, ModelReporter):
 			first_case_index = numpy.where((self.data.choice.sum(1)==0).squeeze())[0][0]
 			doc.append('there are {} cases without any observed choice, the first of which is at caseindex {}'.format(ncases_with_zero_choice, first_case_index))
 		
+		if self.data.quantity is not None:
+			no_quantity = (self.data.quantity.sum(2)==0)
+			any_choice = (self.data.choice>0).squeeze(2)
+			chosen_but_no_quantity = (any_choice & no_quantity)
+			ncases_with_choice_but_no_quantity = chosen_but_no_quantity.sum()
+			if ncases_with_choice_but_no_quantity:
+				wherefore = numpy.where(chosen_but_no_quantity)
+				first_case_index = wherefore[0][0]
+				first_alt_index = wherefore[1][0]
+				doc.append('there are {} choices without any observed quantity, the first of which is at caseindex {} alt {}'.format(ncases_with_choice_but_no_quantity, first_case_index, self.alternative_names()[first_alt_index]))
+		
+		
 		# report out
 		if doc:
 			from .util.doctor import warn
