@@ -428,7 +428,11 @@ class AbstractReportTable():
 								   catleft='=', catright='=', cathorizbar='=')
 
 	def xml(self, table_attrib=None, headlevel=2):
-		table = Elem(tag='table', attrib=table_attrib or {})
+		try:
+			default_table_attrib = self.table_attrib
+		except AttributeError:
+			default_table_attrib = {}
+		table = Elem(tag='table', attrib=table_attrib or default_table_attrib)
 		thead = table.put('thead')
 		tbody = table.put('tbody')
 		tfoot = table.put('tfoot')
@@ -1369,7 +1373,7 @@ class ArtModelReporter():
 		self.new_xhtml_section(caller, figurename, register=autoregister)
 
 
-	def art_simple_parameters(self, foot=None):
+	def art_simple_parameters(self, foot=None, table_attrib=None):
 		any_holdfast = numpy.any(self.parameter_holdfast_array)
 		if any_holdfast:
 			a = ART(columns=('PARAM','VALUE','GRAD','HOLD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
@@ -1378,6 +1382,9 @@ class ArtModelReporter():
 			a = ART(columns=('PARAM','VALUE','GRAD'), n_head_rows=1, title="<larch.Model> "+self.title, short_title="<larch.Model>", n_rows=len(self)+1)
 			a.set_jrow_kwd_strings(0, PARAM="Parameter", VALUE=" Value", GRAD=" Gradient")
 
+		if table_attrib is None:
+			table_attrib = {'class':'running_parameter_update'}
+		a.table_attrib = table_attrib
 		names = self.parameter_names()
 
 		try:
@@ -1422,6 +1429,7 @@ class ArtModelReporter():
 			display.clear_output(wait=True)
 			display.display_html(self.art_simple_parameters(foot=[
 				"At iteration {}".format(iterat),
+				"Log Likelihood = {}".format(self.loglike()),
 				"Convergence Tolerance = {}".format(self.bhhh_tolerance()),
 			]))
 

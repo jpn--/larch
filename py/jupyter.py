@@ -102,6 +102,15 @@ div.output_wrapper caption {
 	font-weight: 100;
 	font-size: 80%;
 }
+
+table.running_parameter_update caption {
+    caption-side: top;
+	text-align: left;
+	font-family: Roboto;
+	font-style: italic;
+	font-weight: 500;
+	font-size: 100%;
+}
 """
 
 
