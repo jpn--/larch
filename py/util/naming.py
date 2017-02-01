@@ -18,7 +18,7 @@ def make_valid_identifier(x, suppress_warnings=False):
 	else:
 		y = x
 	replacer = re.compile('(\W+)')
-	y = replacer.sub("_", y)
+	y = replacer.sub("_", y.strip())
 	if not y.isidentifier():
 		y = "_"+y
 	if y!=x:

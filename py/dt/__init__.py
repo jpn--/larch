@@ -2903,8 +2903,8 @@ class DT(Fountain):
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
 
-	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False, title=None):
-		"""Create a new blank (all zeros) :ref:`idca` variable.
+	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False, title=None, initializer=0):
+		"""Create a new blank (all zeros, or some other initializer) :ref:`idca` variable.
 			
 		Parameters
 		----------
@@ -2913,8 +2913,12 @@ class DT(Fountain):
 		nalts : int or None
 			The number of alternatives in the new :ref:`idca` variable.  If not given,
 			the return value of :meth:`nAlts` is used.
+		dtype : dtype, optional
+			Optionally give a numpy dtype to use for the new blank array instead of float64.
 		title : str
 			Optionally, give a description of the data to be in this array.
+		initializer : scalar dtype, optional
+			If given, initialize the blank array with this value instead of zero
 			
 		Raises
 		-----
@@ -2925,7 +2929,10 @@ class DT(Fountain):
 			nalts = self.nAlts()
 		if not nalts:
 			raise TypeError('number of alts cannot be zero, must be given')
-		zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
+		if initializer==0:
+			zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
+		else:
+			zer = numpy.full([self.nAllCases(), nalts], initializer, dtype=dtype or numpy.float64)
 		return self.new_idca_from_array(name, zer, overwrite=overwrite, title=title)
 
 	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None, dictionary=None):

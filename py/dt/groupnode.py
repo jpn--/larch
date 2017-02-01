@@ -156,6 +156,44 @@ def _get_children_including_extern(node):
 
 
 
+
+
+
+
+
+class CArrayExt(tables.carray.CArray):
+	@property
+	def dict(self):
+		if 'DICTIONARY' in self._v_attrs:
+			return self._v_attrs.DICTIONARY
+		return None
+
+	@dict.setter
+	def dict(self, val):
+		self._v_attrs.DICTIONARY = val
+
+	DICTIONARY = dict
+	dictionary = dict
+
+	@property
+	def title(self):
+		if 'TITLE' in self._v_attrs:
+			return self._v_attrs.TITLE
+		return None
+
+	@title.setter
+	def title(self, val):
+		self._v_attrs.TITLE = val
+
+	TITLE = title
+	DESCRIPTION = title
+	description = title
+	descrip = title
+
+
+
+
+
 class GroupNode():
 	def __init__(self, parentnode, name=None, *arg, **kwarg):
 		if name is None:
@@ -199,6 +237,8 @@ class GroupNode():
 			x.uniques = types.MethodType( _uniques, x )
 		if isinstance(x, tables.Group):
 			x = GroupNode(x)
+		if x.__class__ == tables.carray.CArray:
+			x.__class__ = CArrayExt
 		return x
 	def __setattr__(self, attr, val):
 		return setattr(self._v_node, attr, val)
@@ -302,7 +342,8 @@ class GroupNode():
 			Either the path to an OMX file or the open OMX object.
 		rowindexnode : pytables integer-dtype array-type node
 			This should be an existing node in the group (or elsewhere in the hdf5 file). It contains the integer 
-			index values of the rows that will be linked.  If given as None, matrix tables will not be linked.
+			index values of the rows that will be linked.  If given as None, matrix data tables will not be linked, and
+			matrix lookup tables will only be linked using the n_alts form.
 		prefix : str
 		n_alts : int
 		n_lookup : int 
@@ -316,7 +357,7 @@ class GroupNode():
 		
 		if local_rowindexnode is not None and rowindexnode is None:
 			rowindexnode = self[local_rowindexnode]
-		if not rowindexnode._v_isopen:
+		if rowindexnode is not None and not rowindexnode._v_isopen:
 			raise TypeError('rowindexnode is closed')
 		
 		def rowindexnode_():
@@ -386,6 +427,33 @@ class GroupNode():
 			except OSError:
 				warnings.warn('nothing was linked from file "{}"'.format(omx_filename), stacklevel=2)
 
+	@property
+	def dict(self):
+		if 'DICTIONARY' in self._v_node._v_attrs:
+			return self._v_node._v_attrs.DICTIONARY
+		return None
+
+	@dict.setter
+	def dict(self, val):
+		self._v_node._v_attrs.DICTIONARY = val
+
+	DICTIONARY = dict
+	dictionary = dict
+
+	@property
+	def title(self):
+		if 'TITLE' in self._v_node._v_attrs:
+			return self._v_node._v_attrs.TITLE
+		return None
+
+	@title.setter
+	def title(self, val):
+		self._v_node._v_attrs.TITLE = val
+
+	TITLE = title
+	DESCRIPTION = title
+	description = title
+	descrip = title
 
 
 
