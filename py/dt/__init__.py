@@ -3090,7 +3090,7 @@ class DT(Fountain):
 			pass
 
 
-	def export_idco(self, file, varnames=None, **formats):
+	def export_idco(self, file, varnames=None, screen="None", **formats):
 		'''Export the :ref:`idco` data to a csv file.
 		
 		Only the :ref:`idco` table is exported, the :ref:`idca` table is ignored.  Future versions
@@ -3112,9 +3112,9 @@ class DT(Fountain):
 		arguments not listed here are passed through to the writer.
 		'''
 		if varnames is None:
-			data = self.dataframe_idco(*self.variables_co(), screen="None")
+			data = self.dataframe_idco(*self.variables_co(), screen=screen)
 		else:
-			data = self.dataframe_idco(*varnames, screen="None")
+			data = self.dataframe_idco(*varnames, screen=screen)
 		try:
 			if os.path.splitext(file)[1] == '.gz':
 				if 'compression' not in formats:
