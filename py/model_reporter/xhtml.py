@@ -54,6 +54,7 @@ class XhtmlModelReporter():
 		for i in cats:
 			
 			if isinstance(i, str) and i.casefold()=='help':
+				poss_incl = set()
 				poss = []
 				poss += ['!           ( title, possible_overspecification, params, LL, latest )']
 				poss += ['$           ( utilityspec, probabilityspec )']
@@ -61,11 +62,17 @@ class XhtmlModelReporter():
 				poss += ['&           ( all registered special sections )']
 				poss += ['#BLAH BLAH  ( A level 2 header )']
 				poss += ['?REGEX      ( search for matches among registered special sections )']
+				poss += ['ch_av       ( summary of choice and availability by alternative, up to 50 )']
+				poss += ['ch_av_all   ( summary of choice and availability by alternative, all alts )']
+				poss_incl.add('ch_av')
+				poss_incl.add('ch_av_all')
 				for k in dir(self):
-					if len(k)>6 and k[:6]=='xhtml_':
+					if len(k)>6 and k[:6]=='xhtml_' and k[6:] not in poss_incl:
 						poss += [k[6:]]
-					if len(k)>4 and k[:4]=='art_':
+						poss_incl.add(k[6:])
+					if len(k)>4 and k[:4]=='art_' and k[4:] not in poss_incl:
 						poss += [k[4:]]
+						poss_incl.add(k[4:])
 				raise TypeError('Possibilities...\n'+'\n'.join(poss))
 			
 			elif i=='!':
@@ -1560,7 +1567,7 @@ class XhtmlModelReporter():
 		return art.xml({'class':"run_statistics"})
 
 
-	def xhtml_data(self,max_alts=250,**format):
+	def xhtml_ch_av(self,max_alts=50,**format):
 		"""
 		Generate a div element containing the summary statistics for choice and availability.
 		
@@ -1687,6 +1694,11 @@ class XhtmlModelReporter():
 									alt_condition = "n/a"
 							x.td("{}".format(alt_condition))
 		return x.close()
+
+	xhtml_data = xhtml_ch_av
+
+	def xhtml_ch_av_all(self,**format):
+		return xhtml_ch_av(self,max_alts=1e100,**format)
 
 
 	# Utility Data Summary
@@ -2777,6 +2789,26 @@ class XhtmlModelReporter():
 		x.end('ul')
 		return x.close()
 
+	def xhtml_blurb(self, h_stepdown=2, **format):
+		try:
+			blurb_rst = self.blurb
+		except AttributeError:
+			return None
+		if isinstance(blurb_rst, bytes):
+			blurb_rst = blurb_rst.decode()
+		if not isinstance(blurb_rst, str):
+			raise TypeError('blurb must be reStructuredText as str ot bytes')
 
+		import textwrap
+		blurb_rst = textwrap.dedent(blurb_rst).strip()
 
+		from docutils.core import publish_parts
+		blurb_div = ElementTree.fromstring(publish_parts(blurb_rst, writer_name='html')['html_body'])
+		blurb_div.attrib['class'] = 'blurb'
+		
+		for hlevel in (6,5,4,3,2,1):
+			for bh1 in blurb_div.iter('h{}'.format(hlevel)):
+				bh1.tag = 'h{}'.format(hlevel+h_stepdown)
+		
+		return blurb_div
 
