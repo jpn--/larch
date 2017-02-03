@@ -1047,17 +1047,22 @@ void ndarray::logsumexp_2 (ndarray* out, const size_t& siz1, const size_t& siz2)
 		out->pool = (PyArrayObject*)PyArray_New((PyTypeObject*)get_array_type("Array"), 1, &dims[0], NPY_DOUBLE, nullptr, nullptr, 0, 0, nullptr);
 		Py_INCREF(out->pool);
 	}
-	unsigned x1, x2; double temp;
+//	unsigned x1, x2; double temp;
 	if (PyArray_NDIM(pool)!=2) {
 		OOPS("can only calculate logsums on a 2d array");
 	} else {
-		for ( x1=0; x1<siz1; x1++ ) {
-			{
-				temp = 0;
-				for ( x2=0; x2<siz2; x2++ ) { temp += ::exp(this->operator()(x1,x2)); }
+//		for ( x1=0; x1<siz1; x1++ ) {
+//			{
+//				temp = 0;
+//				for ( x2=0; x2<siz2; x2++ ) { temp += ::exp(this->operator()(x1,x2)); }
+//				out->operator()(x1) = ::log(temp);
+//			}
+//		}
+		ThreadPool::ParallelFor0((unsigned long)0, siz1, [&](size_t& x1){
+				double temp =0;
+				for ( unsigned x2=0; x2<siz2; x2++ ) { temp += ::exp(this->operator()(x1,x2)); }
 				out->operator()(x1) = ::log(temp);
-			}
-		}
+				} );
 	}
 }
 
