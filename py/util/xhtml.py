@@ -70,6 +70,9 @@ caption {
 }
 
 table.dictionary { border:0px hidden !important; border-collapse: collapse !important; }
+div.blurb {
+	margin-top: 15px;
+}
 
 """
 

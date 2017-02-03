@@ -230,4 +230,8 @@ table.dictionary {
 	border-collapse: collapse !important;
 }
 
+div.blurb {
+	margin-top: 15px;
+}
+
 }

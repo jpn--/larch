@@ -14,6 +14,10 @@ import inspect
 import os
 import re
 from xml.etree import ElementTree
+import textwrap
+from docutils.core import publish_parts
+
+
 
 XhtmlModelReporter_default_format = {
 	'LL'         :  '0.2f',
@@ -2795,28 +2799,52 @@ class XhtmlModelReporter():
 		x.end('ul')
 		return x.close()
 
-	def xhtml_blurb(self, h_stepdown=2, **format):
+	def _xhtml_blurb_n(self, h_stepdown=2, n='', **format):
 		try:
-			blurb_rst = self.blurb
+			blurb_rst = getattr(self, 'blurb'+str(n))
 		except AttributeError:
 			return None
 		if isinstance(blurb_rst, bytes):
 			blurb_rst = blurb_rst.decode()
 		if not isinstance(blurb_rst, str):
 			raise TypeError('blurb must be reStructuredText as str ot bytes')
-
-		import textwrap
 		blurb_rst = textwrap.dedent(blurb_rst).strip()
-
-		from docutils.core import publish_parts
 		blurb_div = ElementTree.fromstring(publish_parts(blurb_rst, writer_name='html')['html_body'])
 		blurb_div.attrib['class'] = 'blurb'
-		
 		for hlevel in (6,5,4,3,2,1):
 			for bh1 in blurb_div.iter('h{}'.format(hlevel)):
 				bh1.tag = 'h{}'.format(hlevel+h_stepdown)
-		
 		return blurb_div
+
+	def xhtml_blurb(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, **format)
+
+	def xhtml_blurb1(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=1, **format)
+
+	def xhtml_blurb2(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=2, **format)
+
+	def xhtml_blurb3(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=3, **format)
+
+	def xhtml_blurb4(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=4, **format)
+
+	def xhtml_blurb5(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=5, **format)
+
+	def xhtml_blurb6(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=6, **format)
+
+	def xhtml_blurb7(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=7, **format)
+
+	def xhtml_blurb8(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=8, **format)
+
+	def xhtml_blurb9(self, h_stepdown=2, **format):
+		return self._xhtml_blurb_n(h_stepdown=h_stepdown, n=9, **format)
 
 
 

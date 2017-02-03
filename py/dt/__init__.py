@@ -2483,7 +2483,7 @@ class DT(Fountain):
 			self.h5f.create_carray(self.idco._v_node, idca_var, obj=newarr)
 			self.idca._v_children[idca_var]._f_remove()
 
-	def new_idco(self, name, expression, dtype=numpy.float64, *, overwrite=False, title=None):
+	def new_idco(self, name, expression, dtype=numpy.float64, *, overwrite=False, title=None, dictionary=None):
 		"""Create a new :ref:`idco` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2505,6 +2505,13 @@ class DT(Fountain):
 			The dtype for the array of new data.
 		overwrite : bool
 			Should the variable be overwritten if it already exists, default to False.
+		title : str, optional
+			A descriptive title for the variable, typically a short phrase but an
+			arbitrary length description is allowed.
+		dictionary : dict, optional
+			A data dictionary explaining some or all of the values in this field.
+			Even for otherwise self-explanatory numerical values, the dictionary
+			may give useful information about particular out of range values.
 			
 		Raises
 		------
@@ -2521,6 +2528,8 @@ class DT(Fountain):
 		self.idco[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
 		if title is not None:
 			self.idco[name]._v_attrs.TITLE = title
+		if dictionary is not None:
+			self.idco[name]._v_attrs.DICTIONARY = dictionary
 
 	def recast_idco(self, name, newtype, invalid_values=()):
 		"""
@@ -2555,12 +2564,40 @@ class DT(Fountain):
 
 
 
-	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None, initializer=0):
+	def new_blank_idco(self, name, dtype=None, overwrite=False, title=None, initializer=0, dictionary=None):
+		"""Create a new blank :ref:`idco` variable.
+			
+		Parameters
+		----------
+		name : str
+			The name of the new :ref:`idco` variable.
+		initializer : value, optional
+			If given, initialize the array with this value (defaults to zero.
+		dtype : dtype
+			The dtype for the array of new data.
+		overwrite : bool
+			Should the variable be overwritten if it already exists, default to False.
+		title : str, optional
+			A descriptive title for the variable, typically a short phrase but an
+			arbitrary length description is allowed.
+		dictionary : dict, optional
+			A data dictionary explaining some or all of the values in this field.
+			Even for otherwise self-explanatory numerical values, the dictionary
+			may give useful information about particular out of range values.
+			
+		Raises
+		------
+		tables.exceptions.NodeError
+			If a variable of the same name already exists and overwrite is False.
+		NameError
+			If the expression contains a name that cannot be evaluated from within
+			the existing :ref:`idco` data.
+		"""
 		if initializer is 0:
 			zer = numpy.zeros(self.nAllCases(), dtype=dtype or numpy.float64)
 		else:
 			zer = numpy.full(self.nAllCases(), initializer, dtype=dtype or numpy.float64)
-		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title)
+		return self.new_idco_from_array(name, zer, overwrite=overwrite, title=title, dictionary=dictionary)
 
 	def new_seqential_idco(self, name, dtype=None, overwrite=False, title=None):
 		zer = numpy.arange(self.nAllCases(), dtype=dtype or numpy.float64)
@@ -2593,6 +2630,13 @@ class DT(Fountain):
 			Optionally, give the file name or other description of the source of the data in this array.
 		rel_original_source : bool
 			If true, change the absolute path of the original_source to a relative path viz this file.
+		title : str, optional
+			A descriptive title for the variable, typically a short phrase but an
+			arbitrary length description is allowed.
+		dictionary : dict, optional
+			A data dictionary explaining some or all of the values in this field.
+			Even for otherwise self-explanatory numerical values, the dictionary
+			may give useful information about particular out of range values.
 			
 		Raises
 		------

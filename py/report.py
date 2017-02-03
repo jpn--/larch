@@ -178,6 +178,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 	.larch_signature {""" + styles.signature_font + """}
 	.larch_name_signature {""" + styles.signature_name_font + """}
 	table.dictionary { border:0px hidden !important; border-collapse: collapse !important; }
+	div.blurb { margin-top: 15px; }
 	</style>
 	"""
 
