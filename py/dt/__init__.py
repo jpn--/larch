@@ -3491,6 +3491,8 @@ class DT(Fountain):
 						else:
 							di = str(di)
 						a.set_jrow_loc(rownum, 'DICTIONARY', di)
+					else:
+						a.set_jrow_loc(rownum, 'DICTIONARY', ' ')
 
 
 		## Content: Expr

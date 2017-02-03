@@ -62,6 +62,7 @@ class XhtmlModelReporter():
 				poss += ['&           ( all registered special sections )']
 				poss += ['#BLAH BLAH  ( A level 2 header )']
 				poss += ['?REGEX      ( search for matches among registered special sections )']
+				poss += ['formal      ( title, blurb, params, LL, utilityspec, nesting_tree )']
 				poss += ['ch_av       ( summary of choice and availability by alternative, up to 50 )']
 				poss += ['ch_av_all   ( summary of choice and availability by alternative, all alts )']
 				poss_incl.add('ch_av')
@@ -74,6 +75,11 @@ class XhtmlModelReporter():
 						poss += [k[4:]]
 						poss_incl.add(k[4:])
 				raise TypeError('Possibilities...\n'+'\n'.join(poss))
+
+			elif i=='formal':
+				for j in ('title', 'blurb', 'params', 'll', 'utilityspec',) + ( ('nesting_tree',) if len(self.node)>0 else () ):
+					if j not in discovered: yield j
+					discovered.add(j)
 			
 			elif i=='!':
 				for j in ('title', 'possible_overspecification', 'params', 'll', 'latest'):
@@ -2812,3 +2818,7 @@ class XhtmlModelReporter():
 		
 		return blurb_div
 
+
+
+	def xhtml_dt_info(self, **format):
+		return self.df.info(3).__xml__()
