@@ -27,6 +27,7 @@ import os
 import re
 from .groupnode import GroupNode
 from contextlib import contextmanager
+from ..util.xhtml import ElemTableFromDict
 
 class IncompatibleShape(LarchError):
 	pass
@@ -3484,7 +3485,12 @@ class DT(Fountain):
 						a.set_jrow_loc(rownum, 'TITLE', the_node._v_attrs.TITLE)
 				if 'DICTIONARY' in extra:
 					if 'DICTIONARY' in the_node._v_attrs:
-						a.set_jrow_loc(rownum, 'DICTIONARY', str(the_node._v_attrs.DICTIONARY))
+						di = the_node._v_attrs.DICTIONARY
+						if isinstance(di,dict):
+							di = ElemTableFromDict(di)
+						else:
+							di = str(di)
+						a.set_jrow_loc(rownum, 'DICTIONARY', di)
 
 
 		## Content: Expr

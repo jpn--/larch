@@ -177,6 +177,7 @@ def multireport(models_or_filenames, params=(), ratios=(), *, filename=None, ove
 	td.tstat { font-size: 80%; font-weight: 300;}
 	.larch_signature {""" + styles.signature_font + """}
 	.larch_name_signature {""" + styles.signature_name_font + """}
+	table.dictionary { border:0px hidden !important; border-collapse: collapse !important; }
 	</style>
 	"""
 

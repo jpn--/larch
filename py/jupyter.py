@@ -111,6 +111,9 @@ table.running_parameter_update caption {
 	font-weight: 500;
 	font-size: 100%;
 }
+
+table.dictionary { border:0px hidden !important; border-collapse: collapse !important; }
+
 """
 
 

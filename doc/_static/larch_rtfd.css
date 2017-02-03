@@ -224,4 +224,10 @@ h3.larch_art, h3.larch_art_xhtml {
 h2.larch_art + h3.larch_art, h2.larch_art_xhtml + h3.larch_art_xhtml,
 h2.larch_art + a.toc + h3.larch_art, h2.larch_art_xhtml + a.toc + h3.larch_art_xhtml {
 	margin-top: 5px;
+	
+table.dictionary {
+	border:0px hidden !important;
+	border-collapse: collapse !important;
+}
+
 }

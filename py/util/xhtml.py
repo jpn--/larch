@@ -68,6 +68,9 @@ caption {
 	font-weight: 100;
 	font-size: 80%;
 }
+
+table.dictionary { border:0px hidden !important; border-collapse: collapse !important; }
+
 """
 
 
@@ -166,6 +169,16 @@ class Elem(Element):
 			raise IOError("file {0} already exists".format(filename))
 		with XHTML(filename, overwrite=overwrite, view_on_exit=False) as f:
 			f << self
+
+
+def ElemTableFromDict(dictionary, toptag='div'):
+	e = Elem(tag=toptag)
+	table = e.put('table', attrib={'class':'dictionary'})
+	for k in sorted(dictionary.keys()):
+		trow = table.put('tr')
+		trow.put('td', text=str(k))
+		trow.put('td', text=str(dictionary[k]))
+	return e
 
 
 def Anchor_Elem(reftxt, cls, toclevel):
