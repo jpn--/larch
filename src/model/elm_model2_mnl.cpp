@@ -340,15 +340,45 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 	if ((features & MODELFEATURES_ALLOCATION)) {
 		TODO;
 	} else if ((features & MODELFEATURES_NESTING)) {
-				
-		std::shared_ptr<ndarray> utility_workspace = std::make_shared<ndarray>(nNodes);
-		std::shared_ptr<ndarray> utility_savespace = std::make_shared<ndarray>(nNodes);
+		
+		// THREADPOOL REPLACES ...
+//		std::shared_ptr<ndarray> utility_workspace = std::make_shared<ndarray>(nNodes);
+//		std::shared_ptr<ndarray> utility_savespace = std::make_shared<ndarray>(nNodes);
+//		for (int c=0; c<u->size1(); c++) {
+//			cblas_dcopy(nElementals, u->ptr(c), 1, utility_savespace->ptr(), 1	);
+//			__casewise_nl_utility(utility_savespace->ptr(), Xylem, utility_workspace->ptr());
+//			LogSum->at(c) = *(utility_savespace->ptr(nNodes-1));
+//		}
 
-		for (int c=0; c<u->size1(); c++) {
-			cblas_dcopy(nElementals, u->ptr(c), 1, utility_savespace->ptr(), 1	);
-			__casewise_nl_utility(utility_savespace->ptr(), Xylem, utility_workspace->ptr());
-			LogSum->at(c) = *(utility_savespace->ptr(nNodes-1));
-		}
+//		static std::mutex critical;
+//		static int nothread = 1;
+
+		class local_workspace {
+		public:
+			std::shared_ptr<ndarray> utility_workspace;
+			std::shared_ptr<ndarray> utility_savespace;
+//			int threadnum;
+			local_workspace(int nNodes_)
+			: utility_workspace( std::make_shared<ndarray>(nNodes_) )
+			, utility_savespace( std::make_shared<ndarray>(nNodes_) )
+			{
+//				std::lock_guard<std::mutex> lock(critical);
+//				threadnum = nothread;
+//				nothread++;
+			}
+		};
+
+
+		auto f = [&] (int c, local_workspace& k) {
+			cblas_dcopy(nElementals, u->ptr(c), 1, k.utility_savespace->ptr(), 1	);
+			__casewise_nl_utility(k.utility_savespace->ptr(), Xylem, k.utility_workspace->ptr());
+			LogSum->at(c) = *(k.utility_savespace->ptr(nNodes-1));
+//			std::lock_guard<std::mutex> lock(critical);
+//			std::cout << c << ", thread " << k.threadnum << std::endl;
+		};
+
+		ThreadPool::ParallelFor<local_workspace>((unsigned long)0, u->size1(), f, nNodes);
+
 
 	} else {
 		
