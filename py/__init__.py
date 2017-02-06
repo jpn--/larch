@@ -73,6 +73,7 @@ from .metamodel import MetaModel
 from .core import ModelParameter, LarchError
 from . import array
 from . import roles
+from .util.dirs import cache as cachedir
 core._set_array_module(array)
 try:
 	from .built import build, versions, build_config, longversion

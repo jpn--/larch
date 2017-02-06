@@ -6,10 +6,10 @@ class dir_maker():
 	def __getattr__(self,key):
 		newdir = os.path.join(self._basedir, key)
 		return dir_maker(newdir)
-	def __call__(self, filename=''):
-		newfile = os.path.join(self._basedir, filename)
+	def __call__(self, filename='', *arg):
+		newfile = os.path.join(self._basedir, filename, *arg)
 		try:
-			os.makedirs(self._basedir)
+			os.makedirs(os.path.dirname(newfile))
 		except FileExistsError:
 			pass
 		return newfile
