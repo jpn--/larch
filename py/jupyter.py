@@ -116,6 +116,7 @@ table.dictionary { border:0px hidden !important; border-collapse: collapse !impo
 
 div.blurb {
 	margin-top: 15px;
+	max-width: 6.5in;
 }
 
 """

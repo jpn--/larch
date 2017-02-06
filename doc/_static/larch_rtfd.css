@@ -232,6 +232,7 @@ table.dictionary {
 
 div.blurb {
 	margin-top: 15px;
+	max-width: 6.5in;
 }
 
 }
