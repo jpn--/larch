@@ -28,6 +28,7 @@ import re
 from .groupnode import GroupNode
 from contextlib import contextmanager
 from ..util.xhtml import ElemTableFromDict
+from .export import Exporter
 
 class IncompatibleShape(LarchError):
 	pass
@@ -104,7 +105,7 @@ def _pytables_link_dereference(i):
 
 
 
-class DT(Fountain):
+class DT(Fountain, Exporter):
 	"""A wrapper for a pytables File used to get data for models.
 
 	This object wraps a :class:`_tb.File`, adding a number of methods designed
@@ -3135,38 +3136,6 @@ class DT(Fountain):
 			pass
 
 
-	def export_idco(self, file, varnames=None, screen="None", **formats):
-		'''Export the :ref:`idco` data to a csv file.
-		
-		Only the :ref:`idco` table is exported, the :ref:`idca` table is ignored.  Future versions
-		of Larch may provide a facility to export idco and idca data together in a 
-		single idco output file.
-		
-		Parameters
-		----------
-		file : str or file-like
-			If a string, this is the file name to give to the `open` command. Otherwise,
-			this object is passed to :class:`csv.writer` directly.
-		varnames : sequence of str, or None
-			The variables to export.  If None, all regular variables are exported.
-			
-		Notes
-		-----
-		This method uses a :class:`pandas.DataFrame` object to write the output file, using
-		:meth:`pandas.DataFrame.to_csv`. Any keyword
-		arguments not listed here are passed through to the writer.
-		'''
-		if varnames is None:
-			data = self.dataframe_idco(*self.variables_co(), screen=screen)
-		else:
-			data = self.dataframe_idco(*varnames, screen=screen)
-		try:
-			if os.path.splitext(file)[1] == '.gz':
-				if 'compression' not in formats:
-					formats['compression'] = 'gzip'
-		except:
-			pass
-		data.to_csv(file, index_label='caseid', **formats)
 	
 
 
