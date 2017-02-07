@@ -490,14 +490,18 @@ class AbstractReportTable():
 			try:
 				headlevel = int(headlevel)
 			except:
-				div = XML_Builder("div", attrib={'class':'larch_art'})
+#				div = XML_Builder("div", attrib={'class':'larch_art'})
+				div = Elem("div", attrib={'class':'larch_art'})
 				div << table
-				return div.close()
+#				return div.close()
+				return div
 			else:
-				div = XML_Builder("div", attrib={'class':'larch_art'})
+#				div = XML_Builder("div", attrib={'class':'larch_art'})
+				div = Elem("div", attrib={'class':'larch_art'})
 				div.hn(headlevel, self.title, anchor=self.short_title or self.title, attrib={'class':'larch_art'})
 				div << table
-				return div.close()
+#				return div.close()
+				return div
 		return table
 	
 	__xml__ = xml

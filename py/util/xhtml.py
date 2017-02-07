@@ -174,6 +174,16 @@ class Elem(Element):
 		with XHTML(filename, overwrite=overwrite, view_on_exit=False) as f:
 			f << self
 
+	def anchor(self, ref, reftxt, cls, toclevel):
+		self.put("a",{'name':ref, 'reftxt':reftxt, 'class':cls, 'toclevel':toclevel})
+
+	def hn(self, n, content, attrib={}, anchor=None, **extra):
+		if anchor:
+			h_elem = self.put("h{}".format(n),attrib, **extra)
+			h_elem.put("a",{'name':_uid(), 'reftxt':anchor if isinstance(anchor, str) else content, 'class':'toc', 'toclevel':'{}'.format(n)}, tail=content)
+		else:
+			self.put("h{}".format(n),attrib, text=content, **extra)
+
 
 def ElemTableFromDict(dictionary, toptag='div'):
 	e = Elem(tag=toptag)
@@ -198,7 +208,7 @@ class XML_Builder(TreeBuilder):
 		if tag is None:
 			tag="div"
 		if tag is not None:
-			self.start(tag,attrib,**extra)
+			self.topdiv = self.start(tag,attrib,**extra)
 	def __getattr__(self, name):
 		if len(name)>2 and name[-1]=="_" and name[-2]!="_" and name[0]!="_":
 			return self.block(name[:-1])
