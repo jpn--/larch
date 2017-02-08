@@ -29,6 +29,7 @@ from .groupnode import GroupNode
 from contextlib import contextmanager
 from ..util.xhtml import ElemTableFromDict
 from .export import Exporter
+from .importer import Importer
 
 class IncompatibleShape(LarchError):
 	pass
@@ -105,7 +106,7 @@ def _pytables_link_dereference(i):
 
 
 
-class DT(Fountain, Exporter):
+class DT(Fountain, Importer, Exporter):
 	"""A wrapper for a pytables File used to get data for models.
 
 	This object wraps a :class:`_tb.File`, adding a number of methods designed
@@ -3488,9 +3489,9 @@ class DT(Fountain, Exporter):
 								pass
 							else:
 								path_candidate = the_node._v_attrs.ORIGINAL_SOURCE
-							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate))
+							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(path_candidate).replace('/','\u200B/'))
 						else:
-							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE))
+							a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', str(the_node._v_attrs.ORIGINAL_SOURCE).replace('/','\u200B/'))
 					else:
 						a.set_jrow_loc(rownum, 'ORIGINAL_SOURCE', '.')
 				if 'TITLE' in extra:

@@ -5,6 +5,7 @@ import types
 import pandas
 import os
 import warnings
+import textwrap
 from ..util.naming import make_valid_identifier, NotAPythonIdentifier
 
 #class GroupNode(tables.group.Group):
@@ -186,11 +187,24 @@ class CArrayExt(tables.carray.CArray):
 		self._v_attrs.TITLE = val
 
 	TITLE = title
-	DESCRIPTION = title
-	description = title
-	descrip = title
 
 
+	@property
+	def description(self):
+		"Same as title, except string is reformatted by stripping excess whitespace."
+		if 'TITLE' in self._v_attrs:
+			return textwrap.fill(self._v_attrs.TITLE, width=78)
+		return None
+
+	@description.setter
+	def description(self, val):
+		self._v_attrs.TITLE = " ".join(str(val).split())
+
+	DESCRIPTION = description
+	descrip = description
+
+	def descrip_w(self, width=70, **kwargs):
+		return textwrap.fill(self.TITLE, width=width, **kwargs)
 
 
 
