@@ -75,6 +75,18 @@ div.blurb {
 	max-width: 6.5in;
 }
 
+div.note {
+	font-size:90%;
+	padding-left:1em;
+	padding-right:1em;
+	border: 1px solid #999999;
+	border-radius: 4px;
+}
+
+p.admonition-title {
+	font-weight: 700;
+}
+
 """
 
 
