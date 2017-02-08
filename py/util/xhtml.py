@@ -253,9 +253,9 @@ class XML_Builder(TreeBuilder):
 		self.data(content)
 		self.end("h3")
 	def hn(self, n, content, attrib={}, anchor=None, **extra):
+		self.start("h{}".format(n),attrib, **extra)
 		if anchor:
 			self.anchor(_uid(), anchor if isinstance(anchor, str) else content, 'toc', '{}'.format(n))
-		self.start("h{}".format(n),attrib, **extra)
 		self.data(content)
 		self.end("h{}".format(n))
 	def td(self, content, attrib={}, **extra):
@@ -632,8 +632,13 @@ class XHTML():
 		if attrib is None:
 			attrib = {}
 		if anchor:
-			self.anchor(_uid(), anchor if isinstance(anchor, str) else content, 'toc', '{}'.format(n))
-		self.append(Elem(tag="h{}".format(n),attrib=attrib,text=content))
+			h_elem = Elem(tag="h{}".format(n),attrib=attrib)
+			h_elem.put("a",{'name':_uid(), 'reftxt':anchor if isinstance(anchor, str) else content, 'class':'toc', 'toclevel':'{}'.format(n)}, tail=content)
+		else:
+			h_elem = Elem(tag="h{}".format(n),attrib=attrib,text=content)
+#		if anchor:
+#			self.anchor(_uid(), anchor if isinstance(anchor, str) else content, 'toc', '{}'.format(n))
+		self.append(h_elem)
 
 def xhtml_section_bytes(content):
 	import io
