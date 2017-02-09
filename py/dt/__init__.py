@@ -2729,7 +2729,7 @@ class DT(Fountain, Importer, Exporter):
 				anything_imported = True
 				if original_source is not None:
 					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
-			elif names[col] not in self.idco:
+			elif names is not None and col in names and names[col] not in self.idco:
 				log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
 				self.new_idco_from_array(names[col], arr=new_df[col].values)
 				anything_imported = True
@@ -2819,7 +2819,7 @@ class DT(Fountain, Importer, Exporter):
 				anything_imported = True
 				if original_source is not None:
 					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
-			elif names[col] not in self.idco:
+			elif names is not None and col in names and names[col] not in self.idco:
 				log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
 				self.new_idco_from_array(names[col], arr=new_df[col].values)
 				anything_imported = True
