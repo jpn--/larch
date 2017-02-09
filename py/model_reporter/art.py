@@ -509,6 +509,10 @@ class AbstractReportTable():
 	def _repr_html_(self):
 		return self.__xml__().tostring().decode()
 
+	def to_html(self, filename, **kwargs):
+		with XHTML(filename, **kwargs) as f:
+			f << self.__xml__()
+
 	def to_xlsx(self, workbook, worksheet_name=None, r_top=0, c_left=0,
 	            freeze_panes=True, hide_gridlines=True,
 				metahead=None, buffercol=True):
