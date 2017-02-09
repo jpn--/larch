@@ -2723,19 +2723,18 @@ class DT(Fountain, Importer, Exporter):
 				names = {n:n for n in names}
 		anything_imported = False
 		for col in new_df.columns:
-			if col not in self.idco:
-				if names is None:
-					log('importing "{}" into {}'.format(col, self.source_filename))
-					self.new_idco_from_array(col, arr=new_df[col].values)
-					anything_imported = True
-					if original_source is not None:
-						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
-				elif col in names:
-					log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
-					self.new_idco_from_array(names[col], arr=new_df[col].values)
-					anything_imported = True
-					if original_source is not None:
-						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
+			if names is None and col not in self.idco:
+				log('importing "{}" into {}'.format(col, self.source_filename))
+				self.new_idco_from_array(col, arr=new_df[col].values)
+				anything_imported = True
+				if original_source is not None:
+					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+			elif names[col] not in self.idco:
+				log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
+				self.new_idco_from_array(names[col], arr=new_df[col].values)
+				anything_imported = True
+				if original_source is not None:
+					self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
 		if not anything_imported:
 			if names is not None:
 				names_warn = '\n  from names:\n    '+'\n    '.join(names.keys())
@@ -2814,19 +2813,18 @@ class DT(Fountain, Importer, Exporter):
 			new_df = pandas.merge(baseframe, other_df, left_on=self_on, right_on=other_on, how='left', suffixes=('', dupe_suffix))
 		anything_imported = False
 		for col in new_df.columns:
-			if col not in self.idco:
-				if names is None:
-					log('importing "{}" into {}'.format(col, self.source_filename))
-					self.new_idco_from_array(col, arr=new_df[col].values)
-					anything_imported = True
-					if original_source is not None:
-						self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
-				elif col in names:
-					log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
-					self.new_idco_from_array(names[col], arr=new_df[col].values)
-					anything_imported = True
-					if original_source is not None:
-						self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
+			if names is None and col not in self.idco:
+				log('importing "{}" into {}'.format(col, self.source_filename))
+				self.new_idco_from_array(col, arr=new_df[col].values)
+				anything_imported = True
+				if original_source is not None:
+					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+			elif names[col] not in self.idco:
+				log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
+				self.new_idco_from_array(names[col], arr=new_df[col].values)
+				anything_imported = True
+				if original_source is not None:
+					self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
 		if not anything_imported:
 			if names is not None:
 				names_warn = '\n  from names:\n    '+'\n    '.join(names.keys())
