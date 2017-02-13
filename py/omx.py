@@ -610,3 +610,59 @@ class OMX(_tb.file.File):
 			a.addrow_kwd_strings(TABLE=v_name, DTYPE=self.lookup._v_children[v_name].dtype)
 		return a
 
+	@classmethod
+	def FromDataFrame(cls, frame, *arg, **kwarg):
+		'''
+		Create a new OMX file from a `pandas.DataFrame`.
+		
+		Will create a new OMX file containing only lookups (no matrix data).
+		The shape of the OMX will be set as square, with size equal to the 
+		number of rows in the frame.
+		
+		Parameters
+		----------
+		frame : pandas.DataFrame
+			Import this data.
+		'''
+		self = cls(*arg, **kwarg)
+		self.shape = (len(frame),len(frame))
+		for columnname in frame.columns:
+			self.add_lookup(columnname, frame[columnname].values)
+		return self
+
+	@classmethod
+	def FromCSV(cls, filename, *arg, csv_kwarg=None, **kwarg):
+		'''
+		Create a new OMX file from a csv file.
+		
+		This is a convenience function that wraps reading the CSV into a 
+		`pandas.DataFrame`, and then writing to a new OMX with `FromDataFrame`.
+		
+		Parameters
+		----------
+		filename : str
+			The CSV filename.
+		'''
+		if csv_kwarg is None:
+			csv_kwarg = {}
+		self = cls.FromDataFrame( pandas.read_csv(filename, **csv_kwarg), *arg, **kwarg )
+		return self
+
+	@classmethod
+	def FromXLSX(cls, filename, *arg, excel_kwarg=None, **kwarg):
+		'''
+		Create a new OMX file from an excel file.
+		
+		This is a convenience function that wraps reading the XLSX into a
+		`pandas.DataFrame`, and then writing to a new OMX with `FromDataFrame`.
+		
+		Parameters
+		----------
+		filename : str
+			The CSV filename.
+		'''
+		if excel_kwarg is None:
+			excel_kwarg = {}
+		self = cls.FromDataFrame( pandas.read_excel(filename, **excel_kwarg), *arg, **kwarg )
+		return self
+

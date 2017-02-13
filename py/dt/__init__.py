@@ -2205,131 +2205,6 @@ class DT(Fountain, Importer, Exporter):
 		return omx
 
 
-	def import_idco(self, filepath_or_buffer, caseid_column=None, overwrite=0, *args, **kwargs):
-		"""Import an existing CSV or similar file in idco format into this HDF5 file.
-		
-		This function relies on :func:`pandas.read_csv` to read and parse the input data.
-		All arguments other than those described below are passed through to that function.
-		
-		Parameters
-		----------
-		filepath_or_buffer : str or buffer or :class:`pandas.DataFrame`
-			This argument will be fed directly to the :func:`pandas.read_csv` function.
-			If a string is given and the file extension is ".xlsx" then the :func:`pandas.read_excel`
-			function will be used instead, ot if the file extension is ".dbf" then 
-			:func:`simpledbf.Dbf5.to_dataframe` is used.  Alternatively, you can just pass a pre-loaded
-			:class:`pandas.DataFrame`.
-		caseid_column : None or str
-			If given, this is the column of the input data file to use as caseids.  If not given,
-			arbitrary sequential caseids will be created.  If it is given and
-			the caseids do already exist, a `LarchError` is raised.
-		overwrite : int
-			If positive, existing data with same name will be overwritten.  If zero (the default)
-			existing data with same name will be not overwritten and tables.exceptions.NodeError
-			will be raised.  If negative, existing data will not be overwritten but no errors will be raised.
-		
-		Raises
-		------
-		LarchError
-			If caseids exist and are also given,
-			or if the caseids are not integer values.
-		"""
-		import pandas
-		from .. import logging
-		log = logging.getLogger('DT')
-		log("READING %s",str(filepath_or_buffer))
-		original_source = None
-		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
-			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
-			original_source = filepath_or_buffer
-		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.dbf':
-			from simpledbf import Dbf5
-			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
-			df = dbf.to_dataframe()
-			original_source = filepath_or_buffer
-		elif isinstance(filepath_or_buffer, pandas.DataFrame):
-			df = filepath_or_buffer
-		else:
-			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
-			original_source = filepath_or_buffer
-		log("READING COMPLETE")
-		try:
-			for col in df.columns:
-				log("LOADING %s",col)
-				col_array = df[col].values
-				try:
-					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
-				except ValueError:
-					log.warn("  column %s is not an simple compatible datatype",col)
-					try:
-						maxlen = int(df[col].str.len().max())
-					except ValueError:
-						import datetime
-						if isinstance(df[col][0],datetime.time):
-							log.warn("  column %s is datetime.time, converting to Time32",col)
-							tb_atom = _tb.atom.Time32Atom()
-							#convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
-							def convert_datetime_time_to_epoch_seconds(tm):
-								try:
-									return tm.hour*3600+ tm.minute*60 + tm.second
-								except:
-									if numpy.isnan(tm):
-										return 0
-									else:
-										raise
-							col_array = df[col].apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
-						else:
-							import __main__
-							__main__.err_df = df
-							raise
-					else:
-						maxlen = max(maxlen,8)
-						log.warn("  column %s, converting to S%d",col,maxlen)
-						try:
-							col_array = df[col].astype('S{}'.format(maxlen)).values
-						except SystemError:
-							log.warn("  SystemError in converting column %s to S%d, data is being discarded",col,maxlen)
-							tb_atom = None
-						except UnicodeEncodeError:
-							log.warn("  UnicodeEncodeError in converting column %s to S%d, data is being discarded",col,maxlen)
-							tb_atom = None
-						else:
-							tb_atom = _tb.Atom.from_dtype(col_array.dtype)
-				if tb_atom is not None:
-					col = make_valid_identifier(col)
-					if overwrite and col in self.idco._v_node._v_children:
-						# delete the old data
-						self.h5f.remove_node(self.idco._v_node, col, recursive=True)
-					h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
-					h5var[:] = col_array
-					if original_source:
-						h5var._v_attrs.ORIGINAL_SOURCE = original_source
-			if caseid_column is not None and 'caseids' in self.h5top:
-				raise LarchError("caseids already exist, not setting new ones")
-			if caseid_column is not None and 'caseids' not in self.h5top:
-				if caseid_column not in df.columns:
-					for col in df.columns:
-						if col.casefold() == caseid_column.casefold():
-							caseid_column = col
-							break
-				if caseid_column not in df.columns:
-					raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
-				proposed_caseids_node = self.idco._v_children[caseid_column]
-				if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
-					col_array = df[caseid_column].values.astype('int64')
-					if not numpy.all(col_array==df[caseid_column].values):
-						raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
-					h5var = self.h5f.create_carray(self.idco._v_node, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
-					h5var[:] = col_array
-					caseid_column = caseid_column+'_int64'
-					proposed_caseids_node = self.idco._v_children[caseid_column]
-				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.idco._v_pathname+'/'+caseid_column)
-			if caseid_column is None and 'caseids' not in self.h5top:
-				h5var = self.h5f.create_carray(self.h5top, 'caseids', obj=numpy.arange(1, len(df)+1, dtype=numpy.int64))
-		except:
-			self._df_exception = df
-			raise
-
 
 
 	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e1000):
@@ -2507,6 +2382,7 @@ class DT(Fountain, Importer, Exporter):
 			The dtype for the array of new data.
 		overwrite : bool
 			Should the variable be overwritten if it already exists, default to False.
+			Explicitly set to `None` to suppress the NodeError if the node exists.
 		title : str, optional
 			A descriptive title for the variable, typically a short phrase but an
 			arbitrary length description is allowed.
@@ -2526,6 +2402,8 @@ class DT(Fountain, Importer, Exporter):
 		data = self.array_idco(expression, screen="None", dtype=dtype).reshape(-1)
 		if overwrite:
 			self.delete_data(name)
+		if overwrite is None and name in self.idco:
+			return
 		self.h5f.create_carray(self.idco._v_node, name, obj=data)
 		self.idco[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
 		if title is not None:
@@ -2819,12 +2697,16 @@ class DT(Fountain, Importer, Exporter):
 				anything_imported = True
 				if original_source is not None:
 					self.idco[col]._v_attrs.ORIGINAL_SOURCE = original_source
+				if col in other.idco:
+					self.idco[col]._v_attrs.DICTIONARY = other.idco[col].DICTIONARY
 			elif names is not None and col in names and names[col] not in self.idco:
 				log('importing "{}" as "{}" into {}'.format(col, names[col], self.source_filename))
 				self.new_idco_from_array(names[col], arr=new_df[col].values)
 				anything_imported = True
 				if original_source is not None:
 					self.idco[names[col]]._v_attrs.ORIGINAL_SOURCE = original_source
+				if col in other.idco:
+					self.idco[names[col]]._v_attrs.DICTIONARY = other.idco[col].DICTIONARY
 		if not anything_imported:
 			if names is not None:
 				names_warn = '\n  from names:\n    '+'\n    '.join(names.keys())
@@ -3111,7 +2993,7 @@ class DT(Fountain, Importer, Exporter):
 			raise TypeError("arr_index invalid type ({})".format(str(type(arr_index))))
 
 
-	def delete_data(self, name, recursive=True):
+	def delete_data(self, name, recursive=True, only=None):
 		"""Delete an existing :ref:`idca` or :ref:`idco` variable.
 		
 		Parameters
@@ -3120,19 +3002,25 @@ class DT(Fountain, Importer, Exporter):
 			The name of the data node to remove.
 		recursive : bool
 			If the data node is a group, recursively remove all sub-nodes.
+		only : {None, 'idca', 'idco'}
+			To remove only data from idca or idco, pass that name as here,
+			otherwise the name will be removed from either (or both if it
+			appears in both).
 			
 		If there is a variable of the same name in both idca and idco
 		formats, this method will delete both.
 		
 		"""
-		try:
-			self.h5f.remove_node(self.idca._v_node, name, recursive)
-		except _tb.exceptions.NoSuchNodeError:
-			pass
-		try:
-			self.h5f.remove_node(self.idco._v_node, name, recursive)
-		except _tb.exceptions.NoSuchNodeError:
-			pass
+		if only is None or 'idca' in only:
+			try:
+				self.h5f.remove_node(self.idca._v_node, name, recursive)
+			except _tb.exceptions.NoSuchNodeError:
+				pass
+		if only is None or 'idco' in only:
+			try:
+				self.h5f.remove_node(self.idco._v_node, name, recursive)
+			except _tb.exceptions.NoSuchNodeError:
+				pass
 
 
 	
@@ -3280,7 +3168,11 @@ class DT(Fountain, Importer, Exporter):
 				x[k] = v
 		return x
 	
-	def set_weight(self, wgt, scale=None):
+	def set_weight(self, wgt, scale=None, overwrite=False):
+		if overwrite:
+			self.delete_data('_weight_', only='idco')
+		if not overwrite and '_weight_' in self.idco:
+			return
 		if scale is None:
 			self.h5f.create_soft_link(self.idco._v_node, '_weight_', target='/larch/idco/'+wgt)
 		else:

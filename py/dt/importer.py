@@ -19,6 +19,7 @@ else:
 	_tb_success = True
 
 from ..core import IntStringDict
+from ..util.naming import make_valid_identifier
 
 
 class Importer():
@@ -148,3 +149,138 @@ class Importer():
 			h5f.create_soft_link(larchidco, '_weight_', target='/larch/idco/'+wgt)
 
 		return self
+
+
+
+
+	def import_idco(self, filepath_or_buffer, caseid_column=None, overwrite=0, *args, **kwargs):
+		"""Import an existing CSV or similar file in idco format into this HDF5 file.
+		
+		This function relies on :func:`pandas.read_csv` to read and parse the input data.
+		All arguments other than those described below are passed through to that function.
+		
+		Parameters
+		----------
+		filepath_or_buffer : str or buffer or :class:`pandas.DataFrame`
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+			If a string is given and the file extension is ".xlsx" then the :func:`pandas.read_excel`
+			function will be used instead, ot if the file extension is ".dbf" then 
+			:func:`simpledbf.Dbf5.to_dataframe` is used.  Alternatively, you can just pass a pre-loaded
+			:class:`pandas.DataFrame`.
+		caseid_column : None or str
+			If given, this is the column of the input data file to use as caseids.  If not given,
+			arbitrary sequential caseids will be created.  If it is given and
+			the caseids do already exist, a `LarchError` is raised.
+		overwrite : int
+			If positive, existing data with same name will be overwritten.  If zero (the default)
+			existing data with same name will be not overwritten and tables.exceptions.NodeError
+			will be raised.  If negative, existing data will not be overwritten but no errors will be raised.
+		
+		Returns
+		-------
+		DT
+			self
+		
+		Raises
+		------
+		LarchError
+			If caseids exist and are also given,
+			or if the caseids are not integer values.
+		"""
+		import pandas
+		from .. import logging
+		log = logging.getLogger('DT')
+		log("READING %s",str(filepath_or_buffer))
+		original_source = None
+		if isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.xlsx':
+			df = pandas.read_excel(filepath_or_buffer, *args, **kwargs)
+			original_source = filepath_or_buffer
+		elif isinstance(filepath_or_buffer, str) and filepath_or_buffer.casefold()[-5:]=='.dbf':
+			from simpledbf import Dbf5
+			dbf = Dbf5(filepath_or_buffer, codec='utf-8')
+			df = dbf.to_dataframe()
+			original_source = filepath_or_buffer
+		elif isinstance(filepath_or_buffer, pandas.DataFrame):
+			df = filepath_or_buffer
+		else:
+			df = pandas.read_csv(filepath_or_buffer, *args, **kwargs)
+			original_source = filepath_or_buffer
+		log("READING COMPLETE")
+		try:
+			for col in df.columns:
+				log("LOADING %s",col)
+				col_array = df[col].values
+				try:
+					tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+				except ValueError:
+					log.warn("  column %s is not an simple compatible datatype",col)
+					try:
+						maxlen = int(df[col].str.len().max())
+					except ValueError:
+						import datetime
+						if isinstance(df[col][0],datetime.time):
+							log.warn("  column %s is datetime.time, converting to Time32",col)
+							tb_atom = _tb.atom.Time32Atom()
+							#convert_datetime_time_to_epoch_seconds = lambda tm: tm.hour*3600+ tm.minute*60 + tm.second
+							def convert_datetime_time_to_epoch_seconds(tm):
+								try:
+									return tm.hour*3600+ tm.minute*60 + tm.second
+								except:
+									if numpy.isnan(tm):
+										return 0
+									else:
+										raise
+							col_array = df[col].apply(convert_datetime_time_to_epoch_seconds).astype(numpy.int32).values
+						else:
+							import __main__
+							__main__.err_df = df
+							raise
+					else:
+						maxlen = max(maxlen,8)
+						log.warn("  column %s, converting to S%d",col,maxlen)
+						try:
+							col_array = df[col].astype('S{}'.format(maxlen)).values
+						except SystemError:
+							log.warn("  SystemError in converting column %s to S%d, data is being discarded",col,maxlen)
+							tb_atom = None
+						except UnicodeEncodeError:
+							log.warn("  UnicodeEncodeError in converting column %s to S%d, data is being discarded",col,maxlen)
+							tb_atom = None
+						else:
+							tb_atom = _tb.Atom.from_dtype(col_array.dtype)
+				if tb_atom is not None:
+					col = make_valid_identifier(col)
+					if overwrite and col in self.idco._v_node._v_children:
+						# delete the old data
+						self.h5f.remove_node(self.idco._v_node, col, recursive=True)
+					h5var = self.h5f.create_carray(self.idco._v_node, col, tb_atom, shape=col_array.shape)
+					h5var[:] = col_array
+					if original_source:
+						h5var._v_attrs.ORIGINAL_SOURCE = original_source
+			if caseid_column is not None and 'caseids' in self.h5top:
+				raise LarchError("caseids already exist, not setting new ones")
+			if caseid_column is not None and 'caseids' not in self.h5top:
+				if caseid_column not in df.columns:
+					for col in df.columns:
+						if col.casefold() == caseid_column.casefold():
+							caseid_column = col
+							break
+				if caseid_column not in df.columns:
+					raise LarchError("caseid_column '{}' not found in data".format(caseid_column))
+				proposed_caseids_node = self.idco._v_children[caseid_column]
+				if not isinstance(proposed_caseids_node.atom, _tb.atom.Int64Atom):
+					col_array = df[caseid_column].values.astype('int64')
+					if not numpy.all(col_array==df[caseid_column].values):
+						raise LarchError("caseid_column '{}' does not contain only integer values".format(caseid_column))
+					h5var = self.h5f.create_carray(self.idco._v_node, caseid_column+'_int64', _tb.Atom.from_dtype(col_array.dtype), shape=col_array.shape)
+					h5var[:] = col_array
+					caseid_column = caseid_column+'_int64'
+					proposed_caseids_node = self.idco._v_children[caseid_column]
+				self.h5f.create_soft_link(self.h5top, 'caseids', target=self.idco._v_pathname+'/'+caseid_column)
+			if caseid_column is None and 'caseids' not in self.h5top:
+				h5var = self.h5f.create_carray(self.h5top, 'caseids', obj=numpy.arange(1, len(df)+1, dtype=numpy.int64))
+		except:
+			self._df_exception = df
+			raise
+		return self
+
