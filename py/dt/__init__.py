@@ -2406,7 +2406,7 @@ class DT(Fountain, Importer, Exporter):
 				except ValueError:
 					from .. import logging
 					log = logging.getLogger('DT')
-					log.warn("  array to create as %s is not an simple compatible datatype",name)
+					log.warn("  array to create as %s is not a simple compatible datatype",name)
 					try:
 						maxlen = int(len(max(arr.astype(str), key=len)))
 					except ValueError:
