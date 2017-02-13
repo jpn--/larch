@@ -284,3 +284,140 @@ class Importer():
 			raise
 		return self
 
+	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e1000):
+		"""Import an existing CSV or similar file in idca format into this HDF5 file.
+		
+		This function relies on :func:`pandas.read_csv` to read and parse the input data.
+		All arguments other than those described below are passed through to that function.
+		
+		Parameters
+		----------
+		filepath_or_buffer : str or buffer
+			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		caseid_column : None or str
+			If given, this is the column of the input data file to use as caseids.  It must be 
+			given if the caseids do not already exist in the HDF5 file.  If it is given and
+			the caseids do already exist, a `LarchError` is raised.
+		altid_col : None or str
+			If given, this is the column of the input data file to use as altids.  It must be
+			given if the altids do not already exist in the HDF5 file.  If it is given and
+			the altids do already exist, a `LarchError` is raised.
+		choice_col : None or str
+			If given, use this column as the choice indicator.
+		force_int_as_float : bool
+			If True, data columns that appear to be integer values will still be stored as 
+			double precision floats (defaults to True).
+		chunksize : int
+			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
+			chunks can be much faster and less memory intensive than reading the entire file.
+		
+		Returns
+		-------
+		DT
+			self
+		
+		Raises
+		------
+		LarchError
+			Various errors.
+			
+		Notes
+		-----
+		Chunking may not work on Mac OS X due to a `known bug <http://github.com/pydata/pandas/issues/11793>`_
+		in the pandas.read_csv function.
+		"""
+		import pandas
+		casealtreader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, usecols=[caseid_col,altid_col])
+		caseids = numpy.array([], dtype='int64')
+		altids = numpy.array([], dtype='int64')
+		for chunk in casealtreader:
+			caseids = numpy.union1d(caseids, chunk[caseid_col].values)
+			altids = numpy.union1d(altids, chunk[altid_col].values)
+
+		if caseids.dtype != numpy.int64:
+			from ..util.arraytools import labels_to_unique_ids
+			case_labels, caseids = labels_to_unique_ids(caseids)
+			caseids = caseids.astype('int64')
+
+		if 'caseids' not in self.h5top:
+			self.h5f.create_carray(self.h5top, 'caseids', obj=caseids)
+		else:
+			if not numpy.all(caseids==self.h5caseids[:]):
+				raise LarchError ('caseids exist but do not match the imported data')
+
+		alt_labels = None
+		if 'altids' not in self.alts:
+			if altids.dtype != numpy.int64:
+				from ..util.arraytools import labels_to_unique_ids
+				alt_labels, altids = labels_to_unique_ids(altids)
+			h5altids = self.h5f.create_carray(self.alts._v_node, 'altids', obj=altids, title='elemental alternative code numbers')
+		else:
+			if not numpy.all(numpy.in1d(altids, self.alts.altids[:], True)):
+				raise LarchError ('altids exist but do not match the imported data')
+			else:
+				altids = self.alts.altids[:]
+		if 'names' not in self.alts:
+			h5altnames = self.h5f.create_vlarray(self.alts._v_node, 'names', _tb.VLUnicodeAtom(), title='elemental alternative names')
+			if alt_labels is not None:
+				for an in alt_labels:
+					h5altnames.append( str(an) )
+			else:
+				for an in self.alts.altids[:]:
+					h5altnames.append( 'a'+str(an) )
+
+		caseidmap = {i:n for n,i in enumerate(caseids)}
+		altidmap = {i:n for n,i in enumerate(altids)}
+		if alt_labels is not None:
+			# if the altids are not integers, we replace the altid map with a labels map
+			altidmap = {i:n for n,i in enumerate(alt_labels)}
+
+		try:
+			filepath_or_buffer.seek(0)
+		except AttributeError:
+			pass
+
+		colreader = pandas.read_csv(filepath_or_buffer, nrows=1000 )
+		force_float_columns = {}
+		h5arr = {}
+		for col in colreader.columns:
+			if col in (caseid_col, altid_col): continue
+			if force_int_as_float and colreader[col].dtype == numpy.int64:
+				atom_dtype = _tb.atom.Float64Atom()
+				force_float_columns[col] = numpy.float64
+			else:
+				atom_dtype = _tb.Atom.from_dtype(colreader[col].dtype)
+			h5arr[col] = self.h5f.create_carray(self.idca._v_node, col, atom_dtype, shape=(caseids.shape[0], altids.shape[0]))
+		if '_present_' not in colreader.columns:
+			h5arr['_present_'] = self.h5f.create_carray(self.idca._v_node, '_present_', _tb.atom.BoolAtom(), shape=(caseids.shape[0], altids.shape[0]))
+
+		try:
+			filepath_or_buffer.seek(0)
+		except AttributeError:
+			pass
+
+		reader = pandas.read_csv(filepath_or_buffer, chunksize=chunksize, dtype=force_float_columns, engine='c')
+		try:
+			for chunk in reader:
+				casemap = chunk[caseid_col].map(caseidmap)
+				altmap = chunk[altid_col].map(altidmap)
+				for col in chunk.columns:
+					if col in (caseid_col, altid_col): continue
+					h5arr[col][casemap.values,altmap.values] = chunk[col].values
+				if '_present_' not in chunk.columns:
+					h5arr['_present_'][casemap.values,altmap.values] = True
+		except:
+			self._chunk = chunk
+			self._casemap = casemap
+			self._altmap = altmap
+			self._altidmap = altidmap
+			raise
+		
+		self.h5f.create_soft_link(self.idca._v_node, '_avail_', target=self.idca._v_node._v_pathname+'/_present_')
+
+		if choice_col:
+			if isinstance(self.idca._v_children[choice_col].atom, _tb.atom.Float64Atom):
+				self.h5f.create_soft_link(self.idca._v_node, '_choice_', target=self.idca._v_pathname+'/'+choice_col)
+			else:
+				self.h5f.create_carray(self.idca._v_node, '_choice_', obj=self.idca._v_children[choice_col][:].astype('Float64'))
+
+		return self
