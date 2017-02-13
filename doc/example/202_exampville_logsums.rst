@@ -67,7 +67,7 @@ Now we're ready to generate our logsums.  First we'll create a blank array in th
 
 .. testcode::
 
-	d.new_idca('MODECHOICELOGSUM', numpy.zeros([d.nAllCases(), nZones], dtype=numpy.float32))
+	d.new_idca('MODECHOICELOGSUM', numpy.zeros([d.nAllCases(), nZones], dtype=numpy.float32), original_source="mode choice model")
 
 We will also create a seperate array in memory, to cache the logsums we calculate 
 so that we can push all the calculated values into the DT on disk in one pass at the end.
