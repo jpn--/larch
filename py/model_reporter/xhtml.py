@@ -2564,6 +2564,18 @@ class XhtmlModelReporter():
 		x.end('tr')
 		x.end('thead')
 		
+		def colorspec(problem_value, field_data):
+			nonlocal x
+			y = -numpy.log10(numpy.fabs(problem_value))-2
+			if y<0: y=0
+			y /= 4
+			if y>1: y=1
+			y = 255-255.0*y
+			color = '#{:02X}0000'.format(int(y))
+			x.start('span', {'style': 'color:#FF0000'})
+			x.data(str(field_data))
+			x.end('span')
+		
 		for overspec in self.possible_overspecification:
 			x.start('tr')
 			try:
@@ -2571,16 +2583,40 @@ class XhtmlModelReporter():
 			except ValueError:
 				x.td(str(overspec[0]))
 			x.start('td')
+			if numpy.fabs(overspec[2][0])>0.01:
+				x.start('span', {'style': 'color:#FF0000'})
+			elif numpy.fabs(overspec[2][0])>0.0001:
+				x.start('span', {'style': 'color:#770000'})
 			x.data(str(overspec[2][0]))
+			if numpy.fabs(overspec[2][0])>0.0001:
+				x.end('span')
 			for problem_param in overspec[2][1:]:
 				x.simple('br')
+				if numpy.fabs(problem_param)>0.01:
+					x.start('span', {'style': 'color:#FF0000'})
+				elif numpy.fabs(problem_param)>0.0001:
+					x.start('span', {'style': 'color:#770000'})
 				x.data(str(problem_param))
+				if numpy.fabs(problem_param)>0.0001:
+					x.end('span')
 			x.end('td')
 			x.start('td')
+			if numpy.fabs(overspec[2][0])>0.01:
+				x.start('span', {'style': '#FF0000'})
+			elif numpy.fabs(overspec[2][0])>0.0001:
+				x.start('span', {'style': '#770000'})
 			x.data(overspec[1][0])
-			for problem_param in overspec[1][1:]:
+			if numpy.fabs(overspec[2][0])>0.0001:
+				x.end('span')
+			for problem_param, problem_value in zip(overspec[1][1:],overspec[2][1:]):
 				x.simple('br')
+				if numpy.fabs(problem_value)>0.01:
+					x.start('span', {'style': 'color:#FF0000'})
+				elif numpy.fabs(problem_value)>0.0001:
+					x.start('span', {'style': 'color:#770000'})
 				x.data(problem_param)
+				if numpy.fabs(problem_value)>0.0001:
+					x.end('span')
 			x.end('td')
 			x.end('tr')
 		x.end('table')
