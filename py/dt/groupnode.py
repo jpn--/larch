@@ -336,6 +336,18 @@ class GroupNode():
 		return self._v_file.create_external_link(self._v_node, '_extern_{}'.format(extern_n), link)
 
 
+	def add_external_node(self, name, link):
+		"""
+		Add a linkage to a single external node.
+		"""
+		if isinstance(link, GroupNode):
+			fname = link._v_node._v_file.filename
+			if fname == self._v_node._v_file.filename:
+				raise TypeError('cannot link to external data in same file, try a local link')
+			link = fname +":"+ link._v_node._v_pathname
+		return self._v_file.create_external_link(self._v_node, name, link)
+
+
 	def add_external_omx(self, omx_filename, rowindexnode, prefix="", n_alts=-1, n_lookup=-1, absolute_path=False, local_rowindexnode=None, suppress_identifier_warning=False):
 		'''
 		Add an external linkage from this group to the values in an OMX file.

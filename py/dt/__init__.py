@@ -2658,7 +2658,7 @@ class DT(Fountain, Importer, Exporter):
 
 
 
-	def new_idca(self, name, expression, title=None, dtype=None):
+	def new_idca(self, name, expression, title=None, dtype=None, original_source="externally defined array"):
 		"""Create a new :ref:`idca` variable.
 		
 		Creating a new variable in the data might be convenient in some instances.
@@ -2680,6 +2680,10 @@ class DT(Fountain, Importer, Exporter):
 			Give a description of the data in this array.
 		dtype : dtype, optional
 			What numpy dtype should the new array should be, defaults to float64.
+		original_source : str, optional
+			If `expression` is an array, provide this string as the "original source"
+			of the data.  If omitted, the original source is set as the generic 
+			"externally defined array".
 			
 		Raises
 		-----
@@ -2696,7 +2700,10 @@ class DT(Fountain, Importer, Exporter):
 		else:
 			data = expression
 		self.h5f.create_carray(self.idca._v_node, name, obj=data)
-		self.idca[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
+		if isinstance(expression, str):
+			self.idca[name]._v_attrs.ORIGINAL_SOURCE = "= {}".format(expression)
+		else:
+			self.idca[name]._v_attrs.ORIGINAL_SOURCE = original_source
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
 

@@ -107,12 +107,17 @@ class DT_idco_stack_manager:
 			raise KeyError("key {} not found".format(key) )
 
 	def __setitem__(self, key, value):
+		if self.stacktype not in self.parent.idca:
+			self._make_zeros()
+		if 'stack' not in self.parent.idca[self.stacktype]._v_attrs and not self.parent.in_vault('stack.'+self.stacktype):
+			self._make_zeros()
+
+		if len(self._stackdef_vault) < self.parent._alternative_codes().size:
+			self._stackdef_vault += [0] * (self.parent._alternative_codes().size - len(self._stackdef_vault))
+		if len(self._stackdef_vault) > self.parent._alternative_codes().size:
+			self._stackdef_vault = self._stackdef_vault[:self.parent._alternative_codes().size]
 		slotarray = numpy.where(self.parent._alternative_codes()==key)[0]
 		if len(slotarray) == 1:
-			if self.stacktype not in self.parent.idca:
-				self._make_zeros()
-			if 'stack' not in self.parent.idca[self.stacktype]._v_attrs and not self.parent.in_vault('stack.'+self.stacktype):
-				self._make_zeros()
 			##tempobj = self.parent.idca[self.stacktype]._v_attrs.stack
 			tempobj = self._stackdef_vault
 			tempobj[slotarray[0]] = value
