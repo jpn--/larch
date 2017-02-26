@@ -33,8 +33,8 @@ if os.environ.get('READTHEDOCS', None) == 'True':
 		  classifiers = [
 			'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 			'Programming Language :: Python :: 3',
-			'Programming Language :: Python :: 3.4',
 			'Programming Language :: Python :: 3.5',
+			'Programming Language :: Python :: 3.6',
 			'Operating System :: MacOS :: MacOS X',
 			'Operating System :: Microsoft :: Windows',
 		  ],
@@ -288,8 +288,8 @@ else:
 		  classifiers = [
 			'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 			'Programming Language :: Python :: 3',
-			'Programming Language :: Python :: 3.4',
 			'Programming Language :: Python :: 3.5',
+			'Programming Language :: Python :: 3.6',
 			'Operating System :: MacOS :: MacOS X',
 			'Operating System :: Microsoft :: Windows',
 		  ],
