@@ -269,6 +269,7 @@ else:
 							"pandas >= 0.18",
 							"tables >= 3.2.2",
 							"appdirs >= 1.4",
+							"docutils >= 0.13",
 						],
 		  extras_require = {
 			'docx':  ["python-docx >= 0.8.5",],
