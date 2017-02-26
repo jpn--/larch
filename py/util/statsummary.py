@@ -109,10 +109,11 @@ class statistical_summary():
 					else:
 						ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i], **spark_kwargs) for i in range(xxx_shape_1))
 				sumx_ = dimzer( numpy.sum(xxx,0) )
-				try:
-					ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
-				except ValueError:
-					ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
+				with numpy.errstate(divide='ignore',invalid='ignore'):
+					try:
+						ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+					except ValueError:
+						ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
 				
 				# Make sure that the histogram field is iterable
 				if isinstance(ss.histogram, numpy.ndarray):
@@ -254,10 +255,11 @@ class statistical_summary():
 							ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes, data_for_bins=full_xxx[:,i],
 																	bar_not_pie=bar_not_pie, dictionary=dictionary, **spark_kwargs) for i in range(xxx_shape_1))
 					sumx_ = numpy.nansum(xxx,0)
-					try:
-						ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
-					except ValueError:
-						ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
+					with numpy.errstate(divide='ignore',invalid='ignore'):
+						try:
+							ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+						except ValueError:
+							ss.mean_nonzero = sumx_ / numpy.apply_along_axis(numpy.count_nonzero, 0, xxx)
 					
 					# Make sure that the histogram field is iterable
 					if isinstance(ss.histogram, numpy.ndarray):
@@ -345,7 +347,8 @@ class statistical_summary():
 				ss.n_zeros = tuple(xxx[:,i].size-numpy.count_nonzero(xxx[:,i]) for i in range(xxx_shape_1))
 				ss.histogram = tuple(spark_histogram(xxx[:,i], bins=histogram_bins, notetaker=ss.notes) for i in range(xxx_shape_1))
 			sumx_ = dimzer( numpy.sum(xxx,0) )
-			ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+			with numpy.errstate(divide='ignore',invalid='ignore'):
+				ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
 #			if len(xxx.shape) == 1:
 #				ss.histogram = [spark_histogram(xxx, bins=histogram_bins, notetaker=ss.notes),]
 #			else:
@@ -397,7 +400,8 @@ class statistical_summary():
 						for i in range(xxx_shape_1))
 					)
 				sumx_ = numpy.atleast_1d( numpy.sum(xxx,axis) )
-				ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
+				with numpy.errstate(divide='ignore',invalid='ignore'):
+					ss.mean_nonzero = sumx_ / numpy.asarray(ss.n_nonzeros)
 				if count_uniques:
 					q1,q2 = numpy.unique(xxx, return_counts=True)
 					ss.unique_values = pandas.Series(q2,q1)

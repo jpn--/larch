@@ -1,11 +1,12 @@
 
-from numpy import log10
+from numpy import log10, errstate
 
 
 def flux(should_be, actually_is):
 	difference = abs(should_be - actually_is)
 	if difference==0:
-		return log10(0.0)
+		with errstate(divide='ignore',invalid='ignore'):
+			return log10(0.0)
 	magnitude  = max(abs(should_be),abs(actually_is))
 	if magnitude:
 		return log10(float(difference)/float(magnitude))

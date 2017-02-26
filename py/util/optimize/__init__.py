@@ -589,162 +589,163 @@ def _compute_constrained_d2_loglike_and_bhhh(model, *args, constraints=(), prior
 	d1 = numpy.asarray(model.d_loglike(*args))
 	bh = numpy.asarray(model.bhhh(*args))
 	abandoned_slots = {}
-	for cstrt in constraints:
-		is_active = cstrt['is_active'](model.parameter_array)
-		if not is_active:
-			continue # cstrt not active
-		
-		if ">=" in cstrt['description']:
-			p_hi, p_lo = cstrt['description'].split(">=")
-			op = ">="
-		elif "<=" in cstrt['description']:
-			p_lo, p_hi = cstrt['description'].split("<=")
-			op = "<="
-		else:
-			continue
-		jac = numpy.asarray(cstrt['jac'](model.parameter_array)).ravel()
-		try:
-			hi_slot = numpy.where(numpy.asarray(jac>0).ravel())[0][0]
-		except IndexError:
-			# ineq constraint is against a fixed number, do not merge just drop
-			hi_slot = None
-		try:
-			lo_slot = numpy.where(numpy.asarray(jac<0).ravel())[0][0]
-		except IndexError:
-			# ineq constraint is against a fixed number, do not merge just drop
-			lo_slot = None
-
-		jac_hi = jac[hi_slot]
-		jac_lo = jac[lo_slot]
-
-		mult_1 = -jac_hi/jac_lo
-		hi_slot_1 = hi_slot
-
-		mult_2 = -jac_lo/jac_hi
-		lo_slot_1 = lo_slot
-
-		loop_detector = set([hi_slot])
-		while hi_slot is not None and hi_slot in abandoned_slots:
-			jac_hi *= abandoned_slots[hi_slot].mult
-			p_hi = abandoned_slots[hi_slot].to_name
-			hi_slot = abandoned_slots[hi_slot].to_slot
-			if hi_slot in loop_detector:
-				raise TypeError('hi_slot loop')
+	with numpy.errstate(divide='ignore',invalid='ignore'):
+		for cstrt in constraints:
+			is_active = cstrt['is_active'](model.parameter_array)
+			if not is_active:
+				continue # cstrt not active
+			
+			if ">=" in cstrt['description']:
+				p_hi, p_lo = cstrt['description'].split(">=")
+				op = ">="
+			elif "<=" in cstrt['description']:
+				p_lo, p_hi = cstrt['description'].split("<=")
+				op = "<="
 			else:
-				loop_detector.add(hi_slot)
-		loop_detector = set([lo_slot])
-		while lo_slot is not None and lo_slot in abandoned_slots:
-			jac_lo *= abandoned_slots[lo_slot].mult
-			p_lo = abandoned_slots[lo_slot].to_name
-			lo_slot = abandoned_slots[lo_slot].to_slot
-			if lo_slot in loop_detector:
-				raise TypeError('lo_slot loop')
-			else:
-				loop_detector.add(lo_slot)
+				continue
+			jac = numpy.asarray(cstrt['jac'](model.parameter_array)).ravel()
+			try:
+				hi_slot = numpy.where(numpy.asarray(jac>0).ravel())[0][0]
+			except IndexError:
+				# ineq constraint is against a fixed number, do not merge just drop
+				hi_slot = None
+			try:
+				lo_slot = numpy.where(numpy.asarray(jac<0).ravel())[0][0]
+			except IndexError:
+				# ineq constraint is against a fixed number, do not merge just drop
+				lo_slot = None
 
-		keep_hi = True
-		if p_hi is None:
-			p_hi_1 = None
-		else:
-			p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
-		if p_lo is None:
-			p_lo_1 = None
-		else:
-			p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
-		if p_lo_1 is not None and p_lo_1.id in priority_list:
-			if p_hi_1 is not None and not p_hi_1.id in priority_list:
-				keep_hi = False
+			jac_hi = jac[hi_slot]
+			jac_lo = jac[lo_slot]
+
+			mult_1 = -jac_hi/jac_lo
+			hi_slot_1 = hi_slot
+
+			mult_2 = -jac_lo/jac_hi
+			lo_slot_1 = lo_slot
+
+			loop_detector = set([hi_slot])
+			while hi_slot is not None and hi_slot in abandoned_slots:
+				jac_hi *= abandoned_slots[hi_slot].mult
+				p_hi = abandoned_slots[hi_slot].to_name
+				hi_slot = abandoned_slots[hi_slot].to_slot
+				if hi_slot in loop_detector:
+					raise TypeError('hi_slot loop')
+				else:
+					loop_detector.add(hi_slot)
+			loop_detector = set([lo_slot])
+			while lo_slot is not None and lo_slot in abandoned_slots:
+				jac_lo *= abandoned_slots[lo_slot].mult
+				p_lo = abandoned_slots[lo_slot].to_name
+				lo_slot = abandoned_slots[lo_slot].to_slot
+				if lo_slot in loop_detector:
+					raise TypeError('lo_slot loop')
+				else:
+					loop_detector.add(lo_slot)
+
+			keep_hi = True
+			if p_hi is None:
+				p_hi_1 = None
 			else:
-				if p_hi_1 is not None and p_lo_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+				p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
+			if p_lo is None:
+				p_lo_1 = None
+			else:
+				p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
+			if p_lo_1 is not None and p_lo_1.id in priority_list:
+				if p_hi_1 is not None and not p_hi_1.id in priority_list:
 					keep_hi = False
+				else:
+					if p_hi_1 is not None and p_lo_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+						keep_hi = False
 
 
-#		if p_hi is not None:
-#			p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
-#		else:
-#			p_hi_1 = None
-#		if p_lo is not None:
-#			p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
-#		else:
-#			p_lo_1 = None
-#
-#		if p_hi_1 is None:
-#			keep_hi = False
-#		else:
-#			if p_lo_1 is not None and p_lo_1.id in priority_list:
-#				if p_hi_1 is not None and not p_hi_1.id in priority_list:
-#					keep_hi = False
-#				else:
-#					if p_hi_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
-#						keep_hi = False
+	#		if p_hi is not None:
+	#			p_hi_1 = _NameOrNameTimesNumberOrNumber(p_hi)
+	#		else:
+	#			p_hi_1 = None
+	#		if p_lo is not None:
+	#			p_lo_1 = _NameOrNameTimesNumberOrNumber(p_lo)
+	#		else:
+	#			p_lo_1 = None
+	#
+	#		if p_hi_1 is None:
+	#			keep_hi = False
+	#		else:
+	#			if p_lo_1 is not None and p_lo_1.id in priority_list:
+	#				if p_hi_1 is not None and not p_hi_1.id in priority_list:
+	#					keep_hi = False
+	#				else:
+	#					if p_hi_1 is not None and priority_list[p_hi_1.id] < priority_list[p_lo_1.id]:
+	#						keep_hi = False
 
-		if hi_slot is not None and lo_slot is not None and keep_hi:
-			if not skip_d2:
-				d2[hi_slot, :] -= d2[lo_slot, :]*jac_hi/jac_lo
-				d2[lo_slot, :] = 0
-				d2[:, hi_slot] -= d2[:, lo_slot]*jac_hi/jac_lo
-				d2[:, lo_slot] = 0
-			bh[hi_slot, :] -= bh[lo_slot, :]*jac_hi/jac_lo
-			bh[lo_slot, :] = 0
-			bh[:, hi_slot] -= bh[:, lo_slot]*jac_hi/jac_lo
-			bh[:, lo_slot] = 0
-			d1[hi_slot] -= d1[lo_slot]*jac_hi/jac_lo
-			d1[lo_slot] = 0
-			abandoned_slots[lo_slot] = _abandoned(to_slot=hi_slot, to_name=p_hi, mult=-jac_hi/jac_lo, this_slot=hi_slot_1, this_mult=mult_1)
-		elif hi_slot is not None and lo_slot is not None:
-			if not skip_d2:
-				d2[lo_slot, :] -= d2[hi_slot, :]*jac_lo/jac_hi
-				d2[hi_slot, :] = 0
-				d2[:, lo_slot] -= d2[:, hi_slot]*jac_lo/jac_hi
-				d2[:, hi_slot] = 0
-			bh[lo_slot, :] -= bh[hi_slot, :]*jac_lo/jac_hi
-			bh[hi_slot, :] = 0
-			bh[:, lo_slot] -= bh[:, hi_slot]*jac_lo/jac_hi
-			bh[:, hi_slot] = 0
-			d1[lo_slot] -= d1[hi_slot]*jac_lo/jac_hi
-			d1[hi_slot] = 0
-			abandoned_slots[hi_slot] = _abandoned(to_slot=lo_slot, to_name=p_lo, mult=-jac_lo/jac_hi, this_slot=lo_slot_1, this_mult=mult_2, symbol=_GTE)
-		elif hi_slot is None and lo_slot is not None:
-			if not skip_d2:
-				d2[lo_slot, :] = 0
-				d2[:, lo_slot] = 0
-			bh[lo_slot, :] = 0
-			bh[:, lo_slot] = 0
-			d1[lo_slot] = 0
-			abandoned_slots[lo_slot] = _abandoned(mult=jac_lo, fixed_value=p_hi)
-		elif hi_slot is not None and lo_slot is None:
-			if not skip_d2:
-				d2[hi_slot, :] = 0
-				d2[:, hi_slot] = 0
-			bh[hi_slot, :] = 0
-			bh[:, hi_slot] = 0
-			d1[hi_slot] = 0
-			abandoned_slots[hi_slot] = _abandoned(mult=jac_hi, fixed_value=p_lo)
-	if model.option.enforce_bounds and model.parameter_bounds() is not None:
-		for slot, (min_bound, max_bound) in enumerate(model.parameter_bounds()):
-			if min_bound is not None:
-				if model.parameter_array[slot] - min_bound < 1e-6:
-					if not skip_d2:
-						d2[slot, :] = 0
-						d2[:, slot] = 0
-					bh[slot, :] = 0
-					bh[:, slot] = 0
-					d1[slot] = 0
-					abandoned_slots[slot] = _abandoned(fixed_value=min_bound, mult=1)
-			if max_bound is not None:
-				if max_bound - model.parameter_array[slot] < 1e-6:
-					if not skip_d2:
-						d2[slot, :] = 0
-						d2[:, slot] = 0
-					bh[slot, :] = 0
-					bh[:, slot] = 0
-					d1[slot] = 0
-					abandoned_slots[slot] = _abandoned(fixed_value=max_bound, mult=-1)
-	#model.bhhh_constrained = bh
-	#model.d_loglike_constrained = d1
-	if skip_d2:
-		d2 = None
-	return d2, bh, d1, abandoned_slots
+			if hi_slot is not None and lo_slot is not None and keep_hi:
+				if not skip_d2:
+					d2[hi_slot, :] -= d2[lo_slot, :]*jac_hi/jac_lo
+					d2[lo_slot, :] = 0
+					d2[:, hi_slot] -= d2[:, lo_slot]*jac_hi/jac_lo
+					d2[:, lo_slot] = 0
+				bh[hi_slot, :] -= bh[lo_slot, :]*jac_hi/jac_lo
+				bh[lo_slot, :] = 0
+				bh[:, hi_slot] -= bh[:, lo_slot]*jac_hi/jac_lo
+				bh[:, lo_slot] = 0
+				d1[hi_slot] -= d1[lo_slot]*jac_hi/jac_lo
+				d1[lo_slot] = 0
+				abandoned_slots[lo_slot] = _abandoned(to_slot=hi_slot, to_name=p_hi, mult=-jac_hi/jac_lo, this_slot=hi_slot_1, this_mult=mult_1)
+			elif hi_slot is not None and lo_slot is not None:
+				if not skip_d2:
+					d2[lo_slot, :] -= d2[hi_slot, :]*jac_lo/jac_hi
+					d2[hi_slot, :] = 0
+					d2[:, lo_slot] -= d2[:, hi_slot]*jac_lo/jac_hi
+					d2[:, hi_slot] = 0
+				bh[lo_slot, :] -= bh[hi_slot, :]*jac_lo/jac_hi
+				bh[hi_slot, :] = 0
+				bh[:, lo_slot] -= bh[:, hi_slot]*jac_lo/jac_hi
+				bh[:, hi_slot] = 0
+				d1[lo_slot] -= d1[hi_slot]*jac_lo/jac_hi
+				d1[hi_slot] = 0
+				abandoned_slots[hi_slot] = _abandoned(to_slot=lo_slot, to_name=p_lo, mult=-jac_lo/jac_hi, this_slot=lo_slot_1, this_mult=mult_2, symbol=_GTE)
+			elif hi_slot is None and lo_slot is not None:
+				if not skip_d2:
+					d2[lo_slot, :] = 0
+					d2[:, lo_slot] = 0
+				bh[lo_slot, :] = 0
+				bh[:, lo_slot] = 0
+				d1[lo_slot] = 0
+				abandoned_slots[lo_slot] = _abandoned(mult=jac_lo, fixed_value=p_hi)
+			elif hi_slot is not None and lo_slot is None:
+				if not skip_d2:
+					d2[hi_slot, :] = 0
+					d2[:, hi_slot] = 0
+				bh[hi_slot, :] = 0
+				bh[:, hi_slot] = 0
+				d1[hi_slot] = 0
+				abandoned_slots[hi_slot] = _abandoned(mult=jac_hi, fixed_value=p_lo)
+		if model.option.enforce_bounds and model.parameter_bounds() is not None:
+			for slot, (min_bound, max_bound) in enumerate(model.parameter_bounds()):
+				if min_bound is not None:
+					if model.parameter_array[slot] - min_bound < 1e-6:
+						if not skip_d2:
+							d2[slot, :] = 0
+							d2[:, slot] = 0
+						bh[slot, :] = 0
+						bh[:, slot] = 0
+						d1[slot] = 0
+						abandoned_slots[slot] = _abandoned(fixed_value=min_bound, mult=1)
+				if max_bound is not None:
+					if max_bound - model.parameter_array[slot] < 1e-6:
+						if not skip_d2:
+							d2[slot, :] = 0
+							d2[:, slot] = 0
+						bh[slot, :] = 0
+						bh[:, slot] = 0
+						d1[slot] = 0
+						abandoned_slots[slot] = _abandoned(fixed_value=max_bound, mult=-1)
+		#model.bhhh_constrained = bh
+		#model.d_loglike_constrained = d1
+		if skip_d2:
+			d2 = None
+		return d2, bh, d1, abandoned_slots
 
 
 

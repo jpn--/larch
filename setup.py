@@ -2,7 +2,7 @@ import setuptools
 from setuptools import setup, Extension
 import glob, time, platform, os, sysconfig, sys, shutil, io
 
-VERSION = '3.3.23'
+VERSION = '3.3.24'
 
 
 
@@ -72,7 +72,7 @@ else:
 		os.environ['CLANG_CXX_LIBRARY'] = 'libc++'
 		os.environ['CLANG_CXX_LANGUAGE_STANDARD'] = 'gnu++0x'
 
-	# To update the version, run `git tag -a 3.3.23 -m'version 3.3.23, September 2016'`
+	# To update the version, run `git tag -a 3.3.24 -m'version 3.3.24, September 2016'`
 
 
 
@@ -268,6 +268,7 @@ else:
 							"scipy >= 0.17.0",
 							"pandas >= 0.18",
 							"tables >= 3.2.2",
+							"appdirs >= 1.4",
 						],
 		  extras_require = {
 			'docx':  ["python-docx >= 0.8.5",],

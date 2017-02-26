@@ -1,4 +1,4 @@
-pip install larch==3.3.23
+pip install larch==3.3.24
 if errorlevel 1 exit 1
 
 :: Add more build steps here, if they are necessary.

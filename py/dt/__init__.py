@@ -871,6 +871,8 @@ class DT(Fountain, Importer, Exporter):
 		from ..util.pytables_addon import select_with_repeated1
 		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
+		if vars == ('*',):
+			vars = self.idco._v_children_keys_including_extern
 		n_vars = len(vars)
 		#result = numpy.zeros([n_cases,n_vars], dtype=dtype)
 		result = pandas.DataFrame(index=self.array_caseids(screen))

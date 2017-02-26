@@ -19,12 +19,12 @@ def build_apsw():
 	
 	if 'anaconda' in sys.executable:
 		pylibdir = os.path.normpath(os.path.join(sys.executable, '..','..','lib'))
-		pylibname = 'python3.5m'
+		pylibname = 'python3.{}m'.format(sys.version_info.minor)
 		compiler_pre_args = [ '-arch', 'x86_64']
 		linker_pre_args = [ '-arch', 'x86_64']
 	else:
-		pylibdir = '/Library/Frameworks/Python.framework/Versions/3.5/lib'
-		pylibname = 'python3.5'
+		pylibdir = '/Library/Frameworks/Python.framework/Versions/3.{}/lib'.format(sys.version_info.minor)
+		pylibname = 'python3.{}'.format(sys.version_info.minor)
 	
 	print("building",name,"...")
 

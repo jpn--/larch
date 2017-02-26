@@ -140,7 +140,8 @@ class NormalMixedModel:
 	def d_loglike(self, *args):
 		self._set_parameter_values(*args)
 		dPr = self.d_prob()
-		factor = self.kernel.Data("Choice")/self.simulated_probability[:,:,None]
+		with numpy.errstate(divide='ignore',invalid='ignore'):
+			factor = self.kernel.Data("Choice")/self.simulated_probability[:,:,None]
 		factor[ ~numpy.isfinite(factor) ] = 0
 		if len(args)>0:
 			_getLogger().info("dLL[{!s}]".format(args[0],))

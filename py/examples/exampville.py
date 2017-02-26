@@ -211,29 +211,30 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	Pr_modes = numpy.zeros([n_TOUR, nZones, nModes])
 	Pr_dest = numpy.zeros([n_TOUR, nZones])
 
-	for n in range(n_TOUR):
-		NLS_car[n,:] = paramMUcar * log( exp(Util[n,:,mDA]/paramMUcar) + exp(Util[n,:,mSR]/paramMUcar) )
-		NLS_non[n,:] = paramMUnon * log( exp(Util[n,:,mWA]/paramMUnon) + exp(Util[n,:,mBI]/paramMUnon) )
-		NLS_mot[n,:] = paramMUmot * log( exp(NLS_car[n,:] /paramMUmot) + exp(Util[n,:,mTR]/paramMUmot) )
-		MLS_top[n,:] = log( exp(NLS_non[n,:]) + exp(NLS_mot[n,:]) )
-		DLS_top[n] = log(  numpy.sum( exp( MLS_top[n,:] ) )  )
-		
-		Pr_dest[n,:] = exp(MLS_top[n,:] - DLS_top[n])
-		
-		CPr_top[n,:,0] = exp((NLS_non[n,:] - MLS_top[n,:]) / paramMUtop)
-		CPr_top[n,:,1] = exp((NLS_mot[n,:] - MLS_top[n,:]) / paramMUtop)
-		CPr_mot[n,:,0] = exp((Util[n,:,mTR]- NLS_mot[n,:]) / paramMUmot)
-		CPr_mot[n,:,1] = exp((NLS_car[n,:] - NLS_mot[n,:]) / paramMUmot)
-		CPr_non[n,:,0] = exp((Util[n,:,mWA]- NLS_non[n,:]) / paramMUnon)
-		CPr_non[n,:,1] = exp((Util[n,:,mBI]- NLS_non[n,:]) / paramMUnon)
-		CPr_car[n,:,0] = exp((Util[n,:,mDA]- NLS_car[n,:]) / paramMUcar)
-		CPr_car[n,:,1] = exp((Util[n,:,mSR]- NLS_car[n,:]) / paramMUcar)
-		
-		Pr_modes[n,:,mTR] = CPr_mot[n,:,0] * CPr_top[n,:,1] * Pr_dest[n,:]
-		Pr_modes[n,:,mWA] = CPr_non[n,:,0] * CPr_top[n,:,0] * Pr_dest[n,:]
-		Pr_modes[n,:,mBI] = CPr_non[n,:,1] * CPr_top[n,:,0] * Pr_dest[n,:]
-		Pr_modes[n,:,mDA] = CPr_car[n,:,0] * CPr_mot[n,:,1] * CPr_top[n,:,1] * Pr_dest[n,:]
-		Pr_modes[n,:,mSR] = CPr_car[n,:,1] * CPr_mot[n,:,1] * CPr_top[n,:,1] * Pr_dest[n,:]
+	with numpy.errstate(divide='ignore',invalid='ignore'):
+		for n in range(n_TOUR):
+			NLS_car[n,:] = paramMUcar * log( exp(Util[n,:,mDA]/paramMUcar) + exp(Util[n,:,mSR]/paramMUcar) )
+			NLS_non[n,:] = paramMUnon * log( exp(Util[n,:,mWA]/paramMUnon) + exp(Util[n,:,mBI]/paramMUnon) )
+			NLS_mot[n,:] = paramMUmot * log( exp(NLS_car[n,:] /paramMUmot) + exp(Util[n,:,mTR]/paramMUmot) )
+			MLS_top[n,:] = log( exp(NLS_non[n,:]) + exp(NLS_mot[n,:]) )
+			DLS_top[n] = log(  numpy.sum( exp( MLS_top[n,:] ) )  )
+			
+			Pr_dest[n,:] = exp(MLS_top[n,:] - DLS_top[n])
+			
+			CPr_top[n,:,0] = exp((NLS_non[n,:] - MLS_top[n,:]) / paramMUtop)
+			CPr_top[n,:,1] = exp((NLS_mot[n,:] - MLS_top[n,:]) / paramMUtop)
+			CPr_mot[n,:,0] = exp((Util[n,:,mTR]- NLS_mot[n,:]) / paramMUmot)
+			CPr_mot[n,:,1] = exp((NLS_car[n,:] - NLS_mot[n,:]) / paramMUmot)
+			CPr_non[n,:,0] = exp((Util[n,:,mWA]- NLS_non[n,:]) / paramMUnon)
+			CPr_non[n,:,1] = exp((Util[n,:,mBI]- NLS_non[n,:]) / paramMUnon)
+			CPr_car[n,:,0] = exp((Util[n,:,mDA]- NLS_car[n,:]) / paramMUcar)
+			CPr_car[n,:,1] = exp((Util[n,:,mSR]- NLS_car[n,:]) / paramMUcar)
+			
+			Pr_modes[n,:,mTR] = CPr_mot[n,:,0] * CPr_top[n,:,1] * Pr_dest[n,:]
+			Pr_modes[n,:,mWA] = CPr_non[n,:,0] * CPr_top[n,:,0] * Pr_dest[n,:]
+			Pr_modes[n,:,mBI] = CPr_non[n,:,1] * CPr_top[n,:,0] * Pr_dest[n,:]
+			Pr_modes[n,:,mDA] = CPr_car[n,:,0] * CPr_mot[n,:,1] * CPr_top[n,:,1] * Pr_dest[n,:]
+			Pr_modes[n,:,mSR] = CPr_car[n,:,1] * CPr_mot[n,:,1] * CPr_top[n,:,1] * Pr_dest[n,:]
 
 	Pr_modes[numpy.isnan(Pr_modes)] = 0
 
