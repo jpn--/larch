@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 =====================================
-202: Exampville Mode Choice Logsums
+203: Exampville Destination Choice
 =====================================
 
 .. testsetup:: *
