@@ -56,7 +56,7 @@ It is not working. Can you troubleshoot for me?
 	`scipy <http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy>`_, and
 	`pandas <http://www.lfd.uci.edu/~gohlke/pythonlibs/#pandas>`_ and install them manually. But a
 	better option if you can spare a few extra MB of installation disk space is to install the 64 bit
-	`Anaconda <http://www.continuum.io/downloads>`_ version of Python 3.5.  This comes with a
+	`Anaconda <http://www.continuum.io/downloads>`_ version of Python 3.6.  This comes with a
 	nice stack of other helpful statistical tools as well, and you'll probably not need
 	any other libraries.  Once you've installed Anaconda, you can install Larch by typing
 	"pip install larch" on the command line.

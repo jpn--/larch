@@ -160,7 +160,7 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 intersphinx_mapping = {
-	'python': ('http://docs.python.org/3.5/', None),
+	'python': ('http://docs.python.org/3.6/', None),
 	'apsw': ('http://rogerbinns.github.io/apsw/', 'apsw_3_8_7_3.inv'),
 	'numpy': ('http://docs.scipy.org/doc/numpy/', 'numpy_1_9.inv'),
 	'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),

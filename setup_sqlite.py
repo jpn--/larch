@@ -276,7 +276,7 @@ elif platform.system() == 'Windows':
 	mingw64_dlls = ['libgfortran-3', 'libgcc_s_seh-1', 'libquadmath-0']
 	mingw64_libs = [i+'.dll' for i in mingw64_dlls]
 	local_swig_opts = []
-	local_libraries = ['PYTHON35','libopenblas',]+mingw64_dlls+['PYTHON35',]
+	local_libraries = ['PYTHON3{}'.format(sys.version_info.minor),'libopenblas',]+mingw64_dlls+['PYTHON3{}'.format(sys.version_info.minor),]
 	local_library_dirs = [
 		'Z:/CommonRepo/{0}/{1}'.format(*openblas),
 	#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
