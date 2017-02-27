@@ -120,7 +120,7 @@ void elm::d_logsums_w::work(size_t firstcase, size_t numberofcases, boosted::mut
 		nVarsUCA = UtilPacket.Data_CA->nVars();
 	} else if (UtilPacket.Data_CE && UtilPacket.Data_CE->nalts()>0) {
 		nVarsUCA = UtilPacket.Data_CE->nvars();
-		OOPS_NotImplemented('CE not implemented here');
+		OOPS_NotImplemented("CE not implemented here");
 	}
 	
 	unsigned nVarsUCO = 0;
@@ -133,7 +133,7 @@ void elm::d_logsums_w::work(size_t firstcase, size_t numberofcases, boosted::mut
 		nVarsQCA = QuantPacket.Data_CA->nVars();
 	} else if (QuantPacket.Data_CE && QuantPacket.Data_CE->nalts()>0) {
 		nVarsQCA = QuantPacket.Data_CE->nvars();
-		OOPS_NotImplemented('CE not implemented here');
+		OOPS_NotImplemented("CE not implemented here");
 	}
 
 	

@@ -377,7 +377,7 @@ std::shared_ptr<ndarray> elm::Model2::calc_logsums(ndarray* u) const
 //			std::cout << c << ", thread " << k.threadnum << std::endl;
 		};
 
-		ThreadPool::ParallelFor<local_workspace>((unsigned long)0, u->size1(), f, nNodes);
+		ThreadPool::ParallelFor<local_workspace>((std::size_t)0, u->size1(), f, nNodes);
 
 
 	} else {

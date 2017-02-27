@@ -1058,7 +1058,7 @@ void ndarray::logsumexp_2 (ndarray* out, const size_t& siz1, const size_t& siz2)
 //				out->operator()(x1) = ::log(temp);
 //			}
 //		}
-		ThreadPool::ParallelFor0((unsigned long)0, siz1, [&](size_t& x1){
+		ThreadPool::ParallelFor0((std::size_t)0, siz1, [&](size_t& x1){
 				double temp =0;
 				for ( unsigned x2=0; x2<siz2; x2++ ) { temp += ::exp(this->operator()(x1,x2)); }
 				out->operator()(x1) = ::log(temp);
