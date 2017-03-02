@@ -34,13 +34,13 @@ The nested formula for that term is
 
 .. math::
 
-	P_{nest}=\frac{\exp[V_{nest}]}{\sum_{j\in nests}\exp[V_{j}]}
+	P_{nest}=\frac{\exp(V_{nest})}{\sum_{j\in nests}\exp(V_{j})}
 
 with
 
 .. math::
 
-	V_{nest}=\mu_{nest}\log\left[\sum_{i\in nest}\exp\left[V_{i}/\mu_{nest}\right]\right]
+	V_{nest}=\mu_{nest}\log\left(\sum_{i\in nest}\exp\left(\frac{V_{i}}{\mu_{nest}}\right)\right)
 
 Using assumption 2, we know that :math:`\mu_{nest}` must be 1, as we want the aggregation nesting structure to
 collapse to a multinomial logit model. Further, our first assumption is that all the :math:`V_{i}` are equal,
@@ -48,14 +48,14 @@ so the terms inside the summation can collapse together, leaving
 
 .. math::
 
-	V_{nest}=\log\left[N_{nest}\exp\left[V_{i}\right]\right]=V_{i}+\log\left[N_{nest}\right]
+	V_{nest}=\log\left(N_{nest}\exp\left(V_{i}\right)\right)=V_{i}+\log\left(N_{nest}\right)
 
 with :math:`N_{nest}` as the number of discrete elemental alternatives inside the nest. This can be estimated
-by creating a variable for each aggregate alternative that has a value of :math:`\log\left[N_{nest}\right]`,
+by creating a variable for each aggregate alternative that has a value of :math:`\log\left(N_{nest}\right)`,
 and including it in a MNL model, with a beta coefficient constrained to be equal to 1.
 
 One thing to be careful of in these models: the log likelihood at “zeros” model should include the parameter
-on :math:`\log\left[N_{nest}\right]` equal to 1, not 0. This is because this is not a parameter we are
+on :math:`\log\left(N_{nest}\right)` equal to 1, not 0. This is because this is not a parameter we are
 estimating in the model, it is a direct function of the structure of aggregation, which we have imposed externally.
 
 Relax Arbitrary Boundaries Assumption
@@ -65,9 +65,9 @@ Relaxing the assumption of arbitrary boundaries puts :math:`\mu_{nest}` back int
 
 .. math::
 
-	V_{nest}=\mu_{nest}\log\left[\sum_{i\in nest}\exp\left[V_{i}/\mu_{nest}\right]\right]=V_{i}+\mu_{nest}\log\left[N_{nest}\right]
+	V_{nest}=\mu_{nest}\log\left(\sum_{i\in nest}\exp\left(\frac{V_{i}}{\mu_{nest}}\right)\right)=V_{i}+\mu_{nest}\log\left(N_{nest}\right)
 
-The logsum parameter thus appears as a coefficient on :math:`\log\left[N_{nest}\right]`. This may or may not be a good
+The logsum parameter thus appears as a coefficient on :math:`\log\left(N_{nest}\right)`. This may or may not be a good
 idea for transportation models. In an intra-urban model, if the boundaries of zones are at the TAZ level, which are
 small sectors drawn only for modelling purposes, relaxing this assumption probably doesn't make sense. If the boundaries
 are aligned with political boundaries (counties, towns) that have differing taxing, administration, or other policies,
@@ -95,14 +95,13 @@ While the average utility in Zone A is smaller, you can see that there are some 
 and which are more likely to be chosen. In general, all other things being equal, aggregate alternatives get a positive
 bump in their probability of selection with an increase in variance of the systematic utility.
 
-Dan McFadden showed that, when the utilities in an aggregate are distributed normally, if we define :math:`\omega_{nest}^{2}`
+[McFadden1978]_ showed that, when the utilities in an aggregate are distributed normally, if we define :math:`\omega_{nest}^{2}`
 as the variance of :math:`V_{i}` in a nest, and :math:`\bar{V}_{i}` as the average systematic utility of alternatives in
 the nest, then
 
 .. math::
 
-	V_{nest}=\bar{V}_{i}+\mu_{nest}\log\left[N_{nest}\right]+\frac{1}{2}\frac{\omega_{nest}^{2}}{\mu_{nest}}
-
+	V_{nest}=\bar{V}_{i}+\mu_{nest}\log\left(N_{nest}\right)+\frac{1}{2}\frac{\omega_{nest}^{2}}{\mu_{nest}}
 
 
 Estimating N
@@ -120,20 +119,32 @@ The :math:`\gamma`'s then become new parameters to the model, in addition to the
 
 The size value :math:`N_{nest}` still needs to be strictly positive, as it represents the number of discrete
 alternatives in the zone or aggregation. Therefore, all the data values and all the parameters inside :math:`N` also
-need to be positive. Enforcing positive data is easy, by only choosing variables that reflect size attributes
+need to be positive (or, more precisely, they must all be non-negative and at least one pairing must both be strictly positive).
+Enforcing positive data is easy, by only choosing variables that reflect size attributes
 (like employment, population, area). Enforcing positive coefficients requires constraints on the :math:`\gamma` parameters,
-or more simply a rewrite of the formulation of :math:`N`:
+or, more simply, a rewrite of the formulation of :math:`N`:
 
 .. math::
 
-	N_{nest}=\exp[\dot{\gamma}_{remp}]RetailEmployment+\exp[\dot{\gamma}_{nemp}]NonretailEmployment+\exp[\dot{\gamma}_{pop}]Population
+	N_{nest}=\exp(\dot{\gamma}_{remp})RetailEmployment+\exp(\dot{\gamma}_{nemp})NonretailEmployment+\exp(\dot{\gamma}_{pop})Population
 
 
-Then :math:`\dot{\gamma}` can be unconstrained.
+Then :math:`\dot{\gamma}` can be unconstrained.  (This form also has advantages in the calculation of derivatives, the
+details of which are not important for users to understand.)
 
 One of the issues with estimating :math:`N` in this fashion is that the scale of :math:`N`, like the scale of :math:`V`,
-is not defined. Doubling the :math:`N` size of all alternatives, by adding :math:`\log[2]` to all :math:`\dot{\gamma}`,
+is not defined. Doubling the :math:`N` size of all alternatives, by adding :math:`\log(2)` to all :math:`\dot{\gamma}`,
 will not affect the probabilities. Therefore, one :math:`\dot{\gamma}` needs to be arbitrarily fixed at zero.
 (In the non-estimated :math:`N` case, this normalization occurs implicitly; there is no parameter inside the log term
 on :math:`N`.)
+
+
+
+
+~~~~~~~~~~
+
+
+.. [McFadden1978] McFadden, D. (1978) Modelling the choice of residential location.
+   Spatial Interaction Theory and Residential Location (Karlquist A. Ed., pp. 75-96).
+   North Holland, Amsterdam.
 
