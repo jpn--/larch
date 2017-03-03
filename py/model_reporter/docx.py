@@ -2,6 +2,7 @@
 try:
 	import docx
 	from docx.enum.style import WD_STYLE_TYPE
+	from docx.enum.text import WD_ALIGN_PARAGRAPH
 except ImportError:
 
 	class DocxModelReporter():
@@ -28,6 +29,15 @@ else:
 	def document_larchstyle():
 		document = docx.Document()
 
+#		normal = document.styles['Normal']
+#		normal.font.name = 'Arial'
+#		normal.font.size = docx.shared.Pt(11)
+#		normal.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+#		normal.paragraph_format.line_spacing = 1.0
+#		normal.paragraph_format.widow_control = True
+#
+		body_text = document.styles['Body Text']
+
 		monospaced_small = document.styles.add_style('Monospaced Small',WD_STYLE_TYPE.TABLE)
 		monospaced_small.base_style = document.styles['Normal']
 		monospaced_small.font.name = 'Courier New'
@@ -35,6 +45,15 @@ else:
 		monospaced_small.paragraph_format.space_before = docx.shared.Pt(0)
 		monospaced_small.paragraph_format.space_after  = docx.shared.Pt(0)
 		monospaced_small.paragraph_format.line_spacing = 1.0
+
+		table_body_text = document.styles.add_style('Table Body Text',WD_STYLE_TYPE.TABLE)
+		table_body_text.base_style = document.styles['Body Text']
+		table_body_text.font.name = 'Arial Narrow'
+		table_body_text.font.size = docx.shared.Pt(9)
+		table_body_text.paragraph_format.space_before = docx.shared.Pt(1)
+		table_body_text.paragraph_format.space_after  = docx.shared.Pt(1)
+		table_body_text.paragraph_format.line_spacing = 1.0
+
 
 		return document
 
@@ -69,7 +88,7 @@ else:
 			if groups is None and hasattr(self, 'parameter_groups'):
 				groups = self.parameter_groups
 
-			table = docx_table(rows=1, cols=number_of_columns, style='Monospaced Small',
+			table = docx_table(rows=1, cols=number_of_columns, style='Table Body Text',
 							   header_text="Model Parameter Estimates", header_level=2)
 
 			def append_simple_row(name, initial_value, value, std_err, tstat, nullvalue, holdfast):
