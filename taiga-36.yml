@@ -15,4 +15,4 @@ dependencies:
 - appdirs=1.4
 - pip:
   - larch==3.3.24
-
+  - python-docx==0.8.6
