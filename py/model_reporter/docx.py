@@ -5,7 +5,9 @@ try:
 except ImportError:
 
 	class DocxModelReporter():
-		pass
+		def docx_params(self, groups=None, display_inital=False, **format):
+			raise ImportError()
+
 
 else:
 	from ..utilities import category, pmath, rename
@@ -51,6 +53,139 @@ else:
 
 
 	class DocxModelReporter():
+
+
+		class DocxManager:
+			"""Manages xml reporting for a :class:`Model`.	"""
+
+			def __init__(self, model):
+				self._model = model
+
+#			def _get_item(self, key, html_processor=True):
+#				candidate = None
+#				if isinstance(key,str):
+#					try:
+#						art_obj = getattr(self._model, "art_{}".format(key.casefold()))
+#						candidate = lambda *arg,**kwarg: art_obj(*arg,**kwarg).__xml__()
+#					except AttributeError:
+#						pass
+#					try:
+#						candidate = getattr(self._model, "xhtml_{}".format(key.casefold()))
+#					except AttributeError:
+#						pass
+#					try:
+#						candidate = self._model._user_defined_xhtml[key.casefold()]
+#					except (AttributeError, KeyError):
+#						pass
+#					if candidate is None:
+#						#raise TypeError("xml builder for '{}' not found".format(key.casefold()))
+#						import warnings
+#						warnings.warn("xml builder for '{}' not found".format(key.casefold()))
+#						x = XML_Builder("div", {'class':"no_builder"})
+#						x.start('pre', {'class':'error_report', 'style':'padding:10px;background-color:#fff693;color:#c90000;'})
+#						x.data("xml builder for '{}' not found".format(key.casefold()))
+#						x.end('pre')
+#						candidate = x.close()
+#				else:
+#					raise TypeError("invalid item")
+#				return candidate
+
+			def __getitem__(self, key):
+				return self._get_item(key, True)
+
+			def __repr__(self):
+				return '<DocxManager>'
+
+			def __str__(self):
+				return repr(self)
+
+			def __getattr__(self, key):
+				if key in ('_model', ):
+					return self.__dict__[key]
+				return self.__getitem__(key)
+		
+			def __dir__(self):
+				candidates = set()
+				for j in dir(self._model):
+					if len(j)>5 and j[:5]=='docx_':
+						candidates.add(j[5:])
+				try:
+					self._model._user_defined_docx
+				except AttributeError:
+					pass
+				else:
+					try:
+						if self._user_defined_docx == 'unpicklable local object':
+							self._user_defined_docx = {}
+					except AttributeError:
+						self._user_defined_docx = {}
+					candidates.update(i.casefold() for i in self._user_defined_docx.keys())
+				return candidates
+		
+#			def __setattr__(self, key, val):
+#				if key[0]=='_':
+#					super().__setattr__(key, val)
+#				else:
+#					self._model.new_xhtml_section(val, key)
+
+#			def __setitem__(self, key, val):
+#				if key[0]=='_':
+#					super().__setitem__(key, val)
+#				else:
+#					self._model.new_docx_section(val, key)
+
+#			def __call__(self, *args, force_Elem=False, filename=None, view_on_exit=False, return_html=False, **kwarg):
+#				div = Elem('div')
+#				for arg in self._model.iter_cats(args):
+#					if isinstance(arg, Elem):
+#						div << arg
+#					elif isinstance(arg, str):
+#						div << self._get_item(arg, False)()
+#					elif inspect.ismethod(arg):
+#						div << arg()
+#					elif isinstance(arg, list):
+#						div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
+#				if filename is not None or return_html:
+#					with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
+#						f << div
+#						if return_html or self._return_xhtml:
+#							temphtml = f.dump()
+#						else:
+#							temphtml = None
+#					if temphtml is not None:
+#						return temphtml
+#				if not force_Elem and self._return_xhtml:
+#					return ElementTree.tostring(div, encoding="utf8", method="html")
+#				return div
+
+
+		@property
+		def docx(self):
+			"""A :class:`DocxManager` interface for the model.
+			
+			This method creates a dicx report on the model. Call it with
+			any number of string arguments to include those named report sections.
+			
+			All other parameters must be passed as keywords.
+			
+			Other Parameters
+			----------------
+			filename : None or str
+				If None (the default) no file is generated. 
+				Otherwise, this should name a file into which the html
+				report will be written.  If that file already exists it will by default not 
+				be overwritten, instead a new filename will be spooled off the given name.
+			view_on_exit : bool
+				If true, the html file will be [attempted to be] opened in Word.
+				This feature may not be compatible with all platforms.
+				
+			Returns
+			-------
+			Document
+			"""
+			return XhtmlModelReporter.XmlManager(self)
+
+
 
 		def docx_params(self, groups=None, display_inital=False, **format):
 
