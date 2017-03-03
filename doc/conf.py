@@ -113,7 +113,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Larch'
-copyright = u'2010-2016, Jeffrey Newman'
+copyright = u'2010-2017, Jeffrey Newman'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -377,7 +377,7 @@ texinfo_documents = [
 epub_title = u'larch'
 epub_author = u'Jeffrey Newman'
 epub_publisher = u'Jeffrey Newman'
-epub_copyright = u'2016, Jeffrey Newman'
+epub_copyright = u'2017, Jeffrey Newman'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

@@ -1,5 +1,5 @@
 #
-#  Copyright 2007-2016 Jeffrey Newman
+#  Copyright 2007-2017 Jeffrey Newman
 #
 #  This file is part of Larch.
 #
