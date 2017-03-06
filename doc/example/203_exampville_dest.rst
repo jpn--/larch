@@ -1,5 +1,7 @@
 .. currentmodule:: larch
 
+.. _example203:
+
 =====================================
 203: Exampville Destination Choice
 =====================================

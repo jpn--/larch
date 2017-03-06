@@ -25,6 +25,8 @@ We can make some assumptions:
 	   That is, each such alternative has the same systematic utility, :math:`V_{i} = \beta X_{i}`
 	2. The particular locations of the zonal or aggregation boundaries are arbitrary, and have
 	   no systematic meaning themselves.
+	3. The number of individual elemental alternatives within each zone or aggregate is directly
+	   observable.
 
 Using these assumptions, we can derive an aggregate/zonal choice model.
 
@@ -50,13 +52,18 @@ so the terms inside the summation can collapse together, leaving
 
 	V_{nest}=\log\left(N_{nest}\exp\left(V_{i}\right)\right)=V_{i}+\log\left(N_{nest}\right)
 
-with :math:`N_{nest}` as the number of discrete elemental alternatives inside the nest. This can be estimated
-by creating a variable for each aggregate alternative that has a value of :math:`\log\left(N_{nest}\right)`,
+with :math:`N_{nest}` as the number of discrete elemental alternatives inside the nest.
+
+Under the assumptions we laid out above, estimating an aggregate model is actually quite simple. We can simply define a
+variable for each aggregate alternative that has a value of :math:`\log\left(N_{nest}\right)`,
 and including it in a MNL model, with a beta coefficient constrained to be equal to 1.
 
 One thing to be careful of in these models: the log likelihood at “zeros” model should include the parameter
 on :math:`\log\left(N_{nest}\right)` equal to 1, not 0. This is because this is not a parameter we are
 estimating in the model, it is a direct function of the structure of aggregation, which we have imposed externally.
+
+In application, however, sometimes we want to relax some of the assumptions we outlined above, which can introduce
+some complications.
 
 Relax Arbitrary Boundaries Assumption
 -------------------------------------
@@ -74,13 +81,20 @@ are aligned with political boundaries (counties, towns) that have differing taxi
 it might be OK to relax this assumption. In a log distance travel model, if the boundaries are aligned with metropolitan
 areas, then it is certainly reasonable to relax the arbitrary bounds assumption.
 
+Relaxing this constraint doesn't require any special methods beyond the standard MNL tools. All that is necessary
+is to relax the constraint on the parameter attached to :math:`\log\left(N_{nest}\right)`, so that it no longer must
+exactly equal 1.0.  Of course, we still need to ensure that the estimated parameter is in the interval :math:`(0,1]`.
+Also, for the log likelihood at “zeros” model we should still consider the default value of the parameter
+on :math:`\log\left(N_{nest}\right)` equal to 1, not 0.
+
 
 Relaxing Homogeneity
 --------------------
 
-The other assumption we made was that the individual alternatives within a zone are homogeneous... but it is highly likely
-they are not. Variance in the systematic utilities, and in particular heteroskedastic variance, can change the calculations.
-Consider the one dimensional destination choice depicted here:
+Another assumption we made was that the individual alternatives within a zone are homogeneous... but it is highly likely
+they are not. Variance in the systematic utilities, and in particular heteroskedastic variance (where the variance in
+different aggregates is different), can change the calculations.  Consider the one dimensional destination choice depicted
+here:
 
 .. image:: agg-choice-variance.png
 
@@ -93,7 +107,8 @@ choice; a decision maker does not choose a zone, but she chooses a single discre
 
 While the average utility in Zone A is smaller, you can see that there are some points in Zone A with much higher utility,
 and which are more likely to be chosen. In general, all other things being equal, aggregate alternatives get a positive
-bump in their probability of selection with an increase in variance of the systematic utility.
+bump in their probability of selection with an increase in variance of the systematic utility, because they are more likely to
+include a subset of elemental alternatives with much better utility.
 
 [McFadden1978]_ showed that, when the utilities in an aggregate are distributed normally, if we define :math:`\omega_{nest}^{2}`
 as the variance of :math:`V_{i}` in a nest, and :math:`\bar{V}_{i}` as the average systematic utility of alternatives in
@@ -102,6 +117,11 @@ the nest, then
 .. math::
 
 	V_{nest}=\bar{V}_{i}+\mu_{nest}\log\left(N_{nest}\right)+\frac{1}{2}\frac{\omega_{nest}^{2}}{\mu_{nest}}
+
+Including the variance of utility as shown here requires a non-linear parameter constraint, as :math:`\mu_{nest}`
+enters the utility function twice, once in the numerator and once in the denominator.  Since Larch is structured
+specifically for *linear*  models only, it is not currently possible to estimate a model like this using Larch.  Instead you might
+try Biogeme, which allows a more flexible non-linear structure.
 
 
 Estimating N
@@ -138,7 +158,7 @@ will not affect the probabilities. Therefore, one :math:`\dot{\gamma}` needs to 
 (In the non-estimated :math:`N` case, this normalization occurs implicitly; there is no parameter inside the log term
 on :math:`N`.)
 
-
+Larch is capable of estimating models with quantitative values as described here.  An example is shown in :ref:`Example 203<example203>`.
 
 
 ~~~~~~~~~~
