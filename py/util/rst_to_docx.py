@@ -28,6 +28,7 @@ def xhtml_blurb(blurb_rst, h_stepdown=2, **format):
 
 
 def cut_extra_whitespace(x):
+	if x is None: return ""
 	x = x.replace('\t',' ').replace('\n',' ')
 	x1 = x.replace('  ',' ')
 	while x1!=x:
@@ -55,7 +56,8 @@ class RstRenderer(object):
 		and italic runs within block elements.
 		"""
 		t = xhtml_blurb(self._rst, h_stepdown=h_stepdown)
-		#print(ElementTree.tostring(t).decode())
+#		from pprint import pprint
+#		pprint(ElementTree.tostring(t).decode())
 		self._render_container(t)
 
 	@property
@@ -100,24 +102,8 @@ class RstRenderer(object):
 				self._render_container(element)
 			elif tag == 'title':
 				self._render_paragraph(element, self._styles['h1'])
-			elif tag == 'h1':
-				self._render_paragraph(element, self._styles['h1'])
-			elif tag == 'h2':
-				self._render_paragraph(element, self._styles['h2'])
-			elif tag == 'h3':
-				self._render_paragraph(element, self._styles['h3'])
-			elif tag == 'h4':
-				self._render_paragraph(element, self._styles['h4'])
-			elif tag == 'h5':
-				self._render_paragraph(element, self._styles['h5'])
-			elif tag == 'h6':
-				self._render_paragraph(element, self._styles['h6'])
-			elif tag == 'h7':
-				self._render_paragraph(element, self._styles['h7'])
-			elif tag == 'h8':
-				self._render_paragraph(element, self._styles['h8'])
-			elif tag == 'p':
-				self._render_paragraph(element, self._styles['p'])
+			elif tag in set('h{}'.format(z) for z in range(1,9)) or tag in ('p', 'i', 'b'):
+				self._render_paragraph(element, self._styles[tag])
 			elif tag == 'paragraph':
 				self._render_paragraph(element, self._styles['p'])
 			elif tag == 'transition':
@@ -171,6 +157,7 @@ class RstRenderer(object):
 		`paragraph` element *para*. Create appropriate runs for text having
 		strong and emphasis inline formatting.
 		"""
+#		print("RENDER PARAG style",style)
 		if depth and depth>1:
 			paragraph = self._blkcntnr.add_paragraph(style=style+" {}".format(depth))
 		else:
@@ -179,7 +166,7 @@ class RstRenderer(object):
 			paragraph.add_run(cut_extra_whitespace(para.text))
 		for child in para:
 #			print("child.tag",child.tag,child.text,child.tail)
-			if child.tag=='p':
+			if child.tag in ('p',):
 				paragraph.add_run(cut_extra_whitespace(child.text)+" ")
 				paragraph.add_run(cut_extra_whitespace(child.tail)+ " ")
 			elif child.tag in ('strong','b','em','i'):
@@ -188,6 +175,10 @@ class RstRenderer(object):
 					paragraph.add_run(cut_extra_whitespace(child.text), self._styles[style_key])
 				if child.tail is not None:
 					paragraph.add_run(cut_extra_whitespace(child.tail))
+			elif child.tag=='span':
+				for sub_item in child:
+					self._render_span(paragraph, sub_item, {'strong': 'b', 'em':'i','b':'b', 'i':'i', 'sub':'i', }.get(sub_item.tag))
+				paragraph.add_run(cut_extra_whitespace(child.tail)+ " ")
 			else:
 				self._depth += 1
 				try:
@@ -196,7 +187,15 @@ class RstRenderer(object):
 				finally:
 					self._depth -= 1
 
-
+	def _render_span(self, paragraph, span, style):
+#		print("RENDER SPAN style",style, ":", span.text, span.tail)
+		if style=='b':
+			paragraph.add_run(span.text).bold = True
+		elif style=='i':
+			paragraph.add_run(span.text).italic = True
+		else:
+			paragraph.add_run(span.text)
+		paragraph.add_run(span.tail)
 
 
 	def _render_transition(self, style='p'):

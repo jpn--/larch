@@ -7,7 +7,9 @@ except ImportError:
 
 	class DocxModelReporter():
 		def docx_params(self, groups=None, display_inital=False, **format):
-			raise ImportError()
+			import docx
+			from docx.enum.style import WD_STYLE_TYPE
+			from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
 else:
@@ -19,7 +21,7 @@ else:
 		while not isinstance(other_doc, docx.document.Document) and hasattr(other_doc, '_parent'):
 			other_doc = other_doc._parent
 		if not isinstance(other_doc, docx.document.Document):
-			raise larch.LarchError('other_doc is not a docx.Document or a part thereof')
+			raise TypeError('other_doc is not a docx.Document or a part thereof, it is a {}'.format(type(other_doc)))
 		for element in other_doc._body._element:
 			self._body._element.append(element)
 		return self
@@ -50,10 +52,12 @@ else:
 
 		table_body_text = document.styles.add_style('Table Body Text',WD_STYLE_TYPE.TABLE)
 		table_body_text.base_style = document.styles['Body Text']
-		table_body_text.font.name = 'Arial Narrow'
+		table_body_text.font.name = 'Arial'
 		table_body_text.font.size = docx.shared.Pt(9)
 		table_body_text.paragraph_format.space_before = docx.shared.Pt(1)
 		table_body_text.paragraph_format.space_after  = docx.shared.Pt(1)
+		table_body_text.paragraph_format.left_indent = docx.shared.Pt(2)
+		table_body_text.paragraph_format.right_indent  = docx.shared.Pt(2)
 		table_body_text.paragraph_format.line_spacing = 1.0
 
 
@@ -80,34 +84,31 @@ else:
 			def __init__(self, model):
 				self._model = model
 
-#			def _get_item(self, key, html_processor=True):
-#				candidate = None
-#				if isinstance(key,str):
-#					try:
-#						art_obj = getattr(self._model, "art_{}".format(key.casefold()))
-#						candidate = lambda *arg,**kwarg: art_obj(*arg,**kwarg).__xml__()
-#					except AttributeError:
-#						pass
-#					try:
-#						candidate = getattr(self._model, "xhtml_{}".format(key.casefold()))
-#					except AttributeError:
-#						pass
-#					try:
-#						candidate = self._model._user_defined_xhtml[key.casefold()]
-#					except (AttributeError, KeyError):
-#						pass
-#					if candidate is None:
-#						#raise TypeError("xml builder for '{}' not found".format(key.casefold()))
-#						import warnings
-#						warnings.warn("xml builder for '{}' not found".format(key.casefold()))
-#						x = XML_Builder("div", {'class':"no_builder"})
-#						x.start('pre', {'class':'error_report', 'style':'padding:10px;background-color:#fff693;color:#c90000;'})
-#						x.data("xml builder for '{}' not found".format(key.casefold()))
-#						x.end('pre')
-#						candidate = x.close()
-#				else:
-#					raise TypeError("invalid item")
-#				return candidate
+			def _get_item(self, key, html_processor=True):
+				candidate = None
+				if isinstance(key,str):
+					try:
+						art_obj = getattr(self._model, "art_{}".format(key.casefold()))
+						candidate = lambda *arg,**kwarg: art_obj(*arg,**kwarg).to_docx()
+					except AttributeError:
+						pass
+					try:
+						candidate = getattr(self._model, "docx_{}".format(key.casefold()))
+					except AttributeError:
+						pass
+					try:
+						candidate = self._model._user_defined_docx[key.casefold()]
+					except (AttributeError, KeyError):
+						pass
+					if candidate is None:
+						import warnings
+						warnings.warn("docx builder for '{}' not found".format(key.casefold()))
+						candidate = document_larchstyle()
+						paragraph = candidate.add_paragraph(style="Body Text")
+						paragraph.add_run("docx builder for '{}' not found".format(key.casefold())).bold = True
+				else:
+					raise TypeError("invalid item")
+				return candidate
 
 			def __getitem__(self, key):
 				return self._get_item(key, True)
@@ -153,29 +154,23 @@ else:
 #				else:
 #					self._model.new_docx_section(val, key)
 
-#			def __call__(self, *args, force_Elem=False, filename=None, view_on_exit=False, return_html=False, **kwarg):
-#				div = Elem('div')
-#				for arg in self._model.iter_cats(args):
-#					if isinstance(arg, Elem):
-#						div << arg
-#					elif isinstance(arg, str):
-#						div << self._get_item(arg, False)()
-#					elif inspect.ismethod(arg):
-#						div << arg()
-#					elif isinstance(arg, list):
-#						div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
-#				if filename is not None or return_html:
-#					with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
-#						f << div
-#						if return_html or self._return_xhtml:
-#							temphtml = f.dump()
-#						else:
-#							temphtml = None
-#					if temphtml is not None:
-#						return temphtml
-#				if not force_Elem and self._return_xhtml:
-#					return ElementTree.tostring(div, encoding="utf8", method="html")
-#				return div
+			def __call__(self, *args, filename=None, view_on_exit=False, **kwarg):
+				top_doc = document_larchstyle()
+				for arg in args:
+					if isinstance(arg, docx.document.Document):
+						top_doc.append(arg)
+					elif isinstance(arg, str):
+						top_doc.append(self._get_item(arg)())
+					elif inspect.ismethod(arg):
+						top_doc.append(arg())
+				if filename is not None:
+					top_doc.save(filename)
+					if view_on_exit:
+						try:
+							os.system("open "+filename)
+						except:
+							pass
+				return top_doc
 
 
 		@property
@@ -202,11 +197,11 @@ else:
 			-------
 			Document
 			"""
-			return XhtmlModelReporter.XmlManager(self)
+			return DocxModelReporter.DocxManager(self)
 
 
 
-		def docx_params(self, groups=None, display_inital=False, **format):
+		def docx_params_v0(self, groups=None, display_inital=False, **format):
 
 			# keys fix
 			existing_format_keys = list(format.keys())
@@ -351,8 +346,49 @@ else:
 					for p in unlisted_parameters:
 						write_param_row(p)
 			return table
-		docx_param = docx_parameters = docx_params
+		docx_param_v0 = docx_parameters_v0 = docx_params_v0
 
 
+		def _docx_blurb_n(self, h_stepdown=2, n='', **format):
+			try:
+				blurb_rst = getattr(self, 'blurb'+str(n))
+			except AttributeError:
+				return None
+			if isinstance(blurb_rst, bytes):
+				blurb_rst = blurb_rst.decode()
+			if not isinstance(blurb_rst, str):
+				raise TypeError('blurb must be reStructuredText as str ot bytes')
+			from ..util.rst_to_docx import render_docx
+			return render_docx(blurb_rst, h_stepdown=h_stepdown)
+
+		def docx_blurb(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, **format)
+
+		def docx_blurb1(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=1, **format)
+
+		def docx_blurb2(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=2, **format)
+
+		def docx_blurb3(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=3, **format)
+
+		def docx_blurb4(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=4, **format)
+
+		def docx_blurb5(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=5, **format)
+
+		def docx_blurb6(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=6, **format)
+
+		def docx_blurb7(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=7, **format)
+
+		def docx_blurb8(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=8, **format)
+
+		def docx_blurb9(self, h_stepdown=2, **format):
+			return self._docx_blurb_n(h_stepdown=h_stepdown, n=9, **format)
 
 

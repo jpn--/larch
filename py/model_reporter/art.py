@@ -595,6 +595,51 @@ class AbstractReportTable():
 
 
 
+
+
+
+
+	def to_docx(self, title_level=2, **format):
+
+		number_of_rows, number_of_columns = self.df.shape
+
+		from .docx import docx_table
+		table = docx_table(rows=number_of_rows, cols=number_of_columns, style='Table Body Text',
+						   header_text=self.title, header_level=title_level)
+		
+		in_head = True
+
+		# Content
+		for r,rvalue in enumerate(self.df.index):
+			if (~pandas.isnull(self.df.iloc[r,1:])).sum()==0:
+				catflag = True
+			else:
+				catflag = False
+			if r==self.n_thead_rows:
+				# Have now completed header rows
+				in_head = False
+			startline = True
+			for c,cvalue in enumerate(self.df.columns):
+				cellspan = self.cellspan_iloc(r,c)
+				if cellspan != (0,0):
+					# This is a cell with real content
+					if cellspan == (1,1):
+						cell = table.cell(r,c)
+					else:
+						cell = table.cell(r,c).merge(table.cell(r+cellspan[0]-1,c+cellspan[1]-1))
+					cell.text = self.get_text_iloc(r,c)
+					if in_head:
+						cell.paragraphs[0].runs[0].bold = True
+				else:
+					startline = False
+
+		return table
+
+
+
+
+
+
 	def cellspan_iloc(self,r,c):
 		try:
 			if pandas.isnull(self.df.iloc[r,c]):
