@@ -666,7 +666,9 @@ class Model(Model2, ModelReporter):
 	def __utility_set(self,x):
 		return _core.Model2_utility_set(self,x)
 
-	utility = property(__utility_get, __utility_set)
+	__utility_doc = r'''A :class:`core.LinearBundle` object representing the qualitative utility of alternatives in the model.'''
+
+	utility = property(__utility_get, __utility_set, None, __utility_doc)
 
 	def __quantity_get(self):
 		return _core.Model2_quantity_get(self)
@@ -676,7 +678,25 @@ class Model(Model2, ModelReporter):
 			x = LinearFunction() + x
 		return _core.Model2_quantity_set(self,x)
 
-	quantity = property(__quantity_get, __quantity_set)
+	__quantity_doc = r'''A :class:`core.LinearFunction` object representing the quantitative value of alternatives in the model.
+
+		Because the quantitative measure must be directly related to the alternatives and cannot be a function
+		exclusively based on the decision maker, this term is not a complete :class:`core.LinearBundle` but only
+		a :class:`core.LinearFunction`, which is applied on |idca| data only.
+		
+		Also, the usual representation of a :class:`core.LinearFunction` as the dot product of a data vector and a parameter vector,
+		or :math:`\sum_{k} \beta_k X_k`.  In the case of the `quantity` function, the data vector is treated similarly, but
+		the parameter vector that enters the function is the element-wise exponential of the parameters, so
+		:math:`\sum_{k} \exp(\beta_k) X_k`.  This ensures that if all :math:`X_k` are non-negative and at least one 
+		:math:`X_k` is strictly positive, then the computed value of the :class:`core.LinearFunction` will also be
+		strictly positive.
+			
+		.. seealso::
+		
+			:ref:`Estimating N in Aggregate Choice Models <aggregate-choice-est-n>`
+		'''
+
+	quantity = property(__quantity_get, __quantity_set, None, __quantity_doc)
 
 	def __quantity_scale_set(self, val):
 		if val not in self:
@@ -686,7 +706,12 @@ class Model(Model2, ModelReporter):
 	def __quantity_scale_del(self):
 		_core.Model2_quantity_scale_set(self, "CONSTANT")
 	
-	__quantity_scale_doc = "The scale (logsum) coefficient on the quantity term."
+	__quantity_scale_doc = """The scale (logsum) coefficient on the quantity term.
+	
+		.. seealso::
+
+			:ref:`Non-Arbitrary Boundaries in Aggregate Choice Models <aggregate-choice-theta>`
+		"""
 
 	quantity_scale = property(_core.Model2_quantity_scale_get, __quantity_scale_set, __quantity_scale_del, __quantity_scale_doc)
 

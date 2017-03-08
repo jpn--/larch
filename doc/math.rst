@@ -7,6 +7,7 @@ This documentation will eventually provide instruction on some of the more inter
 mathematics of logit models.
 
 
+.. _aggregate-choice:
 
 ~~~~~~~~~~~~~~~~~~~~~~~
 Aggregate Choice Models
@@ -64,6 +65,8 @@ estimating in the model, it is a direct function of the structure of aggregation
 
 In application, however, sometimes we want to relax some of the assumptions we outlined above, which can introduce
 some complications.
+
+.. _aggregate-choice-theta
 
 Relax Arbitrary Boundaries Assumption
 -------------------------------------
@@ -123,6 +126,7 @@ enters the utility function twice, once in the numerator and once in the denomin
 specifically for *linear*  models only, it is not currently possible to estimate a model like this using Larch.  Instead you might
 try Biogeme, which allows a more flexible non-linear structure.
 
+.. _aggregate-choice-est-n:
 
 Estimating N
 ------------

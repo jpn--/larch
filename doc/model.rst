@@ -68,6 +68,13 @@ Adding Parameters
 	:returns: :class:`ModelParameter`
 
 
+Defining Utility
+----------------
+
+.. autoattribute:: Model.utility
+
+.. autoattribute:: Model.quantity
+
 
 
 Using :class:`Model` Objects
@@ -162,4 +169,10 @@ Related Classes
 	parameter
 	linear-parts
 	metamodel
+
+
+
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
+
 
