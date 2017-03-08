@@ -424,6 +424,8 @@ class XHTML():
 		}
 		"""
 
+		css = styles.load_css(css)
+
 		if quickhead is not None:
 			try:
 				title = quickhead.title
