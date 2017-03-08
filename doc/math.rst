@@ -66,7 +66,7 @@ estimating in the model, it is a direct function of the structure of aggregation
 In application, however, sometimes we want to relax some of the assumptions we outlined above, which can introduce
 some complications.
 
-.. _aggregate-choice-theta
+.. _aggregate-choice-theta:
 
 Relax Arbitrary Boundaries Assumption
 -------------------------------------

@@ -140,6 +140,8 @@ Nested logit and Network GEV models have an underlying network structure.
 
 .. autoattribute:: Model.graph
 
+.. autoattribute:: Model.quantity_scale
+
 
 Reporting Tools
 ---------------

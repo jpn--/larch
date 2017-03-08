@@ -666,7 +666,11 @@ class Model(Model2, ModelReporter):
 	def __utility_set(self,x):
 		return _core.Model2_utility_set(self,x)
 
-	__utility_doc = r'''A :class:`core.LinearBundle` object representing the qualitative utility of alternatives in the model.'''
+	__utility_doc = r'''A :class:`core.LinearBundle` object representing the qualitative utility of alternatives in the model.
+	
+		This is the fundamental building block of a discrete choice model based on utility maximization.   You'll
+		likely want to use this in nearly every discrete choice model you create.
+		'''
 
 	utility = property(__utility_get, __utility_set, None, __utility_doc)
 
@@ -706,7 +710,27 @@ class Model(Model2, ModelReporter):
 	def __quantity_scale_del(self):
 		_core.Model2_quantity_scale_set(self, "CONSTANT")
 	
-	__quantity_scale_doc = """The scale (logsum) coefficient on the quantity term.
+	__quantity_scale_doc = r"""The scale (logsum) coefficient on the quantity term.
+	
+		Assign a :class:`ParameterRef`, or more generally a string naming the parameter,
+		to this attribute to define it. The parameter is coefficient is applied outside the 
+		log of quantity in a model that includes a quantity term, serving as :math:`\theta` 
+		in the expression:
+		
+		.. math::
+		
+			V_i = \sum_{j} \beta_j X_{ij} + \theta \log ( \sum_{k} \exp (\gamma_k) Z_{ik} )
+	
+		Note that this parameter is meaningless if the `quantity` is not defined or otherwise
+		empty.
+		
+		If the `quantity_scale` attribute is not defined for a model that does include a 
+		`quantity` function, the coefficient is assumed to be equal to one.
+		
+		If creating a discrete choice model that includes both utility `quantity_scale` and 
+		other GEV network elements (i.e. nests), it will be necessary to constrain the value 
+		for this parameter to be smaller than any other logsum parameter in the model to remain 
+		consistent with utility maximization.
 	
 		.. seealso::
 
