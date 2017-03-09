@@ -688,16 +688,28 @@ class Model(Model2, ModelReporter):
 		exclusively based on the decision maker, this term is not a complete :class:`core.LinearBundle` but only
 		a :class:`core.LinearFunction`, which is applied on |idca| data only.
 		
-		Also, the usual representation of a :class:`core.LinearFunction` as the dot product of a data vector and a parameter vector,
-		or :math:`\sum_{k} \beta_k X_k`.  In the case of the `quantity` function, the data vector is treated similarly, but
+		Also, the usual representation of a :class:`core.LinearFunction` as the dot product of a data vector 
+		(which here we denote as :math:`Z`) and a parameter vector (denoted with :math:`\gamma`),
+		giving :math:`\sum_{k} \gamma_k Z_k`.  In the case of the `quantity` function, the data vector is treated similarly, but
 		the parameter vector that enters the function is the element-wise exponential of the parameters, so
-		:math:`\sum_{k} \exp(\beta_k) X_k`.  This ensures that if all :math:`X_k` are non-negative and at least one 
-		:math:`X_k` is strictly positive, then the computed value of the :class:`core.LinearFunction` will also be
+		:math:`\sum_{k} \exp(\gamma_k) Z_k`.  This ensures that if all :math:`Z_k` are non-negative and at least one
+		:math:`Z_k` is strictly positive, then the computed value of the :class:`core.LinearFunction` will also be
 		strictly positive.
+		
+		When combined with the qualitative utility, this allows you to write a combined systematic utility function of
+		the form:
+		
+		.. math::
+		
+			V_i = \sum_{j} \beta_j X_{ij} + \theta \log \left( \sum_{k} \exp (\gamma_k) Z_{ik} \right)
 			
 		.. seealso::
 		
 			:ref:`Estimating N in Aggregate Choice Models <aggregate-choice-est-n>`
+				More details on the mathematical implications for using quantity.
+				
+			:attr:`quantity_scale`
+				The :math:`\theta` in the equation above.
 		'''
 
 	quantity = property(__quantity_get, __quantity_set, None, __quantity_doc)
@@ -735,6 +747,11 @@ class Model(Model2, ModelReporter):
 		.. seealso::
 
 			:ref:`Non-Arbitrary Boundaries in Aggregate Choice Models <aggregate-choice-theta>`
+				More details on the mathematical implications for using quantity_scale
+				
+			:attr:`quantity`
+				The quantity function
+
 		"""
 
 	quantity_scale = property(_core.Model2_quantity_scale_get, __quantity_scale_set, __quantity_scale_del, __quantity_scale_doc)
