@@ -14,6 +14,7 @@ Welcome to Exampville, the best simulated town in this here part of the internet
 
 In our previous example, we estimated a mode choice model.  We'll use that same model
 here as the basis for creating logsums that we will use in the next example.  We'll
+start from our mode choice model.
 
 .. testcode::
 
@@ -67,7 +68,10 @@ Now we're ready to generate our logsums.  First we'll create a blank array in th
 
 .. testcode::
 
-	d.new_idca('MODECHOICELOGSUM', numpy.zeros([d.nAllCases(), nZones], dtype=numpy.float32), original_source="mode choice model")
+	# The old way was to do this manually.
+	# d.new_idca('MODECHOICELOGSUM', numpy.zeros([d.nAllCases(), nZones], dtype=numpy.float32), original_source="mode choice model")
+	# The new way is a bit simpler, as it knows to use the correct nAllCases:
+	d.new_blank_idca('MODECHOICELOGSUM', nalts=nZones, dtype=numpy.float32, original_source="mode choice model")
 
 We will also create a seperate array in memory, to cache the logsums we calculate 
 so that we can push all the calculated values into the DT on disk in one pass at the end.
