@@ -19,8 +19,28 @@ def clear_look_cache(self):
 
 
 
-def seer(self, big=False):
-	with XHTML(os.path.splitext(self.source_filename)[0]+".info.html", overwrite=True, view_on_exit=True) as f:
+def seer(self, big=False, view_on_exit=True, outfile=True):
+	"""Generate a HTML summary of the contents of this :class:`DT`.
+	
+	Parameters
+	----------
+	big : bool, optional
+		If given and True, the report will include a detailed statistical analysis of 
+		every variable in the datafile.
+	view_on_exit : bool, optional
+		By default, Larch will attempt to pop up the resulting HTML page in Chrome or 
+		your default web browser.  Set this to False to suppress the pop-up and simply
+		create the HTML file.
+	outfile : str or None, optional
+		By default, Larch will create the file in the same place as the underlying
+		:class:`DT` file, and with the same file name with a ".info.html" extension.
+		Alternatively, you can give your own filename, or specify None to create
+		a temp file only (in which case you should probably leave `view_on_exit` as True
+		or you'll never see the result.)
+	"""
+	if outfile is True:
+		outfile = os.path.splitext(self.source_filename)[0]+".info.html"
+	with XHTML(outfile, overwrite=True, view_on_exit=view_on_exit) as f:
 		f.append(self.info(3))
 		if big:
 			f.append(self.look_idco('*'))
