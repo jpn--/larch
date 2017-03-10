@@ -2709,7 +2709,7 @@ class DT(Fountain, Importer, Exporter):
 		if title is not None:
 			self.idca[name]._v_attrs.TITLE = title
 
-	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False, title=None, initializer=0):
+	def new_blank_idca(self, name, nalts=None, dtype=None, overwrite=False, title=None, initializer=0, original_source=None):
 		"""Create a new blank (all zeros, or some other initializer) :ref:`idca` variable.
 			
 		Parameters
@@ -2725,6 +2725,10 @@ class DT(Fountain, Importer, Exporter):
 			Optionally, give a description of the data to be in this array.
 		initializer : scalar dtype, optional
 			If given, initialize the blank array with this value instead of zero
+		original_source : str, optional
+			Obviously, since the array as created is just blank, there isn't an original source for it
+			just yet, and that source can't be figured out automatically.  But if you want you can
+			name the source that will be used to populate this array later.
 			
 		Raises
 		-----
@@ -2739,7 +2743,10 @@ class DT(Fountain, Importer, Exporter):
 			zer = numpy.zeros([self.nAllCases(), nalts], dtype=dtype or numpy.float64)
 		else:
 			zer = numpy.full([self.nAllCases(), nalts], initializer, dtype=dtype or numpy.float64)
-		return self.new_idca_from_array(name, zer, overwrite=overwrite, title=title)
+		ret = self.new_idca_from_array(name, zer, overwrite=overwrite, title=title)
+		if original_source is not None:
+			self.idca[name]._v_attrs.ORIGINAL_SOURCE = original_source
+		return ret
 
 	def new_idca_from_array(self, name, arr, overwrite=False, original_source=None, rel_original_source=True, title=None, dictionary=None):
 		"""Create a new :ref:`idca` variable.
