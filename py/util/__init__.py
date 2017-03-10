@@ -28,4 +28,15 @@ computer = os.path.splitext(platform.node())[0]
 mplstyle_filepath = os.path.join( os.path.split(__file__)[0], 'larch.mplstyle' )
 
 
+from contextlib import contextmanager
+import warnings
+
+@contextmanager
+def matplotlib_style():
+	from matplotlib import pyplot as plt
+	with plt.style.context(mplstyle_filepath):
+		with warnings.catch_warnings():
+			warnings.filterwarnings('ignore', category=UserWarning)
+			yield
+
 
