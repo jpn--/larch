@@ -45,7 +45,7 @@ class Exporter():
 
 
 
-	def export_zip_package(self, filename, idco_varnames=None, idca_varnames=None, screen="None"):
+	def export_zip_package(self, filename=None, idco_varnames=None, idca_varnames=None, screen="None"):
 		'''Export the data to zip file.
 
 		Only the :ref:`idco` table is exported whole, the :ref:`idca` data is
@@ -53,14 +53,17 @@ class Exporter():
 
 		Parameters
 		----------
-		file : str
-			This is the file name to give to the zipfile.  The .zip extension will be added if not given.
+		file : str, optional
+			This is the file name to give to the zipfile.  The .zip extension will be added if not given
+			in the filename.  If not given at all, the basename from the current file will be used.
 		idco_varnames, idca_varnames : sequence of str, or None
 			The variables to export.  If None, all regular variables of the relevant type are exported.
 		screen : str or array
 			The screen to use.  Defaults to no screen.
 
 		'''
+		if filename is None:
+			filename = self.source_filename
 		filename_base, filename_ext = os.path.splitext(filename)
 		
 		with zipfile.ZipFile(filename_base+'.zip', 'w', compression=zipfile.ZIP_DEFLATED) as myzip:
@@ -89,7 +92,10 @@ class Exporter():
 			for idca_var in idca_varnames:
 				tempfile = TemporaryFile(suffix='txt', mode='wb+')
 				if screen in ("None","*"):
-					numpy.savetxt(tempfile, self.idca[idca_var][:], fmt='%.8e', delimiter=',', newline='\n')
+					try:
+						numpy.savetxt(tempfile, self.idca[idca_var][:], fmt='%.8e', delimiter=',', newline='\n')
+					except TypeError:
+						numpy.savetxt(tempfile, self.array_idca(idca_var, screen=screen), fmt='%.8e', delimiter=',', newline='\n')
 				else:
 					numpy.savetxt(tempfile, self.array_idca(idca_var, screen=screen), fmt='%.8e', delimiter=',', newline='\n')
 				tempfile.flush()
