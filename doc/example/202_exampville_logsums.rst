@@ -40,12 +40,12 @@ of rows as existing DT arrays (and the same number of caseids).
 	>>> d.nAllCases()
 	6123
 
-The `nCases` method returns the number of active (non-excluded) cases,
-while the `nAllCases` method counts _all_ of the cases in the DT, whether
+The :meth:`~DT.nCases` method returns the number of active (non-excluded) cases,
+while the :meth:`~DT.nAllCases` method counts _all_ of the cases in the DT, whether
 they are active or not.
 
 Another concern is that the non-excluded cases are not a contiguous set; they
-are spread around the list of all cases.  Fortunately, we have the `get_screen_indexes` method to extract
+are spread around the list of all cases.  Fortunately, we have the :meth:`~DT.get_screen_indexes` method to extract
 the current active case indexes, which we will use to expand the logsums we create
 and push them back into the DT in the correct places.
 
@@ -83,8 +83,8 @@ before any screening).
 
 	modechoicelogsums = numpy.zeros([d.nCases(), nZones], dtype=numpy.float32)
 
-Now we'll `setUp` the model, which allocates the necessary memory for various computational parts.
-We also set `preserve_casewise_logsums` to True, which will ensure that the logsums created
+Now we'll :meth:`~Model.setUp` the model, which allocates the necessary memory for various computational parts.
+We also set :attr:`~Model.preserve_casewise_logsums` to True, which will ensure that the logsums created
 during the calculation of the loglikelihood are preserved after that calculation completes.
 (Otherwise they can be discarded to save memory.)
 

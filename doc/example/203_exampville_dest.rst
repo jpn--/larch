@@ -64,7 +64,6 @@ we don't want that data anymore.
 		d.delete_data(i.name)
 
 We will replace it with entire rows from the OMX representing all destinations,
-
 which we will attach as an external data souce. Plus, we need the lookups which are OTAZ-generic
 
 .. testcode::

@@ -75,7 +75,7 @@ Now we are ready to define some utility functions.
 	)
 
 Note in the SR utility that we use two different ways for writing parameters, with a dotted
-name (`P.Cost`) and with a parenthesis (`P("HighInc:SR")`).  The dotted name version is neat and
+name (``P.Cost``) and with a parenthesis (``P("HighInc:SR")``).  The dotted name version is neat and
 concise, but it only works when the parameter name is a valid python identifier -- essentially, a
 single word, beginning with a letter and containing only letter and numbers, and no spaces or punctuation.
 Larch allows parameter names that are any string, including spaces and punctuation, but more interesting
