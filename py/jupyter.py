@@ -140,7 +140,7 @@ def larch_tag():
 	xsign.data(version)
 	xsign.end('span')
 	xsign.end('p')
-	xsign.start('img', { 'height':"48", 'src':"https://www.camsys.com/sites/default/files/camsys_logo.png", 'style':'float:right;height:40px;margin-top:0' })
+	xsign.start('img', { 'src':"https://www.camsys.com/sites/default/files/camsys_logo.png", 'style':'float:right;max-height:48px;margin-top:0' })
 	xsign.end('img')
 	xsign.close()
 	from IPython.display import display_html, HTML
