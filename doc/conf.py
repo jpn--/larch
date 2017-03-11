@@ -191,6 +191,7 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
+    'navigation_depth': 4,
 #	'stickysidebar': 'true',
 #	'sidebarbgcolor': "rgb(101,0,122)",
 #	'sidebarlinkcolor': "rgb(239,161,255)",
