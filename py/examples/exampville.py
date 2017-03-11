@@ -13,13 +13,23 @@ __all__ = ['builder',]
 
 _cache_1 = None
 
+_directory = None
 
-
-
+def build_directory(directory=None):
+	global _directory
+	if directory is None:
+		if _directory is not None:
+			directory = _directory
+		else:
+			from ..util.temporaryfile import TemporaryDirectory
+			_directory = directory = TemporaryDirectory()
+	else:
+		_directory = directory
+	return _directory
 
 def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=None, seed=0):
 
-	global _cache_1
+	global _cache_1, _directory
 	if _cache_1 is not None:
 		return _cache_1
 
@@ -28,8 +38,13 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	flog("  traveling among {} travel analysis zones",nZones)
 
 	if directory is None:
-		from ..util.temporaryfile import TemporaryDirectory
-		directory = TemporaryDirectory()
+		if _directory is not None:
+			directory = _directory
+		else:
+			from ..util.temporaryfile import TemporaryDirectory
+			_directory = directory = TemporaryDirectory()
+	else:
+		_directory = directory
 
 	if isinstance(transit_scope, tuple):
 		transit_scope = slice(*transit_scope)
