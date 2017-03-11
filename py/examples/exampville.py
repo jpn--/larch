@@ -300,10 +300,10 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	f_pp.new_caseids(PERid)
 	f_pp.new_idco_from_array('HHID', PERhhid)
 	f_pp.new_idco_from_array('AGE', PERage)
-	f_pp.new_idco_from_array('WORKS', PERworks)
-	f_pp.new_idco_from_array('N_WORKTOURS', PERnworktours)
-	f_pp.new_idco_from_array('N_OTHERTOURS', PERnothertours)
-	f_pp.new_idco_from_array('N_TOTALTOURS', PERntours)
+	f_pp.new_idco_from_array('WORKS', PERworks, dictionary={1:'Yes',0:'No'}, title='Person has a regular job')
+	f_pp.new_idco_from_array('N_WORKTOURS', PERnworktours, title='Number of work tours reported by this person on the survey day')
+	f_pp.new_idco_from_array('N_OTHERTOURS', PERnothertours, title='Number of non-work tours reported by this person on the survey day')
+	f_pp.new_idco_from_array('N_TOTALTOURS', PERntours, title='Number of non-work tours reported by this person on the survey day')
 	f_pp.flush()
 
 	f_tour = larch.DT(os.path.join(directory,'exampville_tours.h5'), mode='a')
@@ -311,19 +311,17 @@ def build_year_1(nZones=9, transit_scope = slice(2,8), n_HH = 834, directory=Non
 	f_tour.new_idco_from_array('HHID', TOURhh)
 	f_tour.new_idco_from_array('PERSONID', TOURper)
 	f_tour.new_idco_from_array('DTAZ', TOURdtaz)
-	f_tour.new_idco_from_array('TOURMODE', TOURmode)
-	f_tour.idco.TOURMODE.attrs.DICTIONARY = {
+	f_tour.new_idco_from_array('TOURMODE', TOURmode, dictionary={
 		1:'DA',
 		2:'SR',
 		3:'Walk',
 		4:'Bike',
 		5:'Transit',
-	}
-	f_tour.new_idco_from_array('TOURPURP', TOURpurpose)
-	f_tour.idco.TOURPURP.attrs.DICTIONARY = {
+	})
+	f_tour.new_idco_from_array('TOURPURP', TOURpurpose, dictionary={
 		1:'Work Tour',
 		2:'Non-Work Tour',
-	}
+	})
 	f_tour.flush()
 
 	flog("EXAMPVILLE Completed Builder (Year 1)")
