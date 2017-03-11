@@ -16,6 +16,11 @@ class OMXNonUniqueLookup(LarchError):
 	pass
 
 class OMX(_tb.file.File):
+	"""A subclass of the :class:`tables.File` class, adding an interface for openmatrix files.
+	
+	As suggested in the openmatrix documentation, the default when creating an OMX file
+	is to use zlib compression level 1, although this can be overridden.
+	"""
 
 	def __repr__(self):
 		from .util.text_manip import max_len
@@ -74,6 +79,13 @@ class OMX(_tb.file.File):
 
 	@property
 	def shape(self):
+		"""The shape of the OMX file.  
+		
+		As required by the standard, all OMX files must have a two dimensional shape. This 
+		attribute accesses or alters that shape. Note that attempting to change the 
+		shape of an existing file that already has data tables that would be incompatible
+		with the new shape will raise an OMXIncompatibleShape exception.
+		"""
 		sh = self.root._v_attrs.SHAPE[:]
 		proposal = (sh[0],sh[1])
 		if proposal==(0,0) and self.data._v_nchildren>0:
@@ -281,11 +293,11 @@ class OMX(_tb.file.File):
 
 
 	def import_datatable_as_lookups(self, filepath, chunksize=10000, column_map=None, log=None, n_rows=None, zone_ix=None, zone_ix1=1, drop_zone=None):
-		"""Import a table in r,c,x,x,x... format into the matrix.
+		"""Import a table in r_or_c,x,x,x... format into the matrix.
 		
-		The r and c columns need to be either 0-based or 1-based index values
+		The r_or_c column needs to be either 0-based or 1-based index values
 		(this may be relaxed in the future). The matrix must already be set up
-		with the correct size before importing the datatable.
+		with the correct shape before importing the datatable.
 		
 		Parameters
 		----------
@@ -379,6 +391,10 @@ class OMX(_tb.file.File):
 		----------
 		filepath : str or buffer
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		one_based : bool
+			If True (the default) it is assumed that zones are indexed sequentially starting with 1 
+			(as is typical for travel demand forecasting applications).
+			Otherwise, it is assumed that zones are indexed sequentially starting with 0 (typical for other c and python applications).
 		chunksize : int
 			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
 			chunks can be much faster and less memory intensive than reading the entire file.
@@ -438,12 +454,17 @@ class OMX(_tb.file.File):
 		(this may be relaxed in the future). The matrix must already be set up
 		with the correct size before importing the datatable.
 		
-		This method is more memory intensive but much faster than the non-3d version. 
+		This method is functionally the same as :meth:`import_datatable` but uses a different implementation.
+		It is much more memory intensive but also much faster than the non-3d version.
 		
 		Parameters
 		----------
 		filepath : str or buffer
 			This argument will be fed directly to the :func:`pandas.read_csv` function.
+		one_based : bool
+			If True (the default) it is assumed that zones are indexed sequentially starting with 1 
+			(as is typical for travel demand forecasting applications).
+			Otherwise, it is assumed that zones are indexed sequentially starting with 0 (typical for other c and python applications).
 		chunksize : int
 			The number of rows of the source file to read as a chunk.  Reading a giant file in moderate sized
 			chunks can be much faster and less memory intensive than reading the entire file.
@@ -527,19 +548,23 @@ class OMX(_tb.file.File):
 	def __getitem__(self, key):
 		if isinstance(key,str):
 			if key in self.data._v_children:
-				return self.data._v_children[key]
+				if key in self.lookup._v_children:
+					raise KeyError('key {} found in both data and lookup'.format(key))
+				else:
+					return self.data._v_children[key]
 			if key in self.lookup._v_children:
 				return self.lookup._v_children[key]
 			raise KeyError("matrix named {} not found".format(key))
 		raise TypeError("OMX matrix access must be by name (str)")
 
 	def __getattr__(self, key):
-		if key in self.data._v_children and key not in self.lookup._v_children:
-			return self.data._v_children[key]
-		if key not in self.data._v_children and key in self.lookup._v_children:
+		if key in self.data._v_children:
+			if key not in self.lookup._v_children:
+				return self.data._v_children[key]
+			else:
+				raise AttributeError('key {} found in both data and lookup'.format(key))
+		if key in self.lookup._v_children:
 			return self.lookup._v_children[key]
-		if key in self.data._v_children and key in self.lookup._v_children:
-			raise AttributeError('key {} found in both data and lookup'.format(key))
 		raise AttributeError('key {} not found'.format(key))
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):

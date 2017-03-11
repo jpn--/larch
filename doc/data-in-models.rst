@@ -13,6 +13,7 @@ been using the SQLite database interface.
 
 	Using SQLite <databases>
 	Using HDF5 <datatables>
+	Using OMX <openmatrix>
 	Abstract Data Interface <datafountain>
 
 
