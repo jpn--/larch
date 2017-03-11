@@ -221,7 +221,7 @@ def reproduce(n, extract='m'):
 	extract : str or iterable of str
 		The name of the object of the example to extract.  By default `m`
 		but it any named object that exists in the example namespace can
-		be returned.  Give a list of `str`s to get multiple objects.
+		be returned.  Give a list of `str` to get multiple objects.
 	'''
 	return _exec_example_n(n, extract=extract)
 

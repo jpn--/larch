@@ -22,20 +22,7 @@ example data files.
 
 .. automethod:: DT.CSV_idco
 
-
-
-Importing Data
---------------
-
-There are methods available to import data from external sources into
-the correct format for use with the larch DT facility.
-
-.. automethod:: DT.import_idco
-
-.. automethod:: DT.import_idca
-
-
-
+.. autofunction:: DTX
 
 Required HDF5 Structure
 -----------------------
@@ -202,6 +189,34 @@ To check if your file has the correct structure, you can use the validate functi
 
 
 
+
+Importing Data
+--------------
+
+There are methods available to import data from external sources into
+the correct format for use with the larch DT facility.
+
+.. automethod:: DT.import_idco
+
+.. automethod:: DT.import_idca
+
+.. automethod:: DT.merge_into_idco
+
+.. automethod:: DT.pluck_into_idco
+
+
+Creating Data
+-------------
+
+.. automethod:: DT.new_idco
+
+.. automethod:: DT.new_idca
+
+
+
+Special Data
+------------
+
 .. autoattribute:: DT.choice_idco
 
 .. autoattribute:: DT.avail_idco
@@ -223,6 +238,8 @@ that contains trips of many purposes).
 .. automethod:: DT.exclude_idco
 
 .. automethod:: DT.exclude_idca
+
+.. automethod:: DT.get_screen_indexes
 
 
 

@@ -208,6 +208,13 @@ class Model(Model2, ModelReporter):
 			is_it_there(self.nest[n].param, val=1)
 			
 	def setUp(self, *arg, **kwarg):
+		"""Set up the model for estimation or calculation.
+		
+		This method will set up the necessary data arrays and other structures necessary
+		to efficiently process calculations using the model.  It should generally be called
+		just before estimation (it is called for you if needed by the :meth:`maximize_loglike`
+		method) and after all model parameters and attributes are given.
+		"""
 		self._parameter_inclusion_check()
 		super().setUp(*arg, **kwarg)
 
@@ -1910,10 +1917,11 @@ class Model(Model2, ModelReporter):
 	@property
 	def preserve_casewise_logsums(self):
 		"""
-		Shall case-wise logsums be preserved when calculating the log likelihood?
+		A bool that indicates if case-wise logsums shall be preserved when calculating the log likelihood.
 		
 		If you don't need them for anything in particular, there's no reason to use memory to save them.
-		But if you do need them, it's much easier to save them than recreate them.
+		But if you do need them, it's much easier to save them than recreate them. The default value
+		for this attribute is False.
 		"""
 		return not(self.top_logsums_out is None)
 	

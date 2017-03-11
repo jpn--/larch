@@ -958,6 +958,20 @@ class DT(Fountain, Importer, Exporter):
 			return self.array_idca('_avail_', dtype=dtype, **kwargs)
 
 	def get_screen_indexes(self):
+		"""Get the index values of all currently active cases.
+		
+		Example
+		-------
+		>>> d = larch.DT.Example('swissmetro')
+		>>> d.get_screen_indexes()
+		array([   0,    1,    2, ..., 8448, 8449, 8450])
+		>>> d.nCases()
+		6768
+		>>> d.nAllCases()
+		10728
+		>>> d.get_screen_indexes().shape
+		(6768,)
+		"""
 		if 'screen' not in self.h5top:
 			return None
 		return numpy.nonzero(self.h5top.screen[:])[0]
@@ -2526,13 +2540,26 @@ class DT(Fountain, Importer, Exporter):
 
 	def merge_into_idco(self, other, self_on, other_on=None, dupe_suffix="_copy", original_source=None, names=None, log=lambda *x: None, **kwargs):
 		"""
-		Merge data into the idco of this DT.
+		Merge data into the idco group of this DT.
 		
 		Every case in the current (receiving) DT should match one or zero cases in the 
 		imported data.
 		
 		Parameters
 		----------
+		other : DT or pandas.DataFrame or str
+			The other data table to be merged.  Can be another DT, or a DataFrame, or the 
+			path to a file of type {csv, xlsx, dbf}.
+		self_on : label or list, or array-like
+			Field names to join on in this DT. Can be a vector or list of vectors
+			of length DT.nAllCases() to use a particular vector as the join key instead of columns
+		other_on : label or list, or array-like
+			Field names to join on in other DataFrame, or vector/list of vectors per self_on
+		dupe_suffix : str
+			A suffix to add to variables that duplicate variables names already in this DT
+		original_source : str, optional
+			Give the original source of this data.  If not given and the filename can be
+			inferred from other, that name will be used.
 		names : None or list or dict
 			If given as a list, only these names will be merged from the other data.  
 			If given as a dict, the keys are the names that will be merged and the 

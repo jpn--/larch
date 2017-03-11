@@ -162,8 +162,22 @@ def DTx(filename=None, *, caseids=None, alts=None, include_vault=True, **kwargs)
 
 	return d
 
-def DTL(source):
+def DTL(source, newfile=None):
+	"""Create a new DT with linked data.
+	
+	This special function creates a new DT object and individually links in
+	the caseids, alternatives, and the idca and idco data from the other
+	DT as read-only data nodes.
+	
+	Parameters
+	----------
+	source : DT
+		The original DT.
+	newfile : str, optional
+		A filename for the new file.
+	"""
+	
 	if isinstance(source, DT):
 		source.change_mode('r')
 		source = source.source_filename
-	return DTx(None, idco=source, idca=source)
+	return DTx(newfile, idco=source, idca=source)

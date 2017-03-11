@@ -76,49 +76,8 @@ Defining Utility
 .. autoattribute:: Model.quantity
 
 
-
-Using :class:`Model` Objects
--------------------------------
-
-.. py:method:: Model.maximize_loglike()
-
-	Find the likelihood maximizing parameters of the model, using the scipy.optimize module.
-	Depending on the model type and structure, various different optimization algorithms
-	may be used.
-
-	
-.. automethod:: Model.roll
-
-
-.. py:method:: Model.estimate()
-
-	Find the likelihood maximizing parameters of the model using deprecated Larch optimization
-	engine.  This engine has fewer algorithms available than the scipy.optimize and may perform
-	poorly for some model types, particularly cross-nested and network GEV models.  Users should
-	almost always prefer the :meth:`Model.maximize_loglike` function instead.
-
-
-
-
-.. py:method:: Model.loglike([values])
-
-	Find the log likelihood of the model.
-
-	:param values: If given, an array-like vector of values should be provided that
-                   will replace the current parameter values.  The vector must be exactly
-                   as long as the number of parameters in the model (including holdfast
-                   parameters).  If any holdfast parameter values differ in the provided
-                   `values`, the new values are ignored and a warning is emitted to the
-                   model logger.
-	:type values:  array-like, optional
-
-
-.. automethod:: Model.d_loglike([values])
-
-
-
-GEV Network
------------
+Nesting / GEV Network
+---------------------
 
 Nested logit and Network GEV models have an underlying network structure.
 
@@ -143,12 +102,60 @@ Nested logit and Network GEV models have an underlying network structure.
 .. autoattribute:: Model.quantity_scale
 
 
+
+
+Using :class:`Model` Objects
+-------------------------------
+
+.. py:method:: Model.maximize_loglike()
+
+	Find the likelihood maximizing parameters of the model, using the scipy.optimize module.
+	Depending on the model type and structure, various different optimization algorithms
+	may be used.
+
+	
+.. automethod:: Model.roll
+
+
+.. py:method:: Model.estimate()
+
+	.. deprecated:: 3.3
+		Use :meth:`Model.maximize_loglike` instead
+
+	Find the likelihood maximizing parameters of the model using deprecated Larch optimization
+	engine.  This engine has fewer algorithms available than the scipy.optimize and may perform
+	poorly for some model types, particularly cross-nested and network GEV models.  Users should
+	almost always prefer the :meth:`Model.maximize_loglike` function instead.
+
+
+
+
+.. py:method:: Model.loglike([values])
+
+	Find the log likelihood of the model.
+
+	:param values: If given, an array-like vector of values should be provided that
+                   will replace the current parameter values.  The vector must be exactly
+                   as long as the number of parameters in the model (including holdfast
+                   parameters).  If any holdfast parameter values differ in the provided
+                   `values`, the new values are ignored and a warning is emitted to the
+                   model logger.
+	:type values:  array-like, optional
+
+
+.. automethod:: Model.d_loglike([values])
+
+.. autoattribute:: Model.preserve_casewise_logsums
+
+.. automethod:: Model.setUp()
+
+
 Reporting Tools
 ---------------
 
 .. py:attribute:: Model.title
 
-	The is a descriptive title to attach to this model.  It is used in certain reports,
+	This string is a descriptive title to attach to this model.  It is used in certain reports,
 	and can be set to any string.  It has no bearing on the numerical representation of
 	the model.
 
