@@ -78,6 +78,7 @@ div.body h6 { font-size: 80%;  padding-left: 95px; }
 
 .trophyicon {
 	max-height: 32px !important;
+	max-width: 32px !important;
 	padding-right: 5px;
 }
 
