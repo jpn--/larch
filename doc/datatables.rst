@@ -22,7 +22,7 @@ example data files.
 
 .. automethod:: DT.CSV_idco
 
-.. autofunction:: DTX
+.. autofunction:: DTL
 
 Required HDF5 Structure
 -----------------------

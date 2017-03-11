@@ -962,6 +962,7 @@ class DT(Fountain, Importer, Exporter):
 		
 		Example
 		-------
+		>>> import larch
 		>>> d = larch.DT.Example('swissmetro')
 		>>> d.get_screen_indexes()
 		array([   0,    1,    2, ..., 8448, 8449, 8450])
