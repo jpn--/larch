@@ -327,7 +327,9 @@ shared_libs = [
 
 
 
-def build_sqlite(basepath=buildbase):
+def build_sqlite(basepath=None):
+	if basepath is None:
+		basepath = buildbase
 	from distutils.ccompiler import new_compiler
 
 	# Create compiler with default options
@@ -342,6 +344,7 @@ def build_sqlite(basepath=buildbase):
 		need_to_update = False
 		for eachsource in source:
 			try:
+				print("checking filemod time on",os.path.join(shlib_folder(basepath), dylib_name_style.format(name)))
 				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(shlib_folder(basepath), dylib_name_style.format(name))))
 			except FileNotFoundError:
 				need_to_update = True

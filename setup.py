@@ -109,7 +109,7 @@ else:
 		local_library_dirs = []
 		local_includedirs = []
 		local_macros = [('I_AM_MAC','1'), ('SQLITE_ENABLE_RTREE','1'), ]
-		local_extra_compile_args = ['-std=gnu++11', '-w', '-arch', 'i386', '-arch', 'x86_64']# +['-framework', 'Accelerate']
+		local_extra_compile_args = ['-std=gnu++11', '-stdlib=libc++', '-w', '-arch', 'i386', '-arch', 'x86_64']# +['-framework', 'Accelerate']
 		local_apsw_compile_args = ['-w']
 		local_extra_link_args =   ['-framework', 'Accelerate']
 		local_data_files = [('/usr/local/bin', [file_at('bin','larch')]), ]
@@ -294,6 +294,7 @@ else:
 			'Operating System :: MacOS :: MacOS X',
 			'Operating System :: Microsoft :: Windows',
 		  ],
+		  setup_requires=['nose>=1.3.7'],
 		 )
 
 
