@@ -7,12 +7,13 @@ import glob, time, platform, os, sysconfig, sys, shutil, io
 
 VERSION = '3.1.47'
 
-usedir = os.path.dirname(__file__)
-if sys.path[0] != usedir:
-	sys.path.insert(0, usedir)
+#usedir = os.path.dirname(__file__)
+#if sys.path[0] != usedir:
+#	sys.path.insert(0, usedir)
 
 def file_at(*arg):
-	return os.path.join(usedir, *arg)
+	#return os.path.join(usedir, *arg)
+	return os.path.join(*arg)
 
 
 import numpy
@@ -344,7 +345,7 @@ def build_sqlite(basepath=None):
 		need_to_update = False
 		for eachsource in source:
 			try:
-				print("checking filemod time on",os.path.join(shlib_folder(basepath), dylib_name_style.format(name)))
+				print("checking filemod time on",eachsource,' vs ',os.path.join(shlib_folder(basepath), dylib_name_style.format(name)))
 				need_to_update = need_to_update or (os.path.getmtime(eachsource) > os.path.getmtime(os.path.join(shlib_folder(basepath), dylib_name_style.format(name))))
 			except FileNotFoundError:
 				need_to_update = True

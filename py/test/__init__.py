@@ -79,9 +79,12 @@ if NOSE_VERBOSITY>2:
 
 _multiprocess_shared_ = True
 
-def simple():
+def simple(fail_fast=False):
 	import nose
-	return nose.run(argv=['-','--where='+os.path.split(__file__)[0],'--verbosity=3'])
+	argv=['-','--where='+os.path.split(__file__)[0],'--verbosity=3']
+	if fail_fast:
+		argv += ['--stop',]
+	return nose.run(argv=argv)
 
 def these(*args):
 	import nose
@@ -97,7 +100,7 @@ def these(*args):
 
 # nosetests /Users/jpn/anaconda/local/larch/test/test_mnl.py:TestMNL.test_qmnl_with_theta --verbosity=3
 
-def run(exit=False):
+def run(exit=False, fail_fast=False):
 	print("<"*30,"larch.test",">"*30)
 	print("FROM:",os.path.split(__file__)[0])
 	try:
@@ -108,7 +111,7 @@ def run(exit=False):
 	print("BUILD:", build)
 	print("CONFIG:", build_config)
 	print(">"*30,"larch.test","<"*30)
-	result = simple()
+	result = simple(fail_fast=fail_fast)
 	if exit:
 		import sys
 		sys.exit(0 if result else -1)
