@@ -10,8 +10,12 @@ This data format rests on HDF5, the exact same underlying technology used in
 :class:`DT` files.  This makes merging and linking to open matrix data easy and
 fun. :sup:`[citation needed]`
 
-.. autoclass:: OMX(filename)
+.. py:class:: OMX(filename)
 
+	A subclass of the :class:`tables.File` class, adding an interface for openmatrix files.
+	
+	As suggested in the openmatrix documentation, the default when creating an OMX file
+	is to use zlib compression level 1, although this can be overridden.
 
 
 .. |idca| replace:: :ref:`idca <idca>`
