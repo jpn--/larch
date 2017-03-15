@@ -18,6 +18,11 @@ fun. :sup:`[citation needed]`
 	is to use zlib compression level 1, although this can be overridden.
 
 
+
+.. automethod:: OMX.import_datatable
+
+
+
 .. |idca| replace:: :ref:`idca <idca>`
 .. |idco| replace:: :ref:`idco <idco>`
 
