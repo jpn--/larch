@@ -211,6 +211,7 @@ class XhtmlModelReporter():
 			The report content. You need to save it to a file on your own,
 			if desired.
 
+
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> from larch.util.temporaryfile import TemporaryHtml
 		>>> html = m.xhtml_report_v0()
@@ -1299,7 +1300,8 @@ class XhtmlModelReporter():
 		-------
 		larch.util.xhtml.Elem
 			A div containing the model parameters.
-		
+
+	
 		>>> from larch.util.categorize import Categorizer, Renamer
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> param_groups = [
@@ -1333,7 +1335,8 @@ class XhtmlModelReporter():
 		-------
 		larch.util.xhtml.Elem
 			A div containing the model parameters.
-		
+
+
 		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> m.xhtml('title', 'll')
@@ -1581,7 +1584,8 @@ class XhtmlModelReporter():
 		-------
 		larch.util.xhtml.Elem
 			A div containing the summary statistics for choice and availability.
-		
+
+
 		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> m.df = larch.DT.Example('MTC')
@@ -1714,7 +1718,8 @@ class XhtmlModelReporter():
 		-------
 		larch.util.xhtml.Elem
 			A div containing the summary statistics for choice and availability.
-		
+
+
 		>>> from larch.util.xhtml import XHTML
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> m.df = larch.DT.Example('MTC')
