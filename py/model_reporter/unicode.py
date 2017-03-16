@@ -116,9 +116,8 @@ class UnicodeModelReporter():
 		-------
 		str
 			A unicode string containing the model parameters in a rectangular table.
-		
-		Example
-		-------
+
+
 		>>> from larch.util.pmath import category, rename
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> param_groups = [
@@ -139,7 +138,6 @@ class UnicodeModelReporter():
 		...              'hhinc#6'   ),
 		... ]
 		>>> m.unicode_params(param_groups)
-		
 		 Model Parameter Estimates
 		┌──────────┬───────────────┬──────────┬──────┬──────────┐
 		│Parameter │Estimated Value│Std Error │t-Stat│Null Value│
@@ -179,12 +177,10 @@ class UnicodeModelReporter():
 		-------
 		str
 			A unicode string containing the model estimation statistics.
-		
-		Example
-		-------
+
+
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> m.unicode_ll()
-
 		 Model Estimation Statistics
 		┌──────────────────────────────────┬─────────┬────────┐
 		│Statistic                         │Aggregate│Per Case│
