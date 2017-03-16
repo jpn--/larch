@@ -2,9 +2,15 @@
 import tables as _tb
 import numpy
 import pandas
+import os
 from .core import LarchError
 from .util import dicta
 import warnings
+
+if (os.environ.get('READTHEDOCS', None) == 'True'):
+	_omx_base_class = _tb.file.File
+else:
+	_omx_base_class = object
 
 class OMXBadFormat(LarchError):
 	pass
@@ -15,7 +21,7 @@ class OMXIncompatibleShape(OMXBadFormat):
 class OMXNonUniqueLookup(LarchError):
 	pass
 
-class OMX(_tb.file.File):
+class OMX(_omx_base_class):
 	"""A subclass of the :class:`tables.File` class, adding an interface for openmatrix files.
 	
 	As suggested in the openmatrix documentation, the default when creating an OMX file
