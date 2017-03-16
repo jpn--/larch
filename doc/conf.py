@@ -75,7 +75,7 @@ larch_versions = {
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
 	'sphinx.ext.autodoc',
-#	'numpydoc',
+	'numpydoc',
 #	'sphinxcontrib.napoleon',
 	'sphinx.ext.napoleon',
 #	'sphinx.ext.viewcode',
