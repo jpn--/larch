@@ -8,9 +8,9 @@ from .util import dicta
 import warnings
 
 if (os.environ.get('READTHEDOCS', None) == 'True'):
-	_omx_base_class = _tb.file.File
-else:
 	_omx_base_class = object
+else:
+	_omx_base_class = _tb.file.File
 
 class OMXBadFormat(LarchError):
 	pass
