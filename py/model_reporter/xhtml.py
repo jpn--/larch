@@ -213,7 +213,6 @@ class XhtmlModelReporter():
 
 		Example
 		-------
-		
 		>>> m = larch.Model.Example(1, pre=True)
 		>>> from larch.util.temporaryfile import TemporaryHtml
 		>>> html = m.xhtml_report_v0()

@@ -960,8 +960,11 @@ class DT(Fountain, Importer, Exporter):
 	def get_screen_indexes(self):
 		"""Get the index values of all currently active cases.
 		
-		Example
-		-------
+		This is just the active cases, and omits those cases
+		that are excluded.  Also, it returns the zero-based indexes and not the
+		caseids, making this method useful for mapping a vector of filtered data
+		into a vector of all-cases data, or vice versa.
+		
 		>>> import larch
 		>>> d = larch.DT.Example('swissmetro')
 		>>> d.get_screen_indexes()
