@@ -1880,7 +1880,10 @@ class Model(Model2, ModelReporter):
 			v = numpy.asarray(self.parameter_values())
 		if out is None or out.shape!=(s,s):
 			out = numpy.empty([s,s], dtype=numpy.float64)
-		for n in range(s):
+		
+		from .util.progressbar import progressbar
+		
+		for n in progressbar(s, desc='Hessian', leave=False, unit='grad'):
 			if self.parameter_holdfast_array[n]!=0:
 				continue
 			jiggle = (self[n].value * 1e-5) or 1e-5;
