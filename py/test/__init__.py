@@ -111,6 +111,8 @@ def run(exit=False, fail_fast=False):
 	print("BUILD:", build)
 	print("CONFIG:", build_config)
 	print(">"*30,"larch.test","<"*30)
+	from ..util.progressbar import deactivate
+	deactivate()
 	result = simple(fail_fast=fail_fast)
 	if exit:
 		import sys

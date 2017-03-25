@@ -239,6 +239,23 @@ class AbstractReportTable():
 		self.df.iloc[j, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
 		self._col_width = None
 
+	def set_jrow_iloc_nondupe(self, j, colnum, val, attrib=None, anchorlabel=None):
+		try:
+			val_text = val.text
+		except AttributeError:
+			val_text = str(val)
+		prev = j-1
+		prev_text = None
+		try:
+			while prev_text is None:
+				prev -= 1
+				prev_text = self.get_text_iloc(prev,colnum, missing=None)
+			if prev_text!=val_text:
+				raise NameError
+		except (NameError, IndexError):
+			self.df.iloc[j, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
+			self._col_width = None
+
 
 	def set_lastrow_iloc(self, colnum, val, attrib=None, anchorlabel=None):
 		self.df.iloc[-1, colnum] = self.encode_cell_value(val, attrib, anchorlabel=anchorlabel)
@@ -1090,16 +1107,23 @@ class ArtModelReporter():
 	
 		es = self._get_estimation_statistics()
 
-		x = AbstractReportTable(columns=["attr", "subattr", "value", ])
-		x.silent_first_col_break = True
-		x.n_thead_rows = 0
-		
-		x.title = "Latest Estimation Run Statistics"
-		x.short_title = "Latest Estimation Run"
+		temp_list = [] # temp list
+
+#		x = AbstractReportTable(columns=["attr", "subattr", "value", ])
+#		x.silent_first_col_break = True
+#		x.n_thead_rows = 0
+#		
+#		x.title = "Latest Estimation Run Statistics"
+#		x.short_title = "Latest Estimation Run"
 
 		try:
 			last = self.maximize_loglike_results
 		except AttributeError:
+			x = AbstractReportTable(columns=["attr", "subattr", "value", ])
+			x.silent_first_col_break = True
+			x.n_thead_rows = 0
+			x.title = "Latest Estimation Run Statistics"
+			x.short_title = "Latest Estimation Run"
 			x.add_blank_row()
 			x.set_lastrow_iloc(0, "Warning")
 			x.set_lastrow_iloc(2, "Latest estimation run statistics not available")
@@ -1109,75 +1133,40 @@ class ArtModelReporter():
 		except AttributeError:
 			pass
 		else:
-			x.add_blank_row()
-			x.set_lastrow_iloc(0, "Estimation Date")
-			x.set_lastrow_iloc(2, last_stat.timestamp)
+			temp_list += [("Estimation Date", None, last_stat.timestamp),]
 
-			x.add_blank_row()
-			x.set_lastrow_iloc(0, "Results")
-			x.set_lastrow_iloc(2, last_stat.results)
+			temp_list += [("Results", None, last_stat.results),]
 
 			if len(last.intermediate) > 1:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Messages")
-				x.set_lastrow_iloc(1, "Final")
-				x.set_lastrow_iloc(2, str(last.message))
+				temp_list += [("Messages", "Final", str(last.message)),]
 				for intermed in last.intermediate:
-					x.add_blank_row()
-					x.set_lastrow_iloc_nondupe(0, "Messages")
-					x.set_lastrow_iloc(1, intermed.method)
-					x.set_lastrow_iloc(2, intermed.message)
+					temp_list += [("Messages", intermed.method, intermed.message),]
 			else:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Message")
-				x.set_lastrow_iloc(2, str(last.message))
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Optimization Method")
-				x.set_lastrow_iloc(2, last.intermediate[0].method)
-			
+				temp_list += [("Message", None, str(last.message)),]
+				temp_list += [("Optimization Method", None, last.intermediate[0].method),]
 
 			if len(last.niter) > 1:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Number of Iterations")
-				x.set_lastrow_iloc(1, "Total")
-				x.set_lastrow_iloc(2, last_stat.iteration)
+				temp_list += [("Number of Iterations", "Total", last_stat.iteration),]
 				for iter in last.niter:
-					x.add_blank_row()
-					x.set_lastrow_iloc_nondupe(0, "Number of Iterations")
-					x.set_lastrow_iloc(1, iter[0])
-					x.set_lastrow_iloc(2, iter[1])
+					temp_list += [("Number of Iterations", iter[0], iter[1]),]
 			else:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Number of Iterations")
-				x.set_lastrow_iloc(2, last_stat.iteration)
+				temp_list += [("Number of Iterations", None, last_stat.iteration),]
 
 			if len(last.intermediate) > 1:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Log Likelihood")
-				x.set_lastrow_iloc(1, "Final")
-				x.set_lastrow_iloc(2, str(last.loglike))
+				temp_list += [("Log Likelihood", "Final", str(last.loglike)),]
 				for intermed in last.intermediate:
-					x.add_blank_row()
-					x.set_lastrow_iloc_nondupe(0, "Log Likelihood")
-					x.set_lastrow_iloc(1, intermed.method)
 					try:
-						x.set_lastrow_iloc(2, str(-intermed.fun))
+						temp_tuple = ("Log Likelihood", intermed.method, str(-intermed.fun))
 					except AttributeError:
-						x.set_lastrow_iloc(2, str("err: no fun"))
-
+						temp_tuple = ("Log Likelihood", intermed.method, str("err: no fun"))
+					temp_list += [temp_tuple,]
 
 			seconds = last_stat.dictionary()['total_duration_seconds']
 			tformat = "{}\t{}".format(*format_seconds(seconds))
-			x.add_blank_row()
-			x.set_lastrow_iloc_nondupe(0, "Running Time")
-			x.set_lastrow_iloc(1, "Total")
-			x.set_lastrow_iloc(2, "{0}".format(tformat,**format))
+			temp_list += [("Running Time", "Total", "{0}".format(tformat,**format)),]
 			for label, dur in zip(last_stat.process_label,last_stat.dictionary()['process_durations']):
-				x.add_blank_row()
-				x.set_lastrow_iloc_nondupe(0, "Running Time")
-				x.set_lastrow_iloc(1, label)
-				x.set_lastrow_iloc(2, "{0}".format(dur,**format))
-				
+				temp_list += [("Running Time", label, "{0}".format(dur,**format)),]
+
 			i = last_stat.notes()
 			if i is not '':
 				if isinstance(i,str):
@@ -1185,78 +1174,40 @@ class ArtModelReporter():
 				if isinstance(i,list):
 					if len(i)>1:
 						for inum, ii in enumerate(i):
-							x.add_blank_row()
-							x.set_lastrow_iloc_nondupe(0, "Notes")
-							x.set_lastrow_iloc(1, "({})".format(inum))
-							x.set_lastrow_iloc(2, str(ii))
+							temp_list += [("Notes", "({})".format(inum), str(ii)),]
 					else:
 						for ii in i:
-							x.add_blank_row()
-							x.set_lastrow_iloc_nondupe(0, "Notes")
-							x.set_lastrow_iloc(2, str(ii))
+							temp_list += [("Notes", None, str(ii)),]
 				else:
+					temp_list += [("Notes", None, str(i)),]
 					x.add_blank_row()
-					x.set_lastrow_iloc_nondupe(0, "Notes")
-					x.set_lastrow_iloc(2, str(i))
+					x.set_lastrow_iloc_nondupe(0, )
+					x.set_lastrow_iloc(2, )
 
-			import socket
-			fqdn = socket.getfqdn()
-			if fqdn:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Computer")
-				x.set_lastrow_iloc(2, fqdn)
+#			import socket
+#			fqdn = socket.getfqdn()
+#			if fqdn:
+#				temp_list += [("Computer", None, fqdn),]
+			# platform.node is much faster
+			import platform
+			compy = platform.node()
+			if compy:
+				temp_list += [("Computer", None, compy),]
 
 			i = last_stat.processor
-#			try:
-#				from ..util.sysinfo import get_processor_name
-#				i2 = get_processor_name()
-#				if isinstance(i2,bytes):
-#					i2 = i2.decode('utf8')
-#			except:
-#				i2 = None
-#			if i is not '':
-#				x.add_blank_row()
-#				x.set_lastrow_iloc(0, "Processor")
-#				x.set_lastrow_iloc(2, str(i))
-#				if i2 is not None:
-#					x.add_blank_row()
-#					x.set_lastrow_iloc_nondupe(0, "Processor")
-#					x.set_lastrow_iloc(1, "Detail")
-#					x.set_lastrow_iloc(2, str(i2))
-			x.add_blank_row()
-			x.set_lastrow_iloc(0, "Processor")
-			x.set_lastrow_iloc(2, i)
+			temp_list += [("Processor", None, i),]
 
-			x.add_blank_row()
-			x.set_lastrow_iloc(0, "Number of CPU Cores")
-			x.set_lastrow_iloc(2, last_stat.number_cpu_cores)
+			temp_list += [("Number of CPU Cores", None, last_stat.number_cpu_cores),]
 
-			x.add_blank_row()
-			x.set_lastrow_iloc(0, "Number of Threads Used")
-			x.set_lastrow_iloc(2, last_stat.number_threads)
+			temp_list += [("Number of Threads Used", None, last_stat.number_threads),]
 
 			# installed memory
-#			try:
-#				import psutil
-#			except ImportError:
-#				pass
-#			else:
-#				mem = psutil.virtual_memory().total
-#				if mem >= 2.0*2**30:
-#					mem_size = str(mem/2**30) + " GiB"
-#				else:
-#					mem_size = str(mem/2**20) + " MiB"
-#				x.add_blank_row()
-#				x.set_lastrow_iloc(0, "Installed Memory")
-#				x.set_lastrow_iloc(2, "{0}".format(mem_size,**format))
 			try:
 				mem_size = last.installed_memory
 			except AttributeError:
 				pass
 			else:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Installed Memory")
-				x.set_lastrow_iloc(2, "{0}".format(mem_size,**format))
+				temp_list += [("Installed Memory", None, "{0}".format(mem_size,**format)),]
 
 			# peak memory usage
 			try:
@@ -1264,9 +1215,21 @@ class ArtModelReporter():
 			except AttributeError:
 				pass
 			else:
-				x.add_blank_row()
-				x.set_lastrow_iloc(0, "Peak Memory Usage")
-				x.set_lastrow_iloc(2, "{0}".format(peak,**format))
+				temp_list += [("Peak Memory Usage", None, "{0}".format(peak,**format)),]
+
+		# Now actually build the ART in one pass
+		x = AbstractReportTable(columns=["attr", "subattr", "value", ], n_rows=len(temp_list))
+		x.silent_first_col_break = True
+		x.n_thead_rows = 0
+		
+		x.title = "Latest Estimation Run Statistics"
+		x.short_title = "Latest Estimation Run"
+		for j,row in enumerate(temp_list):
+				x.set_jrow_iloc_nondupe(j, 0, row[0])
+				if row[1] is not None:
+					x.set_jrow_iloc(j, 1, row[1])
+				if row[2] is not None:
+					x.set_jrow_iloc(j, 2, row[2])
 		return x
 
 
