@@ -135,7 +135,10 @@ class OMX(_omx_base_class):
 				self.add_lookup(i, self.lookup._v_children[i][:shape0], overwrite=True, complevel=complevel, complib=complib, ignore_shape=True)
 			elif self.lookup[i].shape[1] == start1:
 				self.add_lookup(i, self.lookup._v_children[i][:shape1], overwrite=True, complevel=complevel, complib=complib, ignore_shape=True)
-		self.shape = (shape0, shape1)
+		shp = numpy.empty(2, dtype=int)
+		shp[0] = shape0
+		shp[1] = shape1
+		self.root._v_attrs.SHAPE = shp
 
 
 	def add_blank_lookup(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
