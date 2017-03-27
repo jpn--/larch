@@ -119,7 +119,8 @@ else:
 		buildbase = None
 	elif platform.system() == 'Windows':
 		#old openblas = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libopenblas.dll'
-		openblas = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libopenblas.dll'
+#		openblas = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libopenblas.dll'
+		openblas = 'lib', 'libopenblas.dll'
 		#gfortran = 'OpenBLAS-v0.2.9.rc2-x86_64-Win', 'lib', 'libgfortran-3.dll'
 		gfortran = 'OpenBLAS-v0.2.15-Win64-int32', 'lib', 'libgfortran-3.dll'
 		mingw64_path = 'OpenBLAS-v0.2.15-Win64-int32', 'lib',
@@ -127,22 +128,28 @@ else:
 		mingw64_libs = [i+'.dll' for i in mingw64_dlls]
 		local_swig_opts = []
 		local_libraries = ['PYTHON3{}'.format(sys.version_info.minor),'libopenblas',]+mingw64_dlls+['PYTHON3{}'.format(sys.version_info.minor),]
-		if os.path.exists('Z:/CommonRepo/'):
-			local_library_dirs = [
-				'Z:/CommonRepo/{0}/{1}'.format(*openblas),
-			#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
-				]
-			local_includedirs = [
-				'Z:/CommonRepo/{0}/include'.format(*openblas),
-			#	'C:/local/boost_1_56_0',
-				 ]
-		else:
-			local_library_dirs = [
-				'C:/Users/jnewman/Documents/GitHub/{0}/{1}'.format(*openblas),
-				]
-			local_includedirs = [
-				'C:/Users/jnewman/Documents/GitHub/{0}/include'.format(*openblas),
-				 ]
+		
+		openblas_dir = os.path.join(os.getenv('temp'),'openblas')
+		
+		local_library_dirs = [os.path.join(openblas_dir,'lib'),]
+		local_includedirs = [os.path.join(openblas_dir,'include'),]
+		
+#		if os.path.exists('Z:/CommonRepo/'):
+#			local_library_dirs = [
+#				'Z:/CommonRepo/{0}/{1}'.format(*openblas),
+#			#	'C:\\local\\boost_1_56_0\\lib64-msvc-10.0',
+#				]
+#			local_includedirs = [
+#				'Z:/CommonRepo/{0}/include'.format(*openblas),
+#			#	'C:/local/boost_1_56_0',
+#				 ]
+#		else:
+#			local_library_dirs = [
+#				'C:/Users/jnewman/Documents/GitHub/{0}/{1}'.format(*openblas),
+#				]
+#			local_includedirs = [
+#				'C:/Users/jnewman/Documents/GitHub/{0}/include'.format(*openblas),
+#				 ]
 		local_macros = [('I_AM_WIN','1'),  ('SQLITE_ENABLE_RTREE','1'), ]
 		local_extra_compile_args = ['/EHsc', '/W0', ]
 		#  for debugging...
@@ -192,9 +199,9 @@ else:
 			shutil.copyfile(os.path.join('Z:/CommonRepo',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
 	else:
 		if openblas is not None:
-			shutil.copyfile(os.path.join('C:/Users/jnewman/Documents/GitHub',*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
+			shutil.copyfile(os.path.join(openblas_dir,*openblas), os.path.join(shlib_folder(buildbase),openblas[-1]))
 		for dll in mingw64_libs:
-			shutil.copyfile(os.path.join('C:/Users/jnewman/Documents/GitHub',*(mingw64_path+(dll,))), os.path.join(shlib_folder(buildbase),dll))
+			shutil.copyfile(os.path.join(openblas_dir,'lib',dll), os.path.join(shlib_folder(buildbase),dll))
 
 	swig_files = [file_at('src/swig/elmcore.i'),]
 	swig_opts = ['-modern', '-py3',
