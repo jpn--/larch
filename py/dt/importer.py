@@ -347,6 +347,8 @@ class Importer():
 
 		alt_labels = None
 		if 'altids' not in self.alts:
+			if altids.dtype == numpy.int32:
+				altids = altids.astype(numpy.int64)
 			if altids.dtype != numpy.int64:
 				from ..util.arraytools import labels_to_unique_ids
 				alt_labels, altids = labels_to_unique_ids(altids)

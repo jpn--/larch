@@ -463,6 +463,8 @@ class DT(Fountain, Importer, Exporter):
 		self.remove_node_if_exists(self.alts._v_node, 'names')
 		# Make new ones
 		altids = numpy.asarray(altids)
+		if altids.dtype == numpy.int32:
+			altids = altids.astype(numpy.int64)
 		if altids.dtype != numpy.int64:
 			from ..util.arraytools import labels_to_unique_ids
 			alt_labels, altids = labels_to_unique_ids(altids)
