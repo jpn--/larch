@@ -133,7 +133,7 @@ def roll(self, filename=None, loglevel=baselogging.INFO, cats='-', use_ce=False,
 		.strut2 {min-width:1in}
 		"""
 
-	with XHTML(use_filename, quickhead=m, css=css) as f:
+	with XHTML(use_filename, quickhead=m, embed_model=m, css=css) as f:
 		f << m.report(cats=cats, style='xml', **format)
 		if sourcecode:
 			f << xhtml_rawtext_as_div(filename=sourcefile, classtype='raw_source', title="Source Code")

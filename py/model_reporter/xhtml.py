@@ -282,7 +282,7 @@ class XhtmlModelReporter():
 			x = Elem('div', {'class':'model_report'})
 		else:
 			import base64
-			x = XHTML(quickhead=self)
+			x = XHTML(quickhead=self,embed_model=self)
 
 		icats = iter(cats) # do not know why this is important, but crashes sometimes without it
 
@@ -414,7 +414,7 @@ class XhtmlModelReporter():
 			x = Elem('div', {'class':'model_report'})
 		else:
 			import base64
-			x = XHTML(quickhead=self)
+			x = XHTML(quickhead=self,embed_model=self)
 
 		icats = iter(self._inflate_cats(cats)) # do not know why this is important, but crashes sometimes without it
 
@@ -554,7 +554,7 @@ class XhtmlModelReporter():
 				elif isinstance(arg, list):
 					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
 			if filename is not None or return_html or self._return_xhtml:
-				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
+				with XHTML(quickhead=self._model, embed_model=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
 					f << div
 					if return_html or self._return_xhtml:
 						temphtml = f.dump()

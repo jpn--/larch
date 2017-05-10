@@ -319,7 +319,7 @@ class XML_Builder(TreeBuilder):
 
 class XHTML():
 	"""A class used to conveniently build xhtml documents."""
-	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True, floating_tablehead=True):
+	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True, floating_tablehead=True, embed_model=None):
 		self.view_on_exit = view_on_exit
 		self.root = Elem(tag="html", xmlns="http://www.w3.org/1999/xhtml")
 		self.head = Elem(tag="head")
@@ -441,13 +441,14 @@ class XHTML():
 			except AttributeError:
 				pass
 			self.style.text = css.replace('\n',' ').replace('\t',' ')
-			self.head << Elem(tag="meta", name='pymodel', content=base64.standard_b64encode(quickhead.__getstate__()).decode('ascii'))
 		else:
 			if css is None:
 				css = default_css
 			if extra_css is not None:
 				css += extra_css
 			self.style.text = css.replace('\n',' ').replace('\t',' ')
+		if embed_model is not None:
+			self.head << Elem(tag="meta", name='pymodel', content=base64.standard_b64encode(embed_model.__getstate__()).decode('ascii'))
 
 
 	def __enter__(self):
