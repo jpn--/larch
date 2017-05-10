@@ -479,7 +479,7 @@ class XhtmlModelReporter():
 					pass
 				try:
 					candidate = self._model._user_defined_xhtml[key.casefold()]
-				except (AttributeError, KeyError):
+				except (AttributeError, KeyError, TypeError):
 					pass
 				if candidate is None:
 					#raise TypeError("xml builder for '{}' not found".format(key.casefold()))
