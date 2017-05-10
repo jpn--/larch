@@ -697,7 +697,7 @@ class DT(Fountain, Importer, Exporter):
 			An array with specified dtype, of shape (n_cases,n_alts,len(vars)).
 			
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num
 		from ..util.pytables_addon import select_with_repeated1
 		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
@@ -800,7 +800,7 @@ class DT(Fountain, Importer, Exporter):
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num
 		from ..util.pytables_addon import select_with_repeated1
 		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
@@ -869,7 +869,7 @@ class DT(Fountain, Importer, Exporter):
 		-------
 		pandas.DataFrame
 		"""
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num
 		from ..util.pytables_addon import select_with_repeated1
 		from ..util.aster import inXd
 		screen, n_cases = self.process_proposed_screen(screen)
@@ -1406,7 +1406,7 @@ class DT(Fountain, Importer, Exporter):
 			return True
 		if self._check_co_natural(column):
 			return True
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num
 		from ..util.pytables_addon import validate_with_repeated1
 		from ..util.aster import inXd
 		try:
@@ -1437,7 +1437,7 @@ class DT(Fountain, Importer, Exporter):
 	def check_co(self, column, raise_exception=False):
 		if self._check_co_natural(column):
 			return True
-		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num
 		from ..util.pytables_addon import validate_with_repeated1
 		from ..util.aster import inXd
 		try:
