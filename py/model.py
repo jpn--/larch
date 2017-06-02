@@ -528,6 +528,7 @@ class Model(Model2, ModelReporter):
 				self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
+		import pickle
 		_Str = lambda s: (base64.standard_b64decode(s)).decode()
 		if use_base64:
 			content = base64.standard_b64decode(content)
@@ -537,7 +538,6 @@ class Model(Model2, ModelReporter):
 				content = zlib.decompress(content)
 			except zlib.error:
 				pass
-			import pickle
 			try:
 				content = pickle.loads(content)
 			except pickle.UnpicklingError:
