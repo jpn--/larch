@@ -27,7 +27,8 @@ except ImportError:
 def activate():
 	global progressbar
 	if jupyter_active:
-		progressbar = tnrange
+#		progressbar = tnrange
+		progressbar = trange
 	else:
 		progressbar = trange
 
