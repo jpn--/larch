@@ -319,7 +319,7 @@ class XML_Builder(TreeBuilder):
 
 class XHTML():
 	"""A class used to conveniently build xhtml documents."""
-	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True, floating_tablehead=True, embed_model=None):
+	def __init__(self, filename=None, *, overwrite=False, spool=True, quickhead=None, css=None, extra_css=None, view_on_exit=True, jquery=True, jqueryui=True, floating_tablehead=True, embed_model=None, toc=True):
 		self.view_on_exit = view_on_exit
 		self.root = Elem(tag="html", xmlns="http://www.w3.org/1999/xhtml")
 		self.head = Elem(tag="head")
@@ -390,39 +390,68 @@ class XHTML():
 		self.head << self.favicon
 		self.head << self.title
 		self.head << self.style
-		toc_width = 200
+
 		self.toc_color = 'lime'
-		default_css = _default_css + """
+		
+		if toc:
+			self.with_toc = True
+			toc_width = 200
+			default_css = _default_css + """
+				
+			body { margin-left: """+str(toc_width)+"""px; }
+			.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px; z-index:2000;}
+			.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%;}
+			.table_of_contents_head { font-weight:700; padding-left:25px;  }
+			.table_of_contents ul { padding-left:25px;  }
+			.table_of_contents ul ul { font-size:75%; padding-left:15px; }
+			.larch_signature {""" + styles.signature_font + """ width: """+str(toc_width-30)+"""px; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
+			.larch_name_signature {""" + styles.signature_name_font + """}
+			a.parameter_reference {font-style: italic; text-decoration: none}
+			.strut2 {min-width:2in}
+			.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+			table.floatinghead thead {background-color:#FFF;}
+			table.dataframe thead {background-color:#FFF;}
+			@media print {
+			   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
+			   /*.table_of_contents { display: none; }*/
+			   @page {
+				  margin: 1in;
+			   }
+			   h1, h2, h3 { page-break-after: avoid; }
+			   img { max-width: 100% !important; }
+			   ul, img, table { page-break-inside: avoid; }
+			   .larch_signature {""" + styles.signature_font + """ padding:0; background-color:#fff; position: fixed; bottom: 0;}
+			   .larch_name_signature {""" + styles.signature_name_font + """}
+			   .larch_signature img {display:none;}
+			   .larch_signature .noprint {display:none;}
+			}
+			"""
+		else:
+			self.with_toc = False
+			default_css = _default_css + """
 			
-		body { margin-left: """+str(toc_width)+"""px; }
-		.table_of_contents_frame { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; top:0; padding-top:10px; z-index:2000;}
-		.table_of_contents { width: """+str(toc_width-13)+"""px; position: fixed; margin-left: -"""+str(toc_width)+"""px; font-size:85%;}
-		.table_of_contents_head { font-weight:700; padding-left:25px;  }
-		.table_of_contents ul { padding-left:25px;  }
-		.table_of_contents ul ul { font-size:75%; padding-left:15px; }
-		.larch_signature {""" + styles.signature_font + """ width: """+str(toc_width-30)+"""px; position: fixed; left: 0px; bottom: 0px; padding-left:20px; padding-bottom:2px; background-color:rgba(255,255,255,0.9);}
-		.larch_name_signature {""" + styles.signature_name_font + """}
-		a.parameter_reference {font-style: italic; text-decoration: none}
-		.strut2 {min-width:2in}
-		.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
-		table.floatinghead thead {background-color:#FFF;}
-		table.dataframe thead {background-color:#FFF;}
-		@media print {
-		   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
-		   /*.table_of_contents { display: none; }*/
-		   @page {
-			  margin: 1in;
-		   }
-		   h1, h2, h3 { page-break-after: avoid; }
-		   img { max-width: 100% !important; }
-		   ul, img, table { page-break-inside: avoid; }
-		   .larch_signature {""" + styles.signature_font + """ padding:0; background-color:#fff; position: fixed; bottom: 0;}
-		   .larch_name_signature {""" + styles.signature_name_font + """}
-		   .larch_signature img {display:none;}
-		   .larch_signature .noprint {display:none;}
-		}
-		}
-		"""
+		   .larch_signature {""" + styles.signature_font + """ padding:0; background-color:#fff; }
+			.larch_name_signature {""" + styles.signature_name_font + """}
+			a.parameter_reference {font-style: italic; text-decoration: none}
+			.strut2 {min-width:2in}
+			.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+			table.floatinghead thead {background-color:#FFF;}
+			table.dataframe thead {background-color:#FFF;}
+			@media print {
+			   body { color: #000; background: #fff; width: 100%; margin: 0; padding: 0;}
+			   /*.table_of_contents { display: none; }*/
+			   @page {
+				  margin: 1in;
+			   }
+			   h1, h2, h3 { page-break-after: avoid; }
+			   img { max-width: 100% !important; }
+			   ul, img, table { page-break-inside: avoid; }
+			   .larch_signature {""" + styles.signature_font + """ padding:0; background-color:#fff; position: fixed; bottom: 0;}
+			   .larch_name_signature {""" + styles.signature_name_font + """}
+			   .larch_signature img {display:none;}
+			   .larch_signature .noprint {display:none;}
+			}
+			"""
 
 		css = styles.load_css(css)
 
@@ -458,7 +487,7 @@ class XHTML():
 			#traceback.print_exception(type, value, traceback)
 			return False
 		else:
-			self.dump()
+			self.dump(toc=self.with_toc)
 			if self.view_on_exit:
 				self.view()
 			self._f.close()
@@ -633,6 +662,8 @@ class XHTML():
 			self.body.append(node)
 		elif hasattr(node, '__xml__'):
 			self.body.append(node.__xml__())
+		elif node is None:
+			pass
 		else:
 			raise TypeError("must be xml.etree.ElementTree.Element or XML_Builder or TreeBuilder or something with __xml__ defined, not {!s}".format(type(node)))
 
@@ -765,6 +796,39 @@ def xhtml_rawhtml_as_div(contentstring, *, title="And Then", classtype='other_co
 
 def xhtml_dataframe_as_div(contentframe, to_html_kwargs={}, **kwargs):
 	return xhtml_rawhtml_as_div(contentframe.to_html(**to_html_kwargs), **kwargs)
+
+
+def xhtml_header_stepdown(content, h_stepdown=1):
+	if h_stepdown:
+		for hlevel in (8,7,6,5,4,3,2,1):
+			for bh1 in content.iter('h{}'.format(hlevel)):
+				bh1.tag = 'h{}'.format(hlevel+h_stepdown)
+	return content
+
+
+
+def xhtml_rest(content, h_stepdown=0, div_class=None, div_id=None):
+	from docutils.core import publish_parts
+	import textwrap
+	if isinstance(content, bytes):
+		content = content.decode()
+	if not isinstance(content, str):
+		raise TypeError('blurb must be reStructuredText as str ot bytes')
+	content = textwrap.dedent(content).strip()
+	content_div = xml.etree.ElementTree.fromstring(publish_parts(content, writer_name='html')['html_body'])
+	if div_class is None:
+		content_div.attrib['class'] = 'reStructuredText'
+	else:
+		content_div.attrib['class'] = 'reStructuredText {}'.format(div_class)
+	if div_id is not None:
+		content_div.attrib['id'] = div_id
+	if h_stepdown:
+		for hlevel in (8,7,6,5,4,3,2,1):
+			for bh1 in content_div.iter('h{}'.format(hlevel)):
+				bh1.tag = 'h{}'.format(hlevel+h_stepdown)
+	return content_div
+
+
 
 def toc_demote_all(elem, demote=1, anchors=True, heads=True):
 	for anchor in elem.findall('.//a[@toclevel]'):
