@@ -1,7 +1,15 @@
 
 import numpy
 import pandas
+import warnings
 from .plotting import spark_histogram
+
+def _numpy_average(*a, **k):
+	with warnings.catch_warnings():
+		warnings.simplefilter(action='ignore', category=FutureWarning)
+		return numpy.average(*a, **k)
+
+
 
 class statistical_summary():
 
@@ -125,9 +133,9 @@ class statistical_summary():
 			else:
 
 				w = weights.flatten()
-				ss.mean = dimzer( numpy.average(xxx, axis=0, weights=w) )
-				variance = numpy.average((xxx-ss.mean)**2, axis=0, weights=w)
-				ss.stdev = dimzer( numpy.average((xxx-ss.mean)**2, axis=0, weights=w) )
+				ss.mean = dimzer( _numpy_average(xxx, axis=0, weights=w) )
+				variance = _numpy_average((xxx-ss.mean)**2, axis=0, weights=w)
+				ss.stdev = dimzer( _numpy_average((xxx-ss.mean)**2, axis=0, weights=w) )
 				ss.minimum = dimzer( numpy.amin(xxx[w>0],0) )
 				ss.maximum = dimzer( numpy.amax(xxx[w>0],0) )
 				try:
@@ -154,7 +162,7 @@ class statistical_summary():
 				if sum(w_nonzero)==0:
 					ss.mean_nonzero = numpy.zeros_like(ss.mean)
 				else:
-					ss.mean_nonzero = numpy.average(xxx, axis=0, weights=w_nonzero)
+					ss.mean_nonzero = _numpy_average(xxx, axis=0, weights=w_nonzero)
 
 				# Make sure that the histogram field is iterable
 				if isinstance(ss.histogram, numpy.ndarray):
@@ -272,9 +280,9 @@ class statistical_summary():
 				raise NotImplementedError('weights are not implemented for nan_compute')
 
 				w = weights.flatten()
-				ss.mean = dimzer( numpy.average(xxx, axis=0, weights=w) )
-				variance = numpy.average((xxx-ss.mean)**2, axis=0, weights=w)
-				ss.stdev = dimzer( numpy.average((xxx-ss.mean)**2, axis=0, weights=w) )
+				ss.mean = dimzer( _numpy_average(xxx, axis=0, weights=w) )
+				variance = _numpy_average((xxx-ss.mean)**2, axis=0, weights=w)
+				ss.stdev = dimzer( _numpy_average((xxx-ss.mean)**2, axis=0, weights=w) )
 				ss.minimum = dimzer( numpy.amin(xxx[w>0],0) )
 				ss.maximum = dimzer( numpy.amax(xxx[w>0],0) )
 				try:
@@ -308,7 +316,7 @@ class statistical_summary():
 				if sum(w_nonzero)==0:
 					ss.mean_nonzero = numpy.zeros_like(ss.mean)
 				else:
-					ss.mean_nonzero = numpy.average(xxx, axis=0, weights=w_nonzero)
+					ss.mean_nonzero = _numpy_average(xxx, axis=0, weights=w_nonzero)
 
 				# Make sure that the histogram field is iterable
 				if isinstance(ss.histogram, numpy.ndarray):
