@@ -77,7 +77,7 @@ def smoothed_piecewise_linear(basevar, breaks, smoothness=1):
 	]
 	
 	if isinstance(smoothness, (int,float)):
-		smoothness = numpy.full_like( breaks, smoothness )
+		smoothness = numpy.full_like( breaks, smoothness, dtype=type(smoothness) )
 	else:
 		smoothness = numpy.asarray(smoothness)
 

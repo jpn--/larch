@@ -413,7 +413,13 @@ class Model(Model2, ModelReporter):
 	edge = property(_core.Model2_link_get, _set_link, None, "an alias for :attr:`link`")
 	
 	def alternatives(self):
-		return {code:name for code,name in zip(self.alternative_codes(),self.alternative_names())}
+		result = {code:name for code,name in zip(self.alternative_codes(),self.alternative_names())}
+		if len(result):
+			return result
+		try:
+			return self._alternatives_recall
+		except AttributeError:
+			return result
 
 	def alternative_name(self, code):
 		codes = numpy.asarray(self.alternative_codes())
@@ -522,6 +528,7 @@ class Model(Model2, ModelReporter):
 				self = Model()
 		inf = numpy.inf
 		nan = numpy.nan
+		import pickle
 		_Str = lambda s: (base64.standard_b64decode(s)).decode()
 		if use_base64:
 			content = base64.standard_b64decode(content)
@@ -531,7 +538,6 @@ class Model(Model2, ModelReporter):
 				content = zlib.decompress(content)
 			except zlib.error:
 				pass
-			import pickle
 			try:
 				content = pickle.loads(content)
 			except pickle.UnpicklingError:
@@ -579,9 +585,14 @@ class Model(Model2, ModelReporter):
 #				f.write(self.report(lineprefix="#\t", cats=report_cats))
 #				f.write("\n\n\n")
 			import time
+			import pickle
 			f.write("# saved at %s"%time.strftime("%I:%M:%S %p %Z"))
 			f.write(" on %s\n"%time.strftime("%d %b %Y"))
 			f.write(self.save_buffer())
+			
+			f.write("self.recall(alternatives = pickle.loads( base64.standard_b64decode('")
+			f.write( base64.standard_b64encode(pickle.dumps(self.alternatives())).decode('utf8') )
+			f.write("')))\n")
 			
 			f.write("self.covariance_matrix = numpy.loads( base64.standard_b64decode('")
 			f.write( base64.standard_b64encode(self.covariance_matrix.dumps()).decode('utf8') )
@@ -612,7 +623,6 @@ class Model(Model2, ModelReporter):
 						f.write("self.{} = {!r}\n".format(a,getattr(self,a)))
 					else:
 						if not aliens_found:
-							import pickle
 							f.write("import pickle\n")
 							aliens_found = True
 						try:
@@ -663,9 +673,11 @@ class Model(Model2, ModelReporter):
 		exec(code)
 		return self
 
-	def recall(self, nCases=None):
+	def recall(self, nCases=None, alternatives=None):
 		if nCases is not None:
 			self._nCases_recall = nCases
+		if alternatives is not None:
+			self._alternatives_recall = alternatives
 
 	def __utility_get(self):
 		return _core.Model2_utility_get(self)
@@ -925,7 +937,7 @@ class Model(Model2, ModelReporter):
 	new_node = new_nest
 
 	def report_(self, cats='*', **kwargs):
-		with XHTML('temp', quickhead=self, **kwargs) as f:
+		with XHTML('temp', quickhead=self, embed_model=self, **kwargs) as f:
 			f << self.report(cats=cats, style='xml')
 
 	def report_1(self, filename="/tmp/larchreport.html", **kwargs):
@@ -933,7 +945,7 @@ class Model(Model2, ModelReporter):
 		print("from filename",filename)
 		filename = next_stack(filename,suffix='html')
 		print("to filename", filename)
-		with XHTML(filename, quickhead=self, **kwargs) as f:
+		with XHTML(filename, quickhead=self, embed_model=self, **kwargs) as f:
 			f << self.report(cats='*', style='xml')
 
 

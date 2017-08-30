@@ -80,7 +80,7 @@ class ModelReporter(docx.DocxModelReporter,
 			if filename is None and tempfile==False:
 				return rpt
 			else:
-				f = XHTML("temp" if tempfile else filenext(filename), quickhead=self, **kwargs)
+				f = XHTML("temp" if tempfile else filenext(filename), quickhead=self, embed_model=self, **kwargs)
 				f << rpt
 				f.dump()
 				return f

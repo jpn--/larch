@@ -62,7 +62,7 @@ div.output_wrapper table, div.output_wrapper th, div.output_wrapper td {
 	font-weight:400;
 	}
 	
-div.output_wrapper th, div.output_wrapper td { padding:2px; }
+div.output_wrapper th, div.output_wrapper td { padding:2px; text-align:left; }
 
 div.output_wrapper td.parameter_category {
 	font-family:"Roboto", monospace;

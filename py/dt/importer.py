@@ -284,7 +284,7 @@ class Importer():
 			raise
 		return self
 
-	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e1000):
+	def import_idca(self, filepath_or_buffer, caseid_col, altid_col, choice_col=None, force_int_as_float=True, chunksize=1e300):
 		"""Import an existing CSV or similar file in idca format into this HDF5 file.
 		
 		This function relies on :func:`pandas.read_csv` to read and parse the input data.

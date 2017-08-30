@@ -64,7 +64,9 @@ class XhtmlModelReporter():
 				poss += ['$           ( utilityspec, probabilityspec )']
 				poss += ['*           ( everything (almost) )']
 				poss += ['&           ( all registered special sections )']
+				poss += ['#!BLAH BLAH ( A level 1 header )']
 				poss += ['#BLAH BLAH  ( A level 2 header )']
+				poss += ['##BLAH BLAH ( A level 3 header )']
 				poss += ['?REGEX      ( search for matches among registered special sections )']
 				poss += ['formal      ( title, blurb, params, LL, utilityspec, nesting_tree )']
 				poss += ['ch_av       ( summary of choice and availability by alternative, up to 50 )']
@@ -120,9 +122,23 @@ class XhtmlModelReporter():
 							yield j
 							discovered.add(j)
 
+			elif i[:2]=='#!' and len(i)>2:
+				self.new_xhtml_header(i[2:], headerlevel=1, anchor=1)
+				j = i[2:].replace(' ','_')
+				if j not in discovered:
+					yield j
+					discovered.add(j)
+
 			elif i[0]=='#' and len(i)>1 and i[1]!='#':
 				self.new_xhtml_header(i[1:], headerlevel=2, anchor=1)
 				j = i[1:].replace(' ','_')
+				if j not in discovered:
+					yield j
+					discovered.add(j)
+
+			elif i[:2]=='##' and len(i)>2:
+				self.new_xhtml_header(i[2:], headerlevel=3, anchor=1)
+				j = i[2:].replace(' ','_')
 				if j not in discovered:
 					yield j
 					discovered.add(j)
@@ -282,7 +298,7 @@ class XhtmlModelReporter():
 			x = Elem('div', {'class':'model_report'})
 		else:
 			import base64
-			x = XHTML(quickhead=self)
+			x = XHTML(quickhead=self,embed_model=self)
 
 		icats = iter(cats) # do not know why this is important, but crashes sometimes without it
 
@@ -414,7 +430,7 @@ class XhtmlModelReporter():
 			x = Elem('div', {'class':'model_report'})
 		else:
 			import base64
-			x = XHTML(quickhead=self)
+			x = XHTML(quickhead=self,embed_model=self)
 
 		icats = iter(self._inflate_cats(cats)) # do not know why this is important, but crashes sometimes without it
 
@@ -479,7 +495,7 @@ class XhtmlModelReporter():
 					pass
 				try:
 					candidate = self._model._user_defined_xhtml[key.casefold()]
-				except (AttributeError, KeyError):
+				except (AttributeError, KeyError, TypeError):
 					pass
 				if candidate is None:
 					#raise TypeError("xml builder for '{}' not found".format(key.casefold()))
@@ -548,13 +564,16 @@ class XhtmlModelReporter():
 				if isinstance(arg, Elem):
 					div << arg
 				elif isinstance(arg, str):
-					div << self._get_item(arg, False)()
+					try:
+						div << self._get_item(arg, False)()
+					except AttributeError:
+						div << self._get_item('exception', False)(arg)
 				elif inspect.ismethod(arg):
 					div << arg()
 				elif isinstance(arg, list):
 					div << self( *(self._model._inflate_cats(arg)), force_Elem=True )
 			if filename is not None or return_html or self._return_xhtml:
-				with XHTML(quickhead=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
+				with XHTML(quickhead=self._model, embed_model=self._model, view_on_exit=view_on_exit, filename=filename or None, **kwarg) as f:
 					f << div
 					if return_html or self._return_xhtml:
 						temphtml = f.dump()
@@ -2023,7 +2042,10 @@ class XhtmlModelReporter():
 			if "-" in s: return "({})".format(s)
 			if " in " in s.casefold(): return "({})".format(s)
 			return s
-		
+
+		if len(self.utility.co):
+			raise TypeError("utilityspec_ca_only called on a model with utility.co given")
+
 		x = XML_Builder("div", {'class':"utilityspec larch_art"})
 		x.h2("Utility Specification", anchor=1, attrib={'class':'larch_art_xhtml'})
 		
@@ -2041,7 +2063,7 @@ class XhtmlModelReporter():
 						x.th('Alternative')
 						x.th(headline)
 				with x.tbody_:
-					altcode,altname = next(iter(self.alternatives().items()))
+					altcode,altname = None,None # next(iter(self.alternatives().items()))
 					altcode_ = "*"
 					altname_ = "all elemental alternatives"
 					with x.tr_:
@@ -2127,10 +2149,10 @@ class XhtmlModelReporter():
 						
 						for beta in self.utility.ca:
 							x, first_thing = add_util_component(beta, resolved, x, first_thing)
-						if altcode in self.utility.co:
-							for beta in self.utility.co[altcode]:
-								x, first_thing = add_util_component(beta, resolved, x, first_thing)
-						
+#						if altcode in self.utility.co:
+#							for beta in self.utility.co[altcode]:
+#								x, first_thing = add_util_component(beta, resolved, x, first_thing)
+
 						if len(self.quantity):
 							x.simple("br")
 							x.data("+ ")
@@ -2249,35 +2271,6 @@ class XhtmlModelReporter():
 							
 							first_thing = True
 							
-#							def add_util_component(beta, resolved, x, first_thing):
-#								if resolved:
-#									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
-#									if not first_thing:
-#										x.simple("br")
-#										x.data(" + {}".format(beta_val).replace("+ -","- "))
-#									else: # is first thing
-#										x.data(beta_val.replace("-","- "))
-#									first_thing = False
-#								else:
-#									if not first_thing:
-#										x.simple("br")
-#										x.data(" + ")
-#									first_thing = False
-#									x.start('a', {'class':'parameter_reference', 'href':'#param{}'.format(beta.param.replace("#","_hash_"))})
-#									x.data(beta.param)
-#									x.end('a')
-#									if beta.multiplier != 1.0:
-#										x.data("*"+str(beta.multiplier))
-#								try:
-#									beta_data_value = float(beta.data)
-#									if beta_data_value==1.0:
-#										beta_data_value=""
-#									else:
-#										beta_data_value="*"+str(bracketize(beta_data_value))
-#								except:
-#									beta_data_value = "*"+str(bracketize(beta.data))
-#								x.data(beta_data_value)
-#								return x, first_thing
 							def add_util_component(beta, resolved, x, first_thing):
 								if resolved:
 									beta_val = "{:{PARAM}}".format(self.metaparameter(beta.param).value, **format).strip()
@@ -2857,3 +2850,125 @@ class XhtmlModelReporter():
 
 	def xhtml_dt_info(self, **format):
 		return self.df.info(3).__xml__()
+
+
+
+	def load_pregenerated_content(self, source_html, extracts, hide_errors=True):
+		"""
+		Load figures from an existing html file.
+		
+		This is useful if a previously generated report included figures or tables
+		based off the source data, and these should be loaded and output to a new
+		report as is, without reloading the actual data.
+		
+		Parameters
+		----------
+		source_html : str or
+			If a str, the filename of the html file containing the pregenerated figures;
+			otherwise a BeautifulSoup object.
+		extracts : dict
+			A {label:selector} mapping, where label is the name of the new xhtml section
+			and selector is the css selector to extract.  If more than one thing hits the
+			selector, only the first is taken.
+		"""
+		from bs4 import BeautifulSoup
+		try:
+			self._pregenerated_content
+		except AttributeError:
+			self._pregenerated_content = {}
+
+
+		def soupstring_to_element(soup):
+			import xml.etree.ElementTree as ET
+			local_head = '<?xml version="1.0"?><div xmlns:xlink="http://www.w3.org/1999/xlink" >\n'
+			local_tail = '\n</div>'
+			root = ET.fromstring(local_head+soup+local_tail)
+			return root
+
+		def soup_content_to_string(full_soup, selector):
+			figs = full_soup.select(selector)
+			fig = figs[0]
+			fig = soupstring_to_element(str(fig))
+			return fig
+
+		full_soup = source_html
+		if not isinstance(full_soup, BeautifulSoup):
+			with open(source_html, 'r') as html_handle:
+				content = html_handle.read()
+			full_soup = BeautifulSoup(content, "lxml")
+
+		for label, selector in extracts.items():
+			try:
+				fig = soup_content_to_string(full_soup, selector)
+			except:
+				import warnings
+				warnings.warn("selector '{}' not found for {}".format(label, selector))
+				if hide_errors:
+					self.new_xhtml_section((lambda *arg, **kw: None), label, register=True)
+			else:
+				self.new_xhtml_section((lambda *arg, **kw: fig), label, register=True)
+
+		
+
+	def load_pregenerated_figures(self, source_html_file, selector='div.figure'):
+		"""
+		Load figures from an existing html file.
+		
+		This is useful if a previously generated report included figures or tables
+		based off the source data, and these should be loaded and output to a new
+		report as is, without reloading the actual data.
+		
+		Parameters
+		----------
+		source_html_file : str
+			Filename of the html file containing the pregenerated figures.
+		selector : str, optional
+			The css selector to extract, by default 'div.figure'.
+		"""
+		from bs4 import BeautifulSoup
+		
+		def soupstring_to_element(soup):
+			import xml.etree.ElementTree as ET
+			local_head = '<?xml version="1.0"?><div xmlns:xlink="http://www.w3.org/1999/xlink" >\n'
+			local_tail = '\n</div>'
+			root = ET.fromstring(local_head+soup+local_tail)
+			return root
+
+		def soup_figures_to_strings(full_soup, selector):
+			figs = full_soup.select(selector)
+			figs = [soupstring_to_element(str(fig)) for fig in figs]
+			return figs
+
+		with open(source_html_file, 'r') as html_handle:
+			content = html_handle.read()
+		
+		full_soup = BeautifulSoup(content, "lxml")
+		self._pregenerated_figures = soup_figures_to_strings(full_soup, selector)
+
+	def _xhtml_pregenerated_figure(self, n):
+		try:
+			return self._pregenerated_figures[n]
+		except IndexError:
+			raise AttributeError('pregenerated_figure{} not found'.format(n))
+	
+	def xhtml_pregenerated_figure1(self, **format):
+		return self._xhtml_pregenerated_figure(n=1, **format)
+	def xhtml_pregenerated_figure2(self, **format):
+		return self._xhtml_pregenerated_figure(n=2, **format)
+	def xhtml_pregenerated_figure3(self, **format):
+		return self._xhtml_pregenerated_figure(n=3, **format)
+	def xhtml_pregenerated_figure4(self, **format):
+		return self._xhtml_pregenerated_figure(n=4, **format)
+	def xhtml_pregenerated_figure5(self, **format):
+		return self._xhtml_pregenerated_figure(n=5, **format)
+	def xhtml_pregenerated_figure6(self, **format):
+		return self._xhtml_pregenerated_figure(n=6, **format)
+	def xhtml_pregenerated_figure7(self, **format):
+		return self._xhtml_pregenerated_figure(n=7, **format)
+	def xhtml_pregenerated_figure8(self, **format):
+		return self._xhtml_pregenerated_figure(n=8, **format)
+	def xhtml_pregenerated_figure9(self, **format):
+		return self._xhtml_pregenerated_figure(n=9, **format)
+
+
+
