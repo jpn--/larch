@@ -40,3 +40,4 @@ src/.DS_Store
 
 **.ipynb_checkpoints
 pingpong*.bat
+gemm.c
