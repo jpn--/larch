@@ -44,3 +44,5 @@ gemm.c
 .idea/**/workspace.xml
 v4/.idea/**/workspace.xml
 v4/.idea/**/tasks.xml
+gemv.c
+nl_utility.c

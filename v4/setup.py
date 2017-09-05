@@ -3,6 +3,7 @@ from Cython.Build import cythonize
 import numpy
 import os
 
+# os.environ['CFLAGS'] = '-fopenmp'
 
 def find_pyx(path='.'):
     pyx_files = []
@@ -28,4 +29,7 @@ setup(
 # python setup.py build_ext --inplace
 #
 
-
+#
+# extra_compile_args = ['-fopenmp'],
+# extra_link_args = ['-fopenmp'],
+#
