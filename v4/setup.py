@@ -3,7 +3,12 @@ from Cython.Build import cythonize
 import numpy
 import os
 
-# os.environ['CFLAGS'] = '-fopenmp'
+# For macOS, you need to  ...
+#  xcode-select --install
+#  conda install clangdev llvmdev openmp -c conda-forge
+
+os.environ["CC"] = "clang-4.0"
+os.environ['CFLAGS'] = '-fopenmp'
 
 def find_pyx(path='.'):
     pyx_files = []

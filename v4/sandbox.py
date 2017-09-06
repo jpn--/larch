@@ -53,14 +53,19 @@ u1 = numpy.zeros([len(d._caseindex), len(t)-len(d._altindex)])
 
 
 from larch4.nesting.nl_utility import exp_util_of_nests
+# from larch4.nesting import exp_util_of_nests_threaded
 
 exp_util_of_nests(u,u1,t,p)
 
-print("numpy.exp(m.work.utility[0])")
-print(numpy.exp(m.work.utility[0]))
+print("numpy.exp(m.work.utility).sum(0)")
+print(numpy.exp(m.work.utility).sum(0))
 
-print('u[0]\n',u[0])
-print('u1[0]\n',u1[0])
+print('u.sum[0]\n',u.sum(0))
+print('u1.sum[0]\n',u1.sum(0))
 
 # 'mu_motor', value=0.7257824244230557
 # ModelParameter('mu_nonmotor', value=0.7689340538871795)
+
+
+# %timeit exp_util_of_nests_threaded(u,u1,t,p,7)
+# %timeit exp_util_of_nests(u,u1,t,p)
