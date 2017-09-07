@@ -5,6 +5,7 @@ import numpy
 class NestingTree(nx.DiGraph):
 
 	node_dict_factory = OrderedDict
+	adjlist_dict_factory = OrderedDict
 
 	def __init__(self, *arg, root_id=0, **kwarg):
 		super().__init__(*arg, **kwarg)
@@ -22,7 +23,6 @@ class NestingTree(nx.DiGraph):
 		self._successor_slots = {}
 
 	def add_edge(self, u, v, *arg, **kwarg):
-		print("addedge",u,v,kwarg)
 		if 'implied' not in kwarg:
 			drops = []
 			for u_,v_,imp_ in self.in_edges_iter(nbunch=[v], data='implied'):
@@ -34,13 +34,11 @@ class NestingTree(nx.DiGraph):
 		return super().add_edge(u, v, *arg, **kwarg)
 
 	def _remove_edge_no_implied(self, u, v, *arg, **kwarg):
-		print("remove_edge",u,v,kwarg)
 		result = super().remove_edge(u, v)
 		self._clear_caches()
 		return result
 
 	def remove_edge(self, u, v, *arg, **kwarg):
-		print("remove_edge",u,v,kwarg)
 		result = super().remove_edge(u, v)
 		if self.in_degree(v)==0 and v!=self._root_id:
 			self.add_edge(self._root_id, v, implied=True)
@@ -123,3 +121,15 @@ class NestingTree(nx.DiGraph):
 
 	def elementals(self):
 		return [i for i in self.elementals_iter()]
+
+	def elemental_descendants_iter(self, code):
+		if not self.out_degree(code):
+			yield code
+			return
+		all_d = nx.descendants(self, code)
+		for dcode, dout_degree in self.out_degree_iter(all_d):
+			if not dout_degree:
+				yield dcode
+
+	def elemental_descendants(self, code):
+		return [i for i in self.elemental_descendants_iter(code)]

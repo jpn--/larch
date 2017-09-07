@@ -2,7 +2,7 @@ import numpy
 import pandas
 from .linalg.gemm import dgemm
 from .linalg.gemv import dgemv
-
+from .math.elementwise import sum_of_elementwise_product
 
 def _calculate_linear_product(params, data_ca, data_co, result_array, alpha_ca=1.0, alpha_co=1.0):
 	c, a, v1 = data_ca.shape
@@ -28,15 +28,50 @@ def _calculate_linear_product(params, data_ca, data_co, result_array, alpha_ca=1
 		c=result_array)
 
 
+def _optional_array(x, **kwargs):
+	if x is not None:
+		return numpy.asanyarray(x, **kwargs)
+	return None
+
 class DataCollection():
-	def __init__(self, caseindex, altindex, utility_ca_index, utility_co_index, utility_ca_data, utility_co_data, avail):
+	def __init__(self, caseindex, altindex,
+				 utility_ca_index, utility_co_index,
+				 utility_ca_data=None,
+				 utility_co_data=None,
+				 avail_data=None,
+				 choice_ca_data=None,
+				 source=None):
+		self._source = source
 		self._caseindex = pandas.Index( caseindex )
 		self._altindex = pandas.Index( altindex )
 		self._u_ca_varindex = pandas.Index( utility_ca_index )
 		self._u_co_varindex = pandas.Index( utility_co_index )
-		self._u_ca = numpy.asanyarray(utility_ca_data, dtype=numpy.float64) # shape = (C,A,Vca)
-		self._u_co = numpy.asanyarray(utility_co_data, dtype=numpy.float64) # shape = (C,Vco)
-		self._avail = numpy.asanyarray(avail, dtype=bool)                   # shape = (C,A)
+		self._u_ca = _optional_array(utility_ca_data, dtype=numpy.float64) # shape = (C,A,Vca)
+		self._u_co = _optional_array(utility_co_data, dtype=numpy.float64) # shape = (C,Vco)
+		self._avail = _optional_array(avail_data, dtype=bool)                   # shape = (C,A)
+		self._choice_ca = _optional_array(choice_ca_data, dtype=numpy.float64) # shape = (C,A)
+
+	@property
+	def n_cases(self):
+		return len(self._caseindex)
+
+	@property
+	def n_alts(self):
+		return len(self._altindex)
+
+	def load_data(self, source=None):
+		if source is None:
+			source = self._source
+		if source is None:
+			raise ValueError('no data source known')
+		if self._u_ca is None:
+			self._u_ca = source.array_idca(*(self._u_ca_varindex))
+		if self._u_co is None:
+			self._u_co = source.array_idco(*(self._u_co_varindex))
+		if self._avail is None:
+			self._avail = source.array_avail().squeeze()
+		if self._choice_ca is None:
+			self._choice_ca = source.array_choice().squeeze()
 
 	def _calculate_exp_utility_elemental(self, params, result_array=None):
 		if result_array is None:
@@ -46,5 +81,6 @@ class DataCollection():
 		result_array[:, :len(self._altindex)][~self._avail] = 0
 		return result_array
 
-
+	def _calculate_log_like(self, logprob):
+		return sum_of_elementwise_product(logprob, self._choice_ca)
 
