@@ -17,13 +17,13 @@ def _calculate_linear_product(params, data_ca, data_co, result_array, alpha_ca=1
 	dgemv(
 		alpha=alpha_ca,
 		a=data_ca_,
-		x=params._coef_utility_ca,
+		x=params.coef_utility_ca,
 		beta=0,
 		y=result_array_)
 	dgemm(
 		alpha=alpha_co,
 		a=data_co,
-		b=params._coef_utility_co,
+		b=params.coef_utility_co,
 		beta=1.0,
 		c=result_array)
 
