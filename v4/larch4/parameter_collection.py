@@ -69,7 +69,7 @@ class ParameterCollection():
 	def unmangle(self):
 		if self._mangled:
 			self._scan_utility_ensure_names()
-			self._initialize_derived_arrays()
+			self._initialize_derived_util_coef_arrays()
 			self._mangled = False
 
 	@property
@@ -82,7 +82,17 @@ class ParameterCollection():
 		self.unmangle()
 		return self._coef_utility_ca
 
-	def _initialize_derived_arrays(self):
+	@property
+	def utility_ca_vars(self):
+		self.unmangle()
+		return self._u_ca_varindex
+
+	@property
+	def utility_co_vars(self):
+		self.unmangle()
+		return self._u_co_varindex
+
+	def _initialize_derived_util_coef_arrays(self):
 
 		self._coef_utility_co = numpy.zeros( [len(self._u_co_varindex), len(self._altindex)], dtype=numpy.float64)
 		self._coef_utility_ca = numpy.zeros( len(self._u_ca_varindex), dtype=numpy.float64)

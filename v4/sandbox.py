@@ -37,8 +37,8 @@ print([i for i in p._u_ca_varindex])
 
 d = DataCollection(
 	m.df.caseids().copy(), m.df.alternative_codes(),
-	[i for i in p._u_ca_varindex], #  m.needs()['UtilityCA'].get_variables(),
-	[i for i in p._u_co_varindex], # m.needs()['UtilityCO'].get_variables(),
+	p.utility_ca_vars, #  m.needs()['UtilityCA'].get_variables(),
+	p.utility_co_vars, # m.needs()['UtilityCO'].get_variables(),
 )
 
 d.load_data(m.df)
