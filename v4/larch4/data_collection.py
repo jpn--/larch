@@ -35,19 +35,24 @@ def _optional_array(x, **kwargs):
 
 class DataCollection():
 	def __init__(self, caseindex, altindex,
-				 utility_ca_index, utility_co_index,
+				 utility_ca_index=None,
+				 utility_co_index=None,
+				 quantity_ca_index=None,
 				 utility_ca_data=None,
 				 utility_co_data=None,
+				 quantity_ca_data=None,
 				 avail_data=None,
 				 choice_ca_data=None,
 				 source=None):
 		self._source = source
 		self._caseindex = pandas.Index( caseindex )
 		self._altindex = pandas.Index( altindex )
-		self._u_ca_varindex = pandas.Index( utility_ca_index )
-		self._u_co_varindex = pandas.Index( utility_co_index )
+		self._u_ca_varindex = pandas.Index( utility_ca_index or [] )
+		self._u_co_varindex = pandas.Index( utility_co_index or [] )
+		self._q_ca_varindex = pandas.Index( quantity_ca_index or [] )
 		self._u_ca = _optional_array(utility_ca_data, dtype=numpy.float64) # shape = (C,A,Vca)
 		self._u_co = _optional_array(utility_co_data, dtype=numpy.float64) # shape = (C,Vco)
+		self._q_ca = _optional_array(quantity_ca_data, dtype=numpy.float64) # shape = (C,A,Qca)
 		self._avail = _optional_array(avail_data, dtype=bool)                   # shape = (C,A)
 		self._choice_ca = _optional_array(choice_ca_data, dtype=numpy.float64) # shape = (C,A)
 
@@ -68,6 +73,8 @@ class DataCollection():
 			self._u_ca = source.array_idca(*(self._u_ca_varindex))
 		if self._u_co is None:
 			self._u_co = source.array_idco(*(self._u_co_varindex))
+		if self._q_ca is None:
+			self._q_ca = source.array_idca(*(self._q_ca_varindex))
 		if self._avail is None:
 			self._avail = source.array_avail().squeeze()
 		if self._choice_ca is None:

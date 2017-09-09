@@ -27,11 +27,14 @@ class ParameterCollection():
 
 	def __init__(self, names, altindex,
 				 utility_ca=None,
-				 utility_co=None):
+				 utility_co=None,
+				 quantity_ca=None):
 		self._altindex = pandas.Index( altindex )
 
 		self._utility_co_functions = SignalDict(self.mangle,self.mangle,self.mangle,utility_co or {})
 		self._utility_ca_function  = utility_ca or LinearFunction()
+
+		self._quantity_ca_function  = quantity_ca or LinearFunction()
 
 		self.frame = _empty_parameter_frame(names)
 		self._scan_utility_ensure_names()
@@ -49,8 +52,11 @@ class ParameterCollection():
 		self._u_co_varindex = pandas.Index( u_co_dataset )
 
 		self._u_ca_varindex = pandas.Index( str(component.data) for component in self._utility_ca_function )
-
 		for component in self._utility_ca_function:
+			nameset.add(str(component.param))
+
+		self._q_ca_varindex = pandas.Index( str(component.data) for component in self._quantity_ca_function )
+		for component in self._q_ca_varindex:
 			nameset.add(str(component.param))
 
 		self._ensure_names(nameset)
@@ -83,6 +89,11 @@ class ParameterCollection():
 		return self._coef_utility_ca
 
 	@property
+	def coef_quantity_ca(self):
+		self.unmangle()
+		return self._coef_quantity_ca
+
+	@property
 	def utility_ca_vars(self):
 		self.unmangle()
 		return self._u_ca_varindex
@@ -92,10 +103,16 @@ class ParameterCollection():
 		self.unmangle()
 		return self._u_co_varindex
 
+	@property
+	def quantity_ca_vars(self):
+		self.unmangle()
+		return self._q_ca_varindex
+
 	def _initialize_derived_util_coef_arrays(self):
 
 		self._coef_utility_co = numpy.zeros( [len(self._u_co_varindex), len(self._altindex)], dtype=numpy.float64)
 		self._coef_utility_ca = numpy.zeros( len(self._u_ca_varindex), dtype=numpy.float64)
+		self._coef_quantity_ca = numpy.zeros( len(self._q_ca_varindex), dtype=numpy.float64)
 
 		self._parameter_update_scheme = {}
 
@@ -109,6 +126,11 @@ class ParameterCollection():
 				if str(component.param) not in self._parameter_update_scheme:
 					self._parameter_update_scheme[str(component.param)] = []
 				self._parameter_update_scheme[str(component.param)].append( ('_coef_utility_co', (self._u_co_varindex.get_loc(str(component.data)), self._altindex.get_loc(altcode) )) )
+
+		for n,component in enumerate(self._quantity_ca_function):
+			if str(component.param) not in self._parameter_update_scheme:
+				self._parameter_update_scheme[str(component.param)] = []
+			self._parameter_update_scheme[str(component.param)].append( ('_coef_quantity_ca', (n,)) )
 
 		self._refresh_derived_arrays()
 
