@@ -33,6 +33,11 @@ def _optional_array(x, **kwargs):
 		return numpy.asanyarray(x, **kwargs)
 	return None
 
+def _optional_arg(x, default):
+	if x is not None:
+		return x
+	return default
+
 class DataCollection():
 	def __init__(self, caseindex, altindex,
 				 utility_ca_index=None,
@@ -47,9 +52,9 @@ class DataCollection():
 		self._source = source
 		self._caseindex = pandas.Index( caseindex )
 		self._altindex = pandas.Index( altindex )
-		self._u_ca_varindex = pandas.Index( utility_ca_index or [] )
-		self._u_co_varindex = pandas.Index( utility_co_index or [] )
-		self._q_ca_varindex = pandas.Index( quantity_ca_index or [] )
+		self._u_ca_varindex = pandas.Index( _optional_arg(utility_ca_index,[]) )
+		self._u_co_varindex = pandas.Index( _optional_arg(utility_co_index ,[]) )
+		self._q_ca_varindex = pandas.Index( _optional_arg(quantity_ca_index ,[]) )
 		self._u_ca = _optional_array(utility_ca_data, dtype=numpy.float64) # shape = (C,A,Vca)
 		self._u_co = _optional_array(utility_co_data, dtype=numpy.float64) # shape = (C,Vco)
 		self._q_ca = _optional_array(quantity_ca_data, dtype=numpy.float64) # shape = (C,A,Qca)
