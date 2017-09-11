@@ -129,6 +129,9 @@ class ParameterCollection():
 	def get_value(self, name):
 		return self.frame.loc[name,'value']
 
+	def __getitem__(self, name):
+		return self.frame.loc[name,:]
+
 	@property
 	def utility_ca(self):
 		return LinearFunction() + self._utility_ca_function
