@@ -1,3 +1,4 @@
+# cython: profile=True
 
 
 from libc.math cimport pow, log
@@ -11,7 +12,8 @@ from cython.parallel cimport prange
 
 
 @cython.boundscheck(False)
-cdef conditional_logprob_from_nest(
+@cython.cdivision(True)
+cdef conditional_logprob_from_nest_exp_util(
 		const double[:,:] expU_elemental,
 		const double[:,:] expU_nests,
 		int[:] child_slots,
@@ -66,7 +68,7 @@ def conditional_logprob_from_tree(
 			mu = params.get_value(graph.node[node]['parameter'])
 		else:
 			mu = 1.0
-		conditional_logprob_from_nest( expU_elemental, expU_nests, child_slots, child_slots.shape[0], graph.standard_slot_map[node], mu, conditional_logprobability_dict[node] )
+		conditional_logprob_from_nest_exp_util( expU_elemental, expU_nests, child_slots, child_slots.shape[0], graph.standard_slot_map[node], mu, conditional_logprobability_dict[node] )
 
 
 def elemental_logprob_from_conditional_logprob(
@@ -80,3 +82,65 @@ def elemental_logprob_from_conditional_logprob(
 				elemental_slot = graph.standard_slot_map[elemental_code]
 				logprobability[:,elemental_slot] += conditional_logprobability_dict[upnestcode][:,dnslot]
 
+
+
+
+
+
+@cython.boundscheck(False)
+@cython.cdivision(True)
+cdef conditional_logprob_from_nest_util(
+		const double[:,:] U_elemental,
+		const double[:,:] U_nests,
+		int[:] child_slots,
+		int n_children,                       # = child_slots.shape[0]
+		int parent_slot,
+		double MU,
+		double[:,:] conditional_logprob,  # output, shape = (n_cases, n_children)
+	):
+
+	cdef int ci, i, j
+	cdef int len_j = U_elemental.shape[0]
+	cdef int n_elementals = U_elemental.shape[1]
+	cdef int parent_slot_in_nests = parent_slot-n_elementals
+
+	for j in prange(len_j, nogil=True):
+		for i in range(n_children):
+			ci = child_slots[i]
+			if ci < n_elementals:
+				if U_nests[j,parent_slot_in_nests] == -INFINITY or U_elemental[j,ci] == -INFINITY:
+					conditional_logprob[j,i] = -INFINITY
+				else:
+					conditional_logprob[j,i] = (U_elemental[j,ci] - U_nests[j,parent_slot_in_nests])/MU
+			else:
+				if U_nests[j,parent_slot_in_nests] == -INFINITY or U_nests[j,ci-n_elementals] == -INFINITY:
+					conditional_logprob[j,i] = -INFINITY
+				else:
+					conditional_logprob[j,i] = (U_nests[j,ci-n_elementals]-U_nests[j,parent_slot_in_nests])/MU
+
+
+# U_nest = 	mu*log( ∑j exp( Vj / mu ) )
+#
+#
+#          exp( Vi / mu )      exp( Vi / mu )
+# cp = 	 -----------------  = ----------------  = exp( (Vi - U_nest) / mu )
+#         ∑j exp(Vj / mu)     exp(U_nest / mu)
+#
+# log(cp) = ( (Vi - U_nest) / mu )
+
+def conditional_logprob_from_tree_util(
+		double[:,:] U_elemental,
+		double[:,:] U_nests,
+		graph,
+		params,
+		conditional_logprobability_dict
+	):
+	cdef int[:] child_slots
+	cdef double mu
+	for node in graph.topological_sorted_no_elementals:
+		child_slots = graph.successor_slots(node)
+		if 'parameter' in graph.node[node]:
+			mu = params.get_value(graph.node[node]['parameter'])
+		else:
+			mu = 1.0
+		conditional_logprob_from_nest_util( U_elemental, U_nests, child_slots, child_slots.shape[0], graph.standard_slot_map[node], mu, conditional_logprobability_dict[node] )

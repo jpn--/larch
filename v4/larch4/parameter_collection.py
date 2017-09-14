@@ -161,6 +161,16 @@ class ParameterCollection():
 	def __getitem__(self, name):
 		return self.frame.loc[name,:]
 
+	def set_values(self, values):
+		if len(values) != len(self.frame):
+			raise ValueError(f'gave {len(values)} values, needs to be exactly {len(self.frame)} values')
+		self.frame.loc[:,'value'] = values[:]
+		for name in self._parameter_update_scheme:
+			schemes = self._parameter_update_scheme[name]
+			value = self.get_value(name)
+			for member, location in schemes:
+				self.__getattribute__(member)[location] = value
+
 	@property
 	def utility_ca(self):
 		return LinearFunction() + self._utility_ca_function

@@ -40,7 +40,9 @@ def _optional_arg(*args):
 	return None
 
 class DataCollection():
-	def __init__(self, caseindex, altindex,
+	def __init__(self,
+				 caseindex=None,
+				 altindex=None,
 				 utility_ca_index=None,
 				 utility_co_index=None,
 				 quantity_ca_index=None,
@@ -52,8 +54,9 @@ class DataCollection():
 				 source=None,
 	             param_collect=None):
 		self._source = source
-		self._caseindex = pandas.Index( caseindex )
-		self._altindex = pandas.Index( altindex )
+
+		self._caseindex = pandas.Index( _optional_arg(caseindex,[]) )
+		self._altindex = pandas.Index( _optional_arg(altindex,[]) )
 		self._u_ca_varindex = pandas.Index( _optional_arg(utility_ca_index,[]) )
 		self._u_co_varindex = pandas.Index( _optional_arg(utility_co_index ,[]) )
 		self._q_ca_varindex = pandas.Index( _optional_arg(quantity_ca_index ,[]) )
@@ -76,6 +79,10 @@ class DataCollection():
 			source = self._source
 		if source is None:
 			raise ValueError('no data source known')
+		if self._caseindex is None or len(self._caseindex)==0:
+			self._caseindex = pandas.Index(source.caseids())
+		if self._altindex is None or len(self._altindex) == 0:
+			self._altindex = pandas.Index(source.alternative_codes())
 		if self._u_ca is None:
 			self._u_ca = source.array_idca(*(self._u_ca_varindex))
 		if self._u_co is None:
@@ -95,6 +102,13 @@ class DataCollection():
 		result_array[:, :len(self._altindex)][~self._avail] = 0
 		return result_array
 
+	def _calculate_utility_elemental(self, params, result_array=None):
+		if result_array is None:
+			result_array = numpy.empty([len(self._caseindex), len(self._altindex)])
+		_calculate_linear_product(params, self._u_ca, self._u_co, result_array)
+		result_array[:, :len(self._altindex)][~self._avail] = -numpy.inf
+		return result_array
+
 	def _calculate_log_like(self, logprob):
-		return sum_of_elementwise_product(logprob, self._choice_ca)
+		return sum_of_elementwise_product(self._choice_ca, logprob )
 
