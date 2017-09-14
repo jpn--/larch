@@ -33,10 +33,11 @@ def _optional_array(x, **kwargs):
 		return numpy.asanyarray(x, **kwargs)
 	return None
 
-def _optional_arg(x, default):
-	if x is not None:
-		return x
-	return default
+def _optional_arg(*args):
+	for x in args:
+		if x is not None:
+			return x
+	return None
 
 class DataCollection():
 	def __init__(self, caseindex, altindex,
@@ -48,7 +49,8 @@ class DataCollection():
 				 quantity_ca_data=None,
 				 avail_data=None,
 				 choice_ca_data=None,
-				 source=None):
+				 source=None,
+	             param_collect=None):
 		self._source = source
 		self._caseindex = pandas.Index( caseindex )
 		self._altindex = pandas.Index( altindex )
