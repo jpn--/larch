@@ -141,15 +141,15 @@ def test_utility_spec_changes():
 
 	work = WorkspaceCollection(d, p, t)
 
-	d._calculate_exp_utility_elemental(p, work.exp_util_elementals)
+	d._calculate_exp_utility_elemental(p, work.util_elementals)
 
 
-	exp_util_of_nests(work.exp_util_elementals, work.exp_util_nests, t, p)
+	exp_util_of_nests(work.util_elementals, work.util_nests, t, p)
 
 
 	conditional_logprob_from_tree(
-		work.exp_util_elementals,
-		work.exp_util_nests,
+		work.util_elementals,
+		work.util_nests,
 		t,
 		p,
 		work.log_conditional_prob

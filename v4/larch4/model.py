@@ -62,20 +62,14 @@ class Model(ParameterCollection):
 		t.add_nodes(self._altindex)
 		return t
 
-
-	# SLOWER...
-	# def calculate_exp_utility(self):
-	# 	self.data._calculate_exp_utility_elemental(self, self.work.exp_util_elementals)
-	# 	exp_util_of_nests(self.work.exp_util_elementals, self.work.exp_util_nests, self._graph, self)
-
 	def calculate_exp_utility(self):
-		self.data._calculate_utility_elemental(self, self.work.exp_util_elementals)
-		util_of_nests(self.work.exp_util_elementals, self.work.exp_util_nests, self._graph, self)
+		self.data._calculate_utility_elemental(self, self.work.util_elementals)
+		util_of_nests(self.work.util_elementals, self.work.util_nests, self._graph, self)
 
 	def calculate_log_probability(self):
 		conditional_logprob_from_tree_util(
-			self.work.exp_util_elementals,
-			self.work.exp_util_nests,
+			self.work.util_elementals,
+			self.work.util_nests,
 			self._graph,
 			self,
 			self.work.log_conditional_prob
