@@ -1,11 +1,11 @@
 
 
-if 0:
-	import larch
+if 1:
+	# import larch
 	import numpy
 
-	m = larch.Model.Example(22)
-	m.maximize_loglike()
+	# m = larch.Model.Example(22)
+	# m.maximize_loglike()
 
 	# d_u_ca = m.data.UtilityCA.copy()
 	# d_u_co = m.data.UtilityCO.copy()
@@ -18,12 +18,37 @@ if 0:
 	from larch4.parameter_collection import ParameterCollection
 	from larch4.data_collection import DataCollection
 	from larch4.workspace_collection import WorkspaceCollection
+	from larch4.roles import P,X,PX
 
-	p = ParameterCollection( m.parameter_names(),
-		m.df.alternative_codes())
+	altcodes = [1,2,3,4,5,6]
 
-	p.utility_ca = m.utility.ca
-	p.utility_co = dict(m.utility.co)
+	p = ParameterCollection( None, altcodes)
+
+
+
+	p.utility_ca = (
+		+ P("costbyincome")*X('totcost/hhinc')
+		+ X("tottime * (altnum in (1,2,3,4))")*P("motorized_time")
+		+ X("tottime * (altnum in (5,6))")*P("nonmotorized_time")
+		+ X("ovtt/dist * (altnum in (1,2,3,4))")*P("motorized_ovtbydist")
+	)
+
+	p.utility_co[4] += P("hhinc#4") * X("hhinc")
+	p.utility_co[5] += P("hhinc#5") * X("hhinc")
+	p.utility_co[6] += P("hhinc#6") * X("hhinc")
+
+	for a, name in altcodes[1:3]:
+		p.utility_co[a] += X("vehbywrk") * P("vehbywrk_SR")
+		p.utility_co[a] += X("wkccbd+wknccbd") * P("wkcbd_" + name)
+		p.utility_co[a] += X("wkempden") * P("wkempden_" + name)
+		p.utility_co[a] += P("ASC_" + name)
+
+	for a, name in altcodes[3:]:
+		p.utility_co[a] += X("vehbywrk") * P("vehbywrk_" + name)
+		p.utility_co[a] += X("wkccbd+wknccbd") * P("wkcbd_" + name)
+		p.utility_co[a] += X("wkempden") * P("wkempden_" + name)
+		p.utility_co[a] += P("ASC_" + name)
+
 
 	for p_name, p_value in zip(m.parameter_names(), m.parameter_values()):
 		p.set_value(p_name, p_value)
@@ -102,8 +127,13 @@ if 0:
 
 
 	print("-----LL-----")
-	print(d._calculate_log_like(work.log_prob))
-	print(m.loglike())
+	LL = d._calculate_log_like(work.log_prob)
+	print(LL)
+	assert( numpy.isclose(LL, -3441.6725270750367, rtol=1e-09, atol=1e-09, equal_nan=False) )
+
+
+
+	# print(m.loglike())
 
 	# -3441.6725270750367
 	# -3441.6725270750376
@@ -122,7 +152,7 @@ if 0:
 
 
 	print( p.coef_utility_co )
-	print( m.Coef("UtilityCO").squeeze() )
+	# print( m.Coef("UtilityCO").squeeze() )
 
 
 	#
@@ -145,23 +175,33 @@ if 0:
 	#
 	# p.utility_co[3] = P.co3 * X.coo3
 
-
-from larch4.roles import P,X
-
-w1 = P("B1")
-w2 = P("B2")
-print(repr(w1))
-print(repr(w2))
-print(repr(w1+w2))
-print(repr(w1-w2))
-print(repr(w1*w2))
-print(repr(w1/w2))
-
-w1 = X("COL1")
-w2 = X("COL2")
-print(repr(w1))
-print(repr(w2))
-print(repr(w1+w2))
-print(repr(w1-w2))
-print(repr(w1*w2))
-print(repr(w1/w2))
+#
+# from larch4.roles import P,X
+#
+# say = lambda: print('say')
+#
+# w1 = P("B1")
+# w2 = P("B2")
+# # print(repr(w1))
+# # print(repr(w2))
+# # print(repr(w1+w2))
+# # print(repr(w1-w2))
+# # print(repr(w1*w2))
+# # print(repr(w1/w2))
+#
+# y1 = X("COL1")
+# y2 = X("COL2")
+# # print(repr(y1))
+# # print(repr(y2))
+# # print(repr(y1+y2))
+# # print(repr(y1-y2))
+# # print(repr(y1*y2))
+# # print(repr(y1/y2))
+#
+# lf1= w1*y1
+#
+# lf1.set_touch_callback(say)
+#
+# lf2 = w2*y2
+#
+# # lf1 + w2*y2

@@ -26,6 +26,22 @@ def make_valid_identifier(x, suppress_warnings=False):
 	return y
 
 
+
+def valid_identifier_or_parenthized_string(x, leading_dot=True):
+	x = str(x)
+	if x.isidentifier():
+		if leading_dot:
+			return "."+x
+		return x
+	else:
+		if "'" in x and '"' not in x:
+			return '("{}")'.format(x)
+		if "'" not in x and '"' in x:
+			return "('{}')".format(x)
+		raise NotImplementedError("cannot handle strings with both quote types")
+
+
+
 def parenthize(x, signs_qualify=False):
 	"""Wrap a string in parenthesis if needed for unambiguous clarity.
 

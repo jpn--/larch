@@ -1,7 +1,6 @@
 import numpy
 import pandas
-from larch.core import LinearFunction, LinearComponent
-from larch.roles import ParameterRef
+from .roles import LinearFunction, LinearComponent, ParameterRef, DictOfLinearFunction
 from .util import SignalDict
 
 def _optional_index(y):
@@ -31,15 +30,23 @@ class ParameterCollection():
 				 quantity_ca=None):
 		self._altindex = pandas.Index( altindex )
 
-		self._utility_co_functions = SignalDict(self.mangle,self.mangle,self.mangle,utility_co or {})
-		self._utility_ca_function  = utility_ca or LinearFunction()
+		self._utility_co_functions = DictOfLinearFunction(utility_co, touch_callback=self.mangle, alts_validator=self._check_alternative)
+		self._utility_ca_function  = LinearFunction(utility_ca, touch_callback=self.mangle)
 
-		self._quantity_ca_function  = quantity_ca or LinearFunction()
+		self._quantity_ca_function  = LinearFunction(quantity_ca, touch_callback=self.mangle)
+
+		if names is None:
+			names = ()
 
 		self.frame = _empty_parameter_frame(names)
 		self._scan_utility_ensure_names()
 		self._parameter_update_scheme = {}
 		self.mangle()
+
+	def _check_alternative(self, a):
+		if a in self._altindex:
+			return True
+		return False
 
 	def _scan_utility_ensure_names(self):
 		nameset = set()
@@ -165,6 +172,7 @@ class ParameterCollection():
 		if not isinstance(value, LinearFunction):
 			raise TypeError('needs LinearFunction')
 		self._utility_ca_function = value
+		self._utility_ca_function.set_touch_callback(self.mangle)
 		self.mangle()
 
 	@property
@@ -173,7 +181,7 @@ class ParameterCollection():
 
 	@utility_co.setter
 	def utility_co(self, value):
-		if not isinstance(value, (dict, SignalDict)):
+		if not isinstance(value, (dict, DictOfLinearFunction)):
 			raise TypeError('needs [dict] of {key:LinearFunction}')
 		value = value.copy()
 		for k in value.keys():
@@ -181,7 +189,7 @@ class ParameterCollection():
 				value[k] = LinearFunction() + value[k]
 			if not isinstance(value[k], LinearFunction):
 				raise TypeError('needs dict of {key:[LinearFunction]}')
-		self._utility_co_functions = SignalDict(self.mangle, self.mangle, self.mangle, value or {})
+		self._utility_co_functions = DictOfLinearFunction(value, touch_callback=self.mangle, alts_validator=self._check_alternative)
 
 
 

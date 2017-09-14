@@ -9,6 +9,20 @@ class TouchNotify():
 		self.__touch_callback = touch_callback if callable(touch_callback) else lambda: None
 		super().__init__(*args, **kwargs)
 
+	def get_touch_callback(self):
+		return self.__touch_callback
+
+	def set_touch_callback(self, callback):
+		if callable(callback):
+			self.__touch_callback = callback
+		elif callback is None:
+			self.__touch_callback = lambda: None
+		else:
+			raise TypeError('callback must be callable')
+
+	def del_touch_callback(self):
+		self.__touch_callback = lambda: None
+
 	def __setitem__(self, key, value):
 		ret = super().__setitem__(key, value)
 		self.__touch_callback()
@@ -26,6 +40,11 @@ class TouchNotify():
 
 	def __delattr__(self, key):
 		ret = super().__delattr__(key)
+		self.__touch_callback()
+		return ret
+
+	def setdefault(self, *args, **kwargs):
+		ret = super().setdefault(*args, **kwargs)
 		self.__touch_callback()
 		return ret
 

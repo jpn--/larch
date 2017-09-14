@@ -25,3 +25,4 @@ def sum_of_elementwise_product(
 		double[:,:] b,
 ):
 	return _sum_of_elementwise_product(a,b)
+

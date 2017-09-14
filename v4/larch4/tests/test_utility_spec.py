@@ -1,12 +1,12 @@
 
 import larch
 
-from .tree import NestingTree
-from .nl_utility import exp_util_of_nests
-from .nl_prob import conditional_logprob_from_tree, elemental_logprob_from_conditional_logprob
+from ..nesting.tree import NestingTree
+from ..nesting.nl_utility import exp_util_of_nests
+from ..nesting.nl_prob import conditional_logprob_from_tree, elemental_logprob_from_conditional_logprob
 import numpy
 
-def test_nl_simple_loglike():
+def test_utility_spec_changes():
 	from ..parameter_collection import ParameterCollection
 	from ..data_collection import DataCollection
 	from ..workspace_collection import WorkspaceCollection
@@ -54,8 +54,8 @@ def test_nl_simple_loglike():
 	)
 
 	u_co = {
-		2:((P('vehbywrk_SR2') * X('vehbywrk'))+(P('wkcbd_SR2') * X('wkccbd+wknccbd'))+(P('wkempden_SR2') * X('wkempden'))+(P('ASC_SR2') * X('1'))),
-		3:((P('vehbywrk_SR3+') * X('vehbywrk'))+(P('wkcbd_SR3+') * X('wkccbd+wknccbd'))+(P('wkempden_SR3+') * X('wkempden'))+(P('ASC_SR3+') * X('1'))),
+		2:((P('vehbywrk_SR2') * X('vehbywrk'))+(P('wkcbd_SR2') * X('wkccbd+wknccbd'))+(P('wkempden_SR2') * X('wkempden'))+(P('ASC_SR2') )),
+		3:((P('vehbywrk_SR3+') * X('vehbywrk'))+(P('wkcbd_SR3+') * X('wkccbd+wknccbd'))+(P('wkempden_SR3+') * X('wkempden'))+(P('ASC_SR3+') )),
 		4:((P('hhinc#4') * X('hhinc'))+(P('vehbywrk_Tran') * X('vehbywrk'))+(P('wkcbd_Tran') * X('wkccbd+wknccbd'))+(P('wkempden_Tran') * X('wkempden'))+(P('ASC_Tran') * X('1'))),
 		5:((P('hhinc#5') * X('hhinc'))+(P('vehbywrk_Bike') * X('vehbywrk'))+(P('wkcbd_Bike') * X('wkccbd+wknccbd'))+(P('wkempden_Bike') * X('wkempden'))+(P('ASC_Bike') * X('1'))),
 		6:((P('hhinc#6') * X('hhinc'))+(P('vehbywrk_Walk') * X('vehbywrk'))+(P('wkcbd_Walk') * X('wkccbd+wknccbd'))+(P('wkempden_Walk') * X('wkempden'))+(P('ASC_Walk') * X('1')))
@@ -115,6 +115,29 @@ def test_nl_simple_loglike():
 
 	t.add_node(7, children=(1, 2, 3, 4), parameter='mu_motor')
 	t.add_node(8, children=(5, 6), parameter='mu_nonmotor')
+
+	assert( not p._mangled )
+
+	p.utility_ca[0] *= 2
+	assert( p._mangled )
+	p.unmangle()
+	assert( not p._mangled )
+
+	try:
+		p.utility_co[7] += (P('hhinc#7') * X('hhinc'))
+	except KeyError:
+		pass
+	else:
+		raise AssertionError
+
+	assert( not p._mangled )
+
+	p.utility_co[1] += (P('hhinc#1') * X('hhinc'))
+	assert( p._mangled )
+	p.unmangle()
+	assert( not p._mangled )
+
+	assert( len(p.utility_co)==6 )
 
 	work = WorkspaceCollection(d, p, t)
 

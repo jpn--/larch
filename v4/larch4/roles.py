@@ -3,7 +3,7 @@ import re as _re
 # from .core import LinearComponent, LinearFunction
 # from .exceptions import LarchError
 
-from .util.naming import parenthize
+from .util.naming import parenthize, valid_identifier_or_parenthized_string
 from .util.touch_notifier import TouchNotify
 
 _chi = u"\u03C7"
@@ -609,16 +609,24 @@ def exp(x):
 
 class CombinedRef(metaclass=Role):
 	def __new__(cls, s):
-		return LinearComponent(DataRef(s), ParameterRef(s))
+		return LinearComponent(data=DataRef(s), param=ParameterRef(s))
 
 
 # ===========================================================================
 
 class LinearComponent(TouchNotify):
-	def __init__(self, param=None, data=None, **kwargs):
+	def __init__(self, *args, param=None, data=None, **kwargs):
+		if len(args):
+			if isinstance(args[0], LinearComponent):
+				super().__init__(**kwargs)
+				self._param = param or args[0]._param
+				self._data = data or args[0]._data
+				self.set_touch_callback(args[0].get_touch_callback())
+			else:
+				raise TypeError('init LinearComponent with LinearComponent or keyword arguments')
+		super().__init__(**kwargs)
 		self._param = param or '1'
 		self._data = data or '1'
-		super().__init__(**kwargs)
 
 	@property
 	def data(self):
@@ -643,7 +651,7 @@ class LinearComponent(TouchNotify):
 		if other == ():
 			return self
 		elif isinstance(other, (LinearFunction, LinearComponent)):
-			return LinearFunction() + self + other
+			return (LinearFunction(touch_callback=self.get_touch_callback()) + self) + other
 		elif other == 0:
 			return self
 		else:
@@ -654,13 +662,13 @@ class LinearComponent(TouchNotify):
 
 	def __mul__(self, other):
 		if isinstance(other, (int, float, DataRef)):
-			return LinearComponent(data=self.data * other, param=self.param)
+			return LinearComponent(data=self.data * other, param=self.param, touch_callback=self.get_touch_callback())
 		else:
 			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
 
 	def __rmul__(self, other):
 		if isinstance(other, (int, float, DataRef)):
-			return LinearComponent(data=self.data * other, param=self.param)
+			return LinearComponent(data=self.data * other, param=self.param, touch_callback=self.get_touch_callback())
 		else:
 			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
 
@@ -671,7 +679,7 @@ class LinearComponent(TouchNotify):
 			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
 
 	def __iter__(self):
-		return iter(LinearFunction() + self)
+		return iter(LinearFunction(touch_callback=self.get_touch_callback()) + self)
 
 	def __eq__(self, other):
 		if isinstance(other, LinearFunction) and len(other) == 1:
@@ -684,12 +692,263 @@ class LinearComponent(TouchNotify):
 			return False
 		return True
 
+	def __repr__(self):
+		return f"({self.param!r} * {self.data!r})"
 
 # ===========================================================================
 
 class LinearFunction(TouchNotify, list):
-	def __init__(self, *args):
-		super().__init__(*args)
+	def __init__(self, *args, touch_callback=None, **kwargs):
+		if len(args) == 1 and args[0] is None:
+			args = ()
+		super().__init__(*args, **kwargs)
+		self.set_touch_callback(touch_callback)
+
+	def __add__(self, other):
+		if other == ():
+			return self
+		if isinstance(other, LinearFunction):
+			return super().__add__(other)
+		if isinstance(other, ParameterRef):
+			other = LinearComponent(param=other, touch_callback=self.get_touch_callback())
+		if isinstance(other, LinearComponent):
+			result = type(self)(self, touch_callback=self.get_touch_callback())
+			result.append(other)
+			return result
+		raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+
+	def __iadd__(self, other):
+		if isinstance(other, ParameterRef):
+			other = LinearComponent(param=other, touch_callback=self.get_touch_callback())
+		if other == ():
+			return self
+		elif isinstance(other, LinearFunction):
+			super().__iadd__(other)
+		elif isinstance(other, LinearComponent):
+			super().append(other)
+		else:
+			raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+		return self
+
+	def __radd__(self, other):
+		return LinearFunction(touch_callback=self.get_touch_callback()) + other + self
+
+	def __pos__(self):
+		return self
+
+	def __mul__(self, other):
+		trial = LinearFunction(touch_callback=self.get_touch_callback())
+		for component in self:
+			trial += component * other
+		return trial
+
+	def __rmul__(self, other):
+		trial = LinearFunction(touch_callback=self.get_touch_callback())
+		for component in self:
+			trial += other * component
+		return trial
+
+	# def evaluate(self, dataspace, model):
+	# 	if len(self) > 0:
+	# 		i = self[0]
+	# 		y = i.data.eval(**dataspace) * i.param.default_value(0).value(model)
+	# 	for i in self[1:]:
+	# 		y += i.data.eval(**dataspace) * i.param.default_value(0).value(model)
+	# 	return y
+	#
+	# def evaluator1d(self, factorlabel='', x_ident=None):
+	# 	if x_ident is None:
+	# 		try:
+	# 			x_ident = self._x_ident
+	# 		except AttributeError:
+	# 			raise TypeError('a x_ident must be given')
+	# 	if x_ident is None:
+	# 		raise TypeError('a x_ident must be given')
+	# 	from .util.plotting import ComputedFactor
+	# 	return ComputedFactor(label=factorlabel, func=lambda x, m: self.evaluate({x_ident: x}, m))
+
+	def __contains__(self, val):
+		if isinstance(val, ParameterRef):
+			for i in self:
+				if i.param == val:
+					return True
+			return False
+		if isinstance(val, DataRef):
+			for i in self:
+				if i.data == val:
+					return True
+			return False
+		raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+
+	def _index_of(self, val):
+		if isinstance(val, ParameterRef):
+			for n, i in enumerate(self):
+				if i.param == val:
+					return n
+			raise KeyError('ParameterRef not found')
+		if isinstance(val, DataRef):
+			for n, i in enumerate(self):
+				if i.data == val:
+					return n
+			raise KeyError('DataRef not found')
+		raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+
+	def reformat_param(self, container=None, pattern=None, repl=None, **kwargs):
+		"""
+		Transform all the parameters in the LinearFunction.
+
+		Parameters
+		----------
+		container : str
+			A format string, into which the previous parameters are formatted.
+			Use this to append things to the parameter names.
+		pattern : str
+		repl : str
+			Passed to `re.sub` with each existing parameter as the base string
+			to be searched.
+		"""
+		import re
+		r = LinearFunction(touch_callback=self.get_touch_callback())
+		for i in self:
+			if pattern is None:
+				param = i.param
+			else:
+				if repl is None:
+					raise TypeError('must give repl with pattern')
+				param = re.sub(pattern, repl, i.param, **kwargs)
+			if container is None:
+				container = '{}'
+			r += LinearComponent(data=i.data, param=container.format(param), touch_callback=self.get_touch_callback())
+		try:
+			r._x_ident = self._x_ident
+		except AttributeError:
+			pass
+		return r
+
+	def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
+		"""
+		Transform all the data in the LinearFunction.
+
+		Parameters
+		----------
+		container : str
+			A format string, into which the previous data strings are formatted.
+			Use this to apply common global transforms to the data.
+		pattern : str
+		repl : str
+			Passed to `re.sub` with each existing data string as the base string
+			to be searched.
+		"""
+		import re
+		r = LinearFunction(touch_callback=self.get_touch_callback())
+		for i in self:
+			if pattern is None:
+				data = i.data
+			else:
+				if repl is None:
+					raise TypeError('must give repl with pattern')
+				data = re.sub(pattern, repl, i.data, **kwargs)
+			if container is None:
+				container = '{}'
+			r += LinearComponent(data=container.format(data), param=i.param, touch_callback=self.get_touch_callback())
+		try:
+			r._x_ident = self._x_ident
+		except AttributeError:
+			pass
+		return r
+
+	def __eq__(self, other):
+		if not isinstance(other, LinearFunction):
+			return False
+		if len(self) != len(other):
+			return False
+		for i, j in zip(self, other):
+			if i != j: return False
+		return True
+
+	def __getstate__(self):
+		state = {}
+		state['code'] = self.__code__()
+		try:
+			state['_x_ident'] = self._x_ident
+		except AttributeError:
+			pass
+		return state
+
+	def __setstate__(self, state):
+		self.__init__()
+		self.__iadd__(eval(state['code']))
+		if '_x_ident' in state:
+			self._x_ident = state['_x_ident']
+
+	def __repr__(self):
+		result = " + ".join(repr(i) for i in self)
+		if len(result)<80:
+			return result
+		else:
+			return "  "+result.replace(" + ","\n+ ")
+
+	def set_touch_callback(self, callback):
+		super().set_touch_callback(callback)
+		for i in self:
+			i.set_touch_callback(callback)
+
+# ====================================================================================================
+
+from itertools import chain
+_RaiseKeyError = object() # singleton for no-default behavior
+
+class DictOfLinearFunction(TouchNotify, dict):
+	@staticmethod # because this doesn't make sense as a global function.
+	def _process_args(mapping=(), **kwargs):
+		if hasattr(mapping, 'items'):
+			mapping = getattr(mapping, 'items')()
+		return ((k, v) for k, v in chain(mapping, getattr(kwargs, 'items')()))
+	def __init__(self, mapping=(), touch_callback=None, alts_validator=None, **kwargs):
+		if mapping is None:
+			mapping = ()
+		super().__init__(self._process_args(mapping, **kwargs))
+		self.set_touch_callback(touch_callback if callable(touch_callback) else lambda: None)
+		self._alts_validator = alts_validator
+	def set_alts_validator(self, av):
+		self._alts_validator = av
+	def __getitem__(self, k):
+		try:
+			return super().__getitem__(k)
+		except KeyError:
+			if self._alts_validator is None:
+				raise
+			if self._alts_validator(k):
+				super().__setitem__(k, LinearFunction(touch_callback=self.get_touch_callback()))
+				return super().__getitem__(k)
+			else:
+				raise
+	def __setitem__(self, k, v):
+		if isinstance(v, LinearComponent):
+			v = LinearFunction(touch_callback=self.get_touch_callback()) + v
+		elif isinstance(v, LinearFunction):
+			v.set_touch_callback(self.get_touch_callback())
+		else:
+			raise TypeError("only accepts LinearFunction values")
+		return super().__setitem__(k, v)
+	def setdefault(self, k, default=None):
+		if default is None:
+			default = LinearFunction(touch_callback=self.get_touch_callback())
+		if isinstance(default, LinearComponent):
+			default = LinearFunction(touch_callback=self.get_touch_callback()) + default
+		elif isinstance(default, LinearFunction):
+			default.set_touch_callback(self.get_touch_callback())
+		else:
+			raise TypeError("only accepts LinearFunction values")
+		return super().setdefault(k, default)
+	def copy(self): # don't delegate w/ super - dict.copy() -> dict :(
+		return type(self)(self)
+	def __repr__(self):
+		return '{0}({1})'.format(type(self).__name__, super().__repr__())
+	def set_touch_callback(self, callback):
+		super().set_touch_callback(callback)
+		for i in self.values():
+			i.set_touch_callback(callback)
 
 
 #
