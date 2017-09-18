@@ -2,6 +2,7 @@ from scipy.linalg.cython_blas cimport dgemm as _dgemm
 cimport numpy as np
 cimport cython
 
+@cython.boundscheck(False)
 cpdef _dot_strider(
 	double[:,:] a, int lda,
 	double[:,:] b, int ldb,
@@ -59,20 +60,20 @@ def _fortran_check(z, label):
 
 def dgemm(alpha,a,b,beta,c):
 	c, trans_c = _fortran_check(c, "MAT-C")
-	ldc = int(c.strides[1] / c.dtype.itemsize)
+	ldc = c.strides[1] // c.dtype.itemsize
 	if trans_c:
 		a, trans_a = _fortran_check(a.T, "MAT-At")
 		b, trans_b = _fortran_check(b.T, "MAT-Bt")
-		lda = int(a.strides[1] / a.dtype.itemsize)
-		ldb = int(b.strides[1] / b.dtype.itemsize)
+		lda = a.strides[1] // a.dtype.itemsize
+		ldb = b.strides[1] // b.dtype.itemsize
 		#print("b...",b.strides,ldb,b.shape,'T' if trans_b else 'N')
 		#print("a...",a.strides,lda,a.shape,'T' if trans_a else 'N')
 		return _dot_strider(b,ldb,a,lda,c,ldc,alpha,beta,trans_b,trans_a)
 	else:	 
 		a, trans_a = _fortran_check(a, "MAT-A")
 		b, trans_b = _fortran_check(b, "MAT-B")
-		lda = int(a.strides[1] / a.dtype.itemsize)
-		ldb = int(b.strides[1] / b.dtype.itemsize)
+		lda = a.strides[1] // a.dtype.itemsize
+		ldb = b.strides[1] // b.dtype.itemsize
 		#print("a...",a.strides,lda,a.shape,'T' if trans_a else 'N')
 		#print("b...",b.strides,ldb,b.shape,'T' if trans_b else 'N')
 		return _dot_strider(a,lda,b,ldb,c,ldc,alpha,beta,trans_a,trans_b)

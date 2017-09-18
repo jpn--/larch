@@ -22,7 +22,7 @@ def find_pyx(path='.'):
 
 setup(
   name = 'larch4',
-  ext_modules = cythonize(find_pyx()), 
+  ext_modules = cythonize(find_pyx(), gdb_debug=True),
   include_dirs=[numpy.get_include()],
   packages=find_packages(),
 )

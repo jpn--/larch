@@ -148,6 +148,8 @@ if 1:
 	p.graph = t
 
 
+
+
 	# work = WorkspaceCollection(d,p,t)
 	# work = p.work
 
@@ -169,22 +171,22 @@ if 1:
 	# 	work.exp_util_nests,
 	# 		t,
 	# 		p,
-	# 		work.log_conditional_prob
+	# 		work.log_conditional_prob_dict
 	# 	)
 	# print("?"*30, 'Prob?')
 	# # print(m.work.probability[0])
-	# print(work.log_conditional_prob[0][0])
+	# print(work.log_conditional_prob_dict[0][0])
 	#
 	# try:
-	# 	print(work.log_conditional_prob[7][0])
-	# 	print(work.log_conditional_prob[8][0])
+	# 	print(work.log_conditional_prob_dict[7][0])
+	# 	print(work.log_conditional_prob_dict[8][0])
 	# except KeyError:
 	# 	pass
 	#
 	# print("!"*30, 'Prob!')
 	#
 	# elemental_logprob_from_conditional_logprob(
-	# 	work.log_conditional_prob,
+	# 	work.log_conditional_prob_dict,
 	# 	t,
 	# 	work.log_prob
 	#
@@ -224,12 +226,102 @@ if 1:
 		p.loglike()
 
 
+	ue, un = p.calculate_utility_values()
+
+
+	for c in range(100):
+
+		func = lambda x: p.calculate_utility_values(x)[0][c]
+		func2 = lambda x: p.calculate_utility_values(x)[1][c]
+
+		from larch4.math.optimize import approx_fprime
+
+		xk = p.frame['value'].values.copy()
+
+		axp = approx_fprime(xk, func, 1e-5)
+		axp2 = approx_fprime(xk, func2, 1e-5)
+
+		# print("<axp shape=",axp.shape,">")
+		# print(axp)
+		# print("</axp>")
+		#
+		# print("<axp2 shape=",axp2.shape,">")
+		# print(axp2)
+		# print("</axp2>")
+		#
+		from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters
+		from larch4.linalg.contiguous_group import Blocker
+
+		p.unmangle()
+
+		edge_slot_arrays = p.graph.edge_slot_arrays()
+		dU = Blocker([len(p.graph)], [
+			p.coef_utility_ca.shape,
+			p.coef_utility_co.shape,
+			p.coef_quantity_ca.shape,
+			p.coef_logsums.shape,
+		])
+
+		case_dUtility_dFusedParameters(
+			c, # int c,
+
+			p.data.n_cases,  # int n_cases,
+			p.data.n_alts,   # int n_elementals,
+			len(p.graph) - p.data.n_alts, #  int n_nests,
+			p.graph.n_edges, # int n_edges,
+
+			p.work.log_prob,        # double[:,:] log_prob_elementals,  # shape = [cases,alts]
+			p.work.util_elementals, # double[:,:] util_elementals,      # shape = [cases,alts]
+			p.work.util_nests,      # double[:,:] util_nests,           # shape = [cases,nests]
+
+			p.coef_utility_ca,  # double[:] coef_u_ca,               # shape = (vars_ca)
+			p.coef_utility_co,  # double[:,:] coef_u_co,             # shape = (vars_co,alts)
+			p.coef_quantity_ca, # double[:] coef_q_ca,               # shape = (qvars_ca)
+			p.coef_logsums,     # double[:] coef_mu,                 # shape = (nests)
+
+			dU.outer,     # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
+			dU.inners[0], # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+			dU.inners[1], # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+			dU.inners[2], # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+			dU.inners[3], # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+			p.data._u_ca, # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
+			p.data._u_co, # double[:,:] data_u_co,             # shape = (cases,vars_co)
+
+			p.work.log_conditional_probability, # double[:,:] conditional_prob,      # shape = (cases,edges)
+
+			edge_slot_arrays[1], # int[:] edge_child_slot,            # shape = (edges)
+			edge_slot_arrays[0], # int[:] edge_parent_slot,           # shape = (edges)
+			edge_slot_arrays[2], # int[:] first_visit_to_child,       # shape = (edges)
+		)
+
+		dUp = p.push_to_parameterlike(dU)
+
+		try:
+			assert(numpy.allclose(axp, dUp.T[:,:6], rtol=1e-02, atol=1e-06,))
+		except:
+			print("ERRRR1  c=",c)
+			for row in range(30):
+				print("ROW",row,"  -- ",p.frame.index[row])
+				print(axp[row])
+				print(dUp.T[row,:6])
+			raise
+
+		try:
+			assert(numpy.allclose(axp2, dUp.T[:,6:], rtol=1e-02, atol=1e-06,))
+		except:
+			print("ERRRR2  c=",c)
+			for row in range(30):
+				print("ROW",row,"  -- ",p.frame.index[row])
+				print(axp2[row])
+				print(dUp.T[row,6:])
+			raise
 
 
 	# %timeit d._calculate_log_like(work.log_prob)
 
 
-	print( p.coef_utility_co )
+	# print( p.coef_utility_co )
 	# print( m.Coef("UtilityCO").squeeze() )
 
 	m = larch.Model.Example(22)

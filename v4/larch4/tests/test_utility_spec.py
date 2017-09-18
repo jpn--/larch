@@ -152,11 +152,11 @@ def test_utility_spec_changes():
 		work.util_nests,
 		t,
 		p,
-		work.log_conditional_prob
+		work.log_conditional_prob_dict
 	)
 
 	elemental_logprob_from_conditional_logprob(
-		work.log_conditional_prob,
+		work.log_conditional_prob_dict,
 		t,
 		work.log_prob
 

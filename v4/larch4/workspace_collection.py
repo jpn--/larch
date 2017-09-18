@@ -9,8 +9,12 @@ class WorkspaceCollection():
 
 		if graph:
 			self.util_nests = numpy.zeros([data_coll.n_cases, len(graph) - data_coll.n_alts])
-			self.log_conditional_prob = {
-				code: numpy.zeros([data_coll.n_cases, code_out_degree])
-				for code, code_out_degree in graph.out_degree_iter()
-				if code_out_degree > 0
-			}
+			self.log_conditional_probability = numpy.zeros([data_coll.n_cases, graph.n_edges])
+			self.log_conditional_prob_dict = {}
+			n = 0
+			ups, dns, fis = graph.edge_slot_arrays()
+			while n < graph.n_edges:
+				code = graph.standard_sort[ups[n]]
+				degree = graph.out_degree(code)
+				self.log_conditional_prob_dict[code] = self.log_conditional_probability[:, n:n + degree]
+				n += degree

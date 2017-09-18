@@ -25,9 +25,11 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0):
 class ParameterCollection():
 
 	def __init__(self, names, altindex,
-				 utility_ca=None,
-				 utility_co=None,
-				 quantity_ca=None):
+					utility_ca=None,
+					utility_co=None,
+					quantity_ca=None,
+					graph=None,
+	):
 		self._altindex = pandas.Index( altindex )
 
 		self._utility_co_functions = DictOfLinearFunction(utility_co, touch_callback=self.mangle, alts_validator=self._check_alternative)
@@ -35,11 +37,13 @@ class ParameterCollection():
 
 		self._quantity_ca_function  = LinearFunction(quantity_ca, touch_callback=self.mangle)
 
+		self._graph = graph if graph is not None else self._mnl_graph()
+
 		if names is None:
 			names = ()
 
 		self.frame = _empty_parameter_frame(names)
-		self._scan_utility_ensure_names()
+		self._scan_all_ensure_names()
 		self._parameter_update_scheme = {}
 		self.mangle()
 
@@ -47,6 +51,12 @@ class ParameterCollection():
 		if a in self._altindex:
 			return True
 		return False
+
+
+	def _scan_all_ensure_names(self):
+		self._scan_utility_ensure_names()
+		self._scan_quantity_ensure_names()
+		self._scan_logsums_ensure_names()
 
 	def _scan_utility_ensure_names(self):
 		nameset = set()
@@ -62,9 +72,26 @@ class ParameterCollection():
 		for component in self._utility_ca_function:
 			nameset.add(str(component.param))
 
+		self._ensure_names(nameset)
+
+
+	def _scan_quantity_ensure_names(self):
+		nameset = set()
+
 		self._q_ca_varindex = pandas.Index( str(component.data) for component in self._quantity_ca_function )
 		for component in self._q_ca_varindex:
 			nameset.add(str(component.param))
+
+		self._ensure_names(nameset)
+
+	def _scan_logsums_ensure_names(self):
+		nameset = set()
+
+		self._q_ca_varindex = pandas.Index( str(component.data) for component in self._quantity_ca_function )
+		for nodecode in self.graph.topological_sorted_no_elementals:
+			if nodecode != self.graph._root_id:
+				param_name = str(self.graph.node[nodecode]['parameter'])
+				nameset.add(param_name)
 
 		self._ensure_names(nameset)
 
@@ -81,7 +108,7 @@ class ParameterCollection():
 
 	def unmangle(self):
 		if self._mangled:
-			self._scan_utility_ensure_names()
+			self._scan_all_ensure_names()
 			self._initialize_derived_util_coef_arrays()
 			self._mangled = False
 
@@ -101,6 +128,16 @@ class ParameterCollection():
 		return self._coef_quantity_ca
 
 	@property
+	def coef_logsums(self):
+		self.unmangle()
+		return self._coef_logsums
+
+	@property
+	def coef_block(self):
+		self.unmangle()
+		return self._coef_block.outer
+
+	@property
 	def utility_ca_vars(self):
 		self.unmangle()
 		return self._u_ca_varindex
@@ -116,28 +153,66 @@ class ParameterCollection():
 		return self._q_ca_varindex
 
 	def _initialize_derived_util_coef_arrays(self):
+		from .linalg.contiguous_group import Blocker
+		n_logsum_params = len(self.graph)-len(self._altindex)
+		self._coef_block = Blocker(
+			[], [
+				[len(self._u_ca_varindex)],                      # utility ca
+				[len(self._u_co_varindex), len(self._altindex)], # utility co
+				[len(self._q_ca_varindex)],                      # quantity ca
+				[n_logsum_params],                               # logsums
+			], dtype=numpy.float64
+		)
 
-		self._coef_utility_co = numpy.zeros( [len(self._u_co_varindex), len(self._altindex)], dtype=numpy.float64)
-		self._coef_utility_ca = numpy.zeros( len(self._u_ca_varindex), dtype=numpy.float64)
-		self._coef_quantity_ca = numpy.zeros( len(self._q_ca_varindex), dtype=numpy.float64)
+		self._coef_utility_ca = self._coef_block.inners[0]
+		self._coef_utility_co = self._coef_block.inners[1]
+		self._coef_quantity_ca = self._coef_block.inners[2]
+		self._coef_logsums = self._coef_block.inners[3]
+		self._coef_logsums[:] = 1.0
 
 		self._parameter_update_scheme = {}
+		self._parameter_recall_scheme = {
+			'_coef_utility_ca':[],
+			'_coef_utility_co':[],
+			'_coef_quantity_ca':[],
+			'_coef_logsums':[],
+		}
 
 		for n,component in enumerate(self._utility_ca_function):
-			if str(component.param) not in self._parameter_update_scheme:
-				self._parameter_update_scheme[str(component.param)] = []
-			self._parameter_update_scheme[str(component.param)].append( ('_coef_utility_ca', (n,)) )
+			param_name = str(component.param)
+			if param_name not in self._parameter_update_scheme:
+				self._parameter_update_scheme[param_name] = []
+			self._parameter_update_scheme[param_name].append( ('_coef_utility_ca', (n,)) )
+			self._parameter_recall_scheme['_coef_utility_ca'].append( ((n,), self.frame.index.get_loc(param_name)) )
 
 		for altcode, linear_function in self._utility_co_functions.items():
 			for component in linear_function:
-				if str(component.param) not in self._parameter_update_scheme:
-					self._parameter_update_scheme[str(component.param)] = []
-				self._parameter_update_scheme[str(component.param)].append( ('_coef_utility_co', (self._u_co_varindex.get_loc(str(component.data)), self._altindex.get_loc(altcode) )) )
+				param_name = str(component.param)
+				if param_name not in self._parameter_update_scheme:
+					self._parameter_update_scheme[param_name] = []
+				coord = (self._u_co_varindex.get_loc(str(component.data)), self._altindex.get_loc(altcode) )
+				self._parameter_update_scheme[param_name].append( ('_coef_utility_co', coord) )
+				self._parameter_recall_scheme['_coef_utility_co'].append( (coord, self.frame.index.get_loc(param_name)) )
 
 		for n,component in enumerate(self._quantity_ca_function):
-			if str(component.param) not in self._parameter_update_scheme:
-				self._parameter_update_scheme[str(component.param)] = []
-			self._parameter_update_scheme[str(component.param)].append( ('_coef_quantity_ca', (n,)) )
+			param_name = str(component.param)
+			if param_name not in self._parameter_update_scheme:
+				self._parameter_update_scheme[param_name] = []
+			self._parameter_update_scheme[param_name].append( ('_coef_quantity_ca', (n,)) )
+			self._parameter_recall_scheme['_coef_quantity_ca'].append(((n,), self.frame.index.get_loc(param_name)))
+
+		for n,nestcode in enumerate(self.graph.topological_sorted_no_elementals):
+			node_dict = self.graph.node[nestcode]
+			try:
+				param_name = str(node_dict['parameter'])
+			except KeyError:
+				if self.graph._root_id != nestcode:
+					raise
+			else:
+				if param_name not in self._parameter_update_scheme:
+					self._parameter_update_scheme[param_name] = []
+				self._parameter_update_scheme[param_name].append( ('_coef_logsums', (n,)) )
+				self._parameter_recall_scheme['_coef_logsums'].append(((n,), self.frame.index.get_loc(param_name)))
 
 		self._refresh_derived_arrays()
 
@@ -147,6 +222,19 @@ class ParameterCollection():
 			schemes = self._parameter_update_scheme[name]
 			for member, location in schemes:
 				self.__getattribute__(member)[location] = value
+
+	def push_to_parameterlike(self, meta):
+		result = numpy.zeros( tuple(meta.shape_prefix)+(len(self.frame),), dtype=meta.dtype )
+		for i in self._parameter_recall_scheme['_coef_utility_ca']:
+			result[...,i[1]] += meta.inners[0][...,i[0][0]]
+		for i in self._parameter_recall_scheme['_coef_utility_co']:
+			result[...,i[1]] += meta.inners[1][...,i[0][0],i[0][1]]
+		for i in self._parameter_recall_scheme['_coef_quantity_ca']:
+			result[...,i[1]] += meta.inners[2][...,i[0][0]]
+		for i in self._parameter_recall_scheme['_coef_logsums']:
+			result[...,i[1]] += meta.inners[3][...,i[0][0]]
+		return result
+
 
 	def set_value(self, name, value):
 		self.frame.loc[name,'value'] = value
@@ -201,6 +289,26 @@ class ParameterCollection():
 				raise TypeError('needs dict of {key:[LinearFunction]}')
 		self._utility_co_functions = DictOfLinearFunction(value, touch_callback=self.mangle, alts_validator=self._check_alternative)
 
+	@property
+	def graph(self):
+		return self._graph
 
+	def _set_graph(self, value):
+		from .nesting.tree import NestingTree
+		self._graph = NestingTree(value)
+		self._graph.set_touch_callback(self.mangle)
+		self.mangle()
 
+	@graph.setter
+	def graph(self, value):
+		return self._set_graph(value)
+
+	def _mnl_graph(self):
+		from .nesting.tree import NestingTree
+		root_id = 0
+		while root_id in self._altindex:
+			root_id += 1
+		t = NestingTree(root_id=root_id)
+		t.add_nodes(self._altindex)
+		return t
 

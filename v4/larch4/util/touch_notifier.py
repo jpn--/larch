@@ -23,6 +23,9 @@ class TouchNotify():
 	def del_touch_callback(self):
 		self.__touch_callback = lambda: None
 
+	def touch(self):
+		self.__touch_callback()
+
 	def __setitem__(self, key, value):
 		ret = super().__setitem__(key, value)
 		self.__touch_callback()

@@ -2,7 +2,8 @@ from scipy.linalg.cython_blas cimport dgemv as _dgemv
 cimport numpy as np
 cimport cython
 
-cdef _dgemv_strider(
+@cython.boundscheck(False)
+cdef void _dgemv_strider(
 	double[:,:] a, int lda,
 	double[:] x, int incx,
 	double[:] y, int incy,
@@ -47,9 +48,9 @@ def _fortran_check(z):
 		
 
 def dgemv(alpha,a,x,beta,y):
-	incy = int(y.strides[0] / y.dtype.itemsize)
-	incx = int(x.strides[0] / x.dtype.itemsize)
+	incy = y.strides[0] // y.dtype.itemsize
+	incx = x.strides[0] // x.dtype.itemsize
 	a, trans_a = _fortran_check(a)
 	lda = int(a.strides[1] / a.dtype.itemsize)
-	return _dgemv_strider(a,lda,x,incx,y,incy,alpha,beta,trans_a)
+	_dgemv_strider(a,lda,x,incx,y,incy,alpha,beta,trans_a)
 		

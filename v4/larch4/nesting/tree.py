@@ -1,15 +1,20 @@
 import networkx as nx
 from collections import OrderedDict
 import numpy
+from ..util.touch_notifier import TouchNotify
 
-class NestingTree(nx.DiGraph):
+class NestingTree(TouchNotify,nx.DiGraph):
 
 	node_dict_factory = OrderedDict
 	adjlist_dict_factory = OrderedDict
 
 	def __init__(self, *arg, root_id=0, **kwarg):
-		super().__init__(*arg, **kwarg)
-		self._root_id = root_id
+		if len(arg) and isinstance(arg[0], NestingTree):
+			super().__init__(*arg, **kwarg)
+			self._root_id = arg[0]._root_id
+		else:
+			super().__init__(*arg, **kwarg)
+			self._root_id = root_id
 		if self._root_id not in self.node:
 			self.add_node(root_id, name='', root=True)
 		self._clear_caches()
@@ -21,6 +26,7 @@ class NestingTree(nx.DiGraph):
 		self._standard_slot_map = None
 		self._predecessor_slots = {}
 		self._successor_slots = {}
+		self.touch()
 
 	def add_edge(self, u, v, *arg, **kwarg):
 		if 'implied' not in kwarg:
@@ -133,3 +139,26 @@ class NestingTree(nx.DiGraph):
 
 	def elemental_descendants(self, code):
 		return [i for i in self.elemental_descendants_iter(code)]
+
+	@property
+	def n_edges(self):
+		return sum(len(v) for v in self.edge.values())
+
+	def edge_slot_arrays(self):
+		s = self.n_edges
+		up = numpy.zeros(s, dtype=numpy.int32)
+		dn = numpy.zeros(s, dtype=numpy.int32)
+		first_visit = numpy.zeros(s, dtype=numpy.int32)
+		n = s
+		first_visit_found = set()
+		for upcode in reversed(self.standard_sort):
+			upslot = self.standard_slot_map[upcode]
+			for dnslot in reversed(self.successor_slots(upcode)):
+				n -= 1
+				up[n] = upslot
+				dn[n] = dnslot
+		for n in range(s):
+			if dn[n] not in first_visit_found:
+				first_visit[n] = 1
+				first_visit_found.add(dn[n])
+		return up, dn, first_visit
