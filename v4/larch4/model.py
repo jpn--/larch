@@ -5,7 +5,7 @@ from .data_collection import DataCollection
 from .workspace_collection import WorkspaceCollection
 
 from .nesting.nl_utility import exp_util_of_nests, util_of_nests, exp_inplace_2
-from .nesting.nl_prob import conditional_logprob_from_tree_util, elemental_logprob_from_conditional_logprob
+from .nesting.nl_prob import conditional_logprob_from_tree_util, elemental_logprob_from_conditional_logprob, total_prob_from_log_conditional_prob
 
 
 class Model(ParameterCollection):
@@ -74,6 +74,20 @@ class Model(ParameterCollection):
 			self._graph,
 			self.work.log_prob
 		)
+		total_prob_from_log_conditional_prob(
+			self.work.log_conditional_probability,
+			self._graph,
+			self.work.total_probability,  # shape = (cases, nodes)
+		)
+
+
+	def calculate_probability_values(self, parameter_values=None):
+		self.unmangle()
+		if parameter_values is not None:
+			self.set_values(parameter_values)
+		self.calculate_utility()
+		self.calculate_log_probability()
+		return self.work.total_probability
 
 	def loglike(self, parameter_values=None):
 		self.unmangle()

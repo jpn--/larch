@@ -9,6 +9,7 @@ class WorkspaceCollection():
 
 		if graph:
 			self.util_nests = numpy.zeros([data_coll.n_cases, len(graph) - data_coll.n_alts])
+			self.total_probability = numpy.zeros([data_coll.n_cases, len(graph)])
 			self.log_conditional_probability = numpy.zeros([data_coll.n_cases, graph.n_edges])
 			self.log_conditional_prob_dict = {}
 			n = 0

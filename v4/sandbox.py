@@ -1,6 +1,6 @@
 
 
-if 1:
+if 0:
 	import larch
 	import numpy
 
@@ -379,3 +379,188 @@ if 1:
 # lf2 = w2*y2
 #
 # # lf1 + w2*y2
+
+
+if 1:
+
+	from larch4.nesting.test_nl import nl_straw_man_model_1
+	from larch4.math.optimize import approx_fprime
+	import numpy
+
+	p = nl_straw_man_model_1()
+	# p.frame.loc[:,'value'] = 0
+	# p.frame.loc['mu_motor', 'value'] = 1
+	# p.frame.loc['mu_nonmotor', 'value'] = 1
+
+	print(p.frame)
+	p.mangle()
+
+	p.loglike()
+
+	for c in range(1):
+
+		func = lambda x: p.calculate_utility_values(x)[0][c]
+		func2 = lambda x: p.calculate_utility_values(x)[1][c]
+
+
+		xk = p.frame['value'].values.copy()
+
+		axp = approx_fprime(xk, func, 1e-5)
+		axp2 = approx_fprime(xk, func2, 1e-5)
+
+		from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters
+		from larch4.linalg.contiguous_group import Blocker
+
+		p.unmangle()
+
+		edge_slot_arrays = p.graph.edge_slot_arrays()
+		dU = Blocker([len(p.graph)], [
+			p.coef_utility_ca.shape,
+			p.coef_utility_co.shape,
+			p.coef_quantity_ca.shape,
+			p.coef_logsums.shape,
+		])
+
+		case_dUtility_dFusedParameters(
+			c, # int c,
+
+			p.data.n_cases,  # int n_cases,
+			p.data.n_alts,   # int n_elementals,
+			len(p.graph) - p.data.n_alts, #  int n_nests,
+			p.graph.n_edges, # int n_edges,
+
+			p.work.log_prob,        # double[:,:] log_prob_elementals,  # shape = [cases,alts]
+			p.work.util_elementals, # double[:,:] util_elementals,      # shape = [cases,alts]
+			p.work.util_nests,      # double[:,:] util_nests,           # shape = [cases,nests]
+
+			p.coef_utility_ca,  # double[:] coef_u_ca,               # shape = (vars_ca)
+			p.coef_utility_co,  # double[:,:] coef_u_co,             # shape = (vars_co,alts)
+			p.coef_quantity_ca, # double[:] coef_q_ca,               # shape = (qvars_ca)
+			p.coef_logsums,     # double[:] coef_mu,                 # shape = (nests)
+
+			dU.outer,     # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
+			dU.inners[0], # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+			dU.inners[1], # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+			dU.inners[2], # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+			dU.inners[3], # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+			p.data._u_ca, # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
+			p.data._u_co, # double[:,:] data_u_co,             # shape = (cases,vars_co)
+
+			p.work.log_conditional_probability, # double[:,:] conditional_prob,      # shape = (cases,edges)
+
+			edge_slot_arrays[1], # int[:] edge_child_slot,            # shape = (edges)
+			edge_slot_arrays[0], # int[:] edge_parent_slot,           # shape = (edges)
+			edge_slot_arrays[2], # int[:] first_visit_to_child,       # shape = (edges)
+		)
+
+		dUp = p.push_to_parameterlike(dU)
+
+		try:
+			assert(numpy.allclose(axp, dUp.T[:,:6], rtol=1e-02, atol=1e-06,))
+		except:
+			print("Error in dU Elementals  c=",c)
+			for row in range(30):
+				if not numpy.allclose(axp[row], dUp.T[row,:6], rtol=1e-02, atol=1e-06,):
+					print("dU elementals ROW",row,"  -- ",p.frame.index[row])
+					print(axp[row])
+					print(dUp.T[row,:6])
+
+
+		try:
+			assert(numpy.allclose(axp2, dUp.T[:,6:], rtol=1e-02, atol=1e-06,))
+		except:
+			print("Error in dU Nests  c=",c)
+			for row in range(30):
+				if not numpy.allclose(axp2[row], dUp.T[row,6:], rtol=1e-02, atol=1e-06,):
+					print("dU nests ROW",row,"  -- ",p.frame.index[row])
+					print(axp2[row])
+					print(dUp.T[row,6:])
+
+	from larch4.nesting.nl_prob import total_prob_from_log_conditional_prob
+
+	total_probability = numpy.zeros([p.data.n_cases, len(p.graph)])
+	total_prob_from_log_conditional_prob(p.work.log_conditional_probability,
+		p.graph,
+		total_probability)
+
+	from larch4.nesting.nl_deriv import case_dProbability_dFusedParameters
+
+	dP = Blocker([len(p.graph)], [
+		p.coef_utility_ca.shape,
+		p.coef_utility_co.shape,
+		p.coef_quantity_ca.shape,
+		p.coef_logsums.shape,
+	])
+
+	scratch = numpy.zeros([dU.outer.shape[1]], dtype=numpy.float64)
+	scratch_coef_mu = numpy.zeros([len(p.graph) - p.data.n_alts], dtype=numpy.float64)
+
+	for c in range(1):
+
+		func3 = lambda x: p.calculate_probability_values(x)[c]
+
+		xk = p.frame['value'].values.copy()
+		print("xk=",xk)
+
+		axp3 = approx_fprime(xk, func3, 1e-5)
+
+		case_dProbability_dFusedParameters(
+			c,
+			p.data.n_cases,  # int n_cases,
+			p.data.n_alts,  # int n_elementals,
+			len(p.graph) - p.data.n_alts,  # int n_nests,
+			p.graph.n_edges,  # int n_edges,
+
+			dU.outer.shape[1], # int n_meta_coef,
+
+		    p.work.log_prob,  # double[:,:] log_prob_elementals,  # shape = [cases,alts]
+		    p.work.util_elementals,  # double[:,:] util_elementals,      # shape = [cases,alts]
+		    p.work.util_nests,  # double[:,:] util_nests,           # shape = [cases,nests]
+
+		    p.coef_utility_ca,  # double[:] coef_u_ca,               # shape = (vars_ca)
+		    p.coef_utility_co,  # double[:,:] coef_u_co,             # shape = (vars_co,alts)
+		    p.coef_quantity_ca,  # double[:] coef_q_ca,               # shape = (qvars_ca)
+		    p.coef_logsums,  # double[:] coef_mu,                 # shape = (nests)
+
+		    dU.outer,  # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
+		    dU.inners[0],  # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+		    dU.inners[1],  # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+		    dU.inners[2],  # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+		    dU.inners[3],  # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+		    p.data._u_ca,  # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
+		    p.data._u_co,  # double[:,:] data_u_co,             # shape = (cases,vars_co)
+
+		    p.work.log_conditional_probability,  # double[:,:] conditional_prob,      # shape = (cases,edges)
+		    total_probability,       # shape = (nodes)
+
+		    dP.outer,  # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
+		    dP.inners[0],  # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+		    dP.inners[1],  # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+		    dP.inners[2],  # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+		    dP.inners[3],  # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+		    edge_slot_arrays[1],  # int[:] edge_child_slot,            # shape = (edges)
+		    edge_slot_arrays[0],  # int[:] edge_parent_slot,           # shape = (edges)
+		    edge_slot_arrays[2],  # int[:] first_visit_to_child,       # shape = (edges)
+
+		    # Workspace arrays, not input or output but must be pre-allocated
+
+			scratch, # double[:] scratch,              # shape = (n_meta_coef,)
+			scratch_coef_mu, #double[:] scratch_coef_mu,      # shape = (nests,)
+		)
+
+		dPp = p.push_to_parameterlike(dP)
+
+		try:
+			assert(numpy.allclose(axp3, dPp.T[:,:], rtol=1e-02, atol=1e-06,))
+		except:
+			print("Error in dP Elementals  c=",c)
+			for row in range(30):
+				if not numpy.allclose(axp3[row], dPp.T[row,:], rtol=1e-02, atol=1e-06,):
+					print("dP ROW",row,"  -- ",p.frame.index[row])
+					print(axp3[row])
+					print(dPp.T[row,:])
+				else:
+					print("OK dP ROW",row,"  -- ",p.frame.index[row],"OK")

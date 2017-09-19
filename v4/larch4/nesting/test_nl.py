@@ -247,8 +247,9 @@ def test_nl_simple_loglike():
 
 def test_case_dUtility_dFusedParameters():
 	p = nl_straw_man_model_1()
+	p.loglike()
 
-	for c in range(100):
+	for c in range(0,100,10):
 
 		func = lambda x: p.calculate_utility_values(x)[0][c]
 		func2 = lambda x: p.calculate_utility_values(x)[1][c]

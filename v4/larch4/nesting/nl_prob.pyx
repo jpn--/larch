@@ -85,6 +85,20 @@ def elemental_logprob_from_conditional_logprob(
 
 
 
+def total_prob_from_log_conditional_prob(
+		log_conditional_probability,
+		graph,
+		total_probability,  # shape = (cases, nodes)
+):
+	total_probability[:,-1] = 1.0
+	total_probability[:,:-1] = 0.0
+
+	ups, dns, first_visits = graph.edge_slot_arrays()
+	for e in range(graph.n_edges):
+		e_ = graph.n_edges-e-1
+		total_probability[:,dns[e_]] += numpy.exp(log_conditional_probability[:,e_]) * total_probability[:,ups[e_]]
+
+
 
 
 @cython.boundscheck(False)
