@@ -397,7 +397,34 @@ if 1:
 
 	p.loglike()
 
-	for c in range(1):
+
+	from larch4.nesting.nl_prob import total_prob_from_log_conditional_prob
+
+	total_probability = numpy.zeros([p.data.n_cases, len(p.graph)])
+	total_prob_from_log_conditional_prob(p.work.log_conditional_probability,
+		p.graph,
+		total_probability)
+
+	from larch4.nesting.nl_deriv import case_dProbability_dFusedParameters
+	from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters
+	from larch4.linalg.contiguous_group import Blocker
+
+	dP = Blocker([len(p.graph)], [
+		p.coef_utility_ca.shape,
+		p.coef_utility_co.shape,
+		p.coef_quantity_ca.shape,
+		p.coef_logsums.shape,
+	])
+
+	scratch = Blocker([], [
+		p.coef_utility_ca.shape,
+		p.coef_utility_co.shape,
+		p.coef_quantity_ca.shape,
+		p.coef_logsums.shape,
+	])
+
+
+	for c in range(3):
 
 		func = lambda x: p.calculate_utility_values(x)[0][c]
 		func2 = lambda x: p.calculate_utility_values(x)[1][c]
@@ -407,9 +434,6 @@ if 1:
 
 		axp = approx_fprime(xk, func, 1e-5)
 		axp2 = approx_fprime(xk, func2, 1e-5)
-
-		from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters
-		from larch4.linalg.contiguous_group import Blocker
 
 		p.unmangle()
 
@@ -477,26 +501,6 @@ if 1:
 					print(axp2[row])
 					print(dUp.T[row,6:])
 
-	from larch4.nesting.nl_prob import total_prob_from_log_conditional_prob
-
-	total_probability = numpy.zeros([p.data.n_cases, len(p.graph)])
-	total_prob_from_log_conditional_prob(p.work.log_conditional_probability,
-		p.graph,
-		total_probability)
-
-	from larch4.nesting.nl_deriv import case_dProbability_dFusedParameters
-
-	dP = Blocker([len(p.graph)], [
-		p.coef_utility_ca.shape,
-		p.coef_utility_co.shape,
-		p.coef_quantity_ca.shape,
-		p.coef_logsums.shape,
-	])
-
-	scratch = numpy.zeros([dU.outer.shape[1]], dtype=numpy.float64)
-	scratch_coef_mu = numpy.zeros([len(p.graph) - p.data.n_alts], dtype=numpy.float64)
-
-	for c in range(1):
 
 		func3 = lambda x: p.calculate_probability_values(x)[c]
 
@@ -514,23 +518,19 @@ if 1:
 
 			dU.outer.shape[1], # int n_meta_coef,
 
-		    p.work.log_prob,  # double[:,:] log_prob_elementals,  # shape = [cases,alts]
 		    p.work.util_elementals,  # double[:,:] util_elementals,      # shape = [cases,alts]
-		    p.work.util_nests,  # double[:,:] util_nests,           # shape = [cases,nests]
+		    p.work.util_nests,       # double[:,:] util_nests,           # shape = [cases,nests]
 
-		    p.coef_utility_ca,  # double[:] coef_u_ca,               # shape = (vars_ca)
-		    p.coef_utility_co,  # double[:,:] coef_u_co,             # shape = (vars_co,alts)
+		    p.coef_utility_ca,   # double[:] coef_u_ca,               # shape = (vars_ca)
+		    p.coef_utility_co,   # double[:,:] coef_u_co,             # shape = (vars_co,alts)
 		    p.coef_quantity_ca,  # double[:] coef_q_ca,               # shape = (qvars_ca)
-		    p.coef_logsums,  # double[:] coef_mu,                 # shape = (nests)
+		    p.coef_logsums,      # double[:] coef_mu,                 # shape = (nests)
 
-		    dU.outer,  # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
+		    dU.outer,      # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
 		    dU.inners[0],  # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
 		    dU.inners[1],  # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
 		    dU.inners[2],  # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
 		    dU.inners[3],  # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
-
-		    p.data._u_ca,  # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
-		    p.data._u_co,  # double[:,:] data_u_co,             # shape = (cases,vars_co)
 
 		    p.work.log_conditional_probability,  # double[:,:] conditional_prob,      # shape = (cases,edges)
 		    total_probability,       # shape = (nodes)
@@ -547,8 +547,8 @@ if 1:
 
 		    # Workspace arrays, not input or output but must be pre-allocated
 
-			scratch, # double[:] scratch,              # shape = (n_meta_coef,)
-			scratch_coef_mu, #double[:] scratch_coef_mu,      # shape = (nests,)
+			scratch.outer, # double[:] scratch,              # shape = (n_meta_coef,)
+			scratch.inners[3], #double[:] scratch_coef_mu,      # shape = (nests,)
 		)
 
 		dPp = p.push_to_parameterlike(dP)
@@ -564,3 +564,5 @@ if 1:
 					print(dPp.T[row,:])
 				else:
 					print("OK dP ROW",row,"  -- ",p.frame.index[row],"OK")
+					# print(axp3[row])
+					# print(dPp.T[row,:])
