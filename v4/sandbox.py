@@ -388,15 +388,20 @@ if 1:
 	import numpy
 
 	p = nl_straw_man_model_1()
-	# p.frame.loc[:,'value'] = 0
-	# p.frame.loc['mu_motor', 'value'] = 1
-	# p.frame.loc['mu_nonmotor', 'value'] = 1
+	p.set_values(0)
+	p.set_value('mu_motor', 1)
+	p.set_value('mu_nonmotor', 1)
+
 
 	print(p.frame)
 	p.mangle()
 
-	p.loglike()
-
+	ll = p.loglike()
+	print()
+	print()
+	print("LL=",ll)
+	print()
+	print()
 
 	from larch4.nesting.nl_prob import total_prob_from_log_conditional_prob
 
@@ -406,7 +411,7 @@ if 1:
 		total_probability)
 
 	from larch4.nesting.nl_deriv import case_dProbability_dFusedParameters
-	from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters
+	from larch4.nesting.nl_deriv import case_dUtility_dFusedParameters, case_dLogLike_dFusedParameters
 	from larch4.linalg.contiguous_group import Blocker
 
 	dP = Blocker([len(p.graph)], [
@@ -423,8 +428,14 @@ if 1:
 		p.coef_logsums.shape,
 	])
 
+	dLL = Blocker([], [
+		p.coef_utility_ca.shape,
+		p.coef_utility_co.shape,
+		p.coef_quantity_ca.shape,
+		p.coef_logsums.shape,
+	])
 
-	for c in range(3):
+	for c in range(2,6):
 
 		func = lambda x: p.calculate_utility_values(x)[0][c]
 		func2 = lambda x: p.calculate_utility_values(x)[1][c]
@@ -505,7 +516,6 @@ if 1:
 		func3 = lambda x: p.calculate_probability_values(x)[c]
 
 		xk = p.frame['value'].values.copy()
-		print("xk=",xk)
 
 		axp3 = approx_fprime(xk, func3, 1e-5)
 
@@ -566,3 +576,102 @@ if 1:
 					print("OK dP ROW",row,"  -- ",p.frame.index[row],"OK")
 					# print(axp3[row])
 					# print(dPp.T[row,:])
+
+
+		case_dLogLike_dFusedParameters(
+			c,
+			dU.outer.shape[1],  # int n_meta_coef,
+
+			total_probability,  # shape = (nodes)
+
+			dP.outer,      # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as...
+			dP.inners[0],  # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+			dP.inners[1],  # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+			dP.inners[2],  # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+			dP.inners[3],  # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+			dLL.outer,      # double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as...
+			dLL.inners[0],  # double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
+			dLL.inners[1],  # double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
+			dLL.inners[2],  # double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
+			dLL.inners[3],  # double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
+
+			p.data._choice_ca,  #double[:,:] choices,               # shape = (cases,nodes|elementals)
+
+		)
+		dLLp = p.push_to_parameterlike(dLL)
+
+		func4 = lambda x: p.loglike_casewise(x)[c]
+		axp4 = approx_fprime(xk, func4, 1e-5)
+
+		try:
+			assert(numpy.allclose(axp4, dLLp.T, rtol=1e-02, atol=1e-06,))
+		except:
+			print("Error in dLL Elementals  c=",c)
+			for row in range(30):
+				if not numpy.allclose(axp4[row], dLLp.T[row], rtol=1e-02, atol=1e-06,):
+					print("dLL ROW",row,"  -- ",p.frame.index[row])
+					print(axp4[row])
+					print(dLLp.T[row])
+				else:
+					print("OK dLL ROW",row,"  -- ",p.frame.index[row],"OK")
+					# print(axp3[row])
+					# print(dPp.T[row,:])
+		else:
+			print("ALL OK in dLL Elementals  c=",c)
+
+	dllc = p.d_loglike_casewise()
+	func0 = lambda x: p.loglike_casewise(x)
+	xk = p.frame['value'].values.copy()
+	axp0 = approx_fprime(xk, func0, 1e-5)
+	try:
+		assert ( numpy.allclose(axp0, dllc.T, rtol=1e-02, atol=1e-04, ) )
+	except AssertionError:
+		for row in range(len(axp0)):
+			if not numpy.allclose(axp0[row], dllc.T[row], rtol=1e-02, atol=1e-04, ):
+				print("ll-casewise ROW", row, "  -- ", p.frame.index[row])
+				print(axp0[row,:20])
+				print(dllc.T[row,:20])
+				print(axp0[row,:20]-dllc.T[row,:20])
+			else:
+				print("OK ll-casewise ROW", row, "  -- ", p.frame.index[row], "OK")
+			# print(axp3[row])
+			# print(dPp.T[row,:])
+
+
+	dll_ = p.d_loglike()
+	func0x = lambda x: p.loglike(x)
+	xk = p.frame['value'].values.copy()
+	axp0x = approx_fprime(xk, func0x, 1e-5)
+	try:
+		assert ( numpy.allclose(axp0x, dll_, rtol=1e-04, atol=1e-06, ) )
+	except AssertionError:
+		for row in range(len(axp0x)):
+			if not numpy.allclose(axp0x[row], dll_[row], rtol=1e-04, atol=1e-06, ):
+				print("ll-raw ROW", row, "  -- {:30}".format(p.frame.index[row]), "{: 12.8f} {: 12.8f} {: 12.8f}".format(axp0x[row], dll_[row], axp0x[row]-dll_[row]))
+			else:
+				print("OK ll-raw ROW", row, "  -- ", p.frame.index[row], "OK")
+			# print(axp3[row])
+			# print(dPp.T[row,:])
+
+
+	for z1,z2 in zip(dllc.sum(0),dll_):
+		print("{: 12.8f} {: 12.8f}".format(z1,z2))
+
+if 0:
+	import larch
+	import larch4.nesting.test_nl
+
+	m = larch.Model.Example(22)
+	m.setUp()
+	print(m.loglike())
+	print(m.d_loglike())
+
+	p = larch4.nesting.test_nl.nl_straw_man_model_1()
+	p.set_values(0)
+	p.set_value('mu_motor', 1)
+	p.set_value('mu_nonmotor', 1)
+	print(p.loglike())
+	print(p.d_loglike())
+
+

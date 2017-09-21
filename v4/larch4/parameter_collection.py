@@ -237,6 +237,7 @@ class ParameterCollection():
 
 
 	def set_value(self, name, value):
+		value = numpy.float64(value)
 		self.frame.loc[name,'value'] = value
 		if name in self._parameter_update_scheme:
 			schemes = self._parameter_update_scheme[name]
@@ -250,9 +251,12 @@ class ParameterCollection():
 		return self.frame.loc[name,:]
 
 	def set_values(self, values):
-		if len(values) != len(self.frame):
-			raise ValueError(f'gave {len(values)} values, needs to be exactly {len(self.frame)} values')
-		self.frame.loc[:,'value'] = values[:]
+		if not isinstance(values, (int,float)):
+			if len(values) != len(self.frame):
+				raise ValueError(f'gave {len(values)} values, needs to be exactly {len(self.frame)} values')
+		if isinstance(values, (int,float)):
+			values = numpy.float64(values)
+		self.frame.loc[:,'value'] = values
 		for name in self._parameter_update_scheme:
 			schemes = self._parameter_update_scheme[name]
 			value = self.get_value(name)

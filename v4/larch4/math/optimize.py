@@ -14,9 +14,16 @@ def _approx_fprime_helper(xk, f, epsilon, args=(), f0=None):
 
 	"""
 	if f0 is None:
-		f0 = f(*((xk,) + args)).copy()
+		f0_ = f(*((xk,) + args))
+		try:
+			f0 = f0_.copy()
+		except AttributeError:
+			f0 = f0_
 	numpy.nan_to_num(f0, copy=False)
-	f_shape = f0.shape
+	try:
+		f_shape = f0.shape
+	except AttributeError:
+		f_shape = ()
 	grad = numpy.zeros((len(xk),)+f_shape, float)
 	ei = numpy.zeros((len(xk),), float)
 	for k in range(len(xk)):

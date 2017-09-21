@@ -60,8 +60,8 @@ def nl_straw_man_model_1():
 	)
 
 	u_co = {
-		2:((P('vehbywrk_SR2') * X('vehbywrk'))+(P('wkcbd_SR2') * X('wkccbd+wknccbd'))+(P('wkempden_SR2') * X('wkempden'))+(P('ASC_SR2') * X('1'))),
-		3:((P('vehbywrk_SR3+') * X('vehbywrk'))+(P('wkcbd_SR3+') * X('wkccbd+wknccbd'))+(P('wkempden_SR3+') * X('wkempden'))+(P('ASC_SR3+') * X('1'))),
+		2:((P('vehbywrk_SR') * X('vehbywrk'))+(P('wkcbd_SR2') * X('wkccbd+wknccbd'))+(P('wkempden_SR2') * X('wkempden'))+(P('ASC_SR2') * X('1'))),
+		3:((P('vehbywrk_SR') * X('vehbywrk'))+(P('wkcbd_SR3+') * X('wkccbd+wknccbd'))+(P('wkempden_SR3+') * X('wkempden'))+(P('ASC_SR3+') * X('1'))),
 		4:((P('hhinc#4') * X('hhinc'))+(P('vehbywrk_Tran') * X('vehbywrk'))+(P('wkcbd_Tran') * X('wkccbd+wknccbd'))+(P('wkempden_Tran') * X('wkempden'))+(P('ASC_Tran') * X('1'))),
 		5:((P('hhinc#5') * X('hhinc'))+(P('vehbywrk_Bike') * X('vehbywrk'))+(P('wkcbd_Bike') * X('wkccbd+wknccbd'))+(P('wkempden_Bike') * X('wkempden'))+(P('ASC_Bike') * X('1'))),
 		6:((P('hhinc#6') * X('hhinc'))+(P('vehbywrk_Walk') * X('vehbywrk'))+(P('wkcbd_Walk') * X('wkccbd+wknccbd'))+(P('wkempden_Walk') * X('wkempden'))+(P('ASC_Walk') * X('1')))
@@ -101,8 +101,8 @@ def nl_straw_man_model_1():
 	for p_name, p_value in zip(param_names, param_values):
 		p.set_value(p_name, p_value)
 
-	p.set_value('vehbywrk_SR3+', p.get_value('vehbywrk_SR'))
-	p.set_value('vehbywrk_SR2', p.get_value('vehbywrk_SR'))
+	# p.set_value('vehbywrk_SR3+', p.get_value('vehbywrk_SR'))
+	# p.set_value('vehbywrk_SR2', p.get_value('vehbywrk_SR'))
 
 	p.load_data()
 	return p

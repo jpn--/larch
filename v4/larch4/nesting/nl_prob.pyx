@@ -76,6 +76,7 @@ def elemental_logprob_from_conditional_logprob(
 		graph,
 		logprobability
 ):
+	logprobability[:,:] = 0
 	for upnestcode in conditional_logprobability_dict.keys():
 		for dnslot, dncode in enumerate(graph.successors_iter(upnestcode)):
 			for elemental_code in graph.elemental_descendants_iter(dncode):

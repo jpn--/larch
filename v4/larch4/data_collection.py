@@ -2,7 +2,7 @@ import numpy
 import pandas
 from .linalg.gemm import dgemm
 from .linalg.gemv import dgemv
-from .math.elementwise import sum_of_elementwise_product
+from .math.elementwise import sum_of_elementwise_product, sum_of_elementwise_product_save_dim_1
 
 def _calculate_linear_product(params, data_ca, data_co, result_array, alpha_ca=1.0, alpha_co=1.0):
 	c, a, v1 = data_ca.shape
@@ -112,3 +112,7 @@ class DataCollection():
 	def _calculate_log_like(self, logprob):
 		return sum_of_elementwise_product(self._choice_ca, logprob )
 
+	def _calculate_log_like_casewise(self, logprob):
+		result = numpy.zeros([self._choice_ca.shape[0]], dtype=numpy.float64)
+		sum_of_elementwise_product_save_dim_1(self._choice_ca, logprob, result )
+		return result
