@@ -26,3 +26,11 @@ class Blocker:
 	@property
 	def dtype(self):
 		return self.outer.dtype
+
+	@property
+	def shape(self):
+		return self.outer.shape
+
+	@property
+	def size(self):
+		return self.outer.size
