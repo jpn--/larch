@@ -49,3 +49,7 @@ nl_utility.c
 elementwise.c
 nl_prob.c
 lastfailed
+v4/cython_debug
+vcs.xml
+sandbook.ipynb
+*.c
