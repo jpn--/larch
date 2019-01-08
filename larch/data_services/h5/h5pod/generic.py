@@ -803,7 +803,11 @@ class H5Pod(Pod):
 			result[:] = self._evaluate_single_item(name, selector)
 		except IndexError:
 			# https://github.com/PyTables/PyTables/issues/310
-			result[:] = self._evaluate_single_item(name, None)[selector]
+			_temp = self._evaluate_single_item(name, None)
+			try:
+				result[:] = _temp[selector]
+			except Exception as err:
+				raise ValueError(f'_temp.shape={_temp.shape}  selector.shape={selector.shape}') from err
 		return result
 
 	def load_meta_data_item(self, name, result, selector=None):

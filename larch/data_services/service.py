@@ -17,12 +17,12 @@ class DataService():
 		A sequence of alternative names (typically strings). If given it must
 		have the same length as the altids.
 	pods : iterable of larch.Pod, optional
-		Include these :class:`Pod`s in the DataService. The pods can also be given as
+		Include these :class:`Pod` in the DataService. The pods can also be given as
 		positional arguments to the constructor.
 	"""
 
 
-	def __init__(self, *args, altids=None, altnames=None, pods=None, broadcastable=True):
+	def __init__(self, *args, altids=None, altnames=None, pods=None, broadcastable=True, selector=None):
 
 		self._master_n_cases = None
 		self._master_altids = [] if altids is None else altids
@@ -41,6 +41,33 @@ class DataService():
 		if pods is not None:
 			for pod in pods:
 				self.add_pod(pod, broadcastable=broadcastable)
+
+		self._default_selector = selector
+
+	@property
+	def selector(self):
+		return self._default_selector
+
+	@selector.setter
+	def selector(self, value):
+		if value is None:
+			self._default_selector = None
+		else:
+			if not isinstance(value, (str, slice, numpy.ndarray, list, tuple)):
+				raise TypeError
+			if isinstance(value, str):
+				self._default_selector = None
+				value = self.array_idco(value, dtype=bool).squeeze()
+				self._default_selector = value
+			elif isinstance(value, (tuple, list)):
+				self._default_selector = None
+				value = self.array_idco(*value, dtype=bool).all(axis=1)
+				self._default_selector = value
+			else:
+				if len(value)==0:
+					self._default_selector = None
+				else:
+					self._default_selector = value
 
 	def __getattr__(self, item):
 		if item in self._pod_library:
@@ -143,6 +170,8 @@ class DataService():
 
 	def caseindexes(self, selector=None):
 		if selector is None:
+			selector = self._default_selector
+		if selector is None:
 			return numpy.arange(self._master_n_cases)
 		else:
 			return numpy.arange(self._master_n_cases)[selector]
@@ -167,13 +196,15 @@ class DataService():
 		----------------
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 
 		Returns
 		-------
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
+		if selector is None:
+			selector = self._default_selector
 		result = self._pods_idco.get_data_items(vars, selector=selector, dtype=dtype)
 		if strip_nan:
 			result = numpy.nan_to_num(result)
@@ -199,14 +230,16 @@ class DataService():
 		----------------
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 
 		Returns
 		-------
 		data : pandas.DataFrame
 			A DataFrame with data of specified dtype
 		"""
-		d = self.array_idco(*vars, **kwargs)
+		if selector is None:
+			selector = self._default_selector
+		d = self.array_idco(*vars, selector=selector, **kwargs)
 		return pandas.DataFrame(
 			data=d,
 			columns=vars,
@@ -226,7 +259,7 @@ class DataService():
 			The array into which the data shall be loaded.
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 		selector : None or slice
 			If given, use this to slice the caseids used to build
 			the array.
@@ -253,6 +286,8 @@ class DataService():
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
+		if selector is None:
+			selector = self._default_selector
 		try:
 			if arr is None:
 				arr = numpy.zeros(self.idco.shape_result(selector, names), dtype=dtype)
@@ -294,7 +329,7 @@ class DataService():
 			The array into which the data shall be loaded.
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 		selector : None or slice
 			If given, use this to slice the caseids used to build
 			the array.
@@ -320,6 +355,8 @@ class DataService():
 		-------
 		data : idce_arrays
 		"""
+		if selector is None:
+			selector = self._default_selector
 		try:
 			if arr is None:
 				arr = numpy.zeros(self.idce.shape_result(selector, names, use_metashape=True), dtype=dtype)
@@ -377,13 +414,15 @@ class DataService():
 		----------------
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 
 		Returns
 		-------
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
+		if selector is None:
+			selector = self._default_selector
 		result = self._pods_idca.get_data_items(vars, selector=selector, dtype=dtype)
 		if strip_nan:
 			result = numpy.nan_to_num(result)
@@ -409,14 +448,16 @@ class DataService():
 		----------------
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 
 		Returns
 		-------
 		data : pandas.DataFrame
 			A DataFrame with data of specified dtype
 		"""
-		d = self.array_idca(*vars, **kwargs)
+		if selector is None:
+			selector = self._default_selector
+		d = self.array_idca(*vars, selector=selector, **kwargs)
 		d = d.reshape(d.shape[0]*d.shape[1], -1)
 
 		rows = pandas.MultiIndex.from_product(
@@ -442,7 +483,7 @@ class DataService():
 			The array into which the data shall be loaded.
 		dtype : str or dtype
 			Describe the data type you would like the output array to adopt if not given, probably
-			numpy.int64, numpy.float64, or numpy.bool_.
+			numpy.int64, numpy.float64, or numpy.bool.
 		selector : None or slice
 			If given, use this to slice the caseids used to build
 			the array.
@@ -466,6 +507,8 @@ class DataService():
 		data : ndarray
 			An array with specified dtype, of shape (n_cases,len(vars)).
 		"""
+		if selector is None:
+			selector = self._default_selector
 		try:
 			if arr is None:
 				arr = numpy.zeros(self.idca.shape_result(selector, names), dtype=dtype)
