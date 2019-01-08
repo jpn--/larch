@@ -115,18 +115,18 @@ Then the report will look more reasonable (although ultimately the content is th
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                        value    std err  t stat  robust std err  robust t stat
 	Category Parameter
-	LOS      totcost   -4.920e-03  2.389e-04 -20.597       2.833e-04        -17.368
+	LOS      totcost   -4.920e-03  2.389e-04 -20.596       2.833e-04        -17.368
 	         tottime   -5.134e-02  3.099e-03 -16.565       3.455e-03        -14.860
 	ASCs     ASC_BIKE  -2.376e+00  3.045e-01  -7.804       3.607e-01         -6.588
 	         ASC_SR2   -2.178e+00  1.046e-01 -20.815       1.119e-01        -19.461
 	         ASC_SR3P  -3.725e+00  1.777e-01 -20.964       1.929e-01        -19.312
-	         ASC_TRAN  -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.215
-	         ASC_WALK  -2.068e-01  1.941e-01  -1.066       2.067e-01         -1.001
+	         ASC_TRAN  -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.214
+	         ASC_WALK  -2.068e-01  1.941e-01  -1.065       2.067e-01         -1.001
 	Income   hhinc#2   -2.170e-03  1.553e-03  -1.397       1.647e-03         -1.318
-	         hhinc#3    3.583e-04  2.538e-03   0.141       2.806e-03          0.128
-	         hhinc#4   -5.287e-03  1.829e-03  -2.891       1.769e-03         -2.988
+	         hhinc#3    3.577e-04  2.538e-03   0.141       2.806e-03          0.127
+	         hhinc#4   -5.286e-03  1.829e-03  -2.891       1.769e-03         -2.988
 	         hhinc#5   -1.281e-02  5.324e-03  -2.406       6.565e-03         -1.951
-	         hhinc#6   -9.686e-03  3.033e-03  -3.193       3.229e-03         -3.000
+	         hhinc#6   -9.686e-03  3.033e-03  -3.194       3.229e-03         -3.000
 
 
 You can then access individual parameters from the model's parameter frame
@@ -139,7 +139,7 @@ You can then access individual parameters from the model's parameter frame
 	-2.3763...
 
 	>>> m.pf.loc['totcost', 'std err']
-	0.000238896...
+	0.00023889...
 
 
 The :func:`len` function on the parameter DataFrame retrieves the number of parameters.

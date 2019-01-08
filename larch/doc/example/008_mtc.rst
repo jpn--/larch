@@ -71,19 +71,19 @@ In Model 8, the TTR is 2.5. (`pp. 114 <http://www.caee.utexas.edu/prof/Bhat/COUR
 
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                             value  std err   t stat  robust std err  robust t stat
-	Category Parameter                                                                 
-	LOS      totcost           -0.0049   0.0002 -20.3751          0.0003       -17.1031
-	         nonmotorized_time -0.0663   0.0053 -12.5214          0.0053       -12.4225
-	         motorized_ivtt    -0.0254   0.0019 -13.4492          0.0021       -12.0180
-	Income   hhinc#2,3         -0.0016   0.0014  -1.1250          0.0015        -1.0411
-	         hhinc#4           -0.0055   0.0018  -2.9969          0.0018        -3.1141
-	         hhinc#5           -0.0123   0.0053  -2.3513          0.0063        -1.9493
-	         hhinc#6           -0.0095   0.0031  -3.1048          0.0032        -2.9274
-	ASCs     ASC_BIKE          -1.8017   0.3239  -5.5623          0.3711        -4.8553
-	         ASC_SR2           -2.3297   0.0972 -23.9750          0.1060       -21.9791
-	         ASC_SR3P          -3.7562   0.1226 -30.6269          0.1283       -29.2739
-	         ASC_TRAN          -0.5818   0.1464  -3.9748          0.1452        -4.0077
-	         ASC_WALK           0.4420   0.2524   1.7512          0.2584         1.7105
+	Category Parameter
+	LOS      totcost           -0.0049   0.0002 -20.3748          0.0003       -17.1036
+	         nonmotorized_time -0.0663   0.0053 -12.5215          0.0053       -12.4228
+	         motorized_ivtt    -0.0254   0.0019 -13.4493          0.0021       -12.0177
+	Income   hhinc#2,3         -0.0016   0.0014  -1.1252          0.0015        -1.0413
+	         hhinc#4           -0.0055   0.0018  -2.9972          0.0018        -3.1142
+	         hhinc#5           -0.0123   0.0052  -2.3510          0.0063        -1.9492
+	         hhinc#6           -0.0095   0.0031  -3.1050          0.0032        -2.9276
+	ASCs     ASC_BIKE          -1.8017   0.3239  -5.5626          0.3711        -4.8557
+	         ASC_SR2           -2.3297   0.0972 -23.9747          0.1060       -21.9788
+	         ASC_SR3P          -3.7561   0.1226 -30.6266          0.1283       -29.2737
+	         ASC_TRAN          -0.5818   0.1464  -3.9747          0.1452        -4.0075
+	         ASC_WALK           0.4420   0.2524   1.7515          0.2584         1.7108
 
 The value of motorized_ovtt is the TTR * motorized_ivtt. In this instance, it is
 2.5 * (-0.0254) = -0.0635.
