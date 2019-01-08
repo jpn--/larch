@@ -59,3 +59,5 @@ larch4.egg-info
 larch/model/*.html
 larch/**/*.html
 Icon\r
+Icon
+
