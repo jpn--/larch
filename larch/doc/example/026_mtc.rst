@@ -42,36 +42,36 @@ Model 26's nesting structure groups motorized and shared ride alternatives. (`pp
 	>>> m.maximize_loglike()
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
-	-3440.601...
+	-3439.451...
 	
 	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
-		                             value  initvalue  nullvalue  minimum  maximum  holdfast
-	Category   Parameter                                                                    
-	CostbyInc  costbyincome        -0.0336        0.0        0.0     -inf      inf         0
-	TravelTime motorized_time      -0.0149        0.0        0.0     -inf      inf         0
-	           nonmotorized_time   -0.0461        0.0        0.0     -inf      inf         0
-	           motorized_ovtbydist -0.1130        0.0        0.0     -inf      inf         0
-	Household  hhinc#4             -0.0040        0.0        0.0     -inf      inf         0
-	           hhinc#5             -0.0097        0.0        0.0     -inf      inf         0
-	           hhinc#6             -0.0068        0.0        0.0     -inf      inf         0
-	           vehbywrk_BIKE       -0.7422        0.0        0.0     -inf      inf         0
-	           vehbywrk_SR         -0.2243        0.0        0.0     -inf      inf         0
-	           vehbywrk_TRANSIT    -0.7002        0.0        0.0     -inf      inf         0
-	           vehbywrk_WALK       -0.7736        0.0        0.0     -inf      inf         0
-	Zonal      wkcbd_BIKE           0.4859        0.0        0.0     -inf      inf         0
-	           wkcbd_SR2            0.2912        0.0        0.0     -inf      inf         0
-	           wkcbd_SR3            0.4715        0.0        0.0     -inf      inf         0
-	           wkcbd_TRANSIT        0.9277        0.0        0.0     -inf      inf         0
-	           wkcbd_WALK           0.1221        0.0        0.0     -inf      inf         0
-	           wkempden_BIKE        0.0015        0.0        0.0     -inf      inf         0
-	           wkempden_SR2         0.0014        0.0        0.0     -inf      inf         0
-	           wkempden_SR3         0.0014        0.0        0.0     -inf      inf         0
-	           wkempden_TRANSIT     0.0023        0.0        0.0     -inf      inf         0
-	           wkempden_WALK        0.0023        0.0        0.0     -inf      inf         0
-	ASCs       ASC_BIKE            -1.3780        0.0        0.0     -inf      inf         0
-	           ASC_SR2             -1.2345        0.0        0.0     -inf      inf         0
-	           ASC_SR3             -1.6183        0.0        0.0     -inf      inf         0
-	           ASC_TRANSIT         -0.4013        0.0        0.0     -inf      inf         0
-	           ASC_WALK             0.3361        0.0        0.0     -inf      inf         0
-	Other      mu_moto              0.7254        1.0        1.0   0.0010   1.0000         0
-	           mu_shared            0.2420        1.0        1.0   0.0010   1.0000         0
+	                                  value  initvalue  nullvalue  minimum  maximum  holdfast
+	Category   Parameter
+	CostbyInc  costbyincome         -0.0361        0.0        0.0     -inf      inf         0
+	TravelTime motorized_time       -0.0128        0.0        0.0     -inf      inf         0
+	           nonmotorized_time    -0.0465        0.0        0.0     -inf      inf         0
+	           motorized_ovtbydist  -0.1069        0.0        0.0     -inf      inf         0
+	Household  hhinc#4              -0.0038        0.0        0.0     -inf      inf         0
+	           hhinc#5              -0.0096        0.0        0.0     -inf      inf         0
+	           hhinc#6              -0.0067        0.0        0.0     -inf      inf         0
+	           vehbywrk_BIKE        -0.7444        0.0        0.0     -inf      inf         0
+	           vehbywrk_SR          -0.2185        0.0        0.0     -inf      inf         0
+	           vehbywrk_TRANSIT     -0.6800        0.0        0.0     -inf      inf         0
+	           vehbywrk_WALK        -0.7791        0.0        0.0     -inf      inf         0
+	Zonal      wkcbd_BIKE            0.4804        0.0        0.0     -inf      inf         0
+	           wkcbd_SR2            -4.8331        0.0        0.0     -inf      inf         0
+	           wkcbd_SR3            16.7595        0.0        0.0     -inf      inf         0
+	           wkcbd_TRANSIT         0.8845        0.0        0.0     -inf      inf         0
+	           wkcbd_WALK            0.1168        0.0        0.0     -inf      inf         0
+	           wkempden_BIKE         0.0015        0.0        0.0     -inf      inf         0
+	           wkempden_SR2         -0.0063        0.0        0.0     -inf      inf         0
+	           wkempden_SR3          0.0130        0.0        0.0     -inf      inf         0
+	           wkempden_TRANSIT      0.0023        0.0        0.0     -inf      inf         0
+	           wkempden_WALK         0.0023        0.0        0.0     -inf      inf         0
+	ASCs       ASC_BIKE             -1.3349        0.0        0.0     -inf      inf         0
+	           ASC_SR2              -5.1111        0.0        0.0     -inf      inf         0
+	           ASC_SR3             -43.4788        0.0        0.0     -inf      inf         0
+	           ASC_TRANSIT          -0.4434        0.0        0.0     -inf      inf         0
+	           ASC_WALK              0.3911        0.0        0.0     -inf      inf         0
+	Other      mu_moto               0.6970        1.0        1.0   0.0010   1.0000         0
+	           mu_shared            23.1974        1.0        1.0   0.0010   1.0000         0

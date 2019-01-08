@@ -21,7 +21,7 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 	d = larch.examples.MTC()
 	m = larch.Model(dataservice=d)
 	
-	m.selector = "femdum == 0"
+	m.dataservice.selector = "femdum == 0"
 	
 .. testcode::
 	
@@ -74,7 +74,7 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()
-	┣ ...Optimization terminated successfully...
+	┣ ...Optimization terminated...
 	>>> m.calculate_parameter_covariance()
 	>>> m.loglike()
 	-1889.783...
@@ -82,29 +82,29 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                                 value  std err   t stat  robust std err  robust t stat
 	Category   Parameter
-	CostbyInc  costbyincome        -0.0639   0.0147  -4.3597          0.0203        -3.1489
-	TravelTime motorized_time      -0.0195   0.0053  -3.6928          0.0052        -3.7459
-	           nonmotorized_time   -0.0244   0.0074  -3.2820          0.0067        -3.6624
-	           motorized_ovtbydist -0.1865   0.0312  -5.9725          0.0383        -4.8725
-	Household  hhinc#4             -0.0021   0.0027  -0.7762          0.0028        -0.7461
-	           hhinc#5             -0.0014   0.0057  -0.2439          0.0061        -0.2246
-	           hhinc#6             -0.0050   0.0046  -1.1006          0.0051        -0.9787
-	           vehbywrk_BIKE       -0.9920   0.3212  -3.0887          0.3097        -3.2033
-	           vehbywrk_SR         -0.2104   0.0756  -2.7823          0.0836        -2.5165
-	           vehbywrk_TRANSIT    -0.8329   0.1570  -5.3033          0.1713        -4.8625
-	           vehbywrk_WALK       -0.6112   0.2235  -2.7351          0.2714        -2.2518
-	Zonal      wkcbd_BIKE           0.3110   0.4668   0.6662          0.4801         0.6477
-	           wkcbd_SR2            0.0278   0.1742   0.1599          0.1767         0.1575
-	           wkcbd_SR3            1.4238   0.2365   6.0215          0.2380         5.9828
-	           wkcbd_TRANSIT        1.1965   0.2413   4.9594          0.2278         5.2532
-	           wkcbd_WALK           0.2242   0.3747   0.5983          0.3969         0.5648
-	           wkempdenBIKE         0.0005   0.0015   0.3426          0.0015         0.3321
-	           wkempdenSR2          0.0009   0.0005   1.7457          0.0006         1.6223
-	           wkempdenSR3          0.0006   0.0006   0.9555          0.0006         0.9523
-	           wkempdenTRANSIT      0.0025   0.0005   5.4703          0.0005         5.2917
-	           wkempdenWALK         0.0013   0.0010   1.2349          0.0010         1.2505
-	ASCs       ASC_BIKE            -1.9277   0.5344  -3.6069          0.5953        -3.2383
-	           ASC_SR2             -1.9121   0.1347 -14.1932          0.1471       -12.9958
-	           ASC_SR3             -3.5513   0.1983 -17.9079          0.1960       -18.1159
-	           ASC_TRANSIT         -0.8651   0.3534  -2.4479          0.3619        -2.3907
-	           ASC_WALK            -1.2209   0.5101  -2.3932          0.4521        -2.7003
+	CostbyInc  costbyincome        -0.0640   0.0147  -4.3596          0.0203        -3.1488
+	TravelTime motorized_time      -0.0195   0.0053  -3.6913          0.0052        -3.7440
+	           nonmotorized_time   -0.0244   0.0074  -3.2718          0.0067        -3.6522
+	           motorized_ovtbydist -0.1866   0.0312  -5.9763          0.0383        -4.8744
+	Household  hhinc#4             -0.0021   0.0027  -0.7758          0.0028        -0.7457
+	           hhinc#5             -0.0014   0.0057  -0.2454          0.0061        -0.2259
+	           hhinc#6             -0.0050   0.0046  -1.0988          0.0051        -0.9771
+	           vehbywrk_BIKE       -0.9900   0.3210  -3.0847          0.3093        -3.2014
+	           vehbywrk_SR         -0.2104   0.0756  -2.7813          0.0836        -2.5157
+	           vehbywrk_TRANSIT    -0.8331   0.1571  -5.3039          0.1713        -4.8622
+	           vehbywrk_WALK       -0.6100   0.2234  -2.7305          0.2713        -2.2485
+	Zonal      wkcbd_BIKE           0.3082   0.4669   0.6601          0.4803         0.6417
+	           wkcbd_SR2            0.0279   0.1742   0.1599          0.1767         0.1576
+	           wkcbd_SR3            1.4238   0.2364   6.0219          0.2380         5.9834
+	           wkcbd_TRANSIT        1.1967   0.2413   4.9591          0.2278         5.2522
+	           wkcbd_WALK           0.2238   0.3747   0.5973          0.3969         0.5640
+	           wkempdenBIKE         0.0005   0.0015   0.3481          0.0015         0.3378
+	           wkempdenSR2          0.0009   0.0005   1.7463          0.0006         1.6229
+	           wkempdenSR3          0.0006   0.0006   0.9555          0.0006         0.9522
+	           wkempdenTRANSIT      0.0025   0.0005   5.4708          0.0005         5.2918
+	           wkempdenWALK         0.0013   0.0010   1.2415          0.0010         1.2577
+	ASCs       ASC_BIKE            -1.9311   0.5343  -3.6140          0.5951        -3.2452
+	           ASC_SR2             -1.9123   0.1347 -14.1951          0.1471       -12.9975
+	           ASC_SR3             -3.5514   0.1983 -17.9090          0.1960       -18.1173
+	           ASC_TRANSIT         -0.8651   0.3534  -2.4477          0.3620        -2.3902
+	           ASC_WALK            -1.2275   0.5101  -2.4063          0.4521        -2.7148

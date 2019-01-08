@@ -139,6 +139,7 @@ cdef class Model5c:
 		self._scan_utility_ensure_names()
 		self._scan_quantity_ensure_names()
 		self._scan_logsums_ensure_names()
+		self.frame.sort_index(inplace=True)
 
 	def _scan_utility_ensure_names(self):
 		"""
@@ -748,11 +749,13 @@ cdef class Model5c:
 		self._refresh_derived_arrays()
 		self._dataframes._read_in_model_parameters()
 
-	def load_data(self, dataservice=None):
+	def load_data(self, dataservice=None, autoscale_weights=True):
 		if dataservice is not None:
 			self._dataservice = dataservice
 		if self._dataservice is not None:
 			self.dataframes = self._dataservice.make_dataframes(self.required_data())
+			if autoscale_weights:
+				self.dataframes.autoscale_weights()
 		else:
 			raise ValueError('dataservice is not defined')
 
@@ -1094,7 +1097,7 @@ cdef class Model5c:
 		else:
 			message = f"Optimization terminated after {iter} iterations."
 
-		return current_ll, tolerance, iter, steps, message
+		return current_ll, tolerance, iter, numpy.asarray(steps), message
 
 	def _bhhh_direction_and_convergence_tolerance(self, *args):
 		bhhh_inv = self._free_slots_inverse_matrix(self.bhhh(*args))
