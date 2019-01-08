@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7: MTC MNL Mode Choice, Diminishing OVTT by Distance &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8: MTC MNL Mode Choice, TTR = 2.5" href="008_mtc.html" />
+    <link rel="prev" title="6: MTC MNL Mode Choice, Motorized Times" href="006_mtc.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="001_mtc.html">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017A_mtc.html">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exampville.html">Exampville Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="mtc.html">MTC Examples</a> &raquo;</li>
+        
+      <li>7: MTC MNL Mode Choice, Diminishing OVTT by Distance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/007_mtc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mtc-mnl-mode-choice-diminishing-ovtt-by-distance">
+<h1>7: MTC MNL Mode Choice, Diminishing OVTT by Distance<a class="headerlink" href="#mtc-mnl-mode-choice-diminishing-ovtt-by-distance" title="Permalink to this headline">¶</a></h1>
+<p>The primary shortcoming of the specification in Model 6 is that the estimated value of
+IVT is unrealistically small. At least two alternatives can be considered for getting
+an improved estimate of the value of out-of-vehicle time. One is to assume that the
+sensitivity of travelers to OVT diminishes with the trip distance. The idea behind
+this is that travelers are more willing to tolerate higher out-of-vehicle time for a
+long trip rather than for a short trip.</p>
+<p>Model 7 ensures this result by including total travel time (the sum of in-vehicle and
+out-of-vehicle time) and out-of-vehicle time divided by distance in place of in- and
+out-of-vehicle travel time. (<a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">pp. 114</a>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR3P&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAN&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#4&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_BIKE&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#5&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_WALK&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#6&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We diminish the effect of ovtt by dividing its parameter by distance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;= 4) * tottime&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &gt; 4) * tottime&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_ovtbydist&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;= 4) * ovtt/dist&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s2">&quot;.*cost.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*time.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*dist.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Income&quot;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-3547.344...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="go">                               value  std err   t stat  robust std err  robust t stat</span>
+<span class="go">Category Parameter</span>
+<span class="go">LOS      totcost             -0.0041   0.0002 -17.2205          0.0003       -15.2830</span>
+<span class="go">         motorized_time      -0.0415   0.0035 -11.8148          0.0038       -10.9898</span>
+<span class="go">         nonmotorized_time   -0.0475   0.0055  -8.6361          0.0054        -8.8631</span>
+<span class="go">         motorized_ovtbydist -0.1812   0.0179 -10.1396          0.0228        -7.9333</span>
+<span class="go">Income   hhinc#2,3           -0.0014   0.0014  -0.9952          0.0015        -0.9294</span>
+<span class="go">         hhinc#4             -0.0072   0.0019  -3.7869          0.0019        -3.8478</span>
+<span class="go">         hhinc#5             -0.0119   0.0052  -2.2614          0.0063        -1.8821</span>
+<span class="go">         hhinc#6             -0.0082   0.0032  -2.5838          0.0035        -2.3335</span>
+<span class="go">ASCs     ASC_BIKE            -2.6867   0.3336  -8.0528          0.3771        -7.1252</span>
+<span class="go">         ASC_SR2             -2.1884   0.0976 -22.4155          0.1058       -20.6916</span>
+<span class="go">         ASC_SR3P            -3.5180   0.1229 -28.6146          0.1272       -27.6623</span>
+<span class="go">         ASC_TRAN            -0.0422   0.1597  -0.2642          0.1659        -0.2543</span>
+<span class="go">         ASC_WALK            -1.0229   0.2921  -3.5023          0.2971        -3.4428</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="008_mtc.html" class="btn btn-neutral float-right" title="8: MTC MNL Mode Choice, TTR = 2.5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="006_mtc.html" class="btn btn-neutral" title="6: MTC MNL Mode Choice, Motorized Times" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

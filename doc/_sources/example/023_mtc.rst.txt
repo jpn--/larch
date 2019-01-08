@@ -1,0 +1,80 @@
+.. currentmodule:: larch
+
+===========================================================
+23W: MTC Private Auto - Non-Motorized Nested Mode Choice
+===========================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',4)
+	larch._doctest_mode_ = True
+	
+.. testcode::
+	
+	m = larch.example(17)
+
+Model 23's nesting structure groups private automobiles and non-motorized alternatives. (`pp. 179 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+	
+	private_auto = m.graph.new_node(parameter='mu_auto', children=[1,2,3], name='Private_Auto')
+	nonmotorized = m.graph.new_node(parameter='mu_nonmoto', children=[5,6], name='Nonmotorized')
+
+	m.unmangle(True)
+	m.set_value('mu_auto',maximum=2.0)
+	
+.. testcode::
+	
+	m.ordering = (
+		("CostbyInc","costbyincome",),
+		("TravelTime",".*time.*",".*dist.*", ),
+		("Household","hhinc.*","vehbywrk.*",),
+		("Zonal","wkcbd.*","wkempden.*",),
+		("ASCs","ASC.*",),
+	)
+	
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-3435.357...
+	
+	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
+	                                 value  initvalue  nullvalue  minimum  maximum  holdfast
+	Category   Parameter                                                                    
+	CostbyInc  costbyincome        -0.0600        0.0        0.0     -inf      inf         0
+	TravelTime motorized_time      -0.0199        0.0        0.0     -inf      inf         0
+	           nonmotorized_time   -0.0460        0.0        0.0     -inf      inf         0
+	           motorized_ovtbydist -0.1384        0.0        0.0     -inf      inf         0
+	Household  hhinc#4             -0.0046        0.0        0.0     -inf      inf         0
+	           hhinc#5             -0.0081        0.0        0.0     -inf      inf         0
+	           hhinc#6             -0.0046        0.0        0.0     -inf      inf         0
+	           vehbywrk_BIKE       -0.5953        0.0        0.0     -inf      inf         0
+	           vehbywrk_SR         -0.5120        0.0        0.0     -inf      inf         0
+	           vehbywrk_TRANSIT    -0.8737        0.0        0.0     -inf      inf         0
+	           vehbywrk_WALK       -0.6076        0.0        0.0     -inf      inf         0
+	Zonal      wkcbd_BIKE           0.4458        0.0        0.0     -inf      inf         0
+	           wkcbd_SR2            0.3987        0.0        0.0     -inf      inf         0
+	           wkcbd_SR3            1.5876        0.0        0.0     -inf      inf         0
+	           wkcbd_TRANSIT        1.3659        0.0        0.0     -inf      inf         0
+	           wkcbd_WALK           0.1202        0.0        0.0     -inf      inf         0
+	           wkempden_BIKE        0.0026        0.0        0.0     -inf      inf         0
+	           wkempden_SR2         0.0025        0.0        0.0     -inf      inf         0
+	           wkempden_SR3         0.0036        0.0        0.0     -inf      inf         0
+	           wkempden_TRANSIT     0.0035        0.0        0.0     -inf      inf         0
+	           wkempden_WALK        0.0032        0.0        0.0     -inf      inf         0
+	ASCs       ASC_BIKE            -1.6467        0.0        0.0     -inf      inf         0
+	           ASC_SR2             -2.5663        0.0        0.0     -inf      inf         0
+	           ASC_SR3             -4.9612        0.0        0.0     -inf      inf         0
+	           ASC_TRANSIT         -0.8424        0.0        0.0     -inf      inf         0
+	           ASC_WALK            -0.1101        0.0        0.0     -inf      inf         0
+	Other      mu_auto              1.4652        1.0        1.0   0.0010   2.0000         0
+	           mu_nonmoto           0.7661        1.0        1.0   0.0010   1.0000         0

@@ -1,0 +1,92 @@
+.. currentmodule:: larch
+
+=====================================================
+7: MTC MNL Mode Choice, Diminishing OVTT by Distance
+=====================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',4)
+	larch._doctest_mode_ = True
+
+The primary shortcoming of the specification in Model 6 is that the estimated value of
+IVT is unrealistically small. At least two alternatives can be considered for getting
+an improved estimate of the value of out-of-vehicle time. One is to assume that the
+sensitivity of travelers to OVT diminishes with the trip distance. The idea behind
+this is that travelers are more willing to tolerate higher out-of-vehicle time for a
+long trip rather than for a short trip.
+
+Model 7 ensures this result by including total travel time (the sum of in-vehicle and
+out-of-vehicle time) and out-of-vehicle time divided by distance in place of in- and
+out-of-vehicle travel time. (`pp. 114 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+	
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+	
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+We diminish the effect of ovtt by dividing its parameter by distance.
+
+.. testcode::
+	
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime") 
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")  
+		)
+	
+.. testcode::
+	
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	
+.. testcode::
+	
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+	
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3547.344...
+	
+	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
+	                               value  std err   t stat  robust std err  robust t stat
+	Category Parameter
+	LOS      totcost             -0.0041   0.0002 -17.2205          0.0003       -15.2830
+	         motorized_time      -0.0415   0.0035 -11.8148          0.0038       -10.9898
+	         nonmotorized_time   -0.0475   0.0055  -8.6361          0.0054        -8.8631
+	         motorized_ovtbydist -0.1812   0.0179 -10.1396          0.0228        -7.9333
+	Income   hhinc#2,3           -0.0014   0.0014  -0.9952          0.0015        -0.9294
+	         hhinc#4             -0.0072   0.0019  -3.7869          0.0019        -3.8478
+	         hhinc#5             -0.0119   0.0052  -2.2614          0.0063        -1.8821
+	         hhinc#6             -0.0082   0.0032  -2.5838          0.0035        -2.3335
+	ASCs     ASC_BIKE            -2.6867   0.3336  -8.0528          0.3771        -7.1252
+	         ASC_SR2             -2.1884   0.0976 -22.4155          0.1058       -20.6916
+	         ASC_SR3P            -3.5180   0.1229 -28.6146          0.1272       -27.6623
+	         ASC_TRAN            -0.0422   0.1597  -0.2642          0.1659        -0.2543
+	         ASC_WALK            -1.0229   0.2921  -3.5023          0.2971        -3.4428

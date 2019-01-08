@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="17B: MTC MNL Mode Choice, Segmented for 2 or more cars" href="017B_mtc.html" />
+    <link rel="prev" title="16: MTC MNL Mode Choice, Cost by Income" href="016_mtc.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="001_mtc.html">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="007_mtc.html">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exampville.html">Exampville Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="mtc.html">MTC Examples</a> &raquo;</li>
+        
+      <li>17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/017A_mtc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="a-mtc-mnl-mode-choice-segmented-for-1-or-fewer-cars">
+<h1>17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars<a class="headerlink" href="#a-mtc-mnl-mode-choice-segmented-for-1-or-fewer-cars" title="Permalink to this headline">¶</a></h1>
+<p>Market segmentation can be used to determine whether the impact of other variables is
+different among population groups. The most common approach to market segmentation is
+for the analyst to consider sample segments which are mutually exclusive and
+collectively exhaustive (that is, each case is included in one and only one segment).
+Models are estimated for the sample associated with each segment and compared to the
+pooled model (all segments represented by a single model) to determine if there are
+statistically significant and important differences among the market segments.</p>
+<p>Model 17A segments the market by automobile ownership for households that have one or
+fewer cars. It is appealing to include a distinct segment for households with no cars
+since the mode choice behavior of this segment is very different from the rest of the
+population due to their dependence on non-automobile modes. However, the size of this
+segment in the dataset is too small, so it is joined with the one car group. (<a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">pp. 129-133</a>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="s2">&quot;numveh &lt;= 1&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;costbyincome&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;totcost/hhinc&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;= 4) * tottime&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &gt; 4) * tottime&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_ovtbydist&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;=4) * ovtt/dist&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]:</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]:</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;vehbywrk_SR&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;vehbywrk&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkcbd_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkccbd+wknccbd&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkempden&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkempden&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
+                <span class="p">)</span>
+
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;vehbywrk_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;vehbywrk&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkcbd_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkccbd + wknccbd&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkempden&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkempden&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
+                <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;CostbyInc&quot;</span><span class="p">,</span><span class="s2">&quot;costbyincome&quot;</span><span class="p">,),</span>
+        <span class="p">(</span><span class="s2">&quot;TravelTime&quot;</span><span class="p">,</span><span class="s2">&quot;.*time.*&quot;</span><span class="p">,</span><span class="s2">&quot;.*dist.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Household&quot;</span><span class="p">,</span><span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span><span class="s2">&quot;vehbywrk.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Zonal&quot;</span><span class="p">,</span><span class="s2">&quot;wkcbd.*&quot;</span><span class="p">,</span><span class="s2">&quot;wkempden.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span><span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-1049.279...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="go">                                 value  std err   t stat  robust std err  robust t stat</span>
+<span class="go">Category   Parameter</span>
+<span class="go">CostbyInc  costbyincome        -0.0227   0.0138  -1.6408          0.0172        -1.3177</span>
+<span class="go">TravelTime motorized_time      -0.0211   0.0060  -3.4890          0.0063        -3.3548</span>
+<span class="go">           nonmotorized_time   -0.0440   0.0081  -5.4261          0.0086        -5.1319</span>
+<span class="go">           motorized_ovtbydist -0.1131   0.0260  -4.3588          0.0355        -3.1862</span>
+<span class="go">Household  hhinc#4             -0.0064   0.0036  -1.8064          0.0036        -1.7836</span>
+<span class="go">           hhinc#5             -0.0117   0.0095  -1.2286          0.0086        -1.3509</span>
+<span class="go">           hhinc#6             -0.0120   0.0060  -2.0087          0.0057        -2.1150</span>
+<span class="go">           vehbywrk_BIKE       -2.6637   0.6620  -4.0235          0.6861        -3.8825</span>
+<span class="go">           vehbywrk_SR         -3.0146   0.3488  -8.6438          0.3532        -8.5358</span>
+<span class="go">           vehbywrk_TRANSIT    -3.9633   0.3758 -10.5460          0.3829       -10.3498</span>
+<span class="go">           vehbywrk_WALK       -3.3420   0.4446  -7.5166          0.4800        -6.9620</span>
+<span class="go">Zonal      wkcbd_BIKE           0.3951   0.5370   0.7358          0.5602         0.7053</span>
+<span class="go">           wkcbd_SR2            0.3724   0.2410   1.5453          0.2383         1.5627</span>
+<span class="go">           wkcbd_SR3            0.2294   0.4065   0.5644          0.4235         0.5417</span>
+<span class="go">           wkcbd_TRANSIT        1.1064   0.2593   4.2667          0.2541         4.3548</span>
+<span class="go">           wkcbd_WALK           0.0297   0.3505   0.0848          0.3646         0.0815</span>
+<span class="go">           wkempdenBIKE         0.0015   0.0019   0.8028          0.0018         0.8166</span>
+<span class="go">           wkempdenSR2          0.0020   0.0007   2.8048          0.0008         2.5929</span>
+<span class="go">           wkempdenSR3          0.0035   0.0009   3.8880          0.0010         3.4788</span>
+<span class="go">           wkempdenTRANSIT      0.0032   0.0007   4.7291          0.0008         4.1509</span>
+<span class="go">           wkempdenWALK         0.0038   0.0010   3.9146          0.0010         3.8824</span>
+<span class="go">ASCs       ASC_BIKE             0.9769   0.7023   1.3911          0.7043         1.3870</span>
+<span class="go">           ASC_SR2              0.5929   0.3025   1.9597          0.3187         1.8601</span>
+<span class="go">           ASC_SR3             -0.7852   0.3538  -2.2196          0.3660        -2.1452</span>
+<span class="go">           ASC_TRANSIT          2.2580   0.4442   5.0837          0.4932         4.5783</span>
+<span class="go">           ASC_WALK             2.9070   0.5621   5.1715          0.6133         4.7402</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="017B_mtc.html" class="btn btn-neutral float-right" title="17B: MTC MNL Mode Choice, Segmented for 2 or more cars" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="016_mtc.html" class="btn btn-neutral" title="16: MTC MNL Mode Choice, Cost by Income" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

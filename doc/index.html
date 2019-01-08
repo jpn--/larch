@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Larch Documentation &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting-started.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li> Larch Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="treelogo-larch-documentation">
+<h1><a class="treelogo reference internal" href="_images/larch_favicon.png"><img alt="treelogo" class="treelogo" src="_images/larch_favicon.png" style="height: 0.9em;" /></a> Larch Documentation<a class="headerlink" href="#treelogo-larch-documentation" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://anaconda.org/jpn/larch"><img alt="https://img.shields.io/conda/v/jpn/larch.svg" class="statusbadge" src="https://img.shields.io/conda/v/jpn/larch.svg" /></a>
+<a class="reference external image-reference" href="https://bitbucket.com/jpn--"><img alt="https://img.shields.io/badge/source-bitbucket-yellow.svg" class="statusbadge" src="https://img.shields.io/badge/source-bitbucket-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/jpn--/larch/blob/master/LICENSE"><img alt="https://img.shields.io/pypi/l/larch.svg" class="statusbadge" src="https://img.shields.io/pypi/l/larch.svg" /></a>
+<blockquote>
+<div><img alt="trophy" class="trophyicon" src="_images/trophy-64.png" />  Winner of the <a class="reference external" href="http://agifors.org/Symposium">AGIFORS 56th Annual Symposium Best Innovation award</a>.</div></blockquote>
+<p>This documentation is for the Python interface for Larch. If this is your first go
+with Larch, or the first go on a new computer, you might want to start with <a class="reference internal" href="getting-started.html#installation"><span class="std std-ref">Installation</span></a>.</p>
+<p>This project is very much under development.  There are plenty of undocumented functions
+and features; use them at your own risk.  Undocumented features may be non-functional,
+not rigorously tested, deprecated or removed without notice in a future version.  If a
+function or method is documented here, it is intended to be stable in future updates.</p>
+<p>You may also find these links useful:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org/">Python</a> 3.7: <a class="reference external" href="http://docs.python.org/3.7/index.html">http://docs.python.org/3.7/index.html</a></li>
+<li><a class="reference external" href="http://www.numpy.org">NumPy</a>: <a class="reference external" href="http://docs.scipy.org/doc/numpy/">http://docs.scipy.org/doc/numpy/</a></li>
+<li><a class="reference external" href="http://www.scipy.org">SciPy</a>: <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/">http://docs.scipy.org/doc/scipy/reference/</a></li>
+<li><a class="reference external" href="http://www.sqlite.org/">SQLite</a>: <a class="reference external" href="http://www.sqlite.org/docs.html">http://www.sqlite.org/docs.html</a></li>
+<li><a class="reference external" href="https://github.com/rogerbinns/apsw">APSW</a>: <a class="reference external" href="http://rogerbinns.github.io/apsw/">http://rogerbinns.github.io/apsw/</a></li>
+</ul>
+<p>For learning Python itself:</p>
+<ul class="simple">
+<li>If you are new to Python but have some experience with some other programming language,
+I recommend <a class="reference external" href="http://www.diveintopython3.net">Dive Into Python</a>.</li>
+<li>If you are new to programming in general, there are better (slower) guides at
+<a class="reference external" href="http://docs.python-guide.org/en/latest/intro/learning/">Learning Python</a></li>
+</ul>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data-fundamentals.html">Data Fundamentals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-fundamentals.html#idco">idco Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-fundamentals.html#idca">idca Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data-services.html">Data Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-services.html#getting-data-arrays">Getting Data Arrays</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data-pods.html">Pods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-pods.html#idco-pods"><code class="docutils literal notranslate"><span class="pre">idco</span></code> Pods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-pods.html#idca-pods"><code class="docutils literal notranslate"><span class="pre">idca</span></code> Pods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="math/aggregate-choice.html">Aggregate Choice Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math/aggregate-choice.html#basic-aggregate-models">Basic Aggregate Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math/aggregate-choice.html#relax-arbitrary-boundaries-assumption">Relax Arbitrary Boundaries Assumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math/aggregate-choice.html#relaxing-homogeneity">Relaxing Homogeneity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math/aggregate-choice.html#estimating-n">Estimating N</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/mtc.html">MTC Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/001_mtc.html">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/007_mtc.html">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/017A_mtc.html">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example/swissmetro.html">Swissmetro Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/101_mnl.html">101: Swissmetro MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/102_mnl_weighted.html">102: Swissmetro Weighted MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/109_nl.html">109: Swissmetro Nested Logit Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/111_cnl.html">111: Swissmetro Cross-Nested Logit Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example/exampville.html">Exampville Simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/200_exampville.html">200: Exampville Simulated Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/201_exampville_mode.html">201: Exampville Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/202_exampville_logsums.html">202: Exampville Mode Choice Logsums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/203_exampville_dest.html">203: Exampville Destination Choice</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="example/203_exampville_dest.html#data-prep">Data Prep</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example/itinerary.html">Itinerary Choice Examples</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getting-started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

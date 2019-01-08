@@ -1,0 +1,113 @@
+.. currentmodule:: larch
+
+================================================
+16: MTC MNL Mode Choice, Cost by Income
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',4)
+	larch._doctest_mode_ = True
+
+Another approach to the inclusion of trip maker or context characteristics is through
+interactions with mode attributes. The most common example of this approach is to take
+account of the expectation that low-income travelers will be more sensitive to travel
+cost than high-income travelers by using cost divided by income in place of cost as an
+explanatory variable. Such a specification implies that the importance of cost in mode
+choice diminishes with increasing household income.
+
+Model 16 drops travel cost to include travel cost divided by income.
+(`pp. 125 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+	
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+	
+	from larch.roles import P, X
+	for a in [2,3]:
+		m.utility_co[a] = P("hhinc#2,3") * X("hhinc")
+			
+	for a in [4,5,6]:
+		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
+			
+	for a,name in m.dataservice.alternatives[1:]:
+		m.utility_co[a] += (
+			+ P("ASC_"+name)
+			+ P("vehbywrk_"+name) * X("vehbywrk")
+			+ P("wkcbd_"+name) * X("wkccbd + wknccbd")
+			+ P("wkempden_"+name) * X("wkempden")
+			)
+
+.. testcode::
+	
+	m.utility_ca= (
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_time") * X("(altnum <= 4) * ivtt")
+		+ (P("motorized_time") + (P("motorized_ovtbydist")/X("dist"))) * X("(altnum <= 4) * ovtt")
+		+ P("costbyinc") * X("totcost/hhinc")
+		)
+	
+.. testcode::
+	
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "vehbywrk.*", ),
+		("Zonal", "wkcbd.*", "wkempden.*", ),
+		("ASCs", "ASC.*", ),
+	)	
+	
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3442.334...
+	
+	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
+	                                    value  std err   t stat  robust std err  robust t stat
+	Category  Parameter                                                                       
+	LOS       costbyinc           -5.1801e-02   0.0107  -4.8472          0.0137        -3.7847
+	          motorized_time      -2.0159e-02   0.0038  -5.2845          0.0039        -5.1678
+	          nonmotorized_time   -4.5440e-02   0.0058  -7.8774          0.0058        -7.8893
+	          motorized_ovtbydist -1.3275e-01   0.0196  -6.7615          0.0241        -5.5148
+	Income    hhinc#2,3            3.7815e-05   0.0014   0.0268          0.0015         0.0258
+	          hhinc#4             -5.3358e-03   0.0020  -2.6053          0.0021        -2.5696
+	          hhinc#5             -8.6712e-03   0.0052  -1.6755          0.0060        -1.4477
+	          hhinc#6             -6.0164e-03   0.0032  -1.8932          0.0035        -1.737...
+	Ownership vehbywrk_BIKE       -7.0403e-01   0.2586  -2.7227          0.3101        -2.2704
+	          vehbywrk_SR2        -3.8161e-01   0.0766  -4.9814          0.0891        -4.2832
+	          vehbywrk_SR3        -1.3884e-01   0.1091  -1.2727          0.1092        -1.2711
+	          vehbywrk_TRANSIT    -9.3752e-01   0.1185  -7.9147          0.1377        -6.8106
+	          vehbywrk_WALK       -7.2382e-01   0.1696  -4.2685          0.2034        -3.5590
+	Zonal     wkcbd_BIKE           4.8620e-01   0.3612   1.3461          0.3669         1.3250
+	          wkcbd_SR2            2.4709e-01   0.1240   1.9923          0.1246         1.9837
+	          wkcbd_SR3            1.0944e+00   0.1910   5.7287          0.1878         5.8265
+	          wkcbd_TRANSIT        1.3055e+00   0.1657   7.8796          0.1584         8.2406
+	          wkcbd_WALK           9.7177e-02   0.2523   0.3852          0.2591         0.3750
+	          wkempden_BIKE        1.9222e-03   0.0012   1.5803          0.0012         1.6337
+	          wkempden_SR2         1.5961e-03   0.0004   4.0497          0.0004         3.8336
+	          wkempden_SR3         2.2035e-03   0.0005   4.8414          0.0005         4.7968
+	          wkempden_TRANSIT     3.1313e-03   0.0004   8.6141          0.0004         8.1096
+	          wkempden_WALK        2.8812e-03   0.0007   3.877...        0.0007         4.0512
+	ASCs      ASC_BIKE            -1.6219e+00   0.4289  -3.7820          0.4879        -3.3242
+	          ASC_SR2             -1.7299e+00   0.1386 -12.4785          0.1498       -11.5489
+	          ASC_SR3             -3.6563e+00   0.2061 -17.7394          0.2015       -18.1497
+	          ASC_TRANSIT         -6.9146e-01   0.2495  -2.7719          0.2695        -2.5655
+	          ASC_WALK             7.5104e-02   0.3491   0.2151          0.3502         0.2145

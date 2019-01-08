@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1: MTC MNL Mode Choice &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2: MTC MNL Mode Choice, Motorized" href="002_mtc.html" />
+    <link rel="prev" title="MTC Examples" href="mtc.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="007_mtc.html">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017A_mtc.html">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exampville.html">Exampville Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="mtc.html">MTC Examples</a> &raquo;</li>
+        
+      <li>1: MTC MNL Mode Choice</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/001_mtc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mtc-mnl-mode-choice">
+<h1>1: MTC MNL Mode Choice<a class="headerlink" href="#mtc-mnl-mode-choice" title="Permalink to this headline">¶</a></h1>
+<p>This example is a mode choice model built using the MTC example dataset.
+First we create the DB and Model objects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then we can build up the utility function.  We’ll use some <a class="reference internal" href="../data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> data first, using
+the <cite>Model.utility.co</cite> attribute.  This attribute is a dict-like object, to which
+we can assign <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFunction</span></code> objects for each alternative code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR3P&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAN&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#4&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_BIKE&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#5&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_WALK&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#6&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next we’ll use some idca data, with the <cite>utility_ca</cite> attribute. This attribute
+is only a single <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFunction</span></code> that is applied across all alternatives
+using <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data.  Because the data is structured to vary across alternatives,
+the parameters (and thus the structure of the <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFunction</span></code>) does not need
+to vary across alternatives.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;tottime&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lastly, we need to identify <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data that gives the availability for each
+alternative, as well as the number of times each alternative is chosen. (In traditional
+discrete choice analysis, this is often 0 or 1, but it need not be binary, or even integral.)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
+</pre></div>
+</div>
+<p>And let’s give our model a descriptive title.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;MTC Example 1 (Simple MNL)&quot;</span>
+</pre></div>
+</div>
+<p>Having created this model, we can then estimate it:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-3626.18...</span>
+</pre></div>
+</div>
+<p>Then the parameters can be found in the <cite>pf</cite> DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="p">[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="go">              value    std err  t stat  robust std err  robust t stat</span>
+<span class="go">hhinc#5  -1.281e-02  5.324e-03  -2.406       6.565e-03         -1.951</span>
+<span class="go">hhinc#4  -5.287e-03  1.829e-03  -2.891       1.769e-03         -2.988</span>
+<span class="go">ASC_BIKE -2.376e+00  3.045e-01  -7.804       3.607e-01         -6.588</span>
+<span class="go">hhinc#6  -9.686e-03  3.033e-03  -3.193       3.229e-03         -3.000</span>
+<span class="go">hhinc#3   3.583e-04  2.538e-03   0.141       2.806e-03          0.128</span>
+<span class="go">ASC_SR3P -3.725e+00  1.777e-01 -20.964       1.929e-01        -19.312</span>
+<span class="go">tottime  -5.134e-02  3.099e-03 -16.565       3.455e-03        -14.860</span>
+<span class="go">hhinc#2  -2.170e-03  1.553e-03  -1.397       1.647e-03         -1.318</span>
+<span class="go">totcost  -4.920e-03  2.389e-04 -20.597       2.833e-04        -17.368</span>
+<span class="go">ASC_WALK -2.068e-01  1.941e-01  -1.066       2.067e-01         -1.001</span>
+<span class="go">ASC_SR2  -2.178e+00  1.046e-01 -20.815       1.119e-01        -19.461</span>
+<span class="go">ASC_TRAN -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.215</span>
+</pre></div>
+</div>
+<p>It is a little tough to read this report because the parameters can show up in pretty much any order, as they are not sorted
+when they are automatically discovered by Larch.
+We can use the reorder method to fix this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s2">&quot;totcost&quot;</span><span class="p">,</span> <span class="s2">&quot;tottime&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Income&quot;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Then the report will look more reasonable (although ultimately the content is the same):</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="go">                        value    std err  t stat  robust std err  robust t stat</span>
+<span class="go">Category Parameter</span>
+<span class="go">LOS      totcost   -4.920e-03  2.389e-04 -20.597       2.833e-04        -17.368</span>
+<span class="go">         tottime   -5.134e-02  3.099e-03 -16.565       3.455e-03        -14.860</span>
+<span class="go">ASCs     ASC_BIKE  -2.376e+00  3.045e-01  -7.804       3.607e-01         -6.588</span>
+<span class="go">         ASC_SR2   -2.178e+00  1.046e-01 -20.815       1.119e-01        -19.461</span>
+<span class="go">         ASC_SR3P  -3.725e+00  1.777e-01 -20.964       1.929e-01        -19.312</span>
+<span class="go">         ASC_TRAN  -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.215</span>
+<span class="go">         ASC_WALK  -2.068e-01  1.941e-01  -1.066       2.067e-01         -1.001</span>
+<span class="go">Income   hhinc#2   -2.170e-03  1.553e-03  -1.397       1.647e-03         -1.318</span>
+<span class="go">         hhinc#3    3.583e-04  2.538e-03   0.141       2.806e-03          0.128</span>
+<span class="go">         hhinc#4   -5.287e-03  1.829e-03  -2.891       1.769e-03         -2.988</span>
+<span class="go">         hhinc#5   -1.281e-02  5.324e-03  -2.406       6.565e-03         -1.951</span>
+<span class="go">         hhinc#6   -9.686e-03  3.033e-03  -3.193       3.229e-03         -3.000</span>
+</pre></div>
+</div>
+<p>You can then access individual parameters from the model’s parameter frame
+(it’s just a pandas.DataFrame) with the usual pandas methods.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ASC_BIKE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+<span class="go">-2.3763...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;totcost&#39;</span><span class="p">,</span> <span class="s1">&#39;std err&#39;</span><span class="p">]</span>
+<span class="go">0.000238896...</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#len" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code></a> function on the parameter DataFrame retrieves the number of parameters.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+<span class="go">12</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="002_mtc.html" class="btn btn-neutral float-right" title="2: MTC MNL Mode Choice, Motorized" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mtc.html" class="btn btn-neutral" title="MTC Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+.fa-home::before, .icon-home::before {
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    content: "" !important;
+    background: url("../_static/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+
+}
+
+#mainlogo
+{
+    -ms-transform-origin: left 75%; /* IE 9 */
+    -webkit-transform-origin: left 75%; /* Chrome, Safari, Opera */
+    transform-origin: left 75%;
+    -ms-transform: scale(0.5,0.5); /* IE 9 */
+    -webkit-transform: scale(0.5,0.5); /* Chrome, Safari, Opera */
+    transform: scale(0.5,0.5);
+	float:none;
+	margin: 0 0 0 0;
+}
+
+img.logo
+{
+	width:200px;
+}
+
+div.body h1
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 150%;
+	font-weight: 700;
+}
+
+div.body h2
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 130%;
+	font-weight: 400;
+}
+
+div.body h3, div.body h4, div.body h5, div.body h6
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-weight: 100;
+	
+}
+
+div.body h3 { font-size: 110%; padding-left: 50px; }
+div.body h4 { font-size: 100%; padding-left: 65px; }
+div.body h5 { font-size: 90%;  padding-left: 80px; }
+div.body h6 { font-size: 80%;  padding-left: 95px; }
+
+.wy-side-nav-search
+{
+	background-color: rgb(101,0,122) !important;
+}
+
+
+.wy-breadcrumbs li:first-child::before
+{
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+	margin-right:5px !important;
+    content: "" !important;
+    background: url("../_static/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+}
+
+img.htmlrendering
+{
+	box-shadow: 1px 2px 3px 2px rgba(0, 0, 0, 0.3);
+	border-radius: 3px;
+	
+}
+/*
+tt {
+	font-family: 'Source Code Pro', monospace;
+	font-size: 80%;
+}
+
+tt.descname {
+	font-weight: 700;
+	font-size: 90%;
+}
+
+tt.descclassname {
+	font-weight: 300;
+	font-size: 90%;
+}
+*/

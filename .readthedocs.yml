@@ -1,9 +1,0 @@
-# Don't build any extra formats
-formats:
-    - none
-    
-conda:
-    file: taiga-rtfd.yml
-    
-python:
-    setup_py_install: true

@@ -1,0 +1,204 @@
+.. currentmodule:: larch
+
+=====================================
+201: Exampville Mode Choice
+=====================================
+
+.. testsetup:: *
+
+	import larch
+	import os
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+Welcome to Exampville, the best simulated town in this here part of the internet!
+
+Exampville is a simulation tool provided with Larch that can quickly simulate the
+kind of data that a transportation planner might have available when building
+a travel model.  We used the first Exampville builder to generate some
+simulated data in the previous example, which we'll use here.
+
+.. testcode::
+
+	import larch, numpy, pandas, os
+	from larch.roles import P,X
+	from larch.examples import EXAMPVILLE
+	lib = EXAMPVILLE()
+	d = larch.DataService(
+		lib.tours, lib.tours_stack, lib.skims_rc,
+		altids=lib.mode_ids, altnames=lib.mode_names,
+	)
+
+Now we are ready to create our model.
+
+.. testcode::
+
+	m = larch.Model(dataservice=d, alts=[1,2,3,4,5])
+	m.title = "Exampville Work Tour Mode Choice v1"
+
+In Exampville, there are only two kinds of trips: work (purpose=1) and non-work.
+We want to estimate a mode choice model for work trips, so we'll begin by including
+only those tours:
+
+.. testcode::
+
+	m.selector = 'TOURPURP == 1'
+
+
+Now we are ready to define some utility functions.
+
+.. testcode::
+
+	# For clarity, we can define numbers as names for modes
+	DA = 1
+	SR = 2
+	Walk = 3
+	Bike = 4
+	Transit = 5
+
+	m.utility_co[DA] = (
+		+ P.InVehTime * X.AUTO_TIME
+		+ P.Cost * X.CARCOST # dollars per mile
+	)
+
+	m.utility_co[SR] = (
+		+ P.ASC_SR
+		+ P.InVehTime * X.AUTO_TIME
+		+ P.Cost * (X.CARCOST * 0.5) # dollars per mile, half share
+		+ P("HighInc:SR") * X("INCOME>75000")
+	)
+
+Note in the SR utility that we use two different ways for writing parameters, with a dotted
+name (``P.Cost``) and with a parenthesis (``P("HighInc:SR")``).  The dotted name version is neat and
+concise, but it only works when the parameter name is a valid python identifier -- essentially, a
+single word, beginning with a letter and containing only letter and numbers, and no spaces or punctuation.
+Larch allows parameter names that are any string, including spaces and punctuation, but more interesting
+names that are not python identifiers must be given using the second form.
+
+
+.. testcode::
+
+	m.utility_co[Walk] = (
+		+ P.ASC_Walk
+		+ (P.InVehTime * 2) * X.WALKTIME
+		+ P("HighInc:Walk") * X("INCOME>75000")
+	)
+
+	m.utility_co[Bike] = (
+		+ P.ASC_Bike
+		+ (P.InVehTime * 2) * X.BIKETIME
+		+ P("HighInc:Bike") * X("INCOME>75000")
+	)
+
+	m.utility_co[Transit] = (
+		+ P.ASC_Transit
+		+ P.InVehTime * X.RAIL_TIME
+		+ P.Cost * X.RAIL_FARE
+		+ P("HighInc:Transit") * X("INCOME>75000")
+	)
+
+..
+    For this model, we want to ensure that the value of non-motorized travel time is
+    exactly double that of motorized in-vehicle time.  To do this, we can create
+    a snap constraint for non-motorized time that is defined as 2 times the parameter
+    for motorized in-vehicle time.  We can use the `equal_to` method to make this snap as
+    an equality constraint.
+
+    .. testcode::
+
+        m.add_snap( P.NonMotorTime.equalto(P.InVehTime * 2), immediate=True )
+
+    The 'immediate' keyword tells the add_snap method to enforce this snap immediately.
+    Otherwise, the snap is enforced only if it is violated when the `engage_snaps` method
+    is called.  Delayed snaps are useful for inequality constraints.
+
+Let's create a nested logit model.  We'll nest together the two car modes, and the
+two non-motorized modes, and then the car nest with the transit mode.
+
+.. testcode::
+
+	Car = m.graph.new_node(children=(DA,SR), parameter='Nest:Car', name='Car')
+	NonMotor = m.graph.new_node(children=(Walk,Bike), parameter='Nest:NonMotor', name='NonMotor')
+	Motorized = m.graph.new_node(children=(Car,Transit), parameter='Nest:Motorized', name='Motorized')
+
+Unlike previous version of Larch, the data service in version 4 doesn't predefine choice
+or availability variables.  Instead they are just like any other variables, and we identify
+them at the model level.
+
+.. testcode::
+
+	m.availability_var ='availability'
+	m.choice_co_vars = {
+	        DA: 'TOURMODE==1',
+	        SR: 'TOURMODE==2',
+	        Walk: 'TOURMODE==3',
+	        Bike: 'TOURMODE==4',
+	        Transit: 'TOURMODE==5',
+	}
+
+
+We're also going to specify how we want to show parameters in the output.  We can group them into
+categories using the parameter_groups attribute of Model objects, and the Categorizer class.
+Categorizer instances are defined with a label as their first argument, and regular expressions (regex)
+as other arguments.  The regex are evaluated against all parameter names, and those that match are
+put into the category.
+
+.. testcode::
+
+	m.ordering = (
+		("Level of Service",
+			".*Time.*",
+			".*Cost.*",
+		),
+		("Alternative Specific Constants",
+			"ASC.*",
+		),
+		("Income",
+			".*HighInc.*",
+			".*LowInc.*",
+		),
+		("Logsum Parameters",
+			"Nest.*",
+		),
+	)
+
+Now we're ready to go.
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='SLSQP')
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
+	                                                 value  std err  t stat  robust std err  robust t stat
+	Category                        Parameter
+	Level of Service                InVehTime       -0.113    0.014  -8.313           0.015         -7.760
+	                                Cost            -0.341    0.181  -1.880           0.190         -1.792
+	Alternative Specific Constants  ASC_Bike        -1.667    0.274  -6.086           0.277         -6.022
+	                                ASC_SR          -1.394    0.954  -1.462           0.964         -1.447
+	                                ASC_Transit     -1.677    0.498  -3.370           0.536         -3.128
+	                                ASC_Walk         0.732    0.301   2.428           0.308          2.379
+	Income                          HighInc:Bike    -1.053    0.463  -2.273           0.464         -2.268
+	                                HighInc:SR      -1.756    1.289  -1.362           1.295         -1.356
+	                                HighInc:Transit -1.241    0.451  -2.753           0.447         -2.774
+	                                HighInc:Walk    -0.796    0.419  -1.900           0.413         -1.928
+	Logsum Parameters               Nest:Car         0.742    0.538  -0.480           0.541         -0.478
+	                                Nest:Motorized   0.844    0.249  -0.626           0.263         -0.591
+	                                Nest:NonMotor    0.870    0.183  -0.710           0.186         -0.702
+
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-use copy like this::
+
+		m = larch.example(201)
+
+
+

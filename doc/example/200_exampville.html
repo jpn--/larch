@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>200: Exampville Simulated Data &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="201: Exampville Mode Choice" href="201_exampville_mode.html" />
+    <link rel="prev" title="Exampville Simulator" href="exampville.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mtc.html">MTC Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="exampville.html">Exampville Simulator</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">200: Exampville Simulated Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="201_exampville_mode.html">201: Exampville Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="202_exampville_logsums.html">202: Exampville Mode Choice Logsums</a></li>
+<li class="toctree-l3"><a class="reference internal" href="203_exampville_dest.html">203: Exampville Destination Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="exampville.html">Exampville Simulator</a> &raquo;</li>
+        
+      <li>200: Exampville Simulated Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/200_exampville.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exampville-simulated-data">
+<h1>200: Exampville Simulated Data<a class="headerlink" href="#exampville-simulated-data" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to Exampville, the best simulated town in this here part of the internet!</p>
+<p>Exampville is a simulation tool provided with Larch that can quickly simulate the
+kind of data that a transportation planner might have available when building
+a travel model.  We will use the first Exampville builder to generate some
+simulated data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">larch.exampville</span>
+<span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<span class="n">directory</span><span class="p">,</span> <span class="n">omx</span><span class="p">,</span> <span class="n">f_hh</span><span class="p">,</span> <span class="n">f_pp</span><span class="p">,</span> <span class="n">f_tour</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">exampville</span><span class="o">.</span><span class="n">builder_1</span><span class="p">(</span>
+        <span class="n">nZones</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="n">transit_scope</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span>
+        <span class="n">n_HH</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The builder creates a temporary directory, and produces a set of files
+representing some network skim matrixes in openmatrix (OMX) format, as well
+as three DT files containing data on households, persons, and tours, respectively.
+We can take a quick peek at what is inside each file:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">omx</span>
+<span class="go">&lt;larch.OMX&gt; ...exampville.omx</span>
+<span class="go"> |  shape:(15, 15)</span>
+<span class="go"> |  data:</span>
+<span class="go"> |    AUTO_TIME (float64)</span>
+<span class="go"> |    DIST      (float64)</span>
+<span class="go"> |    RAIL_FARE (float64)</span>
+<span class="go"> |    RAIL_TIME (float64)</span>
+<span class="go"> |  lookup:</span>
+<span class="go"> |    EMPLOYMENT    (15 float64)</span>
+<span class="go"> |    EMP_NONRETAIL (15 float64)</span>
+<span class="go"> |    EMP_RETAIL    (15 float64)</span>
+<span class="go"> |    LAT           (15 int64)</span>
+<span class="go"> |    LON           (15 int64)</span>
+<span class="go"> |    TAZID         (15 int64)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_hh</span>
+<span class="go">&lt;larch.H5PodCO&gt;</span>
+<span class="go"> |  file: ...exampville_hh.h5</span>
+<span class="go"> |  shape: (2000,)</span>
+<span class="go"> |  data:</span>
+<span class="go"> |    HHID    (int64)</span>
+<span class="go"> |    HHSIZE  (int64)</span>
+<span class="go"> |    HOMETAZ (int64)</span>
+<span class="go"> |    INCOME  (int64)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_pp</span>
+<span class="go">&lt;larch.H5PodCO&gt;</span>
+<span class="go"> |  file: ...exampville_person.h5</span>
+<span class="go"> |  shape: (3462,)</span>
+<span class="go"> |  data:</span>
+<span class="go"> |    AGE          (int64)</span>
+<span class="go"> |    HHID         (int64)</span>
+<span class="go"> |    N_OTHERTOURS (int64)</span>
+<span class="go"> |    N_TOTALTOURS (int64)</span>
+<span class="go"> |    N_WORKTOURS  (int64)</span>
+<span class="go"> |    PERSONID     (int64)</span>
+<span class="go"> |    WORKS        (int64)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_tour</span>
+<span class="go">&lt;larch.H5PodCO&gt;</span>
+<span class="go"> |  file: ...exampville_tours.h5</span>
+<span class="go"> |  shape: (6123,)</span>
+<span class="go"> |  data:</span>
+<span class="go"> |    DTAZ     (int64)</span>
+<span class="go"> |    HHID     (int64)</span>
+<span class="go"> |    PERSONID (int64)</span>
+<span class="go"> |    TOURID   (int64)</span>
+<span class="go"> |    TOURMODE (int64)</span>
+<span class="go"> |    TOURPURP (int64)</span>
+</pre></div>
+</div>
+<p>The Exampville data output contains a set of files similar to what we might
+find for a real travel survey: network skims, and tables of households, persons,
+and tours.  We’ll need to merge these tables to create a composite dataset
+for mode choice model estimation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Walk</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Bike</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">f_tour</span><span class="o">.</span><span class="n">merge_external_data</span><span class="p">(</span><span class="n">f_hh</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;idco&#39;</span><span class="p">),</span> <span class="s1">&#39;HHID&#39;</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">f_tour</span><span class="o">.</span><span class="n">merge_external_data</span><span class="p">(</span><span class="n">f_pp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;idco&#39;</span><span class="p">),</span> <span class="s1">&#39;PERSONID&#39;</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">f_tour</span><span class="o">.</span><span class="n">add_expression</span><span class="p">(</span><span class="s2">&quot;HOMETAZi&quot;</span><span class="p">,</span> <span class="s2">&quot;HOMETAZ-1&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="n">f_tour</span><span class="o">.</span><span class="n">add_expression</span><span class="p">(</span><span class="s2">&quot;DTAZi&quot;</span><span class="p">,</span> <span class="s2">&quot;DTAZ-1&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s define some variables for clarity.  We could in theory call the complete formula
+“DIST / 2.5 * 60 * (DIST&lt;=3)” every time we want to refer to the walk time (given as
+distance in miles, divided by 2.5 miles per hour, times 60 minutes per hour, but only up to 3 miles).
+But it’s much easier, and potentially faster, to pre-compute the walk time and use it directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.data_services.h5</span> <span class="kn">import</span> <span class="n">H5Pod</span><span class="p">,</span> <span class="n">H5PodRC</span><span class="p">,</span> <span class="n">H5PodGroup</span><span class="p">,</span> <span class="n">H5PodCS</span>
+<span class="kn">from</span> <span class="nn">larch.data_services</span> <span class="kn">import</span> <span class="n">Pods</span>
+<span class="kn">from</span> <span class="nn">larch.data_services</span> <span class="kn">import</span> <span class="n">DataService</span>
+<span class="n">omx</span> <span class="o">=</span> <span class="n">omx</span><span class="o">.</span><span class="n">change_mode</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">omx_</span> <span class="o">=</span> <span class="n">H5Pod</span><span class="p">(</span><span class="n">groupnode</span><span class="o">=</span><span class="n">omx</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">omx_</span><span class="o">.</span><span class="n">add_expression</span><span class="p">(</span><span class="s2">&quot;WALKTIME&quot;</span><span class="p">,</span> <span class="s2">&quot;DIST / 2.5 * 60 * (DIST&lt;=3)&quot;</span><span class="p">)</span> <span class="c1"># 2.5 mph, 60 minutes per hour, max 3 miles</span>
+<span class="n">omx_</span><span class="o">.</span><span class="n">add_expression</span><span class="p">(</span><span class="s2">&quot;BIKETIME&quot;</span><span class="p">,</span> <span class="s2">&quot;DIST / 12 * 60 * (DIST&lt;=15)&quot;</span><span class="p">)</span>  <span class="c1"># 12 mph, 60 minutes per hour, max 15 miles</span>
+<span class="n">omx_</span><span class="o">.</span><span class="n">add_expression</span><span class="p">(</span><span class="s2">&quot;CARCOST&quot;</span><span class="p">,</span> <span class="s2">&quot;DIST * 0.20&quot;</span><span class="p">)</span>  <span class="c1"># 20 cents per mile</span>
+<span class="n">omx_</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">omx</span> <span class="o">=</span> <span class="n">omx</span><span class="o">.</span><span class="n">change_mode</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">rc</span> <span class="o">=</span> <span class="n">H5PodRC</span><span class="p">(</span><span class="n">f_tour</span><span class="o">.</span><span class="n">HOMETAZi</span><span class="p">[:],</span> <span class="n">f_tour</span><span class="o">.</span><span class="n">DTAZi</span><span class="p">[:],</span> <span class="n">groupnode</span><span class="o">=</span><span class="n">omx</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">tours_stack</span> <span class="o">=</span> <span class="n">H5PodCS</span><span class="p">([</span><span class="n">f_tour</span><span class="p">,</span><span class="n">rc</span><span class="p">],</span> <span class="n">storage</span><span class="o">=</span><span class="n">f_tour</span><span class="p">)</span><span class="o">.</span><span class="n">set_alts</span><span class="p">([</span><span class="n">DA</span><span class="p">,</span><span class="n">SR</span><span class="p">,</span><span class="n">Walk</span><span class="p">,</span><span class="n">Bike</span><span class="p">,</span><span class="n">Transit</span><span class="p">])</span>
+<span class="n">tours_stack</span><span class="o">.</span><span class="n">set_bunch</span><span class="p">(</span><span class="s1">&#39;choices&#39;</span><span class="p">,{</span>
+        <span class="n">DA</span><span class="p">:</span> <span class="s1">&#39;TOURMODE==1&#39;</span><span class="p">,</span>
+        <span class="n">SR</span><span class="p">:</span> <span class="s1">&#39;TOURMODE==2&#39;</span><span class="p">,</span>
+        <span class="n">Walk</span><span class="p">:</span> <span class="s1">&#39;TOURMODE==3&#39;</span><span class="p">,</span>
+        <span class="n">Bike</span><span class="p">:</span> <span class="s1">&#39;TOURMODE==4&#39;</span><span class="p">,</span>
+        <span class="n">Transit</span><span class="p">:</span> <span class="s1">&#39;TOURMODE==5&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">tours_stack</span><span class="o">.</span><span class="n">set_bunch</span><span class="p">(</span><span class="s1">&#39;availability&#39;</span><span class="p">,{</span>
+        <span class="n">DA</span><span class="p">:</span> <span class="s1">&#39;(AGE&gt;=16)&#39;</span><span class="p">,</span>
+        <span class="n">SR</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+        <span class="n">Walk</span><span class="p">:</span> <span class="s1">&#39;DIST&lt;=3&#39;</span><span class="p">,</span>
+        <span class="n">Bike</span><span class="p">:</span> <span class="s1">&#39;DIST&lt;=15&#39;</span><span class="p">,</span>
+        <span class="n">Transit</span><span class="p">:</span> <span class="s1">&#39;RAIL_TIME&gt;0&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">DataService</span><span class="p">(</span><span class="n">pods</span><span class="o">=</span><span class="p">[</span><span class="n">f_tour</span><span class="p">,</span> <span class="n">tours_stack</span><span class="p">,</span> <span class="n">rc</span><span class="p">])</span>
+<span class="n">d</span><span class="o">.</span><span class="n">set_alternatives</span><span class="p">(</span> <span class="p">[</span><span class="n">DA</span><span class="p">,</span><span class="n">SR</span><span class="p">,</span><span class="n">Walk</span><span class="p">,</span><span class="n">Bike</span><span class="p">,</span><span class="n">Transit</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;DA&#39;</span><span class="p">,</span><span class="s1">&#39;SR&#39;</span><span class="p">,</span><span class="s1">&#39;Walk&#39;</span><span class="p">,</span><span class="s1">&#39;Bike&#39;</span><span class="p">,</span><span class="s1">&#39;Transit&#39;</span><span class="p">]</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">&lt;larch.DataService&gt;</span>
+<span class="go"> | idco:</span>
+<span class="go"> |   &lt;larch.H5PodCO&gt;</span>
+<span class="go"> |    |  file: ...exampville_tours.h5</span>
+<span class="go"> |    |  shape: (6123,)</span>
+<span class="go"> |    |  data:</span>
+<span class="go"> |    |    AGE          (int64)</span>
+<span class="go"> |    |    DTAZ         (int64)</span>
+<span class="go"> |    |    DTAZi        (int64)</span>
+<span class="go"> |    |    HHID         (int64)</span>
+<span class="go"> |    |    HHSIZE       (int64)</span>
+<span class="go"> |    |    HOMETAZ      (int64)</span>
+<span class="go"> |    |    HOMETAZi     (int64)</span>
+<span class="go"> |    |    INCOME       (int64)</span>
+<span class="go"> |    |    N_OTHERTOURS (int64)</span>
+<span class="go"> |    |    N_TOTALTOURS (int64)</span>
+<span class="go"> |    |    N_WORKTOURS  (int64)</span>
+<span class="go"> |    |    PERSONID     (int64)</span>
+<span class="go"> |    |    TOURID       (int64)</span>
+<span class="go"> |    |    TOURMODE     (int64)</span>
+<span class="go"> |    |    TOURPURP     (int64)</span>
+<span class="go"> |    |    WORKS        (int64)</span>
+<span class="go"> |    |    _BUNCHES_    (&lt;no dtype&gt;)</span>
+<span class="go"> |   &lt;larch.H5PodRC&gt;</span>
+<span class="go"> |    |  file: ...exampville.omx</span>
+<span class="go"> |    |  node: /data</span>
+<span class="go"> |    |  shape: (6123,)</span>
+<span class="go"> |    |  metashape: (15, 15)</span>
+<span class="go"> |    |  data:</span>
+<span class="go"> |    |    AUTO_TIME (float64)</span>
+<span class="go"> |    |    BIKETIME  (float64)</span>
+<span class="go"> |    |    CARCOST   (float64)</span>
+<span class="go"> |    |    DIST      (float64)</span>
+<span class="go"> |    |    RAIL_FARE (float64)</span>
+<span class="go"> |    |    RAIL_TIME (float64)</span>
+<span class="go"> |    |    WALKTIME  (float64)</span>
+<span class="go"> | idca:</span>
+<span class="go"> |   &lt;larch.H5PodCOasCA&gt;</span>
+<span class="go"> |    |  file: ...exampville_tours.h5</span>
+<span class="go"> |    |  shape: (6123, 5)</span>
+<span class="go"> |    |  data:</span>
+<span class="go"> |    |    AGE          (int64)</span>
+<span class="go"> |    |    DTAZ         (int64)</span>
+<span class="go"> |    |    DTAZi        (int64)</span>
+<span class="go"> |    |    HHID         (int64)</span>
+<span class="go"> |    |    HHSIZE       (int64)</span>
+<span class="go"> |    |    HOMETAZ      (int64)</span>
+<span class="go"> |    |    HOMETAZi     (int64)</span>
+<span class="go"> |    |    INCOME       (int64)</span>
+<span class="go"> |    |    N_OTHERTOURS (int64)</span>
+<span class="go"> |    |    N_TOTALTOURS (int64)</span>
+<span class="go"> |    |    N_WORKTOURS  (int64)</span>
+<span class="go"> |    |    PERSONID     (int64)</span>
+<span class="go"> |    |    TOURID       (int64)</span>
+<span class="go"> |    |    TOURMODE     (int64)</span>
+<span class="go"> |    |    TOURPURP     (int64)</span>
+<span class="go"> |    |    WORKS        (int64)</span>
+<span class="go"> |    |    _BUNCHES_    (&lt;no dtype&gt;)</span>
+<span class="go"> |   &lt;larch.H5PodCS&gt;</span>
+<span class="go"> |    |  file: ...exampville_tours.h5</span>
+<span class="go"> |    |  node: /_BUNCHES_</span>
+<span class="go"> |    |  shape: (6123, 5)</span>
+<span class="go"> |    |  bunches:</span>
+<span class="go"> |    |    choices: {1: &#39;TOURMODE==1&#39;,</span>
+<span class="go"> |    |              2: &#39;TOURMODE==2&#39;,</span>
+<span class="go"> |    |              3: &#39;TOURMODE==3&#39;,</span>
+<span class="go"> |    |              4: &#39;TOURMODE==4&#39;,</span>
+<span class="go"> |    |              5: &#39;TOURMODE==5&#39;}</span>
+<span class="go"> |    |    availability: {1: &#39;(AGE&gt;=16)&#39;, 2: &#39;1&#39;, 3: &#39;DIST&lt;=3&#39;, 4: &#39;DIST&lt;=15&#39;, 5: &#39;RAIL_TIME&gt;0&#39;}</span>
+<span class="go"> |   &lt;larch.H5PodRCasCA&gt;</span>
+<span class="go"> |    |  file: ...exampville.omx</span>
+<span class="go"> |    |  node: /data</span>
+<span class="go"> |    |  shape: (6123, 5)</span>
+<span class="go"> |    |  metashape: (15, 15)</span>
+<span class="go"> |    |  data:</span>
+<span class="go"> |    |    AUTO_TIME (float64)</span>
+<span class="go"> |    |    BIKETIME  (float64)</span>
+<span class="go"> |    |    CARCOST   (float64)</span>
+<span class="go"> |    |    DIST      (float64)</span>
+<span class="go"> |    |    RAIL_FARE (float64)</span>
+<span class="go"> |    |    RAIL_TIME (float64)</span>
+<span class="go"> |    |    WALKTIME  (float64)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>If you want access to the data in this example without worrying about assembling all the code blocks
+together on your own, you can load a read-to-use copy like this:</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">EXAMPVILLE</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="201_exampville_mode.html" class="btn btn-neutral float-right" title="201: Exampville Mode Choice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="exampville.html" class="btn btn-neutral" title="Exampville Simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

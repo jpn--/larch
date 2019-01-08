@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Service &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Pods" href="data-pods.html" />
+    <link rel="prev" title="Data Fundamentals" href="data-fundamentals.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="data.html">Data</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data-fundamentals.html">Data Fundamentals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting-data-arrays">Getting Data Arrays</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data-pods.html">Pods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="data.html">Data</a> &raquo;</li>
+        
+      <li>Data Service</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/data-services.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-service">
+<h1>Data Service<a class="headerlink" href="#data-service" title="Permalink to this headline">¶</a></h1>
+<p>Larch (as of version 4) handles data through a <a class="reference internal" href="#larch.DataService" title="larch.DataService"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataService</span></code></a> object.</p>
+<dl class="class">
+<dt id="larch.DataService">
+<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataService</code><span class="sig-paren">(</span><em>*args</em>, <em>altids=None</em>, <em>altnames=None</em>, <em>pods=None</em>, <em>broadcastable=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService" title="Permalink to this definition">¶</a></dt>
+<dd><p>A DataService is a collection of data Pod that provides data for Larch models.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>altids</strong> (<em>sequence</em><em>, </em><em>optional</em>) – A sequence of alternative identifiers (typically integers).</li>
+<li><strong>altnames</strong> (<em>sequence</em><em>, </em><em>optional</em>) – A sequence of alternative names (typically strings). If given it must
+have the same length as the altids.</li>
+<li><strong>pods</strong> (<em>iterable of larch.Pod</em><em>, </em><em>optional</em>) – Include these :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>Pod`s in the DataService. The pods can also be given as
+positional arguments to the constructor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Read-Only Properties</strong></p>
+<dl class="attribute">
+<dt id="larch.DataService.n_cases">
+<code class="descname">n_cases</code><a class="headerlink" href="#larch.DataService.n_cases" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of cases represented by this DataService.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="larch.DataService.n_alts">
+<code class="descname">n_alts</code><a class="headerlink" href="#larch.DataService.n_alts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of alternatives represented by this DataService.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="larch.DataService.alternatives">
+<code class="descname">alternatives</code><a class="headerlink" href="#larch.DataService.alternatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of 2-tuples, each giving the id and name of an alternative</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="getting-data-arrays">
+<h2>Getting Data Arrays<a class="headerlink" href="#getting-data-arrays" title="Permalink to this headline">¶</a></h2>
+<p>The usual method for external access to data is to call for an array. The <cite>array_*</cite>
+methods assemble data into a new <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> and return that array directly.</p>
+<dl class="method">
+<dt id="larch.DataService.array_idco">
+<code class="descclassname">DataService.</code><code class="descname">array_idco</code><span class="sig-paren">(</span><em>*vars</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>selector=None</em>, <em>strip_nan=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService.array_idco" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a set of idco values into a new array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vars</strong> (<em>tuple of str</em>) – A tuple (or other iterable) giving the expressions (often column names, but any valid
+SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
+<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
+the array.</li>
+<li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
+values are converted to the largest magnitude real number representable
+in the selected dtype.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>dtype</strong> (<em>str or dtype</em>) – Describe the data type you would like the output array to adopt, probably
+numpy.int64, numpy.float64, or <a href="#id3"><span class="problematic" id="id4">numpy.bool_</span></a>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="larch.DataService.array_idca">
+<code class="descclassname">DataService.</code><code class="descname">array_idca</code><span class="sig-paren">(</span><em>*vars</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>selector=None</em>, <em>strip_nan=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService.array_idca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a set of idca values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vars</strong> (<em>tuple of str</em>) – A tuple (or other iterable) giving the expressions (often column names, but any valid
+SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
+<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
+the array.</li>
+<li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
+values are converted to the largest magnitude real number representable
+in the selected dtype.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>dtype</strong> (<em>str or dtype</em>) – Describe the data type you would like the output array to adopt, probably
+numpy.int64, numpy.float64, or <a href="#id5"><span class="problematic" id="id6">numpy.bool_</span></a>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Instead of creating a new array, it is also possible to [re]load data into an existing
+array. The <cite>load_*</cite> methods take an existing array, and load the data into it.</p>
+<dl class="method">
+<dt id="larch.DataService.load_idco">
+<code class="descclassname">DataService.</code><code class="descname">load_idco</code><span class="sig-paren">(</span><em>*names</em>, <em>arr=None</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>selector=None</em>, <em>strip_nan=True</em>, <em>mask_pattern=0</em>, <em>mask_names=None</em>, <em>log=None</em>, <em>fallback_to_idce=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService.load_idco" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a set of idco values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>names</strong> (<em>tuple of str</em>) – A tuple (or other iterable) giving the expressions (often column names, but any valid
+SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
+<li><strong>arr</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – The array into which the data shall be loaded.</li>
+<li><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>dtype</em>) – Describe the data type you would like the output array to adopt, probably
+numpy.int64, numpy.float64, or <a href="#id7"><span class="problematic" id="id8">numpy.bool_</span></a>.</li>
+<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
+the array.</li>
+<li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
+values are converted to the largest magnitude real number representable
+in the selected dtype.</li>
+<li><strong>mask_pattern</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – </li>
+<li><strong>mask_names</strong> (<em>array-like</em><em>, </em><em>optional</em>) – An array of int32 of the same shape as <cite>names</cite>.  For each item, if the
+mask_names value bitwise-and the mask_pattern evaluates
+as True, then the data will be skipped. Note the default mask_pattern is 0 so
+even if mask_names is given, everything will be loaded unless the the mask_pattern
+is set to some other value. If mask_pattern is not zero but mask_names is not given,
+the mask_names will be inferred from get_durable_mask values of the component pods.
+This is an optimization tool
+for reloading data that may not have changed (e.g. for logsum generation).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="larch.DataService.load_idca">
+<code class="descclassname">DataService.</code><code class="descname">load_idca</code><span class="sig-paren">(</span><em>*names</em>, <em>arr=None</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>selector=None</em>, <em>strip_nan=True</em>, <em>mask_pattern=0</em>, <em>mask_names=None</em>, <em>log=None</em>, <em>fallback_to_idce=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService.load_idca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a set of idca values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>names</strong> (<em>tuple of str</em>) – A tuple (or other iterable) giving the expressions (often column names, but any valid
+SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
+<li><strong>arr</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – The array into which the data shall be loaded.</li>
+<li><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>dtype</em>) – Describe the data type you would like the output array to adopt if not given, probably
+numpy.int64, numpy.float64, or <a href="#id9"><span class="problematic" id="id10">numpy.bool_</span></a>.</li>
+<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
+the array.</li>
+<li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
+values are converted to the largest magnitude real number representable
+in the selected dtype.</li>
+<li><strong>mask_pattern</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – </li>
+<li><strong>mask_names</strong> (<em>array-like</em><em>, </em><em>optional</em>) – An array of int32 of the same shape as <cite>names</cite>.  For each item, if the
+mask_names value bitwise-and the mask_pattern evaluates
+as True, then the data will be skipped. Note the default mask_pattern is 0 so
+even if mask_names is given, everything will be loaded unless the the mask_pattern
+is set to some other value. If mask_pattern is not zero but mask_names is not given,
+the mask_names will be inferred from get_durable_mask values of the component pods.
+This is an optimization tool
+for reloading data that may not have changed (e.g. for logsum generation).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data-pods.html" class="btn btn-neutral float-right" title="Pods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data-fundamentals.html" class="btn btn-neutral" title="Data Fundamentals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

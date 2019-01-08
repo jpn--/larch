@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>42: MTC Non-Normalized Nested Mode Choice &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Swissmetro Examples" href="swissmetro.html" />
+    <link rel="prev" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" href="029_mtc.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="001_mtc.html">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="007_mtc.html">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017A_mtc.html">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">42: MTC Non-Normalized Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exampville.html">Exampville Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="mtc.html">MTC Examples</a> &raquo;</li>
+        
+      <li>42: MTC Non-Normalized Nested Mode Choice</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/042_mtc_nnnl.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mtc-non-normalized-nested-mode-choice">
+<h1>42: MTC Non-Normalized Nested Mode Choice<a class="headerlink" href="#mtc-non-normalized-nested-mode-choice" title="Permalink to this headline">¶</a></h1>
+<p>For this example, we’re going to create a non-normalized version of model 22 from the
+<cite>Self Instructing Manual &lt;http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf&gt;</cite>.</p>
+<p>This model is a nested logit model using the same utility function as model 17, so let’s
+start with that model and just add the NNNL structure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">umnl</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We will create separate nests for the motorized and non-motorized alternatives.  Unlike for model 22,
+we must give these two nests the same logsum parameter in order to achive consistent estimates with the NNNL model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">motorized</span> <span class="o">=</span> <span class="n">umnl</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Motorized&#39;</span><span class="p">)</span>
+<span class="n">nonmotorized</span> <span class="o">=</span> <span class="n">umnl</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Nonmotorized&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we have a regular “correct” NL model.  But suppose for some reason we want to have a
+NNNL model.  (Contrary to what you may read elsewhere, there are sometimes legitimate computational reasons
+to choose such a model form, some of which will one day will be explained in this
+documentation.)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">larch.model.nnnl</span>
+<span class="n">nnnl</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">NNNL</span><span class="p">(</span><span class="n">umnl</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This creates a new non-normalized nested logit model.</p>
+<p>Having created this model, we can load it up and confirm it looks just like the UMNL equivalent:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nnnl</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnnl</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnnl</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-7309.60...</span>
+</pre></div>
+</div>
+<p>And we can estimation the model as usual:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nnnl</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnnl</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-3441.69...</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">nnnl</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;initvalue&#39;</span><span class="p">,</span><span class="s1">&#39;nullvalue&#39;</span><span class="p">,</span><span class="s1">&#39;minimum&#39;</span><span class="p">,</span><span class="s1">&#39;maximum&#39;</span><span class="p">,</span><span class="s1">&#39;holdfast&#39;</span><span class="p">]])</span>
+<span class="go">                               value  initvalue  nullvalue  minimum  maximum  holdfast</span>
+<span class="go">Category  Parameter</span>
+<span class="go">LOS       costbyincome        -0.053        0.0        0.0     -inf      inf         0</span>
+<span class="go">          motorized_time      -0.020        0.0        0.0     -inf      inf         0</span>
+<span class="go">          nonmotorized_time   -0.062        0.0        0.0     -inf      inf         0</span>
+<span class="go">          motorized_ovtbydist -0.156        0.0        0.0     -inf      inf         0</span>
+<span class="go">Zonal     wkcbd_BIKE           0.538        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkcbd_SR2            0.266        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkcbd_SR3            1.076        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkcbd_TRANSIT        1.272        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkcbd_WALK           0.151        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkempden_BIKE        0.002        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkempden_SR2         0.002        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkempden_SR3         0.002        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkempden_TRANSIT     0.003        0.0        0.0     -inf      inf         0</span>
+<span class="go">          wkempden_WALK        0.003        0.0        0.0     -inf      inf         0</span>
+<span class="go">Household hhinc#4             -0.005        0.0        0.0     -inf      inf         0</span>
+<span class="go">          hhinc#5             -0.014        0.0        0.0     -inf      inf         0</span>
+<span class="go">          hhinc#6             -0.008        0.0        0.0     -inf      inf         0</span>
+<span class="go">          vehbywrk_BIKE       -0.984        0.0        0.0     -inf      inf         0</span>
+<span class="go">          vehbywrk_SR         -0.311        0.0        0.0     -inf      inf         0</span>
+<span class="go">          vehbywrk_TRANSIT    -0.973        0.0        0.0     -inf      inf         0</span>
+<span class="go">          vehbywrk_WALK       -1.024        0.0        0.0     -inf      inf         0</span>
+<span class="go">ASCs      ASC_BIKE            -1.618        0.0        0.0     -inf      inf         0</span>
+<span class="go">          ASC_SR2             -1.825        0.0        0.0     -inf      inf         0</span>
+<span class="go">          ASC_SR3             -3.452        0.0        0.0     -inf      inf         0</span>
+<span class="go">          ASC_TRANSIT         -0.563        0.0        0.0     -inf      inf         0</span>
+<span class="go">          ASC_WALK             0.437        0.0        0.0     -inf      inf         0</span>
+<span class="go">Other     mu                   0.742        1.0        1.0    0.001    1.000         0</span>
+</pre></div>
+</div>
+<p>To contrast these results, let’s also estimate the parameters on the utility maximizing nested
+logit:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">umnl</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">umnl</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">umnl</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-3441.69...</span>
+</pre></div>
+</div>
+<p>Interesting… the log likehood at convergence is the same.  Actually, it turns out the
+entire model is the same, up to the scale of the parameters, which differs by exactly the
+value of the logsum parameter.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">joint</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">nnnl</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">umnl</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">value</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nnnl&#39;</span><span class="p">,</span><span class="s1">&#39;umnl&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">joint</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">joint</span><span class="p">[</span><span class="s1">&#39;umnl&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">joint</span><span class="p">[</span><span class="s1">&#39;nnnl&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="go">                      nnnl   umnl  ratio</span>
+<span class="go">ASC_BIKE            -1.618 -1.201  0.742</span>
+<span class="go">ASC_SR2             -1.825 -1.355  0.742</span>
+<span class="go">ASC_SR3             -3.452 -2.562  0.742</span>
+<span class="go">ASC_TRANSIT         -0.563 -0.418  0.742</span>
+<span class="go">ASC_WALK             0.437  0.324  0.742</span>
+<span class="go">costbyincome        -0.053 -0.039  0.742</span>
+<span class="go">hhinc#4             -0.005 -0.004  0.742</span>
+<span class="go">hhinc#5             -0.014 -0.010  0.742</span>
+<span class="go">hhinc#6             -0.008 -0.006  0.742</span>
+<span class="go">motorized_ovtbydist -0.156 -0.116  0.742</span>
+<span class="go">motorized_time      -0.020 -0.015  0.742</span>
+<span class="go">mu                   0.742  0.742  1.000</span>
+<span class="go">nonmotorized_time   -0.062 -0.046  0.742</span>
+<span class="go">vehbywrk_BIKE       -0.984 -0.731  0.742</span>
+<span class="go">vehbywrk_SR         -0.311 -0.231  0.742</span>
+<span class="go">vehbywrk_TRANSIT    -0.973 -0.722  0.742</span>
+<span class="go">vehbywrk_WALK       -1.024 -0.760  0.742</span>
+<span class="go">wkcbd_BIKE           0.538  0.400  0.742</span>
+<span class="go">wkcbd_SR2            0.266  0.197  0.742</span>
+<span class="go">wkcbd_SR3            1.076  0.799  0.742</span>
+<span class="go">wkcbd_TRANSIT        1.272  0.944  0.742</span>
+<span class="go">wkcbd_WALK           0.151  0.112  0.742</span>
+<span class="go">wkempden_BIKE        0.002  0.002  0.742</span>
+<span class="go">wkempden_SR2         0.002  0.001  0.742</span>
+<span class="go">wkempden_SR3         0.002  0.002  0.742</span>
+<span class="go">wkempden_TRANSIT     0.003  0.002  0.742</span>
+<span class="go">wkempden_WALK        0.003  0.002  0.742</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>If you want access to the models in this example without worrying about assembling all the code blocks
+together on your own, you can load a read-to-estimate copy of each model like this:</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">umnl</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;umnl&#39;</span><span class="p">)</span>
+<span class="n">nnnl</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;nnnl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="swissmetro.html" class="btn btn-neutral float-right" title="Swissmetro Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="029_mtc.html" class="btn btn-neutral" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 08, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
