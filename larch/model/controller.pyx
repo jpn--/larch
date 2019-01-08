@@ -777,7 +777,7 @@ cdef class Model5c:
 		if autoscale_weights:
 			self.dataframes.autoscale_weights()
 
-	def loglike2(self, x=None, *, start_case=0, stop_case=-1, step_case=1, persist=False, leave_out=-1, keep_only=-1, subsample=-1, return_series=True):
+	def loglike2(self, x=None, *, start_case=0, stop_case=-1, step_case=1, persist=0, leave_out=-1, keep_only=-1, subsample=-1, return_series=True):
 		"""
 		Compute a log likelihood value and it first derivative.
 
@@ -795,9 +795,9 @@ cdef class Model5c:
 		step_case : int, default 1
 			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
 			Python slicing and iterating.  To include all cases, step by 1 (the default).
-		persist : bool, default False
+		persist : int, default 0
 			Whether to return a variety of internal and intermediate arrays in the result dictionary.
-			If set to False, only the final `ll` value is included.
+			If set to 0, only the final `ll` value is included.
 		leave_out, keep_only, subsample : int, optional
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
@@ -866,7 +866,7 @@ cdef class Model5c:
 			*,
 			return_series=False,
 			start_case=0, stop_case=-1, step_case=1,
-			persist=False,
+			persist=0,
 			leave_out=-1, keep_only=-1, subsample=-1,
 	):
 		"""
@@ -890,9 +890,9 @@ cdef class Model5c:
 		step_case : int, default 1
 			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
 			Python slicing and iterating.  To include all cases, step by 1 (the default).
-		persist : bool, default False
+		persist : int, default False
 			Whether to return a variety of internal and intermediate arrays in the result dictionary.
-			If set to False, only the final `ll` value is included.
+			If set to 0, only the final `ll` value is included.
 		leave_out, keep_only, subsample : int, optional
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
@@ -1169,7 +1169,7 @@ cdef class Model5c:
 			x=None,
 			*,
 			start_case=0, stop_case=-1, step_case=1,
-			persist=False,
+			persist=0,
 			leave_out=-1, keep_only=-1, subsample=-1,
 			probability_only=False,
 	):
@@ -1190,9 +1190,9 @@ cdef class Model5c:
 		step_case : int, default 1
 			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
 			Python slicing and iterating.  To include all cases, step by 1 (the default).
-		persist : bool, default False
+		persist : int, default 0
 			Whether to return a variety of internal and intermediate arrays in the result dictionary.
-			If set to False, only the final `ll` value is included.
+			If set to 0, only the final `ll` value is included.
 		leave_out, keep_only, subsample : int, optional
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
@@ -1457,9 +1457,9 @@ cdef class Model5c:
 							req_data.co.add(str(i.data))
 
 			if 'ca' in req_data:
-				req_data.ca = list(req_data.ca)
+				req_data.ca = list(sorted(req_data.ca))
 			if 'co' in req_data:
-				req_data.co = list(req_data.co)
+				req_data.co = list(sorted(req_data.co))
 
 			if self.choice_ca_var:
 				req_data.choice_ca = self.choice_ca_var

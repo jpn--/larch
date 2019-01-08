@@ -333,179 +333,6 @@ ctypedef l4_float_t (*LL_FROM_PROB)(
 
 
 
-
-@cython.boundscheck(False)
-@cython.initializedcheck(False)
-@cython.wraparound(False)
-def mnl_log_likelihood_from_utility_all_rows(
-		l4_float_t[:,:] utility,     # input [n_cases, n_alts]
-		l4_float_t[:,:] choice,      # input [n_cases, n_alts]
-		int accel = 0
-):
-	cdef:
-		int n_cases = utility.shape[0]
-		int n_alts  = utility.shape[1]
-		int c,a
-		l4_float_t ll = 0
-
-	cdef l4_float_t* buffer_exp_utility = <l4_float_t *> malloc(n_alts * sizeof(l4_float_t))
-	if not buffer_exp_utility:
-		raise MemoryError()
-	cdef l4_float_t* buffer_probability = <l4_float_t *> malloc(n_alts * sizeof(l4_float_t))
-	if not buffer_probability:
-		raise MemoryError()
-
-	try:
-		for c in range(n_cases):
-			_mnl_probability_from_utility(
-					n_alts,
-					&utility[c,0],     # input
-					buffer_exp_utility, # output
-					buffer_probability, # output
-			)
-			ll += _mnl_log_likelihood_from_probability_stride2(
-					n_alts,
-					buffer_probability, # output
-					choice[c,:], # output
-			)
-
-	finally:
-		free(buffer_exp_utility)
-		free(buffer_probability)
-
-	return ll
-
-
-
-@cython.boundscheck(False)
-@cython.initializedcheck(False)
-@cython.wraparound(False)
-def mnl_log_likelihood_from_dataframes_all_rows_fat(
-		DataFrames dfs,
-):
-	cdef:
-		int c = 0
-		int n_cases = dfs.n_cases
-		int n_alts  = dfs.n_alts
-		l4_float_t[:] array_ch
-		l4_float_t[:,:] U, buffer_exp_utility, buffer_probability
-		l4_float_t    ll = 0
-
-	if dfs._data_ch is None:
-		raise ValueError('DataFrames does not define data_ch')
-
-	try:
-		U                  = numpy.empty([n_cases, n_alts], dtype=l4_float_dtype)
-		buffer_exp_utility = numpy.empty([n_cases, n_alts], dtype=l4_float_dtype)
-		buffer_probability = numpy.empty([n_cases, n_alts], dtype=l4_float_dtype)
-
-		for c in range(n_cases):
-
-			array_ch = dfs._get_choice_onecase(c)
-			dfs._compute_utility_onecase(c,U[c],n_alts)
-
-			_mnl_probability_from_utility(
-				n_alts,
-				&U[c,0],     # input
-				&buffer_exp_utility[c,0], # output
-				&buffer_probability[c,0], # output
-			)
-
-			ll += _mnl_log_likelihood_from_probability_stride(
-				n_alts,
-				buffer_probability[c,:], # output
-				array_ch,
-			)
-
-		from ..util import Dict
-		return Dict(
-			ll=ll,
-			utility=U.base,
-			exp_utility=buffer_exp_utility.base,
-			probability=buffer_probability.base,
-		)
-
-	except:
-		logger.error(f'c={c}')
-		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
-		logger.error(f'array_ch={array_ch}')
-		logger.exception('error in mnl_log_likelihood_from_dataframes_all_rows')
-		raise
-
-
-
-
-
-@cython.boundscheck(False)
-@cython.initializedcheck(False)
-@cython.wraparound(False)
-def mnl_log_likelihood_from_dataframes_all_rows(
-		DataFrames dfs,
-		int accel = 0,
-):
-	cdef:
-		int c = 0
-		int n_cases = dfs._n_cases()
-		int n_alts  = dfs._n_alts()
-		l4_float_t[:]  array_ch
-		l4_float_t[:]  U
-		l4_float_t[:]  exp_utility
-		l4_float_t[:]  probability
-		l4_float_t*    buffer_exp_utility
-		l4_float_t*    buffer_probability
-		PROB_FROM_UTIL prob_from_util
-		LL_FROM_PROB   ll_from_prob
-		l4_float_t     ll = 0
-
-	if accel>=2:
-		prob_from_util = _mnl_probability_from_utility_approx2
-		ll_from_prob = _mnl_log_likelihood_from_probability_approx2_stride
-	elif accel>=1:
-		prob_from_util = _mnl_probability_from_utility_approx
-		ll_from_prob = _mnl_log_likelihood_from_probability_approx_stride
-	else:
-		prob_from_util = _mnl_probability_from_utility
-		ll_from_prob = _mnl_log_likelihood_from_probability_stride
-
-	if dfs._data_ch is None:
-		raise ValueError('DataFrames does not define data_ch')
-
-	try:
-		U = numpy.empty([n_alts], dtype=l4_float_dtype)
-		exp_utility = numpy.empty([n_alts], dtype=l4_float_dtype)
-		probability = numpy.empty([n_alts], dtype=l4_float_dtype)
-
-		buffer_exp_utility = &exp_utility[0]
-		buffer_probability = &probability[0]
-
-		for c in range(n_cases):
-
-			array_ch = dfs._get_choice_onecase(c)
-			dfs._compute_utility_onecase(c,U,n_alts)
-
-			prob_from_util(
-				n_alts,
-				&U[0],     # input
-				buffer_exp_utility, # output
-				buffer_probability, # output
-			)
-
-			ll += ll_from_prob(
-				n_alts,
-				probability, # output
-				array_ch,
-			)
-
-		return ll
-
-	except:
-		logger.error(f'c={c}')
-		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
-		logger.error(f'array_ch={array_ch}')
-		logger.exception('error in mnl_log_likelihood_from_dataframes_all_rows')
-		raise
-
-
 @cython.boundscheck(False)
 cdef void _mnl_d_log_likelihood_from_d_utility(
 		int             n_alts,
@@ -578,7 +405,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		int         start_case=0,
 		int         stop_case=-1,
 		int         step_case=1,
-		bint        persist=False,
+		int         persist=0,
 		int         leave_out=-1,
 		int         keep_only=-1,
 		int         subsample= 1,
@@ -606,8 +433,10 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		l4_float_t*     choice
 		l4_float_t      weight = 1 # default
 		int             thread_number = 0
-		int             storage_size
-		int             store_number
+		int             storage_size1
+		int             store_number1
+		int             storage_size2
+		int             store_number2
 
 	if dfs._data_ch is None and not probability_only:
 		raise ValueError('DataFrames does not define data_ch')
@@ -624,20 +453,25 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 			# must compute dll to get bhhh
 			return_dll = True
 
-		if persist:
-			storage_size = n_cases
+		if persist>=1:
+			storage_size1 = n_cases
 		else:
-			storage_size = num_threads
+			storage_size1 = num_threads
 
-		raw_utility = numpy.zeros([storage_size,n_alts], dtype=l4_float_dtype)
-		exp_utility = numpy.zeros([storage_size,n_alts], dtype=l4_float_dtype)
-		probability = numpy.zeros([storage_size,n_alts], dtype=l4_float_dtype)
+		if persist>=2:
+			storage_size2 = n_cases
+		else:
+			storage_size2 = num_threads
 
-		LL_case  = numpy.zeros([storage_size,], dtype=l4_float_dtype)
+		raw_utility = numpy.zeros([storage_size1,n_alts], dtype=l4_float_dtype)
+		exp_utility = numpy.zeros([storage_size1,n_alts], dtype=l4_float_dtype)
+		probability = numpy.zeros([storage_size1,n_alts], dtype=l4_float_dtype)
+
+		LL_case  = numpy.zeros([storage_size1,], dtype=l4_float_dtype)
 
 		if return_dll:
-			dU = numpy.zeros([num_threads,n_alts, n_params], dtype=l4_float_dtype)
-			dLL_case  = numpy.zeros([storage_size,n_params], dtype=l4_float_dtype)
+			dU = numpy.zeros([storage_size2,n_alts, n_params], dtype=l4_float_dtype)
+			dLL_case  = numpy.zeros([storage_size1,n_params], dtype=l4_float_dtype)
 			dLL_total = numpy.zeros([num_threads,n_params], dtype=l4_float_dtype)
 			dLL_temp  = numpy.zeros([num_threads,n_params], dtype=l4_float_dtype)
 		if return_bhhh:
@@ -654,13 +488,18 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 				if keep_only >= 0 and c % subsample != keep_only:
 					continue
 
-				if persist:
-					store_number = c
+				if persist>=1:
+					store_number1 = c
 				else:
-					store_number = thread_number
+					store_number1 = thread_number
 
-				buffer_exp_utility = &exp_utility[store_number,0]
-				buffer_probability = &probability[store_number,0]
+				if persist>=2:
+					store_number2 = c
+				else:
+					store_number2 = thread_number
+
+				buffer_exp_utility = &exp_utility[store_number1,0]
+				buffer_probability = &probability[store_number1,0]
 
 				if dfs._array_wt is not None:
 					weight = dfs._array_wt[c]
@@ -668,13 +507,13 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 					weight = 1
 
 				if return_dll:
-					dfs._compute_d_utility_onecase(c,raw_utility[store_number],dU[thread_number],n_alts)
+					dfs._compute_d_utility_onecase(c,raw_utility[store_number1],dU[store_number2],n_alts)
 				else:
-					dfs._compute_utility_onecase(c,raw_utility[store_number],n_alts)
+					dfs._compute_utility_onecase(c,raw_utility[store_number1],n_alts)
 
 				_mnl_probability_from_utility(
 					n_alts,
-					&raw_utility[store_number,0],     # input
+					&raw_utility[store_number1,0],     # input
 					buffer_exp_utility, # output
 					buffer_probability, # output
 				)
@@ -684,11 +523,11 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 
 				ll_temp = _mnl_log_likelihood_from_probability_stride(
 					n_alts,
-					probability[store_number], # output
+					probability[store_number1], # output
 					dfs._array_ch[c,:],
 				) * weight
 				ll += ll_temp
-				LL_case[store_number] += ll_temp
+				LL_case[store_number1] += ll_temp
 
 				if return_dll:
 					if weight:
@@ -697,24 +536,15 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 							n_params,
 							dfs._array_ch[c,:],         # input [n_alts]
 							weight,                     # input scalar
-							dU[thread_number],          # input [n_alts, n_params]
+							dU[store_number2],          # input [n_alts, n_params]
 							buffer_probability,         # output [n_alts]
-							&dLL_case[store_number,0],  # output [n_params]
+							&dLL_case[store_number1,0],  # output [n_params]
 							0,                          # accelerator
 							return_bhhh,
 							dLL_total[thread_number],
 							bhhh_total[thread_number],
 							&dLL_temp[thread_number,0],
 						)
-
-						# if return_bhhh:
-						# 	for v in range(n_params):
-						# 		dLL_total[thread_number,v] = dLL_total[thread_number,v] + dLL_case[store_number,v] * weight
-						# 		for v2 in range(n_params):
-						# 			bhhh_total[thread_number,v,v2] = bhhh_total[thread_number,v,v2] + dLL_case[store_number,v] * dLL_case[store_number,v2] * weight
-						# else:
-						# 	for v in range(n_params):
-						# 		dLL_total[thread_number,v] = dLL_total[thread_number,v] + dLL_case[store_number,v] * weight
 
 		if probability_only:
 			ll = numpy.nan
@@ -729,7 +559,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		result = Dict(
 			ll=ll,
 		)
-		if persist:
+		if persist>=1:
 			result.ll_casewise=LL_case.base
 			result.utility=raw_utility.base
 			result.exp_utility=exp_utility.base
@@ -742,7 +572,12 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 			for v in range(dLL_case.shape[0]):
 				for v2 in range(dLL_case.shape[1]):
 					dLL_case[v,v2] *= dfs._weight_normalization
-			result.dll_casewise=dLL_case.base
+			result.dll_casewise=pandas.DataFrame(
+				dLL_case.base,
+				columns=dfs._model_param_names,
+			)
+			if persist>=2:
+				result.dutility = dU.base
 		if return_bhhh:
 			result.bhhh = bhhh
 
@@ -751,7 +586,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 	except:
 		logger.error(f'c={c}')
 		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
-		logger.exception('error in mnl_log_likelihood_from_dataframes_all_rows')
+		logger.exception('error in mnl_d_log_likelihood_from_dataframes_all_rows')
 		raise
 
 
@@ -827,7 +662,7 @@ def mnl_logsums_from_dataframes_all_rows(
 		logger.error(f'c={c}')
 		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
 		logger.error(f'array_ch={array_ch}')
-		logger.exception('error in mnl_log_likelihood_from_dataframes_all_rows')
+		logger.exception('error in mnl_logsums_from_dataframes_all_rows')
 		raise
 
 

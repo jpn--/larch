@@ -1116,7 +1116,7 @@ cdef class DataFrames:
 		cdef:
 			int i,j,k, altindex
 			int64_t row = -2
-			l4_float_t  _temp, _temp_data, _max_U
+			l4_float_t  _temp, _temp_data, _max_U=0
 
 		#memset(&dU[0,0], 0, sizeof(l4_float_t) * dU.size)
 		U[:] = 0
