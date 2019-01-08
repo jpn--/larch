@@ -1,3 +1,4 @@
+# cython: profile=True
 
 
 from numpy.math cimport INFINITY
@@ -8,7 +9,7 @@ from cython.parallel cimport prange
 from ..math.blocker cimport CBlocker0, CBlocker1
 
 
-cpdef case_dUtility_dFusedParameters(
+cdef void case_dUtility_dFusedParameters(
 		int c,
 
 		int n_cases,
@@ -21,17 +22,7 @@ cpdef case_dUtility_dFusedParameters(
 		double[:,:] util_nests,           # shape = [cases,nests]
 
 		CBlocker0 coef,
-		# double[:] coef_u_ca,               # shape = (vars_ca)
-		# double[:,:] coef_u_co,             # shape = (vars_co,alts)
-		# double[:] coef_q_ca,               # shape = (qvars_ca)
-		# double[:] coef_mu,                 # shape = (nests)
-
 		CBlocker1 d_util,
-		# double[:,:] d_util_meta,           # shape = (nodes,n_meta_coef)  refs same memory as the d_util_coef_* arrays...
-		# double[:,:] d_util_coef_u_ca,      # shape = (nodes,vars_ca)
-		# double[:,:,:] d_util_coef_u_co,    # shape = (nodes,vars_co,alts)
-		# double[:,:] d_util_coef_q_ca,      # shape = (nodes,qvars_ca)
-		# double[:,:] d_util_coef_mu,        # shape = (nodes,nests)
 
 		double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
 		double[:,:] data_u_co,             # shape = (cases,vars_co)
@@ -41,7 +32,7 @@ cpdef case_dUtility_dFusedParameters(
 		int[:] edge_child_slot,            # shape = (edges)
 		int[:] edge_parent_slot,           # shape = (edges)
 		int[:] first_visit_to_child,       # shape = (edges)
-):
+) nogil:
 	cdef:
 		int e, a, nest_slot, dn, up, up_n, n, incx, j
 		double cond_prob
@@ -89,7 +80,7 @@ cpdef case_dUtility_dFusedParameters(
 
 
 
-cpdef case_dProbability_dFusedParameters(
+cdef void case_dProbability_dFusedParameters(
 		int c,
 
 		int n_cases,
@@ -119,7 +110,7 @@ cpdef case_dProbability_dFusedParameters(
 		CBlocker0 scratch,              # shape = (n_meta_coef,)  refs same memory as the scratch_coef_* arrays...
 		# double[:] scratch_coef_mu,      # shape = (nests,)
 
-):
+) nogil:
 	cdef int i,j, e, e_rev
 	cdef int dn_slot, up_slot, up_slot_in_nests, dn_slot_in_nests
 	cdef double multiplier
@@ -163,7 +154,7 @@ cpdef case_dProbability_dFusedParameters(
 
 
 
-cpdef case_dLogLike_dFusedParameters(
+cdef void case_dLogLike_dFusedParameters(
 		int c,
 		int n_meta_coef,
 
@@ -174,7 +165,7 @@ cpdef case_dLogLike_dFusedParameters(
 
 		double[:,:] choices,               # shape = (cases,nodes|elementals)
 
-	):
+	) nogil:
 	cdef int a, i
 
 	for i in range(n_meta_coef):
@@ -197,9 +188,24 @@ from ..linalg.contiguous_group import Blocker
 import numpy
 
 
-def _d_loglike_single_case(
+cdef void _d_loglike_single_case(
 		int c,
-		p,                 # Model
+
+		# p,                 # Model
+		int n_cases,                           # p.data.n_cases,
+		int n_alts,                            # p.data.n_alts,
+		int n_nests,                           # len(p.graph) - p.data.n_alts,
+		int n_edges,                           # p.graph.n_edges,
+		double[:,:]   log_prob,                # p.work.log_prob,
+		double[:,:]   util_elementals,         # p.work.util_elementals,
+		double[:,:]   util_nests,              # p.work.util_nests,
+		CBlocker0     coeffs,                  # CBlocker0(p._coef_block),
+		double[:,:,:] data_util_ca,            # p.data._u_ca,
+		double[:,:]   data_util_co,            # p.data._u_co,
+		double[:,:]   log_conditional_prob,    # p.work.log_conditional_probability,
+		double[:,:]   total_probability,       # p.work.total_probability,
+		double[:,:]   choices,                 # p.data._choice_ca,
+
 		CBlocker1 dU,      # Blocker
 		CBlocker1 dP,      # Blocker
 		CBlocker0 scratch, # Blocker
@@ -207,7 +213,7 @@ def _d_loglike_single_case(
 		int[:] edge_child_slot,            # shape = (edges)
 		int[:] edge_parent_slot,           # shape = (edges)
 		int[:] first_visit_to_child,       # shape = (edges)
-):
+) nogil:
 	dU.initialize()
 	dP.initialize()
 	scratch.initialize()
@@ -216,23 +222,23 @@ def _d_loglike_single_case(
 	case_dUtility_dFusedParameters(
 		c, # int c,
 
-		p.data.n_cases,  # int n_cases,
-		p.data.n_alts,   # int n_elementals,
-		len(p.graph) - p.data.n_alts, #  int n_nests,
-		p.graph.n_edges, # int n_edges,
+		n_cases,  # int n_cases,
+		n_alts,   # int n_elementals,
+		n_nests,  #  int n_nests,
+		n_edges,  # int n_edges,
 
-		p.work.log_prob,        # double[:,:] log_prob_elementals,  # shape = [cases,alts]
-		p.work.util_elementals, # double[:,:] util_elementals,      # shape = [cases,alts]
-		p.work.util_nests,      # double[:,:] util_nests,           # shape = [cases,nests]
+		log_prob,        # double[:,:] log_prob_elementals,  # shape = [cases,alts]
+		util_elementals, # double[:,:] util_elementals,      # shape = [cases,alts]
+		util_nests,      # double[:,:] util_nests,           # shape = [cases,nests]
 
-		CBlocker0(p._coef_block),        # CBlocker0    # shape = (n_meta_coef)
+		coeffs,        # CBlocker0    # shape = (n_meta_coef)
 
 		dU,  # CBlocker1    # shape = (nodes,n_meta_coef)
 
-		p.data._u_ca, # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
-		p.data._u_co, # double[:,:] data_u_co,             # shape = (cases,vars_co)
+		data_util_ca, # double[:,:,:] data_u_ca,           # shape = (cases,alts,vars_ca)
+		data_util_co, # double[:,:] data_u_co,             # shape = (cases,vars_co)
 
-		p.work.log_conditional_probability, # double[:,:] conditional_prob,      # shape = (cases,edges)
+		log_conditional_prob, # double[:,:] conditional_prob,      # shape = (cases,edges)
 
 		edge_child_slot,      # int[:] edge_child_slot,            # shape = (edges)
 		edge_parent_slot,     # int[:] edge_parent_slot,           # shape = (edges)
@@ -240,22 +246,22 @@ def _d_loglike_single_case(
 	)
 	case_dProbability_dFusedParameters(
 		c,
-		p.data.n_cases,  # int n_cases,
-		p.data.n_alts,  # int n_elementals,
-		len(p.graph) - p.data.n_alts,  # int n_nests,
-		p.graph.n_edges,  # int n_edges,
+		n_cases,  # int n_cases,
+		n_alts,  # int n_elementals,
+		n_nests,  # int n_nests,
+		n_edges,  # int n_edges,
 
 		dU.meta.shape[1], # int n_meta_coef,
 
-	    p.work.util_elementals,  # double[:,:] util_elementals,      # shape = [cases,alts]
-	    p.work.util_nests,       # double[:,:] util_nests,           # shape = [cases,nests]
+	    util_elementals,  # double[:,:] util_elementals,      # shape = [cases,alts]
+	    util_nests,       # double[:,:] util_nests,           # shape = [cases,nests]
 
-		CBlocker0(p._coef_block),
+		coeffs,
 
 	    dU,      # CBlocker1           # shape = (nodes,n_meta_coef)
 
-	    p.work.log_conditional_probability,  # double[:,:] conditional_prob,      # shape = (cases,edges)
-	    p.work.total_probability,       # shape = (nodes)
+	    log_conditional_prob,  # double[:,:] conditional_prob,      # shape = (cases,edges)
+	    total_probability,       # shape = (nodes)
 
 		dP,       # CBlocker1           # shape = (nodes,n_meta_coef)
 
@@ -272,16 +278,14 @@ def _d_loglike_single_case(
 		c,
 		dU.meta.shape[1],  # int n_meta_coef,
 
-		p.work.total_probability,  # shape = (nodes)
+		total_probability,  # shape = (nodes)
 
 		dP,            # CBlocker1                          # shape = (nodes,n_meta_coef)  refs same memory as...
 		dLL,           # CBlocker0                          # shape = (n_meta_coef)
 
-		p.data._choice_ca,  #double[:,:] choices,               # shape = (cases,nodes|elementals)
+		choices,  #double[:,:] choices,               # shape = (cases,nodes|elementals)
 
 	)
-
-	return dLL
 
 
 
@@ -326,9 +330,23 @@ def _d_loglike_casewise(
 	dLLc = numpy.zeros([n_cases, len(p.frame)])
 
 	for c in range(n_cases):
-		dLLc[c,:] = p.push_to_parameterlike( _d_loglike_single_case(
+		_d_loglike_single_case(
 			c,
-			p,       # Model
+			# Model
+			p.data.n_cases,
+			p.data.n_alts,
+			len(p.graph) - p.data.n_alts,
+			p.graph.n_edges,
+			p.work.log_prob,
+			p.work.util_elementals,
+			p.work.util_nests,
+			CBlocker0(p._coef_block),
+			p.data._u_ca,
+			p.data._u_co,
+			p.work.log_conditional_probability,
+			p.work.total_probability,
+			p.data._choice_ca,
+
 			dU,      # Blocker
 			dP,      # Blocker
 			scratch, # Blocker
@@ -336,7 +354,8 @@ def _d_loglike_casewise(
 			edge_slot_arrays[1], # shape = (edges)
 		    edge_slot_arrays[0], # shape = (edges)
 		    edge_slot_arrays[2], # shape = (edges)
-		)  )
+		)
+		dLLc[c,:] = p.push_to_parameterlike( dLL.outer )
 	return dLLc
 
 
@@ -344,8 +363,7 @@ def _d_loglike(
 		p, # Model
 ):
 
-	cdef int c
-	cdef int n_cases = p.data.n_cases
+	cdef int c, i, j
 
 	edge_slot_arrays = p.graph.edge_slot_arrays()
 	dU = Blocker([len(p.graph)], [
@@ -383,22 +401,68 @@ def _d_loglike(
 		p.coef_logsums.shape,
 	])
 
+	dLL_cum_c = CBlocker0(dLL_cum)
+
 	bhhh_cum = numpy.zeros([dLL.size,dLL.size])
 
+
+	cdef:
+		int           n_cases                 = p.data.n_cases
+		int           n_alts                  = p.data.n_alts
+		int           n_nests                 = len(p.graph) - p.data.n_alts
+		int           n_edges                 = p.graph.n_edges
+		double[:,:]   log_prob                = p.work.log_prob
+		double[:,:]   util_elementals         = p.work.util_elementals
+		double[:,:]   util_nests              = p.work.util_nests
+		CBlocker0     coeffs                  = CBlocker0(p._coef_block)
+		double[:,:,:] data_util_ca            = p.data._u_ca
+		double[:,:]   data_util_co            = p.data._u_co
+		double[:,:]   log_conditional_prob    = p.work.log_conditional_probability
+		double[:,:]   total_probability       = p.work.total_probability
+		double[:,:]   choices                 = p.data._choice_ca
+
+		CBlocker1 _c_dU      = CBlocker1(dU     )
+		CBlocker1 _c_dP      = CBlocker1(dP     )
+		CBlocker0 _c_scratch = CBlocker0(scratch)
+		CBlocker0 _c_dLL     = CBlocker0(dLL    )
+		double[:,:] bhhh_cum_c = bhhh_cum
+
+		int[:] edge_slot_arrays1 = edge_slot_arrays[1], # shape = (edges)
+		int[:] edge_slot_arrays0 = edge_slot_arrays[0], # shape = (edges)
+		int[:] edge_slot_arrays2 = edge_slot_arrays[2], # shape = (edges)
+
+
+	# for c in prange(n_cases, nogil=True):
 	for c in range(n_cases):
-		this_case = _d_loglike_single_case(
+		_d_loglike_single_case(
 			c,
-			p,       # Model
-			CBlocker1(dU),      # Blocker
-			CBlocker1(dP),      # Blocker
-			CBlocker0(scratch), # Blocker
-			CBlocker0(dLL),     # Blocker
-			edge_slot_arrays[1], # shape = (edges)
-		    edge_slot_arrays[0], # shape = (edges)
-		    edge_slot_arrays[2], # shape = (edges)
+			# Model
+			n_cases              ,
+			n_alts               ,
+			n_nests              ,
+			n_edges              ,
+			log_prob             ,
+			util_elementals      ,
+			util_nests           ,
+			coeffs               ,
+			data_util_ca         ,
+			data_util_co         ,
+			log_conditional_prob ,
+			total_probability    ,
+			choices              ,
+
+			_c_dU      , # Blocker
+			_c_dP      , # Blocker
+			_c_scratch , # Blocker
+			_c_dLL     , # Blocker
+			edge_slot_arrays1, # shape = (edges)
+		    edge_slot_arrays0, # shape = (edges)
+		    edge_slot_arrays2, # shape = (edges)
 		)
-		dLL_cum.outer[:] += this_case.meta
-		bhhh_cum[:,:] += numpy.outer(this_case.meta,this_case.meta) # candidate for DSYR from blas or DSPR for packed
+		for i in range(_c_dLL.meta.shape[0]):
+			dLL_cum_c.meta[i] += _c_dLL.meta[i]
+			for j in range(_c_dLL.meta.shape[0]):
+				bhhh_cum_c[i,j] += _c_dLL.meta[i]*_c_dLL.meta[j] # candidate for DSYR from blas or DSPR for packed
 
 	dLL_cum_params = p.push_to_parameterlike(dLL_cum)
 

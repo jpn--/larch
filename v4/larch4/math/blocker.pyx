@@ -19,7 +19,7 @@ cdef class CBlocker0:
 		if len(blocker.inners)>5:
 			self.sizemults = blocker.inners[5]
 
-	cpdef void initialize(self):
+	cdef void initialize(self) nogil:
 		cdef int i
 		for i in range(self.meta.shape[0]):
 			self.meta[i] = 0
@@ -41,7 +41,7 @@ cdef class CBlocker1:
 		if len(blocker.inners)>5:
 			self.sizemults = blocker.inners[5]
 
-	cpdef void initialize(self):
+	cdef void initialize(self) nogil:
 		cdef int i,j
 		for i in range(self.meta.shape[0]):
 			for j in range(self.meta.shape[1]):

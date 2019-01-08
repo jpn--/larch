@@ -31,3 +31,5 @@ def asterize(cmd):
 	ast.fix_missing_locations(tree)
 	co = compile(tree, "<ast>", "eval")
 	return co
+
+

@@ -12,7 +12,7 @@ cdef class CBlocker0:
 	cdef public double[:]   allocs
 	cdef public double[:]   sizemults
 
-	cpdef void initialize(self)
+	cdef void initialize(self) nogil
 
 cdef class CBlocker1:
 
@@ -25,4 +25,4 @@ cdef class CBlocker1:
 	cdef public double[:,:]   allocs
 	cdef public double[:,:]   sizemults
 
-	cpdef void initialize(self)
+	cdef void initialize(self) nogil
