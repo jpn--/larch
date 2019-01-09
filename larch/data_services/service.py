@@ -627,7 +627,10 @@ class DataService():
 		if 'choice_ca' in req_data:
 			df_ch = self.dataframe_idca(req_data['choice_ca'], dtype=float_dtype, selector=selector)
 		elif 'choice_co' in req_data:
-			raise NotImplementedError('choice_co')
+			alts = self.alternative_codes()
+			cols = [req_data['choice_co'].get(a, '0') for a in alts]
+			df_ch = self.dataframe_idco(*cols, dtype=float_dtype, selector=selector)
+			df_ch.columns = alts
 		elif 'choice_co_code' in req_data:
 			raise NotImplementedError('choice_co_code')
 		else:
@@ -687,7 +690,8 @@ def validate_dataservice(dataservice, req_data):
 		if not hasattr(dataservice, 'dataframe_idca'):
 			missing_methods.add('dataframe_idca')
 	elif 'choice_co' in req_data:
-		raise NotImplementedError('choice_co')
+		if not hasattr(dataservice, 'dataframe_idco'):
+			missing_methods.add('dataframe_idco')
 	elif 'choice_co_code' in req_data:
 		raise NotImplementedError('choice_co_code')
 

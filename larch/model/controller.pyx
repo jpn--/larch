@@ -754,7 +754,7 @@ cdef class Model5c:
 			self._dataservice = dataservice
 		if self._dataservice is not None:
 			self.dataframes = self._dataservice.make_dataframes(self.required_data())
-			if autoscale_weights:
+			if autoscale_weights and self.dataframes.data_wt is not None:
 				self.dataframes.autoscale_weights()
 		else:
 			raise ValueError('dataservice is not defined')
@@ -777,7 +777,7 @@ cdef class Model5c:
 			ce = ce[self.required_data().ca],
 			ch = ce[choice].unstack().fillna(0),
 		)
-		if autoscale_weights:
+		if autoscale_weights and self.dataframes.data_wt is not None:
 			self.dataframes.autoscale_weights()
 
 	def loglike2(self, x=None, *, start_case=0, stop_case=-1, step_case=1, persist=0, leave_out=-1, keep_only=-1, subsample=-1, return_series=True):

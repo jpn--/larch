@@ -45,7 +45,7 @@ only those tours:
 
 .. testcode::
 
-	m.selector = 'TOURPURP == 1'
+	m.dataservice.selector = 'TOURPURP == 1'
 
 
 Now we are ready to define some utility functions.
@@ -173,6 +173,8 @@ Now we're ready to go.
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='SLSQP')
 	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-963.8426...
 	>>> m.calculate_parameter_covariance()
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
 	                                                 value  std err  t stat  robust std err  robust t stat

@@ -110,8 +110,8 @@ def TemporaryDirectory(common=True):
 		return _tempdir
 	t = tempfile.mkdtemp()
 	global TemporaryBucket
-	from .attribute_dict import dictal
-	TemporaryBucket.append(dictal(name=t))
+	from . import Dict
+	TemporaryBucket.append(Dict(name=t))
 	if common:
 		_tempdir = t
 	return t
