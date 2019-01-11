@@ -8,8 +8,8 @@
     :target: https://anaconda.org/jpn/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/source-bitbucket-yellow.svg
-    :target: https://bitbucket.com/jpn--
+.. image:: https://img.shields.io/badge/source-github-yellow.svg
+    :target: https://github.com/jpn--/larch
     :class: statusbadge
 
 .. image:: https://img.shields.io/pypi/l/larch.svg
