@@ -12,6 +12,7 @@ cimport cython
 import pandas
 import numpy
 import inspect
+from typing import Mapping, Sequence
 
 import logging
 logger = logging.getLogger('L5')
@@ -542,6 +543,26 @@ cdef class DataFrames:
 
 	def alternative_names(self):
 		return self._alternative_names
+
+	def set_alternative_names(self, names):
+		"""Set the alternative names.
+
+		Parameters
+		----------
+		as_list : Mapping or Sequence
+			If a mapping, with keys as the codes
+			that appear in `alternative_codes`, and values that are
+			the names, these will be used.  Any missing codes will be labeled with the string
+			representation of the code.
+			If given as a sequence, the names must be in the same order as the codes
+			that appear in `alternative_codes`.
+		"""
+		if isinstance(names, Mapping):
+			self._alternative_names = [names.get(i, str(i)) for i in self.alternative_codes()]
+		elif isinstance(names, Sequence):
+			self._alternative_names = names
+		else:
+			raise ValueError('must give a sequence or mapping')
 
 	def alternative_codes(self):
 		return self._alternative_codes
