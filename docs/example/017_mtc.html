@@ -124,7 +124,6 @@
 <li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
@@ -200,7 +199,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mtc-expanded-mnl-mode-choice">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="mtc-expanded-mnl-mode-choice">
 <h1>17: MTC Expanded MNL Mode Choice<a class="headerlink" href="#mtc-expanded-mnl-mode-choice" title="Permalink to this headline">¶</a></h1>
 <p>For this example, we’re going to re-create model 17 from the
 <a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">Self Instructing Manual</a>. (pp. 128)</p>
@@ -276,38 +299,38 @@ regex, it will appear in the ordering only for the first match.</p>
 <p>Having created this model, we can then estimate it:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
-<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3444.1...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
 <span class="go">                               value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category  Parameter</span>
-<span class="go">LOS       costbyincome        -0.052  1.040e-02  -5.038       1.334e-02         -3.929</span>
+<span class="go">LOS       costbyincome        -0.052  1.040e-02  -5.036       1.334e-02         -3.927</span>
 <span class="go">          motorized_time      -0.020  3.815e-03  -5.292       3.898e-03         -5.178</span>
-<span class="go">          nonmotorized_time   -0.045  5.769e-03  -7.878       5.760e-03         -7.890</span>
-<span class="go">          motorized_ovtbydist -0.133  1.964e-02  -6.764       2.410e-02         -5.513</span>
+<span class="go">          nonmotorized_time   -0.045  5.768e-03  -7.878       5.760e-03         -7.890</span>
+<span class="go">          motorized_ovtbydist -0.133  1.964e-02  -6.763       2.410e-02         -5.513</span>
 <span class="go">Zonal     wkcbd_BIKE           0.489  3.611e-01   1.355       3.665e-01          1.335</span>
-<span class="go">          wkcbd_SR2            0.260  1.234e-01   2.106       1.234e-01          2.106</span>
-<span class="go">          wkcbd_SR3            1.069  1.913e-01   5.591       1.899e-01          5.630</span>
-<span class="go">          wkcbd_TRANSIT        1.309  1.657e-01   7.899       1.585e-01          8.258</span>
+<span class="go">          wkcbd_SR2            0.260  1.234e-01   2.107       1.234e-01          2.106</span>
+<span class="go">          wkcbd_SR3            1.069  1.913e-01   5.590       1.899e-01          5.630</span>
+<span class="go">          wkcbd_TRANSIT        1.309  1.657e-01   7.899       1.585e-01          8.259</span>
 <span class="go">          wkcbd_WALK           0.102  2.521e-01   0.404       2.588e-01          0.393</span>
-<span class="go">          wkempden_BIKE        0.002  1.215e-03   1.587       1.176e-03          1.640</span>
-<span class="go">          wkempden_SR2         0.002  3.904e-04   4.042       4.128e-04          3.822</span>
-<span class="go">          wkempden_SR3         0.002  4.520e-04   4.993       4.537e-04          4.974</span>
-<span class="go">          wkempden_TRANSIT     0.003  3.607e-04   8.684       3.831e-04          8.177</span>
+<span class="go">          wkempden_BIKE        0.002  1.215e-03   1.586       1.176e-03          1.640</span>
+<span class="go">          wkempden_SR2         0.002  3.903e-04   4.042       4.128e-04          3.822</span>
+<span class="go">          wkempden_SR3         0.002  4.520e-04   4.994       4.537e-04          4.975</span>
+<span class="go">          wkempden_TRANSIT     0.003  3.607e-04   8.684       3.831e-04          8.178</span>
 <span class="go">          wkempden_WALK        0.003  7.421e-04   3.895       7.107e-04          4.067</span>
-<span class="go">Household hhinc#4             -0.005  1.977e-03  -2.693       2.047e-03         -2.600</span>
-<span class="go">          hhinc#5             -0.009  5.154e-03  -1.677       5.967e-03         -1.448</span>
-<span class="go">          hhinc#6             -0.006  3.149e-03  -1.905       3.432e-03         -1.748</span>
+<span class="go">Household hhinc#4             -0.005  1.977e-03  -2.692       2.047e-03         -2.600</span>
+<span class="go">          hhinc#5             -0.009  5.154e-03  -1.677       5.967e-03         -1.449</span>
+<span class="go">          hhinc#6             -0.006  3.149e-03  -1.905       3.431e-03         -1.748</span>
 <span class="go">          vehbywrk_BIKE       -0.702  2.583e-01  -2.718       3.094e-01         -2.270</span>
-<span class="go">          vehbywrk_SR         -0.317  6.663e-02  -4.752       7.560e-02         -4.189</span>
-<span class="go">          vehbywrk_TRANSIT    -0.946  1.183e-01  -7.999       1.370e-01         -6.908</span>
+<span class="go">          vehbywrk_SR         -0.317  6.663e-02  -4.752       7.560e-02         -4.188</span>
+<span class="go">          vehbywrk_TRANSIT    -0.946  1.183e-01  -7.999       1.370e-01         -6.907</span>
 <span class="go">          vehbywrk_WALK       -0.722  1.694e-01  -4.261       2.032e-01         -3.552</span>
 <span class="go">ASCs      ASC_BIKE            -1.629  4.274e-01  -3.811       4.861e-01         -3.351</span>
 <span class="go">          ASC_SR2             -1.808  1.061e-01 -17.035       1.170e-01        -15.451</span>
 <span class="go">          ASC_SR3             -3.434  1.519e-01 -22.610       1.557e-01        -22.048</span>
-<span class="go">          ASC_TRANSIT         -0.685  2.478e-01  -2.763       2.690e-01         -2.546</span>
+<span class="go">          ASC_TRANSIT         -0.685  2.478e-01  -2.764       2.690e-01         -2.547</span>
 <span class="go">          ASC_WALK             0.068  3.480e-01   0.196       3.493e-01          0.195</span>
 </pre></div>
 </div>
@@ -342,7 +365,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -368,6 +391,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

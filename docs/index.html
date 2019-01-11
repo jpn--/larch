@@ -154,7 +154,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="treelogo-larch-documentation">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="treelogo-larch-documentation">
 <h1><a class="treelogo reference internal" href="_images/larch_favicon.png"><img alt="treelogo" class="treelogo" src="_images/larch_favicon.png" style="height: 0.9em;" /></a> Larch Documentation<a class="headerlink" href="#treelogo-larch-documentation" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://anaconda.org/jpn/larch"><img alt="https://img.shields.io/conda/v/jpn/larch.svg" class="statusbadge" src="https://img.shields.io/conda/v/jpn/larch.svg" /></a>
 <a class="reference external image-reference" href="https://bitbucket.com/jpn--"><img alt="https://img.shields.io/badge/source-bitbucket-yellow.svg" class="statusbadge" src="https://img.shields.io/badge/source-bitbucket-yellow.svg" /></a>
@@ -251,7 +275,6 @@ I recommend <a class="reference external" href="http://www.diveintopython3.net">
 <li class="toctree-l3"><a class="reference internal" href="example/027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example/028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="example/029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example/042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="example/swissmetro.html">Swissmetro Examples</a><ul>
@@ -271,7 +294,9 @@ I recommend <a class="reference external" href="http://www.diveintopython3.net">
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="example/itinerary.html">Itinerary Choice Examples</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="example/itinerary.html">Itinerary Choice Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/300_itinerary.html">300: Itinerary Choice Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/301_itin_mnl.html">301: Itinerary Choice using MNL</a></li>
 </ul>
 </li>
 </ul>
@@ -300,7 +325,7 @@ I recommend <a class="reference external" href="http://www.diveintopython3.net">
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -326,6 +351,7 @@ I recommend <a class="reference external" href="http://www.diveintopython3.net">
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

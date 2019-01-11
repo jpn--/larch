@@ -47,34 +47,34 @@ Model 23's nesting structure groups private automobiles and non-motorized altern
 	>>> m.loglike()
 	-3435.357...
 	
-	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
-	                                 value  initvalue  nullvalue  minimum  maximum  holdfast
-	Category   Parameter                                                                    
-	CostbyInc  costbyincome        -0.0600        0.0        0.0     -inf      inf         0
-	TravelTime motorized_time      -0.0199        0.0        0.0     -inf      inf         0
-	           nonmotorized_time   -0.0460        0.0        0.0     -inf      inf         0
-	           motorized_ovtbydist -0.1384        0.0        0.0     -inf      inf         0
-	Household  hhinc#4             -0.0046        0.0        0.0     -inf      inf         0
-	           hhinc#5             -0.0081        0.0        0.0     -inf      inf         0
-	           hhinc#6             -0.0046        0.0        0.0     -inf      inf         0
-	           vehbywrk_BIKE       -0.5953        0.0        0.0     -inf      inf         0
-	           vehbywrk_SR         -0.5120        0.0        0.0     -inf      inf         0
-	           vehbywrk_TRANSIT    -0.8737        0.0        0.0     -inf      inf         0
-	           vehbywrk_WALK       -0.6076        0.0        0.0     -inf      inf         0
-	Zonal      wkcbd_BIKE           0.4458        0.0        0.0     -inf      inf         0
-	           wkcbd_SR2            0.3987        0.0        0.0     -inf      inf         0
-	           wkcbd_SR3            1.5876        0.0        0.0     -inf      inf         0
-	           wkcbd_TRANSIT        1.3659        0.0        0.0     -inf      inf         0
-	           wkcbd_WALK           0.1202        0.0        0.0     -inf      inf         0
-	           wkempden_BIKE        0.0026        0.0        0.0     -inf      inf         0
-	           wkempden_SR2         0.0025        0.0        0.0     -inf      inf         0
-	           wkempden_SR3         0.0036        0.0        0.0     -inf      inf         0
-	           wkempden_TRANSIT     0.0035        0.0        0.0     -inf      inf         0
-	           wkempden_WALK        0.0032        0.0        0.0     -inf      inf         0
-	ASCs       ASC_BIKE            -1.6467        0.0        0.0     -inf      inf         0
-	           ASC_SR2             -2.5663        0.0        0.0     -inf      inf         0
-	           ASC_SR3             -4.9612        0.0        0.0     -inf      inf         0
-	           ASC_TRANSIT         -0.8424        0.0        0.0     -inf      inf         0
-	           ASC_WALK            -0.1101        0.0        0.0     -inf      inf         0
-	Other      mu_auto              1.4652        1.0        1.0   0.0010   2.0000         0
-	           mu_nonmoto           0.7661        1.0        1.0   0.0010   1.0000         0
+	>>> print(m.pfo()[['value']])
+	                                 value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0600
+	TravelTime motorized_time      -0.0199
+	           nonmotorized_time   -0.0460
+	           motorized_ovtbydist -0.1383
+	Household  hhinc#4             -0.0046
+	           hhinc#5             -0.0081
+	           hhinc#6             -0.0046
+	           vehbywrk_BIKE       -0.5952
+	           vehbywrk_SR         -0.5120
+	           vehbywrk_TRANSIT    -0.8737
+	           vehbywrk_WALK       -0.6076
+	Zonal      wkcbd_BIKE           0.4459
+	           wkcbd_SR2            0.3987
+	           wkcbd_SR3            1.5877
+	           wkcbd_TRANSIT        1.3660
+	           wkcbd_WALK           0.1202
+	           wkempden_BIKE        0.0026
+	           wkempden_SR2         0.0025
+	           wkempden_SR3         0.0036
+	           wkempden_TRANSIT     0.0035
+	           wkempden_WALK        0.0032
+	ASCs       ASC_BIKE            -1.6467
+	           ASC_SR2             -2.5664
+	           ASC_SR3             -4.9614
+	           ASC_TRANSIT         -0.8427
+	           ASC_WALK            -0.1102
+	Other      mu_auto              1.4652
+	           mu_nonmoto           0.7661

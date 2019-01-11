@@ -46,33 +46,33 @@ Model 19's nesting structure groups all private automobile alternatives. (`pp. 1
 	>>> m.loglike()
 	-3435.995...
 
-	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
-	                                 value  initvalue  nullvalue  minimum  maximum  holdfast
-	Category   Parameter                                                                    
-	CostbyInc  costbyincome        -0.0608        0.0        0.0     -inf      inf         0
-	TravelTime motorized_time      -0.0202        0.0        0.0     -inf      inf         0
-	           nonmotorized_time   -0.0462        0.0        0.0     -inf      inf         0
-	           motorized_ovtbydist -0.1359        0.0        0.0     -inf      inf         0
-	Household  hhinc#4             -0.0045        0.0        0.0     -inf      inf         0
-	           hhinc#5             -0.0075        0.0        0.0     -inf      inf         0
-	           hhinc#6             -0.0050        0.0        0.0     -inf      inf         0
-	           vehbywrk_BIKE       -0.6107        0.0        0.0     -inf      inf         0
-	           vehbywrk_SR         -0.5120        0.0        0.0     -inf      inf         0
-	           vehbywrk_TRANSIT    -0.8725        0.0        0.0     -inf      inf         0
-	           vehbywrk_WALK       -0.6143        0.0        0.0     -inf      inf         0
-	Zonal      wkcbd_BIKE           0.5233        0.0        0.0     -inf      inf         0
-	           wkcbd_SR2            0.3981        0.0        0.0     -inf      inf         0
-	           wkcbd_SR3            1.5869        0.0        0.0     -inf      inf         0
-	           wkcbd_TRANSIT        1.3666        0.0        0.0     -inf      inf         0
-	           wkcbd_WALK           0.1170        0.0        0.0     -inf      inf         0
-	           wkempden_BIKE        0.0023        0.0        0.0     -inf      inf         0
-	           wkempden_SR2         0.0024        0.0        0.0     -inf      inf         0
-	           wkempden_SR3         0.0036        0.0        0.0     -inf      inf         0
-	           wkempden_TRANSIT     0.0035        0.0        0.0     -inf      inf         0
-	           wkempden_WALK        0.0033        0.0        0.0     -inf      inf         0
-	ASCs       ASC_BIKE            -1.8206        0.0        0.0     -inf      inf         0
-	           ASC_SR2             -2.5666        0.0        0.0     -inf      inf         0
-	           ASC_SR3             -4.9620        0.0        0.0     -inf      inf         0
-	           ASC_TRANSIT         -0.8471        0.0        0.0     -inf      inf         0
-	           ASC_WALK            -0.1167        0.0        0.0     -inf      inf         0
-	Other      mu                   1.4655        1.0        1.0   0.0010   2.0000         0
+	>>> print(m.pfo()[['value']])
+	                                 value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0607
+	TravelTime motorized_time      -0.0202
+	           nonmotorized_time   -0.0462
+	           motorized_ovtbydist -0.1358
+	Household  hhinc#4             -0.0045
+	           hhinc#5             -0.0074
+	           hhinc#6             -0.0050
+	           vehbywrk_BIKE       -0.6107
+	           vehbywrk_SR         -0.5121
+	           vehbywrk_TRANSIT    -0.8725
+	           vehbywrk_WALK       -0.6143
+	Zonal      wkcbd_BIKE           0.5234
+	           wkcbd_SR2            0.3982
+	           wkcbd_SR3            1.5869
+	           wkcbd_TRANSIT        1.3667
+	           wkcbd_WALK           0.1170
+	           wkempden_BIKE        0.0023
+	           wkempden_SR2         0.0024
+	           wkempden_SR3         0.0036
+	           wkempden_TRANSIT     0.0035
+	           wkempden_WALK        0.0033
+	ASCs       ASC_BIKE            -1.8205
+	           ASC_SR2             -2.5667
+	           ASC_SR3             -4.9623
+	           ASC_TRANSIT         -0.8474
+	           ASC_WALK            -0.1166
+	Other      mu                   1.4656

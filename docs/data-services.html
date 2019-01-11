@@ -165,12 +165,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="data-service">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="data-service">
 <h1>Data Service<a class="headerlink" href="#data-service" title="Permalink to this headline">¶</a></h1>
 <p>Larch (as of version 4) handles data through a <a class="reference internal" href="#larch.DataService" title="larch.DataService"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataService</span></code></a> object.</p>
 <dl class="class">
 <dt id="larch.DataService">
-<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataService</code><span class="sig-paren">(</span><em>*args</em>, <em>altids=None</em>, <em>altnames=None</em>, <em>pods=None</em>, <em>broadcastable=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataService</code><span class="sig-paren">(</span><em>*args</em>, <em>altids=None</em>, <em>altnames=None</em>, <em>pods=None</em>, <em>broadcastable=True</em>, <em>selector=None</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService" title="Permalink to this definition">¶</a></dt>
 <dd><p>A DataService is a collection of data Pod that provides data for Larch models.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -180,7 +204,7 @@
 <li><strong>altids</strong> (<em>sequence</em><em>, </em><em>optional</em>) – A sequence of alternative identifiers (typically integers).</li>
 <li><strong>altnames</strong> (<em>sequence</em><em>, </em><em>optional</em>) – A sequence of alternative names (typically strings). If given it must
 have the same length as the altids.</li>
-<li><strong>pods</strong> (<em>iterable of larch.Pod</em><em>, </em><em>optional</em>) – Include these :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>Pod`s in the DataService. The pods can also be given as
+<li><strong>pods</strong> (<em>iterable of larch.Pod</em><em>, </em><em>optional</em>) – Include these <code class="xref py py-class docutils literal notranslate"><span class="pre">Pod</span></code> in the DataService. The pods can also be given as
 positional arguments to the constructor.</li>
 </ul>
 </td>
@@ -233,7 +257,7 @@ in the selected dtype.</li>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>dtype</strong> (<em>str or dtype</em>) – Describe the data type you would like the output array to adopt, probably
-numpy.int64, numpy.float64, or <a href="#id3"><span class="problematic" id="id4">numpy.bool_</span></a>.</p>
+numpy.int64, numpy.float64, or numpy.bool.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
@@ -267,7 +291,7 @@ in the selected dtype.</li>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>dtype</strong> (<em>str or dtype</em>) – Describe the data type you would like the output array to adopt, probably
-numpy.int64, numpy.float64, or <a href="#id5"><span class="problematic" id="id6">numpy.bool_</span></a>.</p>
+numpy.int64, numpy.float64, or numpy.bool.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – An array with specified dtype, of shape (n_cases,len(vars)).</p>
@@ -295,7 +319,7 @@ array. The <cite>load_*</cite> methods take an existing array, and load the data
 SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
 <li><strong>arr</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – The array into which the data shall be loaded.</li>
 <li><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>dtype</em>) – Describe the data type you would like the output array to adopt, probably
-numpy.int64, numpy.float64, or <a href="#id7"><span class="problematic" id="id8">numpy.bool_</span></a>.</li>
+numpy.int64, numpy.float64, or numpy.bool.</li>
 <li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
 the array.</li>
 <li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
@@ -336,7 +360,7 @@ for reloading data that may not have changed (e.g. for logsum generation).</li>
 SQLite expression works) to extract as <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> format variables.</li>
 <li><strong>arr</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – The array into which the data shall be loaded.</li>
 <li><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>dtype</em>) – Describe the data type you would like the output array to adopt if not given, probably
-numpy.int64, numpy.float64, or <a href="#id9"><span class="problematic" id="id10">numpy.bool_</span></a>.</li>
+numpy.int64, numpy.float64, or numpy.bool.</li>
 <li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a>) – If given, use this to slice the caseids used to build
 the array.</li>
 <li><strong>strip_nan</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If True (the default) then NAN values are converted to 0, and INF
@@ -388,7 +412,7 @@ for reloading data that may not have changed (e.g. for logsum generation).</li>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -414,6 +438,7 @@ for reloading data that may not have changed (e.g. for logsum generation).</li>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

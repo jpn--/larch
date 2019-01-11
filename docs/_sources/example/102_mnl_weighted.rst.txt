@@ -75,7 +75,7 @@ and only cases that evaluate `True` for both are selected.
 
 .. testcode::
 
-	m.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
@@ -86,20 +86,20 @@ We can estimate the models and check the results match up with those given by Bi
 	>>> m.maximize_loglike(method='SLSQP')
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
-	-5273.742...
+	-5931.557...
 	>>> m.calculate_parameter_covariance()
-	>>> m.current_weight_rescale_factor
-	0.889099...
+	>>> m.dataframes.weight_normalization
+	1.124734...
 
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> m.parameter_summary()
 	Category  Parameter     Value   Std Err  t Stat  Null Value
-	    ASCs    ASC_CAR   -0.1143    0.0432   -2.65           0
-	          ASC_TRAIN   -0.7565     0.056  -13.50           0
-	     LOS     B_COST   -0.0112   0.00052  -21.53           0
-	             B_TIME  -0.01322  0.000569  -23.21           0
+	    ASCs    ASC_CAR   -0.1143    0.0407   -2.81         0.0
+	          ASC_TRAIN   -0.7565    0.0528  -14.32         0.0
+	     LOS     B_COST   -0.0112  0.000490  -22.83         0.0
+	             B_TIME  -0.01322  0.000537  -24.62         0.0
 
 
 .. tip::

@@ -33,7 +33,7 @@ segment in the dataset is too small, so it is joined with the one car group. (`p
 	d = larch.examples.MTC()
 	m = larch.Model(dataservice=d)
 	
-	m.selector = "numveh <= 1"
+	m.dataservice.selector = "numveh <= 1"
 	
 .. testcode::
 	
@@ -94,29 +94,29 @@ segment in the dataset is too small, so it is joined with the one car group. (`p
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                                 value  std err   t stat  robust std err  robust t stat
 	Category   Parameter
-	CostbyInc  costbyincome        -0.0227   0.0138  -1.6408          0.0172        -1.3177
-	TravelTime motorized_time      -0.0211   0.0060  -3.4890          0.0063        -3.3548
-	           nonmotorized_time   -0.0440   0.0081  -5.4261          0.0086        -5.1319
+	CostbyInc  costbyincome        -0.0227   0.0138  -1.6408          0.0172        -1.3178
+	TravelTime motorized_time      -0.0211   0.0060  -3.4888          0.0063        -3.3546
+	           nonmotorized_time   -0.0440   0.0081  -5.4261          0.0086        -5.1318
 	           motorized_ovtbydist -0.1131   0.0260  -4.3588          0.0355        -3.1862
-	Household  hhinc#4             -0.0064   0.0036  -1.8064          0.0036        -1.7836
-	           hhinc#5             -0.0117   0.0095  -1.2286          0.0086        -1.3509
-	           hhinc#6             -0.0120   0.0060  -2.0087          0.0057        -2.1150
-	           vehbywrk_BIKE       -2.6637   0.6620  -4.0235          0.6861        -3.8825
-	           vehbywrk_SR         -3.0146   0.3488  -8.6438          0.3532        -8.5358
-	           vehbywrk_TRANSIT    -3.9633   0.3758 -10.5460          0.3829       -10.3498
-	           vehbywrk_WALK       -3.3420   0.4446  -7.5166          0.4800        -6.9620
-	Zonal      wkcbd_BIKE           0.3951   0.5370   0.7358          0.5602         0.7053
-	           wkcbd_SR2            0.3724   0.2410   1.5453          0.2383         1.5627
-	           wkcbd_SR3            0.2294   0.4065   0.5644          0.4235         0.5417
-	           wkcbd_TRANSIT        1.1064   0.2593   4.2667          0.2541         4.3548
-	           wkcbd_WALK           0.0297   0.3505   0.0848          0.3646         0.0815
-	           wkempdenBIKE         0.0015   0.0019   0.8028          0.0018         0.8166
-	           wkempdenSR2          0.0020   0.0007   2.8048          0.0008         2.5929
+	Household  hhinc#4             -0.0064   0.0036  -1.8066          0.0036        -1.7838
+	           hhinc#5             -0.0116   0.0095  -1.2272          0.0086        -1.3496
+	           hhinc#6             -0.0120   0.0060  -2.0084          0.0057        -2.1147
+	           vehbywrk_BIKE       -2.6641   0.6620  -4.0240          0.6861        -3.8831
+	           vehbywrk_SR         -3.0145   0.3488  -8.6438          0.3532        -8.5357
+	           vehbywrk_TRANSIT    -3.9632   0.3758 -10.5458          0.3829       -10.3497
+	           vehbywrk_WALK       -3.3420   0.4446  -7.5166          0.4800        -6.9621
+	Zonal      wkcbd_BIKE           0.3958   0.5370   0.7371          0.5601         0.7067
+	           wkcbd_SR2            0.3724   0.2410   1.5454          0.2383         1.5627
+	           wkcbd_SR3            0.2294   0.4065   0.5644          0.4235         0.5418
+	           wkcbd_TRANSIT        1.1065   0.2593   4.2667          0.2541         4.3548
+	           wkcbd_WALK           0.0297   0.3505   0.0847          0.3646         0.0814
+	           wkempdenBIKE         0.0015   0.0019   0.8015          0.0018         0.8151
+	           wkempdenSR2          0.0020   0.0007   2.8046          0.0008         2.5928
 	           wkempdenSR3          0.0035   0.0009   3.8880          0.0010         3.4788
-	           wkempdenTRANSIT      0.0032   0.0007   4.7291          0.0008         4.1509
-	           wkempdenWALK         0.0038   0.0010   3.9146          0.0010         3.8824
-	ASCs       ASC_BIKE             0.9769   0.7023   1.3911          0.7043         1.3870
-	           ASC_SR2              0.5929   0.3025   1.9597          0.3187         1.8601
+	           wkempdenTRANSIT      0.0032   0.0007   4.7292          0.0008         4.1510
+	           wkempdenWALK         0.0038   0.0010   3.9143          0.0010         3.8821
+	ASCs       ASC_BIKE             0.9765   0.7023   1.3905          0.7043         1.3865
+	           ASC_SR2              0.5929   0.3025   1.9596          0.3187         1.8600
 	           ASC_SR3             -0.7852   0.3538  -2.2196          0.3660        -2.1452
-	           ASC_TRANSIT          2.2580   0.4442   5.0837          0.4932         4.5783
+	           ASC_TRANSIT          2.2579   0.4442   5.0835          0.4932         4.5781
 	           ASC_WALK             2.9070   0.5621   5.1715          0.6133         4.7402

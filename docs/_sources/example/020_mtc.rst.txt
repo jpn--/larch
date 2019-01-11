@@ -38,38 +38,38 @@ Model 20's nesting structure groups both shared ride alternatives. (`pp. 176 <ht
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
 
 	>>> m.load_data()
-	>>> m.maximize_loglike()
+	>>> m.maximize_loglike('slsqp')
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
 	-3442.414...
 	
-	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
-	                                  value  initvalue  nullvalue  minimum  maximum  holdfast
-	Category   Parameter                                                                    
-	CostbyInc  costbyincome        -0.0455        0.0        0.0     -inf      inf         0
-	TravelTime motorized_time      -0.0206        0.0        0.0     -inf      inf         0
-	           nonmotorized_time   -0.0452        0.0        0.0     -inf      inf         0
-	           motorized_ovtbydist -0.1338        0.0        0.0     -inf      inf         0
-	Household  hhinc#4             -0.0054        0.0        0.0     -inf      inf         0
-	           hhinc#5             -0.0089        0.0        0.0     -inf      inf         0
-	           hhinc#6             -0.0062        0.0        0.0     -inf      inf         0
-	           vehbywrk_BIKE       -0.7031        0.0        0.0     -inf      inf         0
-	           vehbywrk_SR         -0.3147        0.0        0.0     -inf      inf         0
-	           vehbywrk_TRANSIT    -0.9381        0.0        0.0     -inf      inf         0
-	           vehbywrk_WALK       -0.7241        0.0        0.0     -inf      inf         0
-	Zonal      wkcbd_BIKE           0.5011        0.0        0.0     -inf      inf         0
-	           wkcbd_SR2            0.3958        0.0        0.0     -inf      inf         0
-	           wkcbd_SR3            0.6406        0.0        0.0     -inf      inf         0
-	           wkcbd_TRANSIT        1.3168        0.0        0.0     -inf      inf         0
-	           wkcbd_WALK           0.1143        0.0        0.0     -inf      inf         0
-	           wkempden_BIKE        0.0020        0.0        0.0     -inf      inf         0
-	           wkempden_SR2         0.0019        0.0        0.0     -inf      inf         0
-	           wkempden_SR3         0.0019        0.0        0.0     -inf      inf         0
-	           wkempden_TRANSIT     0.0032        0.0        0.0     -inf      inf         0
-	           wkempden_WALK        0.0030        0.0        0.0     -inf      inf         0
-	ASCs       ASC_BIKE            -1.6199        0.0        0.0     -inf      inf         0
-	           ASC_SR2             -1.6847        0.0        0.0     -inf      inf         0
-	           ASC_SR3             -2.2055        0.0        0.0     -inf      inf         0
-	           ASC_TRANSIT         -0.6797        0.0        0.0     -inf      inf         0
-	           ASC_WALK             0.0732        0.0        0.0     -inf      inf         0
-	Other      mu                   0.3288        1.0        1.0   0.0010   1.0000         0
+	>>> print(m.pfo()[['value']])
+	                                 value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0455
+	TravelTime motorized_time      -0.0206
+	           nonmotorized_time   -0.0452
+	           motorized_ovtbydist -0.1338
+	Household  hhinc#4             -0.0054
+	           hhinc#5             -0.0089
+	           hhinc#6             -0.0062
+	           vehbywrk_BIKE       -0.7031
+	           vehbywrk_SR         -0.3147
+	           vehbywrk_TRANSIT    -0.9381
+	           vehbywrk_WALK       -0.7241
+	Zonal      wkcbd_BIKE           0.5011
+	           wkcbd_SR2            0.3958
+	           wkcbd_SR3            0.6406
+	           wkcbd_TRANSIT        1.3168
+	           wkcbd_WALK           0.1143
+	           wkempden_BIKE        0.0020
+	           wkempden_SR2         0.0019
+	           wkempden_SR3         0.0019
+	           wkempden_TRANSIT     0.0032
+	           wkempden_WALK        0.0030
+	ASCs       ASC_BIKE            -1.6199
+	           ASC_SR2             -1.6847
+	           ASC_SR3             -2.2055
+	           ASC_TRANSIT         -0.6797
+	           ASC_WALK             0.0732
+	Other      mu                   0.3288

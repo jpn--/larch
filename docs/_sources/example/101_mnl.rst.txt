@@ -69,7 +69,7 @@ and only cases that evaluate `True` for both are selected.
 
 .. testcode::
 
-	m.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
