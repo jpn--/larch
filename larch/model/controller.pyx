@@ -8,7 +8,7 @@ import numpy
 import pandas
 
 import logging
-logger = logging.getLogger('L4.model')
+logger = logging.getLogger('L5.model')
 
 
 from ..dataframes cimport DataFrames

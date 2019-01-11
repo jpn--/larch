@@ -14,7 +14,7 @@ import numpy
 import inspect
 
 import logging
-logger = logging.getLogger('L4')
+logger = logging.getLogger('L5')
 
 from .model.controller cimport Model5c
 from numpy.math cimport expf, logf

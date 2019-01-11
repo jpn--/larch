@@ -52,7 +52,7 @@ class Prelearner():
 		if classifier is None:
 			raise ValueError('must give a classifier')
 
-		logger = logging.getLogger('L4')
+		logger = logging.getLogger('L5')
 
 		self.input_columns = training_X.columns
 		self.output_column = output_name

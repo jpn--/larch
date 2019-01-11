@@ -17,7 +17,7 @@ import numpy
 import pandas
 
 import logging
-logger = logging.getLogger('L4')
+logger = logging.getLogger('L5')
 
 cdef float INFINITY32 = numpy.float('inf')
 
