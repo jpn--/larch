@@ -32,7 +32,7 @@ class SystematicAlternatives:
 		self._suggested_alts_name = suggested_alts_name
 
 	def __repr__(self):
-		s = "<larch4.data_services.SystematicAlternatives>"
+		s = "<larch.data_services.SystematicAlternatives>"
 		for g,c in zip(self.groupby, self.categoricals):
 			s += f"\n | {g}:"
 			s += f"\n |   {str(c)}"

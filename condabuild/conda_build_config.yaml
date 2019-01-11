@@ -1,0 +1,11 @@
+python:
+  - 3.6
+  - 3.7
+
+c_compiler:
+  - clang
+  
+numpy: 
+  - 1.15
+  
+  
