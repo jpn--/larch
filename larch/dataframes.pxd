@@ -53,6 +53,9 @@ cdef class DataFrames:
 		# Aux data
 		object _alternative_codes
 		object _alternative_names
+		object _data_av_name
+		object _data_ch_name
+		object _data_wt_name
 
 		# Linked Model Attributes
 		int _n_model_params

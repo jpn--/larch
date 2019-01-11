@@ -261,6 +261,10 @@ cdef class DataFrames:
 			alt_codes = None,
 
 			crack = False,
+
+			av_name = None,
+			ch_name = None,
+			wt_name = None,
 	):
 
 		try:
@@ -308,9 +312,9 @@ cdef class DataFrames:
 			self.data_ch = ch
 			self.data_wt = wt
 			if av is None and self.data_ce is not None:
-				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes, index=self.caseindex)
+				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
 			if av is True or (isinstance(av, (int, float)) and av==1):
-				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes, index=self.caseindex)
+				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes(), index=self.caseindex)
 			else:
 				if isinstance(av, pandas.DataFrame) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2 and av.shape[1]==1:
 					av = av.iloc[:,0]
@@ -319,12 +323,16 @@ cdef class DataFrames:
 				self.data_av = av
 
 			self._weight_normalization = 1
+
+			self._data_av_name = av_name
+			self._data_ch_name = ch_name
+			self._data_wt_name = wt_name
 		except:
 			logger.exception('error in constructing DataFrames')
 			raise
 
 	@classmethod
-	def from_idce(cls, ce, choice, columns=None, autoscale_weights=True):
+	def from_idce(cls, ce, choice=None, columns=None, autoscale_weights=True, crack=False):
 		"""
 		Create DataFrames from a single `idce` format DataFrame.
 
@@ -332,21 +340,29 @@ cdef class DataFrames:
 		----------
 		ce : pandas.DataFrame
 			The data
-		choice : str
-			The name of the choice column.
+		choice : str, optional
+			The name of the choice column. If not given, data_ch will not be populated.
 		columns : list, optional
 			Import only these columns.  If not given, will import into data_ce all columns except the choice,
 			which is imported separately.
 		autoscale_weights : bool, default True
 			Also call autoscale_weights on the result after loading.
+		crack : bool, default False
+			Split `ce` into :ref:`idca` and :ref:`idco` parts.
 		"""
+		co = None
+		if crack:
+			ce, co = crack_idca(ce, crack)
+
 		if columns is None:
-			columns = ce.columns
-			if choice in columns:
+			columns = list(ce.columns)
+			if choice is not None and choice in ce.columns:
 				columns.remove(choice)
 		result = cls(
 			ce = ce[columns],
-			ch = ce[choice].unstack().fillna(0),
+			ch = ce[choice].unstack().fillna(0) if choice is not None else None,
+			co = co,
+			ch_name = choice
 		)
 		if autoscale_weights:
 			result.autoscale_weights()
@@ -368,13 +384,19 @@ cdef class DataFrames:
 			for col in self.data_ce.columns:
 				print(f"    - {col}", file=out)
 		else:
-			print(f"  data_ca: <not set>", file=out)
+			print(f"  data_ca: <not populated>", file=out)
 		if self.data_co is not None:
 			print(f"  data_co:", file=out)
 			for col in self.data_co.columns:
 				print(f"    - {col}", file=out)
 		else:
-			print(f"  data_co: <not set>", file=out)
+			print(f"  data_co: <not populated>", file=out)
+		if self.data_av is not None:
+			print(f"  data_av: {self._data_av_name or '<populated>'}", file=out)
+		if self.data_ch is not None:
+			print(f"  data_ch: {self._data_ch_name or '<populated>'}", file=out)
+		if self.data_wt is not None:
+			print(f"  data_wt: {self._data_wt_name or '<populated>'}", file=out)
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
 		from ..util.addict import adict_report
@@ -427,8 +449,8 @@ cdef class DataFrames:
 		from collections import OrderedDict
 		od = OrderedDict()
 
-		if self.alternative_names is not None:
-			od['name'] = pandas.Series(self.alternative_names, index=self.alternative_codes)
+		if self.alternative_names() is not None:
+			od['name'] = pandas.Series(self.alternative_names(), index=self.alternative_codes())
 
 		if show_wt:
 			od['chosen weighted'] = ch_w
@@ -466,11 +488,9 @@ cdef class DataFrames:
 		result.drop('_root_', errors='ignore', inplace=True)
 		return result
 
-	@property
 	def alternative_names(self):
 		return self._alternative_names
 
-	@property
 	def alternative_codes(self):
 		return self._alternative_codes
 
@@ -1545,7 +1565,7 @@ cdef class DataFrames:
 		m5 = Model()
 		from larch.roles import P, X, PX
 		if self.data_co is not None:
-			for a in self.alternative_codes[1:]:
+			for a in self.alternative_codes()[1:]:
 				m5.utility_co[a] = sum(PX(j) for j in self.data_co.columns)
 		if self.data_ca is not None:
 			m5.utility_ca = sum(PX(j) for j in self.data_ca.columns)
@@ -1616,14 +1636,129 @@ cdef class DataFrames:
 					data_av=data_av,
 					data_ch=data_ch,
 					data_wt=data_wt,
-					alt_names = self.alternative_names,
-					alt_codes = self.alternative_codes,
+					alt_names = self.alternative_names(),
+					alt_codes = self.alternative_codes(),
 				))
 			logger.debug(f'done splitting dataframe {splits}')
 			return result
 		except:
 			logger.exception('error in DataFrames.split')
 			raise
+
+
+	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64):
+		"""Create a DataFrames object that will satisfy a data request.
+
+		Parameters
+		----------
+		req_data : Dict or str
+			The requested data. The keys for this dictionary may include {'ca', 'co',
+			'choice_ca', 'choice_co', 'weight_co', 'avail_ca', 'standardize'}.
+			Currently, the keys {'choice_co_code', 'avail_co'} are not implemented and
+			will raise an error.
+			Other keys are silently ignored.
+		selector : array-like[bool] or slice, optional
+			If given, the selector filters the cases. This argument can only be given
+			as a keyword argument.
+		float_dtype : dtype, default float64
+			The dtype to use for all float-type arrays.  Note that the availability
+			arrays are always returned as int8 regardless of the float type.
+			This argument can only be given
+			as a keyword argument.
+
+		Returns
+		-------
+		DataFrames
+			This object should satisfy the request.
+		"""
+
+		if selector is not None:
+			raise NotImplementedError
+
+		if isinstance(req_data, str):
+			from .util import Dict
+			import textwrap
+			req_data = Dict.load(textwrap.dedent(req_data))
+
+		if 'ca' in req_data:
+			from .util.dataframe import columnize
+			df_ca = columnize(self._data_ca_or_ce, list(req_data['ca']), inplace=False, dtype=float_dtype)
+		else:
+			df_ca = None
+
+		if 'co' in req_data:
+			df_co = columnize(self._data_co, list(req_data['co']), inplace=False, dtype=float_dtype)
+		else:
+			df_co = None
+
+		if 'choice_ca' in req_data:
+			name_ch = req_data['choice_ca']
+			if name_ch == self._data_ch_name:
+				df_ch = self._data_ch
+			else:
+				try:
+					df_ch = columnize(self._data_ca_or_ce, [name_ch], inplace=False, dtype=float_dtype)
+				except NameError:
+					df_ch = self._data_ch
+		elif 'choice_co' in req_data:
+			alts = self.alternative_codes()
+			cols = [req_data['choice_co'].get(a, '0') for a in alts]
+			try:
+				df_ch = columnize(self._data_co, cols, inplace=False, dtype=float_dtype)
+			except NameError:
+				df_ch = self._data_ch
+			else:
+				df_ch.columns = alts
+		elif 'choice_co_code' in req_data:
+			raise NotImplementedError('choice_co_code')
+		else:
+			df_ch = None
+
+		weight_normalization = 1
+
+		if 'weight_co' in req_data:
+			try:
+				df_wt = columnize(self._data_co, [req_data['weight_co']], inplace=False, dtype=float_dtype)
+			except NameError:
+				df_wt = self._data_wt
+				weight_normalization = self._weight_normalization
+		else:
+			df_wt = None
+
+		if df_wt is None and self._data_wt is not None:
+			logger.warning('req_data does not request weight_co but it is set and being provided')
+			df_wt = self._data_wt
+			weight_normalization = self._weight_normalization
+
+		if 'avail_ca' in req_data:
+			try:
+				df_av = columnize(self._data_ca_or_ce, [req_data['avail_ca']], inplace=False, dtype=numpy.int8)
+			except NameError:
+				df_av = self._data_av
+		elif 'avail_co' in req_data:
+			raise NotImplementedError('avail_co')
+		else:
+			df_av = None
+
+		result = DataFrames(
+			co=df_co,
+			ce=df_ca,
+			av=df_av,
+			ch=df_ch,
+			wt=df_wt,
+			alt_codes=self.alternative_codes(),
+			alt_names=self.alternative_names(),
+		)
+
+		result._weight_normalization = weight_normalization
+
+		if 'standardize' in req_data and req_data.standardize:
+			result.standardize()
+
+		return result
+
+	def validate_dataservice(self, req_data):
+		pass
 
 from sklearn.preprocessing import StandardScaler
 

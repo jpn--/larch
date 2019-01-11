@@ -578,7 +578,7 @@ def test_dataframes_cnl():
 	compute_d_loglike = dict(m5.d_loglike(b))
 
 	for k in correct_d_loglike:
-		assert compute_d_loglike[k] == approx(correct_d_loglike[k]), f"{k}: {compute_d_loglike[k]} != {approx(correct_d_loglike[k])}"
+		assert compute_d_loglike[k] == approx(correct_d_loglike[k], rel=1e-5), f"{k}: {compute_d_loglike[k]} != {approx(correct_d_loglike[k])}"
 
 
 def test_weighted_bhhh():
@@ -1932,9 +1932,9 @@ def test_weighted_qnl_bhhh():
 	assert dict(ll1.bhhh.unstack()) == approx(dict(ll2.bhhh.unstack()))
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = numpy.asarray(dll_casewise_A) / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = numpy.asarray(dll_casewise_A)
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
 		index=ll2.dll.index,
@@ -2253,13 +2253,13 @@ def test_weighted_qmnl_bhhh():
 	assert dict(ll1.bhhh.unstack()) == approx(bhhh_correct)
 	assert dict(ll2.bhhh.unstack()) == approx(bhhh_correct)
 	assert dict(ll1.bhhh.unstack()) == approx(dict(ll2.bhhh.unstack()))
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert ll2.dll.sort_index().values == approx(ll2.dll_casewise.sum(0).sort_index().values)
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = numpy.asarray(dll_casewise_A) / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = numpy.asarray(dll_casewise_A)
 
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
@@ -2872,13 +2872,13 @@ def test_dataframes_holdfast_1():
 	assert dict_ll2_bhhh == approx(bhhh_correct)
 	assert dict_ll1_bhhh == approx(dict_ll2_bhhh)
 
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert ll2.dll.sort_index().values == approx(ll2.dll_casewise.sum(0).sort_index().values)
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = dll_casewise_A.values / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = dll_casewise_A.values
 
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
@@ -3233,13 +3233,13 @@ def test_dataframes_holdfast_2():
 		assert d_ll1_bhhh[k] == approx(bhhh_correct[k]), f"{k}: {d_ll1_bhhh[k]} != {approx(bhhh_correct[k])}"
 	assert d_ll2_bhhh == approx(bhhh_correct)
 	assert d_ll1_bhhh == approx( d_ll2_bhhh )
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert ll2.dll.sort_index().values == approx(ll2.dll_casewise.sum(0).sort_index().values)
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = dll_casewise_A.values / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = dll_casewise_A.values
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
 		index=ll2.dll.index,
