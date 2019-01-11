@@ -2,6 +2,8 @@
 import pandas
 import numpy
 
+from . import Model
+
 
 def bitmask_shift_value(b):
 	s = 1
@@ -30,7 +32,7 @@ class SystematicAlternatives:
 		self._suggested_alts_name = suggested_alts_name
 
 	def __repr__(self):
-		s = "<larch.data_services.SystematicAlternatives>"
+		s = "<larch4.data_services.SystematicAlternatives>"
 		for g,c in zip(self.groupby, self.categoricals):
 			s += f"\n | {g}:"
 			s += f"\n |   {str(c)}"
@@ -308,7 +310,7 @@ def new_alternative_codes(
 		overwrite=False,
 		complete_features_list=None,
 ):
-	"""
+	"""Create new systematic alternatives.
 
 	Parameters
 	----------
@@ -329,7 +331,7 @@ def new_alternative_codes(
 		detected categories.  This is critical if these alternative codes will be used for OGEV models
 		that require extra nodes at levels that are cross-nested.
 	overwrite : bool, default False
-		Should existing variable with `name` be overwritten. It False and it already exists, a
+		Should existing variable with `name` be overwritten. If False and it already exists, a
 		'_v#' suffix is added.
 	complete_features_list : dict, optional
 		Give a complete, ordered enumeration of all possible feature values for each `groupby` level.
@@ -456,15 +458,16 @@ def new_alternative_codes(
 
 
 
-def magic_nesting(model, sys_alts, mu_parameters=None, mu_prefix='MU_'):
+def magic_nesting(model, sys_alts=None, mu_parameters=None, mu_prefix='MU_'):
 	"""
 	Automatically build an NL model based on categories used for idce.
 
 	Parameters
 	----------
 	model : larch.Model
-	sys_alts : SystematicAlternatives
-		As returned by `new_alternative_codes`
+	sys_alts : SystematicAlternatives, optional
+		As returned by `new_alternative_codes`.  If not given, this method will
+		attempt to extract sys_alts from the current `dataframes` or `dataservice`.
 	mu_parameters : iterable, optional
 		A list of mu parameter names, to be applied to each level defined by groupby. If not given,
 		the list is created with `mu_prefix` and `sys_alts.groupby`.
@@ -472,31 +475,47 @@ def magic_nesting(model, sys_alts, mu_parameters=None, mu_prefix='MU_'):
 		A prefix to append to each item in `sys_alts.groupby` if `mu_parameters` is omitted.
 
 	"""
+	if sys_alts is None:
+		try:
+			sys_alts = model.dataframes.sys_alts
+		except AttributeError:
+			pass
+
+	if sys_alts is None:
+		try:
+			sys_alts = model.dataservice.sys_alts
+		except AttributeError:
+			pass
+
+	if sys_alts is None:
+		raise ValueError('cannot find sys_alts')
+
 	return magic_ogev_nesting(
 		model,
-		sys_alts,
 		ogev_coverage=[1 for _ in sys_alts.groupby],
+		sys_alts=sys_alts,
 		mu_parameters=mu_parameters,
 		mu_prefix=mu_prefix,
 	)
 
 
 
-def magic_ogev_nesting(model, sys_alts, ogev_coverage, mu_parameters=None, mu_prefix='MU_', ):
+def magic_ogev_nesting(model, ogev_coverage, sys_alts=None, mu_parameters=None, mu_prefix='MU_', ):
 	"""
 	Automatically build an OGEV model based on categories used for idce.
 
 	Parameters
 	----------
 	model : larch.Model
-	sys_alts : SystematicAlternatives
-		As returned by `new_alternative_codes`
 	ogev_coverage : iterable
 		For each grouby layer in `sys_alts`, how many ordered cross-nests should be created.  Length
 		of this iterable must match the length of the groupby in `sys_alts`.  Give all 1's to create
 		a normal nested logit model, or set some values greater than 1 to create an OGEV model. Note
 		that multiple layers can have values greater than 1, but the resulting model is quite likely
 		to be unwieldy.
+	sys_alts : SystematicAlternatives
+		As returned by `new_alternative_codes`.  If not given, this method will
+		attempt to extract sys_alts from the current `dataframes`.
 	mu_parameters : iterable, optional
 		A list of mu parameter names, to be applied to each level defined by groupby. If not given,
 		the list is created with `mu_prefix` and `sys_alts.groupby`.
@@ -504,6 +523,21 @@ def magic_ogev_nesting(model, sys_alts, ogev_coverage, mu_parameters=None, mu_pr
 		A prefix to append to each item in `sys_alts.groupby` if `mu_parameters` is omitted.
 
 	"""
+	if sys_alts is None:
+		try:
+			sys_alts = model.dataframes.sys_alts
+		except AttributeError:
+			pass
+
+	if sys_alts is None:
+		try:
+			sys_alts = model.dataservice.sys_alts
+		except AttributeError:
+			pass
+
+	if sys_alts is None:
+		raise ValueError('cannot find sys_alts')
+
 	groupby = sys_alts.groupby
 	masks = sys_alts.masks
 	unique_alt_codes = sys_alts.altcodes

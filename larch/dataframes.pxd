@@ -56,6 +56,7 @@ cdef class DataFrames:
 		object _data_av_name
 		object _data_ch_name
 		object _data_wt_name
+		object _systematic_alternatives
 
 		# Linked Model Attributes
 		int _n_model_params

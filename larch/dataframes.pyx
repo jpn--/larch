@@ -237,7 +237,33 @@ def crack_idca(df:pandas.DataFrame, caseid_col=True):
 	return df[idca_columns[idca_columns].index], g[idco_columns[idco_columns].index].first()
 
 
+def _infer_name(thing):
+	if thing is None:
+		return None
+	if isinstance(thing, str):
+		return thing
+	if hasattr(thing, 'name'):
+		name = thing.name
+		if isinstance(name, str):
+			return name
+		if callable(name):
+			return _infer_name(name())
+		return str(name)
+	return None
+
 cdef class DataFrames:
+	"""A structured class to hold multi-format discrete choice data.
+
+	Parameters
+	----------
+	co : pandas.DataFrame
+		A dataframe containing idco format data, with one row per case.
+		The index contains the caseid's.
+	ca : pandas.DataFrame
+		A dataframe containing idca format data, with one row per alternative.
+		The index should be a two-level multi-index, with the first level
+		containing the caseid's and the second level containing the altid's.
+	"""
 
 	def __init__(
 			self,
@@ -265,6 +291,11 @@ cdef class DataFrames:
 			av_name = None,
 			ch_name = None,
 			wt_name = None,
+
+			av_as_ce = None,
+			ch_as_ce = None,
+
+			sys_alts = None,
 	):
 
 		try:
@@ -274,6 +305,14 @@ cdef class DataFrames:
 			av = av if av is not None else data_av
 			ch = ch if ch is not None else data_ch
 			wt = wt if wt is not None else data_wt
+
+			# Infer names from input data is possible
+			if av_name is None:
+				av_name = _infer_name(av)
+			if ch_name is None:
+				ch_name = _infer_name(ch)
+			if wt_name is None:
+				wt_name = _infer_name(wt)
 
 			if crack and co is None:
 				if ca is not None:
@@ -291,6 +330,16 @@ cdef class DataFrames:
 			if ch is not None and len(ch.shape) == 1 and ch.shape[0] == _n_cases:
 				logger.warning('one-hot encoding choice array')
 				ch = to_categorical(ch)
+
+			if ch is None and ch_as_ce is not None and ce is not None:
+				_ch_temp = pandas.DataFrame(numpy.asarray(ch_as_ce), index=ce.index, columns=['choice'])
+				ch = _ch_temp.unstack().fillna(0)
+				ch.columns = ch.columns.droplevel(0)
+
+			if av is None and av_as_ce is not None and ce is not None:
+				_av_temp = pandas.DataFrame(numpy.asarray(av_as_ce), index=ce.index, columns=['avail'])
+				av = _av_temp.unstack().fillna(0)
+				av.columns = av.columns.droplevel(0)
 
 			if alt_codes is None:
 				if ca is not None:
@@ -327,6 +376,9 @@ cdef class DataFrames:
 			self._data_av_name = av_name
 			self._data_ch_name = ch_name
 			self._data_wt_name = wt_name
+
+			self._systematic_alternatives = sys_alts
+
 		except:
 			logger.exception('error in constructing DataFrames')
 			raise
@@ -675,6 +727,31 @@ cdef class DataFrames:
 		self._data_av = _ensure_dataframe_of_dtype(df, numpy.int8, 'data_av', warn_on_convert=False)
 		self._array_av = _df_values(self.data_av, (self.n_cases, self.n_alts))
 
+	def data_av_as_ce(self):
+		"""
+		Reformat avail data into idce format.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		if self._data_av is None:
+			return None
+		if self.data_ce is None:
+			if self._data_av is None:
+				raise NotImplementedError('not implemented when data_ce and data_av are None')
+			return self._data_av[self._data_av.stack().astype(bool).values]
+
+		arr = numpy.zeros( [len(self.data_ce)], dtype=numpy.int8 )
+		cdef int c,a,row
+		for c in range(self._array_ce_reversemap.shape[0]):
+			for a in range(self._array_ce_reversemap.shape[1]):
+				row = self._array_ce_reversemap[c,a]
+				if row >= 0:
+					arr[row] = self._array_av[c,a]
+		return pandas.DataFrame(arr, index=self.data_ce.index, columns=['avail'])
+
+
 	def data_av_cascade(self, graph):
 		result = pandas.DataFrame(
 			data=numpy.int8(0),
@@ -836,7 +913,7 @@ cdef class DataFrames:
 		missing_data = set()
 
 		import logging
-		logger = logging.getLogger("L4").error
+		logger = logging.getLogger("L5").error
 
 		def missing(y):
 			if y not in missing_data:
@@ -962,7 +1039,7 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L4')
+			logger = logging.getLogger('L5')
 			logger.exception('error in DataFrames._link_to_model_structure')
 			raise
 
@@ -999,7 +1076,7 @@ cdef class DataFrames:
 		except:
 			if logger is None:
 				import logging
-				logger = logging.getLogger('L4')
+				logger = logging.getLogger('L5')
 			logger.exception('error in DataFrames.link_to_model_parameters')
 			raise
 
@@ -1039,7 +1116,7 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L4')
+			logger = logging.getLogger('L5')
 			logger.exception('error in DataFrames._read_in_model_parameters')
 			raise
 
@@ -1748,6 +1825,7 @@ cdef class DataFrames:
 			wt=df_wt,
 			alt_codes=self.alternative_codes(),
 			alt_names=self.alternative_names(),
+			sys_alts=self._systematic_alternatives,
 		)
 
 		result._weight_normalization = weight_normalization
@@ -1759,6 +1837,82 @@ cdef class DataFrames:
 
 	def validate_dataservice(self, req_data):
 		pass
+
+	def new_systematic_alternatives(
+			self,
+			groupby,
+			name='alternative_code',
+			padding_levels=4,
+			groupby_prefixes=None,
+			overwrite=False,
+			complete_features_list=None,
+	):
+		"""Create new systematic alternatives.
+
+		Parameters
+		----------
+		groupby : str or list
+			The column or columns that will define the new alternative codes. Every unique combination
+			of values in these columns will be grouped together in such a way as to allow a nested logit
+			tree to be build with the unique values defining the nest memberships.  As such, the order
+			of columns given in this list is meaningful.
+		name : str
+			Name of the new alternative codes column.
+		padding_levels : int, default 4
+			Space for this number of "extra" levels is reserved in each mask, beyond the number of
+			detected categories.  This is critical if these alternative codes will be used for OGEV models
+			that require extra nodes at levels that are cross-nested.
+		overwrite : bool, default False
+			Should existing variable with `name` be overwritten. If False and it already exists, a
+			'_v#' suffix is added.
+		complete_features_list : dict, optional
+			Give a complete, ordered enumeration of all possible feature values for each `groupby` level.
+			If any level is not specifically identified, the unique values observed in this dataset are used.
+			This argument can be important for OGEV models (e.g. when grouping by time slot but some time slots
+			have no alternatives present) or when train and test data may not include a completely overlapping
+			set of feature values.
+
+		Returns
+		-------
+		pandas.DataFrames
+
+		"""
+		from .model.systematic_alternatives import new_alternative_codes
+
+		df = self._data_ca_or_ce
+
+		caseindex = self.data_ce.index.names[0]
+		if caseindex is None:
+			caseindex = "_caseid_"
+
+		df1, sa1 = new_alternative_codes(
+			self.data_ce,
+			groupby=groupby,
+			caseindex=caseindex,
+			name=name,
+			padding_levels=padding_levels,
+			groupby_prefixes=groupby_prefixes,
+			overwrite=overwrite,
+			complete_features_list=complete_features_list,
+		)
+
+		dfs = type(self)(
+			ce = df1,
+			alt_names = sa1.altnames,
+			alt_codes = sa1.altcodes,
+			co = self.data_co,
+			av_as_ce = self.data_av_as_ce(),
+			wt = self.data_wt,
+			ch_as_ce = self.data_ch_as_ce(),
+			sys_alts = sa1,
+		)
+
+		return dfs
+
+	@property
+	def sys_alts(self):
+		"""The SystematicAlternatives instance used to create this DataFrames."""
+		return self._systematic_alternatives
 
 from sklearn.preprocessing import StandardScaler
 
