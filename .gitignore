@@ -57,7 +57,7 @@ cython_debug
 larch4.egg-info
 larch/model/*.html
 larch/**/*.html
-Icon
+Icon?
 
 
 docs/.doctrees
