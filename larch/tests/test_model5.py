@@ -2967,7 +2967,7 @@ def test_dataframes_holdfast_2():
 
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
@@ -3337,7 +3337,7 @@ def test_dataframes_nl_holdfasts():
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 	m5.check_d_loglike()
 
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
