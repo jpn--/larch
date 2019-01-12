@@ -135,7 +135,7 @@ setup(
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
         'seaborn >=0.8.1',
-        'xmle >=0.1.3',
+        # 'xmle >=0.1.3',
     ] + [
         # 'sqlite >=3.21',
     ] if platform.system() != 'Windows' else [],
