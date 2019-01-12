@@ -1,4 +1,4 @@
-# cython: language_level=3
+# cython: language_level=3, embedsignature=True
 
 from .general_precision cimport *
 from .model.controller cimport Model5c
