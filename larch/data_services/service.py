@@ -608,6 +608,30 @@ class DataService():
 
 
 	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64):
+		"""Create a DataFrames object that will satisfy a data request.
+
+		Parameters
+		----------
+		req_data : Dict or str
+			The requested data. The keys for this dictionary may include {'ca', 'co',
+			'choice_ca', 'choice_co', 'weight_co', 'avail_ca', 'standardize'}.
+			Currently, the keys {'choice_co_code', 'avail_co'} are not implemented and
+			will raise an error.
+			Other keys are silently ignored.
+		selector : array-like[bool] or slice, optional
+			If given, the selector filters the cases. This argument can only be given
+			as a keyword argument.
+		float_dtype : dtype, default float64
+			The dtype to use for all float-type arrays.  Note that the availability
+			arrays are always returned as int8 regardless of the float type.
+			This argument can only be given
+			as a keyword argument.
+
+		Returns
+		-------
+		DataFrames
+			This object should satisfy the request.
+		"""
 
 		if isinstance(req_data, str):
 			from ..util import Dict
@@ -666,45 +690,45 @@ class DataService():
 		return result
 
 
-def validate_dataservice(dataservice, req_data):
-	"""
-	Check if an object is a sufficient dataservice.
-	"""
+	def validate_dataservice(self, req_data):
+		"""
+		Check if an object is a sufficient dataservice.
+		"""
 
-	if isinstance(req_data, str):
-		from ..util import Dict
-		import textwrap
-		req_data = Dict.load(textwrap.dedent(req_data))
+		if isinstance(req_data, str):
+			from ..util import Dict
+			import textwrap
+			req_data = Dict.load(textwrap.dedent(req_data))
 
-	missing_methods = set()
+		missing_methods = set()
 
-	if 'ca' in req_data:
-		if not hasattr(dataservice, 'dataframe_idca'):
-			missing_methods.add('dataframe_idca')
+		if 'ca' in req_data:
+			if not hasattr(self, 'dataframe_idca'):
+				missing_methods.add('dataframe_idca')
 
-	if 'co' in req_data:
-		if not hasattr(dataservice, 'dataframe_idco'):
-			missing_methods.add('dataframe_idco')
+		if 'co' in req_data:
+			if not hasattr(self, 'dataframe_idco'):
+				missing_methods.add('dataframe_idco')
 
-	if 'choice_ca' in req_data:
-		if not hasattr(dataservice, 'dataframe_idca'):
-			missing_methods.add('dataframe_idca')
-	elif 'choice_co' in req_data:
-		if not hasattr(dataservice, 'dataframe_idco'):
-			missing_methods.add('dataframe_idco')
-	elif 'choice_co_code' in req_data:
-		raise NotImplementedError('choice_co_code')
+		if 'choice_ca' in req_data:
+			if not hasattr(self, 'dataframe_idca'):
+				missing_methods.add('dataframe_idca')
+		elif 'choice_co' in req_data:
+			if not hasattr(self, 'dataframe_idco'):
+				missing_methods.add('dataframe_idco')
+		elif 'choice_co_code' in req_data:
+			raise NotImplementedError('choice_co_code')
 
-	if 'weight_co' in req_data:
-		if not hasattr(dataservice, 'dataframe_idco'):
-			missing_methods.add('dataframe_idco')
+		if 'weight_co' in req_data:
+			if not hasattr(self, 'dataframe_idco'):
+				missing_methods.add('dataframe_idco')
 
-	if 'avail_ca' in req_data:
-		if not hasattr(dataservice, 'dataframe_idca'):
-			missing_methods.add('dataframe_idca')
-	elif 'avail_co' in req_data:
-		raise NotImplementedError('avail_co')
+		if 'avail_ca' in req_data:
+			if not hasattr(self, 'dataframe_idca'):
+				missing_methods.add('dataframe_idca')
+		elif 'avail_co' in req_data:
+			raise NotImplementedError('avail_co')
 
-	if len(missing_methods)>0:
-		raise ValueError('dataservice is missing '+", ".join(missing_methods))
+		if len(missing_methods)>0:
+			raise ValueError('dataservice is missing '+", ".join(missing_methods))
 

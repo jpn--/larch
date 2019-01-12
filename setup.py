@@ -16,7 +16,6 @@ import io
 # for more info on this topic see:
 #  https://stackoverflow.com/questions/52509602/cant-compile-c-program-on-a-mac-after-upgrade-to-mojave
 
-VERSION = '4.4.6'
 
 def read(path, encoding='utf-8'):
     path = os.path.join(os.path.dirname(__file__), path)
@@ -136,11 +135,11 @@ setup(
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
         'seaborn >=0.8.1',
-        'xmle >=0.1.3',
+        # 'xmle >=0.1.3',
     ] + [
         # 'sqlite >=3.21',
     ] if platform.system() != 'Windows' else [],
-    url='http://larch.readthedocs.org',
+    url='http://larch.newman.me',
     author='Jeffrey Newman',
     author_email='jeff@newman.me',
     description='A framework for estimating and applying discrete choice models.',

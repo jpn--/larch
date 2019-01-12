@@ -1,4 +1,4 @@
-# cython: language_level=3
+# cython: language_level=3, embedsignature=True
 
 include "../general_precision.pxi"
 from ..general_precision import l4_float_dtype
@@ -17,7 +17,7 @@ import numpy
 import pandas
 
 import logging
-logger = logging.getLogger('L4')
+logger = logging.getLogger('L5')
 
 cdef float INFINITY32 = numpy.float('inf')
 

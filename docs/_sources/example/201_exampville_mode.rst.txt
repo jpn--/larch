@@ -45,7 +45,7 @@ only those tours:
 
 .. testcode::
 
-	m.selector = 'TOURPURP == 1'
+	m.dataservice.selector = 'TOURPURP == 1'
 
 
 Now we are ready to define some utility functions.
@@ -83,13 +83,13 @@ names that are not python identifiers must be given using the second form.
 
 	m.utility_co[Walk] = (
 		+ P.ASC_Walk
-		+ P.NonMotorTime * X.WALKTIME 
+		+ (P.InVehTime * 2) * X.WALKTIME
 		+ P("HighInc:Walk") * X("INCOME>75000")
 	)
 
 	m.utility_co[Bike] = (
 		+ P.ASC_Bike
-		+ P.NonMotorTime * X.BIKETIME
+		+ (P.InVehTime * 2) * X.BIKETIME
 		+ P("HighInc:Bike") * X("INCOME>75000")
 	)
 
@@ -100,20 +100,20 @@ names that are not python identifiers must be given using the second form.
 		+ P("HighInc:Transit") * X("INCOME>75000")
 	)
 
+..
+    For this model, we want to ensure that the value of non-motorized travel time is
+    exactly double that of motorized in-vehicle time.  To do this, we can create
+    a snap constraint for non-motorized time that is defined as 2 times the parameter
+    for motorized in-vehicle time.  We can use the `equal_to` method to make this snap as
+    an equality constraint.
 
-For this model, we want to ensure that the value of non-motorized travel time is
-exactly double that of motorized in-vehicle time.  To do this, we can create
-a snap constraint for non-motorized time that is defined as 2 times the parameter
-for motorized in-vehicle time.  We can use the `equal_to` method to make this snap as
-an equality constraint.
+    .. testcode::
 
-.. testcode::
+        m.add_snap( P.NonMotorTime.equalto(P.InVehTime * 2), immediate=True )
 
-	m.add_snap( P.NonMotorTime.equalto(P.InVehTime * 2), immediate=True )
-
-The 'immediate' keyword tells the add_snap method to enforce this snap immediately.
-Otherwise, the snap is enforced only if it is violated when the `engage_snaps` method
-is called.  Delayed snaps are useful for inequality constraints.
+    The 'immediate' keyword tells the add_snap method to enforce this snap immediately.
+    Otherwise, the snap is enforced only if it is violated when the `engage_snaps` method
+    is called.  Delayed snaps are useful for inequality constraints.
 
 Let's create a nested logit model.  We'll nest together the two car modes, and the
 two non-motorized modes, and then the car nest with the transit mode.
@@ -173,6 +173,8 @@ Now we're ready to go.
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='SLSQP')
 	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-963.8426...
 	>>> m.calculate_parameter_covariance()
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
 	                                                 value  std err  t stat  robust std err  robust t stat

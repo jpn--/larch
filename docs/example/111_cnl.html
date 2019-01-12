@@ -171,7 +171,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="swissmetro-cross-nested-logit-mode-choice">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="swissmetro-cross-nested-logit-mode-choice">
 <h1>111: Swissmetro Cross-Nested Logit Mode Choice<a class="headerlink" href="#swissmetro-cross-nested-logit-mode-choice" title="Permalink to this headline">¶</a></h1>
 <p>This example is a mode choice model built using the Swissmetro example dataset.
 First we create the DB and Model objects.  When we create the DB object, we will
@@ -270,27 +294,26 @@ a rational order.  We can use the ordering method to do this:</p>
 <p>The swissmetro example models exclude some observations.  We will use the selector
 to identify the observations we would like to keep.  There are two selector criteria,
 and only cases that evaluate <cite>True</cite> for both are selected.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We can estimate the models and check the results match up with those given by Biogeme:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
-<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
+<span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
-<span class="go">-5214.049...</span>
+<span class="go">-5214.063...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
 <span class="go">                    value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
-<span class="go">ASCs     ASC_CAR   -0.240  3.844e-02  -6.256       5.345e-02         -4.499</span>
-<span class="go">         ASC_TRAIN  0.098  5.634e-02   1.744       6.998e-02          1.404</span>
-<span class="go">LOS      B_COST    -0.008  4.460e-04 -18.360       5.897e-04        -13.886</span>
-<span class="go">         B_TIME    -0.008  5.576e-04 -13.931       1.024e-03         -7.588</span>
-<span class="go">Other    PHI       -0.020  1.157e-01  -0.170       1.390e-01         -0.142</span>
-<span class="go">         existing   0.398  2.761e-02 -21.820       3.926e-02        -15.342</span>
-<span class="go">         public     0.243  3.361e-02 -22.522       2.936e-02        -25.784</span>
+<span class="go">ASCs     ASC_CAR   -0.238  3.606e-02  -6.606       4.883e-02         -4.878</span>
+<span class="go">         ASC_TRAIN  0.092  4.513e-02   2.047       6.503e-02          1.421</span>
+<span class="go">LOS      B_COST    -0.008  4.247e-04 -19.335       5.493e-04        -14.949</span>
+<span class="go">         B_TIME    -0.008  5.376e-04 -14.497       9.715e-04         -8.022</span>
+<span class="go">Other    existing   0.399  2.711e-02 -22.186       3.937e-02        -15.277</span>
+<span class="go">         public     0.246  3.035e-02 -24.853       2.068e-02        -36.463</span>
 </pre></div>
 </div>
 <div class="admonition tip">
@@ -324,7 +347,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -350,6 +373,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

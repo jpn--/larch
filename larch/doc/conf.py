@@ -80,7 +80,7 @@ extensions = [
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.doctest',
 	'sphinx.ext.graphviz',
-#	'nbsphinx',
+	'nbsphinx',
 #	'IPython.sphinxext.ipython_console_highlighting',
 ]
 

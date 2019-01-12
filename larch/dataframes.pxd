@@ -1,4 +1,4 @@
-# cython: language_level=3
+# cython: language_level=3, embedsignature=True
 
 from .general_precision cimport *
 from .model.controller cimport Model5c
@@ -53,6 +53,10 @@ cdef class DataFrames:
 		# Aux data
 		object _alternative_codes
 		object _alternative_names
+		object _data_av_name
+		object _data_ch_name
+		object _data_wt_name
+		object _systematic_alternatives
 
 		# Linked Model Attributes
 		int _n_model_params

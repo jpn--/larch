@@ -33,7 +33,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="101: Swissmetro MNL Mode Choice" href="101_mnl.html" />
-    <link rel="prev" title="42: MTC Non-Normalized Nested Mode Choice" href="042_mtc_nnnl.html" /> 
+    <link rel="prev" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" href="029_mtc.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -169,7 +169,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="swissmetro-examples">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="swissmetro-examples">
 <h1>Swissmetro Examples<a class="headerlink" href="#swissmetro-examples" title="Permalink to this headline">¶</a></h1>
 <p><strong>Example Data</strong></p>
 <p>The Swissmetro sample dataset is the same data used in the examples for <a class="reference external" href="http://biogeme.epfl.ch/">Biogeme</a>.
@@ -197,7 +221,7 @@ It is not possible to reproduce using Larch every example model shown for Biogem
         <a href="101_mnl.html" class="btn btn-neutral float-right" title="101: Swissmetro MNL Mode Choice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="042_mtc_nnnl.html" class="btn btn-neutral" title="42: MTC Non-Normalized Nested Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="029_mtc.html" class="btn btn-neutral" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -207,7 +231,7 @@ It is not possible to reproduce using Larch every example model shown for Biogem
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -233,6 +257,7 @@ It is not possible to reproduce using Larch every example model shown for Biogem
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

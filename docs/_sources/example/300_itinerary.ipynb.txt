@@ -1,0 +1,469 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 300: Itinerary Choice Data\n",
+    "\n",
+    "The example itinerary choice described here is based on data derived from a ticketing database\n",
+    "provided by the Airlines Reporting Corporation. The data represent ten origin destination\n",
+    "pairs for travel in U.S. continental markets in May of 2013.   Itinerary characteristics\n",
+    "have been masked, e.g., carriers are labeled generically as \"carrier X\" and departure times\n",
+    "have been aggregated into categories. A fare is provided but is not completely accurate (a\n",
+    "random error has been added to each fare). These modifications were made to satisfy\n",
+    "nondisclosure agreements, so that the data can be published freely for teaching and\n",
+    "demostration purposes.  It is generally representative of real itinerary choice data used\n",
+    "in practice, and the results obtained from this data are intuitive from a behavioral\n",
+    "perspective, but it is not quite accurate and should not be used for behavioral studies.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import larch\n",
+    "import pandas\n",
+    "import os\n",
+    "import gzip"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    "In this example we will import the air itinerary choice example dataset, starting from a csv\n",
+    "text file in |idca| format.  Suppose that data file is gzipped, named \"arc.csv.gz\" and\n",
+    "is located in the current directory (use :func:`os.getcwd` to see what is the\n",
+    "current directory)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from larch.data_warehouse import example_file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "doc_only": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "id_case,id_alt,choice,traveler,origin,destination,nb_cnxs,elapsed_time,fare_hy,fare_ly,equipment,carrier,timeperiod\n",
+      " 1,1,0,1,444,222,1,300,470.55658,0,1,3,7\n",
+      " 1,2,0,1,444,222,1,345,475.92258,0,2,3,5\n",
+      " 1,3,0,1,444,222,1,335,443.48166,0,1,3,2\n",
+      " 1,4,0,1,444,222,1,435,433.56735,0,2,3,2\n",
+      " 1,5,0,1,444,222,1,710,449.83664,0,2,3,2\n",
+      " 1,6,0,1,444,222,1,380,470.45175,0,1,3,5\n",
+      " 1,7,0,1,444,222,1,345,440.70526,0,2,3,6\n",
+      " 1,8,0,1,444,222,1,320,474.57831,0,2,3,4\n",
+      " 1,9,0,1,444,222,1,335,474.97363,0,2,3,3\n",
+      " 1,10,0,1,444,222,1,335,481.98392,0,1,3,3\n",
+      " 1,11,0,1,444,222,1,320,440.41138,0,1,3,7\n",
+      " 1,12,0,1,444,222,1,360,455.11444,0,2,3,1\n",
+      " 1,13,0,1,444,222,1,380,470.67239,0,1,3,4\n",
+      " 1,14,14,1,444,222,0,215,317.4277,0,2,3,1\n",
+      " 1,15,19,1,444,222,0,215,283.96292,0,2,3,1\n",
+      " 1,16,19,1,444,222,0,215,285.04138,0,2,3,2\n",
+      " 1,17,19,1,444,222,0,215,283.59644,0,2,3,2\n",
+      " 1,18,1,1,444,222,0,220,276.40555,0,2,3,3\n",
+      " 1,19,8,1,444,222,0,220,285.51282,0,2,3,3\n",
+      " 1,20,10,1,444,222,0,215,313.89828,0,2,3,3\n",
+      " 1,21,7,1,444,222,0,220,280.06757,0,2,3,4\n",
+      " 1,22,1,1,444,222,0,220,294.53979,0,2,3,4\n",
+      " 1,23,5,1,444,222,0,220,285.1618,0,2,3,5\n",
+      " 1,24,1,1,444,222,0,220,287.32828,0,2,3,5\n",
+      " 1,25,22,1,444,222,0,225,274.38611,0,2,3,6\n",
+      " 1,26,16,1,444,222,0,225,286.12646,0,2,3,7\n",
+      " 1,27,11,1,444,222,0,225,300.91037,0,2,3,6\n",
+      " 1,28,5,1,444,222,0,220,301.78799,0,2,3,7\n",
+      " 1,29,5,1,444,222,0,220,311.88431,0,2,3,7\n",
+      " 1,30,3,1,444,222,0,215,285.65631,0,2,3,8\n",
+      " 1,31,4,1,444,222,0,215,283.51544,0,2,3,8\n",
+      " 1,32,0,1,444,222,1,512,467.40497,0,1,1,3\n",
+      " 1,33,0,1,444,222,1,411,474.33835,0,1,1,2\n",
+      " 1,34,0,1,444,222,1,508,433.01563,0,1,1,5\n",
+      " 1,35,0,1,444,222,1,387,457.29861,0,1,1,3\n",
+      " 1,36,0,1,444,222,1,389,461.02136,0,1,1,4\n",
+      " 1,37,0,1,444,222,1,392,465.53665,0,1,1,5\n",
+      " 1,38,0,1,444,222,1,389,472.26083,0,1,1,4\n",
+      " 1,39,0,1,444,222,1,379,438.02396,0,1,1,4\n",
+      " 1,40,0,1,444,222,1,343,474.71518,0,1,1,1\n",
+      " 1,41,0,1,444,222,1,389,437.87329,0,1,1,4\n",
+      " 1,42,0,1,444,222,1,405,448.78522,0,1,1,6\n",
+      " 1,43,0,1,444,222,1,392,473.38318,0,1,1,2\n",
+      " 1,44,0,1,444,222,1,434,444.40308,0,1,1,1\n",
+      " 1,45,3,1,444,222,0,214,248.23685,0,2,2,6\n",
+      " 1,46,0,1,444,222,0,223,255.85193,0,2,2,3\n",
+      " 1,47,3,1,444,222,0,214,253.83798,0,2,2,6\n",
+      " 1,48,0,1,444,222,0,223,239.98866,0,2,2,3\n",
+      " 1,49,0,1,444,222,0,219,282.74249,0,1,2,7\n",
+      " 1,50,3,1,444,222,0,221,265.04773,0,1,2,6\n",
+      " 1,51,1,1,444,222,0,219,281.88403,0,1,2,7\n",
+      " 1,52,0,1,444,222,0,214,252.09259,0,1,2,4\n",
+      " 1,53,3,1,444,222,0,214,264.69473,0,1,2,4\n",
+      " 1,54,0,1,444,222,0,215,255.55827,0,1,2,7\n",
+      " 1,55,0,1,444,222,1,396,423.67627,0,1,2,8\n",
+      " 1,56,0,1,444,222,0,215,278.64148,0,1,2,8\n",
+      " 1,57,3,1,444,222,0,215,234.55371,0,1,2,1\n",
+      " 1,58,0,1,444,222,1,578,268.89609,0,2,4,1\n",
+      " 1,59,0,1,444,222,1,477,285.80167,0,2,4,1\n",
+      " 1,60,0,1,444,222,1,599,259.35504,0,2,4,4\n",
+      " 1,61,1,1,444,222,1,758,262.39859,0,2,4,4\n",
+      " 1,62,0,1,444,222,1,476,267.64124,0,2,4,5\n",
+      " 1,63,0,1,444,222,1,477,273.67731,0,2,4,7\n",
+      " 1,64,0,1,444,222,1,459,283.35803,0,2,4,6\n",
+      " 1,65,0,1,444,222,1,586,291.98431,0,2,4,3\n",
+      " 1,66,0,1,444,222,1,618,298.26163,0,2,4,6\n",
+      " 1,67,0,1,444,222,1,502,259.70834,0,2,4,2\n",
+      " 2,1,3,2,444,222,1,300,0,422.4599,1,3,7\n",
+      " 2,2,1,2,444,222,1,345,0,415.59332,2,3,5\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "with gzip.open(example_file(\"arc\"), 'rt') as previewfile:\n",
+    "    print(*(next(previewfile) for x in range(70)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The first line of the file contains column headers. After that, each line represents\n",
+    "an alternative available to one or more decision makers. In our sample data, we see the first 67\n",
+    "lines of data share a ``id_case`` of 1, indicating that they are 67 different itineraries\n",
+    "available to the first decision maker type.  An identidier of the alternatives is given by the\n",
+    "number in the column ``id_alt``, although this number is simply a sequential counter within each case\n",
+    "in the raw data, and conveys no other information about the itinerary or its attributes.\n",
+    "The observed choices of the decision maker[s] are indicated in the column ``choice``.\n",
+    "That column counts the number of travelers who face this choice set and chose the itinerary\n",
+    "described by this row in the file.\n",
+    "\n",
+    "We can load this data easily using pandas.  We'll also set the index of the resulting DataFrame to\n",
+    "be the case and alt identifiers.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "itin = pandas.read_csv(example_file(\"arc\"))\n",
+    "itin.set_index(['id_case','id_alt'], inplace=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "doc_only": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "MultiIndex: 6023 entries, (1, 1) to (105, 51)\n",
+      "Data columns (total 11 columns):\n",
+      "choice          6023 non-null int64\n",
+      "traveler        6023 non-null int64\n",
+      "origin          6023 non-null int64\n",
+      "destination     6023 non-null int64\n",
+      "nb_cnxs         6023 non-null int64\n",
+      "elapsed_time    6023 non-null int64\n",
+      "fare_hy         6023 non-null float64\n",
+      "fare_ly         6023 non-null float64\n",
+      "equipment       6023 non-null int64\n",
+      "carrier         6023 non-null int64\n",
+      "timeperiod      6023 non-null int64\n",
+      "dtypes: float64(2), int64(9)\n",
+      "memory usage: 537.2 KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "itin.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "doc_only": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th>choice</th>\n",
+       "      <th>traveler</th>\n",
+       "      <th>origin</th>\n",
+       "      <th>destination</th>\n",
+       "      <th>nb_cnxs</th>\n",
+       "      <th>elapsed_time</th>\n",
+       "      <th>fare_hy</th>\n",
+       "      <th>fare_ly</th>\n",
+       "      <th>equipment</th>\n",
+       "      <th>carrier</th>\n",
+       "      <th>timeperiod</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>id_case</th>\n",
+       "      <th>id_alt</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"5\" valign=\"top\">1</th>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>444</td>\n",
+       "      <td>222</td>\n",
+       "      <td>1</td>\n",
+       "      <td>300</td>\n",
+       "      <td>470.55658</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>3</td>\n",
+       "      <td>7</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>444</td>\n",
+       "      <td>222</td>\n",
+       "      <td>1</td>\n",
+       "      <td>345</td>\n",
+       "      <td>475.92258</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>3</td>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>444</td>\n",
+       "      <td>222</td>\n",
+       "      <td>1</td>\n",
+       "      <td>335</td>\n",
+       "      <td>443.48166</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>3</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>444</td>\n",
+       "      <td>222</td>\n",
+       "      <td>1</td>\n",
+       "      <td>435</td>\n",
+       "      <td>433.56735</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>3</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>444</td>\n",
+       "      <td>222</td>\n",
+       "      <td>1</td>\n",
+       "      <td>710</td>\n",
+       "      <td>449.83664</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>3</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                choice  traveler  origin  destination  nb_cnxs  elapsed_time  \\\n",
+       "id_case id_alt                                                                 \n",
+       "1       1            0         1     444          222        1           300   \n",
+       "        2            0         1     444          222        1           345   \n",
+       "        3            0         1     444          222        1           335   \n",
+       "        4            0         1     444          222        1           435   \n",
+       "        5            0         1     444          222        1           710   \n",
+       "\n",
+       "                  fare_hy  fare_ly  equipment  carrier  timeperiod  \n",
+       "id_case id_alt                                                      \n",
+       "1       1       470.55658      0.0          1        3           7  \n",
+       "        2       475.92258      0.0          2        3           5  \n",
+       "        3       443.48166      0.0          1        3           2  \n",
+       "        4       433.56735      0.0          2        3           2  \n",
+       "        5       449.83664      0.0          2        3           2  "
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "itin.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "converting data_co to <class 'numpy.float64'>\n",
+      "converting data_ce to <class 'numpy.float64'>\n",
+      "rescaled array of weights by a factor of 2239.980952380952\n"
+     ]
+    }
+   ],
+   "source": [
+    "d = larch.DataFrames.from_idce(itin, choice='choice', crack=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "doc_only": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:\n",
+      "  n_cases: 105\n",
+      "  n_alts: 127\n",
+      "  data_ce:\n",
+      "    - nb_cnxs\n",
+      "    - elapsed_time\n",
+      "    - fare_hy\n",
+      "    - fare_ly\n",
+      "    - equipment\n",
+      "    - carrier\n",
+      "    - timeperiod\n",
+      "  data_co:\n",
+      "    - traveler\n",
+      "    - origin\n",
+      "    - destination\n"
+     ]
+    }
+   ],
+   "source": [
+    "d.info()"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    "By setting `crack` to `True`, Larch automatically analyzed the data to find variables that do not vary within\n",
+    "cases, and transformed those into |idco| format variables.  If you would prefer that\n",
+    "Larch not do this you can omit this argument or set it to False.  This is particularly\n",
+    "important for larger datasets (the data sample included is only a tiny extract of the data\n",
+    "that might be available for this kind of model), as breaking the data into seperate |idca| and |idco| parts is\n",
+    "a relatively expensive operation, and it is not actually required for most model structures.\n",
+    "\n",
+    "Also, you may note that in creating the DataFrames object, the set of all possible alternatives was deduced automatically from all the values\n",
+    "in the ``altid`` column.  You will note that, while the sample case we have peeked at in the beginning\n",
+    "of the raw data file has 67 alternatives, there are other observations in the file with alternatives numbering\n",
+    "up to 127.\n"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    ".. |idca| replace:: :ref:`idca <idca>`\n",
+    ".. |idco| replace:: :ref:`idco <idco>`"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Taiga 3.7",
+   "language": "python",
+   "name": "taiga37"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

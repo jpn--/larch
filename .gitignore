@@ -54,10 +54,11 @@ vcs.xml
 sandbook.ipynb
 *.c
 cython_debug
-doc/.doctrees
 larch4.egg-info
 larch/model/*.html
 larch/**/*.html
-Icon\r
-Icon
+Icon?
 
+
+docs/.doctrees
+conda-build

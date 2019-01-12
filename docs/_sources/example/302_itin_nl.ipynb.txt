@@ -1,0 +1,619 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 302: Itinerary Choice using Simple Nested Logit"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import larch"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This example is an itinerary choice model built using the example\n",
+    "itinerary choice dataset included with Larch.  See example 300 for details.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "converting data_co to <class 'numpy.float64'>\n",
+      "converting data_ce to <class 'numpy.float64'>\n",
+      "rescaled array of weights by a factor of 2239.980952380952\n"
+     ]
+    }
+   ],
+   "source": [
+    "from larch.examples import example\n",
+    "d = example(300, 'd')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We will be building a nested logit model, but in order to do so we need to rationalize the alternative\n",
+    "numbers.  As given, our raw itinerary choice data has a lot of alternatives, but they are not\n",
+    "ordered or numbered in a regular way; each elemental alternative has\n",
+    "an arbitrary code number assigned to it, and the code numbers for one case\n",
+    "are not comparable to another case. We need to renumber the alternatives in\n",
+    "a manner that is more suited for our application, such that based on the code\n",
+    "number we can programatically extract a the relevant features of the alternative\n",
+    "that we will want to use in building our nested logit model.  In this example\n",
+    "we want to test a model which has nests based on level of service.\n",
+    "To renumber, first we will define the relevant categories and values, and establish a numbering\n",
+    "system using a special object:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "converting data_ce to <class 'numpy.float64'>\n"
+     ]
+    }
+   ],
+   "source": [
+    "d1 = d.new_systematic_alternatives(\n",
+    "    groupby='nb_cnxs',\n",
+    "    name='alternative_code',\n",
+    "    padding_levels=4,\n",
+    "    groupby_prefixes=['Cnx'],\n",
+    "    overwrite=False,\n",
+    "    complete_features_list={'nb_cnxs':[0,1,2]},\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "If we compare the new data with the old data, we'll see that we have created a few more alternative."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:\n",
+      "  n_cases: 105\n",
+      "  n_alts: 127\n",
+      "  data_ce:\n",
+      "    - nb_cnxs\n",
+      "    - elapsed_time\n",
+      "    - fare_hy\n",
+      "    - fare_ly\n",
+      "    - equipment\n",
+      "    - carrier\n",
+      "    - timeperiod\n",
+      "  data_co:\n",
+      "    - traveler\n",
+      "    - origin\n",
+      "    - destination\n",
+      "  data_av: <populated>\n",
+      "  data_ch: choice\n",
+      "  data_wt: <populated>\n"
+     ]
+    }
+   ],
+   "source": [
+    "d.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:\n",
+      "  n_cases: 105\n",
+      "  n_alts: 134\n",
+      "  data_ce:\n",
+      "    - id_alt\n",
+      "    - nb_cnxs\n",
+      "    - elapsed_time\n",
+      "    - fare_hy\n",
+      "    - fare_ly\n",
+      "    - equipment\n",
+      "    - carrier\n",
+      "    - timeperiod\n",
+      "  data_co:\n",
+      "    - traveler\n",
+      "    - origin\n",
+      "    - destination\n",
+      "  data_av: <populated>\n",
+      "  data_ch: <populated>\n",
+      "  data_wt: <populated>\n"
+     ]
+    }
+   ],
+   "source": [
+    "d1.info()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now let's make our model.  The utility function we will use is the same as the one we used for\n",
+    "the MNL version of the model.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m = larch.Model(dataservice=d1)\n",
+    "\n",
+    "v = [\n",
+    "    \"timeperiod==2\",\n",
+    "    \"timeperiod==3\",\n",
+    "    \"timeperiod==4\",\n",
+    "    \"timeperiod==5\",\n",
+    "    \"timeperiod==6\",\n",
+    "    \"timeperiod==7\",\n",
+    "    \"timeperiod==8\",\n",
+    "    \"timeperiod==9\",\n",
+    "    \"carrier==2\",\n",
+    "    \"carrier==3\",\n",
+    "    \"carrier==4\",\n",
+    "    \"carrier==5\",\n",
+    "    \"equipment==2\",\n",
+    "    \"fare_hy\",\n",
+    "    \"fare_ly\",    \n",
+    "    \"elapsed_time\",  \n",
+    "    \"nb_cnxs\",       \n",
+    "]\n",
+    "from larch.roles import PX\n",
+    "m.utility_ca = sum(PX(i) for i in v)\n",
+    "\n",
+    "m.choice_ca_var = 'choice'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "If we just end our model specification here, we will have a plain MNL model.  To change to\n",
+    "a nested logit model, all we need to do is add the nests.  We can do this easily, using the \n",
+    "special `magic_nesting` method, that uses the structure of the data that we defined above."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m.magic_nesting()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "req_data does not request weight_co but it is set and being provided\n"
+     ]
+    }
+   ],
+   "source": [
+    "m.load_data()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h3>Iteration 009 [Converged] </h3>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<p>LL = -347.19303042325504</p>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>value</th>\n",
+       "      <th>initvalue</th>\n",
+       "      <th>nullvalue</th>\n",
+       "      <th>minimum</th>\n",
+       "      <th>maximum</th>\n",
+       "      <th>holdfast</th>\n",
+       "      <th>note</th>\n",
+       "      <th>best</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>MU_nb_cnxs</th>\n",
+       "      <td>0.691112</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.001000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.691112</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>carrier==2</th>\n",
+       "      <td>0.079526</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.079526</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>carrier==3</th>\n",
+       "      <td>0.440481</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.440481</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>carrier==4</th>\n",
+       "      <td>0.396793</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.396793</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>carrier==5</th>\n",
+       "      <td>-0.439080</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.439080</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>elapsed_time</th>\n",
+       "      <td>-0.004233</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.004233</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>equipment==2</th>\n",
+       "      <td>0.326877</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.326877</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fare_hy</th>\n",
+       "      <td>-0.000847</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.000847</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>fare_ly</th>\n",
+       "      <td>-0.000856</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.000856</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>nb_cnxs</th>\n",
+       "      <td>-3.155549</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-3.155549</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==2</th>\n",
+       "      <td>0.065527</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.065527</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==3</th>\n",
+       "      <td>0.088094</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.088094</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==4</th>\n",
+       "      <td>0.042914</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.042914</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==5</th>\n",
+       "      <td>0.096519</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.096519</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==6</th>\n",
+       "      <td>0.164687</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.164687</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==7</th>\n",
+       "      <td>0.243887</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.243887</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==8</th>\n",
+       "      <td>0.245135</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.245135</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>timeperiod==9</th>\n",
+       "      <td>-0.005913</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.005913</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                  value  initvalue  nullvalue   minimum   maximum  holdfast  \\\n",
+       "MU_nb_cnxs     0.691112        1.0        1.0  0.001000  1.000000         0   \n",
+       "carrier==2     0.079526        0.0        0.0      -inf       inf         0   \n",
+       "carrier==3     0.440481        0.0        0.0      -inf       inf         0   \n",
+       "carrier==4     0.396793        0.0        0.0      -inf       inf         0   \n",
+       "carrier==5    -0.439080        0.0        0.0      -inf       inf         0   \n",
+       "elapsed_time  -0.004233        0.0        0.0      -inf       inf         0   \n",
+       "equipment==2   0.326877        0.0        0.0      -inf       inf         0   \n",
+       "fare_hy       -0.000847        0.0        0.0      -inf       inf         0   \n",
+       "fare_ly       -0.000856        0.0        0.0      -inf       inf         0   \n",
+       "nb_cnxs       -3.155549        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==2  0.065527        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==3  0.088094        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==4  0.042914        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==5  0.096519        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==6  0.164687        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==7  0.243887        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==8  0.245135        0.0        0.0      -inf       inf         0   \n",
+       "timeperiod==9 -0.005913        0.0        0.0      -inf       inf         0   \n",
+       "\n",
+       "              note      best  \n",
+       "MU_nb_cnxs          0.691112  \n",
+       "carrier==2          0.079526  \n",
+       "carrier==3          0.440481  \n",
+       "carrier==4          0.396793  \n",
+       "carrier==5         -0.439080  \n",
+       "elapsed_time       -0.004233  \n",
+       "equipment==2        0.326877  \n",
+       "fare_hy            -0.000847  \n",
+       "fare_ly            -0.000856  \n",
+       "nb_cnxs            -3.155549  \n",
+       "timeperiod==2       0.065527  \n",
+       "timeperiod==3       0.088094  \n",
+       "timeperiod==4       0.042914  \n",
+       "timeperiod==5       0.096519  \n",
+       "timeperiod==6       0.164687  \n",
+       "timeperiod==7       0.243887  \n",
+       "timeperiod==8       0.245135  \n",
+       "timeperiod==9      -0.005913  "
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": [
+       "┣          loglike: -347.19303042325504\n",
+       "┣                x: MU_nb_cnxs       0.691112\n",
+       "┃                   carrier==2       0.079526\n",
+       "┃                   carrier==3       0.440481\n",
+       "┃                   carrier==4       0.396793\n",
+       "┃                   carrier==5      -0.439080\n",
+       "┃                   elapsed_time    -0.004233\n",
+       "┃                   equipment==2     0.326877\n",
+       "┃                   fare_hy         -0.000847\n",
+       "┃                   fare_ly         -0.000856\n",
+       "┃                   nb_cnxs         -3.155549\n",
+       "┃                   timeperiod==2    0.065527\n",
+       "┃                   timeperiod==3    0.088094\n",
+       "┃                   timeperiod==4    0.042914\n",
+       "┃                   timeperiod==5    0.096519\n",
+       "┃                   timeperiod==6    0.164687\n",
+       "┃                   timeperiod==7    0.243887\n",
+       "┃                   timeperiod==8    0.245135\n",
+       "┃                   timeperiod==9   -0.005913\n",
+       "┃                   dtype: float64\n",
+       "┣        tolerance: 3.8832811170766046e-06\n",
+       "┣            steps: array([1., 1., 1., 1., 1., 1., 1., 1., 1.])\n",
+       "┣          message: 'Optimization terminated successfully.'\n",
+       "┣     elapsed_time: datetime.timedelta(microseconds=61784)\n",
+       "┣           method: 'bhhh'\n",
+       "┣          n_cases: 105\n",
+       "┣ iteration_number: 9\n",
+       "┣          logloss: 3.306600289745286"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "m.maximize_loglike()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Taiga 3.7",
+   "language": "python",
+   "name": "taiga37"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

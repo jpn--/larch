@@ -124,7 +124,6 @@
 <li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="042_mtc_nnnl.html">42: MTC Non-Normalized Nested Mode Choice</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
@@ -200,7 +199,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mtc-mnl-mode-choice-motorized-travel-time">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="mtc-mnl-mode-choice-motorized-travel-time">
 <h1>5: MTC MNL Mode Choice, Motorized Travel Time<a class="headerlink" href="#mtc-mnl-mode-choice-motorized-travel-time" title="Permalink to this headline">¶</a></h1>
 <p>Model 5 relaxes the time constraints in Model 1 by specifying distinct time variables
 for the motorized and non-motorized modes based on our expectation that travelers are
@@ -240,7 +263,7 @@ and nonmotorized being 5 and 6.</p>
 </div>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
-<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3616.893...</span>
@@ -248,18 +271,18 @@ and nonmotorized being 5 and 6.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
 <span class="go">                             value  std err   t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
-<span class="go">LOS      totcost           -0.0050   0.0002 -20.6814          0.0003       -17.0861</span>
-<span class="go">         motorized_time    -0.0431   0.0035 -12.2884          0.0039       -11.1700</span>
-<span class="go">         nonmotorized_time -0.0687   0.0053 -12.9009          0.0054       -12.7345</span>
-<span class="go">Income   hhinc#2,3         -0.0015   0.0014  -1.1023          0.0015        -1.0208</span>
-<span class="go">         hhinc#4           -0.0054   0.0018  -2.9743          0.0018        -3.0812</span>
-<span class="go">         hhinc#5           -0.0125   0.0053  -2.3661          0.0064        -1.9488</span>
-<span class="go">         hhinc#6           -0.0095   0.0031  -3.1134          0.0033        -2.9228</span>
-<span class="go">ASCs     ASC_BIKE          -1.8443   0.3258  -5.6613          0.3759        -4.9064</span>
-<span class="go">         ASC_SR2           -2.2619   0.0982 -23.0257          0.1076       -21.0310</span>
-<span class="go">         ASC_SR3P          -3.6768   0.1242 -29.6090          0.1307       -28.1276</span>
-<span class="go">         ASC_TRAN          -0.8522   0.1393  -6.1198          0.1368        -6.2297</span>
-<span class="go">         ASC_WALK           0.4768   0.2522   1.8905          0.2593         1.8384</span>
+<span class="go">LOS      totcost           -0.0050   0.0002 -20.6810          0.0003       -17.0869</span>
+<span class="go">         motorized_time    -0.0431   0.0035 -12.2883          0.0039       -11.1694</span>
+<span class="go">         nonmotorized_time -0.0687   0.0053 -12.9009          0.0054       -12.7348</span>
+<span class="go">Income   hhinc#2,3         -0.0015   0.0014  -1.1026          0.0015        -1.0211</span>
+<span class="go">         hhinc#4           -0.0054   0.0018  -2.9747          0.0018        -3.0814</span>
+<span class="go">         hhinc#5           -0.0125   0.0053  -2.3659          0.0064        -1.9487</span>
+<span class="go">         hhinc#6           -0.0095   0.0031  -3.1135          0.0033        -2.9229</span>
+<span class="go">ASCs     ASC_BIKE          -1.8444   0.3258  -5.6616          0.3759        -4.9067</span>
+<span class="go">         ASC_SR2           -2.2619   0.0982 -23.0253          0.1076       -21.0307</span>
+<span class="go">         ASC_SR3P          -3.6768   0.1242 -29.6087          0.1307       -28.1274</span>
+<span class="go">         ASC_TRAN          -0.8522   0.1393  -6.1198          0.1368        -6.2296</span>
+<span class="go">         ASC_WALK           0.4768   0.2522   1.8906          0.2593         1.8385</span>
 </pre></div>
 </div>
 </div>
@@ -285,7 +308,7 @@ and nonmotorized being 5 and 6.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -311,6 +334,7 @@ and nonmotorized being 5 and 6.</p>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

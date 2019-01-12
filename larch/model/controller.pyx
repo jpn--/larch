@@ -1,4 +1,4 @@
-# cython: language_level=3
+# cython: language_level=3, embedsignature=True
 
 include "../general_precision.pxi"
 from ..general_precision import l4_float_dtype
@@ -8,7 +8,7 @@ import numpy
 import pandas
 
 import logging
-logger = logging.getLogger('L4.model')
+logger = logging.getLogger('L5.model')
 
 
 from ..dataframes cimport DataFrames
@@ -185,19 +185,19 @@ cdef class Model5c:
 	def _scan_logsums_ensure_names(self):
 		nameset = set()
 
-		if self.graph is not None:
-			for nodecode in self.graph.topological_sorted_no_elementals:
-				if nodecode != self.graph._root_id:
-					param_name = str(self.graph.node[nodecode]['parameter'])
+		if self._graph is not None:
+			for nodecode in self._graph.topological_sorted_no_elementals:
+				if nodecode != self._graph._root_id:
+					param_name = str(self._graph.node[nodecode]['parameter'])
 					# if param_name in self._snapped_parameters:
 					# 	snapped = self._snapped_parameters[param_name]
 					# 	param_name = str(snapped._is_scaled_parameter()[0])
 					nameset.add(self.__p_rename(param_name))
 
 		if len(self._quantity_ca_function)>0:
-			# for nodecode in self.graph.elementals:
+			# for nodecode in self._graph.elementals:
 			# 	try:
-			# 		param_name = str(self.graph.node[nodecode]['parameter'])
+			# 		param_name = str(self._graph.node[nodecode]['parameter'])
 			# 	except KeyError:
 			# 		pass
 			# 	else:
@@ -732,8 +732,10 @@ cdef class Model5c:
 
 	@dataservice.setter
 	def dataservice(self, x):
-		from ..data_services.service import validate_dataservice
-		validate_dataservice(x, self.required_data())
+		try:
+			x.validate_dataservice(self.required_data())
+		except AttributeError:
+			raise TypeError("proposed dataservice does not implement 'validate_dataservice'")
 		self._dataservice = x
 
 	@property
@@ -2105,7 +2107,7 @@ cdef class Model5c:
 
 	def logloss(self, x=None):
 		"""
-		Logloss is the average per-case negative log likelihood.
+		Logloss is the average per-case (per unit weight for weighted data) negative log likelihood.
 		"""
-		return -self.loglike(x=x) / self._dataframes._n_cases()
+		return -self.loglike(x=x) / self._dataframes._n_cases() / self._dataframes._weight_normalization
 

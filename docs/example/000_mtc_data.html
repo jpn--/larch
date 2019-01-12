@@ -1,0 +1,1138 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MTC Work Mode Choice Data &mdash; Larch 5.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1: MTC MNL Mode Choice" href="001_mtc.html" />
+    <link rel="prev" title="MTC Examples" href="mtc.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">MTC Work Mode Choice Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="001_mtc.html">1: MTC MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="002_mtc.html">2: MTC MNL Mode Choice, Motorized</a></li>
+<li class="toctree-l3"><a class="reference internal" href="003_mtc.html">3: MTC MNL Mode Choice, Zeroed Shared</a></li>
+<li class="toctree-l3"><a class="reference internal" href="005_mtc.html">5: MTC MNL Mode Choice, Motorized Travel Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="006_mtc.html">6: MTC MNL Mode Choice, Motorized Times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="007_mtc.html">7: MTC MNL Mode Choice, Diminishing OVTT by Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="008_mtc.html">8: MTC MNL Mode Choice, TTR = 2.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="009_mtc.html">9: MTC MNL Mode Choice, TTR = 4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="010_mtc.html">10: MTC MNL Mode Choice, Autos per Household</a></li>
+<li class="toctree-l3"><a class="reference internal" href="011_mtc.html">11: MTC MNL Mode Choice, Vehicle by Worker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="012_mtc.html">12: MTC MNL Mode Choice, Autos per Adult</a></li>
+<li class="toctree-l3"><a class="reference internal" href="013_mtc.html">13: MTC MNL Mode Choice, CBD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="014_mtc.html">14: MTC MNL Mode Choice, Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="015_mtc.html">15: MTC MNL Mode Choice, CBD and Work Zone Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="016_mtc.html">16: MTC MNL Mode Choice, Cost by Income</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017A_mtc.html">17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017B_mtc.html">17B: MTC MNL Mode Choice, Segmented for 2 or more cars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017C_mtc.html">17C: MTC MNL Mode Choice, Segmented for Males</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017D_mtc.html">17D: MTC MNL Mode Choice, Segmented for Females</a></li>
+<li class="toctree-l3"><a class="reference internal" href="017_mtc.html">17: MTC Expanded MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="018_mtc.html">18: MTC Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="019_mtc.html">19: MTC Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020_mtc.html">20: MTC Shared Ride Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="021_mtc.html">21: MTC Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="022_mtc.html">22: MTC Motorized and Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="023_mtc.html">23W: MTC Private Auto - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="024_mtc.html">23W: MTC Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="025_mtc.html">25: MTC Private Auto - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="026_mtc.html">26: MTC Shared Ride - Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="027_mtc.html">27: MTC Shared Ride - Private Auto Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="028_mtc.html">28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="029_mtc.html">29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exampville.html">Exampville Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="mtc.html">MTC Examples</a> &raquo;</li>
+        
+      <li>MTC Work Mode Choice Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/000_mtc_data.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="MTC-Work-Mode-Choice-Data">
+<h1>MTC Work Mode Choice Data<a class="headerlink" href="#MTC-Work-Mode-Choice-Data" title="Permalink to this headline">¶</a></h1>
+<p>The MTC sample dataset is the same data used in the Self Instructing Manual for discrete choice modeling:</p>
+<blockquote>
+<div>The San Francisco Bay Area work mode choice data set comprises 5029 home-to-work commute trips in the San Francisco Bay Area. The data is drawn from the San Francisco Bay Area Household Travel Survey conducted by the Metropolitan Transportation Commission (MTC) in the spring and fall of 1990. This survey included a one day travel diary for each household member older than five years and detailed individual and household socio-demographic information.</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">larch</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+</pre></div>
+</div>
+</div>
+<p>In this example we will import the MTC example dataset, starting from a csv
+text file in <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca</span></a> format.  Suppose that data file is gzipped, named “MTCwork.csv.gz” and
+is located in the current directory (use <a class="reference external" href="https://docs.python.org/3.7/library/os.html#os.getcwd" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.getcwd()</span></code></a> to see what is the
+current directory).  For this example, we’ll use the <cite>example_file</cite> method to find
+the file that comes with Larch.</p>
+<p>We can take a peek at the contents of the file, examining the first 10 lines:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">larch.data_warehouse</span> <span class="kn">import</span> <span class="n">example_file</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">example_file</span><span class="p">(</span><span class="s2">&quot;MTCwork.csv.gz&quot;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">previewfile</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">previewfile</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+casenum,altnum,chose,ivtt,ovtt,tottime,totcost,hhid,perid,numalts,dist,wkzone,hmzone,rspopden,rsempden,wkpopden,wkempden,vehavdum,femdum,age,drlicdum,noncadum,numveh,hhsize,hhinc,famtype,hhowndum,numemphh,numadlt,nmlt5,nm5to11,nm12to16,wkccbd,wknccbd,corredis,vehbywrk,vocc,wgt
+ 1,1,1,13.38,2,15.38,70.63,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+ 1,2,0,18.38,2,20.38,35.32,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+ 1,3,0,20.38,2,22.38,20.18,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+ 1,4,0,25.9,15.2,41.1,115.64,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+ 1,5,0,40.5,2,42.5,0,2,1,2,7.69,664,726,15.52,9.96,37.26,3.48,1,0,35,1,0,4,1,42.5,7,0,1,1,0,0,0,0,0,0,4,1,1
+ 2,1,0,29.92,10,39.92,390.81,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+ 2,2,0,34.92,10,44.92,195.4,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+ 2,3,0,21.92,10,31.92,97.97,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+ 2,4,1,22.96,14.2,37.16,185,3,1,2,11.62,738,9,35.81,53.33,32.91,764.19,1,0,40,1,0,1,1,17.5,7,0,1,1,0,0,0,1,0,1,1,0,1
+
+</pre></div></div>
+</div>
+<p>The first line of the file contains column headers. After that, each line represents an alternative available to a decision maker. In our sample data, we see the first 5 lines of data share a <code class="docutils literal notranslate"><span class="pre">caseid</span></code> of 1, indicating that they are 5 different alternatives available to the first decision maker. The identity of the alternatives is given by the number in the column <code class="docutils literal notranslate"><span class="pre">altid</span></code>. The observed choice of the decision maker is indicated in the column <code class="docutils literal notranslate"><span class="pre">chose</span></code> with a 1 in the appropriate row.</p>
+<p>We can load this data easily using pandas. We’ll also set the index of the resulting DataFrame to be the case and alt identifiers.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">example_file</span><span class="p">(</span><span class="s2">&quot;MTCwork.csv.gz&quot;</span><span class="p">))</span>
+<span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;casenum&#39;</span><span class="p">,</span><span class="s1">&#39;altnum&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>chose</th>
+      <th>ivtt</th>
+      <th>ovtt</th>
+      <th>tottime</th>
+      <th>totcost</th>
+      <th>hhid</th>
+      <th>perid</th>
+      <th>numalts</th>
+      <th>dist</th>
+      <th>wkzone</th>
+      <th>...</th>
+      <th>numadlt</th>
+      <th>nmlt5</th>
+      <th>nm5to11</th>
+      <th>nm12to16</th>
+      <th>wkccbd</th>
+      <th>wknccbd</th>
+      <th>corredis</th>
+      <th>vehbywrk</th>
+      <th>vocc</th>
+      <th>wgt</th>
+    </tr>
+    <tr>
+      <th>casenum</th>
+      <th>altnum</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th>1</th>
+      <td>1</td>
+      <td>13.38</td>
+      <td>2.0</td>
+      <td>15.38</td>
+      <td>70.63</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.69</td>
+      <td>664</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>18.38</td>
+      <td>2.0</td>
+      <td>20.38</td>
+      <td>35.32</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.69</td>
+      <td>664</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>20.38</td>
+      <td>2.0</td>
+      <td>22.38</td>
+      <td>20.18</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.69</td>
+      <td>664</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>25.90</td>
+      <td>15.2</td>
+      <td>41.10</td>
+      <td>115.64</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.69</td>
+      <td>664</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0</td>
+      <td>40.50</td>
+      <td>2.0</td>
+      <td>42.50</td>
+      <td>0.00</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7.69</td>
+      <td>664</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">2</th>
+      <th>1</th>
+      <td>0</td>
+      <td>29.92</td>
+      <td>10.0</td>
+      <td>39.92</td>
+      <td>390.81</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>11.62</td>
+      <td>738</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>34.92</td>
+      <td>10.0</td>
+      <td>44.92</td>
+      <td>195.40</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>11.62</td>
+      <td>738</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>21.92</td>
+      <td>10.0</td>
+      <td>31.92</td>
+      <td>97.97</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>11.62</td>
+      <td>738</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>22.96</td>
+      <td>14.2</td>
+      <td>37.16</td>
+      <td>185.00</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>11.62</td>
+      <td>738</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0</td>
+      <td>58.95</td>
+      <td>10.0</td>
+      <td>68.95</td>
+      <td>0.00</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>11.62</td>
+      <td>738</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">3</th>
+      <th>1</th>
+      <td>1</td>
+      <td>8.60</td>
+      <td>6.0</td>
+      <td>14.60</td>
+      <td>37.76</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>4.10</td>
+      <td>696</td>
+      <td>...</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.33</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>13.60</td>
+      <td>6.0</td>
+      <td>19.60</td>
+      <td>18.88</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>4.10</td>
+      <td>696</td>
+      <td>...</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.33</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>12 rows × 36 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+MultiIndex: 22033 entries, (1, 1) to (5029, 6)
+Data columns (total 36 columns):
+chose       22033 non-null int64
+ivtt        22033 non-null float64
+ovtt        22033 non-null float64
+tottime     22033 non-null float64
+totcost     22033 non-null float64
+hhid        22033 non-null int64
+perid       22033 non-null int64
+numalts     22033 non-null int64
+dist        22033 non-null float64
+wkzone      22033 non-null int64
+hmzone      22033 non-null int64
+rspopden    22033 non-null float64
+rsempden    22033 non-null float64
+wkpopden    22033 non-null float64
+wkempden    22033 non-null float64
+vehavdum    22033 non-null int64
+femdum      22033 non-null int64
+age         22033 non-null int64
+drlicdum    22033 non-null int64
+noncadum    22033 non-null int64
+numveh      22033 non-null int64
+hhsize      22033 non-null int64
+hhinc       22033 non-null float64
+famtype     22033 non-null int64
+hhowndum    22033 non-null int64
+numemphh    22033 non-null int64
+numadlt     22033 non-null int64
+nmlt5       22033 non-null int64
+nm5to11     22033 non-null int64
+nm12to16    22033 non-null int64
+wkccbd      22033 non-null int64
+wknccbd     22033 non-null int64
+corredis    22033 non-null int64
+vehbywrk    22033 non-null float64
+vocc        22033 non-null int64
+wgt         22033 non-null int64
+dtypes: float64(11), int64(25)
+memory usage: 6.2 MB
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">DataFrames</span><span class="o">.</span><span class="n">from_idce</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">choice</span><span class="o">=</span><span class="s1">&#39;chose&#39;</span><span class="p">,</span> <span class="n">crack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+converting data_co to &lt;class &#39;numpy.float64&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+larch.DataFrames:
+  n_cases: 5029
+  n_alts: 6
+  data_ce:
+    - ivtt
+    - ovtt
+    - tottime
+    - totcost
+  data_co:
+    - hhid
+    - perid
+    - numalts
+    - dist
+    - wkzone
+    - hmzone
+    - rspopden
+    - rsempden
+    - wkpopden
+    - wkempden
+    - vehavdum
+    - femdum
+    - age
+    - drlicdum
+    - noncadum
+    - numveh
+    - hhsize
+    - hhinc
+    - famtype
+    - hhowndum
+    - numemphh
+    - numadlt
+    - nmlt5
+    - nm5to11
+    - nm12to16
+    - wkccbd
+    - wknccbd
+    - corredis
+    - vehbywrk
+    - vocc
+    - wgt
+  data_av: &lt;populated&gt;
+  data_ch: chose
+</pre></div></div>
+</div>
+<p>By setting <cite>crack</cite> to <cite>True</cite>, Larch automatically analyzed the data to find variables that do not vary within
+cases, and transformed those into <a class="reference internal" href="../data-fundamentals.html#idco"><span class="std std-ref">idco</span></a> format variables.  If you would prefer that
+Larch not do this you can omit this argument or set it to False.  This is particularly
+important for larger datasets (the data sample included is only a tiny extract of the data
+that might be available for this kind of model), as breaking the data into seperate <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca</span></a> and <a class="reference internal" href="../data-fundamentals.html#idco"><span class="std std-ref">idco</span></a> parts is
+a relatively expensive operation, and it is not actually required for most model structures.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span><span class="o">.</span><span class="n">alternative_codes</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Int64Index([1, 2, 3, 4, 5, 6], dtype=&#39;int64&#39;, name=&#39;altnum&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span><span class="o">.</span><span class="n">alternative_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The set of all possible alternative codes is deduced automatically from all the values in the <code class="docutils literal notranslate"><span class="pre">altid</span></code> column. However, the alterative codes are not very descriptive when they are set automatically, as the csv data file does not have enough information to tell what each alternative code number means.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span><span class="o">.</span><span class="n">set_alternative_names</span><span class="p">({</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;DA&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;SR2&#39;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;SR3+&#39;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;Transit&#39;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;Bike&#39;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;Walk&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">d</span><span class="o">.</span><span class="n">alternative_names</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[&#39;DA&#39;, &#39;SR2&#39;, &#39;SR3+&#39;, &#39;Transit&#39;, &#39;Bike&#39;, &#39;Walk&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="001_mtc.html" class="btn btn-neutral float-right" title="1: MTC MNL Mode Choice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mtc.html" class="btn btn-neutral" title="MTC Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      Last updated on Jan 11, 2019.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

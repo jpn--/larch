@@ -36,6 +36,6 @@ from .examples import example
 
 _doctest_mode_ = False
 
-_larch4_self = sys.modules[__name__]
+_larch_self = sys.modules[__name__]
 
 from xmle import Reporter, NumberedCaption

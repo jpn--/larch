@@ -82,14 +82,21 @@ def apply_global_background_gradient(df, override_min=None, override_max=None, c
 
 ###################
 
-def columnize(df, name, inplace=True):
+def columnize(df, name, inplace=True, dtype=None):
 	"""Add a computed column to a DataFrame."""
+
+	datanames = None
 
 	from ..roles import LinearFunction
 	if isinstance(name, LinearFunction):
 		datanames = [str(_.data) for _ in name]
+
+	if isinstance(name, (list,tuple)):
+		datanames = [str(_) for _ in name]
+
+	if datanames is not None:
 		df1 = pandas.concat([
-			columnize(df, _, False)
+			columnize(df, _, False, dtype)
 			for _ in datanames
 		], axis=1)
 		if inplace:
@@ -112,7 +119,8 @@ def columnize(df, name, inplace=True):
 	if inplace:
 		recommand = [(NAME, 'df'), OBRAC, (STRING, f"'{name}'"), CBRAC, EQUAL]
 	else:
-		recommand = []
+		recommand = [ ]
+	recommand += [OPAR,]
 	try:
 		name_encode = name.encode('utf-8')
 	except AttributeError:
@@ -137,6 +145,10 @@ def columnize(df, name, inplace=True):
 				recommand.append((toknum, tokval))
 		else:
 			recommand.append((toknum, tokval))
+	recommand += [CPAR,]
+	if dtype is not None:
+		dtype_ = str(numpy.dtype(dtype))
+		recommand += [DOT, (NAME, 'astype'), OPAR, (STRING, f"'{dtype_}'"), CPAR]
 	try:
 		ret = untokenize(recommand).decode('utf-8')
 	except:

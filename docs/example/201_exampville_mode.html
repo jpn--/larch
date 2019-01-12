@@ -171,7 +171,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="exampville-mode-choice">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="exampville-mode-choice">
 <h1>201: Exampville Mode Choice<a class="headerlink" href="#exampville-mode-choice" title="Permalink to this headline">¶</a></h1>
 <p>Welcome to Exampville, the best simulated town in this here part of the internet!</p>
 <p>Exampville is a simulation tool provided with Larch that can quickly simulate the
@@ -196,7 +220,7 @@ simulated data in the previous example, which we’ll use here.</p>
 <p>In Exampville, there are only two kinds of trips: work (purpose=1) and non-work.
 We want to estimate a mode choice model for work trips, so we’ll begin by including
 only those tours:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="s1">&#39;TOURPURP == 1&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="s1">&#39;TOURPURP == 1&#39;</span>
 </pre></div>
 </div>
 <p>Now we are ready to define some utility functions.</p>
@@ -228,13 +252,13 @@ Larch allows parameter names that are any string, including spaces and punctuati
 names that are not python identifiers must be given using the second form.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Walk</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Walk</span>
-        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">WALKTIME</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">WALKTIME</span>
         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:Walk&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Bike</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Bike</span>
-        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">BIKETIME</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">BIKETIME</span>
         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:Bike&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 
@@ -246,17 +270,6 @@ names that are not python identifiers must be given using the second form.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>For this model, we want to ensure that the value of non-motorized travel time is
-exactly double that of motorized in-vehicle time.  To do this, we can create
-a snap constraint for non-motorized time that is defined as 2 times the parameter
-for motorized in-vehicle time.  We can use the <cite>equal_to</cite> method to make this snap as
-an equality constraint.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">add_snap</span><span class="p">(</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span><span class="o">.</span><span class="n">equalto</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="n">immediate</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>The ‘immediate’ keyword tells the add_snap method to enforce this snap immediately.
-Otherwise, the snap is enforced only if it is violated when the <cite>engage_snaps</cite> method
-is called.  Delayed snaps are useful for inequality constraints.</p>
 <p>Let’s create a nested logit model.  We’ll nest together the two car modes, and the
 two non-motorized modes, and then the car nest with the transit mode.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Car</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">children</span><span class="o">=</span><span class="p">(</span><span class="n">DA</span><span class="p">,</span><span class="n">SR</span><span class="p">),</span> <span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Nest:Car&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Car&#39;</span><span class="p">)</span>
@@ -303,7 +316,9 @@ put into the category.</p>
 <p>Now we’re ready to go.</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">)</span>
-<span class="go">&lt;...Optimization terminated successfully...&gt;</span>
+<span class="go">┣ ...Optimization terminated successfully...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
+<span class="go">-963.8426...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
 <span class="go">                                                 value  std err  t stat  robust std err  robust t stat</span>
@@ -354,7 +369,7 @@ together on your own, you can load a read-to-use copy like this:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 08, 2019.
+      Last updated on Jan 11, 2019.
 
     </p>
   </div>
@@ -380,6 +395,7 @@ together on your own, you can load a read-to-use copy like this:</p>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
 
   

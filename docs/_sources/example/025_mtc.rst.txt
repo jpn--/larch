@@ -47,34 +47,34 @@ Since private auto is completely contained within motorized, we can use the priv
 	>>> m.loglike()
 	-3427.166...
 	
-	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
-                      			     value  initvalue  nullvalue  minimum  maximum  holdfast
-	Category   Parameter                                                                    
-	CostbyInc  costbyincome        -0.0363        0.0        0.0     -inf      inf         0
-	TravelTime motorized_time      -0.0106        0.0        0.0     -inf      inf         0
-	           nonmotorized_time   -0.0471        0.0        0.0     -inf      inf         0
-	           motorized_ovtbydist -0.0995        0.0        0.0     -inf      inf         0
-	Household  hhinc#4             -0.0022        0.0        0.0     -inf      inf         0
-	           hhinc#5             -0.0090        0.0        0.0     -inf      inf         0
-	           hhinc#6             -0.0061        0.0        0.0     -inf      inf         0
-	           vehbywrk_BIKE       -0.6885        0.0        0.0     -inf      inf         0
-	           vehbywrk_SR         -0.3218        0.0        0.0     -inf      inf         0
-	           vehbywrk_TRANSIT    -0.4628        0.0        0.0     -inf      inf         0
-	           vehbywrk_WALK       -0.7053        0.0        0.0     -inf      inf         0
-	Zonal      wkcbd_BIKE           0.5004        0.0        0.0     -inf      inf         0
-	           wkcbd_SR2            0.2753        0.0        0.0     -inf      inf         0
-	           wkcbd_SR3            1.0253        0.0        0.0     -inf      inf         0
-	           wkcbd_TRANSIT        0.7310        0.0        0.0     -inf      inf         0
-	           wkcbd_WALK           0.1416        0.0        0.0     -inf      inf         0
-	           wkempden_BIKE        0.0014        0.0        0.0     -inf      inf         0
-	           wkempden_SR2         0.0016        0.0        0.0     -inf      inf         0
-	           wkempden_SR3         0.0024        0.0        0.0     -inf      inf         0
-	           wkempden_TRANSIT     0.0019        0.0        0.0     -inf      inf         0
-	           wkempden_WALK        0.0022        0.0        0.0     -inf      inf         0
-	ASCs       ASC_BIKE            -1.3789        0.0        0.0     -inf      inf         0
-	           ASC_SR2             -1.6335        0.0        0.0     -inf      inf         0
-	           ASC_SR3             -3.1467        0.0        0.0     -inf      inf         0
-	           ASC_TRANSIT         -0.4069        0.0        0.0     -inf      inf         0
-	           ASC_WALK             0.3393        0.0        0.0     -inf      inf         0
-	Other      mu_moto              0.5322        1.0        1.0   0.0010   1.0000         0
-	           mu_private           0.9235        1.0        1.0   0.0010   1.0000         0
+	>>> print(m.pfo()[['value']])
+                                     value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0363
+	TravelTime motorized_time      -0.0106
+	           nonmotorized_time   -0.0471
+	           motorized_ovtbydist -0.0995
+	Household  hhinc#4             -0.0022
+	           hhinc#5             -0.0090
+	           hhinc#6             -0.0061
+	           vehbywrk_BIKE       -0.6885
+	           vehbywrk_SR         -0.3218
+	           vehbywrk_TRANSIT    -0.4628
+	           vehbywrk_WALK       -0.7052
+	Zonal      wkcbd_BIKE           0.5003
+	           wkcbd_SR2            0.2753
+	           wkcbd_SR3            1.0253
+	           wkcbd_TRANSIT        0.7310
+	           wkcbd_WALK           0.1416
+	           wkempden_BIKE        0.0014
+	           wkempden_SR2         0.0016
+	           wkempden_SR3         0.0024
+	           wkempden_TRANSIT     0.0019
+	           wkempden_WALK        0.0022
+	ASCs       ASC_BIKE            -1.3790
+	           ASC_SR2             -1.6337
+	           ASC_SR3             -3.1469
+	           ASC_TRANSIT         -0.4069
+	           ASC_WALK             0.3391
+	Other      mu_moto              0.5322
+	           mu_private           0.9236
