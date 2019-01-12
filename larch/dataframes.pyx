@@ -12,7 +12,7 @@ cimport cython
 import pandas
 import numpy
 import inspect
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, Union
 
 import logging
 logger = logging.getLogger('L5')
@@ -542,14 +542,15 @@ cdef class DataFrames:
 		return result
 
 	def alternative_names(self):
+		"""The alternative names."""
 		return self._alternative_names
 
-	def set_alternative_names(self, names):
+	def set_alternative_names(self, names:Union[Mapping,Sequence]):
 		"""Set the alternative names.
 
 		Parameters
 		----------
-		as_list : Mapping or Sequence
+		names : Mapping or Sequence
 			If a mapping, with keys as the codes
 			that appear in `alternative_codes`, and values that are
 			the names, these will be used.  Any missing codes will be labeled with the string
@@ -565,14 +566,17 @@ cdef class DataFrames:
 			raise ValueError('must give a sequence or mapping')
 
 	def alternative_codes(self):
+		"""The alternative codes."""
 		return self._alternative_codes
 
 	@property
 	def n_alts(self):
+		"""The number of alternatives."""
 		return self._n_alts()
 
 	@property
 	def n_cases(self):
+		"""The number of cases."""
 		return self._n_cases()
 
 	@property
@@ -610,6 +614,8 @@ cdef class DataFrames:
 
 	@property
 	def caseindex(self):
+		"""The indexes of the cases.
+		"""
 		if self._data_co is not None:
 			return self.data_co.index
 		elif self._data_ch is not None:
@@ -628,6 +634,12 @@ cdef class DataFrames:
 
 	@property
 	def data_ca(self):
+		"""A pandas.DataFrame in idca format.
+
+		This DataFrame should have a two-level MultiIndex as the index, where
+		the first level is the caseids and the second level is the
+		alternative codes.
+		"""
 		return self._data_ca
 
 	@data_ca.setter
@@ -665,6 +677,11 @@ cdef class DataFrames:
 
 	@property
 	def data_co(self):
+		"""A pandas.DataFrame in idco format.
+
+		This DataFrame should have a simple pandas.Index as the index, where
+		the index values are is the caseids.
+		"""
 		return self._data_co
 
 	@data_co.setter
