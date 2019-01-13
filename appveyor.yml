@@ -49,6 +49,8 @@ install:
   - conda install conda-build anaconda-client numpy cython
   # Install codecov tool for uploading coverage reports
   - pip install codecov coverage
+  - conda config --append channels conda-forge
+  - conda config --append channels jpn
   # Show conda info for debugging
   - conda info -a
 
@@ -87,7 +89,7 @@ artifacts:
 
 on_success:
   - ECHO "Yep"
-  
+
 # Upload to anaconda, with the correct label derived from the version tag.
 # This is virtually impossible with a normal dos batch script...
 # It also contains an incredibly clunky way to avoid build failure when anaconda writes
