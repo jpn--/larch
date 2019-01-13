@@ -8,6 +8,7 @@ environment:
       secure: 4tBu5qS0545E1dJt/t1aKIjI84gUjMGy/VQj/CKqwYNMzwM51dCemTLEv4Xwhy54
     PROJECT_NAME: larch
     GITHUB_REPO_NAME: jpn--/larch
+    PYPACKAGE: larch
 
   matrix:
     - PYTHON_VERSION: 3.7
@@ -99,7 +100,8 @@ on_success:
   - ps:
       if (($Env:APPVEYOR_REPO_TAG -eq "true") -and
           ($Env:APPVEYOR_REPO_NAME -eq ${Env:GITHUB_REPO_NAME})) {
-        $tar_glob = ".\conda-bld\win-*\${Env:PYPKG}-${Env:APPVEYOR_REPO_TAG_NAME}-*.tar.bz2";
+        $this_version_number = (${Env:APPVEYOR_REPO_TAG_NAME}).TrimStart("v");
+        $tar_glob = ".\conda-bld\win-*\%PYPACKAGE%-$this_version_number-*.tar.bz2";
         Write-Host "tar_glob $tar_glob";
         if ($Env:APPVEYOR_REPO_TAG_NAME -like "*a*") {
           $anaconda_label = "alpha"
