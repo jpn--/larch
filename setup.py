@@ -152,6 +152,7 @@ setup(
     'Operating System :: MacOS :: MacOS X',
     'Operating System :: Microsoft :: Windows',
     ],
+    zip_safe=False,
 
 )
 
