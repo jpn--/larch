@@ -87,6 +87,7 @@ artifacts:
 
 on_success:
   - ECHO "Yep"
+  
 # Upload to anaconda, with the correct label derived from the version tag.
 # This is virtually impossible with a normal dos batch script...
 # It also contains an incredibly clunky way to avoid build failure when anaconda writes
