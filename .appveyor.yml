@@ -56,9 +56,11 @@ install:
 - set /P PROJECT_VERSION=<version.txt
 - python tools\\gitversion.py python > %PROJECT_NAME%\\version.py
 
-build: false
+build: off
 
 test_script:
+  - '"%CONDA%\Scripts\activate.bat"'
+  - python tools\\gitversion.py
   # Build the package
   - "%CMD_IN_ENV% conda build conda-recipe"
 
