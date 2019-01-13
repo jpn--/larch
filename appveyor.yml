@@ -5,7 +5,7 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: 'cmd /E:ON /V:ON /C .\tools\appveyor\run_with_env.cmd'
     ANACONDA_TOKEN:
-      secure: tDZEWokad8PeJ0CHchSl+jD+9zW7ne4pyNZ+Wl7+vAgGJ9epzodg47Q9fnYIr2s3
+      secure: 4tBu5qS0545E1dJt/t1aKIjI84gUjMGy/VQj/CKqwYNMzwM51dCemTLEv4Xwhy54
     PROJECT_NAME: larch
     GITHUB_REPO_NAME: jpn--/larch
 
