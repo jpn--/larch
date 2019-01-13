@@ -27,6 +27,7 @@ branches:
     - master
 
 init:
+  - echo "begin init"
   - ps: if ($Env:PLATFORM -eq "x64") { $Env:CONDA = "${Env:CONDA}-x64" }
   - ps: Write-Host $Env:PYTHON_VERSION
   - ps: Write-Host $Env:CONDA
@@ -37,28 +38,30 @@ init:
   - ps: Write-Host $Env:APPVEYOR_REPO_NAME
 
 install:
-# Make sure the compiler is accessible
-- '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
+  - echo "begin install"
+  # Make sure the compiler is accessible
+  - '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
 
-# Load the conda root environment, configure and install some packages
-- '"%CONDA%\Scripts\activate.bat"'
-- conda config --set always_yes yes --set changeps1 no
-- conda update -q conda
-- conda install conda-build anaconda-client numpy cython
-# Install codecov tool for uploading coverage reports
-- pip install codecov coverage
-# Show conda info for debugging
-- conda info -a
+  # Load the conda root environment, configure and install some packages
+  - '"%CONDA%\Scripts\activate.bat"'
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda install conda-build anaconda-client numpy cython
+  # Install codecov tool for uploading coverage reports
+  - pip install codecov coverage
+  # Show conda info for debugging
+  - conda info -a
 
-# Set the version info from the git tag
-- git fetch origin --tags
-- python tools\\gitversion.py > version.txt
-- set /P PROJECT_VERSION=<version.txt
-- python tools\\gitversion.py python > %PROJECT_NAME%\\version.py
+  # Set the version info from the git tag
+  - git fetch origin --tags
+  - python tools\\gitversion.py > version.txt
+  - set /P PROJECT_VERSION=<version.txt
+  - python tools\\gitversion.py python > %PROJECT_NAME%\\version.py
 
 build: off
 
 test_script:
+  - echo "begin test"
   - '"%CONDA%\Scripts\activate.bat"'
   - python tools\\gitversion.py
   # Build the package
@@ -83,6 +86,7 @@ artifacts:
   - path: 'conda-bld\win-*\*.tar.bz2'
 
 on_success:
+  - ECHO "Yep"
 # Upload to anaconda, with the correct label derived from the version tag.
 # This is virtually impossible with a normal dos batch script...
 # It also contains an incredibly clunky way to avoid build failure when anaconda writes
