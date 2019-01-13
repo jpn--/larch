@@ -1598,11 +1598,11 @@ def test_weighted_qnl_bhhh():
 
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	q1_dll = {'ASC_BIKE': -211.29923846797828,
 			  'ASC_SR2': 22245.040250878912,
@@ -2020,11 +2020,11 @@ def test_weighted_qmnl_bhhh():
 
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	q1_dll = {'ASC_BIKE': -292.0559358088135,
 			  'ASC_SR2': 7378.46798009938,
@@ -2600,11 +2600,11 @@ def test_dataframes_holdfast_1():
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 5
+	assert m5.check_d_loglike().data.similarity.min() > 4
 
 	q1_dll = {'ASC_BIKE': -292.0559358088135,
 			  'ASC_SR2': 7378.46798009938,
