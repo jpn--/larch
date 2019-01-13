@@ -134,7 +134,15 @@ release = version
 # directories to ignore when looking for source files.
 exclude_patterns = ['_build', '**ipynb_checkpoints']
 
-nbsphinx_execute = 'never'
+nbsphinx_execute = 'auto'
+# Or on a per-notebook basis by adding this to the notebook’s JSON metadata:
+# "nbsphinx": {
+#   "execute": "never"
+# }
+# There are three possible settings, "always", "auto" and "never". By default
+# (= "auto"), notebooks with no outputs are executed and notebooks with at least
+# one output are not. As always, per-notebook settings take precedence over the
+# settings in conf.py.
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
