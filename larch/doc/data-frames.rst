@@ -32,3 +32,7 @@ which represent :ref:`idco` and :ref:`idca` data features.
     .. autoattribute:: caseindex
 
 
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
+
+

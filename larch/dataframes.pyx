@@ -677,9 +677,9 @@ cdef class DataFrames:
 
 	@property
 	def data_co(self):
-		"""A pandas.DataFrame in idco format.
+		"""A pandas.DataFrame in |idco| format.
 
-		This DataFrame should have a simple pandas.Index as the index, where
+		This DataFrame should have a simple :class:`pandas.Index` as the index, where
 		the index values are is the caseids.
 		"""
 		return self._data_co
