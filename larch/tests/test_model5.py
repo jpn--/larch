@@ -2597,14 +2597,17 @@ def test_dataframes_holdfast_1():
 
 	m5.pf_sort()
 
+	assert j1.computational
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
+	assert j2.computational
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	assert m5.check_d_loglike().data.similarity.min() > 4
+	similarity = m5.check_d_loglike().data.similarity.min()
+	assert similarity > 4
 
 	q1_dll = {'ASC_BIKE': -292.0559358088135,
 			  'ASC_SR2': 7378.46798009938,
@@ -2965,10 +2968,12 @@ def test_dataframes_holdfast_2():
 
 	m5.pf_sort()
 
+	assert j1.computational
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
+	assert j2.computational
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
@@ -3333,16 +3338,20 @@ def test_dataframes_nl_holdfasts():
 
 	m5.pf_sort()
 
+	assert j1.computational
 	m5.dataframes = j1
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
-	m5.check_d_loglike()
+	checker = m5.check_d_loglike()
 
+	assert checker.data.similarity.min() > 4
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
+	assert j2.computational
 	m5.dataframes = j2
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
-	assert m5.check_d_loglike().data.similarity.min() > 4
+	similarity = m5.check_d_loglike().data.similarity.min()
+	assert similarity > 4
 
 	q1_dll = {'ASC_BIKE': -392.6027832998042,
 			  'ASC_SR2': 7006.672643267781,

@@ -405,6 +405,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		int             storage_size
 		int             store_number
 
+	if not dfs._computational:
+		raise ValueError('DataFrames is not initialized in computational mode')
+
 	if dfs._data_ch is None and not probability_only:
 		raise ValueError('DataFrames does not define data_ch')
 

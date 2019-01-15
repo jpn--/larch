@@ -8,6 +8,8 @@ from libc.stdint cimport int8_t, int64_t
 cdef class DataFrames:
 
 	cdef:
+		bint _computational
+
 		# Pandas DataFrames
 		object _data_co
 		object _data_ca

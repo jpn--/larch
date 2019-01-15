@@ -252,6 +252,34 @@ def _infer_name(thing):
 		return str(name)
 	return None
 
+
+def get_dataframe_format(df):
+	'''Check the format of a dataframe.
+
+	This function assumes the input dataframe is in |idco|, |idca|, or
+	|idce| formats, and returns the format found.
+
+	Parameters
+	----------
+	df : pandas.DataFrame
+		The dataframe to inspect
+
+	Returns
+	-------
+	str
+		one of {'idco', 'idca', 'idce'}
+	'''
+	if isinstance(df.index, pandas.MultiIndex) and df.index.nlevels==2:
+		# The df is idca or idce format
+		if len(df) < len(df.index.levels[0]) * len(df.index.levels[1]):
+			return 'idce'
+		if not df.index.is_monotonic_increasing:
+			return 'idce'
+		return 'idca'
+	elif isinstance(df.index, pandas.Index) and not isinstance(df.index, pandas.MultiIndex):
+		return 'idco'
+
+
 cdef class DataFrames:
 	"""A structured class to hold multi-format discrete choice data.
 
@@ -297,9 +325,12 @@ cdef class DataFrames:
 			ch_as_ce = None,
 
 			sys_alts = None,
+			computational = True
 	):
 
 		try:
+			self._computational = computational
+
 			co = co if co is not None else data_co
 			ca = ca if ca is not None else data_ca
 			ce = ce if ce is not None else data_ce
@@ -450,6 +481,10 @@ cdef class DataFrames:
 			print(f"  data_ch: {self._data_ch_name or '<populated>'}", file=out)
 		if self.data_wt is not None:
 			print(f"  data_wt: {self._data_wt_name or '<populated>'}", file=out)
+
+	@property
+	def computational(self):
+		return self._computational
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
 		from ..util.addict import adict_report
@@ -644,15 +679,21 @@ cdef class DataFrames:
 
 	@data_ca.setter
 	def data_ca(self, df:pandas.DataFrame):
-		if df is not None:
-			_ensure_no_duplicate_column_names(df)
-			self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
-			if self._alternative_codes is None and self._data_ca is not None:
-				self._alternative_codes = self._data_ca.index.levels[1]
-			self._array_ca = _df_values(self.data_ca, (self.n_cases, self.n_alts, -1))
-		else:
+		if df is None:
 			self._data_ca = None
 			self._array_ca = None
+		else:
+			if not isinstance(df, pandas.DataFrame):
+				raise TypeError('data_ca must be a pandas.DataFrame')
+			_ensure_no_duplicate_column_names(df)
+			if self._computational:
+				self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
+				self._array_ca = _df_values(self.data_ca, (self.n_cases, self.n_alts, -1))
+			else:
+				self._data_ca = df
+				self._array_ca = None
+			if self._alternative_codes is None and self._data_ca is not None:
+				self._alternative_codes = self._data_ca.index.levels[1]
 
 	def data_ca_as_ce(self):
 		"""
@@ -686,13 +727,19 @@ cdef class DataFrames:
 
 	@data_co.setter
 	def data_co(self, df:pandas.DataFrame):
-		if df is not None:
-			_ensure_no_duplicate_column_names(df)
-			self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
-			self._array_co = _df_values(self.data_co)
-		else:
+		if df is None:
 			self._data_co = None
 			self._array_co = None
+		else:
+			if not isinstance(df, pandas.DataFrame):
+				raise TypeError('data_co must be a pandas.DataFrame')
+			_ensure_no_duplicate_column_names(df)
+			if self._computational:
+				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
+				self._array_co = _df_values(self.data_co)
+			else:
+				self._data_co = df
+				self._array_co = None
 
 	def data_co_as_ce(self):
 		"""
@@ -734,11 +781,17 @@ cdef class DataFrames:
 			self._array_ce_altindexes = None
 			self._array_ce_reversemap = None
 		else:
+			if not isinstance(df, pandas.DataFrame):
+				raise TypeError('data_ce must be a pandas.DataFrame')
 			_ensure_no_duplicate_column_names(df)
 			if not df.index.is_monotonic_increasing:
 				df = df.sort_index()
-			self._data_ce = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ce')
-			self._array_ce = _df_values(self.data_ce)
+			if self._computational:
+				self._data_ce = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ce')
+				self._array_ce = _df_values(self.data_ce)
+			else:
+				self._data_ce = df
+				self._array_ce = None
 
 			unique_labels, new_labels =numpy.unique(self.data_ce.index.labels[0], return_inverse=True)
 			self._array_ce_caseindexes = new_labels
@@ -1253,6 +1306,9 @@ cdef class DataFrames:
 			int64_t row = -2
 			l4_float_t  _temp, _temp_data, _max_U=0
 
+		if not self._computational:
+			return
+
 		#memset(&dU[0,0], 0, sizeof(l4_float_t) * dU.size)
 		U[:] = 0
 		dU[:,:] = 0
@@ -1347,6 +1403,9 @@ cdef class DataFrames:
 			int i,j,k, altindex
 			int64_t row = -2
 			l4_float_t  _temp, _temp_data, _max_U
+
+		if not self._computational:
+			return
 
 		U[:] = 0
 		_max_U = 0
