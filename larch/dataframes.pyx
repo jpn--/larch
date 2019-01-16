@@ -296,7 +296,7 @@ cdef class DataFrames:
 
 	def __init__(
 			self,
-			*,
+			*args,
 			co=None,
 			ca=None,
 			ce=None,
@@ -329,7 +329,6 @@ cdef class DataFrames:
 	):
 
 		try:
-			self._computational = computational
 
 			co = co if co is not None else data_co
 			ca = ca if ca is not None else data_ca
@@ -337,6 +336,25 @@ cdef class DataFrames:
 			av = av if av is not None else data_av
 			ch = ch if ch is not None else data_ch
 			wt = wt if wt is not None else data_wt
+
+			if len(args) > 1:
+				raise ValueError('DataFrames accepts at most one positional argument')
+			elif len(args) == 1:
+				fmt = get_dataframe_format(args[0])
+				if fmt == 'idca':
+					if ca is not None:
+						raise ValueError('cannot give both positional and keyword data_ca')
+					ca = args[0]
+				elif fmt == 'idce':
+					if ce is not None:
+						raise ValueError('cannot give both positional and keyword data_ce')
+					ce = args[0]
+				elif fmt == 'idco':
+					if co is not None:
+						raise ValueError('cannot give both positional and keyword data_co')
+					co = args[0]
+
+			self._computational = computational
 
 			# Infer names from input data is possible
 			if av_name is None:
@@ -485,6 +503,47 @@ cdef class DataFrames:
 	@property
 	def computational(self):
 		return self._computational
+
+	@computational.setter
+	def computational(self, value):
+		value = bool(value)
+		original = self._computational
+		try:
+			if not self._computational and value:
+				self._computational = value
+				self.data_ca = self._data_ca
+				self.data_ce = self._data_ce
+				self.data_co = self._data_co
+		except:
+			self._computational = original
+
+	def is_computational_ready(self, activate=False):
+		"""Check if this DataFrames is or can be computational with no data conversion.
+
+		Parameters
+		----------
+		activate : bool, default False
+			If this DataFrames is computational-ready, setting this parameter as True
+			will make this DataFrames computational.
+			
+		Returns
+		-------
+		bool
+		"""
+		if self._computational:
+			return True
+		if self.data_ca is not None:
+			if not _check_dataframe_of_dtype(self.data_ca, l4_float_dtype):
+				return False
+		if self.data_ce is not None:
+			if not _check_dataframe_of_dtype(self.data_ce, l4_float_dtype):
+				return False
+		if self.data_co is not None:
+			if not _check_dataframe_of_dtype(self.data_co, l4_float_dtype):
+				return False
+		if activate:
+			self._computational = True
+		return True
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
 		from ..util.addict import adict_report
