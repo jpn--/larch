@@ -6,6 +6,7 @@ from ..general_precision cimport l4_float_t
 
 import numpy
 import pandas
+from typing import Union
 
 import logging
 logger = logging.getLogger('L5.model')
@@ -743,7 +744,10 @@ cdef class Model5c:
 		return self._dataframes
 
 	@dataframes.setter
-	def dataframes(self, DataFrames x):
+	def dataframes(self, x):
+		if isinstance(x, pandas.DataFrame):
+			x = DataFrames(x)
+		x.computational = True
 		self.clear_best_loglike()
 		self.unmangle()
 		x._check_data_is_sufficient_for_model(self)
