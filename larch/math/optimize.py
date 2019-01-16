@@ -1,6 +1,7 @@
 
 import numpy, pandas
 from collections import OrderedDict
+from ..warning import ignore_warnings
 
 import logging
 logger = logging.getLogger('L5')
@@ -151,8 +152,9 @@ def similarity(a,b, to_zero=None):
 		similar = -numpy.log10(difference/magnitude)
 	similar[a==b] = 100
 	if to_zero:
-		similar[a == 0] = (to_zero / difference)[a == 0]
-		similar[b == 0] = (to_zero / difference)[b == 0]
+		with ignore_warnings():
+			similar[a == 0] = (to_zero / difference)[a == 0]
+			similar[b == 0] = (to_zero / difference)[b == 0]
 	return similar
 
 
