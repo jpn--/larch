@@ -1214,7 +1214,7 @@ cdef class DataFrames:
 	def read_in_model_parameters(self):
 		self._read_in_model_parameters()
 
-	def _debug_access(self):
+	def _debug_arrays(self):
 		from .util import Dict
 		return Dict(
 			model_utility_ca_param_value    = self.model_utility_ca_param_value.base,
@@ -1226,13 +1226,13 @@ cdef class DataFrames:
 			model_quantity_ca_param_value   = self.model_quantity_ca_param_value.base,
 			model_quantity_ca_param_holdfast= self.model_quantity_ca_param_holdfast.base,
 
-			model_utility_ca_param   = self.model_utility_ca_param ,
-			model_utility_ca_data    = self.model_utility_ca_data  ,
-			model_utility_co_alt     = self.model_utility_co_alt   ,
-			model_utility_co_param   = self.model_utility_co_param ,
-			model_utility_co_data    = self.model_utility_co_data  ,
-			model_quantity_ca_param  = self.model_quantity_ca_param,
-			model_quantity_ca_data   = self.model_quantity_ca_data ,
+			model_utility_ca_param   = self.model_utility_ca_param.base ,
+			model_utility_ca_data    = self.model_utility_ca_data.base  ,
+			model_utility_co_alt     = self.model_utility_co_alt.base   ,
+			model_utility_co_param   = self.model_utility_co_param.base ,
+			model_utility_co_data    = self.model_utility_co_data.base  ,
+			model_quantity_ca_param  = self.model_quantity_ca_param.base,
+			model_quantity_ca_data   = self.model_quantity_ca_data.base ,
 		)
 
 
@@ -1503,12 +1503,6 @@ cdef class DataFrames:
 			for i in range(writecap):
 				into_array[i] = self._array_ch[c,i]
 
-	def what_is_up(self):
-		return (
-			self.model_quantity_scale_param_value,
-			self.model_quantity_ca_param_value.base,
-
-		)
 
 	def dump(self, filename, **kwargs):
 		"""Persist this DataFrames object into one file.
