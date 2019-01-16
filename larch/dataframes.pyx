@@ -329,6 +329,12 @@ cdef class DataFrames:
 	):
 
 		try:
+			self._data_co = None
+			self._data_ca = None
+			self._data_ce = None
+			self._data_ch = None
+			self._data_wt = None
+			self._data_av = None
 
 			co = co if co is not None else data_co
 			ca = ca if ca is not None else data_ca
