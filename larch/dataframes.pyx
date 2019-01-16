@@ -517,7 +517,24 @@ cdef class DataFrames:
 		except:
 			self._computational = original
 
-	def is_computational_ready(self, activate=False):
+	cdef bint _is_computational_ready(self, bint activate) nogil:
+		if self._computational:
+			return True
+		with gil:
+			if self._data_ca is not None:
+				if not _check_dataframe_of_dtype(self._data_ca, l4_float_dtype):
+					return False
+			if self._data_ce is not None:
+				if not _check_dataframe_of_dtype(self._data_ce, l4_float_dtype):
+					return False
+			if self._data_co is not None:
+				if not _check_dataframe_of_dtype(self._data_co, l4_float_dtype):
+					return False
+		if activate:
+			self._computational = True
+		return True
+
+	def is_computational_ready(self, bint activate=False):
 		"""Check if this DataFrames is or can be computational with no data conversion.
 
 		Parameters
@@ -525,25 +542,12 @@ cdef class DataFrames:
 		activate : bool, default False
 			If this DataFrames is computational-ready, setting this parameter as True
 			will make this DataFrames computational.
-			
+
 		Returns
 		-------
 		bool
 		"""
-		if self._computational:
-			return True
-		if self.data_ca is not None:
-			if not _check_dataframe_of_dtype(self.data_ca, l4_float_dtype):
-				return False
-		if self.data_ce is not None:
-			if not _check_dataframe_of_dtype(self.data_ce, l4_float_dtype):
-				return False
-		if self.data_co is not None:
-			if not _check_dataframe_of_dtype(self.data_co, l4_float_dtype):
-				return False
-		if activate:
-			self._computational = True
-		return True
+		return self._is_computational_ready(activate)
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
 		from ..util.addict import adict_report
@@ -1365,7 +1369,7 @@ cdef class DataFrames:
 			int64_t row = -2
 			l4_float_t  _temp, _temp_data, _max_U=0
 
-		if not self._computational:
+		if not self._is_computational_ready(activate=True):
 			return
 
 		#memset(&dU[0,0], 0, sizeof(l4_float_t) * dU.size)
@@ -1463,7 +1467,7 @@ cdef class DataFrames:
 			int64_t row = -2
 			l4_float_t  _temp, _temp_data, _max_U
 
-		if not self._computational:
+		if not self._is_computational_ready(activate=True):
 			return
 
 		U[:] = 0

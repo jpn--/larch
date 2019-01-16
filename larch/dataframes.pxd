@@ -113,3 +113,6 @@ cdef class DataFrames:
 			self,
 			Model5c model,
 	) except -1
+
+	cdef bint _is_computational_ready(self, bint activate) nogil
+

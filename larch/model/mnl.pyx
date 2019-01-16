@@ -438,8 +438,8 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		int             storage_size2
 		int             store_number2
 
-	if not dfs._computational:
-		raise ValueError('DataFrames is not initialized in computational mode')
+	if not dfs.is_computational_ready(activate=True):
+		raise ValueError('DataFrames is not computational-ready')
 
 	if dfs._data_ch is None and not probability_only:
 		raise ValueError('DataFrames does not define data_ch')
@@ -620,8 +620,8 @@ def mnl_logsums_from_dataframes_all_rows(
 		l4_float_t*     choice
 		l4_float_t      weight = 1 # TODO
 
-	if not dfs._computational:
-		raise ValueError('DataFrames is not initialized in computational mode')
+	if not dfs.is_computational_ready(activate=True):
+		raise ValueError('DataFrames is not computational-ready')
 
 	if dfs._data_ch is None:
 		raise ValueError('DataFrames does not define data_ch')
