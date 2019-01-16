@@ -743,10 +743,7 @@ cdef class Model5c:
 	def dataframes(self):
 		return self._dataframes
 
-	@dataframes.setter
-	def dataframes(self, x):
-		if isinstance(x, pandas.DataFrame):
-			x = DataFrames(x)
+	def _set_dataframes(self, DataFrames x):
 		x.computational = True
 		self.clear_best_loglike()
 		self.unmangle()
@@ -754,6 +751,12 @@ cdef class Model5c:
 		self._dataframes = x
 		self._refresh_derived_arrays()
 		self._dataframes._read_in_model_parameters()
+
+	@dataframes.setter
+	def dataframes(self, x):
+		if isinstance(x, pandas.DataFrame):
+			x = DataFrames(x)
+		self._set_dataframes(x)
 
 	def load_data(self, dataservice=None, autoscale_weights=True):
 		if dataservice is not None:
