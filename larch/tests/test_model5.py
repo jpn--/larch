@@ -2597,14 +2597,16 @@ def test_dataframes_holdfast_1():
 
 	m5.pf_sort()
 
-	assert j1.computational
+	assert not j1.computational
 	m5.dataframes = j1
+	assert j1.computational
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
-	assert j2.computational
+	assert not j2.computational
 	m5.dataframes = j2
+	assert j2.computational
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 	similarity = m5.check_d_loglike().data.similarity.min()
 	assert similarity > 4
@@ -2968,13 +2970,14 @@ def test_dataframes_holdfast_2():
 
 	m5.pf_sort()
 
-	assert j1.computational
+	assert not j1.computational
 	m5.dataframes = j1
+	assert m5.dataframes.computational
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
-	assert j2.computational
 	m5.dataframes = j2
+	assert j2.computational
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
 	assert m5.check_d_loglike().data.similarity.min() > 4
@@ -3338,16 +3341,16 @@ def test_dataframes_nl_holdfasts():
 
 	m5.pf_sort()
 
-	assert j1.computational
 	m5.dataframes = j1
+	assert j1.computational
 	ll1 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 	checker = m5.check_d_loglike()
 
 	assert checker.data.similarity.min() > 4
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
-	assert j2.computational
 	m5.dataframes = j2
+	assert j2.computational
 	ll2 = m5.loglike2_bhhh(beta_in1, return_series=True, persist=True)
 
 	similarity = m5.check_d_loglike().data.similarity.min()

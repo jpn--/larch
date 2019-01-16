@@ -1143,6 +1143,8 @@ cdef class Model5c:
 		missing_ch, missing_av = False, False
 		if self._dataframes is None:
 			raise MissingDataError('dataframes is not set, maybe you need to call `load_data` first?')
+		if not self._dataframes.is_computational_ready(activate=True):
+			raise ValueError('DataFrames is not computational-ready')
 		if x is not None:
 			self.set_values(x)
 		self.unmangle()
