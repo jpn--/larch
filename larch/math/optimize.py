@@ -2,6 +2,9 @@
 import numpy, pandas
 from collections import OrderedDict
 
+import logging
+logger = logging.getLogger('L5')
+
 try:
 	from ipywidgets import FloatProgress as ipywidgets_FloatProgress
 except ImportError:
@@ -116,7 +119,7 @@ def approx_fprime(xk, f, epsilon=None, trailing=False, *args, status_widget=None
 	else:
 		return _approx_fprime_helper(xk, f, epsilon, args=args, status_widget=status_widget)
 
-def similarity(a,b):
+def similarity(a,b, to_zero=None):
 	"""
 	The similarity between two values or arrays.
 
@@ -128,6 +131,12 @@ def similarity(a,b):
 	----------
 	a,b : numeric or arrays of same size
 		Scalar values are converted to numpy arrays.
+	to_zero : numeric, optional
+		A threshold level for values that can be
+		considered to match zero, where if one value is
+		exactly zero and the other is not, the similarity
+		is equal to the inverse absolute value of the other value
+		multiplied by `to_zero`
 
 	Returns
 	-------
@@ -141,6 +150,9 @@ def similarity(a,b):
 	with numpy.errstate(divide='ignore',invalid='ignore'):
 		similar = -numpy.log10(difference/magnitude)
 	similar[a==b] = 100
+	if to_zero:
+		similar[a == 0] = (to_zero / difference)[a == 0]
+		similar[b == 0] = (to_zero / difference)[b == 0]
 	return similar
 
 
@@ -206,7 +218,7 @@ def check_gradient(func, grad, x0, epsilon=None, names=None, require_sim=None, s
 			('finite_diff', g_f_),
 			('analytic', g_a_),
 			('diff', g_f_ - g_a_),
-			('similarity', similarity(g_f_, g_a_)),
+			('similarity', similarity(g_f_, g_a_, to_zero=0.01)),
 		]
 	try:
 		f = pandas.DataFrame.from_dict(OrderedDict(lister))
