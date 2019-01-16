@@ -325,7 +325,7 @@ cdef class DataFrames:
 			ch_as_ce = None,
 
 			sys_alts = None,
-			computational = True
+			computational = False
 	):
 
 		try:
@@ -473,24 +473,46 @@ cdef class DataFrames:
 	def __repr__(self):
 		return f"<larch.DataFrames ({self.n_cases} cases, {self.n_alts} alts)>"
 
-	def info(self, out=None):
-		print(f"larch.DataFrames:", file=out)
+	def info(self, verbose=False, out=None):
+		"""Print info about this DataFrames.
+
+		Parameters
+		----------
+		verbose : bool, default False
+			Print a more verbose report
+		out : file-like, optional
+			A file-like object to which the report will be written. If not given,
+			this method will print to stdout.
+		"""
+		if not self.is_computational_ready():
+			print(f"larch.DataFrames:  (not computation-ready)", file=out)
+		else:
+			print(f"larch.DataFrames:", file=out)
 		print(f"  n_cases: {self.n_cases}", file=out)
 		print(f"  n_alts: {self.n_alts}", file=out)
 		if self.data_ca is not None:
-			print(f"  data_ca:", file=out)
-			for col in self.data_ca.columns:
-				print(f"    - {col}", file=out)
+			if verbose:
+				print(f"  data_ca:", file=out)
+				for col in self.data_ca.columns:
+					print(f"    - {col}", file=out)
+			else:
+				print(f"  data_ca: {len(self.data_ca.columns)} variables", file=out)
 		elif self.data_ce is not None:
-			print(f"  data_ce:", file=out)
-			for col in self.data_ce.columns:
-				print(f"    - {col}", file=out)
+			if verbose:
+				print(f"  data_ce: {len(self.data_ce)} rows", file=out)
+				for col in self.data_ce.columns:
+					print(f"    - {col}", file=out)
+			else:
+				print(f"  data_ce: {len(self.data_ce.columns)} variables, {len(self.data_ce)} rows", file=out)
 		else:
 			print(f"  data_ca: <not populated>", file=out)
 		if self.data_co is not None:
-			print(f"  data_co:", file=out)
-			for col in self.data_co.columns:
-				print(f"    - {col}", file=out)
+			if verbose:
+				print(f"  data_co:", file=out)
+				for col in self.data_co.columns:
+					print(f"    - {col}", file=out)
+			else:
+				print(f"  data_co: {len(self.data_co.columns)} variables", file=out)
 		else:
 			print(f"  data_co: <not populated>", file=out)
 		if self.data_av is not None:
