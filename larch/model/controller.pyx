@@ -1402,11 +1402,13 @@ cdef class Model5c:
 		step_case : int, default 1
 			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
 			Python slicing and iterating.  To include all cases, step by 1 (the default).
-		return_dataframe : {'names', True, False, 'idce'}, default False
-			Format for the results.  If True, a pandas.DataFrame is returned, with case indexes and alternative
+		return_dataframe : {'names', True, False, 'idco', 'idca', 'idce'}, default False
+			Format for the results.  If True or 'idco', a pandas.DataFrame is returned, with case indexes and alternative
 			code columns.  If 'names', the alternative names are used for the columns.
 			If set to False, the results are returned as a numpy array.
-			If 'idce', the resulting dataframe is unstacked and unavailable alternatives are removed.
+			If 'idca', the resulting dataframe is stacked, such that a single column is included and
+			there is a two-level MultiIndex with caseids and alternative codes, repsectively.
+			If 'idce', the resulting dataframe is stacked and unavailable alternatives are removed.
 
 		Returns
 		-------
@@ -1429,6 +1431,8 @@ cdef class Model5c:
 				)
 				if return_dataframe == 'idce':
 					return result.stack()[self._dataframes._data_av.stack().astype(bool).values]
+				elif return_dataframe == 'idca':
+					return result.stack()
 				else:
 					return result
 			else:
