@@ -63,6 +63,19 @@ if platform.system() == 'Windows':
     extra_compile_args = ("/openmp",) # ["/openmp"],
     extra_link_args = ("/openmp",) # ['/openmp']
     libraries = []
+elif platform.system() == 'Linux':
+    include_dirs = ['.', numpy.get_include(), ]
+    library_dirs = []
+    extra_compile_args = [
+        "-fopenmp=libomp",
+    ]
+    extra_link_args = [
+        '-fopenmp=libomp',
+    ]
+    libraries = [
+        'iomp5',
+        'pthread',
+    ]
 else:
     if LARCH_COMPILER == 'gcc':
         ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
