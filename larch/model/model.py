@@ -3,7 +3,7 @@ import numpy
 import copy
 
 from .controller import Model5c as _Model5c
-from ..dataframes import DataFrames
+from ..dataframes import DataFrames, get_dataframe_format
 from ..roles import LinearFunction
 from ..general_precision import l4_float_dtype
 
@@ -73,6 +73,8 @@ class Model(_Model5c):
 		if sample_weight is not None:
 			raise NotImplementedError('sample_weight not implemented')
 
+		self._sklearn_data_format = get_dataframe_format(X)
+
 		if self._sklearn_data_format == 'idce':
 
 			if sample_weight is not None:
@@ -88,23 +90,31 @@ class Model(_Model5c):
 			else:
 				y = pandas.Series(y, index=X.index).unstack().fillna(0)
 
-			from .dataframes import _check_dataframe_of_dtype
-			if _check_dataframe_of_dtype(X, l4_float_dtype):
-				# when the dataframe is an array of the correct type,
-				# it is efficient to use it directly
-				self.dataframes = DataFrames(
-					ce = X,
-					ch = y,
-					wt = sample_weight,
-				)
-			else:
-				# when the dataframe is not an array of the correct type,
-				# it is efficient to only manipulate needed columns
-				self.dataframes = DataFrames(
-					ce = X[self.required_data().ca],
-					ch = y,
-					wt = sample_weight,
-				)
+			from ..dataframes import _check_dataframe_of_dtype
+			try:
+				if _check_dataframe_of_dtype(X, l4_float_dtype):
+					# when the dataframe is an array of the correct type,
+					# it is efficient to use it directly
+					self.dataframes = DataFrames(
+						ce = X,
+						ch = y,
+						wt = sample_weight,
+					)
+				else:
+					# when the dataframe is not an array of the correct type,
+					# it is efficient to only manipulate needed columns
+					self.dataframes = DataFrames(
+						ce = X[self.required_data().ca],
+						ch = y,
+						wt = sample_weight,
+					)
+			except KeyError:
+				# not all keys were available in natural form, try computing them
+				dfs1 = DataFrames( ce = X, )
+				dfs = dfs1.make_dataframes(self.required_data())
+				dfs.data_ch = y
+				dfs.data_wt = sample_weight
+				self.dataframes = dfs
 		else:
 			raise NotImplementedError(self._sklearn_data_format)
 
@@ -128,8 +138,25 @@ class Model(_Model5c):
 		y : array of shape = [n_cases]
 			The predicted choices.
 		"""
+		if not isinstance(X, pandas.DataFrame):
+			raise TypeError("X must be a pandas.DataFrame")
 
-		return numpy.argmax(self.predict_proba(X), axis=1)
+		if self._sklearn_data_format in ('idce', 'idca'):
+			pr = self.predict_proba(X)
+			pr = pr.unstack()
+		elif self._sklearn_data_format in ('idco',):
+			pr = self.predict_proba(X)
+		else:
+			raise NotImplementedError(self._sklearn_data_format)
+
+		result = numpy.nanargmax(pr.values, axis=1)
+
+		if self._sklearn_data_format in ('idce', 'idca'):
+			pr.values[~numpy.isnan(pr.values)] = 0
+			pr.values[numpy.arange(pr.shape[0]), result] = 1
+			result = pr.stack()
+
+		return result
 
 	def predict_proba(self, X):
 		"""Predict probability for X.
@@ -151,6 +178,14 @@ class Model(_Model5c):
 		if self._sklearn_data_format == 'idce':
 			self.dataframes = DataFrames(
 				ce = X[self.required_data().ca],
+			)
+		elif self._sklearn_data_format == 'idca':
+			self.dataframes = DataFrames(
+				ca = X[self.required_data().ca],
+			)
+		elif self._sklearn_data_format == 'idco':
+			self.dataframes = DataFrames(
+				co = X[self.required_data().co],
 			)
 		else:
 			raise NotImplementedError(self._sklearn_data_format)
@@ -369,3 +404,15 @@ class Model(_Model5c):
 			tr << self.__parameter_table_section(ordered_p[rownum][1])
 
 		return div
+
+
+	def __repr__(self):
+		s = "<larch.Model"
+		if self.is_mnl():
+			s += " (MNL)"
+		else:
+			s += " (GEV)"
+		if self.title != "Untitled":
+			s += f' "{self.title}"'
+		s += ">"
+		return s
