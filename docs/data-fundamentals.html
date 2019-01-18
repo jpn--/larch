@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Data Fundamentals &mdash; Larch 5.0.1 documentation</title>
+  <title>Data Fundamentals &mdash; Larch 5.0.5 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="_static/larch_rtfd.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Service" href="data-services.html" />
+    <link rel="next" title="DataFrames" href="data-frames.html" />
     <link rel="prev" title="Data" href="data.html" /> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                5.0.1
+                5.0.5
               </div>
             
           
@@ -94,11 +94,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#idca">idca Format</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data-services.html">Data Service</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data-pods.html">Pods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data-frames.html">DataFrames</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
 </ul>
 
@@ -394,6 +395,15 @@ alternative was or was not chosen.</p>
 </tr>
 </tbody>
 </table>
+<p>Internally, Larch uses two distinct sub-types for data in this format: a dense version
+labeled as <cite>idca</cite> and a sparse version labeled as <cite>idce</cite>.  The dense <cite>idca</cite> version
+enforces a constraint that every case must have a row for every alternative, even
+when the alternative is not available and has no meaningful data.  In this case, the
+data storage is no more space efficient than <cite>idco</cite> format, but the utility function
+can be expressed in a simpler fashion. The sparse <cite>idce</cite>
+version allows such unavailable alternative to be omitted entirely, but it must
+maintain an separate but associated lookup table to find the first alternative in
+each case efficiently.</p>
 </div></blockquote>
 <p>In the abstract, these two data formats are completely interchangable: any data that
 you can express in <cite>idco</cite> format, you can also express in <cite>idca</cite> format, and vice versa.
@@ -412,7 +422,7 @@ simultaneously, to express utility function data.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="data-services.html" class="btn btn-neutral float-right" title="Data Service" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="data-frames.html" class="btn btn-neutral float-right" title="DataFrames" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="data.html" class="btn btn-neutral" title="Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -425,7 +435,7 @@ simultaneously, to express utility function data.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 11, 2019.
+      Last updated on Jan 17, 2019.
 
     </p>
   </div>

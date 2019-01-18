@@ -6,8 +6,37 @@ from .controller import Model5c as _Model5c
 from ..dataframes import DataFrames, get_dataframe_format
 from ..roles import LinearFunction
 from ..general_precision import l4_float_dtype
+from typing import Sequence
 
 class Model(_Model5c):
+	"""A discrete choice model.
+
+	Parameters
+	----------
+	parameters : Sequence, optional
+		The names of parameters used in this model.  It is generally not
+		necessary to define parameter names at initialization, as the names
+		can (and will) be collected from the utility function and nesting
+		components later.
+	utility_ca : LinearFunction, optional
+		The utility_ca function, which represents the qualitative portion of
+		utility for attributes that vary by alternative.
+	utility_co : DictOfLinearFunction, optional
+		The utility_co function, which represents the qualitative portion of
+		utility for attributes that vary by decision maker but not by alternative.
+	quantity_ca : LinearFunction, optional
+		The quantity_ca function, which represents the quantitative portion of
+		utility for attributes that vary by alternative.
+	quantity_scale : str, optional
+		The name of the parameter used to scale the quantitative portion of
+		utility.
+	graph : NestingTree, optional
+		The nesting tree for this choice model.
+	dataservice : DataService, optional
+		An object that can act as a DataService to generate the data needed for
+		this model.
+
+	"""
 
 	@classmethod
 	def Example(cls, n=1):
@@ -55,7 +84,9 @@ class Model(_Model5c):
 		Parameters
 		----------
 		X : pandas.DataFrame
-			If given in idce format, a dataFrame with *n_casealts* rows.
+			This DataFrame can be in idca, idce, or idco formats.
+			If given in idce format, this is a DataFrame with *n_casealts* rows, and
+			a two-level MultiIndex.
 		y : array-like or str
 			The target choice values.  If given as a ``str``, use that named column of `X`.
 		sample_weight : array-like, shape = [n_cases] or [n_casealts], or None
@@ -173,20 +204,39 @@ class Model(_Model5c):
 		"""
 
 		if not isinstance(X, pandas.DataFrame):
-			raise TypeError(f'must fit on an {self._sklearn_data_format} dataframe')
+			raise TypeError(f'predict_proba requires an {self._sklearn_data_format} dataframe')
 
 		if self._sklearn_data_format == 'idce':
-			self.dataframes = DataFrames(
-				ce = X[self.required_data().ca],
-			)
+			try:
+				self.dataframes = DataFrames(
+					ce = X[self.required_data().ca],
+				)
+			except KeyError:
+				# not all keys were available in natural form, try computing them
+				dfs1 = DataFrames( ce = X, )
+				dfs = dfs1.make_dataframes({'ca':self.required_data().ca})
+				self.dataframes = dfs
+
 		elif self._sklearn_data_format == 'idca':
-			self.dataframes = DataFrames(
-				ca = X[self.required_data().ca],
-			)
+			try:
+				self.dataframes = DataFrames(
+					ca = X[self.required_data().ca],
+				)
+			except KeyError:
+				# not all keys were available in natural form, try computing them
+				dfs1 = DataFrames( ca = X, )
+				dfs = dfs1.make_dataframes({'ca':self.required_data().ca})
+				self.dataframes = dfs
 		elif self._sklearn_data_format == 'idco':
-			self.dataframes = DataFrames(
-				co = X[self.required_data().co],
-			)
+			try:
+				self.dataframes = DataFrames(
+					co = X[self.required_data().co],
+				)
+			except KeyError:
+				# not all keys were available in natural form, try computing them
+				dfs1 = DataFrames(co=X, )
+				dfs = dfs1.make_dataframes({'co': self.required_data().co})
+				self.dataframes = dfs
 		else:
 			raise NotImplementedError(self._sklearn_data_format)
 
@@ -196,7 +246,10 @@ class Model(_Model5c):
 
 	def score(self, X, y, sample_weight=None):
 		"""
-		Returns the mean log loss on the given test data and labels.
+		Returns the mean negative log loss on the given test data and labels.
+
+		Note that the log loss is defined as the negative of the log likelihood,
+		and thus the mean negative log loss is also just mean log likelihood.
 
 		Parameters
 		----------
@@ -210,7 +263,7 @@ class Model(_Model5c):
 		Returns
 		-------
 		score : float
-			Mean log loss of self.predict_proba(X) wrt. y.
+			Mean negative log loss of self.predict_proba(X) wrt. y.
 		"""
 		if isinstance(y, str):
 			y = X[y].values.reshape(-1)
@@ -230,9 +283,9 @@ class Model(_Model5c):
 		y = y[y>0]
 
 		if sample_weight is None:
-			return -numpy.sum(numpy.log(pr) * y / weight_adjust) / self.dataframes.n_cases
+			return numpy.sum(numpy.log(pr) * y / weight_adjust) / self.dataframes.n_cases
 		else:
-			return -numpy.sum(numpy.log(pr) * y * sample_weight) / numpy.sum(sample_weight)
+			return numpy.sum(numpy.log(pr) * y * sample_weight) / numpy.sum(sample_weight)
 
 
 	def __parameter_table_section(self, pname):

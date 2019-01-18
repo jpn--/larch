@@ -172,6 +172,7 @@ intersphinx_mapping = {
 	'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
 	'tables': ('http://www.pytables.org/', None),
 	'networkx': ('https://networkx.github.io/documentation/stable', None),
+	'sklearn': ('https://scikit-learn.org/stable/', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------

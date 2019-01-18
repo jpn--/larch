@@ -672,7 +672,8 @@ cdef class DataFrames:
 		return self._alternative_names
 
 	def set_alternative_names(self, names:Union[Mapping,Sequence]):
-		"""Set the alternative names.
+		"""
+		Set the alternative names.
 
 		Parameters
 		----------

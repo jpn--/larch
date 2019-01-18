@@ -42,13 +42,12 @@ You may also find these links useful:
 * `Python <http://www.python.org/>`_ 3.7: http://docs.python.org/3.7/index.html
 * `NumPy <http://www.numpy.org>`__: http://docs.scipy.org/doc/numpy/
 * `SciPy <http://www.scipy.org>`__: http://docs.scipy.org/doc/scipy/reference/
-* `SQLite <http://www.sqlite.org/>`_: http://www.sqlite.org/docs.html
-* `APSW <https://github.com/rogerbinns/apsw>`_: http://rogerbinns.github.io/apsw/
+* `scikit-learn <https://scikit-learn.org>`__: https://scikit-learn.org/stable/documentation.html
 
 For learning Python itself:
 
 * If you are new to Python but have some experience with some other programming language,
-  I recommend `Dive Into Python <http://www.diveintopython3.net>`__.
+  I recommend `Dive Into Python <https://www.diveinto.org/python3/>`__.
 * If you are new to programming in general, there are better (slower) guides at
   `Learning Python <http://docs.python-guide.org/en/latest/intro/learning/>`__
 
@@ -62,7 +61,9 @@ Contents
 
     getting-started
     data
+    model
     math
+    machine_learning
     example/examples
 
 

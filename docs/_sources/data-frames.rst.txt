@@ -13,22 +13,24 @@ which represent :ref:`idco` and :ref:`idca` data features.
 
     .. automethod:: alternative_names
 
-    .. automethod:: set_alternative_names(names)
+    .. automethod:: set_alternative_names
 
-    Attributes
-    ----------
+    **Attributes**
 
     .. autoattribute:: data_co
 
     .. autoattribute:: data_ca
 
-    Read-only Attributes
-    --------------------
+    **Read-only Attributes**
 
     .. autoattribute:: n_alts
 
     .. autoattribute:: n_cases
 
     .. autoattribute:: caseindex
+
+
+.. |idca| replace:: :ref:`idca <idca>`
+.. |idco| replace:: :ref:`idco <idco>`
 
 

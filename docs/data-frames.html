@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DataFrames &mdash; Larch 5.0.1 documentation</title>
+  <title>DataFrames &mdash; Larch 5.0.5 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="_static/larch_rtfd.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Mathematics of Logit Choice Modeling" href="math.html" />
+    <link rel="next" title="DataService" href="dataservice.html" />
     <link rel="prev" title="Data Fundamentals" href="data-fundamentals.html" /> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                5.0.1
+                5.0.5
               </div>
             
           
@@ -91,9 +91,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="data.html">Data</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="data-fundamentals.html">Data Fundamentals</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">DataFrames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataservice.html">DataService</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
 </ul>
 
@@ -191,7 +194,7 @@
 which represent <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> and <a class="reference internal" href="data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data features.</p>
 <dl class="class">
 <dt id="larch.DataFrames">
-<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataFrames</code><a class="headerlink" href="#larch.DataFrames" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataFrames</code><span class="sig-paren">(</span><em>co=None</em>, <em>*args</em>, <em>ca=None</em>, <em>ce=None</em>, <em>av=None</em>, <em>ch=None</em>, <em>wt=None</em>, <em>data_co=None</em>, <em>data_ca=None</em>, <em>data_ce=None</em>, <em>data_av=None</em>, <em>data_ch=None</em>, <em>data_wt=None</em>, <em>alt_names=None</em>, <em>alt_codes=None</em>, <em>crack=False</em>, <em>av_name=None</em>, <em>ch_name=None</em>, <em>wt_name=None</em>, <em>av_as_ce=None</em>, <em>ch_as_ce=None</em>, <em>sys_alts=None</em>, <em>computational=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames" title="Permalink to this definition">¶</a></dt>
 <dd><p>A structured class to hold multi-format discrete choice data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -210,19 +213,19 @@ containing the caseid’s and the second level containing the altid’s.</li>
 </table>
 <dl class="method">
 <dt id="larch.DataFrames.alternative_codes">
-<code class="descname">alternative_codes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.alternative_codes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">alternative_codes</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.alternative_codes" title="Permalink to this definition">¶</a></dt>
 <dd><p>The alternative codes.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="larch.DataFrames.alternative_names">
-<code class="descname">alternative_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.alternative_names" title="Permalink to this definition">¶</a></dt>
+<code class="descname">alternative_names</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.alternative_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>The alternative names.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="larch.DataFrames.set_alternative_names">
-<code class="descname">set_alternative_names</code><span class="sig-paren">(</span><em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.set_alternative_names" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_alternative_names</code><span class="sig-paren">(</span><em>self, names: Union[Mapping, Sequence]</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.set_alternative_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the alternative names.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,11 +242,12 @@ that appear in <cite>alternative_codes</cite>.</td>
 </table>
 </dd></dl>
 
+<p><strong>Attributes</strong></p>
 <dl class="attribute">
 <dt id="larch.DataFrames.data_co">
 <code class="descname">data_co</code><a class="headerlink" href="#larch.DataFrames.data_co" title="Permalink to this definition">¶</a></dt>
-<dd><p>A pandas.DataFrame in idco format.</p>
-<p>This DataFrame should have a simple pandas.Index as the index, where
+<dd><p>A pandas.DataFrame in <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco</span></a> format.</p>
+<p>This DataFrame should have a simple <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Index.html#pandas.Index" title="(in pandas v0.23.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Index</span></code></a> as the index, where
 the index values are is the caseids.</p>
 </dd></dl>
 
@@ -256,6 +260,7 @@ the first level is the caseids and the second level is the
 alternative codes.</p>
 </dd></dl>
 
+<p><strong>Read-only Attributes</strong></p>
 <dl class="attribute">
 <dt id="larch.DataFrames.n_alts">
 <code class="descname">n_alts</code><a class="headerlink" href="#larch.DataFrames.n_alts" title="Permalink to this definition">¶</a></dt>
@@ -286,7 +291,7 @@ alternative codes.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="math.html" class="btn btn-neutral float-right" title="Mathematics of Logit Choice Modeling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dataservice.html" class="btn btn-neutral float-right" title="DataService" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="data-fundamentals.html" class="btn btn-neutral" title="Data Fundamentals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -299,7 +304,7 @@ alternative codes.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 11, 2019.
+      Last updated on Jan 18, 2019.
 
     </p>
   </div>

@@ -65,7 +65,15 @@ idca Format
 		4      3          3              50,000 10   250  1
 		====== ========== ============== ====== ==== ==== ======
 
-
+	Internally, Larch uses two distinct sub-types for data in this format: a dense version
+	labeled as `idca` and a sparse version labeled as `idce`.  The dense `idca` version
+	enforces a constraint that every case must have a row for every alternative, even
+	when the alternative is not available and has no meaningful data.  In this case, the
+	data storage is no more space efficient than `idco` format, but the utility function
+	can be expressed in a simpler fashion. The sparse `idce`
+	version allows such unavailable alternative to be omitted entirely, but it must
+	maintain an separate but associated lookup table to find the first alternative in
+	each case efficiently.
 
 
 In the abstract, these two data formats are completely interchangable: any data that
