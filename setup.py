@@ -67,10 +67,10 @@ elif platform.system() == 'Linux':
     include_dirs = ['.', numpy.get_include(), ]
     library_dirs = []
     extra_compile_args = [
-        "-fopenmp=libomp",
+        "-fopenmp",
     ]
     extra_link_args = [
-        '-fopenmp=libomp',
+        "-fopenmp",
     ]
     libraries = [
         'iomp5',
