@@ -489,6 +489,10 @@ cdef class Model5c:
 
 	@property
 	def utility_ca(self):
+		"""
+		A LinearFunction that represents the qualitative portion of
+		utility for attributes that vary by alternative.
+		"""
 		if self._is_clone:
 			return self._utility_ca_function
 		return LinearFunction(touch_callback=self.mangle) + self._utility_ca_function
@@ -517,6 +521,10 @@ cdef class Model5c:
 
 	@property
 	def utility_co(self):
+		"""
+		A DictOfLinearFunction that represents the qualitative portion of
+		utility for attributes that vary by decision maker but not by alternative.
+		"""
 		return self._utility_co_functions
 
 	@utility_co.setter
@@ -536,6 +544,10 @@ cdef class Model5c:
 
 	@property
 	def quantity_ca(self):
+		"""
+		A LinearFunction that represents the quantitative portion of
+		utility for attributes that vary by alternative.
+		"""
 		if self._is_clone:
 			return self._quantity_ca_function
 		return LinearFunction(touch_callback=self.mangle) + self._quantity_ca_function

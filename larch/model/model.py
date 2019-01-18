@@ -95,7 +95,7 @@ class Model(_Model5c):
 
 		Returns
 		-------
-		self : object
+		self : Model
 		"""
 
 		if not isinstance(X, pandas.DataFrame):
@@ -157,12 +157,12 @@ class Model(_Model5c):
 		"""Predict choices for X.
 
 		This method returns the index of the maximum probability choice, not the probability.
-		To recover the probability, see :ref:`predict_proba`.
+		To recover the probability, which is probably what you want (pun intended), see
+		:meth:`predict_proba`.
 
 		Parameters
 		----------
 		X : pandas.DataFrame
-			In idce format
 
 		Returns
 		-------
@@ -195,7 +195,6 @@ class Model(_Model5c):
 		Parameters
 		----------
 		X : pandas.DataFrame
-			In idce format
 
 		Returns
 		-------

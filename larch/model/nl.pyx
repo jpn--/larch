@@ -15,6 +15,7 @@ from ..dataframes cimport DataFrames
 from .tree_struct cimport TreeStructure
 from .controller cimport Model5c
 from .mnl cimport _mnl_log_likelihood_from_probability_stride
+from .persist_flags cimport *
 
 import numpy
 import pandas
@@ -369,7 +370,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		int         start_case=0,
 		int         stop_case=-1,
 		int         step_case=1,
-		bint        persist=False,
+		int         persist=0,
 		int         leave_out=-1,
 		int         keep_only=-1,
 		int         subsample= 1,
@@ -402,10 +403,20 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		TreeStructure   tree
 		l4_float_t[:,:,:] bhhh_total # thread-local
 		int             thread_number = 0
-		int             storage_size
-		int             store_number
+		int             storage_size_U
+		int             store_number_U
+		int             storage_size_CP
+		int             store_number_CP
+		int             storage_size_P
+		int             store_number_P
+		int             storage_size_LLc
+		int             store_number_LLc
+		int             storage_size_dLLc
+		int             store_number_dLLc
+		int             storage_size_dU
+		int             store_number_dU
 
-	if not dfs.is_computational_ready(activate=True):
+	if not dfs._is_computational_ready(activate=True):
 		raise ValueError('DataFrames is not computational-ready')
 
 	if dfs._data_ch is None and not probability_only:
@@ -425,28 +436,30 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 			# must compute dll to get bhhh
 			return_dll = True
 
-		if persist:
-			storage_size = n_cases
-		else:
-			storage_size = num_threads
+		storage_size_U    = n_cases if persist & PERSIST_UTILITY            else num_threads
+		storage_size_CP   = n_cases if persist & PERSIST_COND_LOG_PROB      else num_threads
+		storage_size_P    = n_cases if persist & PERSIST_PROBABILITY        else num_threads
+		storage_size_LLc  = n_cases if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
+		storage_size_dLLc = n_cases if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
+		storage_size_dU   = n_cases if persist & PERSIST_D_UTILITY          else num_threads
 
 		tree = TreeStructure(model, model._graph)
 		_check_for_zero_mu(n_alts, tree.n_nodes, tree.model_mu_param_values)
 
 		scratch             = numpy.zeros([num_threads,n_params], dtype=l4_float_dtype)
 
-		raw_utility         = numpy.zeros([storage_size, tree.n_nodes], dtype=l4_float_dtype)
-		cond_logprobability = numpy.zeros([storage_size, tree.n_edges], dtype=l4_float_dtype)
-		total_probability   = numpy.zeros([storage_size, tree.n_nodes], dtype=l4_float_dtype)
+		raw_utility         = numpy.zeros([storage_size_U, tree.n_nodes], dtype=l4_float_dtype)
+		cond_logprobability = numpy.zeros([storage_size_CP, tree.n_edges], dtype=l4_float_dtype)
+		total_probability   = numpy.zeros([storage_size_P, tree.n_nodes], dtype=l4_float_dtype)
 
 		array_ch_wide = numpy.zeros([num_threads, tree.n_nodes], dtype=l4_float_dtype)
 
-		LL_case =  numpy.zeros([storage_size, ], dtype=l4_float_dtype)
+		LL_case =  numpy.zeros([storage_size_LLc, ], dtype=l4_float_dtype)
 
 		if return_dll:
 			dU = numpy.zeros([num_threads, tree.n_nodes, n_params], dtype=l4_float_dtype)
 			dP = numpy.zeros([num_threads, tree.n_nodes, n_params], dtype=l4_float_dtype)
-			dLL_case  = numpy.zeros([storage_size, n_params], dtype=l4_float_dtype)
+			dLL_case  = numpy.zeros([storage_size_dLLc, n_params], dtype=l4_float_dtype)
 			dLL_total = numpy.zeros([num_threads, n_params], dtype=l4_float_dtype)
 			dLL_temp  = numpy.zeros([num_threads, n_params], dtype=l4_float_dtype)
 		if return_bhhh:
@@ -463,20 +476,22 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 				if keep_only >= 0 and c % subsample != keep_only:
 					continue
 
-				if persist:
-					store_number = c
-				else:
-					store_number = thread_number
+				store_number_U    = c if persist & PERSIST_UTILITY            else thread_number
+				store_number_CP   = c if persist & PERSIST_COND_LOG_PROB      else thread_number
+				store_number_P    = c if persist & PERSIST_PROBABILITY        else thread_number
+				store_number_LLc  = c if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
+				store_number_dLLc = c if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
+				store_number_dU   = c if persist & PERSIST_D_UTILITY          else thread_number
 
 				if return_dll:
-					dfs._compute_d_utility_onecase(c,raw_utility[store_number,:],dU[thread_number],n_alts)
+					dfs._compute_d_utility_onecase(c,raw_utility[store_number_U,:],dU[thread_number],n_alts)
 				else:
-					dfs._compute_utility_onecase(c,raw_utility[store_number,:],n_alts)
+					dfs._compute_utility_onecase(c,raw_utility[store_number_U,:],n_alts)
 
 				_nl_utility_upstream_v2(
 					tree.n_elementals,
 					tree.n_nodes,
-					raw_utility[store_number,:], # in-out [n_nodes]
+					raw_utility[store_number_U,:], # in-out [n_nodes]
 					tree.model_mu_param_values,  # input  [n_nodes]  elemental alternatives are ignored
 					tree.edge_alpha_values,      # input  [n_edges]
 					tree.edge_logalpha_values,   # input  [n_edges]
@@ -487,9 +502,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 
 				_nl_conditional_logprobability_from_utility(
 						tree.n_edges,
-						&raw_utility[store_number,0],          # input  [n_nodes]
+						&raw_utility[store_number_U,0],          # input  [n_nodes]
 						&tree.model_mu_param_values[0],        # input  [n_nodes]
-						&cond_logprobability[store_number,0],  # output [n_edges]
+						&cond_logprobability[store_number_CP,0],  # output [n_edges]
 						&tree.edge_up[0],                      # input  [n_edges]
 						&tree.edge_dn[0],                      # input  [n_edges]
 						&tree.edge_alpha_values[0],            # input  [n_edges]
@@ -499,8 +514,8 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 				_nl_total_probability_from_conditional_logprobability(
 						tree.n_nodes,
 						tree.n_edges,
-						&total_probability[store_number,0],    # output [n_nodes]
-						&cond_logprobability[store_number,0],  # input  [n_edges]
+						&total_probability[store_number_P,0],    # output [n_nodes]
+						&cond_logprobability[store_number_CP,0],  # input  [n_edges]
 						&tree.edge_up[0],                      # input  [n_edges]
 						&tree.edge_dn[0],                      # input  [n_edges]
 				)
@@ -515,22 +530,22 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 
 				ll_temp = _mnl_log_likelihood_from_probability_stride(
 					n_alts,
-					total_probability[store_number,:],        # input [n_alts]
+					total_probability[store_number_P,:],        # input [n_alts]
 					dfs._array_ch[c,:],                       # input [n_alts]
 				) * weight
-				LL_case[store_number] += ll_temp
+				LL_case[store_number_LLc] += ll_temp
 				ll += ll_temp
 
 				if return_dll:
 					_nl_d_utility_upstream_v2(
 						tree.n_elementals,
 						tree.n_nodes,
-						raw_utility[store_number,:],          # input [n_nodes]
+						raw_utility[store_number_U,:],          # input [n_nodes]
 						tree.model_mu_param_values,           # input [n_nodes]  elemental alternatives are ignored
 						tree.model_mu_param_slots,
 						tree.edge_alpha_values,               # input [n_nodes,n_nodes]
 						tree.edge_logalpha_values,            # input [n_nodes,n_nodes]
-						cond_logprobability[store_number,:],  # input [n_edges]
+						cond_logprobability[store_number_CP,:],  # input [n_edges]
 						tree.n_edges,
 						n_params,
 						dU[thread_number],                    # input/output  [n_nodes, n_params]
@@ -543,12 +558,12 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 					_nl_d_probability_from_d_utility(
 						tree.n_edges,                         # input   int
 						n_params,                             # input   int
-						raw_utility[store_number,:],          # input  [n_nodes]
+						raw_utility[store_number_U,:],          # input  [n_nodes]
 						dU[thread_number],                    # input  [n_nodes, n_params]
 						tree.model_mu_param_values,           # input  [n_nodes]
 						scratch[thread_number],               # temp   [n_params]
-						cond_logprobability[store_number,:],  # input  [n_edges]
-						total_probability[store_number,:],    # input  [n_nodes]
+						cond_logprobability[store_number_CP,:],  # input  [n_edges]
+						total_probability[store_number_P,:],    # input  [n_nodes]
 						dP[thread_number],                    # output [n_nodes, n_params]
 						tree.edge_up,                         # input  [n_edges]
 						tree.edge_dn,                         # input  [n_edges]
@@ -562,9 +577,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 						_nl_d_loglike_from_d_probability(
 							n_params,                           # input   int
 							n_alts,                             # input   int
-							total_probability[store_number,:],  # input  [n_nodes]
+							total_probability[store_number_P,:],  # input  [n_nodes]
 							dP[thread_number],                  # input  [n_nodes, n_params]
-							dLL_case[store_number,:],           # output [n_params]
+							dLL_case[store_number_dLLc,:],           # output [n_params]
 							dfs._array_ch[c,:],                 # input  [n_nodes]
 							weight,
 
@@ -596,11 +611,15 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		if return_bhhh:
 			result.bhhh = bhhh
 
-		if persist:
+		if persist & PERSIST_LOGLIKE_CASEWISE:
 			result.ll_casewise = LL_case.base
+		if persist & PERSIST_UTILITY:
 			result.utility = raw_utility.base
+		if persist & PERSIST_COND_LOG_PROB:
 			result.conditional_log_prob = cond_logprobability.base
+		if persist & PERSIST_PROBABILITY:
 			result.probability   = total_probability.base
+		if persist & PERSIST_D_LOGLIKE_CASEWISE:
 			if return_dll:
 				for v in range(dLL_case.shape[0]):
 					for v2 in range(dLL_case.shape[1]):
