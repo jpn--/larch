@@ -16,11 +16,11 @@
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
     :class: statusbadge
 
-.. image:: https://img.shields.io/appveyor/ci/jpn--/larch.svg?label=windows
+.. image:: https://img.shields.io/appveyor/ci/jpn--/larch.svg?label=windows%20build
     :target: https://ci.appveyor.com/project/jpn--/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/travis/jpn--/larch.svg?label=linux
+.. image:: https://img.shields.io/travis/jpn--/larch.svg?label=linux%20build
     :target: https://travis-ci.org/jpn--/larch
     :class: statusbadge
 
