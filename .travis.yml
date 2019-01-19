@@ -28,4 +28,12 @@ install:
   - conda install larch --use-local
 
 script:
-  - pytest --pyargs larch
+  - mkdir ~/conda-bld
+  - conda config --set anaconda_upload no
+  - export CONDA_BLD_PATH=~/conda-bld
+  - conda build conda-recipe
+
+after_success:
+  - bash conda-recipe/conda_upload.sh
+
+
