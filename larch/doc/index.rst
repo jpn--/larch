@@ -16,6 +16,13 @@
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
     :class: statusbadge
 
+.. image:: https://img.shields.io/appveyor/ci/jpn--/larch.svg?label=windows
+    :target: https://ci.appveyor.com/project/jpn--/larch
+    :class: statusbadge
+
+.. image:: https://img.shields.io/travis/jpn--/larch.svg?label=linux
+    :target: https://travis-ci.org/jpn--/larch
+    :class: statusbadge
 
 .. |treelogo| image:: ../../img/larch_favicon.png
     :height: 0.9em
