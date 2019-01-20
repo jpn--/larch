@@ -27,10 +27,10 @@ atexit.register(TemporaryBucketCleanUp)
 def _open_in_chrome_or_something(url):
 	# MacOS
 	if os.path.exists('/Applications/Google Chrome.app'):
-		chrome_path = 'open -a /Applications/Google\ Chrome.app %s'
+		chrome_path = r'open -a /Applications/Google\ Chrome.app %s'
 	# Windows
-	elif os.path.exists('C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'):
-		chrome_path = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe %s'
+	elif os.path.exists(r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'):
+		chrome_path = r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe %s'
 	# Linux
 	elif os.path.exists('/usr/bin/google-chrome'):
 		chrome_path = '/usr/bin/google-chrome %s'

@@ -3,6 +3,7 @@
 include "../general_precision.pxi"
 from ..general_precision import l4_float_dtype
 from ..general_precision cimport l4_float_t
+from .persist_flags cimport *
 
 import numpy
 import pandas
@@ -801,6 +802,58 @@ cdef class Model5c:
 		if autoscale_weights and self.dataframes.data_wt is not None:
 			self.dataframes.autoscale_weights()
 
+	def __d_log_likelihood_from_dataframes_all_rows(
+			self,
+			bint        return_dll=True,
+			bint        return_bhhh=False,
+			int         start_case=0,
+			int         stop_case=-1,
+			int         step_case=1,
+			int         persist=0,
+			int         leave_out=-1,
+			int         keep_only=-1,
+			int         subsample= 1,
+			bint        probability_only=False,
+	):
+		if self.is_mnl() and not (persist & PERSIST_D_PROBABILITY):
+			from .mnl import mnl_d_log_likelihood_from_dataframes_all_rows
+			y = mnl_d_log_likelihood_from_dataframes_all_rows(
+				self._dataframes,
+				num_threads=self.n_threads,
+				return_dll=return_dll,
+				return_bhhh=return_bhhh,
+				start_case=start_case,
+				stop_case=stop_case,
+				step_case=step_case,
+				persist=persist,
+				leave_out=leave_out,
+				keep_only=keep_only,
+				subsample=subsample,
+				probability_only=probability_only,
+			)
+		else:
+			if self.graph is None:
+				if persist & PERSIST_D_PROBABILITY:
+					raise ValueError('must have a graph to use PERSIST_D_PROBABILITY')
+				else:
+					raise ValueError('no graph defined for NL computations')
+			from .nl import nl_d_log_likelihood_from_dataframes_all_rows
+			y = nl_d_log_likelihood_from_dataframes_all_rows(
+				self._dataframes,
+				self,
+				return_dll=return_dll,
+				return_bhhh=return_bhhh,
+				start_case=start_case,
+				stop_case=stop_case,
+				step_case=step_case,
+				persist=persist,
+				leave_out=leave_out,
+				keep_only=keep_only,
+				subsample=subsample,
+				probability_only=probability_only,
+			)
+		return y
+
 	def loglike2(self, x=None, *, start_case=0, stop_case=-1, step_case=1, persist=0, leave_out=-1, keep_only=-1, subsample=-1, return_series=True):
 		"""
 		Compute a log likelihood value and it first derivative.
@@ -837,36 +890,17 @@ cdef class Model5c:
 
 		"""
 		self.__prepare_for_compute(x)
-		if self.is_mnl():
-			from .mnl import mnl_d_log_likelihood_from_dataframes_all_rows
-			y = mnl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				num_threads=self.n_threads,
-				return_dll=True,
-				return_bhhh=False,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-			)
-		else:
-			from .nl import nl_d_log_likelihood_from_dataframes_all_rows
-			y = nl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				self,
-				return_dll=True,
-				return_bhhh=False,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-			)
+		y = self.__d_log_likelihood_from_dataframes_all_rows(
+			return_dll=True,
+			return_bhhh=False,
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+			persist=persist,
+			leave_out=leave_out,
+			keep_only=keep_only,
+			subsample=subsample,
+		)
 		if start_case==0 and stop_case==-1:
 			self.__check_if_best(y.ll)
 		# if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
@@ -930,36 +964,17 @@ cdef class Model5c:
 
 		"""
 		self.__prepare_for_compute(x)
-		if self.is_mnl():
-			from .mnl import mnl_d_log_likelihood_from_dataframes_all_rows
-			y = mnl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				num_threads=self.n_threads,
-				return_dll=True,
-				return_bhhh=True,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-			)
-		else:
-			from .nl import nl_d_log_likelihood_from_dataframes_all_rows
-			y = nl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				self,
-				return_dll=True,
-				return_bhhh=True,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-			)
+		y = self.__d_log_likelihood_from_dataframes_all_rows(
+			return_dll=True,
+			return_bhhh=True,
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+			persist=persist,
+			leave_out=leave_out,
+			keep_only=keep_only,
+			subsample=subsample,
+		)
 		if start_case==0 and stop_case==-1:
 			self.__check_if_best(y.ll)
 		if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
@@ -1234,38 +1249,18 @@ cdef class Model5c:
 
 		"""
 		self.__prepare_for_compute(x, allow_missing_ch=probability_only)
-		if self.is_mnl():
-			from .mnl import mnl_d_log_likelihood_from_dataframes_all_rows
-			y = mnl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				num_threads=self.n_threads,
-				return_dll=False,
-				return_bhhh=False,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-				probability_only=probability_only,
-			)
-		else:
-			from .nl import nl_d_log_likelihood_from_dataframes_all_rows
-			y = nl_d_log_likelihood_from_dataframes_all_rows(
-				self._dataframes,
-				self,
-				return_dll=False,
-				return_bhhh=False,
-				start_case=start_case,
-				stop_case=stop_case,
-				step_case=step_case,
-				persist=persist,
-				leave_out=leave_out,
-				keep_only=keep_only,
-				subsample=subsample,
-				probability_only=probability_only,
-			)
+		y = self.__d_log_likelihood_from_dataframes_all_rows(
+			return_dll=False,
+			return_bhhh=False,
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+			persist=persist,
+			leave_out=leave_out,
+			keep_only=keep_only,
+			subsample=subsample,
+			probability_only=probability_only,
+		)
 		if start_case==0 and stop_case==-1 and step_case==1:
 			self.__check_if_best(y.ll)
 		if probability_only:

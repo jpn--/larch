@@ -1142,7 +1142,7 @@ def test_weighted_nl_bhhh():
 	assert dict(ll2.bhhh.unstack()) == approx(bhhh_correct)
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
-	dll_casewise_B = dll_casewise_A / j2.data_wt.values
+	dll_casewise_B = numpy.asarray(dll_casewise_A) / j2.data_wt.values
 
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
@@ -1500,9 +1500,9 @@ def test_weighted_nl2_bhhh():
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = numpy.asarray(dll_casewise_A) / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = numpy.asarray(dll_casewise_A)
 
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),
@@ -1512,7 +1512,7 @@ def test_weighted_nl2_bhhh():
 
 	assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
 
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert numpy.asarray(ll2.dll) == approx(numpy.asarray(ll2.dll_casewise.sum(0)))
 
 
 def test_weighted_qnl_bhhh():
@@ -1943,7 +1943,7 @@ def test_weighted_qnl_bhhh():
 	) * j2.weight_normalization
 	assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
 
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert numpy.asarray(ll2.dll) == approx(numpy.asarray(ll2.dll_casewise.sum(0)))
 
 
 
@@ -3718,13 +3718,13 @@ def test_dataframes_nl_holdfasts():
 
 	assert d_ll2_bhhh == approx(bhhh_correct)
 	assert d_ll1_bhhh == approx( d_ll2_bhhh )
-	assert ll2.dll.values == approx(ll2.dll_casewise.sum(0))
+	assert numpy.asarray(ll2.dll) == approx(numpy.asarray(ll2.dll_casewise.sum(0)))
 
 	dll_casewise_A = ll2.dll_casewise / j2.weight_normalization
 	if j2.data_wt is not None:
-		dll_casewise_B = dll_casewise_A / j2.data_wt.values
+		dll_casewise_B = numpy.asarray(dll_casewise_A) / j2.data_wt.values
 	else:
-		dll_casewise_B = dll_casewise_A
+		dll_casewise_B = numpy.asarray(dll_casewise_A)
 
 	corrected_bhhh = pandas.DataFrame(
 		numpy.dot(dll_casewise_A.T, dll_casewise_B),

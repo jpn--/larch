@@ -634,7 +634,10 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 				for v in range(dLL_case.shape[0]):
 					for v2 in range(dLL_case.shape[1]):
 						dLL_case[v,v2] *= dfs._weight_normalization
-				result.dll_casewise=dLL_case.base
+				result.dll_casewise=pandas.DataFrame(
+					dLL_case.base,
+					columns=dfs._model_param_names,
+				)
 
 		return result
 
