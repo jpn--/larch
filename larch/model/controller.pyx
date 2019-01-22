@@ -1423,7 +1423,7 @@ cdef class Model5c:
 
 		"""
 		try:
-			arr = self.loglike(x=x, persist=True, start_case=start_case, stop_case=stop_case, step_case=step_case, probability_only=True)
+			arr = self.loglike(x=x, persist=PERSIST_PROBABILITY, start_case=start_case, stop_case=stop_case, step_case=step_case, probability_only=True)
 			if return_dataframe == 'names':
 				return pandas.DataFrame(
 					data=arr,
