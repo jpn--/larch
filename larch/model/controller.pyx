@@ -1579,7 +1579,7 @@ cdef class Model5c:
 	@availability_var.setter
 	def availability_var(self, x):
 		#self.mangle()
-		self._availability_var = x
+		self._availability_var = str(x)
 
 	@property
 	def availability_co_vars(self):
