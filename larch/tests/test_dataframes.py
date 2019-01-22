@@ -2,6 +2,10 @@ import pandas
 import os
 import gzip
 import io
+import numpy
+from pytest import approx
+
+from ..data_warehouse import example_file
 
 from .. import DataFrames
 
@@ -55,3 +59,20 @@ def test_dfs_info():
 		'  data_co: <not populated>\n'
 		'  data_av: <populated>\n')
 
+def test_service_idco():
+
+	df = pandas.read_csv(example_file("MTCwork.csv.gz"))
+	df.set_index(['casenum', 'altnum'], inplace=True)
+
+	dfs = DataFrames(df, crack=True)
+	check1 = dfs.make_idco('1')
+	assert (check1 == 1).shape == (5029, 1)
+	assert numpy.all(check1 == 1)
+
+	check2 = dfs.make_idco('age')
+	assert check2.shape == (5029, 1)
+	assert numpy.all(check2.head(5) == [35, 40, 28, 34, 43])
+	assert numpy.all(check2.tail(5) == [58, 33, 34, 35, 37])
+
+	check3 = dfs.make_idco('age', '1')
+	assert check3.shape == (5029, 2)

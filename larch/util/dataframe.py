@@ -95,6 +95,11 @@ def columnize(df, name, inplace=True, dtype=None):
 		datanames = [str(_) for _ in name]
 
 	if datanames is not None:
+		if len(datanames) == 0:
+			if inplace:
+				return
+			else:
+				return pandas.DataFrame(index=df.index)
 		df1 = pandas.concat([
 			columnize(df, _, False, dtype)
 			for _ in datanames
@@ -127,6 +132,7 @@ def columnize(df, name, inplace=True, dtype=None):
 		name_encode = str(name).encode('utf-8')
 	reader = BytesIO(name_encode)
 	g = tokenize(reader.readline)
+	from_df = False
 	for toknum, tokval, _, _, _ in g:
 		if toknum == NAME:
 			pass
@@ -136,6 +142,7 @@ def columnize(df, name, inplace=True, dtype=None):
 					(NAME, 'df'),
 					OBRAC, (STRING, f"'{tokval}'"), CBRAC,
 				]
+				from_df = True
 				recommand.extend(partial)
 			# break
 			else:
@@ -145,6 +152,9 @@ def columnize(df, name, inplace=True, dtype=None):
 				recommand.append((toknum, tokval))
 		else:
 			recommand.append((toknum, tokval))
+	if not from_df and not inplace:
+		recommand = [(NAME, 'pandas'), DOT, (NAME, 'Series')] + recommand \
+					+ [COMMA, (NAME, 'index'), EQUAL, (NAME, 'df'), DOT, (NAME, 'index')]
 	recommand += [CPAR,]
 	if dtype is not None:
 		dtype_ = str(numpy.dtype(dtype))
@@ -170,7 +180,10 @@ def columnize(df, name, inplace=True, dtype=None):
 			_result = exec(j)
 		else:
 			_result = eval(j)
-			_result.name = name
+			try:
+				_result.name = name
+			except AttributeError:
+				pass
 	except Exception as exc:
 		args = exc.args
 		if not args:
