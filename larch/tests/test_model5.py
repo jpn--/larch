@@ -4,6 +4,7 @@ from pytest import approx
 import numpy
 import pandas
 from ..model import *
+from ..roles import P, X, PX
 
 def test_dataframes_mnl5():
 	d = MTC()
@@ -4072,4 +4073,31 @@ def test_dataframes_nl_holdfasts():
 
 	for k in bhhh_correct:
 		assert bhhh_compute_3[k] == approx(bhhh_correct_3[k]), f"{k}: {bhhh_compute_3[k]} != {approx(bhhh_correct_3[k])}"
+
+def test_probability():
+	d = MTC()
+	m = Model(dataservice=d)
+
+	m.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+	m.utility_ca = PX("tottime") + PX("totcost")
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	m.load_data()
+
+	pr = m.probability()
+
+	pr3_correct = numpy.asarray([
+		[0.2, 0.2, 0.2, 0.2, 0.2, 0.],
+		[0.2, 0.2, 0.2, 0.2, 0.2, 0.],
+		[0.25, 0.25, 0.25, 0.25, 0., 0.],
+	])
+
+	assert pr[:3] == approx(pr3_correct)
+
+
 
