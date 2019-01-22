@@ -21,6 +21,9 @@ from .model.controller cimport Model5c
 from numpy.math cimport expf, logf
 from libc.math cimport exp, log
 
+from .util.dataframe import columnize
+
+
 cdef float INFINITY32 = numpy.float('inf')
 
 class MissingDataError(Exception):
@@ -85,7 +88,7 @@ def _ensure_dataframe_of_dtype_c_contiguous(df, dtype, label):
 
 def _ensure_no_duplicate_column_names(df):
 	cols, counts = numpy.unique(df.columns, return_counts=True)
-	if counts.max()>1:
+	if len(cols)>0 and counts.max()>1:
 		dupes = str(cols[numpy.where(counts>1)])
 		raise DuplicateColumnNames(dupes)
 
@@ -1905,6 +1908,67 @@ cdef class DataFrames:
 			logger.exception('error in DataFrames.split')
 			raise
 
+	def make_idca(self, *columns, selector=None, float_dtype=numpy.float64):
+		"""Extract a set of idca values into a new dataframe.
+
+		Parameters
+		----------
+		columns : tuple of str
+			A tuple (or other iterable) giving the expressions to extract
+			as :ref:`idco` format variables.
+		selector : None or slice
+			If given, use this to slice the caseids used to build
+			the array.
+		float_dtype : dtype, default float64
+			The dtype to use for all float-type arrays.
+			This argument can only be given
+			as a keyword argument.
+
+		Other Parameters
+		----------------
+		dtype : str or dtype
+			Describe the data type you would like the output array to adopt, probably
+			numpy.int64, numpy.float64, or numpy.bool.
+
+		Returns
+		-------
+		data : pandas.DataFrame
+			A DataFrame with data of specified dtype
+		"""
+		if selector is not None:
+			raise NotImplementedError
+		return columnize(self._data_ca_or_ce, list(columns), inplace=False, dtype=float_dtype)
+
+	def make_idco(self, *columns, selector=None, float_dtype=numpy.float64):
+		"""Extract a set of idco values into a new dataframe.
+
+		Parameters
+		----------
+		columns : tuple of str
+			A tuple (or other iterable) giving the expressions to extract
+			as :ref:`idco` format variables.
+		selector : None or slice
+			If given, use this to slice the caseids used to build
+			the array.
+		float_dtype : dtype, default float64
+			The dtype to use for all float-type arrays.
+			This argument can only be given
+			as a keyword argument.
+
+		Other Parameters
+		----------------
+		dtype : str or dtype
+			Describe the data type you would like the output array to adopt, probably
+			numpy.int64, numpy.float64, or numpy.bool.
+
+		Returns
+		-------
+		data : pandas.DataFrame
+			A DataFrame with data of specified dtype
+		"""
+		if selector is not None:
+			raise NotImplementedError
+		return columnize(self._data_co, list(columns), inplace=False, dtype=float_dtype)
 
 	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64):
 		"""Create a DataFrames object that will satisfy a data request.
@@ -1941,7 +2005,6 @@ cdef class DataFrames:
 			req_data = Dict.load(textwrap.dedent(req_data))
 
 		if 'ca' in req_data:
-			from .util.dataframe import columnize
 			df_ca = columnize(self._data_ca_or_ce, list(req_data['ca']), inplace=False, dtype=float_dtype)
 		else:
 			df_ca = None
@@ -1994,6 +2057,8 @@ cdef class DataFrames:
 			try:
 				df_av = columnize(self._data_ca_or_ce, [req_data['avail_ca']], inplace=False, dtype=numpy.int8)
 			except NameError:
+				df_av = self._data_av
+			except MissingDataError:
 				df_av = self._data_av
 		elif 'avail_co' in req_data:
 			raise NotImplementedError('avail_co')

@@ -37,6 +37,9 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 class MissingDataError(ValueError):
 	pass
 
+class ParameterNotInModelWarning(UserWarning):
+	pass
+
 
 cdef class Model5c:
 
@@ -467,7 +470,7 @@ cdef class Model5c:
 						self.frame.loc[k, 'value'] = v
 				else:
 					import warnings
-					warnings.warn(f'{k} not in model')
+					warnings.warn(f'{k} not in model', category=ParameterNotInModelWarning)
 		# refresh everything # TODO: only refresh what changed
 		try:
 			if self._dataframes is not None:
