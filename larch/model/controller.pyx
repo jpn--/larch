@@ -775,6 +775,25 @@ cdef class Model5c:
 		self._set_dataframes(x)
 
 	def load_data(self, dataservice=None, autoscale_weights=True):
+		"""Load dataframes as required from the dataservice.
+
+		Parameters
+		----------
+		dataservice : DataService, optional
+			A dataservice from which to load data.  If a dataservice
+			has not been previously defined for this model, this
+			argument is not optional.
+		autoscale_weights : bool, default True
+			If True and data_wt is not None, the loaded dataframes will
+			have the weights automatically scaled such that the average
+			value for data_wt is 1.0.  See `autoscale_weights` for more
+			information.
+
+		Raises
+		------
+		ValueError
+			If no dataservice is given nor pre-defined.
+		"""
 		if dataservice is not None:
 			self._dataservice = dataservice
 		if self._dataservice is not None:
