@@ -1031,6 +1031,65 @@ cdef class DataFrames:
 		else:
 			raise MissingDataError('neither ca nor ce is defined')
 
+	def data_co_combined(self):
+		"""Return a combined DataFrame in idco format that includes idco and idca data.
+
+		Returns
+		-------
+		pandas.DataFrame
+
+		"""
+		try:
+			ca = self._data_ca_or_ce
+		except MissingDataError:
+			ca = None
+
+		if ca is not None and self._data_co is not None:
+			result = pandas.DataFrame(
+				self.data_co.values,
+				index=self.data_co.index,
+				columns=pandas.MultiIndex.from_product([self.data_co.columns, ['*']])
+			).merge(
+				ca.unstack(),
+				left_index=True, right_index=True,
+			)
+		elif ca is not None:
+			result = ca.unstack()
+		elif self._data_co is not None:
+			result = self.data_co
+		return result
+
+	def data_ca_combined(self):
+		"""Return a combined DataFrame in idca format that includes idco and idca data.
+
+		Returns
+		-------
+		pandas.DataFrame
+
+		Raises
+		------
+		NotImplementedError
+			If neither data_ca nor data_ce is defined; in this case there is nothing to
+			combine and it is generally more efficient to just use data_co anyhow.
+		"""
+		try:
+			ca = self._data_ca_or_ce
+		except MissingDataError:
+			ca = None
+		if ca is not None and self.data_co is not None:
+			idx_names = ca.index.names
+			result = ca.merge(
+				self.data_co,
+				left_on=idx_names[0],
+				right_index=True,
+			)
+			result.index.names = idx_names
+		elif ca is not None:
+			result = ca
+		else:
+			raise NotImplementedError("data_ca is not defined, just use data_co")
+		return result
+
 	def array_ca(self, dtype=None, force=False):
 		if force and self.data_ca is None:
 			dtype = dtype if dtype is not None else numpy.float32
