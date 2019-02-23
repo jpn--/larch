@@ -1,7 +1,5 @@
 import keyword as _keyword
 import re as _re
-# from .core import LinearComponent, LinearFunction
-# from .exceptions import LarchError
 from numbers import Number
 import numpy
 import copy
@@ -853,20 +851,657 @@ class CombinedRef(metaclass=Role):
 	def __new__(cls, s):
 		return LinearComponent(data=DataRef(s), param=ParameterRef(s))
 
+# +++
+
+class LinearComponent2(tuple):
+	__slots__ = []
+	def __new__(cls, param, data='1', scale=1):
+		return tuple.__new__(cls, (str(param), str(data), scale))
+
+	@property
+	def param(self):
+		return ParameterRef(self[0])
+
+	@property
+	def data(self):
+		return DataRef(self[1])
+
+	@property
+	def scale(self):
+		return self[2]
+
+	def __pos__(self):
+		return self
+
+	def __repr__(self):
+		try:
+			if self.scale == 1.0:
+				try:
+					data_is_1 = (float(self.data) == 1)
+				except:
+					data_is_1 = False
+				if data_is_1:
+					return f"({self.param!r})"
+				else:
+					return f"({self.param!r} * {self.data!r})"
+			return f"({self.param!r} * {self.scale} * {self.data!r})"
+		except AttributeError:
+			return f"<{self.__class__.__name__} {id(self)} with error>"
+
+	def __add__(self, other):
+		if other == ():
+			return self
+		elif isinstance(other, LinearComponent2):
+			return LinearFunction2([self, other])
+		elif isinstance(other, LinearFunction2):
+			return LinearFunction2([self, *other])
+		elif other == 0:
+			return self
+		elif isinstance(other, ParameterRef):
+			return LinearFunction2([self, LinearComponent2(param=other)])
+		else:
+			raise NotImplementedError()
+
+	def __radd__(self, other):
+		if other == 0:
+			return self
+		return other.__add__(self)
+
+	def __mul__(self, other):
+		if isinstance(other, (int, float, )):
+			return self.__class__(
+				param=self.param,
+				data=self.data,
+				scale=self.scale * other,
+			)
+		elif isinstance(other, (DataRef, )):
+			return self.__class__(
+				param=self.param,
+				data=self.data * other,
+				scale=self.scale,
+			)
+		else:
+			raise TypeError(f'unsupported operand type(s) for {self.__class__.__name__}: {type(other)}')
+
+	def __rmul__(self, other):
+		if isinstance(other, (int, float, )):
+			return self.__class__(
+				param=self.param,
+				data=self.data,
+				scale=self.scale * other,
+			)
+		elif isinstance(other, (DataRef, )):
+			return self.__class__(
+				param=self.param,
+				data=self.data * other,
+				scale=self.scale,
+			)
+		else:
+			raise TypeError(f'unsupported operand type(s) for {self.__class__.__name__}: {type(other)}')
+
+	def __iter__(self):
+		return iter(LinearFunction2([self]))
+
+	def __eq__(self, other):
+		if isinstance(other, LinearFunction2) and len(other) == 1:
+			other = other[0]
+		if not isinstance(other, LinearComponent2):
+			return False
+		if self.param != other.param:
+			return False
+		if self.data != other.data:
+			return False
+		if self.scale != other.scale:
+			return False
+		return True
+
+	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None):
+		from xmle import Elem
+		x = Elem('div')
+		# x << tooltipped_style()
+
+		if resolve_parameters is not None:
+			if exponentiate_parameter:
+				plabel = resolve_parameters.pvalue(self.param, default_value="This is a Parameter")
+				if not isinstance(plabel, str):
+					plabel = "exp({0:.3g})={1:.3g}".format(plabel, numpy.exp(plabel))
+			else:
+				plabel = "{0:.3g}".format(resolve_parameters.pvalue(self.param, default_value="This is a Parameter"))
+		else:
+			plabel = "This is a Parameter"
+
+
+		data_tail = " * "
+		try:
+			if float(self.data)==1:
+				data_tail = ""
+		except:
+			pass
+
+		if self.scale == 1.0:
+			if exponentiate_parameter:
+				x.elem('span', tail="exp(")
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=")"+data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+			else:
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+		else:
+			if exponentiate_parameter:
+				x.elem('span', tail="exp(")
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}){data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+			else:
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}{data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+		if data_tail == " * ":
+			a_x = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.data))
+			a_x.elem('span', attrib={'class':'tooltiptext'}, text="This is Data")
+		return x
+
+	def _repr_html_(self):
+		return self.__xml__().tostring()
+
+	def _evaluate(self, p_getter, x_namespace=None, **kwargs):
+		return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
+
+	def __copy__(self):
+		return self.__class__(
+			param=self.param,
+			data=self.data,
+			scale=self.scale,
+		)
+
+
+
+from collections.abc import MutableSequence
+
+
+def _try_mangle(instance):
+	try:
+		instance.mangle()
+	except AttributeError as err:
+		print(f"No Mangle R: {err}")
+
+
+class LinearFunction2(MutableSequence):
+
+	def __init__(self, init=None, touch_callback=None):
+		self.__func = list()
+		self.__instance = None
+		if init is not None:
+			for i in init:
+				if isinstance(i, LinearComponent2):
+					self.__func.append(i)
+				else:
+					raise TypeError(f'members of {self.__class__.__name__} must be LinearComponent2')
+
+	def set_instance(self, instance):
+		self.__instance = instance
+
+	def __get__(self, instance, owner):
+		#print(f"get from descriptor object\n  instance={instance}\n  owner={owner}")
+		self.__instance = instance
+		return self
+
+	def __set__(self, instance, values):
+		#print(f"set in descriptor object\n  instance={instance}\n  values={values}")
+		self.__init__(values)
+		self.__instance = instance
+		_try_mangle(self.__instance)
+
+	def __delete__(self, instance):
+		#print("deleted in descriptor object", instance)
+		self.__instance = instance
+		self.__func = list()
+		_try_mangle(self.__instance)
+
+	def __set_name__(self, owner, name):
+		#print(f"setname in descriptor object\n  owner={owner}\n  name={name}\n  self={self}")
+		self.name = name
+
+	def __getitem__(self, item):
+		return self.__func[item]
+
+	def __setitem__(self, key, value):
+		if isinstance(value, LinearComponent2):
+			self.__func[key] = value
+			_try_mangle(self.__instance)
+		else:
+			raise TypeError(f'members of {self.__class__.__name__} must be LinearComponent2')
+
+	def __delitem__(self, key):
+		del self.__func[key]
+		_try_mangle(self.__instance)
+
+	def __len__(self):
+		return len(self.__func)
+
+	def insert(self, index, value):
+		if isinstance(value, LinearComponent2):
+			self.__func.insert(index, value)
+			_try_mangle(self.__instance)
+		else:
+			raise TypeError(f'members of {self.__class__.__name__} must be LinearComponent2')
+
+	def __add__(self, other):
+		if other == ():
+			return self
+		if isinstance(other, LinearFunction2):
+			return type(self)(*self.__func, *other.__func)
+		if isinstance(other, ParameterRef):
+			other = LinearComponent2(param=other)
+		if isinstance(other, LinearComponent2):
+			result = type(self)(self)
+			result.append(other)
+			return result
+		raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+
+	def __iadd__(self, other):
+		if isinstance(other, ParameterRef):
+			other = LinearComponent2(param=other)
+		if other == ():
+			return self
+		elif isinstance(other, LinearFunction2):
+			self.__func.extend(other)
+		elif isinstance(other, LinearComponent2):
+			self.append(other)
+		else:
+			raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+		return self
+
+	def __radd__(self, other):
+		return LinearFunction2([*other, *self])
+
+	def __pos__(self):
+		return self
+
+	def __mul__(self, other):
+		trial = LinearFunction2()
+		for component in self:
+			trial.append(component * other)
+		return trial
+
+	def __rmul__(self, other):
+		trial = LinearFunction2()
+		for component in self:
+			trial += other * component
+		return trial
+
+	def __contains__(self, val):
+		if isinstance(val, ParameterRef):
+			for i in self:
+				if i.param == val:
+					return True
+			return False
+		if isinstance(val, DataRef):
+			for i in self:
+				if i.data == val:
+					return True
+			return False
+		raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+
+	def _index_of(self, val):
+		if isinstance(val, ParameterRef):
+			for n, i in enumerate(self):
+				if i.param == val:
+					return n
+			raise KeyError('ParameterRef not found')
+		if isinstance(val, DataRef):
+			for n, i in enumerate(self):
+				if i.data == val:
+					return n
+			raise KeyError('DataRef not found')
+		raise TypeError("the searched for content must be of type ParameterRef or DataRef")
+
+	#######
+	def reformat_param(self, container=None, pattern=None, repl=None, **kwargs):
+		"""
+		Transform all the parameters in the LinearFunction.
+
+		Parameters
+		----------
+		container : str
+			A format string, into which the previous parameters are formatted.
+			Use this to append things to the parameter names.
+		pattern : str
+		repl : str
+			Passed to `re.sub` with each existing parameter as the base string
+			to be searched.
+
+		Examples
+		--------
+		>>> from larch.roles import P,X
+		>>> f = P.InVehTime * X.IVTT + P.OutOfVehTime * X.OVTT
+		>>> f1 = f.reformat_param('{}_Suffix')
+		>>> str(f1)
+		'(P.InVehTime_Suffix * X.IVTT) + (P.OutOfVehTime_Suffix * X.OVTT)'
+		>>> f2 = f.reformat_param(pattern='(Veh)', repl='Vehicle')
+		>>> str(f2)
+		'(P.InVehicleTime * X.IVTT) + (P.OutOfVehicleTime * X.OVTT)'
+
+		"""
+		import re
+		r = self.__class__()
+		for i in self:
+			if pattern is None:
+				param = i.param
+			else:
+				if repl is None:
+					raise TypeError('must give repl with pattern')
+				param = re.sub(pattern, repl, i.param, **kwargs)
+			if container is None:
+				container = '{}'
+			r += LinearComponent2(data=i.data, param=container.format(param), scale=i.scale)
+		try:
+			r._x_ident = self._x_ident
+		except AttributeError:
+			pass
+		return r
+
+	def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
+		"""
+		Transform all the data in the LinearFunction.
+
+		Parameters
+		----------
+		container : str
+			A format string, into which the previous data strings are formatted.
+			Use this to apply common global transforms to the data.
+		pattern : str
+		repl : str
+			Passed to `re.sub` with each existing data string as the base string
+			to be searched.
+		"""
+		import re
+		r = self.__class__()
+		for i in self:
+			if pattern is None:
+				data = i.data
+			else:
+				if repl is None:
+					raise TypeError('must give repl with pattern')
+				data = re.sub(pattern, repl, i.data, **kwargs)
+			if container is None:
+				container = '{}'
+			r += LinearComponent2(data=container.format(data), param=i.param, scale=i.scale)
+		try:
+			r._x_ident = self._x_ident
+		except AttributeError:
+			pass
+		return r
+
+	def __code__(self):
+		return " + ".join(f"({repr(i)})" for i in self)
+
+	def __eq__(self, other):
+		if not isinstance(other, LinearFunction2):
+			return False
+		if len(self) != len(other):
+			return False
+		for i, j in zip(self, other):
+			if i != j: return False
+		return True
+
+	# def __getstate__(self):
+	# 	state = {}
+	# 	state['code'] = self.__code__()
+	# 	try:
+	# 		state['_x_ident'] = self._x_ident
+	# 	except AttributeError:
+	# 		pass
+	# 	return state
+	#
+	# def __setstate__(self, state):
+	# 	self.__init__()
+	# 	if state['code']:
+	# 		self.__iadd__(eval(state['code']))
+	# 	if '_x_ident' in state:
+	# 		self._x_ident = state['_x_ident']
+
+	def __repr__(self):
+		if len(self):
+			result = " + ".join(repr(i) for i in self)
+			if len(result)<80:
+				return result
+			else:
+				return "  "+result.replace(" + ","\n+ ")
+		return f"<Empty {self.__class__.__name__}>"
+
+	def __xml__(self, linebreaks=False, lineprefix="", exponentiate_parameters=False, resolve_parameters=None):
+		from xmle import Elem
+		x = Elem('div', attrib={'class':'LinearFunc'})
+		for n,i in enumerate(self):
+			ix_ = i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters).getchildren()
+			if linebreaks:
+				if n>0 or lineprefix:
+					ix_.insert(0,Elem('br', tail = lineprefix+" + "))
+			else:
+				if n < len(self)-1:
+					if ix_[-1].tail is None:
+						ix_[-1].tail = " + "
+					else:
+						ix_[-1].tail += " + "
+			for ii in ix_:
+				x << ii
+		return x
+
+	def _repr_html_(self):
+		return self.__xml__().tostring()
+
+	def data(self, cls=None):
+		if cls is None:
+			return [_.data for _ in self]
+		else:
+			return [cls(_.data) for _ in self]
+
+	def _evaluate(self, p_getter, x_namespace=None, **more_x_namespace):
+		if hasattr(p_getter,'pvalue') and callable(p_getter.pvalue):
+			p_getter = p_getter.pvalue
+		return sum(j._evaluate(p_getter, x_namespace=x_namespace, **more_x_namespace) for j in self)
+
+	def copy(self):
+		result = self.__class__(self)
+		return result
+
+	def __deepcopy__(self, memodict):
+		result = self.__class__()
+		for i in self:
+			result.append(copy.deepcopy(i, memodict))
+		return result
+
+	def _linear_plot_2d_data(self, p_getter, x_name, x_min, x_max, n_points=100, **other_namespace):
+		import numpy
+		if hasattr(self, 'plotting_namespace') and len(other_namespace)==0:
+			other_namespace = self.plotting_namespace
+		x = numpy.linspace(x_min, x_max, n_points)
+		y = self._evaluate(p_getter, {x_name:x}, **other_namespace)
+		return x,y
+
+	def linear_plot_2d(self, p_getter, x_name, x_min, x_max, n_points=100, *, xlabel=None, svg=True, header=None, **other_namespace):
+
+		# Delayed evaluation mode...
+		if p_getter is None:
+			return lambda x: self.linear_plot_2d(x, x_name, x_min, x_max, n_points=n_points, xlabel=xlabel, svg=svg, header=header, **other_namespace)
+
+		# Active evaluation mode...
+		from matplotlib import pyplot as plt
+		plt.clf()
+		x,y = self._linear_plot_2d_data(p_getter, x_name, x_min, x_max, n_points, **other_namespace)
+		if hasattr(self, 'plotting_label'):
+			plt.plot(x, y, label=self.plotting_label)
+		else:
+			plt.plot(x, y)
+		if xlabel is None:
+			plt.xlabel(x_name)
+		else:
+			plt.xlabel(xlabel)
+		plt.tight_layout(pad=0.5)
+		from .util.plotting import plot_as_svg_xhtml
+		if svg is True:
+			svg = {}
+		if svg or svg == {}:
+			if header is not None:
+				svg['header'] = header
+			return plot_as_svg_xhtml(plt, **svg)
+		else:
+			plt.show()
+
+	def _inplot_linear_plot_2d(self, plt, p_getter, x_name, x_min, x_max, n_points=100, *, xlabel=None, svg=True, header=None, **other_namespace):
+
+		# Delayed evaluation mode...
+		if p_getter is None:
+			return lambda x: self._inplot_linear_plot_2d(plt, x, x_name, x_min, x_max, n_points=n_points, xlabel=xlabel, svg=svg, header=header, **other_namespace)
+
+		# Active evaluation mode...
+		x,y = self._linear_plot_2d_data(p_getter, x_name, x_min, x_max, n_points, **other_namespace)
+		if hasattr(self, 'plotting_label'):
+			plt.plot(x, y, label=self.plotting_label)
+		else:
+			plt.plot(x,y)
+
+	def total_ordering_increasing(self):
+		from toolz.itertoolz import sliding_window
+		snaps = []
+		for windows_size in range(2, len(self)-1):
+			for sub_p in sliding_window(windows_size, self):
+				snaps.append(sub_p[0].param.lessthan(sub_p[-1].param))
+
+		return snaps
+
+
+from collections.abc import MutableMapping
+
+class DictOfLinearFunction2(MutableMapping):
+
+	def __init__(self, mapping=None, alts_validator=None, touch_callback=None, **kwargs):
+		self.__map = {}
+		if mapping is None:
+			mapping = {}
+		for k,v in mapping.items():
+			self.__map[k] = LinearFunction2(v)
+		for k,v in kwargs.items():
+			try:
+				self.__map[k] = LinearFunction2(v)
+			except:
+				print(v)
+				print(type(v))
+				raise
+
+		self._alts_validator = alts_validator
+		self.__instance = None
+
+	def __get__(self, instance, owner):
+		#print(f"get from descriptor object\n  instance={instance}\n  owner={owner}")
+		self.__instance = instance
+		return self
+
+	def __set__(self, instance, values):
+		#print(f"set in descriptor object\n  instance={instance}\n  values={values}")
+		self.__init__(values)
+		self.__instance = instance
+		_try_mangle(self.__instance)
+
+	def __delete__(self, instance):
+		#print("deleted in descriptor object", instance)
+		self.__instance = instance
+		self.__func = list()
+		_try_mangle(self.__instance)
+
+	def __set_name__(self, owner, name):
+		#print(f"setname in descriptor object\n  owner={owner}\n  name={name}\n  self={self}")
+		self.name = name
+
+
+	def set_alts_validator(self, av):
+		self._alts_validator = av
+
+	def __getitem__(self, k):
+		try:
+			v = self.__map[k]
+			v.set_instance(self.__instance)
+			return v
+		except KeyError:
+			if self._alts_validator is None or self._alts_validator(k):
+				v = self.__map[k] = LinearFunction2()
+				v.set_instance(self.__instance)
+				return v
+			else:
+				raise
+
+	def __setitem__(self, k, v):
+		if isinstance(v, ParameterRef):
+			v = v * DataRef('1')
+		if isinstance(v, int) and v==0:
+			v = LinearFunction2()
+		elif isinstance(v, LinearComponent2):
+			v = LinearFunction2([v])
+		elif isinstance(v, list):
+			v = LinearFunction2(v)
+		elif not isinstance(v, LinearFunction2):
+			raise TypeError(f"only accepts LinearFunction2 values, not {type(v)}")
+		if "with error" in repr(v):
+			raise ValueError("found error here")
+		v.set_instance(self.__instance)
+		self.__map[k] = v
+		_try_mangle(self.__instance)
+
+	def __delitem__(self, key):
+		del self.__map[key]
+		_try_mangle(self.__instance)
+
+	def __iter__(self):
+		return iter(self.__map.keys())
+
+	def __len__(self):
+		return len(self.__map)
+
+	def copy(self):
+		return type(self)(self)
+
+	def __repr__(self):
+		return '{0}({1})'.format(type(self).__name__, repr(self.__map))
+
+	def __xml__(self):
+		from pprint import pformat
+		from xmle import Elem
+		x = Elem('div')
+		t = x.elem('table', style="margin-top:1px;")
+		t.elem('caption', text=f"<larch.{self.__class__.__name__}>", style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;font-style:normal;font-size:100%;padding:0px;")
+		if len(self):
+			tr = t.elem('tr')
+			tr.elem('th', text="alt")
+			tr.elem('th', text='formula')
+			for k,v in self.items():
+				tr = t.elem('tr')
+				tr.elem('td', text=str(k))
+				try:
+					v_ = v.__xml__()
+				except AttributeError:
+					tr.elem('td', text=str(v))
+				else:
+					tr.elem('td') << v_
+		else:
+			tr = t.elem('tr')
+			tr.elem('td', text="<empty>")
+		return x
+
+	def _repr_html_(self):
+		return self.__xml__().tostring()
 
 # ===========================================================================
 
-class LinearComponent(TouchNotify):
+class LinearComponent0(TouchNotify):
 	def __init__(self, *args, param=None, data=None, scale=None, **kwargs):
 		if len(args):
-			if isinstance(args[0], LinearComponent):
+			if isinstance(args[0], LinearComponent0):
 				super().__init__(**kwargs)
 				self._param = param or args[0]._param
 				self._data = data or args[0]._data
 				self._scale = scale or args[0]._scale
 				self.set_touch_callback(args[0].get_touch_callback())
 			else:
-				raise TypeError('init LinearComponent with LinearComponent or keyword arguments')
+				raise TypeError('init LinearComponent0 with LinearComponent0 or keyword arguments')
 		super().__init__(**kwargs)
 		self._param = param or '1'
 		self._data = data or '1'
@@ -902,7 +1537,7 @@ class LinearComponent(TouchNotify):
 	def __add__(self, other):
 		if other == ():
 			return self
-		elif isinstance(other, (LinearFunction, LinearComponent)):
+		elif isinstance(other, (LinearFunction, LinearComponent0)):
 			return (LinearFunction(touch_callback=self.get_touch_callback()) + self) + other
 		elif other == 0:
 			return self
@@ -916,19 +1551,19 @@ class LinearComponent(TouchNotify):
 
 	def __mul__(self, other):
 		if isinstance(other, (int, float, )):
-			return LinearComponent(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
 		elif isinstance(other, (DataRef, )):
-			return LinearComponent(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
 		else:
-			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
+			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
 	def __rmul__(self, other):
 		if isinstance(other, (int, float, )):
-			return LinearComponent(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
 		elif isinstance(other, (DataRef, )):
-			return LinearComponent(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
 		else:
-			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
+			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
 	def __imul__(self, other):
 		if isinstance(other, (int, float, )):
@@ -936,7 +1571,7 @@ class LinearComponent(TouchNotify):
 		elif isinstance(other, (DataRef, )):
 			self.data = self.data * other
 		else:
-			raise TypeError('unsupported operand type(s) for LinearComponent: {}'.format(type(other)))
+			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
 	def __iter__(self):
 		return iter(LinearFunction(touch_callback=self.get_touch_callback()) + self)
@@ -944,7 +1579,7 @@ class LinearComponent(TouchNotify):
 	def __eq__(self, other):
 		if isinstance(other, LinearFunction) and len(other) == 1:
 			other = other[0]
-		if not isinstance(other, LinearComponent):
+		if not isinstance(other, LinearComponent0):
 			return False
 		if self.param != other.param:
 			return False
@@ -960,7 +1595,7 @@ class LinearComponent(TouchNotify):
 				return f"({self.param!r} * {self.data!r})"
 			return f"({self.param!r} * {self.scale} * {self.data!r})"
 		except AttributeError:
-			return f"<LinearComponent {id(self)} with error>"
+			return f"<LinearComponent0 {id(self)} with error>"
 
 	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None):
 		from xmle import Elem
@@ -1004,14 +1639,14 @@ class LinearComponent(TouchNotify):
 		return self._scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
 
 	def __copy__(self):
-		return LinearComponent(
+		return LinearComponent0(
 			param=self._param,
 			data=self._data,
 			scale=self._scale,
 		)
 
 	def __deepcopy__(self, memodict):
-		return LinearComponent(
+		return LinearComponent0(
 			param=copy.deepcopy(self._param if isinstance(self._param, str) else str(self._param), memodict),
 			data=copy.deepcopy(self._data if isinstance(self._data, str) else str(self._data), memodict),
 			scale=copy.deepcopy(self._scale, memodict),
@@ -1019,7 +1654,7 @@ class LinearComponent(TouchNotify):
 
 # ===========================================================================
 
-class LinearFunction(TouchNotify, list):
+class LinearFunction0(TouchNotify, list):
 	def __init__(self, *args, touch_callback=None, **kwargs):
 		if len(args) == 1 and args[0] is None:
 			args = ()
@@ -1029,43 +1664,43 @@ class LinearFunction(TouchNotify, list):
 	def __add__(self, other):
 		if other == ():
 			return self
-		if isinstance(other, LinearFunction):
+		if isinstance(other, LinearFunction0):
 			return type(self)(super().__add__(other), touch_callback=self.get_touch_callback())
 		if isinstance(other, ParameterRef):
-			other = LinearComponent(param=other, touch_callback=self.get_touch_callback())
-		if isinstance(other, LinearComponent):
+			other = LinearComponent0(param=other, touch_callback=self.get_touch_callback())
+		if isinstance(other, LinearComponent0):
 			result = type(self)(self, touch_callback=self.get_touch_callback())
 			result.append(other)
 			return result
-		raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+		raise TypeError("cannot add type {} to LinearFunction0".format(type(other)))
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef):
-			other = LinearComponent(param=other, touch_callback=self.get_touch_callback())
+			other = LinearComponent0(param=other, touch_callback=self.get_touch_callback())
 		if other == ():
 			return self
-		elif isinstance(other, LinearFunction):
+		elif isinstance(other, LinearFunction0):
 			super().__iadd__(other)
-		elif isinstance(other, LinearComponent):
+		elif isinstance(other, LinearComponent0):
 			super().append(other)
 		else:
-			raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+			raise TypeError("cannot add type {} to LinearFunction0".format(type(other)))
 		return self
 
 	def __radd__(self, other):
-		return LinearFunction(touch_callback=self.get_touch_callback()) + other + self
+		return LinearFunction0(touch_callback=self.get_touch_callback()) + other + self
 
 	def __pos__(self):
 		return self
 
 	def __mul__(self, other):
-		trial = LinearFunction(touch_callback=self.get_touch_callback())
+		trial = LinearFunction0(touch_callback=self.get_touch_callback())
 		for component in self:
 			trial += component * other
 		return trial
 
 	def __rmul__(self, other):
-		trial = LinearFunction(touch_callback=self.get_touch_callback())
+		trial = LinearFunction0(touch_callback=self.get_touch_callback())
 		for component in self:
 			trial += other * component
 		return trial
@@ -1117,7 +1752,7 @@ class LinearFunction(TouchNotify, list):
 
 	def reformat_param(self, container=None, pattern=None, repl=None, **kwargs):
 		"""
-		Transform all the parameters in the LinearFunction.
+		Transform all the parameters in the LinearFunction0.
 
 		Parameters
 		----------
@@ -1142,7 +1777,7 @@ class LinearFunction(TouchNotify, list):
 
 		"""
 		import re
-		r = LinearFunction(touch_callback=self.get_touch_callback())
+		r = LinearFunction0(touch_callback=self.get_touch_callback())
 		for i in self:
 			if pattern is None:
 				param = i.param
@@ -1152,7 +1787,7 @@ class LinearFunction(TouchNotify, list):
 				param = re.sub(pattern, repl, i.param, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent(data=i.data, param=container.format(param), touch_callback=self.get_touch_callback())
+			r += LinearComponent0(data=i.data, param=container.format(param), touch_callback=self.get_touch_callback())
 		try:
 			r._x_ident = self._x_ident
 		except AttributeError:
@@ -1161,7 +1796,7 @@ class LinearFunction(TouchNotify, list):
 
 	def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
 		"""
-		Transform all the data in the LinearFunction.
+		Transform all the data in the LinearFunction0.
 
 		Parameters
 		----------
@@ -1174,7 +1809,7 @@ class LinearFunction(TouchNotify, list):
 			to be searched.
 		"""
 		import re
-		r = LinearFunction(touch_callback=self.get_touch_callback())
+		r = LinearFunction0(touch_callback=self.get_touch_callback())
 		for i in self:
 			if pattern is None:
 				data = i.data
@@ -1184,7 +1819,7 @@ class LinearFunction(TouchNotify, list):
 				data = re.sub(pattern, repl, i.data, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent(data=container.format(data), param=i.param, touch_callback=self.get_touch_callback())
+			r += LinearComponent0(data=container.format(data), param=i.param, touch_callback=self.get_touch_callback())
 		try:
 			r._x_ident = self._x_ident
 		except AttributeError:
@@ -1195,7 +1830,7 @@ class LinearFunction(TouchNotify, list):
 		return " + ".join(f"({repr(i)})" for i in self)
 
 	def __eq__(self, other):
-		if not isinstance(other, LinearFunction):
+		if not isinstance(other, LinearFunction0):
 			return False
 		if len(self) != len(other):
 			return False
@@ -1264,11 +1899,11 @@ class LinearFunction(TouchNotify, list):
 		return sum(j._evaluate(p_getter, x_namespace=x_namespace, **more_x_namespace) for j in self)
 
 	def copy(self):
-		result = LinearFunction() + self
+		result = LinearFunction0() + self
 		return result
 
 	def __deepcopy__(self, memodict):
-		result = LinearFunction()
+		result = LinearFunction0()
 		for i in self:
 			result.append(copy.deepcopy(i, memodict))
 		return result
@@ -1373,7 +2008,7 @@ def multiple_linear_plot_2d(linear_funcs, p_getter, x_name, x_min, x_max, n_poin
 from itertools import chain
 _RaiseKeyError = object() # singleton for no-default behavior
 
-class DictOfLinearFunction(TouchNotify, dict):
+class DictOfLinearFunction0(TouchNotify, dict):
 	@staticmethod # because this doesn't make sense as a global function.
 	def _process_args(mapping=(), **kwargs):
 		if hasattr(mapping, 'items'):
@@ -1392,7 +2027,7 @@ class DictOfLinearFunction(TouchNotify, dict):
 			return super().__getitem__(k)
 		except KeyError:
 			if self._alts_validator is None or self._alts_validator(k):
-				super().__setitem__(k, LinearFunction(touch_callback=self.get_touch_callback()))
+				super().__setitem__(k, LinearFunction0(touch_callback=self.get_touch_callback()))
 				return super().__getitem__(k)
 			else:
 				raise
@@ -1400,30 +2035,30 @@ class DictOfLinearFunction(TouchNotify, dict):
 		if isinstance(v, ParameterRef):
 			v = v * DataRef('1')
 		if isinstance(v, int) and v==0:
-			v = LinearFunction(touch_callback=self.get_touch_callback())
-		elif isinstance(v, LinearComponent):
-			v = LinearFunction(touch_callback=self.get_touch_callback()) + v
-		elif isinstance(v, LinearFunction):
+			v = LinearFunction0(touch_callback=self.get_touch_callback())
+		elif isinstance(v, LinearComponent0):
+			v = LinearFunction0(touch_callback=self.get_touch_callback()) + v
+		elif isinstance(v, LinearFunction0):
 			v.set_touch_callback(self.get_touch_callback())
 		elif isinstance(v, list):
-			v_ = LinearFunction(touch_callback=self.get_touch_callback())
+			v_ = LinearFunction0(touch_callback=self.get_touch_callback())
 			for vv in v:
 				v_ = v_ + vv
 			v = v_
 		else:
-			raise TypeError("only accepts LinearFunction values")
+			raise TypeError("only accepts LinearFunction0 values")
 		if "with error" in repr(v):
 			raise ValueError("found error here")
 		return super().__setitem__(k, v)
 	def setdefault(self, k, default=None):
 		if default is None:
-			default = LinearFunction(touch_callback=self.get_touch_callback())
-		if isinstance(default, LinearComponent):
-			default = LinearFunction(touch_callback=self.get_touch_callback()) + default
-		elif isinstance(default, LinearFunction):
+			default = LinearFunction0(touch_callback=self.get_touch_callback())
+		if isinstance(default, LinearComponent0):
+			default = LinearFunction0(touch_callback=self.get_touch_callback()) + default
+		elif isinstance(default, LinearFunction0):
 			default.set_touch_callback(self.get_touch_callback())
 		else:
-			raise TypeError("only accepts LinearFunction values")
+			raise TypeError("only accepts LinearFunction0 values")
 		return super().setdefault(k, default)
 	def copy(self): # don't delegate w/ super - dict.copy() -> dict :(
 		return type(self)(self)
@@ -1568,6 +2203,9 @@ globals()[_ParameterRef_repr_txt] = ParameterRef
 globals()[_DataRef_repr_txt] = DataRef
 globals()[_ParameterRef_repr_txt + _DataRef_repr_txt] = CombinedRef
 
+LinearFunction = LinearFunction2
+LinearComponent = LinearComponent2
+DictOfLinearFunction = DictOfLinearFunction2
 
 P = ParameterRef
 X = DataRef

@@ -5,6 +5,7 @@ from ..general_precision import l4_float_dtype
 from ..general_precision cimport l4_float_t
 from .persist_flags cimport *
 
+import sys
 import numpy
 import pandas
 from typing import Union
@@ -17,13 +18,46 @@ from ..dataframes cimport DataFrames
 
 from ..roles import LinearFunction, LinearComponent, ParameterRef, DictOfLinearFunction, DictOfStrings, DataRef
 
+def bonker():
+
+	return pandas.DataFrame(
+					index=[1,2],
+			data=numpy.ones([2,2]),
+			columns=['a','b']
+	)
+
 def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 
 	cdef int len_names = 0 if names is None else len(names)
 
+	import pandas
+
+	if len_names == 0:
+		len_names = 1
+
+
+	print("_empty_parameter_frame 1", pandas, file=sys.stderr)
+
 	min_ = min if min is not None else -numpy.inf
 	max_ = max if max is not None else numpy.inf
-	return pandas.DataFrame(index=names, data=dict(
+	print("_empty_parameter_frame 2", pandas.__version__, file=sys.stderr)
+
+	print(bonker())
+		# 	(
+		# 	index=[1,2],
+		# 	data=numpy.ones([2,2]),
+		# 	columns=['a','b']
+		# )
+
+	# print(pandas.DataFrame(
+	# 				index=[1,2],
+	# 		data=numpy.ones([2,2]),
+	# 		columns=['a','b']
+	# ))
+
+	print("_empty_parameter_frame len_name=", len_names, file=sys.stderr)
+
+	data=dict(
 			value = numpy.full(len_names, fill_value=initvalue, dtype=l4_float_dtype),
 			minimum = numpy.full(len_names, fill_value=min_, dtype=l4_float_dtype),
 			maximum = numpy.full(len_names, fill_value=max_, dtype=l4_float_dtype),
@@ -31,8 +65,27 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 			initvalue = numpy.full(len_names, fill_value=initvalue, dtype=l4_float_dtype),
 			holdfast = numpy.zeros(len_names, dtype=numpy.int8),
 			note = numpy.zeros(len_names, dtype='<U128')
-		), columns=['value', 'initvalue', 'nullvalue', 'minimum', 'maximum', 'holdfast', 'note'])
+		)
+	print("_empty_parameter_frame 3", data, file=sys.stderr)
+	ix = names if names is not None else []
+	if len(ix) == 0 and len_names > 0:
+		ix = ['QQQ' for _ in range(len_names)]
+	print("_empty_parameter_frame 4", ix, file=sys.stderr)
+	columns=['value', 'initvalue', 'nullvalue', 'minimum', 'maximum', 'holdfast', 'note']
+	print("_empty_parameter_frame 5", columns, file=sys.stderr)
+	try:
+		r = pandas.DataFrame(
+			index=ix,
+			data=data,
+			columns=columns
+		)
+	except Exception as err:
+		print(err, file=sys.stderr)
+		raise
 
+	print("_empty_parameter_frame 6", file=sys.stderr)
+	print("_empty_parameter_frame 7", file=sys.stderr)
+	return r.copy()
 
 class MissingDataError(ValueError):
 	pass
@@ -42,6 +95,12 @@ class ParameterNotInModelWarning(UserWarning):
 
 
 cdef class Model5c:
+
+	def __cinit__(self):
+		import sys
+		print("HELLO c", file=sys.stderr)
+		self.frame = None
+
 
 	def __init__(
 			self, *,
@@ -58,14 +117,12 @@ cdef class Model5c:
 			n_threads=-1,
 			is_clone=False,
 	):
-
+		import sys
+		print("HELLO i", file=sys.stderr)
 		self._dataframes = None
 
 		if is_clone:
 			self._is_clone = True
-			self._utility_co_functions = utility_co
-			self._utility_ca_function = utility_ca
-			self._quantity_ca_function = quantity_ca
 			if quantity_scale is None:
 				self._quantity_scale = None
 			else:
@@ -73,34 +130,42 @@ cdef class Model5c:
 
 		else:
 			self._is_clone = False
-			self._utility_co_functions = DictOfLinearFunction(utility_co, touch_callback=self.mangle)
-			self._utility_ca_function  = LinearFunction(utility_ca, touch_callback=self.mangle)
-			self._quantity_ca_function  = LinearFunction(quantity_ca, touch_callback=self.mangle)
 			if quantity_scale is None:
 				self._quantity_scale = None
 			else:
 				self._quantity_scale = str(quantity_scale)
+		print("HELLO i1", file=sys.stderr)
 
 		self.rename_parameters = DictOfStrings(touch_callback=self.mangle)
+		print("HELLO i2", file=sys.stderr)
 
 		self._cached_loglike_null = 0
 		self._cached_loglike_constants_only = 0
 		self._cached_loglike_best = -numpy.inf
 		self._most_recent_estimation_result = None
+		print("HELLO i3", file=sys.stderr)
 
 		self.n_threads = n_threads
+		print("HELLO i4", file=sys.stderr)
 
 		self._dataservice = dataservice
+		print("HELLO i5", file=sys.stderr)
 
 		if frame is not None:
+			print("HELLO i5.1a", file=sys.stderr)
 			self.frame = frame
 		else:
-			self.frame = _empty_parameter_frame(parameters)
+			print("HELLO i5.1b", file=sys.stderr)
+			fr = _empty_parameter_frame(parameters or [])
+			print("HELLO i5.2b", file=sys.stderr)
+			self.frame = fr
+			print("HELLO i5.3b", file=sys.stderr)
+		print("HELLO i6", file=sys.stderr)
 
 		self._graph = graph
 
-		self._scan_all_ensure_names()
-		self.mangle()
+		print("BYE i", file=sys.stderr)
+
 
 	@property
 	def title(self):
@@ -129,6 +194,7 @@ cdef class Model5c:
 		self.clear_best_loglike()
 		self._mangled = True
 		#self._clear_cached_values()
+		print("Mangle!")
 
 	def unmangle(self, force=False):
 		if self._mangled or force:
@@ -179,13 +245,13 @@ cdef class Model5c:
 			raise
 
 	def _scan_quantity_ensure_names(self):
-		nameset = set()
+		if self._quantity_ca is not None:
+			nameset = set()
 
-		#self._q_ca_varindex = pandas.Index( str(component.data) for component in self._quantity_ca_postprocess)
-		for component in self._quantity_ca_function:
-			nameset.add(self.__p_rename(component.param))
+			for component in self._quantity_ca:
+				nameset.add(self.__p_rename(component.param))
 
-		self._ensure_names(nameset)
+			self._ensure_names(nameset)
 
 	def _scan_logsums_ensure_names(self):
 		nameset = set()
@@ -199,7 +265,7 @@ cdef class Model5c:
 					# 	param_name = str(snapped._is_scaled_parameter()[0])
 					nameset.add(self.__p_rename(param_name))
 
-		if len(self._quantity_ca_function)>0:
+		if self._quantity_ca is not None and len(self._quantity_ca)>0:
 			# for nodecode in self._graph.elementals:
 			# 	try:
 			# 		param_name = str(self._graph.node[nodecode]['parameter'])
@@ -222,9 +288,6 @@ cdef class Model5c:
 		missing_names = nameset - existing_names
 		if missing_names:
 			self.frame = self.frame.append(_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs), verify_integrity=True)
-
-	def __contains__(self, item):
-		return (item in self.pf.index) or (item in self.rename_parameters)
 
 	@property
 	def pf(self):
@@ -491,82 +554,83 @@ cdef class Model5c:
 		self.set_values(values)
 		return self
 
-	@property
-	def utility_ca(self):
-		"""
-		A LinearFunction that represents the qualitative portion of
-		utility for attributes that vary by alternative.
-		"""
-		if self._is_clone:
-			return self._utility_ca_function
-		return LinearFunction(touch_callback=self.mangle) + self._utility_ca_function
 
-	@utility_ca.setter
-	def utility_ca(self, value):
-		if self._is_clone:
-			raise PermissionError('cannot edit utility_ca when is_clone is True')
-		if isinstance(value, (LinearComponent, ParameterRef)):
-			value = LinearFunction() + value
-		elif value is None or value == 0:
-			value = LinearFunction()
-		if not isinstance(value, LinearFunction):
-			raise TypeError('needs LinearFunction')
-		self._utility_ca_function = value
-		self._utility_ca_function.set_touch_callback(self.mangle)
-		self.mangle()
+	# @property
+	# def utility_ca(self):
+	# 	"""
+	# 	A LinearFunction that represents the qualitative portion of
+	# 	utility for attributes that vary by alternative.
+	# 	"""
+	# 	if self._is_clone:
+	# 		return self._utility_ca
+	# 	return LinearFunction(touch_callback=self.mangle) + self._utility_ca
+	#
+	# @utility_ca.setter
+	# def utility_ca(self, value):
+	# 	if self._is_clone:
+	# 		raise PermissionError('cannot edit utility_ca when is_clone is True')
+	# 	if isinstance(value, (LinearComponent, ParameterRef)):
+	# 		value = LinearFunction() + value
+	# 	elif value is None or value == 0:
+	# 		value = LinearFunction()
+	# 	if not isinstance(value, LinearFunction):
+	# 		raise TypeError('needs LinearFunction')
+	# 	self._utility_ca = value
+	# 	self._utility_ca.set_touch_callback(self.mangle)
+	# 	self.mangle()
+	#
+	# @utility_ca.deleter
+	# def utility_ca(self):
+	# 	if self._is_clone:
+	# 		raise PermissionError('cannot edit utility_ca when is_clone is True')
+	# 	self._utility_ca = LinearFunction()
+	# 	self._utility_ca.set_touch_callback(self.mangle)
+	# 	self.mangle()
 
-	@utility_ca.deleter
-	def utility_ca(self):
-		if self._is_clone:
-			raise PermissionError('cannot edit utility_ca when is_clone is True')
-		self._utility_ca_function = LinearFunction()
-		self._utility_ca_function.set_touch_callback(self.mangle)
-		self.mangle()
-
-	@property
-	def utility_co(self):
-		"""
-		A DictOfLinearFunction that represents the qualitative portion of
-		utility for attributes that vary by decision maker but not by alternative.
-		"""
-		return self._utility_co_functions
-
-	@utility_co.setter
-	def utility_co(self, value):
-		if self._is_clone:
-			raise PermissionError('cannot edit utility_co when is_clone is True')
-		if not isinstance(value, (dict, DictOfLinearFunction)):
-			raise TypeError('needs [dict] of {key:LinearFunction}')
-		value = value.copy()
-		for k in value.keys():
-			if isinstance(value[k], (LinearComponent, ParameterRef)):
-				value[k] = LinearFunction() + value[k]
-			if not isinstance(value[k], LinearFunction):
-				raise TypeError('needs dict of {key:[LinearFunction]}')
-		self._utility_co_functions = DictOfLinearFunction(value, touch_callback=self.mangle)
+	# @property
+	# def utility_co(self):
+	# 	"""
+	# 	A DictOfLinearFunction that represents the qualitative portion of
+	# 	utility for attributes that vary by decision maker but not by alternative.
+	# 	"""
+	# 	return self._utility_co
+	#
+	# @utility_co.setter
+	# def utility_co(self, value):
+	# 	if self._is_clone:
+	# 		raise PermissionError('cannot edit utility_co when is_clone is True')
+	# 	if not isinstance(value, (dict, DictOfLinearFunction)):
+	# 		raise TypeError('needs [dict] of {key:LinearFunction}')
+	# 	value = value.copy()
+	# 	for k in value.keys():
+	# 		if isinstance(value[k], (LinearComponent, ParameterRef)):
+	# 			value[k] = LinearFunction() + value[k]
+	# 		if not isinstance(value[k], LinearFunction):
+	# 			raise TypeError('needs dict of {key:[LinearFunction]}')
+	# 	self._utility_co = DictOfLinearFunction(value, touch_callback=self.mangle)
 
 
-	@property
-	def quantity_ca(self):
-		"""
-		A LinearFunction that represents the quantitative portion of
-		utility for attributes that vary by alternative.
-		"""
-		if self._is_clone:
-			return self._quantity_ca_function
-		return LinearFunction(touch_callback=self.mangle) + self._quantity_ca_function
-
-	@quantity_ca.setter
-	def quantity_ca(self, value):
-		if self._is_clone:
-			raise PermissionError('cannot edit quantity_ca when is_clone is True')
-		if isinstance(value, (LinearComponent, ParameterRef)):
-			value = LinearFunction() + value
-		if not isinstance(value, LinearFunction):
-			raise TypeError('needs LinearFunction')
-		self._quantity_ca_function = value
-		self._quantity_ca_function.set_touch_callback(self.mangle)
-		self.mangle()
+	# @property
+	# def quantity_ca(self):
+	# 	"""
+	# 	A LinearFunction that represents the quantitative portion of
+	# 	utility for attributes that vary by alternative.
+	# 	"""
+	# 	if self._is_clone:
+	# 		return self._quantity_ca
+	# 	return LinearFunction(touch_callback=self.mangle) + self._quantity_ca
+	#
+	# @quantity_ca.setter
+	# def quantity_ca(self, value):
+	# 	if self._is_clone:
+	# 		raise PermissionError('cannot edit quantity_ca when is_clone is True')
+	# 	if isinstance(value, (LinearComponent, ParameterRef)):
+	# 		value = LinearFunction() + value
+	# 	if not isinstance(value, LinearFunction):
+	# 		raise TypeError('needs LinearFunction')
+	# 	self._quantity_ca = value
+	# 	self._quantity_ca.set_touch_callback(self.mangle)
+	# 	self.mangle()
 
 	@property
 	def quantity_scale(self):
@@ -590,78 +654,6 @@ cdef class Model5c:
 		self.mangle()
 
 
-	def utility_functions(self, subset=None, resolve_parameters=True):
-		from xmle import Elem
-		x = Elem('div')
-		t = x.elem('table', style="margin-top:1px;", attrib={'class':'floatinghead'})
-		if len(self.utility_co):
-			# t.elem('caption', text=f"Utility Functions",
-			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
-			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
-			t_head = t.elem('thead')
-			tr = t_head.elem('tr')
-			tr.elem('th', text="alt")
-			tr.elem('th', text='formula')
-			t_body = t.elem('tbody')
-			for j in self.utility_co.keys():
-				if subset is None or j in subset:
-					tr = t_body.elem('tr')
-					tr.elem('td', text=str(j))
-					utilitycell = tr.elem('td')
-					utilitycell.elem('div')
-					anything = False
-					if len(self.utility_ca):
-						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
-						anything = True
-					if j in self.utility_co:
-						if anything:
-							utilitycell << Elem('br')
-						v = self.utility_co[j]
-						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
-						anything = True
-					if len(self.quantity_ca):
-						if anything:
-							utilitycell << Elem('br')
-						if self.quantity_scale:
-							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-							from .roles import ParameterRef
-							utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
-							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
-						else:
-							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
-						content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ",
-														   exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
-						utilitycell << list(content)
-						utilitycell.elem('br', tail=")")
-		else:
-			# there is no differentiation by alternatives, just give one formula
-			# t.elem('caption', text=f"Utility Function",
-			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
-			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
-			tr = t.elem('tr')
-			utilitycell = tr.elem('td')
-			utilitycell.elem('div')
-			anything = False
-			if len(self.utility_ca):
-				utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
-				anything = True
-			if len(self.quantity_ca):
-				if anything:
-					utilitycell << Elem('br')
-				if self.quantity_scale:
-					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-					from ..roles import ParameterRef
-					utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
-					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
-				else:
-					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
-				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
-				utilitycell << list(content)
-				utilitycell.elem('br', tail=")")
-		return x
 
 
 
@@ -691,25 +683,27 @@ cdef class Model5c:
 	@property
 	def _utility_co_postprocess(self):
 		u = DictOfLinearFunction()
-		keys = list(self.utility_co.keys())
-		u_found = {k:set() for k in keys}
-		for altkey in keys:
-			u[altkey] = LinearFunction()
-		for altkey in keys:
-			for n, i in enumerate(self.utility_co[altkey]):
-				try:
-					i_d = i.data
-				except:
-					logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self.utility_co[altkey])}")
-					raise
-				while i_d in u_found[altkey]:
-					i_d = i_d + DataRef('0')
-				u_found[altkey].add(i_d)
-				# if i.param in self._snapped_parameters:
-				# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
-				# else:
-				# 	u[altkey] += i.param * i_d * i.scale
-				u[altkey] += i.param * i_d * i.scale
+		print("DWG:",self._utility_co)
+		if self._utility_co is not None:
+			keys = list(self._utility_co.keys())
+			u_found = {k:set() for k in keys}
+			for altkey in keys:
+				u[altkey] = LinearFunction()
+			for altkey in keys:
+				for n, i in enumerate(self._utility_co[altkey]):
+					try:
+						i_d = i.data
+					except:
+						logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self._utility_co[altkey])}")
+						raise
+					while i_d in u_found[altkey]:
+						i_d = i_d + DataRef('0')
+					u_found[altkey].add(i_d)
+					# if i.param in self._snapped_parameters:
+					# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
+					# else:
+					# 	u[altkey] += i.param * i_d * i.scale
+					u[altkey] += i.param * i_d * i.scale
 		return u
 
 	@property
@@ -1223,7 +1217,7 @@ cdef class Model5c:
 			self.frame['best'] = self.frame['value']
 
 	def clear_best_loglike(self):
-		if 'best' in self.frame.columns:
+		if self.frame is not None and 'best' in self.frame.columns:
 			del self.frame['best']
 		self._cached_loglike_best = -numpy.inf
 
@@ -1471,61 +1465,6 @@ cdef class Model5c:
 			raise
 
 
-	def required_data(self):
-		"""
-		What data is required in DataFrames for this model to be used.
-
-		Returns
-		-------
-		Dict
-		"""
-		try:
-			from ..util import Dict
-			req_data = Dict()
-
-			if self._utility_ca_function is not None and len(self._utility_ca_function):
-				if 'ca' not in req_data:
-					req_data.ca = set()
-				for i in self._utility_ca_function:
-					req_data.ca.add(str(i.data))
-
-			if self._quantity_ca_function is not None and len(self._quantity_ca_function):
-				if 'ca' not in req_data:
-					req_data.ca = set()
-				for i in self._quantity_ca_function:
-					req_data.ca.add(str(i.data))
-
-			if self._utility_co_functions is not None and len(self._utility_co_functions):
-				if 'co' not in req_data:
-					req_data.co = set()
-				for alt, func in self._utility_co_functions.items():
-					for i in func:
-						if str(i.data)!= '1':
-							req_data.co.add(str(i.data))
-
-			if 'ca' in req_data:
-				req_data.ca = list(sorted(req_data.ca))
-			if 'co' in req_data:
-				req_data.co = list(sorted(req_data.co))
-
-			if self.choice_ca_var:
-				req_data.choice_ca = self.choice_ca_var
-			elif self.choice_co_vars:
-				req_data.choice_co = self.choice_co_vars
-			elif self.choice_co_code:
-				req_data.choice_co_code = self.choice_co_code
-
-			if self.weight_co_var:
-				req_data.weight_co = self.weight_co_var
-
-			if self.availability_var:
-				req_data.avail_ca = self.availability_var
-			elif self.availability_co_vars:
-				req_data.avail_co = self.availability_co_vars
-
-			return req_data
-		except:
-			logger.exception("error in required_data")
 
 
 	@property

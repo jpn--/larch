@@ -145,3 +145,63 @@ class TouchNotify():
 
 	def __setstate__(self, state):
 		self.__touch_callback = lambda: None
+
+#
+# class EditableList:
+#
+# 	def __init__(self, content=None, touched=None):
+# 		self._data = [] if content is None else list(content)
+# 		if touched is None:
+# 			self._touched = lambda: print("TOUCH")
+# 		else:
+# 			self._touched = touch
+#
+# 	def __getitem__(self, position):
+# 		return self._data[position]
+#
+# 	def __setitem__(self, position, value):
+# 		self._data[position] = value
+# 		self._touched()
+#
+# 	def append(self, value):
+# 		self._data.append(value)
+# 		self._touched()
+#
+#
+# # this is our descriptor object
+# class Bar(object):
+# 	def __init__(self):
+# 		self.values = EditableList()
+#
+# 	def __get__(self, instance, owner):
+# 		print("returned from descriptor object", type(instance), type(owner), instance.its_me())
+# 		return self.values
+#
+# 	def __set__(self, instance, values):
+# 		print("set in descriptor object", type(instance), type(values), instance.its_me())
+# 		self.values = EditableList(values)
+# 		self.values._touched = instance.mangle
+#
+# 	def __delete__(self, instance):
+# 		print("deleted in descriptor object", type(instance))
+# 		del self.values
+# 		self.values = EditableList()
+#
+# 	def __set_name__(self, owner, name):
+# 		print("setname in descriptor object", type(owner), owner, name, type(self))
+# 		self.name = name
+# 		self.internal_name = '_' + name
+#
+#
+# class Foo(object):
+# 	bar = Bar()
+# 	bax = 888.888
+#
+# 	def __init__(self):
+# 		self.bar = []
+#
+# 	def mangle(self):
+# 		print("MANGLED")
+#
+# 	def its_me(self):
+# 		return repr(self.bax)

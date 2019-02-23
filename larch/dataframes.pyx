@@ -1165,27 +1165,27 @@ cdef class DataFrames:
 				logger(y)
 				missing_data.add(y)
 
-		if model._utility_ca_function is not None and len(model._utility_ca_function):
+		if model._utility_ca is not None and len(model._utility_ca):
 			if self._data_ca_or_ce is None:
 				missing(f'idca data missing for utility')
 			else:
-				for i in model._utility_ca_function:
+				for i in model._utility_ca:
 					if str(i.data) not in self._data_ca_or_ce:
 						missing(f'idca utility variable missing: {i.data}')
 
-		if model._quantity_ca_function is not None and len(model._quantity_ca_function):
+		if model._quantity_ca is not None and len(model._quantity_ca):
 			if self._data_ca_or_ce is None:
 				missing(f'idca data missing for quantity')
 			else:
-				for i in model._quantity_ca_function:
+				for i in model._quantity_ca:
 					if str(i.data) not in self._data_ca_or_ce:
 						missing(f'idca quantity variable missing: {i.data}')
 
-		if model._utility_co_functions is not None and len(model._utility_co_functions):
+		if model._utility_co is not None and len(model._utility_co):
 			if self._data_co is None:
 				missing(f'idco data missing for utility')
 			else:
-				for alt, func in model._utility_co_functions.items():
+				for alt, func in model._utility_co.items():
 					for i in func:
 						if str(i.data) not in self._data_co and str(i.data)!= '1':
 							missing(f'idco utility variable missing: {i.data}')
@@ -1218,13 +1218,13 @@ cdef class DataFrames:
 			#self.du = _initialize_or_validate_shape(du, [self_.n_alts, len(model.pf)], dtype=l4_float_dtype)
 			self.check_data_is_sufficient_for_model(model)
 
-			if model._quantity_ca_function is not None:
-				len_model_utility_ca = len(model._quantity_ca_function)
+			if model._quantity_ca is not None:
+				len_model_utility_ca = len(model._quantity_ca)
 				self.model_quantity_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_quantity_ca_param_holdfast = numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_quantity_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
-				for n,i in enumerate(model._quantity_ca_function):
+				for n,i in enumerate(model._quantity_ca):
 					self.model_quantity_ca_param[n] = model.frame.index.get_loc(str(i.param))
 					self.model_quantity_ca_data [n] = self.data_ca.columns.get_loc(str(i.data))
 				if model._quantity_scale is not None:
@@ -1239,13 +1239,13 @@ cdef class DataFrames:
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_quantity_scale_param = -1
 
-			if model._utility_ca_function is not None:
-				len_model_utility_ca = len(model._utility_ca_function)
+			if model._utility_ca is not None:
+				len_model_utility_ca = len(model._utility_ca)
 				self.model_utility_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_utility_ca_param_holdfast=numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
-				for n,i in enumerate(model._utility_ca_function):
+				for n,i in enumerate(model._utility_ca):
 					self.model_utility_ca_param[n] = model.frame.index.get_loc(str(i.param))
 					self.model_utility_ca_data [n] = self._data_ca_or_ce.columns.get_loc(str(i.data))
 			else:
@@ -1255,8 +1255,8 @@ cdef class DataFrames:
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 
-			if model._utility_co_functions is not None:
-				len_co = sum(len(_) for _ in model._utility_co_functions.values())
+			if model._utility_co is not None:
+				len_co = sum(len(_) for _ in model._utility_co.values())
 				self.model_utility_co_alt         = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_param_value = numpy.zeros([len_co], dtype=l4_float_dtype)
 				self.model_utility_co_param_holdfast = numpy.zeros([len_co], dtype=numpy.int8)
@@ -1264,7 +1264,7 @@ cdef class DataFrames:
 				self.model_utility_co_data        = numpy.zeros([len_co], dtype=numpy.int32)
 
 				j = 0
-				for alt, func in model._utility_co_functions.items():
+				for alt, func in model._utility_co.items():
 					altindex = self._alternative_codes.get_loc(alt)
 					for i in func:
 						self.model_utility_co_alt  [j] = altindex
