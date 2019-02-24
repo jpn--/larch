@@ -9,7 +9,29 @@ _ParameterRef_C_repr_txt = "P"
 _DataRef_repr_txt = 'X'
 
 
-cdef class ParameterRef_C(unicode):
+cdef class UnicodeRef_C(unicode):
+
+	pass
+
+cdef class Ref_Gen:
+
+	def __init__(self, kind):
+		self._kind = kind
+
+	def __getattr__(self, key):
+		return self._kind(key)
+
+	def __call__(self, arg):
+		return self._kind(str(arg))
+
+	def __getitem__(self, arg):
+		return self._kind(str(arg))
+
+
+P = Ref_Gen(ParameterRef_C)
+X = Ref_Gen(DataRef_C)
+
+cdef class ParameterRef_C(UnicodeRef_C):
 
 	def __repr__(self):
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$", self) and not _keyword.iskeyword(self):
@@ -17,10 +39,58 @@ cdef class ParameterRef_C(unicode):
 		else:
 			return "{}('{}')".format(_ParameterRef_C_repr_txt, self)
 
+	def __eq__(self, other):
+		if isinstance(other, str) and not isinstance(other, DataRef_C):
+			if str(self) == str(other):
+				return True
+		return False
+
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
+	def __hash__(self):
+		return super().__hash__()
+
+	def __pos__(self):
+		return self
+
+	def __add__(self, other):
+		if other == 0:
+			return self
+		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+			return LinearComponent_C(param=str(self), data="1") + other
+		# return _param_add(self, other)
+		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+
+	def __radd__(self, other):
+		if other == 0:
+			return self
+		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+			return other + LinearComponent_C(param=str(self), data="1")
+		# return _param_add(other, self)
+		raise NotImplementedError(f"<{other.__class__.__name__}> + <{self.__class__.__name__}>")
+
+	def __sub__(self, other):
+		if other == 0:
+			return self
+		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+			return LinearComponent_C(param=str(self), data="1") - other
+		#return _param_subtract(self, other)
+		raise NotImplementedError(f"<{self.__class__.__name__}> - <{other.__class__.__name__}>")
+
+	def __rsub__(self, other):
+		if other == 0:
+			return self
+		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+			return other - LinearComponent_C(param=str(self), data="1")
+		#return _param_subtract(other, self)
+		raise NotImplementedError(f"<{other.__class__.__name__}> - <{self.__class__.__name__}>")
+
 	def __mul__(self, DataRef_C other):
 		return LinearComponent_C(str(self), str(other))
 
-cdef class DataRef_C(unicode):
+
+cdef class DataRef_C(UnicodeRef_C):
 
 	def __repr__(self):
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$", self) and not _keyword.iskeyword(self):
@@ -28,14 +98,29 @@ cdef class DataRef_C(unicode):
 		else:
 			return "{}('{}')".format(_DataRef_repr_txt, self)
 
-	def __mul__(self, ParameterRef_C other):
-		return LinearComponent_C(str(other), str(self))
+	def __eq__(self, other):
+		if isinstance(other, str) and not isinstance(other, ParameterRef_C):
+			if str(self) == str(other):
+				return True
+		return False
+
+	def __ne__(self, other):
+		return not self.__eq__(other)
+
+	def __hash__(self):
+		return super().__hash__()
+
+	def __pos__(self):
+		return self
+
+	def __mul__(self, other):
+		if isinstance(other, ParameterRef_C):
+			return LinearComponent_C(str(other), str(self))
+		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
+
 
 
 cdef class LinearComponent_C:
-
-	def __cinit__(self):
-		print("HELLO LinearComponent_C", file=sys.stderr)
 
 	def __init__(self, unicode param, unicode data='1', l4_float_t scale=1):
 		self._param = param
@@ -94,14 +179,14 @@ cdef class LinearComponent_C:
 	def __mul__(self, other):
 		if isinstance(other, (int, float, )):
 			return self.__class__(
-				param=self.param,
-				data=self.data,
+				param=str(self.param),
+				data=str(self.data),
 				scale=self.scale * other,
 			)
 		elif isinstance(other, (DataRef_C, )):
 			return self.__class__(
-				param=self.param,
-				data=self.data * other,
+				param=str(self.param),
+				data=str(self.data * other),
 				scale=self.scale,
 			)
 		else:
@@ -110,14 +195,14 @@ cdef class LinearComponent_C:
 	def __rmul__(self, other):
 		if isinstance(other, (int, float, )):
 			return self.__class__(
-				param=self.param,
-				data=self.data,
+				param=str(self.param),
+				data=str(self.data),
 				scale=self.scale * other,
 			)
 		elif isinstance(other, (DataRef_C, )):
 			return self.__class__(
-				param=self.param,
-				data=self.data * other,
+				param=str(self.param),
+				data=str(self.data * other),
 				scale=self.scale,
 			)
 		else:
@@ -191,8 +276,8 @@ cdef class LinearComponent_C:
 
 	def __copy__(self):
 		return self.__class__(
-			param=self.param,
-			data=self.data,
+			param=str(self.param),
+			data=str(self._data),
 			scale=self.scale,
 		)
 
@@ -204,11 +289,14 @@ def _try_mangle(instance):
 	except AttributeError as err:
 		print(f"No Mangle L: {err}")
 
+def _try_mangle_h(instance_holder):
+	try:
+		instance_holder._instance.mangle()
+	except AttributeError as err:
+		print(f"No Mangle L2: {err}")
+
 
 cdef class LinearFunction_C:
-
-	def __cinit__(self):
-		print("HELLO LinearFunction_C", file=sys.stderr)
 
 	def __init__(self, init=None):
 		self._func = list()
@@ -219,10 +307,15 @@ cdef class LinearFunction_C:
 					self._func.append(i)
 				else:
 					raise TypeError(f'members of {self.__class__.__name__} must be LinearComponent_C')
-		print("FINAL LinearFunction_C", file=sys.stderr)
 
 	def set_instance(self, instance):
 		self._instance = instance
+
+	def __fresh(self, instance):
+		newself = LinearFunction_C()
+		newself._instance = instance
+		setattr(instance, self.private_name, newself)
+		return newself
 
 	def __get__(self, instance, owner):
 
@@ -231,14 +324,11 @@ cdef class LinearFunction_C:
 		if instance is None:
 			return self
 		try:
-			newself = getattr(instance, '_'+self.name)
+			newself = getattr(instance, self.private_name)
 		except AttributeError:
-			newself = LinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
+			newself = self.__fresh(instance)
 		if newself is None:
-			newself = LinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
-		newself._instance = instance
+			newself = self.__fresh(instance)
 		return newself
 
 	def __set__(self, instance, values):
@@ -246,30 +336,29 @@ cdef class LinearFunction_C:
 		cdef LinearFunction_C newself
 
 		try:
-			newself = getattr(instance, '_'+self.name)
+			newself = getattr(instance, self.private_name)
 		except AttributeError:
-			newself = LinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
+			newself = self.__fresh(instance)
+		if newself is None:
+			newself = self.__fresh(instance)
 		newself.__init__(values)
-		newself._instance = instance
-		_try_mangle(newself._instance)
+		_try_mangle_h(newself)
 
 	def __delete__(self, instance):
 
 		cdef LinearFunction_C newself
 
 		try:
-			newself = getattr(instance, '_'+self.name)
+			newself = getattr(instance, self.private_name)
 		except AttributeError:
-			newself = LinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
+			newself = self.__fresh(instance)
 		newself.__init__()
 		newself._instance = instance
-		_try_mangle(newself._instance)
+		_try_mangle_h(newself)
 
 	def __set_name__(self, owner, name):
 		self.name = name
-		print("NAME LinearFunction_C", self.name, file=sys.stderr)
+		self.private_name = "_"+name
 
 	def __getitem__(self, item):
 		return self._func[item]
@@ -569,9 +658,6 @@ cdef class LinearFunction_C:
 
 cdef class DictOfLinearFunction_C:
 
-	def __cinit__(self):
-		print("HELLO DictOfLinearFunction_C", file=sys.stderr)
-
 	def __init__(self, mapping=None, alts_validator=None, **kwargs):
 		self._map = {}
 		if mapping is None:
@@ -588,7 +674,13 @@ cdef class DictOfLinearFunction_C:
 
 		self._alts_validator = alts_validator
 		self._instance = None
-		print("FINAL DictOfLinearFunction_C", self._instance, file=sys.stderr)
+
+	def __fresh(self, instance):
+		cdef DictOfLinearFunction_C newself
+		newself = DictOfLinearFunction_C()
+		newself._instance = instance
+		setattr(instance, self.private_name, newself)
+		return newself
 
 	def __get__(self, instance, owner):
 
@@ -597,14 +689,11 @@ cdef class DictOfLinearFunction_C:
 		if instance is None:
 			return self
 		try:
-			newself = getattr(instance, '_'+self.name)
+			newself = getattr(instance, self.private_name)
 		except AttributeError:
-			newself = DictOfLinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
+			newself = self.__fresh(instance)
 		if newself is None:
-			newself = DictOfLinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
-		newself._instance = instance
+			newself = self.__fresh(instance)
 		return newself
 
 	def __set__(self, instance, values):
@@ -612,30 +701,20 @@ cdef class DictOfLinearFunction_C:
 		cdef DictOfLinearFunction_C newself
 
 		try:
-			newself = getattr(instance, '_'+self.name)
+			newself = getattr(instance, self.private_name)
 		except AttributeError:
-			newself = DictOfLinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
+			newself = self.__fresh(instance)
+		if newself is None:
+			newself = self.__fresh(instance)
 		newself.__init__(values)
-		newself._instance = instance
-		_try_mangle(newself._instance)
+		_try_mangle_h(newself)
 
 	def __delete__(self, instance):
-
-		cdef DictOfLinearFunction_C newself
-
-		try:
-			newself = getattr(instance, '_'+self.name)
-		except AttributeError:
-			newself = DictOfLinearFunction_C()
-			setattr(instance, '_'+self.name, newself)
-		newself.__init__()
-		newself._instance = instance
-		_try_mangle(newself._instance)
+		self.__set__(instance, None)
 
 	def __set_name__(self, owner, name):
 		self.name = name
-
+		self.private_name = "_"+name
 
 	def set_alts_validator(self, av):
 		self._alts_validator = av
@@ -680,6 +759,15 @@ cdef class DictOfLinearFunction_C:
 	def __len__(self):
 		return len(self._map)
 
+	def keys(self):
+		return self._map.keys()
+
+	def items(self):
+		return self._map.items()
+
+	def values(self):
+		return self._map.values()
+
 	def copy(self):
 		return type(self)(self)
 
@@ -714,22 +802,31 @@ cdef class DictOfLinearFunction_C:
 		return self.__xml__().tostring()
 
 
-cdef class Top:
+cdef class GenericContainerCy:
 
 	def __init__(self, arg):
-		self.arg = arg
+		self.ident = arg
 
 	def mangle(self):
-		print("MANGLE",self.arg)
+		print(":MANGLE:",self.ident)
 
 	def stats(self):
-		print(self._qf)
+		print("LF:",self.lf)
+		print("DLF:",self.dlf)
+		print("_LF:",self._lf)
+		print("_DLF:",self._dlf)
 
 
-class Topper(Top):
+class GenericContainerPy(GenericContainerCy):
 
-	qf = LinearFunction_C()
+	lf = LinearFunction_C()
+	dlf = DictOfLinearFunction_C()
 
 	def __init__(self, arg):
 		super().__init__(arg)
+
+	def stats(self):
+		print("LF:",self.lf)
+		print("DLF:",self.dlf)
+		super().stats()
 

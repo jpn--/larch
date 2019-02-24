@@ -16,46 +16,17 @@ logger = logging.getLogger('L5.model')
 
 from ..dataframes cimport DataFrames
 
-from ..roles import LinearFunction, LinearComponent, ParameterRef, DictOfLinearFunction, DictOfStrings, DataRef
+from ..roles import DictOfStrings
 
-def bonker():
-
-	return pandas.DataFrame(
-					index=[1,2],
-			data=numpy.ones([2,2]),
-			columns=['a','b']
-	)
+from .linear cimport ParameterRef_C as ParameterRef
+from .linear cimport DataRef_C as DataRef
 
 def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 
 	cdef int len_names = 0 if names is None else len(names)
 
-	import pandas
-
-	if len_names == 0:
-		len_names = 1
-
-
-	print("_empty_parameter_frame 1", pandas, file=sys.stderr)
-
 	min_ = min if min is not None else -numpy.inf
 	max_ = max if max is not None else numpy.inf
-	print("_empty_parameter_frame 2", pandas.__version__, file=sys.stderr)
-
-	print(bonker())
-		# 	(
-		# 	index=[1,2],
-		# 	data=numpy.ones([2,2]),
-		# 	columns=['a','b']
-		# )
-
-	# print(pandas.DataFrame(
-	# 				index=[1,2],
-	# 		data=numpy.ones([2,2]),
-	# 		columns=['a','b']
-	# ))
-
-	print("_empty_parameter_frame len_name=", len_names, file=sys.stderr)
 
 	data=dict(
 			value = numpy.full(len_names, fill_value=initvalue, dtype=l4_float_dtype),
@@ -66,13 +37,8 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 			holdfast = numpy.zeros(len_names, dtype=numpy.int8),
 			note = numpy.zeros(len_names, dtype='<U128')
 		)
-	print("_empty_parameter_frame 3", data, file=sys.stderr)
 	ix = names if names is not None else []
-	if len(ix) == 0 and len_names > 0:
-		ix = ['QQQ' for _ in range(len_names)]
-	print("_empty_parameter_frame 4", ix, file=sys.stderr)
 	columns=['value', 'initvalue', 'nullvalue', 'minimum', 'maximum', 'holdfast', 'note']
-	print("_empty_parameter_frame 5", columns, file=sys.stderr)
 	try:
 		r = pandas.DataFrame(
 			index=ix,
@@ -83,8 +49,6 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 		print(err, file=sys.stderr)
 		raise
 
-	print("_empty_parameter_frame 6", file=sys.stderr)
-	print("_empty_parameter_frame 7", file=sys.stderr)
 	return r.copy()
 
 class MissingDataError(ValueError):
@@ -95,12 +59,6 @@ class ParameterNotInModelWarning(UserWarning):
 
 
 cdef class Model5c:
-
-	def __cinit__(self):
-		import sys
-		print("HELLO c", file=sys.stderr)
-		self.frame = None
-
 
 	def __init__(
 			self, *,
@@ -117,8 +75,6 @@ cdef class Model5c:
 			n_threads=-1,
 			is_clone=False,
 	):
-		import sys
-		print("HELLO i", file=sys.stderr)
 		self._dataframes = None
 
 		if is_clone:
@@ -134,38 +90,54 @@ cdef class Model5c:
 				self._quantity_scale = None
 			else:
 				self._quantity_scale = str(quantity_scale)
-		print("HELLO i1", file=sys.stderr)
 
 		self.rename_parameters = DictOfStrings(touch_callback=self.mangle)
-		print("HELLO i2", file=sys.stderr)
 
 		self._cached_loglike_null = 0
 		self._cached_loglike_constants_only = 0
 		self._cached_loglike_best = -numpy.inf
 		self._most_recent_estimation_result = None
-		print("HELLO i3", file=sys.stderr)
 
 		self.n_threads = n_threads
-		print("HELLO i4", file=sys.stderr)
 
 		self._dataservice = dataservice
-		print("HELLO i5", file=sys.stderr)
 
 		if frame is not None:
-			print("HELLO i5.1a", file=sys.stderr)
 			self.frame = frame
 		else:
-			print("HELLO i5.1b", file=sys.stderr)
 			fr = _empty_parameter_frame(parameters or [])
-			print("HELLO i5.2b", file=sys.stderr)
 			self.frame = fr
-			print("HELLO i5.3b", file=sys.stderr)
-		print("HELLO i6", file=sys.stderr)
 
 		self._graph = graph
 
-		print("BYE i", file=sys.stderr)
 
+	@property
+	def _utility_ca(self):
+		return self._utility_ca_c
+
+	@_utility_ca.setter
+	def _utility_ca(self, LinearFunction_C x not None):
+		self._utility_ca_c = x
+
+	@property
+	def _utility_co(self):
+		return self._utility_co_c
+
+	@_utility_co.setter
+	def _utility_co(self, DictOfLinearFunction_C x not None):
+		self._utility_co_c = x
+
+	@property
+	def _quantity_ca(self):
+		return self._quantity_ca_c
+
+	@_quantity_ca.setter
+	def _quantity_ca(self, LinearFunction_C x not None):
+		self._quantity_ca_c = x
+
+
+	def debug_utility_all(self):
+		return self._utility_ca_c, self._utility_co_c, self._quantity_ca_c
 
 	@property
 	def title(self):
@@ -682,13 +654,13 @@ cdef class Model5c:
 
 	@property
 	def _utility_co_postprocess(self):
-		u = DictOfLinearFunction()
+		u = DictOfLinearFunction_C()
 		print("DWG:",self._utility_co)
 		if self._utility_co is not None:
 			keys = list(self._utility_co.keys())
 			u_found = {k:set() for k in keys}
 			for altkey in keys:
-				u[altkey] = LinearFunction()
+				u[altkey] = LinearFunction_C()
 			for altkey in keys:
 				for n, i in enumerate(self._utility_co[altkey]):
 					try:
@@ -718,7 +690,7 @@ cdef class Model5c:
 		# 	return u
 		# else:
 		# 	return self.utility_ca
-		return self.utility_ca
+		return self._utility_ca
 
 	@property
 	def _quantity_ca_postprocess(self):
@@ -732,7 +704,7 @@ cdef class Model5c:
 		# 	return u
 		# else:
 		# 	return self.quantity_ca
-		return self.quantity_ca
+		return self._quantity_ca
 
 	def _refresh_derived_arrays(self):
 		self._dataframes._link_to_model_structure(self)

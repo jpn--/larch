@@ -2199,16 +2199,22 @@ class DictOfStringKeys(TouchNotify, dict):
 		return self.__xml__().tostring()
 
 
-globals()[_ParameterRef_repr_txt] = ParameterRef
-globals()[_DataRef_repr_txt] = DataRef
-globals()[_ParameterRef_repr_txt + _DataRef_repr_txt] = CombinedRef
 
-LinearFunction = LinearFunction2
-LinearComponent = LinearComponent2
-DictOfLinearFunction = DictOfLinearFunction2
+from .model.linear import ParameterRef_C, DataRef_C, LinearFunction_C, \
+	LinearComponent_C, DictOfLinearFunction_C, Ref_Gen
 
-P = ParameterRef
-X = DataRef
-PX = CombinedRef
+LinearFunction = LinearFunction_C
+LinearComponent = LinearComponent_C
+DictOfLinearFunction = DictOfLinearFunction_C
+
+P = Ref_Gen(ParameterRef_C)
+X = Ref_Gen(DataRef_C)
+
+def PX(z):
+	return P(z) * X(z)
+
+globals()[_ParameterRef_repr_txt] = P
+globals()[_DataRef_repr_txt] = X
+globals()[_ParameterRef_repr_txt + _DataRef_repr_txt] = PX
 
 __all__ = [_ParameterRef_repr_txt, _DataRef_repr_txt, _ParameterRef_repr_txt + _DataRef_repr_txt]

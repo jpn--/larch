@@ -56,17 +56,11 @@ class Model(_Model5c):
 				 quantity_ca=None,
 				 **kwargs):
 		import sys
-		print("HELLO p1", file=sys.stderr)
 		self._sklearn_data_format = 'idce'
-		print("HELLO p2", file=sys.stderr)
 		self.utility_co = utility_co
-		print("HELLO p3", file=sys.stderr)
 		self.utility_ca = utility_ca
-		print("HELLO p4", file=sys.stderr)
 		self.quantity_ca = quantity_ca
-		print("HELLO p5", file=sys.stderr)
 		super().__init__(**kwargs)
-		print("HELLO p6", file=sys.stderr)
 		self._scan_all_ensure_names()
 		self.mangle()
 
