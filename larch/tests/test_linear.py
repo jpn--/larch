@@ -26,6 +26,39 @@ def test_data_c():
 	assert not p == d
 	assert p != d
 
+def test_data_c_math():
+
+	assert X.Aaa + X.Bbb == X("Aaa+Bbb")
+	assert X.Aaa - X.Bbb == X("Aaa-Bbb")
+	assert X.Aaa * X.Bbb == X("Aaa*Bbb")
+	assert X.Aaa / X.Bbb == X("Aaa/Bbb")
+	assert X.Aaa & X.Bbb == X("Aaa&Bbb")
+	assert X.Aaa | X.Bbb == X("Aaa|Bbb")
+	assert X.Aaa ^ X.Bbb == X("Aaa^Bbb")
+	assert X.Aaa ** X.Bbb == X("Aaa**Bbb")
+	assert X.Zzz / X.Aaa + X.Vvv * X.Bbb == X('(Zzz/Aaa)+(Vvv*Bbb)')
+	assert +X.Aaa == X("Aaa")
+	assert -X.Aaa == X("-Aaa")
+
+	assert X.Aaa + 2 == X("Aaa+2")
+	assert X.Aaa - 2 == X("Aaa-2")
+	assert X.Aaa * 2 == X("Aaa*2")
+	assert X.Aaa / 2 == X("Aaa/2")
+	assert X.Aaa & 2 == X("Aaa&2")
+	assert X.Aaa | 2 == X("Aaa|2")
+	assert X.Aaa ^ 2 == X("Aaa^2")
+	assert X.Aaa ** 2 == X("Aaa**2")
+
+	assert 2 + X.Aaa == X("2+Aaa")
+	assert 2 - X.Aaa == X("2-Aaa")
+	assert 2 * X.Aaa == X("2*Aaa")
+	assert 2 / X.Aaa == X("2/Aaa")
+	assert 2 & X.Aaa == X("2&Aaa")
+	assert 2 | X.Aaa == X("2|Aaa")
+	assert 2 ^ X.Aaa == X("2^Aaa")
+	assert 2 ** X.Aaa == X("2**Aaa")
+
+
 def test_ref_gen():
 
 	assert X["Asd"] == X("Asd") == X.Asd

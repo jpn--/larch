@@ -4,6 +4,10 @@ import re as _re
 import keyword as _keyword
 import numpy as _numpy
 import sys
+from numbers import Number as _Number
+
+from ..util.naming import parenthize, valid_identifier_or_parenthized_string
+
 
 _ParameterRef_C_repr_txt = "P"
 _DataRef_repr_txt = 'X'
@@ -113,10 +117,77 @@ cdef class DataRef_C(UnicodeRef_C):
 	def __pos__(self):
 		return self
 
+	def __add__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+
+	def __sub__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}-{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> - <{other.__class__.__name__}>")
+
 	def __mul__(self, other):
-		if isinstance(other, ParameterRef_C):
-			return LinearComponent_C(str(other), str(self))
+		if isinstance(self, DataRef_C):
+			if isinstance(other, (DataRef_C, _Number)):
+				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
+			if isinstance(other, ParameterRef_C):
+				return LinearComponent_C(param=str(other), data=str(self))
+			if isinstance(other, LinearComponent_C):
+				return LinearComponent_C(param=str(other.param), data=str(self * other.data) )
+			if isinstance(other, LinearFunction_C):
+				return LinearFunction_C([self * c for c in other] )
+		elif isinstance(other, DataRef_C):
+			if isinstance(self, (DataRef_C, _Number)):
+				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
+			if isinstance(self, ParameterRef_C):
+				return LinearComponent_C(param=str(self), data=str(other))
+			if isinstance(self, LinearComponent_C):
+				return LinearComponent_C(param=str(self.param), data=str(self.data * other) )
+			if isinstance(self, LinearFunction_C):
+				return LinearFunction_C([c*other for c in self] )
 		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
+
+	def __truediv__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}/{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> / <{other.__class__.__name__}>")
+
+	def __and__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}&{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> & <{other.__class__.__name__}>")
+
+	def __or__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}|{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> | <{other.__class__.__name__}>")
+
+	def __xor__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}^{}".format(parenthize(self), parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> ^ <{other.__class__.__name__}>")
+
+	def __floordiv__(self, other):
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}//{}".format(parenthize(self),parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> // <{other.__class__.__name__}>")
+
+	def __pow__(self, other, modulo):
+		if modulo is not None:
+			raise NotImplementedError(f"no pow with modulo on {self.__class__.__name__}")
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			return DataRef_C("{}**{}".format(parenthize(self),parenthize(other, True)))
+		raise NotImplementedError(f"<{self.__class__.__name__}> ** <{other.__class__.__name__}>")
+
+	def __invert__(self):
+		return DataRef_C("~{}".format(parenthize(self, True)))
+
+	def __neg__(self):
+		return DataRef_C("-{}".format(parenthize(self, True)))
+
+	def __pos__(self):
+		return self
 
 
 
