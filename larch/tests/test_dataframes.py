@@ -71,8 +71,8 @@ def test_service_idco():
 
 	check2 = dfs.make_idco('age')
 	assert check2.shape == (5029, 1)
-	assert numpy.all(check2.head(5) == [35, 40, 28, 34, 43])
-	assert numpy.all(check2.tail(5) == [58, 33, 34, 35, 37])
+	assert numpy.all(check2.iloc[:5,0] == [35, 40, 28, 34, 43])
+	assert numpy.all(check2.iloc[-5:,0] == [58, 33, 34, 35, 37])
 
 	check3 = dfs.make_idco('age', '1')
 	assert check3.shape == (5029, 2)
