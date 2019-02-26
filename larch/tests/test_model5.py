@@ -74,7 +74,6 @@ def test_dataframes_mnl5():
 
 	print("+"*60)
 	print(m5.utility_ca)
-	print(m5.debug_utility_all()[0])
 
 	assert -4930.3212890625 == approx(ll2.ll)
 

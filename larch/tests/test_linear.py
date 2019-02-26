@@ -1,7 +1,8 @@
 
-from larch.model.linear import ParameterRef_C, DataRef_C, P, X
+from larch.model.linear import ParameterRef_C, DataRef_C, LinearComponent_C, LinearFunction_C
+from larch import P, X
 import keyword
-
+import pytest
 
 def test_parameter_c():
 
@@ -11,7 +12,9 @@ def test_parameter_c():
 	assert not keyword.iskeyword(p)
 	assert hash(p) == hash("hsh")
 	assert repr(p) == "P.hsh"
-
+	assert p == P.hsh
+	assert p == P("hsh")
+	assert p == P['hsh']
 
 def test_data_c():
 
@@ -21,6 +24,10 @@ def test_data_c():
 	assert not keyword.iskeyword(d)
 	assert hash(d) == hash("hsh")
 	assert repr(d) == "X.hsh"
+
+	assert d == X.hsh
+	assert d == X("hsh")
+	assert d == X['hsh']
 
 	p = ParameterRef_C("hsh")
 	assert not p == d
@@ -58,9 +65,53 @@ def test_data_c_math():
 	assert 2 ^ X.Aaa == X("2^Aaa")
 	assert 2 ** X.Aaa == X("2**Aaa")
 
+	assert X.Aaa + 0 == X.Aaa
+	assert 0 + X.Aaa == X.Aaa
+
+	assert X.Aaa * 1 == X.Aaa
+	assert 1 * X.Aaa == X.Aaa
+
+	with pytest.raises(NotImplementedError):
+		_ = X.Aaa + "Plain String"
+
+	with pytest.raises(NotImplementedError):
+		_ = X.Aaa - "Plain String"
+
+	with pytest.raises(NotImplementedError):
+		_ = X.Aaa * "Plain String"
+
+	with pytest.raises(NotImplementedError):
+		_ = X.Aaa / "Plain String"
+
 
 def test_ref_gen():
 
 	assert X["Asd"] == X("Asd") == X.Asd
 	assert P["Asd"] == P("Asd") == P.Asd
 	assert X.Asd != P.Asd
+
+def test_linear_func():
+
+	assert LinearComponent_C(param="pname", data="dname") == P.pname * X.dname
+
+	assert type(list(P.singleton + P.pname * X.dname)[0]) is LinearComponent_C
+	assert type(list(P.singleton + P.pname * X.dname)[1]) is LinearComponent_C
+
+	assert type(list( + P.pname * X.dname + P.singleton)[0]) is LinearComponent_C
+	assert type(list( + P.pname * X.dname + P.singleton)[1]) is LinearComponent_C
+
+
+
+	assert list(-(P.pname * X.dname + P.singleton)) == [
+		LinearComponent_C('pname', 'dname', -1.0),
+		LinearComponent_C('singleton', '1', -1.0),
+	]
+	assert list(-(P.pname * X.dname - P.singleton)) == [
+		LinearComponent_C('pname', 'dname', -1.0),
+		LinearComponent_C('singleton', '1', 1.0),
+	]
+
+	assert list((P.pname * X.dname - P.singleton) * X.Sss) == [
+		LinearComponent_C(param='pname', data='dname*Sss', scale=1.0),
+		LinearComponent_C(param='singleton', data='Sss', scale=-1.0),
+	]

@@ -112,34 +112,6 @@ cdef class Model5c:
 
 
 	@property
-	def _utility_ca(self):
-		return self._utility_ca_c
-
-	@_utility_ca.setter
-	def _utility_ca(self, LinearFunction_C x not None):
-		self._utility_ca_c = x
-
-	@property
-	def _utility_co(self):
-		return self._utility_co_c
-
-	@_utility_co.setter
-	def _utility_co(self, DictOfLinearFunction_C x not None):
-		self._utility_co_c = x
-
-	@property
-	def _quantity_ca(self):
-		return self._quantity_ca_c
-
-	@_quantity_ca.setter
-	def _quantity_ca(self, LinearFunction_C x not None):
-		self._quantity_ca_c = x
-
-
-	def debug_utility_all(self):
-		return self._utility_ca_c, self._utility_co_c, self._quantity_ca_c
-
-	@property
 	def title(self):
 		if self._title is None:
 			return "Untitled"
@@ -166,7 +138,6 @@ cdef class Model5c:
 		self.clear_best_loglike()
 		self._mangled = True
 		#self._clear_cached_values()
-		print("Mangle!")
 
 	def unmangle(self, force=False):
 		if self._mangled or force:
@@ -655,7 +626,6 @@ cdef class Model5c:
 	@property
 	def _utility_co_postprocess(self):
 		u = DictOfLinearFunction_C()
-		print("DWG:",self._utility_co)
 		if self._utility_co is not None:
 			keys = list(self._utility_co.keys())
 			u_found = {k:set() for k in keys}

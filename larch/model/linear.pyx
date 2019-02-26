@@ -59,39 +59,45 @@ cdef class ParameterRef_C(UnicodeRef_C):
 		return self
 
 	def __add__(self, other):
-		if other == 0:
-			return self
-		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
-			return LinearComponent_C(param=str(self), data="1") + other
-		# return _param_add(self, other)
+		if isinstance(self, ParameterRef_C):
+			if other == 0:
+				return self
+			if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+				return LinearComponent_C(param=str(self), data="1") + other
+			# return _param_add(self, other)
+		elif isinstance(other, ParameterRef_C):
+			if self == 0:
+				return other
+			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
+				return self + LinearComponent_C(param=str(other), data="1")
 		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
 
-	def __radd__(self, other):
-		if other == 0:
-			return self
-		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
-			return other + LinearComponent_C(param=str(self), data="1")
-		# return _param_add(other, self)
-		raise NotImplementedError(f"<{other.__class__.__name__}> + <{self.__class__.__name__}>")
-
 	def __sub__(self, other):
-		if other == 0:
-			return self
-		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
-			return LinearComponent_C(param=str(self), data="1") - other
+		if isinstance(self, ParameterRef_C):
+			if other == 0:
+				return self
+			if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
+				return LinearComponent_C(param=str(self), data="1") - other
+		elif isinstance(other, ParameterRef_C):
+			if self == 0:
+				return other
+			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
+				return self - LinearComponent_C(param=str(other), data="1")
 		#return _param_subtract(self, other)
 		raise NotImplementedError(f"<{self.__class__.__name__}> - <{other.__class__.__name__}>")
 
-	def __rsub__(self, other):
-		if other == 0:
-			return self
-		if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
-			return other - LinearComponent_C(param=str(self), data="1")
-		#return _param_subtract(other, self)
-		raise NotImplementedError(f"<{other.__class__.__name__}> - <{self.__class__.__name__}>")
-
-	def __mul__(self, DataRef_C other):
-		return LinearComponent_C(str(self), str(other))
+	def __mul__(self, other):
+		if isinstance(self, ParameterRef_C):
+			if isinstance(other, DataRef_C):
+				return LinearComponent_C(param=str(self), data=str(other))
+			if isinstance(other, _Number):
+				return LinearComponent_C(param=str(self), data=str("1"), scale=other)
+		elif isinstance(other, ParameterRef_C):
+			if isinstance(self, DataRef_C):
+				return LinearComponent_C(param=str(other), data=str(self))
+			if isinstance(self, _Number):
+				return LinearComponent_C(param=str(other), data=str("1"), scale=self)
+		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
 
 
 cdef class DataRef_C(UnicodeRef_C):
@@ -119,6 +125,10 @@ cdef class DataRef_C(UnicodeRef_C):
 
 	def __add__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
+			if self == "0" or self == "0.0" or self == 0:
+				return other
+			if other == "0" or other == "0.0" or other == 0:
+				return self
 			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
 		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
 
@@ -130,6 +140,10 @@ cdef class DataRef_C(UnicodeRef_C):
 	def __mul__(self, other):
 		if isinstance(self, DataRef_C):
 			if isinstance(other, (DataRef_C, _Number)):
+				if self == "1" or self == "1.0" or self == 1:
+					return other
+				if other == "1" or other == "1.0" or other == 1:
+					return self
 				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
 			if isinstance(other, ParameterRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
@@ -139,6 +153,10 @@ cdef class DataRef_C(UnicodeRef_C):
 				return LinearFunction_C([self * c for c in other] )
 		elif isinstance(other, DataRef_C):
 			if isinstance(self, (DataRef_C, _Number)):
+				if self == "1" or self == "1.0" or self == 1:
+					return other
+				if other == "1" or other == "1.0" or other == 1:
+					return self
 				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
 			if isinstance(self, ParameterRef_C):
 				return LinearComponent_C(param=str(self), data=str(other))
@@ -213,6 +231,9 @@ cdef class LinearComponent_C:
 	def __pos__(self):
 		return self
 
+	def __neg__(self):
+		return self.__class__(param=self._param, data=self._data, scale=-self._scale)
+
 	def __repr__(self):
 		try:
 			if self.scale == 1.0:
@@ -229,55 +250,60 @@ cdef class LinearComponent_C:
 			return f"<{self.__class__.__name__} {id(self)} with error>"
 
 	def __add__(self, other):
-		if other == ():
-			return self
-		elif isinstance(other, LinearComponent_C):
-			return LinearFunction_C([self, other])
-		elif isinstance(other, LinearFunction_C):
-			return LinearFunction_C([self, *other])
-		elif other == 0:
-			return self
-		elif isinstance(other, ParameterRef_C):
-			return LinearFunction_C([self, LinearComponent_C(param=other)])
-		else:
-			raise NotImplementedError()
+		if isinstance(self, LinearComponent_C):
+			if other == () or other == 0:
+				return self
+			elif isinstance(other, LinearComponent_C):
+				return LinearFunction_C([self, other])
+			elif isinstance(other, LinearFunction_C):
+				return LinearFunction_C([self, *other])
+			elif isinstance(other, ParameterRef_C):
+				return LinearFunction_C([self, LinearComponent_C(param=str(other))])
+		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
 
-	def __radd__(self, other):
-		if other == 0:
-			return self
-		return other.__add__(self)
+	def __sub__(self, other):
+		if isinstance(self, LinearComponent_C):
+			if other == () or other == 0:
+				return self
+			elif isinstance(other, LinearComponent_C):
+				return LinearFunction_C([self, -other])
+			elif isinstance(other, LinearFunction_C):
+				return LinearFunction_C([self, *(-other)])
+			elif isinstance(other, ParameterRef_C):
+				return LinearFunction_C([self, -LinearComponent_C(param=str(other))])
+		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
 
 	def __mul__(self, other):
-		if isinstance(other, (int, float, )):
-			return self.__class__(
-				param=str(self.param),
-				data=str(self.data),
-				scale=self.scale * other,
-			)
-		elif isinstance(other, (DataRef_C, )):
-			return self.__class__(
-				param=str(self.param),
-				data=str(self.data * other),
-				scale=self.scale,
-			)
-		else:
-			raise TypeError(f'unsupported operand type(s) for {self.__class__.__name__}: {type(other)}')
+		if isinstance(self, LinearComponent_C):
+			if isinstance(other, (int, float, )):
+				return self.__class__(
+					param=str(self.param),
+					data=str(self.data),
+					scale=self.scale * other,
+				)
+			elif isinstance(other, (DataRef_C, )):
+				return self.__class__(
+					param=str(self.param),
+					data=str(self.data * other),
+					scale=self.scale,
+				)
+		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
 
-	def __rmul__(self, other):
-		if isinstance(other, (int, float, )):
-			return self.__class__(
-				param=str(self.param),
-				data=str(self.data),
-				scale=self.scale * other,
-			)
-		elif isinstance(other, (DataRef_C, )):
-			return self.__class__(
-				param=str(self.param),
-				data=str(self.data * other),
-				scale=self.scale,
-			)
-		else:
-			raise TypeError(f'unsupported operand type(s) for {self.__class__.__name__}: {type(other)}')
+	def __truediv__(self, other):
+		if isinstance(self, LinearComponent_C):
+			if isinstance(other, (int, float, )):
+				return self.__class__(
+					param=str(self.param),
+					data=str(self.data),
+					scale=self.scale / other,
+				)
+			elif isinstance(other, (DataRef_C, )):
+				return self.__class__(
+					param=str(self.param),
+					data=str(self.data / other),
+					scale=self.scale,
+				)
+		raise NotImplementedError(f"<{self.__class__.__name__}> / <{other.__class__.__name__}>")
 
 	def __iter__(self):
 		return iter(LinearFunction_C([self]))
@@ -358,13 +384,13 @@ def _try_mangle(instance):
 	try:
 		instance.mangle()
 	except AttributeError as err:
-		print(f"No Mangle L: {err}")
+		pass # print(f"No Mangle L: {err}")
 
 def _try_mangle_h(instance_holder):
 	try:
 		instance_holder._instance.mangle()
 	except AttributeError as err:
-		print(f"No Mangle L2: {err}")
+		pass # print(f"No Mangle L2: {err}")
 
 
 cdef class LinearFunction_C:
@@ -461,17 +487,18 @@ cdef class LinearFunction_C:
 		_try_mangle(self._instance)
 
 	def __add__(self, other):
-		if other == ():
-			return self
-		if isinstance(other, LinearFunction_C):
-			return self.__class__(*self._func, *other._func)
-		if isinstance(other, ParameterRef_C):
-			other = LinearComponent_C(param=other)
-		if isinstance(other, LinearComponent_C):
-			result = self.__class__(self)
-			result.append(other)
-			return result
-		raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
+		if isinstance(self, LinearFunction_C):
+			if other == ():
+				return self
+			if isinstance(other, LinearFunction_C):
+				return self.__class__(*self._func, *other._func)
+			if isinstance(other, ParameterRef_C):
+				other = LinearComponent_C(param=other)
+			if isinstance(other, LinearComponent_C):
+				result = self.__class__(self)
+				result.append(other)
+				return result
+		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef_C):
@@ -487,22 +514,16 @@ cdef class LinearFunction_C:
 			raise TypeError("cannot add type {} to LinearFunction".format(type(other)))
 		return self
 
-	def __radd__(self, other):
-		return LinearFunction_C([*other, *self])
-
 	def __pos__(self):
 		return self
+
+	def __neg__(self):
+		return self.__class__(-i for i in self)
 
 	def __mul__(self, other):
 		trial = LinearFunction_C()
 		for component in self:
 			trial.append(component * other)
-		return trial
-
-	def __rmul__(self, other):
-		trial = LinearFunction_C()
-		for component in self:
-			trial += other * component
 		return trial
 
 	def __contains__(self, val):
@@ -813,7 +834,7 @@ cdef class DictOfLinearFunction_C:
 		elif isinstance(v, list):
 			v = LinearFunction_C(v)
 		elif not isinstance(v, LinearFunction_C):
-			raise TypeError(f"only accepts LinearFunction_C values, not {type(v)}")
+			raise TypeError(f"values in {self.__class__} can only have type LinearFunction_C, not {type(v)}")
 		if "with error" in repr(v):
 			raise ValueError("found error here")
 		v.set_instance(self._instance)

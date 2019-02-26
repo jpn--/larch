@@ -1021,7 +1021,7 @@ def _try_mangle(instance):
 	try:
 		instance.mangle()
 	except AttributeError as err:
-		print(f"No Mangle R: {err}")
+		pass # print(f"No Mangle R: {err}")
 
 
 class LinearFunction2(MutableSequence):

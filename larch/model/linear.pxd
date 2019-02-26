@@ -40,6 +40,7 @@ cdef class DictOfLinearFunction_C:
 
 
 cdef class GenericContainerCy:
-	cdef public LinearFunction_C _lf
-	cdef public DictOfLinearFunction_C _dlf
-	cdef public object ident
+	cdef public:
+		LinearFunction_C _lf
+		DictOfLinearFunction_C _dlf
+		object ident

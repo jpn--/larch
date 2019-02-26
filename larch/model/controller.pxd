@@ -6,11 +6,12 @@ from .linear cimport LinearFunction_C, DictOfLinearFunction_C
 
 cdef class Model5c:
 
-	cdef:
-		DictOfLinearFunction_C _utility_co_c
-		LinearFunction_C _utility_ca_c
-		LinearFunction_C _quantity_ca_c
+	cdef public:
+		DictOfLinearFunction_C _utility_co
+		LinearFunction_C _utility_ca
+		LinearFunction_C _quantity_ca
 
+	cdef:
 		DataFrames _dataframes
 		object _dataservice
 
