@@ -13,6 +13,16 @@ _ParameterRef_C_repr_txt = "P"
 _DataRef_repr_txt = 'X'
 
 
+def _what_is(thing):
+	if isinstance(thing, (ParameterRef_C, DataRef_C)):
+		return repr(thing)
+	if isinstance(thing, (str, int, float)):
+		return f"{thing.__class__.__name__}({thing})"
+	if isinstance(thing, LinearComponent_C):
+		return f"{thing.__class__.__name__}({thing!r})"
+	return f"<{thing.__class__.__name__}>"
+
+
 cdef class UnicodeRef_C(unicode):
 
 	pass
@@ -70,7 +80,7 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return other
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self + LinearComponent_C(param=str(other), data="1")
-		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
 		if isinstance(self, ParameterRef_C):
@@ -84,7 +94,7 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self - LinearComponent_C(param=str(other), data="1")
 		#return _param_subtract(self, other)
-		raise NotImplementedError(f"<{self.__class__.__name__}> - <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
 		if isinstance(self, ParameterRef_C):
@@ -97,7 +107,7 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
 			if isinstance(self, _Number):
 				return LinearComponent_C(param=str(other), data=str("1"), scale=self)
-		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 
 cdef class DataRef_C(UnicodeRef_C):
@@ -130,12 +140,12 @@ cdef class DataRef_C(UnicodeRef_C):
 			if other == "0" or other == "0.0" or other == 0:
 				return self
 			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}-{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> - <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
 		if isinstance(self, DataRef_C):
@@ -164,39 +174,39 @@ cdef class DataRef_C(UnicodeRef_C):
 				return LinearComponent_C(param=str(self.param), data=str(self.data * other) )
 			if isinstance(self, LinearFunction_C):
 				return LinearFunction_C([c*other for c in self] )
-		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}/{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> / <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __and__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}&{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> & <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} & {_what_is(other)}")
 
 	def __or__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}|{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> | <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} | {_what_is(other)}")
 
 	def __xor__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}^{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> ^ <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} ^ {_what_is(other)}")
 
 	def __floordiv__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}//{}".format(parenthize(self),parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> // <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} // {_what_is(other)}")
 
 	def __pow__(self, other, modulo):
 		if modulo is not None:
 			raise NotImplementedError(f"no pow with modulo on {self.__class__.__name__}")
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}**{}".format(parenthize(self),parenthize(other, True)))
-		raise NotImplementedError(f"<{self.__class__.__name__}> ** <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} ** {_what_is(other)}")
 
 	def __invert__(self):
 		return DataRef_C("~{}".format(parenthize(self, True)))
@@ -259,7 +269,14 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *other])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, LinearComponent_C(param=str(other))])
-		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+		elif isinstance(other, LinearComponent_C):
+			if self == () or self == 0:
+				return other
+			elif isinstance(self, ParameterRef_C):
+				return LinearFunction_C([LinearComponent_C(param=str(self)), other])
+			elif isinstance(self, LinearFunction_C):
+				return LinearFunction_C([*self, other])
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
 		if isinstance(self, LinearComponent_C):
@@ -271,7 +288,7 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *(-other)])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, -LinearComponent_C(param=str(other))])
-		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __mul__(self, other):
 		if isinstance(self, LinearComponent_C):
@@ -287,7 +304,7 @@ cdef class LinearComponent_C:
 					data=str(self.data * other),
 					scale=self.scale,
 				)
-		raise NotImplementedError(f"<{self.__class__.__name__}> * <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
 		if isinstance(self, LinearComponent_C):
@@ -303,7 +320,7 @@ cdef class LinearComponent_C:
 					data=str(self.data / other),
 					scale=self.scale,
 				)
-		raise NotImplementedError(f"<{self.__class__.__name__}> / <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __iter__(self):
 		return iter(LinearFunction_C([self]))
@@ -498,7 +515,7 @@ cdef class LinearFunction_C:
 				result = self.__class__(self)
 				result.append(other)
 				return result
-		raise NotImplementedError(f"<{self.__class__.__name__}> + <{other.__class__.__name__}>")
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef_C):

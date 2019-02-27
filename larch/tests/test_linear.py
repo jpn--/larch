@@ -1,6 +1,6 @@
 
 from larch.model.linear import ParameterRef_C, DataRef_C, LinearComponent_C, LinearFunction_C
-from larch import P, X
+from larch import P, X, PX
 import keyword
 import pytest
 
@@ -114,4 +114,9 @@ def test_linear_func():
 	assert list((P.pname * X.dname - P.singleton) * X.Sss) == [
 		LinearComponent_C(param='pname', data='dname*Sss', scale=1.0),
 		LinearComponent_C(param='singleton', data='Sss', scale=-1.0),
+	]
+
+	assert list(sum(PX(i) for i in ['Aaa', 'Bbb'])) == [
+		LinearComponent_C(param='Aaa', data='Aaa', scale=1.0),
+		LinearComponent_C(param='Bbb', data='Bbb', scale=1.0),
 	]
