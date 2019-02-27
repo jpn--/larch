@@ -114,3 +114,30 @@ def ipython_status(magic_matplotlib=False):
                 message_set.add('pylab not loaded')
     return message_set
 
+
+def versions(*args):
+    """
+    Get versions of packages
+
+    Parameters
+    ----------
+    *args : Collection of packages
+    """
+    versions = {}
+    for i in args:
+        if i is sys:
+            versions['python'] = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        elif isinstance(i, type(os)):
+            pkg = getattr(i, "__package__", None)
+            ver = getattr(i, "__version__", None)
+            name = getattr(i, "__name__", None)
+            if ver is not None:
+                versions[name] = ver
+            if pkg and pkg in sys.modules:
+                ver = getattr(sys.modules[pkg], '__version__', None)
+                name = pkg
+                if ver is not None:
+                    versions[name] = ver
+    return versions
+
+
