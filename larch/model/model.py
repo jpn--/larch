@@ -4,9 +4,12 @@ import copy
 
 from .controller import Model5c as _Model5c
 from ..dataframes import DataFrames, get_dataframe_format
-from ..roles import LinearFunction
+from .linear import LinearFunction_C, DictOfLinearFunction_C
 from ..general_precision import l4_float_dtype
 from typing import Sequence
+
+import logging
+logger = logging.getLogger('L5.model')
 
 class Model(_Model5c):
 	"""A discrete choice model.
@@ -18,13 +21,13 @@ class Model(_Model5c):
 		necessary to define parameter names at initialization, as the names
 		can (and will) be collected from the utility function and nesting
 		components later.
-	utility_ca : LinearFunction, optional
+	utility_ca : LinearFunction_C, optional
 		The utility_ca function, which represents the qualitative portion of
 		utility for attributes that vary by alternative.
 	utility_co : DictOfLinearFunction, optional
 		The utility_co function, which represents the qualitative portion of
 		utility for attributes that vary by decision maker but not by alternative.
-	quantity_ca : LinearFunction, optional
+	quantity_ca : LinearFunction_C, optional
 		The quantity_ca function, which represents the quantitative portion of
 		utility for attributes that vary by alternative.
 	quantity_scale : str, optional
@@ -38,22 +41,36 @@ class Model(_Model5c):
 
 	"""
 
+	utility_co = DictOfLinearFunction_C()
+	utility_ca = LinearFunction_C()
+	quantity_ca = LinearFunction_C()
+
 	@classmethod
 	def Example(cls, n=1):
 		from ..examples import example
 		return example(n)
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self,
+				 utility_ca=None,
+				 utility_co=None,
+				 quantity_ca=None,
+				 **kwargs):
+		import sys
 		self._sklearn_data_format = 'idce'
-		super().__init__(*args, **kwargs)
+		self.utility_co = utility_co
+		self.utility_ca = utility_ca
+		self.quantity_ca = quantity_ca
+		super().__init__(**kwargs)
+		self._scan_all_ensure_names()
+		self.mangle()
 
 	def get_params(self, deep=True):
 		p = dict()
 		if deep:
 			p['frame'] = self.pf.copy()
-			p['utility_ca'] = LinearFunction(self.utility_ca.copy())
+			p['utility_ca'] = LinearFunction_C(self.utility_ca.copy())
 			p['utility_co'] = self.utility_co.copy_without_touch_callback()
-			p['quantity_ca'] = LinearFunction(self.quantity_ca.copy())
+			p['quantity_ca'] = LinearFunction_C(self.quantity_ca.copy())
 			p['quantity_scale'] = self.quantity_scale.copy() if self.quantity_scale is not None else None
 			p['graph'] = copy.deepcopy(self.graph)
 			p['is_clone'] = True
@@ -468,3 +485,139 @@ class Model(_Model5c):
 			s += f' "{self.title}"'
 		s += ">"
 		return s
+
+
+	def utility_functions(self, subset=None, resolve_parameters=True):
+		from xmle import Elem
+		x = Elem('div')
+		t = x.elem('table', style="margin-top:1px;", attrib={'class':'floatinghead'})
+		if len(self.utility_co):
+			# t.elem('caption', text=f"Utility Functions",
+			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
+			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
+			t_head = t.elem('thead')
+			tr = t_head.elem('tr')
+			tr.elem('th', text="alt")
+			tr.elem('th', text='formula')
+			t_body = t.elem('tbody')
+			for j in self.utility_co.keys():
+				if subset is None or j in subset:
+					tr = t_body.elem('tr')
+					tr.elem('td', text=str(j))
+					utilitycell = tr.elem('td')
+					utilitycell.elem('div')
+					anything = False
+					if len(self.utility_ca):
+						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						anything = True
+					if j in self.utility_co:
+						if anything:
+							utilitycell << Elem('br')
+						v = self.utility_co[j]
+						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						anything = True
+					if len(self.quantity_ca):
+						if anything:
+							utilitycell << Elem('br')
+						if self.quantity_scale:
+							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+							from .roles import ParameterRef
+							utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
+						else:
+							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
+						content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ",
+														   exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+						utilitycell << list(content)
+						utilitycell.elem('br', tail=")")
+		else:
+			# there is no differentiation by alternatives, just give one formula
+			# t.elem('caption', text=f"Utility Function",
+			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
+			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
+			tr = t.elem('tr')
+			utilitycell = tr.elem('td')
+			utilitycell.elem('div')
+			anything = False
+			if len(self.utility_ca):
+				utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+				anything = True
+			if len(self.quantity_ca):
+				if anything:
+					utilitycell << Elem('br')
+				if self.quantity_scale:
+					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+					from ..roles import ParameterRef
+					utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
+				else:
+					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
+				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+				utilitycell << list(content)
+				utilitycell.elem('br', tail=")")
+		return x
+
+
+	def required_data(self):
+		"""
+		What data is required in DataFrames for this model to be used.
+
+		Returns
+		-------
+		Dict
+		"""
+		try:
+			from ..util import Dict
+			req_data = Dict()
+
+			if self.utility_ca is not None and len(self.utility_ca):
+				if 'ca' not in req_data:
+					req_data.ca = set()
+				for i in self.utility_ca:
+					req_data.ca.add(str(i.data))
+
+			if self.quantity_ca is not None and len(self.quantity_ca):
+				if 'ca' not in req_data:
+					req_data.ca = set()
+				for i in self.quantity_ca:
+					req_data.ca.add(str(i.data))
+
+			if self.utility_co is not None and len(self.utility_co):
+				if 'co' not in req_data:
+					req_data.co = set()
+				for alt, func in self.utility_co.items():
+					for i in func:
+						if str(i.data)!= '1':
+							req_data.co.add(str(i.data))
+
+			if 'ca' in req_data:
+				req_data.ca = list(sorted(req_data.ca))
+			if 'co' in req_data:
+				req_data.co = list(sorted(req_data.co))
+
+			if self.choice_ca_var:
+				req_data.choice_ca = self.choice_ca_var
+			elif self.choice_co_vars:
+				req_data.choice_co = self.choice_co_vars
+			elif self.choice_co_code:
+				req_data.choice_co_code = self.choice_co_code
+
+			if self.weight_co_var:
+				req_data.weight_co = self.weight_co_var
+
+			if self.availability_var:
+				req_data.avail_ca = self.availability_var
+			elif self.availability_co_vars:
+				req_data.avail_co = self.availability_co_vars
+
+			return req_data
+		except:
+			logger.exception("error in required_data")
+
+
+	def __contains__(self, item):
+		return (item in self.pf.index) or (item in self.rename_parameters)
+

@@ -25,12 +25,17 @@ def test_dataframes_mnl5():
 
 	m5 = Model()
 
-	from larch.roles import P, X, PX
-	m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
-	m5.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
-	m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
-	m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
-	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+	# from larch.roles import P, X, PX
+	from larch.model.linear import ParameterRef_C as P
+	from larch.model.linear import DataRef_C as X
+	def PX(i):
+		return P(i)*X(i)
+
+	m5.utility_co[2] = P("ASC_SR2")*X("1") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P")*X("1") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN")*X("1") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE")*X("1") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK")*X("1") + P("hhinc#6") * X("hhinc")
 	m5.utility_ca = PX("tottime") + PX("totcost")
 
 	m5.dataframes = j
@@ -66,6 +71,9 @@ def test_dataframes_mnl5():
 		'totcost': 39520.043,
 		'tottime': -26556.303,
 	}
+
+	print("+"*60)
+	print(m5.utility_ca)
 
 	assert -4930.3212890625 == approx(ll2.ll)
 

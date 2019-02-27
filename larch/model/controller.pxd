@@ -2,16 +2,19 @@
 
 from ..general_precision cimport *
 from ..dataframes cimport DataFrames
+from .linear cimport LinearFunction_C, DictOfLinearFunction_C
 
 cdef class Model5c:
+
+	cdef public:
+		DictOfLinearFunction_C _utility_co
+		LinearFunction_C _utility_ca
+		LinearFunction_C _quantity_ca
 
 	cdef:
 		DataFrames _dataframes
 		object _dataservice
 
-		object _utility_co_functions
-		object _utility_ca_function
-		object _quantity_ca_function
 		object _quantity_scale
 		object _logsum_parameter
 		object rename_parameters
