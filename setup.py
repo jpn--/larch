@@ -132,7 +132,10 @@ setup(
     package_data={
         # If any package contains these types of files, include them:
         '': ['*.h5', '*.h5d', '*.omx', '*.h5.gz', '*.csv.gz', '*.sqlite', ],
-        'larch': ['doc/*.rst','doc/*/*.rst','doc/*/*/*.rst','doc/*/*/*/*.rst',],
+        'larch': [
+            'doc/*.rst','doc/*/*.rst','doc/*/*/*.rst','doc/*/*/*/*.rst',
+            'doc/*.ipynb', 'doc/example/*.ipynb',
+        ],
     },
     install_requires=[
         'numpy >=1.13',
