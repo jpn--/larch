@@ -60,6 +60,17 @@ class OMX(_omx_base_class):
 			if len(arg)>1 and arg[1]!='r':
 				raise TypeError('cannot open .gz with other than readonly mode')
 
+		if len(arg) == 0:
+			# Make a temporary file
+			from .util.temporaryfile import TemporaryDirectory
+			self._temporary_dir = TemporaryDirectory()
+			kwarg['driver']="H5FD_CORE"
+			kwarg['driver_core_backing_store']=0
+			n = 1
+			while os.path.exists(os.path.join(self._temporary_dir, f'TEMP{n}.omx')):
+				n +=1
+			arg = (os.path.join(self._temporary_dir, f'TEMP{n}.omx'), 'w')
+
 		if 'filters' in kwarg:
 			super().__init__(*arg, **kwarg)
 		else:
@@ -85,10 +96,29 @@ class OMX(_omx_base_class):
 		self.rlookup = Dict()
 		self.rlookup._helper = self.get_reverse_lookup
 
+	@property
+	def version(self):
+		"""The open matrix format version for this file."""
+		if 'OMX_VERSION' not in self.root._v_attrs:
+			raise OMXBadFormat("the root OMX_VERSION attribute does not exist")
+		return self.root._v_attrs.OMX_VERSION
+
 	def change_mode(self, mode, **kwarg):
-		"""Change the file mode of the underlying HDF5 file.
+		"""
+		Change the file mode of the underlying HDF5 file.
 
 		Can be used to change from read-only to read-write.
+
+		Parameters
+		----------
+		mode : {'r','a'}
+			The file mode to set. Note that the 'w' mode, which would
+			open a blank HDF5 overwriting an existing file, is not allowed
+			here.
+
+		Returns
+		-------
+		self
 		"""
 		try:
 			if mode == self.mode:
@@ -166,6 +196,35 @@ class OMX(_omx_base_class):
 		self.root._v_attrs.SHAPE = shp
 
 	def add_blank_lookup(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
+		"""
+		Adds a blank lookup to the OMX file.
+
+		Parameters
+		----------
+		name : str
+			The name of the matrix to add.
+		atom : tables.Atom, optional
+			The atomic data type for the new matrix. If not given, Float64 is assumed.
+		shape : int, optional
+			The length of the lookup to add. Must match one of the dimensions of an existing
+			shape.  If there is no existing shape, the shape will be initialized as a square
+			with this size.
+		complevel : int, default 1
+			Compression level.
+		complib : str, default 'zlib'
+			Compression library.
+
+		Returns
+		-------
+		tables.CArray
+
+		Note
+		----
+		This method allows you to add a blank matrix of 3 or more dimemsions,
+		only the first 2 must match the OMX.  Adding a matrix of more than
+		two dimensions may violate compatability with other open matrix tools,
+		do so at your own risk.
+		"""
 		if name in self.lookup._v_children:
 			return self.lookup._v_children[name]
 		if atom is None:
@@ -188,11 +247,32 @@ class OMX(_omx_base_class):
 
 	def add_blank_matrix(self, name, atom=None, shape=None, complevel=1, complib='zlib', **kwargs):
 		"""
+		Adds a blank matrix to the OMX file.
+
+		Parameters
+		----------
+		name : str
+			The name of the matrix to add.
+		atom : tables.Atom, optional
+			The atomic data type for the new matrix. If not given, Float64 is assumed.
+		shape : tuple, optional
+			The shape of the matrix to add.  The first two dimensions must match the
+			shape of any existing matrices; giving a shape is mostly used on initialization.
+		complevel : int, default 1
+			Compression level.
+		complib : str, default 'zlib'
+			Compression library.
+
+		Returns
+		-------
+		tables.CArray
 
 		Note
 		----
-		This method allows you to add a blank matrix of 3 or more dimemsions, only the first 2 must match the OMX.
-
+		This method allows you to add a blank matrix of 3 or more dimemsions,
+		only the first 2 must match the OMX.  Adding a matrix of more than
+		two dimensions may violate compatability with other open matrix tools,
+		do so at your own risk.
 		"""
 		if name in self.data._v_children:
 			return self.data._v_children[name]
@@ -210,6 +290,32 @@ class OMX(_omx_base_class):
 		                          filters=_tb.Filters(complib=complib, complevel=complevel), **kwargs)
 
 	def add_matrix(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', ignore_shape=False, **kwargs):
+		"""
+		Adds a matrix to the OMX file.
+
+		Parameters
+		----------
+		name : str
+			The name of the matrix to add.
+		obj : array-like
+			The data for the new matrix.
+		overwrite : bool, default False
+			Whether to overwrite an existing matrix with the same name.
+		complevel : int, default 1
+			Compression level.
+		complib : str, default 'zlib'
+			Compression library.
+		ignore_shape : bool, default False
+			Whether to ignore all checks on the shape of the matrix being added.
+			Setting this to True allows adding a matrix with a different shape
+			than any other existing matrices, which may result in an invalid OMX
+			file.
+
+		Returns
+		-------
+		tables.CArray
+		"""
+		obj = numpy.asanyarray(obj)
 		if not ignore_shape:
 			if len(obj.shape) != 2:
 				raise OMXIncompatibleShape('all omx arrays must have 2 dimensional shape')
@@ -226,10 +332,37 @@ class OMX(_omx_base_class):
 			raise TypeError('{} exists'.format(name))
 		if name in self.data._v_children:
 			self.remove_node(self.data, name)
-		return self.create_carray(self.data, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel),
+		return self.create_carray(self.data, name, obj=obj,
+								  filters=_tb.Filters(complib=complib, complevel=complevel),
 		                          **kwargs)
 
 	def add_lookup(self, name, obj, *, overwrite=False, complevel=1, complib='zlib', ignore_shape=False, **kwargs):
+		"""
+		Adds a lookup mapping to the OMX file.
+
+		Parameters
+		----------
+		name : str
+			The name of the matrix to add.
+		obj : array-like
+			The data for the new matrix.
+		overwrite : bool, default False
+			Whether to overwrite an existing matrix with the same name.
+		complevel : int, default 1
+			Compression level.
+		complib : str, default 'zlib'
+			Compression library.
+		ignore_shape : bool, default False
+			Whether to ignore all checks on the shape of the lookup being added.
+			Setting this to True allows adding a lookup with a different length
+			than either of the two shape dimensions, which may result in an invalid
+			OMX file.
+
+		Returns
+		-------
+		tables.CArray
+		"""
+		obj = numpy.asanyarray(obj)
 		if not ignore_shape:
 			if len(obj.shape) != 1:
 				raise OMXIncompatibleShape('all omx lookups must have 1 dimensional shape')
@@ -243,7 +376,8 @@ class OMX(_omx_base_class):
 			raise TypeError('{} exists'.format(name))
 		if name in self.lookup._v_children:
 			self.remove_node(self.lookup, name)
-		return self.create_carray(self.lookup, name, obj=obj, filters=_tb.Filters(complib=complib, complevel=complevel),
+		return self.create_carray(self.lookup, name, obj=obj,
+								  filters=_tb.Filters(complib=complib, complevel=complevel),
 		                          **kwargs)
 
 	def change_all_atoms_of_type(self, oldatom, newatom):
@@ -293,7 +427,8 @@ class OMX(_omx_base_class):
 		return label_to_i
 
 	def lookup_to_index(self, lookupname, arr):
-		"""Convert an array of lookup-able values into indexes.
+		"""
+		Convert an array of lookup-able values into indexes.
 
 		If you have an array of lookup-able values (e.g., TAZ identifiers) and you
 		want to convert them to 0-based indexes for use in accessing matrix data,
@@ -602,19 +737,53 @@ class OMX(_omx_base_class):
 			return self.lookup._v_children[key]
 		raise AttributeError('key {} not found'.format(key))
 
+	def get_dataframe(self, matrix, index=None, columns=None):
+		"""
+		Get values from a matrix as a pandas.DataFrame.
+
+		Parameters
+		----------
+		matrix : str
+			The name of the matrix to extract
+		index : str or array-like, optional
+			The name of the lookup to use as the index, or an array
+			of length equal to the first shape dimension.
+			If not given, a RangeIndex is used.
+		columns : str, optional
+			The name of the lookup to use as the columns, or an array
+			of length equal to the second shape dimension.
+			If not given, a RangeIndex is used.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		if isinstance(index, str):
+			index = self.lookup._v_children[index]
+		if isinstance(columns, str):
+			columns = self.lookup._v_children[columns]
+		return pandas.DataFrame(
+			data=self.data._v_children[matrix],
+			index=index,
+			columns=columns,
+		)
+
+
+
 	def all_matrix_at(self, r, c):
 		"""
-		Get the value from all matrixes at a coordinate
+		Get the value from all matrices at a coordinate
 
 		Parameters
 		----------
 		r,c : int
-			Coordinate to extract
+			Coordinate to extract.  This is the zero-based index.
 
 		Returns
 		-------
 		Dict
-
+			The keys are the names of the matrices, and the value are
+			taken from the given coordinates.
 		"""
 		from .util import Dict
 		result = Dict()
