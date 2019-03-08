@@ -29,7 +29,7 @@ script:
   - mkdir ~/conda-bld
   - conda config --set anaconda_upload no
   - export CONDA_BLD_PATH=~/conda-bld
-  - conda build conda-recipe
+  - conda build conda-recipe --override-channels -c conda-forge -c jpn
 
 after_success:
   - bash conda-recipe/conda_upload.sh
