@@ -6,5 +6,6 @@ c_compiler:
   
 numpy: 
   - 1.15
+  - 1.16
   
   

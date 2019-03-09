@@ -33,6 +33,8 @@ requirements:
     - llvmdev >=7.0.0
     - intel-openmp >=2018.0  # [win]
     - openmp                 # [osx or linux]
+    - numpy x.x
+
   host:
     - python {{ python }}
     - numpy x.x
