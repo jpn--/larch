@@ -73,8 +73,8 @@ elif platform.system() == 'Linux':
         "-fopenmp",
     ]
     libraries = [
-        'iomp5',
-        'pthread',
+        # 'iomp5',
+        # 'pthread',
     ]
 else:
     if LARCH_COMPILER == 'gcc':
@@ -89,8 +89,8 @@ else:
            # '-openmp',
         ]
         libraries = [
-            'iomp5',
-            'pthread',
+            # 'iomp5',
+            # 'pthread',
         ]
     else:
         os.environ['CFLAGS'] = '-fopenmp'
@@ -103,8 +103,8 @@ else:
            '-fopenmp',
         ]
         libraries = [
-            'iomp5',
-            'pthread',
+            # 'iomp5',
+            # 'pthread',
         ]
 
 from pprint import pprint
