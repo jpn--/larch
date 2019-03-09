@@ -30,6 +30,7 @@ requirements:
   build:
     - python {{ python }}
     - cython >=0.29
+    - numpy >=1.16
     - clangdev >=7.0.0
     - llvmdev >=7.0.0
     - intel-openmp >=2018.0  # [win]
@@ -37,7 +38,7 @@ requirements:
   host:
     - python {{ python }}
     - cython >=0.29
-    - numpy >=1.15.4
+    - numpy >=1.16
     - scipy >=1.1
     - pandas >=0.23.4
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
@@ -66,7 +67,7 @@ requirements:
   run:
     - python {{ python }}
     - ipython >=7.1
-    - numpy >=1.15.4
+    - numpy >=1.16
     - scipy >=1.1
     - pandas >=0.23.4
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
