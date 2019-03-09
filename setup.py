@@ -145,12 +145,11 @@ setup(
         'cloudpickle',
         'tqdm',
         'networkx >=2.0',
-        'appdirs >=1.4',
-        'docutils >=0.13.1',
-        'ghalton >=0.6.1',
+        'appdirs',
+        'docutils',
+        'ghalton',
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
-        'seaborn >=0.8.1',
         # 'xmle >=0.1.3',
     ] + [
         # 'sqlite >=3.21',
