@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export MACOSX_DEPLOYMENT_TARGET=10.9
-$PYTHON setup.py install
+$PYTHON setup.py install --single-version-externally-managed --record=record.txt
 
 # Add more build steps here, if they are necessary.
 
