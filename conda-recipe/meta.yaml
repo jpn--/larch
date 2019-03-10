@@ -63,7 +63,7 @@ requirements:
   run:
     - python {{ python }}
     - ipython >=7.1
-    - numpy x.x
+    - {{ pin_compatible('numpy') }}
     - scipy >=1.1
     - pandas >=0.23.4
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
