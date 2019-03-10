@@ -24,12 +24,10 @@ source:
 requirements:
 
   build:
-    - cython >=0.29
-    - clangdev >=7.0.0
-    - llvmdev >=7.0.0
+    - {{ compiler('c') }}
     - intel-openmp >=2018.0  # [win]
     - openmp                 # [osx or linux]
-    - numpy x.x
+    - llvm-openmp
 
   host:
     - python {{ python }}

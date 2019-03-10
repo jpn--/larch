@@ -7,5 +7,7 @@ c_compiler:
 numpy: 
   - 1.15
   - 1.16
-  
-  
+
+# https://conda.io/projects/conda-build/en/latest/source/resources/compiler-tools.html
+CONDA_BUILD_SYSROOT:
+  - /opt/MacOSX10.9.sdk        # [osx]

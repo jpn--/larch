@@ -3,12 +3,11 @@
 from __future__ import print_function
 
 from libc.stdio cimport FILE, fopen, fwrite, fscanf, fclose, fseek, SEEK_END, ftell, stdout, stderr, fread, SEEK_SET
-cimport numpy as np
+
 cimport cython
 from cython.parallel cimport prange, parallel, threadid
 
-
-ctypedef np.int64_t int64_t
+from libc.stdint cimport uint32_t, int64_t
 
 cdef enum:
 	maxfld = 256

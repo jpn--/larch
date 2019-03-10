@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages, Extension
 
 from Cython.Build import cythonize
-import numpy
+# import numpy
 import os
 import platform
 import re
@@ -53,9 +53,11 @@ def find_pyx(path='.'):
 if platform.system() == 'Windows':
     os.environ['CFLAGS'] = '/openmp'
     try:
-        include_dirs = ['.', numpy.get_include(), os.environ['LIBRARY_INC']]
+        #include_dirs = ['.', numpy.get_include(), os.environ['LIBRARY_INC']]
+        include_dirs = ['.', os.environ['LIBRARY_INC']]
     except KeyError:
-        include_dirs = ['.', numpy.get_include(), ]
+        #include_dirs = ['.', numpy.get_include(), ]
+        include_dirs = ['.', ]
     try:
         library_dirs = [os.environ['LIBRARY_LIB']]
     except KeyError:
@@ -64,7 +66,8 @@ if platform.system() == 'Windows':
     extra_link_args = ("/openmp",) # ['/openmp']
     libraries = []
 elif platform.system() == 'Linux':
-    include_dirs = ['.', numpy.get_include(), ]
+    # include_dirs = ['.', numpy.get_include(), ]
+    include_dirs = ['.', ]
     library_dirs = []
     extra_compile_args = [
         "-fopenmp",
@@ -80,7 +83,8 @@ else:
     if LARCH_COMPILER == 'gcc':
         ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
         os.environ['CFLAGS'] = '-openmp'
-        include_dirs = ['.', numpy.get_include(), ]
+        # include_dirs = ['.', numpy.get_include(), ]
+        include_dirs = ['.', ]
         library_dirs = []
         extra_compile_args = [
             # "-openmp",
@@ -94,7 +98,8 @@ else:
         ]
     else:
         os.environ['CFLAGS'] = '-fopenmp'
-        include_dirs = ['.', numpy.get_include(), ]
+        # include_dirs = ['.', numpy.get_include(), ]
+        include_dirs = ['.', ]
         library_dirs = []
         extra_compile_args = [
             "-fopenmp",
