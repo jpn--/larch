@@ -5,10 +5,6 @@ package:
 source:
   path: ../
 
-
-build:
-  script: python setup.py install --single-version-externally-managed --record=record.txt
-
 # build:
   # noarch_python: True
   # preserve_egg_dir: True
