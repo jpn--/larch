@@ -1,7 +1,6 @@
 from setuptools import setup, find_packages, Extension
 
 from Cython.Build import cythonize
-# import numpy
 import os
 import platform
 import re
@@ -53,10 +52,8 @@ def find_pyx(path='.'):
 if platform.system() == 'Windows':
     os.environ['CFLAGS'] = '/openmp'
     try:
-        #include_dirs = ['.', numpy.get_include(), os.environ['LIBRARY_INC']]
         include_dirs = ['.', os.environ['LIBRARY_INC']]
     except KeyError:
-        #include_dirs = ['.', numpy.get_include(), ]
         include_dirs = ['.', ]
     try:
         library_dirs = [os.environ['LIBRARY_LIB']]
@@ -66,7 +63,6 @@ if platform.system() == 'Windows':
     extra_link_args = ("/openmp",) # ['/openmp']
     libraries = []
 elif platform.system() == 'Linux':
-    # include_dirs = ['.', numpy.get_include(), ]
     include_dirs = ['.', ]
     library_dirs = []
     extra_compile_args = [
@@ -83,7 +79,6 @@ else:
     if LARCH_COMPILER == 'gcc':
         ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
         os.environ['CFLAGS'] = '-openmp'
-        # include_dirs = ['.', numpy.get_include(), ]
         include_dirs = ['.', ]
         library_dirs = []
         extra_compile_args = [
@@ -98,7 +93,6 @@ else:
         ]
     else:
         os.environ['CFLAGS'] = '-fopenmp'
-        # include_dirs = ['.', numpy.get_include(), ]
         include_dirs = ['.', ]
         library_dirs = []
         extra_compile_args = [
@@ -143,18 +137,19 @@ setup(
         ],
     },
     install_requires=[
-        'numpy >=1.13',
-        'scipy >=1.0',
-        'pandas >=0.21',
+        'numpy',
+        'scipy',
+        'pandas',
         'tables >=3.4',
         'cloudpickle',
         'tqdm',
         'networkx >=2.0',
-        'appdirs',
-        'docutils',
+        'appdirs >=1.4',
+        'docutils >=0.13.1',
         'ghalton',
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
+        'seaborn',
         # 'xmle >=0.1.3',
     ] + [
         # 'sqlite >=3.21',

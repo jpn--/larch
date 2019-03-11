@@ -7,7 +7,6 @@ from ..general_precision cimport l4_float_t
 include "fastmath.pxi"
 from libc.stdlib cimport malloc, free
 from libc.math cimport exp, log
-# from numpy.math cimport expf, logf
 
 from cython.parallel cimport prange, parallel, threadid
 

@@ -727,6 +727,24 @@ class OMX(_omx_base_class):
 			raise KeyError("matrix named {} not found".format(key))
 		raise TypeError("OMX matrix access must be by name (str)")
 
+	def __setitem__(self, key, value):
+		try:
+			value_shape = value.shape
+		except:
+			raise TypeError("value must array-like with one or two dimensions")
+		if len(value_shape) == 1:
+			if value_shape[0] == self.shape[0] or value_shape[0] == self.shape[1]:
+				self.add_lookup(key, numpy.asarray(value))
+			else:
+				raise OMXIncompatibleShape(f"cannot add vector[{value_shape[0]}] to OMX with shape {self.shape}")
+		elif len(value_shape) == 2:
+			if value_shape[0] == self.shape[0] and value_shape[1] == self.shape[1]:
+				self.add_matrix(key, numpy.asarray(value))
+			else:
+				raise OMXIncompatibleShape(f"cannot add matrix[{value_shape}] to OMX with shape {self.shape}")
+		else:
+			raise OMXIncompatibleShape(f"cannot add matrix[{value_shape}] which has more than 3 dimnensions to OMX")
+
 	def __getattr__(self, key):
 		if key in self.data._v_children:
 			if key not in self.lookup._v_children:
@@ -917,3 +935,103 @@ class OMX(_omx_base_class):
 		self = cls.FromDataFrame(pandas.read_excel(filename, **excel_kwarg), *arg, **kwarg)
 		return self
 
+	def _remake_command(self, cmd, selector=None, receiver=None):
+		from tokenize import tokenize, untokenize, NAME, OP, STRING
+		DOT = (OP, '.')
+		COLON = (OP, ':')
+		COMMA = (OP, ',')
+		OBRAC = (OP, '[')
+		CBRAC = (OP, ']')
+		OPAR = (OP, '(')
+		CPAR = (OP, ')')
+		from io import BytesIO
+		recommand = []
+
+		if receiver:
+			recommand += [(NAME, receiver), OBRAC, COLON, CBRAC, (OP, '='), ]
+
+		try:
+			cmd_encode = cmd.encode('utf-8')
+		except AttributeError:
+			cmd_encode = str(cmd).encode('utf-8')
+		dims = len(self.shape)
+		g = tokenize(BytesIO(cmd_encode).readline)
+		if selector is None:
+			screen_tokens = [COLON,]
+		else:
+			# try:
+			# 	slicer_encode = selector.encode('utf-8')
+			# except AttributeError:
+			# 	slicer_encode = str(selector).encode('utf-8')
+			# screen_tokens = [(toknum, tokval) for toknum, tokval, _, _, _ in tokenize(BytesIO(slicer_encode).readline)]
+			screen_tokens = [(NAME, 'selector'), ]
+		for toknum, tokval, _, _, _ in g:
+			if toknum == NAME and tokval in self.data:
+				# replace NAME tokens
+				partial = [(NAME, 'self'), DOT, (NAME, 'data'), DOT, (NAME, tokval), OBRAC, ]
+				partial += screen_tokens
+				if len(self._groupnode._v_children[tokval].shape)>1:
+					partial += [COMMA, COLON, ]
+				if len(self._groupnode._v_children[tokval].shape)>2:
+					partial += [COMMA, COLON, ]
+				if len(self._groupnode._v_children[tokval].shape)>3:
+					partial += [COMMA, COLON, ]
+				partial += [CBRAC,]
+				recommand.extend(partial)
+			elif toknum == NAME and tokval in self.lookup:
+				# replace NAME tokens
+				partial = [(NAME, 'self'), DOT, (NAME, 'lookup'), DOT, (NAME, tokval), OBRAC, ]
+				partial += screen_tokens
+				if len(self._groupnode._v_children[tokval].shape) > 1:
+					partial += [COMMA, COLON, ]
+				if len(self._groupnode._v_children[tokval].shape) > 2:
+					partial += [COMMA, COLON, ]
+				if len(self._groupnode._v_children[tokval].shape) > 3:
+					partial += [COMMA, COLON, ]
+				partial += [CBRAC, ]
+				recommand.extend(partial)
+			else:
+				recommand.append((toknum, tokval))
+		# print("<recommand>")
+		# print(recommand)
+		# print("</recommand>")
+		ret = untokenize(recommand).decode('utf-8')
+		from .util.aster import asterize
+		return asterize(ret, mode="exec" if receiver is not None else "eval"), ret
+
+
+	def _evaluate_single_item(self, cmd, selector=None, receiver=None):
+		j, j_plain = self._remake_command(cmd, selector=selector, receiver='receiver' if receiver is not None else None)
+		# important globals
+		from .util.aster import inXd
+		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num, sin, cos, pi
+		from .util.common_functions import piece, normalize
+		try:
+			if receiver is not None:
+				exec(j)
+			else:
+				return eval(j)
+		except Exception as exc:
+			args = exc.args
+			if not args:
+				arg0 = ''
+			else:
+				arg0 = args[0]
+			arg0 = arg0 + '\nwithin parsed command: "{!s}"'.format(cmd)
+			arg0 = arg0 + '\nwithin re-parsed command: "{!s}"'.format(j_plain)
+			if selector is not None:
+				arg0 = arg0 + '\nwith selector: "{!s}"'.format(selector)
+			if "max" in cmd:
+				arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(cmd)
+			if "min" in cmd:
+				arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(cmd)
+			if isinstance(exc, NameError):
+				badname = str(exc).split("'")[1]
+				goodnames = dir()
+				from .util.text_manip import case_insensitive_close_matches
+				did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
+				if len(did_you_mean_list) > 0:
+					arg0 = arg0 + '\n' + "did you mean {}?".format(
+						" or ".join("'{}'".format(s) for s in did_you_mean_list))
+			exc.args = (arg0,) + args[1:]
+			raise
