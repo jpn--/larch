@@ -68,7 +68,7 @@ test_script:
   - '"%CONDA%\Scripts\activate.bat"'
   - python tools\\gitversion.py
   # Build the package
-  - "%CMD_IN_ENV% conda build conda-recipe --override-channels -c conda-forge -c jpn"
+  - "%CMD_IN_ENV% conda build conda-recipe"
 
   # Install the package
   - conda install --use-local %PROJECT_NAME%
