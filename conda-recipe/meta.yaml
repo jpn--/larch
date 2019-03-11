@@ -29,8 +29,9 @@ requirements:
     - cython >=0.29
     - clangdev >=7.0.0
     - llvmdev >=7.0.0
-    - intel-openmp >=2018.0  # [win]
-    - openmp                 # [osx or linux]
+    - intel-openmp >=2018.0
+    - openmp
+
   host:
     - python {{ python }}
     - cython >=0.29
@@ -45,7 +46,7 @@ requirements:
     - cloudpickle >=0.6.1
     - clangdev >=7.0.0
     - llvmdev >=7.0.0
-    - intel-openmp >=2018.0  # [win]
+    - intel-openmp >=2018.0
     - appdirs >=1.4
     - docutils >=0.13.1
     - ghalton >=0.6.1
@@ -73,7 +74,7 @@ requirements:
     - networkx >=2.2
     - tqdm >=4.28.1
     - cloudpickle >=0.6.1
-    - intel-openmp >=2018.0  # [win]
+    - intel-openmp >=2018.0
     - appdirs >=1.4
     - docutils >=0.13.1
     - ghalton >=0.6.1
@@ -99,6 +100,7 @@ test:
   # Python imports
   imports:
     - larch
+    - geopandas
 
   commands:
     # You can put test commands to be run here.  Use this to test that the
@@ -111,6 +113,11 @@ test:
   requires:
     # Put any additional test requirements here.  For example
     - pytest
+    - conda-forge::fiona>=1.7.11
+    - conda-forge::gdal>=2.2.4
+    - conda-forge::geopandas>=0.4
+    - conda-forge::krb5>=1.16
+    - conda-forge::shapely>=1.6.4
 
 about:
   home: http://larch.newman.me
