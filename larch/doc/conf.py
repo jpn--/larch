@@ -13,27 +13,6 @@
 
 import sys, os
 
-# on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-
-if on_rtd:
-	from unittest.mock import MagicMock
-
-	class Mock(MagicMock):
-		@classmethod
-		def __getattr__(cls, name):
-			if name=='_mock_methods':
-				return super().__getattr__(cls, name)
-			else:
-				return Mock()
-
-	MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'larch._core', 'larch.apsw', '_core', 'apsw',
-					'docx', 'docx.enum', 'docx.enum.style', 'scipy', 'scipy.optimize',
-					'numpy.linalg', 'scipy.linalg', 'tables', 'numpy.ma', 'matplotlib',
-					'matplotlib.pyplot', 'larch.util.optimize', 'larch.util.sysinfo',
-	]
-	sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 import larch
 
