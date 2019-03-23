@@ -1,5 +1,4 @@
-
-
+# cython: language_level=3, embedsignature=True
 
 cpdef enum:
 	PERSIST_UTILITY = 0x1
