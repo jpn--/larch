@@ -1,7 +1,7 @@
 import numpy
 from .. import warning
 from .histograms import sizable_histogram_figure, seems_like_discrete_data
-from . import dicta
+from . import Dict
 from .arraytools import scalarize
 import numpy.ma as ma
 from .common_functions import parse_piece
@@ -40,7 +40,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 
 	Returns
 	-------
-	dicta
+	addict_yaml.Dict
 
 	"""
 	a = arr
@@ -50,7 +50,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 		if ch_weights is not None:
 			ch_weights = ch_weights.reshape(-1)
 
-	stats = dicta()
+	stats = Dict()
 
 	if varname is not None:
 		stats.description = varname
@@ -105,19 +105,24 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 				discrete_ = seems_like_discrete_data(ax, dictionary)
 
 			if lowbound is not None or highbound is not None:
+
+				xlabel = kwargs.pop('xlabel', base_def)
 				stats.histogram = sizable_histogram_figure(
 					ax, sizer=histogram,
-					title=None, xlabel=base_def, ylabel='Frequency',
+					title=None, xlabel=xlabel, ylabel='Frequency',
 					ch_weights=ch_weightsx,
 					piecerange=(lowbound, highbound),
+					dictionary=dictionary,
 					**kwargs
 				)
 			else:
+				xlabel = kwargs.pop('xlabel', varname)
 				stats.histogram = sizable_histogram_figure(
 					ax, sizer=histogram,
-					title=None, xlabel=varname, ylabel='Frequency',
+					title=None, xlabel=xlabel, ylabel='Frequency',
 					ch_weights=ch_weightsx,
 					discrete=discrete_,
+					dictionary=dictionary,
 					**kwargs
 				)
 	if can_nan:

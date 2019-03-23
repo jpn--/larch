@@ -413,10 +413,14 @@ def histogram_figure(
 		fixedrange=None,
 		piecerange=None,
 		mask=None,
+		dictionary=None,
 		**kwargs
 ):
 	density = None if ch_weights is None else True
 	discrete = (bins=='discrete')
+
+	if dictionary is None:
+		dictionary = {}
 
 	if mask is not None:
 		data_to_bin = data_to_bin[mask]
@@ -453,7 +457,7 @@ def histogram_figure(
 			if ch_heights is not None:
 				ch_heights = ch_heights/(ch_heights.sum())
 		if (('xticks' not in kwargs) and (kwargs.get('figwidth',1)>=2)) or (kwargs.get('xticks') is True):
-			kwargs['xticklabels'] = bin_labels
+			kwargs['xticklabels'] = [dictionary.get(label,label) for label in bin_labels]
 			kwargs['xticks'] = bin_edges[:-1]
 		pct_under, pct_over = 0,0
 	else:
