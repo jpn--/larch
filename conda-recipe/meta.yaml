@@ -60,6 +60,7 @@ requirements:
     - jpn::xmle >=0.1.3
     - jpn::addict_yaml
     - pyyaml
+    - mock        # travis needs this for some as yet unknown reason
 
   run:
     - python {{ python }}
