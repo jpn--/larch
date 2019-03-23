@@ -98,6 +98,8 @@ cdef void _readDBFFileHeader(
 					dbhrec.fctype[i] = CType.DOUBLE
 			elif dbhrec.ftyp[i]==b'F':
 				dbhrec.fctype[i] = CType.DOUBLE
+			elif dbhrec.ftyp[i]==b'C':
+				dbhrec.fctype[i] = CType.STRING
 			else:
 				dbhrec.fctype[i] = CType.OTHER
 
@@ -240,6 +242,17 @@ cdef double get_dbf_double_v2(int fieldlen, int fieldoffset, char* buffer) nogil
 	free(s)
 	return result
 
+cdef unicode get_dbf_string_v2(int fieldlen, int fieldoffset, char* buffer):
+	cdef char* s
+	cdef int j
+	s = <char*>malloc((fieldlen+1) * sizeof(char))
+	for j in range(fieldlen):
+		s[j]=buffer[fieldoffset+j]
+	s[fieldlen] = 0
+	cdef unicode result = s.decode('UTF-8')
+	free(s)
+	return result
+
 # cdef void set_dbf_double_v2(double value, int fieldlen, int fieldprecision, int fieldoffset, char* buffer) nogil:
 # 	cdef char* s
 # 	cdef int j
@@ -359,6 +372,13 @@ cdef class DBF:
 				result.append(self._header.fname[i].decode())
 		return result
 
+	def fieldnames_char(self):
+		result = []
+		for i in range(self._header.nflds):
+			if self._header.fctype[i] == CType.STRING:
+				result.append(self._header.fname[i].decode())
+		return result
+
 	cdef void _get_int_array(self, int fieldnum, int startrow, int stoprow, int[:] arr):
 		"""
 		Extract an int64 array of values from the DBF file.
@@ -452,6 +472,31 @@ cdef class DBF:
 			free(local_read_buffer)
 			fclose(local_file_handle)
 
+	@cython.boundscheck(False)
+	cdef void _load_dataframe_arr_string(self, int startrow, int stoprow, unicode[:,:] arr):
+		cdef int i=0
+		cdef int row=startrow
+		cdef int nrows = stoprow - startrow
+		cdef int j, k, xx1, xx2
+		cdef FILE* local_file_handle
+		cdef void* local_read_buffer
+		cdef double xx3
+		cdef unicode s
+
+		local_file_handle = fopen( self._filename_c, 'r' )
+		local_read_buffer = <void*>malloc(self._header.recln)
+		for i in range(nrows):
+			row = startrow+i
+			pull_record_data(local_file_handle, &self._header, row, <char*>local_read_buffer)
+			k = 0
+			for j in range(self._header.nflds):
+				if self._header.fctype[j] == CType.STRING:
+					s = get_dbf_string_v2(self._header.flen[j], self._header.fdisp[j], <char*>local_read_buffer)
+					arr[i,k] = s
+					k = k + 1
+		free(local_read_buffer)
+		fclose(local_file_handle)
+
 	# @cython.boundscheck(False)
 	# cdef void _write_arr_float(self, int startrow, int stoprow, int fieldnum, double[:] arr):
 	# 	cdef int i=0
@@ -493,10 +538,11 @@ cdef class DBF:
 	# 		for j in range(self._header.nflds):
 	# 			arr[i,j] = get_dbf_double(&self._header, j, <char*>self._read_buffer)
 
-	def _load_dataframe(self, int startrow, int stoprow):
+	def _load_dataframe(self, int startrow, int stoprow, bint preserve_order=False):
 		import pandas, numpy
 		fields_integer = self.fieldnames_integer()
 		fields_float = self.fieldnames_float()
+		fields_string = self.fieldnames_char()
 		if stoprow<0 or stoprow>self._header.nrecs:
 			stoprow=self._header.nrecs
 		if startrow<0 or startrow>self._header.nrecs:
@@ -510,10 +556,17 @@ cdef class DBF:
 			df_float = pandas.DataFrame(index=numpy.arange(startrow, stoprow), columns=fields_float, dtype=numpy.float64 )
 			self._load_dataframe_arr_float(startrow, stoprow, df_float.values)
 			df = pandas.concat([df, df_float], axis=1, join_axes=[df.index])
+		if fields_string:
+			df_string = pandas.DataFrame(index=numpy.arange(startrow, stoprow), columns=fields_string, dtype=str )
+			self._load_dataframe_arr_string(startrow, stoprow, df_string.values)
+			df = pandas.concat([df, df_string], axis=1, join_axes=[df.index])
+		if preserve_order:
+			cols = [i for i in self.fieldnames() if i in df.columns]
+			df = df[cols]
 		return df
 
-	def load_dataframe(self, start=0, stop=-1):
-		return self._load_dataframe(start, stop)
+	def load_dataframe(self, start=0, stop=-1, preserve_order=False):
+		return self._load_dataframe(start, stop, preserve_order)
 
 	def load_dataframe_iter(self, chunksize=100000, *, return_slice=False):
 		start = 0
