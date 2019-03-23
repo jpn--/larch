@@ -14,7 +14,7 @@ def flog(a0, *arg, **kwarg):
 
 __all__ = ['builder', ]
 
-_cache_1 = None
+_cache_1 = {}
 
 _directory = None
 
@@ -34,11 +34,11 @@ def build_directory(directory=None):
 
 
 # def build_year_1(nZones=9, transit_scope=slice(2, 8), n_HH=834, directory=None, seed=0)
-def build_year_1(nZones=15, transit_scope=slice(4,15), n_HH=2000, directory=None, seed=0):
+def build_year_1(nZones=15, transit_scope=slice(4,15), n_HH=2000, directory=None, seed=0, output_format='h5'):
 
 	global _cache_1, _directory
-	if _cache_1 is not None:
-		return _cache_1
+	if output_format in _cache_1:
+		return _cache_1[output_format]
 
 	flog("EXAMPVILLE Builder (Year 1)")
 	flog("  simulating a survey of {} households", n_HH)
@@ -293,56 +293,108 @@ def build_year_1(nZones=15, transit_scope=slice(4,15), n_HH=2000, directory=None
 	omx.close()
 	omx = OMX(os.path.join(directory, 'exampville.omx'), mode='r')
 
-	from ..data_services.h5 import H5Pod
+	if output_format == 'h5':
 
-	f_hh = H5Pod(os.path.join(directory, 'exampville_hh.h5'), mode='a')
-	f_hh.add_array('HHID', HHid)
-	f_hh.add_array('INCOME', HHincome)
-	f_hh.add_array('HHSIZE', HHsize)
-	f_hh.add_array('HOMETAZ', HHhomezone)
-	f_hh.flush()
+		from ..data_services.h5 import H5Pod
 
-	f_pp = H5Pod(os.path.join(directory, 'exampville_person.h5'), mode='a')
-	f_pp.add_array('PERSONID', PERid)
-	f_pp.add_array('HHID', PERhhid)
-	f_pp.add_array('AGE', PERage)
-	f_pp.add_array('WORKS', PERworks, dictionary={1: 'Yes', 0: 'No'}, title='Person has a regular job')
-	f_pp.add_array('N_WORKTOURS', PERnworktours,
-	               title='Number of work tours reported by this person on the survey day')
-	f_pp.add_array('N_OTHERTOURS', PERnothertours,
-	               title='Number of non-work tours reported by this person on the survey day')
-	f_pp.add_array('N_TOTALTOURS', PERntours,
-	               title='Number of non-work tours reported by this person on the survey day')
-	f_pp.flush()
+		f_hh = H5Pod(os.path.join(directory, 'exampville_hh.h5'), mode='a')
+		f_hh.add_array('HHID', HHid)
+		f_hh.add_array('INCOME', HHincome)
+		f_hh.add_array('HHSIZE', HHsize)
+		f_hh.add_array('HOMETAZ', HHhomezone)
+		f_hh.flush()
+		f_hh_filename = f_hh.filename
 
-	f_tour = H5Pod(os.path.join(directory, 'exampville_tours.h5'), mode='a')
-	f_tour.add_array('TOURID', TOURid)
-	f_tour.add_array('HHID', TOURhh)
-	f_tour.add_array('PERSONID', TOURper)
-	f_tour.add_array('DTAZ', TOURdtaz)
-	f_tour.add_array('TOURMODE', TOURmode, dictionary={
-		1: 'DA',
-		2: 'SR',
-		3: 'Walk',
-		4: 'Bike',
-		5: 'Transit',
-	})
-	f_tour.add_array('TOURPURP', TOURpurpose, dictionary={
-		1: 'Work Tour',
-		2: 'Non-Work Tour',
-	})
-	f_tour.flush()
+		f_pp = H5Pod(os.path.join(directory, 'exampville_person.h5'), mode='a')
+		f_pp.add_array('PERSONID', PERid)
+		f_pp.add_array('HHID', PERhhid)
+		f_pp.add_array('AGE', PERage)
+		f_pp.add_array('WORKS', PERworks, dictionary={1: 'Yes', 0: 'No'}, title='Person has a regular job')
+		f_pp.add_array('N_WORKTOURS', PERnworktours,
+					   title='Number of work tours reported by this person on the survey day')
+		f_pp.add_array('N_OTHERTOURS', PERnothertours,
+					   title='Number of non-work tours reported by this person on the survey day')
+		f_pp.add_array('N_TOTALTOURS', PERntours,
+					   title='Number of non-work tours reported by this person on the survey day')
+		f_pp.flush()
+		f_pp_filename = f_pp.filename
+
+		f_tour = H5Pod(os.path.join(directory, 'exampville_tours.h5'), mode='a')
+		f_tour.add_array('TOURID', TOURid)
+		f_tour.add_array('HHID', TOURhh)
+		f_tour.add_array('PERSONID', TOURper)
+		f_tour.add_array('DTAZ', TOURdtaz)
+		f_tour.add_array('TOURMODE', TOURmode, dictionary={
+			1: 'DA',
+			2: 'SR',
+			3: 'Walk',
+			4: 'Bike',
+			5: 'Transit',
+		})
+		f_tour.add_array('TOURPURP', TOURpurpose, dictionary={
+			1: 'Work Tour',
+			2: 'Non-Work Tour',
+		})
+		f_tour.flush()
+		f_tour_filename = f_tour.filename
+
+	elif output_format == 'csv':
+
+		import pandas
+		from collections import OrderedDict
+		f_hh = pandas.DataFrame.from_dict(
+			OrderedDict([
+				('HHID', HHid),
+				('INCOME', HHincome),
+				('HHSIZE', HHsize),
+				('HOMETAZ', HHhomezone),
+			])
+		)
+		f_hh_filename = os.path.join(directory, 'exampville_hh.csv')
+		f_hh.to_csv(f_hh_filename)
+
+		f_pp = pandas.DataFrame.from_dict(
+			OrderedDict([
+				('PERSONID', PERid),
+				('HHID', PERhhid),
+				('AGE', PERage),
+				('WORKS', PERworks),
+				('N_WORKTOURS', PERnworktours),
+				('N_OTHERTOURS', PERnothertours),
+				('N_TOTALTOURS', PERntours),
+			])
+		)
+		f_pp_filename = os.path.join(directory, 'exampville_person.csv')
+		f_pp.to_csv(f_pp_filename)
+
+		f_tour = pandas.DataFrame.from_dict(
+			OrderedDict([
+				('TOURID', TOURid),
+				('HHID', TOURhh),
+				('PERSONID', TOURper),
+				('DTAZ', TOURdtaz),
+				('TOURMODE', TOURmode),
+				('TOURPURP', TOURpurpose),
+			])
+		)
+		f_tour_filename = os.path.join(directory, 'exampville_tours.csv')
+		f_tour.to_csv(f_tour_filename)
+
+	else:
+		raise ValueError(f'bad output_format "{output_format}"')
 
 	flog("EXAMPVILLE Completed Builder (Year 1)")
 	flog("   SKIMS  : {}", omx.filename)
-	flog("   HHs    : {}", f_hh.filename)
-	flog("   Persons: {}", f_pp.filename)
-	flog("   Tours  : {}", f_tour.filename)
+	flog("   HHs    : {}", f_hh_filename)
+	flog("   Persons: {}", f_pp_filename)
+	flog("   Tours  : {}", f_tour_filename)
 
-	_cache_1 = (directory, omx, f_hh, f_pp, f_tour)
+	_cache_1[output_format] = (directory, omx, f_hh, f_pp, f_tour)
 
-	return directory, omx, f_hh.astype('idco'), f_pp.astype('idco'), f_tour.astype('idco')
-
+	if output_format == 'h5':
+		return directory, omx, f_hh.astype('idco'), f_pp.astype('idco'), f_tour.astype('idco')
+	else:
+		return directory, omx, f_hh, f_pp, f_tour
 
 builder = builder_1 = build_year_1
 

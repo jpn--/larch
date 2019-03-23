@@ -18,7 +18,6 @@ import logging
 logger = logging.getLogger('L5')
 
 from .model.controller cimport Model5c
-from numpy.math cimport expf, logf
 from libc.math cimport exp, log
 
 from .util.dataframe import columnize
