@@ -120,3 +120,9 @@ def test_linear_func():
 		LinearComponent_C(param='Aaa', data='Aaa', scale=1.0),
 		LinearComponent_C(param='Bbb', data='Bbb', scale=1.0),
 	]
+
+
+	u = P.Aaa * X.Aaa + P.Bbb * X.Bbb
+	u += P.Ccc * X.Ccc
+
+	assert u == P.Aaa * X.Aaa + P.Bbb * X.Bbb + P.Ccc * X.Ccc

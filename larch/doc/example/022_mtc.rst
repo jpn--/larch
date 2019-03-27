@@ -71,8 +71,8 @@ That's it! We're basically ready to estimate.
 	          ASC_SR3             -2.506        0.0        0.0     -inf      inf         0
 	          ASC_TRANSIT         -0.404        0.0        0.0     -inf      inf         0
 	          ASC_WALK             0.345        0.0        0.0     -inf      inf         0
-	Other     mu_motor             0.726        1.0        1.0    0.001    1.000         0
-	          mu_nonmotor          0.769        1.0        1.0    0.001    1.000         0
+	Other     mu_motor             0.726        1.0        1.0    0.001      1.0         0
+	          mu_nonmotor          0.769        1.0        1.0    0.001      1.0         0
 
 
 .. tip::

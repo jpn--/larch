@@ -76,5 +76,5 @@ Model 27's nesting structure groups private auto and shared ride alternatives. (
 	           ASC_SR3              5.9822        0.0        0.0     -inf      inf         0
 	           ASC_TRANSIT         -0.8968        0.0        0.0     -inf      inf         0
 	           ASC_WALK            -0.1182        0.0        0.0     -inf      inf         0
-	Other      mu_auto              1.4779        1.0        1.0   0.0010   2.0000         0
-	           mu_shared           -4.6280        1.0        1.0   0.0010   1.0000         0
+	Other      mu_auto              1.4779        1.0        1.0    0.001      2.0         0
+	           mu_shared           -4.6280        1.0        1.0    0.001      1.0         0

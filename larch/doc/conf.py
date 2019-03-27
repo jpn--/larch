@@ -60,14 +60,9 @@ extensions = [
 	'sphinx.ext.doctest',
 	'sphinx.ext.graphviz',
 	'nbsphinx',
-#	'IPython.sphinxext.ipython_console_highlighting',
+	'IPython.sphinxext.ipython_console_highlighting',
 ]
 
-if on_rtd:
-	extensions.append('nbsphinx')
-
-if not on_rtd:
-	extensions.append('IPython.sphinxext.ipython_console_highlighting')
 
 numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
@@ -160,34 +155,24 @@ intersphinx_mapping = {
 # a list of builtin themes.
 #html_theme = 'default'
 
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-    html_theme_options = { }
+import sphinx_rtd_theme
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
-# otherwise, readthedocs.org uses their theme by default, so no need to specify it
-
-
-
-
-
-else:
-
-    # Theme options are theme-specific and customize the look and feel of a theme
-    # further.  For a list of options available for each theme, see the
-    # documentation.
-    html_theme_options = {
-        'navigation_depth': 4,
-    #	'stickysidebar': 'true',
-    #	'sidebarbgcolor': "rgb(101,0,122)",
-    #	'sidebarlinkcolor': "rgb(239,161,255)",
-    #	'relbarbgcolor': "rgb(82,0,99)",
-    #	'footerbgcolor': "rgb(59,0,71)",
-    #	'collapsiblesidebar': 'false',
-    #	'headfont': 'Roboto Slab',
-    #	'bodyfont': 'Source Sans Pro',
-    }
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+html_theme_options = {
+	'navigation_depth': 4,
+#	'stickysidebar': 'true',
+#	'sidebarbgcolor': "rgb(101,0,122)",
+#	'sidebarlinkcolor': "rgb(239,161,255)",
+#	'relbarbgcolor': "rgb(82,0,99)",
+#	'footerbgcolor': "rgb(59,0,71)",
+#	'collapsiblesidebar': 'false',
+#	'headfont': 'Roboto Slab',
+#	'bodyfont': 'Source Sans Pro',
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []

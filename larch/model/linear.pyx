@@ -179,6 +179,8 @@ cdef class DataRef_C(UnicodeRef_C):
 	def __truediv__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}/{}".format(parenthize(self), parenthize(other, True)))
+		if isinstance(self, ParameterRef_C) and isinstance(other, (DataRef_C, _Number)):
+			return self * DataRef_C("1/{}".format(parenthize(other, True)))
 		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __and__(self, other):
@@ -508,9 +510,9 @@ cdef class LinearFunction_C:
 			if other == ():
 				return self
 			if isinstance(other, LinearFunction_C):
-				return self.__class__(*self._func, *other._func)
+				return self.__class__([*list(self), *list(other)])
 			if isinstance(other, ParameterRef_C):
-				other = LinearComponent_C(param=other)
+				other = LinearComponent_C(param=str(other))
 			if isinstance(other, LinearComponent_C):
 				result = self.__class__(self)
 				result.append(other)
@@ -519,7 +521,7 @@ cdef class LinearFunction_C:
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef_C):
-			other = LinearComponent_C(param=other)
+			other = LinearComponent_C(param=str(other))
 		if other == ():
 			return self
 		elif isinstance(other, LinearFunction_C):
@@ -606,7 +608,7 @@ cdef class LinearFunction_C:
 				param = re.sub(pattern, repl, i.param, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent_C(data=i.data, param=container.format(param), scale=i.scale)
+			r += LinearComponent_C(data=str(i.data), param=container.format(param), scale=i.scale)
 		return r
 
 	def reformat_data(self, container=None, pattern=None, repl=None, **kwargs):
@@ -634,7 +636,7 @@ cdef class LinearFunction_C:
 				data = re.sub(pattern, repl, i.data, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent_C(data=container.format(data), param=i.param, scale=i.scale)
+			r += LinearComponent_C(data=container.format(data), param=str(i.param), scale=i.scale)
 		return r
 
 	def __code__(self):
