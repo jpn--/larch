@@ -11,7 +11,7 @@
 	import pandas
 	pandas.set_option('display.max_columns',999)
 	pandas.set_option('expand_frame_repr',False)
-	pandas.set_option('precision',4)
+	pandas.set_option('precision',3)
 	larch._doctest_mode_ = True
 
 The primary shortcoming of the specification in Model 6 is that the estimated value of
@@ -77,16 +77,16 @@ We diminish the effect of ovtt by dividing its parameter by distance.
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                               value  std err   t stat  robust std err  robust t stat
 	Category Parameter
-	LOS      totcost             -0.0041   0.0002 -17.2212          0.0003       -15.2834
-	         motorized_time      -0.0415   0.0035 -11.8147          0.0038       -10.9896
-	         nonmotorized_time   -0.0475   0.0055  -8.6359          0.0054        -8.8632
-	         motorized_ovtbydist -0.1812   0.0179 -10.1382          0.0228        -7.9330
-	Income   hhinc#2,3           -0.0014   0.0014  -0.9953          0.0015        -0.9294
-	         hhinc#4             -0.0072   0.0019  -3.7867          0.0019        -3.8476
-	         hhinc#5             -0.0119   0.0052  -2.2611          0.0063        -1.8819
-	         hhinc#6             -0.0082   0.0032  -2.5835          0.0035        -2.3332
-	ASCs     ASC_BIKE            -2.6868   0.3336  -8.0531          0.3771        -7.1256
-	         ASC_SR2             -2.1884   0.0976 -22.4157          0.1058       -20.6918
-	         ASC_SR3P            -3.5181   0.1229 -28.6148          0.1272       -27.6624
-	         ASC_TRAN            -0.0424   0.1597  -0.2656          0.1659        -0.2557
-	         ASC_WALK            -1.0229   0.2921  -3.5026          0.2971        -3.4431
+	LOS      totcost             -0.039  1.048e-02  -3.702       1.263e-02         -3.071
+	         motorized_time      -0.015  3.919e-03  -3.733       4.172e-03         -3.506
+	         nonmotorized_time   -0.046  5.650e-03  -8.183       5.533e-03         -8.357
+	         motorized_ovtbydist -0.112  2.086e-02  -5.374       2.484e-02         -4.513
+	Income   hhinc#2,3           -0.004  1.610e-03  -2.428       1.725e-03         -2.267
+	         hhinc#4             -0.010  5.211e-03  -1.826       6.151e-03         -1.547
+	         hhinc#5             -0.007  3.139e-03  -2.102       3.394e-03         -1.944
+	         hhinc#6             -0.742  2.636e-01  -2.815       3.229e-01         -2.297
+	ASCs     ASC_BIKE            -0.225  6.524e-02  -3.451       7.172e-02         -3.139
+	         ASC_SR2             -0.705  1.506e-01  -4.678       1.600e-01         -4.404
+	         ASC_SR3P            -0.772  1.704e-01  -4.531       2.063e-01         -3.742
+	         ASC_TRAN             0.478  3.583e-01   1.333       3.652e-01          1.308
+	         ASC_WALK             0.192  9.603e-02   2.002       9.592e-02          2.004

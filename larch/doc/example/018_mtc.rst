@@ -11,7 +11,7 @@
 	import pandas
 	pandas.set_option('display.max_columns',999)
 	pandas.set_option('expand_frame_repr',False)
-	pandas.set_option('precision',4)
+	pandas.set_option('precision',3)
 	larch._doctest_mode_ = True
 
 Model 18 and those that follow are all nested logit models. There will be no more
@@ -48,35 +48,35 @@ Model 18's nesting structure groups all motorized alternatives. (`pp. 176 <http:
 	-3442.315...
 	
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                                 value  std err  t stat  robust std err  robust t stat
+	                                value    std err  t stat  robust std err  robust t stat
 	Category   Parameter
-	CostbyInc  costbyincome        -0.0388   0.0105 -3.7017          0.0126        -3.0712
-	TravelTime motorized_time      -0.0146   0.0039 -3.7327          0.0042        -3.5061
-	           nonmotorized_time   -0.0462   0.0057 -8.1831          0.0055        -8.3573
-	           motorized_ovtbydist -0.1121   0.0209 -5.3736          0.0248        -4.5130
-	Household  hhinc#4             -0.0039   0.0016 -2.4280          0.0017        -2.2666
-	           hhinc#5             -0.0095   0.0052 -1.8261          0.0062        -1.5472
-	           hhinc#6             -0.0066   0.0031 -2.1024          0.0034        -1.9444
-	           vehbywrk_BIKE       -0.7419   0.2636 -2.8148          0.3229        -2.2974
-	           vehbywrk_SR         -0.2251   0.0652 -3.4511          0.0717        -3.1391
-	           vehbywrk_TRANSIT    -0.7046   0.1506 -4.6785          0.1600        -4.4040
-	           vehbywrk_WALK       -0.7720   0.1704 -4.5311          0.2063        -3.7419
-	Zonal      wkcbd_BIKE           0.4776   0.3583  1.3331          0.3652         1.3079
-	           wkcbd_SR2            0.1922   0.0960  2.0019          0.0959         2.0043
-	           wkcbd_SR3            0.7781   0.2004  3.8822          0.2065         3.7689
-	           wkcbd_TRANSIT        0.9190   0.2231  4.1186          0.2332         3.9401
-	           wkcbd_WALK           0.1131   0.2449  0.4619          0.2480         0.4561
-	           wkempden_BIKE        0.0014   0.0012  1.1827          0.0012         1.2441
-	           wkempden_SR2         0.0011   0.0004  3.2267          0.0004         3.0243
-	           wkempden_SR3         0.0016   0.0004  3.6273          0.0005         3.5219
-	           wkempden_TRANSIT     0.0022   0.0005  4.3711          0.0005         4.1459
-	           wkempden_WALK        0.0023   0.0008  2.9334          0.0007         3.1908
-	ASCs       ASC_BIKE            -1.3824   0.4486 -3.0815          0.5226        -2.6452
-	           ASC_SR2             -1.3205   0.2567 -5.1444          0.2754        -4.7951
-	           ASC_SR3             -2.4975   0.4791 -5.2126          0.5092        -4.9044
-	           ASC_TRANSIT         -0.4045   0.2215 -1.8264          0.2365        -1.7103
-	           ASC_WALK             0.3343   0.3686  0.9071          0.3715         0.8999
-	Other      mu                   0.7237   0.1363 -2.0280          0.1452        -1.9030
+	CostbyInc  costbyincome        -0.039  1.048e-02  -3.702       1.263e-02         -3.071
+	TravelTime motorized_time      -0.015  3.919e-03  -3.733       4.172e-03         -3.506
+	           nonmotorized_time   -0.046  5.650e-03  -8.183       5.533e-03         -8.357
+	           motorized_ovtbydist -0.112  2.086e-02  -5.374       2.484e-02         -4.513
+	Household  hhinc#4             -0.004  1.610e-03  -2.428       1.725e-03         -2.267
+	           hhinc#5             -0.010  5.211e-03  -1.826       6.151e-03         -1.547
+	           hhinc#6             -0.007  3.139e-03  -2.102       3.394e-03         -1.944
+	           vehbywrk_BIKE       -0.742  2.636e-01  -2.815       3.229e-01         -2.297
+	           vehbywrk_SR         -0.225  6.524e-02  -3.451       7.172e-02         -3.139
+	           vehbywrk_TRANSIT    -0.705  1.506e-01  -4.678       1.600e-01         -4.404
+	           vehbywrk_WALK       -0.772  1.704e-01  -4.531       2.063e-01         -3.742
+	Zonal      wkcbd_BIKE           0.478  3.583e-01   1.333       3.652e-01          1.308
+	           wkcbd_SR2            0.192  9.603e-02   2.002       9.592e-02          2.004
+	           wkcbd_SR3            0.778  2.004e-01   3.882       2.065e-01          3.769
+	           wkcbd_TRANSIT        0.919  2.231e-01   4.119       2.332e-01          3.940
+	           wkcbd_WALK           0.113  2.449e-01   0.462       2.480e-01          0.456
+	           wkempden_BIKE        0.001  1.214e-03   1.183       1.154e-03          1.244
+	           wkempden_SR2         0.001  3.544e-04   3.227       3.781e-04          3.024
+	           wkempden_SR3         0.002  4.492e-04   3.627       4.626e-04          3.522
+	           wkempden_TRANSIT     0.002  5.099e-04   4.371       5.376e-04          4.146
+	           wkempden_WALK        0.002  7.711e-04   2.933       7.089e-04          3.191
+	ASCs       ASC_BIKE            -1.382  4.486e-01  -3.082       5.226e-01         -2.645
+	           ASC_SR2             -1.321  2.567e-01  -5.144       2.754e-01         -4.795
+	           ASC_SR3             -2.498  4.791e-01  -5.213       5.092e-01         -4.904
+	           ASC_TRANSIT         -0.404  2.215e-01  -1.826       2.365e-01         -1.710
+	           ASC_WALK             0.334  3.686e-01   0.907       3.715e-01          0.900
+	Other      mu                   0.724  1.363e-01  -2.028       1.452e-01         -1.903
 
 Note that the "null" value for the logsum parameters is 1.0, so the t-statistic is negative
 even though the parameter is positive, as it is less than the null value.
