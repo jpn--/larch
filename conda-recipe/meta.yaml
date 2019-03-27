@@ -36,7 +36,7 @@ requirements:
     - cython >=0.29
     - numpy >=1.15.4
     - scipy >=1.1
-    - pandas >=0.23.4
+    - pandas >=0.24
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
     - blosc >=1.14.3 
     - matplotlib >=3.0
@@ -67,7 +67,7 @@ requirements:
     - ipython >=7.1
     - numpy >=1.15.4
     - scipy >=1.1
-    - pandas >=0.23.4
+    - pandas >=0.24
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
     - blosc >=1.14.3 
     - matplotlib >=3.0

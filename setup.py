@@ -140,7 +140,7 @@ setup(
     install_requires=[
         'numpy >=1.13',
         'scipy >=1.0',
-        'pandas >=0.21',
+        'pandas >=0.24',
         'tables >=3.4',
         'cloudpickle',
         'tqdm',
