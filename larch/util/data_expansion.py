@@ -340,13 +340,27 @@ def ratio_min(s, column=None, inplace=False, result_name=None):
 	inplace : bool, default False
 		modify `s` in-place?
 	result_name : str, optional
-		If `s` is given as a DataFrame, and `inplace` is True, write to this column
+		If `s` is given as a DataFrame, and `inplace` is True, write to this column.
+		When not given, the result is named "ratio_min(<column>)"
 
 	Returns
 	-------
 	pandas.DataFrame
+
+	Raises
+	------
+	ValueError
+		The input argument `s` is not in idce format (i.e., it does not have
+		a MultiIndex as the index or that MultiIndex does not have 2 levels.)
 	"""
 	index = s.index
+
+	if not isinstance(s.index, pandas.MultiIndex) or len(s.index.levels) != 2:
+		raise ValueError('`s` must be in idce format, with a 2-level multi-index.')
+
+	if column is None and isinstance(s, pandas.Series):
+		column = s.name
+
 	if isinstance(s, pandas.DataFrame):
 		input = s
 		if len(s.columns) == 1:
@@ -356,7 +370,7 @@ def ratio_min(s, column=None, inplace=False, result_name=None):
 	else:
 		input = None
 
-	divisor = s.groupby(index.labels[0]).transform(numpy.min)
+	divisor = s.groupby(index.codes[0]).transform(numpy.min)
 	divisor[divisor==0] = 1.0
 	scaled = s/divisor
 
