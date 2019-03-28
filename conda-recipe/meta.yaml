@@ -106,7 +106,7 @@ test:
     # entry points work.
     - pytest --pyargs larch
     - svn export https://github.com/jpn--/larch/trunk/larch/doc --non-interactive --trust-server-cert-failures=unknown-ca  # [not win]
-    - sphinx-build -b doctest ./doc ./build/docs
+    - sphinx-build -b doctest ./doc ./build/docs   # [not win]
 
   # You can also put a file called run_test.py in the recipe that will be run
   # at test time.
