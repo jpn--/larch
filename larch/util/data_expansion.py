@@ -175,12 +175,12 @@ def piece(x, low_bound, high_bound):
 		if high_bound is None:
 			return x
 		else:
-			return numpy.fmin(x, high_bound)
+			return numpy.minimum(x, high_bound)
 	else:
 		if high_bound is None:
-			return numpy.fmax(x-low_bound, 0)
+			return numpy.maximum(x-low_bound, 0)
 		else:
-			return numpy.fmax(numpy.fmin(x, high_bound)-low_bound, 0)
+			return numpy.maximum(numpy.minimum(x, high_bound)-low_bound, 0)
 
 
 def parse_piece(s):
@@ -204,12 +204,13 @@ def parse_piece(s):
 
 def piecewise_linear(x, p=None, breaks=None):
 	from ..roles import P,X
+	from ..model import linear
 
 	if p is None:
 		p = x
 
 	# Flip x and p if given backwards
-	if isinstance(x, P) and isinstance(p, X):
+	if isinstance(x, linear.ParameterRef_C) and isinstance(p, linear.DataRef_C):
 		p,x = x,p
 
 	if breaks is None:

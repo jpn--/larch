@@ -126,3 +126,32 @@ def test_linear_func():
 	u += P.Ccc * X.Ccc
 
 	assert u == P.Aaa * X.Aaa + P.Bbb * X.Bbb + P.Ccc * X.Ccc
+
+def test_piecewise_linear():
+	from larch.util.data_expansion import piecewise_linear
+
+	func = piecewise_linear(X.DataName, P.ParamName, [3, 5, 7])
+	assert func[0] == P('ParamName ① up to 3') * X('piece(DataName,None,3)')
+	assert func[1] == P('ParamName ② 3 to 5') * X('piece(DataName,3,5)')
+	assert func[2] == P('ParamName ③ 5 to 7') * X('piece(DataName,5,7)')
+	assert func[3] == P('ParamName ④ over 7') * X('piece(DataName,7,None)')
+	assert len(func) == 4
+
+	func = piecewise_linear(X.DataName, breaks=[3, 5, 7])
+	assert func[0] == P('DataName ① up to 3') * X('piece(DataName,None,3)')
+	assert func[1] == P('DataName ② 3 to 5') * X('piece(DataName,3,5)')
+	assert func[2] == P('DataName ③ 5 to 7') * X('piece(DataName,5,7)')
+	assert func[3] == P('DataName ④ over 7') * X('piece(DataName,7,None)')
+	assert len(func) == 4
+
+	func = piecewise_linear('GenName', breaks=[3, 5, 7])
+	assert func[0] == P('GenName ① up to 3') * X('piece(GenName,None,3)')
+	assert func[1] == P('GenName ② 3 to 5') * X('piece(GenName,3,5)')
+	assert func[2] == P('GenName ③ 5 to 7') * X('piece(GenName,5,7)')
+	assert func[3] == P('GenName ④ over 7') * X('piece(GenName,7,None)')
+	assert len(func) == 4
+
+	with pytest.raises(ValueError):
+		func = piecewise_linear('GenName', [3, 5, 7])
+
+

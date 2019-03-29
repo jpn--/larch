@@ -7,58 +7,8 @@ from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logadd
     fmin, fmax, nan_to_num, sin, cos, pi
 
 
-
-def piece(x, low_bound, high_bound):
-    if low_bound is None:
-        if high_bound is None:
-            return x
-        else:
-            return numpy.fmin(x, high_bound)
-    else:
-        if high_bound is None:
-            return numpy.fmax(x-low_bound, 0)
-        else:
-            return numpy.fmax(numpy.fmin(x, high_bound)-low_bound, 0)
-
-
-def parse_piece(s):
-    if s is not None:
-        float_regex = r'[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?'
-        z = re.match(r"^piece\((.*),({0}|None),({0}|None)\)$".format(float_regex), s)
-        if z:
-            # data is exactly and only a piecewise part
-            base_def = z.group(1)
-            lowbound = ast.literal_eval(z.group(2))
-            highbound = ast.literal_eval(z.group(4))
-            return base_def, lowbound, highbound, True
-        z = re.match(r".*piece\((.*),({0}|None),({0}|None)\)".format(float_regex), s)
-        if z:
-            # data is a piecewise part possibly interacted with something else
-            base_def = z.group(1)
-            lowbound = ast.literal_eval(z.group(2))
-            highbound = ast.literal_eval(z.group(4))
-            return base_def, lowbound, highbound, False
-    return None, None, None, None
-
-def piecewise_linear(x, p, breaks):
-    # Flip x and p if given backwards
-    if isinstance(x, P) and isinstance(p, X):
-        p,x = x,p
-    # first leg
-    b = breaks[0]
-    z = X(f"piece({x},None,{b})") * P(f"{p} ① upto{b}")
-    # middle legs
-    lex = '②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
-    #lex = 'BCDEFGHIJKLMNOPQRSTUVWXYZ'
-    for i in range(len(breaks)-1):
-        b0 = breaks[i]
-        b1 = breaks[i+1]
-        z = z+ X(f"piece({x},{b0},{b1})") * P(f"{p} {lex[i]} {b0}to{b1}")
-    # last leg
-    i = len(breaks)-1
-    b0 = breaks[i]
-    z = z + X(f"piece({x},{b0},None)") * P(f"{p} {lex[i]} over{b0}")
-    return z
+# duplicate these here for legacy compatibility
+from .data_expansion import piece, piecewise_linear, parse_piece
 
 
 
