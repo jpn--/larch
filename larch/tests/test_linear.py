@@ -155,3 +155,50 @@ def test_piecewise_linear():
 		func = piecewise_linear('GenName', [3, 5, 7])
 
 
+def test_piecewise_expansion():
+	import pandas, io, numpy
+	from larch.util.data_expansion import piecewise_expansion, piecewise_linear
+
+	df = pandas.DataFrame(
+		numpy.linspace(0, 10, 25),
+		columns=['DataName'],
+	)
+
+	expanded = piecewise_expansion(df, [3, 5, 7])
+
+	s = '''
+	    piece(DataName,None,3)  piece(DataName,3,5)  piece(DataName,5,7)  piece(DataName,7,None)
+	0                 0.000000             0.000000             0.000000                0.000000
+	1                 0.416667             0.000000             0.000000                0.000000
+	2                 0.833333             0.000000             0.000000                0.000000
+	3                 1.250000             0.000000             0.000000                0.000000
+	4                 1.666667             0.000000             0.000000                0.000000
+	5                 2.083333             0.000000             0.000000                0.000000
+	6                 2.500000             0.000000             0.000000                0.000000
+	7                 2.916667             0.000000             0.000000                0.000000
+	8                 3.000000             0.333333             0.000000                0.000000
+	9                 3.000000             0.750000             0.000000                0.000000
+	10                3.000000             1.166667             0.000000                0.000000
+	11                3.000000             1.583333             0.000000                0.000000
+	12                3.000000             2.000000             0.000000                0.000000
+	13                3.000000             2.000000             0.416667                0.000000
+	14                3.000000             2.000000             0.833333                0.000000
+	15                3.000000             2.000000             1.250000                0.000000
+	16                3.000000             2.000000             1.666667                0.000000
+	17                3.000000             2.000000             2.000000                0.083333
+	18                3.000000             2.000000             2.000000                0.500000
+	19                3.000000             2.000000             2.000000                0.916667
+	20                3.000000             2.000000             2.000000                1.333333
+	21                3.000000             2.000000             2.000000                1.750000
+	22                3.000000             2.000000             2.000000                2.166667
+	23                3.000000             2.000000             2.000000                2.583333
+	24                3.000000             2.000000             2.000000                3.000000
+	'''
+
+	correct = pandas.read_csv(io.StringIO(s), sep='\s+')
+
+	pandas.testing.assert_frame_equal(expanded, correct)
+
+	func = piecewise_linear(X.DataName, P.ParamName, [3, 5, 7])
+	expanded2 = piecewise_expansion(df, func)
+	pandas.testing.assert_frame_equal(expanded2, correct)

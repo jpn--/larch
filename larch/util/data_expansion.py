@@ -258,6 +258,31 @@ def piecewise_linear_data_names(basename, breaks):
 	return z
 
 
+def infer_breaks(fun):
+	"""
+	Infer break points from a piecewise_linear LinearFunction.
+
+	Parameters
+	----------
+	fun : LinearFunction_C
+	"""
+	m = re.compile('piece\(.*,(.*),(.*)\)')
+	_0 = m.match(fun[0].data)
+	if _0.group(1) != 'None':
+		raise NotImplementedError('Bounded Minimum')
+	breaks = [ast.literal_eval(_0.group(2))]
+	for i in fun[1:-1]:
+		_n = m.match(i.data)
+		if breaks[-1] != ast.literal_eval(_n.group(1)):
+			raise NotImplementedError('Diconnected')
+		breaks.append(ast.literal_eval(_n.group(2)))
+	_n = m.match(fun[-1].data)
+	if breaks[-1] != ast.literal_eval(_n.group(1)):
+		raise NotImplementedError('Diconnected Top')
+	if _n.group(2) != 'None':
+		raise NotImplementedError('Bounded Maximum')
+	return breaks
+
 def piecewise_expansion(s, breaks, column=None, inplace=False):
 	"""
 	Expand a pandas Series into a DataFrame containing a piecewise linear series.
@@ -283,6 +308,11 @@ def piecewise_expansion(s, breaks, column=None, inplace=False):
 			s = s.loc[:, column]
 	else:
 		input = None
+
+	from ..model import linear
+
+	if isinstance(breaks, linear.LinearFunction_C):
+		breaks = infer_breaks(breaks)
 
 	columns = piecewise_linear_data_names(s.name, breaks=breaks)
 	df = pandas.DataFrame(
