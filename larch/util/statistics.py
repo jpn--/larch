@@ -1,7 +1,7 @@
 import numpy
 from .. import warning
 from .histograms import sizable_histogram_figure, seems_like_discrete_data
-from . import dicta
+from . import dictx
 from .arraytools import scalarize
 import numpy.ma as ma
 from .common_functions import parse_piece
@@ -40,7 +40,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 
 	Returns
 	-------
-	dicta
+	dictx
 
 	"""
 	a = arr
@@ -50,7 +50,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 		if ch_weights is not None:
 			ch_weights = ch_weights.reshape(-1)
 
-	stats = dicta()
+	stats = dictx()
 
 	if varname is not None:
 		stats.description = varname
