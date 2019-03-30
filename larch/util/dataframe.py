@@ -211,6 +211,10 @@ def columnize(df, name, inplace=True, dtype=None):
 		raise
 	return _result
 
+def compute(df, name, dtype=None):
+	return columnize(df, name, inplace=False, dtype=dtype)
+
+
 ###################
 ### Typical Calibration Table
 
