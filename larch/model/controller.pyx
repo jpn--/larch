@@ -1418,6 +1418,9 @@ cdef class Model5c:
 	def choice_ca_var(self, x):
 		#self.mangle()
 		self._choice_ca_var = x
+		if x is not None:
+			self._choice_co_vars = None
+			self._choice_co_code = None
 
 	@property
 	def choice_co_vars(self):
@@ -1432,6 +1435,8 @@ cdef class Model5c:
 		#self.mangle()
 		if isinstance(x, dict):
 			self._choice_co_vars = x
+			self._choice_ca_var = None
+			self._choice_co_code = None
 		elif x is None:
 			self._choice_co_vars = x
 		else:
@@ -1454,6 +1459,8 @@ cdef class Model5c:
 		#self.mangle()
 		if isinstance(x, str):
 			self._choice_co_code = x
+			self._choice_co_vars = None
+			self._choice_ca_var = None
 		elif x is None:
 			self._choice_co_code = x
 		else:
