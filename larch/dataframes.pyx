@@ -295,6 +295,10 @@ cdef class DataFrames:
 		A dataframe containing idca format data, with one row per alternative.
 		The index should be a two-level multi-index, with the first level
 		containing the caseid's and the second level containing the altid's.
+	alt_names : Sequence[str]
+		A sequence of alternative names as str.
+	alt_codes : Sequence[int]
+		A sequence of alternative codes.
 	"""
 
 	def __init__(
@@ -2036,8 +2040,8 @@ cdef class DataFrames:
 		----------
 		req_data : Dict or str
 			The requested data. The keys for this dictionary may include {'ca', 'co',
-			'choice_ca', 'choice_co', 'weight_co', 'avail_ca', 'standardize'}.
-			Currently, the keys {'choice_co_code', 'avail_co'} are not implemented and
+			'choice_ca', 'choice_co', 'choice_co_code', 'weight_co', 'avail_ca', 'standardize'}.
+			Currently, the keys {'avail_co'} are not implemented and
 			will raise an error.
 			Other keys are silently ignored.
 		selector : array-like[bool] or slice, optional
@@ -2092,7 +2096,15 @@ cdef class DataFrames:
 			else:
 				df_ch.columns = alts
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			choicecodes = columnize(self._data_co, [req_data['choice_co_code']], inplace=False, dtype=int)
+			df_ch = pandas.DataFrame(
+				0,
+				columns=self.alternative_codes(),
+				index=self._data_co.index,
+				dtype=float_dtype,
+			)
+			for c in df_ch.columns:
+				df_ch.loc[:,c] = (choicecodes==c).astype(float_dtype)
 		else:
 			df_ch = None
 
