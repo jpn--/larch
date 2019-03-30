@@ -782,8 +782,10 @@ cdef class DataFrames:
 			self._data_ca = None
 			self._array_ca = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_ca must be a pandas.DataFrame')
+				raise TypeError('data_ca must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if self._computational:
 				self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
@@ -830,8 +832,10 @@ cdef class DataFrames:
 			self._data_co = None
 			self._array_co = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_co must be a pandas.DataFrame')
+				raise TypeError('data_co must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if self._computational:
 				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
@@ -880,8 +884,10 @@ cdef class DataFrames:
 			self._array_ce_altindexes = None
 			self._array_ce_reversemap = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_ce must be a pandas.DataFrame')
+				raise TypeError('data_ce must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if not df.index.is_monotonic_increasing:
 				df = df.sort_index()
