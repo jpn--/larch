@@ -656,7 +656,11 @@ class DataService():
 			df_ch = self.dataframe_idco(*cols, dtype=float_dtype, selector=selector)
 			df_ch.columns = alts
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			alts = self.alternative_codes()
+			df_ch_code = self.dataframe_idco(req_data['choice_co_code'], dtype=int, selector=selector)
+			df_ch = pandas.DataFrame(0, columns=alts, index=df_ch_code.index, dtype=float_dtype)
+			for c in df_ch.columns:
+				df_ch.loc[:,c] = (df_ch_code==c).astype(float_dtype)
 		else:
 			df_ch = None
 
@@ -717,7 +721,8 @@ class DataService():
 			if not hasattr(self, 'dataframe_idco'):
 				missing_methods.add('dataframe_idco')
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			if not hasattr(self, 'dataframe_idco'):
+				missing_methods.add('dataframe_idco')
 
 		if 'weight_co' in req_data:
 			if not hasattr(self, 'dataframe_idco'):
