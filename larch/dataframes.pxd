@@ -116,3 +116,16 @@ cdef class DataFrames:
 
 	cdef bint _is_computational_ready(self, bint activate) nogil
 
+	cdef void _is_zero_quantity_onecase(
+			self,
+			int c,
+			int8_t[:] Q,
+			int n_alts,
+	) nogil
+
+	cdef bint _is_zero_quantity_onecase_onealt(
+			self,
+			int c,
+			int j,
+	) nogil
+

@@ -422,6 +422,10 @@ cdef class DataFrames:
 			self.data_co = co
 			self.data_ca = ca
 			self.data_ce = ce
+			if isinstance(ch, pandas.DataFrame) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2 and ch.shape[1]==1:
+				ch = ch.iloc[:,0]
+			if isinstance(ch, pandas.Series) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2:
+				ch = ch.unstack()
 			self.data_ch = ch
 			self.data_wt = wt
 			if av is None and self.data_ce is not None:
@@ -1671,6 +1675,142 @@ cdef class DataFrames:
 		else:
 			for i in range(writecap):
 				into_array[i] = self._array_ch[c,i]
+
+
+
+	@cython.boundscheck(False)
+	@cython.initializedcheck(False)
+	@cython.cdivision(True)
+	cdef void _is_zero_quantity_onecase(
+			self,
+			int c,
+			int8_t[:] Q,
+			int n_alts,
+	) nogil:
+		"""
+		Check whether each alt in a specific case has zero quantity.
+		
+		Parameters
+		----------
+		c : int
+			The case index to check.
+		Q : int[n_alts]
+			input/output array.  Only non-zero input values are checked
+		n_alts : int
+			The number of alternatives to check
+		"""
+
+		cdef:
+			int i,j
+			int64_t row = -2
+			l4_float_t  _temp
+
+		if not self._is_computational_ready(activate=True):
+			return
+
+		for j in range(n_alts):
+
+			if Q[j]:
+
+				if self._array_ce_reversemap is not None:
+					if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
+						row = -1
+					else:
+						row = self._array_ce_reversemap[c,j]
+
+				if self._array_av[c,j] and row!=-1:
+
+					if self.model_quantity_ca_param.shape[0]:
+						for i in range(self.model_quantity_ca_param.shape[0]):
+							if row >= 0:
+								_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+							else:
+								_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
+							if _temp:
+								Q[j] = 0
+								break # stop searching for non-zero quant vars in this alt
+
+				else:
+					Q[j] = 0 # don't flag as non-zero if not available
+
+	@cython.boundscheck(False)
+	@cython.initializedcheck(False)
+	@cython.cdivision(True)
+	cdef bint _is_zero_quantity_onecase_onealt(
+			self,
+			int c,
+			int j,
+	) nogil:
+		"""
+		Check whether a specific case-alt has zero quantity.
+		
+		Parameters
+		----------
+		c : int
+			The case index to check.
+		j : int
+			The alt index to check.
+		"""
+
+		cdef:
+			int i
+			int64_t row = -2
+			l4_float_t  _temp
+			bint result = True
+
+		if self._array_ce_reversemap is not None:
+			if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
+				row = -1
+			else:
+				row = self._array_ce_reversemap[c,j]
+
+		if self._array_av[c,j] and row!=-1:
+
+			if self.model_quantity_ca_param.shape[0]:
+				for i in range(self.model_quantity_ca_param.shape[0]):
+					if row >= 0:
+						_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+					else:
+						_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
+					if _temp:
+						result = False
+						break # stop searching for non-zero quant vars in this alt
+
+		else:
+			result = False # don't flag as non-zero if not available
+
+		return result
+
+
+	def get_zero_quantity_ca(self):
+		"""
+		Find all alternatives with zeros across all quantity values.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+
+		z = self.data_av.copy()
+
+		cdef int8_t[:,:] _z_check = z.values
+		cdef int ncases = self.n_cases
+		cdef int n_alts = _z_check.shape[1]
+		cdef int c
+		cdef int q_shape
+
+		try:
+			q_shape = self.model_quantity_ca_param.shape[0]
+		except AttributeError:
+			raise ValueError("no quantity defined, cannot get zeros on empty set")
+
+		if q_shape == 0:
+			raise ValueError("no quantity defined, cannot get zeros on empty set")
+
+		for c in range(ncases):
+			self._is_zero_quantity_onecase( c, _z_check[c], n_alts, )
+
+		return z
 
 
 	def dump(self, filename, **kwargs):

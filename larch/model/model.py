@@ -618,7 +618,24 @@ class Model(_Model5c):
 		except:
 			logger.exception("error in required_data")
 
-
 	def __contains__(self, item):
 		return (item in self.pf.index) or (item in self.rename_parameters)
 
+	def doctor(
+			self,
+			repair_ch_av=None,
+			repair_ch_zq=None,
+			repair_asc=None,
+			repair_noch_nowt=None,
+			verbose=3,
+	):
+		self.unmangle(True)
+		from ..troubleshooting import doctor
+		return doctor(
+			self,
+			repair_ch_av=repair_ch_av,
+			repair_ch_zq=repair_ch_zq,
+			repair_asc=repair_asc,
+			repair_noch_nowt=repair_noch_nowt,
+			verbose=verbose,
+		)
