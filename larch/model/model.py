@@ -571,8 +571,8 @@ class Model(_Model5c):
 		Dict
 		"""
 		try:
-			from ..util import Dict
-			req_data = Dict()
+			from ..util import dictx
+			req_data = dictx()
 
 			if self.utility_ca is not None and len(self.utility_ca):
 				if 'ca' not in req_data:
