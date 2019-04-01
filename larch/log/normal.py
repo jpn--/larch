@@ -6,13 +6,14 @@ CONSOLE_LOG_FORMAT = '[%(asctime)s] %(name)s.%(levelname)s: %(message)s'
 
 DEFAULT_LOG_LEVEL = logging.WARNING
 
+from . import logger_name
 
 def log_to_console(level=None):
 
 	if level is None:
 		level = DEFAULT_LOG_LEVEL
 
-	logger = logging.getLogger('L5')
+	logger = logging.getLogger(logger_name)
 
 	# avoid creation of multiple stream handlers for logging to console
 	for entry in logger.handlers:
@@ -32,7 +33,7 @@ def log_to_file(filename, level=None):
 	if level is None:
 		level = DEFAULT_LOG_LEVEL
 
-	logger = logging.getLogger('L5')
+	logger = logging.getLogger(logger_name)
 
 	# avoid creation of multiple file handlers for logging to the same file
 	for entry in logger.handlers:

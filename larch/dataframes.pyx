@@ -15,7 +15,8 @@ import inspect
 from typing import Mapping, Sequence, Union
 
 import logging
-logger = logging.getLogger('L5')
+from .log import logger_name
+logger = logging.getLogger(logger_name)
 
 from .model.controller cimport Model5c
 from numpy.math cimport expf, logf
@@ -1168,7 +1169,8 @@ cdef class DataFrames:
 		missing_data = set()
 
 		import logging
-		logger = logging.getLogger("L5").error
+		from .log import logger_name
+		logger = logging.getLogger(logger_name).error
 
 		def missing(y):
 			if y not in missing_data:
@@ -1294,7 +1296,8 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L5')
+			from .log import logger_name
+			logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames._link_to_model_structure')
 			raise
 
@@ -1331,7 +1334,8 @@ cdef class DataFrames:
 		except:
 			if logger is None:
 				import logging
-				logger = logging.getLogger('L5')
+				from .log import logger_name
+				logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames.link_to_model_parameters')
 			raise
 
@@ -1371,7 +1375,8 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L5')
+			from .log import logger_name
+			logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames._read_in_model_parameters')
 			raise
 

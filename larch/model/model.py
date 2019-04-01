@@ -9,7 +9,8 @@ from ..general_precision import l4_float_dtype
 from typing import Sequence
 
 import logging
-logger = logging.getLogger('L5.model')
+from ..log import logger_name
+logger = logging.getLogger(logger_name+'.model')
 
 class Model(_Model5c):
 	"""A discrete choice model.

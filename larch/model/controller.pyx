@@ -11,7 +11,8 @@ import pandas
 from typing import Union
 
 import logging
-logger = logging.getLogger('L5.model')
+from ..log import logger_name
+logger = logging.getLogger(logger_name+'.model')
 
 
 from ..dataframes cimport DataFrames
