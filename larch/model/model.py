@@ -488,7 +488,23 @@ class Model(_Model5c):
 		return s
 
 
-	def utility_functions(self, subset=None, resolve_parameters=True):
+	def utility_functions(self, subset=None, resolve_parameters=False):
+		"""
+		Generate an XHTML output of the utility function(s).
+
+		Parameters
+		----------
+		subset : Collection, optional
+			A collection of alterative codes to include. This only has effect if
+			there are seperate utility_co functions set by alternative.
+		resolve_parameters : bool, default False
+			Whether to resolve the parameters to the current (estimated) value
+			in the output.
+
+		Returns
+		-------
+		xmle.Elem
+		"""
 		from xmle import Elem
 		x = Elem('div')
 		t = x.elem('table', style="margin-top:1px;", attrib={'class':'floatinghead'})
@@ -499,38 +515,38 @@ class Model(_Model5c):
 			t_head = t.elem('thead')
 			tr = t_head.elem('tr')
 			tr.elem('th', text="alt")
-			tr.elem('th', text='formula')
+			tr.elem('th', text='formula', attrib={'style':'text-align:left;'})
 			t_body = t.elem('tbody')
 			for j in self.utility_co.keys():
 				if subset is None or j in subset:
 					tr = t_body.elem('tr')
 					tr.elem('td', text=str(j))
-					utilitycell = tr.elem('td')
+					utilitycell = tr.elem('td', attrib={'style':'text-align:left;'})
 					utilitycell.elem('div')
 					anything = False
 					if len(self.utility_ca):
 						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 						anything = True
 					if j in self.utility_co:
 						if anything:
 							utilitycell << Elem('br')
 						v = self.utility_co[j]
 						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 						anything = True
 					if len(self.quantity_ca):
 						if anything:
 							utilitycell << Elem('br')
 						if self.quantity_scale:
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-							from .roles import ParameterRef
-							utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+							from .linear import ParameterRef_C
+							utilitycell << list(ParameterRef_C(self.quantity_scale).__xml__(resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
 						else:
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
 						content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ",
-														   exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+														   exponentiate_parameters=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters)
 						utilitycell << list(content)
 						utilitycell.elem('br', tail=")")
 		else:
@@ -539,24 +555,24 @@ class Model(_Model5c):
 			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
 			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
 			tr = t.elem('tr')
-			utilitycell = tr.elem('td')
+			utilitycell = tr.elem('td', attrib={'style':'text-align:left;'})
 			utilitycell.elem('div')
 			anything = False
 			if len(self.utility_ca):
 				utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 				anything = True
 			if len(self.quantity_ca):
 				if anything:
 					utilitycell << Elem('br')
 				if self.quantity_scale:
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-					from ..roles import ParameterRef
-					utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+					from .linear import ParameterRef_C
+					utilitycell << list(ParameterRef_C(self.quantity_scale).__xml__(resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
 				else:
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
-				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters)
 				utilitycell << list(content)
 				utilitycell.elem('br', tail=")")
 		return x
@@ -568,7 +584,7 @@ class Model(_Model5c):
 
 		Returns
 		-------
-		Dict
+		dictx
 		"""
 		try:
 			from ..util import dictx
