@@ -130,7 +130,7 @@ class Model(_Model5c):
 				if isinstance(sample_weight, str):
 					sample_weight = X[sample_weight]
 				if len(sample_weight) == X.shape[0]:
-					sample_weight = sample_weight.groupby(X.index.labels[0]).first()
+					sample_weight = sample_weight.groupby(X.index.codes[0]).first()
 
 			if isinstance(y, str):
 				y = X[y].unstack().fillna(0)

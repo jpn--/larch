@@ -820,9 +820,9 @@ cdef class DataFrames:
 		elif self._data_av is not None:
 			return self.data_av.index
 		elif self._data_ca is not None:
-			return self._data_ca.index.levels[0][numpy.unique(self._data_ca.index.labels[0])]
+			return self._data_ca.index.levels[0][numpy.unique(self._data_ca.index.codes[0])]
 		elif self._data_ce is not None:
-			return self._data_ce.index.levels[0][numpy.unique(self._data_ce.index.labels[0])]
+			return self._data_ce.index.levels[0][numpy.unique(self._data_ce.index.codes[0])]
 		else:
 			return 0
 
@@ -959,7 +959,7 @@ cdef class DataFrames:
 				self._data_ce = df
 				self._array_ce = None
 
-			unique_labels, new_labels =numpy.unique(self.data_ce.index.labels[0], return_inverse=True)
+			unique_labels, new_labels =numpy.unique(self.data_ce.index.codes[0], return_inverse=True)
 			self._array_ce_caseindexes = new_labels
 
 			# min_case_x = self.data_ce.index.labels[0].min()
@@ -967,7 +967,7 @@ cdef class DataFrames:
 			# 	self._array_ce_caseindexes = self.data_ce.index.labels[0]
 			# else:
 			# 	self._array_ce_caseindexes = self.data_ce.index.labels[0] - min_case_x
-			self._array_ce_altindexes  = self.data_ce.index.labels[1]
+			self._array_ce_altindexes  = self.data_ce.index.codes[1]
 			self._array_ce_reversemap = numpy.full([self._array_ce_caseindexes.max()+1, self._array_ce_altindexes.max()+1], -1, dtype=numpy.int64)
 			for i in range(len(self._array_ce_caseindexes)):
 				c = self._array_ce_caseindexes[i]
