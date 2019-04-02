@@ -10,7 +10,7 @@ cdef class Ref_Gen:
 		object _kind
 
 cdef class ParameterRef_C(UnicodeRef_C):
-	pass
+	cdef public unicode _formatting
 
 cdef class DataRef_C(UnicodeRef_C):
 	pass

@@ -71,16 +71,16 @@ def test_data_c_math():
 	assert X.Aaa * 1 == X.Aaa
 	assert 1 * X.Aaa == X.Aaa
 
-	with pytest.raises(NotImplementedError):
+	with pytest.raises(TypeError):
 		_ = X.Aaa + "Plain String"
 
-	with pytest.raises(NotImplementedError):
+	with pytest.raises(TypeError):
 		_ = X.Aaa - "Plain String"
 
-	with pytest.raises(NotImplementedError):
+	with pytest.raises(TypeError):
 		_ = X.Aaa * "Plain String"
 
-	with pytest.raises(NotImplementedError):
+	with pytest.raises(TypeError):
 		_ = X.Aaa / "Plain String"
 
 
