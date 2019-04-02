@@ -1,4 +1,5 @@
-
+import larch
+import larch.model.linear_math
 from larch.model.linear import ParameterRef_C, DataRef_C, LinearComponent_C, LinearFunction_C
 from larch import P, X, PX
 import keyword
@@ -202,3 +203,62 @@ def test_piecewise_expansion():
 	func = piecewise_linear(X.DataName, P.ParamName, [3, 5, 7])
 	expanded2 = piecewise_expansion(df, func)
 	pandas.testing.assert_frame_equal(expanded2, correct)
+
+
+def test_pmath():
+	m = larch.Model()
+	m.utility_ca = P.Aaa * X.Aaa + P.Bbb * X.Bbb + P.Ccc
+	m.set_values(Aaa=12, Bbb=20, Ccc=2)
+
+	assert P.Aaa.value(m) == 12
+	assert P.Bbb.value(m) == 20
+	assert P.Ccc.value(m) == 2
+
+	with pytest.raises(KeyError):
+		P.Ddd.value(m)
+
+	assert P.Ddd.value(m, {'Ddd': 123}) == 123
+
+	y = P.Aaa + P.Bbb
+	assert y.value(m) == 12 + 20
+	assert repr(y) == 'P.Aaa + P.Bbb'
+	assert repr(y + y) == 'P.Aaa + P.Bbb + P.Aaa + P.Bbb'
+	assert isinstance(y, larch.model.linear.LinearFunction_C)
+	assert isinstance(y + y, larch.model.linear.LinearFunction_C)
+
+	y = P.Aaa / P.Bbb
+	assert y.value(m) == 12 / 20
+	assert y.string(m) == "0.6"
+	assert repr(y) == 'P.Aaa / P.Bbb'
+	assert repr(y + y) == 'P.Aaa / P.Bbb + P.Aaa / P.Bbb'
+
+	y = P.Aaa * 60 / (P.Bbb * 100)
+	y.set_fmt("${:0.2f}/hr")
+	assert y.value(m) == 12 * 60 / (20 * 100)
+	assert y.string(m) == '$0.36/hr'
+
+	y = P.Aaa + P.Bbb / P.Ccc
+	assert y.value(m) == 12 + 20 / 2
+	assert isinstance(y, larch.model.linear_math.ParameterAdd)
+	assert repr(y) == 'P.Aaa + P.Bbb / P.Ccc'
+
+	y = (P.Aaa + P.Bbb) + P.Ccc * P.Aaa
+	assert isinstance(y, larch.model.linear_math.ParameterAdd)
+	assert y.value(m) == (12 + 20) + 2 * 12
+
+	y = (P.Aaa + P.Bbb) + P.Ccc / P.Aaa
+	assert isinstance(y, larch.model.linear_math.ParameterAdd)
+	assert y.value(m) == (12 + 20) + 2 / 12
+
+	y = (P.Aaa + P.Bbb + P.Ccc) * P.Aaa
+	assert isinstance(y, larch.model.linear_math.ParameterMultiply)
+	assert y.value(m) == (12 + 20 + 2) * 12
+
+	y = (P.Aaa + P.Bbb + P.Ccc) / P.Aaa
+	assert isinstance(y, larch.model.linear_math.ParameterDivide)
+	assert y.value(m) == (12 + 20 + 2) / 12
+	assert repr(y) == '(P.Aaa + P.Bbb + P.Ccc) / P.Aaa'
+
+	y = (P.Aaa + P.Bbb + P.Ccc) - P.Aaa
+	assert isinstance(y, larch.model.linear.LinearFunction_C)
+	assert y.value(m) == 12 + 20 + 2 - 12

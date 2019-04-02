@@ -188,6 +188,10 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			return True
 		return False
 
+	def as_pmath(self):
+		from .linear_math import ParameterNoop
+		return ParameterNoop(self)
+
 cdef class DataRef_C(UnicodeRef_C):
 
 	def __repr__(self):
@@ -392,6 +396,12 @@ cdef class LinearComponent_C:
 					data=str(self.data * other),
 					scale=self.scale,
 				)
+			elif isinstance(other, (LinearComponent_C, )):
+				from .linear_math import ParameterMultiply
+				return ParameterMultiply(
+					self.as_pmath(),
+					other.as_pmath(),
+				)
 		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -407,6 +417,12 @@ cdef class LinearComponent_C:
 					param=str(self.param),
 					data=str(self.data / other),
 					scale=self.scale,
+				)
+			elif isinstance(other, (LinearComponent_C, )):
+				from .linear_math import ParameterDivide
+				return ParameterDivide(
+					self.as_pmath(),
+					other.as_pmath(),
 				)
 		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
@@ -483,7 +499,14 @@ cdef class LinearComponent_C:
 			scale=self.scale,
 		)
 
-
+	def as_pmath(self):
+		from .linear_math import ParameterNoop, ParameterMultiply
+		if self.data != "1":
+			raise NotImplementedError('data is not 1')
+		if self.scale == 1:
+			return ParameterNoop(self.param)
+		else:
+			return ParameterMultiply(self.param, self.scale)
 
 def _try_mangle(instance):
 	try:
@@ -905,23 +928,11 @@ cdef class LinearFunction_C:
 		if len(self) == 0:
 			return 0
 		elif len(self) == 1:
-			return ParameterMultiply(self[0].param, self[0].scale)
+			return self[0].as_pmath()
 		else:
-			if self[0].scale == 1:
-				left = P(self[0].param)
-			else:
-				left = ParameterMultiply(self[0].param, self[0].scale)
-			if self[1].scale == 1:
-				right = P(self[1].param)
-			else:
-				right = ParameterMultiply(self[1].param, self[1].scale)
-			x = ParameterAdd(left, right)
+			x = ParameterAdd(self[0].as_pmath(), self[1].as_pmath())
 			for i in self[2:]:
-				if i.scale == 1:
-					j = P(i.param)
-				else:
-					j = ParameterMultiply(i.param, i.scale)
-				x = ParameterAdd(x, j)
+				x = ParameterAdd(x, i.as_pmath())
 			return x
 
 cdef class DictOfLinearFunction_C:

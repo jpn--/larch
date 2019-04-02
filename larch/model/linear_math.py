@@ -210,10 +210,18 @@ class ParameterDivide(_ParameterBinaryOp):
 		return x
 
 
+class ParameterNoop(_ParameterUnaryOp):
+	_op = ''
+	_precedence = 98
+
+	def value(self, *args):
+		return self._operand.value(*args)
+
+
 class ParameterNegate(_ParameterUnaryOp):
 	_op = '-'
 	_precedence = 12
 
 	def value(self, *args):
-		return -self.value(*args)
+		return -self._operand.value(*args)
 
