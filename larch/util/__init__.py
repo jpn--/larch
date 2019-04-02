@@ -55,7 +55,7 @@ class dictx(dict):
 			self[name] = value
 
 	def __xml__(self):
-		from xmle import Elem
+		from xmle import Elem, Show
 		x = Elem('div')
 		t = x.elem('table', style="margin-top:1px;")
 		if len(self):
@@ -66,7 +66,7 @@ class dictx(dict):
 				tr = t.elem('tr')
 				tr.elem('td', text=str(k))
 				try:
-					v_ = v.__xml__()
+					v_ = Show(v)
 				except AttributeError:
 					tr.elem('td', text=pprint.pformat(v), style='text-align:left;')
 				else:
