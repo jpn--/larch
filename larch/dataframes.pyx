@@ -241,6 +241,29 @@ def crack_idca(df:pandas.DataFrame, caseid_col=True):
 	idco_columns = ~idca_columns
 	return df[idca_columns[idca_columns].index], g[idco_columns[idco_columns].index].first()
 
+def force_crack_idca(df:pandas.DataFrame, caseid_col=True):
+	"""
+	Split an :ref:`idca` DataFrame into :ref:`idca` and :ref:`idco` parts.
+
+	Parameters
+	----------
+	df: pandas.DataFrame
+		DataFrame to split
+	caseid_col: str, optional
+		Name of the case indentifier column. If omitted, the first level of the MultiIndex is used.
+
+	Returns
+	-------
+	idco: DataFrame
+	"""
+	if caseid_col is None or caseid_col is True:
+		try:
+			caseid_col = df.index.names[0]
+		except:
+			raise ValueError('cannot infer caseid_col')
+	g = df.groupby([caseid_col])
+	return g.first()
+
 
 def _infer_name(thing):
 	if thing is None:
@@ -296,10 +319,18 @@ cdef class DataFrames:
 		A dataframe containing idca format data, with one row per alternative.
 		The index should be a two-level multi-index, with the first level
 		containing the caseid's and the second level containing the altid's.
+	wt : pandas.DataFrame or pandas.Series, optional
+		A one-column dataframe, or series, containing idco format data, with one
+		row per case, containing the case-weights.
 	alt_names : Sequence[str]
 		A sequence of alternative names as str.
 	alt_codes : Sequence[int]
 		A sequence of alternative codes.
+	wt_name : str, optional
+		A name to use for the weight variable.  If not given, it is inferred from
+		the `wt` argument if possible.  If the `wt` argument is not given but a
+		name is specified, then that named column is found in the `co`, `ca`, or `ce`
+		arguments and used as the weight.
 	"""
 
 	def __init__(
@@ -404,6 +435,14 @@ cdef class DataFrames:
 				_av_temp = pandas.DataFrame(numpy.asarray(av_as_ce), index=ce.index, columns=['avail'])
 				av = _av_temp.unstack().fillna(0)
 				av.columns = av.columns.droplevel(0)
+
+			if wt_name is not None and wt is None:
+				if co is not None and wt_name in co.columns:
+					wt = co[wt_name]
+				elif ca is not None and wt_name in ca.columns:
+					_, wt = force_crack_idca(ca[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
+				elif ce is not None and wt_name in ce.columns:
+					_, wt = force_crack_idca(ce[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
 
 			if alt_codes is None:
 				if ca is not None:
