@@ -328,6 +328,20 @@ cdef class DataRef_C(UnicodeRef_C):
 	def __pos__(self):
 		return self
 
+	def eval(self, namespace=None, *, globals=None, **more_namespace):
+		import numpy
+		from ..util.common_functions import piece
+		use_namespace = {'exp': numpy.exp, 'log': numpy.log, 'log1p': numpy.log1p, 'fabs': numpy.fabs,
+		                 'sqrt': numpy.sqrt,
+		                 'absolute': numpy.absolute, 'isnan': numpy.isnan, 'isfinite': numpy.isfinite,
+		                 'logaddexp': numpy.logaddexp, 'fmin': numpy.fmin, 'fmax': numpy.fmax,
+		                 'nan_to_num': numpy.nan_to_num,
+						 'piece': piece,}
+		if namespace is not None:
+			use_namespace.update(namespace)
+		use_namespace.update(more_namespace)
+		return eval(self, globals, use_namespace)
+
 
 
 cdef class LinearComponent_C:
