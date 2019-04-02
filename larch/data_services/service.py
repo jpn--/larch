@@ -550,6 +550,9 @@ class DataService():
 			result = numpy.nan_to_num(result)
 		return result
 
+	make_idco = dataframe_idco
+	make_idca = dataframe_idca
+
 	def __repr__(self):
 		s = "<larch.DataService>"
 		if len(self._pods_idco):
