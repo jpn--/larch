@@ -319,6 +319,10 @@ cdef class DataFrames:
 		A dataframe containing idca format data, with one row per alternative.
 		The index should be a two-level multi-index, with the first level
 		containing the caseid's and the second level containing the altid's.
+	ch : pandas.DataFrame
+		A dataframe containing choice data, with one row per case and one column
+		per alternative.
+		The index contains the caseid's, and the columns contain the alt_codes.
 	wt : pandas.DataFrame or pandas.Series, optional
 		A one-column dataframe, or series, containing idco format data, with one
 		row per case, containing the case-weights.
@@ -326,6 +330,11 @@ cdef class DataFrames:
 		A sequence of alternative names as str.
 	alt_codes : Sequence[int]
 		A sequence of alternative codes.
+	ch_name : str, optional
+		A name to use for the choice variable.  If not given, it is inferred from
+		the `ch` argument if possible.  If the `ch` argument is not given but a
+		name is specified, then that named column is found in the `ca`, or `ce`
+		arguments and used as the choice.
 	wt_name : str, optional
 		A name to use for the weight variable.  If not given, it is inferred from
 		the `wt` argument if possible.  If the `wt` argument is not given but a
@@ -430,6 +439,14 @@ cdef class DataFrames:
 				_ch_temp = pandas.DataFrame(numpy.asarray(ch_as_ce), index=ce.index, columns=['choice'])
 				ch = _ch_temp.unstack().fillna(0)
 				ch.columns = ch.columns.droplevel(0)
+
+			if ch is None and ch_name is not None and ce is not None and ch_name in ce.columns:
+				_ch_temp = ce[ch_name]
+				ch = _ch_temp.unstack().fillna(0)
+
+			if ch is None and ch_name is not None and ca is not None and ch_name in ca.columns:
+				_ch_temp = ca[ch_name]
+				ch = _ch_temp.unstack().fillna(0)
 
 			if av is None and av_as_ce is not None and ce is not None:
 				_av_temp = pandas.DataFrame(numpy.asarray(av_as_ce), index=ce.index, columns=['avail'])
