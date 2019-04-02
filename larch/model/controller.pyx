@@ -268,7 +268,9 @@ cdef class Model5c:
 		-------
 
 		"""
-		from .roles import _param_math_binaryop
+		from ..roles import _param_math_binaryop
+		from .linear import ParameterRef_C
+		from .linear_math import _ParameterOp
 		from numbers import Number
 		try:
 			if isinstance(parameter_name, _param_math_binaryop):

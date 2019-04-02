@@ -192,6 +192,25 @@ cdef class ParameterRef_C(UnicodeRef_C):
 		from .linear_math import ParameterNoop
 		return ParameterNoop(self)
 
+	def __xml__(self, resolve_parameters=None, value_in_tooltips=True):
+
+		if resolve_parameters is not None:
+			if value_in_tooltips:
+				p_display = repr(self)
+				p_tooltip = self.string(resolve_parameters)
+			else:
+				p_display = self.string(resolve_parameters)
+				p_tooltip = repr(self)
+		else:
+			p_display = repr(self)
+			p_tooltip = "This is a Parameter"
+
+		from xmle import Elem
+		x = Elem('div')
+		a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display)
+		a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
+		return x
+
 cdef class DataRef_C(UnicodeRef_C):
 
 	def __repr__(self):
@@ -442,20 +461,30 @@ cdef class LinearComponent_C:
 			return False
 		return True
 
-	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None):
+	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None, value_in_tooltips=True):
 		from xmle import Elem
 		x = Elem('div')
 		# x << tooltipped_style()
 
 		if resolve_parameters is not None:
 			if exponentiate_parameter:
-				plabel = resolve_parameters.pvalue(self.param, default_value="This is a Parameter")
-				if not isinstance(plabel, str):
-					plabel = "exp({0:.3g})={1:.3g}".format(plabel, _numpy.exp(plabel))
+				if value_in_tooltips:
+					p_tooltip = f"exp({self.param.string(resolve_parameters)}) = {self.param.value(resolve_parameters):.4g}"
+					p_display = f"{repr(self.param)}"
+				else:
+					p_display = f"{self.param.string(resolve_parameters)}"
+					p_tooltip = f"exp({repr(self.param)})"
 			else:
-				plabel = "{0:.3g}".format(resolve_parameters.pvalue(self.param, default_value="This is a Parameter"))
+				if value_in_tooltips:
+					p_tooltip = self.param.string(resolve_parameters)
+					p_display = repr(self.param)
+				else:
+					p_display = self.param.string(resolve_parameters)
+					p_tooltip = repr(self.param)
 		else:
-			plabel = "This is a Parameter"
+			p_display = repr(self.param)
+			p_tooltip = "This is a Parameter"
+
 
 
 		data_tail = " * "
@@ -468,19 +497,19 @@ cdef class LinearComponent_C:
 		if self.scale == 1.0:
 			if exponentiate_parameter:
 				x.elem('span', tail="exp(")
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=")"+data_tail)
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=")"+data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 			else:
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=data_tail)
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 		else:
 			if exponentiate_parameter:
 				x.elem('span', tail="exp(")
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}){data_tail}")
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=f" * {self.scale}){data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 			else:
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}{data_tail}")
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=f" * {self.scale}{data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 		if data_tail == " * ":
 			a_x = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.data))
 			a_x.elem('span', attrib={'class':'tooltiptext'}, text="This is Data")
@@ -813,11 +842,22 @@ cdef class LinearFunction_C:
 				return "  "+result.replace(" + ","\n+ ")
 		return f"<Empty {self.__class__.__name__}>"
 
-	def __xml__(self, linebreaks=False, lineprefix="", exponentiate_parameters=False, resolve_parameters=None):
+	def __xml__(
+			self,
+			linebreaks=False,
+			lineprefix="",
+			exponentiate_parameters=False,
+			resolve_parameters=None,
+			value_in_tooltips=True,
+	):
 		from xmle import Elem
 		x = Elem('div', attrib={'class':'LinearFunc'})
 		for n,i in enumerate(self):
-			ix_ = i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters).getchildren()
+			ix_ = i.__xml__(
+				exponentiate_parameter=exponentiate_parameters,
+				resolve_parameters=resolve_parameters,
+				value_in_tooltips=value_in_tooltips,
+			).getchildren()
 			if linebreaks:
 				if n>0 or lineprefix:
 					ix_.insert(0,Elem('br', tail = lineprefix+" + "))

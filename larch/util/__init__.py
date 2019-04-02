@@ -1,6 +1,7 @@
 from .signal_dict import SignalDict
 
 import addict_yaml
+import pprint
 
 class Dict(addict_yaml.Dict):
 
@@ -67,7 +68,7 @@ class dictx(dict):
 				try:
 					v_ = v.__xml__()
 				except AttributeError:
-					tr.elem('td', text=str(v), style='text-align:left;')
+					tr.elem('td', text=pprint.pformat(v), style='text-align:left;')
 				else:
 					tr.elem('td') << v_
 		else:
