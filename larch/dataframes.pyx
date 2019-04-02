@@ -2116,7 +2116,7 @@ cdef class DataFrames:
 			the relative size of the splits.
 		method : {'simple', 'shuffle'}
 			If simple, the data is assumed to be adequately shuffled already and splits are
-			made of contiguous sections of data.  This is memory efficient.  Choose 'shuffle'
+			made of contiguous sections of data.  This may be more memory efficient.  Choose 'shuffle'
 			to randomly shuffle the cases while splitting; data will be copied to new memory.
 
 		Returns
@@ -2140,6 +2140,9 @@ cdef class DataFrames:
 
 			cum_splits = splits.cumsum()
 			uniform_seq = numpy.arange(self.n_cases) / self.n_cases
+
+			if method == 'shuffle':
+				numpy.random.shuffle(uniform_seq)
 
 			membership = (uniform_seq.reshape(-1,1) <= cum_splits.reshape(1,-1))
 			membership[:,1:] ^= membership[:,:-1]
@@ -2171,6 +2174,10 @@ cdef class DataFrames:
 					data_wt=data_wt,
 					alt_names = self.alternative_names(),
 					alt_codes = self.alternative_codes(),
+					sys_alts=self.sys_alts,
+					ch_name=self._data_ch_name,
+					wt_name=self._data_wt_name,
+					av_name=self._data_av_name,
 				))
 			logger.debug(f'done splitting dataframe {splits}')
 			return result
