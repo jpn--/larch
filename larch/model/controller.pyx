@@ -111,6 +111,84 @@ cdef class Model5c:
 
 		self._graph = graph
 
+	def __getstate__(self):
+
+		import cloudpickle
+		import gzip
+		import base64
+
+		state = dict()
+		state["_utility_ca                    ".strip()] = (self._utility_ca                    )
+		state["_utility_co                    ".strip()] = (self._utility_co                    )
+		state["_quantity_ca                   ".strip()] = (self._quantity_ca                   )
+		state["_quantity_scale                ".strip()] = (self._quantity_scale                )
+		state["_logsum_parameter              ".strip()] = (self._logsum_parameter              )
+		state["rename_parameters              ".strip()] = (self.rename_parameters              )
+		state["_choice_ca_var                 ".strip()] = (self._choice_ca_var                 )
+		state["_choice_co_vars                ".strip()] = (self._choice_co_vars                )
+		state["_choice_co_code                ".strip()] = (self._choice_co_code                )
+		state["_weight_co_var                 ".strip()] = (self._weight_co_var                 )
+		state["_availability_var              ".strip()] = (self._availability_var              )
+		state["_availability_co_vars          ".strip()] = (self._availability_co_vars          )
+		state["frame                          ".strip()] = (self.frame                          )
+		state["_graph                         ".strip()] = (self._graph                         )
+		state["_display_order                 ".strip()] = (self._display_order                 )
+		state["_display_order_tail            ".strip()] = (self._display_order_tail            )
+		state["_possible_overspecification    ".strip()] = (self._possible_overspecification    )
+		state["_most_recent_estimation_result ".strip()] = (self._most_recent_estimation_result )
+		state["_cached_loglike_null           ".strip()] = (self._cached_loglike_null           )
+		state["_cached_loglike_constants_only ".strip()] = (self._cached_loglike_constants_only )
+		state["_cached_loglike_best           ".strip()] = (self._cached_loglike_best           )
+		state["_title                         ".strip()] = (self._title                         )
+		state["hessian_matrix                 ".strip()] = (self.hessian_matrix                 )
+		state["covariance_matrix              ".strip()] = (self.covariance_matrix              )
+		state["robust_covariance_matrix       ".strip()] = (self.robust_covariance_matrix       )
+
+		state = cloudpickle.dumps(state)
+		state = gzip.compress(state)
+		state = base64.b85encode(state)
+
+		return state
+
+	def __setstate__(self, state):
+
+		import cloudpickle
+		import gzip
+		import base64
+
+		state = base64.b85decode(state)
+		state = gzip.decompress(state)
+		state = cloudpickle.loads(state)
+
+		(self._utility_ca                    ) = state["_utility_ca                    ".strip()]
+		(self._utility_co                    ) = state["_utility_co                    ".strip()]
+		(self._quantity_ca                   ) = state["_quantity_ca                   ".strip()]
+		(self._quantity_scale                ) = state["_quantity_scale                ".strip()]
+		(self._logsum_parameter              ) = state["_logsum_parameter              ".strip()]
+		(self.rename_parameters              ) = state["rename_parameters              ".strip()]
+		(self._choice_ca_var                 ) = state["_choice_ca_var                 ".strip()]
+		(self._choice_co_vars                ) = state["_choice_co_vars                ".strip()]
+		(self._choice_co_code                ) = state["_choice_co_code                ".strip()]
+		(self._weight_co_var                 ) = state["_weight_co_var                 ".strip()]
+		(self._availability_var              ) = state["_availability_var              ".strip()]
+		(self._availability_co_vars          ) = state["_availability_co_vars          ".strip()]
+		(self.frame                          ) = state["frame                          ".strip()]
+		(self._graph                         ) = state["_graph                         ".strip()]
+		(self._display_order                 ) = state["_display_order                 ".strip()]
+		(self._display_order_tail            ) = state["_display_order_tail            ".strip()]
+		(self._possible_overspecification    ) = state["_possible_overspecification    ".strip()]
+		(self._most_recent_estimation_result ) = state["_most_recent_estimation_result ".strip()]
+		(self._cached_loglike_null           ) = state["_cached_loglike_null           ".strip()]
+		(self._cached_loglike_constants_only ) = state["_cached_loglike_constants_only ".strip()]
+		(self._cached_loglike_best           ) = state["_cached_loglike_best           ".strip()]
+		(self._title                         ) = state["_title                         ".strip()]
+		(self.hessian_matrix                 ) = state["hessian_matrix                 ".strip()]
+		(self.covariance_matrix              ) = state["covariance_matrix              ".strip()]
+		(self.robust_covariance_matrix       ) = state["robust_covariance_matrix       ".strip()]
+
+		self.unmangle(True)
+
+
 
 	@property
 	def title(self):

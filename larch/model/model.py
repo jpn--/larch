@@ -65,6 +65,21 @@ class Model(_Model5c):
 		self._scan_all_ensure_names()
 		self.mangle()
 
+	def dumps(self):
+		"""
+		Use pickle to dump the contents of this Model to a bytestring.
+
+		Any associated data (dataframes and dataservice) are not included.
+
+		Returns
+		-------
+		bytes
+		"""
+		import pickle
+		return pickle.dumps(self)
+
+
+
 	def get_params(self, deep=True):
 		p = dict()
 		if deep:
