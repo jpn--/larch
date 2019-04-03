@@ -562,8 +562,8 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		if return_bhhh:
 			bhhh = bhhh_total.base.sum(0) * dfs._weight_normalization
 
-		from ..util import Dict
-		result = Dict(
+		from ..util import dictx
+		result = dictx(
 			ll=ll,
 		)
 		if persist & PERSIST_UTILITY:

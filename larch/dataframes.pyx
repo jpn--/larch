@@ -1444,8 +1444,8 @@ cdef class DataFrames:
 		self._read_in_model_parameters()
 
 	def _debug_arrays(self):
-		from .util import Dict
-		return Dict(
+		from .util import dictx
+		return dictx(
 			model_utility_ca_param_value    = self.model_utility_ca_param_value.base,
 			model_utility_ca_param_holdfast = self.model_utility_ca_param_holdfast.base,
 			model_utility_co_param_value    = self.model_utility_co_param_value.base,

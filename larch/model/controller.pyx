@@ -1207,8 +1207,8 @@ cdef class Model5c:
 		return (-result.ll, -result.dll)
 
 	def neg_loglike3(self, *args, **kwargs):
-		from ..util import Dict
-		result = Dict()
+		from ..util import dictx
+		result = dictx()
 		part = self.loglike3(*args, **kwargs)
 		return (-result.ll, -result.dll, -result.d2ll)
 
@@ -1704,8 +1704,8 @@ cdef class Model5c:
 		#if check_for_overspecification:
 		#	self.check_for_possible_overspecification()
 
-		from ..util import Dict
-		result = Dict()
+		from ..util import dictx
+		result = dictx()
 		for k,v in raw_result.items():
 			if k == 'fun':
 				result['loglike'] = -v
@@ -1725,17 +1725,11 @@ cdef class Model5c:
 
 		if _doctest_mode_:
 			result['__verbose_repr__'] = True
-		if return_tags:
-			return result, tag1, tag2, tag3
-
-		# try:
-		# 	parent_model = self._original_parallel_model
-		# except AttributeError:
-		# 	pass
-		# else:
-		# 	parent_model._parallel_model_results[self.title] = result['loglike']
 
 		self._most_recent_estimation_result = result
+
+		if return_tags:
+			return result, tag1, tag2, tag3
 
 		return result
 
