@@ -39,8 +39,23 @@ class Dict(addict_yaml.Dict):
 		return self.__getitem__(item)
 
 
+def _prettyprint_fallback(x):
+	if isinstance(x, dictx):
+		return repr(x)
+	else:
+		return pprint.pformat(x)
+
+
+
 class dictx(dict):
 	"""Python dict with attribute access and xml output."""
+
+	def __repr__(self):
+		if self.keys():
+			m = max(map(len, list(str(_) for _ in self.keys()))) + 1
+			return '\n'.join(['┣'+str(k).rjust(m) + ': ' + _prettyprint_fallback(v).replace('\n','\n┃'+' '*(m+2)) for k, v in self.items()])
+		else:
+			return self.__class__.__name__ + "()"
 
 	def __getattr__(self, item):
 		if item[0]=="_" and item[-1]=="_":
