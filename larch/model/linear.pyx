@@ -532,7 +532,7 @@ cdef class LinearComponent_C:
 	def _repr_html_(self):
 		return self.__xml__().tostring()
 
-	def _evaluate(self, p_getter, x_namespace=None, **kwargs):
+	def evaluate(self, p_getter, x_namespace=None, **kwargs):
 		return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
 
 	def __copy__(self):
@@ -896,10 +896,30 @@ cdef class LinearFunction_C:
 		else:
 			return [cls(_.data) for _ in self]
 
-	def _evaluate(self, p_getter, x_namespace=None, **more_x_namespace):
-		if hasattr(p_getter,'pvalue') and callable(p_getter.pvalue):
-			p_getter = p_getter.pvalue
-		return sum(j._evaluate(p_getter, x_namespace=x_namespace, **more_x_namespace) for j in self)
+	def evaluate(self, param_source, x_namespace=None, **more_x_namespace):
+		"""
+		Evaluate the linear function in the context of some parameters and data.
+
+		Typically all of the data given will be scalar values (to compute a
+		scalar result) or a single data item will be a vector of possible
+		values (to get a vector result).
+
+		Parameters
+		----------
+		param_source : Model-like
+			The source of the current parameter values.
+		x_namespace : dict, optional
+			A namespace of data values.
+		**more_x_namespace : any
+			More data values
+
+		Returns
+		-------
+		numeric or array-like
+		"""
+		if hasattr(param_source, 'pvalue') and callable(param_source.pvalue):
+			param_source = param_source.pvalue
+		return sum(j.evaluate(param_source, x_namespace=x_namespace, **more_x_namespace) for j in self)
 
 	def value(self, *args):
 		return self.as_pmath().value(*args)
@@ -920,7 +940,7 @@ cdef class LinearFunction_C:
 		if hasattr(self, 'plotting_namespace') and len(other_namespace)==0:
 			other_namespace = self.plotting_namespace
 		x = numpy.linspace(x_min, x_max, n_points)
-		y = self._evaluate(p_getter, {x_name:x}, **other_namespace)
+		y = self.evaluate(p_getter, {x_name:x}, **other_namespace)
 		return x,y
 
 	def linear_plot_2d(self, p_getter, x_name, x_min, x_max, n_points=100, *, xlabel=None, svg=True, header=None, **other_namespace):
