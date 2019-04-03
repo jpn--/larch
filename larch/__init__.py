@@ -39,3 +39,4 @@ _doctest_mode_ = False
 _larch_self = sys.modules[__name__]
 
 from xmle import Reporter, NumberedCaption
+from .workspace import make_reporter
