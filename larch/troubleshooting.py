@@ -22,19 +22,19 @@ def doctor(
 	logger.info("checking for chosen-but-zero-quantity")
 	dfs, diagnosis = chosen_but_zero_quantity(dfs, repair=repair_ch_zq, verbose=verbose)
 	if diagnosis is not None:
-		logger.warning(f'problem: chosen-but-zero-quantity\n{diagnosis}')
+		logger.warning(f'problem: chosen-but-zero-quantity ({len(diagnosis)} issues)')
 		problems['chosen_but_zero_quantity'] = diagnosis
 
 	logger.info("checking for chosen-but-not-available")
 	dfs, diagnosis = chosen_but_not_available(dfs, repair=repair_ch_av, verbose=verbose)
 	if diagnosis is not None:
-		logger.warning(f'problem: chosen-but-not-available\n{diagnosis}')
+		logger.warning(f'problem: chosen-but-not-available ({len(diagnosis)} issues)')
 		problems['chosen_but_not_available'] = diagnosis
 
 	logger.info("checking for nothing-chosen-but-nonzero-weight")
 	dfs, diagnosis = nothing_chosen_but_nonzero_weight(dfs, repair=repair_noch_nowt, verbose=verbose)
 	if diagnosis is not None:
-		logger.warning(f'problem: nothing-chosen-but-nonzero-weight\n{diagnosis}')
+		logger.warning(f'problem: nothing-chosen-but-nonzero-weight ({len(diagnosis)} issues)')
 		problems['nothing_chosen_but_nonzero_weight'] = diagnosis
 
 	# if repair_asc:
