@@ -4,6 +4,10 @@ from .pod import Pod
 from .general import selector_len_for
 from ..util import Dict
 
+import logging
+from ..log import logger_name
+logger = logging.getLogger(logger_name+".data")
+
 class EmptyPodsError(ValueError):
 	pass
 
@@ -344,6 +348,7 @@ class Pods(MutableSequence):
 			into which the data will be loaded.
 
 		"""
+		logger.info(f'Loading data from HDF5 into a new array...')
 		if isinstance(names, str):
 			names = (names, )
 		names = names + arg
@@ -362,7 +367,9 @@ class Pods(MutableSequence):
 			err.args = (err.args[0]+ f', result_shape={result_shape}',) + err.args[1:]
 			raise
 		for i,name in enumerate(names):
+			logger.info(f' - loading {name} ...')
 			self.load_data_item(name, result[...,i], selector=selector)
+		logger.info(f'Completed loading data from HDF5 ...')
 		return result
 
 	def get_data_masks(self, names):
@@ -416,17 +423,17 @@ class Pods(MutableSequence):
 			into which the data will be loaded.
 
 		"""
-		if log is None:
-			log = lambda *x: None
+		logger.info(f'Loading data from HDF5 ...')
 		if isinstance(names, str):
 			names = (names, )
 		names = names + arg
 		if result is None:
-			print("!! inits",self.shape_result(selector, names, use_metashape=use_metashape))
+			logger.warning('Initializing a new array: {}'.format(
+				self.shape_result(selector, names, use_metashape=use_metashape)
+			))
 			result = numpy.zeros(self.shape_result(selector, names, use_metashape=use_metashape), dtype=dtype)
 		else:
 			from .general import _sqz_same, NotSameShapeError
-			#print("!! exists",self.shape_result(selector, names))
 			output_shape = self.shape_result(selector, names, use_metashape=use_metashape)
 			try:
 				_sqz_same(result.shape, output_shape)
@@ -435,18 +442,19 @@ class Pods(MutableSequence):
 					raise
 		if mask_names is None:
 			for i,name in enumerate(names):
-				log(f'loading {name}')
+				logger.info(f' - loading {name}')
 				self.load_data_item(name, result[...,i], selector=selector)
 		else:
 			for i,name in enumerate(names):
 				try:
 					if not (mask_names[i] & mask_pattern):
-						log(f'loading {name}')
+						logger.info(f' - loading {name}')
 						self.load_data_item(name, result[...,i], selector=selector)
 					else:
-						log(f'not loading {name} (masked)')
+						logger.info(f' - not loading {name} (masked)')
 				except:
 					raise
+		logger.info(f'Completed loading data from HDF5.')
 		return result
 
 	def load_casealt_indexes(self, caseindexes=None, altindexes=None, selector=None):
