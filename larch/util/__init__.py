@@ -67,8 +67,8 @@ class dictx(dict):
 				tr.elem('td', text=str(k))
 				try:
 					v_ = Show(v)
-				except AttributeError:
-					tr.elem('td', text=pprint.pformat(v), style='text-align:left;')
+				except (AttributeError, ValueError):
+					tr.elem('td', style='text-align:left;').elem('pre', text=pprint.pformat(v))
 				else:
 					tr.elem('td') << v_
 		else:
