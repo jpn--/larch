@@ -121,6 +121,24 @@ def _df_values_c_contiguous(df, re_shape=None, dtype=None):
 		else:
 			return numpy.ascontiguousarray(df.values.astype(dtype))
 
+def _fast_check_multiindex_equality(i, j):
+	if not isinstance(i, pandas.MultiIndex):
+		return False
+	if not isinstance(j, pandas.MultiIndex):
+		return False
+	if len(i.codes) != len(j.codes):
+		return False
+	for k in range(len(i.codes)):
+		if not numpy.array_equal(i.codes[k], j.codes[k]):
+			return False
+	if len(i.levels) != len(j.levels):
+		return False
+	for k in range(len(i.levels)):
+		if not numpy.array_equal(i.levels[k], j.levels[k]):
+			return False
+	return True
+
+
 
 def _to_categorical(y, num_classes=None, dtype='float32'):
 	"""Converts a class vector (integers) to binary class matrix.
@@ -420,8 +438,10 @@ cdef class DataFrames:
 
 			if crack and co is None:
 				if ca is not None:
+					logger.debug(" DataFrames ~ cracking idca")
 					ca, co = crack_idca(ca, crack)
 				elif ce is not None:
+					logger.debug(" DataFrames ~ cracking idce")
 					ce, co = crack_idca(ce, crack)
 
 			if co is not None:
@@ -436,31 +456,39 @@ cdef class DataFrames:
 				ch = to_categorical(ch)
 
 			if ch is None and ch_as_ce is not None and ce is not None:
+				logger.debug(" DataFrames ~ building ch_as_ce")
 				_ch_temp = pandas.DataFrame(numpy.asarray(ch_as_ce), index=ce.index, columns=['choice'])
 				ch = _ch_temp.unstack().fillna(0)
 				ch.columns = ch.columns.droplevel(0)
 
 			if ch is None and ch_name is not None and ce is not None and ch_name in ce.columns:
+				logger.debug(" DataFrames ~ pulling ch from ce")
 				_ch_temp = ce[ch_name]
 				ch = _ch_temp.unstack().fillna(0)
 
 			if ch is None and ch_name is not None and ca is not None and ch_name in ca.columns:
+				logger.debug(" DataFrames ~ pulling ch from ca")
 				_ch_temp = ca[ch_name]
 				ch = _ch_temp.unstack().fillna(0)
 
 			if av is None and av_as_ce is not None and ce is not None:
+				logger.debug(" DataFrames ~ building av_as_ce")
 				_av_temp = pandas.DataFrame(numpy.asarray(av_as_ce), index=ce.index, columns=['avail'])
 				av = _av_temp.unstack().fillna(0)
 				av.columns = av.columns.droplevel(0)
 
 			if wt_name is not None and wt is None:
 				if co is not None and wt_name in co.columns:
+					logger.debug(" DataFrames ~ pulling wt from co")
 					wt = co[wt_name]
 				elif ca is not None and wt_name in ca.columns:
+					logger.debug(" DataFrames ~ build wt from ca")
 					_, wt = force_crack_idca(ca[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
 				elif ce is not None and wt_name in ce.columns:
+					logger.debug(" DataFrames ~ build wt from ce")
 					_, wt = force_crack_idca(ce[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
 
+			logger.debug(" DataFrames ~ set alternative_codes")
 			if alt_codes is None:
 				if ca is not None:
 					self._alternative_codes = ca.index.levels[1]
@@ -473,30 +501,57 @@ cdef class DataFrames:
 			else:
 				self._alternative_codes = pandas.Index(alt_codes)
 
+			logger.debug(" DataFrames ~ set alternative_names")
 			self._alternative_names = alt_names
 
+			logger.debug(" DataFrames ~ assign core data")
 			self.data_co = co
 			self.data_ca = ca
 			self.data_ce = ce
 			if isinstance(ch, pandas.DataFrame) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2 and ch.shape[1]==1:
+				logger.debug(" DataFrames ~ change ch to Series")
 				ch = ch.iloc[:,0]
 			if isinstance(ch, pandas.Series) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2:
-				ch = ch.unstack()
+				if self.data_ca is not None and _fast_check_multiindex_equality(self.data_ca.index, ch.index):
+					logger.debug(" DataFrames ~ unstack ch (fast)")
+					ch = pandas.DataFrame(
+						data=ch.values.reshape(-1, len(self.alternative_codes())),
+						index=self.caseindex,
+						columns=self.alternative_codes(),
+					)
+				else:
+					logger.debug(" DataFrames ~ unstack ch (slow)")
+					ch = ch.unstack()
+
+			logger.debug(" DataFrames ~ assign aux data")
 			self.data_ch = ch
 			self.data_wt = wt
 			if av is None and self.data_ce is not None:
+				logger.debug(" DataFrames ~ build av from ce")
 				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
 			if av is True or (isinstance(av, (int, float)) and av==1):
+				logger.debug(" DataFrames ~ initialize av as 1")
 				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes(), index=self.caseindex)
 			else:
 				if isinstance(av, pandas.DataFrame) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2 and av.shape[1]==1:
+					logger.debug(" DataFrames ~ change av to Series")
 					av = av.iloc[:,0]
 				if isinstance(av, pandas.Series) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2:
-					av = av.unstack()
+					if self.data_ca is not None and _fast_check_multiindex_equality(self.data_ca.index, av.index):
+						logger.debug(" DataFrames ~ unstack av (fast)")
+						av = pandas.DataFrame(
+							data=av.values.reshape(-1, len(self.alternative_codes())),
+							index=self.caseindex,
+							columns=self.alternative_codes(),
+						)
+					else:
+						logger.debug(" DataFrames ~ unstack av (slow)")
+						av = av.unstack()
 				self.data_av = av
 
 			self._weight_normalization = 1
 
+			logger.debug(" DataFrames ~ assign names")
 			self._data_av_name = av_name
 			self._data_ch_name = ch_name
 			self._data_wt_name = wt_name

@@ -348,7 +348,7 @@ class Pods(MutableSequence):
 			into which the data will be loaded.
 
 		"""
-		logger.info(f'Loading data from HDF5 into a new array...')
+		logger.debug(f'Loading data from HDF5 into a new array...')
 		if isinstance(names, str):
 			names = (names, )
 		names = names + arg
@@ -369,7 +369,7 @@ class Pods(MutableSequence):
 		for i,name in enumerate(names):
 			logger.info(f' - loading {name} ...')
 			self.load_data_item(name, result[...,i], selector=selector)
-		logger.info(f'Completed loading data from HDF5 ...')
+		logger.debug(f'Completed loading data from HDF5.')
 		return result
 
 	def get_data_masks(self, names):
@@ -423,7 +423,7 @@ class Pods(MutableSequence):
 			into which the data will be loaded.
 
 		"""
-		logger.info(f'Loading data from HDF5 ...')
+		logger.debug(f'Loading data from HDF5 ...')
 		if isinstance(names, str):
 			names = (names, )
 		names = names + arg
@@ -454,7 +454,7 @@ class Pods(MutableSequence):
 						logger.info(f' - not loading {name} (masked)')
 				except:
 					raise
-		logger.info(f'Completed loading data from HDF5.')
+		logger.debug(f'Completed loading data from HDF5.')
 		return result
 
 	def load_casealt_indexes(self, caseindexes=None, altindexes=None, selector=None):
