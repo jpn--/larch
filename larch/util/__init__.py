@@ -2,6 +2,7 @@ from .signal_dict import SignalDict
 
 import addict_yaml
 import pprint
+import datetime
 
 class Dict(addict_yaml.Dict):
 
@@ -81,11 +82,19 @@ class dictx(dict):
 				tr = t.elem('tr')
 				tr.elem('td', text=str(k))
 				try:
+					if isinstance(v, str) and '\n' not in v and v[:1] != "#":
+						raise ValueError()
 					v_ = Show(v)
 				except (AttributeError, ValueError):
-					tr.elem('td', style='text-align:left;').elem('pre', text=pprint.pformat(v))
+					plaintext = pprint.pformat(v)
+					if isinstance(v, datetime.timedelta):
+						plaintext = str(v)
+					if "\n" in plaintext:
+						tr.elem('td', style='text-align:left;').elem('pre', text=plaintext)
+					else:
+						tr.elem('td', style='text-align:left;', text=plaintext)
 				else:
-					tr.elem('td') << v_
+					tr.elem('td', style='text-align:left;') << v_
 		else:
 			tr = t.elem('tr')
 			tr.elem('td', text="<empty>")

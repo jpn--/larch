@@ -329,6 +329,15 @@ cdef class Model5c:
 		return self.frame['value'].values.copy()
 
 	@property
+	def pbounds(self):
+		self.unmangle()
+		from scipy.optimize import Bounds
+		return Bounds(
+			self.frame['minimum'].values.copy(),
+			self.frame['maximum'].values.copy(),
+		)
+
+	@property
 	def pnames(self):
 		self.unmangle()
 		return self.frame.index.values.copy()
@@ -940,7 +949,7 @@ cdef class Model5c:
 			keep_only=keep_only,
 			subsample=subsample,
 		)
-		if start_case==0 and stop_case==-1:
+		if start_case==0 and stop_case==-1 and step_case==1:
 			self.__check_if_best(y.ll)
 		# if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
 		# 	y['dll'] = pandas.Series(y['dll'], index=self.frame.index, )
@@ -1014,7 +1023,7 @@ cdef class Model5c:
 			keep_only=keep_only,
 			subsample=subsample,
 		)
-		if start_case==0 and stop_case==-1:
+		if start_case==0 and stop_case==-1 and step_case==1:
 			self.__check_if_best(y.ll)
 		if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
 			y['dll'] = pandas.Series(y['dll'], index=self.frame.index, )
@@ -1642,14 +1651,15 @@ cdef class Model5c:
 			tag2 = lambda *ax, **kx: None
 			tag3 = lambda *ax, **kx: None
 
-		def callback(x):
+		def callback(x, status=None):
 			nonlocal iteration_number, throttle_gate
 			iteration_number += 1
 			if throttle_gate:
 				#clear_output(wait=True)
 				tag1.update(f'Iteration {iteration_number:03} {iteration_number_tail}')
-				tag2.update(f'LL = {self.loglike()}')
+				tag2.update(f'LL = {self._cached_loglike_best}')
 				tag3.update(self.pf)
+			return False
 
 		if quiet or _doctest_mode_:
 			callback = None
@@ -1677,14 +1687,18 @@ cdef class Model5c:
 					'message':message,
 				}
 			else:
+
+				bounds = None
+				if method in ('SLSQP', 'L-BFGS-B', 'TNC', 'trust-constr'):
+					bounds = self.pbounds
+
 				raw_result = minimize(
 					self.neg_loglike2,
 					self.pvals,
 					args=(0, -1, 1, leave_out, keep_only, subsample), # start_case, stop_case, step_case, leave_out, keep_only, subsample
 					method=method,
 					jac=True,
-					#bounds=self.pbounds(),
-					#hess=self.bhhh,
+					bounds=bounds,
 					callback=callback,
 					options=options,
 					**kwargs
