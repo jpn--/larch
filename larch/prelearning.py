@@ -9,7 +9,7 @@ from appdirs import user_cache_dir
 from sklearn.externals import joblib
 
 from .general_precision import l4_float_dtype
-
+from .log import logger_name
 
 def user_cache_file(filename, appname=None, appauthor=None, version=None, opinion=True):
 	d = user_cache_dir(appname=appname, appauthor=appauthor, version=version, opinion=opinion)
@@ -52,7 +52,7 @@ class Prelearner():
 		if classifier is None:
 			raise ValueError('must give a classifier')
 
-		logger = logging.getLogger('L5')
+		logger = logging.getLogger(logger_name)
 
 		self.input_columns = training_X.columns
 		self.output_column = output_name

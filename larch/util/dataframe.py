@@ -82,7 +82,7 @@ def apply_global_background_gradient(df, override_min=None, override_max=None, c
 
 ###################
 
-def columnize(df, name, inplace=True, dtype=None):
+def columnize(df, name, inplace=True, dtype=None, debug=False):
 	"""Add a computed column to a DataFrame."""
 
 	datanames = None
@@ -168,9 +168,10 @@ def columnize(df, name, inplace=True, dtype=None):
 		raise
 	g.close()
 	reader.close()
-	# print("<ret>")
-	# print(ret)
-	# print("</ret>")
+	if debug:
+		print("<ret>")
+		print(ret)
+		print("</ret>")
 	j = asterize(ret, mode="exec" if inplace else "eval")
 	from .aster import inXd
 	from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num, sin, cos, pi
@@ -180,6 +181,8 @@ def columnize(df, name, inplace=True, dtype=None):
 			_result = exec(j)
 		else:
 			_result = eval(j)
+			if not isinstance(_result, pandas.Series):
+				_result = pandas.Series(_result, index=df.index)
 			try:
 				_result.name = name
 			except AttributeError:
@@ -210,6 +213,11 @@ def columnize(df, name, inplace=True, dtype=None):
 		exc.args = (arg0,) + args[1:]
 		raise
 	return _result
+
+def compute(df, name, **kwargs):
+	kwargs['inplace'] = False
+	return columnize(df, name, **kwargs)
+
 
 ###################
 ### Typical Calibration Table

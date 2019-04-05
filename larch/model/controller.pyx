@@ -11,7 +11,8 @@ import pandas
 from typing import Union
 
 import logging
-logger = logging.getLogger('L5.model')
+from ..log import logger_name
+logger = logging.getLogger(logger_name+'.model')
 
 
 from ..dataframes cimport DataFrames
@@ -109,6 +110,84 @@ cdef class Model5c:
 			self.frame = fr
 
 		self._graph = graph
+
+	def __getstate__(self):
+
+		import cloudpickle
+		import gzip
+		import base64
+
+		state = dict()
+		state["_utility_ca                    ".strip()] = (self._utility_ca                    )
+		state["_utility_co                    ".strip()] = (self._utility_co                    )
+		state["_quantity_ca                   ".strip()] = (self._quantity_ca                   )
+		state["_quantity_scale                ".strip()] = (self._quantity_scale                )
+		state["_logsum_parameter              ".strip()] = (self._logsum_parameter              )
+		state["rename_parameters              ".strip()] = (self.rename_parameters              )
+		state["_choice_ca_var                 ".strip()] = (self._choice_ca_var                 )
+		state["_choice_co_vars                ".strip()] = (self._choice_co_vars                )
+		state["_choice_co_code                ".strip()] = (self._choice_co_code                )
+		state["_weight_co_var                 ".strip()] = (self._weight_co_var                 )
+		state["_availability_var              ".strip()] = (self._availability_var              )
+		state["_availability_co_vars          ".strip()] = (self._availability_co_vars          )
+		state["frame                          ".strip()] = (self.frame                          )
+		state["_graph                         ".strip()] = (self._graph                         )
+		state["_display_order                 ".strip()] = (self._display_order                 )
+		state["_display_order_tail            ".strip()] = (self._display_order_tail            )
+		state["_possible_overspecification    ".strip()] = (self._possible_overspecification    )
+		state["_most_recent_estimation_result ".strip()] = (self._most_recent_estimation_result )
+		state["_cached_loglike_null           ".strip()] = (self._cached_loglike_null           )
+		state["_cached_loglike_constants_only ".strip()] = (self._cached_loglike_constants_only )
+		state["_cached_loglike_best           ".strip()] = (self._cached_loglike_best           )
+		state["_title                         ".strip()] = (self._title                         )
+		state["hessian_matrix                 ".strip()] = (self.hessian_matrix                 )
+		state["covariance_matrix              ".strip()] = (self.covariance_matrix              )
+		state["robust_covariance_matrix       ".strip()] = (self.robust_covariance_matrix       )
+
+		state = cloudpickle.dumps(state)
+		state = gzip.compress(state)
+		state = base64.b85encode(state)
+
+		return state
+
+	def __setstate__(self, state):
+
+		import cloudpickle
+		import gzip
+		import base64
+
+		state = base64.b85decode(state)
+		state = gzip.decompress(state)
+		state = cloudpickle.loads(state)
+
+		(self._utility_ca                    ) = state["_utility_ca                    ".strip()]
+		(self._utility_co                    ) = state["_utility_co                    ".strip()]
+		(self._quantity_ca                   ) = state["_quantity_ca                   ".strip()]
+		(self._quantity_scale                ) = state["_quantity_scale                ".strip()]
+		(self._logsum_parameter              ) = state["_logsum_parameter              ".strip()]
+		(self.rename_parameters              ) = state["rename_parameters              ".strip()]
+		(self._choice_ca_var                 ) = state["_choice_ca_var                 ".strip()]
+		(self._choice_co_vars                ) = state["_choice_co_vars                ".strip()]
+		(self._choice_co_code                ) = state["_choice_co_code                ".strip()]
+		(self._weight_co_var                 ) = state["_weight_co_var                 ".strip()]
+		(self._availability_var              ) = state["_availability_var              ".strip()]
+		(self._availability_co_vars          ) = state["_availability_co_vars          ".strip()]
+		(self.frame                          ) = state["frame                          ".strip()]
+		(self._graph                         ) = state["_graph                         ".strip()]
+		(self._display_order                 ) = state["_display_order                 ".strip()]
+		(self._display_order_tail            ) = state["_display_order_tail            ".strip()]
+		(self._possible_overspecification    ) = state["_possible_overspecification    ".strip()]
+		(self._most_recent_estimation_result ) = state["_most_recent_estimation_result ".strip()]
+		(self._cached_loglike_null           ) = state["_cached_loglike_null           ".strip()]
+		(self._cached_loglike_constants_only ) = state["_cached_loglike_constants_only ".strip()]
+		(self._cached_loglike_best           ) = state["_cached_loglike_best           ".strip()]
+		(self._title                         ) = state["_title                         ".strip()]
+		(self.hessian_matrix                 ) = state["hessian_matrix                 ".strip()]
+		(self.covariance_matrix              ) = state["covariance_matrix              ".strip()]
+		(self.robust_covariance_matrix       ) = state["robust_covariance_matrix       ".strip()]
+
+		self.unmangle(True)
+
 
 
 	@property
@@ -267,7 +346,9 @@ cdef class Model5c:
 		-------
 
 		"""
-		from .roles import _param_math_binaryop
+		from ..roles import _param_math_binaryop
+		from .linear import ParameterRef_C
+		from .linear_math import _ParameterOp
 		from numbers import Number
 		try:
 			if isinstance(parameter_name, _param_math_binaryop):
@@ -1126,8 +1207,8 @@ cdef class Model5c:
 		return (-result.ll, -result.dll)
 
 	def neg_loglike3(self, *args, **kwargs):
-		from ..util import Dict
-		result = Dict()
+		from ..util import dictx
+		result = dictx()
 		part = self.loglike3(*args, **kwargs)
 		return (-result.ll, -result.dll, -result.d2ll)
 
@@ -1418,6 +1499,9 @@ cdef class Model5c:
 	def choice_ca_var(self, x):
 		#self.mangle()
 		self._choice_ca_var = x
+		if x is not None:
+			self._choice_co_vars = None
+			self._choice_co_code = None
 
 	@property
 	def choice_co_vars(self):
@@ -1432,6 +1516,8 @@ cdef class Model5c:
 		#self.mangle()
 		if isinstance(x, dict):
 			self._choice_co_vars = x
+			self._choice_ca_var = None
+			self._choice_co_code = None
 		elif x is None:
 			self._choice_co_vars = x
 		else:
@@ -1454,6 +1540,8 @@ cdef class Model5c:
 		#self.mangle()
 		if isinstance(x, str):
 			self._choice_co_code = x
+			self._choice_co_vars = None
+			self._choice_ca_var = None
 		elif x is None:
 			self._choice_co_code = x
 		else:
@@ -1616,8 +1704,8 @@ cdef class Model5c:
 		#if check_for_overspecification:
 		#	self.check_for_possible_overspecification()
 
-		from ..util import Dict
-		result = Dict()
+		from ..util import dictx
+		result = dictx()
 		for k,v in raw_result.items():
 			if k == 'fun':
 				result['loglike'] = -v
@@ -1637,17 +1725,11 @@ cdef class Model5c:
 
 		if _doctest_mode_:
 			result['__verbose_repr__'] = True
-		if return_tags:
-			return result, tag1, tag2, tag3
-
-		# try:
-		# 	parent_model = self._original_parallel_model
-		# except AttributeError:
-		# 	pass
-		# else:
-		# 	parent_model._parallel_model_results[self.title] = result['loglike']
 
 		self._most_recent_estimation_result = result
+
+		if return_tags:
+			return result, tag1, tag2, tag3
 
 		return result
 

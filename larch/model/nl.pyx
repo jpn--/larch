@@ -21,7 +21,8 @@ import numpy
 import pandas
 
 import logging
-logger = logging.getLogger('L5')
+from ..log import logger_name
+logger = logging.getLogger(logger_name)
 
 cdef float INFINITY32 = numpy.float('inf')
 
@@ -603,8 +604,8 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 			bhhh = bhhh_total.base.sum(0) * dfs._weight_normalization
 
 
-		from ..util import Dict
-		result = Dict(
+		from ..util import dictx
+		result = dictx(
 			ll=ll,
 		)
 		if return_dll:

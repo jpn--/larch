@@ -3,11 +3,7 @@ import numpy
 import numpy.ma as ma
 from .colors import hexcolor
 
-try:
-	from numpy.lib.function_base import _hist_bin_selectors
-except ImportError:
-	# moved in later version of numpy
-	from numpy.lib.histograms import _hist_bin_selectors  #
+from numpy.lib.histograms import _hist_bin_selectors
 
 
 def robust_min_max(s, threshold_for_dropping_zeros=0.35, cut_after_stdevs=5, percentiles_to_cut=1):
@@ -110,7 +106,7 @@ def get_histogram_bins(data_to_bin, bins='sturges', percentiles_to_cut=1, maxran
 	# generate number of bins based on named algorithm
 	if isinstance(bins, str):
 		try:
-			width = _hist_bin_selectors[bins](sx)
+			width = _hist_bin_selectors[bins](sx, (bottom, top))
 		except IndexError:
 			width = 1
 		if numpy.isnan(width):

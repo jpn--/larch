@@ -4,6 +4,10 @@ from .pod import Pod
 from .podlist import Pods, PodsCA, EmptyPodsError
 from .general import _sqz_same, _sqz, selector_len_for
 
+import logging
+from ..log import logger_name
+logger = logging.getLogger(logger_name+'.data')
+
 
 
 class DataService():
@@ -550,6 +554,9 @@ class DataService():
 			result = numpy.nan_to_num(result)
 		return result
 
+	make_idco = dataframe_idco
+	make_idca = dataframe_idca
+
 	def __repr__(self):
 		s = "<larch.DataService>"
 		if len(self._pods_idco):
@@ -639,33 +646,44 @@ class DataService():
 			req_data = Dict.load(textwrap.dedent(req_data))
 
 		if 'ca' in req_data:
+			logger.info("Loading `ca` data...")
 			df_ca = self.dataframe_idca(*req_data['ca'], dtype=float_dtype, selector=selector)
 		else:
 			df_ca = None
 
 		if 'co' in req_data:
+			logger.info("Loading `co` data...")
 			df_co = self.dataframe_idco(*req_data['co'], dtype=float_dtype, selector=selector)
 		else:
 			df_co = None
 
 		if 'choice_ca' in req_data:
+			logger.info("Loading `choice_ca` data...")
 			df_ch = self.dataframe_idca(req_data['choice_ca'], dtype=float_dtype, selector=selector)
 		elif 'choice_co' in req_data:
+			logger.info("Loading `choice_co` data...")
 			alts = self.alternative_codes()
 			cols = [req_data['choice_co'].get(a, '0') for a in alts]
 			df_ch = self.dataframe_idco(*cols, dtype=float_dtype, selector=selector)
 			df_ch.columns = alts
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			logger.info("Loading `choice_co_code` data...")
+			alts = self.alternative_codes()
+			df_ch_code = self.dataframe_idco(req_data['choice_co_code'], dtype=int, selector=selector)
+			df_ch = pandas.DataFrame(0, columns=alts, index=df_ch_code.index, dtype=float_dtype)
+			for c in df_ch.columns:
+				df_ch.loc[:,c] = (df_ch_code==c).astype(float_dtype)
 		else:
 			df_ch = None
 
 		if 'weight_co' in req_data:
+			logger.info("Loading `weight_co` data...")
 			df_wt = self.dataframe_idco(req_data['weight_co'], dtype=float_dtype, selector=selector)
 		else:
 			df_wt = None
 
 		if 'avail_ca' in req_data:
+			logger.info("Loading `avail_ca` data...")
 			df_av = self.dataframe_idca(req_data['avail_ca'], dtype=numpy.int8, selector=selector)
 		elif 'avail_co' in req_data:
 			raise NotImplementedError('avail_co')
@@ -674,6 +692,7 @@ class DataService():
 
 		from ..dataframes import DataFrames
 
+		logger.info("Combining into DataFrames structure...")
 		result = DataFrames(
 			co=df_co,
 			ca=df_ca,
@@ -685,8 +704,10 @@ class DataService():
 		)
 
 		if 'standardize' in req_data and req_data.standardize:
+			logger.info("Standardizing data...")
 			result.standardize()
 
+		logger.info("Completed make_dataframes.")
 		return result
 
 
@@ -717,7 +738,8 @@ class DataService():
 			if not hasattr(self, 'dataframe_idco'):
 				missing_methods.add('dataframe_idco')
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			if not hasattr(self, 'dataframe_idco'):
+				missing_methods.add('dataframe_idco')
 
 		if 'weight_co' in req_data:
 			if not hasattr(self, 'dataframe_idco'):

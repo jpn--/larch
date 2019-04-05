@@ -1,5 +1,5 @@
 
-__version__ = '5.1.4'
+__version__ = '5.2.8'
 
 from .util.interface_info import Info, ipython_status
 import sys
@@ -39,3 +39,4 @@ _doctest_mode_ = False
 _larch_self = sys.modules[__name__]
 
 from xmle import Reporter, NumberedCaption
+from .workspace import make_reporter

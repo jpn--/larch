@@ -4,7 +4,8 @@ from collections import OrderedDict
 from ..warning import ignore_warnings
 
 import logging
-logger = logging.getLogger('L5')
+from ..log import logger_name
+logger = logging.getLogger(logger_name)
 
 try:
 	from ipywidgets import FloatProgress as ipywidgets_FloatProgress

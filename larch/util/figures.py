@@ -14,6 +14,7 @@ def distribution_on_continuous_idca_variable(
 		obs_label="Observed",
 		header=None,
 		subselector=None,
+		probability=None,
 ):
 	"""
 
@@ -28,6 +29,14 @@ def distribution_on_continuous_idca_variable(
 		A label to put in the legend for the modeled probabilities
 	obs_label : str, optional
 		A label to put in the legend for the observed choices
+	header : str, optional
+	subselector : str or array-like, optional
+
+
+	probability : array-like, optional
+		The pre-calculated probability array for all cases in this analysis.
+		If not given, the probability array is calculated at the current parameter
+		values.
 
 	Returns
 	-------
@@ -47,28 +56,23 @@ def distribution_on_continuous_idca_variable(
 		subselector=subselector,
 		)
 
-	sel = model.selector_eval()
+	cv = model.dataservice.array_idca(continuous_variable).reshape(-1)
 
-	if subselector is None:
-		cv = model.dataservice.array_idca(continuous_variable, selector=sel).reshape(-1)
-		model_result = model.work.total_probability[:, :model.n_alts]
-		model_choice = model.data.choice.values
-		if model.data.weight is not None:
-			model_result = model_result.copy()
-			model_result *= model.data.weight.values[:,None]
-			model_choice = model_choice.copy()
-			model_choice *= model.data.weight.values[:,None]
-	else:
-		subsel = model.dataservice.array_idco(subselector, selector=sel, dtype=bool).squeeze()
-		cv = model.dataservice.array_idca(continuous_variable, selector=sel)[subsel]
-		cv = cv.reshape(-1)
-		model_result = model.work.total_probability[subsel, :model.n_alts]
-		model_choice = model.data.choice.values[subsel]
-		if model.data.weight is not None:
-			model_result = model_result.copy()
-			model_result *= model.data.weight.values[subsel,None]
-			model_choice = model_choice.copy()
-			model_choice *= model.data.weight.values[subsel,None]
+	if probability is None:
+		probability = model.probability()
+
+	model_result = probability[:, :model.dataframes.n_alts]
+	model_choice = model.dataframes.data_ch.values
+	if model.dataframes.data_wt is not None:
+		model_result *= model.dataframes.data_wt.values[:,None]
+		model_choice = model_choice.copy()
+		model_choice *= model.dataframes.data_wt.values[:,None]
+
+	if subselector is not None:
+		if isinstance(subselector, str):
+			subselector = model.dataservice.make_idco(subselector).values.reshape(-1)
+		model_result = model_result[subselector]
+		model_choice = model_choice[subselector]
 
 	y, x = numpy.histogram(
 		cv,

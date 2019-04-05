@@ -1,7 +1,7 @@
 import numpy
 from .. import warning
 from .histograms import sizable_histogram_figure, seems_like_discrete_data
-from . import dicta
+from . import dictx
 from .arraytools import scalarize
 import numpy.ma as ma
 from .common_functions import parse_piece
@@ -40,7 +40,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 
 	Returns
 	-------
-	dicta
+	dictx
 
 	"""
 	a = arr
@@ -50,7 +50,7 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 		if ch_weights is not None:
 			ch_weights = ch_weights.reshape(-1)
 
-	stats = dicta()
+	stats = dictx()
 
 	if varname is not None:
 		stats.description = varname
@@ -144,6 +144,43 @@ def statistics_for_array(arr, histogram=True, varname=None, ch_weights=None, ava
 
 	return stats
 
+def statistics_for_array5(arr, histogram=5, *args, **kwargs):
+	"""
+	Generate a statistical analysis of an array.
+
+	Parameters
+	----------
+	arr : ndarray
+		The array to analyze.
+	histogram : bool or numeric, default 5
+		If this evaluates as True, a histogram for the data array will be generated. If given as a number,
+		this indicates the size and level of detail in the histogram.
+	varname : str, optional
+		A label for the x-axis of the histogram.  Only appears if the size is 3 or greater.  The varname is
+		also used to detect piecewise linear segments, when given as "piece(label, lowerbound, upperbound)". Note this
+		function does not *process* the array to extract a linear segment, this just flags the histogram generator
+		to know that this is a linear segment.
+	ch_weights : ndarray, optional
+		If given, this indicates the choice-weights of the observations.  Must be the same shape as `arr`.
+		Useful to analyze whether the distribution of the data appears different for chosen alternatives than
+		for all alternatives.
+	avail : ndarray, optional
+		If given, this indicates the availability of the observations.  Must be the same shape as `arr`.
+		If missing, all finite values in `arr` are considered available.
+	dictionary : dict, optional
+		A dictionary of {value: str} pairs, which give labels to use on the histogram instead of the
+		code values stored in `arr`.
+	flatten : bool, default False
+		Indicates if `arr` (and `ch_weights` if given) should be flattened before processing.
+
+	Other keyword parameters are passed through to :meth:`sizable_histogram_figure`.
+
+	Returns
+	-------
+	dictx
+
+	"""
+	return statistics_for_array(arr, histogram=histogram, *args, **kwargs)
 
 def statistics_for_dataframe(df, histogram=True, ch_weights=None, avail=None, **kwargs):
 	s = {}

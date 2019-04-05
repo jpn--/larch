@@ -22,6 +22,8 @@ def _what_is(thing):
 		return f"{thing.__class__.__name__}({thing!r})"
 	return f"<{thing.__class__.__name__}>"
 
+def _unsupported_operands(op,a,b):
+	return f"unsupported operands for {op}: '{_what_is(a)}' and '{_what_is(b)}'"
 
 cdef class UnicodeRef_C(unicode):
 
@@ -46,6 +48,15 @@ P = Ref_Gen(ParameterRef_C)
 X = Ref_Gen(DataRef_C)
 
 cdef class ParameterRef_C(UnicodeRef_C):
+
+	_precedence = 99
+
+	def __init__(self, *args):
+		self._formatting = None
+
+	def set_fmt(self, str formatting):
+		self._formatting = formatting
+		return self
 
 	def __repr__(self):
 		if _re.match("[_A-Za-z][_a-zA-Z0-9]*$", self) and not _keyword.iskeyword(self):
@@ -74,13 +85,12 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return self
 			if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
 				return LinearComponent_C(param=str(self), data="1") + other
-			# return _param_add(self, other)
 		elif isinstance(other, ParameterRef_C):
 			if self == 0:
 				return other
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self + LinearComponent_C(param=str(other), data="1")
-		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
 		if isinstance(self, ParameterRef_C):
@@ -93,8 +103,7 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return other
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self - LinearComponent_C(param=str(other), data="1")
-		#return _param_subtract(self, other)
-		raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
 		if isinstance(self, ParameterRef_C):
@@ -102,13 +111,105 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return LinearComponent_C(param=str(self), data=str(other))
 			if isinstance(other, _Number):
 				return LinearComponent_C(param=str(self), data=str("1"), scale=other)
+			if isinstance(other, ParameterRef_C):
+				from .linear_math import ParameterMultiply
+				return ParameterMultiply(self, other)
 		elif isinstance(other, ParameterRef_C):
 			if isinstance(self, DataRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
 			if isinstance(self, _Number):
 				return LinearComponent_C(param=str(other), data=str("1"), scale=self)
-		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
+	def __truediv__(self, other):
+		if isinstance(self, ParameterRef_C):
+			if isinstance(other, ParameterRef_C):
+				from .linear_math import ParameterDivide
+				return ParameterDivide(self, other)
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
+
+	def value(self, *args):
+		"""
+		The value of the parameter in a given model.
+
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+
+		Returns
+		-------
+		float
+		"""
+		s = str(self)
+		for m in args:
+			if isinstance(m, dict) and s in m:
+				return m[s]
+			else:
+				try:
+					return m.get_value(s)
+				except KeyError:
+					pass
+		raise KeyError(s)
+
+	def string(self, m):
+		"""
+		The value of the parameter in a given model, as a formatted string.
+
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+
+		Returns
+		-------
+		str
+		"""
+		if self._formatting is None:
+			return "{:.3g}".format(self.value(m))
+		else:
+			return self._formatting.format(self.value(m))
+
+	def valid(self, m):
+		"""
+		Check if this ParameterRef would give a value for a given model.
+
+		Parameters
+		----------
+		m : Model
+			The model from which to extract a parameter value.
+
+		Returns
+		-------
+		bool
+			False if the value method would raise an exception, and True otherwise.
+		"""
+		if str(self) in m:
+			return True
+		return False
+
+	def as_pmath(self):
+		from .linear_math import ParameterNoop
+		return ParameterNoop(self)
+
+	def __xml__(self, resolve_parameters=None, value_in_tooltips=True):
+
+		if resolve_parameters is not None:
+			if value_in_tooltips:
+				p_display = repr(self)
+				p_tooltip = self.string(resolve_parameters)
+			else:
+				p_display = self.string(resolve_parameters)
+				p_tooltip = repr(self)
+		else:
+			p_display = repr(self)
+			p_tooltip = "This is a Parameter"
+
+		from xmle import Elem
+		x = Elem('div')
+		a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display)
+		a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
+		return x
 
 cdef class DataRef_C(UnicodeRef_C):
 
@@ -140,12 +241,20 @@ cdef class DataRef_C(UnicodeRef_C):
 			if other == "0" or other == "0.0" or other == 0:
 				return self
 			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
+
+		# Don't return NotImplemented just raise TypeError when adding a DataRef_C and a plain string.
+		# This will disallow the __radd__ method on the plain string.
+		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, str) and not isinstance(other, DataRef_C):
+			raise TypeError(_unsupported_operands('-', self, other))
+		if isinstance(other, (DataRef_C, _Number)) and isinstance(self, str) and not isinstance(self, DataRef_C):
+			raise TypeError(_unsupported_operands('-', self, other))
+
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}-{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
 		if isinstance(self, DataRef_C):
@@ -174,41 +283,41 @@ cdef class DataRef_C(UnicodeRef_C):
 				return LinearComponent_C(param=str(self.param), data=str(self.data * other) )
 			if isinstance(self, LinearFunction_C):
 				return LinearFunction_C([c*other for c in self] )
-		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}/{}".format(parenthize(self), parenthize(other, True)))
 		if isinstance(self, ParameterRef_C) and isinstance(other, (DataRef_C, _Number)):
 			return self * DataRef_C("1/{}".format(parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __and__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}&{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} & {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} & {_what_is(other)}")
 
 	def __or__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}|{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} | {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} | {_what_is(other)}")
 
 	def __xor__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}^{}".format(parenthize(self), parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} ^ {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} ^ {_what_is(other)}")
 
 	def __floordiv__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}//{}".format(parenthize(self),parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} // {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} // {_what_is(other)}")
 
 	def __pow__(self, other, modulo):
 		if modulo is not None:
 			raise NotImplementedError(f"no pow with modulo on {self.__class__.__name__}")
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}**{}".format(parenthize(self),parenthize(other, True)))
-		raise NotImplementedError(f"{_what_is(self)} ** {_what_is(other)}")
+		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} ** {_what_is(other)}")
 
 	def __invert__(self):
 		return DataRef_C("~{}".format(parenthize(self, True)))
@@ -218,6 +327,20 @@ cdef class DataRef_C(UnicodeRef_C):
 
 	def __pos__(self):
 		return self
+
+	def eval(self, namespace=None, *, globals=None, **more_namespace):
+		import numpy
+		from ..util.common_functions import piece
+		use_namespace = {'exp': numpy.exp, 'log': numpy.log, 'log1p': numpy.log1p, 'fabs': numpy.fabs,
+		                 'sqrt': numpy.sqrt,
+		                 'absolute': numpy.absolute, 'isnan': numpy.isnan, 'isfinite': numpy.isfinite,
+		                 'logaddexp': numpy.logaddexp, 'fmin': numpy.fmin, 'fmax': numpy.fmax,
+		                 'nan_to_num': numpy.nan_to_num,
+						 'piece': piece,}
+		if namespace is not None:
+			use_namespace.update(namespace)
+		use_namespace.update(more_namespace)
+		return eval(self, globals, use_namespace)
 
 
 
@@ -254,10 +377,10 @@ cdef class LinearComponent_C:
 				except:
 					data_is_1 = False
 				if data_is_1:
-					return f"({self.param!r})"
+					return f"{self.param!r}"
 				else:
-					return f"({self.param!r} * {self.data!r})"
-			return f"({self.param!r} * {self.scale} * {self.data!r})"
+					return f"{self.param!r} * {self.data!r}"
+			return f"{self.param!r} * {self.scale} * {self.data!r}"
 		except AttributeError:
 			return f"<{self.__class__.__name__} {id(self)} with error>"
 
@@ -306,6 +429,12 @@ cdef class LinearComponent_C:
 					data=str(self.data * other),
 					scale=self.scale,
 				)
+			elif isinstance(other, (LinearComponent_C, )):
+				from .linear_math import ParameterMultiply
+				return ParameterMultiply(
+					self.as_pmath(),
+					other.as_pmath(),
+				)
 		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -321,6 +450,12 @@ cdef class LinearComponent_C:
 					param=str(self.param),
 					data=str(self.data / other),
 					scale=self.scale,
+				)
+			elif isinstance(other, (LinearComponent_C, )):
+				from .linear_math import ParameterDivide
+				return ParameterDivide(
+					self.as_pmath(),
+					other.as_pmath(),
 				)
 		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
@@ -340,20 +475,30 @@ cdef class LinearComponent_C:
 			return False
 		return True
 
-	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None):
+	def __xml__(self, exponentiate_parameter=False, resolve_parameters=None, value_in_tooltips=True):
 		from xmle import Elem
 		x = Elem('div')
 		# x << tooltipped_style()
 
 		if resolve_parameters is not None:
 			if exponentiate_parameter:
-				plabel = resolve_parameters.pvalue(self.param, default_value="This is a Parameter")
-				if not isinstance(plabel, str):
-					plabel = "exp({0:.3g})={1:.3g}".format(plabel, _numpy.exp(plabel))
+				if value_in_tooltips:
+					p_tooltip = f"exp({self.param.string(resolve_parameters)}) = {self.param.value(resolve_parameters):.4g}"
+					p_display = f"{repr(self.param)}"
+				else:
+					p_display = f"{self.param.string(resolve_parameters)}"
+					p_tooltip = f"exp({repr(self.param)})"
 			else:
-				plabel = "{0:.3g}".format(resolve_parameters.pvalue(self.param, default_value="This is a Parameter"))
+				if value_in_tooltips:
+					p_tooltip = self.param.string(resolve_parameters)
+					p_display = repr(self.param)
+				else:
+					p_display = self.param.string(resolve_parameters)
+					p_tooltip = repr(self.param)
 		else:
-			plabel = "This is a Parameter"
+			p_display = repr(self.param)
+			p_tooltip = "This is a Parameter"
+
 
 
 		data_tail = " * "
@@ -366,19 +511,19 @@ cdef class LinearComponent_C:
 		if self.scale == 1.0:
 			if exponentiate_parameter:
 				x.elem('span', tail="exp(")
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=")"+data_tail)
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=")"+data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 			else:
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=data_tail)
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=data_tail)
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 		else:
 			if exponentiate_parameter:
 				x.elem('span', tail="exp(")
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}){data_tail}")
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=f" * {self.scale}){data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 			else:
-				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.param), tail=f" * {self.scale}{data_tail}")
-				a_p.elem('span', attrib={'class':'tooltiptext'}, text=plabel)
+				a_p = x.elem('div', attrib={'class':'tooltipped'}, text=p_display, tail=f" * {self.scale}{data_tail}")
+				a_p.elem('span', attrib={'class':'tooltiptext'}, text=p_tooltip)
 		if data_tail == " * ":
 			a_x = x.elem('div', attrib={'class':'tooltipped'}, text=repr(self.data))
 			a_x.elem('span', attrib={'class':'tooltiptext'}, text="This is Data")
@@ -387,7 +532,7 @@ cdef class LinearComponent_C:
 	def _repr_html_(self):
 		return self.__xml__().tostring()
 
-	def _evaluate(self, p_getter, x_namespace=None, **kwargs):
+	def evaluate(self, p_getter, x_namespace=None, **kwargs):
 		return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
 
 	def __copy__(self):
@@ -397,7 +542,14 @@ cdef class LinearComponent_C:
 			scale=self.scale,
 		)
 
-
+	def as_pmath(self):
+		from .linear_math import ParameterNoop, ParameterMultiply
+		if self.data != "1":
+			raise NotImplementedError('data is not 1')
+		if self.scale == 1:
+			return ParameterNoop(self.param)
+		else:
+			return ParameterMultiply(self.param, self.scale)
 
 def _try_mangle(instance):
 	try:
@@ -517,6 +669,13 @@ cdef class LinearFunction_C:
 				result = self.__class__(self)
 				result.append(other)
 				return result
+			from .linear_math import _ParameterOp, ParameterAdd
+			if isinstance(other, _ParameterOp):
+				return ParameterAdd(self.as_pmath(), other)
+		if isinstance(other, LinearFunction_C):
+			from .linear_math import _ParameterOp, ParameterAdd
+			if isinstance(self, _ParameterOp):
+				return ParameterAdd(self, other.as_pmath())
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __iadd__(self, other):
@@ -539,11 +698,48 @@ cdef class LinearFunction_C:
 	def __neg__(self):
 		return self.__class__(-i for i in self)
 
+	def __sub__(self, other):
+		if isinstance(self, LinearFunction_C):
+			if other == ():
+				return self
+			if isinstance(other, LinearFunction_C):
+				return self.__class__([*list(self), *list(-other)])
+			if isinstance(other, ParameterRef_C):
+				other = LinearComponent_C(param=str(other))
+			if isinstance(other, LinearComponent_C):
+				result = self.__class__(self)
+				result.append(-other)
+				return result
+			from .linear_math import _ParameterOp, ParameterSubtract
+			if isinstance(other, _ParameterOp):
+				return ParameterSubtract(self.as_pmath(), other)
+		if isinstance(other, LinearFunction_C):
+			from .linear_math import _ParameterOp, ParameterSubtract
+			if isinstance(self, _ParameterOp):
+				return ParameterSubtract(self, other.as_pmath())
+		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
+
 	def __mul__(self, other):
-		trial = LinearFunction_C()
-		for component in self:
-			trial.append(component * other)
-		return trial
+		from .linear_math import _ParameterOp, ParameterMultiply
+		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp)):
+			return ParameterMultiply(self.as_pmath(), other)
+		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp)):
+			return ParameterMultiply(self, other.as_pmath())
+		try:
+			trial = LinearFunction_C()
+			for component in self:
+				trial.append(component * other)
+			return trial
+		except NotImplementedError:
+			return NotImplemented
+
+	def __truediv__(self, other):
+		from .linear_math import _ParameterOp, ParameterDivide
+		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp)):
+			return ParameterDivide(self.as_pmath(), other)
+		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp)):
+			return ParameterDivide(self, other.as_pmath())
+		return NotImplemented
 
 	def __contains__(self, val):
 		if isinstance(val, ParameterRef_C):
@@ -660,11 +856,22 @@ cdef class LinearFunction_C:
 				return "  "+result.replace(" + ","\n+ ")
 		return f"<Empty {self.__class__.__name__}>"
 
-	def __xml__(self, linebreaks=False, lineprefix="", exponentiate_parameters=False, resolve_parameters=None):
+	def __xml__(
+			self,
+			linebreaks=False,
+			lineprefix="",
+			exponentiate_parameters=False,
+			resolve_parameters=None,
+			value_in_tooltips=True,
+	):
 		from xmle import Elem
 		x = Elem('div', attrib={'class':'LinearFunc'})
 		for n,i in enumerate(self):
-			ix_ = i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters).getchildren()
+			ix_ = i.__xml__(
+				exponentiate_parameter=exponentiate_parameters,
+				resolve_parameters=resolve_parameters,
+				value_in_tooltips=value_in_tooltips,
+			).getchildren()
 			if linebreaks:
 				if n>0 or lineprefix:
 					ix_.insert(0,Elem('br', tail = lineprefix+" + "))
@@ -689,10 +896,33 @@ cdef class LinearFunction_C:
 		else:
 			return [cls(_.data) for _ in self]
 
-	def _evaluate(self, p_getter, x_namespace=None, **more_x_namespace):
-		if hasattr(p_getter,'pvalue') and callable(p_getter.pvalue):
-			p_getter = p_getter.pvalue
-		return sum(j._evaluate(p_getter, x_namespace=x_namespace, **more_x_namespace) for j in self)
+	def evaluate(self, param_source, x_namespace=None, **more_x_namespace):
+		"""
+		Evaluate the linear function in the context of some parameters and data.
+
+		Typically all of the data given will be scalar values (to compute a
+		scalar result) or a single data item will be a vector of possible
+		values (to get a vector result).
+
+		Parameters
+		----------
+		param_source : Model-like
+			The source of the current parameter values.
+		x_namespace : dict, optional
+			A namespace of data values.
+		**more_x_namespace : any
+			More data values
+
+		Returns
+		-------
+		numeric or array-like
+		"""
+		if hasattr(param_source, 'pvalue') and callable(param_source.pvalue):
+			param_source = param_source.pvalue
+		return sum(j.evaluate(param_source, x_namespace=x_namespace, **more_x_namespace) for j in self)
+
+	def value(self, *args):
+		return self.as_pmath().value(*args)
 
 	def copy(self):
 		result = self.__class__(self)
@@ -710,7 +940,7 @@ cdef class LinearFunction_C:
 		if hasattr(self, 'plotting_namespace') and len(other_namespace)==0:
 			other_namespace = self.plotting_namespace
 		x = numpy.linspace(x_min, x_max, n_points)
-		y = self._evaluate(p_getter, {x_name:x}, **other_namespace)
+		y = self.evaluate(p_getter, {x_name:x}, **other_namespace)
 		return x,y
 
 	def linear_plot_2d(self, p_getter, x_name, x_min, x_max, n_points=100, *, xlabel=None, svg=True, header=None, **other_namespace):
@@ -764,8 +994,20 @@ cdef class LinearFunction_C:
 
 		return snaps
 
-	
-
+	def as_pmath(self):
+		for i in self:
+			if i.data != "1":
+				raise NotImplementedError(f"{type(self)} has non-unit data")
+		from .linear_math import ParameterMultiply, ParameterAdd
+		if len(self) == 0:
+			return 0
+		elif len(self) == 1:
+			return self[0].as_pmath()
+		else:
+			x = ParameterAdd(self[0].as_pmath(), self[1].as_pmath())
+			for i in self[2:]:
+				x = ParameterAdd(x, i.as_pmath())
+			return x
 
 cdef class DictOfLinearFunction_C:
 

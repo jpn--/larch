@@ -15,7 +15,8 @@ import inspect
 from typing import Mapping, Sequence, Union
 
 import logging
-logger = logging.getLogger('L5')
+from .log import logger_name
+logger = logging.getLogger(logger_name)
 
 from .model.controller cimport Model5c
 from numpy.math cimport expf, logf
@@ -119,6 +120,24 @@ def _df_values_c_contiguous(df, re_shape=None, dtype=None):
 			return numpy.ascontiguousarray(df.values)
 		else:
 			return numpy.ascontiguousarray(df.values.astype(dtype))
+
+def _fast_check_multiindex_equality(i, j):
+	if not isinstance(i, pandas.MultiIndex):
+		return False
+	if not isinstance(j, pandas.MultiIndex):
+		return False
+	if len(i.codes) != len(j.codes):
+		return False
+	for k in range(len(i.codes)):
+		if not numpy.array_equal(i.codes[k], j.codes[k]):
+			return False
+	if len(i.levels) != len(j.levels):
+		return False
+	for k in range(len(i.levels)):
+		if not numpy.array_equal(i.levels[k], j.levels[k]):
+			return False
+	return True
+
 
 
 def _to_categorical(y, num_classes=None, dtype='float32'):
@@ -240,6 +259,29 @@ def crack_idca(df:pandas.DataFrame, caseid_col=True):
 	idco_columns = ~idca_columns
 	return df[idca_columns[idca_columns].index], g[idco_columns[idco_columns].index].first()
 
+def force_crack_idca(df:pandas.DataFrame, caseid_col=True):
+	"""
+	Split an :ref:`idca` DataFrame into :ref:`idca` and :ref:`idco` parts.
+
+	Parameters
+	----------
+	df: pandas.DataFrame
+		DataFrame to split
+	caseid_col: str, optional
+		Name of the case indentifier column. If omitted, the first level of the MultiIndex is used.
+
+	Returns
+	-------
+	idco: DataFrame
+	"""
+	if caseid_col is None or caseid_col is True:
+		try:
+			caseid_col = df.index.names[0]
+		except:
+			raise ValueError('cannot infer caseid_col')
+	g = df.groupby([caseid_col])
+	return g.first()
+
 
 def _infer_name(thing):
 	if thing is None:
@@ -295,6 +337,27 @@ cdef class DataFrames:
 		A dataframe containing idca format data, with one row per alternative.
 		The index should be a two-level multi-index, with the first level
 		containing the caseid's and the second level containing the altid's.
+	ch : pandas.DataFrame
+		A dataframe containing choice data, with one row per case and one column
+		per alternative.
+		The index contains the caseid's, and the columns contain the alt_codes.
+	wt : pandas.DataFrame or pandas.Series, optional
+		A one-column dataframe, or series, containing idco format data, with one
+		row per case, containing the case-weights.
+	alt_names : Sequence[str]
+		A sequence of alternative names as str.
+	alt_codes : Sequence[int]
+		A sequence of alternative codes.
+	ch_name : str, optional
+		A name to use for the choice variable.  If not given, it is inferred from
+		the `ch` argument if possible.  If the `ch` argument is not given but a
+		name is specified, then that named column is found in the `ca`, or `ce`
+		arguments and used as the choice.
+	wt_name : str, optional
+		A name to use for the weight variable.  If not given, it is inferred from
+		the `wt` argument if possible.  If the `wt` argument is not given but a
+		name is specified, then that named column is found in the `co`, `ca`, or `ce`
+		arguments and used as the weight.
 	"""
 
 	def __init__(
@@ -375,8 +438,10 @@ cdef class DataFrames:
 
 			if crack and co is None:
 				if ca is not None:
+					logger.debug(" DataFrames ~ cracking idca")
 					ca, co = crack_idca(ca, crack)
 				elif ce is not None:
+					logger.debug(" DataFrames ~ cracking idce")
 					ce, co = crack_idca(ce, crack)
 
 			if co is not None:
@@ -391,15 +456,39 @@ cdef class DataFrames:
 				ch = to_categorical(ch)
 
 			if ch is None and ch_as_ce is not None and ce is not None:
+				logger.debug(" DataFrames ~ building ch_as_ce")
 				_ch_temp = pandas.DataFrame(numpy.asarray(ch_as_ce), index=ce.index, columns=['choice'])
 				ch = _ch_temp.unstack().fillna(0)
 				ch.columns = ch.columns.droplevel(0)
 
+			if ch is None and ch_name is not None and ce is not None and ch_name in ce.columns:
+				logger.debug(" DataFrames ~ pulling ch from ce")
+				_ch_temp = ce[ch_name]
+				ch = _ch_temp.unstack().fillna(0)
+
+			if ch is None and ch_name is not None and ca is not None and ch_name in ca.columns:
+				logger.debug(" DataFrames ~ pulling ch from ca")
+				_ch_temp = ca[ch_name]
+				ch = _ch_temp.unstack().fillna(0)
+
 			if av is None and av_as_ce is not None and ce is not None:
+				logger.debug(" DataFrames ~ building av_as_ce")
 				_av_temp = pandas.DataFrame(numpy.asarray(av_as_ce), index=ce.index, columns=['avail'])
 				av = _av_temp.unstack().fillna(0)
 				av.columns = av.columns.droplevel(0)
 
+			if wt_name is not None and wt is None:
+				if co is not None and wt_name in co.columns:
+					logger.debug(" DataFrames ~ pulling wt from co")
+					wt = co[wt_name]
+				elif ca is not None and wt_name in ca.columns:
+					logger.debug(" DataFrames ~ build wt from ca")
+					_, wt = force_crack_idca(ca[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
+				elif ce is not None and wt_name in ce.columns:
+					logger.debug(" DataFrames ~ build wt from ce")
+					_, wt = force_crack_idca(ce[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
+
+			logger.debug(" DataFrames ~ set alternative_codes")
 			if alt_codes is None:
 				if ca is not None:
 					self._alternative_codes = ca.index.levels[1]
@@ -412,26 +501,57 @@ cdef class DataFrames:
 			else:
 				self._alternative_codes = pandas.Index(alt_codes)
 
+			logger.debug(" DataFrames ~ set alternative_names")
 			self._alternative_names = alt_names
 
+			logger.debug(" DataFrames ~ assign core data")
 			self.data_co = co
 			self.data_ca = ca
 			self.data_ce = ce
+			if isinstance(ch, pandas.DataFrame) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2 and ch.shape[1]==1:
+				logger.debug(" DataFrames ~ change ch to Series")
+				ch = ch.iloc[:,0]
+			if isinstance(ch, pandas.Series) and isinstance(ch.index, pandas.MultiIndex) and len(ch.index.levels)==2:
+				if self.data_ca is not None and _fast_check_multiindex_equality(self.data_ca.index, ch.index):
+					logger.debug(" DataFrames ~ unstack ch (fast)")
+					ch = pandas.DataFrame(
+						data=ch.values.reshape(-1, len(self.alternative_codes())),
+						index=self.caseindex,
+						columns=self.alternative_codes(),
+					)
+				else:
+					logger.debug(" DataFrames ~ unstack ch (slow)")
+					ch = ch.unstack()
+
+			logger.debug(" DataFrames ~ assign aux data")
 			self.data_ch = ch
 			self.data_wt = wt
 			if av is None and self.data_ce is not None:
+				logger.debug(" DataFrames ~ build av from ce")
 				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
 			if av is True or (isinstance(av, (int, float)) and av==1):
+				logger.debug(" DataFrames ~ initialize av as 1")
 				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes(), index=self.caseindex)
 			else:
 				if isinstance(av, pandas.DataFrame) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2 and av.shape[1]==1:
+					logger.debug(" DataFrames ~ change av to Series")
 					av = av.iloc[:,0]
 				if isinstance(av, pandas.Series) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2:
-					av = av.unstack()
+					if self.data_ca is not None and _fast_check_multiindex_equality(self.data_ca.index, av.index):
+						logger.debug(" DataFrames ~ unstack av (fast)")
+						av = pandas.DataFrame(
+							data=av.values.reshape(-1, len(self.alternative_codes())),
+							index=self.caseindex,
+							columns=self.alternative_codes(),
+						)
+					else:
+						logger.debug(" DataFrames ~ unstack av (slow)")
+						av = av.unstack()
 				self.data_av = av
 
 			self._weight_normalization = 1
 
+			logger.debug(" DataFrames ~ assign names")
 			self._data_av_name = av_name
 			self._data_ch_name = ch_name
 			self._data_wt_name = wt_name
@@ -755,9 +875,9 @@ cdef class DataFrames:
 		elif self._data_av is not None:
 			return self.data_av.index
 		elif self._data_ca is not None:
-			return self._data_ca.index.levels[0][numpy.unique(self._data_ca.index.labels[0])]
+			return self._data_ca.index.levels[0][numpy.unique(self._data_ca.index.codes[0])]
 		elif self._data_ce is not None:
-			return self._data_ce.index.levels[0][numpy.unique(self._data_ce.index.labels[0])]
+			return self._data_ce.index.levels[0][numpy.unique(self._data_ce.index.codes[0])]
 		else:
 			return 0
 
@@ -778,8 +898,10 @@ cdef class DataFrames:
 			self._data_ca = None
 			self._array_ca = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_ca must be a pandas.DataFrame')
+				raise TypeError('data_ca must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if self._computational:
 				self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
@@ -826,8 +948,10 @@ cdef class DataFrames:
 			self._data_co = None
 			self._array_co = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_co must be a pandas.DataFrame')
+				raise TypeError('data_co must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if self._computational:
 				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
@@ -876,8 +1000,10 @@ cdef class DataFrames:
 			self._array_ce_altindexes = None
 			self._array_ce_reversemap = None
 		else:
+			if isinstance(df, pandas.Series):
+				df = pandas.DataFrame(df)
 			if not isinstance(df, pandas.DataFrame):
-				raise TypeError('data_ce must be a pandas.DataFrame')
+				raise TypeError('data_ce must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
 			if not df.index.is_monotonic_increasing:
 				df = df.sort_index()
@@ -888,7 +1014,7 @@ cdef class DataFrames:
 				self._data_ce = df
 				self._array_ce = None
 
-			unique_labels, new_labels =numpy.unique(self.data_ce.index.labels[0], return_inverse=True)
+			unique_labels, new_labels =numpy.unique(self.data_ce.index.codes[0], return_inverse=True)
 			self._array_ce_caseindexes = new_labels
 
 			# min_case_x = self.data_ce.index.labels[0].min()
@@ -896,7 +1022,7 @@ cdef class DataFrames:
 			# 	self._array_ce_caseindexes = self.data_ce.index.labels[0]
 			# else:
 			# 	self._array_ce_caseindexes = self.data_ce.index.labels[0] - min_case_x
-			self._array_ce_altindexes  = self.data_ce.index.labels[1]
+			self._array_ce_altindexes  = self.data_ce.index.codes[1]
 			self._array_ce_reversemap = numpy.full([self._array_ce_caseindexes.max()+1, self._array_ce_altindexes.max()+1], -1, dtype=numpy.int64)
 			for i in range(len(self._array_ce_caseindexes)):
 				c = self._array_ce_caseindexes[i]
@@ -1158,7 +1284,8 @@ cdef class DataFrames:
 		missing_data = set()
 
 		import logging
-		logger = logging.getLogger("L5").error
+		from .log import logger_name
+		logger = logging.getLogger(logger_name).error
 
 		def missing(y):
 			if y not in missing_data:
@@ -1284,7 +1411,8 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L5')
+			from .log import logger_name
+			logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames._link_to_model_structure')
 			raise
 
@@ -1321,7 +1449,8 @@ cdef class DataFrames:
 		except:
 			if logger is None:
 				import logging
-				logger = logging.getLogger('L5')
+				from .log import logger_name
+				logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames.link_to_model_parameters')
 			raise
 
@@ -1361,7 +1490,8 @@ cdef class DataFrames:
 
 		except:
 			import logging
-			logger = logging.getLogger('L5')
+			from .log import logger_name
+			logger = logging.getLogger(logger_name)
 			logger.exception('error in DataFrames._read_in_model_parameters')
 			raise
 
@@ -1369,8 +1499,8 @@ cdef class DataFrames:
 		self._read_in_model_parameters()
 
 	def _debug_arrays(self):
-		from .util import Dict
-		return Dict(
+		from .util import dictx
+		return dictx(
 			model_utility_ca_param_value    = self.model_utility_ca_param_value.base,
 			model_utility_ca_param_holdfast = self.model_utility_ca_param_holdfast.base,
 			model_utility_co_param_value    = self.model_utility_co_param_value.base,
@@ -1658,6 +1788,142 @@ cdef class DataFrames:
 				into_array[i] = self._array_ch[c,i]
 
 
+
+	@cython.boundscheck(False)
+	@cython.initializedcheck(False)
+	@cython.cdivision(True)
+	cdef void _is_zero_quantity_onecase(
+			self,
+			int c,
+			int8_t[:] Q,
+			int n_alts,
+	) nogil:
+		"""
+		Check whether each alt in a specific case has zero quantity.
+		
+		Parameters
+		----------
+		c : int
+			The case index to check.
+		Q : int[n_alts]
+			input/output array.  Only non-zero input values are checked
+		n_alts : int
+			The number of alternatives to check
+		"""
+
+		cdef:
+			int i,j
+			int64_t row = -2
+			l4_float_t  _temp
+
+		if not self._is_computational_ready(activate=True):
+			return
+
+		for j in range(n_alts):
+
+			if Q[j]:
+
+				if self._array_ce_reversemap is not None:
+					if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
+						row = -1
+					else:
+						row = self._array_ce_reversemap[c,j]
+
+				if self._array_av[c,j] and row!=-1:
+
+					if self.model_quantity_ca_param.shape[0]:
+						for i in range(self.model_quantity_ca_param.shape[0]):
+							if row >= 0:
+								_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+							else:
+								_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
+							if _temp:
+								Q[j] = 0
+								break # stop searching for non-zero quant vars in this alt
+
+				else:
+					Q[j] = 0 # don't flag as non-zero if not available
+
+	@cython.boundscheck(False)
+	@cython.initializedcheck(False)
+	@cython.cdivision(True)
+	cdef bint _is_zero_quantity_onecase_onealt(
+			self,
+			int c,
+			int j,
+	) nogil:
+		"""
+		Check whether a specific case-alt has zero quantity.
+		
+		Parameters
+		----------
+		c : int
+			The case index to check.
+		j : int
+			The alt index to check.
+		"""
+
+		cdef:
+			int i
+			int64_t row = -2
+			l4_float_t  _temp
+			bint result = True
+
+		if self._array_ce_reversemap is not None:
+			if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
+				row = -1
+			else:
+				row = self._array_ce_reversemap[c,j]
+
+		if self._array_av[c,j] and row!=-1:
+
+			if self.model_quantity_ca_param.shape[0]:
+				for i in range(self.model_quantity_ca_param.shape[0]):
+					if row >= 0:
+						_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+					else:
+						_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
+					if _temp:
+						result = False
+						break # stop searching for non-zero quant vars in this alt
+
+		else:
+			result = False # don't flag as non-zero if not available
+
+		return result
+
+
+	def get_zero_quantity_ca(self):
+		"""
+		Find all alternatives with zeros across all quantity values.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+
+		z = self.data_av.copy()
+
+		cdef int8_t[:,:] _z_check = z.values
+		cdef int ncases = self.n_cases
+		cdef int n_alts = _z_check.shape[1]
+		cdef int c
+		cdef int q_shape
+
+		try:
+			q_shape = self.model_quantity_ca_param.shape[0]
+		except AttributeError:
+			raise ValueError("no quantity defined, cannot get zeros on empty set")
+
+		if q_shape == 0:
+			raise ValueError("no quantity defined, cannot get zeros on empty set")
+
+		for c in range(ncases):
+			self._is_zero_quantity_onecase( c, _z_check[c], n_alts, )
+
+		return z
+
+
 	def dump(self, filename, **kwargs):
 		"""Persist this DataFrames object into one file.
 
@@ -1905,7 +2171,7 @@ cdef class DataFrames:
 			the relative size of the splits.
 		method : {'simple', 'shuffle'}
 			If simple, the data is assumed to be adequately shuffled already and splits are
-			made of contiguous sections of data.  This is memory efficient.  Choose 'shuffle'
+			made of contiguous sections of data.  This may be more memory efficient.  Choose 'shuffle'
 			to randomly shuffle the cases while splitting; data will be copied to new memory.
 
 		Returns
@@ -1929,6 +2195,9 @@ cdef class DataFrames:
 
 			cum_splits = splits.cumsum()
 			uniform_seq = numpy.arange(self.n_cases) / self.n_cases
+
+			if method == 'shuffle':
+				numpy.random.shuffle(uniform_seq)
 
 			membership = (uniform_seq.reshape(-1,1) <= cum_splits.reshape(1,-1))
 			membership[:,1:] ^= membership[:,:-1]
@@ -1960,6 +2229,10 @@ cdef class DataFrames:
 					data_wt=data_wt,
 					alt_names = self.alternative_names(),
 					alt_codes = self.alternative_codes(),
+					sys_alts=self.sys_alts,
+					ch_name=self._data_ch_name,
+					wt_name=self._data_wt_name,
+					av_name=self._data_av_name,
 				))
 			logger.debug(f'done splitting dataframe {splits}')
 			return result
@@ -2036,8 +2309,8 @@ cdef class DataFrames:
 		----------
 		req_data : Dict or str
 			The requested data. The keys for this dictionary may include {'ca', 'co',
-			'choice_ca', 'choice_co', 'weight_co', 'avail_ca', 'standardize'}.
-			Currently, the keys {'choice_co_code', 'avail_co'} are not implemented and
+			'choice_ca', 'choice_co', 'choice_co_code', 'weight_co', 'avail_ca', 'standardize'}.
+			Currently, the keys {'avail_co'} are not implemented and
 			will raise an error.
 			Other keys are silently ignored.
 		selector : array-like[bool] or slice, optional
@@ -2092,7 +2365,15 @@ cdef class DataFrames:
 			else:
 				df_ch.columns = alts
 		elif 'choice_co_code' in req_data:
-			raise NotImplementedError('choice_co_code')
+			choicecodes = columnize(self._data_co, [req_data['choice_co_code']], inplace=False, dtype=int)
+			df_ch = pandas.DataFrame(
+				0,
+				columns=self.alternative_codes(),
+				index=self._data_co.index,
+				dtype=float_dtype,
+			)
+			for c in df_ch.columns:
+				df_ch.loc[:,c] = (choicecodes==c).astype(float_dtype)
 		else:
 			df_ch = None
 

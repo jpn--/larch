@@ -9,7 +9,8 @@ from ..general_precision import l4_float_dtype
 from typing import Sequence
 
 import logging
-logger = logging.getLogger('L5.model')
+from ..log import logger_name
+logger = logging.getLogger(logger_name+'.model')
 
 class Model(_Model5c):
 	"""A discrete choice model.
@@ -63,6 +64,21 @@ class Model(_Model5c):
 		super().__init__(**kwargs)
 		self._scan_all_ensure_names()
 		self.mangle()
+
+	def dumps(self):
+		"""
+		Use pickle to dump the contents of this Model to a bytestring.
+
+		Any associated data (dataframes and dataservice) are not included.
+
+		Returns
+		-------
+		bytes
+		"""
+		import pickle
+		return pickle.dumps(self)
+
+
 
 	def get_params(self, deep=True):
 		p = dict()
@@ -129,7 +145,7 @@ class Model(_Model5c):
 				if isinstance(sample_weight, str):
 					sample_weight = X[sample_weight]
 				if len(sample_weight) == X.shape[0]:
-					sample_weight = sample_weight.groupby(X.index.labels[0]).first()
+					sample_weight = sample_weight.groupby(X.index.codes[0]).first()
 
 			if isinstance(y, str):
 				y = X[y].unstack().fillna(0)
@@ -487,7 +503,23 @@ class Model(_Model5c):
 		return s
 
 
-	def utility_functions(self, subset=None, resolve_parameters=True):
+	def utility_functions(self, subset=None, resolve_parameters=False):
+		"""
+		Generate an XHTML output of the utility function(s).
+
+		Parameters
+		----------
+		subset : Collection, optional
+			A collection of alterative codes to include. This only has effect if
+			there are seperate utility_co functions set by alternative.
+		resolve_parameters : bool, default False
+			Whether to resolve the parameters to the current (estimated) value
+			in the output.
+
+		Returns
+		-------
+		xmle.Elem
+		"""
 		from xmle import Elem
 		x = Elem('div')
 		t = x.elem('table', style="margin-top:1px;", attrib={'class':'floatinghead'})
@@ -498,38 +530,38 @@ class Model(_Model5c):
 			t_head = t.elem('thead')
 			tr = t_head.elem('tr')
 			tr.elem('th', text="alt")
-			tr.elem('th', text='formula')
+			tr.elem('th', text='formula', attrib={'style':'text-align:left;'})
 			t_body = t.elem('tbody')
 			for j in self.utility_co.keys():
 				if subset is None or j in subset:
 					tr = t_body.elem('tr')
 					tr.elem('td', text=str(j))
-					utilitycell = tr.elem('td')
+					utilitycell = tr.elem('td', attrib={'style':'text-align:left;'})
 					utilitycell.elem('div')
 					anything = False
 					if len(self.utility_ca):
 						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 						anything = True
 					if j in self.utility_co:
 						if anything:
 							utilitycell << Elem('br')
 						v = self.utility_co[j]
 						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 						anything = True
 					if len(self.quantity_ca):
 						if anything:
 							utilitycell << Elem('br')
 						if self.quantity_scale:
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-							from .roles import ParameterRef
-							utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+							from .linear import ParameterRef_C
+							utilitycell << list(ParameterRef_C(self.quantity_scale).__xml__(resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
 						else:
 							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
 						content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ",
-														   exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+														   exponentiate_parameters=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters)
 						utilitycell << list(content)
 						utilitycell.elem('br', tail=")")
 		else:
@@ -538,24 +570,24 @@ class Model(_Model5c):
 			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
 			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
 			tr = t.elem('tr')
-			utilitycell = tr.elem('td')
+			utilitycell = tr.elem('td', attrib={'style':'text-align:left;'})
 			utilitycell.elem('div')
 			anything = False
 			if len(self.utility_ca):
 				utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self if resolve_parameters else None))
+				utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 				anything = True
 			if len(self.quantity_ca):
 				if anything:
 					utilitycell << Elem('br')
 				if self.quantity_scale:
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-					from ..roles import ParameterRef
-					utilitycell << list(ParameterRef(self.quantity_scale).__xml__(resolve_parameters=self if resolve_parameters else None))
+					from .linear import ParameterRef_C
+					utilitycell << list(ParameterRef_C(self.quantity_scale).__xml__(resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " * log("
 				else:
 					utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + log("
-				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self if resolve_parameters else None)
+				content = self.quantity_ca.__xml__(linebreaks=True, lineprefix="  ", exponentiate_parameters=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters)
 				utilitycell << list(content)
 				utilitycell.elem('br', tail=")")
 		return x
@@ -567,11 +599,11 @@ class Model(_Model5c):
 
 		Returns
 		-------
-		Dict
+		dictx
 		"""
 		try:
-			from ..util import Dict
-			req_data = Dict()
+			from ..util import dictx
+			req_data = dictx()
 
 			if self.utility_ca is not None and len(self.utility_ca):
 				if 'ca' not in req_data:
@@ -617,7 +649,24 @@ class Model(_Model5c):
 		except:
 			logger.exception("error in required_data")
 
-
 	def __contains__(self, item):
 		return (item in self.pf.index) or (item in self.rename_parameters)
 
+	def doctor(
+			self,
+			repair_ch_av=None,
+			repair_ch_zq=None,
+			repair_asc=None,
+			repair_noch_nowt=None,
+			verbose=3,
+	):
+		self.unmangle(True)
+		from ..troubleshooting import doctor
+		return doctor(
+			self,
+			repair_ch_av=repair_ch_av,
+			repair_ch_zq=repair_ch_zq,
+			repair_asc=repair_asc,
+			repair_noch_nowt=repair_noch_nowt,
+			verbose=verbose,
+		)

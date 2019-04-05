@@ -1,6 +1,6 @@
 
 from ..examples import MTC, SWISSMETRO
-from pytest import approx
+from pytest import approx, raises
 import numpy
 import pandas
 from ..model import *
@@ -4109,3 +4109,125 @@ def test_probability():
 
 
 
+def test_zero_quant_doctor():
+
+	d = MTC()
+	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', '(altnum+1)*(altnum!=6)',
+							 '(ivtt+1)*(altnum!=6)')
+	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	df_av = d.dataframe_idca('_avail_', dtype=bool)
+	df_ch = d.dataframe_idca('_choice_')
+
+	from larch.dataframes import DataFrames
+	from larch import Model
+
+	j = DataFrames(
+		co=df_co,
+		ca=df_ca,
+		av=df_av,
+		ch=df_ch,
+	)
+
+	jj = DataFrames(
+		co=None,
+		ca=df_ca,
+		av=df_av,
+		ch=df_ch,
+	)
+
+	numpy.testing.assert_array_equal(jj.caseindex, numpy.arange(5029))
+
+	with raises(ValueError):
+		jj.get_zero_quantity_ca()
+
+	m5 = Model()
+
+	from larch.roles import P, X, PX
+	m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+	m5.utility_ca = PX("tottime") + PX("totcost")
+
+	m5.quantity_ca = (
+			+ P("FakeSizeAlt") * X('(altnum+1)*(altnum!=6)')
+			+ P("FakeSizeIvtt") * X('(ivtt+1)*(altnum!=6)')
+	)
+
+	m5.dataframes = j
+
+	numpy.testing.assert_array_equal(j.get_zero_quantity_ca().sum(), [0, 0, 0, 0, 0, 1479])
+
+	beta_in1 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+		'FakeSizeAlt': 0.123,
+	}
+
+	ll2 = m5.loglike2(beta_in1, return_series=True)
+
+	assert numpy.isinf(m5.loglike(persist=0xFFF).ll_casewise).sum() == 166
+
+	assert numpy.isinf(ll2.ll)
+
+	m6, problems = m5.doctor(repair_ch_zq='-', repair_noch_nowt='-')
+
+	assert numpy.isinf(m5.loglike(persist=0xFFF).ll_casewise).sum() == 0
+
+	q1_dll = {
+		'ASC_BIKE': -277.5656593502029,
+		'ASC_SR2': -891.6016660163207,
+		'ASC_SR3P': -183.41788898189085,
+		'ASC_TRAN': -522.1997756201238,
+		'ASC_WALK': 0,
+		'FakeSizeAlt': -76.76242434797904,
+		'FakeSizeIvtt': 76.76242434797905,
+		'hhinc#2': -52670.72440893809,
+		'hhinc#3': -11938.805499222452,
+		'hhinc#4': -31388.66675131292,
+		'hhinc#5': -16356.555223315461,
+		'hhinc#6': 0,
+		'totcost': 58497.83075794341,
+		'tottime': -32559.55689795156,
+	}
+
+	ll3 = m5.loglike2(beta_in1, return_series=True)
+
+	assert -5144.938038856157 == approx(ll3.ll, rel=1e-5), f"ll3.ll={ll3.ll}"
+
+	for k in q1_dll:
+		assert q1_dll[k] == approx(dict(ll3.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll3.dll)[k]}"
+
+	correct_null_dloglike = {
+		'ASC_SR2': -671.6828023571333,
+		'ASC_SR3P': -1159.664963617872,
+		'ASC_TRAN': -491.601066961784,
+		'ASC_BIKE': -445.96888883651434,
+		'ASC_WALK': 0,
+		'FakeSizeAlt': -83.95161797745953,
+		'FakeSizeIvtt': 83.95161797745953,
+		'hhinc#2': -40452.62064427807,
+		'hhinc#3': -67529.64731801033,
+		'hhinc#4': -31000.511497821743,
+		'hhinc#5': -27526.5128282836,
+		'hhinc#6': 0,
+		'totcost': 146955.59767955705,
+		'tottime': -46961.83149428295,
+	}
+
+	ll0 = m5.loglike2('null', return_series=True)
+	assert (ll0.ll == approx(-8000.105568597247))
+	for k in dict(ll0.dll):
+		assert dict(ll0.dll)[k] == approx(
+			correct_null_dloglike[k]), f'{k}  {dict(ll0.dll)[k]} == {(dict(correct_null_dloglike)[k])}'

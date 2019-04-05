@@ -175,12 +175,12 @@ def piece(x, low_bound, high_bound):
 		if high_bound is None:
 			return x
 		else:
-			return numpy.fmin(x, high_bound)
+			return numpy.minimum(x, high_bound)
 	else:
 		if high_bound is None:
-			return numpy.fmax(x-low_bound, 0)
+			return numpy.maximum(x-low_bound, 0)
 		else:
-			return numpy.fmax(numpy.fmin(x, high_bound)-low_bound, 0)
+			return numpy.maximum(numpy.minimum(x, high_bound)-low_bound, 0)
 
 
 def parse_piece(s):
@@ -204,12 +204,13 @@ def parse_piece(s):
 
 def piecewise_linear(x, p=None, breaks=None):
 	from ..roles import P,X
+	from ..model import linear
 
 	if p is None:
 		p = x
 
 	# Flip x and p if given backwards
-	if isinstance(x, P) and isinstance(p, X):
+	if isinstance(x, linear.ParameterRef_C) and isinstance(p, linear.DataRef_C):
 		p,x = x,p
 
 	if breaks is None:
@@ -257,6 +258,31 @@ def piecewise_linear_data_names(basename, breaks):
 	return z
 
 
+def infer_breaks(fun):
+	"""
+	Infer break points from a piecewise_linear LinearFunction.
+
+	Parameters
+	----------
+	fun : LinearFunction_C
+	"""
+	m = re.compile('piece\(.*,(.*),(.*)\)')
+	_0 = m.match(fun[0].data)
+	if _0.group(1) != 'None':
+		raise NotImplementedError('Bounded Minimum')
+	breaks = [ast.literal_eval(_0.group(2))]
+	for i in fun[1:-1]:
+		_n = m.match(i.data)
+		if breaks[-1] != ast.literal_eval(_n.group(1)):
+			raise NotImplementedError('Diconnected')
+		breaks.append(ast.literal_eval(_n.group(2)))
+	_n = m.match(fun[-1].data)
+	if breaks[-1] != ast.literal_eval(_n.group(1)):
+		raise NotImplementedError('Diconnected Top')
+	if _n.group(2) != 'None':
+		raise NotImplementedError('Bounded Maximum')
+	return breaks
+
 def piecewise_expansion(s, breaks, column=None, inplace=False):
 	"""
 	Expand a pandas Series into a DataFrame containing a piecewise linear series.
@@ -282,6 +308,11 @@ def piecewise_expansion(s, breaks, column=None, inplace=False):
 			s = s.loc[:, column]
 	else:
 		input = None
+
+	from ..model import linear
+
+	if isinstance(breaks, linear.LinearFunction_C):
+		breaks = infer_breaks(breaks)
 
 	columns = piecewise_linear_data_names(s.name, breaks=breaks)
 	df = pandas.DataFrame(
