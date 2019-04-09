@@ -316,6 +316,24 @@ cdef class Model5c:
 		self.unmangle()
 		return self.frame
 
+	def set_frame(self, frame):
+		"""
+		Assign a new parameter frame.
+
+		If the frame to be set evaluates as equal to the existing
+		frame, this method will not change the existing frame and will not
+		trigger a `mangle`.
+
+		Parameters
+		----------
+		frame : pandas.DataFrame
+		"""
+		if not isinstance(frame, pandas.DataFrame):
+			raise ValueError(f'frame must be pandas.DataFrame, not {type(frame)}')
+		if not self.frame.equals(frame):
+			self.frame = frame
+			self.mangle()
+
 	def pf_sort(self):
 		self.unmangle()
 		self.frame.sort_index(inplace=True)
