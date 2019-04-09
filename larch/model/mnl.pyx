@@ -415,9 +415,11 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 ):
 	cdef:
 		int c = 0
+		int c_local = 0
 		int v
 		int v2
 		int n_cases = dfs._n_cases()
+		int n_cases_local = n_cases
 		int n_alts  = dfs._n_alts()
 		int n_params= dfs._n_model_params
 		l4_float_t[:] array_ch
@@ -457,6 +459,9 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 	if dfs._data_av is None:
 		raise ValueError('DataFrames does not define data_av')
 
+	if step_case <= 0:
+		raise NotImplementedError('non-positive step')
+
 	try:
 
 		if stop_case<0:
@@ -466,12 +471,14 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 			# must compute dll to get bhhh
 			return_dll = True
 
-		storage_size_U    = n_cases if persist & PERSIST_UTILITY            else num_threads
-		storage_size_expU = n_cases if persist & PERSIST_EXP_UTILITY        else num_threads
-		storage_size_P    = n_cases if persist & PERSIST_PROBABILITY        else num_threads
-		storage_size_LLc  = n_cases if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
-		storage_size_dLLc = n_cases if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
-		storage_size_dU   = n_cases if persist & PERSIST_D_UTILITY          else num_threads
+		n_cases_local = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+
+		storage_size_U    = n_cases_local if persist & PERSIST_UTILITY            else num_threads
+		storage_size_expU = n_cases_local if persist & PERSIST_EXP_UTILITY        else num_threads
+		storage_size_P    = n_cases_local if persist & PERSIST_PROBABILITY        else num_threads
+		storage_size_LLc  = n_cases_local if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
+		storage_size_dLLc = n_cases_local if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
+		storage_size_dU   = n_cases_local if persist & PERSIST_D_UTILITY          else num_threads
 
 		raw_utility = numpy.zeros([storage_size_U,   n_alts], dtype=l4_float_dtype)
 		exp_utility = numpy.zeros([storage_size_expU,n_alts], dtype=l4_float_dtype)
@@ -498,12 +505,14 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 				if keep_only >= 0 and c % subsample != keep_only:
 					continue
 
-				store_number_U    = c if persist & PERSIST_UTILITY            else thread_number
-				store_number_expU = c if persist & PERSIST_EXP_UTILITY        else thread_number
-				store_number_P    = c if persist & PERSIST_PROBABILITY        else thread_number
-				store_number_LLc  = c if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
-				store_number_dLLc = c if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
-				store_number_dU   = c if persist & PERSIST_D_UTILITY          else thread_number
+				c_local = (c-start_case)//step_case
+
+				store_number_U    = c_local if persist & PERSIST_UTILITY            else thread_number
+				store_number_expU = c_local if persist & PERSIST_EXP_UTILITY        else thread_number
+				store_number_P    = c_local if persist & PERSIST_PROBABILITY        else thread_number
+				store_number_LLc  = c_local if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
+				store_number_dLLc = c_local if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
+				store_number_dU   = c_local if persist & PERSIST_D_UTILITY          else thread_number
 
 				buffer_exp_utility = &exp_utility[store_number_expU,0]
 				buffer_probability = &probability[store_number_P,0]
@@ -597,7 +606,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 
 	except:
 		logger.error(f'c={c}')
-		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
+		logger.error(f'n_cases, n_cases_local, n_alts={(n_cases, n_cases_local, n_alts)}')
 		logger.exception('error in mnl_d_log_likelihood_from_dataframes_all_rows')
 		raise
 

@@ -4231,3 +4231,75 @@ def test_zero_quant_doctor():
 	for k in dict(ll0.dll):
 		assert dict(ll0.dll)[k] == approx(
 			correct_null_dloglike[k]), f'{k}  {dict(ll0.dll)[k]} == {(dict(correct_null_dloglike)[k])}'
+
+
+def test_partial_compute():
+	d = MTC()
+	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
+	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	df_av = d.dataframe_idca('_avail_', dtype=bool)
+	df_ch = d.dataframe_idca('_choice_')
+
+	from larch.dataframes import DataFrames
+	from larch.model import Model
+
+	j = DataFrames(
+		co=df_co,
+		ca=df_ca,
+		av=df_av,
+		ch=df_ch,
+	)
+
+	m5 = Model()
+
+	# from larch.roles import P, X, PX
+	from larch.model.linear import ParameterRef_C as P
+	from larch.model.linear import DataRef_C as X
+	def PX(i):
+		return P(i) * X(i)
+
+	m5.utility_co[2] = P("ASC_SR2") * X("1") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P") * X("1") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN") * X("1") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE") * X("1") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK") * X("1") + P("hhinc#6") * X("hhinc")
+	m5.utility_ca = PX("tottime") + PX("totcost")
+
+	m5.dataframes = j
+
+	beta_in1 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+	}
+
+	from larch.model.persist_flags import PERSIST_ALL
+	ll2 = m5.loglike2(beta_in1, persist=PERSIST_ALL & ~PERSIST_D_PROBABILITY)
+
+	ll_short = m5.loglike2(beta_in1, persist=PERSIST_ALL & ~PERSIST_D_PROBABILITY, start_case=10, stop_case=17,
+						   step_case=2)
+
+	assert ll_short.utility == approx(ll2.utility[10:17:2])
+	assert ll_short.exp_utility == approx(ll2.exp_utility[10:17:2])
+	assert ll_short.probability == approx(ll2.probability[10:17:2])
+	assert ll_short.dll_casewise.values == approx(ll2.dll_casewise.iloc[10:17:2].values)
+	assert ll_short.dutility == approx(ll2.dutility[10:17:2])
+
+	ll_short2 = m5.loglike2(beta_in1, persist=PERSIST_ALL, start_case=23, stop_case=26,
+						   step_case=1)
+
+	assert ll_short2.utility[:, :6] == approx(ll2.utility[23:26])
+	assert ll_short2.probability[:, :6] == approx(ll2.probability[23:26])
+	assert ll_short2.dll_casewise.values == approx(ll2.dll_casewise.iloc[23:26].values)
+	assert ll_short2.dutility[:, :6, :] == approx(ll2.dutility[23:26])
+
+	

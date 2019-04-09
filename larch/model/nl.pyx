@@ -379,8 +379,10 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 ):
 	cdef:
 		int c = 0
+		int c_local = 0
 		int v, v2
 		int n_cases = dfs._n_cases()
+		int n_cases_local = n_cases
 		int n_alts  = dfs._n_alts()
 		int n_params= dfs._n_model_params
 		l4_float_t[:] array_ch
@@ -428,6 +430,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 	if dfs._data_av is None:
 		raise ValueError('DataFrames does not define data_av')
 
+	if step_case <= 0:
+		raise NotImplementedError('non-positive step')
+
 	try:
 		if num_threads <= 0:
 			num_threads = model._n_threads
@@ -439,13 +444,15 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 			# must compute dll to get bhhh
 			return_dll = True
 
-		storage_size_U    = n_cases if persist & PERSIST_UTILITY            else num_threads
-		storage_size_CP   = n_cases if persist & PERSIST_COND_LOG_PROB      else num_threads
-		storage_size_P    = n_cases if persist & PERSIST_PROBABILITY        else num_threads
-		storage_size_dP   = n_cases if persist & PERSIST_D_PROBABILITY      else num_threads
-		storage_size_LLc  = n_cases if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
-		storage_size_dLLc = n_cases if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
-		storage_size_dU   = n_cases if persist & PERSIST_D_UTILITY          else num_threads
+		n_cases_local = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+
+		storage_size_U    = n_cases_local if persist & PERSIST_UTILITY            else num_threads
+		storage_size_CP   = n_cases_local if persist & PERSIST_COND_LOG_PROB      else num_threads
+		storage_size_P    = n_cases_local if persist & PERSIST_PROBABILITY        else num_threads
+		storage_size_dP   = n_cases_local if persist & PERSIST_D_PROBABILITY      else num_threads
+		storage_size_LLc  = n_cases_local if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
+		storage_size_dLLc = n_cases_local if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
+		storage_size_dU   = n_cases_local if persist & PERSIST_D_UTILITY          else num_threads
 
 		tree = TreeStructure(model, model._graph)
 		_check_for_zero_mu(n_alts, tree.n_nodes, tree.model_mu_param_values)
@@ -480,13 +487,15 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 				if keep_only >= 0 and c % subsample != keep_only:
 					continue
 
-				store_number_U    = c if persist & PERSIST_UTILITY            else thread_number
-				store_number_CP   = c if persist & PERSIST_COND_LOG_PROB      else thread_number
-				store_number_P    = c if persist & PERSIST_PROBABILITY        else thread_number
-				store_number_dP   = c if persist & PERSIST_D_PROBABILITY      else thread_number
-				store_number_LLc  = c if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
-				store_number_dLLc = c if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
-				store_number_dU   = c if persist & PERSIST_D_UTILITY          else thread_number
+				c_local = (c-start_case)//step_case
+
+				store_number_U    = c_local if persist & PERSIST_UTILITY            else thread_number
+				store_number_CP   = c_local if persist & PERSIST_COND_LOG_PROB      else thread_number
+				store_number_P    = c_local if persist & PERSIST_PROBABILITY        else thread_number
+				store_number_dP   = c_local if persist & PERSIST_D_PROBABILITY      else thread_number
+				store_number_LLc  = c_local if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
+				store_number_dLLc = c_local if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
+				store_number_dU   = c_local if persist & PERSIST_D_UTILITY          else thread_number
 
 				if return_dll:
 					dfs._compute_d_utility_onecase(c,raw_utility[store_number_U,:],dU[store_number_dU],n_alts)
