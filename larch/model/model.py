@@ -520,6 +520,7 @@ class Model(_Model5c):
 		-------
 		xmle.Elem
 		"""
+		self.unmangle()
 		from xmle import Elem
 		x = Elem('div')
 		t = x.elem('table', style="margin-top:1px;", attrib={'class':'floatinghead'})
