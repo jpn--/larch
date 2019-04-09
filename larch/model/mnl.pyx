@@ -330,7 +330,75 @@ ctypedef l4_float_t (*LL_FROM_PROB)(
 
 
 
+cdef double _loglike_from_probability_without_weight(
+	l4_float_t[:,:] probabilities, # input [cases, n_alts]
+	l4_float_t[:,:] choices,      # input [cases, n_alts]
+):
+	"""
+	Compute log likelihood from probability and choice arrays.
 
+	Returns
+	-------
+	double
+	"""
+	cdef:
+		double ll_temp = 0
+		double ll = 0
+		int c = 0
+		int n_alts = probabilities.shape[1]
+
+	if probabilities.shape[0] != choices.shape[0] or probabilities.shape[1] != choices.shape[1]:
+		raise ValueError(f"probabilities.shape ~= choices.shape {probabilities.shape} != {choices.shape}")
+
+	for c in range(probabilities.shape[0]):
+		ll_temp = _mnl_log_likelihood_from_probability_stride(
+			n_alts,
+			probabilities[c,:],
+			choices[c,:],
+		)
+		ll += ll_temp
+	return ll
+
+cdef double _loglike_from_probability_with_weight(
+	l4_float_t[:,:] probabilities, # input [cases, n_alts]
+	l4_float_t[:,:] choices,      # input [cases, n_alts]
+	l4_float_t[:]   weights,      # input [cases]
+):
+	"""
+	Compute log likelihood from probability and choice arrays.
+
+	Returns
+	-------
+	double
+	"""
+	cdef:
+		double ll_temp = 0
+		double ll = 0
+		int c = 0
+		int n_alts = probabilities.shape[1]
+
+	if probabilities.shape[0] != choices.shape[0] or probabilities.shape[1] != choices.shape[1]:
+		raise ValueError(f"probabilities.shape ~= choices.shape {probabilities.shape} != {choices.shape}")
+
+	for c in range(probabilities.shape[0]):
+		ll_temp = _mnl_log_likelihood_from_probability_stride(
+			n_alts,
+			probabilities[c,:],
+			choices[c,:],
+		) * weights[c]
+		ll += ll_temp
+	return ll
+
+
+def loglike_from_probability(
+	l4_float_t[:,:] probabilities not None, # input [cases, n_alts]
+	l4_float_t[:,:] choices not None,       # input [cases, n_alts]
+	weights = None,      # input [cases]
+):
+	if weights is None:
+		return _loglike_from_probability_without_weight(probabilities, choices)
+	else:
+		return _loglike_from_probability_with_weight(probabilities, choices, weights)
 
 
 

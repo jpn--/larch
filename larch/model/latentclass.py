@@ -6,6 +6,8 @@ from typing import MutableMapping
 from ..util import Dict
 from ..dataframes import DataFrames
 from ..model.controller import ParameterNotInModelWarning
+from .linear import ParameterRef_C
+from ..general_precision import l4_float_dtype
 
 
 def sync_frames(*models):
@@ -42,6 +44,11 @@ class LatentClassModel:
 	def _k_model_names(self):
 		return list(sorted(self._k_models.keys()))
 
+	@property
+	def pf(self):
+		self.unmangle()
+		return self._k_membership.pf
+
 	def required_data(self):
 		# combine all required_data from all class-level submodels
 		req = Dict()
@@ -71,26 +78,127 @@ class LatentClassModel:
 		if x is not None:
 			self._k_membership.set_values(x)
 
-	def class_membership_probability(self, x=None):
-		return self._k_membership.probability(x, return_dataframe='idco')
+	def class_membership_probability(self, x=None, start_case=0, stop_case=-1, step_case=1):
+		return self._k_membership.probability(
+			x,
+			return_dataframe='idco',
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+		)
 
-	def probability(self, x=None):
+	def probability(self, x=None, start_case=0, stop_case=-1, step_case=1, return_dataframe=False,):
 		self.__prep_for_compute(x)
-		p = numpy.zeros([self.dataframes.n_cases, self.dataframes.n_alts])
+
+		if start_case >= self.dataframes.n_cases:
+			raise IndexError("start_case >= n_cases")
+
+		if stop_case == -1:
+			stop_case = self.dataframes.n_cases
+
+		if start_case > stop_case:
+			raise IndexError("start_case > stop_case")
+
+		if step_case <= 0:
+			raise IndexError("non-positive step_case")
+
+		n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+
+		p = numpy.zeros([n_rows, self.dataframes.n_alts])
+
 		import warnings
 		with warnings.catch_warnings():
 			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
-			k_membership_probability = self.class_membership_probability()
+			k_membership_probability = self.class_membership_probability(
+				start_case=start_case, stop_case=stop_case, step_case=step_case,
+			)
 			for k_name, k_model in self._k_models.items():
+				k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
 				p += (
-						numpy.asarray( k_model.probability()[:,:self.dataframes.n_alts] )
+						numpy.asarray( k_pr[:,:self.dataframes.n_alts] )
 						* k_membership_probability.loc[:,k_name].values[:, None]
 				)
-		return pandas.DataFrame(
-			p,
-			index=self._dataframes.caseindex,
-			columns=self._dataframes.alternative_codes(),
+
+		if return_dataframe:
+			return pandas.DataFrame(
+				p,
+				index=self._dataframes.caseindex[start_case:stop_case:step_case],
+				columns=self._dataframes.alternative_codes(),
+			)
+		return p
+
+	def loglike(
+			self,
+			x=None,
+			*,
+			start_case=0, stop_case=-1, step_case=1,
+			persist=0,
+			leave_out=-1, keep_only=-1, subsample=-1,
+			probability_only=False,
+	):
+		"""
+		Compute a log likelihood value.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		start_case : int, default 0
+			The first case to include in the log likelihood computation.  To include all
+			cases, start from 0 (the default).
+		stop_case : int, default -1
+			One past the last case to include in the log likelihood computation.  This is processed as usual for
+			Python slicing and iterating, and negative values count backward from the end.  To include all cases,
+			end at -1 (the default).
+		step_case : int, default 1
+			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
+			Python slicing and iterating.  To include all cases, step by 1 (the default).
+		persist : int, default 0
+			Whether to return a variety of internal and intermediate arrays in the result dictionary.
+			If set to 0, only the final `ll` value is included.
+		leave_out, keep_only, subsample : int, optional
+			Settings for cross validation calculations.
+			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
+			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+		probability_only : bool, default False
+			Compute only the probability and ignore the likelihood.  If this setting is active, the
+			dataframes need not include the "actual" choice data.
+
+		Returns
+		-------
+		Dict or float or array
+			The log likelihood or the probability.  Other arrays are also included if `persist` is set to True.
+
+		"""
+		self.__prep_for_compute(x)
+		pr = self.probability(
+			x=None,
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+			return_dataframe=False,
 		)
+		if probability_only:
+			return pr
+		from .mnl import loglike_from_probability
+
+		if stop_case == -1:
+			stop_case = self.dataframes.n_cases
+
+		if self.dataframes.data_wt is not None:
+			wt = self.dataframes.data_wt.iloc[start_case:stop_case:step_case]
+		else:
+			wt = None
+
+		ll = loglike_from_probability(
+			pr,
+			self.dataframes.array_ch()[start_case:stop_case:step_case],
+			wt
+		)
+
+		return ll
+
+
 
 	@property
 	def dataframes(self):
@@ -147,4 +255,48 @@ class LatentClassModel:
 			self.dataframes = dfs
 		else:
 			raise ValueError('dataservice is not defined')
+
+	def set_value(self, name, value=None, **kwargs):
+		if isinstance(name, ParameterRef_C):
+			name = str(name)
+		if name not in self.pf.index:
+			self.unmangle()
+		if value is not None:
+			# value = numpy.float64(value)
+			# self.frame.loc[name,'value'] = value
+			kwargs['value'] = value
+		for k,v in kwargs.items():
+			if k in self.pf.columns:
+				if self.pf.dtypes[k] == 'float64':
+					v = numpy.float64(v)
+				elif self.pf.dtypes[k] == 'float32':
+					v = numpy.float32(v)
+				elif self.pf.dtypes[k] == 'int8':
+					v = numpy.int8(v)
+				self.pf.loc[name, k] = v
+
+			# update init values when they are implied
+			if k=='value':
+				if 'initvalue' not in kwargs and pandas.isnull(self.pf.loc[name, 'initvalue']):
+					self.pf.loc[name, 'initvalue'] = l4_float_dtype(v)
+
+		# update null values when they are implied
+		if 'nullvalue' not in kwargs and pandas.isnull(self.pf.loc[name, 'nullvalue']):
+			self.pf.loc[name, 'nullvalue'] = 0
+
+		# refresh everything # TODO: only refresh what changed
+		if self._k_membership.dataframes is not None:
+			try:
+				self._k_membership.dataframes.read_in_model_parameters()
+			except AttributeError:
+				# the model may not have been ever unmangled yet
+				pass
+		for m in self._k_models.values():
+			try:
+				if m.dataframes is not None:
+					m.dataframes.read_in_model_parameters()
+			except AttributeError:
+				# the model may not have been ever unmangled yet
+				pass
+
 

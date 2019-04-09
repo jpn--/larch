@@ -413,10 +413,12 @@ cdef class Model5c:
 			kwargs['value'] = value
 		for k,v in kwargs.items():
 			if k in self.frame.columns:
-				if k == 'holdfast':
+				if self.frame.dtypes[k] == 'float64':
+					v = numpy.float64(v)
+				elif self.frame.dtypes[k] == 'float32':
+					v = numpy.float32(v)
+				elif self.frame.dtypes[k] == 'int8':
 					v = numpy.int8(v)
-				else:
-					v = l4_float_dtype(v)
 				self.frame.loc[name, k] = v
 
 			# update init values when they are implied
@@ -1490,17 +1492,24 @@ cdef class Model5c:
 		"""
 		try:
 			arr = self.loglike(x=x, persist=PERSIST_PROBABILITY, start_case=start_case, stop_case=stop_case, step_case=step_case, probability_only=True)
+			if return_dataframe:
+				idx = self._dataframes._data_co.index if self._dataframes._data_co is not None else None
+				if idx is not None:
+					if stop_case == -1:
+						stop_case = len(idx)
+					idx = idx[start_case:stop_case:step_case]
+
 			if return_dataframe == 'names':
 				return pandas.DataFrame(
 					data=arr,
 					columns=self._dataframes._alternative_names,
-					index=self._dataframes._data_co.index if self._dataframes._data_co is not None else None,
+					index=idx,
 				)
 			elif return_dataframe:
 				result = pandas.DataFrame(
 					data=arr,
 					columns=self._dataframes._alternative_codes,
-					index=self._dataframes._data_co.index if self._dataframes._data_co is not None else None,
+					index=idx,
 				)
 				if return_dataframe == 'idce':
 					return result.stack()[self._dataframes._data_av.stack().astype(bool).values]

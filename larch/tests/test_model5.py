@@ -4302,4 +4302,3 @@ def test_partial_compute():
 	assert ll_short2.dll_casewise.values == approx(ll2.dll_casewise.iloc[23:26].values)
 	assert ll_short2.dutility[:, :6, :] == approx(ll2.dutility[23:26])
 
-	
