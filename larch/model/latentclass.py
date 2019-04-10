@@ -79,9 +79,19 @@ class LatentClassModel:
 			self._k_membership.set_values(x)
 
 	def class_membership_probability(self, x=None, start_case=0, stop_case=-1, step_case=1):
+		self.__prep_for_compute(x)
 		return self._k_membership.probability(
-			x,
+			x=None,
 			return_dataframe='idco',
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+		)
+
+	def class_membership_d_probability(self, x=None, start_case=0, stop_case=-1, step_case=1):
+		self.__prep_for_compute(x)
+		return self._k_membership.d_probability(
+			x=None,
 			start_case=start_case,
 			stop_case=stop_case,
 			step_case=step_case,
@@ -126,6 +136,96 @@ class LatentClassModel:
 				columns=self._dataframes.alternative_codes(),
 			)
 		return p
+
+
+	def d_probability(self, x=None, start_case=0, stop_case=-1, step_case=1,):
+		"""
+		Compute the partial derivative of probability w.r.t. the parameters.
+
+		Note this function is known to be incomplete.  It computes the
+		derivative only within the classes, not for the class membership model.
+
+		Parameters
+		----------
+		x
+		start_case
+		stop_case
+		step_case
+		return_dataframe
+
+		Returns
+		-------
+
+		"""
+		self.__prep_for_compute(x)
+
+		if start_case >= self.dataframes.n_cases:
+			raise IndexError("start_case >= n_cases")
+
+		if stop_case == -1:
+			stop_case = self.dataframes.n_cases
+
+		if start_case > stop_case:
+			raise IndexError("start_case > stop_case")
+
+		if step_case <= 0:
+			raise IndexError("non-positive step_case")
+
+		n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+
+		p = numpy.zeros([n_rows, self.dataframes.n_alts, len(self.pf)])
+
+		import warnings
+		with warnings.catch_warnings():
+			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+			k_membership_probability = self.class_membership_probability(
+				start_case=start_case, stop_case=stop_case, step_case=step_case,
+			)
+			k_membership_d_probability = self.class_membership_d_probability(
+				start_case=start_case, stop_case=stop_case, step_case=step_case,
+			)
+			for k_name, k_model in self._k_models.items():
+				k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+				k_d_pr = k_model.d_probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+				p += (
+						numpy.asarray( k_d_pr[:,:self.dataframes.n_alts,:] )
+						* k_membership_probability.loc[:,k_name].values[:, None, None]
+				)
+				k_position = k_membership_probability.columns.get_loc(k_name)
+				p += (
+						numpy.asarray( k_pr[:,:self.dataframes.n_alts, None] )
+						* k_membership_d_probability[:,k_position,:][:,None,:]
+				)
+		return p
+
+	def d_loglike(
+			self,
+			x=None,
+			start_case=0,
+			stop_case=-1,
+			step_case=1,
+	):
+		self.__prep_for_compute(x)
+		pr = self.probability(x=None, start_case=start_case, stop_case=stop_case, step_case=step_case,)
+		d_p = self.d_probability(x=None, start_case=start_case, stop_case=stop_case, step_case=step_case,)
+		from .nl import d_loglike_from_d_probability
+
+		if stop_case == -1:
+			stop_case = self.dataframes.n_cases
+
+		if self.dataframes.data_wt is not None:
+			wt = self.dataframes.data_wt.iloc[start_case:stop_case:step_case]
+		else:
+			wt = None
+
+		d_LL = d_loglike_from_d_probability(
+			pr,
+			d_p,
+			self.dataframes.array_ch()[start_case:stop_case:step_case],
+			wt,
+			False
+		)
+		return d_LL
 
 	def loglike(
 			self,
@@ -299,4 +399,41 @@ class LatentClassModel:
 				# the model may not have been ever unmangled yet
 				pass
 
+	@property
+	def pvals(self):
+		self.unmangle()
+		return self.pf['value'].values.copy()
 
+	@property
+	def pnames(self):
+		self.unmangle()
+		return self.pf.index.values.copy()
+
+	def check_d_loglike(self, stylize=True, skip_zeros=False):
+		"""
+		Check that the analytic and finite-difference gradients are approximately equal.
+
+		Primarily used for debugging.
+
+		Parameters
+		----------
+		stylize : bool, default True
+			See :ref:`check_gradient` for details.
+		skip_zeros : bool, default False
+			See :ref:`check_gradient` for details.
+
+		Returns
+		-------
+		pandas.DataFrame or Stylized DataFrame
+		"""
+		from ..math.optimize import check_gradient
+		epsilon=numpy.sqrt(numpy.finfo(float).eps)
+		return check_gradient(
+			self.loglike,
+			self.d_loglike,
+			self.pvals.copy(),
+			names=self.pnames,
+			stylize=stylize,
+			skip_zeros=skip_zeros,
+			epsilon=epsilon,
+		)

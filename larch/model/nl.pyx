@@ -257,6 +257,67 @@ cdef int _nl_d_loglike_from_d_probability(
 	return flag # 0 on success, -1 on ZeroProbWhenChosen
 
 
+def d_loglike_from_d_probability(
+		l4_float_t[:,:]   probability,                # input  [n_nodes]
+		l4_float_t[:,:,:] d_probability,              # input  [n_nodes, n_params]
+		l4_float_t[:,:]   array_ch,                   # input/output  [n_nodes]
+		l4_float_t[:]     weight,                     # input scalar
+
+		bint            return_bhhh,
+):
+
+	cdef:
+		double ll_temp = 0
+		double ll = 0
+		int status = 0
+		int c = 0
+		int n_alts = probability.shape[1]
+		int n_params = d_probability.shape[2]
+		l4_float_t[:] d_LL_temp
+		l4_float_t[:] d_LL_cum
+		l4_float_t[:,:] bhhh_temp
+		l4_float_t[:,:] bhhh_cum
+		l4_float_t wt
+
+	try:
+		if probability.shape[0] != array_ch.shape[0] or probability.shape[1] != array_ch.shape[1]:
+			raise ValueError(f"probabilities.shape ~= choices.shape {probability.shape} != {array_ch.shape}")
+
+		d_LL_temp = numpy.zeros(n_params, dtype=l4_float_dtype)
+		d_LL_cum = numpy.zeros(n_params, dtype=l4_float_dtype)
+		if return_bhhh:
+			bhhh_cum = numpy.zeros([n_params, n_params], dtype=l4_float_dtype)
+		else:
+			bhhh_cum = numpy.zeros([1,1], dtype=l4_float_dtype)
+
+		for c in range(probability.shape[0]):
+
+			if weight is not None:
+				wt = weight[c]
+			else:
+				wt = 1.0
+
+			status = _nl_d_loglike_from_d_probability(
+					n_params,
+					n_alts,
+					probability[c],
+					d_probability[c],
+					d_LL_temp,
+					array_ch[c],
+					wt,
+					return_bhhh,
+					d_LL_cum,
+					bhhh_cum,
+					&d_LL_temp[0],
+			)
+
+		if return_bhhh:
+			return d_LL_cum.base, bhhh_cum.base
+		return d_LL_cum.base
+	except:
+		logger.exception('error in d_loglike_from_d_probability')
+		raise
+
 
 @cython.cdivision(True)
 @cython.boundscheck(False)

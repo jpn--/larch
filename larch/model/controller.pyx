@@ -922,7 +922,20 @@ cdef class Model5c:
 			)
 		return y
 
-	def loglike2(self, x=None, *, start_case=0, stop_case=-1, step_case=1, persist=0, leave_out=-1, keep_only=-1, subsample=-1, return_series=True):
+	def loglike2(
+			self,
+			x=None,
+			*,
+			start_case=0,
+			stop_case=-1,
+			step_case=1,
+			persist=0,
+			leave_out=-1,
+			keep_only=-1,
+			subsample=-1,
+			return_series=True,
+			probability_only=False,
+	):
 		"""
 		Compute a log likelihood value and it first derivative.
 
@@ -968,6 +981,7 @@ cdef class Model5c:
 			leave_out=leave_out,
 			keep_only=keep_only,
 			subsample=subsample,
+			probability_only=probability_only,
 		)
 		if start_case==0 and stop_case==-1 and step_case==1:
 			self.__check_if_best(y.ll)
@@ -1064,6 +1078,36 @@ cdef class Model5c:
 
 	def bhhh(self, x=None, *, return_series=False):
 		return self.loglike2_bhhh(x=x,return_series=return_series).bhhh
+
+	def d_probability(
+			self,
+			x=None,
+			start_case=0, stop_case=-1, step_case=1,
+			leave_out=-1, keep_only=-1, subsample=-1,
+	):
+		"""
+		Compute the partial derivative of probability w.r.t. the parameters.
+
+		Parameters
+		----------
+		x
+		start_case
+		stop_case
+		step_case
+		leave_out
+		keep_only
+		subsample
+
+		Returns
+		-------
+		ndarray
+		"""
+		return self.loglike2(
+			x=x,
+			start_case=start_case, stop_case=stop_case, step_case=step_case,
+			leave_out=leave_out, keep_only=keep_only, subsample=subsample,
+			persist=PERSIST_D_PROBABILITY,
+		).dprobability
 
 	def _bhhh_simple_direction(self, *args, **kwargs):
 		bhhh_inv = self._free_slots_inverse_matrix(self.bhhh(*args))
