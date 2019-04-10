@@ -38,6 +38,13 @@ class LatentClassModel:
 			raise ValueError(f'k_models must be a MutableMapping, not {type(k_models)}')
 		self._k_models = k_models
 		self._dataservice = dataservice
+		if self._dataservice is None:
+			self._dataservice = k_membership.dataservice
+		if self._dataservice is None:
+			for m in self._k_models.values():
+				self._dataservice = m.dataservice
+				if self._dataservice is not None:
+					break
 		self._dataframes = None
 		self._mangled = True
 
