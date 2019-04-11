@@ -4,11 +4,12 @@ import pandas
 from typing import MutableMapping
 
 from ..util import Dict
-from ..dataframes import DataFrames
+from ..dataframes import DataFrames, MissingDataError
 from ..model.controller import ParameterNotInModelWarning
 from .linear import ParameterRef_C
 from ..general_precision import l4_float_dtype
-
+from ..model import persist_flags
+from ..model.abstract_model import AbstractChoiceModel
 
 def sync_frames(*models):
 	"""
@@ -20,19 +21,27 @@ def sync_frames(*models):
 	"""
 	# check if all frames are already in sync
 	in_sync = True
-	pf1 = models[0].pf
+	pf1 = models[0]._frame
 	for m in models[1:]:
-		if m.pf is not pf1:
+		if m._frame is not pf1:
 			in_sync = False
 	if not in_sync:
-		joined = pandas.concat([m.pf for m in models])
+		joined = pandas.concat([m._frame for m in models])
 		joined = joined[~joined.index.duplicated(keep='first')]
 		for m in models:
 			m.set_frame(joined)
 
-class LatentClassModel:
+class LatentClassModel(AbstractChoiceModel):
 
-	def __init__(self, k_membership, k_models:MutableMapping, dataservice=None):
+	def __init__(
+			self,
+			k_membership,
+			k_models:MutableMapping,
+			*,
+			dataservice=None,
+			title=None,
+			frame=None,
+	):
 		self._k_membership = k_membership
 		if not isinstance(k_models, MutableMapping):
 			raise ValueError(f'k_models must be a MutableMapping, not {type(k_models)}')
@@ -48,13 +57,14 @@ class LatentClassModel:
 		self._dataframes = None
 		self._mangled = True
 
+		super().__init__(
+			parameters=None,
+			frame=frame,
+			title=title,
+		)
+
 	def _k_model_names(self):
 		return list(sorted(self._k_models.keys()))
-
-	@property
-	def pf(self):
-		self.unmangle()
-		return self._k_membership.pf
 
 	def required_data(self):
 		# combine all required_data from all class-level submodels
@@ -205,17 +215,68 @@ class LatentClassModel:
 				)
 		return p
 
-	def d_loglike(
+
+	def loglike2(
 			self,
 			x=None,
+			*,
 			start_case=0,
 			stop_case=-1,
 			step_case=1,
+			persist=0,
+			leave_out=-1,
+			keep_only=-1,
+			subsample=-1,
+			return_series=True,
+			probability_only=False,
 	):
+		"""
+		Compute a log likelihood value and it first derivative.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		start_case : int, default 0
+			The first case to include in the log likelihood computation.  To include all
+			cases, start from 0 (the default).
+		stop_case : int, default -1
+			One past the last case to include in the log likelihood computation.  This is processed as usual for
+			Python slicing and iterating, and negative values count backward from the end.  To include all cases,
+			end at -1 (the default).
+		step_case : int, default 1
+			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
+			Python slicing and iterating.  To include all cases, step by 1 (the default).
+		persist : int, default 0
+			Whether to return a variety of internal and intermediate arrays in the result dictionary.
+			If set to 0, only the final `ll` value is included.
+		leave_out, keep_only, subsample : int, optional
+			Settings for cross validation calculations.
+			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
+			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+		return_series : bool
+			Deprecated, no effect.  Derivatives are always returned as a Series.
+
+		Returns
+		-------
+		dictx
+			The log likelihood is given by key 'll' and the first derivative by key 'dll'.
+			Other arrays are also included if `persist` is set to True.
+
+		"""
 		self.__prep_for_compute(x)
-		pr = self.probability(x=None, start_case=start_case, stop_case=stop_case, step_case=step_case,)
-		d_p = self.d_probability(x=None, start_case=start_case, stop_case=stop_case, step_case=step_case,)
+		pr = self.probability(
+			x=None,
+			start_case=start_case, stop_case=stop_case, step_case=step_case,
+		)
+		d_p = self.d_probability(
+			x=None,
+			start_case=start_case, stop_case=stop_case, step_case=step_case,
+		)
+
 		from .nl import d_loglike_from_d_probability
+		from .mnl import loglike_from_probability
+		from ..util import dictx
 
 		if stop_case == -1:
 			stop_case = self.dataframes.n_cases
@@ -225,14 +286,96 @@ class LatentClassModel:
 		else:
 			wt = None
 
-		d_LL = d_loglike_from_d_probability(
+		ch = self.dataframes.array_ch()[start_case:stop_case:step_case]
+
+		y = dictx()
+		y.ll = loglike_from_probability(
 			pr,
-			d_p,
-			self.dataframes.array_ch()[start_case:stop_case:step_case],
-			wt,
-			False
+			ch,
+			wt
 		)
-		return d_LL
+
+		if persist & persist_flags.PERSIST_PROBABILITY:
+			y.probability = pr
+
+		if persist & persist_flags.PERSIST_BHHH:
+			y.dll, y.bhhh = d_loglike_from_d_probability(
+				pr,
+				d_p,
+				ch,
+				wt,
+				True
+			)
+		else:
+			y.dll = d_loglike_from_d_probability(
+				pr,
+				d_p,
+				ch,
+				wt,
+				False
+			)
+		return y
+
+	def loglike2_bhhh(
+			self,
+			x=None,
+			*,
+			start_case=0,
+			stop_case=-1,
+			step_case=1,
+			persist=0,
+			leave_out=-1,
+			keep_only=-1,
+			subsample=-1,
+	):
+		"""
+		Compute a log likelihood value, it first derivative, and the BHHH approximation of the Hessian.
+
+		The `BHHH algorithm <https://en.wikipedia.org/wiki/Berndt–Hall–Hall–Hausman_algorithm>`
+		employs a matrix computated as the sum of the casewise outer product of the gradient, to
+		approximate the hessian matrix.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		start_case : int, default 0
+			The first case to include in the log likelihood computation.  To include all
+			cases, start from 0 (the default).
+		stop_case : int, default -1
+			One past the last case to include in the log likelihood computation.  This is processed as usual for
+			Python slicing and iterating, and negative values count backward from the end.  To include all cases,
+			end at -1 (the default).
+		step_case : int, default 1
+			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
+			Python slicing and iterating.  To include all cases, step by 1 (the default).
+		persist : int, default False
+			Whether to return a variety of internal and intermediate arrays in the result dictionary.
+			If set to 0, only the final `ll` value is included.
+		leave_out, keep_only, subsample : int, optional
+			Settings for cross validation calculations.
+			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
+			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+
+		Returns
+		-------
+		dictx
+			The log likelihood is given by key 'll', the first derivative by key 'dll', and the BHHH matrix by 'bhhh'.
+			Other arrays are also included if `persist` is set to True.
+
+		"""
+		return self.loglike2(
+			x=x,
+			start_case=start_case,
+			stop_case=stop_case,
+			step_case=step_case,
+			persist=persist | persist_flags.PERSIST_BHHH,
+			leave_out=leave_out,
+			keep_only=keep_only,
+			subsample=subsample,
+			return_series=True,
+			probability_only=False,
+		)
 
 	def loglike(
 			self,
@@ -273,9 +416,10 @@ class LatentClassModel:
 
 		Returns
 		-------
-		Dict or float or array
-			The log likelihood or the probability.  Other arrays are also included if `persist` is set to True.
-
+		float or array or dictx
+			The log likelihood as a float, when `probability_only` is False and `persist` is 0.
+			The probability as an array, when `probability_only` is True and `persist` is 0.
+			A dictx is returned if `persist` is non-zero.
 		"""
 		self.__prep_for_compute(x)
 		pr = self.probability(
@@ -297,13 +441,19 @@ class LatentClassModel:
 		else:
 			wt = None
 
-		ll = loglike_from_probability(
+		from ..util import dictx
+		y = dictx()
+		y.ll = loglike_from_probability(
 			pr,
 			self.dataframes.array_ch()[start_case:stop_case:step_case],
 			wt
 		)
 
-		return ll
+		if persist & persist_flags.PERSIST_PROBABILITY:
+			y.probability = pr
+		if persist:
+			return y
+		return y.ll
 
 
 
@@ -334,18 +484,18 @@ class LatentClassModel:
 			)
 
 	def mangle(self, *args, **kwargs):
-		#self.clear_best_loglike()
-		self._mangled = True
 		self._k_membership.mangle()
 		for m in self._k_models.values():
 			m.mangle()
+		super().mangle(*args, **kwargs)
 
 	def unmangle(self, force=False):
+		super().unmangle(force=force)
 		if self._mangled or force:
 			self._k_membership.unmangle(force=force)
 			for m in self._k_models.values():
 				m.unmangle(force=force)
-			sync_frames(self._k_membership, *self._k_models.values())
+			sync_frames(self, self._k_membership, *self._k_models.values())
 			self._k_membership.unmangle()
 			for m in self._k_models.values():
 				m.unmangle()
@@ -392,55 +542,20 @@ class LatentClassModel:
 			self.pf.loc[name, 'nullvalue'] = 0
 
 		# refresh everything # TODO: only refresh what changed
-		if self._k_membership.dataframes is not None:
-			try:
-				self._k_membership.dataframes.read_in_model_parameters()
-			except AttributeError:
-				# the model may not have been ever unmangled yet
-				pass
+		self._k_membership._check_if_frame_values_changed()
 		for m in self._k_models.values():
-			try:
-				if m.dataframes is not None:
-					m.dataframes.read_in_model_parameters()
-			except AttributeError:
-				# the model may not have been ever unmangled yet
-				pass
+			m._check_if_frame_values_changed()
+
+	def _frame_values_have_changed(self):
+		self._k_membership._frame_values_have_changed()
+		for m in self._k_models.values():
+			m._frame_values_have_changed()
 
 	@property
-	def pvals(self):
-		self.unmangle()
-		return self.pf['value'].values.copy()
+	def n_cases(self):
+		"""int : The number of cases in the attached dataframes."""
+		if self._dataframes is None:
+			raise MissingDataError("no dataframes are set")
+		return self._k_membership.n_cases
 
-	@property
-	def pnames(self):
-		self.unmangle()
-		return self.pf.index.values.copy()
 
-	def check_d_loglike(self, stylize=True, skip_zeros=False):
-		"""
-		Check that the analytic and finite-difference gradients are approximately equal.
-
-		Primarily used for debugging.
-
-		Parameters
-		----------
-		stylize : bool, default True
-			See :ref:`check_gradient` for details.
-		skip_zeros : bool, default False
-			See :ref:`check_gradient` for details.
-
-		Returns
-		-------
-		pandas.DataFrame or Stylized DataFrame
-		"""
-		from ..math.optimize import check_gradient
-		epsilon=numpy.sqrt(numpy.finfo(float).eps)
-		return check_gradient(
-			self.loglike,
-			self.d_loglike,
-			self.pvals.copy(),
-			names=self.pnames,
-			stylize=stylize,
-			skip_zeros=skip_zeros,
-			epsilon=epsilon,
-		)
