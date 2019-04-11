@@ -56,7 +56,6 @@ cdef class ParameterFrame:
 			self, *,
 			parameters=None,
 			frame=None,
-			rename_parameters=None,
 			title=None,
 	):
 		self._title = title
@@ -88,8 +87,15 @@ cdef class ParameterFrame:
 	def _frame_values_have_changed(self):
 		raise NotImplementedError("abstract base class, use a derived class instead")
 
+	def _ensure_names(self, names, **kwargs):
+		existing_names = set(self._frame.index)
+		nameset = set(names)
+		missing_names = nameset - existing_names
+		if missing_names:
+			self._frame = self._frame.append(_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs), verify_integrity=True)
+
 	def _scan_all_ensure_names(self):
-		self.frame.sort_index(inplace=True)
+		self._frame.sort_index(inplace=True)
 
 	@property
 	def title(self):
@@ -500,4 +506,15 @@ cdef class ParameterFrame:
 		f.index = ix
 		return f
 
+	@property
+	def hessian_matrix(self):
+		return self._matrixes.get('hessian_matrix', None)
+
+	@property
+	def covariance_matrix(self):
+		return self._matrixes.get('covariance_matrix', None)
+
+	@property
+	def robust_covariance_matrix(self):
+		return self._matrixes.get('robust_covariance_matrix', None)
 

@@ -1,8 +1,6 @@
 # cython: language_level=3, embedsignature=True
 
 from ..general_precision cimport *
-from ..dataframes cimport DataFrames
-from .linear cimport LinearFunction_C, DictOfLinearFunction_C
 
 cdef class ParameterFrame:
 

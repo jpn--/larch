@@ -102,7 +102,7 @@ class Model(_Model5c):
 
 	def set_params(self, **kwargs):
 		if 'frame' in kwargs and kwargs['frame'] is not None:
-			self.frame = kwargs['frame']
+			self._frame = kwargs['frame']
 
 		self.utility_ca = kwargs.get('utility_ca', None)
 		self.utility_co = kwargs.get('utility_co', None)

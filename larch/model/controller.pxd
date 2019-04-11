@@ -3,8 +3,11 @@
 from ..general_precision cimport *
 from ..dataframes cimport DataFrames
 from .linear cimport LinearFunction_C, DictOfLinearFunction_C
+from .parameter_frame cimport ParameterFrame
 
-cdef class Model5c:
+
+
+cdef class Model5c(ParameterFrame):
 
 	cdef public:
 		DictOfLinearFunction_C _utility_co
@@ -26,27 +29,16 @@ cdef class Model5c:
 		str    _availability_var
 		object _availability_co_vars
 
-		bint _mangled
 		bint _is_clone
-
-		object frame  # pandas.DataFrame
 
 		object _graph
 
-		object _display_order
-		object _display_order_tail
 		object _possible_overspecification
 
 		object _most_recent_estimation_result
 		double _cached_loglike_null
 		double _cached_loglike_constants_only
 		double _cached_loglike_best
-
-		unicode _title
-
-		object hessian_matrix
-		object covariance_matrix
-		object robust_covariance_matrix
 
 		int _n_threads
 

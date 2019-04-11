@@ -94,6 +94,7 @@ class _ParameterOp():
 		raise NotImplementedError(f"{_what_is(other)} / {_what_is(self)}")
 
 
+ParameterOp = _ParameterOp
 
 class _ParameterUnaryOp(_ParameterOp):
 	_op = '??'

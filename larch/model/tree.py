@@ -502,7 +502,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			for parent in self.predecessor_slots(childcode):
 				alpha[parent, child] = 1
 			pname = self.nodes[childcode].get('parameter', None)
-			mu[child] = model.get_value_x(pname, 1.0)
+			mu[child] = model.get_value(pname, default=1.0)
 			muslots[child] = model.get_slot_x(pname, True)
 
 		s = self.n_edges

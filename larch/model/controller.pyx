@@ -22,35 +22,8 @@ from ..roles import DictOfStrings
 from .linear cimport ParameterRef_C as ParameterRef
 from .linear cimport DataRef_C as DataRef
 
-def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
-
-	cdef int len_names = 0 if names is None else len(names)
-
-	min_ = min if min is not None else -numpy.inf
-	max_ = max if max is not None else numpy.inf
-
-	data=dict(
-			value = numpy.full(len_names, fill_value=initvalue, dtype=l4_float_dtype),
-			minimum = numpy.full(len_names, fill_value=min_, dtype=l4_float_dtype),
-			maximum = numpy.full(len_names, fill_value=max_, dtype=l4_float_dtype),
-			nullvalue = numpy.full(len_names, fill_value=nullvalue, dtype=l4_float_dtype),
-			initvalue = numpy.full(len_names, fill_value=initvalue, dtype=l4_float_dtype),
-			holdfast = numpy.zeros(len_names, dtype=numpy.int8),
-			note = numpy.zeros(len_names, dtype='<U128')
-		)
-	ix = names if names is not None else []
-	columns=['value', 'initvalue', 'nullvalue', 'minimum', 'maximum', 'holdfast', 'note']
-	try:
-		r = pandas.DataFrame(
-			index=ix,
-			data=data,
-			columns=columns
-		)
-	except Exception as err:
-		print(err, file=sys.stderr)
-		raise
-
-	return r.copy()
+from .parameter_frame import _empty_parameter_frame, ParameterFrame
+from .parameter_frame cimport ParameterFrame
 
 class MissingDataError(ValueError):
 	pass
@@ -59,7 +32,7 @@ class ParameterNotInModelWarning(UserWarning):
 	pass
 
 
-cdef class Model5c:
+cdef class Model5c(ParameterFrame):
 
 	def __init__(
 			self, *,
@@ -75,6 +48,7 @@ cdef class Model5c:
 			frame=None,
 			n_threads=-1,
 			is_clone=False,
+			title=None,
 	):
 		self._dataframes = None
 
@@ -103,11 +77,11 @@ cdef class Model5c:
 
 		self._dataservice = dataservice
 
-		if frame is not None:
-			self.frame = frame
-		else:
-			fr = _empty_parameter_frame(parameters or [])
-			self.frame = fr
+		super().__init__(
+			parameters=parameters,
+			frame=frame,
+			title=title,
+		)
 
 		self._graph = graph
 
@@ -130,7 +104,7 @@ cdef class Model5c:
 		state["_weight_co_var                 ".strip()] = (self._weight_co_var                 )
 		state["_availability_var              ".strip()] = (self._availability_var              )
 		state["_availability_co_vars          ".strip()] = (self._availability_co_vars          )
-		state["frame                          ".strip()] = (self.frame                          )
+		state["_frame                         ".strip()] = (self._frame                         )
 		state["_graph                         ".strip()] = (self._graph                         )
 		state["_display_order                 ".strip()] = (self._display_order                 )
 		state["_display_order_tail            ".strip()] = (self._display_order_tail            )
@@ -140,9 +114,7 @@ cdef class Model5c:
 		state["_cached_loglike_constants_only ".strip()] = (self._cached_loglike_constants_only )
 		state["_cached_loglike_best           ".strip()] = (self._cached_loglike_best           )
 		state["_title                         ".strip()] = (self._title                         )
-		state["hessian_matrix                 ".strip()] = (self.hessian_matrix                 )
-		state["covariance_matrix              ".strip()] = (self.covariance_matrix              )
-		state["robust_covariance_matrix       ".strip()] = (self.robust_covariance_matrix       )
+		state["_matrixes                      ".strip()] = (self._matrixes                      )
 
 		state = cloudpickle.dumps(state)
 		state = gzip.compress(state)
@@ -172,7 +144,7 @@ cdef class Model5c:
 		(self._weight_co_var                 ) = state["_weight_co_var                 ".strip()]
 		(self._availability_var              ) = state["_availability_var              ".strip()]
 		(self._availability_co_vars          ) = state["_availability_co_vars          ".strip()]
-		(self.frame                          ) = state["frame                          ".strip()]
+		(self._frame                         ) = state["_frame                         ".strip()]
 		(self._graph                         ) = state["_graph                         ".strip()]
 		(self._display_order                 ) = state["_display_order                 ".strip()]
 		(self._display_order_tail            ) = state["_display_order_tail            ".strip()]
@@ -182,24 +154,11 @@ cdef class Model5c:
 		(self._cached_loglike_constants_only ) = state["_cached_loglike_constants_only ".strip()]
 		(self._cached_loglike_best           ) = state["_cached_loglike_best           ".strip()]
 		(self._title                         ) = state["_title                         ".strip()]
-		(self.hessian_matrix                 ) = state["hessian_matrix                 ".strip()]
-		(self.covariance_matrix              ) = state["covariance_matrix              ".strip()]
-		(self.robust_covariance_matrix       ) = state["robust_covariance_matrix       ".strip()]
+		(self._matrixes                      ) = state["_matrixes                      ".strip()]
 
 		self.unmangle(True)
 
 
-
-	@property
-	def title(self):
-		if self._title is None:
-			return "Untitled"
-		else:
-			return self._title
-
-	@title.setter
-	def title(self, value):
-		self._title = str(value)
 
 	@property
 	def n_threads(self):
@@ -215,8 +174,7 @@ cdef class Model5c:
 
 	def mangle(self, *args, **kwargs):
 		self.clear_best_loglike()
-		self._mangled = True
-		#self._clear_cached_values()
+		super().mangle()
 
 	def unmangle(self, force=False):
 		if self._mangled or force:
@@ -226,13 +184,21 @@ cdef class Model5c:
 				self._refresh_derived_arrays()
 			self._mangled = False
 
+	def _frame_values_have_changed(self):
+		# refresh everything # TODO: only refresh what changed
+		try:
+			if self._dataframes is not None:
+				self._dataframes._read_in_model_parameters()
+		except AttributeError:
+			# the model may not have been ever unmangled yet
+			pass
 
 
 	def _scan_all_ensure_names(self):
 		self._scan_utility_ensure_names()
 		self._scan_quantity_ensure_names()
 		self._scan_logsums_ensure_names()
-		self.frame.sort_index(inplace=True)
+		super()._scan_all_ensure_names()
 
 	def _scan_utility_ensure_names(self):
 		"""
@@ -304,386 +270,7 @@ cdef class Model5c:
 
 		self._ensure_names(nameset, nullvalue=1, initvalue=1, min=0.001, max=1)
 
-	def _ensure_names(self, names, **kwargs):
-		existing_names = set(self.frame.index)
-		nameset = set(names)
-		missing_names = nameset - existing_names
-		if missing_names:
-			self.frame = self.frame.append(_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs), verify_integrity=True)
 
-	@property
-	def pf(self):
-		self.unmangle()
-		return self.frame
-
-	def set_frame(self, frame):
-		"""
-		Assign a new parameter frame.
-
-		If the frame to be set evaluates as equal to the existing
-		frame, this method will not change the existing frame and will not
-		trigger a `mangle`.
-
-		Parameters
-		----------
-		frame : pandas.DataFrame
-		"""
-		if not isinstance(frame, pandas.DataFrame):
-			raise ValueError(f'frame must be pandas.DataFrame, not {type(frame)}')
-		if not self.frame.equals(frame):
-			self.frame = frame
-			self.mangle()
-
-	def pf_sort(self):
-		self.unmangle()
-		self.frame.sort_index(inplace=True)
-		self.mangle()
-		self.unmangle()
-		return self.frame
-
-	@property
-	def pvals(self):
-		self.unmangle()
-		return self.frame['value'].values.copy()
-
-	@property
-	def pbounds(self):
-		self.unmangle()
-		from scipy.optimize import Bounds
-		return Bounds(
-			self.frame['minimum'].values.copy(),
-			self.frame['maximum'].values.copy(),
-		)
-
-	@property
-	def pnames(self):
-		self.unmangle()
-		return self.frame.index.values.copy()
-
-	def pvalue(self, parameter_name, apply_formatting=False, default_value=None):
-		"""
-		Get the value of a parameter or a parameter expression.
-
-		Parameters
-		----------
-		parameter_name : str or ParameterRef
-		apply_formatting : bool
-
-		Returns
-		-------
-
-		"""
-		from ..roles import _param_math_binaryop
-		from .linear import ParameterRef_C
-		from .linear_math import _ParameterOp
-		from numbers import Number
-		try:
-			if isinstance(parameter_name, _param_math_binaryop):
-				if apply_formatting:
-					return parameter_name.strf(self)
-				else:
-					return parameter_name.value(self)
-			elif isinstance(parameter_name, dict):
-				result = type(parameter_name)()
-				for k,v in parameter_name.items():
-					result[k] = self.pvalue(v, apply_formatting=apply_formatting)
-				return result
-			elif isinstance(parameter_name, (set, tuple, list)):
-				result = dict()
-				for k in parameter_name:
-					result[k] = self.pvalue(k) #? apply_formatting=apply_formatting ?
-				return result
-			elif isinstance(parameter_name, Number):
-				return parameter_name
-			else:
-				return self.pf.loc[self.__p_rename(parameter_name),'value']
-		except KeyError:
-			if default_value is not None:
-				return default_value
-			raise
-
-	def set_value(self, name, value=None, **kwargs):
-		if isinstance(name, ParameterRef):
-			name = str(name)
-		if name not in self.frame.index:
-			self.unmangle()
-		if value is not None:
-			# value = numpy.float64(value)
-			# self.frame.loc[name,'value'] = value
-			kwargs['value'] = value
-		for k,v in kwargs.items():
-			if k in self.frame.columns:
-				if self.frame.dtypes[k] == 'float64':
-					v = numpy.float64(v)
-				elif self.frame.dtypes[k] == 'float32':
-					v = numpy.float32(v)
-				elif self.frame.dtypes[k] == 'int8':
-					v = numpy.int8(v)
-				self.frame.loc[name, k] = v
-
-			# update init values when they are implied
-			if k=='value':
-				if 'initvalue' not in kwargs and pandas.isnull(self.frame.loc[name, 'initvalue']):
-					self.frame.loc[name, 'initvalue'] = l4_float_dtype(v)
-
-		# update null values when they are implied
-		if 'nullvalue' not in kwargs and pandas.isnull(self.frame.loc[name, 'nullvalue']):
-			self.frame.loc[name, 'nullvalue'] = 0
-
-		# refresh everything # TODO: only refresh what changed
-		try:
-			if self._dataframes is not None:
-				self._dataframes._read_in_model_parameters()
-		except AttributeError:
-			# the model may not have been ever unmangled yet
-			pass
-
-	def lock_value(self, name, value, note=None):
-		if isinstance(name, ParameterRef):
-			name = str(name)
-		if value is 'null':
-			value = self.pf.loc[name, 'nullvalue']
-		self.set_value(name, value, holdfast=1, initvalue=value, nullvalue=value, minimum=value, maximum=value)
-		if note is not None:
-			self.frame.loc[name, 'note'] = note
-
-	def lock_values(self, *names, note=None, **kwargs):
-		"""Set a fixed value for one or more model parameters.
-
-		Positional arguments give the names of parameters to fix at the current value.
-		Keyword arguments name the parameter and give a value to set as fixed.
-
-		Other Parameters
-		----------------
-		note : str, optional
-			Add a note to all parameters fixed with this comment.  The same note is added to
-			all the parameters.
-		"""
-		for name in names:
-			value = self.get_value(name)
-			self.lock_value(name, value, note=note)
-		for name, value in kwargs.items():
-			self.lock_value(name, value, note=note)
-
-	def get_value(self, name):
-		if isinstance(name, ParameterRef):
-			return name.value(self)
-		return self.frame.loc[name,'value']
-
-	def get_value_x(self, name, default):
-		if name is None:
-			return default
-		try:
-			return self.frame.loc[name,'value']
-		except KeyError:
-			return default
-
-	def get_holdfast_x(self, name, default):
-		if name is None:
-			return default
-		try:
-			return self.frame.loc[name,'holdfast']
-		except KeyError:
-			return default
-
-
-	def get_slot_x(self, name, holdfast_invalidates=False):
-		"""Get the position of a named parameter within the parameters index.
-
-		Parameters
-		----------
-		name : str
-			Name of parameter to find.
-		holdfast_invalidates : bool, default False
-			If the parameter is holdfast, return -1 (as if there is no parameter).
-
-		Returns
-		-------
-		int
-			Position of parameter, or -1 if it is not found.
-		"""
-		if name is None:
-			return -1
-		try:
-			result = self.frame.index.get_loc(name)
-		except KeyError:
-			return -1
-		if holdfast_invalidates:
-			if self.frame.loc[name,'holdfast']:
-				return -1
-		return result
-
-	def __getitem__(self, name):
-		try:
-			return self.frame.loc[name,:]
-		except:
-			logger.exception("error in Model5c.__getitem__")
-			raise
-
-	def set_values(self, values=None, **kwargs):
-		"""
-		Set the parameter values.
-
-		Parameters
-		----------
-		values : {'null', 'init', 'best', array-like, dict, scalar}, optional
-			New values to set for the parameters.
-			If 'null' or 'init', the current values are set equal to the null or initial values given in
-			the 'nullvalue' or 'initvalue' column of the parameter frame, respectively.
-			If 'best', the current values are set equal to the values given in the 'best' column of the
-			parameter frame, if that columns exists, otherwise a ValueError exception is raised.
-			If given as array-like, the array must be a vector with length equal to the length of the
-			parameter frame, and the given vector will replace the current values.  If given as a dictionary,
-			the dictionary is used to update `kwargs` before they are processed.
-		kwargs : dict
-			Any keyword arguments (or if `values` is a dictionary) are used to update the included named parameters
-			only.  A warning will be given if any key of the dictionary is not found among the existing named
-			parameters in the parameter frame, and the value associated with that key is ignored.  Any parameters
-			not named by key in this dictionary are not changed.
-
-		Notes
-		-----
-		Setting parameters both in the `values` argument and through keyword assignment is not explicitly disallowed,
-		although it is not recommended and may be disallowed in the future.
-
-		Raises
-		------
-		ValueError
-			If setting to 'best' but there is no 'best' column in the `pf` parameters DataFrame.
-		"""
-
-		if isinstance(values, str):
-			if values.lower() == 'null':
-				values = self.frame.loc[:,'nullvalue'].values
-			elif values.lower() == 'init':
-				values = self.frame.loc[:,'initvalue'].values
-			elif values.lower() == 'initial':
-				values = self.frame.loc[:, 'initvalue'].values
-			elif values.lower() == 'best':
-				if 'best' not in self.frame.columns:
-					raise ValueError('best is not stored')
-				else:
-					values = self.frame.loc[:, 'best'].values
-		if isinstance(values, dict):
-			kwargs.update(values)
-			values = None
-		if values is not None:
-			if not isinstance(values, (int,float)):
-				if len(values) != len(self.frame):
-					raise ValueError(f'gave {len(values)} values, needs to be exactly {len(self.frame)} values')
-			# only change parameters that are not holdfast
-			free_parameters= self.frame['holdfast'].values == 0
-			if isinstance(values, (int,float)):
-				self.frame.loc[free_parameters, 'value'] = l4_float_dtype(values)
-			else:
-				self.frame.loc[free_parameters, 'value'] = numpy.asanyarray(values)[free_parameters]
-		if len(kwargs):
-			if self._mangled:
-				self._scan_all_ensure_names()
-			for k,v in kwargs.items():
-				if k in self.frame.index:
-					if self.frame.loc[k,'holdfast'] == 0:
-						self.frame.loc[k, 'value'] = v
-				else:
-					import warnings
-					warnings.warn(f'{k} not in model', category=ParameterNotInModelWarning)
-		# refresh everything # TODO: only refresh what changed
-		try:
-			if self._dataframes is not None:
-				self._dataframes._read_in_model_parameters()
-			#_refresh_derived_arrays()
-		except AttributeError:
-			# the model may not have been ever unmangled yet
-			pass
-
-	def get_values(self):
-		return self.pf.loc[:,'value'].copy()
-
-	def shift_values(self, shifts):
-		self.set_values(self.pvals + shifts)
-		return self
-
-	def update_values(self, values):
-		self.set_values(values)
-		return self
-
-
-	# @property
-	# def utility_ca(self):
-	# 	"""
-	# 	A LinearFunction that represents the qualitative portion of
-	# 	utility for attributes that vary by alternative.
-	# 	"""
-	# 	if self._is_clone:
-	# 		return self._utility_ca
-	# 	return LinearFunction(touch_callback=self.mangle) + self._utility_ca
-	#
-	# @utility_ca.setter
-	# def utility_ca(self, value):
-	# 	if self._is_clone:
-	# 		raise PermissionError('cannot edit utility_ca when is_clone is True')
-	# 	if isinstance(value, (LinearComponent, ParameterRef)):
-	# 		value = LinearFunction() + value
-	# 	elif value is None or value == 0:
-	# 		value = LinearFunction()
-	# 	if not isinstance(value, LinearFunction):
-	# 		raise TypeError('needs LinearFunction')
-	# 	self._utility_ca = value
-	# 	self._utility_ca.set_touch_callback(self.mangle)
-	# 	self.mangle()
-	#
-	# @utility_ca.deleter
-	# def utility_ca(self):
-	# 	if self._is_clone:
-	# 		raise PermissionError('cannot edit utility_ca when is_clone is True')
-	# 	self._utility_ca = LinearFunction()
-	# 	self._utility_ca.set_touch_callback(self.mangle)
-	# 	self.mangle()
-
-	# @property
-	# def utility_co(self):
-	# 	"""
-	# 	A DictOfLinearFunction that represents the qualitative portion of
-	# 	utility for attributes that vary by decision maker but not by alternative.
-	# 	"""
-	# 	return self._utility_co
-	#
-	# @utility_co.setter
-	# def utility_co(self, value):
-	# 	if self._is_clone:
-	# 		raise PermissionError('cannot edit utility_co when is_clone is True')
-	# 	if not isinstance(value, (dict, DictOfLinearFunction)):
-	# 		raise TypeError('needs [dict] of {key:LinearFunction}')
-	# 	value = value.copy()
-	# 	for k in value.keys():
-	# 		if isinstance(value[k], (LinearComponent, ParameterRef)):
-	# 			value[k] = LinearFunction() + value[k]
-	# 		if not isinstance(value[k], LinearFunction):
-	# 			raise TypeError('needs dict of {key:[LinearFunction]}')
-	# 	self._utility_co = DictOfLinearFunction(value, touch_callback=self.mangle)
-
-
-	# @property
-	# def quantity_ca(self):
-	# 	"""
-	# 	A LinearFunction that represents the quantitative portion of
-	# 	utility for attributes that vary by alternative.
-	# 	"""
-	# 	if self._is_clone:
-	# 		return self._quantity_ca
-	# 	return LinearFunction(touch_callback=self.mangle) + self._quantity_ca
-	#
-	# @quantity_ca.setter
-	# def quantity_ca(self, value):
-	# 	if self._is_clone:
-	# 		raise PermissionError('cannot edit quantity_ca when is_clone is True')
-	# 	if isinstance(value, (LinearComponent, ParameterRef)):
-	# 		value = LinearFunction() + value
-	# 	if not isinstance(value, LinearFunction):
-	# 		raise TypeError('needs LinearFunction')
-	# 	self._quantity_ca = value
-	# 	self._quantity_ca.set_touch_callback(self.mangle)
-	# 	self.mangle()
 
 	@property
 	def quantity_scale(self):
@@ -1060,9 +647,9 @@ cdef class Model5c:
 		if start_case==0 and stop_case==-1 and step_case==1:
 			self.__check_if_best(y.ll)
 		if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
-			y['dll'] = pandas.Series(y['dll'], index=self.frame.index, )
+			y['dll'] = pandas.Series(y['dll'], index=self._frame.index, )
 		if return_series and 'bhhh' in y and not isinstance(y['bhhh'], pandas.DataFrame):
-			y['bhhh'] = pandas.DataFrame(y['bhhh'], index=self.frame.index, columns=self.frame.index)
+			y['bhhh'] = pandas.DataFrame(y['bhhh'], index=self._frame.index, columns=self._frame.index)
 		return y
 
 	def _loglike2_bhhh_tuple(self, *args, **kwargs):
@@ -1310,11 +897,11 @@ cdef class Model5c:
 	def __check_if_best(self, computed_ll):
 		if computed_ll > self._cached_loglike_best:
 			self._cached_loglike_best = computed_ll
-			self.frame['best'] = self.frame['value']
+			self._frame['best'] = self._frame['value']
 
 	def clear_best_loglike(self):
-		if self.frame is not None and 'best' in self.frame.columns:
-			del self.frame['best']
+		if self._frame is not None and 'best' in self._frame.columns:
+			del self._frame['best']
 		self._cached_loglike_best = -numpy.inf
 
 	def loglike(
@@ -1696,7 +1283,7 @@ cdef class Model5c:
 			from ..model import Model
 			if type(self) == Model:
 				self.unmangle()
-				self.frame.sort_index(inplace=True)
+				self._frame.sort_index(inplace=True)
 				self.unmangle(True)
 
 		if options is None:
@@ -1843,7 +1430,7 @@ cdef class Model5c:
 		for fold in range(cv):
 			i = self.maximize_loglike(leave_out=fold, subsample=cv, quiet=True, *args, **kwargs)
 			ll_cv += self.loglike(keep_only=fold, subsample=cv)
-			self.frame[f'cv_{fold:03d}'] = self.frame['value']
+			self._frame[f'cv_{fold:03d}'] = self._frame['value']
 		return ll_cv
 
 	def noop(self):
@@ -2025,63 +1612,14 @@ cdef class Model5c:
 		self.pf['robust t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust std err']
 
 		if preserve_hessian:
-			self.hessian_matrix = hess
+			self._matrixes['hessian_matrix'] = hess
 
-		self.covariance_matrix = covariance_matrix
-		self.robust_covariance_matrix = robust_covariance_matrix
+		self._matrixes['covariance_matrix'] = covariance_matrix
+		self._matrixes['robust_covariance_matrix'] = robust_covariance_matrix
 
 	@property
 	def possible_overspecification(self):
 		return self._possible_overspecification
-
-	@property
-	def ordering(self):
-		disp_order = self._display_order if self._display_order is not None else ()
-		return disp_order + self.ordering_tail
-
-	@ordering.setter
-	def ordering(self, x):
-		tail = set(self.ordering_tail)
-		self._display_order = tuple(y for y in x if y not in tail)
-
-	@property
-	def ordering_tail(self):
-		return self._display_order_tail if self._display_order_tail is not None else ()
-
-	@ordering_tail.setter
-	def ordering_tail(self, x):
-		self._display_order_tail = tuple(x)
-
-	def pfo(self):
-		if self.ordering is None:
-			return self.pf
-		paramset = set(self.pf.index)
-		out = []
-		import re
-		if self.ordering:
-			for category in self.ordering:
-				category_name = category[0]
-				category_params = []
-				for category_pattern in category[1:]:
-					category_params.extend(sorted(i for i in paramset if re.match(category_pattern, i) is not None))
-					paramset -= set(category_params)
-				out.append( [category_name, category_params] )
-		if len(paramset):
-			out.append( ['Other', sorted(paramset)] )
-
-		tuples = []
-		for c,pp in out:
-			for p in pp:
-				tuples.append((c,p))
-
-		ix = pandas.MultiIndex.from_tuples(tuples, names=['Category','Parameter'])
-
-		f = self.pf
-		f = f.reindex(ix.get_level_values(1))
-		f.index = ix
-		return f
-
-
 
 
 	@property

@@ -1339,8 +1339,8 @@ cdef class DataFrames:
 
 		try:
 			self._model = model
-			self._n_model_params = len(model.frame)
-			self._model_param_names = model.frame.index
+			self._n_model_params = len(model._frame)
+			self._model_param_names = model._frame.index
 
 			#self.du = _initialize_or_validate_shape(du, [self_.n_alts, len(model.pf)], dtype=l4_float_dtype)
 			self.check_data_is_sufficient_for_model(model)
@@ -1352,10 +1352,10 @@ cdef class DataFrames:
 				self.model_quantity_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				for n,i in enumerate(model._quantity_ca):
-					self.model_quantity_ca_param[n] = model.frame.index.get_loc(str(i.param))
+					self.model_quantity_ca_param[n] = model._frame.index.get_loc(str(i.param))
 					self.model_quantity_ca_data [n] = self.data_ca.columns.get_loc(str(i.data))
 				if model._quantity_scale is not None:
-					self.model_quantity_scale_param = model.frame.index.get_loc(str(model._quantity_scale))
+					self.model_quantity_scale_param = model._frame.index.get_loc(str(model._quantity_scale))
 				else:
 					self.model_quantity_scale_param = -1
 			else:
@@ -1373,7 +1373,7 @@ cdef class DataFrames:
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				for n,i in enumerate(model._utility_ca):
-					self.model_utility_ca_param[n] = model.frame.index.get_loc(str(i.param))
+					self.model_utility_ca_param[n] = model._frame.index.get_loc(str(i.param))
 					self.model_utility_ca_data [n] = self._data_ca_or_ce.columns.get_loc(str(i.data))
 			else:
 				len_model_utility_ca = 0
@@ -1395,7 +1395,7 @@ cdef class DataFrames:
 					altindex = self._alternative_codes.get_loc(alt)
 					for i in func:
 						self.model_utility_co_alt  [j] = altindex
-						self.model_utility_co_param[j] = model.frame.index.get_loc(str(i.param))
+						self.model_utility_co_param[j] = model._frame.index.get_loc(str(i.param))
 						if i.data == '1':
 							self.model_utility_co_data [j] = -1
 						else:
@@ -1463,8 +1463,8 @@ cdef class DataFrames:
 			l4_float_t[:] pvalues
 
 		try:
-			pvalues = self._model.frame['value'].values.astype(l4_float_dtype)
-			hvalues = self._model.frame['holdfast'].values.astype(numpy.int8)
+			pvalues = self._model._frame['value'].values.astype(l4_float_dtype)
+			hvalues = self._model._frame['holdfast'].values.astype(numpy.int8)
 
 			for n in range(self.model_quantity_ca_param_value.shape[0]):
 				IF DOUBLE_PRECISION:
