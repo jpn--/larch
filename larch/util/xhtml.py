@@ -215,3 +215,18 @@ def floating_table_head():
 	""")
 	return floatThead, floatTheadA
 
+
+
+def logo_in_signature():
+	from .images import favicon
+	from .. import __version__ as version
+
+	sig = Elem('div')
+	sig << Elem('img', {'width': "14", 'height': "14", 'src': "data:image/png;base64,{}".format(favicon),
+						'style': 'position:relative;top:2px;'})
+	sig << Elem('span', {'class': 'larch_name_signature'}, text=" Larch {}".format(version))
+	return sig
+
+import xmle.xhtml
+
+xmle.xhtml.logo_in_signature = logo_in_signature
