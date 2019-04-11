@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Swissmetro Examples &mdash; Larch 5.0.5 documentation</title>
+  <title>Swissmetro Examples &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="101: Swissmetro MNL Mode Choice" href="101_mnl.html" />
     <link rel="prev" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" href="029_mtc.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -97,6 +101,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Swissmetro Examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="101_mnl.html">101: Swissmetro MNL Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="102_mnl_weighted.html">102: Swissmetro Weighted MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html">107: Latent Class Models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="109_nl.html">109: Swissmetro Nested Logit Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="111_cnl.html">111: Swissmetro Cross-Nested Logit Mode Choice</a></li>
 </ul>
@@ -206,6 +211,13 @@ It is not possible to reproduce using Larch every example model shown for Biogem
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="101_mnl.html">101: Swissmetro MNL Mode Choice</a></li>
 <li class="toctree-l1"><a class="reference internal" href="102_mnl_weighted.html">102: Swissmetro Weighted MNL Mode Choice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="107_latent_class.html">107: Latent Class Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="107_latent_class.html#Class-Model-Setup">Class Model Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="107_latent_class.html#Class-Membership-Model">Class Membership Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="107_latent_class.html#Latent-Class-Model">Latent Class Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="107_latent_class.html#Reporting-Results">Reporting Results</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="109_nl.html">109: Swissmetro Nested Logit Mode Choice</a></li>
 <li class="toctree-l1"><a class="reference internal" href="111_cnl.html">111: Swissmetro Cross-Nested Logit Mode Choice</a></li>
 </ul>
@@ -223,7 +235,7 @@ It is not possible to reproduce using Larch every example model shown for Biogem
         <a href="101_mnl.html" class="btn btn-neutral float-right" title="101: Swissmetro MNL Mode Choice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="029_mtc.html" class="btn btn-neutral" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="029_mtc.html" class="btn btn-neutral float-left" title="29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -233,7 +245,9 @@ It is not possible to reproduce using Larch every example model shown for Biogem
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 19, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -250,27 +264,16 @@ It is not possible to reproduce using Larch every example model shown for Biogem
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

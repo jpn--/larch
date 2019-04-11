@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DataService &mdash; Larch 5.0.5 documentation</title>
+  <title>DataService &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Model" href="model.html" />
     <link rel="prev" title="DataFrames" href="data-frames.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -199,33 +203,29 @@ methods.</p>
 <dt id="larch.DataService.make_dataframes">
 <code class="descname">make_dataframes</code><span class="sig-paren">(</span><em>req_data</em>, <em>*</em>, <em>selector=None</em>, <em>float_dtype=numpy.float64</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataService.make_dataframes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a DataFrames object that will satisfy a data request.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>req_data</strong> (<em>Dict</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The requested data. The keys for this dictionary may include {‘ca’, ‘co’,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>req_data</strong> (<em>Dict</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The requested data. The keys for this dictionary may include {‘ca’, ‘co’,
 ‘choice_ca’, ‘choice_co’, ‘weight_co’, ‘avail_ca’, ‘standardize’}.
 Currently, the keys {‘choice_co_code’, ‘avail_co’} are not implemented and
 will raise an error.
-Other keys are silently ignored.</li>
-<li><strong>selector</strong> (<em>array-like</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em>, </em><em>optional</em>) – If given, the selector filters the cases. This argument can only be given
-as a keyword argument.</li>
-<li><strong>float_dtype</strong> (<em>dtype</em><em>, </em><em>default float64</em>) – The dtype to use for all float-type arrays.  Note that the availability
+Other keys are silently ignored.</p></li>
+<li><p><strong>selector</strong> (<em>array-like</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>] or </em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em>, </em><em>optional</em>) – If given, the selector filters the cases. This argument can only be given
+as a keyword argument.</p></li>
+<li><p><strong>float_dtype</strong> (<em>dtype</em><em>, </em><em>default float64</em>) – The dtype to use for all float-type arrays.  Note that the availability
 arrays are always returned as int8 regardless of the float type.
 This argument can only be given
-as a keyword argument.</li>
+as a keyword argument.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="data-frames.html#larch.DataFrames" title="larch.DataFrames">DataFrames</a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">This object should satisfy the request.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="data-frames.html#larch.DataFrames" title="larch.DataFrames">DataFrames</a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This object should satisfy the request.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -243,7 +243,7 @@ as a keyword argument.</li>
         <a href="model.html" class="btn btn-neutral float-right" title="Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="data-frames.html" class="btn btn-neutral" title="DataFrames" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="data-frames.html" class="btn btn-neutral float-left" title="DataFrames" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -253,7 +253,9 @@ as a keyword argument.</li>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 17, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -270,27 +272,16 @@ as a keyword argument.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

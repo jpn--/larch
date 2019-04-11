@@ -1,0 +1,928 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>200: Exampville Simulated Data &mdash; Larch 5.2.8 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Itinerary Choice Examples" href="itinerary.html" />
+    <link rel="prev" title="Exampville Simulator" href="exampville.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.2.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machine_learning.html">Machine Learning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mtc.html">MTC Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="exampville.html">Exampville Simulator</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">200: Exampville Simulated Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="exampville.html">Exampville Simulator</a> &raquo;</li>
+        
+      <li>200: Exampville Simulated Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/210_exampville.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="200:-Exampville-Simulated-Data">
+<h1>200: Exampville Simulated Data<a class="headerlink" href="#200:-Exampville-Simulated-Data" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">larch</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">pandas</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">larch</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&#39;5.0.5&#39;
+</pre></div>
+</div>
+</div>
+<p>Welcome to Exampville, the best simulated town in this here part of the internet!</p>
+<p>Exampville is a simulation tool provided with Larch that can quickly simulate the kind of data that a transportation planner might have available when building a travel model. We will use the first Exampville builder to generate some simulated data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">larch.exampville</span>
+<span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<span class="n">directory</span><span class="p">,</span> <span class="n">skims</span><span class="p">,</span> <span class="n">f_hh</span><span class="p">,</span> <span class="n">f_pp</span><span class="p">,</span> <span class="n">f_tour</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">exampville</span><span class="o">.</span><span class="n">builder_1</span><span class="p">(</span>
+    <span class="n">nZones</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">transit_scope</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span>
+    <span class="n">n_HH</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;csv&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The builder creates a temporary directory, and produces a set of files representing some network skim matrixes in openmatrix (OMX) format, as well as three DT files containing data on households, persons, and tours, respectively. We can take a quick peek at what is inside each file:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">skims</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;larch.OMX&gt; ⋯/T/tmpk50hcwwc/exampville.omx
+ |  shape:(15, 15)
+ |  data:
+ |    AUTO_TIME (float64)
+ |    DIST      (float64)
+ |    RAIL_FARE (float64)
+ |    RAIL_TIME (float64)
+ |  lookup:
+ |    EMPLOYMENT    (15 float64)
+ |    EMP_NONRETAIL (15 float64)
+ |    EMP_RETAIL    (15 float64)
+ |    LAT           (15 int64)
+ |    LON           (15 int64)
+ |    TAZID         (15 int64)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f_hh</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">f_hh</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 2000 entries, 0 to 1999
+Data columns (total 4 columns):
+HHID       2000 non-null int64
+INCOME     2000 non-null int64
+HHSIZE     2000 non-null int64
+HOMETAZ    2000 non-null int64
+dtypes: int64(4)
+memory usage: 62.6 KB
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>HHID</th>
+      <th>INCOME</th>
+      <th>HHSIZE</th>
+      <th>HOMETAZ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>50000</td>
+      <td>133000</td>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>50001</td>
+      <td>48000</td>
+      <td>1</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>50002</td>
+      <td>72000</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>50003</td>
+      <td>103000</td>
+      <td>3</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>50004</td>
+      <td>77000</td>
+      <td>1</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f_pp</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">f_pp</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 3462 entries, 0 to 3461
+Data columns (total 7 columns):
+PERSONID        3462 non-null int64
+HHID            3462 non-null int64
+AGE             3462 non-null int64
+WORKS           3462 non-null int64
+N_WORKTOURS     3462 non-null int64
+N_OTHERTOURS    3462 non-null int64
+N_TOTALTOURS    3462 non-null int64
+dtypes: int64(7)
+memory usage: 189.4 KB
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PERSONID</th>
+      <th>HHID</th>
+      <th>AGE</th>
+      <th>WORKS</th>
+      <th>N_WORKTOURS</th>
+      <th>N_OTHERTOURS</th>
+      <th>N_TOTALTOURS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>60000</td>
+      <td>50000</td>
+      <td>82</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>60001</td>
+      <td>50000</td>
+      <td>26</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>60002</td>
+      <td>50000</td>
+      <td>19</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>60003</td>
+      <td>50001</td>
+      <td>46</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>60004</td>
+      <td>50002</td>
+      <td>32</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f_tour</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">f_tour</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 6123 entries, 0 to 6122
+Data columns (total 6 columns):
+TOURID      6123 non-null int64
+HHID        6123 non-null int64
+PERSONID    6123 non-null int64
+DTAZ        6123 non-null int64
+TOURMODE    6123 non-null int64
+TOURPURP    6123 non-null int64
+dtypes: int64(6)
+memory usage: 287.1 KB
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TOURID</th>
+      <th>HHID</th>
+      <th>PERSONID</th>
+      <th>DTAZ</th>
+      <th>TOURMODE</th>
+      <th>TOURPURP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>50000</td>
+      <td>60002</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>50000</td>
+      <td>60002</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>50001</td>
+      <td>60003</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>50002</td>
+      <td>60004</td>
+      <td>8</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>50002</td>
+      <td>60004</td>
+      <td>8</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The Exampville data output contains a set of files similar to what we might find for a real travel survey: network skims, and tables of households, persons, and tours. We’ll need to merge these tables to create a composite dataset for mode choice model estimation.</p>
+<p>We can merge data from other tables using the usual pandas syntax for merging.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f_tour</span> <span class="o">=</span> <span class="n">f_tour</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">f_hh</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;HHID&#39;</span><span class="p">)</span>
+<span class="n">f_tour</span> <span class="o">=</span> <span class="n">f_tour</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">f_pp</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;HHID&#39;</span><span class="p">,</span> <span class="s1">&#39;PERSONID&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Our zone numbering system starts with zone 1, as is common for many TAZ numbering systems seen in practice. But, for looking up data in the skims matrix, we’ll need to use zero-based numbering that is standard in Python. So we’ll create two new TAZ-index columns to assist this process.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f_tour</span><span class="p">[</span><span class="s2">&quot;HOMETAZi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_tour</span><span class="p">[</span><span class="s2">&quot;HOMETAZ&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">f_tour</span><span class="p">[</span><span class="s2">&quot;DTAZi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_tour</span><span class="p">[</span><span class="s2">&quot;DTAZ&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s define some variables for clarity. We could in theory call the complete formula “DIST / 2.5 * 60 * (DIST&lt;=3)” every time we want to refer to the walk time (given as distance in miles, divided by 2.5 miles per hour, times 60 minutes per hour, but only up to 3 miles). But it’s much easier, and potentially faster, to pre-compute the walk time and use it directly.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">skims</span><span class="o">.</span><span class="n">change_mode</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">skims</span><span class="p">[</span><span class="s2">&quot;WALKTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">skims</span><span class="o">.</span><span class="n">DIST</span><span class="p">[:]</span> <span class="o">/</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="n">skims</span><span class="o">.</span><span class="n">DIST</span><span class="p">[:]</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">skims</span><span class="p">[</span><span class="s2">&quot;BIKETIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">skims</span><span class="o">.</span><span class="n">DIST</span><span class="p">[:]</span> <span class="o">/</span> <span class="mi">12</span>  <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="n">skims</span><span class="o">.</span><span class="n">DIST</span><span class="p">[:]</span> <span class="o">&lt;=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">skims</span><span class="p">[</span><span class="s2">&quot;CARCOST&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">skims</span><span class="o">.</span><span class="n">DIST</span><span class="p">[:]</span> <span class="o">*</span> <span class="mf">0.20</span>
+<span class="n">skims</span><span class="o">.</span><span class="n">change_mode</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;larch.OMX&gt; ⋯/T/tmpk50hcwwc/exampville.omx
+ |  shape:(15, 15)
+ |  data:
+ |    AUTO_TIME (float64)
+ |    BIKETIME  (float64)
+ |    CARCOST   (float64)
+ |    DIST      (float64)
+ |    RAIL_FARE (float64)
+ |    RAIL_TIME (float64)
+ |    WALKTIME  (float64)
+ |  lookup:
+ |    EMPLOYMENT    (15 float64)
+ |    EMP_NONRETAIL (15 float64)
+ |    EMP_RETAIL    (15 float64)
+ |    LAT           (15 int64)
+ |    LON           (15 int64)
+ |    TAZID         (15 int64)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Walk</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Bike</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="itinerary.html" class="btn btn-neutral float-right" title="Itinerary Choice Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="exampville.html" class="btn btn-neutral float-left" title="Exampville Simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

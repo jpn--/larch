@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7: MTC MNL Mode Choice, Diminishing OVTT by Distance &mdash; Larch 5.0.5 documentation</title>
+  <title>7: MTC MNL Mode Choice, Diminishing OVTT by Distance &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="8: MTC MNL Mode Choice, TTR = 2.5" href="008_mtc.html" />
     <link rel="prev" title="6: MTC MNL Mode Choice, Motorized Times" href="006_mtc.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -89,7 +93,9 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="mtc.html">MTC Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="000_mtc_data.html">MTC Work Mode Choice Data</a></li>
@@ -235,11 +241,11 @@ long trip rather than for a short trip.</p>
 <p>Model 7 ensures this result by including total travel time (the sum of in-vehicle and
 out-of-vehicle time) and out-of-vehicle time divided by distance in place of in- and
 out-of-vehicle travel time. (<a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">pp. 114</a>)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="k">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR3P&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAN&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#4&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
@@ -248,7 +254,7 @@ out-of-vehicle travel time. (<a class="reference external" href="http://www.caee
 </pre></div>
 </div>
 <p>We diminish the effect of ovtt by dividing its parameter by distance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">=</span> <span class="p">(</span>
         <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;= 4) * tottime&quot;</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &gt; 4) * tottime&quot;</span><span class="p">)</span>
@@ -256,40 +262,40 @@ out-of-vehicle travel time. (<a class="reference external" href="http://www.caee
         <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s2">&quot;.*cost.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*time.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*dist.*&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Income&quot;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3547.344...</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
-<span class="go">                               value  std err   t stat  robust std err  robust t stat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="go">                              value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
-<span class="go">LOS      totcost             -0.0041   0.0002 -17.2212          0.0003       -15.2834</span>
-<span class="go">         motorized_time      -0.0415   0.0035 -11.8147          0.0038       -10.9896</span>
-<span class="go">         nonmotorized_time   -0.0475   0.0055  -8.6359          0.0054        -8.8632</span>
-<span class="go">         motorized_ovtbydist -0.1812   0.0179 -10.1382          0.0228        -7.9330</span>
-<span class="go">Income   hhinc#2,3           -0.0014   0.0014  -0.9953          0.0015        -0.9294</span>
-<span class="go">         hhinc#4             -0.0072   0.0019  -3.7867          0.0019        -3.8476</span>
-<span class="go">         hhinc#5             -0.0119   0.0052  -2.2611          0.0063        -1.8819</span>
-<span class="go">         hhinc#6             -0.0082   0.0032  -2.5835          0.0035        -2.3332</span>
-<span class="go">ASCs     ASC_BIKE            -2.6868   0.3336  -8.0531          0.3771        -7.1256</span>
-<span class="go">         ASC_SR2             -2.1884   0.0976 -22.4157          0.1058       -20.6918</span>
-<span class="go">         ASC_SR3P            -3.5181   0.1229 -28.6148          0.1272       -27.6624</span>
-<span class="go">         ASC_TRAN            -0.0424   0.1597  -0.2656          0.1659        -0.2557</span>
-<span class="go">         ASC_WALK            -1.0229   0.2921  -3.5026          0.2971        -3.4431</span>
+<span class="go">LOS      totcost             -0.004  2.391e-04 -17.221       2.694e-04        -15.283</span>
+<span class="go">         motorized_time      -0.042  3.516e-03 -11.815       3.780e-03        -10.990</span>
+<span class="go">         nonmotorized_time   -0.047  5.496e-03  -8.636       5.355e-03         -8.863</span>
+<span class="go">         motorized_ovtbydist -0.181  1.787e-02 -10.138       2.284e-02         -7.933</span>
+<span class="go">Income   hhinc#2,3           -0.001  1.383e-03  -0.995       1.481e-03         -0.929</span>
+<span class="go">         hhinc#4             -0.007  1.914e-03  -3.787       1.884e-03         -3.848</span>
+<span class="go">         hhinc#5             -0.012  5.244e-03  -2.261       6.300e-03         -1.882</span>
+<span class="go">         hhinc#6             -0.008  3.188e-03  -2.583       3.530e-03         -2.333</span>
+<span class="go">ASCs     ASC_BIKE            -2.687  3.336e-01  -8.053       3.771e-01         -7.126</span>
+<span class="go">         ASC_SR2             -2.188  9.763e-02 -22.416       1.058e-01        -20.692</span>
+<span class="go">         ASC_SR3P            -3.518  1.229e-01 -28.615       1.272e-01        -27.662</span>
+<span class="go">         ASC_TRAN            -0.042  1.597e-01  -0.266       1.659e-01         -0.256</span>
+<span class="go">         ASC_WALK            -1.023  2.921e-01  -3.503       2.971e-01         -3.443</span>
 </pre></div>
 </div>
 </div>
@@ -305,7 +311,7 @@ out-of-vehicle travel time. (<a class="reference external" href="http://www.caee
         <a href="008_mtc.html" class="btn btn-neutral float-right" title="8: MTC MNL Mode Choice, TTR = 2.5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="006_mtc.html" class="btn btn-neutral" title="6: MTC MNL Mode Choice, Motorized Times" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="006_mtc.html" class="btn btn-neutral float-left" title="6: MTC MNL Mode Choice, Motorized Times" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -315,7 +321,9 @@ out-of-vehicle travel time. (<a class="reference external" href="http://www.caee
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 17, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -332,27 +340,16 @@ out-of-vehicle travel time. (<a class="reference external" href="http://www.caee
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

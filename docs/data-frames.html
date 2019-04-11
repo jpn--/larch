@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DataFrames &mdash; Larch 5.0.5 documentation</title>
+  <title>DataFrames &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="DataService" href="dataservice.html" />
     <link rel="prev" title="Data Fundamentals" href="data-fundamentals.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -190,27 +194,38 @@
 </style>
 <div class="section" id="dataframes">
 <h1>DataFrames<a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h1>
-<p>A <a class="reference internal" href="#larch.DataFrames" title="larch.DataFrames"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrames</span></code></a> is essentially a collection of related <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>s,
+<p>A <a class="reference internal" href="#larch.DataFrames" title="larch.DataFrames"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrames</span></code></a> is essentially a collection of related <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>s,
 which represent <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> and <a class="reference internal" href="data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data features.</p>
 <dl class="class">
 <dt id="larch.DataFrames">
 <em class="property">class </em><code class="descclassname">larch.</code><code class="descname">DataFrames</code><span class="sig-paren">(</span><em>co=None</em>, <em>*args</em>, <em>ca=None</em>, <em>ce=None</em>, <em>av=None</em>, <em>ch=None</em>, <em>wt=None</em>, <em>data_co=None</em>, <em>data_ca=None</em>, <em>data_ce=None</em>, <em>data_av=None</em>, <em>data_ch=None</em>, <em>data_wt=None</em>, <em>alt_names=None</em>, <em>alt_codes=None</em>, <em>crack=False</em>, <em>av_name=None</em>, <em>ch_name=None</em>, <em>wt_name=None</em>, <em>av_as_ce=None</em>, <em>ch_as_ce=None</em>, <em>sys_alts=None</em>, <em>computational=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames" title="Permalink to this definition">¶</a></dt>
 <dd><p>A structured class to hold multi-format discrete choice data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>co</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><em>pandas.DataFrame</em></a>) – A dataframe containing idco format data, with one row per case.
-The index contains the caseid’s.</li>
-<li><strong>ca</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><em>pandas.DataFrame</em></a>) – A dataframe containing idca format data, with one row per alternative.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>co</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing idco format data, with one row per case.
+The index contains the caseid’s.</p></li>
+<li><p><strong>ca</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing idca format data, with one row per alternative.
 The index should be a two-level multi-index, with the first level
-containing the caseid’s and the second level containing the altid’s.</li>
+containing the caseid’s and the second level containing the altid’s.</p></li>
+<li><p><strong>ch</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing choice data, with one row per case and one column
+per alternative.
+The index contains the caseid’s, and the columns contain the alt_codes.</p></li>
+<li><p><strong>wt</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a><em> or </em><a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.24.2)"><em>pandas.Series</em></a><em>, </em><em>optional</em>) – A one-column dataframe, or series, containing idco format data, with one
+row per case, containing the case-weights.</p></li>
+<li><p><strong>alt_names</strong> (<em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>]</em>) – A sequence of alternative names as str.</p></li>
+<li><p><strong>alt_codes</strong> (<em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>]</em>) – A sequence of alternative codes.</p></li>
+<li><p><strong>ch_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – A name to use for the choice variable.  If not given, it is inferred from
+the <cite>ch</cite> argument if possible.  If the <cite>ch</cite> argument is not given but a
+name is specified, then that named column is found in the <cite>ca</cite>, or <cite>ce</cite>
+arguments and used as the choice.</p></li>
+<li><p><strong>wt_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – A name to use for the weight variable.  If not given, it is inferred from
+the <cite>wt</cite> argument if possible.  If the <cite>wt</cite> argument is not given but a
+name is specified, then that named column is found in the <cite>co</cite>, <cite>ca</cite>, or <cite>ce</cite>
+arguments and used as the weight.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="larch.DataFrames.alternative_codes">
 <code class="descname">alternative_codes</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.alternative_codes" title="Permalink to this definition">¶</a></dt>
@@ -227,19 +242,16 @@ containing the caseid’s and the second level containing the altid’s.</li>
 <dt id="larch.DataFrames.set_alternative_names">
 <code class="descname">set_alternative_names</code><span class="sig-paren">(</span><em>self, names: Union[Mapping, Sequence]</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.DataFrames.set_alternative_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the alternative names.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>names</strong> (<em>Mapping</em><em> or </em><em>Sequence</em>) – If a mapping, with keys as the codes
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> (<em>Mapping</em><em> or </em><em>Sequence</em>) – If a mapping, with keys as the codes
 that appear in <cite>alternative_codes</cite>, and values that are
 the names, these will be used.  Any missing codes will be labeled with the string
 representation of the code.
 If given as a sequence, the names must be in the same order as the codes
-that appear in <cite>alternative_codes</cite>.</td>
-</tr>
-</tbody>
-</table>
+that appear in <cite>alternative_codes</cite>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p><strong>Attributes</strong></p>
@@ -247,7 +259,7 @@ that appear in <cite>alternative_codes</cite>.</td>
 <dt id="larch.DataFrames.data_co">
 <code class="descname">data_co</code><a class="headerlink" href="#larch.DataFrames.data_co" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pandas.DataFrame in <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco</span></a> format.</p>
-<p>This DataFrame should have a simple <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Index.html#pandas.Index" title="(in pandas v0.23.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Index</span></code></a> as the index, where
+<p>This DataFrame should have a simple <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index" title="(in pandas v0.24.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Index</span></code></a> as the index, where
 the index values are is the caseids.</p>
 </dd></dl>
 
@@ -294,7 +306,7 @@ alternative codes.</p>
         <a href="dataservice.html" class="btn btn-neutral float-right" title="DataService" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="data-fundamentals.html" class="btn btn-neutral" title="Data Fundamentals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="data-fundamentals.html" class="btn btn-neutral float-left" title="Data Fundamentals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -304,7 +316,9 @@ alternative codes.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 18, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -321,27 +335,16 @@ alternative codes.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

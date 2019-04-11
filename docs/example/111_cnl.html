@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>111: Swissmetro Cross-Nested Logit Mode Choice &mdash; Larch 5.0.5 documentation</title>
+  <title>111: Swissmetro Cross-Nested Logit Mode Choice &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Exampville Simulator" href="exampville.html" />
     <link rel="prev" title="109: Swissmetro Nested Logit Mode Choice" href="109_nl.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -89,12 +93,15 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="mtc.html">MTC Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="101_mnl.html">101: Swissmetro MNL Mode Choice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="102_mnl_weighted.html">102: Swissmetro Weighted MNL Mode Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html">107: Latent Class Models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="109_nl.html">109: Swissmetro Nested Logit Mode Choice</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">111: Swissmetro Cross-Nested Logit Mode Choice</a></li>
 </ul>
@@ -200,23 +207,23 @@
 <p>This example is a mode choice model built using the Swissmetro example dataset.
 First we create the DB and Model objects.  When we create the DB object, we will
 redefine the weight value:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">SWISSMETRO</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">SWISSMETRO</span><span class="p">()</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can attach a title to the model. The title does not affect the calculations
 as all; it is merely used in various output report styles.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;swissmetro example 11 (cross nested logit)&quot;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;swissmetro example 11 (cross nested logit)&quot;</span>
 </pre></div>
 </div>
 <p>We need to identify the availability and choice variables. These have been conveniently
 set up in the data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;choice&#39;</span>
 </pre></div>
 </div>
 <p>The swissmetro dataset, as with all Biogeme data, is only in <cite>co</cite> format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="k">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_TRAIN</span>
                   <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">B_TIME</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">TRAIN_TT</span>
                   <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">B_COST</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;TRAIN_CO*(GA==0)&quot;</span><span class="p">)</span> <span class="p">)</span>
@@ -232,7 +239,7 @@ and we want to nest Train and SM together into a “public” modes nest. This c
 different from a traditional nested logit model, because the Train mode
 is “cross-nested”: it appears in more than one nest.  The desired nesting structure then looks
 like this:</p>
-<div class="graphviz"><img src="../_images/graphviz-d00b9dec1b5f7fe8d11227e2d203f6865005cf55.png" alt="digraph Desired_Nesting_Structure {
+<div class="graphviz"><img src="../_images/graphviz-2bad354fcbda1614a20bf1415bc2772639d393f4.png" alt="digraph Desired_Nesting_Structure {
 bgcolor=&quot;transparent&quot;
 root [label=&quot;Root&quot;, shape=&quot;oval&quot;]
 train [label=&quot;Train&quot;, shape=box, style=&quot;rounded&quot;, penwidth=2]
@@ -249,14 +256,14 @@ root -&gt; public
 }" class="graphviz" /></div>
 <p>To create nests, we can use the new_node command, although we’ll need to know what the
 alternative codes are for the alternatives in our dataset. To find out, we can do:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span>
 <span class="go">[(1, &#39;Train&#39;), (2, &#39;SM&#39;), (3, &#39;Car&#39;)]</span>
 </pre></div>
 </div>
 <p>For this example, we want to nest together the Train and Car modes into a “existing” modes nest,
 and we want to nest together the Train and SM modes into a “public” modes nest.
 We can use the new_nest command like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span>
         <span class="n">parameter</span><span class="o">=</span><span class="s2">&quot;existing&quot;</span><span class="p">,</span>
         <span class="n">parent</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">root_id</span><span class="p">,</span>
         <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
@@ -284,7 +291,7 @@ link PT, <span class="math notranslate nohighlight">\(\phi_{ET}\)</span> is a si
 <p>We can attach parameters to each link using the <cite>phi_parameters</cite> argument to new_node.</p>
 <p>Larch will find all the parameters in the model, but we’d like to output them in
 a rational order.  We can use the ordering method to do this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s1">&#39;ASC.*&#39;</span><span class="p">,),</span>
         <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s1">&#39;B_.*&#39;</span><span class="p">,),</span>
         <span class="p">(</span><span class="s2">&quot;LogSums&quot;</span><span class="p">,</span> <span class="s1">&#39;Existing&#39;</span><span class="p">,</span> <span class="s1">&#39;Public&#39;</span><span class="p">,</span> <span class="p">),</span>
@@ -294,18 +301,18 @@ a rational order.  We can use the ordering method to do this:</p>
 <p>The swissmetro example models exclude some observations.  We will use the selector
 to identify the observations we would like to keep.  There are two selector criteria,
 and only cases that evaluate <cite>True</cite> for both are selected.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We can estimate the models and check the results match up with those given by Biogeme:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-5214.063...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
 <span class="go">                    value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
 <span class="go">ASCs     ASC_CAR   -0.238  3.606e-02  -6.606       4.883e-02         -4.878</span>
@@ -317,10 +324,10 @@ and only cases that evaluate <cite>True</cite> for both are selected.</p>
 </pre></div>
 </div>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
+<p class="admonition-title">Tip</p>
 <p>If you want access to the model in this example without worrying about assembling all the code blocks
 together on your own, you can load a read-to-estimate copy like this:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -337,7 +344,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
         <a href="exampville.html" class="btn btn-neutral float-right" title="Exampville Simulator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="109_nl.html" class="btn btn-neutral" title="109: Swissmetro Nested Logit Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="109_nl.html" class="btn btn-neutral float-left" title="109: Swissmetro Nested Logit Mode Choice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -347,7 +354,9 @@ together on your own, you can load a read-to-estimate copy like this:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 17, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -364,27 +373,16 @@ together on your own, you can load a read-to-estimate copy like this:</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

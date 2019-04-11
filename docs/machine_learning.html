@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Machine Learning &mdash; Larch 5.0.5 documentation</title>
+  <title>Machine Learning &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="example/examples.html" />
     <link rel="prev" title="Aggregate Choice Models" href="math/aggregate-choice.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -382,8 +386,8 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Machine-Learning">
 <h1>Machine Learning<a class="headerlink" href="#Machine-Learning" title="Permalink to this headline">¶</a></h1>
 <p>Larch is (mostly) compatible with the <a class="reference external" href="https://scikit-learn.org">scikit-learn</a> stucture for machine learning.
-Within this structure, the larch.Model object can be used as an <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-estimator" title="(in scikit-learn v0.20.2)"><span>estimator</span></a>
-and a <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-predictor" title="(in scikit-learn v0.20.2)"><span>predictor</span></a>.</p>
+Within this structure, the larch.Model object can be used as an <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-estimator" title="(in scikit-learn v0.20.3)"><span>estimator</span></a>
+and a <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-predictor" title="(in scikit-learn v0.20.3)"><span>predictor</span></a>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -423,7 +427,7 @@ and a <a class="reference external" href="https://scikit-learn.org/stable/glossa
 </pre></div>
 </div>
 </div>
-<p>Because the larch.Model object is an estimator, if offers a <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v0.20.2)"><span>fit</span></a>
+<p>Because the larch.Model object is an estimator, if offers a <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-fit" title="(in scikit-learn v0.20.3)"><span>fit</span></a>
 method to estimate the fitted (likelihood maximizing) parameters.  This method
 for model estimation takes a plain old pandas.DataFrame as the <cite>X</cite> input. Because
 this is a regular DataFrame, the data does not internally identify which column[s]
@@ -711,7 +715,7 @@ dtype: float64
         <a href="example/examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="math/aggregate-choice.html" class="btn btn-neutral" title="Aggregate Choice Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="math/aggregate-choice.html" class="btn btn-neutral float-left" title="Aggregate Choice Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -721,7 +725,9 @@ dtype: float64
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 19, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -738,27 +744,16 @@ dtype: float64
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

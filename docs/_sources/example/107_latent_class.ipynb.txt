@@ -916,7 +916,7 @@
        "</table></td></tr><tr><td>tolerance</td><td style=\"text-align:left;\">8.736059377268807e-06</td></tr><tr><td>steps</td><td style=\"text-align:left;\"><pre>array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
        "       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
        "       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
-       "       1., 1., 1., 1., 1.])</pre></td></tr><tr><td>message</td><td style=\"text-align:left;\">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style=\"text-align:left;\">0:00:32.584511</td></tr><tr><td>method</td><td style=\"text-align:left;\">'bhhh'</td></tr><tr><td>n_cases</td><td style=\"text-align:left;\">6768</td></tr><tr><td>iteration_number</td><td style=\"text-align:left;\">56</td></tr><tr><td>logloss</td><td style=\"text-align:left;\">0.7695771374056521</td></tr></table></div>"
+       "       1., 1., 1., 1., 1.])</pre></td></tr><tr><td>message</td><td style=\"text-align:left;\">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style=\"text-align:left;\">0:00:30.073803</td></tr><tr><td>method</td><td style=\"text-align:left;\">'bhhh'</td></tr><tr><td>n_cases</td><td style=\"text-align:left;\">6768</td></tr><tr><td>iteration_number</td><td style=\"text-align:left;\">56</td></tr><tr><td>logloss</td><td style=\"text-align:left;\">0.7695771374056521</td></tr></table></div>"
       ],
       "text/plain": [
        "┣          loglike: -5208.498065961454\n",
@@ -932,7 +932,7 @@
        "┃                          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
        "┃                          1., 1., 1., 1., 1.])\n",
        "┣          message: 'Optimization terminated successfully.'\n",
-       "┣     elapsed_time: datetime.timedelta(seconds=32, microseconds=584511)\n",
+       "┣     elapsed_time: datetime.timedelta(seconds=30, microseconds=73803)\n",
        "┣           method: 'bhhh'\n",
        "┣          n_cases: 6768\n",
        "┣ iteration_number: 56\n",
@@ -1637,7 +1637,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
+   "execution_count": 33,
    "metadata": {},
    "outputs": [
     {
@@ -1646,7 +1646,7 @@
        "'latent-class-example-report.html'"
       ]
      },
-     "execution_count": 32,
+     "execution_count": 33,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1654,6 +1654,13 @@
    "source": [
     "report.save('latent-class-example-report.html', overwrite=True)"
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
   }
  ],
  "metadata": {

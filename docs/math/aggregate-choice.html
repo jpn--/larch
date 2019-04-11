@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Aggregate Choice Models &mdash; Larch 5.0.5 documentation</title>
+  <title>Aggregate Choice Models &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,36 +19,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../example/examples.html" />
+    <link rel="next" title="Machine Learning" href="../machine_learning.html" />
     <link rel="prev" title="Mathematics of Logit Choice Modeling" href="../math.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -89,6 +93,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">Model</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Aggregate Choice Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#basic-aggregate-models">Basic Aggregate Models</a></li>
@@ -99,6 +104,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/examples.html">Examples</a></li>
 </ul>
 
@@ -204,12 +210,12 @@ the elemental alternative level.</p>
 <p>To start with, we can make some assumptions:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>The individual elemental alternatives within each zone or aggregate are homogeneous.
-That is, each such alternative has the same systematic utility, <span class="math notranslate nohighlight">\(V_{i} = \beta X_{i}\)</span></li>
-<li>The particular locations of the zonal or aggregation boundaries are arbitrary, and have
-no systematic meaning themselves.</li>
-<li>The number of individual elemental alternatives within each zone or aggregate is directly
-observable.</li>
+<li><p>The individual elemental alternatives within each zone or aggregate are homogeneous.
+That is, each such alternative has the same systematic utility, <span class="math notranslate nohighlight">\(V_{i} = \beta X_{i}\)</span></p></li>
+<li><p>The particular locations of the zonal or aggregation boundaries are arbitrary, and have
+no systematic meaning themselves.</p></li>
+<li><p>The number of individual elemental alternatives within each zone or aggregate is directly
+observable.</p></li>
 </ol>
 </div></blockquote>
 <p>Using these assumptions, we can derive a reasonably simple aggregate/zonal choice model.</p>
@@ -269,7 +275,7 @@ choice; a decision maker does not choose a zone, but she chooses a single discre
 and which are more likely to be chosen. In general, all other things being equal, aggregate alternatives get a positive
 bump in their probability of selection with an increase in variance of the systematic utility, because they are more likely to
 include a subset of elemental alternatives with much better utility.</p>
-<p><a class="reference internal" href="#mcfadden1978" id="id1">[McFadden1978]</a> showed that, when the utilities in an aggregate are distributed normally, if we define <span class="math notranslate nohighlight">\(\omega_{nest}^{2}\)</span>
+<p><a class="reference internal" href="#mcfadden1978" id="id1"><span>[McFadden1978]</span></a> showed that, when the utilities in an aggregate are distributed normally, if we define <span class="math notranslate nohighlight">\(\omega_{nest}^{2}\)</span>
 as the variance of <span class="math notranslate nohighlight">\(V_{i}\)</span> in a nest, and <span class="math notranslate nohighlight">\(\bar{V}_{i}\)</span> as the average systematic utility of alternatives in
 the nest, then</p>
 <div class="math notranslate nohighlight">
@@ -302,16 +308,15 @@ is not defined. Doubling the <span class="math notranslate nohighlight">\(N\)</s
 will not affect the probabilities. Therefore, one <span class="math notranslate nohighlight">\(\dot{\gamma}\)</span> needs to be arbitrarily fixed at zero.
 (In the non-estimated <span class="math notranslate nohighlight">\(N\)</span> case, this normalization occurs implicitly; there is no parameter inside the log term
 on <span class="math notranslate nohighlight">\(N\)</span>.)</p>
-<p>Larch is capable of estimating models with quantitative values as described here.  An example is shown in <a class="reference internal" href="../example/203_exampville_dest.html#example203"><span class="std std-ref">Example 203</span></a>.</p>
+<p>Larch is capable of estimating models with quantitative values as described here.  An example is shown in <span class="xref std std-ref">Example 203</span>.</p>
 <hr class="docutils" />
-<table class="docutils citation" frame="void" id="mcfadden1978" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[McFadden1978]</a></td><td>McFadden, D. (1978) Modelling the choice of residential location.
+<dl class="citation">
+<dt class="label" id="mcfadden1978"><span class="brackets"><a class="fn-backref" href="#id1">McFadden1978</a></span></dt>
+<dd><p>McFadden, D. (1978) Modelling the choice of residential location.
 Spatial Interaction Theory and Residential Location (Karlquist A. Ed., pp. 75-96).
-North Holland, Amsterdam.</td></tr>
-</tbody>
-</table>
+North Holland, Amsterdam.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -323,10 +328,10 @@ North Holland, Amsterdam.</td></tr>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../example/examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../machine_learning.html" class="btn btn-neutral float-right" title="Machine Learning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../math.html" class="btn btn-neutral" title="Mathematics of Logit Choice Modeling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../math.html" class="btn btn-neutral float-left" title="Mathematics of Logit Choice Modeling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -336,7 +341,9 @@ North Holland, Amsterdam.</td></tr>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 17, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -353,27 +360,16 @@ North Holland, Amsterdam.</td></tr>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-.. currentmodule:: larch
+ .. currentmodule:: larch
 
 ==================================================================
 28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
@@ -75,6 +75,6 @@ Model 28's nesting structure groups motorized, shared ride, and non-motorized. (
 	           ASC_SR3             -1.6208        0.0        0.0     -inf      inf         0
 	           ASC_TRANSIT         -0.4004        0.0        0.0     -inf      inf         0
 	           ASC_WALK             0.3468        0.0        0.0     -inf      inf         0
-	Other      mu_moto              0.7281        1.0        1.0   0.0010   1.0000         0
-	           mu_nonmoto           0.7659        1.0        1.0   0.0010   1.0000         0
-	           mu_shared            0.2406        1.0        1.0   0.0010   1.0000         0
+	Other      mu_moto              0.7281        1.0        1.0    0.001      1.0         0
+	           mu_nonmoto           0.7659        1.0        1.0    0.001      1.0         0
+	           mu_shared            0.2406        1.0        1.0    0.001      1.0         0

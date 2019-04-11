@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model &mdash; Larch 5.0.5 documentation</title>
+  <title>Model &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Mathematics of Logit Choice Modeling" href="math.html" />
     <link rel="prev" title="DataService" href="dataservice.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -186,80 +190,69 @@
 <p>A <a class="reference internal" href="#larch.Model" title="larch.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> is the core object used to represent a discrete choice model.</p>
 <dl class="class">
 <dt id="larch.Model">
-<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">larch.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>utility_ca=None</em>, <em>utility_co=None</em>, <em>quantity_ca=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>A discrete choice model.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parameters</strong> (<em>Sequence</em><em>, </em><em>optional</em>) – The names of parameters used in this model.  It is generally not
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> (<em>Sequence</em><em>, </em><em>optional</em>) – The names of parameters used in this model.  It is generally not
 necessary to define parameter names at initialization, as the names
 can (and will) be collected from the utility function and nesting
-components later.</li>
-<li><strong>utility_ca</strong> (<em>LinearFunction</em><em>, </em><em>optional</em>) – The utility_ca function, which represents the qualitative portion of
-utility for attributes that vary by alternative.</li>
-<li><strong>utility_co</strong> (<em>DictOfLinearFunction</em><em>, </em><em>optional</em>) – The utility_co function, which represents the qualitative portion of
-utility for attributes that vary by decision maker but not by alternative.</li>
-<li><strong>quantity_ca</strong> (<em>LinearFunction</em><em>, </em><em>optional</em>) – The quantity_ca function, which represents the quantitative portion of
-utility for attributes that vary by alternative.</li>
-<li><strong>quantity_scale</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the parameter used to scale the quantitative portion of
-utility.</li>
-<li><strong>graph</strong> (<em>NestingTree</em><em>, </em><em>optional</em>) – The nesting tree for this choice model.</li>
-<li><strong>dataservice</strong> (<a class="reference internal" href="dataservice.html#larch.DataService" title="larch.DataService"><em>DataService</em></a><em>, </em><em>optional</em>) – An object that can act as a DataService to generate the data needed for
-this model.</li>
+components later.</p></li>
+<li><p><strong>utility_ca</strong> (<em>LinearFunction_C</em><em>, </em><em>optional</em>) – The utility_ca function, which represents the qualitative portion of
+utility for attributes that vary by alternative.</p></li>
+<li><p><strong>utility_co</strong> (<em>DictOfLinearFunction</em><em>, </em><em>optional</em>) – The utility_co function, which represents the qualitative portion of
+utility for attributes that vary by decision maker but not by alternative.</p></li>
+<li><p><strong>quantity_ca</strong> (<em>LinearFunction_C</em><em>, </em><em>optional</em>) – The quantity_ca function, which represents the quantitative portion of
+utility for attributes that vary by alternative.</p></li>
+<li><p><strong>quantity_scale</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the parameter used to scale the quantitative portion of
+utility.</p></li>
+<li><p><strong>graph</strong> (<em>NestingTree</em><em>, </em><em>optional</em>) – The nesting tree for this choice model.</p></li>
+<li><p><strong>dataservice</strong> (<a class="reference internal" href="dataservice.html#larch.DataService" title="larch.DataService"><em>DataService</em></a><em>, </em><em>optional</em>) – An object that can act as a DataService to generate the data needed for
+this model.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="larch.Model.utility_ca">
 <code class="descname">utility_ca</code><a class="headerlink" href="#larch.Model.utility_ca" title="Permalink to this definition">¶</a></dt>
-<dd><p>A LinearFunction that represents the qualitative portion of
-utility for attributes that vary by alternative.</p>
+<dd><p>LinearFunction_C(init=None)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="larch.Model.utility_co">
 <code class="descname">utility_co</code><a class="headerlink" href="#larch.Model.utility_co" title="Permalink to this definition">¶</a></dt>
-<dd><p>A DictOfLinearFunction that represents the qualitative portion of
-utility for attributes that vary by decision maker but not by alternative.</p>
+<dd><p>DictOfLinearFunction_C(mapping=None, alts_validator=None, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="larch.Model.quantity_ca">
 <code class="descname">quantity_ca</code><a class="headerlink" href="#larch.Model.quantity_ca" title="Permalink to this definition">¶</a></dt>
-<dd><p>A LinearFunction that represents the quantitative portion of
-utility for attributes that vary by alternative.</p>
+<dd><p>LinearFunction_C(init=None)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="larch.Model.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the parameters of this model from the training set (X, y).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><em>pandas.DataFrame</em></a>) – This DataFrame can be in idca, idce, or idco formats.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – This DataFrame can be in idca, idce, or idco formats.
 If given in idce format, this is a DataFrame with <em>n_casealts</em> rows, and
-a two-level MultiIndex.</li>
-<li><strong>y</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The target choice values.  If given as a <code class="docutils literal notranslate"><span class="pre">str</span></code>, use that named column of <cite>X</cite>.</li>
-<li><strong>sample_weight</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> [</em><em>n_cases</em><em>] or </em><em>[</em><em>n_casealts</em><em>]</em><em>, or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – Sample weights. If None, then samples are equally weighted. If shape is <em>n_casealts</em>,
-the array is collapsed to <em>n_cases</em> by taking only the first weight in each case.</li>
+a two-level MultiIndex.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The target choice values.  If given as a <code class="docutils literal notranslate"><span class="pre">str</span></code>, use that named column of <cite>X</cite>.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> [</em><em>n_cases</em><em>] or </em><em>[</em><em>n_casealts</em><em>]</em><em>, or </em><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – Sample weights. If None, then samples are equally weighted. If shape is <em>n_casealts</em>,
+the array is collapsed to <em>n_cases</em> by taking only the first weight in each case.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self</strong></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#larch.Model" title="larch.Model">Model</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#larch.Model" title="larch.Model">Model</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -269,36 +262,34 @@ the array is collapsed to <em>n_cases</em> by taking only the first weight in ea
 <p>This method returns the index of the maximum probability choice, not the probability.
 To recover the probability, which is probably what you want (pun intended), see
 <a class="reference internal" href="#larch.Model.predict_proba" title="larch.Model.predict_proba"><code class="xref py py-meth docutils literal notranslate"><span class="pre">predict_proba()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><em>pandas.DataFrame</em></a>) – </td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>y</strong> – The predicted choices.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array of shape = [n_cases]</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The predicted choices.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array of shape = [n_cases]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="larch.Model.predict_proba">
 <code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict probability for X.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><em>pandas.DataFrame</em></a>) – </td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>y</strong> – The predicted probabilities.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array of shape = [n_cases, n_alts]</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The predicted probabilities.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array of shape = [n_cases, n_alts]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -316,7 +307,7 @@ To recover the probability, which is probably what you want (pun intended), see
         <a href="math.html" class="btn btn-neutral float-right" title="Mathematics of Logit Choice Modeling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="dataservice.html" class="btn btn-neutral" title="DataService" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dataservice.html" class="btn btn-neutral float-left" title="DataService" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -326,7 +317,9 @@ To recover the probability, which is probably what you want (pun intended), see
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 18, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -343,27 +336,16 @@ To recover the probability, which is probably what you want (pun intended), see
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

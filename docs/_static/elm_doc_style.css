@@ -74,6 +74,41 @@ img.htmlrendering
 	border-radius: 3px;
 	
 }
+
+
+.tooltipped {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipped .tooltiptext {
+	visibility: hidden;
+	width: 180px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	top: -5px;
+	left: 110%;
+}
+
+.tooltipped .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent black transparent transparent;
+}
+.tooltipped:hover .tooltiptext {
+	visibility: visible;
+}
+
 /*
 tt {
 	font-family: 'Source Code Pro', monospace;

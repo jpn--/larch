@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; Larch 5.0.5 documentation</title>
+  <title>Examples &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,13 +19,22 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -34,21 +43,16 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="MTC Examples" href="mtc.html" />
     <link rel="prev" title="Machine Learning" href="../machine_learning.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +66,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -198,21 +202,17 @@ is provided to extract that object directly into your workspace:</p>
 <dt id="larch.example">
 <code class="descclassname">larch.</code><code class="descname">example</code><span class="sig-paren">(</span><em>n</em>, <em>extract='m'</em>, <em>echo=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.example" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run an example code section (from the documentation) and give the result.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of the example to reproduce.</li>
-<li><strong>extract</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>iterable of str</em>) – The name of the object of the example to extract.  By default <cite>m</cite>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of the example to reproduce.</p></li>
+<li><p><strong>extract</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>iterable of str</em>) – The name of the object of the example to extract.  By default <cite>m</cite>
 but it any named object that exists in the example namespace can
-be returned.  Give a list of <cite>str</cite> to get multiple objects.</li>
-<li><strong>echo</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, will echo the commands used.</li>
+be returned.  Give a list of <cite>str</cite> to get multiple objects.</p></li>
+<li><p><strong>echo</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, will echo the commands used.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <div class="toctree-wrapper compound">
@@ -256,18 +256,19 @@ be returned.  Give a list of <cite>str</cite> to get multiple objects.</li>
 <li class="toctree-l1"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="101_mnl.html">101: Swissmetro MNL Mode Choice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="102_mnl_weighted.html">102: Swissmetro Weighted MNL Mode Choice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="107_latent_class.html">107: Latent Class Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html#Class-Model-Setup">Class Model Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html#Class-Membership-Model">Class Membership Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html#Latent-Class-Model">Latent Class Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="107_latent_class.html#Reporting-Results">Reporting Results</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="109_nl.html">109: Swissmetro Nested Logit Mode Choice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="111_cnl.html">111: Swissmetro Cross-Nested Logit Mode Choice</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="exampville.html">Exampville Simulator</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="200_exampville.html">200: Exampville Simulated Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="201_exampville_mode.html">201: Exampville Mode Choice</a></li>
-<li class="toctree-l2"><a class="reference internal" href="202_exampville_logsums.html">202: Exampville Mode Choice Logsums</a></li>
-<li class="toctree-l2"><a class="reference internal" href="203_exampville_dest.html">203: Exampville Destination Choice</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="203_exampville_dest.html#data-prep">Data Prep</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="210_exampville.html">200: Exampville Simulated Data</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a><ul>
@@ -291,7 +292,7 @@ be returned.  Give a list of <cite>str</cite> to get multiple objects.</li>
         <a href="mtc.html" class="btn btn-neutral float-right" title="MTC Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../machine_learning.html" class="btn btn-neutral" title="Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../machine_learning.html" class="btn btn-neutral float-left" title="Machine Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -301,7 +302,9 @@ be returned.  Give a list of <cite>str</cite> to get multiple objects.</li>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 19, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -318,27 +321,16 @@ be returned.  Give a list of <cite>str</cite> to get multiple objects.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

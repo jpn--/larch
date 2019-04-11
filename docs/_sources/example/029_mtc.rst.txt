@@ -74,6 +74,6 @@ Model 29's nesting structure groups motorized, private auto, and shared ride alt
 	           ASC_SR3             -1.8612        0.0        0.0     -inf      inf         0
 	           ASC_TRANSIT         -0.3967        0.0        0.0     -inf      inf         0
 	           ASC_WALK             0.3401        0.0        0.0     -inf      inf         0
-	Other      mu_moto              0.5327        1.0        1.0   0.0010   1.0000         0
-	           mu_private           0.9282        1.0        1.0   0.0010   1.0000         0
-	           mu_shared            0.2169        1.0        1.0   0.0010   1.0000         0
+	Other      mu_moto              0.5327        1.0        1.0    0.001      1.0         0
+	           mu_private           0.9282        1.0        1.0    0.001      1.0         0
+	           mu_shared            0.2169        1.0        1.0    0.001      1.0         0

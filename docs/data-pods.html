@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Pods &mdash; Larch 5.0.5 documentation</title>
+  <title>Pods &mdash; Larch 5.2.8 documentation</title>
   
 
   
@@ -19,34 +19,38 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="_static/larch_rtfd.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -60,7 +64,7 @@
             
             
               <div class="version">
-                5.0.5
+                5.2.8
               </div>
             
           
@@ -87,7 +91,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="machine_learning.html">Machine Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
 </ul>
 
@@ -192,34 +198,30 @@ provides some basic common functionality and defines a consistent interface.</p>
 <dt id="larch.data_services.Pod.get_data_item">
 <code class="descname">get_data_item</code><span class="sig-paren">(</span><em>name</em>, <em>selector=None</em>, <em>dtype=None</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.data_services.Pod.get_data_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data in a new array.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The identifier for the data that will be loaded. This can be
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The identifier for the data that will be loaded. This can be
 the natural name of a data item in this pod, or some expression
 that can be evaluated. The exact form of allowable expressions is
-dependent on the particular Pod implementation.</li>
-<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – This will slice the first dimension (cases) of the result.
-There may be a performace hit for using slices.</li>
-<li><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – The dtype for the array to return. If the dtype is not given and not
-inferable from the data itself, float64 will be used.</li>
+dependent on the particular Pod implementation.</p></li>
+<li><p><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – This will slice the first dimension (cases) of the result.
+There may be a performace hit for using slices.</p></li>
+<li><p><strong>dtype</strong> (<em>dtype</em><em>, </em><em>optional</em>) – The dtype for the array to return. If the dtype is not given and not
+inferable from the data itself, float64 will be used.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> – This is the array (typically a slice of an array)
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong> – This is the array (typically a slice of an array)
 into which the data has beem loaded.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#NameError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NameError</span></code></a> – This pod cannot independently resolve the given name.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#NameError" title="(in Python v3.7)"><strong>NameError</strong></a> – This pod cannot independently resolve the given name.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -228,28 +230,24 @@ into which the data has beem loaded.</p>
 <dd><p>Load data into an existing array.</p>
 <p>The existing array must be the correct shape to receive the data. Errors can
 occur if the existing array is the incorrect shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The identifier for the data that will be loaded. This can be
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The identifier for the data that will be loaded. This can be
 the natural name of a data item in this pod, or some expression
 that can be evaluated. The exact form of allowable expressions is
-dependent on the particular Pod implementation.</li>
-<li><strong>result</strong> (<em>ndarray</em>) – This is the array (typically a slice of an array)
+dependent on the particular Pod implementation.</p></li>
+<li><p><strong>result</strong> (<em>ndarray</em>) – This is the array (typically a slice of an array)
 into which the data will be loaded. It must be given and it
-must be the correct shape.</li>
-<li><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – This will slice the first dimension (cases) of the result.
-There may be a performace hit for using slices.</li>
+must be the correct shape.</p></li>
+<li><p><strong>selector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#slice" title="(in Python v3.7)"><em>slice</em></a><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – This will slice the first dimension (cases) of the result.
+There may be a performace hit for using slices.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#NameError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NameError</span></code></a> – This pod cannot independently resolve the given name.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#NameError" title="(in Python v3.7)"><strong>NameError</strong></a> – This pod cannot independently resolve the given name.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -379,7 +377,9 @@ name must exist in <a class="reference internal" href="data-fundamentals.html#id
   <div role="contentinfo">
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
-      Last updated on Jan 17, 2019.
+      <span class="lastupdated">
+        Last updated on Apr 11, 2019.
+      </span>
 
     </p>
   </div>
@@ -396,27 +396,16 @@ name must exist in <a class="reference internal" href="data-fundamentals.html#id
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
