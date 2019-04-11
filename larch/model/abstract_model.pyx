@@ -149,6 +149,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
 			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+		return_series : bool
+			Deprecated, no effect.  Derivatives are always returned as a Series.
 
 		Returns
 		-------
@@ -403,7 +405,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		part = self.loglike3(*args, **kwargs)
 		return (-result.ll, -result.dll, -result.d2ll)
 
-	def __check_if_best(self, computed_ll):
+	def _check_if_best(self, computed_ll):
 		if computed_ll > self._cached_loglike_best:
 			self._cached_loglike_best = computed_ll
 			self._frame['best'] = self._frame['value']

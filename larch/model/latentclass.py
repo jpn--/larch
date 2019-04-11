@@ -264,11 +264,24 @@ class LatentClassModel(AbstractChoiceModel):
 			Other arrays are also included if `persist` is set to True.
 
 		"""
+		if leave_out != -1 or keep_only != -1 or subsample != -1:
+			raise NotImplementedError()
+
+		from ..util import dictx
+
 		self.__prep_for_compute(x)
 		pr = self.probability(
 			x=None,
 			start_case=start_case, stop_case=stop_case, step_case=step_case,
 		)
+
+		y = dictx()
+
+		if probability_only:
+			y.ll = numpy.nan
+			y.probability = pr
+			return y
+
 		d_p = self.d_probability(
 			x=None,
 			start_case=start_case, stop_case=stop_case, step_case=step_case,
@@ -276,19 +289,19 @@ class LatentClassModel(AbstractChoiceModel):
 
 		from .nl import d_loglike_from_d_probability
 		from .mnl import loglike_from_probability
-		from ..util import dictx
 
 		if stop_case == -1:
-			stop_case = self.dataframes.n_cases
+			stop_case_ = self.n_cases
+		else:
+			stop_case_ = stop_case
 
 		if self.dataframes.data_wt is not None:
-			wt = self.dataframes.data_wt.iloc[start_case:stop_case:step_case]
+			wt = self.dataframes.data_wt.iloc[start_case:stop_case_:step_case]
 		else:
 			wt = None
 
-		ch = self.dataframes.array_ch()[start_case:stop_case:step_case]
+		ch = self.dataframes.array_ch()[start_case:stop_case_:step_case]
 
-		y = dictx()
 		y.ll = loglike_from_probability(
 			pr,
 			ch,
@@ -314,6 +327,10 @@ class LatentClassModel(AbstractChoiceModel):
 				wt,
 				False
 			)
+
+		if start_case==0 and (stop_case==-1 or stop_case==self.n_cases) and step_case==1:
+			self._check_if_best(y.ll)
+
 		return y
 
 	def loglike2_bhhh(
@@ -327,6 +344,7 @@ class LatentClassModel(AbstractChoiceModel):
 			leave_out=-1,
 			keep_only=-1,
 			subsample=-1,
+			return_series=False,
 	):
 		"""
 		Compute a log likelihood value, it first derivative, and the BHHH approximation of the Hessian.
@@ -356,6 +374,8 @@ class LatentClassModel(AbstractChoiceModel):
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
 			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+		return_series : bool
+			Deprecated, no effect.  Derivatives are always returned as a Series.
 
 		Returns
 		-------
@@ -434,10 +454,12 @@ class LatentClassModel(AbstractChoiceModel):
 		from .mnl import loglike_from_probability
 
 		if stop_case == -1:
-			stop_case = self.dataframes.n_cases
+			stop_case_ = self.n_cases
+		else:
+			stop_case_ = stop_case
 
 		if self.dataframes.data_wt is not None:
-			wt = self.dataframes.data_wt.iloc[start_case:stop_case:step_case]
+			wt = self.dataframes.data_wt.iloc[start_case:stop_case_:step_case]
 		else:
 			wt = None
 
@@ -445,9 +467,12 @@ class LatentClassModel(AbstractChoiceModel):
 		y = dictx()
 		y.ll = loglike_from_probability(
 			pr,
-			self.dataframes.array_ch()[start_case:stop_case:step_case],
+			self.dataframes.array_ch()[start_case:stop_case_:step_case],
 			wt
 		)
+
+		if start_case==0 and (stop_case==-1 or stop_case==self.n_cases) and step_case==1:
+			self._check_if_best(y.ll)
 
 		if persist & persist_flags.PERSIST_PROBABILITY:
 			y.probability = pr
@@ -470,6 +495,12 @@ class LatentClassModel(AbstractChoiceModel):
 			alt_names=self._k_model_names(),
 			av=1,
 		)
+
+		# TODO: This kludge creates an empty array for the data_ch in the class membership model
+		#     : but it is not needed except to satisfy a data integrity check on that model
+		#     : We should instead just allow no-choice when it is a class membership model.
+		top_data.data_ch = pandas.DataFrame(0, index=top_data.caseindex, columns=self._k_models.keys())
+
 		self._k_membership.dataframes = top_data
 		for k_name, k_model in self._k_models.items():
 			k_model.dataframes = DataFrames(

@@ -2401,7 +2401,16 @@ cdef class DataFrames:
 			except MissingDataError:
 				df_av = self._data_av
 		elif 'avail_co' in req_data:
-			raise NotImplementedError('avail_co')
+			alts = self.alternative_codes()
+			cols = [req_data['avail_co'].get(a, '0') for a in alts]
+			try:
+				df_av = columnize(self._data_co, cols, inplace=False, dtype=float_dtype)
+			except NameError:
+				logger.exception('NameError in avail_co')
+				raise
+				#df_av = self._data_av
+			else:
+				df_av.columns = alts
 		else:
 			df_av = None
 

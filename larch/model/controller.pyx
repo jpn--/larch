@@ -578,7 +578,7 @@ cdef class Model5c(AbstractChoiceModel):
 			probability_only=probability_only,
 		)
 		if start_case==0 and stop_case==-1 and step_case==1:
-			self.__check_if_best(y.ll)
+			self._check_if_best(y.ll)
 		# if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
 		# 	y['dll'] = pandas.Series(y['dll'], index=self.frame.index, )
 		return y
@@ -621,6 +621,8 @@ cdef class Model5c(AbstractChoiceModel):
 			Settings for cross validation calculations.
 			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
 			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+		return_series : bool
+			Deprecated, no effect.  Derivatives are always returned as a Series.
 
 		Returns
 		-------
@@ -642,7 +644,7 @@ cdef class Model5c(AbstractChoiceModel):
 			subsample=subsample,
 		)
 		if start_case==0 and stop_case==-1 and step_case==1:
-			self.__check_if_best(y.ll)
+			self._check_if_best(y.ll)
 		if return_series and 'dll' in y and not isinstance(y['dll'], (pandas.DataFrame, pandas.Series)):
 			y['dll'] = pandas.Series(y['dll'], index=self._frame.index, )
 		if return_series and 'bhhh' in y and not isinstance(y['bhhh'], pandas.DataFrame):
@@ -762,7 +764,7 @@ cdef class Model5c(AbstractChoiceModel):
 			probability_only=probability_only,
 		)
 		if start_case==0 and stop_case==-1 and step_case==1:
-			self.__check_if_best(y.ll)
+			self._check_if_best(y.ll)
 		if probability_only:
 			return y.probability
 		if persist:
