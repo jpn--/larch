@@ -237,3 +237,83 @@ div.blurb {
 	max-width: 6.5in;
 }
 
+
+.tooltipped {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipped .tooltiptext {
+	visibility: hidden;
+	width: 180px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	top: -5px;
+	left: 110%;
+}
+
+.tooltipped .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent black transparent transparent;
+}
+.tooltipped:hover .tooltiptext {
+	visibility: visible;
+}
+
+
+div.output_area h1 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h2 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h3 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h4 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area td {
+	border: 1px solid #999999 !important;
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	font-weight: 400;
+}
+
+div.output_area th {
+	border: 1px solid #999999 !important;
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	font-weight: 800;
+}
+
+div.output_area div ~ h2 {
+  margin-top: 20px;
+}
+
+div.output_area h2 ~ div {
+  margin-top: -10px;
+}
+
+div.output_area div ~ h3 {
+  margin-top: 20px;
+}
+
+div.output_area h3 ~ div {
+  margin-top: -10px;
+}
