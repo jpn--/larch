@@ -317,3 +317,109 @@ div.output_area div ~ h3 {
 div.output_area h3 ~ div {
   margin-top: -10px;
 }
+
+
+div.highlight-console div.highlight pre {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-console div.highlight pre span.go {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session {
+    border: none !important;
+}
+
+div.highlight-shell-session div.highlight pre {
+    margin-top: 0;
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session div.highlight pre span.go {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session div.highlight::before {
+    content: "MAC / LINUX";
+    background-color: #dddddd;
+    border-top: 1px solid #666666;
+    border-left: 1px solid #666666;
+    border-right: 1px solid #666666;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+
+div.highlight-batch {
+    border: none !important;
+}
+
+
+div.highlight-batch div.highlight pre {
+    margin-top: 0;
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-batch div.highlight::before {
+    content: "WINDOWS";
+    background-color: #dddddd;
+    border-top: 1px solid #666666;
+    border-left: 1px solid #666666;
+    border-right: 1px solid #666666;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+
+div.highlight-yaml {
+    border: none !important;
+}
+
+div.highlight-yaml div.highlight pre {
+    margin-top: 0;
+    background: #fff0a5;
+}
+
+div.highlight-yaml div.highlight::before {
+    content: "YAML";
+    background-color: #fffcba;
+    border-top: 1px solid #d5d3a4;
+    border-left: 1px solid #d5d3a4;
+    border-right: 1px solid #d5d3a4;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+.highlight {
+    background: none;
+}

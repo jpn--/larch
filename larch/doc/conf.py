@@ -147,6 +147,7 @@ intersphinx_mapping = {
 	'tables': ('http://www.pytables.org/', None),
 	'networkx': ('https://networkx.github.io/documentation/stable', None),
 	'sklearn': ('https://scikit-learn.org/stable/', None),
+	'conda': ('https://docs.conda.io/projects/conda/en/latest/', None),
 }
 
 # -- Options for HTML output ---------------------------------------------------
