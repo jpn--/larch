@@ -193,17 +193,18 @@ current environment name will be shown as part of the prompt:
 By default, when opening a new terminal the environment is set as the
 ``base`` environment, although this is typically not where you want to
 be if you have followed the advice above.  Instead, to switch environments
-use the ``conda activate`` command:
+use the ``conda activate`` command.  For example, to activate the ``taiga``
+environment installed in the quick start, run:
 
 .. code-block:: batch
 
-    (base) C:\Users\cfinley> conda activate your_environment_name
-    (your_environment_name) C:\Users\cfinley>
+    (base) C:\Users\cfinley> conda activate taiga
+    (taiga) C:\Users\cfinley>
 
 .. code-block:: shell-session
 
-    (base) Computer:~ cfinley$ conda activate your_environment_name
-    (your_environment_name) Computer:~ cfinley$
+    (base) Computer:~ cfinley$ conda activate taiga
+    (taiga) Computer:~ cfinley$
 
 
 Running Jupyter
