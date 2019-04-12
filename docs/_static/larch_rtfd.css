@@ -423,3 +423,55 @@ div.highlight-yaml div.highlight::before {
 .highlight {
     background: none;
 }
+
+
+.wy-alert.wy-alert-info .wy-alert-title,
+.rst-content .note .wy-alert-title,
+.rst-content .wy-alert-info.attention .wy-alert-title,
+.rst-content .wy-alert-info.caution .wy-alert-title,
+.rst-content .wy-alert-info.danger .wy-alert-title,
+.rst-content .wy-alert-info.error .wy-alert-title,
+.rst-content .wy-alert-info.hint .wy-alert-title,
+.rst-content .wy-alert-info.important .wy-alert-title,
+.rst-content .wy-alert-info.tip .wy-alert-title,
+.rst-content .wy-alert-info.warning .wy-alert-title,
+.rst-content .seealso .wy-alert-title,
+.rst-content .wy-alert-info.admonition-todo .wy-alert-title,
+.rst-content .wy-alert-info.admonition .wy-alert-title,
+.wy-alert.wy-alert-info .rst-content .admonition-title,
+.rst-content .wy-alert.wy-alert-info .admonition-title,
+.rst-content .note .admonition-title,
+.rst-content .wy-alert-info.attention .admonition-title,
+.rst-content .wy-alert-info.caution .admonition-title,
+.rst-content .wy-alert-info.danger .admonition-title,
+.rst-content .wy-alert-info.error .admonition-title,
+.rst-content .wy-alert-info.hint .admonition-title,
+.rst-content .wy-alert-info.important .admonition-title,
+.rst-content .wy-alert-info.tip .admonition-title,
+.rst-content .wy-alert-info.warning .admonition-title,
+.rst-content .seealso .admonition-title,
+.rst-content .wy-alert-info.admonition-todo .admonition-title,
+.rst-content .wy-alert-info.admonition .admonition-title
+{
+    font-size: 85%;
+	line-height: 1.1;
+}
+
+.wy-alert.wy-alert-info p,
+.rst-content .note p,
+.rst-content .wy-alert-info.attention p,
+.rst-content .wy-alert-info.caution p,
+.rst-content .wy-alert-info.danger p,
+.rst-content .wy-alert-info.error p,
+.rst-content .wy-alert-info.hint p,
+.rst-content .wy-alert-info.important p,
+.rst-content .wy-alert-info.tip p,
+.rst-content .wy-alert-info.warning p,
+.rst-content .seealso p,
+.rst-content .wy-alert-info.admonition-todo p,
+.rst-content .wy-alert-info.admonition p
+{
+    font-size: 85%;
+	line-height: 1.3;
+}
+

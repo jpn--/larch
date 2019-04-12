@@ -223,7 +223,7 @@ Then to start JupyterLab,
 
 .. code-block:: console
 
-    conda install -c conda-forge jupyterlab
+    jupyter lab
 
 JupyterLab will open automatically in your browser.
 
