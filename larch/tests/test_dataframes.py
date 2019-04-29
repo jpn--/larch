@@ -151,5 +151,21 @@ def test_dbf_reader():
 			  b'C@#jS<`JYyF2k4x~8G*uQ{y0K*2w7Q&Wdw>eP<kT1z-g2Wc+&Cvbvda<?)700'
 
 	correct_df = pickle.loads(gzip.decompress(base64.b85decode(correct)))
+	pandas.testing.assert_frame_equal(correct_df, df)
 
-	assert all(correct_df == df)
+	df_o = q.load_dataframe(preserve_order=True)
+	pandas.testing.assert_frame_equal(correct_df[[
+		'STATEFP',
+		'STATENS',
+		'AFFGEOID',
+		'GEOID',
+		'STUSPS',
+		'NAME',
+		'LSAD',
+		'ALAND',
+		'AWATER',
+	]], df_o)
+
+	df_s = q.load_dataframe(strip_whitespace=True)
+	correct_df.NAME = correct_df.NAME.str.strip()
+	pandas.testing.assert_frame_equal(correct_df, df_s)
