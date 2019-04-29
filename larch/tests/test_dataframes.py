@@ -100,7 +100,7 @@ def test_dbf_reader():
 		'AWATER',
 	]
 
-	df = q.load_dataframe()
+	df = q.load_dataframe(preserve_order=False, strip_whitespace=False)
 
 	correct = b'ABzY8<${%50{^v}dwdkt^}s_!9zhTV6cBJlk*FB=HM6sbNXP@i=EWu?0gUNnGs!O5?B<-EC4?Fg6%a&4#cB}W7GJGeA4P=<ilV4h#' \
 			  b'EMT8pA{dKpS8czTHD?`bMMW~w7-9T?d0Q!^F8O@x#!+9=iWIJCzl)*>(o;%dZr+jMx&q=^$sJiSU2@jiy-HWl`x<Oa`PLG&dJGXY9' \
@@ -151,5 +151,21 @@ def test_dbf_reader():
 			  b'C@#jS<`JYyF2k4x~8G*uQ{y0K*2w7Q&Wdw>eP<kT1z-g2Wc+&Cvbvda<?)700'
 
 	correct_df = pickle.loads(gzip.decompress(base64.b85decode(correct)))
+	pandas.testing.assert_frame_equal(correct_df, df)
 
-	assert all(correct_df == df)
+	df_o = q.load_dataframe(preserve_order=True, strip_whitespace=False)
+	pandas.testing.assert_frame_equal(correct_df[[
+		'STATEFP',
+		'STATENS',
+		'AFFGEOID',
+		'GEOID',
+		'STUSPS',
+		'NAME',
+		'LSAD',
+		'ALAND',
+		'AWATER',
+	]], df_o)
+
+	df_s = q.load_dataframe(preserve_order=False, strip_whitespace=True)
+	correct_df.NAME = correct_df.NAME.str.strip()
+	pandas.testing.assert_frame_equal(correct_df, df_s)

@@ -242,7 +242,7 @@ cdef double get_dbf_double_v2(int fieldlen, int fieldoffset, char* buffer) nogil
 	free(s)
 	return result
 
-cdef unicode get_dbf_string_v2(int fieldlen, int fieldoffset, char* buffer):
+cdef unicode get_dbf_string_v2(int fieldlen, int fieldoffset, char* buffer, bint strip_whitespace=False):
 	cdef char* s
 	cdef int j
 	s = <char*>malloc((fieldlen+1) * sizeof(char))
@@ -251,6 +251,8 @@ cdef unicode get_dbf_string_v2(int fieldlen, int fieldoffset, char* buffer):
 	s[fieldlen] = 0
 	cdef unicode result = s.decode('UTF-8')
 	free(s)
+	if strip_whitespace:
+		return result.strip()
 	return result
 
 # cdef void set_dbf_double_v2(double value, int fieldlen, int fieldprecision, int fieldoffset, char* buffer) nogil:
@@ -473,7 +475,7 @@ cdef class DBF:
 			fclose(local_file_handle)
 
 	@cython.boundscheck(False)
-	cdef void _load_dataframe_arr_string(self, int startrow, int stoprow, unicode[:,:] arr):
+	cdef void _load_dataframe_arr_string(self, int startrow, int stoprow, unicode[:,:] arr, bint strip_whitespace=False):
 		cdef int i=0
 		cdef int row=startrow
 		cdef int nrows = stoprow - startrow
@@ -491,7 +493,7 @@ cdef class DBF:
 			k = 0
 			for j in range(self._header.nflds):
 				if self._header.fctype[j] == CType.STRING:
-					s = get_dbf_string_v2(self._header.flen[j], self._header.fdisp[j], <char*>local_read_buffer)
+					s = get_dbf_string_v2(self._header.flen[j], self._header.fdisp[j], <char*>local_read_buffer, strip_whitespace)
 					arr[i,k] = s
 					k = k + 1
 		free(local_read_buffer)
@@ -538,7 +540,10 @@ cdef class DBF:
 	# 		for j in range(self._header.nflds):
 	# 			arr[i,j] = get_dbf_double(&self._header, j, <char*>self._read_buffer)
 
-	def _load_dataframe(self, int startrow, int stoprow, bint preserve_order=False):
+	def _load_dataframe(self, int startrow, int stoprow,
+						bint preserve_order=False,
+						bint strip_whitespace=False,
+						):
 		import pandas, numpy
 		fields_integer = self.fieldnames_integer()
 		fields_float = self.fieldnames_float()
@@ -558,15 +563,44 @@ cdef class DBF:
 			df = pandas.concat([df, df_float], axis=1, join_axes=[df.index])
 		if fields_string:
 			df_string = pandas.DataFrame(index=numpy.arange(startrow, stoprow), columns=fields_string, dtype=str )
-			self._load_dataframe_arr_string(startrow, stoprow, df_string.values)
+			self._load_dataframe_arr_string(startrow, stoprow, df_string.values, strip_whitespace)
 			df = pandas.concat([df, df_string], axis=1, join_axes=[df.index])
 		if preserve_order:
 			cols = [i for i in self.fieldnames() if i in df.columns]
 			df = df[cols]
 		return df
 
-	def load_dataframe(self, start=0, stop=-1, preserve_order=False):
-		return self._load_dataframe(start, stop, preserve_order)
+	def load_dataframe(self, start=0, stop=-1, preserve_order=True, strip_whitespace=True):
+		"""
+		Load a DataFrame from the DBF file.
+
+		Parameters
+		----------
+		start : int, default 0
+			The index of the row number to begin loading data. Only non-negative
+			values are permitted.
+		stop : int, default -1
+			One past the index of the row number to stop loading data.
+			Negative or out-of-range values are interpreted as an instruction
+			to read to the end of the file.
+		preserve_order: bool, default True
+			Preserve the order of columns when loading.  If False,
+			columns are re-ordered to group together similar data types, which
+			slightly improves efficiency.
+		strip_whitespace: bool, default True
+			Strip white space from text fields, which are stored generally as
+			space-padded fixed-length strings in the raw file.
+
+		Returns
+		-------
+		pandas.DataFrame
+
+		Raises
+		------
+		IndexError
+			If `startrow` is negative or out-of-range.
+		"""
+		return self._load_dataframe(start, stop, preserve_order, strip_whitespace)
 
 	def load_dataframe_iter(self, chunksize=100000, *, return_slice=False):
 		start = 0
