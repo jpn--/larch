@@ -570,7 +570,7 @@ cdef class DBF:
 			df = df[cols]
 		return df
 
-	def load_dataframe(self, start=0, stop=-1, preserve_order=False, strip_whitespace=False):
+	def load_dataframe(self, start=0, stop=-1, preserve_order=True, strip_whitespace=True):
 		"""
 		Load a DataFrame from the DBF file.
 
@@ -583,11 +583,11 @@ cdef class DBF:
 			One past the index of the row number to stop loading data.
 			Negative or out-of-range values are interpreted as an instruction
 			to read to the end of the file.
-		preserve_order: bool, default False
-			Preserve the order of columns when loading.  If False (the default)
+		preserve_order: bool, default True
+			Preserve the order of columns when loading.  If False,
 			columns are re-ordered to group together similar data types, which
 			slightly improves efficiency.
-		strip_whitespace: bool, default False
+		strip_whitespace: bool, default True
 			Strip white space from text fields, which are stored generally as
 			space-padded fixed-length strings in the raw file.
 
