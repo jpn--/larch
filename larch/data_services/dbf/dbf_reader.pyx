@@ -571,6 +571,35 @@ cdef class DBF:
 		return df
 
 	def load_dataframe(self, start=0, stop=-1, preserve_order=False, strip_whitespace=False):
+		"""
+		Load a DataFrame from the DBF file.
+
+		Parameters
+		----------
+		start : int, default 0
+			The index of the row number to begin loading data. Only non-negative
+			values are permitted.
+		stop : int, default -1
+			One past the index of the row number to stop loading data.
+			Negative or out-of-range values are interpreted as an instruction
+			to read to the end of the file.
+		preserve_order: bool, default False
+			Preserve the order of columns when loading.  If False (the default)
+			columns are re-ordered to group together similar data types, which
+			slightly improves efficiency.
+		strip_whitespace: bool, default False
+			Strip white space from text fields, which are stored generally as
+			space-padded fixed-length strings in the raw file.
+
+		Returns
+		-------
+		pandas.DataFrame
+
+		Raises
+		------
+		IndexError
+			If `startrow` is negative or out-of-range.
+		"""
 		return self._load_dataframe(start, stop, preserve_order, strip_whitespace)
 
 	def load_dataframe_iter(self, chunksize=100000, *, return_slice=False):
