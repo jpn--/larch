@@ -70,7 +70,7 @@ Contents
     data
     model
     math
-    machine_learning
+    machine-learning/index
     example/examples
 
 
