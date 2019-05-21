@@ -859,6 +859,12 @@ cdef class DataFrames:
 			return len(self.data_ca) / self.n_alts
 		elif self._data_ce is not None:
 			return self._array_ce_reversemap.shape[0]
+		elif self._data_ch is not None:
+			return len(self.data_ch)
+		elif self._data_av is not None:
+			return len(self.data_av)
+		elif self._data_wt is not None:
+			return len(self.data_wt)
 		else:
 			return 0
 
@@ -926,6 +932,8 @@ cdef class DataFrames:
 		-------
 		pandas.DataFrame
 		"""
+		if self._data_ce is not None:
+			return self._data_ce
 		if self._data_ca is None:
 			return None
 		if self._data_av is None:
@@ -2302,17 +2310,22 @@ cdef class DataFrames:
 			raise NotImplementedError
 		return columnize(self._data_co, list(columns), inplace=False, dtype=float_dtype)
 
-	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64):
+	def make_dataframes(
+			self,
+			req_data,
+			*,
+			selector=None,
+			float_dtype=numpy.float64,
+			log_warnings=True,
+	):
 		"""Create a DataFrames object that will satisfy a data request.
 
 		Parameters
 		----------
 		req_data : Dict or str
 			The requested data. The keys for this dictionary may include {'ca', 'co',
-			'choice_ca', 'choice_co', 'choice_co_code', 'weight_co', 'avail_ca', 'standardize'}.
-			Currently, the keys {'avail_co'} are not implemented and
-			will raise an error.
-			Other keys are silently ignored.
+			'choice_ca', 'choice_co', 'choice_co_code', 'weight_co', 'avail_ca',
+			'avail_co', 'standardize'}. Other keys are silently ignored.
 		selector : array-like[bool] or slice, optional
 			If given, the selector filters the cases. This argument can only be given
 			as a keyword argument.
@@ -2321,6 +2334,10 @@ cdef class DataFrames:
 			arrays are always returned as int8 regardless of the float type.
 			This argument can only be given
 			as a keyword argument.
+		log_warnings : bool, default True
+			Emit warnings in the logger if choice, avail, or weight is not included in
+			`req_data` but is set in this DataFrames and thus returned by default even
+			though it was not requested.
 
 		Returns
 		-------
@@ -2374,6 +2391,11 @@ cdef class DataFrames:
 			)
 			for c in df_ch.columns:
 				df_ch.loc[:,c] = (choicecodes==c).astype(float_dtype)
+		elif self._data_ch is not None:
+			if log_warnings:
+				logger.warning('req_data does not request {choice_ca,choice_co,choice_co_code} but '
+							   'choice is set and being provided')
+			df_ch = self._data_ch
 		else:
 			df_ch = None
 
@@ -2389,7 +2411,8 @@ cdef class DataFrames:
 			df_wt = None
 
 		if df_wt is None and self._data_wt is not None:
-			logger.warning('req_data does not request weight_co but it is set and being provided')
+			if log_warnings:
+				logger.warning('req_data does not request weight_co but it is set and being provided')
 			df_wt = self._data_wt
 			weight_normalization = self._weight_normalization
 
@@ -2411,6 +2434,10 @@ cdef class DataFrames:
 				#df_av = self._data_av
 			else:
 				df_av.columns = alts
+		elif self._data_av is not None:
+			if log_warnings:
+				logger.warning('req_data does not request avail_ca or avail_co but it is set and being provided')
+			df_av = self._data_av
 		else:
 			df_av = None
 

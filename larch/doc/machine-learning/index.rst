@@ -1,8 +1,12 @@
 
 
+================
+Machine Learning
+================
+
 .. toctree::
     :maxdepth: 4
 
-    machine-learning
+    machine_learning
     prelearn
 

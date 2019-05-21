@@ -23,6 +23,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			title=None,
 	):
 
+		self._cached_loglike_nil = 0
 		self._cached_loglike_null = 0
 		self._cached_loglike_constants_only = 0
 		self._cached_loglike_best = -numpy.inf
@@ -735,6 +736,20 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		print("No op!")
 
 	def loglike_null(self):
+		"""
+		Compute the log likelihood at Null Values.
+
+		Set all parameter values to the value indicated in the
+		"nullvalue" column of the parameter frame, and compute
+		the log likelihood with the currently loaded data.  Note
+		that the null value for each parameter may not be zero
+		(for example, the default null value for logsum parameters
+		in a nested logit model is 1).
+
+		Returns
+		-------
+		float
+		"""
 		if self._cached_loglike_null != 0:
 			return self._cached_loglike_null
 		else:
@@ -743,6 +758,33 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			self._cached_loglike_null = self.loglike()
 			self.set_values(current_parameters)
 			return self._cached_loglike_null
+
+	def loglike_nil(self):
+		"""
+		Compute the log likelihood with no model at all.
+
+		This is different from the null model, in that
+		no explanatory data and no model structure is used to compute the log
+		likelihood.  For simple MNL models, this is my be equivalent to
+		the Null model, but for more complex models this may be
+		different.
+
+		Returns
+		-------
+		float
+		"""
+		if self._cached_loglike_nil != 0:
+			return self._cached_loglike_nil
+		else:
+			from .model import Model
+			nil = Model()
+			try:
+				nil.dataservice = self.dataframes
+			except AttributeError:
+				raise ValueError('cannot access model.dataframes')
+			nil.load_data(log_warnings=False)
+			self._cached_loglike_nil = nil.loglike()
+			return self._cached_loglike_nil
 
 	def loglike_constants_only(self):
 		raise NotImplementedError
@@ -799,6 +841,19 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				tr.put('td', text='Rho Squared w.r.t. Null Parameters')
 				rsz = 1.0 - (mostrecent.loglike / ll_z)
 				tr.put('td', text="{:.3f}".format(rsz), colspan='2')
+
+		ll_nil = self._cached_loglike_nil
+		if ll_nil != 0:
+			tr = thead.put('tr')
+			tr.put('td', text='Log Likelihood with No Model')
+			tr.put('td', text="{:.2f}".format(ll_nil))
+			tr.put('td', text="{:.2f}".format(ll_nil / self.n_cases))
+			if mostrecent is not None:
+				tr = thead.put('tr')
+				tr.put('td', text='Rho Squared w.r.t. No Model')
+				rsz = 1.0 - (mostrecent.loglike / ll_nil)
+				tr.put('td', text="{:.3f}".format(rsz), colspan='2')
+
 
 		ll_c = self._cached_loglike_constants_only
 		if ll_c != 0:

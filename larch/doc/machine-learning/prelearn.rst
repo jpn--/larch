@@ -2,8 +2,11 @@
 
 .. currentmodule:: larch.prelearning
 
-=======================
-Prelearning
-=======================
+===============================
+Using Scikit-Learn within Larch
+===============================
 
 .. autoclass:: Prelearner
+
+.. autoclass:: XGBoostPrelearner
+

@@ -68,6 +68,7 @@ cdef class Model5c(AbstractChoiceModel):
 		self.rename_parameters = DictOfStrings(touch_callback=self.mangle)
 
 		self._cached_loglike_null = 0
+		self._cached_loglike_nil = 0
 		self._cached_loglike_constants_only = 0
 		self._cached_loglike_best = -numpy.inf
 		self._most_recent_estimation_result = None
@@ -110,6 +111,7 @@ cdef class Model5c(AbstractChoiceModel):
 		state["_possible_overspecification    ".strip()] = (self._possible_overspecification    )
 		state["_most_recent_estimation_result ".strip()] = (self._most_recent_estimation_result )
 		state["_cached_loglike_null           ".strip()] = (self._cached_loglike_null           )
+		state["_cached_loglike_nil            ".strip()] = (self._cached_loglike_nil            )
 		state["_cached_loglike_constants_only ".strip()] = (self._cached_loglike_constants_only )
 		state["_cached_loglike_best           ".strip()] = (self._cached_loglike_best           )
 		state["_title                         ".strip()] = (self._title                         )
@@ -149,6 +151,7 @@ cdef class Model5c(AbstractChoiceModel):
 		(self._display_order_tail            ) = state["_display_order_tail            ".strip()]
 		(self._possible_overspecification    ) = state["_possible_overspecification    ".strip()]
 		(self._most_recent_estimation_result ) = state["_most_recent_estimation_result ".strip()]
+		(self._cached_loglike_nil            ) = state["_cached_loglike_nil            ".strip()]
 		(self._cached_loglike_null           ) = state["_cached_loglike_null           ".strip()]
 		(self._cached_loglike_constants_only ) = state["_cached_loglike_constants_only ".strip()]
 		(self._cached_loglike_best           ) = state["_cached_loglike_best           ".strip()]
@@ -414,7 +417,7 @@ cdef class Model5c(AbstractChoiceModel):
 			raise MissingDataError("no dataframes are set")
 		return self._dataframes.n_cases
 
-	def load_data(self, dataservice=None, autoscale_weights=True):
+	def load_data(self, dataservice=None, autoscale_weights=True, log_warnings=True):
 		"""Load dataframes as required from the dataservice.
 
 		Parameters
@@ -428,6 +431,10 @@ cdef class Model5c(AbstractChoiceModel):
 			have the weights automatically scaled such that the average
 			value for data_wt is 1.0.  See `autoscale_weights` for more
 			information.
+		log_warnings : bool, default True
+			Emit warnings in the logger if choice, avail, or weight is not included in
+			`req_data` but is set in the dataservice, and thus returned by default even
+			though it was not requested.
 
 		Raises
 		------
@@ -437,7 +444,10 @@ cdef class Model5c(AbstractChoiceModel):
 		if dataservice is not None:
 			self._dataservice = dataservice
 		if self._dataservice is not None:
-			self.dataframes = self._dataservice.make_dataframes(self.required_data())
+			self.dataframes = self._dataservice.make_dataframes(
+				self.required_data(),
+				log_warnings=log_warnings,
+			)
 			if autoscale_weights and self.dataframes.data_wt is not None:
 				self.dataframes.autoscale_weights()
 		else:

@@ -614,7 +614,7 @@ class DataService():
 		)
 
 
-	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64):
+	def make_dataframes(self, req_data, *, selector=None, float_dtype=numpy.float64, log_warnings=True):
 		"""Create a DataFrames object that will satisfy a data request.
 
 		Parameters
@@ -633,6 +633,8 @@ class DataService():
 			arrays are always returned as int8 regardless of the float type.
 			This argument can only be given
 			as a keyword argument.
+		log_warnings : bool, default True
+			No effect.
 
 		Returns
 		-------

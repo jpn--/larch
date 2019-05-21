@@ -532,12 +532,12 @@ class LatentClassModel(AbstractChoiceModel):
 				m.unmangle()
 			self._mangled = False
 
-	def load_data(self, dataservice=None, autoscale_weights=True):
+	def load_data(self, dataservice=None, autoscale_weights=True, log_warnings=True):
 		self.unmangle()
 		if dataservice is not None:
 			self._dataservice = dataservice
 		if self._dataservice is not None:
-			dfs = self._dataservice.make_dataframes(self.required_data())
+			dfs = self._dataservice.make_dataframes(self.required_data(), log_warnings=log_warnings)
 			if autoscale_weights and dfs.data_wt is not None:
 				dfs.autoscale_weights()
 			self.dataframes = dfs

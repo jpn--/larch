@@ -10,6 +10,7 @@ from sklearn.externals import joblib
 
 from .general_precision import l4_float_dtype
 from .log import logger_name
+from .dataframes import DataFrames
 
 def user_cache_file(filename, appname=None, appauthor=None, version=None, opinion=True):
 	d = user_cache_dir(appname=appname, appauthor=appauthor, version=version, opinion=opinion)
@@ -18,12 +19,46 @@ def user_cache_file(filename, appname=None, appauthor=None, version=None, opinio
 
 
 class Prelearner():
+	"""
+	A prelearner for use with Larch.
+
+	A prelearner uses a machine learning classifier to make an initial
+	prediction of the result.  This initial prediction is then added
+	as an input data column for Larch, effectively creating a chained
+	classifier.
+
+	Parameters
+	----------
+	training_X : pandas.DataFrame
+		The exogenous variables.
+	training_Y : pandas.DataFrame
+		The observed choices in the training data.
+	training_W : pandas.DataFrame, optional
+		The weights.
+	classifier : sklearn Classifier or Regressor
+		This is the class object for the selected classifier, not
+		an existing instance.  This classifier or Regressor will be
+		instantiated and trained using the data above to generate
+		the prediction.
+	fit : bool, default True
+		Whether to fit this prelearner automatically on construction.
+	cache_file : str, optional
+		A cache file name to store the trained prelearner.  If just a filename is given,
+		it will be stored in `appdirs.user_cache_file()`. If instead an absolute path or
+		a relative path beginning with '.' is given, that location will be used.
+		If the file exists, it will be loaded instead of re-training.
+	output_name : str, default 'prelearned_utility'
+		The name of the output column from this prelearner.
+	**kwargs
+		Any other keyword arguments are passed through to the classifier's
+		constructor.
+	"""
 
 	def __init__(
 			self,
-			training_X,
-			training_Y,
-			training_W=None,
+			dataframes,
+			ca_columns=None,
+			co_columns=None,
 			classifier=None,
 			fit=True,
 			cache_file=None,
@@ -31,30 +66,32 @@ class Prelearner():
 			appname='larch',
 			**kwargs,
 	):
-		"""
-
-		Parameters
-		----------
-		training_X : pandas.DataFrame
-		training_Y
-		training_Y
-		classifier
-		fit
-		cache_file : str, optional
-			A cache file name to store the trained prelearner.  If just a filename is given,
-			it will be stored in `appdirs.user_cache_file()`. If instead an absolute path or
-			a relative path beginning with '.' is given, that location will be used.
-			If the file exists, it will be loaded instead of re-training.
-		output_name
-		kwargs
-		"""
 
 		if classifier is None:
 			raise ValueError('must give a classifier')
 
 		logger = logging.getLogger(logger_name)
 
-		self.input_columns = training_X.columns
+		self.input_ca_columns = ca_columns if ca_columns is not None else []
+		self.input_co_columns = co_columns
+
+		# training_X = self.filter_ca_columns(dataframes.data_ca_as_ce())
+		# if co_columns:
+		# 	try:
+		# 		Xco = dataframes.data_co[co_columns]
+		# 	except KeyError:
+		# 		Xco = pandas.DataFrame(
+		# 			dataframes.data_co.eval(co_columns).T.astype(float),
+		# 			index=dataframes.data_co.index,
+		# 			columns=co_columns,
+		# 		)
+		# 	training_X = training_X.join(Xco, on=training_X.index.levels[0].name, how='left')
+		training_X = self.filter_and_join_columns(
+			dataframes.data_ca_as_ce(),
+			dataframes.data_co,
+		)
+		training_Y = dataframes.array_ch_as_ce()
+		training_W = dataframes.array_wt_as_ce()
 		self.output_column = output_name
 
 		if cache_file is not None:
@@ -86,17 +123,69 @@ class Prelearner():
 		self._predict_type = 'predict_proba col 1'
 
 
+	def filter_ca_columns(self, X):
+		# filter the columns of the input into the correct form for the prelearner.
+		try:
+			X1 = X[self.input_ca_columns]
+		except KeyError:
+			X1 = pandas.DataFrame(
+				X.eval(self.input_ca_columns).T.astype(float),
+				index=X.index,
+				columns=self.input_ca_columns,
+			)
+		return X1
+
+	def filter_and_join_columns(self, X_ca, X_co):
+		training_X = self.filter_ca_columns(X_ca)
+		if self.input_co_columns:
+			try:
+				X_co = X_co[self.input_co_columns]
+			except KeyError:
+				X_co = pandas.DataFrame(
+					X_co.eval(self.input_co_columns).T.astype(float),
+					index=X_co.index,
+					columns=self.input_co_columns,
+				)
+			training_X = training_X.join(X_co, on=training_X.index.levels[0].name, how='left').fillna(0)
+		return training_X
+
 	def apply(
 			self,
 			X,
 			dtype=None,
 	):
+		"""
+		Apply the prelearner to compute pseudo-utility.
+
+		Parameters
+		----------
+		X : pandas.DataFrame
+		dtype : dtype, default float
+			The dtype to use for the output column.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
 		if dtype is None:
 			dtype = l4_float_dtype
+
+		if isinstance(X, DataFrames):
+			X_ca = X._data_ca_or_ce
+			X_co = X.data_co
+		else:
+			X_ca = X
+			X_co = None
+
+		X_in = self.filter_and_join_columns(
+			X_ca,
+			X_co,
+		)
+
 		if self._predict_type == 'predict_proba col 1':
-			X[self.output_column] = numpy.log(self.clf.predict_proba(X[self.input_columns])[:, 1]).astype(dtype)
+			X_ca[self.output_column] = numpy.log(self.clf.predict_proba(X_in)[:, 1]).astype(dtype)
 		elif self._predict_type == 'predict':
-			X[self.output_column] = numpy.log(self.clf.predict(X[self.input_columns])).astype(dtype)
+			X_ca[self.output_column] = numpy.log(self.clf.predict(X_in)).astype(dtype)
 		else:
 			raise TypeError(self._predict_type)
 		return X
@@ -106,9 +195,9 @@ class Prelearner():
 class RandomForestPrelearner(Prelearner):
 	def __init__(
 			self,
-			training_X,
-			training_Y,
-			training_W=None,
+			dataframes,
+			ca_columns=None,
+			co_columns=None,
 			cache_file=None,
 			fit=True,
 			output_name='prelearned_utility',
@@ -128,9 +217,9 @@ class RandomForestPrelearner(Prelearner):
 		default_kwargs.update(kwargs)
 
 		super().__init__(
-			training_X,
-			training_Y,
-			training_W=training_W,
+			dataframes=dataframes,
+			ca_columns=ca_columns,
+			co_columns=co_columns,
 			classifier=RandomForestClassifier,
 			fit=fit,
 			cache_file=cache_file,
@@ -143,9 +232,9 @@ class XGBoostHardPrelearner(Prelearner):
 
 	def __init__(
 			self,
-			training_X,
-			training_Y,
-			training_W=None,
+			dataframes,
+			ca_columns=None,
+			co_columns=None,
 			cache_file=None,
 			fit=True,
 			output_name='prelearned_utility',
@@ -175,9 +264,9 @@ class XGBoostHardPrelearner(Prelearner):
 		default_kwargs.update(kwargs)
 
 		super().__init__(
-			training_X,
-			training_Y,
-			training_W=training_W,
+			dataframes=dataframes,
+			ca_columns=ca_columns,
+			co_columns=co_columns,
 			classifier=XGBClassifier,
 			fit=fit,
 			cache_file=cache_file,
@@ -190,9 +279,9 @@ class XGBoostSoftPrelearner(Prelearner):
 
 	def __init__(
 			self,
-			training_X,
-			training_Y,
-			training_W=None,
+			dataframes,
+			ca_columns=None,
+			co_columns=None,
 			cache_file=None,
 			fit=True,
 			output_name='prelearned_utility',
@@ -222,9 +311,9 @@ class XGBoostSoftPrelearner(Prelearner):
 		default_kwargs.update(kwargs)
 
 		super().__init__(
-			training_X,
-			training_Y,
-			training_W=training_W,
+			dataframes=dataframes,
+			ca_columns=ca_columns,
+			co_columns=co_columns,
 			classifier=XGBRegressor,
 			fit=fit,
 			cache_file=cache_file,
@@ -241,9 +330,9 @@ class XGBoostPrelearner(Prelearner):
 
 	def __init__(
 			self,
-			training_X,
-			training_Y,
-			training_W=None,
+			dataframes,
+			ca_columns=None,
+			co_columns=None,
 			cache_file=None,
 			fit=True,
 			output_name='prelearned_utility',
@@ -251,6 +340,7 @@ class XGBoostPrelearner(Prelearner):
 	):
 		from xgboost import XGBRegressor, XGBClassifier
 
+		training_Y = dataframes.array_ch_as_ce()
 		use_soft = numpy.any((training_Y != 0) & (training_Y != 1.0))
 
 		default_kwargs = dict(
@@ -275,9 +365,9 @@ class XGBoostPrelearner(Prelearner):
 		default_kwargs.update(kwargs)
 
 		super().__init__(
-			training_X,
-			training_Y,
-			training_W=training_W,
+			dataframes=dataframes,
+			ca_columns=ca_columns,
+			co_columns=co_columns,
 			classifier=XGBRegressor if use_soft else XGBClassifier,
 			fit=fit,
 			cache_file=cache_file,

@@ -13,6 +13,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		object _possible_overspecification
 
 		double _cached_loglike_null
+		double _cached_loglike_nil
 		double _cached_loglike_constants_only
 		double _cached_loglike_best
 
