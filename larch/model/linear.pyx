@@ -26,8 +26,12 @@ def _unsupported_operands(op,a,b):
 	return f"unsupported operands for {op}: '{_what_is(a)}' and '{_what_is(b)}'"
 
 cdef class UnicodeRef_C(unicode):
+	"""
+	A common base class for all larch named reference types.
 
-	pass
+	This class itself has no features and should not be instantiated.
+	Instead create :class:`ParameterRef_C` or :class:`DataRef_C` objects as needed.
+	"""
 
 cdef class Ref_Gen:
 
