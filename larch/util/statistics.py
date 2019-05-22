@@ -114,10 +114,12 @@ def statistics_for_array(
 	else:
 		ch_weightsx = None
 
-	if can_nan and histogram:
+	if (can_nan and histogram) or ax.dtype=='category':
 		with warning.ignore_warnings():
 
 			discrete_ = kwargs.pop('discrete', None)
+			if ax.dtype=='category':
+				discrete_ = True
 			if discrete_ is None:
 				discrete_ = seems_like_discrete_data(ax, dictionary)
 
