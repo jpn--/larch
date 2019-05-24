@@ -757,7 +757,12 @@ class OMX(_omx_base_class):
 
 	def get_dataframe(self, matrix, index=None, columns=None):
 		"""
-		Get values from a matrix as a pandas.DataFrame.
+		Get a matrix array as a pandas.DataFrame.
+
+		This will return the entire content from a single matrix
+		array as a pandas.DataFrame, using index or column labels
+		from lookup vectors contained in the OMX file, or as
+		provided directly.
 
 		Parameters
 		----------
@@ -807,6 +812,59 @@ class OMX(_omx_base_class):
 		result = Dict()
 		for name,vals in self.data._v_children.items():
 			result[name] = vals[r,c]
+		return result
+
+	def get_rc_dataframe(self, row_indexes, col_indexes, mat_names=None, index=None):
+		"""
+		Build a DataFrame containing values pulled from this OMX.
+
+		Parameters
+		----------
+		row_indexes : array-like
+			The row index within the matrix for each output row.
+		col_indexes : array-like
+			The column index within the matrix for each output row.
+			Must have the same shape as `row_indexes`.
+		mat_names : Sequence, optional
+			A sequence of matrix names to draw values from.  Each
+			name should be a matrix table that exists in the OMX
+			file. If not given, all matrix arrays from the `data`
+			node in the OMX file will be used.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		if mat_names is None:
+			mat_names = list(self.data._v_children.keys())
+
+		data = {
+			mat: self[mat][row_indexes, col_indexes]
+			for mat in mat_names
+		}
+
+		if index is None:
+			try:
+				rows_name = row_indexes.name
+			except AttributeError:
+				rows_name = 'i'
+				while rows_name in mat_names:
+					rows_name = rows_name + "_"
+			data[rows_name] = row_indexes
+
+			try:
+				cols_name = col_indexes.name
+			except AttributeError:
+				cols_name = 'j'
+				while cols_name in mat_names:
+					cols_name = cols_name + "_"
+			data[cols_name] = col_indexes
+
+		result = pandas.DataFrame.from_dict(data)
+		if index is None:
+			result = result.set_index([rows_name, cols_name])
+		else:
+			result.index = index
 		return result
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
