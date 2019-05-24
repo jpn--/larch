@@ -830,6 +830,8 @@ class OMX(_omx_base_class):
 			name should be a matrix table that exists in the OMX
 			file. If not given, all matrix arrays from the `data`
 			node in the OMX file will be used.
+		index : array-like, optional
+			An array to use as the index on the returned DataFrame.
 
 		Returns
 		-------
@@ -842,6 +844,18 @@ class OMX(_omx_base_class):
 			mat: self[mat][row_indexes, col_indexes]
 			for mat in mat_names
 		}
+
+		if index is None:
+			try:
+				index = row_indexes.index
+			except AttributeError:
+				pass
+
+		if index is None:
+			try:
+				index = col_indexes.index
+			except AttributeError:
+				pass
 
 		if index is None:
 			try:
@@ -866,6 +880,47 @@ class OMX(_omx_base_class):
 		else:
 			result.index = index
 		return result
+
+	def join_rc_dataframe(
+			self,
+			df,
+			rowidx,
+			colidx,
+			mat_names=None,
+			prefix='',
+	):
+		"""
+		Join RC data pulled from this OMX with an existing DataFrame.
+
+		Parameters
+		----------
+		df : pandas.DataFrame
+			The existing dataframe to join to.
+		rowidx, colidx : str or array-like
+			The columns to use for the rowindexes and colindexes,
+			respectively. Give as a string to name columns in `df`,
+			or as an eval-capable instruction, or give an array
+			explicitly.
+		mat_names : Sequence, optional
+			A sequence of matrix names to draw values from.  Each
+			name should be a matrix table that exists in the OMX
+			file. If not given, all matrix arrays from the `data`
+			node in the OMX file will be used.
+		prefix : str, optional
+			Add this prefix to every matrix name used.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		return df.join(
+			self.get_rc_dataframe(
+				df.eval(rowidx),
+				df.eval(colidx),
+				mat_names,
+				index=df.index,
+			).add_prefix(prefix)
+		)
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
 		oth = OMX(otherfile, mode='r')
