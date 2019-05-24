@@ -109,9 +109,11 @@ dicta = Dict
 
 # Add statistics to pandas.DataFrame and pandas.Series
 import pandas
-from .statistics import statistics_for_dataframe, statistics_for_array5
+from .statistics import statistics_for_dataframe, statistics_for_array5, uniques, invmap
 pandas.DataFrame.statistics = statistics_for_dataframe
 pandas.Series.statistics = statistics_for_array5
+pandas.Series.uniques = uniques
+pandas.Series.invmap = invmap
 
 from .dataframe import compute
 pandas.DataFrame.compute = compute

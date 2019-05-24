@@ -1,4 +1,6 @@
 import numpy
+import pandas
+import enum
 from .. import warning
 from .histograms import sizable_histogram_figure, seems_like_discrete_data
 from . import dictx
@@ -118,8 +120,11 @@ def statistics_for_array(
 		with warning.ignore_warnings():
 
 			discrete_ = kwargs.pop('discrete', None)
-			if ax.dtype=='category':
-				discrete_ = True
+			try:
+				if ax.dtype == 'category':
+					discrete_ = True
+			except TypeError:
+				pass
 			if discrete_ is None:
 				discrete_ = seems_like_discrete_data(ax, dictionary)
 
@@ -247,3 +252,68 @@ def statistics_for_dataframe(df, histogram=True, ch_weights=None, avail=None, **
 	except:
 		pass
 	return result
+
+
+def uniques(s, dictionary=None):
+	"""
+	Count the frequency for each unique value in a pandas.Series.
+
+	Parameters
+	----------
+	s : pandas.Series
+		The values to count.
+	dictionary : Mapping or Enum, optional
+		A mapping converting the actual values in the series
+		to a more meaningful value (e.g. changes code numbers
+		to names).  If an Enum class is passed, the values
+		are treated as keys, and the names as values.
+
+	Returns
+	-------
+	pandas.Series
+	"""
+	action = s
+	len_action = len(action)
+	try:
+		action = action[~numpy.isnan(action)]
+	except TypeError:
+		num_nan = 0
+	else:
+		num_nan = len_action - len(action)
+	x = numpy.unique(action, return_counts=True)
+	if dictionary is None:
+		y = pandas.Series(x[1], x[0])
+	else:
+		if isinstance(dictionary, enum.EnumMeta):
+			dictionary = {v: k for k, v in dictionary.__members__.items()}
+		y = pandas.Series(x[1], [dictionary.get(j, j) for j in x[0]])
+	if num_nan:
+		y[numpy.nan] = num_nan
+	return y
+
+
+def invmap(s, mapping):
+	"""
+	Apply an inverse map.
+
+	When the values in `s` are the values of a Mapping,
+	but you want them to be the keys instead.  Note
+	that values need not be unique, so an arbitrary
+	key with the correct value will result for non-unique
+	inverse mappings.
+
+	Parameters
+	----------
+	s : array-like
+	mapping : Mapping or Enum, optional
+		A mapping. If an Enum class is passed, the
+		__members__ is used.
+
+	Returns
+	-------
+
+	"""
+	if isinstance(mapping, enum.EnumMeta):
+		mapping = mapping.__members__
+	inv_map = {v: k for k, v in mapping.items()}
+	return s.map(inv_map)
