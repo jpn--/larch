@@ -701,8 +701,8 @@ cdef class DataFrames:
 		return self._is_computational_ready(activate)
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
-		from ..util.addict import adict_report
-		from ..util.statistics import statistics_for_dataframe
+		from .util.addict import adict_report
+		from .util.statistics import statistics_for_dataframe
 		result = adict_report(__title=title, __depth=header_level)
 		if self.data_co is not None:
 			result.data_co = statistics_for_dataframe(self.data_co)
@@ -715,80 +715,95 @@ cdef class DataFrames:
 		return result
 
 	def choice_avail_summary(self, graph=None):
+		"""
+		Generate a summary of choice and availability statistics.
 
-		if graph is None:
-			ch_ = self.data_ch.unstack()
-			av_ = self.data_av
-		else:
-			ch_ = self.data_ch_cascade(graph)
-			av_ = self.data_av_cascade(graph)
+		Parameters
+		----------
+		graph : networkx.DiGraph, optional
+			The nesting graph.
 
-		ch_.columns = ch_.columns.droplevel(0)
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		try:
+			if graph is None:
+				ch_ = self.data_ch
+				av_ = self.data_av
+			else:
+				ch_ = self.data_ch_cascade(graph)
+				av_ = self.data_av_cascade(graph)
 
-		ch = ch_.sum()
-		av = av_.sum()
+			# ch_.columns = ch_.columns.droplevel(0)
 
-		if self.data_wt is not None:
-			ch_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
-			av_w = pandas.Series((av_.values * self.data_wt.values).sum(0), index=av_.columns)
-			show_wt = numpy.any(ch != ch_w)
-		else:
-			ch_w = ch
-			av_w = av
-			show_wt = False
+			ch = ch_.sum()
+			av = av_.sum()
 
-		ch_.values[av_.values > 0] = 0
-		if ch_.values.sum() > 0:
-			ch_but_not_av = ch_.sum()
 			if self.data_wt is not None:
-				ch_but_not_av_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
+				ch_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
+				av_w = pandas.Series((av_.values * self.data_wt.values).sum(0), index=av_.columns)
+				show_wt = numpy.any(ch != ch_w)
 			else:
-				ch_but_not_av_w = ch_but_not_av
-		else:
-			ch_but_not_av = None
-			ch_but_not_av_w = None
+				ch_w = ch
+				av_w = av
+				show_wt = False
 
-		from collections import OrderedDict
-		od = OrderedDict()
+			ch_.values[av_.values > 0] = 0
+			if ch_.values.sum() > 0:
+				ch_but_not_av = ch_.sum()
+				if self.data_wt is not None:
+					ch_but_not_av_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
+				else:
+					ch_but_not_av_w = ch_but_not_av
+			else:
+				ch_but_not_av = None
+				ch_but_not_av_w = None
 
-		if self.alternative_names() is not None:
-			od['name'] = pandas.Series(self.alternative_names(), index=self.alternative_codes())
+			from collections import OrderedDict
+			od = OrderedDict()
 
-		if show_wt:
-			od['chosen weighted'] = ch_w
-			od['chosen unweighted'] = ch
-			od['available weighted'] = av_w
-			od['available unweighted'] = av
-		else:
-			od['chosen'] = ch
-			od['available'] = av
-		if ch_but_not_av is not None:
+			if self.alternative_names() is not None:
+				od['name'] = pandas.Series(self.alternative_names(), index=self.alternative_codes())
+
 			if show_wt:
-				od['chosen but not available weighted'] = ch_but_not_av_w
-				od['chosen but not available unweighted'] = ch_but_not_av
+				od['chosen weighted'] = ch_w
+				od['chosen unweighted'] = ch
+				od['available weighted'] = av_w
+				od['available unweighted'] = av
 			else:
-				od['chosen but not available'] = ch_but_not_av
+				od['chosen'] = ch
+				od['available'] = av
+			if ch_but_not_av is not None:
+				if show_wt:
+					od['chosen but not available weighted'] = ch_but_not_av_w
+					od['chosen but not available unweighted'] = ch_but_not_av
+				else:
+					od['chosen but not available'] = ch_but_not_av
 
-		result = pandas.DataFrame.from_dict(od)
+			result = pandas.DataFrame.from_dict(od)
 
-		totals = result.sum()
+			totals = result.sum()
 
-		for tot in (
-				'chosen',
-				'chosen weighted',
-				'chosen unweighted',
-				'chosen but not available',
-				'chosen but not available weighted',
-				'chosen but not available unweighted',
-				'chosen thus available',
-				'not available so not chosen'
-		):
-			if tot in totals:
-				result.loc['< Total All Alternatives >', tot] = totals[tot]
+			for tot in (
+					'chosen',
+					'chosen weighted',
+					'chosen unweighted',
+					'chosen but not available',
+					'chosen but not available weighted',
+					'chosen but not available unweighted',
+					'chosen thus available',
+					'not available so not chosen'
+			):
+				if tot in totals:
+					result.loc['< Total All Alternatives >', tot] = totals[tot]
 
-		result.loc['< Total All Alternatives >', pandas.isnull(result.loc['< Total All Alternatives >', :])] = ""
-		result.drop('_root_', errors='ignore', inplace=True)
-		return result
+			result.loc['< Total All Alternatives >', pandas.isnull(result.loc['< Total All Alternatives >', :])] = ""
+			result.drop('_root_', errors='ignore', inplace=True)
+			return result
+		except:
+			logger.exception('error in choice_avail_summary')
+			raise
 
 	def alternative_names(self):
 		"""The alternative names."""
