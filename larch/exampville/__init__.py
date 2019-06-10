@@ -4,8 +4,10 @@ import numpy
 import os
 import scipy
 import scipy.stats
+import geopandas
 from numpy import log, exp, log1p
 
+from ..data_warehouse import example_file
 
 # flog = larch.logging.flogger(level=30, label="exampville")
 def flog(a0, *arg, **kwarg):
@@ -31,14 +33,27 @@ def build_directory(directory=None):
 		_directory = directory
 	return _directory
 
+shapefile = example_file('exampville_taz.zip')
+hhfile = example_file('exampville_households.csv.gz', missing_ok=True)
+personfile = example_file('exampville_persons.csv.gz', missing_ok=True)
+tourfile = example_file('exampville_tours.csv.gz', missing_ok=True)
+skimsfile = example_file('exampville_skims.omx', missing_ok=True)
+employmentfile = example_file('exampville_employment.csv.gz', missing_ok=True)
 
-
-# def build_year_1(nZones=9, transit_scope=slice(2, 8), n_HH=834, directory=None, seed=0)
-def build_year_1(nZones=15, transit_scope=slice(4,15), n_HH=2000, directory=None, seed=0, output_format='h5'):
+def build_year_1(
+		n_HH=5000,
+		directory=None,
+		seed=0,
+		output_format='csv',
+):
 
 	global _cache_1, _directory
 	if output_format in _cache_1:
 		return _cache_1[output_format]
+
+	taz_shape = geopandas.read_file("zip://" + shapefile)
+
+	nZones = len(taz_shape)
 
 	flog("EXAMPVILLE Builder (Year 1)")
 	flog("  simulating a survey of {} households", n_HH)
