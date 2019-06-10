@@ -478,7 +478,7 @@ cdef class ParameterFrame:
 		self._display_order_tail = tuple(x)
 
 	def pfo(self):
-		if self.ordering is None:
+		if self.ordering is None or self.ordering == ():
 			return self.pf
 		paramset = set(self.pf.index)
 		out = []
@@ -634,6 +634,8 @@ cdef class ParameterFrame:
 
 		ordered_p = list(pfo.index)
 
+		any_categories = not (self.ordering is None or self.ordering == ())
+
 		any_colons = False
 		for rownum in range(len(ordered_p)):
 			if ":" in ordered_p[rownum][1]:
@@ -647,7 +649,8 @@ cdef class ParameterFrame:
 
 		thead = table.put('thead')
 		tr = thead.put('tr')
-		tr.put('th', text='Category', style="text-align: left;")
+		if any_categories:
+			tr.put('th', text='Category', style="text-align: left;")
 		if any_colons:
 			tr.put('th', text='Parameter', colspan='2', style="text-align: left;")
 		else:
@@ -668,7 +671,9 @@ cdef class ParameterFrame:
 
 		for rownum in range(len(ordered_p)):
 			tr = tbody.put('tr')
-			if swallow_categories > 0:
+			if not any_categories:
+				pass
+			elif swallow_categories > 0:
 				swallow_categories -= 1
 			else:
 				nextrow = rownum + 1

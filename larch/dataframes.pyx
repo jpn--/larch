@@ -351,8 +351,10 @@ cdef class DataFrames:
 	ch_name : str, optional
 		A name to use for the choice variable.  If not given, it is inferred from
 		the `ch` argument if possible.  If the `ch` argument is not given but a
-		name is specified, then that named column is found in the `ca`, or `ce`
-		arguments and used as the choice.
+		name is specified, then that named column is found in the `ca` or `ce`
+		arguments if it appears there and used as the choice.  Otherwise, if
+		the named column is found in the `co` argument then the codes in that column
+		are used to identify the choices.
 	wt_name : str, optional
 		A name to use for the weight variable.  If not given, it is inferred from
 		the `wt` argument if possible.  If the `wt` argument is not given but a
@@ -500,6 +502,18 @@ cdef class DataFrames:
 					self._alternative_codes = pandas.Index([])
 			else:
 				self._alternative_codes = pandas.Index(alt_codes)
+
+			if ch is None and ch_name is not None and co is not None and ch_name in co.columns:
+				choicecodes = columnize(co, [ch_name], inplace=False, dtype=int)
+				_ch_temp = pandas.DataFrame(
+					0,
+					columns=self.alternative_codes(),
+					index=co.index,
+					dtype=numpy.float64,
+				)
+				for c in _ch_temp.columns:
+					_ch_temp.loc[:,c] = (choicecodes==c).astype(numpy.float64)
+				ch = _ch_temp
 
 			logger.debug(" DataFrames ~ set alternative_names")
 			self._alternative_names = alt_names
@@ -729,28 +743,44 @@ cdef class DataFrames:
 		"""
 		try:
 			if graph is None:
-				ch_ = self.data_ch
+				if self.data_ch is not None:
+					ch_ = self.data_ch.copy()
+				else:
+					ch_ = None
 				av_ = self.data_av
 			else:
 				ch_ = self.data_ch_cascade(graph)
 				av_ = self.data_av_cascade(graph)
 
 			# ch_.columns = ch_.columns.droplevel(0)
+			if ch_ is not None:
+				ch = ch_.sum()
+			else:
+				ch = None
 
-			ch = ch_.sum()
-			av = av_.sum()
+			if av_ is not None:
+				av = av_.sum()
+			else:
+				av = None
 
 			if self.data_wt is not None:
-				ch_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
-				av_w = pandas.Series((av_.values * self.data_wt.values).sum(0), index=av_.columns)
+				if ch_ is not None:
+					ch_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)
+				else:
+					ch_w = None
+				if av_ is not None:
+					av_w = pandas.Series((av_.values * self.data_wt.values).sum(0), index=av_.columns)
+				else:
+					av_w = None
 				show_wt = numpy.any(ch != ch_w)
 			else:
 				ch_w = ch
 				av_w = av
 				show_wt = False
 
-			ch_.values[av_.values > 0] = 0
-			if ch_.values.sum() > 0:
+			if av_ is not None:
+				ch_.values[av_.values > 0] = 0
+			if ch_ is not None and ch_.values.sum() > 0:
 				ch_but_not_av = ch_.sum()
 				if self.data_wt is not None:
 					ch_but_not_av_w = pandas.Series((ch_.values * self.data_wt.values).sum(0), index=ch_.columns)

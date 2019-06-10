@@ -115,7 +115,11 @@ def _exec_example(sourcefile, d=None, extract='m', echo=False):
 			if code is not None:
 				exec(code, _global, _local)
 	if isinstance(extract, str):
-		return _local[extract]
+		try:
+			return _local[extract]
+		except KeyError:
+			print("Known keys:", ", ".join(str(i) for i in _local.keys()))
+			raise
 	else:
 		return tuple(_local[i] for i in extract)
 

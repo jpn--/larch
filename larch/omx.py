@@ -785,13 +785,20 @@ class OMX(_omx_base_class):
 			index = self.lookup._v_children[index]
 		if isinstance(columns, str):
 			columns = self.lookup._v_children[columns]
-		return pandas.DataFrame(
-			data=self.data._v_children[matrix],
-			index=index,
-			columns=columns,
-		)
-
-
+		if matrix in self.data._v_children:
+			return pandas.DataFrame(
+				data=self.data._v_children[matrix],
+				index=index,
+				columns=columns,
+			)
+		elif matrix in self.lookup._v_children:
+			return pandas.DataFrame(
+				data=self.lookup._v_children[matrix],
+				index=index,
+				columns=[matrix],
+			)
+		else:
+			raise KeyError(matrix)
 
 	def all_matrix_at(self, r, c):
 		"""
