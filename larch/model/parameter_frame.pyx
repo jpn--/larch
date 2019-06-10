@@ -478,7 +478,7 @@ cdef class ParameterFrame:
 		self._display_order_tail = tuple(x)
 
 	def pfo(self):
-		if self.ordering is None or self.ordering == ():
+		if self.ordering is None:
 			return self.pf
 		paramset = set(self.pf.index)
 		out = []
@@ -630,80 +630,86 @@ cdef class ParameterFrame:
 	# 	return f
 
 	def parameter_summary(self):
-		pfo = self.pfo()
 
-		ordered_p = list(pfo.index)
+		try:
 
-		any_categories = not (self.ordering is None or self.ordering == ())
+			pfo = self.pfo()
 
-		any_colons = False
-		for rownum in range(len(ordered_p)):
-			if ":" in ordered_p[rownum][1]:
-				any_colons = True
-				break
+			ordered_p = list(pfo.index)
 
-		from xmle import ElemTable
+			any_categories = not (self.ordering is None or self.ordering == ())
 
-		div = ElemTable('div')
-		table = div.put('table')
+			any_colons = False
+			for rownum in range(len(ordered_p)):
+				if ":" in ordered_p[rownum][1]:
+					any_colons = True
+					break
 
-		thead = table.put('thead')
-		tr = thead.put('tr')
-		if any_categories:
-			tr.put('th', text='Category', style="text-align: left;")
-		if any_colons:
-			tr.put('th', text='Parameter', colspan='2', style="text-align: left;")
-		else:
-			tr.put('th', text='Parameter', style="text-align: left;")
+			from xmle import ElemTable
 
-		tr.put('th', text='Value')
-		if 'std err' in pfo.columns:
-			tr.put('th', text='Std Err')
-		if 't stat' in pfo.columns:
-			tr.put('th', text='t Stat')
-		if 'nullvalue' in pfo.columns:
-			tr.put('th', text='Null Value')
+			div = ElemTable('div')
+			table = div.put('table')
 
-		tbody = table.put('tbody')
-
-		swallow_categories = 0
-		swallow_subcategories = 0
-
-		for rownum in range(len(ordered_p)):
-			tr = tbody.put('tr')
-			if not any_categories:
-				pass
-			elif swallow_categories > 0:
-				swallow_categories -= 1
+			thead = table.put('thead')
+			tr = thead.put('tr')
+			if any_categories:
+				tr.put('th', text='Category', style="text-align: left;")
+			if any_colons:
+				tr.put('th', text='Parameter', colspan='2', style="text-align: left;")
 			else:
-				nextrow = rownum + 1
-				while nextrow<len(ordered_p) and ordered_p[nextrow][0] == ordered_p[rownum][0]:
-					nextrow += 1
-				swallow_categories = nextrow - rownum - 1
-				if swallow_categories:
-					tr.put('th', text=ordered_p[rownum][0], rowspan=str(swallow_categories+1), style="vertical-align: top; text-align: left;")
-				else:
-					tr.put('th', text=ordered_p[rownum][0], style="vertical-align: top; text-align: left;")
-			parameter_name = ordered_p[rownum][1]
-			if ":" in parameter_name:
-				parameter_name = parameter_name.split(":",1)
-				if swallow_subcategories > 0:
-					swallow_subcategories -= 1
+				tr.put('th', text='Parameter', style="text-align: left;")
+
+			tr.put('th', text='Value')
+			if 'std err' in pfo.columns:
+				tr.put('th', text='Std Err')
+			if 't stat' in pfo.columns:
+				tr.put('th', text='t Stat')
+			if 'nullvalue' in pfo.columns:
+				tr.put('th', text='Null Value')
+
+			tbody = table.put('tbody')
+
+			swallow_categories = 0
+			swallow_subcategories = 0
+
+			for rownum in range(len(ordered_p)):
+				tr = tbody.put('tr')
+				if not any_categories:
+					pass
+				elif swallow_categories > 0:
+					swallow_categories -= 1
 				else:
 					nextrow = rownum + 1
-					while nextrow < len(ordered_p) and ":" in ordered_p[nextrow][1] and ordered_p[nextrow][1].split(":",1)[0] == parameter_name[0]:
+					while nextrow<len(ordered_p) and ordered_p[nextrow][0] == ordered_p[rownum][0]:
 						nextrow += 1
-					swallow_subcategories = nextrow - rownum - 1
-					if swallow_subcategories:
-						tr.put('th', text=parameter_name[0], rowspan=str(swallow_subcategories+1), style="vertical-align: top; text-align: left;")
+					swallow_categories = nextrow - rownum - 1
+					if swallow_categories:
+						tr.put('th', text=ordered_p[rownum][0], rowspan=str(swallow_categories+1), style="vertical-align: top; text-align: left;")
 					else:
-						tr.put('th', text=parameter_name[0], style="vertical-align: top; text-align: left;")
-				tr.put('th', text=parameter_name[1], style="vertical-align: top; text-align: left;")
-			else:
-				if any_colons:
-					tr.put('th', text=parameter_name, colspan="2", style="vertical-align: top; text-align: left;")
+						tr.put('th', text=ordered_p[rownum][0], style="vertical-align: top; text-align: left;")
+				parameter_name = ordered_p[rownum][1]
+				if ":" in parameter_name:
+					parameter_name = parameter_name.split(":",1)
+					if swallow_subcategories > 0:
+						swallow_subcategories -= 1
+					else:
+						nextrow = rownum + 1
+						while nextrow < len(ordered_p) and ":" in ordered_p[nextrow][1] and ordered_p[nextrow][1].split(":",1)[0] == parameter_name[0]:
+							nextrow += 1
+						swallow_subcategories = nextrow - rownum - 1
+						if swallow_subcategories:
+							tr.put('th', text=parameter_name[0], rowspan=str(swallow_subcategories+1), style="vertical-align: top; text-align: left;")
+						else:
+							tr.put('th', text=parameter_name[0], style="vertical-align: top; text-align: left;")
+					tr.put('th', text=parameter_name[1], style="vertical-align: top; text-align: left;")
 				else:
-					tr.put('th', text=parameter_name, style="vertical-align: top; text-align: left;")
-			tr << self.__parameter_table_section(ordered_p[rownum][1])
+					if any_colons:
+						tr.put('th', text=parameter_name, colspan="2", style="vertical-align: top; text-align: left;")
+					else:
+						tr.put('th', text=parameter_name, style="vertical-align: top; text-align: left;")
+				tr << self.__parameter_table_section(ordered_p[rownum][1])
 
-		return div
+			return div
+		except Exception as err:
+			logger.exception("error in parameter_summary")
+			raise

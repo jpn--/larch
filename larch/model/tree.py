@@ -386,10 +386,30 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			except KeyError:
 				pass
 
+			cluster_elemental = pydot.Cluster(
+				'elemental',
+				style='rounded',
+				bgcolor='lightgrey',
+				color='white',
+			)
+
 			for n, nodedata in N.nodes(data=True):
-				str_nodedata = dict((k if k!='name' else 'name_', str(v)) for k, v in nodedata.items())
-				p = pydot.Node(str(n), **str_nodedata)
-				P.add_node(p)
+				str_nodedata = dict((k if k!='name' else 'name_', '"'+str(v)+'"') for k, v in nodedata.items())
+				if n in self.elementals:
+					p = pydot.Node(
+						str(n),
+						style='filled',
+						fillcolor='white',
+						**str_nodedata
+					)
+					P.add_node(p)
+					cluster_elemental.add_node(p)
+				else:
+					p = pydot.Node(str(n), **str_nodedata)
+					P.add_node(p)
+
+
+			P.add_subgraph(cluster_elemental)
 
 			if N.is_multigraph():
 				for u, v, key, edgedata in N.edges(data=True, keys=True):
@@ -401,7 +421,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 			else:
 				for u, v, edgedata in N.edges(data=True):
-					str_edgedata = dict((k, str(v)) for k, v in edgedata.items())
+					str_edgedata = dict((k, '"'+str(v)+'"') for k, v in edgedata.items())
 					edge = pydot.Edge(str(u), str(v), **str_edgedata)
 					P.add_edge(edge)
 
