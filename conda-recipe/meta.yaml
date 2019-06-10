@@ -119,6 +119,7 @@ test:
     - sphinxcontrib
     - sphinxcontrib-websupport
     - nbsphinx
+    - geopandas
 
 about:
   home: http://larch.newman.me
