@@ -131,7 +131,7 @@ setup(
     packages=find_packages(),
     package_data={
         # If any package contains these types of files, include them:
-        '': ['*.h5', '*.h5d', '*.omx', '*.h5.gz', '*.csv.gz', '*.sqlite', '*.dbf',  '*.dbf.gz'],
+        '': ['*.h5', '*.h5d', '*.omx', '*.h5.gz', '*.csv.gz', '*.sqlite', '*.dbf',  '*.dbf.gz', '*taz.zip'],
         'larch': [
             'doc/*.rst','doc/*/*.rst','doc/*/*/*.rst','doc/*/*/*/*.rst',
             'doc/*.ipynb', 'doc/example/*.ipynb',
