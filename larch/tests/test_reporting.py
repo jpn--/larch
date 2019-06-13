@@ -5,12 +5,16 @@ import larch
 from larch import Model, P, X
 
 def test_ch_av_summary_output():
-	f_tour, f_skims = larch.example(200, ['f_tour', 'f_skims'])
-	f_tour = f_tour[f_tour.TOURPURP == 1]
+	hh, pp, tour, skims = larch.example(200, ['hh', 'pp', 'tour', 'skims'])
+	raw = tour.merge(hh, on='HHID').merge(pp, on=('HHID', 'PERSONID'))
+	raw["HOMETAZi"] = raw["HOMETAZ"] - 1
+	raw["DTAZi"] = raw["DTAZ"] - 1
 
-	f_tour = f_tour.join(
-		f_skims.get_rc_dataframe(
-			f_tour.HOMETAZi, f_tour.DTAZi,
+	raw = raw[raw.TOURPURP == 1]
+
+	f_tour = raw.join(
+		skims.get_rc_dataframe(
+			raw.HOMETAZi, raw.DTAZi,
 		)
 	)
 
