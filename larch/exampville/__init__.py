@@ -33,12 +33,33 @@ def build_directory(directory=None):
 		_directory = directory
 	return _directory
 
-shapefile = example_file('exampville_taz.zip')
-hhfile = example_file('exampville_households.csv.gz', missing_ok=True)
-personfile = example_file('exampville_persons.csv.gz', missing_ok=True)
-tourfile = example_file('exampville_tours.csv.gz', missing_ok=True)
-skimsfile = example_file('exampville_skims.omx', missing_ok=True)
-employmentfile = example_file('exampville_employment.csv.gz', missing_ok=True)
+class _files:
+
+	@property
+	def shapefile(self):
+		return example_file('exampville_taz.zip', rel=True)
+
+	@property
+	def employment(self):
+		return example_file('exampville_employment.csv.gz', missing_ok=True, rel=True)
+
+	@property
+	def hh(self):
+		return example_file('exampville_households.csv.gz', missing_ok=True, rel=True)
+
+	@property
+	def person(self):
+		return example_file('exampville_persons.csv.gz', missing_ok=True, rel=True)
+
+	@property
+	def tour(self):
+		return example_file('exampville_tours.csv.gz', missing_ok=True, rel=True)
+
+	@property
+	def skims(self):
+		return example_file('exampville_skims.omx', missing_ok=True, rel=True)
+
+files = _files()
 
 def build_year_1(
 		n_HH=5000,
