@@ -1018,18 +1018,26 @@ cdef class Model5c(AbstractChoiceModel):
 		if self._dataframes is not None and alternative_codes is not None:
 			import warnings
 			warnings.warn('alternative_codes are ignored when dataframes are set')
+			alternative_codes = self._dataframes._alternative_codes
+
+		alternative_names = None
 
 		if alternative_codes is None:
 			if self._dataframes is None and self._dataservice is not None:
 				alternative_codes = self._dataservice.alternative_codes()
+				alternative_names = self._dataservice.alternative_names()
 			else:
 				alternative_codes = self._dataframes._alternative_codes
+				alternative_names = self._dataframes._alternative_names
 
 		from .tree import NestingTree
 		g = NestingTree()
-		for a in alternative_codes:
-			g.add_node(a)
-
+		if alternative_names is None:
+			for a in alternative_codes:
+				g.add_node(a)
+		else:
+			for a, name in zip(alternative_codes, alternative_names):
+				g.add_node(a, name=name)
 		self.graph = g
 
 	def is_mnl(self):

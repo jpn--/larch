@@ -359,18 +359,17 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			return ET.fromstring(pyg_imgdata.getvalue().decode())
 		else:
 
-			N = self
 			pydot = dot
 
 			# set Graphviz graph type
-			if N.is_directed():
+			if self.is_directed():
 				graph_type = 'digraph'
 			else:
 				graph_type = 'graph'
-			strict = nx.number_of_selfloops(N) == 0 and not N.is_multigraph()
+			strict = nx.number_of_selfloops(self) == 0 and not self.is_multigraph()
 
-			name = N.name
-			graph_defaults = N.graph.get('graph', {})
+			name = self.name
+			graph_defaults = self.graph.get('graph', {})
 			if name is '':
 				P = pydot.Dot('', graph_type=graph_type, strict=strict,
 							  **graph_defaults)
@@ -378,11 +377,11 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				P = pydot.Dot('"%s"' % name, graph_type=graph_type, strict=strict,
 							  **graph_defaults)
 			try:
-				P.set_node_defaults(**N.graph['node'])
+				P.set_node_defaults(**self.graph['node'])
 			except KeyError:
 				pass
 			try:
-				P.set_edge_defaults(**N.graph['edge'])
+				P.set_edge_defaults(**self.graph['edge'])
 			except KeyError:
 				pass
 
@@ -391,36 +390,54 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				style='rounded',
 				bgcolor='lightgrey',
 				color='white',
+				rank='same',
+				rankdir="LR",
 			)
 
-			for n, nodedata in N.nodes(data=True):
+			for n, nodedata in self.nodes(data=True):
 				str_nodedata = dict((k if k!='name' else 'name_', '"'+str(v)+'"') for k, v in nodedata.items())
-				if n in self.elementals:
-					p = pydot.Node(
-						str(n),
-						style='filled',
-						fillcolor='white',
-						**str_nodedata
-					)
-					P.add_node(p)
-					cluster_elemental.add_node(p)
-				else:
-					p = pydot.Node(str(n), **str_nodedata)
-					P.add_node(p)
 
+				if 'parameter' in nodedata:
+					param_label = '<BR ALIGN="CENTER" /><FONT COLOR="#999999" POINT-SIZE="9"><I>{0}</I></FONT>'.format(nodedata['parameter'])
+				else:
+					param_label = ''
+
+				if 'name' in nodedata and n != self.root_id:
+					name = nodedata['name']
+					str_nodedata['label'] = '<' \
+											'<FONT COLOR="#999999" POINT-SIZE="9">({1}) </FONT>' \
+											'{0}' \
+											'{2}>'.format(name,n,param_label)
+
+				# Default styling for nodes can have been overridden
+				if n in self.elementals:
+					str_nodedata['style'] = str_nodedata.get('style', 'filled')
+					str_nodedata['fillcolor'] = str_nodedata.get('fillcolor', 'white')
+				elif n == self.root_id:
+					str_nodedata['shape'] = str_nodedata.get('shape', 'invhouse')
+				else:
+					str_nodedata['style'] = str_nodedata.get('style', 'rounded')
+					str_nodedata['shape'] = str_nodedata.get('shape', 'rectangle')
+
+				p = pydot.Node(str(n), **str_nodedata)
+				P.add_node(p)
+				if n in self.elementals:
+					cluster_elemental.add_node(p)
 
 			P.add_subgraph(cluster_elemental)
 
-			if N.is_multigraph():
-				for u, v, key, edgedata in N.edges(data=True, keys=True):
+			if self.is_multigraph():
+				for u, v, key, edgedata in self.edges(data=True, keys=True):
 					str_edgedata = dict((k, str(v)) for k, v in edgedata.items()
 										if k != 'key')
+					if v in self.elementals:
+						str_edgedata['constraint'] = 'false'
 					edge = pydot.Edge(str(u), str(v),
 									  key=str(key), **str_edgedata)
 					P.add_edge(edge)
 
 			else:
-				for u, v, edgedata in N.edges(data=True):
+				for u, v, edgedata in self.edges(data=True):
 					str_edgedata = dict((k, '"'+str(v)+'"') for k, v in edgedata.items())
 					edge = pydot.Edge(str(u), str(v), **str_edgedata)
 					P.add_edge(edge)
