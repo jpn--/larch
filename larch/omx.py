@@ -827,11 +827,13 @@ class OMX(_omx_base_class):
 
 		Parameters
 		----------
-		row_indexes : array-like
+		row_indexes : array-like or int
 			The row index within the matrix for each output row.
-		col_indexes : array-like
+		col_indexes : array-like or int
 			The column index within the matrix for each output row.
-			Must have the same shape as `row_indexes`.
+			Must have the same shape as `row_indexes`, unless one of
+			these is just an integer, in which case that value is
+			broadcast to the shape of the other.
 		mat_names : Sequence, optional
 			A sequence of matrix names to draw values from.  Each
 			name should be a matrix table that exists in the OMX
@@ -846,6 +848,11 @@ class OMX(_omx_base_class):
 		"""
 		if mat_names is None:
 			mat_names = list(self.data._v_children.keys())
+
+		if isinstance(row_indexes, int):
+			row_indexes = numpy.full_like(col_indexes, row_indexes)
+		elif isinstance(col_indexes, int):
+			col_indexes = numpy.full_like(row_indexes, col_indexes)
 
 		data = {
 			mat: self[mat][row_indexes, col_indexes]
