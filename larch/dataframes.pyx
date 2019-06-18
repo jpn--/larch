@@ -715,17 +715,22 @@ cdef class DataFrames:
 		return self._is_computational_ready(activate)
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
-		from .util.addict import adict_report
+		from xmle import Reporter, NumberedCaption
 		from .util.statistics import statistics_for_dataframe
-		result = adict_report(__title=title, __depth=header_level)
+		result = Reporter()
+		result.hn_(header_level, title)
 		if self.data_co is not None:
-			result.data_co = statistics_for_dataframe(self.data_co)
+			result.hn_(header_level+1, 'CO Data')
+			result << statistics_for_dataframe(self.data_co)
 		if self.data_ca is not None:
-			result.data_ca = statistics_for_dataframe(self.data_ca)
+			result.hn_(header_level+1, 'CA Data')
+			result << statistics_for_dataframe(self.data_ca)
 		if self.data_ce is not None:
-			result.data_ce = statistics_for_dataframe(self.data_ce)
+			result.hn_(header_level+1, 'CE Data')
+			result << statistics_for_dataframe(self.data_ce)
 		if self.data_ch is not None and self.data_av is not None:
-			result.choices = self.choice_avail_summary(graph=graph)
+			result.hn_(header_level+1, 'Choices')
+			result << self.choice_avail_summary(graph=graph)
 		return result
 
 	def choice_avail_summary(self, graph=None):
