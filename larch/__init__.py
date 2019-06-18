@@ -39,4 +39,5 @@ _doctest_mode_ = False
 _larch_self = sys.modules[__name__]
 
 from xmle import Reporter, NumberedCaption
+from xmle import load_metadata as read_metadata
 from .workspace import make_reporter
