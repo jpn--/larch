@@ -261,6 +261,30 @@ cdef class ParameterFrame:
 			raise
 
 	def set_value(self, name, value=None, **kwargs):
+		"""
+		Set the value for a model parameter.
+
+		This function will set the current value of a parameter.
+		Unless explicitly instructed with an alternate value,
+		the new value will also be saved as the "initial" value
+		of the parameter.
+
+		Parameters
+		----------
+		name : str
+			The name of the parameter to set to a fixed value.
+		value : float
+			The numerical value to set for the parameter.
+		initvalue : float, optional
+			If given, this value is used to indicate the initial value
+			for the parameter, which may be different from the
+			current value.
+		nullvalue : float, optional
+			If given, this will overwrite any existing null value for
+			the parameter.  If not given, the null value for the
+			parameter is not changed.
+
+		"""
 		if isinstance(name, ParameterRef_C):
 			name = str(name)
 		if name not in self._frame.index:
@@ -291,6 +315,25 @@ cdef class ParameterFrame:
 		self._check_if_frame_values_changed()
 
 	def lock_value(self, name, value, note=None, _change_check=True):
+		"""
+		Set a fixed value for a model parameter.
+
+		Parameters with a fixed value (i.e., with "holdfast" set to 1)
+		will not be changed during estimation by the likelihood
+		maximization algorithm.
+
+		Parameters
+		----------
+		name : str
+			The name of the parameter to set to a fixed value.
+		value : float
+			The numerical value to set for the parameter.
+		note : str, optional
+			A note as to why this parameter is set to a fixed value.
+			This will not affect the mathematical treatment of the
+			parameter in any way, but may be useful for reporting.
+
+		"""
 		if isinstance(name, ParameterRef_C):
 			name = str(name)
 		if value is 'null':

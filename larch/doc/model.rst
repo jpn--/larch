@@ -14,6 +14,10 @@ A :class:`Model` is the core object used to represent a discrete choice model.
 
     .. autoattribute:: quantity_ca
 
+    .. automethod:: set_value
+
+    .. automethod:: lock_value
+
     .. automethod:: fit
 
     .. automethod:: predict
