@@ -1,0 +1,114 @@
+.. currentmodule:: larch
+
+================================
+101: Swissmetro MNL Mode Choice
+================================
+
+.. testsetup:: *
+
+	import larch
+	import os
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+This example is a mode choice model built using the Swissmetro example dataset.
+First we create the DB and Model objects:
+
+.. testcode::
+
+	import larch.examples
+	d = larch.examples.SWISSMETRO()
+	m = larch.Model(dataservice=d)
+
+We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.
+
+.. testcode::
+
+	m.title = "swissmetro example 01 (simple logit)"
+
+We need to identify the availability and choice variables. These have been conveniently
+set up in the data.
+
+.. testcode::
+
+	m.availability_var = 'avail'
+	m.choice_ca_var = 'choice'
+
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+
+.. testcode::
+
+	from larch.roles import P,X
+	m.utility_co[1] = P("ASC_TRAIN")
+	m.utility_co[2] = 0
+	m.utility_co[3] = P("ASC_CAR")
+	m.utility_co[1] += X("TRAIN_TT") * P("B_TIME")
+	m.utility_co[2] += X("SM_TT") * P("B_TIME")
+	m.utility_co[3] += X("CAR_TT") * P("B_TIME")
+	m.utility_co[1] += X("TRAIN_CO*(GA==0)") * P("B_COST")
+	m.utility_co[2] += X("SM_CO*(GA==0)") * P("B_COST")
+	m.utility_co[3] += X("CAR_CO") * P("B_COST")
+
+Larch will find all the parameters in the model, but we'd like to output them in
+a rational order.  We can use the ordering method to do this:
+
+.. testcode::
+
+	m.ordering = [
+		("ASCs", 'ASC.*',),
+		("LOS", 'B_.*',),
+	]
+
+The swissmetro example models exclude some observations.  We will use the selector
+to identify the observations we would like to keep.  There are two selector criteria,
+and only cases that evaluate `True` for both are selected.
+
+.. testcode::
+
+	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+
+We can estimate the models and check the results match up with those given by Biogeme:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='SLSQP')
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-5331.252...
+	>>> m.calculate_parameter_covariance()
+	>>> m.pf.loc['B_TIME','value']
+	-0.01277...
+	>>> m.pf.loc['B_COST','value']
+	-0.01083...
+	>>> m.pf.loc['ASC_TRAIN','value']
+	-0.701...
+	>>> m.pf.loc['ASC_CAR','value']
+	-0.1546...
+
+
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+
+	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
+	                    value    std err  t stat  robust std err  robust t stat
+	Category Parameter
+	ASCs     ASC_CAR   -0.155  4.324e-02  -3.576       5.816e-02         -2.65...
+	         ASC_TRAIN -0.701  5.487e-02 -12.778       8.256e-02         -8.49...
+	LOS      B_COST    -0.011  5.183e-04 -20.910       6.823e-04        -15.88...
+	         B_TIME    -0.013  5.688e-04 -22.465       1.043e-03        -12.25...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.example(101)
+

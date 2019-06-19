@@ -1,0 +1,477 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700|Roboto+Slab:200,500);
+
+
+
+.fa-home::before, .icon-home::before {
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    content: "" !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+
+}
+
+.wy-nav-top a::before {
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    content: "" !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+	margin-right:5px !important;
+
+}
+
+
+#mainlogo
+{
+    -ms-transform-origin: left 75%; /* IE 9 */
+    -webkit-transform-origin: left 75%; /* Chrome, Safari, Opera */
+    transform-origin: left 75%;
+    -ms-transform: scale(0.5,0.5); /* IE 9 */
+    -webkit-transform: scale(0.5,0.5); /* Chrome, Safari, Opera */
+    transform: scale(0.5,0.5);
+	float:none;
+	margin: 0 0 0 0;
+}
+
+img.logo
+{
+	width:200px;
+}
+
+div.body h1
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 150%;
+	font-weight: 700;
+}
+
+div.body h2
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 130%;
+	font-weight: 400;
+}
+
+div.body h3, div.body h4, div.body h5, div.body h6
+{
+	font-family: 'Roboto Slab', sans-serif;
+	font-weight: 100;
+	
+}
+
+div.body h3 { font-size: 110%; padding-left: 50px; }
+div.body h4 { font-size: 100%; padding-left: 65px; }
+div.body h5 { font-size: 90%;  padding-left: 80px; }
+div.body h6 { font-size: 80%;  padding-left: 95px; }
+
+.wy-side-nav-search, .wy-nav-top
+{
+	background-color: rgb(51,91,71) !important;
+}
+
+.treelogo {
+	max-width: 32px !important;
+}
+
+.trophyicon {
+	max-height: 32px !important;
+	max-width: 32px !important;
+	padding-right: 5px;
+}
+
+.wy-side-nav-search .fa-home, .wy-nav-top a
+{
+	font-family: 'Roboto Slab';
+	font-weight: 700;
+}
+
+.wy-breadcrumbs li:first-child::before
+{
+	display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+	margin-right:5px !important;
+    content: "" !important;
+    background: url("../_images/larch_favicon.png") no-repeat 0 2px !important;
+    background-size: 100% !important;
+}
+
+p.rubric
+{
+	font-weight: bold;
+}
+
+.rst-content dl dd
+{
+	line-height: 24px;
+	font-size: 16px;
+}
+
+.rst-content dl dt
+{
+	margin-bottom: 0.3em;
+}
+
+
+div#treelogo-larch-documentation>p:first-of-type
+{
+	margin-top: 24px;
+}
+
+.statusbadge {
+	max-height: 18px !important;
+}
+
+img.htmlrendering
+{
+	box-shadow: 1px 2px 3px 2px rgba(0, 0, 0, 0.3);
+	border-radius: 5px;
+	
+}
+
+div[class^='highlight'] pre {
+    line-height: 1.2;
+}
+
+
+
+
+/*
+tt {
+	font-family: 'Source Code Pro', monospace;
+	font-size: 80%;
+}
+
+tt.descname {
+	font-weight: 700;
+	font-size: 90%;
+}
+
+tt.descclassname {
+	font-weight: 300;
+	font-size: 90%;
+}
+*/
+
+
+
+
+
+.error_report {color:red; font-family:monospace;}
+
+
+table {border-collapse:collapse;}
+
+div.larch_art table, div.larch_art th, div.larch_art td {
+	border: 1px solid #999999;
+	font-family:"Roboto Mono", monospace;
+	font-size:90%;
+	font-weight:400;
+	}
+	
+div.larch_art th, div.larch_art td { padding:2px; text-align:left;}
+
+div.larch_art td.parameter_category {
+	font-family:"Roboto", monospace;
+	font-weight:500;
+	background-color: #f4f4f4; 
+	font-style: italic;
+	}
+
+div.larch_art th {
+	font-family:"Roboto", monospace;
+	font-weight:700;
+	}
+	
+.larch_signature {font-size:70%; font-weight:100; font-style:italic; font-family: "Roboto", Helvetica, sans-serif; }
+
+a.parameter_reference {font-style: italic; text-decoration: none}
+
+.strut2 {min-width:1in}
+
+.histogram_cell { padding-top:1; padding-bottom:1; vertical-align:center; }
+
+.raw_log pre {
+	font-family:"Roboto Mono", monospace;
+	font-weight:300;
+	font-size:70%;
+	}
+
+div.larch_art caption {
+    caption-side: bottom;
+	text-align: left;
+	font-family: Roboto;
+	font-style: italic;
+	font-weight: 100;
+	font-size: 80%;
+}
+
+h2.larch_art, h2.larch_art_xhtml {
+	font-weight: 500;
+	font-family: "Roboto Slab", "ff-tisa-web-pro", "Georgia", Arial, sans-serif;
+	margin-bottom: 3px;
+}
+
+h3.larch_art, h3.larch_art_xhtml {
+	font-weight: 200;
+	font-family: "Roboto Slab", "ff-tisa-web-pro", "Georgia", Arial, sans-serif;
+	margin-bottom: 3px;
+	margin-top: 15px;
+}
+
+h2.larch_art + h3.larch_art, h2.larch_art_xhtml + h3.larch_art_xhtml,
+h2.larch_art + a.toc + h3.larch_art, h2.larch_art_xhtml + a.toc + h3.larch_art_xhtml {
+	margin-top: 5px;
+}
+
+table.dictionary {
+	border:0px hidden !important;
+	border-collapse: collapse !important;
+}
+
+div.blurb {
+	margin-top: 15px;
+	max-width: 6.5in;
+}
+
+
+.tooltipped {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltipped .tooltiptext {
+	visibility: hidden;
+	width: 180px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	top: -5px;
+	left: 110%;
+}
+
+.tooltipped .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent black transparent transparent;
+}
+.tooltipped:hover .tooltiptext {
+	visibility: visible;
+}
+
+
+div.output_area h1 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h2 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h3 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area h4 {
+	font-family: "Book-Antiqua", "Palatino", serif;
+}
+
+div.output_area td {
+	border: 1px solid #999999 !important;
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	font-weight: 400;
+}
+
+div.output_area th {
+	border: 1px solid #999999 !important;
+	font-family: "Roboto Mono", monospace;
+	font-size: 90%;
+	font-weight: 800;
+}
+
+div.output_area div ~ h2 {
+  margin-top: 20px;
+}
+
+div.output_area h2 ~ div {
+  margin-top: -10px;
+}
+
+div.output_area div ~ h3 {
+  margin-top: 20px;
+}
+
+div.output_area h3 ~ div {
+  margin-top: -10px;
+}
+
+
+div.highlight-console div.highlight pre {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-console div.highlight pre span.go {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session {
+    border: none !important;
+}
+
+div.highlight-shell-session div.highlight pre {
+    margin-top: 0;
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session div.highlight pre span.go {
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-shell-session div.highlight::before {
+    content: "MAC / LINUX";
+    background-color: #dddddd;
+    border-top: 1px solid #666666;
+    border-left: 1px solid #666666;
+    border-right: 1px solid #666666;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+
+div.highlight-batch {
+    border: none !important;
+}
+
+
+div.highlight-batch div.highlight pre {
+    margin-top: 0;
+    background: #666666;
+    color: #ffffff;
+}
+
+div.highlight-batch div.highlight::before {
+    content: "WINDOWS";
+    background-color: #dddddd;
+    border-top: 1px solid #666666;
+    border-left: 1px solid #666666;
+    border-right: 1px solid #666666;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+
+div.highlight-yaml {
+    border: none !important;
+}
+
+div.highlight-yaml div.highlight pre {
+    margin-top: 0;
+    background: #fff0a5;
+}
+
+div.highlight-yaml div.highlight::before {
+    content: "YAML";
+    background-color: #fffcba;
+    border-top: 1px solid #d5d3a4;
+    border-left: 1px solid #d5d3a4;
+    border-right: 1px solid #d5d3a4;
+    color: #666666;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 0;
+    margin-left: 10px;
+    padding:2px 10px 2px 10px;
+    font-size:7pt;
+    font-family: 'Roboto', sans-serif;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+}
+
+.highlight {
+    background: none;
+}
+
+
+.wy-alert.wy-alert-info .wy-alert-title,
+.rst-content .note .wy-alert-title,
+.rst-content .wy-alert-info.attention .wy-alert-title,
+.rst-content .wy-alert-info.caution .wy-alert-title,
+.rst-content .wy-alert-info.danger .wy-alert-title,
+.rst-content .wy-alert-info.error .wy-alert-title,
+.rst-content .wy-alert-info.hint .wy-alert-title,
+.rst-content .wy-alert-info.important .wy-alert-title,
+.rst-content .wy-alert-info.tip .wy-alert-title,
+.rst-content .wy-alert-info.warning .wy-alert-title,
+.rst-content .seealso .wy-alert-title,
+.rst-content .wy-alert-info.admonition-todo .wy-alert-title,
+.rst-content .wy-alert-info.admonition .wy-alert-title,
+.wy-alert.wy-alert-info .rst-content .admonition-title,
+.rst-content .wy-alert.wy-alert-info .admonition-title,
+.rst-content .note .admonition-title,
+.rst-content .wy-alert-info.attention .admonition-title,
+.rst-content .wy-alert-info.caution .admonition-title,
+.rst-content .wy-alert-info.danger .admonition-title,
+.rst-content .wy-alert-info.error .admonition-title,
+.rst-content .wy-alert-info.hint .admonition-title,
+.rst-content .wy-alert-info.important .admonition-title,
+.rst-content .wy-alert-info.tip .admonition-title,
+.rst-content .wy-alert-info.warning .admonition-title,
+.rst-content .seealso .admonition-title,
+.rst-content .wy-alert-info.admonition-todo .admonition-title,
+.rst-content .wy-alert-info.admonition .admonition-title
+{
+    font-size: 85%;
+	line-height: 1.1;
+}
+
+.wy-alert.wy-alert-info p,
+.rst-content .note p,
+.rst-content .wy-alert-info.attention p,
+.rst-content .wy-alert-info.caution p,
+.rst-content .wy-alert-info.danger p,
+.rst-content .wy-alert-info.error p,
+.rst-content .wy-alert-info.hint p,
+.rst-content .wy-alert-info.important p,
+.rst-content .wy-alert-info.tip p,
+.rst-content .wy-alert-info.warning p,
+.rst-content .seealso p,
+.rst-content .wy-alert-info.admonition-todo p,
+.rst-content .wy-alert-info.admonition p
+{
+    font-size: 85%;
+	line-height: 1.3;
+}
+

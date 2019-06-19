@@ -1,0 +1,2238 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>201: Exampville Mode Choice &mdash; Larch 5.2.10 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/larch_favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/larch_rtfd.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="202: Exampville Mode Choice Logsums" href="202_exville_mc_logsums.html" />
+    <link rel="prev" title="200: Exampville Simulated Data" href="200_exampville.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Larch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.2.10
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../math.html">Mathematics of Logit Choice Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machine-learning/index.html">Machine Learning</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mtc.html">MTC Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swissmetro.html">Swissmetro Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="exampville.html">Exampville Simulator</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="200_exampville.html">200: Exampville Simulated Data</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">201: Exampville Mode Choice</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Preprocessing">Preprocessing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Model-Definition">Model Definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Model-Estimation">Model Estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Save-and-Report-Model">Save and Report Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="202_exville_mc_logsums.html">202: Exampville Mode Choice Logsums</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="itinerary.html">Itinerary Choice Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Larch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="examples.html">Examples</a> &raquo;</li>
+        
+          <li><a href="exampville.html">Exampville Simulator</a> &raquo;</li>
+        
+      <li>201: Exampville Mode Choice</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/example/201_exville_mode_choice.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="201:-Exampville-Mode-Choice">
+<h1>201: Exampville Mode Choice<a class="headerlink" href="#201:-Exampville-Mode-Choice" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">larch</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">pandas</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">larch</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">larch</span><span class="o">.</span><span class="n">info</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700|Roboto+Slab:200,900|EB+Garamond:400,400i');
+
+.error_report {
+    color:red; font-family:monospace;
+}
+
+div.output_wrapper {font-family: "Book-Antiqua", "Palatino", serif;}
+
+div.output_wrapper table,
+div.jp-OutputArea-output table
+{
+    border-collapse:collapse;
+}
+
+div.output_wrapper table, div.output_wrapper th, div.output_wrapper td,
+div.jp-OutputArea-output table, div.jp-OutputArea-output th, div.jp-OutputArea-output td
+{
+    border: 1px solid #999999;
+    font-family:"Roboto Mono", monospace;
+    font-size:9pt;
+    font-weight:400;
+}
+
+div.output_wrapper th, div.output_wrapper td,
+div.jp-OutputArea-output th, div.jp-OutputArea-output td
+{
+    padding:2px; text-align:left;
+}
+
+div.output_wrapper td.parameter_category,
+div.jp-OutputArea-output td.parameter_category
+{
+    font-family:"Roboto", monospace;
+    font-weight:500;
+    background-color: #f4f4f4;
+    font-style: italic;
+}
+
+div.output_wrapper th,
+div.jp-OutputArea-output th
+{
+    font-family:"Roboto", monospace;
+    font-weight:700;
+}
+
+div.output_wrapper table.dicta,
+div.jp-OutputArea-output table.dicta
+{
+    border-left: 2px solid black; margin-bottom:2px; border-top:0; border-right:0
+}
+
+div.output_wrapper th.dicta, div.output_wrapper td.dicta,
+div.jp-OutputArea-output th.dicta, div.jp-OutputArea-output td.dicta
+{
+    padding-top:0px; text-align:left; border:0;
+}
+
+div.output_wrapper div.LinearFunc,
+div.jp-OutputArea-output div.LinearFunc
+{
+    font-family:"Roboto Mono", monospace;
+    font-size:100%;
+    font-weight:400;
+}
+
+
+
+.larch_signature {font-size:70%; font-weight:100; font-style:italic; font-family: Roboto, Helvetica, sans-serif; }
+.larch_name_signature {font-weight:400; font-style:normal; font-family: "Roboto Slab", Roboto, Helvetica, sans-serif;}
+
+.larch_head_tag {font-size:150%; font-weight:900; font-family:"Roboto Slab", Verdana;}
+.larch_head_tag_ver {font-size:80%; font-weight:200; font-family:"Roboto Slab", Verdana;}
+.larch_head_tag_pth {font-size:40%; font-weight:200; font-family:"Roboto Slab", Verdana; padding-left:5px;}
+.larch_head_tag_more {font-size:50%; font-weight:300; font-family:"Roboto Mono", monospace; line-height:130%;}
+
+div.output_wrapper a.parameter_reference,
+div.jp-OutputArea-output a.parameter_reference
+{
+    font-style: italic; text-decoration: none
+}
+
+div.output_wrapper .strut2,
+div.jp-OutputArea-output .strut2
+{
+    min-width:1in
+}
+
+div.output_wrapper .histogram_cell,
+div.jp-OutputArea-output .histogram_cell
+{
+    padding-top:1; padding-bottom:1; vertical-align:center;
+}
+
+div.output_wrapper .raw_log pre,
+div.jp-OutputArea-output .raw_log pre
+{
+    font-family:"Roboto Mono", monospace;
+    font-weight:300;
+    font-size:70%;
+}
+
+.dicta pre
+{
+    margin:0;
+}
+
+div.output_wrapper caption,
+div.jp-OutputArea-output caption,
+{
+    caption-side: bottom;
+    text-align: left;
+    font-family: Roboto;
+    font-style: italic;
+    font-weight: 100;
+    font-size: 80%;
+}
+
+table.running_parameter_update caption
+{
+    caption-side: top;
+    text-align: left;
+    font-family: Roboto;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 100%;
+}
+
+table.dictionary
+{
+    border:0px hidden !important; border-collapse: collapse !important;
+}
+
+div.blurb {
+    margin-top: 15px;
+    max-width: 6.5in;
+}
+
+h2.figure_head {
+    padding-left: .25in;
+}
+
+h3.figure_head {
+    padding-left: .5in;
+}
+
+div.jp-RenderedMarkdown h1 {font-weight: 900; border-bottom:2px black solid; padding-bottom:4px}
+div.jp-RenderedMarkdown h2 {font-weight: 850; border-bottom:0.5px black solid; padding-bottom:4px}
+div.jp-RenderedMarkdown h3 {font-weight: 800; font-style:italic}
+
+div.jp-RenderedMarkdown p {
+    max-width:600px;
+    font-size:150%;
+    font-family: EB Garamond;
+}
+
+div.jp-RenderedMarkdown p code {
+    font-size: 75%;
+}
+
+
+
+
+
+            .tooltipped {
+                    position: relative;
+                    display: inline-block;
+            }
+
+            .tooltipped .tooltiptext {
+                    visibility: hidden;
+                    width: 180px;
+                    background-color: black;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 6px;
+                    padding: 5px 0;
+                    position: absolute;
+                    z-index: 1;
+                    top: -5px;
+                    left: 110%;
+            }
+
+            .tooltipped .tooltiptext::after {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    right: 100%;
+                    margin-top: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: transparent black transparent transparent;
+            }
+            .tooltipped:hover .tooltiptext {
+                    visibility: visible;
+            }
+
+
+
+
+    </style>
+<div class="larch_head_tag"><p style="float:left;margin-top:6px"><img height="32" src="data:image/png;base64,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%3D" style="float:left;position:relative;top:-3px;padding-right:0.2em;" width="32"> Larch <span class="larch_head_tag_ver"> 5.2.10 </span><span class="larch_head_tag_pth"> /Users/jpn/Larch/Larch/larch </span></p><img src="data:image/png;base64,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" style="float:right;max-height:44px;margin-top:0"><img src="data:image/png;base64,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" style="float:right;max-height:40px;margin-top:0;margin-right:20px;margin-left:20px"></div></div>
+</div>
+<p>Welcome to Exampville, the best simulated town in this here part of the internet!</p>
+<p>Exampville is a demonstration provided with Larch that walks through some of the data and tools that a transportation planner use when building a travel model.</p>
+<p>In this example notebook, we will walk through the creation of a tour mode choice model.</p>
+<p>To begin, we’ll re-load the tours and skims data from the data setup example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">hh</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">tour</span><span class="p">,</span> <span class="n">skims</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;hh&#39;</span><span class="p">,</span> <span class="s1">&#39;pp&#39;</span><span class="p">,</span> <span class="s1">&#39;tour&#39;</span><span class="p">,</span> <span class="s1">&#39;skims&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#Preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>The Exampville data output contains a set of files similar to what we might find for a real travel survey: network skims, and tables of households, persons, and tours. We’ll need to merge these tables to create a composite dataset for mode choice model estimation.</p>
+<p>We can merge data from other tables using the usual pandas syntax for merging.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">tour</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">hh</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;HHID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;HHID&#39;</span><span class="p">,</span> <span class="s1">&#39;PERSONID&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Our zone numbering system starts with zone 1, as is common for many TAZ numbering systems seen in practice. But, for looking up data in the skims matrix, we’ll need to use zero-based numbering that is standard in Python. So we’ll create two new TAZ-index columns to assist this process.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span><span class="p">[</span><span class="s2">&quot;HOMETAZi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;HOMETAZ&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">raw</span><span class="p">[</span><span class="s2">&quot;DTAZi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;DTAZ&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 15934 entries, 0 to 15933
+Data columns (total 20 columns):
+TOURID           15934 non-null int64
+HHID             15934 non-null int64
+PERSONID         15934 non-null int64
+DTAZ             15934 non-null int64
+TOURMODE         15934 non-null int64
+TOURPURP         15934 non-null int64
+X                15934 non-null float64
+Y                15934 non-null float64
+INCOME           15934 non-null int64
+geometry         15934 non-null object
+HOMETAZ          15934 non-null int64
+HHSIZE           15934 non-null int64
+HHIDX            15934 non-null int64
+AGE              15934 non-null int64
+WORKS            15934 non-null int64
+N_WORK_TOURS     15934 non-null int64
+N_OTHER_TOURS    15934 non-null int64
+N_TOURS          15934 non-null int64
+HOMETAZi         15934 non-null int64
+DTAZi            15934 non-null int64
+dtypes: float64(2), int64(17), object(1)
+memory usage: 2.6+ MB
+</pre></div></div>
+</div>
+<p>In Exampville, there are only two kinds of trips:</p>
+<ul class="simple">
+<li>work (purpose=1) and</li>
+<li>non-work (purpose=2).</li>
+</ul>
+<p>We want to estimate a mode choice model for work trips, so we’ll begin by excluding all the other trips:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">TOURPURP</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 4952 entries, 0 to 15931
+Data columns (total 20 columns):
+TOURID           4952 non-null int64
+HHID             4952 non-null int64
+PERSONID         4952 non-null int64
+DTAZ             4952 non-null int64
+TOURMODE         4952 non-null int64
+TOURPURP         4952 non-null int64
+X                4952 non-null float64
+Y                4952 non-null float64
+INCOME           4952 non-null int64
+geometry         4952 non-null object
+HOMETAZ          4952 non-null int64
+HHSIZE           4952 non-null int64
+HHIDX            4952 non-null int64
+AGE              4952 non-null int64
+WORKS            4952 non-null int64
+N_WORK_TOURS     4952 non-null int64
+N_OTHER_TOURS    4952 non-null int64
+N_TOURS          4952 non-null int64
+HOMETAZi         4952 non-null int64
+DTAZi            4952 non-null int64
+dtypes: float64(2), int64(17), object(1)
+memory usage: 812.4+ KB
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">skims</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;larch.OMX&gt; ⋯/exampville_skims.omx
+ |  shape:(40, 40)
+ |  data:
+ |    AUTO_COST    (float64)
+ |    AUTO_DIST    (float64)
+ |    AUTO_TIME    (float64)
+ |    BIKE_TIME    (float64)
+ |    TRANSIT_FARE (float64)
+ |    TRANSIT_IVTT (float64)
+ |    TRANSIT_OVTT (float64)
+ |    WALK_DIST    (float64)
+ |    WALK_TIME    (float64)
+</pre></div>
+</div>
+</div>
+<p>For this tour mode choice model, we can pick values out of the skims for the known O-D of the tour, so that we have access to the level-of-service data for each possible mode serving that O-D pair. We’ll use the <code class="docutils literal notranslate"><span class="pre">get_rc_dataframe</span></code> method of the <code class="docutils literal notranslate"><span class="pre">larch.OMX</span></code> object, which lets us give the a list of the index for the production and attraction (row and column) value we want to use.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">skims</span><span class="o">.</span><span class="n">get_rc_dataframe</span><span class="p">(</span>
+        <span class="n">raw</span><span class="o">.</span><span class="n">HOMETAZi</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">DTAZi</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can review the <code class="docutils literal notranslate"><span class="pre">raw</span></code> frame to see what variables are now included.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 4952 entries, 0 to 15931
+Data columns (total 29 columns):
+TOURID           4952 non-null int64
+HHID             4952 non-null int64
+PERSONID         4952 non-null int64
+DTAZ             4952 non-null int64
+TOURMODE         4952 non-null int64
+TOURPURP         4952 non-null int64
+X                4952 non-null float64
+Y                4952 non-null float64
+INCOME           4952 non-null int64
+geometry         4952 non-null object
+HOMETAZ          4952 non-null int64
+HHSIZE           4952 non-null int64
+HHIDX            4952 non-null int64
+AGE              4952 non-null int64
+WORKS            4952 non-null int64
+N_WORK_TOURS     4952 non-null int64
+N_OTHER_TOURS    4952 non-null int64
+N_TOURS          4952 non-null int64
+HOMETAZi         4952 non-null int64
+DTAZi            4952 non-null int64
+AUTO_COST        4952 non-null float64
+AUTO_DIST        4952 non-null float64
+AUTO_TIME        4952 non-null float64
+BIKE_TIME        4952 non-null float64
+TRANSIT_FARE     4952 non-null float64
+TRANSIT_IVTT     4952 non-null float64
+TRANSIT_OVTT     4952 non-null float64
+WALK_DIST        4952 non-null float64
+WALK_TIME        4952 non-null float64
+dtypes: float64(11), int64(17), object(1)
+memory usage: 1.3+ MB
+</pre></div></div>
+</div>
+<p>Now we can assemble this data, along with the definitions of the alternatives, into a <code class="docutils literal notranslate"><span class="pre">larch.DataFrames</span></code> object. This object links information about the raw data and the choices into one data structure. It can handle multiple data formats (including <code class="docutils literal notranslate"><span class="pre">idco</span></code> and <code class="docutils literal notranslate"><span class="pre">idca</span></code> data simultanously), but here we’ll only be using a single <code class="docutils literal notranslate"><span class="pre">idco</span></code> format data table.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># For clarity, we can define numbers as names for modes</span>
+<span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Walk</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">Bike</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">dfs</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">DataFrames</span><span class="p">(</span>
+    <span class="n">co</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span>
+    <span class="n">alt_codes</span><span class="o">=</span><span class="p">[</span><span class="n">DA</span><span class="p">,</span><span class="n">SR</span><span class="p">,</span><span class="n">Walk</span><span class="p">,</span><span class="n">Bike</span><span class="p">,</span><span class="n">Transit</span><span class="p">],</span>
+    <span class="n">alt_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DA&#39;</span><span class="p">,</span><span class="s1">&#39;SR&#39;</span><span class="p">,</span><span class="s1">&#39;Walk&#39;</span><span class="p">,</span><span class="s1">&#39;Bike&#39;</span><span class="p">,</span><span class="s1">&#39;Transit&#39;</span><span class="p">],</span>
+    <span class="n">ch_name</span><span class="o">=</span><span class="s1">&#39;TOURMODE&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Model-Definition">
+<h2>Model Definition<a class="headerlink" href="#Model-Definition" title="Permalink to this headline">¶</a></h2>
+<p>And then we are ready to create our model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">dfs</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Exampville Work Tour Mode Choice v1&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>We will explicitly define the set of utility functions we want to use. Because the DataFrames we are using to serve data to this model contains exclusively <code class="docutils literal notranslate"><span class="pre">idco</span></code> format data, we’ll use only the <code class="docutils literal notranslate"><span class="pre">utility_co</span></code> mapping to define a unique utility function for each alternative.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">DA</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_TIME</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Cost</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_COST</span> <span class="c1"># dollars per mile</span>
+<span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">SR</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_SR</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_TIME</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Cost</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">AUTO_COST</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1"># dollars per mile, half share</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:SR&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Walk</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Walk</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">WALK_TIME</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:Walk&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Bike</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Bike</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">BIKE_TIME</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:Bike&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Transit</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Transit</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">TRANSIT_IVTT</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">OutVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">TRANSIT_OVTT</span>
+        <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Cost</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">TRANSIT_FARE</span>
+        <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;HighInc:Transit&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;INCOME&gt;75000&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>To write a nested logit mode, we’ll attach some nesting nodes to the model’s <code class="docutils literal notranslate"><span class="pre">graph</span></code>. Each <code class="docutils literal notranslate"><span class="pre">new_node</span></code> allows us to define the set of codes for the child nodes (elemental alternatives, or lower level nests) as well as giving the new nest a name and assigning a logsum parameter. The return value of this method is the node code for the newly created nest, which then can potenially be used as a child code when creating a higher level nest. We do this below, adding the ‘Car’ nest into the ‘Motor’
+nest.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">Car</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:Car&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">DA</span><span class="p">,</span><span class="n">SR</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Car&#39;</span><span class="p">)</span>
+<span class="n">NonMotor</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:NonMotor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">Walk</span><span class="p">,</span><span class="n">Bike</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;NonMotor&#39;</span><span class="p">)</span>
+<span class="n">Motor</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:Motor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">Car</span><span class="p">,</span><span class="n">Transit</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Motor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s visually check on the nesting structure.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">graph</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div xmlns="http://www.w3.org/2000/svg"><svg height="276pt" viewBox="0.00 0.00 478.00 276.00" width="478pt">
+<g class="graph" id="graph0" transform="scale(1 1) rotate(0) translate(4 272)">
+<title>%3</title>
+<polygon fill="#ffffff" points="-4,4 -4,-272 474,-272 474,4 -4,4" stroke="transparent"></polygon>
+<g class="cluster" id="clust1">
+<title>cluster_elemental</title>
+<path d="M20,-8C20,-8 450,-8 450,-8 456,-8 462,-14 462,-20 462,-20 462,-48 462,-48 462,-54 456,-60 450,-60 450,-60 20,-60 20,-60 14,-60 8,-54 8,-48 8,-48 8,-20 8,-20 8,-14 14,-8 20,-8" fill="#d3d3d3" stroke="#ffffff"></path>
+</g>
+
+<g class="node" id="node1">
+<title>0</title>
+<polygon fill="none" points="169,-244.4377 196,-232 223,-244.4377 222.9748,-264.5623 169.0252,-264.5623 169,-244.4377" stroke="#000000"></polygon>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="middle" x="196" y="-246.3">0</text>
+</g>
+
+<g class="node" id="node8">
+<title>7</title>
+<path d="M177.5,-124C177.5,-124 112.5,-124 112.5,-124 106.5,-124 100.5,-118 100.5,-112 100.5,-112 100.5,-100 100.5,-100 100.5,-94 106.5,-88 112.5,-88 112.5,-88 177.5,-88 177.5,-88 183.5,-88 189.5,-94 189.5,-100 189.5,-100 189.5,-112 189.5,-112 189.5,-118 183.5,-124 177.5,-124" fill="none" stroke="#000000"></path>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="108.5" y="-107.3">(7) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="121.5" y="-107.3">NonMotor</text>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" font-style="italic" text-anchor="start" x="118.5" y="-97.3">Mu:NonMotor</text>
+</g>
+
+<g class="edge" id="edge1">
+<title>0-&gt;7</title>
+<path d="M190.445,-234.3154C181.9094,-210.2148 165.4472,-163.7333 154.8549,-133.8257" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="158.1455,-132.6326 151.5077,-124.3748 151.5471,-134.9696 158.1455,-132.6326" stroke="#000000"></polygon>
+</g>
+
+<g class="node" id="node9">
+<title>8</title>
+<path d="M267.5,-196C267.5,-196 226.5,-196 226.5,-196 220.5,-196 214.5,-190 214.5,-184 214.5,-184 214.5,-172 214.5,-172 214.5,-166 220.5,-160 226.5,-160 226.5,-160 267.5,-160 267.5,-160 273.5,-160 279.5,-166 279.5,-172 279.5,-172 279.5,-184 279.5,-184 279.5,-190 273.5,-196 267.5,-196" fill="none" stroke="#000000"></path>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="222.5" y="-179.3">(8) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="235.5" y="-179.3">Motor</text>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" font-style="italic" text-anchor="start" x="228" y="-169.3">Mu:Motor</text>
+</g>
+
+<g class="edge" id="edge2">
+<title>0-&gt;8</title>
+<path d="M205.8333,-236.1177C212.1827,-227.1538 220.648,-215.2029 228.2506,-204.4698" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="231.1817,-206.3869 234.1058,-196.2035 225.4695,-202.3407 231.1817,-206.3869" stroke="#000000"></polygon>
+</g>
+
+<g class="node" id="node2">
+<title>1</title>
+<ellipse cx="342" cy="-34" fill="#ffffff" rx="32.4942" ry="18" stroke="#000000"></ellipse>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="325" y="-31.3">(1) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="338" y="-31.3">DA</text>
+</g>
+
+<g class="node" id="node3">
+<title>2</title>
+<ellipse cx="423" cy="-34" fill="#ffffff" rx="30.5947" ry="18" stroke="#000000"></ellipse>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="407.5" y="-31.3">(2) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="420.5" y="-31.3">SR</text>
+</g>
+
+<g class="node" id="node4">
+<title>3</title>
+<ellipse cx="145" cy="-34" fill="#ffffff" rx="38.9931" ry="18" stroke="#000000"></ellipse>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="123" y="-31.3">(3) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="136" y="-31.3">Walk</text>
+</g>
+
+<g class="node" id="node5">
+<title>4</title>
+<ellipse cx="52" cy="-34" fill="#ffffff" rx="36.2938" ry="18" stroke="#000000"></ellipse>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="32" y="-31.3">(4) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="45" y="-31.3">Bike</text>
+</g>
+
+<g class="node" id="node6">
+<title>5</title>
+<ellipse cx="247" cy="-34" fill="#ffffff" rx="44.6926" ry="18" stroke="#000000"></ellipse>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="220.5" y="-31.3">(5) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="233.5" y="-31.3">Transit</text>
+</g>
+
+<g class="node" id="node7">
+<title>6</title>
+<path d="M357,-124C357,-124 327,-124 327,-124 321,-124 315,-118 315,-112 315,-112 315,-100 315,-100 315,-94 321,-88 327,-88 327,-88 357,-88 357,-88 363,-88 369,-94 369,-100 369,-100 369,-112 369,-112 369,-118 363,-124 357,-124" fill="none" stroke="#000000"></path>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" text-anchor="start" x="325" y="-107.3">(6) </text>
+<text fill="#000000" font-family="Times,serif" font-size="14.00" text-anchor="start" x="338" y="-107.3">Car</text>
+<text fill="#999999" font-family="Times,serif" font-size="9.00" font-style="italic" text-anchor="start" x="327.5" y="-97.3">Mu:Car</text>
+</g>
+
+<g class="edge" id="edge3">
+<title>6-&gt;1</title>
+<path d="M342,-87.8314C342,-80.131 342,-70.9743 342,-62.4166" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="345.5001,-62.4132 342,-52.4133 338.5001,-62.4133 345.5001,-62.4132" stroke="#000000"></polygon>
+</g>
+
+<g class="edge" id="edge4">
+<title>6-&gt;2</title>
+<path d="M362.4397,-87.8314C373.4065,-78.0832 386.9986,-66.0013 398.5256,-55.755" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="400.9695,-58.2655 406.1183,-49.0059 396.3189,-53.0336 400.9695,-58.2655" stroke="#000000"></polygon>
+</g>
+
+<g class="edge" id="edge5">
+<title>7-&gt;3</title>
+<path d="M145,-87.8314C145,-80.131 145,-70.9743 145,-62.4166" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="148.5001,-62.4132 145,-52.4133 141.5001,-62.4133 148.5001,-62.4132" stroke="#000000"></polygon>
+</g>
+
+<g class="edge" id="edge6">
+<title>7-&gt;4</title>
+<path d="M121.5322,-87.8314C108.7877,-77.9647 92.9552,-65.7073 79.6187,-55.3822" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="81.7373,-52.5961 71.6874,-49.2418 77.452,-58.1311 81.7373,-52.5961" stroke="#000000"></polygon>
+</g>
+
+<g class="edge" id="edge8">
+<title>8-&gt;5</title>
+<path d="M247,-159.7623C247,-135.201 247,-91.2474 247,-62.3541" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="250.5001,-62.0896 247,-52.0896 243.5001,-62.0897 250.5001,-62.0896" stroke="#000000"></polygon>
+</g>
+
+<g class="edge" id="edge7">
+<title>8-&gt;6</title>
+<path d="M270.9725,-159.8314C282.7861,-150.8779 297.1972,-139.9558 309.9435,-130.2955" fill="none" stroke="#000000"></path>
+<polygon fill="#000000" points="312.1795,-132.9925 318.0352,-124.1628 307.9514,-127.4137 312.1795,-132.9925" stroke="#000000"></polygon>
+</g>
+</g>
+</svg></div></div>
+</div>
+<p>The tour mode choice model’s choice variable is indicated by the code value in ‘TOURMODE’, and this can be defined for the model using <code class="docutils literal notranslate"><span class="pre">choice_co_code</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">choice_co_code</span> <span class="o">=</span> <span class="s1">&#39;TOURMODE&#39;</span>
+</pre></div>
+</div>
+</div>
+<p>We can also give a dictionary of availability conditions based on values in the <code class="docutils literal notranslate"><span class="pre">idco</span></code> data, using the <code class="docutils literal notranslate"><span class="pre">availability_co_vars</span></code> attribute. Alternatives that are always available can be indicated by setting the criterion to 1.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_co_vars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DA</span><span class="p">:</span> <span class="s1">&#39;AGE &gt;= 16&#39;</span><span class="p">,</span>
+    <span class="n">SR</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">Walk</span><span class="p">:</span> <span class="s1">&#39;WALK_TIME &lt; 60&#39;</span><span class="p">,</span>
+    <span class="n">Bike</span><span class="p">:</span> <span class="s1">&#39;BIKE_TIME &lt; 60&#39;</span><span class="p">,</span>
+    <span class="n">Transit</span><span class="p">:</span> <span class="s1">&#39;TRANSIT_FARE&gt;0&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Then let’s prepare this data for estimation. Even though the data is already in memory, the <code class="docutils literal notranslate"><span class="pre">load_data</span></code> method is used to pre-process the data, extracting the required values, pre-computing the values of fixed expressions, and assembling the results into contiguous arrays suitable for computing the log likelihood values efficiently.</p>
+</div>
+<div class="section" id="Model-Estimation">
+<h2>Model Estimation<a class="headerlink" href="#Model-Estimation" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>We can check on some important statistics of this loaded data even before we estimate the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">choice_avail_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>chosen</th>
+      <th>available</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>DA</td>
+      <td>3984.0</td>
+      <td>4952</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>SR</td>
+      <td>570.0</td>
+      <td>4952</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Walk</td>
+      <td>114.0</td>
+      <td>2789</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Bike</td>
+      <td>47.0</td>
+      <td>4952</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Transit</td>
+      <td>237.0</td>
+      <td>2651</td>
+    </tr>
+    <tr>
+      <th>&lt; Total All Alternatives &gt;</th>
+      <td></td>
+      <td>4952.0</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">data_co</span><span class="o">.</span><span class="n">statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div xmlns="http://www.w3.org/2000/svg"><table class="dataframe larch_dataframe"><thead><th></th><th>n</th><th>minimum</th><th>maximum</th><th>median</th><th>histogram</th><th>mean</th><th>stdev</th><th>zeros</th><th>positives</th><th>negatives</th><th>nonzero_minimum</th><th>nonzero_maximum</th><th>nonzero_mean</th><th>nonzero_stdev</th></thead><tbody><tr><th>AUTO_COST</th><td>4952</td><td>0.194926</td><td>4.30796</td><td>0.991167</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2ijAwAAAAAAAH8DAAAAAAAABgQAAAAAAAAqAgAAAAAAAOMBAAAAAAAAlQEAAAAAAAAbAQAAAAAAAHcAAAAAAAAAlQAAAAAAAAA2AAAAAAAAABMAAAAAAAAAGAAAAAAAAAAGAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcCfSia1S88g/iwubY61c4D+MotMbhnzqP8YcBmovTvI/R2gixhte9z/Hsz4iCG78P6R/LT/6vgBAZKU7bfBGA0Aky0mb5s4FQOTwV8ncVghApBZm99LeCkBlPHQlyWYNQCViglO/7g9A80PIwFo7EUCUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pf927f21732)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 3.468904  L 4.036364 3.468904  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pf927f21732)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 4.097745  L 8.953846 4.097745  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pf927f21732)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pf927f21732)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 10.054266  L 18.788811 10.054266  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pf927f21732)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 11.29448  L 23.706294 11.29448  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pf927f21732)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 12.656968  L 28.623776 12.656968  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pf927f21732)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 14.78804  L 33.541259 14.78804  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pf927f21732)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 17.65276  L 38.458741 17.65276  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pf927f21732)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 17.128726  L 43.376224 17.128726  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pf927f21732)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 18.788167  L 48.293706 18.788167  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pf927f21732)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.39954  L 53.211189 19.39954  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pf927f21732)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.312201  L 58.128671 19.312201  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pf927f21732)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.626622  L 63.046154 19.626622  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf927f21732">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>1.19767</td><td>0.746932</td><td>0</td><td>4952</td><td>0</td><td>0.194926</td><td>4.30796</td><td>1.19767</td><td>0.746932</td></tr><tr><th>AUTO_COST*(0.5)</th><td>4952</td><td>0.0974628</td><td>2.15398</td><td>0.495584</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2ijAwAAAAAAAH8DAAAAAAAABgQAAAAAAAAqAgAAAAAAAOMBAAAAAAAAlQEAAAAAAAAbAQAAAAAAAHcAAAAAAAAAlQAAAAAAAAA2AAAAAAAAABMAAAAAAAAAGAAAAAAAAAAGAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcCfSia1S87g/iwubY61c0D+MotMbhnzaP8YcBmovTuI/R2gixhte5z/Hsz4iCG7sP6R/LT/6vvA/ZKU7bfBG8z8ky0mb5s71P+TwV8ncVvg/pBZm99Le+j9lPHQlyWb9PyViglO/7v8/80PIwFo7AUCUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pf622b4d187)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 3.468904  L 4.036364 3.468904  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pf622b4d187)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 4.097745  L 8.953846 4.097745  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pf622b4d187)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pf622b4d187)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 10.054266  L 18.788811 10.054266  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pf622b4d187)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 11.29448  L 23.706294 11.29448  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pf622b4d187)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 12.656968  L 28.623776 12.656968  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pf622b4d187)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 14.78804  L 33.541259 14.78804  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pf622b4d187)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 17.65276  L 38.458741 17.65276  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pf622b4d187)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 17.128726  L 43.376224 17.128726  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pf622b4d187)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 18.788167  L 48.293706 18.788167  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pf622b4d187)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.39954  L 53.211189 19.39954  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pf622b4d187)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.312201  L 58.128671 19.312201  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pf622b4d187)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.626622  L 63.046154 19.626622  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf622b4d187">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>0.598834</td><td>0.373466</td><td>0</td><td>4952</td><td>0</td><td>0.0974628</td><td>2.15398</td><td>0.598834</td><td>0.373466</td></tr><tr><th>AUTO_TIME</th><td>4952</td><td>0.930008</td><td>30.8023</td><td>7.55075</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2gLAgAAAAAAAAkEAAAAAAAAcAQAAAAAAABBAwAAAAAAAFQCAAAAAAAASQEAAAAAAAAFAQAAAAAAAGQAAAAAAAAAYAAAAAAAAAAgAAAAAAAAAAgAAAAAAAAAAwAAAAAAAAACAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcAjW8M2gwu0/waYSd7DSCUAAjFRdXBoWQJ/EH39gSx9AoH51UDI+JEDwGlthtNYoQD63QHI2by1AxymTQdwDMUDv9wVKHVAzQBfGeFJenDVAP5TrWp/oN0BnYl5j4DQ6QI4w0WshgTxAt/5DdGLNPkCUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p9b9782fd10)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 11.448215  L 4.036364 11.448215  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p9b9782fd10)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 3.370894  L 8.953846 3.370894  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p9b9782fd10)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#p9b9782fd10)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 6.538471  L 18.788811 6.538471  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p9b9782fd10)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 10.292049  L 23.706294 10.292049  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#p9b9782fd10)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 14.520765  L 28.623776 14.520765  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#p9b9782fd10)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 15.597741  L 33.541259 15.597741  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#p9b9782fd10)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 18.14764  L 38.458741 18.14764  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#p9b9782fd10)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 18.210992  L 43.376224 18.210992  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#p9b9782fd10)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 19.224616  L 48.293706 19.224616  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#p9b9782fd10)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.604725  L 53.211189 19.604725  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#p9b9782fd10)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.683915  L 58.128671 19.683915  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#p9b9782fd10)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.699753  L 63.046154 19.699753  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9b9782fd10">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>8.24245</td><td>4.60459</td><td>0</td><td>4952</td><td>0</td><td>0.930008</td><td>30.8023</td><td>8.24245</td><td>4.60459</td></tr><tr><th>BIKE_TIME</th><td>4952</td><td>2.78465</td><td>52.2321</td><td>13.3696</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2iiAgAAAAAAAJMDAAAAAAAAIwQAAAAAAAAsAgAAAAAAADICAAAAAAAAmQEAAAAAAABHAQAAAAAAANIAAAAAAAAAbgAAAAAAAABHAAAAAAAAACIAAAAAAAAAFQAAAAAAAAAEAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcMjEqIj3RgZAPICxxGpaGkAKT4firMgkQPXdtWIkZCxAcDZy8c3/MUDmfYmxic01QFzFoHFFmzlA0gy4MQFpPUAkqud4XptAQN5N81g8gkJAmvH+OBppREBUlQoZ+E9GQBA5FvnVNkhAytwh2bMdSkCUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p90ff5561e7)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 8.280533  L 4.036364 8.280533  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p90ff5561e7)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 4.186074  L 8.953846 4.186074  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p90ff5561e7)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#p90ff5561e7)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 10.28529  L 18.788811 10.28529  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p90ff5561e7)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 10.183353  L 23.706294 10.183353  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#p90ff5561e7)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 12.78274  L 28.623776 12.78274  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#p90ff5561e7)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 14.175876  L 33.541259 14.175876  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#p90ff5561e7)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 16.163642  L 38.458741 16.163642  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#p90ff5561e7)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 17.862588  L 43.376224 17.862588  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#p90ff5561e7)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 18.525177  L 48.293706 18.525177  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#p90ff5561e7)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.153787  L 53.211189 19.153787  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#p90ff5561e7)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.37465  L 58.128671 19.37465  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#p90ff5561e7)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.663471  L 63.046154 19.663471  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p90ff5561e7">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>15.8609</td><td>9.07942</td><td>0</td><td>4952</td><td>0</td><td>2.78465</td><td>52.2321</td><td>15.8609</td><td>9.07942</td></tr><tr><th>INCOME&gt;75000</th><td>4952</td><td>0</td><td>1</td><td>0</td><td><div class="figure" metadata="gASVGQEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLAoWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQxBSDgAAAAAAAAYFAAAAAAAAlHSUYowJYmluX2VkZ2VzlGgEaAdLAIWUaAmHlFKUKEsBSwOFlGgRiUMYAAAAAAAAAAABAAAAAAAAAAIAAAAAAAAAlHSUYowRemVyb3NfYXJlX2Ryb3BwZWSUiYwScmFuZ2VfaXNfdHJ1bmNhdGVklIl1Lg==" range_is_truncated="False" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title>Histograms are purple if the data is represented as discrete values.</title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p3fbf580454)" d="M 4.036364 19.731429  L 32.448485 19.731429  L 32.448485 1.739592  L 4.036364 1.739592  z " style="fill:#6478ba;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p3fbf580454)" d="M 39.551515 19.731429  L 67.963636 19.731429  L 67.963636 13.420053  L 39.551515 13.420053  z " style="fill:#6478ba;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_5">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_6">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_7">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_8">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p3fbf580454">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>0.259693</td><td>0.438466</td><td>3666</td><td>1286</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr><tr><th>TRANSIT_FARE</th><td>4952</td><td>0</td><td>2.5</td><td>2.5</td><td><div class="figure" metadata="gASVGQEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLAoWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQxD9CAAAAAAAAFsKAAAAAAAAlHSUYowJYmluX2VkZ2VzlGgEaAdLAIWUaAmHlFKUKEsBSwOFlGgRiUMYAAAAAAAAAAABAAAAAAAAAAIAAAAAAAAAlHSUYowRemVyb3NfYXJlX2Ryb3BwZWSUiYwScmFuZ2VfaXNfdHJ1bmNhdGVklIl1Lg==" range_is_truncated="False" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title>Histograms are purple if the data is represented as discrete values.</title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#peae6171539)" d="M 4.036364 19.731429  L 32.448485 19.731429  L 32.448485 4.114976  L 4.036364 4.114976  z " style="fill:#6478ba;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#peae6171539)" d="M 39.551515 19.731429  L 67.963636 19.731429  L 67.963636 1.739592  L 39.551515 1.739592  z " style="fill:#6478ba;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_5">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_6">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_7">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_8">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="peae6171539">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>1.33835</td><td>1.24687</td><td>2301</td><td>2651</td><td>0</td><td>2.5</td><td>2.5</td><td>2.5</td><td>0</td></tr><tr><th>TRANSIT_IVTT</th><td>4952</td><td>0</td><td>12.1668</td><td>0.959322</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2iGAgAAAAAAAOsAAAAAAAAAnAEAAAAAAACcAAAAAAAAANoAAAAAAAAA4QAAAAAAAABnAAAAAAAAAMkAAAAAAAAAJgAAAAAAAABgAAAAAAAAADQAAAAAAAAAfAAAAAAAAACRAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcO3qD0LDsu4/niMQ8Jok/T/iKIwf6ncFQPU/EMeGXQxAhStKt5GhEUAPNwwLYBQVQJhCzl4uhxhAIk6Qsvz5G0CsWVIGy2wfQJsyCq3MbyFAYDjr1jMpI0AlPswAm+IkQOlDrSoCnCZArkmOVGlVKECUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSIjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="True"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title>Histograms are orange if the zeros are numerous and have been excluded.</title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pbfac2fb575)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 1.739592  L 4.036364 1.739592  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pbfac2fb575)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 13.186411  L 8.953846 13.186411  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pbfac2fb575)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 8.256759  L 13.871329 8.256759  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pbfac2fb575)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 15.386651  L 18.788811 15.386651  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pbfac2fb575)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 13.65988  L 23.706294 13.65988  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pbfac2fb575)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 13.464922  L 28.623776 13.464922  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pbfac2fb575)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 16.862761  L 33.541259 16.862761  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pbfac2fb575)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 14.133349  L 38.458741 14.133349  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pbfac2fb575)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 18.673085  L 43.376224 18.673085  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pbfac2fb575)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 17.057719  L 48.293706 17.057719  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pbfac2fb575)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 18.283169  L 53.211189 18.283169  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pbfac2fb575)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 16.277887  L 58.128671 16.277887  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pbfac2fb575)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 15.693013  L 63.046154 15.693013  z " style="fill:#f69300;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pbfac2fb575">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>2.51945</td><td>3.35336</td><td>2301</td><td>2651</td><td>0</td><td>0.959322</td><td>12.1668</td><td>4.70626</td><td>3.27318</td></tr><tr><th>TRANSIT_OVTT</th><td>4952</td><td>0.759059</td><td>127.031</td><td>39.2568</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2h9AgAAAAAAAM4BAAAAAAAAGgMAAAAAAACVAgAAAAAAAMACAAAAAAAA8gIAAAAAAABkAQAAAAAAAB8BAAAAAAAAhwAAAAAAAAB8AAAAAAAAABgAAAAAAAAACQAAAAAAAAAFAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcJTvdic2Sug/VTGOQczxJEDZeVKQei80QAfb3f8O5j1AGp60t1HOQ0CxTnrvm6lIQEj/PyfmhE1A79eCLxgwUUA7sGVLvZ1TQIeISGdiC1ZA0mArgwd5WEAdOQ6frOZaQGkR8bpRVF1AtenT1vbBX0CUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pdc3b43146d)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 5.297172  L 4.036364 5.297172  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pdc3b43146d)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 9.262627  L 8.953846 9.262627  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pdc3b43146d)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pdc3b43146d)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 4.753338  L 18.788811 4.753338  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pdc3b43146d)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 3.778969  L 23.706294 3.778969  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pdc3b43146d)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 2.645982  L 28.623776 2.645982  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pdc3b43146d)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 11.66456  L 33.541259 11.66456  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pdc3b43146d)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 13.228082  L 38.458741 13.228082  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pdc3b43146d)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 16.672363  L 43.376224 16.672363  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pdc3b43146d)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 16.92162  L 48.293706 16.92162  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pdc3b43146d)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.187595  L 53.211189 19.187595  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pdc3b43146d)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.527491  L 58.128671 19.527491  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pdc3b43146d)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.61813  L 63.046154 19.61813  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pdc3b43146d">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>39.2398</td><td>24.0574</td><td>0</td><td>4952</td><td>0</td><td>0.759059</td><td>127.031</td><td>39.2398</td><td>24.0574</td></tr><tr><th>WALK_TIME</th><td>4952</td><td>11.1386</td><td>208.928</td><td>53.4784</td><td><div class="figure" metadata="gASV7gEAAAAAAAB9lCiMC2Jpbl9oZWlnaHRzlIwVbnVtcHkuY29yZS5tdWx0aWFycmF5lIwMX3JlY29uc3RydWN0lJOUjAVudW1weZSMB25kYXJyYXmUk5RLAIWUQwFilIeUUpQoSwFLDYWUaAWMBWR0eXBllJOUjAJpOJRLAEsBh5RSlChLA4wBPJROTk5K/////0r/////SwB0lGKJQ2iiAgAAAAAAAJMDAAAAAAAAIwQAAAAAAAAsAgAAAAAAADICAAAAAAAAmQEAAAAAAABHAQAAAAAAANIAAAAAAAAAbgAAAAAAAABHAAAAAAAAACIAAAAAAAAAFQAAAAAAAAAEAAAAAAAAAJR0lGKMCWJpbl9lZGdlc5RoBGgHSwCFlGgJh5RSlChLAUsOhZRoDowCZjiUSwBLAYeUUpQoSwNoEk5OTkr/////Sv////9LAHSUYolDcMjEqIj3RiZAPICxxGpaOkAKT4firMhEQPXdtWIkZExAcDZy8c3/UUDmfYmxic1VQFzFoHFFm1lA0gy4MQFpXUAkqud4XptgQN5N81g8gmJAmvH+OBppZEBUlQoZ+E9mQBA5FvnVNmhAytwh2bMdakCUdJRijBF6ZXJvc19hcmVfZHJvcHBlZJSJjBJyYW5nZV9pc190cnVuY2F0ZWSUSwB1Lg==" range_is_truncated="0" style="min-width:Truein" zeros_are_dropped="False"><svg height="20.571429pt" version="1.1" viewBox="0 0 72 20.571429" width="72pt">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <title></title><g id="patch_1">
+   <path d="M 0 20.571429  L 72 20.571429  L 72 0  L 0 0  z " style="fill:#ffffff;"></path>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  L 71.16 0.84  L 0.84 0.84  z " style="fill:none;"></path>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#p2917c913a6)" d="M 4.036364 19.731429  L 8.953846 19.731429  L 8.953846 8.280533  L 4.036364 8.280533  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#p2917c913a6)" d="M 8.953846 19.731429  L 13.871329 19.731429  L 13.871329 4.186074  L 8.953846 4.186074  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#p2917c913a6)" d="M 13.871329 19.731429  L 18.788811 19.731429  L 18.788811 1.739592  L 13.871329 1.739592  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#p2917c913a6)" d="M 18.788811 19.731429  L 23.706294 19.731429  L 23.706294 10.28529  L 18.788811 10.28529  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#p2917c913a6)" d="M 23.706294 19.731429  L 28.623776 19.731429  L 28.623776 10.183353  L 23.706294 10.183353  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#p2917c913a6)" d="M 28.623776 19.731429  L 33.541259 19.731429  L 33.541259 12.78274  L 28.623776 12.78274  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#p2917c913a6)" d="M 33.541259 19.731429  L 38.458741 19.731429  L 38.458741 14.175876  L 33.541259 14.175876  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#p2917c913a6)" d="M 38.458741 19.731429  L 43.376224 19.731429  L 43.376224 16.163642  L 38.458741 16.163642  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#p2917c913a6)" d="M 43.376224 19.731429  L 48.293706 19.731429  L 48.293706 17.862588  L 43.376224 17.862588  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#p2917c913a6)" d="M 48.293706 19.731429  L 53.211189 19.731429  L 53.211189 18.525177  L 48.293706 18.525177  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#p2917c913a6)" d="M 53.211189 19.731429  L 58.128671 19.731429  L 58.128671 19.153787  L 53.211189 19.153787  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#p2917c913a6)" d="M 58.128671 19.731429  L 63.046154 19.731429  L 63.046154 19.37465  L 58.128671 19.37465  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#p2917c913a6)" d="M 63.046154 19.731429  L 67.963636 19.731429  L 67.963636 19.663471  L 63.046154 19.663471  z " style="fill:#1d8bcc;"></path>
+   </g>
+   <g id="matplotlib.axis_1"></g>
+   <g id="matplotlib.axis_2"></g>
+   <g id="patch_16">
+    <path d="M 0.84 19.731429  L 0.84 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_17">
+    <path d="M 71.16 19.731429  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+   <g id="patch_18">
+    <path d="M 0.84 19.731429  L 71.16 19.731429  " style="fill:none;"></path>
+   </g>
+   <g id="patch_19">
+    <path d="M 0.84 0.84  L 71.16 0.84  " style="fill:none;"></path>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p2917c913a6">
+   <rect height="18.891429" width="70.32" x="0.84" y="0.84"></rect>
+  </clipPath>
+ </defs>
+</svg></div></td><td>63.4435</td><td>36.3177</td><td>0</td><td>4952</td><td>0</td><td>11.1386</td><td>208.928</td><td>63.4435</td><td>36.3177</td></tr></tbody></table></div></div>
+</div>
+<p>If we are satisfied with the statistics we see above, we can go ahead and estimate the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<h3>Iteration 038 [Converged] </h3></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<p>LL = -2296.778188223886</p></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>value</th>
+      <th>initvalue</th>
+      <th>nullvalue</th>
+      <th>minimum</th>
+      <th>maximum</th>
+      <th>holdfast</th>
+      <th>note</th>
+      <th>best</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ASC_Bike</th>
+      <td>-2.222350</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-2.222350</td>
+    </tr>
+    <tr>
+      <th>ASC_SR</th>
+      <td>-1.157323</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-1.157323</td>
+    </tr>
+    <tr>
+      <th>ASC_Transit</th>
+      <td>1.465705</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>1.465705</td>
+    </tr>
+    <tr>
+      <th>ASC_Walk</th>
+      <td>2.700217</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>2.700217</td>
+    </tr>
+    <tr>
+      <th>Cost</th>
+      <td>-0.335379</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.335379</td>
+    </tr>
+    <tr>
+      <th>HighInc:Bike</th>
+      <td>-1.146057</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-1.146057</td>
+    </tr>
+    <tr>
+      <th>HighInc:SR</th>
+      <td>-1.431353</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-1.431353</td>
+    </tr>
+    <tr>
+      <th>HighInc:Transit</th>
+      <td>-1.262540</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-1.262540</td>
+    </tr>
+    <tr>
+      <th>HighInc:Walk</th>
+      <td>-1.281035</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-1.281035</td>
+    </tr>
+    <tr>
+      <th>InVehTime</th>
+      <td>-0.079103</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.079103</td>
+    </tr>
+    <tr>
+      <th>Mu:Car</th>
+      <td>0.583640</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.001</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td></td>
+      <td>0.583640</td>
+    </tr>
+    <tr>
+      <th>Mu:Motor</th>
+      <td>0.640155</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.001</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td></td>
+      <td>0.640155</td>
+    </tr>
+    <tr>
+      <th>Mu:NonMotor</th>
+      <td>0.747557</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.001</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td></td>
+      <td>0.747557</td>
+    </tr>
+    <tr>
+      <th>NonMotorTime</th>
+      <td>-0.229538</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.229538</td>
+    </tr>
+    <tr>
+      <th>OutVehTime</th>
+      <td>-0.235188</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.235188</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>After we find the best fitting parameters, we can compute some variance-covariance statistics, incuding standard errors of the estimates and t statistics, using <code class="docutils literal notranslate"><span class="pre">calculate_parameter_covariance</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Then we can review the results in a variety of report tables.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div><table><thead><tr><th colspan="2" style="text-align: left;">Parameter</th><th>Value</th><th>Std Err</th><th>t Stat</th><th>Null Value</th></tr></thead><tbody><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Bike</th><td>-2.222</td><td>0.262</td><td>-8.50</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_SR</th><td>-1.157</td><td>0.726</td><td>-1.60</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Transit</th><td>1.466</td><td>0.702</td><td>2.09</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Walk</th><td>2.7</td><td>0.357</td><td>7.56</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">Cost</th><td>-0.3354</td><td>0.203</td><td>-1.65</td><td>0.0</td></tr><tr><th rowspan="4" style="vertical-align: top; text-align: left;">HighInc</th><th style="vertical-align: top; text-align: left;">Bike</th><td>-1.146</td><td>0.427</td><td>-2.69</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">SR</th><td>-1.431</td><td>0.922</td><td>-1.55</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Transit</th><td>-1.263</td><td>0.577</td><td>-2.19</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Walk</th><td>-1.281</td><td>0.288</td><td>-4.45</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">InVehTime</th><td>-0.0791</td><td>0.0395</td><td>-2.00</td><td>0.0</td></tr><tr><th rowspan="3" style="vertical-align: top; text-align: left;">Mu</th><th style="vertical-align: top; text-align: left;">Car</th><td>0.5836</td><td>0.372</td><td>-1.12</td><td>1.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Motor</th><td>0.6402</td><td>0.277</td><td>-1.30</td><td>1.0</td></tr><tr><th style="vertical-align: top; text-align: left;">NonMotor</th><td>0.7476</td><td>0.132</td><td>-1.91</td><td>1.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">NonMotorTime</th><td>-0.2295</td><td>0.0213</td><td>-10.78</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">OutVehTime</th><td>-0.2352</td><td>0.103</td><td>-2.29</td><td>0.0</td></tr></tbody></table></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">m</span><span class="o">.</span><span class="n">estimation_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div><table><thead><tr><th>Statistic</th><th>Aggregate</th><th>Per Case</th></tr><tr><td>Number of Cases</td><td colspan="2">4952</td></tr><tr><td>Log Likelihood at Convergence</td><td>-2296.78</td><td>-0.46</td></tr><tr><td>Log Likelihood at Null Parameters</td><td>-6958.98</td><td>-1.41</td></tr><tr><td>Rho Squared w.r.t. Null Parameters</td><td colspan="2">0.670</td></tr></thead><tbody></tbody></table></div></div>
+</div>
+</div>
+<div class="section" id="Save-and-Report-Model">
+<h2>Save and Report Model<a class="headerlink" href="#Save-and-Report-Model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">report</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Reporter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">report</span> <span class="o">&lt;&lt;</span> <span class="s1">&#39;# Parameter Summary&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<h1><a class="toc" name="rx1" reftxt="Parameter Summary" toclevel="1"></a>Parameter Summary</h1><div><table><thead><tr><th colspan="2" style="text-align: left;">Parameter</th><th>Value</th><th>Std Err</th><th>t Stat</th><th>Null Value</th></tr></thead><tbody><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Bike</th><td>-2.222</td><td>0.262</td><td>-8.50</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_SR</th><td>-1.157</td><td>0.726</td><td>-1.60</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Transit</th><td>1.466</td><td>0.702</td><td>2.09</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">ASC_Walk</th><td>2.7</td><td>0.357</td><td>7.56</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">Cost</th><td>-0.3354</td><td>0.203</td><td>-1.65</td><td>0.0</td></tr><tr><th rowspan="4" style="vertical-align: top; text-align: left;">HighInc</th><th style="vertical-align: top; text-align: left;">Bike</th><td>-1.146</td><td>0.427</td><td>-2.69</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">SR</th><td>-1.431</td><td>0.922</td><td>-1.55</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Transit</th><td>-1.263</td><td>0.577</td><td>-2.19</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Walk</th><td>-1.281</td><td>0.288</td><td>-4.45</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">InVehTime</th><td>-0.0791</td><td>0.0395</td><td>-2.00</td><td>0.0</td></tr><tr><th rowspan="3" style="vertical-align: top; text-align: left;">Mu</th><th style="vertical-align: top; text-align: left;">Car</th><td>0.5836</td><td>0.372</td><td>-1.12</td><td>1.0</td></tr><tr><th style="vertical-align: top; text-align: left;">Motor</th><td>0.6402</td><td>0.277</td><td>-1.30</td><td>1.0</td></tr><tr><th style="vertical-align: top; text-align: left;">NonMotor</th><td>0.7476</td><td>0.132</td><td>-1.91</td><td>1.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">NonMotorTime</th><td>-0.2295</td><td>0.0213</td><td>-10.78</td><td>0.0</td></tr><tr><th colspan="2" style="vertical-align: top; text-align: left;">OutVehTime</th><td>-0.2352</td><td>0.103</td><td>-2.29</td><td>0.0</td></tr></tbody></table></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">report</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;# Estimation Statistics&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">estimation_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<h1><a class="toc" name="rx2" reftxt="Estimation Statistics" toclevel="1"></a>Estimation Statistics</h1><div><table><thead><tr><th>Statistic</th><th>Aggregate</th><th>Per Case</th></tr><tr><td>Number of Cases</td><td colspan="2">4952</td></tr><tr><td>Log Likelihood at Convergence</td><td>-2296.78</td><td>-0.46</td></tr><tr><td>Log Likelihood at Null Parameters</td><td>-6958.98</td><td>-1.41</td></tr><tr><td>Rho Squared w.r.t. Null Parameters</td><td colspan="2">0.670</td></tr></thead><tbody></tbody></table></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">report</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;# Utility Functions&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_functions</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<h1><a class="toc" name="rx3" reftxt="Utility Functions" toclevel="1"></a>Utility Functions</h1><div><table class="floatinghead" style="margin-top:1px;"><thead><tr><th>alt</th><th style="text-align:left;">formula</th></tr></thead><tbody><tr><td>1</td><td style="text-align:left;"><div></div> + <div class="tooltipped">P.InVehTime<span class="tooltiptext">-0.0791</span></div> * <div class="tooltipped">X.AUTO_TIME<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P.Cost<span class="tooltiptext">-0.335</span></div> * <div class="tooltipped">X.AUTO_COST<span class="tooltiptext">This is Data</span></div></td></tr><tr><td>2</td><td style="text-align:left;"><div></div> + <div class="tooltipped">P.ASC_SR<span class="tooltiptext">-1.16</span></div><br> + <div class="tooltipped">P.InVehTime<span class="tooltiptext">-0.0791</span></div> * <div class="tooltipped">X.AUTO_TIME<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P.Cost<span class="tooltiptext">-0.335</span></div> * <div class="tooltipped">X('AUTO_COST*(0.5)')<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P('HighInc:SR')<span class="tooltiptext">-1.43</span></div> * <div class="tooltipped">X('INCOME&gt;75000')<span class="tooltiptext">This is Data</span></div></td></tr><tr><td>3</td><td style="text-align:left;"><div></div> + <div class="tooltipped">P.ASC_Walk<span class="tooltiptext">2.7</span></div><br> + <div class="tooltipped">P.NonMotorTime<span class="tooltiptext">-0.23</span></div> * <div class="tooltipped">X.WALK_TIME<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P('HighInc:Walk')<span class="tooltiptext">-1.28</span></div> * <div class="tooltipped">X('INCOME&gt;75000')<span class="tooltiptext">This is Data</span></div></td></tr><tr><td>4</td><td style="text-align:left;"><div></div> + <div class="tooltipped">P.ASC_Bike<span class="tooltiptext">-2.22</span></div><br> + <div class="tooltipped">P.NonMotorTime<span class="tooltiptext">-0.23</span></div> * <div class="tooltipped">X.BIKE_TIME<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P('HighInc:Bike')<span class="tooltiptext">-1.15</span></div> * <div class="tooltipped">X('INCOME&gt;75000')<span class="tooltiptext">This is Data</span></div></td></tr><tr><td>5</td><td style="text-align:left;"><div></div> + <div class="tooltipped">P.ASC_Transit<span class="tooltiptext">1.47</span></div><br> + <div class="tooltipped">P.InVehTime<span class="tooltiptext">-0.0791</span></div> * <div class="tooltipped">X.TRANSIT_IVTT<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P.OutVehTime<span class="tooltiptext">-0.235</span></div> * <div class="tooltipped">X.TRANSIT_OVTT<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P.Cost<span class="tooltiptext">-0.335</span></div> * <div class="tooltipped">X.TRANSIT_FARE<span class="tooltiptext">This is Data</span></div><br> + <div class="tooltipped">P('HighInc:Transit')<span class="tooltiptext">-1.26</span></div> * <div class="tooltipped">X('INCOME&gt;75000')<span class="tooltiptext">This is Data</span></div></td></tr></tbody></table></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">report</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+    <span class="s1">&#39;/tmp/exampville_mode_choice.html&#39;</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&#39;/tmp/exampville_mode_choice.html&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="202_exville_mc_logsums.html" class="btn btn-neutral float-right" title="202: Exampville Mode Choice Logsums" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="200_exampville.html" class="btn btn-neutral float-left" title="200: Exampville Simulated Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2010-2019, Jeffrey Newman
+      <span class="lastupdated">
+        Last updated on Jun 19, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

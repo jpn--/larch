@@ -1,0 +1,425 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Using Larch within Scikit-Learn"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    "Larch is (mostly) compatible with the `scikit-learn <https://scikit-learn.org>`__ stucture for machine learning.\n",
+    "Within this structure, the larch.Model object can be used as an :term:`sklearn:estimator`\n",
+    "and a :term:`sklearn:predictor`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import larch\n",
+    "import pandas\n",
+    "\n",
+    "from larch import PX, P, X"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from larch.data_warehouse import example_file\n",
+    "df = pandas.read_csv(example_file(\"MTCwork.csv.gz\"))\n",
+    "df.set_index(['casenum','altnum'], inplace=True, drop=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m = larch.Model()\n",
+    "\n",
+    "m.utility_ca = (\n",
+    "    PX('tottime') \n",
+    "    + PX('totcost') \n",
+    "    + sum(P(f'ASC_{i}') * X(f'altnum=={i}') for i in [2,3,4,5,6])\n",
+    "    + sum(P(f'HHINC#{i}') * X(f'(altnum=={i})*hhinc') for i in [2,3,4,5,6])\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    "Because the larch.Model object is an estimator, if offers a :term:`sklearn:fit`\n",
+    "method to estimate the fitted (likelihood maximizing) parameters.  This method\n",
+    "for model estimation takes a plain old pandas.DataFrame as the `X` input. Because\n",
+    "this is a regular DataFrame, the data does not internally identify which column[s]\n",
+    "contain the observed choice values, so that data must be explictly identified\n",
+    "in the method call:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h3>Iteration 010 [Converged] </h3>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<p>LL = -3626.186255512929</p>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>value</th>\n",
+       "      <th>initvalue</th>\n",
+       "      <th>nullvalue</th>\n",
+       "      <th>minimum</th>\n",
+       "      <th>maximum</th>\n",
+       "      <th>holdfast</th>\n",
+       "      <th>note</th>\n",
+       "      <th>best</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_2</th>\n",
+       "      <td>-2.178014</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-2.178014</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_3</th>\n",
+       "      <td>-3.725078</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-3.725078</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_4</th>\n",
+       "      <td>-0.670861</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.670861</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_5</th>\n",
+       "      <td>-2.376328</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-2.376328</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_6</th>\n",
+       "      <td>-0.206775</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.206775</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>HHINC#2</th>\n",
+       "      <td>-0.002170</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.002170</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>HHINC#3</th>\n",
+       "      <td>0.000358</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.000358</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>HHINC#4</th>\n",
+       "      <td>-0.005286</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.005286</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>HHINC#5</th>\n",
+       "      <td>-0.012808</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.012808</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>HHINC#6</th>\n",
+       "      <td>-0.009686</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.009686</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>totcost</th>\n",
+       "      <td>-0.004920</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.004920</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>tottime</th>\n",
+       "      <td>-0.051342</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.051342</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            value  initvalue  nullvalue  minimum  maximum  holdfast note  \\\n",
+       "ASC_2   -2.178014        0.0        0.0     -inf      inf         0        \n",
+       "ASC_3   -3.725078        0.0        0.0     -inf      inf         0        \n",
+       "ASC_4   -0.670861        0.0        0.0     -inf      inf         0        \n",
+       "ASC_5   -2.376328        0.0        0.0     -inf      inf         0        \n",
+       "ASC_6   -0.206775        0.0        0.0     -inf      inf         0        \n",
+       "HHINC#2 -0.002170        0.0        0.0     -inf      inf         0        \n",
+       "HHINC#3  0.000358        0.0        0.0     -inf      inf         0        \n",
+       "HHINC#4 -0.005286        0.0        0.0     -inf      inf         0        \n",
+       "HHINC#5 -0.012808        0.0        0.0     -inf      inf         0        \n",
+       "HHINC#6 -0.009686        0.0        0.0     -inf      inf         0        \n",
+       "totcost -0.004920        0.0        0.0     -inf      inf         0        \n",
+       "tottime -0.051342        0.0        0.0     -inf      inf         0        \n",
+       "\n",
+       "             best  \n",
+       "ASC_2   -2.178014  \n",
+       "ASC_3   -3.725078  \n",
+       "ASC_4   -0.670861  \n",
+       "ASC_5   -2.376328  \n",
+       "ASC_6   -0.206775  \n",
+       "HHINC#2 -0.002170  \n",
+       "HHINC#3  0.000358  \n",
+       "HHINC#4 -0.005286  \n",
+       "HHINC#5 -0.012808  \n",
+       "HHINC#6 -0.009686  \n",
+       "totcost -0.004920  \n",
+       "tottime -0.051342  "
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<larch.Model (MNL)>"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "m.fit(df, y=df.chose)"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "raw_mimetype": "text/restructuredtext"
+   },
+   "source": [
+    "Unlike most scikit-learn estimators, the :meth:`fit <larch.Model.fit>` method cannot\n",
+    "accept a numpy ndarray, because Larch needs the column names to be able \n",
+    "to match up the data to the pre-defined utility function."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "   altnum\n",
+       "0  1         0.817458\n",
+       "   2         0.077710\n",
+       "   3         0.017906\n",
+       "   4         0.071428\n",
+       "   5         0.015497\n",
+       "1  1         0.336928\n",
+       "   2         0.074339\n",
+       "   3         0.052072\n",
+       "   4         0.498117\n",
+       "   5         0.038545\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "proba = m.predict_proba(df)\n",
+    "proba.head(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-0.7210551313408093"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "score = m.score(df, y=df.chose)\n",
+    "score"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-3626.18625551293"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "score * m.dataframes.n_cases"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:greenhouse]",
+   "language": "python",
+   "name": "conda-env-greenhouse-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

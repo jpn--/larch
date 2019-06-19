@@ -1,0 +1,1684 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 107: Latent Class Models\n",
+    "\n",
+    "In this example, we will replicate the [latent class example model](http://biogeme.epfl.ch/examples/swissmetro/pandas/07discreteMixture.py)\n",
+    "from Biogeme."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import larch\n",
+    "import pandas\n",
+    "from larch.roles import P,X"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The swissmetro dataset used in this example is conveniently bundled with Larch,\n",
+    "accessible using the ``data_warehouse`` module.  We'll load this file using \n",
+    "the pandas [``read_csv``](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) command."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from larch import data_warehouse\n",
+    "raw = pandas.read_csv(larch.data_warehouse.example_file('swissmetro.csv.gz'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can inspect a few rows of data to see what we have using the ``head`` method."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>GROUP</th>\n",
+       "      <th>SURVEY</th>\n",
+       "      <th>SP</th>\n",
+       "      <th>ID</th>\n",
+       "      <th>PURPOSE</th>\n",
+       "      <th>FIRST</th>\n",
+       "      <th>TICKET</th>\n",
+       "      <th>WHO</th>\n",
+       "      <th>LUGGAGE</th>\n",
+       "      <th>AGE</th>\n",
+       "      <th>...</th>\n",
+       "      <th>TRAIN_TT</th>\n",
+       "      <th>TRAIN_CO</th>\n",
+       "      <th>TRAIN_HE</th>\n",
+       "      <th>SM_TT</th>\n",
+       "      <th>SM_CO</th>\n",
+       "      <th>SM_HE</th>\n",
+       "      <th>SM_SEATS</th>\n",
+       "      <th>CAR_TT</th>\n",
+       "      <th>CAR_CO</th>\n",
+       "      <th>CHOICE</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3</td>\n",
+       "      <td>...</td>\n",
+       "      <td>112</td>\n",
+       "      <td>48</td>\n",
+       "      <td>120</td>\n",
+       "      <td>63</td>\n",
+       "      <td>52</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "      <td>117</td>\n",
+       "      <td>65</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3</td>\n",
+       "      <td>...</td>\n",
+       "      <td>103</td>\n",
+       "      <td>48</td>\n",
+       "      <td>30</td>\n",
+       "      <td>60</td>\n",
+       "      <td>49</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "      <td>117</td>\n",
+       "      <td>84</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3</td>\n",
+       "      <td>...</td>\n",
+       "      <td>130</td>\n",
+       "      <td>48</td>\n",
+       "      <td>60</td>\n",
+       "      <td>67</td>\n",
+       "      <td>58</td>\n",
+       "      <td>30</td>\n",
+       "      <td>0</td>\n",
+       "      <td>117</td>\n",
+       "      <td>52</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3</td>\n",
+       "      <td>...</td>\n",
+       "      <td>103</td>\n",
+       "      <td>40</td>\n",
+       "      <td>30</td>\n",
+       "      <td>63</td>\n",
+       "      <td>52</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "      <td>72</td>\n",
+       "      <td>52</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3</td>\n",
+       "      <td>...</td>\n",
+       "      <td>130</td>\n",
+       "      <td>36</td>\n",
+       "      <td>60</td>\n",
+       "      <td>63</td>\n",
+       "      <td>42</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "      <td>90</td>\n",
+       "      <td>84</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 28 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   GROUP  SURVEY  SP  ID  PURPOSE  FIRST  TICKET  WHO  LUGGAGE  AGE  ...  \\\n",
+       "0      2       0   1   1        1      0       1    1        0    3  ...   \n",
+       "1      2       0   1   1        1      0       1    1        0    3  ...   \n",
+       "2      2       0   1   1        1      0       1    1        0    3  ...   \n",
+       "3      2       0   1   1        1      0       1    1        0    3  ...   \n",
+       "4      2       0   1   1        1      0       1    1        0    3  ...   \n",
+       "\n",
+       "   TRAIN_TT  TRAIN_CO  TRAIN_HE  SM_TT  SM_CO  SM_HE  SM_SEATS  CAR_TT  \\\n",
+       "0       112        48       120     63     52     20         0     117   \n",
+       "1       103        48        30     60     49     10         0     117   \n",
+       "2       130        48        60     67     58     30         0     117   \n",
+       "3       103        40        30     63     52     20         0      72   \n",
+       "4       130        36        60     63     42     20         0      90   \n",
+       "\n",
+       "   CAR_CO  CHOICE  \n",
+       "0      65       2  \n",
+       "1      84       2  \n",
+       "2      52       2  \n",
+       "3      52       2  \n",
+       "4      84       2  \n",
+       "\n",
+       "[5 rows x 28 columns]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "raw.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The Biogeme code includes a variety of commands to manipulate the data\n",
+    "and create new variables.  Because Larch sits on top of pandas, a reasonable\n",
+    "method to create new variables is to just create new columns in the \n",
+    "source ``pandas.DataFrame`` in the usual manner for any ``DataFrame``."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "raw['SM_COST'] = raw['SM_CO'] * (raw[\"GA\"]==0) "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can also use the ``eval`` method of pandas DataFrames.\n",
+    "This method takes an expression as a string\n",
+    "and evaluates it within a namespace that has already loaded the \n",
+    "column names as variables."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "raw['TRAIN_COST'] = raw.eval(\"TRAIN_CO * (GA == 0)\") "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This can allow for writing data \n",
+    "expressions more succinctly, as long as all your variable names \n",
+    "are strings that can also be the names of variables in Python.\n",
+    "If this isn't the case (e.g., if any variable names have spaces\n",
+    "in the name) you'll be better off if you stay away from this \n",
+    "feature."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can mix and match between these two method to create new\n",
+    "columns in any DataFrame as needed."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "raw['TRAIN_COST_SCALED'] = raw['TRAIN_COST'] / 100\n",
+    "raw['TRAIN_TT_SCALED'] = raw['TRAIN_TT'] / 100\n",
+    "\n",
+    "raw['SM_COST_SCALED'] = raw.eval('SM_COST / 100')\n",
+    "raw['SM_TT_SCALED'] = raw['SM_TT'] / 100\n",
+    "\n",
+    "raw['CAR_CO_SCALED'] = raw['CAR_CO'] / 100\n",
+    "raw['CAR_TT_SCALED'] = raw['CAR_TT'] / 100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "raw['CAR_AV_SP'] = raw.eval(\"CAR_AV * (SP!=0)\")\n",
+    "raw['TRAIN_AV_SP'] = raw.eval(\"TRAIN_AV * (SP!=0)\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Removing some observations can also be done directly using pandas.\n",
+    "Here we identify a subset of observations that we want to keep."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "keep = raw.eval(\"PURPOSE in (1,3) and CHOICE != 0\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You may note that we don't assign this value to a column within the\n",
+    "``raw`` DataFrame.  This is perfectly acceptable, as the output from\n",
+    "the ``eval`` method is just a normal pandas.Series, like any other\n",
+    "single column output you might expect to get from a pandas method."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "When you've created the data you need, you can pass the dataframe to\n",
+    "the larch.DataFrames constructor.  Since the *swissmetro* data is in\n",
+    "``idco`` format, we'll need to explicitly identify the alternative \n",
+    "codes as well."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dfs = larch.DataFrames(raw[keep], alt_codes=[1,2,3])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The info method of the DataFrames object gives a short summary\n",
+    "of the contents."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:  (not computation-ready)\n",
+      "  n_cases: 6768\n",
+      "  n_alts: 3\n",
+      "  data_ca: <not populated>\n",
+      "  data_co: 38 variables\n"
+     ]
+    }
+   ],
+   "source": [
+    "dfs.info()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A longer summary is available by setting verbose to True."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:  (not computation-ready)\n",
+      "  n_cases: 6768\n",
+      "  n_alts: 3\n",
+      "  data_ca: <not populated>\n",
+      "  data_co:\n",
+      "    - GROUP\n",
+      "    - SURVEY\n",
+      "    - SP\n",
+      "    - ID\n",
+      "    - PURPOSE\n",
+      "    - FIRST\n",
+      "    - TICKET\n",
+      "    - WHO\n",
+      "    - LUGGAGE\n",
+      "    - AGE\n",
+      "    - MALE\n",
+      "    - INCOME\n",
+      "    - GA\n",
+      "    - ORIGIN\n",
+      "    - DEST\n",
+      "    - TRAIN_AV\n",
+      "    - CAR_AV\n",
+      "    - SM_AV\n",
+      "    - TRAIN_TT\n",
+      "    - TRAIN_CO\n",
+      "    - TRAIN_HE\n",
+      "    - SM_TT\n",
+      "    - SM_CO\n",
+      "    - SM_HE\n",
+      "    - SM_SEATS\n",
+      "    - CAR_TT\n",
+      "    - CAR_CO\n",
+      "    - CHOICE\n",
+      "    - SM_COST\n",
+      "    - TRAIN_COST\n",
+      "    - TRAIN_COST_SCALED\n",
+      "    - TRAIN_TT_SCALED\n",
+      "    - SM_COST_SCALED\n",
+      "    - SM_TT_SCALED\n",
+      "    - CAR_CO_SCALED\n",
+      "    - CAR_TT_SCALED\n",
+      "    - CAR_AV_SP\n",
+      "    - TRAIN_AV_SP\n"
+     ]
+    }
+   ],
+   "source": [
+    "dfs.info(verbose=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You may have noticed that the info summary notes that this data is \"not computation-ready\".\n",
+    "That's because some of the data columns are stored as integers, which can be observed by\n",
+    "inspecting the info on the data_co dataframe."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "Int64Index: 6768 entries, 0 to 8450\n",
+      "Data columns (total 38 columns):\n",
+      "GROUP                6768 non-null int64\n",
+      "SURVEY               6768 non-null int64\n",
+      "SP                   6768 non-null int64\n",
+      "ID                   6768 non-null int64\n",
+      "PURPOSE              6768 non-null int64\n",
+      "FIRST                6768 non-null int64\n",
+      "TICKET               6768 non-null int64\n",
+      "WHO                  6768 non-null int64\n",
+      "LUGGAGE              6768 non-null int64\n",
+      "AGE                  6768 non-null int64\n",
+      "MALE                 6768 non-null int64\n",
+      "INCOME               6768 non-null int64\n",
+      "GA                   6768 non-null int64\n",
+      "ORIGIN               6768 non-null int64\n",
+      "DEST                 6768 non-null int64\n",
+      "TRAIN_AV             6768 non-null int64\n",
+      "CAR_AV               6768 non-null int64\n",
+      "SM_AV                6768 non-null int64\n",
+      "TRAIN_TT             6768 non-null int64\n",
+      "TRAIN_CO             6768 non-null int64\n",
+      "TRAIN_HE             6768 non-null int64\n",
+      "SM_TT                6768 non-null int64\n",
+      "SM_CO                6768 non-null int64\n",
+      "SM_HE                6768 non-null int64\n",
+      "SM_SEATS             6768 non-null int64\n",
+      "CAR_TT               6768 non-null int64\n",
+      "CAR_CO               6768 non-null int64\n",
+      "CHOICE               6768 non-null int64\n",
+      "SM_COST              6768 non-null int64\n",
+      "TRAIN_COST           6768 non-null int64\n",
+      "TRAIN_COST_SCALED    6768 non-null float64\n",
+      "TRAIN_TT_SCALED      6768 non-null float64\n",
+      "SM_COST_SCALED       6768 non-null float64\n",
+      "SM_TT_SCALED         6768 non-null float64\n",
+      "CAR_CO_SCALED        6768 non-null float64\n",
+      "CAR_TT_SCALED        6768 non-null float64\n",
+      "CAR_AV_SP            6768 non-null int64\n",
+      "TRAIN_AV_SP          6768 non-null int64\n",
+      "dtypes: float64(6), int64(32)\n",
+      "memory usage: 2.0 MB\n"
+     ]
+    }
+   ],
+   "source": [
+    "dfs.data_co.info()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "When computations are run, we'll need all the data to be in float format, but Larch knows this and will \n",
+    "handle it for you later."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Class Model Setup\n",
+    "Having prepped our data, we're ready to set up discrete choices models \n",
+    "for each class in the latent class model.  We'll reproduce the Biogeme\n",
+    "example exactly here, as a technology demonstation.  Each of two classes\n",
+    "will be set up with a simple MNL model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m1 = larch.Model(dataservice=dfs)\n",
+    "m1.availability_co_vars = {\n",
+    "    1: \"TRAIN_AV_SP\",\n",
+    "    2: \"SM_AV\",\n",
+    "    3: \"CAR_AV_SP\",\n",
+    "}\n",
+    "m1.choice_co_code = 'CHOICE'\n",
+    "\n",
+    "m1.utility_co[1] = P(\"ASC_TRAIN\") + X(\"TRAIN_COST_SCALED\") * P(\"B_COST\")\n",
+    "m1.utility_co[2] = X(\"SM_COST_SCALED\") * P(\"B_COST\")\n",
+    "m1.utility_co[3] = P(\"ASC_CAR\") + X(\"CAR_CO_SCALED\") * P(\"B_COST\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m2 = larch.Model(dataservice=dfs)\n",
+    "m2.availability_co_vars = {\n",
+    "    1: \"TRAIN_AV_SP\",\n",
+    "    2: \"SM_AV\",\n",
+    "    3: \"CAR_AV_SP\",\n",
+    "}\n",
+    "m2.choice_co_code = 'CHOICE'\n",
+    "\n",
+    "m2.utility_co[1] = P(\"ASC_TRAIN\") + X(\"TRAIN_TT_SCALED\") * P(\"B_TIME\") + X(\"TRAIN_COST_SCALED\") * P(\"B_COST\")\n",
+    "m2.utility_co[2] = X(\"SM_TT_SCALED\") * P(\"B_TIME\") + X(\"SM_COST_SCALED\") * P(\"B_COST\")\n",
+    "m2.utility_co[3] = P(\"ASC_CAR\") + X(\"CAR_TT_SCALED\") * P(\"B_TIME\") + X(\"CAR_CO_SCALED\") * P(\"B_COST\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Class Membership Model"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "For Larch, the class membership model will be set up as yet another discrete choice model.\n",
+    "In this case, the choices are not the ultimate choices, but instead are the latent classes.\n",
+    "To remain consistent with the Biogeme example, we'll set up this model with only a single\n",
+    "constant that determines class membership.  Unlike Biogeme, this class membership will\n",
+    "be represented with an MNL model, not a simple direct probability."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mk = larch.Model()\n",
+    "mk.utility_co[2] = P(\"W_OTHER\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The utility function of the first class isn't written here, which means it will implicitly\n",
+    "be set as 0."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Latent Class Model\n",
+    "\n",
+    "Now we're ready to create the latent class model itself, by assembling the components\n",
+    "we created above.  The constructor for the ``LatentClassModel`` takes two arguments,\n",
+    "a class membership model, and a dictionary of class models, where the keys in the \n",
+    "dictionary correspond to the identifying codes from the utility functions we wrote\n",
+    "for the class membership model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from larch.model.latentclass import LatentClassModel\n",
+    "m = LatentClassModel(mk, {1:m1, 2:m2})"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The we'll load the data needed for our models using the ``load_data`` method.\n",
+    "This step will assemble the data needed, and convert it to floating point\n",
+    "format as required."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "converting data_ch to <class 'numpy.float64'>\n"
+     ]
+    }
+   ],
+   "source": [
+    "m.load_data()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "larch.DataFrames:\n",
+      "  n_cases: 6768\n",
+      "  n_alts: 3\n",
+      "  data_ca: <not populated>\n",
+      "  data_co:\n",
+      "    - CAR_CO_SCALED\n",
+      "    - CAR_TT_SCALED\n",
+      "    - SM_COST_SCALED\n",
+      "    - SM_TT_SCALED\n",
+      "    - TRAIN_COST_SCALED\n",
+      "    - TRAIN_TT_SCALED\n",
+      "  data_av: <populated>\n",
+      "  data_ch: <populated>\n"
+     ]
+    }
+   ],
+   "source": [
+    "m.dataframes.info(verbose=1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Only the data actually needed by the models has been converted, which may help\n",
+    "keep memory usage down on larger models.  You may also note that the loaded\n",
+    "dataframes no longer reports that it is \"not computational-ready\".\n",
+    "\n",
+    "To estimate the model, we'll use the ``maximize_loglike`` method.  When run\n",
+    "in Jupyter, a live-view report of the parmeters and log likelihood is displayed."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "tags": [
+     "nbval-ignore-output"
+    ]
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h3>Iteration 056 [Converged] </h3>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<p>LL = -5208.498065961454</p>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>value</th>\n",
+       "      <th>initvalue</th>\n",
+       "      <th>nullvalue</th>\n",
+       "      <th>minimum</th>\n",
+       "      <th>maximum</th>\n",
+       "      <th>holdfast</th>\n",
+       "      <th>note</th>\n",
+       "      <th>best</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.124611</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.124611</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>-0.397611</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.397611</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>-1.263567</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-1.263567</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-2.797798</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-2.797798</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>1.094291</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>1.094291</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "              value  initvalue  nullvalue  minimum  maximum  holdfast note  \\\n",
+       "ASC_CAR    0.124611        0.0        0.0     -inf      inf         0        \n",
+       "ASC_TRAIN -0.397611        0.0        0.0     -inf      inf         0        \n",
+       "B_COST    -1.263567        0.0        0.0     -inf      inf         0        \n",
+       "B_TIME    -2.797798        0.0        0.0     -inf      inf         0        \n",
+       "W_OTHER    1.094291        0.0        0.0     -inf      inf         0        \n",
+       "\n",
+       "               best  \n",
+       "ASC_CAR    0.124611  \n",
+       "ASC_TRAIN -0.397611  \n",
+       "B_COST    -1.263567  \n",
+       "B_TIME    -2.797798  \n",
+       "W_OTHER    1.094291  "
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "result = m.maximize_loglike()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div><table style=\"margin-top:1px;\"><tr><th>key</th><th style=\"text-align:left;\">value</th></tr><tr><td>loglike</td><td style=\"text-align:left;\">-5208.498065961454</td></tr><tr><td>x</td><td style=\"text-align:left;\"><table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.124611</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>-0.397611</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>-1.263567</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-2.797798</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>1.094291</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table></td></tr><tr><td>tolerance</td><td style=\"text-align:left;\">8.736059377268807e-06</td></tr><tr><td>steps</td><td style=\"text-align:left;\"><pre>array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "       1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "       1., 1., 1., 1., 1.])</pre></td></tr><tr><td>message</td><td style=\"text-align:left;\">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style=\"text-align:left;\">0:00:32.584511</td></tr><tr><td>method</td><td style=\"text-align:left;\">'bhhh'</td></tr><tr><td>n_cases</td><td style=\"text-align:left;\">6768</td></tr><tr><td>iteration_number</td><td style=\"text-align:left;\">56</td></tr><tr><td>logloss</td><td style=\"text-align:left;\">0.7695771374056521</td></tr></table></div>"
+      ],
+      "text/plain": [
+       "┣          loglike: -5208.498065961454\n",
+       "┣                x: ASC_CAR      0.124611\n",
+       "┃                   ASC_TRAIN   -0.397611\n",
+       "┃                   B_COST      -1.263567\n",
+       "┃                   B_TIME      -2.797798\n",
+       "┃                   W_OTHER      1.094291\n",
+       "┃                   dtype: float64\n",
+       "┣        tolerance: 8.736059377268807e-06\n",
+       "┣            steps: array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "┃                          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "┃                          1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,\n",
+       "┃                          1., 1., 1., 1., 1.])\n",
+       "┣          message: 'Optimization terminated successfully.'\n",
+       "┣     elapsed_time: datetime.timedelta(seconds=32, microseconds=584511)\n",
+       "┣           method: 'bhhh'\n",
+       "┣          n_cases: 6768\n",
+       "┣ iteration_number: 56\n",
+       "┣          logloss: 0.7695771374056521"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "result"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To complete our analysis, we can compute the log likelihood at \"null\" parameters."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-6964.662979191462"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "m.loglike_null()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And the parameter covariance matrixes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m.calculate_parameter_covariance()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <th>B_COST</th>\n",
+       "      <th>B_TIME</th>\n",
+       "      <th>W_OTHER</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.002549</td>\n",
+       "      <td>0.001935</td>\n",
+       "      <td>0.000252</td>\n",
+       "      <td>-0.004538</td>\n",
+       "      <td>-0.000080</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>0.001935</td>\n",
+       "      <td>0.003702</td>\n",
+       "      <td>-0.000143</td>\n",
+       "      <td>-0.004348</td>\n",
+       "      <td>0.001439</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>0.000252</td>\n",
+       "      <td>-0.000143</td>\n",
+       "      <td>0.003742</td>\n",
+       "      <td>0.002839</td>\n",
+       "      <td>0.000620</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-0.004538</td>\n",
+       "      <td>-0.004348</td>\n",
+       "      <td>0.002839</td>\n",
+       "      <td>0.030840</td>\n",
+       "      <td>0.012869</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>-0.000080</td>\n",
+       "      <td>0.001439</td>\n",
+       "      <td>0.000620</td>\n",
+       "      <td>0.012869</td>\n",
+       "      <td>0.013563</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            ASC_CAR  ASC_TRAIN    B_COST    B_TIME   W_OTHER\n",
+       "ASC_CAR    0.002549   0.001935  0.000252 -0.004538 -0.000080\n",
+       "ASC_TRAIN  0.001935   0.003702 -0.000143 -0.004348  0.001439\n",
+       "B_COST     0.000252  -0.000143  0.003742  0.002839  0.000620\n",
+       "B_TIME    -0.004538  -0.004348  0.002839  0.030840  0.012869\n",
+       "W_OTHER   -0.000080   0.001439  0.000620  0.012869  0.013563"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "m.covariance_matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <th>B_COST</th>\n",
+       "      <th>B_TIME</th>\n",
+       "      <th>W_OTHER</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.010295</td>\n",
+       "      <td>0.008356</td>\n",
+       "      <td>0.001083</td>\n",
+       "      <td>-0.018769</td>\n",
+       "      <td>-0.001150</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>0.008356</td>\n",
+       "      <td>0.015392</td>\n",
+       "      <td>-0.001147</td>\n",
+       "      <td>-0.017526</td>\n",
+       "      <td>0.006384</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>0.001083</td>\n",
+       "      <td>-0.001147</td>\n",
+       "      <td>0.029295</td>\n",
+       "      <td>0.014484</td>\n",
+       "      <td>-0.000933</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-0.018770</td>\n",
+       "      <td>-0.017526</td>\n",
+       "      <td>0.014483</td>\n",
+       "      <td>0.117864</td>\n",
+       "      <td>0.047962</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>-0.001150</td>\n",
+       "      <td>0.006384</td>\n",
+       "      <td>-0.000933</td>\n",
+       "      <td>0.047962</td>\n",
+       "      <td>0.053560</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            ASC_CAR  ASC_TRAIN    B_COST    B_TIME   W_OTHER\n",
+       "ASC_CAR    0.010295   0.008356  0.001083 -0.018769 -0.001150\n",
+       "ASC_TRAIN  0.008356   0.015392 -0.001147 -0.017526  0.006384\n",
+       "B_COST     0.001083  -0.001147  0.029295  0.014484 -0.000933\n",
+       "B_TIME    -0.018770  -0.017526  0.014483  0.117864  0.047962\n",
+       "W_OTHER   -0.001150   0.006384 -0.000933  0.047962  0.053560"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "m.robust_covariance_matrix"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Reporting Results"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And then generate a report of the estimation statistics.  Larch includes a ``Reporter`` class \n",
+    "to help you assemble a report containing the relevant output you want."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "report = larch.Reporter(\"Latent Class Example\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Pipe into the report section headers in markdown format (use one hash for top level\n",
+    "headings, two hashes for lower levels, etc.)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h1><a class=\"toc\" name=\"rx1\" reftxt=\"Parameter Estimates\" toclevel=\"1\"></a>Parameter Estimates</h1>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 2 children>"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << \"# Parameter Estimates\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can also pipe in dataframes directly, include the ``pf`` parameter frame from the model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped=\"1\">\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>value</th>\n",
+       "      <th>initvalue</th>\n",
+       "      <th>nullvalue</th>\n",
+       "      <th>minimum</th>\n",
+       "      <th>maximum</th>\n",
+       "      <th>holdfast</th>\n",
+       "      <th>note</th>\n",
+       "      <th>best</th>\n",
+       "      <th>std err</th>\n",
+       "      <th>t stat</th>\n",
+       "      <th>robust std err</th>\n",
+       "      <th>robust t stat</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.124611</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>0.124611</td>\n",
+       "      <td>0.050483</td>\n",
+       "      <td>2.468380</td>\n",
+       "      <td>0.101465</td>\n",
+       "      <td>1.228109</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>-0.397611</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-0.397611</td>\n",
+       "      <td>0.060847</td>\n",
+       "      <td>-6.534638</td>\n",
+       "      <td>0.124063</td>\n",
+       "      <td>-3.204911</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>-1.263567</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-1.263567</td>\n",
+       "      <td>0.061170</td>\n",
+       "      <td>-20.656769</td>\n",
+       "      <td>0.171159</td>\n",
+       "      <td>-7.382413</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-2.797798</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>-2.797798</td>\n",
+       "      <td>0.175613</td>\n",
+       "      <td>-15.931614</td>\n",
+       "      <td>0.343313</td>\n",
+       "      <td>-8.149405</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>1.094291</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-inf</td>\n",
+       "      <td>inf</td>\n",
+       "      <td>0</td>\n",
+       "      <td></td>\n",
+       "      <td>1.094291</td>\n",
+       "      <td>0.116461</td>\n",
+       "      <td>9.396203</td>\n",
+       "      <td>0.231430</td>\n",
+       "      <td>4.728383</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 3 children>"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << m.pf"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And a selection of pre-formatted summary sections."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h1><a class=\"toc\" name=\"rx2\" reftxt=\"Estimation Statistics\" toclevel=\"1\"></a>Estimation Statistics</h1><div><table><thead><tr><th>Statistic</th><th>Aggregate</th><th>Per Case</th></tr><tr><td>Number of Cases</td><td colspan=\"2\">6768</td></tr><tr><td>Log Likelihood at Convergence</td><td>-5208.50</td><td>-0.77</td></tr><tr><td>Log Likelihood at Null Parameters</td><td>-6964.66</td><td>-1.03</td></tr><tr><td>Rho Squared w.r.t. Null Parameters</td><td colspan=\"2\">0.252</td></tr></thead><tbody></tbody></table></div>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 5 children>"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << \"# Estimation Statistics\"\n",
+    "report << m.estimation_statistics()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h1><a class=\"toc\" name=\"rx3\" reftxt=\"Parameter Covariance\" toclevel=\"1\"></a>Parameter Covariance</h1><h2><a class=\"toc\" name=\"rx4\" reftxt=\"Typical Parameter Covariance\" toclevel=\"2\"></a>Typical Parameter Covariance</h2><div>\n",
+       "<style scoped=\"1\">\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <th>B_COST</th>\n",
+       "      <th>B_TIME</th>\n",
+       "      <th>W_OTHER</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.002549</td>\n",
+       "      <td>0.001935</td>\n",
+       "      <td>0.000252</td>\n",
+       "      <td>-0.004538</td>\n",
+       "      <td>-0.000080</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>0.001935</td>\n",
+       "      <td>0.003702</td>\n",
+       "      <td>-0.000143</td>\n",
+       "      <td>-0.004348</td>\n",
+       "      <td>0.001439</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>0.000252</td>\n",
+       "      <td>-0.000143</td>\n",
+       "      <td>0.003742</td>\n",
+       "      <td>0.002839</td>\n",
+       "      <td>0.000620</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-0.004538</td>\n",
+       "      <td>-0.004348</td>\n",
+       "      <td>0.002839</td>\n",
+       "      <td>0.030840</td>\n",
+       "      <td>0.012869</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>-0.000080</td>\n",
+       "      <td>0.001439</td>\n",
+       "      <td>0.000620</td>\n",
+       "      <td>0.012869</td>\n",
+       "      <td>0.013563</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div><h2><a class=\"toc\" name=\"rx5\" reftxt=\"Robust Parameter Covariance\" toclevel=\"2\"></a>Robust Parameter Covariance</h2><div>\n",
+       "<style scoped=\"1\">\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <th>B_COST</th>\n",
+       "      <th>B_TIME</th>\n",
+       "      <th>W_OTHER</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>ASC_CAR</th>\n",
+       "      <td>0.010295</td>\n",
+       "      <td>0.008356</td>\n",
+       "      <td>0.001083</td>\n",
+       "      <td>-0.018769</td>\n",
+       "      <td>-0.001150</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>ASC_TRAIN</th>\n",
+       "      <td>0.008356</td>\n",
+       "      <td>0.015392</td>\n",
+       "      <td>-0.001147</td>\n",
+       "      <td>-0.017526</td>\n",
+       "      <td>0.006384</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_COST</th>\n",
+       "      <td>0.001083</td>\n",
+       "      <td>-0.001147</td>\n",
+       "      <td>0.029295</td>\n",
+       "      <td>0.014484</td>\n",
+       "      <td>-0.000933</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>B_TIME</th>\n",
+       "      <td>-0.018770</td>\n",
+       "      <td>-0.017526</td>\n",
+       "      <td>0.014483</td>\n",
+       "      <td>0.117864</td>\n",
+       "      <td>0.047962</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>W_OTHER</th>\n",
+       "      <td>-0.001150</td>\n",
+       "      <td>0.006384</td>\n",
+       "      <td>-0.000933</td>\n",
+       "      <td>0.047962</td>\n",
+       "      <td>0.053560</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 10 children>"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << \"# Parameter Covariance\"\n",
+    "report << \"## Typical Parameter Covariance\"\n",
+    "report << m.covariance_matrix\n",
+    "report << \"## Robust Parameter Covariance\"\n",
+    "report << m.robust_covariance_matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h1><a class=\"toc\" name=\"rx6\" reftxt=\"Utility Functions\" toclevel=\"1\"></a>Utility Functions</h1><h2><a class=\"toc\" name=\"rx7\" reftxt=\"Class 1\" toclevel=\"2\"></a>Class 1</h2><h3><a class=\"toc\" name=\"rx8\" reftxt=\"Formulae\" toclevel=\"3\"></a>Formulae</h3><div><table class=\"floatinghead\" style=\"margin-top:1px;\"><thead><tr><th>alt</th><th style=\"text-align:left;\">formula</th></tr></thead><tbody><tr><td>1</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.ASC_TRAIN<span class=\"tooltiptext\">-0.398</span></div><br> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.TRAIN_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>2</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.SM_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>3</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.ASC_CAR<span class=\"tooltiptext\">0.125</span></div><br> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.CAR_CO_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr></tbody></table></div><h3><a class=\"toc\" name=\"rx9\" reftxt=\"Final Estimated Values\" toclevel=\"3\"></a>Final Estimated Values</h3><div><table class=\"floatinghead\" style=\"margin-top:1px;\"><thead><tr><th>alt</th><th style=\"text-align:left;\">formula</th></tr></thead><tbody><tr><td>1</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">-0.398<span class=\"tooltiptext\">P.ASC_TRAIN</span></div><br> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.TRAIN_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>2</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.SM_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>3</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">0.125<span class=\"tooltiptext\">P.ASC_CAR</span></div><br> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.CAR_CO_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr></tbody></table></div>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 16 children>"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << \"# Utility Functions\"\n",
+    "report << \"## Class 1\"\n",
+    "report << \"### Formulae\"\n",
+    "report << m1.utility_functions(resolve_parameters=False)\n",
+    "report << \"### Final Estimated Values\"\n",
+    "report << m1.utility_functions(resolve_parameters=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<h2><a class=\"toc\" name=\"rx10\" reftxt=\"Class 2\" toclevel=\"2\"></a>Class 2</h2><h3><a class=\"toc\" name=\"rx11\" reftxt=\"Formulae\" toclevel=\"3\"></a>Formulae</h3><div><table class=\"floatinghead\" style=\"margin-top:1px;\"><thead><tr><th>alt</th><th style=\"text-align:left;\">formula</th></tr></thead><tbody><tr><td>1</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.ASC_TRAIN<span class=\"tooltiptext\">-0.398</span></div><br> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.TRAIN_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>2</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.SM_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>3</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">P.ASC_CAR<span class=\"tooltiptext\">0.125</span></div><br> + <div class=\"tooltipped\">P.B_COST<span class=\"tooltiptext\">-1.26</span></div> * <div class=\"tooltipped\">X.CAR_CO_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr></tbody></table></div><h3><a class=\"toc\" name=\"rx12\" reftxt=\"Final Estimated Values\" toclevel=\"3\"></a>Final Estimated Values</h3><div><table class=\"floatinghead\" style=\"margin-top:1px;\"><thead><tr><th>alt</th><th style=\"text-align:left;\">formula</th></tr></thead><tbody><tr><td>1</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">-0.398<span class=\"tooltiptext\">P.ASC_TRAIN</span></div><br> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.TRAIN_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>2</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.SM_COST_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr><tr><td>3</td><td style=\"text-align:left;\"><div></div> + <div class=\"tooltipped\">0.125<span class=\"tooltiptext\">P.ASC_CAR</span></div><br> + <div class=\"tooltipped\">-1.26<span class=\"tooltiptext\">P.B_COST</span></div> * <div class=\"tooltipped\">X.CAR_CO_SCALED<span class=\"tooltiptext\">This is Data</span></div></td></tr></tbody></table></div>"
+      ],
+      "text/plain": [
+       "<xmle.Elem 'div' with 21 children>"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report << \"## Class 2\"\n",
+    "report << \"### Formulae\"\n",
+    "report << m1.utility_functions(resolve_parameters=False)\n",
+    "report << \"### Final Estimated Values\"\n",
+    "report << m1.utility_functions(resolve_parameters=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In addition to reviewing report sections in a Jupyter notebook, the \n",
+    "entire report can be saved to an HTML file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'latent-class-example-report.html'"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "report.save('latent-class-example-report.html', overwrite=True)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:greenhouse]",
+   "language": "python",
+   "name": "conda-env-greenhouse-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
