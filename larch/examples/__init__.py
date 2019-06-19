@@ -120,7 +120,7 @@ def _exec_example(sourcefile, d=None, extract='m', echo=False):
 		except KeyError:
 			print("Known keys:", ", ".join(str(i) for i in _local.keys()))
 			raise
-	else:
+	elif extract is not None:
 		return tuple(_local[i] for i in extract)
 
 
@@ -129,18 +129,33 @@ def _exec_example_n(n, *arg, **kwarg):
 	return _exec_example(f, *arg, **kwarg)
 
 
-def example(n, extract='m', echo=False):
+def example(n, extract='m', echo=False, output_file=None):
 	'''Run an example code section (from the documentation) and give the result.
 
 	Parameters
 	----------
 	n : int
 		The number of the example to reproduce.
-	extract : str or iterable of str
+	extract : str or Sequence[str]
 		The name of the object of the example to extract.  By default `m`
 		but it any named object that exists in the example namespace can
-		be returned.  Give a list of `str` to get multiple objects.
+		be returned.  Give a sequence of `str` to get multiple objects.
 	echo : bool, optional
 		If True, will echo the commands used.
+	output_file : str, optional
+		If given, check whether this named file exists.  If so,
+		return the filename, otherwise run the example code section
+		(which should as a side effect create this file).  Then
+		check that the file now exists, raising a FileNotFoundError
+		if it still does not exist.
 	'''
-	return _exec_example_n(n, extract=extract, echo=echo)
+	if output_file is not None:
+		if os.path.exists(output_file):
+			return output_file
+		_exec_example_n(n, extract=None, echo=echo)
+		if os.path.exists(output_file):
+			return output_file
+		else:
+			raise FileNotFoundError(output_file)
+	else:
+		return _exec_example_n(n, extract=extract, echo=echo)
