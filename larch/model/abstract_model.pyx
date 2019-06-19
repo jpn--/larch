@@ -798,7 +798,37 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		# 	self._cached_loglike_constants_only = result.loglike
 		# 	return self._cached_loglike_constants_only
 
-	def estimation_statistics(self, recompute_loglike_null=True):
+	def estimation_statistics(self, compute_loglike_null=True):
+		"""
+		Create an XHTML summary of estimation statistics.
+
+		This will generate a small table of estimation statistics,
+		containing:
+
+		*	Log Likelihood at Convergence
+		*	Log Likelihood at Null Parameters (if known)
+		*	Log Likelihood with No Model (if known)
+		*	Log Likelihood at Constants Only (if known)
+
+		Additionally, for each included reference value (i.e.
+		everything except log likelihood at convergence) the
+		rho squared with respect to that value is also given.
+
+		Each statistic is reported in aggregate, as well as
+		per case.
+
+		Parameters
+		----------
+		compute_loglike_null : bool, default True
+			If the log likelihood at null values has not already
+			been computed (i.e., if it is not cached) then compute
+			it, cache its value, and include it in the output.
+
+		Returns
+		-------
+		xmle.Elem
+
+		"""
 
 		from xmle import Elem
 		div = Elem('div')
@@ -826,7 +856,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		ll_z = self._cached_loglike_null
 		if ll_z == 0:
-			if recompute_loglike_null:
+			if compute_loglike_null:
 				ll_z = self.loglike_null()
 				self.loglike()
 			else:

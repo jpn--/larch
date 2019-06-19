@@ -234,3 +234,8 @@ Advanced Usage
 It is highly recommended that you use the pre-built packages available through
 conda.  However, if for some reason you want to compile Larch from source,
 you might find some useful tips :ref:`here <compiling>`.
+
+.. toctree::
+    :maxdepth: 1
+
+    compiling

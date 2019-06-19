@@ -8,19 +8,43 @@ A :class:`Model` is the core object used to represent a discrete choice model.
 
 .. autoclass:: Model
 
-    .. autoattribute:: utility_ca
 
-    .. autoattribute:: utility_co
+Utility Function Definition
+---------------------------
 
-    .. autoattribute:: quantity_ca
+Note that these function definitions act like *properties* of
+the Model object, instead of methods on Model objects.
 
-    .. automethod:: set_value
+.. autoattribute:: Model.utility_ca
 
-    .. automethod:: lock_value
+.. autoattribute:: Model.utility_co
 
-    .. automethod:: fit
+.. autoattribute:: Model.quantity_ca
 
-    .. automethod:: predict
 
-    .. automethod:: predict_proba
+Parameter Manipulation
+----------------------
 
+.. automethod:: Model.set_value
+
+.. automethod:: Model.lock_value
+
+
+Scikit-Learn Interface
+----------------------
+
+.. automethod:: Model.fit
+
+.. automethod:: Model.predict
+
+.. automethod:: Model.predict_proba
+
+
+Reporting and Outputs
+---------------------
+
+.. automethod:: Model.parameter_summary
+
+.. automethod:: Model.utility_functions
+
+.. automethod:: Model.estimation_statistics

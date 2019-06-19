@@ -314,7 +314,7 @@ cdef class ParameterFrame:
 
 		self._check_if_frame_values_changed()
 
-	def lock_value(self, name, value, note=None, _change_check=True):
+	def lock_value(self, name, value, note=None, change_check=True):
 		"""
 		Set a fixed value for a model parameter.
 
@@ -332,6 +332,13 @@ cdef class ParameterFrame:
 			A note as to why this parameter is set to a fixed value.
 			This will not affect the mathematical treatment of the
 			parameter in any way, but may be useful for reporting.
+		change_check : bool, default True
+			Whether to trigger a check to see if any parameter frame
+			values have changed.  Can be set to false to skip this
+			check if you know that the values have not changed or want
+			to delay this check for later, but this may result in
+			problems if the check is needed but not triggered before
+			certain other modeling tasks are performed.
 
 		"""
 		if isinstance(name, ParameterRef_C):
@@ -341,7 +348,7 @@ cdef class ParameterFrame:
 		self.set_value(name, value, holdfast=1, initvalue=value, nullvalue=value, minimum=value, maximum=value)
 		if note is not None:
 			self._frame.loc[name, 'note'] = note
-		if _change_check:
+		if change_check:
 			self._check_if_frame_values_changed()
 
 	def lock_values(self, *names, note=None, **kwargs):
@@ -351,6 +358,9 @@ cdef class ParameterFrame:
 		Positional arguments give the names of parameters to fix at the current value.
 		Keyword arguments name the parameter and give a value to set as fixed.
 
+		This is a convenience method to efficiently lock
+		multiple parameters simultaneously.
+
 		Other Parameters
 		----------------
 		note : str, optional
@@ -359,9 +369,9 @@ cdef class ParameterFrame:
 		"""
 		for name in names:
 			value = self.get_value(name)
-			self.lock_value(name, value, note=note, _change_check=False)
+			self.lock_value(name, value, note=note, change_check=False)
 		for name, value in kwargs.items():
-			self.lock_value(name, value, note=note, _change_check=False)
+			self.lock_value(name, value, note=note, change_check=False)
 		self._check_if_frame_values_changed()
 
 	def get_value(self, name, *, default=None):
@@ -673,7 +683,23 @@ cdef class ParameterFrame:
 	# 	return f
 
 	def parameter_summary(self):
+		"""
+		Create an XHTML summary of parameter values.
 
+		This will generate a small table of parameters statistics,
+		containing:
+
+		*	Parameter Name (and Category, if applicable)
+		*	Estimated Value
+		*	Standard Error of the Estimate (if known)
+		*	t Statistic (if known)
+		*	Null Value
+
+		Returns
+		-------
+		xmle.Elem
+
+		"""
 		try:
 
 			pfo = self.pfo()

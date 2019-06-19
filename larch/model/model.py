@@ -43,8 +43,51 @@ class Model(_Model5c):
 	"""
 
 	utility_co = DictOfLinearFunction_C()
+	"""DictOfLinearFunction_C : The portion of the utility function computed from idco data.
+	
+	The keys of this mapping are alternative codes for the applicable elemental
+	alteratives, and the values are linear functions to compute for the indicated
+	alternative.  Each alternative that has any idco utility components must have
+	a unique linear function given.
+	"""
+
 	utility_ca = LinearFunction_C()
+	"""LinearFunction_C : The portion of the utility function computed from idca data.
+	
+	Examples
+	--------
+		
+	>>> from larch import Model, P, X
+	>>> m = Model()
+	>>> m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
+	>>> print(m.utility_ca)
+	P.Param1 * X.Data1 + P.Param2 * X.Data2
+	
+	"""
+
 	quantity_ca = LinearFunction_C()
+	"""LinearFunction_C : The portion of the quantity function computed from idca data.
+	
+	Note that for the quantity function, the actual computed linear function
+	uses the exponential of the parameter value(s), not the raw values. Thus, 
+	if the quantity function is given as `P.Param1 * X.Data1 + P.Param2 * X.Data2`,
+	the computed values will actually be `exp(P.Param1) * X.Data1 + exp(P.Param2) * X.Data2`.
+	This transformation ensures that the outcome from the quantity function is 
+	always positive, so long as at all of the data terms in the function are
+	positive.  The `LinearFunction_C` class itself is not intrinsically aware
+	of this implementation detail, but the `Model.utility_functions()` method is, 
+	and will render the complete utility function in a mathematically correct form.
+	
+	Examples
+	--------
+		
+	>>> from larch import Model, P, X
+	>>> m = Model()
+	>>> m.quantity_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
+	>>> print(m.quantity_ca)
+	P.Param1 * X.Data1 + P.Param2 * X.Data2
+
+	"""
 
 	@classmethod
 	def Example(cls, n=1):
@@ -342,8 +385,11 @@ class Model(_Model5c):
 		Parameters
 		----------
 		subset : Collection, optional
-			A collection of alterative codes to include. This only has effect if
-			there are seperate utility_co functions set by alternative.
+			A collection of alternative codes to include. This only has effect if
+			there are separate utility_co functions set by alternative. It is
+			recommended to use this parameter if there are a very large number of
+			alternatives, and the utility functions of most (or all) of them
+			can be effectively communicated by showing only a few.
 		resolve_parameters : bool, default False
 			Whether to resolve the parameters to the current (estimated) value
 			in the output.
