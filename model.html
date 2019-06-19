@@ -333,7 +333,7 @@ parameter is not changed.</li>
 
 <dl class="method">
 <dt id="larch.Model.lock_value">
-<code class="descclassname">Model.</code><code class="descname">lock_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em>, <em>note=None</em>, <em>_change_check=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.lock_value" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">lock_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em>, <em>note=None</em>, <em>change_check=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.lock_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a fixed value for a model parameter.</p>
 <p>Parameters with a fixed value (i.e., with “holdfast” set to 1)
 will not be changed during estimation by the likelihood
@@ -348,6 +348,12 @@ maximization algorithm.</p>
 <li><strong>note</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – A note as to why this parameter is set to a fixed value.
 This will not affect the mathematical treatment of the
 parameter in any way, but may be useful for reporting.</li>
+<li><strong>change_check</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>default True</em>) – Whether to trigger a check to see if any parameter frame
+values have changed.  Can be set to false to skip this
+check if you know that the values have not changed or want
+to delay this check for later, but this may result in
+problems if the check is needed but not triggered before
+certain other modeling tasks are performed.</li>
 </ul>
 </td>
 </tr>
@@ -431,7 +437,27 @@ To recover the probability, which is probably what you want (pun intended), see
 <dl class="method">
 <dt id="larch.Model.parameter_summary">
 <code class="descclassname">Model.</code><code class="descname">parameter_summary</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.parameter_summary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create an XHTML summary of parameter values.</p>
+<p>This will generate a small table of parameters statistics,
+containing:</p>
+<ul class="simple">
+<li>Parameter Name (and Category, if applicable)</li>
+<li>Estimated Value</li>
+<li>Standard Error of the Estimate (if known)</li>
+<li>t Statistic (if known)</li>
+<li>Null Value</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">xmle.Elem</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="larch.Model.utility_functions">
@@ -465,7 +491,35 @@ in the output.</li>
 <dl class="method">
 <dt id="larch.Model.estimation_statistics">
 <code class="descclassname">Model.</code><code class="descname">estimation_statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.estimation_statistics" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create an XHTML summary of estimation statistics.</p>
+<p>This will generate a small table of estimation statistics,
+containing:</p>
+<ul class="simple">
+<li>Log Likelihood at Convergence</li>
+<li>Log Likelihood at Null Parameters (if known)</li>
+<li>Log Likelihood with No Model (if known)</li>
+<li>Log Likelihood at Constants Only (if known)</li>
+</ul>
+<p>Additionally, for each included reference value (i.e.
+everything except log likelihood at convergence) the
+rho squared with respect to that value is also given.</p>
+<p>Each statistic is reported in aggregate, as well as
+per case.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>compute_loglike_null</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>default True</em>) – If the log likelihood at null values has not already
+been computed (i.e., if it is not cached) then compute
+it, cache its value, and include it in the output.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">xmle.Elem</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 </div>
