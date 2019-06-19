@@ -93,7 +93,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#utility-function-definition">Utility Function Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-manipulation">Parameter Manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn-interface">Scikit-Learn Interface</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="machine-learning/index.html">Machine Learning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/examples.html">Examples</a></li>
@@ -217,27 +222,89 @@ this model.</li>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<div class="section" id="utility-function-definition">
+<h2>Utility Function Definition<a class="headerlink" href="#utility-function-definition" title="Permalink to this headline">¶</a></h2>
+<p>Note that these function definitions act like <em>properties</em> of
+the Model object, instead of methods on Model objects.</p>
 <dl class="attribute">
 <dt id="larch.Model.utility_ca">
-<code class="descname">utility_ca</code><a class="headerlink" href="#larch.Model.utility_ca" title="Permalink to this definition">¶</a></dt>
-<dd><p>LinearFunction_C(init=None)</p>
+<code class="descclassname">Model.</code><code class="descname">utility_ca</code><a class="headerlink" href="#larch.Model.utility_ca" title="Permalink to this definition">¶</a></dt>
+<dd><p>The portion of the utility function computed from idca data.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">larch</span> <span class="k">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">Param1</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">Data1</span> <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Param2</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">Data2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">)</span>
+<span class="go">P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">LinearFunction_C</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="larch.Model.utility_co">
-<code class="descname">utility_co</code><a class="headerlink" href="#larch.Model.utility_co" title="Permalink to this definition">¶</a></dt>
-<dd><p>DictOfLinearFunction_C(mapping=None, alts_validator=None, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs)</p>
+<code class="descclassname">Model.</code><code class="descname">utility_co</code><a class="headerlink" href="#larch.Model.utility_co" title="Permalink to this definition">¶</a></dt>
+<dd><p>The portion of the utility function computed from idco data.</p>
+<p>The keys of this mapping are alternative codes for the applicable elemental
+alteratives, and the values are linear functions to compute for the indicated
+alternative.  Each alternative that has any idco utility components must have
+a unique linear function given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">DictOfLinearFunction_C</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="larch.Model.quantity_ca">
-<code class="descname">quantity_ca</code><a class="headerlink" href="#larch.Model.quantity_ca" title="Permalink to this definition">¶</a></dt>
-<dd><p>LinearFunction_C(init=None)</p>
+<code class="descclassname">Model.</code><code class="descname">quantity_ca</code><a class="headerlink" href="#larch.Model.quantity_ca" title="Permalink to this definition">¶</a></dt>
+<dd><p>The portion of the quantity function computed from idca data.</p>
+<p>Note that for the quantity function, the actual computed linear function
+uses the exponential of the parameter value(s), not the raw values. Thus,
+if the quantity function is given as <cite>P.Param1 * X.Data1 + P.Param2 * X.Data2</cite>,
+the computed values will actually be <cite>exp(P.Param1) * X.Data1 + exp(P.Param2) * X.Data2</cite>.
+This transformation ensures that the outcome from the quantity function is
+always positive, so long as at all of the data terms in the function are
+positive.  The <cite>LinearFunction_C</cite> class itself is not intrinsically aware
+of this implementation detail, but the <cite>Model.utility_functions()</cite> method is,
+and will render the complete utility function in a mathematically correct form.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">larch</span> <span class="k">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">quantity_ca</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">Param1</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">Data1</span> <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Param2</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">Data2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">)</span>
+<span class="go">P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">LinearFunction_C</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+</div>
+<div class="section" id="parameter-manipulation">
+<h2>Parameter Manipulation<a class="headerlink" href="#parameter-manipulation" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="larch.Model.set_value">
-<code class="descname">set_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.set_value" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">set_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.set_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value for a model parameter.</p>
 <p>This function will set the current value of a parameter.
 Unless explicitly instructed with an alternate value,
@@ -265,7 +332,7 @@ parameter is not changed.</li>
 
 <dl class="method">
 <dt id="larch.Model.lock_value">
-<code class="descname">lock_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em>, <em>note=None</em>, <em>_change_check=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.lock_value" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">lock_value</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>value</em>, <em>note=None</em>, <em>_change_check=True</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.lock_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a fixed value for a model parameter.</p>
 <p>Parameters with a fixed value (i.e., with “holdfast” set to 1)
 will not be changed during estimation by the likelihood
@@ -287,9 +354,12 @@ parameter in any way, but may be useful for reporting.</li>
 </table>
 </dd></dl>
 
+</div>
+<div class="section" id="scikit-learn-interface">
+<h2>Scikit-Learn Interface<a class="headerlink" href="#scikit-learn-interface" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="larch.Model.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>sample_weight=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the parameters of this model from the training set (X, y).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,7 +387,7 @@ the array is collapsed to <em>n_cases</em> by taking only the first weight in ea
 
 <dl class="method">
 <dt id="larch.Model.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">predict</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict choices for X.</p>
 <p>This method returns the index of the maximum probability choice, not the probability.
 To recover the probability, which is probably what you want (pun intended), see
@@ -338,7 +408,7 @@ To recover the probability, which is probably what you want (pun intended), see
 
 <dl class="method">
 <dt id="larch.Model.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict probability for X.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -354,8 +424,7 @@ To recover the probability, which is probably what you want (pun intended), see
 </table>
 </dd></dl>
 
-</dd></dl>
-
+</div>
 </div>
 
 
