@@ -100,11 +100,11 @@ def statistics_for_array(
 				stats.median_chosen = scalarize(numpy.nanmedian(a_ch_weighted, axis=0))
 
 	if avail is None and can_nan:
-		ax = ma.masked_array(a, mask=~numpy.isfinite(a))
+		a_masked = ma.masked_array(a, mask=~numpy.isfinite(a))
 	elif avail is not None:
-		ax = ma.masked_array(a, mask=~avail)
+		a_masked = ma.masked_array(a, mask=~avail)
 	else:
-		ax = a
+		a_masked = a
 
 	if ch_weights is not None:
 		if avail is None and can_nan:
@@ -116,21 +116,26 @@ def statistics_for_array(
 	else:
 		ch_weightsx = None
 
-	if (can_nan and histogram) or ax.dtype=='category':
+	try:
+		a_masked_is_category = (a_masked.dtype=='category')
+	except:
+		a_masked_is_category = False
+
+	if (can_nan and histogram) or a_masked_is_category:
 		with warning.ignore_warnings():
 
 			discrete_ = kwargs.pop('discrete', None)
 			try:
-				if ax.dtype == 'category':
+				if a_masked_is_category:
 					discrete_ = True
 			except TypeError:
 				pass
 			if discrete_ is None:
-				discrete_ = seems_like_discrete_data(ax, dictionary)
+				discrete_ = seems_like_discrete_data(a_masked, dictionary)
 
 			if lowbound is not None or highbound is not None:
 				stats.histogram = sizable_histogram_figure(
-					ax, sizer=histogram,
+					a_masked, sizer=histogram,
 					title=None, xlabel=base_def, ylabel='Frequency',
 					ch_weights=ch_weightsx,
 					piecerange=(lowbound, highbound),
@@ -138,30 +143,30 @@ def statistics_for_array(
 				)
 			else:
 				stats.histogram = sizable_histogram_figure(
-					ax, sizer=histogram,
+					a_masked, sizer=histogram,
 					title=None, xlabel=varname, ylabel='Frequency',
 					ch_weights=ch_weightsx,
 					discrete=discrete_,
 					**kwargs
 				)
 	if can_nan:
-		stats.mean = scalarize(numpy.mean(ax, axis=0))
-		stats.stdev = scalarize(numpy.std(ax, axis=0))
-		stats.zeros = scalarize(numpy.sum(numpy.logical_not(ax), axis=0))
+		stats.mean = scalarize(numpy.mean(a_masked, axis=0))
+		stats.stdev = scalarize(numpy.std(a_masked, axis=0))
+		stats.zeros = scalarize(numpy.sum(numpy.logical_not(a_masked), axis=0))
 		with warning.ignore_warnings():
-			stats.positives = scalarize(numpy.sum(ax > 0, axis=0))
-			stats.negatives = scalarize(numpy.sum(ax < 0, axis=0))
+			stats.positives = scalarize(numpy.sum(a_masked > 0, axis=0))
+			stats.negatives = scalarize(numpy.sum(a_masked < 0, axis=0))
 		n_nans = scalarize(numpy.sum(numpy.isnan(a), axis=0))
 		if numpy.any(n_nans):
 			stats.nans = n_nans
 		n_infs = scalarize(numpy.sum(numpy.isinf(a), axis=0))
 		if numpy.any(n_infs):
 			stats.infs = n_infs
-		ax.mask |= ( ax ==0)
-		stats.nonzero_minimum = scalarize(numpy.min(ax, axis=0))
-		stats.nonzero_maximum = scalarize(numpy.max(ax, axis=0))
-		stats.nonzero_mean = scalarize(numpy.mean(ax, axis=0))
-		stats.nonzero_stdev = scalarize(numpy.std(ax, axis=0))
+		a_masked.mask |= ( a_masked ==0)
+		stats.nonzero_minimum = scalarize(numpy.min(a_masked, axis=0))
+		stats.nonzero_maximum = scalarize(numpy.max(a_masked, axis=0))
+		stats.nonzero_mean = scalarize(numpy.mean(a_masked, axis=0))
+		stats.nonzero_stdev = scalarize(numpy.std(a_masked, axis=0))
 
 	if dictionary is not None:
 		stats.dictionary = dictionary
