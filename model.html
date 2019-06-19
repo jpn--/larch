@@ -97,6 +97,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#utility-function-definition">Utility Function Definition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#parameter-manipulation">Parameter Manipulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scikit-learn-interface">Scikit-Learn Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reporting-and-outputs">Reporting and Outputs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
@@ -423,6 +424,48 @@ To recover the probability, which is probably what you want (pun intended), see
 </tbody>
 </table>
 </dd></dl>
+
+</div>
+<div class="section" id="reporting-and-outputs">
+<h2>Reporting and Outputs<a class="headerlink" href="#reporting-and-outputs" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="larch.Model.parameter_summary">
+<code class="descclassname">Model.</code><code class="descname">parameter_summary</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.parameter_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="larch.Model.utility_functions">
+<code class="descclassname">Model.</code><code class="descname">utility_functions</code><span class="sig-paren">(</span><em>subset=None</em>, <em>resolve_parameters=False</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.utility_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an XHTML output of the utility function(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subset</strong> (<em>Collection</em><em>, </em><em>optional</em>) – A collection of alternative codes to include. This only has effect if
+there are separate utility_co functions set by alternative. It is
+recommended to use this parameter if there are a very large number of
+alternatives, and the utility functions of most (or all) of them
+can be effectively communicated by showing only a few.</li>
+<li><strong>resolve_parameters</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to resolve the parameters to the current (estimated) value
+in the output.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">xmle.Elem</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="larch.Model.estimation_statistics">
+<code class="descclassname">Model.</code><code class="descname">estimation_statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.estimation_statistics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 </div>
