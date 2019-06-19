@@ -52,7 +52,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._successor_slots = {}
 		self.touch()
 
-	def add_edge(self, u, v, *arg, **kwarg):
+	def add_edge(self, u, v, **kwarg):
 		if 'implied' not in kwarg:
 			drops = []
 			for u_,v_,imp_ in self.in_edges(nbunch=[v], data='implied'):
@@ -61,7 +61,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			for d in drops:
 				self._remove_edge_no_implied(*d)
 		self._clear_caches()
-		return super().add_edge(u, v, *arg, **kwarg)
+		return super().add_edge(int(u), int(v), **kwarg)
 
 	def _remove_edge_no_implied(self, u, v, *arg, **kwarg):
 		result = super().remove_edge(u, v)
@@ -75,10 +75,10 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._clear_caches()
 		return result
 
-	def add_node(self, code, *arg, children=(), parent=None, parents=None, phi_parameters=None, **kwarg):
+	def add_node(self, code, *, children=(), parent=None, parents=None, phi_parameters=None, **kwarg):
 		if parents is not None and parent is not None:
 			raise TypeError("cannot give both parent and parents arguments")
-		super().add_node(code, *arg, **kwarg)
+		super().add_node(code, **kwarg)
 		for child in children:
 			self.add_edge(code, child)
 		if parent is not None:
@@ -99,11 +99,39 @@ class NestingTree(TouchNotify,nx.DiGraph):
 					raise ValueError(f"connected node {k} from phi_parameters not found")
 		self._clear_caches()
 
-	def new_node(self, *arg, **kwarg):
+	def new_node(self, **kwarg):
+		"""
+		Add a new nesting node to this NestingTree.
+
+		A new unique code is automatically created and returned by
+		this method for creating new nests.
+
+		All arguments must be given as keyword parameters.
+
+		Parameters
+		----------
+		parameter : str
+			The name of the parameter to associate with this nest.
+		children : Collection[int], optional
+			The code numbers for the children of this nest.  These can be
+			elemental alternatives or other nests.  If not given, no children
+			will be defined initially, but they can be added later.
+		parent : int, optional
+			The code number for the parent of this nest.  If not given,
+			the parent is implied as the root node, unless and until set
+			to some other node.
+		name : str, optional
+			A human-readable name to associate with this nest.
+
+		Returns
+		-------
+		int
+			The new code for this nest.
+		"""
 		proposed_code = len(self)
 		while proposed_code in self:
 			proposed_code += 1
-		self.add_node(proposed_code, *arg, **kwarg)
+		self.add_node(proposed_code, **kwarg)
 		return proposed_code
 
 	def add_nodes(self, codes, *arg, parent=None, **kwarg):
@@ -428,7 +456,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 			if self.is_multigraph():
 				for u, v, key, edgedata in self.edges(data=True, keys=True):
-					str_edgedata = dict((k, str(v)) for k, v in edgedata.items()
+					str_edgedata = dict((k, str(v_)) for k, v_ in edgedata.items()
 										if k != 'key')
 					if v in self.elementals:
 						str_edgedata['constraint'] = 'false'
