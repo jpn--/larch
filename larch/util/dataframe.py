@@ -82,7 +82,17 @@ def apply_global_background_gradient(df, override_min=None, override_max=None, c
 
 ###################
 
-def columnize(df, name, inplace=True, dtype=None, debug=False):
+def columnize_with_joinable_backing(df, name, inplace=True, dtype=None, debug=False, backing=None):
+	try:
+		return columnize(df, name, inplace=inplace, dtype=dtype, debug=debug)
+	except NameError:
+		if not inplace:
+			return columnize(df.join(backing), name, inplace=False, dtype=dtype, debug=debug)
+		else:
+			raise
+
+
+def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 	"""Add a computed column to a DataFrame."""
 
 	datanames = None
@@ -101,7 +111,7 @@ def columnize(df, name, inplace=True, dtype=None, debug=False):
 			else:
 				return pandas.DataFrame(index=df.index)
 		df1 = pandas.concat([
-			columnize(df, _, False, dtype)
+			columnize_with_joinable_backing(df, _, False, dtype, backing=backing)
 			for _ in datanames
 		], axis=1)
 		if inplace:
@@ -205,6 +215,8 @@ def columnize(df, name, inplace=True, dtype=None, debug=False):
 				'isfinite', 'logaddexp', 'fmin', 'fmax', 'nan_to_num', 'piece', 'normalize',
 			}
 			goodnames |= set(df.columns)
+			if backing is not None:
+				goodnames |= set(backing.columns)
 			from ..util.text_manip import case_insensitive_close_matches
 			did_you_mean_list = case_insensitive_close_matches(badname, goodnames, n=3, cutoff=0.1, excpt=None)
 			if len(did_you_mean_list) > 0:

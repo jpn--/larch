@@ -1411,7 +1411,7 @@ cdef class DataFrames:
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				for n,i in enumerate(model._quantity_ca):
 					self.model_quantity_ca_param[n] = model._frame.index.get_loc(str(i.param))
-					self.model_quantity_ca_data [n] = self.data_ca.columns.get_loc(str(i.data))
+					self.model_quantity_ca_data [n] = self._data_ca_or_ce.columns.get_loc(str(i.data))
 				if model._quantity_scale is not None:
 					self.model_quantity_scale_param = model._frame.index.get_loc(str(model._quantity_scale))
 				else:
@@ -2404,12 +2404,23 @@ cdef class DataFrames:
 			req_data = Dict.load(textwrap.dedent(req_data))
 
 		if 'ca' in req_data:
-			df_ca = columnize(self._data_ca_or_ce, list(req_data['ca']), inplace=False, dtype=float_dtype)
+			df_ca = columnize(
+				self._data_ca_or_ce,
+				list(req_data['ca']),
+				inplace=False,
+				dtype=float_dtype,
+				backing=self._data_co,
+			)
 		else:
 			df_ca = None
 
 		if 'co' in req_data:
-			df_co = columnize(self._data_co, list(req_data['co']), inplace=False, dtype=float_dtype)
+			df_co = columnize(
+				self._data_co,
+				list(req_data['co']),
+				inplace=False,
+				dtype=float_dtype,
+			)
 		else:
 			df_co = None
 
