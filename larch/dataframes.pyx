@@ -1215,6 +1215,13 @@ cdef class DataFrames:
 		else:
 			raise MissingDataError('neither ca nor ce is defined')
 
+	@property
+	def _data_ca_or_ce_type(self):
+		if self._data_ce is not None:
+			return 'ce'
+		else:
+			return 'ca'
+
 	def data_co_combined(self):
 		"""Return a combined DataFrame in idco format that includes idco and idca data.
 
@@ -2367,6 +2374,7 @@ cdef class DataFrames:
 			selector=None,
 			float_dtype=numpy.float64,
 			log_warnings=True,
+			explicit=False,
 	):
 		"""Create a DataFrames object that will satisfy a data request.
 
@@ -2388,6 +2396,10 @@ cdef class DataFrames:
 			Emit warnings in the logger if choice, avail, or weight is not included in
 			`req_data` but is set in this DataFrames and thus returned by default even
 			though it was not requested.
+		explicit : bool, default False
+			Only include data that is explicitly requested.  If set to True, the
+			choice, avail, or weight will not be included, even if set in this
+			DataFrames, unless explicitly included in the request.
 
 		Returns
 		-------
@@ -2452,7 +2464,7 @@ cdef class DataFrames:
 			)
 			for c in df_ch.columns:
 				df_ch.loc[:,c] = (choicecodes==c).astype(float_dtype)
-		elif self._data_ch is not None:
+		elif self._data_ch is not None and not explicit:
 			if log_warnings:
 				logger.warning('req_data does not request {choice_ca,choice_co,choice_co_code} but '
 							   'choice is set and being provided')
@@ -2471,7 +2483,7 @@ cdef class DataFrames:
 		else:
 			df_wt = None
 
-		if df_wt is None and self._data_wt is not None:
+		if df_wt is None and self._data_wt is not None and not explicit:
 			if log_warnings:
 				logger.warning('req_data does not request weight_co but it is set and being provided')
 			df_wt = self._data_wt
@@ -2495,7 +2507,7 @@ cdef class DataFrames:
 				#df_av = self._data_av
 			else:
 				df_av.columns = alts
-		elif self._data_av is not None:
+		elif self._data_av is not None and not explicit:
 			if log_warnings:
 				logger.warning('req_data does not request avail_ca or avail_co but it is set and being provided')
 			df_av = self._data_av
@@ -2504,14 +2516,17 @@ cdef class DataFrames:
 
 		result = DataFrames(
 			co=df_co,
-			ce=df_ca,
+			# ce=df_ca, # dynamically set below
 			av=df_av,
 			ch=df_ch,
 			wt=df_wt,
 			alt_codes=self.alternative_codes(),
 			alt_names=self.alternative_names(),
 			sys_alts=self._systematic_alternatives,
+			**{self._data_ca_or_ce_type: df_ca},
 		)
+
+
 
 		result._weight_normalization = weight_normalization
 
