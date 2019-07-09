@@ -33,6 +33,7 @@ from .model import Model
 from .dataframes import DataFrames
 
 from .examples import example
+from .util import figures
 
 _doctest_mode_ = False
 

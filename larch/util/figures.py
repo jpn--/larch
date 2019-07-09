@@ -7,38 +7,61 @@ from .plotting import plot_as_svg_xhtml
 def distribution_on_continuous_idca_variable(
 		model,
 		continuous_variable,
-		continuous_variable_label=None,
+		xlabel=None,
+		ylabel='Relative Frequency',
+		style='hist',
 		bins=25,
 		range=None,
 		prob_label="Modeled",
 		obs_label="Observed",
-		header=None,
 		subselector=None,
 		probability=None,
-		style='line',
 		bw_method=None,
+		**kwargs,
 ):
 	"""
+	Generate a figure of observed and modeled choices over a range of variable values.
 
 	Parameters
 	----------
 	model : Model
+		The discrete choice model to analyze.
 	continuous_variable : str
-	continuous_variable_label
-	bins
-	range
-	prob_label : str, optional
+		The name of an `idca` variable that is continuous.  If this name exactly
+		matches that of an `idca` column in the model's loaded `dataframes`, then
+		those values are used, otherwise the variable is loaded from the model's
+		`dataservice`.
+	xlabel : str, optional
+		A label to use for the x-axis of the resulting figure.  If not given,
+		the value of `continuous_variable` is used.  Set to `False` to omit the
+		x-axis label.
+	ylabel : str, default "Relative Frequency"
+		A label to use for the y-axis of the resulting figure.
+	style : {'hist', 'kde'}
+		The style of figure to produce, either a histogram or a kernel density plot.
+	bins : int, default 25
+		The number of bins to use, only applicable to histogram style.
+	range : 2-tuple, optional
+		A range to truncate the figure.
+	prob_label : str, default "Modeled"
 		A label to put in the legend for the modeled probabilities
-	obs_label : str, optional
+	obs_label : str, default "Observed"
 		A label to put in the legend for the observed choices
-	header : str, optional
 	subselector : str or array-like, optional
-
-
+		A filter to apply to cases. If given as a string, this is loaded from the
+		model's `dataservice` as an `idco` variable.
 	probability : array-like, optional
 		The pre-calculated probability array for all cases in this analysis.
 		If not given, the probability array is calculated at the current parameter
 		values.
+
+	Other Parameters
+	----------------
+	header : str, optional
+		A header to attach to the figure.  The header is not generated using
+		matplotlib, but instead is prepended to the xml output with a header tag before the
+		rendered svg figure.
+
 
 	Returns
 	-------
@@ -49,16 +72,19 @@ def distribution_on_continuous_idca_variable(
 		return lambda x: distribution_on_continuous_idca_variable(
 		x,
 		continuous_variable,
-		continuous_variable_label=continuous_variable_label,
+		xlabel=xlabel,
 		bins=bins,
 		range=range,
 		prob_label=prob_label,
 		obs_label=obs_label,
-		header=header,
 		subselector=subselector,
+			**kwargs,
 		)
 
-	cv = model.dataservice.make_dataframes({'ca': [continuous_variable]}, explicit=True).array_ca().reshape(-1)
+	if model.dataframes and model.dataframes.data_ca is not None and continuous_variable in model.dataframes.data_ca:
+		cv = model.dataframes.data_ca[continuous_variable].values.reshape(-1)
+	else:
+		cv = model.dataservice.make_dataframes({'ca': [continuous_variable]}, explicit=True).array_ca().reshape(-1)
 
 	if probability is None:
 		probability = model.probability()
@@ -73,7 +99,8 @@ def distribution_on_continuous_idca_variable(
 
 	if subselector is not None:
 		if isinstance(subselector, str):
-			subselector = model.dataservice.make_dataframes({'co': [subselector]}, explicit=True).array_co().reshape(-1)
+			subselector = model.dataservice.make_dataframes({'co': [subselector]}, explicit=True).array_co(dtype=bool).reshape(-1)
+		cv = cv.reshape(*model_result.shape)[subselector].reshape(-1)
 		model_result = model_result[subselector]
 		model_choice = model_choice[subselector]
 
@@ -121,21 +148,29 @@ def distribution_on_continuous_idca_variable(
 		y, y_ = y_doubled, y_doubled_
 		x_midpoints = x_doubled
 
-	if continuous_variable_label is None:
-		continuous_variable_label = continuous_variable
+	if xlabel is None:
+		xlabel = continuous_variable
+	if xlabel is False:
+		xlabel = None
 
-
-	plt.ioff()
-	plt.clf()
+	fig, ax = plt.subplots()
 	if style=='kde':
-		plt.plot(x_midpoints, y, label=prob_label, lw=1.5)
-		plt.fill_between(x_midpoints, y_, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
+		ax.plot(x_midpoints, y, label=prob_label, lw=1.5)
+		ax.fill_between(x_midpoints, y_, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
 	else:
-		plt.plot(x_midpoints, y, label=prob_label, lw=1.5)
-		plt.fill_between(x_midpoints, y_, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
-	plt.legend()
-	plt.xlabel(continuous_variable_label)
-	plt.tight_layout(pad=0.5)
-	result = plot_as_svg_xhtml(plt, header=header)
-	plt.clf()
+		ax.plot(x_midpoints, y, label=prob_label, lw=1.5)
+		ax.fill_between(x_midpoints, y_, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
+	ax.legend()
+	ax.set_xlabel(xlabel)
+	ax.set_yticks([])
+	ax.set_ylabel(ylabel)
+	fig.tight_layout(pad=0.5)
+	result = plot_as_svg_xhtml(fig, **kwargs)
+	fig.clf()
+	plt.close(fig)
 	return result
+
+
+from .. import Model
+
+Model.distribution_on_continuous_idca_variable = distribution_on_continuous_idca_variable
