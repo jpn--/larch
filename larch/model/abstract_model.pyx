@@ -735,7 +735,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 	def noop(self):
 		print("No op!")
 
-	def loglike_null(self):
+	def loglike_null(self, use_cache=True):
 		"""
 		Compute the log likelihood at Null Values.
 
@@ -746,11 +746,16 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		(for example, the default null value for logsum parameters
 		in a nested logit model is 1).
 
+		Parameters
+		----------
+		use_cache : bool, default True
+			Use the cached value if available.
+
 		Returns
 		-------
 		float
 		"""
-		if self._cached_loglike_null != 0:
+		if self._cached_loglike_null != 0 and use_cache:
 			return self._cached_loglike_null
 		else:
 			current_parameters = self.get_values()
@@ -759,7 +764,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			self.set_values(current_parameters)
 			return self._cached_loglike_null
 
-	def loglike_nil(self):
+	def loglike_nil(self, use_cache=True):
 		"""
 		Compute the log likelihood with no model at all.
 
@@ -773,7 +778,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		-------
 		float
 		"""
-		if self._cached_loglike_nil != 0:
+		if self._cached_loglike_nil != 0 and use_cache:
 			return self._cached_loglike_nil
 		else:
 			from .model import Model
