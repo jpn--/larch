@@ -183,9 +183,9 @@ class Prelearner():
 		)
 
 		if self._predict_type == 'predict_proba col 1':
-			X_ca[self.output_column] = numpy.log(self.clf.predict_proba(X_in)[:, 1]).astype(dtype)
+			X_ca.loc[:,self.output_column] = numpy.log(self.clf.predict_proba(X_in)[:, 1]).astype(dtype)
 		elif self._predict_type == 'predict':
-			X_ca[self.output_column] = numpy.log(self.clf.predict(X_in)).astype(dtype)
+			X_ca.loc[:,self.output_column] = numpy.log(self.clf.predict(X_in)).astype(dtype)
 		else:
 			raise TypeError(self._predict_type)
 		return X
