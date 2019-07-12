@@ -2362,10 +2362,19 @@ cdef class DataFrames:
 			for s in range(n_splits):
 				logger.debug(f'  split {s} data prep')
 				these_positions = membership[:,s].reshape(-1)
-				these_caseids   = self.caseindex[these_positions]
 				data_co=None if self.data_co is None else self.data_co.iloc[these_positions,:]
-				data_ca=None if self.data_ca is None else self.data_ca.loc[these_caseids,:]
-				data_ce=None if self.data_ce is None else self.data_ce.loc[these_caseids,:]
+
+				if self.data_ca is None:
+					data_ca = None
+				else:
+					these_positions_2 = numpy.in1d(self.data_ca.index.codes[0], numpy.where(these_positions))
+					data_ca=self.data_ca.iloc[these_positions_2,:]
+				if self.data_ce is None:
+					data_ce = None
+				else:
+					these_positions_2 = numpy.in1d(self.data_ce.index.codes[0], numpy.where(these_positions))
+					data_ce=self.data_ce.iloc[these_positions_2,:]
+
 				data_av=None if self.data_av is None else self.data_av.iloc[these_positions,:]
 				data_ch=None if self.data_ch is None else self.data_ch.iloc[these_positions,:]
 				data_wt=None if self.data_wt is None else self.data_wt.iloc[these_positions,:]
