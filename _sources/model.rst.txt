@@ -48,3 +48,9 @@ Reporting and Outputs
 .. automethod:: Model.utility_functions
 
 .. automethod:: Model.estimation_statistics
+
+
+Visualization Tools
+-------------------
+
+.. automethod:: Model.distribution_on_continuous_idca_variable

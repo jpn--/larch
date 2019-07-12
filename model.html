@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model &mdash; Larch 5.2.10 documentation</title>
+  <title>Model &mdash; Larch 5.2.12 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.10
+                5.2.12
               </div>
             
           
@@ -98,6 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#parameter-manipulation">Parameter Manipulation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scikit-learn-interface">Scikit-Learn Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reporting-and-outputs">Reporting and Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualization-tools">Visualization Tools</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="math.html">Mathematics of Logit Choice Modeling</a></li>
@@ -373,7 +374,7 @@ certain other modeling tasks are performed.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – This DataFrame can be in idca, idce, or idco formats.
+<li><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – This DataFrame can be in idca, idce, or idco formats.
 If given in idce format, this is a DataFrame with <em>n_casealts</em> rows, and
 a two-level MultiIndex.</li>
 <li><strong>y</strong> (<em>array-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The target choice values.  If given as a <code class="docutils literal notranslate"><span class="pre">str</span></code>, use that named column of <cite>X</cite>.</li>
@@ -403,7 +404,7 @@ To recover the probability, which is probably what you want (pun intended), see
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>y</strong> – The predicted choices.</td>
 </tr>
@@ -421,7 +422,7 @@ To recover the probability, which is probably what you want (pun intended), see
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>y</strong> – The predicted probabilities.</td>
 </tr>
@@ -522,6 +523,56 @@ it, cache its value, and include it in the output.</td>
 </dd></dl>
 
 </div>
+<div class="section" id="visualization-tools">
+<h2>Visualization Tools<a class="headerlink" href="#visualization-tools" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="larch.Model.distribution_on_continuous_idca_variable">
+<code class="descclassname">Model.</code><code class="descname">distribution_on_continuous_idca_variable</code><span class="sig-paren">(</span><em>continuous_variable</em>, <em>xlabel=None</em>, <em>ylabel='Relative Frequency'</em>, <em>style='hist'</em>, <em>bins=25</em>, <em>range=None</em>, <em>prob_label='Modeled'</em>, <em>obs_label='Observed'</em>, <em>subselector=None</em>, <em>probability=None</em>, <em>bw_method=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.Model.distribution_on_continuous_idca_variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a figure of observed and modeled choices over a range of variable values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> (<a class="reference internal" href="#larch.Model" title="larch.Model"><em>Model</em></a>) – The discrete choice model to analyze.</li>
+<li><strong>continuous_variable</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of an <cite>idca</cite> variable that is continuous.  If this name exactly
+matches that of an <cite>idca</cite> column in the model’s loaded <cite>dataframes</cite>, then
+those values are used, otherwise the variable is loaded from the model’s
+<cite>dataservice</cite>.</li>
+<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – A label to use for the x-axis of the resulting figure.  If not given,
+the value of <cite>continuous_variable</cite> is used.  Set to <cite>False</cite> to omit the
+x-axis label.</li>
+<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>default &quot;Relative Frequency&quot;</em>) – A label to use for the y-axis of the resulting figure.</li>
+<li><strong>style</strong> (<em>{'hist'</em><em>, </em><em>'kde'}</em>) – The style of figure to produce, either a histogram or a kernel density plot.</li>
+<li><strong>bins</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>default 25</em>) – The number of bins to use, only applicable to histogram style.</li>
+<li><strong>range</strong> (<em>2-tuple</em><em>, </em><em>optional</em>) – A range to truncate the figure.</li>
+<li><strong>prob_label</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>default &quot;Modeled&quot;</em>) – A label to put in the legend for the modeled probabilities</li>
+<li><strong>obs_label</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>default &quot;Observed&quot;</em>) – A label to put in the legend for the observed choices</li>
+<li><strong>subselector</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – A filter to apply to cases. If given as a string, this is loaded from the
+model’s <cite>dataservice</cite> as an <cite>idco</cite> variable.</li>
+<li><strong>probability</strong> (<em>array-like</em><em>, </em><em>optional</em>) – The pre-calculated probability array for all cases in this analysis.
+If not given, the probability array is calculated at the current parameter
+values.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>header</strong> (<em>str, optional</em>) – A header to attach to the figure.  The header is not generated using
+matplotlib, but instead is prepended to the xml output with a header tag before the
+rendered svg figure.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Elem</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -546,7 +597,7 @@ it, cache its value, and include it in the output.</td>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jun 19, 2019.
+        Last updated on Jul 12, 2019.
       </span>
 
     </p>
