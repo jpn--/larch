@@ -2234,10 +2234,12 @@ cdef class DataFrames:
 		splits : int or list
 			If an int, gives the number of evenly sized splits to create. If a list, gives
 			the relative size of the splits.
-		method : {'simple', 'shuffle'}
+		method : {'simple', 'shuffle', 'copy'}
 			If simple, the data is assumed to be adequately shuffled already and splits are
 			made of contiguous sections of data.  This may be more memory efficient.  Choose 'shuffle'
 			to randomly shuffle the cases while splitting; data will be copied to new memory.
+			Choose 'copy' to adopt the simple approach but still copy the underlying data,
+			which may help minimize "SettingWithCopy" warnings from pandas.
 
 		Returns
 		-------
@@ -2283,6 +2285,14 @@ cdef class DataFrames:
 				data_av=None if self.data_av is None else self.data_av.iloc[these_positions,:]
 				data_ch=None if self.data_ch is None else self.data_ch.iloc[these_positions,:]
 				data_wt=None if self.data_wt is None else self.data_wt.iloc[these_positions,:]
+
+				if method == 'copy':
+					data_co=None if data_co is None else data_co.copy(deep=False)
+					data_ca=None if data_ca is None else data_ca.copy(deep=False)
+					data_ce=None if data_ce is None else data_ce.copy(deep=False)
+					data_av=None if data_av is None else data_av.copy(deep=False)
+					data_ch=None if data_ch is None else data_ch.copy(deep=False)
+					data_wt=None if data_wt is None else data_wt.copy(deep=False)
 
 				logger.debug(f'  split {s} factory')
 				result.append(self.__class__(
