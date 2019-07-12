@@ -663,7 +663,10 @@ cdef class DataFrames:
 		if self.data_ch is not None:
 			print(f"  data_ch: {self._data_ch_name or '<populated>'}", file=out)
 		if self.data_wt is not None:
-			print(f"  data_wt: {self._data_wt_name or '<populated>'}", file=out)
+			if self.weight_normalization < 0.99999999 or self.weight_normalization > 1.00000001:
+				print(f"  data_wt: {self._data_wt_name or '<populated>'} (/ {self.weight_normalization})", file=out)
+			else:
+				print(f"  data_wt: {self._data_wt_name or '<populated>'}", file=out)
 
 	@property
 	def computational(self):
