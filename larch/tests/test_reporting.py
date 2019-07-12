@@ -3,9 +3,15 @@ import numpy
 import pandas
 import larch
 from larch import Model, P, X
+import larch.exampville
 
 def test_ch_av_summary_output():
-	hh, pp, tour, skims = larch.example(200, ['hh', 'pp', 'tour', 'skims'])
+
+	skims = larch.OMX(larch.exampville.files.skims, mode='r')
+	hh = pandas.read_csv(larch.exampville.files.hh)
+	pp = pandas.read_csv(larch.exampville.files.person)
+	tour = pandas.read_csv(larch.exampville.files.tour)
+
 	raw = tour.merge(hh, on='HHID').merge(pp, on=('HHID', 'PERSONID'))
 	raw["HOMETAZi"] = raw["HOMETAZ"] - 1
 	raw["DTAZi"] = raw["DTAZ"] - 1
