@@ -2128,7 +2128,24 @@ cdef class DataFrames:
 				self._std_scaler_ce.fit(self.data_ce.values, Xmask=mask)
 				self.data_ce.values[:] = self._std_scaler_ce.transform(self.data_ce.values)
 
-	def autoscale_weights(self):
+	def scale_weights(self, scale):
+		"""
+		Scale the weights by a fixed exogenous value.
+
+		If weights are embedded in the choice variable,
+		they are extracted (so the total choice in each case
+		is 0.0 or 1.0, and the weight is isolated in the
+		data_wt terms) before any scaling is applied.
+
+		Parameters
+		----------
+		scale : float
+			The fixed exogenous scale to apply to the weights.
+
+		Returns
+		-------
+		scale
+		"""
 
 		cdef int i,j
 		cdef bint need_to_extract_wgt_from_ch = False
@@ -2148,6 +2165,67 @@ cdef class DataFrames:
 				index=self.caseindex,
 				columns=['computed_weight'],
 			)
+			self._data_wt_name = 'computed_weight'
+
+		if need_to_extract_wgt_from_ch:
+			while i < self._array_ch.shape[0]:
+				temp = 0
+				for j in range(self._array_ch.shape[1]):
+					temp += self._array_ch[i,j]
+				if temp != 0:
+					for j in range(self._array_ch.shape[1]):
+						self._array_ch[i,j] /= temp
+				self._array_wt[i] *= temp
+				i += 1
+
+		if self._data_wt is None and scale == 1.0:
+			return 1.0
+
+		scale_level = scale
+
+		for i in range(self._array_wt.shape[0]):
+			self._array_wt[i] /= scale_level
+
+		self._weight_normalization *= scale_level
+
+		if scale_level < 0.99999 or scale_level > 1.00001:
+			logger.warning(f'rescaled array of weights by a factor of {scale_level}')
+
+		return scale_level
+
+	def autoscale_weights(self):
+		"""
+		Scale the weights so the average weight is 1.
+
+		If weights are embedded in the choice variable,
+		they are extracted (so the total choice in each case
+		is 0.0 or 1.0, and the weight is isolated in the
+		data_wt terms) before any scaling is applied.
+
+		Returns
+		-------
+		scale
+		"""
+
+		cdef int i,j
+		cdef bint need_to_extract_wgt_from_ch = False
+		cdef l4_float_t scale_level, temp
+
+		for i in range(self._array_ch.shape[0]):
+			temp = 0
+			for j in range(self._array_ch.shape[1]):
+				temp += self._array_ch[i,j]
+			if temp < 0.99999999 or temp > 1.00000001:
+				need_to_extract_wgt_from_ch = True
+				break
+
+		if need_to_extract_wgt_from_ch and self._data_wt is None:
+			self.data_wt = pandas.DataFrame(
+				data=1.0,
+				index=self.caseindex,
+				columns=['computed_weight'],
+			)
+			self._data_wt_name = 'computed_weight'
 
 		if need_to_extract_wgt_from_ch:
 			while i < self._array_ch.shape[0]:
@@ -2625,6 +2703,9 @@ cdef class DataFrames:
 			wt = self.data_wt,
 			ch_as_ce = self.data_ch_as_ce(),
 			sys_alts = sa1,
+			ch_name = self._data_ch_name,
+			wt_name = self._data_wt_name,
+			av_name = self._data_av_name,
 		)
 
 		return dfs
