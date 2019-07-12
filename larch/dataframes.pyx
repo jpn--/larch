@@ -141,7 +141,8 @@ def _fast_check_multiindex_equality(i, j):
 
 
 def _to_categorical(y, num_classes=None, dtype='float32'):
-	"""Converts a class vector (integers) to binary class matrix.
+	"""
+	Converts a class vector (integers) to binary class matrix.
 
 	E.g. for use with categorical_crossentropy.
 
@@ -1993,7 +1994,8 @@ cdef class DataFrames:
 
 
 	def dump(self, filename, **kwargs):
-		"""Persist this DataFrames object into one file.
+		"""
+		Persist this DataFrames object into one file.
 
 		Parameters
 		-----------
@@ -2047,7 +2049,8 @@ cdef class DataFrames:
 
 	@classmethod
 	def load(cls, filename):
-		"""Reconstruct a DataFrames object from a file persisted with DataFrames.dump.
+		"""
+		Reconstruct a DataFrames object from a file persisted with DataFrames.dump.
 
 		Parameters
 		-----------
@@ -2319,7 +2322,8 @@ cdef class DataFrames:
 			raise
 
 	def make_idca(self, *columns, selector=None, float_dtype=numpy.float64):
-		"""Extract a set of idca values into a new dataframe.
+		"""
+		Extract a set of idca values into a new dataframe.
 
 		Parameters
 		----------
@@ -2350,7 +2354,8 @@ cdef class DataFrames:
 		return columnize(self._data_ca_or_ce, list(columns), inplace=False, dtype=float_dtype)
 
 	def make_idco(self, *columns, selector=None, float_dtype=numpy.float64):
-		"""Extract a set of idco values into a new dataframe.
+		"""
+		Extract a set of idco values into a new dataframe.
 
 		Parameters
 		----------
@@ -2389,7 +2394,8 @@ cdef class DataFrames:
 			log_warnings=True,
 			explicit=False,
 	):
-		"""Create a DataFrames object that will satisfy a data request.
+		"""
+		Create a DataFrames object that will satisfy a data request.
 
 		Parameters
 		----------
@@ -2560,7 +2566,8 @@ cdef class DataFrames:
 			overwrite=False,
 			complete_features_list=None,
 	):
-		"""Create new systematic alternatives.
+		"""
+		Create new systematic alternatives.
 
 		Parameters
 		----------
