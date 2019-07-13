@@ -4302,3 +4302,20 @@ def test_partial_compute():
 	assert ll_short2.dll_casewise.values == approx(ll2.dll_casewise.iloc[23:26].values)
 	assert ll_short2.dutility[:, :6, :] == approx(ll2.dutility[23:26])
 
+def test_pickling():
+
+	from .. import example
+	m0 = example(1)
+	ds = m0.dataservice
+	m0.load_data()
+	m0.maximize_loglike()
+	initial_ll = m0.loglike()
+	b = m0.dumps()
+	import pickle
+	m1 = pickle.loads(b)
+	m1.parameter_summary()
+	m1.dataservice = ds
+	m1.load_data()
+	restored_ll = m1.loglike()
+	assert initial_ll == approx(restored_ll)
+

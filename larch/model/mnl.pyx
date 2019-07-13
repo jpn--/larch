@@ -532,6 +532,9 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 
 	try:
 
+		if num_threads <= 0:
+			num_threads = 1
+
 		if stop_case<0:
 			stop_case = n_cases
 
@@ -674,7 +677,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 
 	except:
 		logger.error(f'c={c}')
-		logger.error(f'n_cases, n_cases_local, n_alts={(n_cases, n_cases_local, n_alts)}')
+		logger.error(f'n_cases, n_cases_local, n_alts, num_threads={(n_cases, n_cases_local, n_alts, num_threads)}')
 		logger.exception('error in mnl_d_log_likelihood_from_dataframes_all_rows')
 		raise
 

@@ -159,7 +159,7 @@ cdef class Model5c(AbstractChoiceModel):
 		(self._matrixes                      ) = state["_matrixes                      ".strip()]
 
 		self.unmangle(True)
-
+		self.n_threads = 0
 
 
 	@property
