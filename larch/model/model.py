@@ -549,3 +549,20 @@ class Model(_Model5c):
 			repair_noch_nowt=repair_noch_nowt,
 			verbose=verbose,
 		)
+
+	def copy(self):
+		"""
+		Create a copy of the Model.
+
+		The copy shares the same DataService, but does not
+		share or copy any loaded DataFrames, which must be
+		reloaded if desired.
+
+		Returns
+		-------
+		Model
+		"""
+		import pickle
+		result = pickle.loads(self.dumps())
+		result.dataservice = self.dataservice
+		return result
