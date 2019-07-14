@@ -26,6 +26,7 @@ platform:
 branches:
   only:
     - master
+    - dev-a
 
 init:
   - echo "begin init"
