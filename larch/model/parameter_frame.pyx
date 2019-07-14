@@ -79,10 +79,18 @@ cdef class ParameterFrame:
 		Triggers a call to `frame_values_have_changed` if there is a change to the
 		frame values.
 		"""
-		if not (numpy.array_equal(self._prior_frame_values.values, self._frame['value'].values)
-				and numpy.array_equal(self._prior_frame_values.index, self._frame['value'].index)):
-			self._frame_values_have_changed()
-			self._prior_frame_values = self._frame['value'].copy()
+		try:
+			if self._prior_frame_values is None or (
+				not (
+						numpy.array_equal(self._prior_frame_values.values, self._frame['value'].values)
+					and numpy.array_equal(self._prior_frame_values.index, self._frame['value'].index)
+				)
+			):
+				self._frame_values_have_changed()
+				self._prior_frame_values = self._frame['value'].copy()
+		except:
+			logger.exception('error in _check_if_frame_values_changed')
+			raise
 
 	def _frame_values_have_changed(self):
 		raise NotImplementedError("abstract base class, use a derived class instead")
@@ -135,6 +143,7 @@ cdef class ParameterFrame:
 		(self._display_order_tail            ) = state["_display_order_tail            ".strip()]
 		(self._title                         ) = state["_title                         ".strip()]
 		(self._matrixes                      ) = state["_matrixes                      ".strip()]
+		self._prior_frame_values = None
 		self.unmangle(True)
 
 	def mangle(self, *args, **kwargs):

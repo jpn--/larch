@@ -160,6 +160,7 @@ cdef class Model5c(AbstractChoiceModel):
 
 		self.unmangle(True)
 		self.n_threads = 0
+		self._prior_frame_values = None
 
 
 	@property

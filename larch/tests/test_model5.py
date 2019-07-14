@@ -4318,4 +4318,5 @@ def test_pickling():
 	m1.load_data()
 	restored_ll = m1.loglike()
 	assert initial_ll == approx(restored_ll)
+	assert m1.loglike_null() == approx(-7309.6009717495635)
 
