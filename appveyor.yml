@@ -14,7 +14,7 @@ environment:
     - PYTHON_VERSION: 3.7
       CONDA: C:\Miniconda37
 
-version: '5.2.13.{build}'
+version: '5.2.14.{build}'
 image: Visual Studio 2015
 
 # For testing only...
