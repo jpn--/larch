@@ -4320,3 +4320,36 @@ def test_pickling():
 	assert initial_ll == approx(restored_ll)
 	assert m1.loglike_null() == approx(-7309.6009717495635)
 
+
+def test_rho_sq():
+	from .. import example
+	m = example(102)
+	m.load_data()
+	assert m.dataframes.total_weight() == approx(7612.2)
+	assert m.dataframes.n_cases == 6768
+	assert m.logloss() == approx(1.0367714291907435)
+	assert m.logloss([-0.11442241, -0.75669048, -0.01119601, -0.01321288]) == approx(0.7792172680648063)
+	assert m.loglike_null() == approx(-7892.111473285777)
+	assert m.rho_sq_null() == approx(0.24841942387144322)
+	assert m.rho_sq_nil() == approx(0.24841942387144322)
+	assert m.rho_sq_null(adj=True) == approx(0.2479125886583905)
+	assert m.rho_sq_nil(adj=True) == approx(0.2479125886583905)
+
+def test_top_k_accuracy():
+	from .. import example
+	m = example(102)
+	m.load_data()
+	assert m.loglike([-0.11442241, -0.75669048, -0.01119601, -0.01321288]) == approx(-5931.557687962916)
+	assert m.top_k_accuracy(1) == approx(0.6819579096713172)
+	assert m.top_k_accuracy(1, x='null') == approx(0.3689340795039541)
+	assert m.top_k_accuracy(1, x=[-0.11442241, -0.75669048, -0.01119601, -0.01321288]) == approx(0.6819579096713172)
+	pandas.testing.assert_series_equal(
+		m.top_k_accuracy([1, 2, 3, 5], x=[-0.11442241, -0.75669048, -0.01119601, -0.01321288]),
+		pandas.Series({
+			1: 0.681958,
+			2: 0.938677,
+			3: 1.000000,
+			5: 1.000000,
+		})
+	)
+

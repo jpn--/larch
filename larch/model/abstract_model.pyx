@@ -737,7 +737,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 	def loglike_null(self, use_cache=True):
 		"""
-		Compute the log likelihood at Null Values.
+		Compute the log likelihood at null values.
 
 		Set all parameter values to the value indicated in the
 		"nullvalue" column of the parameter frame, and compute
@@ -763,6 +763,30 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			self._cached_loglike_null = self.loglike()
 			self.set_values(current_parameters)
 			return self._cached_loglike_null
+
+	def rho_sq_null(self, x=None, use_cache=True, adj=False):
+		"""
+		Compute the rho squared value w.r.t. null values.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		use_cache : bool, default True
+			Use the cached value for `loglike_null` if available.
+		adj : bool, default False
+			Compute adjusted rho squared, which accounts for the
+			degrees of freedom.
+
+		Returns
+		-------
+		float
+		"""
+		if adj:
+			k = (self._frame.holdfast == 0).sum()
+		else:
+			k = 0
+		return 1 - ((self.loglike(x=x)-k) / self.loglike_null(use_cache=use_cache))
 
 	def loglike_nil(self, use_cache=True):
 		"""
@@ -790,6 +814,31 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			nil.load_data(log_warnings=False)
 			self._cached_loglike_nil = nil.loglike()
 			return self._cached_loglike_nil
+
+	def rho_sq_nil(self, x=None, use_cache=True, adj=False):
+		"""
+		Compute the rho squared value w.r.t. no model at all.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		use_cache : bool, default True
+			Use the cached value for `loglike_null` if available.
+		adj : bool, default False
+			Compute adjusted rho squared, which accounts for the
+			degrees of freedom.
+
+		Returns
+		-------
+		float
+		"""
+		if adj:
+			k = (self._frame.holdfast == 0).sum()
+		else:
+			k = 0
+		return 1 - ((self.loglike(x=x)-k) / self.loglike_nil(use_cache=use_cache))
+
 
 	def loglike_constants_only(self):
 		raise NotImplementedError
