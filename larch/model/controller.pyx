@@ -1062,7 +1062,7 @@ cdef class Model5c(AbstractChoiceModel):
 	#
 	# These scoring mechanisms are popular in machine learning applications.
 
-	def top_k_accuracy(self, x=None, *, k=1):
+	def top_k_accuracy(self, k=1, x=None):
 		"""
 		Compute top-K accuracy for the model.
 
@@ -1070,6 +1070,8 @@ cdef class Model5c(AbstractChoiceModel):
 		----------
 		k : int or iterable of ints
 			The ranking to compute.
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
 
 		Returns
 		-------
@@ -1080,7 +1082,7 @@ cdef class Model5c(AbstractChoiceModel):
 		-----
 		Top
 		"""
-		from .scoring import top_k_accuracy, probability_to_rank
+		from ..scoring import top_k_accuracy, probability_to_rank
 		if self._dataframes._array_wt is None:
 			return top_k_accuracy(
 				probability_to_rank(self.probability(x=x)),
