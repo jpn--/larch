@@ -883,6 +883,12 @@ cdef class DataFrames:
 		"""The number of cases."""
 		return self._n_cases()
 
+	def total_weight(self):
+		"""The total weight of cases."""
+		if self._data_wt is None:
+			return float(self.n_cases)
+		return float(self._data_wt.sum() * self._weight_normalization)
+
 	@property
 	def n_params(self):
 		if self._n_model_params is None:

@@ -1099,5 +1099,5 @@ cdef class Model5c(AbstractChoiceModel):
 		"""
 		Logloss is the average per-case (per unit weight for weighted data) negative log likelihood.
 		"""
-		return -self.loglike(x=x) / self._dataframes._n_cases() / self._dataframes._weight_normalization
+		return -self.loglike(x=x) / self._dataframes.total_weight()
 
