@@ -161,6 +161,8 @@ cdef class Model5c(AbstractChoiceModel):
 		self.unmangle(True)
 		self.n_threads = 0
 		self._prior_frame_values = None
+		# if self._graph is not None:
+		# 	self.graph.set_touch_callback(self.mangle)
 
 
 	@property
@@ -816,7 +818,15 @@ cdef class Model5c(AbstractChoiceModel):
 	def utility(self, x=None, return_dataframe=None):
 		return numpy.log(self.exputility(x=x, return_dataframe=return_dataframe))
 
-	def probability(self, x=None, start_case=0, stop_case=-1, step_case=1, return_dataframe=False,):
+	def probability(
+			self,
+			x=None,
+			start_case=0,
+			stop_case=-1,
+			step_case=1,
+			return_dataframe=False,
+			include_nests=False,
+	):
 		"""
 		Compute probability values.
 
@@ -841,6 +851,10 @@ cdef class Model5c(AbstractChoiceModel):
 			If 'idca', the resulting dataframe is stacked, such that a single column is included and
 			there is a two-level MultiIndex with caseids and alternative codes, repsectively.
 			If 'idce', the resulting dataframe is stacked and unavailable alternatives are removed.
+		include_nests : bool, default False
+			Whether to include the nests section in a nested model.  This argument is ignored for MNL models
+			as the probability array is naturally limited to only the elemental alternatives.  Setting this
+			to True cannot be done when `return_dataframe` is not False.
 
 		Returns
 		-------
@@ -848,7 +862,11 @@ cdef class Model5c(AbstractChoiceModel):
 
 		"""
 		try:
+			if include_nests and return_dataframe is not False:
+				raise ValueError('cannot use both `include_nests` and `return_dataframe`')
 			arr = self.loglike(x=x, persist=PERSIST_PROBABILITY, start_case=start_case, stop_case=stop_case, step_case=step_case, probability_only=True)
+			if not include_nests:
+				arr = arr[:,:self._dataframes._n_alts()]
 			if return_dataframe:
 				idx = self._dataframes._data_co.index if self._dataframes._data_co is not None else None
 				if idx is not None:

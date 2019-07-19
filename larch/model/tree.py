@@ -310,6 +310,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self.__dict__ = state.copy()
 		self._predecessor_slots = {}
 		self._successor_slots = {}
+		self.set_touch_callback(None)
 
 	def __xml__(self, **format):
 		viz = None

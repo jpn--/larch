@@ -4107,6 +4107,24 @@ def test_probability():
 
 	assert pr[:3] == approx(pr3_correct)
 
+	m.graph.new_node(children=[5,6], parameter='MU', name='NonMotor')
+	m.graph.new_node(children=[1,2,3,4], parameter='MU', name='Motor')
+	m.mangle()
+	m.unmangle()
+	m.load_data()
+
+	pr = m.probability(include_nests=1)
+
+	pr3_correct_wide = numpy.asarray([
+		[0.2, 0.2, 0.2, 0.2, 0.2, 0., 0.2 , 0.8 , 1.],
+		[0.2, 0.2, 0.2, 0.2, 0.2, 0., 0.2 , 0.8 , 1.],
+		[0.25, 0.25, 0.25, 0.25, 0., 0., 0. , 1., 1.],
+	])
+	assert pr[:3] == approx(pr3_correct_wide)
+
+	pr = m.probability()
+	assert pr[:3] == approx(pr3_correct)
+
 
 
 def test_zero_quant_doctor():
