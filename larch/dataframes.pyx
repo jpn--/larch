@@ -233,6 +233,16 @@ def categorical_expansion(s, column=None, inplace=False, drop=False):
 	else:
 		return onehot
 
+def categorical_compression(df, columns):
+	"""
+	Compress a one-hot encoded part of a pandas DataFrame into a categorical variable.
+	"""
+	onehot = df[columns]
+	result = pandas.Series(None, index=onehot.index)
+	for i in onehot.columns:
+		result.loc[onehot[i]==1] = i
+	return result
+
 def crack_idca(df:pandas.DataFrame, caseid_col=True):
 	"""
 	Split an :ref:`idca` DataFrame into :ref:`idca` and :ref:`idco` parts.
