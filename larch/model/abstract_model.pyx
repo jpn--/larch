@@ -549,6 +549,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		"""int : The number of cases in the attached dataframes."""
 		raise NotImplementedError("abstract base class, use a derived class instead")
 
+	def total_weight(self):
+		"""float : The total weight of cases in the attached dataframes."""
+		raise NotImplementedError("abstract base class, use a derived class instead")
+
 	def maximize_loglike(
 			self,
 			method='bhhh',
@@ -692,7 +696,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		result['iteration_number'] = iteration_number
 
 		if 'loglike' in result:
-			result['logloss'] = -result['loglike'] / self.n_cases
+			result['logloss'] = -result['loglike'] / self.total_weight()
 
 		if _doctest_mode_:
 			result['__verbose_repr__'] = True

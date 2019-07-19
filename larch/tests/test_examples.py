@@ -37,4 +37,4 @@ def test_301():
 
 	assert result.loglike == approx(-777770.0688722526)
 	assert result.x['carrier==2'] == approx(0.11720047917232307)
-	assert result.logloss == approx(7407.333989259549)
+	assert result.logloss == approx(3.306873650593341)

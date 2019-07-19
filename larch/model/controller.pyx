@@ -420,6 +420,12 @@ cdef class Model5c(AbstractChoiceModel):
 			raise MissingDataError("no dataframes are set")
 		return self._dataframes.n_cases
 
+	def total_weight(self):
+		"""int : The number of cases in the attached dataframes."""
+		if self._dataframes is None:
+			raise MissingDataError("no dataframes are set")
+		return self._dataframes.total_weight()
+
 	def load_data(self, dataservice=None, autoscale_weights=True, log_warnings=True):
 		"""Load dataframes as required from the dataservice.
 
