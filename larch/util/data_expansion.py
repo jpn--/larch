@@ -134,7 +134,7 @@ def categorical_compression(df, columns=None, inplace=False, drop=False, name=No
 	for i in onehot.columns:
 		result.loc[onehot[i]==1] = i
 	if inplace and name is not None:
-		input[inplace] = result
+		input[name] = result
 		if drop:
 			input.drop(columns, axis=1)
 	else:
