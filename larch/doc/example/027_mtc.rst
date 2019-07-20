@@ -39,7 +39,7 @@ Model 27's nesting structure groups private auto and shared ride alternatives. (
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +SKIP
 
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='slsqp')
