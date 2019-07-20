@@ -15,18 +15,21 @@
 	larch._doctest_mode_ = True
 	
 .. testcode::
-	
+	:skipif: True
+
 	m = larch.example(17)
 
 Model 26's nesting structure groups motorized and shared ride alternatives. (`pp. 182 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
 
 .. testcode::
-	
+	:skipif: True
+
 	shared = m.graph.new_node(parameter='mu_shared', children=[2,3], name='Shared')
 	motorized = m.graph.new_node(parameter='mu_moto', children=[1,shared,4], name='Motorized')
 
 .. testcode::
-	
+	:skipif: True
+
 	m.ordering = (
 		("CostbyInc","costbyincome",),
 		("TravelTime",".*time.*",".*dist.*", ),
@@ -36,7 +39,8 @@ Model 26's nesting structure groups motorized and shared ride alternatives. (`pp
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +SKIP
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:skipif: True
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()
