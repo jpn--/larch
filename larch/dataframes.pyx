@@ -2722,6 +2722,7 @@ cdef class DataFrames:
 			wt_name = self._data_wt_name,
 			av_name = self._data_av_name,
 		)
+		dfs._weight_normalization = self._weight_normalization
 
 		return dfs
 
