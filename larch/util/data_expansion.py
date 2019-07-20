@@ -101,6 +101,47 @@ def categorical_expansion(s, column=None, inplace=False, drop=False):
 
 one_hot_expansion = categorical_expansion
 
+def categorical_compression(df, columns=None, inplace=False, drop=False, name=None):
+	"""
+	Compress a one-hot encoded part of a pandas DataFrame into a categorical variable.
+
+	Parameters
+	----------
+	s : pandas.DataFrame
+		The input data
+	columns : Sequence[str], optional
+		Use these columns of `df`, or all columns if not given.
+	inplace : bool, default False
+		If true, add the result directly as new columns in `df`.
+	drop : bool, default False
+		If true, drop the existing columns from `df`. Has no effect if
+		`inplace` is not true.
+
+	Returns
+	-------
+	pandas.Series
+		Only if inplace is false.
+	"""
+	input = df
+	if columns is None:
+		columns = df.columns
+	onehot = df[columns]
+	result = pandas.Series(
+		numpy.full(onehot.index.shape, numpy.nan),
+		dtype=pandas.CategoricalDtype(columns),
+		index=onehot.index,
+	)
+	for i in onehot.columns:
+		result.loc[onehot[i]==1] = i
+	if inplace and name is not None:
+		input[inplace] = result
+		if drop:
+			input.drop(columns, axis=1)
+	else:
+		return result
+
+one_hot_compression = categorical_compression
+
 
 ### FOURIER EXPANSION ###
 
