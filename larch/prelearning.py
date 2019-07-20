@@ -6,7 +6,7 @@ import numpy
 import pandas
 import os
 from appdirs import user_cache_dir
-from sklearn.externals import joblib
+import joblib
 
 from .general_precision import l4_float_dtype
 from .log import logger_name

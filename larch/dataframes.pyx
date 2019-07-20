@@ -2050,7 +2050,7 @@ cdef class DataFrames:
 			storage_dict['co'] = self.data_co
 		if self.data_wt is not None:
 			storage_dict['wt'] = self.data_wt
-		from sklearn.externals import joblib
+		import joblib
 		return joblib.dump(storage_dict, filename, **kwargs)
 
 	@classmethod
@@ -2074,7 +2074,7 @@ cdef class DataFrames:
 
 		"""
 
-		from sklearn.externals import joblib
+		import joblib
 		storage_dict = joblib.load(filename)
 		return cls(**storage_dict)
 
