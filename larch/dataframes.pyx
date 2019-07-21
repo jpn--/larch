@@ -2278,6 +2278,12 @@ cdef class DataFrames:
 	def weight_normalization(self):
 		return self._weight_normalization
 
+	@weight_normalization.setter
+	def weight_normalization(self, float value):
+		if value <= 0:
+			raise ValueError('weight_normalization must be strictly positive')
+		self._weight_normalization = value
+
 	@weight_normalization.deleter
 	def weight_normalization(self):
 		if self._weight_normalization != 1.0:
@@ -2709,6 +2715,7 @@ cdef class DataFrames:
 			complete_features_list=complete_features_list,
 		)
 
+		cdef DataFrames dfs
 		dfs = type(self)(
 			ce = df1,
 			alt_names = sa1.altnames,
@@ -2722,7 +2729,7 @@ cdef class DataFrames:
 			wt_name = self._data_wt_name,
 			av_name = self._data_av_name,
 		)
-		dfs._weight_normalization = self._weight_normalization
+		dfs.weight_normalization = self.weight_normalization
 
 		return dfs
 
