@@ -49,6 +49,14 @@ class Prelearner():
 		If the file exists, it will be loaded instead of re-training.
 	output_name : str, default 'prelearned_utility'
 		The name of the output column from this prelearner.
+	grid_cv_params : dict or List[dict], optional
+		If given, this is used as the `param_grid` argument
+		to initialize a :class:`sklearn.model_selection.GridSearchCV`
+		wrapped around the classifier, instead of using the
+		classifier directly.
+	grid_cv_kwds : dict, optional
+		If `grid_cv_params` is given, this dict gives other keyword
+		arguments given to :class:`sklearn.model_selection.GridSearchCV`.
 	**kwargs
 		Any other keyword arguments are passed through to the classifier's
 		constructor.
@@ -64,6 +72,8 @@ class Prelearner():
 			cache_file=None,
 			output_name='prelearned_utility',
 			appname='larch',
+			grid_cv_params=None,
+			grid_cv_kwds=None,
 			**kwargs,
 	):
 
@@ -75,17 +85,6 @@ class Prelearner():
 		self.input_ca_columns = ca_columns if ca_columns is not None else []
 		self.input_co_columns = co_columns
 
-		# training_X = self.filter_ca_columns(dataframes.data_ca_as_ce())
-		# if co_columns:
-		# 	try:
-		# 		Xco = dataframes.data_co[co_columns]
-		# 	except KeyError:
-		# 		Xco = pandas.DataFrame(
-		# 			dataframes.data_co.eval(co_columns).T.astype(float),
-		# 			index=dataframes.data_co.index,
-		# 			columns=co_columns,
-		# 		)
-		# 	training_X = training_X.join(Xco, on=training_X.index.levels[0].name, how='left')
 		training_X = self.filter_and_join_columns(
 			dataframes.data_ca_as_ce(),
 			dataframes.data_co,
@@ -107,7 +106,15 @@ class Prelearner():
 			clf = joblib.load(cache_clf_file)
 			logger.info(f'COMPLETED LOADING {cache_clf_file}')
 		else:
-			clf = classifier(**kwargs)
+			if grid_cv_params is not None:
+				from sklearn.model_selection import GridSearchCV
+				clf = GridSearchCV(
+					classifier(**kwargs),
+					grid_cv_params,
+					**grid_cv_kwds,
+				)
+			else:
+				clf = classifier(**kwargs)
 			if fit:
 				logger.info(f'FITTING {classifier}...')
 				if training_W is not None:
