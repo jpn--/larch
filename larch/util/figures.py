@@ -174,3 +174,114 @@ def distribution_on_continuous_idca_variable(
 from .. import Model
 
 Model.distribution_on_continuous_idca_variable = distribution_on_continuous_idca_variable
+
+
+
+def distribution_on_continuous_idco_variable(
+		model,
+		continuous_variable,
+		bins=None,
+		pct_bins=20,
+		figsize=(12, 4),
+		**kwargs,
+):
+
+	if isinstance(continuous_variable, str):
+		if model.dataframes and model.dataframes.data_co is not None and continuous_variable in model.dataframes.data_co:
+			x = model.dataframes.data_co[continuous_variable].values.reshape(-1)
+		else:
+			x = model.dataservice.make_dataframes({'co': [continuous_variable]}, explicit=True).array_co().reshape(-1)
+	else:
+		x = continuous_variable
+		try:
+			continuous_variable = continuous_variable.name
+		except AttributeError:
+			continuous_variable = ''
+
+	h_pr = {}
+	h_ch = {}
+
+
+	pr = model.probability(
+		return_dataframe='names',
+	)
+
+	ch = model.dataframes.data_ch
+
+	if bins is None:
+		if isinstance(pct_bins, int):
+			bins = numpy.percentile(x, numpy.linspace(0, 100, pct_bins + 1))
+		else:
+			bins = numpy.percentile(x, pct_bins)
+
+	for i in range(pr.shape[1]):
+		h_pr[i], _ = numpy.histogram(
+			x,
+			weights=pr.iloc[:, i],
+			bins=bins,
+		)
+		h_ch[i], _ = numpy.histogram(
+			x,
+			weights=ch.iloc[:, i],
+			bins=bins,
+		)
+
+	h_pr = pandas.DataFrame(h_pr)
+	h_pr.index = bins[:-1]
+	h_pr.columns = pr.columns
+	h_pr = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
+
+	h_ch = pandas.DataFrame(h_ch)
+	h_ch.index = bins[:-1]
+	h_ch.columns = pr.columns
+	h_ch = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
+
+	fig, (ax0, ax1) = plt.subplots(1, 2, figsize=figsize)
+
+	bottom0 = 0
+	bottom1 = 0
+	bin_widths = bins[1:] - bins[:-1]
+
+	for i in h_pr.columns:
+		ax0.bar(
+			h_pr.index,
+			height=h_pr[i],
+			bottom=bottom0,
+			width=bin_widths,
+			align='edge',
+			label=i,
+		)
+		bottom0 = h_pr[i] + bottom0
+		ax1.bar(
+			h_ch.index,
+			height=h_ch[i],
+			bottom=bottom1,
+			width=bin_widths,
+			align='edge',
+		)
+		bottom1 = h_ch[i] + bottom1
+
+	ax0.set_ylim(0, 1)
+	ax0.set_xlim(bins[0], bins[-1])
+	ax0.set_title('Modeled Shares')
+
+	ax1.set_ylim(0, 1)
+	ax1.set_xlim(bins[0], bins[-1])
+	ax1.set_title('Observed Shares')
+	if continuous_variable:
+		ax0.set_xlabel(continuous_variable)
+		ax1.set_xlabel(continuous_variable)
+
+	fig.legend(
+		loc='center right',
+	)
+
+	# fig.tight_layout(pad=0.5)
+	result = plot_as_svg_xhtml(fig, **kwargs)
+	fig.clf()
+	plt.close(fig)
+	return result
+
+
+
+Model.distribution_on_continuous_idco_variable = distribution_on_continuous_idco_variable
