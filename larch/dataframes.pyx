@@ -1399,6 +1399,11 @@ cdef class DataFrames:
 				missing_examples = [missing_data.pop() for _ in range(5)]
 				raise MissingDataError(f'{len(missing_data)+5} things missing, for example:\n  '+'\n  '.join(str(_) for _ in missing_examples))
 
+		# check data is well aligned
+		if self._data_ch is not None and model._graph is not None:
+			if not numpy.all(self._data_ch.columns == model._graph.elementals):
+				raise ValueError("data_ch columns not aligned with graph.elementals")
+
 		return 0
 
 	def check_data_is_sufficient_for_model( self, Model5c model, ):

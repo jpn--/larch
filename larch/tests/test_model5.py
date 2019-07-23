@@ -4371,3 +4371,36 @@ def test_top_k_accuracy():
 		})
 	)
 
+def test_intentional_misalignment():
+
+	d = MTC()
+	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	df_ch = d.dataframe_idca('_choice_')
+
+	df_co['CHOICE'] = numpy.where(df_ch.unstack())[1] + 1
+
+	from larch.dataframes import DataFrames
+	from larch.model import Model
+
+	j = DataFrames(
+		co=df_co,
+		alt_codes=[
+			1,2,5,6,3,4,
+		],
+	)
+
+	m5 = Model(dataservice=j)
+	m5.graph.suggest_elemental_order([1,2,3,4,5,6])
+
+	from larch.roles import P,X
+	m5.choice_co_code = 'CHOICE'
+
+	m5.utility_co[2] = P("ASC_SR2")*X("1") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P")*X("1") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN")*X("1") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE")*X("1") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK")*X("1") + P("hhinc#6") * X("hhinc")
+
+	with raises(ValueError):
+		m5.load_data()
+

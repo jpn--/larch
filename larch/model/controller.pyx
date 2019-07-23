@@ -84,6 +84,8 @@ cdef class Model5c(AbstractChoiceModel):
 		)
 
 		self._graph = graph
+		if self._dataservice is not None:
+			self.graph.suggest_elemental_order(self._dataservice.alternative_codes())
 
 	def __getstate__(self):
 
