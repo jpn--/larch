@@ -4,6 +4,31 @@ from matplotlib import pyplot as plt
 import pandas, numpy
 from .plotting import plot_as_svg_xhtml
 
+
+def pseudo_bar_data(x_bins, y):
+	"""
+	Parameters
+	----------
+	x_bins : array-like, shape=(N+1,)
+		The bin boundaries
+	y : array-like, shape=(N,)
+		The bar heights
+
+	Returns
+	-------
+	x, y
+	"""
+	# midpoints = (x_bins[1:] + x_bins[:-1]) / 2
+	# widths = x_bins[1:] - x_bins[:-1]
+	x_doubled = numpy.zeros((x_bins.shape[0] - 1) * 2, dtype=x_bins.dtype)
+	x_doubled[::2] = x_bins[:-1]
+	x_doubled[1::2] = x_bins[1:]
+	y_doubled = numpy.zeros((y.shape[0]) * 2, dtype=y.dtype)
+	y_doubled[::2] = y
+	y_doubled[1::2] = y
+	return x_doubled, y_doubled
+
+
 def distribution_on_continuous_idca_variable(
 		model,
 		continuous_variable,
@@ -183,6 +208,7 @@ def distribution_on_continuous_idco_variable(
 		bins=None,
 		pct_bins=20,
 		figsize=(12, 4),
+		style='stacked',
 		**kwargs,
 ):
 
@@ -236,50 +262,80 @@ def distribution_on_continuous_idco_variable(
 	h_ch.columns = pr.columns
 	h_ch = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
 
-	fig, (ax0, ax1) = plt.subplots(1, 2, figsize=figsize)
+	if style == 'stacked':
 
-	bottom0 = 0
-	bottom1 = 0
-	bin_widths = bins[1:] - bins[:-1]
+		fig, (ax0, ax1) = plt.subplots(1, 2, figsize=figsize)
 
-	for i in h_pr.columns:
-		ax0.bar(
-			h_pr.index,
-			height=h_pr[i],
-			bottom=bottom0,
-			width=bin_widths,
-			align='edge',
-			label=i,
+		bottom0 = 0
+		bottom1 = 0
+		bin_widths = bins[1:] - bins[:-1]
+
+		for i in h_pr.columns:
+			ax0.bar(
+				h_pr.index,
+				height=h_pr[i],
+				bottom=bottom0,
+				width=bin_widths,
+				align='edge',
+				label=i,
+			)
+			bottom0 = h_pr[i] + bottom0
+			ax1.bar(
+				h_ch.index,
+				height=h_ch[i],
+				bottom=bottom1,
+				width=bin_widths,
+				align='edge',
+			)
+			bottom1 = h_ch[i] + bottom1
+
+		ax0.set_ylim(0, 1)
+		ax0.set_xlim(bins[0], bins[-1])
+		ax0.set_title('Modeled Shares')
+
+		ax1.set_ylim(0, 1)
+		ax1.set_xlim(bins[0], bins[-1])
+		ax1.set_title('Observed Shares')
+		if x_label:
+			ax0.set_xlabel(x_label)
+			ax1.set_xlabel(x_label)
+
+		fig.legend(
+			loc='center right',
 		)
-		bottom0 = h_pr[i] + bottom0
-		ax1.bar(
-			h_ch.index,
-			height=h_ch[i],
-			bottom=bottom1,
-			width=bin_widths,
-			align='edge',
-		)
-		bottom1 = h_ch[i] + bottom1
 
-	ax0.set_ylim(0, 1)
-	ax0.set_xlim(bins[0], bins[-1])
-	ax0.set_title('Modeled Shares')
+		# fig.tight_layout(pad=0.5)
+		result = plot_as_svg_xhtml(fig, **kwargs)
+		fig.clf()
+		plt.close(fig)
 
-	ax1.set_ylim(0, 1)
-	ax1.set_xlim(bins[0], bins[-1])
-	ax1.set_title('Observed Shares')
-	if x_label:
-		ax0.set_xlabel(x_label)
-		ax1.set_xlabel(x_label)
+	else:
 
-	fig.legend(
-		loc='center right',
-	)
+		fig, axes = plt.subplots(len(h_pr.columns), 1, figsize=figsize)
 
-	# fig.tight_layout(pad=0.5)
-	result = plot_as_svg_xhtml(fig, **kwargs)
-	fig.clf()
-	plt.close(fig)
+		for n,i in enumerate(h_pr.columns):
+			x_, y_ = pseudo_bar_data(bins, h_pr[i])
+			axes[n].plot(x_, y_, label='Modeled', lw=1.5)
+
+			x_ch_, y_ch_ = pseudo_bar_data(bins, h_ch[i])
+			axes[n].fill_between(
+				x_ch_, y_ch_, label='Observed', step=None,
+				facecolor='#ffbe4d', edgecolor='#ffa200',
+				lw=1.5,
+			)
+			axes[n].set_xlim(bins[0], bins[-1])
+			axes[n].set_ylabel(i)
+
+			axes[n].legend(
+				# loc='center right',
+			)
+
+		if x_label:
+			axes[-1].set_xlabel(x_label)
+		fig.tight_layout(pad=0.5)
+		result = plot_as_svg_xhtml(fig, **kwargs)
+		fig.clf()
+		plt.close(fig)
 	return result
 
 
