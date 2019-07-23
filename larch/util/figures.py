@@ -179,24 +179,24 @@ Model.distribution_on_continuous_idca_variable = distribution_on_continuous_idca
 
 def distribution_on_continuous_idco_variable(
 		model,
-		continuous_variable,
+		x,
 		bins=None,
 		pct_bins=20,
 		figsize=(12, 4),
 		**kwargs,
 ):
 
-	if isinstance(continuous_variable, str):
-		if model.dataframes and model.dataframes.data_co is not None and continuous_variable in model.dataframes.data_co:
-			x = model.dataframes.data_co[continuous_variable].values.reshape(-1)
+	if isinstance(x, str):
+		x_label = x
+		if model.dataframes and model.dataframes.data_co is not None and x in model.dataframes.data_co:
+			x = model.dataframes.data_co[x].values.reshape(-1)
 		else:
-			x = model.dataservice.make_dataframes({'co': [continuous_variable]}, explicit=True).array_co().reshape(-1)
+			x = model.dataservice.make_dataframes({'co': [x]}, explicit=True).array_co().reshape(-1)
 	else:
-		x = continuous_variable
 		try:
-			continuous_variable = continuous_variable.name
+			x_label = x.name
 		except AttributeError:
-			continuous_variable = ''
+			x_label = ''
 
 	h_pr = {}
 	h_ch = {}
@@ -268,9 +268,9 @@ def distribution_on_continuous_idco_variable(
 	ax1.set_ylim(0, 1)
 	ax1.set_xlim(bins[0], bins[-1])
 	ax1.set_title('Observed Shares')
-	if continuous_variable:
-		ax0.set_xlabel(continuous_variable)
-		ax1.set_xlabel(continuous_variable)
+	if x_label:
+		ax0.set_xlabel(x_label)
+		ax1.set_xlabel(x_label)
 
 	fig.legend(
 		loc='center right',
