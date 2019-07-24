@@ -37,10 +37,11 @@ def plot_as_svg_xhtml(pyplot, classname='figure', headerlevel=2, header=None, an
 	ET.register_namespace("","http://www.w3.org/2000/svg")
 	ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
 	imgbuffer = BytesIO()
-	pyplot.savefig(imgbuffer, dpi=None, facecolor='w', edgecolor='w',
-					orientation='portrait', papertype=None, format='svg',
-					transparent=transparent, bbox_inches=None, pad_inches=0.1,
-					frameon=None)
+	pyplot.savefig(
+		imgbuffer, dpi=None, facecolor="none", edgecolor='w',
+		orientation='portrait', papertype=None, format='svg',
+		transparent=transparent, bbox_inches=None, pad_inches=0.1,
+	)
 	x = Elem("div", {'class':classname})
 	if header:
 		x.hn(headerlevel, header, anchor=anchor)
