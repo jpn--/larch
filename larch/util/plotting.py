@@ -27,7 +27,17 @@ def adjust_spines(ax, spines):
 
 
 
-def plot_as_svg_xhtml(pyplot, classname='figure', headerlevel=2, header=None, anchor=1, transparent=True, tooltip=None, **format):
+def plot_as_svg_xhtml(
+		fig,
+		classname='figure',
+		headerlevel=2,
+		header=None,
+		anchor=1,
+		transparent=True,
+		tooltip=None,
+		bbox_extra_artists=None,
+		**format,
+):
 	existing_format_keys = list(format.keys())
 	for key in existing_format_keys:
 		if key.upper()!=key: format[key.upper()] = format[key]
@@ -37,10 +47,11 @@ def plot_as_svg_xhtml(pyplot, classname='figure', headerlevel=2, header=None, an
 	ET.register_namespace("","http://www.w3.org/2000/svg")
 	ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
 	imgbuffer = BytesIO()
-	pyplot.savefig(
+	fig.savefig(
 		imgbuffer, dpi=None, facecolor="none", edgecolor='w',
 		orientation='portrait', papertype=None, format='svg',
-		transparent=transparent, bbox_inches=None, pad_inches=0.1,
+		transparent=transparent, bbox_inches="tight", pad_inches=0.1,
+		bbox_extra_artists=bbox_extra_artists,
 	)
 	x = Elem("div", {'class':classname})
 	if header:

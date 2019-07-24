@@ -352,15 +352,15 @@ def distribution_on_idco_variable(
 
 		fig, axes = plt.subplots(len(h_pr.columns), 1, figsize=figsize)
 
-		shift = 0.5 if discrete else 0
+		shift = 0.4 if discrete else 0
 
 		for n,i in enumerate(h_pr.columns):
 			x_, y_ = pseudo_bar_data(bins-shift, h_pr[i], gap=0.2 if discrete else 0)
-			axes[n].plot(x_, y_, label='Modeled', lw=1.5)
+			axes[n].plot(x_, y_, label='Modeled' if n==0 else None, lw=1.5)
 
 			x_ch_, y_ch_ = pseudo_bar_data(bins-shift, h_ch[i], gap=0.2 if discrete else 0)
 			axes[n].fill_between(
-				x_ch_, y_ch_, label='Observed', step=None,
+				x_ch_, y_ch_, label='Observed' if n==0 else None, step=None,
 				facecolor='#ffbe4d', edgecolor='#ffa200',
 				lw=1.5,
 			)
@@ -371,14 +371,21 @@ def distribution_on_idco_variable(
 				axes[n].set_xticklabels(x_discrete_labels)
 			axes[n].set_ylabel(i)
 
-			axes[n].legend(
-				# loc='center right',
-			)
+			# axes[n].legend(
+			# 	# loc='center right',
+			# )
+
+		legnd = axes[0].legend(
+			loc='lower center',
+			ncol=2,
+			borderaxespad=0,
+			bbox_to_anchor=(0.5, 1.08)
+		)
 
 		if x_label:
 			axes[-1].set_xlabel(x_label)
-		fig.tight_layout(pad=0.5)
-		result = plot_as_svg_xhtml(fig, **kwargs)
+		#fig.tight_layout(pad=0.5)
+		result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
 		fig.clf()
 		plt.close(fig)
 	return result
