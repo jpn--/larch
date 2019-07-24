@@ -276,14 +276,14 @@ def distribution_on_idco_variable(
 		)
 
 	h_pr = pandas.DataFrame(h_pr)
-	h_pr.index = bins[:-1]
+	h_pr.index = pandas.IntervalIndex.from_breaks(bins) # bins[:-1]
 	h_pr.columns = pr.columns
-	h_pr = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
+	h_pr_share = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
 
 	h_ch = pandas.DataFrame(h_ch)
-	h_ch.index = bins[:-1]
+	h_ch.index = h_pr.index
 	h_ch.columns = pr.columns
-	h_ch = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
+	h_ch_share = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
 
 	if discrete:
 		x_placement = numpy.arange(len(bins)-1)
@@ -294,31 +294,52 @@ def distribution_on_idco_variable(
 		x_alignment = 'edge'
 		bin_widths = bins[1:] - bins[:-1]
 
-	if style == 'stacked':
+	if style == 'dataframe':
+
+		result = pandas.concat({
+			'Modeled Shares': h_pr_share,
+			'Observed Shares': h_ch_share,
+		}, axis=1)
+		result['Count', '*'] = h_pr.sum(1)
+
+		if x_label:
+			result.index.name = x_label
+
+		# result = pandas.DataFrame(
+		# 	{
+		# 		('Modeled', 'Count'): h_pr.stack(),
+		# 		('Modeled', 'Share'): h_pr_share.stack(),
+		# 		('Observed', 'Count'): h_ch.stack(),
+		# 		('Observed', 'Share'): h_ch_share.stack(),
+		# 	},
+		# 	index=h_pr.stack().index,
+		# )
+
+	elif style == 'stacked':
 
 		fig, (ax0, ax1) = plt.subplots(1, 2, figsize=figsize)
 
 		bottom0 = 0
 		bottom1 = 0
 
-		for i in h_pr.columns:
+		for i in h_pr_share.columns:
 			ax0.bar(
 				x_placement,
-				height=h_pr[i],
+				height=h_pr_share[i],
 				bottom=bottom0,
 				width=bin_widths,
 				align=x_alignment,
 				label=i,
 			)
-			bottom0 = h_pr[i].values + bottom0
+			bottom0 = h_pr_share[i].values + bottom0
 			ax1.bar(
 				x_placement,
-				height=h_ch[i],
+				height=h_ch_share[i],
 				bottom=bottom1,
 				width=bin_widths,
 				align=x_alignment,
 			)
-			bottom1 = h_ch[i].values + bottom1
+			bottom1 = h_ch_share[i].values + bottom1
 
 		ax0.set_ylim(0, 1)
 		if not discrete:
@@ -350,15 +371,15 @@ def distribution_on_idco_variable(
 
 	else:
 
-		fig, axes = plt.subplots(len(h_pr.columns), 1, figsize=figsize)
+		fig, axes = plt.subplots(len(h_pr_share.columns), 1, figsize=figsize)
 
 		shift = 0.4 if discrete else 0
 
-		for n,i in enumerate(h_pr.columns):
-			x_, y_ = pseudo_bar_data(bins-shift, h_pr[i], gap=0.2 if discrete else 0)
+		for n,i in enumerate(h_pr_share.columns):
+			x_, y_ = pseudo_bar_data(bins-shift, h_pr_share[i], gap=0.2 if discrete else 0)
 			axes[n].plot(x_, y_, label='Modeled' if n==0 else None, lw=1.5)
 
-			x_ch_, y_ch_ = pseudo_bar_data(bins-shift, h_ch[i], gap=0.2 if discrete else 0)
+			x_ch_, y_ch_ = pseudo_bar_data(bins-shift, h_ch_share[i], gap=0.2 if discrete else 0)
 			axes[n].fill_between(
 				x_ch_, y_ch_, label='Observed' if n==0 else None, step=None,
 				facecolor='#ffbe4d', edgecolor='#ffa200',
@@ -388,6 +409,7 @@ def distribution_on_idco_variable(
 		result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
 		fig.clf()
 		plt.close(fig)
+
 	return result
 
 
