@@ -279,7 +279,7 @@ def distribution_on_continuous_idco_variable(
 				align='edge',
 				label=i,
 			)
-			bottom0 = h_pr[i] + bottom0
+			bottom0 = h_pr[i].values + bottom0
 			ax1.bar(
 				h_ch.index,
 				height=h_ch[i],
@@ -287,7 +287,7 @@ def distribution_on_continuous_idco_variable(
 				width=bin_widths,
 				align='edge',
 			)
-			bottom1 = h_ch[i] + bottom1
+			bottom1 = h_ch[i].values + bottom1
 
 		ax0.set_ylim(0, 1)
 		ax0.set_xlim(bins[0], bins[-1])
