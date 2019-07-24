@@ -500,9 +500,16 @@ def sizable_histogram_figure(*args, sizer=1, discrete=None, **kwargs):
 			kwargs['bins'] = 'discrete'
 	return histogram_figure(*args, **kwargs)
 
-def seems_like_discrete_data(arr, dictionary=None):
-	if numpy.issubdtype(arr.dtype, numpy.bool_):
+def seems_like_discrete_data(arr, dictionary=None, return_uniques=False):
+	if isinstance(arr.dtype, pandas.CategoricalDtype):
+		#print('seems_like_discrete_data? YES categorical')
+		if return_uniques:
+			return (True, list(arr.cat.categories))
+		return True
+	elif numpy.issubdtype(arr.dtype, numpy.bool_):
 		#print('seems_like_discrete_data? YES bool')
+		if return_uniques:
+			return (True, [False, True])
 		return True
 	else:
 		pass
@@ -510,8 +517,11 @@ def seems_like_discrete_data(arr, dictionary=None):
 	if dictionary is None:
 		if len(numpy.unique(arr[:100]))<6:
 			if len(numpy.unique(arr[:1000])) < 6:
-				if len(numpy.unique(arr)) < 6:
+				uniques = numpy.unique(arr)
+				if len(uniques) < 6:
 					#print('seems_like_discrete_data? YES uniques < 6')
+					if return_uniques:
+						return (True, uniques)
 					return True
 		#print('seems_like_discrete_data? too many and no dictionary')
 	else:
@@ -522,8 +532,14 @@ def seems_like_discrete_data(arr, dictionary=None):
 				not_in_dict += 1
 		if not_in_dict > 2:
 			#print(f'seems_like_discrete_data? dictionary but {not_in_dict} missing keys')
+			if return_uniques:
+				return False, None
 			return False
 		else:
 			#print(f'seems_like_discrete_data? dictionary with {not_in_dict} missing keys')
+			if return_uniques:
+				return True, uniq
 			return True
+	if return_uniques:
+		return False, None
 	return False
