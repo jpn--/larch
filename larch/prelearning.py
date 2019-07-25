@@ -92,10 +92,14 @@ class Prelearner():
 		self.input_ca_columns = ca_columns if ca_columns is not None else []
 		self.input_co_columns = co_columns
 
+		self.eval_set_names = fit.pop('eval_set_names', [])
+		
 		if isinstance(fit, MutableMapping):
 			if 'validation_percent' in fit and validation_dataframes is None:
 				vpct = fit.pop('validation_percent')
 				dataframes, validation_dataframes = dataframes.split([100-vpct, vpct])
+			else:
+				vpct = 'preset'
 			if validation_dataframes is not None:
 				validation_X = self.filter_and_join_columns(
 					validation_dataframes.data_ca_as_ce(),
@@ -104,9 +108,10 @@ class Prelearner():
 				validation_Y = validation_dataframes.array_ch_as_ce()
 				validation_W = validation_dataframes.array_wt_as_ce()
 
-				fit['eval_set'] = [(validation_X, validation_Y)]
+				fit['eval_set'] = fit.get('eval_set', []) + [(validation_X, validation_Y)]
 				if validation_W is not None:
-					fit['sample_weight_eval_set'] = [validation_W]
+					fit['sample_weight_eval_set'] = fit.get('sample_weight_eval_set', []) + [validation_W]
+				self.eval_set_names += [f'validation_{vpct}']
 
 		training_X = self.filter_and_join_columns(
 			dataframes.data_ca_as_ce(),
@@ -142,15 +147,10 @@ class Prelearner():
 
 				if 'train_as_eval' in fit:
 					fit.pop('train_as_eval')
-					if 'eval_set' in fit:
-						fit['eval_set'] = [(training_X, training_Y),] + fit['eval_set']
-					else:
-						fit['eval_set'] = [(training_X, training_Y),]
+					fit['eval_set'] = [(training_X, training_Y),] + fit.get('eval_set',[])
 					if training_W is not None:
-						if 'sample_weight_eval_set' in fit:
-							fit['sample_weight_eval_set'] = [training_W,]+fit['sample_weight_eval_set']
-						else:
-							fit['sample_weight_eval_set'] = [training_W,]
+						fit['sample_weight_eval_set'] = [training_W,]+fit.get('sample_weight_eval_set',[])
+					self.eval_set_names = ['training'] + self.eval_set_names
 
 				logger.info(f'FITTING {classifier}...')
 				if training_W is not None:
@@ -421,3 +421,13 @@ class XGBoostPrelearner(Prelearner):
 		self._predict_type = 'predict' if use_soft else 'predict_proba col 1'
 
 
+	def eval_metric(self):
+		j = [
+			pandas.DataFrame({mk:numpy.asarray(mv) for mk, mv in ev.items()}) 
+			for ek, ev in self.clf.evals_result_.items()
+		]
+		k = [
+			ek
+			for ek, ev in self.clf.evals_result_.items()
+		]
+		return pandas.concat(j, axis=1, keys=k)
