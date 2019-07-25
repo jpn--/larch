@@ -421,7 +421,7 @@ class XGBoostPrelearner(Prelearner):
 		self._predict_type = 'predict' if use_soft else 'predict_proba col 1'
 
 
-	def eval_metric(self):
+	def evals_result(self):
 		j = [
 			pandas.DataFrame({mk:numpy.asarray(mv) for mk, mv in ev.items()}) 
 			for ek, ev in self.clf.evals_result_.items()
