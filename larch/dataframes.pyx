@@ -2253,6 +2253,8 @@ cdef class DataFrames:
 			return 1.0
 
 		total_weight = self._array_wt.base.sum()
+		if numpy.isnan(total_weight):
+			total_weight = self.data_wt.sum()
 		scale_level = total_weight / self._n_cases()
 
 		for i in range(self._array_wt.shape[0]):
