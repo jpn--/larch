@@ -94,7 +94,7 @@ class Prelearner():
 
 		if isinstance(fit, MutableMapping):
 			if 'validation_percent' in fit and validation_dataframes is None:
-				vpct = fit['validation_percent']
+				vpct = fit.pop('validation_percent')
 				dataframes, validation_dataframes = dataframes.split([100-vpct, vpct])
 			if validation_dataframes is not None:
 				validation_X = self.filter_and_join_columns(
