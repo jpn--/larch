@@ -492,17 +492,11 @@ cdef class DataFrames:
 					_, wt = force_crack_idca(ce[wt_name], crack if ((crack is not None) and (crack is not False)) else True)
 
 			logger.debug(" DataFrames ~ set alternative_codes")
-			if alt_codes is None:
-				if ca is not None:
-					self._alternative_codes = ca.index.levels[1]
-				elif ce is not None:
-					self._alternative_codes = ce.index.levels[1]
-				elif ch is not None:
-					self._alternative_codes = ch.columns
-				else:
-					self._alternative_codes = pandas.Index([])
-			else:
-				self._alternative_codes = pandas.Index(alt_codes)
+			self._ensure_consistent_alternative_codes(alt_codes)
+			if ca is not None:
+				self._ensure_consistent_alternative_codes(ca.index.levels[1])
+			if ce is not None:
+				self._ensure_consistent_alternative_codes(ce.index.levels[1])
 
 			if ch is None and ch_name is not None and co is not None and ch_name in co.columns:
 				choicecodes = columnize(co, [ch_name], inplace=False, dtype=int)
@@ -537,6 +531,11 @@ cdef class DataFrames:
 				else:
 					logger.debug(" DataFrames ~ unstack ch (slow)")
 					ch = ch.unstack()
+
+			if ch is not None:
+				self._ensure_consistent_alternative_codes(ch.columns)
+			if self._alternative_codes is None:
+				self._alternative_codes = pandas.Index([])
 
 			logger.debug(" DataFrames ~ assign aux data")
 			self.data_ch = ch
@@ -872,6 +871,23 @@ cdef class DataFrames:
 	def alternative_codes(self):
 		"""The alternative codes."""
 		return self._alternative_codes
+
+	def _ensure_consistent_alternative_codes(self, alt_codes, result='raise'):
+		if alt_codes is None:
+			return True
+		alt_codes = pandas.Index(alt_codes)
+		if self._alternative_codes is None:
+			self._alternative_codes = alt_codes
+			return True
+		if alt_codes.shape != self._alternative_codes.shape:
+			if result == 'raise':
+				raise ValueError(f'shape of alt_codes ({alt_codes.shape}) does not match existing ({self._alternative_codes.shape})')
+			return False
+		if numpy.any(alt_codes != self._alternative_codes):
+			if result == 'raise':
+				raise ValueError(f'values of alt_codes does not match existing\nnew:{alt_codes}\nold:{self._alternative_codes}')
+			return False
+		return True
 
 	@property
 	def n_alts(self):
