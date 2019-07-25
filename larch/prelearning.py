@@ -7,6 +7,7 @@ import pandas
 import os
 from appdirs import user_cache_dir
 import joblib
+from typing import MutableMapping
 
 from .general_precision import l4_float_dtype
 from .log import logger_name
@@ -40,8 +41,10 @@ class Prelearner():
 		an existing instance.  This classifier or Regressor will be
 		instantiated and trained using the data above to generate
 		the prediction.
-	fit : bool, default True
-		Whether to fit this prelearner automatically on construction.
+	fit : dict or False, optional
+		A dictionary of arguments to pass to the `fit` method of the
+		classifier, or set to False to not fit the classifier
+		during the initialization of this object.
 	cache_file : str, optional
 		A cache file name to store the trained prelearner.  If just a filename is given,
 		it will be stored in `appdirs.user_cache_file()`. If instead an absolute path or
@@ -74,11 +77,31 @@ class Prelearner():
 			appname='larch',
 			grid_cv_params=None,
 			grid_cv_kwds=None,
+			validation_dataframes=None,
 			**kwargs,
 	):
 
 		if classifier is None:
 			raise ValueError('must give a classifier')
+
+		if fit is True:
+			fit = {}
+
+		if isinstance(fit, MutableMapping):
+			if 'validation_percent' in fit and validation_dataframes is None:
+				vpct = fit['validation_percent']
+				dataframes, validation_dataframes = dataframes.split([100-vpct, vpct])
+			if validation_dataframes is not None:
+				validation_X = self.filter_and_join_columns(
+					validation_dataframes.data_ca_as_ce(),
+					validation_dataframes.data_co,
+				)
+				validation_Y = validation_dataframes.array_ch_as_ce()
+				validation_W = validation_dataframes.array_wt_as_ce()
+
+				fit['eval_set'] = [(validation_X, validation_Y)]
+				if validation_W is not None:
+					fit['sample_weight_eval_set'] = [validation_W]
 
 		logger = logging.getLogger(logger_name)
 
@@ -115,12 +138,25 @@ class Prelearner():
 				)
 			else:
 				clf = classifier(**kwargs)
-			if fit:
+			if fit is not False:
+
+				if 'train_as_eval' in fit:
+					fit.pop('train_as_eval')
+					if 'eval_set' in fit:
+						fit['eval_set'] = [(training_X, training_Y),] + fit['eval_set']
+					else:
+						fit['eval_set'] = [(training_X, training_Y),]
+					if training_W is not None:
+						if 'sample_weight_eval_set' in fit:
+							fit['sample_weight_eval_set'] = [training_W,]+fit['sample_weight_eval_set']
+						else:
+							fit['sample_weight_eval_set'] = [training_W,]
+
 				logger.info(f'FITTING {classifier}...')
 				if training_W is not None:
-					clf.fit(training_X, training_Y, sample_weight=training_W)
+					clf.fit(training_X, training_Y, sample_weight=training_W, **fit)
 				else:
-					clf.fit(training_X, training_Y)
+					clf.fit(training_X, training_Y, **fit)
 				logger.info(f'FITTED {classifier}')
 			if cache_clf_file is not None:
 				joblib.dump(clf, cache_clf_file)
