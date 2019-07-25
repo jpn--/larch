@@ -169,3 +169,39 @@ def test_dbf_reader():
 	df_s = q.load_dataframe(preserve_order=False, strip_whitespace=True)
 	correct_df.NAME = correct_df.NAME.str.strip()
 	pandas.testing.assert_frame_equal(correct_df, df_s)
+
+def test_repeated_splitting():
+	df = pandas.read_csv(example_file("MTCwork.csv.gz"))
+	df.set_index(['casenum', 'altnum'], inplace=True)
+
+	dfs = DataFrames(df, crack=False)
+	d1, d2 = dfs.split([80, 20])
+	assert d1.n_cases == 4024
+	assert d2.n_cases == 1005
+	d11, d12 = d1.split([50, 50])
+	assert d11.n_cases == 2012
+	assert d12.n_cases == 2012
+
+	dfs = DataFrames(df, crack=False)
+	d1, d2 = dfs.split([80, 20], method='shuffle')
+	assert d1.n_cases == 4024
+	assert d2.n_cases == 1005
+	d11, d12 = d1.split([50, 50])
+	assert d11.n_cases == 2012
+	assert d12.n_cases == 2012
+
+	dfs = DataFrames(df, crack=True)
+	d1, d2 = dfs.split([80, 20])
+	assert d1.n_cases == 4024
+	assert d2.n_cases == 1005
+	d11, d12 = d1.split([50, 50])
+	assert d11.n_cases == 2012
+	assert d12.n_cases == 2012
+
+	dfs = DataFrames(df, crack=True)
+	d1, d2 = dfs.split([80, 20], method='shuffle')
+	assert d1.n_cases == 4024
+	assert d2.n_cases == 1005
+	d11, d12 = d1.split([50, 50])
+	assert d11.n_cases == 2012
+	assert d12.n_cases == 2012

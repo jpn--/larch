@@ -2369,7 +2369,7 @@ cdef class DataFrames:
 			if method == 'shuffle':
 				numpy.random.shuffle(uniform_seq)
 
-			membership = (uniform_seq.reshape(-1,1) <= cum_splits.reshape(1,-1))
+			membership = (uniform_seq.reshape(-1,1) < cum_splits.reshape(1,-1))
 			membership[:,1:] ^= membership[:,:-1]
 
 			logger.debug(f'   membership.shape {membership.shape}')
@@ -2393,6 +2393,7 @@ cdef class DataFrames:
 				else:
 					these_positions_2 = numpy.in1d(self.data_ce.index.codes[0], numpy.where(these_positions))
 					data_ce=self.data_ce.iloc[these_positions_2,:]
+					data_ce.index = data_ce.index.remove_unused_levels()
 
 				data_av=None if self.data_av is None else self.data_av.iloc[these_positions,:]
 				data_ch=None if self.data_ch is None else self.data_ch.iloc[these_positions,:]
