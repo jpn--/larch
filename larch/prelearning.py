@@ -430,4 +430,7 @@ class XGBoostPrelearner(Prelearner):
 			ek
 			for ek, ev in self.clf.evals_result_.items()
 		]
+		for i in range(len(self.eval_set_names)):
+			if len(k)>i:
+				k[i] = self.eval_set_names[i]
 		return pandas.concat(j, axis=1, keys=k)
