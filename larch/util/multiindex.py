@@ -5,33 +5,24 @@ import pandas.core.algorithms as algos
 
 def remove_unused_level(multiindex, level=0):
 	"""
+	Remove unused labels from a level.
+
 	Create a new MultiIndex from the current that removes
-	unused levels, meaning that they are not expressed in the labels.
+	unused levels from a given level[s], meaning that they are
+	not expressed in that level's labels.
 	The resulting MultiIndex will have the same outward
 	appearance, meaning the same .values and ordering. It will also
 	be .equals() to the original.
-	.. versionadded:: 0.20.0
+
+	Parameters
+	----------
+	multiindex : pandas.MultiIndex
+	level : int or List[int]
+
 	Returns
 	-------
-	MultiIndex
-	Examples
-	--------
-	>>> mi = pd.MultiIndex.from_product([range(2), list('ab')])
-	>>> mi
-	MultiIndex([(0, 'a'),
-				(0, 'b'),
-				(1, 'a'),
-				(1, 'b')],
-			   )
-	>>> mi[2:]
-	MultiIndex([(1, 'a'),
-				(1, 'b')],
-			   )
-	The 0 from the first level is not represented
-	and can be removed
-	>>> mi2 = mi[2:].remove_unused_levels()
-	>>> mi2.levels
-	FrozenList([[1], ['a', 'b']])
+	pandas.MultiIndex
+
 	"""
 
 	new_levels = []
@@ -86,3 +77,36 @@ def remove_unused_level(multiindex, level=0):
 
 	return result
 
+
+def replace_levels(multiindex, level, new_label_array):
+	"""
+	Replace the labels in a level with a new order.
+
+	Parameters
+	----------
+	multiindex : pandas.MultiIndex
+	level : int
+	new_label_array : array-like
+
+	Returns
+	-------
+	pandas.MultiIndex
+	"""
+
+	levels = [i for i in multiindex.levels]
+	codes = [i for i in multiindex.codes]
+
+	new_label_array = np.asarray(new_label_array)
+	old_label_array = multiindex.levels[level]
+	where_in_new_label_array = {}
+	for n, j in enumerate(old_label_array):
+		try:
+			where_in_new_label_array[n] = int(np.where(j == new_label_array)[0])
+		except TypeError:
+			raise ValueError(f"missing {j} in new_label_array, all the old labels must appear")
+
+	old_codes = list(multiindex.codes[level])
+	codes[level] = list(map(where_in_new_label_array.get, old_codes))
+	levels[level] = new_label_array
+
+	return pd.MultiIndex(levels=levels, codes=codes, names=multiindex.names)
