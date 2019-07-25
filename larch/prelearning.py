@@ -87,6 +87,11 @@ class Prelearner():
 		if fit is True:
 			fit = {}
 
+		logger = logging.getLogger(logger_name)
+
+		self.input_ca_columns = ca_columns if ca_columns is not None else []
+		self.input_co_columns = co_columns
+
 		if isinstance(fit, MutableMapping):
 			if 'validation_percent' in fit and validation_dataframes is None:
 				vpct = fit['validation_percent']
@@ -102,11 +107,6 @@ class Prelearner():
 				fit['eval_set'] = [(validation_X, validation_Y)]
 				if validation_W is not None:
 					fit['sample_weight_eval_set'] = [validation_W]
-
-		logger = logging.getLogger(logger_name)
-
-		self.input_ca_columns = ca_columns if ca_columns is not None else []
-		self.input_co_columns = co_columns
 
 		training_X = self.filter_and_join_columns(
 			dataframes.data_ca_as_ce(),
