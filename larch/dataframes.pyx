@@ -23,7 +23,7 @@ from numpy.math cimport expf, logf
 from libc.math cimport exp, log
 
 from .util.dataframe import columnize
-
+from .util.multiindex import remove_unused_level
 
 cdef float INFINITY32 = numpy.float('inf')
 
@@ -2393,7 +2393,7 @@ cdef class DataFrames:
 				else:
 					these_positions_2 = numpy.in1d(self.data_ce.index.codes[0], numpy.where(these_positions))
 					data_ce=self.data_ce.iloc[these_positions_2,:]
-					data_ce.index = data_ce.index.remove_unused_levels()
+					data_ce.index = remove_unused_level(data_ce.index, 0)
 
 				data_av=None if self.data_av is None else self.data_av.iloc[these_positions,:]
 				data_ch=None if self.data_ch is None else self.data_ch.iloc[these_positions,:]
