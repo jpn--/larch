@@ -5,7 +5,7 @@ import pandas, numpy
 from .plotting import plot_as_svg_xhtml
 
 
-def pseudo_bar_data(x_bins, y):
+def pseudo_bar_data(x_bins, y, gap=0):
 	"""
 	Parameters
 	----------
@@ -20,12 +20,22 @@ def pseudo_bar_data(x_bins, y):
 	"""
 	# midpoints = (x_bins[1:] + x_bins[:-1]) / 2
 	# widths = x_bins[1:] - x_bins[:-1]
-	x_doubled = numpy.zeros((x_bins.shape[0] - 1) * 2, dtype=x_bins.dtype)
-	x_doubled[::2] = x_bins[:-1]
-	x_doubled[1::2] = x_bins[1:]
-	y_doubled = numpy.zeros((y.shape[0]) * 2, dtype=y.dtype)
-	y_doubled[::2] = y
-	y_doubled[1::2] = y
+	if gap:
+		x_doubled = numpy.zeros(((x_bins.shape[0] - 1) * 4), dtype=numpy.float)
+		x_doubled[::4] = x_bins[:-1]
+		x_doubled[1::4] = x_bins[:-1]
+		x_doubled[2::4] = x_bins[1:] - gap
+		x_doubled[3::4] = x_bins[1:] - gap
+		y_doubled = numpy.zeros(((y.shape[0]) * 4), dtype=y.dtype)
+		y_doubled[1::4] = y
+		y_doubled[2::4] = y
+	else:
+		x_doubled = numpy.zeros((x_bins.shape[0] - 1) * 2, dtype=x_bins.dtype)
+		x_doubled[::2] = x_bins[:-1]
+		x_doubled[1::2] = x_bins[1:]
+		y_doubled = numpy.zeros((y.shape[0]) * 2, dtype=y.dtype)
+		y_doubled[::2] = y
+		y_doubled[1::2] = y
 	return x_doubled, y_doubled
 
 
@@ -202,13 +212,14 @@ Model.distribution_on_continuous_idca_variable = distribution_on_continuous_idca
 
 
 
-def distribution_on_continuous_idco_variable(
+def distribution_on_idco_variable(
 		model,
 		x,
 		bins=None,
 		pct_bins=20,
 		figsize=(12, 4),
 		style='stacked',
+		discrete=None,
 		**kwargs,
 ):
 
@@ -227,6 +238,12 @@ def distribution_on_continuous_idco_variable(
 	h_pr = {}
 	h_ch = {}
 
+	discrete_values = None
+	if discrete:
+		discrete_values = numpy.unique(x)
+	elif discrete is None:
+		from .histograms import seems_like_discrete_data
+		discrete, discrete_values = seems_like_discrete_data(x, return_uniques=True)
 
 	pr = model.probability(
 		return_dataframe='names',
@@ -239,8 +256,14 @@ def distribution_on_continuous_idco_variable(
 	else:
 		wt = model.dataframes.data_wt.values.reshape(-1)
 
+	x_discrete_labels = None if discrete_values is None else [str(i) for i in discrete_values]
+
 	if bins is None:
-		if isinstance(pct_bins, int):
+		if isinstance(x.dtype, pandas.CategoricalDtype):
+			discrete_values = numpy.arange(len(x_discrete_labels))
+			bins = numpy.arange(len(x_discrete_labels)+1)
+			x = x.cat.codes
+		elif isinstance(pct_bins, int):
 			bins = numpy.percentile(x, numpy.linspace(0, 100, pct_bins + 1))
 		else:
 			bins = numpy.percentile(x, pct_bins)
@@ -258,48 +281,85 @@ def distribution_on_continuous_idco_variable(
 		)
 
 	h_pr = pandas.DataFrame(h_pr)
-	h_pr.index = bins[:-1]
+	h_pr.index = pandas.IntervalIndex.from_breaks(bins) # bins[:-1]
 	h_pr.columns = pr.columns
-	h_pr = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
+	h_pr_share = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
 
 	h_ch = pandas.DataFrame(h_ch)
-	h_ch.index = bins[:-1]
+	h_ch.index = h_pr.index
 	h_ch.columns = pr.columns
-	h_ch = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
+	h_ch_share = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
 
-	if style == 'stacked':
+	if discrete:
+		x_placement = numpy.arange(len(bins)-1)
+		x_alignment = 'center'
+		bin_widths = 0.8
+	else:
+		x_placement = bins[:-1]
+		x_alignment = 'edge'
+		bin_widths = bins[1:] - bins[:-1]
+
+	if style == 'dataframe':
+
+		result = pandas.concat({
+			'Modeled Shares': h_pr_share,
+			'Observed Shares': h_ch_share,
+		}, axis=1)
+		result['Count', '*'] = h_pr.sum(1)
+
+		if x_label:
+			result.index.name = x_label
+
+		# result = pandas.DataFrame(
+		# 	{
+		# 		('Modeled', 'Count'): h_pr.stack(),
+		# 		('Modeled', 'Share'): h_pr_share.stack(),
+		# 		('Observed', 'Count'): h_ch.stack(),
+		# 		('Observed', 'Share'): h_ch_share.stack(),
+		# 	},
+		# 	index=h_pr.stack().index,
+		# )
+
+	elif style == 'stacked':
 
 		fig, (ax0, ax1) = plt.subplots(1, 2, figsize=figsize)
 
 		bottom0 = 0
 		bottom1 = 0
-		bin_widths = bins[1:] - bins[:-1]
 
-		for i in h_pr.columns:
+		for i in h_pr_share.columns:
 			ax0.bar(
-				h_pr.index,
-				height=h_pr[i],
+				x_placement,
+				height=h_pr_share[i],
 				bottom=bottom0,
 				width=bin_widths,
-				align='edge',
+				align=x_alignment,
 				label=i,
 			)
-			bottom0 = h_pr[i] + bottom0
+			bottom0 = h_pr_share[i].values + bottom0
 			ax1.bar(
-				h_ch.index,
-				height=h_ch[i],
+				x_placement,
+				height=h_ch_share[i],
 				bottom=bottom1,
 				width=bin_widths,
-				align='edge',
+				align=x_alignment,
 			)
-			bottom1 = h_ch[i] + bottom1
+			bottom1 = h_ch_share[i].values + bottom1
 
 		ax0.set_ylim(0, 1)
-		ax0.set_xlim(bins[0], bins[-1])
+		if not discrete:
+			ax0.set_xlim(bins[0], bins[-1])
+		if x_discrete_labels is not None:
+			ax0.set_xticks(numpy.arange(len(x_discrete_labels)))
+			ax0.set_xticklabels(x_discrete_labels)
 		ax0.set_title('Modeled Shares')
 
 		ax1.set_ylim(0, 1)
-		ax1.set_xlim(bins[0], bins[-1])
+		if not discrete:
+			ax1.set_xlim(bins[0], bins[-1])
+		if x_discrete_labels is not None:
+			ax1.set_xticks(numpy.arange(len(x_discrete_labels)))
+			ax1.set_xticklabels(x_discrete_labels)
 		ax1.set_title('Observed Shares')
 		if x_label:
 			ax0.set_xlabel(x_label)
@@ -316,33 +376,47 @@ def distribution_on_continuous_idco_variable(
 
 	else:
 
-		fig, axes = plt.subplots(len(h_pr.columns), 1, figsize=figsize)
+		fig, axes = plt.subplots(len(h_pr_share.columns), 1, figsize=figsize)
 
-		for n,i in enumerate(h_pr.columns):
-			x_, y_ = pseudo_bar_data(bins, h_pr[i])
-			axes[n].plot(x_, y_, label='Modeled', lw=1.5)
+		shift = 0.4 if discrete else 0
 
-			x_ch_, y_ch_ = pseudo_bar_data(bins, h_ch[i])
+		for n,i in enumerate(h_pr_share.columns):
+			x_, y_ = pseudo_bar_data(bins-shift, h_pr_share[i], gap=0.2 if discrete else 0)
+			axes[n].plot(x_, y_, label='Modeled' if n==0 else None, lw=1.5)
+
+			x_ch_, y_ch_ = pseudo_bar_data(bins-shift, h_ch_share[i], gap=0.2 if discrete else 0)
 			axes[n].fill_between(
-				x_ch_, y_ch_, label='Observed', step=None,
+				x_ch_, y_ch_, label='Observed' if n==0 else None, step=None,
 				facecolor='#ffbe4d', edgecolor='#ffa200',
 				lw=1.5,
 			)
-			axes[n].set_xlim(bins[0], bins[-1])
+			if not discrete:
+				axes[n].set_xlim(bins[0], bins[-1])
+			if x_discrete_labels is not None:
+				axes[n].set_xticks(numpy.arange(len(x_discrete_labels)))
+				axes[n].set_xticklabels(x_discrete_labels)
 			axes[n].set_ylabel(i)
 
-			axes[n].legend(
-				# loc='center right',
-			)
+			# axes[n].legend(
+			# 	# loc='center right',
+			# )
+
+		legnd = axes[0].legend(
+			loc='lower center',
+			ncol=2,
+			borderaxespad=0,
+			bbox_to_anchor=(0.5, 1.08)
+		)
 
 		if x_label:
 			axes[-1].set_xlabel(x_label)
-		fig.tight_layout(pad=0.5)
-		result = plot_as_svg_xhtml(fig, **kwargs)
+		#fig.tight_layout(pad=0.5)
+		result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
 		fig.clf()
 		plt.close(fig)
+
 	return result
 
 
 
-Model.distribution_on_continuous_idco_variable = distribution_on_continuous_idco_variable
+Model.distribution_on_idco_variable = distribution_on_idco_variable
