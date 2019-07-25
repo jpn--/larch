@@ -234,6 +234,11 @@ def distribution_on_continuous_idco_variable(
 
 	ch = model.dataframes.data_ch
 
+	if model.dataframes.data_wt is None:
+		wt = 1
+	else:
+		wt = model.dataframes.data_wt.values.reshape(-1)
+
 	if bins is None:
 		if isinstance(pct_bins, int):
 			bins = numpy.percentile(x, numpy.linspace(0, 100, pct_bins + 1))
@@ -243,12 +248,12 @@ def distribution_on_continuous_idco_variable(
 	for i in range(pr.shape[1]):
 		h_pr[i], _ = numpy.histogram(
 			x,
-			weights=pr.iloc[:, i],
+			weights=pr.iloc[:, i] * wt,
 			bins=bins,
 		)
 		h_ch[i], _ = numpy.histogram(
 			x,
-			weights=ch.iloc[:, i],
+			weights=ch.iloc[:, i] * wt,
 			bins=bins,
 		)
 
