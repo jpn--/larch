@@ -1,6 +1,9 @@
 import logging
 import sys
 from . import logger_name
+from contextlib import contextmanager
+import time
+from ..util.timesize import timesize_stack
 
 FILE_LOG_FORMAT = '%(name)s.%(levelname)s: %(message)s'
 CONSOLE_LOG_FORMAT = '[%(asctime)s] %(name)s.%(levelname)s: %(message)s'
@@ -49,3 +52,18 @@ def log_to_file(filename, level=None):
 
 
 logger = log = log_to_console()
+
+
+@contextmanager
+def timing_log(label=''):
+	start_time = time.time()
+	log.critical(f"<TIME BEGINS> {label}")
+	try:
+		yield
+	except:
+		log.critical(f"<TIME ERROR!> {label} <{timesize_stack(time.time() - start_time)}>")
+		raise
+	else:
+		log.critical(f"< TIME ENDS > {label} <{timesize_stack(time.time() - start_time)}>")
+
+
