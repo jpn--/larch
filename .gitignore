@@ -62,3 +62,4 @@ Icon?
 
 docs/.doctrees
 conda-build
+*.cp37-win_amd64.pyd
