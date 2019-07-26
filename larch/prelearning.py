@@ -196,6 +196,8 @@ class Prelearner():
 			self,
 			X,
 			dtype=None,
+			output_name=None,
+			**kwargs,
 	):
 		"""
 		Apply the prelearner to compute pseudo-utility.
@@ -205,6 +207,13 @@ class Prelearner():
 		X : pandas.DataFrame
 		dtype : dtype, default float
 			The dtype to use for the output column.
+		output_name : str, optional
+			The name of the output column from this
+			application of the prelearner.
+		**kwargs
+			Other keyword arguments are forwarded to the
+			`predict` or `predict_proba` method of the
+			`clf` member.
 
 		Returns
 		-------
@@ -225,10 +234,13 @@ class Prelearner():
 			X_co,
 		)
 
+		if output_name is None:
+			output_name = self.output_column
+
 		if self._predict_type == 'predict_proba col 1':
-			X_ca.loc[:,self.output_column] = numpy.log(self.clf.predict_proba(X_in)[:, 1]).astype(dtype)
+			X_ca.loc[:,output_name] = numpy.log(self.clf.predict_proba(X_in, **kwargs)[:, 1]).astype(dtype)
 		elif self._predict_type == 'predict':
-			X_ca.loc[:,self.output_column] = numpy.log(self.clf.predict(X_in)).astype(dtype)
+			X_ca.loc[:,output_name] = numpy.log(self.clf.predict(X_in, **kwargs)).astype(dtype)
 		else:
 			raise TypeError(self._predict_type)
 		return X
