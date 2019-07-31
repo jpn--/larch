@@ -4,10 +4,11 @@ import sys, os
 
 class Info:
 
-    def __init__(self, appname='Larch', extra=True, version=None, path=None):
+    def __init__(self, appname='Larch', extra=True, version=None, path=None, hidden=False):
         self.appname = appname
         self.extra = extra
         self.version = version or __version__
+        self.hidden = hidden
         from .. import __path__
         self.path = path or __path__[0]
 
@@ -28,6 +29,10 @@ class Info:
         return r
 
     def _repr_html_(self):
+        from ..util.styles import _default_css_jupyter, _tooltipped_style_css
+        style_prefix = "<style>{}\n\n{}</style>\n".format(_default_css_jupyter, _tooltipped_style_css)
+        if self.hidden:
+            return style_prefix
         from xmle import Elem
         xsign = Elem("div", {'class': 'larch_head_tag'})
         from .images import favicon
@@ -56,9 +61,6 @@ class Info:
             ul = xinfo.elem('ul', {'style': 'margin-top:0; margin-bottom:0;'})
             for p in sys.path:
                 ul.elem('li', text=p)
-
-        from ..util.styles import _default_css_jupyter, _tooltipped_style_css
-        style_prefix = "<style>{}\n\n{}</style>\n".format(_default_css_jupyter, _tooltipped_style_css)
 
         return style_prefix+xsign.tostring()
 

@@ -6,6 +6,7 @@ import sys
 from .util.styles import css
 
 info = Info('Larch', False, __version__)
+stylesheet = Info('Larch', False, __version__, hidden=True)
 
 if 'IPython' in ipython_status():
     from .util.display import display
