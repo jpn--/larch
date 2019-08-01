@@ -44,7 +44,8 @@ def load_css(filename):
 
 _default_css_jupyter = """
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700|Roboto+Slab:200,900|EB+Garamond:400,400i');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500italic,100italic|Roboto+Mono:300,400,700|EB+Garamond:400,400i');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:100,400,700&display=swap');
 
 .error_report {
 	color:red; font-family:monospace;
@@ -114,9 +115,9 @@ div.jp-OutputArea-output div.LinearFunc
 .larch_signature {""" + signature_font + """ }
 .larch_name_signature {""" + signature_name_font + """}
 
-.larch_head_tag {font-size:150%; font-weight:900; font-family:"Roboto Slab", Verdana;}
-.larch_head_tag_ver {font-size:80%; font-weight:200; font-family:"Roboto Slab", Verdana;}
-.larch_head_tag_pth {font-size:40%; font-weight:200; font-family:"Roboto Slab", Verdana; padding-left:5px;}
+.larch_head_tag {font-size:150%; font-weight:900; font-family:"Roboto Slab", "Roboto", Verdana;}
+.larch_head_tag_ver {font-size:80%; font-weight:200; font-family:"Roboto Slab", "Roboto", Verdana;}
+.larch_head_tag_pth {font-size:40%; font-weight:200; font-family:"Roboto Slab", "Roboto", Verdana; padding-left:5px;}
 .larch_head_tag_more {font-size:50%; font-weight:300; font-family:"Roboto Mono", monospace; line-height:130%;}
 
 div.output_wrapper a.parameter_reference,

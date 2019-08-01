@@ -12,6 +12,9 @@ def test_utility_function_output():
 
 	k.set_values(Aaa=12, Bbb=20, Ccc=2, Dx1=0, Dy1=0.001, Dx2=0.33, Dy2=-0.002)
 
+	import larch.model.linear
+	larch.model.linear.use_tooltips = True
+
 	u1 = k.utility_functions(resolve_parameters=False)
 
 	assert u1.tostring() == '<div><table class="floatinghead" style="margin-top:1px;"><thead>' \
