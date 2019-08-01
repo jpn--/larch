@@ -4,11 +4,11 @@ import sys, os
 
 class Info:
 
-    def __init__(self, appname='Larch', extra=True, version=None, path=None, hidden=False):
+    def __init__(self, appname='Larch', extra=True, version=None, path=None, minimal=False):
         self.appname = appname
         self.extra = extra
         self.version = version or __version__
-        self.hidden = hidden
+        self.minimal = minimal
         from .. import __path__
         self.path = path or __path__[0]
 
@@ -31,8 +31,6 @@ class Info:
     def _repr_html_(self):
         from ..util.styles import _default_css_jupyter, _tooltipped_style_css
         style_prefix = "<style>{}\n\n{}</style>\n".format(_default_css_jupyter, _tooltipped_style_css)
-        if self.hidden:
-            return style_prefix
         from xmle import Elem
         xsign = Elem("div", {'class': 'larch_head_tag'})
         from .images import favicon
@@ -44,23 +42,24 @@ class Info:
             'style': 'float:left;position:relative;top:-3px;padding-right:0.2em;'
         }, tail=f" {self.appname} ")
         p.elem('span', {'class': 'larch_head_tag_ver'}, text=f" {self.version} ")
-        p.elem('span', {'class': 'larch_head_tag_pth'}, text=f" {self.path} ")
-        from .images import camsyslogo_element
-        xsign << camsyslogo_element
-        if 'larch' in sys.modules:
-            from .images import georgiatechlogo_element
-            xsign << georgiatechlogo_element
+        if not self.minimal:
+            p.elem('span', {'class': 'larch_head_tag_pth'}, text=f" {self.path} ")
+            from .images import camsyslogo_element
+            xsign << camsyslogo_element
+            if 'larch' in sys.modules:
+                from .images import georgiatechlogo_element
+                xsign << georgiatechlogo_element
 
-        if self.extra:
-            v = '\n│'.join(sys.version.split('\n'))
-            xsign.elem('br')
-            xinfo = xsign.elem('div', {'class': 'larch_head_tag_more', 'style':'margin-top:10px; padding:7px'}, text=f'Python {v}')
-            xinfo.elem('br', tail=f"EXE - {sys.executable}")
-            xinfo.elem('br', tail=f"CWD - {os.getcwd()}")
-            xinfo.elem('br', tail=f"PATH - ")
-            ul = xinfo.elem('ul', {'style': 'margin-top:0; margin-bottom:0;'})
-            for p in sys.path:
-                ul.elem('li', text=p)
+            if self.extra:
+                v = '\n│'.join(sys.version.split('\n'))
+                xsign.elem('br')
+                xinfo = xsign.elem('div', {'class': 'larch_head_tag_more', 'style':'margin-top:10px; padding:7px'}, text=f'Python {v}')
+                xinfo.elem('br', tail=f"EXE - {sys.executable}")
+                xinfo.elem('br', tail=f"CWD - {os.getcwd()}")
+                xinfo.elem('br', tail=f"PATH - ")
+                ul = xinfo.elem('ul', {'style': 'margin-top:0; margin-bottom:0;'})
+                for p in sys.path:
+                    ul.elem('li', text=p)
 
         return style_prefix+xsign.tostring()
 
