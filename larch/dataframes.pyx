@@ -1248,6 +1248,14 @@ cdef class DataFrames:
 		else:
 			return 'ca'
 
+	@property
+	def data_ca_or_ce(self):
+		if self._data_ca is not None:
+			return self._data_ca
+		elif self._data_ce is not None:
+			return self._data_ce
+		return None
+
 	def data_co_combined(self):
 		"""Return a combined DataFrame in idco format that includes idco and idca data.
 
@@ -1256,10 +1264,7 @@ cdef class DataFrames:
 		pandas.DataFrame
 
 		"""
-		try:
-			ca = self._data_ca_or_ce
-		except MissingDataError:
-			ca = None
+		ca = self.data_ca_or_ce
 
 		if ca is not None and self._data_co is not None:
 			result = pandas.DataFrame(
@@ -1289,10 +1294,7 @@ cdef class DataFrames:
 			If neither data_ca nor data_ce is defined; in this case there is nothing to
 			combine and it is generally more efficient to just use data_co anyhow.
 		"""
-		try:
-			ca = self._data_ca_or_ce
-		except MissingDataError:
-			ca = None
+		ca = self.data_ca_or_ce
 		if ca is not None and self.data_co is not None:
 			idx_names = ca.index.names
 			result = ca.merge(
@@ -1384,7 +1386,7 @@ cdef class DataFrames:
 				missing_data.add(y)
 
 		if model._utility_ca is not None and len(model._utility_ca):
-			if self._data_ca_or_ce is None:
+			if self.data_ca_or_ce is None:
 				missing(f'idca data missing for utility')
 			else:
 				for i in model._utility_ca:
@@ -1392,7 +1394,7 @@ cdef class DataFrames:
 						missing(f'idca utility variable missing: {i.data}')
 
 		if model._quantity_ca is not None and len(model._quantity_ca):
-			if self._data_ca_or_ce is None:
+			if self.data_ca_or_ce is None:
 				missing(f'idca data missing for quantity')
 			else:
 				for i in model._quantity_ca:

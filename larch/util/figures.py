@@ -194,40 +194,38 @@ def distribution_on_idca_variable(
 		if range is None:
 			range = (x.min(), x.max())
 
-		x_midpoints = numpy.linspace(*range, 250)
-		y1 = kernel_result(x_midpoints)
-		y2 = kernel_choice(x_midpoints)
-
+		x_points = numpy.linspace(*range, 250)
+		y_points_1 = kernel_result(x_points)
+		y_points_2 = kernel_choice(x_points)
 
 	else:
-		y1, x1 = numpy.histogram(
+		if range is not None:
+			range_low, range_high = range
+			if range_low is None:
+				range_low = x.min()
+			if range_high is None:
+				range_high = x.max()
+			range = (range_low, range_high)
+
+		y_points_1, x1 = numpy.histogram(
 			x,
 			weights=model_result.reshape(-1),
 			bins=bins,
 			range=range,
 		)
 
-		y2, x2 = numpy.histogram(
+		y_points_2, x2 = numpy.histogram(
 			x,
 			weights=model_choice.reshape(-1),
 			bins=x1,
 		)
-		x_midpoints = (x1[1:] + x1[:-1]) / 2
 
-		x_doubled = numpy.zeros((x1.shape[0]-1)*2)
-		x_doubled[::2] = x1[:-1]
-		x_doubled[1::2] = x1[1:]
+		shift = 0.4 if discrete else 0
+		gap = 0.2 if discrete else 0
 
-		y_doubled = numpy.zeros((y1.shape[0])*2)
-		y_doubled_ = numpy.zeros((y1.shape[0])*2)
+		x_points, y_points_1 = pseudo_bar_data(x1 - shift, y_points_1, gap=gap)
+		x_points, y_points_2 = pseudo_bar_data(x1 - shift, y_points_2, gap=gap)
 
-		y_doubled[::2] = y1
-		y_doubled[1::2] = y1
-		y_doubled_[::2] = y2
-		y_doubled_[1::2] = y2
-
-		y1, y2 = y_doubled, y_doubled_
-		x_midpoints = x_doubled
 
 	if xlabel is None:
 		xlabel = x_label
@@ -239,13 +237,14 @@ def distribution_on_idca_variable(
 	else:
 		fig = None
 
-	if style=='kde':
-		ax.plot(x_midpoints, y1, label=prob_label, lw=1.5)
-		ax.fill_between(x_midpoints, y2, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
-	else:
-		ax.plot(x_midpoints, y1, label=prob_label, lw=1.5)
-		ax.fill_between(x_midpoints, y2, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
+	ax.plot(x_points, y_points_1, label=prob_label, lw=1.5)
+	ax.fill_between(x_points, y_points_2, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
 	ax.legend()
+	if not discrete:
+		ax.set_xlim(x_points[0], x_points[-1])
+	if x_discrete_labels is not None:
+		ax.set_xticks(numpy.arange(len(x_discrete_labels)))
+		ax.set_xticklabels(x_discrete_labels)
 	ax.set_xlabel(xlabel)
 	ax.set_yticks([])
 	ax.set_ylabel(ylabel)
