@@ -266,6 +266,7 @@ Model.distribution_on_idca_variable = distribution_on_idca_variable
 def distribution_on_idco_variable(
 		model,
 		x,
+		xlabel,
 		bins=None,
 		pct_bins=20,
 		figsize=(12, 4),
@@ -273,6 +274,32 @@ def distribution_on_idco_variable(
 		discrete=None,
 		**kwargs,
 ):
+	"""
+	Generate a figure of variables over a range of variable values.
+
+	Parameters
+	----------
+	model : Model
+		The discrete choice model to analyze.
+	x : str or array-like
+		The name of an `idco` variable, or an array giving its values.  If this name exactly
+		matches that of an `idco` column in the model's loaded `dataframes`, then
+		those values are used, otherwise the variable is loaded from the model's
+		`dataservice`.
+	xlabel : str, optional
+		A label to use for the x-axis of the resulting figure.  If not given,
+		the value of `x` is used if it is a string.  Set to `False` to omit the
+		x-axis label.
+	bins : int, optional
+		The number of equal-sized bins to use.
+	pct_bins : int or array-like, default 20
+		The number of equal-mass bins to use.
+	style : {'stacked', 'dataframe', 'many'}
+
+	Returns
+	-------
+	Elem
+	"""
 
 	if isinstance(x, str):
 		x_label = x
@@ -350,6 +377,11 @@ def distribution_on_idco_variable(
 		x_alignment = 'edge'
 		bin_widths = bins[1:] - bins[:-1]
 
+	if xlabel is None:
+		xlabel = x_label
+	if xlabel is False:
+		xlabel = None
+
 	if style == 'dataframe':
 
 		result = pandas.concat({
@@ -359,7 +391,7 @@ def distribution_on_idco_variable(
 		result['Count', '*'] = h_pr.sum(1)
 
 		if x_label:
-			result.index.name = x_label
+			result.index.name = xlabel
 
 		# result = pandas.DataFrame(
 		# 	{
@@ -412,9 +444,9 @@ def distribution_on_idco_variable(
 			ax1.set_xticks(numpy.arange(len(x_discrete_labels)))
 			ax1.set_xticklabels(x_discrete_labels)
 		ax1.set_title('Observed Shares')
-		if x_label:
-			ax0.set_xlabel(x_label)
-			ax1.set_xlabel(x_label)
+		if xlabel:
+			ax0.set_xlabel(xlabel)
+			ax1.set_xlabel(xlabel)
 
 		fig.legend(
 			loc='center right',
@@ -459,8 +491,8 @@ def distribution_on_idco_variable(
 			bbox_to_anchor=(0.5, 1.08)
 		)
 
-		if x_label:
-			axes[-1].set_xlabel(x_label)
+		if xlabel:
+			axes[-1].set_xlabel(xlabel)
 		#fig.tight_layout(pad=0.5)
 		result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
 		fig.clf()

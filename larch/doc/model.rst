@@ -53,4 +53,6 @@ Reporting and Outputs
 Visualization Tools
 -------------------
 
-.. automethod:: Model.distribution_on_continuous_idca_variable
+.. automethod:: Model.distribution_on_idca_variable
+
+.. automethod:: Model.distribution_on_idco_variable
