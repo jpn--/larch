@@ -15,6 +15,8 @@ import io
 #  /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
 # for more info on this topic see:
 #  https://stackoverflow.com/questions/52509602/cant-compile-c-program-on-a-mac-after-upgrade-to-mojave
+# For macOS 10.15 Catalina:
+#  https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15
 
 
 def read(path, encoding='utf-8'):
