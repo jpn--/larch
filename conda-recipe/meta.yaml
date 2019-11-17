@@ -58,7 +58,7 @@ requirements:
     - pytest >=4.0
     - openmp                 # [osx or linux]
     - jpn::xmle >=0.1.3
-    - jpn::addict_yaml
+    - addict >=2.2.1
     - pyyaml
     - mock        # travis needs this for some as yet unknown reason
 
@@ -87,7 +87,7 @@ requirements:
     - pytest >=4.0
     - openmp                 # [osx or linux]
     - jpn::xmle >=0.1.3
-    - jpn::addict_yaml
+    - addict >=2.2.1
     - pyyaml
 
 #build:

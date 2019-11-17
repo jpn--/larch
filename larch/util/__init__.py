@@ -1,43 +1,9 @@
 from .signal_dict import SignalDict
 
-import addict_yaml
 import pprint
 import datetime
+from .addict_yaml import Dict
 
-class Dict(addict_yaml.Dict):
-
-	def __xml__(self):
-		from xmle import Elem
-		x = Elem('div')
-		t = x.elem('table', style="margin-top:1px;")
-		if len(self):
-			tr = t.elem('tr')
-			tr.elem('th', text="key")
-			tr.elem('th', text='value', style='text-align:left;')
-			for k,v in self.items():
-				tr = t.elem('tr')
-				tr.elem('td', text=str(k))
-				try:
-					v_ = v.__xml__()
-				except AttributeError:
-					tr.elem('td', text=str(v), style='text-align:left;')
-				else:
-					tr.elem('td') << v_
-		else:
-			tr = t.elem('tr')
-			tr.elem('td', text="<empty>")
-		return x
-
-	def _repr_html_(self):
-		return self.__xml__().tostring()
-
-	def _ipython_display_(self):
-		raise AttributeError('_ipython_display_')
-
-	def __getattr__(self, item):
-		if item[:5]=="_repr" and item[-1]=="_":
-			raise AttributeError(item)
-		return self.__getitem__(item)
 
 
 def _prettyprint_fallback(x):
