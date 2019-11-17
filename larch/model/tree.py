@@ -21,7 +21,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			super().__init__(*arg, **kwarg)
 			self._root_id = root_id
 			self._suggested_elemental_order = suggested_elemental_order
-		if self._root_id not in self.node:
+		if self._root_id not in self.nodes:
 			self.add_node(root_id, name='_root_', root=True)
 		self._clear_caches()
 
@@ -163,7 +163,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		return self.elementals + tuple(self.topological_sorted_no_elementals)
 
 	def node_name(self, code):
-		return self.node[code].get('name', str(code))
+		return self.nodes[code].get('name', str(code))
 
 	@property
 	def standard_sort_names(self):
@@ -521,7 +521,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 		# Add every node in every path from the root to each `including_nodes`
 		for each_node in including_nodes:
-			if each_node in self.node:
+			if each_node in self.nodes:
 				for i in all_simple_paths(self, source, each_node):
 					for j in i:
 						shows.add(j)
