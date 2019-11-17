@@ -222,7 +222,16 @@ def statistics_for_array5(arr, histogram=5, *args, **kwargs):
 def statistics_for_dataframe(df, histogram=True, ch_weights=None, avail=None, **kwargs):
 	s = {}
 	for col in df.columns:
-		if numpy.issubdtype(df.dtypes[col], numpy.floating):
+		if isinstance(df.dtypes[col], pandas.CategoricalDtype):
+			s[col] = statistics_for_array(
+				df[col],
+				varname=col,
+				histogram=histogram,
+				ch_weights=ch_weights,
+				avail=avail,
+				**kwargs,
+			)
+		elif numpy.issubdtype(df.dtypes[col], numpy.floating):
 			s[col] = statistics_for_array(
 				df[col],
 				varname=col,
