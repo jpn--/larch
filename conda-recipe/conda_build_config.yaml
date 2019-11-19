@@ -7,4 +7,5 @@ c_compiler:
 numpy: 
   - 1.15
   
-  
+CONDA_BUILD_SYSROOT:
+  - /opt/MacOSX10.9.sdk        # [osx]

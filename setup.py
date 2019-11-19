@@ -38,9 +38,6 @@ def version(path):
 
 VERSION = version('larch/__init__.py')
 
-LARCH_COMPILER = "clang" #  "gcc"
-
-os.environ["CC"] = LARCH_COMPILER
 
 def find_pyx(path='.'):
     pyx_files = []
@@ -75,39 +72,39 @@ elif platform.system() == 'Linux':
         "-fopenmp",
     ]
     libraries = [
-        'iomp5',
+        # 'iomp5',
         'pthread',
     ]
 else:
-    if LARCH_COMPILER == 'gcc':
-        ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
-        os.environ['CFLAGS'] = '-openmp'
-        include_dirs = ['.', numpy.get_include(), ]
-        library_dirs = []
-        extra_compile_args = [
-            # "-openmp",
-        ]
-        extra_link_args = [
-           # '-openmp',
-        ]
-        libraries = [
-            'iomp5',
-            'pthread',
-        ]
-    else:
-        os.environ['CFLAGS'] = '-fopenmp'
-        include_dirs = ['.', numpy.get_include(), ]
-        library_dirs = []
-        extra_compile_args = [
-            "-fopenmp",
-        ]
-        extra_link_args = [
-           '-fopenmp',
-        ]
-        libraries = [
-            'iomp5',
-            'pthread',
-        ]
+    # if LARCH_COMPILER == 'gcc':
+    ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
+    os.environ['CFLAGS'] = '-openmp'
+    include_dirs = ['.', numpy.get_include(), ]
+    library_dirs = []
+    extra_compile_args = [
+        # "-openmp",
+    ]
+    extra_link_args = [
+       # '-openmp',
+    ]
+    libraries = [
+        # 'iomp5',
+        'pthread',
+    ]
+    # else:
+    #     os.environ['CFLAGS'] = '-fopenmp'
+    #     include_dirs = ['.', numpy.get_include(), ]
+    #     library_dirs = []
+    #     extra_compile_args = [
+    #         "-fopenmp",
+    #     ]
+    #     extra_link_args = [
+    #        '-fopenmp',
+    #     ]
+    #     libraries = [
+    #         'iomp5',
+    #         'pthread',
+    #     ]
 
 from pprint import pprint
 pprint(os.environ)
@@ -154,11 +151,9 @@ setup(
         'beautifulsoup4 >=4.6',
         'seaborn >=0.8.1',
         'addict >=2.2.1',
-        # 'xmle >=0.1.3',
-    ] + [
-        # 'sqlite >=3.21',
-    ] if platform.system() != 'Windows' else [],
-    url='http://larch.newman.me',
+        'xmle >=0.1.3',
+    ],
+    url='https://larch.newman.me',
     author='Jeffrey Newman',
     author_email='jeff@newman.me',
     description='A framework for estimating and applying discrete choice models.',
@@ -176,13 +171,3 @@ setup(
 )
 
 
-
-
-###
-# python setup.py build_ext --inplace
-#
-
-#
-# extra_compile_args = ['-fopenmp'],
-# extra_link_args = ['-fopenmp'],
-#
