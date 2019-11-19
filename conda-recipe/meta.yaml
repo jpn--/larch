@@ -31,11 +31,11 @@ requirements:
     - pip
     - conda-forge::llvm-openmp  # [osx]
     - conda-forge::cython >=0.29
-    - conda-forge::libcblas
+    - conda-forge::libcblas   # [not win]
     - conda-forge::numpy
     - conda-forge::scipy >=0.17.0
     - conda-forge::joblib >=0.11
-    - conda-forge::blas=*=openblas
+    - conda-forge::blas=*=openblas  # [not win]
 
   run:
     - python {{ python }}
