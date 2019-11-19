@@ -2,7 +2,7 @@ python:
   - 3.7
 
 c_compiler:
-  - clang
+  - clang     # [osx]
   
 numpy: 
   - 1.15
