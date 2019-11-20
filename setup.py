@@ -146,7 +146,6 @@ setup(
         'networkx >=2.0',
         'appdirs >=1.4',
         'docutils >=0.13.1',
-        'ghalton >=0.6.1',
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
         'seaborn >=0.8.1',
