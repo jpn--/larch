@@ -7,15 +7,8 @@ source:
 
 build:
   number: 1
-  skip: True  # [py<37 or py>37]
+  skip: True  # [py<37]
   script:
-    #- rm $PREFIX/include/cblas.h  # [not win and not osx]
-    - del /f %LIBRARY_INC%\cblas.h  # [win]
-    - echo CC is $CC
-    - echo CXX is $CXX
-    - echo CFLAGS is $CFLAGS
-    - echo CXXFLAGS is $CXXFLAGS
-    - echo LDFLAGS is $LDFLAGS
     - "{{ PYTHON }} -m pip install . --no-deps -vv"
 
 requirements:
