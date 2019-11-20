@@ -24,7 +24,7 @@ requirements:
     - {{ compiler('c') }}
     - conda-forge::compilers
     - conda-forge::llvm-openmp  # [osx]
-    - conda-forge::blas=*=openblas
+    #- conda-forge::blas=*=openblas
 
   host:
     - python
@@ -32,7 +32,7 @@ requirements:
     - conda-forge::llvm-openmp  # [osx]
     - conda-forge::cython >=0.29
     - conda-forge::numpy
-    - conda-forge::blas=*=openblas  # [not win]
+    #- conda-forge::blas=*=openblas  # [not win]
 
   run:
     - python {{ python }}
