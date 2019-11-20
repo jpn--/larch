@@ -560,11 +560,11 @@ cdef class DBF:
 		if fields_float:
 			df_float = pandas.DataFrame(index=numpy.arange(startrow, stoprow), columns=fields_float, dtype=numpy.float64 )
 			self._load_dataframe_arr_float(startrow, stoprow, df_float.values)
-			df = pandas.concat([df, df_float], axis=1, join_axes=[df.index])
+			df = pandas.concat([df, df_float], axis=1).reindex(index=df.index)
 		if fields_string:
 			df_string = pandas.DataFrame(index=numpy.arange(startrow, stoprow), columns=fields_string, dtype=str )
 			self._load_dataframe_arr_string(startrow, stoprow, df_string.values, strip_whitespace)
-			df = pandas.concat([df, df_string], axis=1, join_axes=[df.index])
+			df = pandas.concat([df, df_string], axis=1).reindex(index=df.index)
 		if preserve_order:
 			cols = [i for i in self.fieldnames() if i in df.columns]
 			df = df[cols]
