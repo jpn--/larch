@@ -38,7 +38,7 @@ Model 18's nesting structure groups all motorized alternatives. (`pp. 176 <http:
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

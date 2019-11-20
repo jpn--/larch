@@ -34,7 +34,7 @@ We will create seperate nests for the motorized and non-motorized alternatives.
 That's it! We're basically ready to estimate.
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

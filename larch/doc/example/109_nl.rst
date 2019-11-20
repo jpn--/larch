@@ -57,7 +57,7 @@ To create a new nest, we can use the new_nest command, although we'll need to kn
 alternative codes are for the alternatives in our dataset. To find out, we can do:
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.dataservice.alternatives
 	[(1, 'Train'), (2, 'SM'), (3, 'Car')]
@@ -93,7 +93,7 @@ and only cases that evaluate `True` for both are selected.
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='slsqp')

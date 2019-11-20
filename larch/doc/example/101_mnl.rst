@@ -119,7 +119,7 @@ source to create these computational arrays.
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='SLSQP')
@@ -139,7 +139,7 @@ We can estimate the models and check the results match up with those given by Bi
 
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
 	                    value    std err  t stat  robust std err  robust t stat

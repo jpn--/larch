@@ -71,7 +71,7 @@ that have more than one car. (`pp. 133 <http://www.caee.utexas.edu/prof/Bhat/COU
 	)
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

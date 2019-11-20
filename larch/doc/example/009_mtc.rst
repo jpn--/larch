@@ -52,7 +52,7 @@ Model 9 is formulated the same way as Model 8, only with the TTR set to 4. (`pp.
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

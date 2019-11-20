@@ -39,7 +39,7 @@ Model 26's nesting structure groups motorized and shared ride alternatives. (`pp
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 	:skipif: True
 
 	>>> m.load_data()

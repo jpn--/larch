@@ -57,7 +57,7 @@ To accomplish this, we give the income parameters for all three alternatives the
 	m.title = "MTC Example 2, Motorized"
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()
@@ -67,7 +67,7 @@ To accomplish this, we give the income parameters for all three alternatives the
 	-3628.285...
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
 	                      value  std err   t stat  robust std err  robust t stat

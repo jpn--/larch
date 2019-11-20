@@ -57,7 +57,7 @@ We set the terms to zero can be done by omitting the terms altogether.
 	m.title = "MTC Example 3, Zeroed Shared"
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()
