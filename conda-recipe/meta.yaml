@@ -15,7 +15,6 @@ requirements:
 
   build:
     - {{ compiler('c') }}
-    - conda-forge::compilers
     - conda-forge::llvm-openmp  # [osx]
 
   host:
