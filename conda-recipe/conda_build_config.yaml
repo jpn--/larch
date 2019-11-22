@@ -3,7 +3,8 @@ python:
 
 c_compiler:
   - clang     # [osx]
-  
+  - vs2015    # [win]
+
 numpy: 
   - 1.15
   
