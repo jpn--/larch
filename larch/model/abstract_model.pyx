@@ -68,30 +68,37 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
 			Values for the parameters.  See :ref:`set_values` for details.
 		start_case : int, default 0
-			The first case to include in the log likelihood computation.  To include all
-			cases, start from 0 (the default).
+			The first case to include in the log likelihood computation.
+			To include all cases, start from 0 (the default).
 		stop_case : int, default -1
-			One past the last case to include in the log likelihood computation.  This is processed as usual for
-			Python slicing and iterating, and negative values count backward from the end.  To include all cases,
-			end at -1 (the default).
+			One past the last case to include in the log likelihood
+			computation.  This is processed as usual for Python slicing
+			and iterating, and negative values count backward from the
+			end.  To include all cases, end at -1 (the default).
 		step_case : int, default 1
-			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
-			Python slicing and iterating.  To include all cases, step by 1 (the default).
+			The step size of the case iterator to use in likelihood
+			calculation.  This is processed as usual for Python slicing
+			and iterating.  To include all cases, step by 1 (the default).
 		persist : int, default 0
-			Whether to return a variety of internal and intermediate arrays in the result dictionary.
-			If set to 0, only the final `ll` value is included.
+			Whether to return a variety of internal and intermediate
+			arrays in the result dictionary. If set to 0, only the
+			final `ll` value is included.
 		leave_out, keep_only, subsample : int, optional
 			Settings for cross validation calculations.
-			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
-			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+			If `leave_out` and `subsample` are set, then case rows
+			where rownumber % subsample == leave_out are dropped.
+			If `keep_only` and `subsample` are set, then only case
+			rows where rownumber % subsample == keep_only are used.
 		return_series : bool
-			Deprecated, no effect.  Derivatives are always returned as a Series.
+			Deprecated, no effect.  Derivatives are always returned
+			as a Series.
 
 		Returns
 		-------
 		dictx
-			The log likelihood is given by key 'll' and the first derivative by key 'dll'.
-			Other arrays are also included if `persist` is set to True.
+			The log likelihood is given by key 'll' and the first
+			derivative by key 'dll'. Other arrays are also included
+			if `persist` is set to True.
 
 		"""
 		raise NotImplementedError("abstract base class, use a derived class instead")
@@ -100,14 +107,17 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		"""
 		Compute a log likelihood value and it first derivative.
 
-		This is a convenience function that returns these values in a 2-tuple instead of a dictx,
-		for compatibility with scipy.optimize.  It accepts all the same input arguments as :ref:`loglike2`.
+		This is a convenience function that returns these values
+		in a 2-tuple instead of a dictx, for compatibility with
+		scipy.optimize.  It accepts all the same input arguments
+		as :ref:`loglike2`.
 
 		Returns
 		-------
 		Tuple[float, array-like]
-			The log likelihood is given by key 'll' and the first derivative by key 'dll'.
-			Other arrays are also included if `persist` is set to True.
+			The log likelihood is given by key 'll' and the first
+			derivative by key 'dll'. Other arrays are also included
+			if `persist` is set to True.
 
 		"""
 		result = self.loglike2(*args, **kwargs)
@@ -123,41 +133,49 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			leave_out=-1, keep_only=-1, subsample=-1,
 	):
 		"""
-		Compute a log likelihood value, it first derivative, and the BHHH approximation of the Hessian.
+		Compute a log like, it first deriv, and the BHHH approx of the Hessian.
 
 		The `BHHH algorithm <https://en.wikipedia.org/wiki/Berndt–Hall–Hall–Hausman_algorithm>`
-		employs a matrix computated as the sum of the casewise outer product of the gradient, to
-		approximate the hessian matrix.
+		employs a matrix computated as the sum of the casewise
+		outer product of the gradient, to approximate the
+		hessian matrix.
 
 		Parameters
 		----------
 		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
 			Values for the parameters.  See :ref:`set_values` for details.
 		start_case : int, default 0
-			The first case to include in the log likelihood computation.  To include all
-			cases, start from 0 (the default).
+			The first case to include in the log likelihood computation.
+			To include all cases, start from 0 (the default).
 		stop_case : int, default -1
-			One past the last case to include in the log likelihood computation.  This is processed as usual for
-			Python slicing and iterating, and negative values count backward from the end.  To include all cases,
-			end at -1 (the default).
+			One past the last case to include in the log likelihood
+			computation.  This is processed as usual for Python slicing
+			and iterating, and negative values count backward from the
+			end.  To include all cases, end at -1 (the default).
 		step_case : int, default 1
-			The step size of the case iterator to use in likelihood calculation.  This is processed as usual for
-			Python slicing and iterating.  To include all cases, step by 1 (the default).
+			The step size of the case iterator to use in likelihood
+			calculation.  This is processed as usual for Python slicing
+			and iterating.  To include all cases, step by 1 (the default).
 		persist : int, default False
-			Whether to return a variety of internal and intermediate arrays in the result dictionary.
-			If set to 0, only the final `ll` value is included.
+			Whether to return a variety of internal and intermediate
+			arrays in the result dictionary. If set to 0, only the final
+			`ll` value is included.
 		leave_out, keep_only, subsample : int, optional
 			Settings for cross validation calculations.
-			If `leave_out` and `subsample` are set, then case rows where rownumber % subsample == leave_out are dropped.
-			If `keep_only` and `subsample` are set, then only case rows where rownumber % subsample == keep_only are used.
+			If `leave_out` and `subsample` are set, then case rows where
+			rownumber % subsample == leave_out are dropped. If `keep_only`
+			and `subsample` are set, then only case rows where
+			rownumber % subsample == keep_only are used.
 		return_series : bool
-			Deprecated, no effect.  Derivatives are always returned as a Series.
+			Deprecated, no effect.  Derivatives are always returned
+			as a Series.
 
 		Returns
 		-------
 		dictx
-			The log likelihood is given by key 'll', the first derivative by key 'dll', and the BHHH matrix by 'bhhh'.
-			Other arrays are also included if `persist` is set to a non-zero value.
+			The log likelihood is given by key 'll', the first derivative
+			by key 'dll', and the BHHH matrix by 'bhhh'. Other arrays are
+			also included if `persist` is set to a non-zero value.
 		"""
 		raise NotImplementedError("abstract base class, use a derived class instead")
 
