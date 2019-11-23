@@ -2,6 +2,7 @@ from ..model import Model
 import numpy
 from pytest import approx
 import pandas
+import pytest
 
 def qmnl_straw_man_model_1():
 
@@ -61,3 +62,16 @@ def test_qmnl():
 
 	for n in names:
 		assert (correct.loc[n] == approx(dll.loc[n]))
+
+@pytest.mark.skip(reason="test is for manual use to check multithreading")
+def test_saturate_cpu(howlong=15):
+	pq = qmnl_straw_man_model_1()
+	pq.initialize_graph(alternative_codes=[1,2,3,4,5,6])
+	pq.graph.add_node(10, children=(5, 6), parameter='MU_nonmotor')
+	pq.graph.add_node(11, children=(1, 2, 3), parameter='MU_car')
+	assert( pq.loglike() == approx(-8486.55377320886))
+
+	import time
+	starttime = time.time()
+	while time.time() < starttime + howlong:
+		dll = pq.d_loglike()
