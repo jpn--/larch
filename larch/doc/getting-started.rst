@@ -6,6 +6,16 @@ Getting Started
 
 .. _installation:
 
+Quick Start
+-----------
+
+If you already have conda installed, you can install Larch from conda-forge in a
+new environment called `arboretum` like this:
+
+.. code-block:: console
+
+	conda create -n arboretum -c conda-forge larch
+
 Installing Python
 -----------------
 
