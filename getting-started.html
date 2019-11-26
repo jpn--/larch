@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started &mdash; Larch 5.2.12 documentation</title>
+  <title>Getting Started &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -92,11 +92,12 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-python">Installing Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#managing-environments">Managing Environments</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Quick Start</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#creating-an-environment">Creating an Environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Using an Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Using an Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#running-jupyter">Running Jupyter</a></li>
@@ -201,6 +202,24 @@
 </style>
 <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="quick-start">
+<span id="quickstart"></span><h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>If you already have conda installed, you can install Larch from conda-forge in a
+new environment called <cite>arboretum</cite> like this:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n arboretum -c conda-forge larch</span>
+</pre></div>
+</div>
+<p>Alternatively, if you would prefer to run in a completely isolated container,
+you can install <a class="reference external" href="https://www.docker.com/">Docker</a> and run the following
+command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run -it -p 8857:8857 -v &quot;%cd%&quot;:/home/paladin/work wirepaladin/sanfrancisco</span>
+</pre></div>
+</div>
+<p>This will install a container containing the entire conda package and everything
+needed to run Larch, including JupyterLab.  Once the container is downloaded and
+running, point your browser at <a class="reference external" href="http://localhost:8857">http://localhost:8857</a>
+to access JupyterLab.</p>
+</div>
 <div class="section" id="installing-python">
 <span id="installation"></span><h2>Installing Python<a class="headerlink" href="#installing-python" title="Permalink to this headline">¶</a></h2>
 <p>To run Larch, you’ll need to have the 64 bit version of Python 3.7, plus a handful
@@ -245,12 +264,12 @@ will not break another project.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">The instructions below provide only the most basic steps to
 set up and use an environment.  Much more extensive documentation
-on <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html" title="(in conda v4.7.5.post26+fa4c53f1)"><span class="xref std std-doc">managing environments</span></a>
+on <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html" title="(in conda v4.8.0rc0.post57+89d91d63)"><span class="xref std std-doc">managing environments</span></a>
 is available in the conda documentation
 itself.</p>
 </div>
-<div class="section" id="quick-start">
-<h3>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Quick Start<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>If you installed the “Miniconda” version of the anaconda package, you
@@ -310,7 +329,6 @@ file that looks something like this:</p>
 <span class="nt">channels</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">defaults</span>
-<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">jpn</span>
 
 <span class="nt">dependencies</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">python=3.7</span>
@@ -335,8 +353,8 @@ is installed using pip instead of conda.  This is
 if the package is also available from conda, but may be necessary to
 install certain packages that are available only on PyPI.</p>
 </div>
-<div class="section" id="id1">
-<span id="id2"></span><h3>Using an Environment<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<span id="id3"></span><h3>Using an Environment<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>When using the terminal (MacOS/Linux) or an Anaconda Prompt (Windows), the
 current environment name will be shown as part of the prompt:</p>
 <div class="highlight-batch notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>base<span class="p">)</span> C:\Users\cfinley&gt;
@@ -410,7 +428,7 @@ you might find some useful tips <a class="reference internal" href="compiling.ht
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

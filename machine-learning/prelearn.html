@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Using Scikit-Learn within Larch &mdash; Larch 5.2.12 documentation</title>
+  <title>Using Scikit-Learn within Larch &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -195,7 +195,7 @@
 <h1>Using Scikit-Learn within Larch<a class="headerlink" href="#using-scikit-learn-within-larch" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="larch.prelearning.Prelearner">
-<em class="property">class </em><code class="descclassname">larch.prelearning.</code><code class="descname">Prelearner</code><span class="sig-paren">(</span><em>dataframes</em>, <em>ca_columns=None</em>, <em>co_columns=None</em>, <em>classifier=None</em>, <em>fit=True</em>, <em>cache_file=None</em>, <em>output_name='prelearned_utility'</em>, <em>appname='larch'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.prelearning.Prelearner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">larch.prelearning.</code><code class="descname">Prelearner</code><span class="sig-paren">(</span><em>dataframes</em>, <em>ca_columns=None</em>, <em>co_columns=None</em>, <em>classifier=None</em>, <em>fit=True</em>, <em>cache_file=None</em>, <em>output_name='prelearned_utility'</em>, <em>appname='larch'</em>, <em>grid_cv_params=None</em>, <em>grid_cv_kwds=None</em>, <em>validation_dataframes=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#larch.prelearning.Prelearner" title="Permalink to this definition">¶</a></dt>
 <dd><p>A prelearner for use with Larch.</p>
 <p>A prelearner uses a machine learning classifier to make an initial
 prediction of the result.  This initial prediction is then added
@@ -206,19 +206,27 @@ classifier.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>training_X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – The exogenous variables.</li>
-<li><strong>training_Y</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – The observed choices in the training data.</li>
-<li><strong>training_W</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a><em>, </em><em>optional</em>) – The weights.</li>
+<li><strong>training_X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a>) – The exogenous variables.</li>
+<li><strong>training_Y</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a>) – The observed choices in the training data.</li>
+<li><strong>training_W</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a><em>, </em><em>optional</em>) – The weights.</li>
 <li><strong>classifier</strong> (<em>sklearn Classifier</em><em> or </em><em>Regressor</em>) – This is the class object for the selected classifier, not
 an existing instance.  This classifier or Regressor will be
 instantiated and trained using the data above to generate
 the prediction.</li>
-<li><strong>fit</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>default True</em>) – Whether to fit this prelearner automatically on construction.</li>
+<li><strong>fit</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em> or </em><em>False</em><em>, </em><em>optional</em>) – A dictionary of arguments to pass to the <cite>fit</cite> method of the
+classifier, or set to False to not fit the classifier
+during the initialization of this object.</li>
 <li><strong>cache_file</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – A cache file name to store the trained prelearner.  If just a filename is given,
 it will be stored in <cite>appdirs.user_cache_file()</cite>. If instead an absolute path or
 a relative path beginning with ‘.’ is given, that location will be used.
 If the file exists, it will be loaded instead of re-training.</li>
 <li><strong>output_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>default 'prelearned_utility'</em>) – The name of the output column from this prelearner.</li>
+<li><strong>grid_cv_params</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em> or </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>]</em><em>, </em><em>optional</em>) – If given, this is used as the <cite>param_grid</cite> argument
+to initialize a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v0.21.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.GridSearchCV</span></code></a>
+wrapped around the classifier, instead of using the
+classifier directly.</li>
+<li><strong>grid_cv_kwds</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – If <cite>grid_cv_params</cite> is given, this dict gives other keyword
+arguments given to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v0.21.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.GridSearchCV</span></code></a>.</li>
 <li><strong>**kwargs</strong> – Any other keyword arguments are passed through to the classifier’s
 constructor.</li>
 </ul>
@@ -257,7 +265,7 @@ constructor.</li>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

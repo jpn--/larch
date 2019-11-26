@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>22: MTC Motorized and Non-Motorized Nested Mode Choice &mdash; Larch 5.2.12 documentation</title>
+  <title>22: MTC Motorized and Non-Motorized Nested Mode Choice &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -236,22 +236,22 @@
 <a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">Self Instructing Manual</a>. (pp. 179)</p>
 <p>This model is a nested logit model using the same utility function as model 17, so
 we can start with that model and just add the nesting structure.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We will create seperate nests for the motorized and non-motorized alternatives.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">motorized</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_motor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Motorized&#39;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">motorized</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_motor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Motorized&#39;</span><span class="p">)</span>
 <span class="n">nonmotorized</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_nonmotor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Nonmotorized&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>That’s it! We’re basically ready to estimate.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3441.67...</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;initvalue&#39;</span><span class="p">,</span><span class="s1">&#39;nullvalue&#39;</span><span class="p">,</span><span class="s1">&#39;minimum&#39;</span><span class="p">,</span><span class="s1">&#39;maximum&#39;</span><span class="p">,</span><span class="s1">&#39;holdfast&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;initvalue&#39;</span><span class="p">,</span><span class="s1">&#39;nullvalue&#39;</span><span class="p">,</span><span class="s1">&#39;minimum&#39;</span><span class="p">,</span><span class="s1">&#39;maximum&#39;</span><span class="p">,</span><span class="s1">&#39;holdfast&#39;</span><span class="p">]])</span>
 <span class="go">                               value  initvalue  nullvalue  minimum  maximum  holdfast</span>
 <span class="go">Category  Parameter</span>
 <span class="go">LOS       costbyincome        -0.039        0.0        0.0     -inf      inf         0</span>
@@ -316,7 +316,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

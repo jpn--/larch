@@ -80,7 +80,7 @@ and only cases that evaluate `True` for both are selected.
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='SLSQP')
@@ -92,7 +92,7 @@ We can estimate the models and check the results match up with those given by Bi
 	1.124734...
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.parameter_summary()
 	Category  Parameter     Value   Std Err  t Stat  Null Value

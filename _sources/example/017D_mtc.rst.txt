@@ -70,7 +70,7 @@ Model 17D segments the market by gender for females. (`pp. 135 <http://www.caee.
 	)
 		
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

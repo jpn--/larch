@@ -15,13 +15,11 @@
 	larch._doctest_mode_ = True
 
 This example is a mode choice model built using the Swissmetro example dataset.
-First we create the DB and Model objects:
+First we can create a Model object:
 
 .. testcode::
 
-	import larch.examples
-	d = larch.examples.SWISSMETRO()
-	m = larch.Model(dataservice=d)
+	m = larch.Model()
 
 We can attach a title to the model. The title does not affect the calculations
 as all; it is merely used in various output report styles.
@@ -30,15 +28,33 @@ as all; it is merely used in various output report styles.
 
 	m.title = "swissmetro example 01 (simple logit)"
 
-We need to identify the availability and choice variables. These have been conveniently
-set up in the data.
+We need to identify the availability and choice variables.
+The Swissmetro dataset, as with all Biogeme data, is only
+in `co` format, so we must define alternative
+availability as an expression for each alternative, using a
+dictionary to map alternative codes and expressions.
 
 .. testcode::
 
-	m.availability_var = 'avail'
-	m.choice_ca_var = 'choice'
+	m.availability_co_vars = {
+	    1: "TRAIN_AV * (SP!=0)",
+	    2: "SM_AV",
+	    3: "CAR_AV * (SP!=0)",
+	}
 
-The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+In the Swissmetro example dataset, as in many discrete choice
+modeling applications, there is one and only one chosen
+alternative for each case, so the choices can be described
+as a single expression that evaluates to the code of the
+chosen alternative.
+
+.. testcode::
+
+	m.choice_co_code = 'CHOICE'
+
+We will also write utility functions for each alternative.
+Since the data is only in `co` format, we must use only the
+`utility_co` form for the utility functions.
 
 .. testcode::
 
@@ -63,18 +79,47 @@ a rational order.  We can use the ordering method to do this:
 		("LOS", 'B_.*',),
 	]
 
-The swissmetro example models exclude some observations.  We will use the selector
-to identify the observations we would like to keep.  There are two selector criteria,
-and only cases that evaluate `True` for both are selected.
+Now we can prepare the data, which is available in the data warehouse that
+comes with Larch.
 
 .. testcode::
 
-	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+	from larch.data_warehouse import example_file
+	import pandas
+	raw_data = pandas.read_csv(example_file('swissmetro.csv.gz'))
+
+The swissmetro example models exclude some observations.  We will use pandas
+to identify the observations we would like to keep.
+
+.. testcode::
+
+	keep = raw_data.eval("PURPOSE in (1,3) and CHOICE != 0")
+	selected_data = raw_data[keep]
+
+When you've created the data you need, you can pass the dataframe to
+the larch.DataFrames constructor.  Since the *swissmetro* data is in
+``idco`` format, we'll need to explicitly identify the alternative
+codes as well.
+
+.. testcode::
+
+	dfs = larch.DataFrames(selected_data, alt_codes=[1,2,3])
+
+You might notice we have not carefully constructed this object to
+include only the relevant data or the various simple transformations
+used in the utility definition above.  Larch can do this itself, if
+you assign this DataFrames not as the actual set of data used in model
+estimation, but rather as the `dataservice` that can be used as the
+source to create these computational arrays.
+
+.. testcode::
+
+	m.dataservice = dfs
 
 We can estimate the models and check the results match up with those given by Biogeme:
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike(method='SLSQP')
@@ -94,7 +139,7 @@ We can estimate the models and check the results match up with those given by Bi
 
 
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])  # parameter frame, ordered
 	                    value    std err  t stat  robust std err  robust t stat

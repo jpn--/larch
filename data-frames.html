@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DataFrames &mdash; Larch 5.2.12 documentation</title>
+  <title>DataFrames &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -194,7 +194,7 @@
 </style>
 <div class="section" id="dataframes">
 <h1>DataFrames<a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h1>
-<p>A <a class="reference internal" href="#larch.DataFrames" title="larch.DataFrames"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrames</span></code></a> is essentially a collection of related <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>s,
+<p>A <a class="reference internal" href="#larch.DataFrames" title="larch.DataFrames"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrames</span></code></a> is essentially a collection of related <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>s,
 which represent <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> and <a class="reference internal" href="data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data features.</p>
 <dl class="class">
 <dt id="larch.DataFrames">
@@ -205,15 +205,15 @@ which represent <a class="reference internal" href="data-fundamentals.html#idco"
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>co</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing idco format data, with one row per case.
+<li><strong>co</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a>) – A dataframe containing idco format data, with one row per case.
 The index contains the caseid’s.</li>
-<li><strong>ca</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing idca format data, with one row per alternative.
+<li><strong>ca</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a>) – A dataframe containing idca format data, with one row per alternative.
 The index should be a two-level multi-index, with the first level
 containing the caseid’s and the second level containing the altid’s.</li>
-<li><strong>ch</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a>) – A dataframe containing choice data, with one row per case and one column
+<li><strong>ch</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a>) – A dataframe containing choice data, with one row per case and one column
 per alternative.
 The index contains the caseid’s, and the columns contain the alt_codes.</li>
-<li><strong>wt</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.24.2)"><em>pandas.DataFrame</em></a><em> or </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.24.2)"><em>pandas.Series</em></a><em>, </em><em>optional</em>) – A one-column dataframe, or series, containing idco format data, with one
+<li><strong>wt</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><em>pandas.DataFrame</em></a><em> or </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><em>pandas.Series</em></a><em>, </em><em>optional</em>) – A one-column dataframe, or series, containing idco format data, with one
 row per case, containing the case-weights.</li>
 <li><strong>alt_names</strong> (<em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>]</em>) – A sequence of alternative names as str.</li>
 <li><strong>alt_codes</strong> (<em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>]</em>) – A sequence of alternative codes.</li>
@@ -268,7 +268,7 @@ that appear in <cite>alternative_codes</cite>.</td>
 <dt id="larch.DataFrames.data_co">
 <code class="descname">data_co</code><a class="headerlink" href="#larch.DataFrames.data_co" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pandas.DataFrame in <a class="reference internal" href="data-fundamentals.html#idco"><span class="std std-ref">idco</span></a> format.</p>
-<p>This DataFrame should have a simple <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index" title="(in pandas v0.24.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Index</span></code></a> as the index, where
+<p>This DataFrame should have a simple <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index" title="(in pandas v0.25.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Index</span></code></a> as the index, where
 the index values are is the caseids.</p>
 </dd></dl>
 
@@ -326,7 +326,7 @@ alternative codes.</p>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

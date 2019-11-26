@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1: MTC MNL Mode Choice &mdash; Larch 5.2.12 documentation</title>
+  <title>1: MTC MNL Mode Choice &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -234,14 +234,14 @@
 <h1>1: MTC MNL Mode Choice<a class="headerlink" href="#mtc-mnl-mode-choice" title="Permalink to this headline">¶</a></h1>
 <p>This example is a mode choice model built using the MTC example dataset.
 First we create the DB and Model objects:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then we can build up the utility function.  We’ll use some <a class="reference internal" href="../data-fundamentals.html#idco"><span class="std std-ref">idco Format</span></a> data first, using
 the <cite>Model.utility.co</cite> attribute.  This attribute is a dict-like object, to which
 we can assign <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFunction</span></code> objects for each alternative code.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="k">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR3P&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAN&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#4&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
@@ -254,22 +254,22 @@ is only a single <code class="xref py py-class docutils literal notranslate"><sp
 using <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data.  Because the data is structured to vary across alternatives,
 the parameters (and thus the structure of the <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearFunction</span></code>) does not need
 to vary across alternatives.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;tottime&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;tottime&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Lastly, we need to identify <a class="reference internal" href="../data-fundamentals.html#idca"><span class="std std-ref">idca Format</span></a> data that gives the availability for each
 alternative, as well as the number of times each alternative is chosen. (In traditional
 discrete choice analysis, this is often 0 or 1, but it need not be binary, or even integral.)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
 </pre></div>
 </div>
 <p>And let’s give our model a descriptive title.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;MTC Example 1 (Simple MNL)&quot;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;MTC Example 1 (Simple MNL)&quot;</span>
 </pre></div>
 </div>
 <p>Having created this model, we can then estimate it:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
@@ -297,7 +297,7 @@ discrete choice analysis, this is often 0 or 1, but it need not be binary, or ev
 <p>It is a little tough to read this report because the parameters can show up in pretty much any order, as they are not sorted
 when they are automatically discovered by Larch.
 We can use the reorder method to fix this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s2">&quot;totcost&quot;</span><span class="p">,</span> <span class="s2">&quot;tottime&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Income&quot;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="p">),</span>
@@ -305,7 +305,7 @@ We can use the reorder method to fix this:</p>
 </pre></div>
 </div>
 <p>Then the report will look more reasonable (although ultimately the content is the same):</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
 <span class="go">                        value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
 <span class="go">LOS      totcost   -4.920e-03  2.389e-04 -20.596       2.833e-04        -17.368</span>
@@ -324,7 +324,7 @@ We can use the reorder method to fix this:</p>
 </div>
 <p>You can then access individual parameters from the model’s parameter frame
 (it’s just a pandas.DataFrame) with the usual pandas methods.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ASC_BIKE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;ASC_BIKE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 <span class="go">-2.3763...</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;totcost&#39;</span><span class="p">,</span> <span class="s1">&#39;std err&#39;</span><span class="p">]</span>
@@ -332,7 +332,7 @@ We can use the reorder method to fix this:</p>
 </pre></div>
 </div>
 <p>The <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#len" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">len()</span></code></a> function on the parameter DataFrame retrieves the number of parameters.</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pf</span><span class="p">)</span>
 <span class="go">12</span>
 </pre></div>
 </div>
@@ -360,7 +360,7 @@ We can use the reorder method to fix this:</p>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

@@ -71,7 +71,7 @@ Model 16 drops travel cost to include travel cost divided by income.
 	)	
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

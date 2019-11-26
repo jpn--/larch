@@ -58,7 +58,7 @@ of driving age in the household. (`pp. 120 <http://www.caee.utexas.edu/prof/Bhat
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

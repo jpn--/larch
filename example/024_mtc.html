@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>23W: MTC Shared Ride - Non-Motorized Nested Mode Choice &mdash; Larch 5.2.12 documentation</title>
+  <title>23W: MTC Shared Ride - Non-Motorized Nested Mode Choice &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -232,15 +232,15 @@
 </style>
 <div class="section" id="w-mtc-shared-ride-non-motorized-nested-mode-choice">
 <h1>23W: MTC Shared Ride - Non-Motorized Nested Mode Choice<a class="headerlink" href="#w-mtc-shared-ride-non-motorized-nested-mode-choice" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Model 24’s nesting structure groups shared ride and non-motorized alternatives. (<a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">pp. 179</a>)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">shared</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_shared&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Shared&#39;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">shared</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_shared&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Shared&#39;</span><span class="p">)</span>
 <span class="n">nonmotorized</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;mu_nonmoto&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Nonmotorized&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;CostbyInc&quot;</span><span class="p">,</span><span class="s2">&quot;costbyincome&quot;</span><span class="p">,),</span>
         <span class="p">(</span><span class="s2">&quot;TravelTime&quot;</span><span class="p">,</span><span class="s2">&quot;.*time.*&quot;</span><span class="p">,</span><span class="s2">&quot;.*dist.*&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Household&quot;</span><span class="p">,</span><span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span><span class="s2">&quot;vehbywrk.*&quot;</span><span class="p">,),</span>
@@ -249,13 +249,13 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3441.76...</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">]])</span>
 <span class="go">                                 value</span>
 <span class="go">Category   Parameter</span>
 <span class="go">CostbyInc  costbyincome        -0.0450</span>
@@ -312,7 +312,7 @@
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

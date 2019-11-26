@@ -4,6 +4,31 @@
 Getting Started
 ===============
 
+.. _quickstart:
+
+Quick Start
+-----------
+
+If you already have conda installed, you can install Larch from conda-forge in a
+new environment called `arboretum` like this:
+
+.. code-block:: console
+
+    conda create -n arboretum -c conda-forge larch
+
+Alternatively, if you would prefer to run in a completely isolated container,
+you can install `Docker <https://www.docker.com/>`_ and run the following
+command:
+
+.. code-block:: console
+
+    docker run -it -p 8857:8857 -v "%cd%":/home/paladin/work wirepaladin/sanfrancisco
+
+This will install a container containing the entire conda package and everything
+needed to run Larch, including JupyterLab.  Once the container is downloaded and
+running, point your browser at `http://localhost:8857 <http://localhost:8857>`_
+to access JupyterLab.
+
 .. _installation:
 
 Installing Python
@@ -18,8 +43,8 @@ so you don't have the sort through the huge pile of junk that is available for P
 
 .. note::
 
-	Python has two versions (2 and 3) that are available and currently maintained.
-	Larch is compatible *only* with version 3.
+    Python has two versions (2 and 3) that are available and currently maintained.
+    Larch is compatible *only* with version 3.
 
 You should usually install Anaconda for the local user,
 which does not require administrator permissions.
@@ -81,14 +106,14 @@ analysis, you can create a new environment for Larch with one line.
 
 .. code-block:: console
 
-	conda env create jpn/taiga
+    conda env create jpn/taiga
 
 If you've already installed the *taiga* environment and want to update it to the latest
 version, you can use:
 
 .. code-block:: console
 
-	conda env update jpn/taiga --prune
+    conda env update jpn/taiga --prune
 
 The *prune* option here will remove packages that are not ordinarily included in the
 *taiga* environment; omit that function if you've installed extra packages that you
@@ -144,7 +169,6 @@ file that looks something like this:
     channels:
     - conda-forge
     - defaults
-    - jpn
 
     dependencies:
     - python=3.7

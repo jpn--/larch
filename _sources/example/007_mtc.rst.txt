@@ -65,7 +65,7 @@ We diminish the effect of ovtt by dividing its parameter by distance.
 	)
 	
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()

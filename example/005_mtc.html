@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>5: MTC MNL Mode Choice, Motorized Travel Time &mdash; Larch 5.2.12 documentation</title>
+  <title>5: MTC MNL Mode Choice, Motorized Travel Time &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -235,11 +235,11 @@
 <p>Model 5 relaxes the time constraints in Model 1 by specifying distinct time variables
 for the motorized and non-motorized modes based on our expectation that travelers are
 likely to be more sensitive to travel time by non-motorized modes. (<a class="reference external" href="http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf">pp. 111</a>)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">()</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="k">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">PX</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR3P&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2,3&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAN&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#4&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
@@ -250,32 +250,32 @@ likely to be more sensitive to travel time by non-motorized modes. (<a class="re
 <p>To only use the proper parameter for Motorized and Nonmotorized,
 we can take advantage of all motorized options being alternatives 1 through 4,
 and nonmotorized being 5 and 6.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">+</span> <span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &lt;= 4) * tottime&quot;</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;(altnum &gt;4) * tottime&quot;</span><span class="p">)</span>
         <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s2">&quot;totcost&quot;</span><span class="p">))</span>
         <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;_avail_&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;_choice_&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s2">&quot;totcost&quot;</span><span class="p">,</span> <span class="s2">&quot;motorized_time&quot;</span><span class="p">,</span> <span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;Income&quot;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="p">),</span>
         <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,</span> <span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-3616.893...</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>
 <span class="go">                             value  std err   t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
 <span class="go">LOS      totcost           -0.0050   0.0002 -20.6810          0.0003       -17.0869</span>
@@ -316,7 +316,7 @@ and nonmotorized being 5 and 6.</p>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

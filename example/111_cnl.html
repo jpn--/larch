@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>111: Swissmetro Cross-Nested Logit Mode Choice &mdash; Larch 5.2.12 documentation</title>
+  <title>111: Swissmetro Cross-Nested Logit Mode Choice &mdash; Larch 5.3.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                5.2.12
+                5.3.0
               </div>
             
           
@@ -207,23 +207,23 @@
 <p>This example is a mode choice model built using the Swissmetro example dataset.
 First we create the DB and Model objects.  When we create the DB object, we will
 redefine the weight value:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">SWISSMETRO</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">SWISSMETRO</span><span class="p">()</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can attach a title to the model. The title does not affect the calculations
 as all; it is merely used in various output report styles.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;swissmetro example 11 (cross nested logit)&quot;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;swissmetro example 11 (cross nested logit)&quot;</span>
 </pre></div>
 </div>
 <p>We need to identify the availability and choice variables. These have been conveniently
 set up in the data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;choice&#39;</span>
 </pre></div>
 </div>
 <p>The swissmetro dataset, as with all Biogeme data, is only in <cite>co</cite> format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="k">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
 <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_TRAIN</span>
                   <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">B_TIME</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">TRAIN_TT</span>
                   <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">B_COST</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;TRAIN_CO*(GA==0)&quot;</span><span class="p">)</span> <span class="p">)</span>
@@ -256,14 +256,14 @@ root -&gt; public
 }" class="graphviz" /></div>
 <p>To create nests, we can use the new_node command, although we’ll need to know what the
 alternative codes are for the alternatives in our dataset. To find out, we can do:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternatives</span>
 <span class="go">[(1, &#39;Train&#39;), (2, &#39;SM&#39;), (3, &#39;Car&#39;)]</span>
 </pre></div>
 </div>
 <p>For this example, we want to nest together the Train and Car modes into a “existing” modes nest,
 and we want to nest together the Train and SM modes into a “public” modes nest.
 We can use the new_nest command like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span>
         <span class="n">parameter</span><span class="o">=</span><span class="s2">&quot;existing&quot;</span><span class="p">,</span>
         <span class="n">parent</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">root_id</span><span class="p">,</span>
         <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
@@ -291,7 +291,7 @@ link PT, <span class="math notranslate nohighlight">\(\phi_{ET}\)</span> is a si
 <p>We can attach parameters to each link using the <cite>phi_parameters</cite> argument to new_node.</p>
 <p>Larch will find all the parameters in the model, but we’d like to output them in
 a rational order.  We can use the ordering method to do this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s1">&#39;ASC.*&#39;</span><span class="p">,),</span>
         <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s1">&#39;B_.*&#39;</span><span class="p">,),</span>
         <span class="p">(</span><span class="s2">&quot;LogSums&quot;</span><span class="p">,</span> <span class="s1">&#39;Existing&#39;</span><span class="p">,</span> <span class="s1">&#39;Public&#39;</span><span class="p">,</span> <span class="p">),</span>
@@ -301,18 +301,18 @@ a rational order.  We can use the ordering method to do this:</p>
 <p>The swissmetro example models exclude some observations.  We will use the selector
 to identify the observations we would like to keep.  There are two selector criteria,
 and only cases that evaluate <cite>True</cite> for both are selected.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PURPOSE in (1,3)&quot;</span><span class="p">,</span> <span class="s2">&quot;CHOICE != 0&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We can estimate the models and check the results match up with those given by Biogeme:</p>
-<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;slsqp&#39;</span><span class="p">)</span>
 <span class="go">┣ ...Optimization terminated successfully...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 <span class="go">-5214.063...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pfo</span><span class="p">()[[</span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="s1">&#39;std err&#39;</span><span class="p">,</span><span class="s1">&#39;t stat&#39;</span><span class="p">,</span><span class="s1">&#39;robust std err&#39;</span><span class="p">,</span><span class="s1">&#39;robust t stat&#39;</span><span class="p">]])</span>  <span class="c1"># parameter frame, ordered</span>
 <span class="go">                    value    std err  t stat  robust std err  robust t stat</span>
 <span class="go">Category Parameter</span>
 <span class="go">ASCs     ASC_CAR   -0.238  3.606e-02  -6.606       4.883e-02         -4.878</span>
@@ -355,7 +355,7 @@ together on your own, you can load a read-to-estimate copy like this:</p>
     <p>
         &copy; Copyright 2010-2019, Jeffrey Newman
       <span class="lastupdated">
-        Last updated on Jul 12, 2019.
+        Last updated on Nov 25, 2019.
       </span>
 
     </p>

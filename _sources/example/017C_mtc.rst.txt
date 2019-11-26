@@ -70,7 +70,7 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 	)
 		
 .. doctest::
-	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
 	>>> m.maximize_loglike()
