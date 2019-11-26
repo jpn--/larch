@@ -16,7 +16,8 @@ new environment called `arboretum` like this:
 
     conda create -n arboretum -c conda-forge larch
 
-Alternatively, if you would prefer to run in a completely isolated container,
+Alternatively, if you would prefer to run in a container, which is potentially
+a more stable and portable "go anywhere" solution across various machines,
 you can install `Docker <https://www.docker.com/>`_ and run the following
 command:
 
