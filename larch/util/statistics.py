@@ -99,10 +99,15 @@ def statistics_for_array(
 			with warning.ignore_warnings():
 				stats.median_chosen = scalarize(numpy.nanmedian(a_ch_weighted, axis=0))
 
+	a_masked_is_category = None
+
 	if avail is None and can_nan:
 		a_masked = ma.masked_array(a, mask=~numpy.isfinite(a))
 	elif avail is not None:
 		a_masked = ma.masked_array(a, mask=~avail)
+	elif isinstance(a, pandas.Series) and a.dtype=='category':
+		a_masked = ma.masked_array(a, mask=pandas.isnull(a))
+		a_masked_is_category = True
 	else:
 		a_masked = a
 
@@ -111,15 +116,18 @@ def statistics_for_array(
 			ch_weightsx = ma.masked_array(ch_weights, mask=~numpy.isfinite(a))
 		elif avail is not None:
 			ch_weightsx = ma.masked_array(ch_weights, mask=~avail)
+		elif isinstance(a, pandas.Series) and a.dtype == 'category':
+			ch_weightsx = ma.masked_array(ch_weights, mask=pandas.isnull(a))
 		else:
 			ch_weightsx = ch_weights
 	else:
 		ch_weightsx = None
 
-	try:
-		a_masked_is_category = (a_masked.dtype=='category')
-	except:
-		a_masked_is_category = False
+	if a_masked_is_category is None:
+		try:
+			a_masked_is_category = (a_masked.dtype=='category')
+		except:
+			a_masked_is_category = False
 
 	if (can_nan and histogram) or a_masked_is_category:
 		with warning.ignore_warnings():
@@ -167,6 +175,12 @@ def statistics_for_array(
 		stats.nonzero_maximum = scalarize(numpy.max(a_masked, axis=0))
 		stats.nonzero_mean = scalarize(numpy.mean(a_masked, axis=0))
 		stats.nonzero_stdev = scalarize(numpy.std(a_masked, axis=0))
+	elif a_masked_is_category:
+		stats.nulls = pandas.isnull(a).sum()
+		the_mode = tuple(a.mode().values)
+		if len(the_mode) == 1:
+			the_mode = the_mode[0]
+		stats.mode = the_mode
 
 	if dictionary is not None:
 		stats.dictionary = dictionary
