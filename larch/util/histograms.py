@@ -365,11 +365,15 @@ def draw_histogram_figure(
 
 	if return_format.lower() == 'svg':
 		from .plotting import plot_as_svg_xhtml
+		pad_inches = 0.1
 		try:
 			if 'left' in frame_off and 'bottom' in frame_off:
-				plt.tight_layout(pad=0)
+				ax.set_position([0,0,1,1], which='both')
+				ax.set_frame_on(False)
+				pad_inches=0
 			elif figheight<=1.0:
 				plt.tight_layout(pad=figheight/2)
+				pad_inches=0
 			else:
 				plt.tight_layout(pad=0.5)
 		except ValueError:
@@ -384,7 +388,7 @@ def draw_histogram_figure(
 				tooltip += "\n"
 			tooltip += "Side thermometers indicate the fraction of all observations at or beyond the limits, and are scaled independently."
 
-		ret = plot_as_svg_xhtml(plt, tooltip=tooltip)
+		ret = plot_as_svg_xhtml(plt, tooltip=tooltip, pad_inches=pad_inches)
 		plt.clf()
 		plt.close()  # do not showing empty windows?
 		if attach_metadata:

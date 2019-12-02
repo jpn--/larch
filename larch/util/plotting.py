@@ -36,6 +36,7 @@ def plot_as_svg_xhtml(
 		transparent=True,
 		tooltip=None,
 		bbox_extra_artists=None,
+		pad_inches=0.1,
 		**format,
 ):
 	existing_format_keys = list(format.keys())
@@ -50,7 +51,7 @@ def plot_as_svg_xhtml(
 	fig.savefig(
 		imgbuffer, dpi=None, facecolor="none", edgecolor='w',
 		orientation='portrait', papertype=None, format='svg',
-		transparent=transparent, bbox_inches="tight", pad_inches=0.1,
+		transparent=transparent, bbox_inches="tight", pad_inches=pad_inches,
 		bbox_extra_artists=bbox_extra_artists,
 	)
 	x = Elem("div", {'class':classname})
