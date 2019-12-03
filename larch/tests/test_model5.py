@@ -4494,3 +4494,6 @@ def test_wide_choice():
 	})
 
 	assert m.check_d_loglike().data.similarity.min() > 3
+
+	# confirm the doctor is good
+	m, problems = m.doctor()
