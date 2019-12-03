@@ -566,3 +566,18 @@ class Model(_Model5c):
 		result = pickle.loads(self.dumps())
 		result.dataservice = self.dataservice
 		return result
+
+	def data_statistics(self):
+		"""
+		Generate a summary of data statistics.
+
+		This summary includes several sections, including
+		statistics on idco and idca data as appropriate, as well as
+		choice and availability statistics.
+
+		Returns
+		-------
+		xmle.Elem
+		"""
+		if self.dataframes is not None:
+			return self.dataframes.statistics(graph=self.graph)
