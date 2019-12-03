@@ -190,6 +190,11 @@ h3.figure_head {
 	padding-left: .5in;
 }
 
+"""
+
+
+deprecated_notebook_formatting = """
+
 div.jp-RenderedMarkdown h1 {font-weight: 900; border-bottom:2px black solid; padding-bottom:4px}
 div.jp-RenderedMarkdown h2 {font-weight: 850; border-bottom:0.5px black solid; padding-bottom:4px}
 div.jp-RenderedMarkdown h3 {font-weight: 800; font-style:italic}
