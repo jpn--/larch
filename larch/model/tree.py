@@ -99,7 +99,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 					raise ValueError(f"connected node {k} from phi_parameters not found")
 		self._clear_caches()
 
-	def new_node(self, **kwarg):
+	def new_node(self, *, code=None, **kwarg):
 		"""
 		Add a new nesting node to this NestingTree.
 
@@ -122,15 +122,28 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			to some other node.
 		name : str, optional
 			A human-readable name to associate with this nest.
+		code : int, optional
+			Use this code for the new nest. If this code already exists,
+			a ValueError is raised.
 
 		Returns
 		-------
 		int
 			The new code for this nest.
+
+		Raises
+		------
+		ValueError
+			If a new code is given but it already exists in this tree.
 		"""
-		proposed_code = len(self)
-		while proposed_code in self:
-			proposed_code += 1
+		if code is None:
+			proposed_code = len(self)
+			while proposed_code in self:
+				proposed_code += 1
+		else:
+			if code in self:
+				raise ValueError(f'code {code} already exists in this tree')
+			proposed_code = code
 		self.add_node(proposed_code, **kwarg)
 		return proposed_code
 
