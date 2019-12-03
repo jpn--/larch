@@ -76,14 +76,20 @@ def chosen_but_not_available(dfs, repair=None, verbose=3):
 	else:
 		m = None
 
-	_not_avail = (dfs.data_av==0).values
+	if m is not None and dfs.data_ch.shape[1] == len(m.graph):
+		# choice data is wide, make availability data wide
+		data_av = dfs.data_av_cascade(m.graph)
+	else:
+		data_av = dfs.data_av
+
+	_not_avail = (data_av==0).values
 	_chosen = (dfs.data_ch > 0).values
 	_wid = min(_not_avail.shape[1], _chosen.shape[1])
 
 	chosen_but_not_available = pandas.DataFrame(
 		data=_not_avail[:, :_wid] & _chosen[:, :_wid],
-		index=dfs.data_av.index,
-		columns=dfs.data_av.columns[:_wid],
+		index=data_av.index,
+		columns=data_av.columns[:_wid],
 	)
 	chosen_but_not_available_sum = chosen_but_not_available.sum(0)
 

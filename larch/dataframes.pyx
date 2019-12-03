@@ -819,7 +819,14 @@ cdef class DataFrames:
 				else:
 					od['chosen but not available'] = ch_but_not_av
 
+			if graph is not None:
+				od['name'] = pandas.Series(
+					graph.standard_sort_names,
+					index=graph.standard_sort,
+				)
 			result = pandas.DataFrame.from_dict(od)
+			if graph is not None:
+				result.drop(index=graph.root_id, inplace=True)
 
 			totals = result.sum()
 
@@ -1396,7 +1403,7 @@ cdef class DataFrames:
 		return _df_values(self.data_av, (self.n_cases, self.n_alts, ), dtype=dtype)
 
 	def array_ch(self, dtype=None):
-		return _df_values(self.data_ch, (self.n_cases, self.n_alts, ), dtype=dtype)
+		return _df_values(self.data_ch, (self.n_cases, -1, ), dtype=dtype)
 
 	def array_ch_as_ce(self, dtype=None):
 		return _df_values(self.data_ch_as_ce(), None, dtype=dtype)
