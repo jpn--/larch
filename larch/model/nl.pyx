@@ -446,7 +446,6 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		int n_cases_local = n_cases
 		int n_alts  = dfs._n_alts()
 		int n_params= dfs._n_model_params
-		l4_float_t[:] array_ch
 		l4_float_t[:,:] array_ch_wide  # thread-local
 		l4_float_t[:]   LL_case
 		l4_float_t[:,:] dLL_case
@@ -481,6 +480,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		int             store_number_dLLc
 		int             storage_size_dU
 		int             store_number_dU
+		int choice_width
 
 	if not dfs._is_computational_ready(activate=True):
 		raise ValueError('DataFrames is not computational-ready')
@@ -525,6 +525,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		total_probability   = numpy.zeros([storage_size_P, tree.n_nodes], dtype=l4_float_dtype)
 
 		array_ch_wide = numpy.zeros([num_threads, tree.n_nodes], dtype=l4_float_dtype)
+		choice_width = dfs._array_ch.shape[1]
+		if not (choice_width == n_alts or choice_width == tree.n_nodes):
+			raise ValueError("choice_width ({}) must be n_alts ({}) or n_nodes ({})".format(choice_width, n_alts, tree.n_nodes))
 
 		LL_case =  numpy.zeros([storage_size_LLc, ], dtype=l4_float_dtype)
 
@@ -604,7 +607,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 					weight = 1
 
 				ll_temp = _mnl_log_likelihood_from_probability_stride(
-					n_alts,
+					choice_width,
 					total_probability[store_number_P,:],        # input [n_alts]
 					dfs._array_ch[c,:],                       # input [n_alts]
 				) * weight
@@ -651,7 +654,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 					if weight:
 						_nl_d_loglike_from_d_probability(
 							n_params,                           # input   int
-							n_alts,                             # input   int
+							choice_width,                             # input   int
 							total_probability[store_number_P,:],  # input  [n_nodes]
 							dP[store_number_dP],                  # input  [n_nodes, n_params]
 							dLL_case[store_number_dLLc,:],           # output [n_params]

@@ -1149,6 +1149,22 @@ cdef class DataFrames:
 
 
 	def data_av_cascade(self, graph):
+		"""
+		Create an extra wide dataframe with availability rolled up to nests.
+
+		This has all the same elemental alternatives as the original
+		`data_av` dataframe, plus columns for all nests.  For each
+		nest, if any component is available, then the nest is also
+		indicated as available.
+
+		Parameters
+		----------
+		graph : NestingTree
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
 		result = pandas.DataFrame(
 			data=numpy.int8(0),
 			columns=graph.standard_sort,
@@ -1169,7 +1185,44 @@ cdef class DataFrames:
 		self._data_ch = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ch')
 		self._array_ch = _df_values(self.data_ch, (self.n_cases, self.n_alts))
 
+	def set_data_ch_wide(self, df, graph):
+		"""
+		Write an extra wide choice dataframe with choices also on nests.
+
+		Use this function to overwrite the existing loaded choices
+		with an alternative wider set of choices.  This can be used
+		to manually over-ride choices, and to make choices explicitly
+		at the nest level instead of at the elemental alternative
+		level.  Use with care, as some data quality checks are skipped
+		when the choice array is wide.
+
+		Parameters
+		----------
+		df : pandas.DataFrame
+		graph : NestingTree
+
+		"""
+		self._data_ch = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ch')
+		self._array_ch = _df_values(self.data_ch, (self.n_cases, len(graph)))
+
 	def data_ch_cascade(self, graph):
+		"""
+		Create an extra wide dataframe with choices rolled up to nests.
+
+		This has all the same elemental alternatives as the original
+		`data_ch` dataframe, plus columns for all nests. For each
+		nest, the chosen-ness is given as the sum of the chosen-ness
+		of all nest components.
+
+		Parameters
+		----------
+		graph : NestingTree
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+
 		result = pandas.DataFrame(
 			data=l4_float_dtype(0),
 			columns=graph.standard_sort,
