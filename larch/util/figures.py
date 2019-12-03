@@ -266,12 +266,13 @@ Model.distribution_on_idca_variable = distribution_on_idca_variable
 def distribution_on_idco_variable(
 		model,
 		x,
-		xlabel,
+		xlabel=None,
 		bins=None,
 		pct_bins=20,
 		figsize=(12, 4),
 		style='stacked',
 		discrete=None,
+		xlim=None,
 		**kwargs,
 ):
 	"""
@@ -295,6 +296,16 @@ def distribution_on_idco_variable(
 	pct_bins : int or array-like, default 20
 		The number of equal-mass bins to use.
 	style : {'stacked', 'dataframe', 'many'}
+		The type of output to generate.
+	discrete : bool, default False
+		Whether to treat the data values explicitly as discrete (vs continuous)
+		data.  This will change the styling and automatic bin generation.  If
+		there are very few unique values, the data will be assumed to be
+		discrete anyhow.
+	xlim : 2-tuple, optional
+		Explicitly set the range of values shown on the x axis of generated
+		figures.  This can truncate long tails.  The actual histogram bins
+		are not changed.
 
 	Returns
 	-------
@@ -382,6 +393,9 @@ def distribution_on_idco_variable(
 	if xlabel is False:
 		xlabel = None
 
+	if xlim is None:
+		xlim = (bins[0], bins[-1])
+
 	if style == 'dataframe':
 
 		result = pandas.concat({
@@ -431,7 +445,7 @@ def distribution_on_idco_variable(
 
 		ax0.set_ylim(0, 1)
 		if not discrete:
-			ax0.set_xlim(bins[0], bins[-1])
+			ax0.set_xlim(*xlim)
 		if x_discrete_labels is not None:
 			ax0.set_xticks(numpy.arange(len(x_discrete_labels)))
 			ax0.set_xticklabels(x_discrete_labels)
@@ -439,7 +453,7 @@ def distribution_on_idco_variable(
 
 		ax1.set_ylim(0, 1)
 		if not discrete:
-			ax1.set_xlim(bins[0], bins[-1])
+			ax1.set_xlim(*xlim)
 		if x_discrete_labels is not None:
 			ax1.set_xticks(numpy.arange(len(x_discrete_labels)))
 			ax1.set_xticklabels(x_discrete_labels)
@@ -474,7 +488,7 @@ def distribution_on_idco_variable(
 				lw=1.5,
 			)
 			if not discrete:
-				axes[n].set_xlim(bins[0], bins[-1])
+				axes[n].set_xlim(*xlim)
 			if x_discrete_labels is not None:
 				axes[n].set_xticks(numpy.arange(len(x_discrete_labels)))
 				axes[n].set_xticklabels(x_discrete_labels)
