@@ -4404,3 +4404,93 @@ def test_intentional_misalignment():
 	with raises(ValueError):
 		m5.load_data()
 
+def test_wide_choice():
+
+	from larch import example
+	m = example(1)
+	m.graph.new_node(parameter='mu_SR', children=[2,3], name='SR_any')
+	m.load_data()
+	ll0 = m.loglike2()
+	correct = {
+		'ASC_BIKE': -279.79999999999376,
+		'ASC_SR2': -687.7000000000156,
+		'ASC_SR3P': -1043.7000000000337,
+		'ASC_TRAN': -380.78333333332864,
+		'ASC_WALK': -113.65000000000244,
+		'hhinc#2': -41179.541666666715,
+		'hhinc#3': -60691.541666666686,
+		'hhinc#4': -24028.37499999998,
+		'hhinc#5': -17374.80833333334,
+		'hhinc#6': -7739.108333333338,
+		'mu_SR': -1200.1150284214655,
+		'totcost': 127397.53666666636,
+		'tottime': -42104.202666666555,
+	}
+	assert dict(ll0.dll) == approx(correct)
+
+	ch2 = m.dataframes.data_ch_cascade(m.graph)
+	ch2.loc[:,2] = 0.0
+	ch2.loc[:,3] = 0.0
+	ch2.loc[:,0] = 0.0
+
+	m.dataframes.set_data_ch_wide(ch2, m.graph)
+
+	llx = m.loglike2()
+	assert llx.ll == approx(-6839.647183330167)
+	assert dict(llx.dll) == approx({
+		'ASC_BIKE': -279.79999999999376,
+		'ASC_SR2': -865.7000000000273,
+		'ASC_SR3P': -865.7000000000273,
+		'ASC_TRAN': -380.78333333332864,
+		'ASC_WALK': -113.65000000000244,
+		'hhinc#2': -50935.54166666669,
+		'hhinc#3': -50935.54166666669,
+		'hhinc#4': -24028.37499999998,
+		'hhinc#5': -17374.80833333334,
+		'hhinc#6': -7739.108333333338,
+		'mu_SR': -1200.1150284214655,
+		'totcost': 122711.85166666626,
+		'tottime': -41675.50266666655,
+	})
+
+	assert m.check_d_loglike().data.similarity.min() > 3
+
+	# Change parameter values to non-zero, check again
+
+	m.set_values(**{
+		'ASC_BIKE': -1.0815660353456702,
+		'ASC_SR2': -0.615618347692271,
+		'ASC_SR3P': -0.6156183477206784,
+		'ASC_TRAN': -0.09104767592760173,
+		'ASC_WALK': 0.06221673375450811,
+		'hhinc#2': 0.0005716766270268823,
+		'hhinc#3': 0.0005716766315307928,
+		'hhinc#4': -0.001031762994256139,
+		'hhinc#5': -0.0035607220618929254,
+		'hhinc#6': -0.0023923910638776534,
+		'mu_SR': 0.146571756006591,
+		'totcost': -0.0011645642322675527,
+		'tottime': -0.022147656451515424,
+	})
+
+	x2 = m.loglike2()
+
+	assert x2.ll == approx(-4371.317501308223)
+
+	assert dict(x2.dll) == approx({
+		'ASC_BIKE': -107.53929725776547,
+		'ASC_SR2': -412.80554540072376,
+		'ASC_SR3P': -429.51505228139143,
+		'ASC_TRAN': -332.9107680078807,
+		'ASC_WALK': -102.39351439568138,
+		'hhinc#2': -24995.36247440482,
+		'hhinc#3': -26107.59500119089,
+		'hhinc#4': -20048.453733915474,
+		'hhinc#5': -6488.901792234734,
+		'hhinc#6': -6485.273816957247,
+		'mu_SR': -564.4975283374417,
+		'totcost': 44335.95805850644,
+		'tottime': -23760.870418033315,
+	})
+
+	assert m.check_d_loglike().data.similarity.min() > 3
