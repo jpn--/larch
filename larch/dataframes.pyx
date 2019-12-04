@@ -1235,7 +1235,7 @@ cdef class DataFrames:
 			columns=graph.standard_sort,
 			index=self.data_ch.index,
 		)
-		result.iloc[:,:graph.n_elementals()] = self.data_ch
+		result.iloc[:,:self.data_ch.shape[1]] = self.data_ch
 		for dn in graph.standard_sort:
 			for up in graph.predecessors(dn):
 				result[up] += result[dn]
