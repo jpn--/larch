@@ -861,8 +861,7 @@ cdef class Model5c(AbstractChoiceModel):
 			If 'idce', the resulting dataframe is stacked and unavailable alternatives are removed.
 		include_nests : bool, default False
 			Whether to include the nests section in a nested model.  This argument is ignored for MNL models
-			as the probability array is naturally limited to only the elemental alternatives.  Setting this
-			to True cannot be done when `return_dataframe` is not False.
+			as the probability array is naturally limited to only the elemental alternatives.
 
 		Returns
 		-------
@@ -870,8 +869,8 @@ cdef class Model5c(AbstractChoiceModel):
 
 		"""
 		try:
-			if include_nests and return_dataframe is not False:
-				raise ValueError('cannot use both `include_nests` and `return_dataframe`')
+			# if include_nests and return_dataframe is not in (False, 'names'):
+			# 	raise ValueError('cannot use both `include_nests` and `return_dataframe`')
 			arr = self.loglike(x=x, persist=PERSIST_PROBABILITY, start_case=start_case, stop_case=stop_case, step_case=step_case, probability_only=True)
 			if not include_nests:
 				arr = arr[:,:self._dataframes._n_alts()]
@@ -885,13 +884,13 @@ cdef class Model5c(AbstractChoiceModel):
 			if return_dataframe == 'names':
 				return pandas.DataFrame(
 					data=arr,
-					columns=self._dataframes._alternative_names,
+					columns=self._dataframes._alternative_names if not include_nests else self.graph.standard_sort_names,
 					index=idx,
 				)
 			elif return_dataframe:
 				result = pandas.DataFrame(
 					data=arr,
-					columns=self._dataframes._alternative_codes,
+					columns=self._dataframes._alternative_codes if not include_nests else self.graph.standard_sort,
 					index=idx,
 				)
 				if return_dataframe == 'idce':
