@@ -4497,3 +4497,6 @@ def test_wide_choice():
 
 	# confirm the doctor is good
 	m, problems = m.doctor()
+
+	chav = m.dataframes.choice_avail_summary(graph=m.graph)
+	assert chav.loc["< Total All Alternatives >", "chosen"] == 5029
