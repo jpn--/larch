@@ -273,6 +273,8 @@ def distribution_on_idco_variable(
 		style='stacked',
 		discrete=None,
 		xlim=None,
+		include_nests=False,
+		exclude_alts=None,
 		**kwargs,
 ):
 	"""
@@ -306,11 +308,26 @@ def distribution_on_idco_variable(
 		Explicitly set the range of values shown on the x axis of generated
 		figures.  This can truncate long tails.  The actual histogram bins
 		are not changed.
+	include_nests : bool, default False
+		Whether to include nests in the figure.
+	exclude_alts : Collection, optional
+		Alternatives to exclude from the figure.
 
 	Returns
 	-------
 	Elem
 	"""
+
+	if style not in {'stacked', 'dataframe', 'many'}:
+		raise ValueError("style must be in {'stacked', 'dataframe', 'many'}")
+
+	if include_nests and style == 'stacked' and exclude_alts is None:
+		import warnings
+		warnings.warn("including nests in a stacked figure is likely to give "
+					  "misleading results unless constituent alternatives are omitted")
+
+	if exclude_alts is None:
+		exclude_alts = set()
 
 	if isinstance(x, str):
 		x_label = x
@@ -336,9 +353,14 @@ def distribution_on_idco_variable(
 
 	pr = model.probability(
 		return_dataframe='names',
+		include_nests=bool(include_nests),
 	)
 
-	ch = model.dataframes.data_ch
+	if include_nests:
+		ch = model.dataframes.data_ch_cascade(model.graph)
+	else:
+		ch = model.dataframes.data_ch
+
 
 	if model.dataframes.data_wt is None:
 		wt = 1
@@ -357,26 +379,35 @@ def distribution_on_idco_variable(
 		else:
 			bins = numpy.percentile(x, pct_bins)
 
+	n_alts = model.graph.n_elementals()
+	columns = {}
+
 	for i in range(pr.shape[1]):
-		h_pr[i], _ = numpy.histogram(
-			x,
-			weights=pr.iloc[:, i] * wt,
-			bins=bins,
-		)
-		h_ch[i], _ = numpy.histogram(
-			x,
-			weights=ch.iloc[:, i] * wt,
-			bins=bins,
-		)
+		columns[i] = pr.columns[i]
+		if i < n_alts or include_nests is True or model.graph.standard_sort[i] in include_nests:
+			if model.graph.standard_sort[i] == model.graph.root_id:
+				continue
+			if model.graph.standard_sort[i] in exclude_alts:
+				continue
+			h_pr[i], _ = numpy.histogram(
+				x,
+				weights=pr.iloc[:, i] * wt,
+				bins=bins,
+			)
+			h_ch[i], _ = numpy.histogram(
+				x,
+				weights=ch.iloc[:, i] * wt,
+				bins=bins,
+			)
 
 	h_pr = pandas.DataFrame(h_pr)
 	h_pr.index = pandas.IntervalIndex.from_breaks(bins) # bins[:-1]
-	h_pr.columns = pr.columns
+	h_pr.rename(columns=columns, inplace=True)
 	h_pr_share = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
 
 	h_ch = pandas.DataFrame(h_ch)
 	h_ch.index = h_pr.index
-	h_ch.columns = pr.columns
+	h_ch.rename(columns=columns, inplace=True)
 	h_ch_share = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
 
 	if discrete:
@@ -406,16 +437,6 @@ def distribution_on_idco_variable(
 
 		if x_label:
 			result.index.name = xlabel
-
-		# result = pandas.DataFrame(
-		# 	{
-		# 		('Modeled', 'Count'): h_pr.stack(),
-		# 		('Modeled', 'Share'): h_pr_share.stack(),
-		# 		('Observed', 'Count'): h_ch.stack(),
-		# 		('Observed', 'Share'): h_ch_share.stack(),
-		# 	},
-		# 	index=h_pr.stack().index,
-		# )
 
 	elif style == 'stacked':
 
