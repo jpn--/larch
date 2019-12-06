@@ -826,9 +826,10 @@ cdef class DataFrames:
 				)
 			result = pandas.DataFrame.from_dict(od)
 			if graph is not None:
+				totals = result.loc[graph.root_id, :]
 				result.drop(index=graph.root_id, inplace=True)
-
-			totals = result.sum()
+			else:
+				totals = result.sum()
 
 			for tot in (
 					'chosen',
