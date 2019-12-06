@@ -275,6 +275,7 @@ def distribution_on_idco_variable(
 		xlim=None,
 		include_nests=False,
 		exclude_alts=None,
+		filter=None,
 		**kwargs,
 ):
 	"""
@@ -312,6 +313,9 @@ def distribution_on_idco_variable(
 		Whether to include nests in the figure.
 	exclude_alts : Collection, optional
 		Alternatives to exclude from the figure.
+	filter : str, optional
+		A filter that will be used to select only a subset of cases.
+
 
 	Returns
 	-------
@@ -341,6 +345,17 @@ def distribution_on_idco_variable(
 		except AttributeError:
 			x_label = ''
 
+	if filter:
+		_ds = model.dataservice if model.dataservice is not None else model.dataframes
+		filter_ = _ds.make_dataframes(
+			{'co': [filter]},
+			explicit=True,
+			float_dtype=bool,
+		).array_co().reshape(-1)
+		x = x[filter_]
+	else:
+		filter_ = slice(None)
+
 	h_pr = {}
 	h_ch = {}
 
@@ -354,18 +369,18 @@ def distribution_on_idco_variable(
 	pr = model.probability(
 		return_dataframe='names',
 		include_nests=bool(include_nests),
-	)
+	).loc[filter_,:]
 
 	if include_nests:
-		ch = model.dataframes.data_ch_cascade(model.graph)
+		ch = model.dataframes.data_ch_cascade(model.graph).loc[filter_,:]
 	else:
-		ch = model.dataframes.data_ch
+		ch = model.dataframes.data_ch.loc[filter_,:]
 
 
 	if model.dataframes.data_wt is None:
 		wt = 1
 	else:
-		wt = model.dataframes.data_wt.values.reshape(-1)
+		wt = model.dataframes.data_wt.values.reshape(-1)[filter_]
 
 	x_discrete_labels = None if discrete_values is None else [str(i) for i in discrete_values]
 
