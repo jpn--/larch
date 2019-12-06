@@ -105,7 +105,7 @@ def statistics_for_array(
 		a_masked = ma.masked_array(a, mask=~numpy.isfinite(a))
 	elif avail is not None:
 		a_masked = ma.masked_array(a, mask=~avail)
-	elif isinstance(a, pandas.Series) and a.dtype=='category':
+	elif isinstance(a, pandas.Series) and isinstance(a.dtype, pandas.CategoricalDtype):
 		a_masked = ma.masked_array(a, mask=pandas.isnull(a))
 		a_masked_is_category = True
 	else:
@@ -116,7 +116,7 @@ def statistics_for_array(
 			ch_weightsx = ma.masked_array(ch_weights, mask=~numpy.isfinite(a))
 		elif avail is not None:
 			ch_weightsx = ma.masked_array(ch_weights, mask=~avail)
-		elif isinstance(a, pandas.Series) and a.dtype == 'category':
+		elif isinstance(a, pandas.Series) and isinstance(a.dtype, pandas.CategoricalDtype):
 			ch_weightsx = ma.masked_array(ch_weights, mask=pandas.isnull(a))
 		else:
 			ch_weightsx = ch_weights
@@ -125,7 +125,7 @@ def statistics_for_array(
 
 	if a_masked_is_category is None:
 		try:
-			a_masked_is_category = (a_masked.dtype=='category')
+			a_masked_is_category = isinstance(a_masked.dtype, pandas.CategoricalDtype)
 		except:
 			a_masked_is_category = False
 
