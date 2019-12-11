@@ -247,6 +247,11 @@ cdef class DataRef_C(UnicodeRef_C):
 				return other
 			if other == "0" or other == "0.0" or other == 0:
 				return self
+			# Double zero is trapped here as it is used to flag duplicate terms in a utility function.
+			if self == "00":
+				return DataRef_C("0+{}".format(parenthize(self), parenthize(other, True)))
+			if other == "00":
+				return DataRef_C("{}+0".format(parenthize(self), parenthize(other, True)))
 			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
 
 		# Don't return NotImplemented just raise TypeError when adding a DataRef_C and a plain string.

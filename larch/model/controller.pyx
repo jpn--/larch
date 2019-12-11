@@ -344,7 +344,9 @@ cdef class Model5c(AbstractChoiceModel):
 						logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self._utility_co[altkey])}")
 						raise
 					while i_d in u_found[altkey]:
-						i_d = i_d + DataRef('0')
+						import warnings
+						warnings.warn("found duplicate X.{} in utility_co[{}]".format(i_d,altkey))
+						i_d = i_d + DataRef('00')
 					u_found[altkey].add(i_d)
 					# if i.param in self._snapped_parameters:
 					# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
