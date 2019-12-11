@@ -94,9 +94,9 @@ cdef class Model5c(AbstractChoiceModel):
 		import base64
 
 		state = dict()
-		state["_utility_ca                    ".strip()] = (self._utility_ca                    )
-		state["_utility_co                    ".strip()] = (self._utility_co                    )
-		state["_quantity_ca                   ".strip()] = (self._quantity_ca                   )
+		state["utility_ca                     ".strip()] = (self.utility_ca.copy()              )
+		state["utility_co                     ".strip()] = (self.utility_co.copy()              )
+		state["quantity_ca                    ".strip()] = (self.quantity_ca.copy()             )
 		state["_quantity_scale                ".strip()] = (self._quantity_scale                )
 		state["_logsum_parameter              ".strip()] = (self._logsum_parameter              )
 		state["rename_parameters              ".strip()] = (self.rename_parameters              )
@@ -135,9 +135,9 @@ cdef class Model5c(AbstractChoiceModel):
 		state = gzip.decompress(state)
 		state = cloudpickle.loads(state)
 
-		(self._utility_ca                    ) = state["_utility_ca                    ".strip()]
-		(self._utility_co                    ) = state["_utility_co                    ".strip()]
-		(self._quantity_ca                   ) = state["_quantity_ca                   ".strip()]
+		(self.utility_ca                     ) = state["utility_ca                     ".strip()]
+		(self.utility_co                     ) = state["utility_co                     ".strip()]
+		(self.quantity_ca                    ) = state["quantity_ca                    ".strip()]
 		(self._quantity_scale                ) = state["_quantity_scale                ".strip()]
 		(self._logsum_parameter              ) = state["_logsum_parameter              ".strip()]
 		(self.rename_parameters              ) = state["rename_parameters              ".strip()]

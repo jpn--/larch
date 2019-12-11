@@ -1,6 +1,6 @@
 
 from ..examples import MTC, SWISSMETRO
-from pytest import approx, raises
+from pytest import approx, raises, warns
 import numpy
 import pandas
 from ..model import *
@@ -4500,3 +4500,45 @@ def test_wide_choice():
 
 	chav = m.dataframes.choice_avail_summary(graph=m.graph)
 	assert chav.loc["< Total All Alternatives >", "chosen"] == 5029
+
+
+def test_mangling():
+	m = Model()
+
+	m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
+
+	assert m._is_mangled()
+	m.unmangle()
+	assert not m._is_mangled()
+
+	m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
+
+	assert m._is_mangled()
+	m.unmangle()
+	assert not m._is_mangled()
+
+	m.quantity_ca = P.Param3 * X.Data3 + P.Param4 * X.Data4
+
+	assert m._is_mangled()
+	m.unmangle()
+	assert not m._is_mangled()
+	m.utility_co[1] = 0
+
+	assert m._is_mangled()
+	m.unmangle()
+	assert not m._is_mangled()
+
+	m.utility_co[2] = P.ParamASC2 + P.ParamZ2 * X.DataZ
+
+	assert m._is_mangled()
+	m.unmangle()
+	assert not m._is_mangled()
+	str(m.utility_co[1])
+	assert not m._is_mangled()
+	assert "Empty" not in m.utility_functions()._repr_html_()
+
+	m.utility_co[2] += P.ParamZ2b * X.DataZ
+	assert m._is_mangled()
+	with warns(UserWarning):
+		m.unmangle()
+	assert not m._is_mangled()

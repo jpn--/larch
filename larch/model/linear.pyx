@@ -616,7 +616,7 @@ cdef class LinearFunction_C:
 
 	def __init__(self, init=None):
 		self._func = list()
-		self._instance = None
+		#self._instance = None
 		if init is not None:
 			for i in init:
 				if isinstance(i, LinearComponent_C):
@@ -658,7 +658,13 @@ cdef class LinearFunction_C:
 		if newself is None:
 			newself = self.__fresh(instance)
 		newself.__init__(values)
-		_try_mangle_h(newself)
+		#_try_mangle_h(newself)
+		try:
+			newself._instance.mangle()
+		except AttributeError as err:
+			pass # print(f"No Mangle L2: {err}")
+		else:
+			pass # print(f"Yes Mangle L2: {newself._instance}")
 
 	def __delete__(self, instance):
 
@@ -670,7 +676,14 @@ cdef class LinearFunction_C:
 			newself = self.__fresh(instance)
 		newself.__init__()
 		newself._instance = instance
-		_try_mangle_h(newself)
+		#_try_mangle_h(newself)
+		try:
+			newself._instance.mangle()
+		except AttributeError as err:
+			pass # print(f"No Mangle L2: {err}")
+		else:
+			pass # print(f"Yes Mangle L2: {newself._instance}")
+
 
 	def __set_name__(self, owner, name):
 		self.name = name
@@ -1074,7 +1087,7 @@ cdef class DictOfLinearFunction_C:
 				raise
 
 		self._alts_validator = alts_validator
-		self._instance = None
+		#self._instance = None
 
 	def __fresh(self, instance):
 		cdef DictOfLinearFunction_C newself
@@ -1108,7 +1121,13 @@ cdef class DictOfLinearFunction_C:
 		if newself is None:
 			newself = self.__fresh(instance)
 		newself.__init__(values)
-		_try_mangle_h(newself)
+		#_try_mangle_h(newself)
+		try:
+			newself._instance.mangle()
+		except AttributeError as err:
+			pass # print(f"No Mangle L2: {err}")
+		else:
+			pass # print(f"Yes Mangle L2: {newself._instance}")
 
 	def __delete__(self, instance):
 		self.__set__(instance, None)

@@ -149,6 +149,9 @@ cdef class ParameterFrame:
 	def mangle(self, *args, **kwargs):
 		self._mangled = True
 
+	def _is_mangled(self):
+		return self._mangled
+
 	def unmangle(self, force=False):
 		if self._mangled or force:
 			self._scan_all_ensure_names()
