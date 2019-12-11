@@ -310,7 +310,7 @@ class Pods(MutableSequence):
 				if "max" in name:
 					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(name)
 				if "min" in name:
-					arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(name)
+					arg0 = arg0 + '\n(note to get the minimum of arrays use "fmin" not "min")'.format(name)
 				if isinstance(exc, NameError):
 					badname = str(exc).split("'")[1]
 					goodnames = {

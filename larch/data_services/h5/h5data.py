@@ -187,7 +187,7 @@ class H5Data():
 			if "max" in cmd:
 				arg0 = arg0 + '\n(note to get the maximum of arrays use "fmax" not "max")'.format(cmd)
 			if "min" in cmd:
-				arg0 = arg0 + '\n(note to get the maximum of arrays use "fmin" not "min")'.format(cmd)
+				arg0 = arg0 + '\n(note to get the minimum of arrays use "fmin" not "min")'.format(cmd)
 			if isinstance(exc, NameError):
 				badname = str(exc).split("'")[1]
 				goodnames = dir()
