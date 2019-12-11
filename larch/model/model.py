@@ -423,12 +423,13 @@ class Model(_Model5c):
 						utilitycell << list(self.utility_ca.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
 						anything = True
 					if j in self.utility_co:
-						if anything:
-							utilitycell << Elem('br')
 						v = self.utility_co[j]
-						utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
-						utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
-						anything = True
+						if len(v):
+							if anything:
+								utilitycell << Elem('br')
+							utilitycell[-1].tail = (utilitycell[-1].tail or "") + " + "
+							utilitycell << list(v.__xml__(linebreaks=True, resolve_parameters=self, value_in_tooltips=not resolve_parameters))
+							anything = True
 					if len(self.quantity_ca):
 						if anything:
 							utilitycell << Elem('br')
