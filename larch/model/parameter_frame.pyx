@@ -543,7 +543,7 @@ cdef class ParameterFrame:
 		self._display_order_tail = tuple(x)
 
 	def pfo(self):
-		if self.ordering is None:
+		if self.ordering is None or self.ordering == ():
 			return self.pf
 		paramset = set(self.pf.index)
 		out = []
