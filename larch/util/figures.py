@@ -55,6 +55,7 @@ def distribution_on_idca_variable(
 		bw_method=None,
 		discrete=None,
 		ax=None,
+		format='figure',
 		**kwargs,
 ):
 	"""
@@ -94,7 +95,11 @@ def distribution_on_idca_variable(
 		values.
 	ax : matplotlib.Axes, optional
 		If given, the figure will be drawn on these axes and they will be returned,
-		otherwise new blank axes are used to draw the figure and a rendering is returned.
+		otherwise new blank axes are used to draw the figure.
+	format : {'figure','svg'}, default 'figure'
+		How to return the result if it is a figure. The default is to return
+		the raw matplotlib Figure instance (or the `ax` if given), set to `svg` to get a SVG
+		rendering as an xmle.Elem.
 
 	Other Parameters
 	----------------
@@ -126,6 +131,7 @@ def distribution_on_idca_variable(
 			bw_method=bw_method,
 			discrete=discrete,
 			ax=ax,
+			format=format,
 			**kwargs,
 		)
 
@@ -251,9 +257,12 @@ def distribution_on_idca_variable(
 	if fig is None:
 		return ax
 	fig.tight_layout(pad=0.5)
-	result = plot_as_svg_xhtml(fig, **kwargs)
-	fig.clf()
-	plt.close(fig)
+	if format == 'svg':
+		result = plot_as_svg_xhtml(fig, **kwargs)
+		fig.clf()
+		plt.close(fig)
+	else:
+		result = fig
 	return result
 
 
@@ -276,6 +285,7 @@ def distribution_on_idco_variable(
 		include_nests=False,
 		exclude_alts=None,
 		filter=None,
+		format='figure',
 		**kwargs,
 ):
 	"""
@@ -315,11 +325,14 @@ def distribution_on_idco_variable(
 		Alternatives to exclude from the figure.
 	filter : str, optional
 		A filter that will be used to select only a subset of cases.
-
+	format : {'figure','svg'}, default 'figure'
+		How to return the result if it is a figure. The default is to return
+		the raw matplotlib Figure instance, ot set to `svg` to get a SVG
+		rendering as an xmle.Elem.
 
 	Returns
 	-------
-	Elem
+	Figure, DataFrame, or Elem
 	"""
 
 	if style not in {'stacked', 'dataframe', 'many'}:
@@ -503,9 +516,12 @@ def distribution_on_idco_variable(
 		)
 
 		# fig.tight_layout(pad=0.5)
-		result = plot_as_svg_xhtml(fig, **kwargs)
-		fig.clf()
-		plt.close(fig)
+		if format == 'svg':
+			result = plot_as_svg_xhtml(fig, **kwargs)
+			fig.clf()
+			plt.close(fig)
+		else:
+			result = fig
 
 	else:
 
@@ -544,9 +560,12 @@ def distribution_on_idco_variable(
 		if xlabel:
 			axes[-1].set_xlabel(xlabel)
 		#fig.tight_layout(pad=0.5)
-		result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
-		fig.clf()
-		plt.close(fig)
+		if format == 'svg':
+			result = plot_as_svg_xhtml(fig, bbox_extra_artists=[legnd],  **kwargs)
+			fig.clf()
+			plt.close(fig)
+		else:
+			result = fig
 
 	return result
 
