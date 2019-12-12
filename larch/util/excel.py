@@ -1,11 +1,12 @@
 
-
+import numpy as np
 import pandas as pd
 from xmle import Elem
 import matplotlib.figure
 import io
 import base64
 from PIL import Image
+
 try:
     import xlsxwriter
 except ImportError:
@@ -14,30 +15,45 @@ except ImportError:
 else:
     from pandas.io.excel._xlsxwriter import _XlsxWriter
 
+
+class NumberedCaptions:
+
+    def __init__(self, kind):
+        self._kind = kind
+        self._n = 1
+
+    def __call__(self, caption):
+        numb_caption = f"{self._kind} {self._n}: {caption}"
+        self._n += 1
+        return numb_caption
+
+
 class ExcelWriter(_XlsxWriter):
 
     def __init__(self, *args, model=None, data_statistics=True, **kwargs):
         super().__init__(*args, **kwargs)
-        self.head_fmt = self.book.add_format({'bold': True})
+        self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
+        self.sheet_startrow = {}
+        self._col_widths = {}
         if model is not None:
             self.add_model(model, data_statistics=data_statistics)
-        self.sheet_startrow = {}
 
     def add_model(self, model, data_statistics=True):
 
-        model.pfo().to_excel(self, sheet_name="Parameters")
+        self.add_content_tab(model.pfo(), sheetname="Parameters", heading="Parameters" )
 
         if data_statistics:
             from .statistics import statistics_for_dataframe
 
             if model.dataframes.data_co is not None:
-                statistics_for_dataframe(model.dataframes.data_co).to_excel(self, sheet_name="CO Data")
+                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_co), sheetname="CO Data", heading="CO Data")
             if model.dataframes.data_ca is not None:
-                statistics_for_dataframe(model.dataframes.data_ca).to_excel(self, sheet_name="CA Data")
+                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ca), sheetname="CA Data", heading="CA Data")
             if model.dataframes.data_ce is not None:
-                statistics_for_dataframe(model.dataframes.data_ce).to_excel(self, sheet_name="CE Data")
+                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ce), sheetname="CE Data", heading="CE Data")
             if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
-                model.dataframes.choice_avail_summary(graph=model.graph).to_excel(self, sheet_name="Choices")
+                self.add_content_tab(model.dataframes.choice_avail_summary(graph=model.graph), sheetname="Choice", heading="Choices")
+
 
     def add_worksheet(self, name, force=False):
 
@@ -79,6 +95,20 @@ class ExcelWriter(_XlsxWriter):
             startrow += 2 # gap
             success = True
 
+            if sheetname not in self._col_widths:
+                self._col_widths[sheetname] = {}
+            if content.index.nlevels == 1:
+                current_width = self._col_widths[sheetname].get(0, 8)
+                new_width = max(current_width, max(len(str(i)) for i in content.index))
+                self._col_widths[sheetname][0] = new_width
+                worksheet.set_column(0, 0, new_width)
+            else:
+                for n in range(content.index.nlevels):
+                    current_width = self._col_widths[sheetname].get(n, 8)
+                    new_width = max(current_width, max(len(str(i)) for i in content.index.levels[n]))
+                    self._col_widths[sheetname][n] = new_width
+                    worksheet.set_column(n,n,new_width)
+
         # Render matplotlib.Figure into an Elem
         if not success and 'matplotlib' in str(type(content)):
             if isinstance(content, matplotlib.figure.Figure):
@@ -98,12 +128,12 @@ class ExcelWriter(_XlsxWriter):
                 else:
                     if isinstance(_v, str) and _v[:22] == 'data:image/png;base64,':
                         _v = io.BytesIO(base64.standard_b64decode(_v[22:]))
-                        pixel_width, pixel_height = Image.open(_v).size
+                        img = Image.open(_v)
                         if heading is not None:
                             worksheet.write(startrow, 0, heading, self.head_fmt)
                             startrow += 1
                         worksheet.insert_image(startrow, 0, f'image-{sheetname}.png', {'image_data': _v})
-                        startrow += (pixel_height // 15) + 3
+                        startrow += int(np.ceil(img.size[1] / img.info.get('dpi',[96,96])[1] * 72 / 15)) + 3
                         success = True
 
         if not success:
