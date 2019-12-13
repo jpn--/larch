@@ -52,8 +52,8 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._successor_slots = {}
 		self.touch()
 
-	def add_edge(self, u, v, **kwarg):
-		if 'implied' not in kwarg:
+	def add_edge(self, u, v, implied=False, **kwarg):
+		if not implied:
 			drops = []
 			for u_,v_,imp_ in self.in_edges(nbunch=[v], data='implied'):
 				if imp_:
@@ -61,7 +61,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			for d in drops:
 				self._remove_edge_no_implied(*d)
 		self._clear_caches()
-		return super().add_edge(int(u), int(v), **kwarg)
+		return super().add_edge(int(u), int(v), implied=implied, **kwarg)
 
 	def _remove_edge_no_implied(self, u, v, *arg, **kwarg):
 		result = super().remove_edge(u, v)
@@ -76,6 +76,36 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		return result
 
 	def add_node(self, code, *, children=(), parent=None, parents=None, phi_parameters=None, **kwarg):
+		"""
+		Add a single node `code` and update node attributes.
+
+		Parameters
+		----------
+		code : int
+			Although the generic networkx.DiGraph allows a node
+			to be any hashable Python object except None, Larch
+			assumes that node codes are integers.
+		children : Collection
+			A collection of other node codes that are the children
+			of this new node.  Links will be created from this node
+			to each child.
+		parent : int, optional
+			The parent of this new node. If not given, the root
+			node is assumed to be the parent of this node, and an
+			implied link is created.  This implied link is removed
+			if the node is later made the child of some other node.
+			If the parent is set explicitly, the link is *not*
+			removed later.
+		parents : Collection, optional
+			Set multiple parent up-stream nodes.
+		phi_parameters : Mapping
+			Set phi parameters on graph links connecting to this
+			node, used in network GEV models. The keys of this mapping
+			indicate the node at the other end of the link, and the
+			values are parameter names.
+		kwarg : other keyword arguments, optional
+			Set or change node attributes using key=value.
+		"""
 		if parents is not None and parent is not None:
 			raise TypeError("cannot give both parent and parents arguments")
 		super().add_node(code, **kwarg)
@@ -325,12 +355,19 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._successor_slots = {}
 		self.set_touch_callback(None)
 
-	def __xml__(self, **format):
+	def __xml__(self, use_viz=True, use_dot=True, output='svg', **format):
 		viz = None
 		dot = None
-		try:
-			import pygraphviz as viz
-		except ImportError:
+		if use_viz:
+			try:
+				import pygraphviz as viz
+			except ImportError:
+				if use_dot:
+					try:
+						import pydot as dot
+					except ImportError:
+						pass
+		elif use_dot:
 			try:
 				import pydot as dot
 			except ImportError:
@@ -338,8 +375,16 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 		if viz is None and dot is None:
 			import warnings
-			warnings.warn("pygraphviz module not installed, unable to draw nesting tree")
-			raise NotImplementedError("pygraphviz module not installed, unable to draw nesting tree")
+			if use_viz and use_dot:
+				msg = "neither pydot nor pygraphviz modules are installed, unable to draw nesting tree"
+			elif use_viz:
+				msg = "pygraphviz module not installed, unable to draw nesting tree"
+			elif use_dot:
+				msg = "pydot module not installed, unable to draw nesting tree"
+			else:
+				msg = "no drawing module used, unable to draw nesting tree"
+			warnings.warn(msg)
+			raise NotImplementedError(msg)
 
 		if viz is not None:
 			existing_format_keys = list(format.keys())
@@ -391,16 +436,19 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				up_nodes.add(i)
 			pyg_imgdata = BytesIO()
 			try:
-				G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
+				G.draw(pyg_imgdata, format=output, prog='dot')       # write postscript in k5.ps with neato layout
 			except ValueError as err:
 				if 'in path' in str(err):
 					import warnings
 					warnings.warn(str(err)+"; unable to draw nesting tree in report")
 					raise NotImplementedError()
-			import xml.etree.ElementTree as ET
-			ET.register_namespace("","http://www.w3.org/2000/svg")
-			ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
-			return ET.fromstring(pyg_imgdata.getvalue().decode())
+			if output=='svg':
+				import xml.etree.ElementTree as ET
+				ET.register_namespace("","http://www.w3.org/2000/svg")
+				ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
+				return ET.fromstring(pyg_imgdata.getvalue().decode())
+			else:
+				raise NotImplementedError(f"output {output} with use_viz")
 		else:
 
 			pydot = dot
@@ -488,7 +536,14 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 			###
 			from xmle import Elem
-			return Elem.from_any(P.create_svg())
+			prog = None
+			if output == 'svg':
+				import xml.etree.ElementTree as ET
+				ET.register_namespace("","http://www.w3.org/2000/svg")
+				ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
+			elif output == 'png':
+				prog = [P.prog, '-Gdpi=300']
+			return Elem.from_any(P.create(prog=prog, format=output, **format))
 
 	def _repr_html_(self):
 		from xmle import Elem

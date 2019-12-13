@@ -715,9 +715,11 @@ cdef class ParameterFrame:
 
 			pfo = self.pfo()
 
-			ordered_p = list(pfo.index)
-
 			any_categories = not (self.ordering is None or self.ordering == ())
+			if not any_categories:
+				ordered_p = [("",i) for i in pfo.index]
+			else:
+				ordered_p = list(pfo.index)
 
 			any_colons = False
 			for rownum in range(len(ordered_p)):

@@ -23,28 +23,50 @@ class NumberedCaptions:
         self._n = 1
 
     def __call__(self, caption):
-        numb_caption = f"{self._kind} {self._n}: {caption}"
-        self._n += 1
-        return numb_caption
-
+        if caption:
+            numb_caption = f"{self._kind} {self._n}: {caption}"
+            self._n += 1
+            return numb_caption
+        else:
+            return caption
 
 class ExcelWriter(_XlsxWriter):
 
-    def __init__(self, *args, model=None, data_statistics=True, **kwargs):
+    def __init__(self, *args, model=None, data_statistics=True, numbering=True, hide_log=True, **kwargs):
+
         super().__init__(*args, **kwargs)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.sheet_startrow = {}
         self._col_widths = {}
+
+        if numbering:
+            self.TAB = NumberedCaptions('Table')
+            self.FIG = NumberedCaptions('Figure')
+        else:
+            self.TAB = lambda x: x
+            self.FIG = lambda x: x
+
+        self.add_worksheet('Parameters') # first sheet cannot be hidden
+
+        self.logsheet = self.add_worksheet('_log_', hide=hide_log)
+        self.log(f"larch.util.excel.ExcelWriter opened: {str(args)}")
+
+        self.metadatasheet = self.add_worksheet('_metadata_', hide=True)
+        self.metadatasheet.write(0, 0, 'key')
+        self.metadatasheet.write(0, 1, 'len')
+        self.metadatasheet.write(0, 2, 'val')
+        self.sheet_startrow['_metadata_'] = 1
+
         if model is not None:
             self.add_model(model, data_statistics=data_statistics)
 
-    def add_model(self, model, data_statistics=True):
+
+    def add_model(self, model, data_statistics=True, nesting=True):
 
         self.add_content_tab(model.pfo(), sheetname="Parameters", heading="Parameters" )
 
         if data_statistics:
             from .statistics import statistics_for_dataframe
-
             if model.dataframes.data_co is not None:
                 self.add_content_tab(statistics_for_dataframe(model.dataframes.data_co), sheetname="CO Data", heading="CO Data")
             if model.dataframes.data_ca is not None:
@@ -54,8 +76,38 @@ class ExcelWriter(_XlsxWriter):
             if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
                 self.add_content_tab(model.dataframes.choice_avail_summary(graph=model.graph), sheetname="Choice", heading="Choices")
 
+        if nesting and model.is_mnl():
+            self.add_content_tab(model.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
+            self.add_content_tab(model.graph_descrip('nodes'), sheetname="Nesting", heading="Nesting Node List")
 
-    def add_worksheet(self, name, force=False):
+    def add_metadata(self, key, value):
+        if not isinstance(key, str):
+            raise ValueError(f"metadata key must be str not {type(key)}")
+        import base64
+        try:
+            import cloudpickle as pickle
+        except ImportError:
+            import pickle
+        encoded_value = base64.standard_b64encode(pickle.dumps(value)).decode()
+        row = self.sheet_startrow.get('_metadata_',0)
+        self.metadatasheet.write(row, 0, key)
+        c = 2
+        while len(encoded_value):
+            self.metadatasheet.write(row, c, encoded_value[:30_000]) # excel has cell text length cap
+            c += 1
+            encoded_value = encoded_value[30_000:]
+        self.metadatasheet.write(row, 1, c-2)
+        self.sheet_startrow['_metadata_'] = row+1
+
+    def log(self, message):
+        import time
+        t = time.strftime("%Y-%b-%d %H:%M:%S")
+        row = self.sheet_startrow.get('_log_',0)
+        self.logsheet.write(row, 0, t)
+        self.logsheet.write(row, 1, str(message))
+        self.sheet_startrow['_log_'] = row+1
+
+    def add_worksheet(self, name, force=False, hide=None):
 
         if not force and name in self.sheets:
             return self.sheets[name]
@@ -73,6 +125,12 @@ class ExcelWriter(_XlsxWriter):
                     if i > 99:
                         raise
         self.sheets[name] = s
+        if hide is not None:
+            if hide:
+                s.hide()
+            else:
+                s.hidden = 0
+
         return s
 
     def add_content_tab(self, content, sheetname, heading=None, startrow=None):
@@ -86,7 +144,7 @@ class ExcelWriter(_XlsxWriter):
 
         if isinstance(content, pd.DataFrame):
             if heading is not None:
-                worksheet.write(startrow, 0, heading, self.head_fmt)
+                worksheet.write(startrow, 0, self.TAB(heading), self.head_fmt)
                 startrow += 1
             content.to_excel(self, sheet_name=worksheet.name, startrow=2 if heading is not None else 0)
             startrow += len(content) + content.columns.nlevels
@@ -130,7 +188,7 @@ class ExcelWriter(_XlsxWriter):
                         _v = io.BytesIO(base64.standard_b64decode(_v[22:]))
                         img = Image.open(_v)
                         if heading is not None:
-                            worksheet.write(startrow, 0, heading, self.head_fmt)
+                            worksheet.write(startrow, 0, self.FIG(heading), self.head_fmt)
                             startrow += 1
                         worksheet.insert_image(startrow, 0, f'image-{sheetname}.png', {'image_data': _v})
                         startrow += int(np.ceil(img.size[1] / img.info.get('dpi',[96,96])[1] * 72 / 15)) + 3
@@ -151,10 +209,13 @@ class ExcelWriter(_XlsxWriter):
         if not overwrite:
             from xmle.file_util import archive_existing_file
             try:
-                archive_existing_file(self.path, archive_path=None, tag='creation')
+                new_name = archive_existing_file(self.path, archive_path=None, tag='creation')
             except FileNotFoundError:
                 pass
+            else:
+                self.log(f"archived existing file to {new_name}")
 
+        self.log(f"saving")
         super().save()
 
 def _make_excel_writer(model, filename, data_statistics=True):
@@ -165,6 +226,19 @@ if xlsxwriter is not None:
     from .. import Model
     Model.to_xlsx = _make_excel_writer
 
+def load_metadata(xlsx_filename, key=None):
+    import pickle, base64, pandas
+    raw = pandas.read_excel(xlsx_filename, sheet_name='_metadata_', index_col=0)
+    metadata = {}
+    if key is None:
+        for key, row in raw.iterrows():
+            v = (row[1:row[0] + 1].str.cat())
+            metadata[key] = pickle.loads(base64.standard_b64decode(v.encode()))
+        return metadata
+    else:
+        row = raw.loc[key]
+        v = (row[1:row[0] + 1].str.cat())
+        return pickle.loads(base64.standard_b64decode(v.encode()))
 
 
 def image_dims():

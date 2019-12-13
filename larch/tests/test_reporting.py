@@ -4,6 +4,9 @@ import pandas
 import larch
 from larch import Model, P, X
 import larch.exampville
+import os
+from pytest import approx
+
 
 def test_ch_av_summary_output():
 
@@ -122,3 +125,94 @@ def test_ch_av_summary_output():
 							 numpy.array([4077.0, 4952.0, 2789.0, 4952.0, 2651.0, ''], dtype=object))
 	assert numpy.array_equal(q['chosen but not available'].values, [693.0, 0.0, 0.0, 0.0, 0.0, 693.0])
 
+
+
+def test_excel_metadata():
+
+	import larch.util.excel
+
+	from larch.util.temporaryfile import TemporaryDirectory
+
+	tempdir = TemporaryDirectory()
+	os.path.join(tempdir, 'larchtest.xlsx')
+
+	m = larch.example(1)
+	m.load_data()
+	m.loglike_null()
+	m.maximize_loglike()
+
+	xl = m.to_xlsx(os.path.join(tempdir, 'larchtest.xlsx'))
+	xl.add_metadata('self', m)
+	xl.add_metadata('short', 123)
+	xl.add_metadata('plain', 'text')
+	xl.save()
+
+	md = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'))
+	assert len(md) == 3
+	assert isinstance(md['self'], larch.Model)
+	assert md['short'] == 123
+	assert md['plain'] == 'text'
+
+	md_m = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'self')
+	assert isinstance(md_m, larch.Model)
+
+	assert larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'short') == 123
+
+	from numpy import inf
+	assert md_m._get_cached_loglike_values() == approx(
+		{'nil': 0.0, 'null': -7309.600971749679, 'constants_only': 0.0, 'best': -inf})
+
+	md_m.estimation_statistics()
+
+
+def test_parameter_summary():
+
+	m = larch.example(1)
+	m.load_data()
+	m.loglike_null()
+	m.set_values(**{
+		'ASC_BIKE': -2.3763275319243244,
+		'ASC_SR2': -2.1780143286612037,
+		'ASC_SR3P': -3.725078388760564,
+		'ASC_TRAN': -0.6708609582690096,
+		'ASC_WALK': -0.20677521181801753,
+		'hhinc#2': -0.0021699381002406883,
+		'hhinc#3': 0.0003577067151217295,
+		'hhinc#4': -0.00528632366072714,
+		'hhinc#5': -0.012807975284603574,
+		'hhinc#6': -0.009686302933787567,
+		'totcost': -0.00492023540098787,
+		'tottime': -0.05134209452571549,
+	})
+	m.loglike()
+	assert m.parameter_summary().tostring() == (
+		'<div><table><thead><tr><th style="text-align: left;">Category</th><th style="text-align: left;">Parameter</th>'
+		'<th>Value</th><th>Null Value</th></tr></thead><tbody><tr><th rowspan="2" style="vertical-align: top; text-alig'
+		'n: left;">LOS</th><th style="vertical-align: top; text-align: left;">totcost</th><td>-0.00492</td><td>0.0</td>'
+		'</tr><tr><th style="vertical-align: top; text-align: left;">tottime</th><td>-0.05134</td><td>0.0</td></tr><tr>'
+		'<th rowspan="5" style="vertical-align: top; text-align: left;">ASCs</th><th style="vertical-align: top; text-a'
+		'lign: left;">ASC_BIKE</th><td>-2.376</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left'
+		';">ASC_SR2</th><td>-2.178</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">ASC_SR3P'
+		'</th><td>-3.725</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">ASC_TRAN</th><td>-'
+		'0.6709</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">ASC_WALK</th><td>-0.2068</t'
+		'd><td>0.0</td></tr><tr><th rowspan="5" style="vertical-align: top; text-align: left;">Income</th><th style="ve'
+		'rtical-align: top; text-align: left;">hhinc#2</th><td>-0.00217</td><td>0.0</td></tr><tr><th style="vertical-al'
+		'ign: top; text-align: left;">hhinc#3</th><td>0.0003577</td><td>0.0</td></tr><tr><th style="vertical-align: top'
+		'; text-align: left;">hhinc#4</th><td>-0.005286</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-a'
+		'lign: left;">hhinc#5</th><td>-0.01281</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: lef'
+		't;">hhinc#6</th><td>-0.009686</td><td>0.0</td></tr></tbody></table></div>')
+	m.ordering = ()
+	assert m.parameter_summary().tostring() == (
+		'<div><table><thead><tr><th style="text-align: left;">Parameter</th><th>Value</th><th>Null Value</th></tr></the'
+		'ad><tbody><tr><th style="vertical-align: top; text-align: left;">ASC_BIKE</th><td>-2.376</td><td>0.0</td></tr>'
+		'<tr><th style="vertical-align: top; text-align: left;">ASC_SR2</th><td>-2.178</td><td>0.0</td></tr><tr><th sty'
+		'le="vertical-align: top; text-align: left;">ASC_SR3P</th><td>-3.725</td><td>0.0</td></tr><tr><th style="vertic'
+		'al-align: top; text-align: left;">ASC_TRAN</th><td>-0.6709</td><td>0.0</td></tr><tr><th style="vertical-align:'
+		' top; text-align: left;">ASC_WALK</th><td>-0.2068</td><td>0.0</td></tr><tr><th style="vertical-align: top; tex'
+		't-align: left;">hhinc#2</th><td>-0.00217</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: '
+		'left;">hhinc#3</th><td>0.0003577</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">h'
+		'hinc#4</th><td>-0.005286</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">hhinc#5</'
+		'th><td>-0.01281</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">hhinc#6</th><td>-0'
+		'.009686</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">totcost</th><td>-0.00492</'
+		'td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">tottime</th><td>-0.05134</td><td>0.'
+		'0</td></tr></tbody></table></div>')

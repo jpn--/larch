@@ -1078,7 +1078,43 @@ cdef class Model5c(AbstractChoiceModel):
 			return True
 		return False
 
+	def graph_descrip(self, which='nodes'):
+		"""
+		Generate DataFrames that describe this graph.
 
+		Parameters
+		----------
+		which : {'nodes','edges'}
+			Which type of description to return.
+
+		Returns
+		-------
+		DataFrame
+			Describing nodes or edges
+		"""
+		if which in ('edge','edges','link','links'):
+			ef = pandas.DataFrame.from_dict(self.graph.edges, orient='index')
+			ef.index.names = ['up', 'down']
+			return ef.fillna("")
+
+		nf = pandas.DataFrame.from_dict(self.graph.nodes, orient='index')
+		from itertools import islice
+		max_c = 8
+		max_p = 8
+		for n in nf.index:
+			children = [e[1] for e in islice(self.graph.out_edges(n), max_c)]
+			if len(children) > max_c-1:
+				children[-1] = '...'
+			if children:
+				nf.loc[n,'children'] = ", ".join(str(c) for c in children)
+		for n in nf.index:
+			parents = [e[0] for e in islice(self.graph.in_edges(n), max_p)]
+			if len(parents) > max_p-1:
+				parents[-1] = '...'
+			if parents:
+				nf.loc[n,'parents'] = ", ".join(str(c) for c in parents)
+		nf.drop(columns='root', errors='ignore', inplace=True)
+		return nf.fillna("")
 
 	###########
 	# Scoring
