@@ -928,29 +928,48 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		tbody = table.put('tbody')
 
+		try:
+			ncases = self.n_cases
+		except MissingDataError:
+			ncases = None
+
 		tr = thead.put('tr')
 		tr.put('td', text='Number of Cases')
-		tr.put('td', text=str(self.n_cases), colspan='2')
+		if ncases:
+			tr.put('td', text=str(ncases), colspan='2')
+		else:
+			tr.put('td', text="not available", colspan='2')
 
 		mostrecent = self._most_recent_estimation_result
 		if mostrecent is not None:
 			tr = thead.put('tr')
 			tr.put('td', text='Log Likelihood at Convergence')
 			tr.put('td', text="{:.2f}".format(mostrecent.loglike))
-			tr.put('td', text="{:.2f}".format(mostrecent.loglike / self.n_cases))
+			if ncases:
+				tr.put('td', text="{:.2f}".format(mostrecent.loglike / ncases))
+			else:
+				tr.put('td', text="na")
+
 
 		ll_z = self._cached_loglike_null
 		if ll_z == 0:
 			if compute_loglike_null:
-				ll_z = self.loglike_null()
-				self.loglike()
+				try:
+					ll_z = self.loglike_null()
+				except MissingDataError:
+					pass
+				else:
+					self.loglike()
 			else:
 				ll_z = 0
 		if ll_z != 0:
 			tr = thead.put('tr')
 			tr.put('td', text='Log Likelihood at Null Parameters')
 			tr.put('td', text="{:.2f}".format(ll_z))
-			tr.put('td', text="{:.2f}".format(ll_z / self.n_cases))
+			if ncases:
+				tr.put('td', text="{:.2f}".format(ll_z / ncases))
+			else:
+				tr.put('td', text="na")
 			if mostrecent is not None:
 				tr = thead.put('tr')
 				tr.put('td', text='Rho Squared w.r.t. Null Parameters')
@@ -962,7 +981,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			tr = thead.put('tr')
 			tr.put('td', text='Log Likelihood with No Model')
 			tr.put('td', text="{:.2f}".format(ll_nil))
-			tr.put('td', text="{:.2f}".format(ll_nil / self.n_cases))
+			if ncases:
+				tr.put('td', text="{:.2f}".format(ll_nil / ncases))
+			else:
+				tr.put('td', text="na")
 			if mostrecent is not None:
 				tr = thead.put('tr')
 				tr.put('td', text='Rho Squared w.r.t. No Model')
@@ -975,7 +997,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			tr = thead.put('tr')
 			tr.put('td', text='Log Likelihood at Constants Only')
 			tr.put('td', text="{:.2f}".format(ll_c))
-			tr.put('td', text="{:.2f}".format(ll_c / self.n_cases))
+			if ncases:
+				tr.put('td', text="{:.2f}".format(ll_c / ncases))
+			else:
+				tr.put('td', text="na")
 			if mostrecent is not None:
 				tr = thead.put('tr')
 				tr.put('td', text='Rho Squared w.r.t. Constants Only')
