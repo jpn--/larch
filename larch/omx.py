@@ -85,7 +85,7 @@ class OMX(_omx_base_class):
 			raise OMXBadFormat("the '/lookup' node does not exist and cannot be created")
 		if 'OMX_VERSION' not in self.root._v_attrs:
 			try:
-				self.root._v_attrs.OMX_VERSION = "0.2"
+				self.root._v_attrs.OMX_VERSION = b"0.2"
 			except _tb.exceptions.FileModeError:
 				raise OMXBadFormat("the root OMX_VERSION attribute does not exist and cannot be created")
 		if 'SHAPE' not in self.root._v_attrs:
