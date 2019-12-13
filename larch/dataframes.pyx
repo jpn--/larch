@@ -27,11 +27,8 @@ from .util.multiindex import remove_unused_level
 
 cdef float INFINITY32 = numpy.float('inf')
 
-class MissingDataError(Exception):
-	pass
+from .exceptions import MissingDataError, DuplicateColumnNames
 
-class DuplicateColumnNames(ValueError):
-	pass
 
 def _initialize_or_validate_shape(arr, shape, dtype):
 	if arr is None:

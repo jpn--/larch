@@ -5,7 +5,7 @@ from typing import MutableMapping
 
 from ..util import Dict
 from ..dataframes import DataFrames, MissingDataError
-from ..model.controller import ParameterNotInModelWarning
+from ..exceptions import ParameterNotInModelWarning
 from .linear import ParameterRef_C
 from ..general_precision import l4_float_dtype
 from ..model import persist_flags

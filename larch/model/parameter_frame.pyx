@@ -46,8 +46,7 @@ def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 	return r.copy()
 
 
-class ParameterNotInModelWarning(UserWarning):
-	pass
+from ..exceptions import ParameterNotInModelWarning
 
 
 cdef class ParameterFrame:

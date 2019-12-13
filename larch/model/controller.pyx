@@ -24,11 +24,7 @@ from .linear cimport DataRef_C as DataRef
 
 from .abstract_model cimport AbstractChoiceModel
 
-class MissingDataError(ValueError):
-	pass
-
-class ParameterNotInModelWarning(UserWarning):
-	pass
+from ..exceptions import MissingDataError, ParameterNotInModelWarning
 
 
 cdef class Model5c(AbstractChoiceModel):

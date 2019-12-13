@@ -8,6 +8,7 @@ from ..general_precision cimport l4_float_t
 
 from .parameter_frame cimport ParameterFrame
 from .persist_flags cimport *
+from ..exceptions import MissingDataError
 
 import logging
 from ..log import logger_name
