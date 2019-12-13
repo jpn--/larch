@@ -38,6 +38,14 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			title=title,
 		)
 
+	def _get_cached_loglike_values(self):
+		return {
+			'nil': self._cached_loglike_nil,
+			'null': self._cached_loglike_null,
+			'constants_only': self._cached_loglike_constants_only,
+			'best': self._cached_loglike_best,
+		}
+
 	def mangle(self, *args, **kwargs):
 		self.clear_best_loglike()
 		super().mangle(*args, **kwargs)
