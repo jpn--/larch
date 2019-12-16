@@ -49,6 +49,7 @@ requirements:
     - xmle >=0.1.3
     - addict >=2.2.1
     - pyyaml
+    - pillow
 
 test:
 
