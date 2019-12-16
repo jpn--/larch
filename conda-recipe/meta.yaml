@@ -51,6 +51,7 @@ requirements:
     - pyyaml
     - pillow
     - xlsxwriter
+    - pydot
 
 test:
 
