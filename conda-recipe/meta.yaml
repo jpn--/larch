@@ -50,6 +50,7 @@ requirements:
     - addict >=2.2.1
     - pyyaml
     - pillow
+    - xlsxwriter
 
 test:
 
