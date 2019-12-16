@@ -13,7 +13,10 @@ except ImportError:
     xlsxwriter = None
     _XlsxWriter = object
 else:
-    from pandas.io.excel._xlsxwriter import _XlsxWriter
+    try:
+        from pandas.io.excel._xlsxwriter import _XlsxWriter
+    except ImportError:
+        from pandas.io.excel import _XlsxWriter
 
 
 class NumberedCaptions:
@@ -31,10 +34,13 @@ class NumberedCaptions:
             return caption
 
 class ExcelWriter(_XlsxWriter):
+    engine = 'xlsxwriter_larch'
+    supported_extensions = ('.xlsx',)
 
     def __init__(self, *args, model=None, data_statistics=True, numbering=True, hide_log=True, **kwargs):
-
-        super().__init__(*args, **kwargs)
+        _engine = 'xlsxwriter_larch'
+        kwargs.pop('engine', None)
+        super().__init__(*args, engine=_engine, **kwargs)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.sheet_startrow = {}
         self._col_widths = {}
@@ -218,8 +224,12 @@ class ExcelWriter(_XlsxWriter):
         self.log(f"saving")
         super().save()
 
+if xlsxwriter is not None:
+    from pandas.io.excel import register_writer
+    register_writer(ExcelWriter)
+
 def _make_excel_writer(model, filename, data_statistics=True):
-    xl = ExcelWriter(filename, model=model, data_statistics=data_statistics)
+    xl = ExcelWriter(filename, engine='xlsxwriter_larch', model=model, data_statistics=data_statistics)
     return xl
 
 if xlsxwriter is not None:
