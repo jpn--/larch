@@ -197,7 +197,10 @@ class ExcelWriter(_XlsxWriter):
 
         # Extract PNG data from Elem if found there
         if not success and isinstance(content, Elem):
-            _v = content.find('img')
+            if content.tag == 'img':
+                _v = content
+            else:
+                _v = content.find('img')
             if _v is not None:
                 try:
                     _v = _v.attrib['src']
