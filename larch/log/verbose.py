@@ -67,3 +67,39 @@ def timing_log(label=''):
 		log.critical(f"< TIME ENDS > {label} <{timesize_stack(time.time() - start_time)}>")
 
 
+class TimingLog:
+
+	def __init__(self, label='', log=None, level=50):
+		global logger
+		if log is None:
+			log = logger
+		self.label = label
+		self.log = log
+		self.level = level
+		self.split_time = None
+		self.current_task = ''
+
+	def __enter__(self):
+		self.start_time = time.time()
+		self.log.log(self.level, f"<BEGIN> {self.label}")
+		return self
+
+	def __exit__(self, exc_type, exc_value, traceback):
+		now = time.time()
+		if self.split_time is not None:
+			self.log.log(self.level, f"<SPLIT> {self.label} / Final <{timesize_stack(now - self.split_time)}>")
+		if exc_type is None:
+			self.log.log(self.level, f"<-END-> {self.label} <{timesize_stack(now - self.start_time)}>")
+		else:
+			self.log.log(self.level, f"<ERROR> {self.label} <{timesize_stack(now - self.start_time)}>")
+
+	def split(self, note=''):
+		if self.split_time is None:
+			self.split_time = self.start_time
+		now = time.time()
+		if note:
+			note = " / " + note
+		self.log.log(self.level, f"<SPLIT> {self.label}{note} <{timesize_stack(now - self.split_time)}>")
+		self.split_time = now
+
+
