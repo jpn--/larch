@@ -172,6 +172,6 @@ def unique_successful_transform(iterable, transformer, accept_longest=False):
 
 def scalarize(a):
 	try:
-		return numpy.asscalar(a)
+		return a.item()
 	except (ValueError, AttributeError):
 		return a
