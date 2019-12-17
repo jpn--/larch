@@ -37,13 +37,27 @@ class ExcelWriter(_XlsxWriter):
     engine = 'xlsxwriter_larch'
     supported_extensions = ('.xlsx',)
 
-    def __init__(self, *args, model=None, data_statistics=True, numbering=True, hide_log=True, **kwargs):
+    def __init__(
+            self,
+            *args,
+            model=None,
+            data_statistics=True,
+            nesting=True,
+            numbering=True,
+            hide_log=True,
+            output_renderer=None,
+            **kwargs,
+    ):
+
         _engine = 'xlsxwriter_larch'
         kwargs.pop('engine', None)
         super().__init__(*args, engine=_engine, **kwargs)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.sheet_startrow = {}
         self._col_widths = {}
+        if output_renderer is None:
+            output_renderer = lambda x: x
+        self._output_renderer = output_renderer
 
         if numbering:
             self.TAB = NumberedCaptions('Table')
@@ -64,7 +78,7 @@ class ExcelWriter(_XlsxWriter):
         self.sheet_startrow['_metadata_'] = 1
 
         if model is not None:
-            self.add_model(model, data_statistics=data_statistics)
+            self.add_model(model, data_statistics=data_statistics, nesting=nesting)
 
 
     def add_model(self, model, data_statistics=True, nesting=True):
@@ -82,7 +96,7 @@ class ExcelWriter(_XlsxWriter):
             if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
                 self.add_content_tab(model.dataframes.choice_avail_summary(graph=model.graph), sheetname="Choice", heading="Choices")
 
-        if nesting and model.is_mnl():
+        if nesting and not model.is_mnl():
             self.add_content_tab(model.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
             self.add_content_tab(model.graph_descrip('nodes'), sheetname="Nesting", heading="Nesting Node List")
 
@@ -205,14 +219,14 @@ class ExcelWriter(_XlsxWriter):
             warnings.warn(f'content not written to sheet {sheetname}')
 
         self.sheet_startrow[worksheet.name] = startrow
-        return content_in
+        return self._output_renderer(content_in)
 
     def save(self, makedirs=True, overwrite=False):
         if makedirs:
             import os
             os.makedirs(os.path.dirname(self.path), exist_ok=True)
 
-        if not overwrite:
+        if not overwrite and not getattr(self, '__file_archived', False): # don't move twice
             from xmle.file_util import archive_existing_file
             try:
                 new_name = archive_existing_file(self.path, archive_path=None, tag='creation')
@@ -220,6 +234,7 @@ class ExcelWriter(_XlsxWriter):
                 pass
             else:
                 self.log(f"archived existing file to {new_name}")
+                setattr(self, '__file_archived', new_name)
 
         self.log(f"saving")
         super().save()
@@ -250,9 +265,3 @@ def load_metadata(xlsx_filename, key=None):
         v = (row[1:row[0] + 1].str.cat())
         return pickle.loads(base64.standard_b64decode(v.encode()))
 
-
-def image_dims():
-    from PIL import Image
-
-    im = Image.open('whatever.png')
-    width, height = im.size
