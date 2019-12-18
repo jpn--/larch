@@ -795,16 +795,22 @@ cdef class ParameterFrame:
 				return div
 
 			else:
-				columns = [i for i in ['value','std err','t stat','nullvalue'] if i in pfo.columns]
+				columns = [i for i in ['value','std err','t stat','nullvalue', 'minimum', 'maximum'] if i in pfo.columns]
 				result = pfo[columns].rename(
 					columns={
 						'value':'Value',
 						'std err':'Std Err',
 						't stat':'t Stat',
 						'nullvalue':'Null Value',
+						'minimum': 'Minimum',
+						'maximum': 'Maximum',
 					}
 				)
 				if 't Stat' in result.columns:
+					result.insert(result.columns.get_loc('t Stat')+1, 'Signif', None)
+					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
+					result.loc[numpy.absolute(result['t Stat']) > 2.5758, 'Signif'] = "**"
+					result.loc[numpy.absolute(result['t Stat']) > 3.2905, 'Signif'] = "***"
 					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if not pandas.isna(x) else "NA")
 				if 'Std Err' in result.columns:
 					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if not pandas.isna(x) else "NA")
