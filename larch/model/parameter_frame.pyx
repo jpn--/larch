@@ -693,7 +693,7 @@ cdef class ParameterFrame:
 	# 	f.index = ix
 	# 	return f
 
-	def parameter_summary(self):
+	def parameter_summary(self, output='xml'):
 		"""
 		Create an XHTML summary of parameter values.
 
@@ -714,84 +714,127 @@ cdef class ParameterFrame:
 		try:
 
 			pfo = self.pfo()
+			if output == 'xml':
 
-			any_categories = not (self.ordering is None or self.ordering == ())
-			if not any_categories:
-				ordered_p = [("",i) for i in pfo.index]
-			else:
-				ordered_p = list(pfo.index)
-
-			any_colons = False
-			for rownum in range(len(ordered_p)):
-				if ":" in ordered_p[rownum][1]:
-					any_colons = True
-					break
-
-			from xmle import ElemTable
-
-			div = ElemTable('div')
-			table = div.put('table')
-
-			thead = table.put('thead')
-			tr = thead.put('tr')
-			if any_categories:
-				tr.put('th', text='Category', style="text-align: left;")
-			if any_colons:
-				tr.put('th', text='Parameter', colspan='2', style="text-align: left;")
-			else:
-				tr.put('th', text='Parameter', style="text-align: left;")
-
-			tr.put('th', text='Value')
-			if 'std err' in pfo.columns:
-				tr.put('th', text='Std Err')
-			if 't stat' in pfo.columns:
-				tr.put('th', text='t Stat')
-			if 'nullvalue' in pfo.columns:
-				tr.put('th', text='Null Value')
-
-			tbody = table.put('tbody')
-
-			swallow_categories = 0
-			swallow_subcategories = 0
-
-			for rownum in range(len(ordered_p)):
-				tr = tbody.put('tr')
+				any_categories = not (self.ordering is None or self.ordering == ())
 				if not any_categories:
-					pass
-				elif swallow_categories > 0:
-					swallow_categories -= 1
+					ordered_p = [("",i) for i in pfo.index]
 				else:
-					nextrow = rownum + 1
-					while nextrow<len(ordered_p) and ordered_p[nextrow][0] == ordered_p[rownum][0]:
-						nextrow += 1
-					swallow_categories = nextrow - rownum - 1
-					if swallow_categories:
-						tr.put('th', text=ordered_p[rownum][0], rowspan=str(swallow_categories+1), style="vertical-align: top; text-align: left;")
-					else:
-						tr.put('th', text=ordered_p[rownum][0], style="vertical-align: top; text-align: left;")
-				parameter_name = ordered_p[rownum][1]
-				if ":" in parameter_name:
-					parameter_name = parameter_name.split(":",1)
-					if swallow_subcategories > 0:
-						swallow_subcategories -= 1
+					ordered_p = list(pfo.index)
+
+				any_colons = False
+				for rownum in range(len(ordered_p)):
+					if ":" in ordered_p[rownum][1]:
+						any_colons = True
+						break
+
+				from xmle import ElemTable
+
+				div = ElemTable('div')
+				table = div.put('table')
+
+				thead = table.put('thead')
+				tr = thead.put('tr')
+				if any_categories:
+					tr.put('th', text='Category', style="text-align: left;")
+				if any_colons:
+					tr.put('th', text='Parameter', colspan='2', style="text-align: left;")
+				else:
+					tr.put('th', text='Parameter', style="text-align: left;")
+
+				tr.put('th', text='Value')
+				if 'std err' in pfo.columns:
+					tr.put('th', text='Std Err')
+				if 't stat' in pfo.columns:
+					tr.put('th', text='t Stat')
+				if 'nullvalue' in pfo.columns:
+					tr.put('th', text='Null Value')
+
+				tbody = table.put('tbody')
+
+				swallow_categories = 0
+				swallow_subcategories = 0
+
+				for rownum in range(len(ordered_p)):
+					tr = tbody.put('tr')
+					if not any_categories:
+						pass
+					elif swallow_categories > 0:
+						swallow_categories -= 1
 					else:
 						nextrow = rownum + 1
-						while nextrow < len(ordered_p) and ":" in ordered_p[nextrow][1] and ordered_p[nextrow][1].split(":",1)[0] == parameter_name[0]:
+						while nextrow<len(ordered_p) and ordered_p[nextrow][0] == ordered_p[rownum][0]:
 							nextrow += 1
-						swallow_subcategories = nextrow - rownum - 1
-						if swallow_subcategories:
-							tr.put('th', text=parameter_name[0], rowspan=str(swallow_subcategories+1), style="vertical-align: top; text-align: left;")
+						swallow_categories = nextrow - rownum - 1
+						if swallow_categories:
+							tr.put('th', text=ordered_p[rownum][0], rowspan=str(swallow_categories+1), style="vertical-align: top; text-align: left;")
 						else:
-							tr.put('th', text=parameter_name[0], style="vertical-align: top; text-align: left;")
-					tr.put('th', text=parameter_name[1], style="vertical-align: top; text-align: left;")
-				else:
-					if any_colons:
-						tr.put('th', text=parameter_name, colspan="2", style="vertical-align: top; text-align: left;")
+							tr.put('th', text=ordered_p[rownum][0], style="vertical-align: top; text-align: left;")
+					parameter_name = ordered_p[rownum][1]
+					if ":" in parameter_name:
+						parameter_name = parameter_name.split(":",1)
+						if swallow_subcategories > 0:
+							swallow_subcategories -= 1
+						else:
+							nextrow = rownum + 1
+							while nextrow < len(ordered_p) and ":" in ordered_p[nextrow][1] and ordered_p[nextrow][1].split(":",1)[0] == parameter_name[0]:
+								nextrow += 1
+							swallow_subcategories = nextrow - rownum - 1
+							if swallow_subcategories:
+								tr.put('th', text=parameter_name[0], rowspan=str(swallow_subcategories+1), style="vertical-align: top; text-align: left;")
+							else:
+								tr.put('th', text=parameter_name[0], style="vertical-align: top; text-align: left;")
+						tr.put('th', text=parameter_name[1], style="vertical-align: top; text-align: left;")
 					else:
-						tr.put('th', text=parameter_name, style="vertical-align: top; text-align: left;")
-				tr << self.__parameter_table_section(ordered_p[rownum][1])
+						if any_colons:
+							tr.put('th', text=parameter_name, colspan="2", style="vertical-align: top; text-align: left;")
+						else:
+							tr.put('th', text=parameter_name, style="vertical-align: top; text-align: left;")
+					tr << self.__parameter_table_section(ordered_p[rownum][1])
 
-			return div
+				return div
+
+			else:
+				columns = [i for i in ['value','std err','t stat','nullvalue'] if i in pfo.columns]
+				result = pfo[columns].rename(
+					columns={
+						'value':'Value',
+						'std err':'Std Err',
+						't stat':'t Stat',
+						'nullvalue':'Null Value',
+					}
+				)
+				if 't Stat' in result.columns:
+					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if not pandas.isna(x) else "NA")
+				if 'Std Err' in result.columns:
+					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if not pandas.isna(x) else "NA")
+				if 'Value' in result.columns:
+					result['Value'] = result['Value'].apply(lambda x: f"{x:#.3g}")
+
+				if result.index.nlevels > 1:
+					pnames = result.index.get_level_values(-1)
+				else:
+					pnames = result.index
+				for i in range(len(result)):
+					pname_str = str(pnames[i])
+
+				if self.pf.loc[pname_str,'holdfast']:
+					j = result.index[i]
+					if 'Std Err' in result.columns:
+						result.loc[j,'Std Err'] = "fixed value"
+						if 't Stat' in result.columns:
+							result.loc[j,'t Stat'] = None
+						if 'Null Value' in result.columns:
+							result.loc[j,'Null Value'] = None
+					elif 't Stat' in result.columns:
+						result.loc[j,'t Stat'] = "fixed value"
+						if 'Null Value' in result.columns:
+							result.loc[j,'Null Value'] = None
+					elif 'Null Value' in result.columns:
+						result.loc[j,'Null Value'] = "fixed value"
+
+				return result
+
 		except Exception as err:
 			logger.exception("error in parameter_summary")
 			raise
