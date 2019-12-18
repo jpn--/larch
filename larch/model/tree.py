@@ -543,6 +543,9 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
 			elif output == 'png':
 				prog = [P.prog, '-Gdpi=300']
+				e = Elem.from_any(P.create(prog=prog, format=output, **format))
+				e.attrib['dpi'] = (300,300)
+				return e
 			return Elem.from_any(P.create(prog=prog, format=output, **format))
 
 	def _repr_html_(self):
