@@ -27,6 +27,8 @@ def log_to_console(level=None):
 	console_handler.setLevel(level)
 	console_handler.setFormatter(logging.Formatter(CONSOLE_LOG_FORMAT))
 	logger.addHandler(console_handler)
+	if level < logger.getEffectiveLevel():
+		logger.setLevel(level)
 
 	return logger
 
