@@ -1,11 +1,16 @@
 
 import numpy as np
 import pandas as pd
+from pandas.io.formats.style import Styler
 from xmle import Elem
 import matplotlib.figure
 import io
 import base64
-from PIL import Image
+from .png import make_png
+
+import logging
+
+logger = logging.getLogger("Larch.Excel")
 
 try:
     import xlsxwriter
@@ -83,7 +88,7 @@ class ExcelWriter(_XlsxWriter):
 
     def add_model(self, model, data_statistics=True, nesting=True):
 
-        self.add_content_tab(model.pfo(), sheetname="Parameters", heading="Parameters" )
+        self.add_content_tab(model.parameter_summary('df'), sheetname="Parameters", heading="Parameters" )
 
         if data_statistics:
             from .statistics import statistics_for_dataframe
@@ -153,7 +158,7 @@ class ExcelWriter(_XlsxWriter):
 
         return s
 
-    def add_content_tab(self, content, sheetname, heading=None, startrow=None):
+    def add_content_tab(self, content, sheetname, heading=None, startrow=None, blurb=None):
 
         if startrow is None:
             startrow = self.sheet_startrow.get(sheetname, 0)
@@ -162,28 +167,38 @@ class ExcelWriter(_XlsxWriter):
         content_in = content
         success = False
 
-        if isinstance(content, pd.DataFrame):
+        logger.debug("writing to %s", sheetname)
+
+        if isinstance(content, (pd.DataFrame, Styler)):
+
+            if isinstance(content, Styler):
+                content_, content_data = content, content.data
+            else:
+                content_, content_data = content, content
+
             if heading is not None:
                 worksheet.write(startrow, 0, self.TAB(heading), self.head_fmt)
                 startrow += 1
-            content.to_excel(self, sheet_name=worksheet.name, startrow=2 if heading is not None else 0)
-            startrow += len(content) + content.columns.nlevels
-            if content.index.name:
+                logger.debug(" after heading row is %d", startrow)
+            content_.to_excel(self, sheet_name=worksheet.name, startrow=startrow)
+            startrow += len(content_data) + content.columns.nlevels
+            if content_data.index.name:
                 startrow += 1
             startrow += 2 # gap
+            logger.debug(" after table row is %d", startrow)
             success = True
 
             if sheetname not in self._col_widths:
                 self._col_widths[sheetname] = {}
-            if content.index.nlevels == 1:
+            if content_data.index.nlevels == 1:
                 current_width = self._col_widths[sheetname].get(0, 8)
-                new_width = max(current_width, max(len(str(i)) for i in content.index))
+                new_width = max(current_width, max(len(str(i)) for i in content_data.index))
                 self._col_widths[sheetname][0] = new_width
                 worksheet.set_column(0, 0, new_width)
             else:
-                for n in range(content.index.nlevels):
+                for n in range(content_data.index.nlevels):
                     current_width = self._col_widths[sheetname].get(n, 8)
-                    new_width = max(current_width, max(len(str(i)) for i in content.index.levels[n]))
+                    new_width = max(current_width, max(len(str(i)) for i in content_data.index.levels[n]))
                     self._col_widths[sheetname][n] = new_width
                     worksheet.set_column(n,n,new_width)
 
@@ -191,7 +206,7 @@ class ExcelWriter(_XlsxWriter):
         if not success and 'matplotlib' in str(type(content)):
             if isinstance(content, matplotlib.figure.Figure):
                 try:
-                    content = Elem.from_figure(content, format='png', dpi='figure')
+                    content = make_png(content, dpi='figure', compress=True, output='Elem', facecolor='w')
                 except:
                     pass
 
@@ -203,23 +218,40 @@ class ExcelWriter(_XlsxWriter):
                 _v = content.find('img')
             if _v is not None:
                 try:
+                    dpi = _v.attrib['dpi']
+                except:
+                    dpi = None
+
+                try:
                     _v = _v.attrib['src']
                 except:
                     pass
                 else:
                     if isinstance(_v, str) and _v[:22] == 'data:image/png;base64,':
-                        _v = io.BytesIO(base64.standard_b64decode(_v[22:]))
-                        img = Image.open(_v)
+                        fp, img_size, dpi = make_png(
+                            base64.standard_b64decode(_v[22:]), dpi=dpi, output='bytesio',
+                            return_size=True, return_dpi=True,
+                        )
                         if heading is not None:
                             worksheet.write(startrow, 0, self.FIG(heading), self.head_fmt)
                             startrow += 1
-                        worksheet.insert_image(startrow, 0, f'image-{sheetname}.png', {'image_data': _v})
-                        startrow += int(np.ceil(img.size[1] / img.info.get('dpi',[96,96])[1] * 72 / 15)) + 3
+                            logger.debug(" after heading row is %d", startrow)
+                        worksheet.insert_image(startrow, 0, f'image-{sheetname}.png', {'image_data': fp})
+                        startrow += int(np.ceil(img_size[1] / dpi[1] * 72 / 15)) + 3
+                        logger.debug(" after image row is %d", startrow)
                         success = True
 
         if not success:
             import warnings
-            warnings.warn(f'content not written to sheet {sheetname}')
+            warnings.warn(f'content not written to sheet {sheetname}, type {type(content_in)}')
+        else:
+            if blurb is not None:
+                import textwrap
+                blurb = textwrap.wrap(blurb)
+                for line in blurb:
+                    worksheet.write(startrow, 0, line)
+                    startrow += 1
+                logger.debug(" after blurb row is %d", startrow)
 
         self.sheet_startrow[worksheet.name] = startrow
         return self._output_renderer(content_in)
@@ -246,8 +278,8 @@ if xlsxwriter is not None:
     from pandas.io.excel import register_writer
     register_writer(ExcelWriter)
 
-def _make_excel_writer(model, filename, data_statistics=True):
-    xl = ExcelWriter(filename, engine='xlsxwriter_larch', model=model, data_statistics=data_statistics)
+def _make_excel_writer(model, filename, **kwargs):
+    xl = ExcelWriter(filename, engine='xlsxwriter_larch', model=model, **kwargs)
     return xl
 
 if xlsxwriter is not None:
