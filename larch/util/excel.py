@@ -58,6 +58,7 @@ class ExcelWriter(_XlsxWriter):
         kwargs.pop('engine', None)
         super().__init__(*args, engine=_engine, **kwargs)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
+        self.toc_link_fmt = self.book.add_format({'font_size':8})
         self.sheet_startrow = {}
         self._col_widths = {}
         if output_renderer is None:
@@ -71,7 +72,9 @@ class ExcelWriter(_XlsxWriter):
             self.TAB = lambda x: x
             self.FIG = lambda x: x
 
-        self.add_worksheet('Parameters') # first sheet cannot be hidden
+        self.tocsheet = self.add_worksheet('Contents') # first sheet cannot be hidden
+        self.tocsheet.write(0, 0, 'Table of Contents', self.head_fmt)
+        self.sheet_startrow['Contents'] = 3
 
         self.logsheet = self.add_worksheet('_log_', hide=hide_log)
         self.log(f"larch.util.excel.ExcelWriter opened: {str(args)}")
@@ -158,6 +161,10 @@ class ExcelWriter(_XlsxWriter):
 
         return s
 
+    def _add_toc_entry(self, heading, target_sheet, target_row):
+        self.tocsheet.write_url(self.sheet_startrow['Contents'], 0, f"internal:'{target_sheet}'!A{target_row+1}", string=heading)
+        self.sheet_startrow['Contents'] += 1
+
     def add_content_tab(self, content, sheetname, heading=None, startrow=None, blurb=None):
 
         if startrow is None:
@@ -177,7 +184,11 @@ class ExcelWriter(_XlsxWriter):
                 content_, content_data = content, content
 
             if heading is not None:
-                worksheet.write(startrow, 0, self.TAB(heading), self.head_fmt)
+                worksheet.write_url(startrow, 0, 'internal:Contents!A1', self.toc_link_fmt, string='<< Back to Table of Contents', )
+                startrow += 1
+                h = self.TAB(heading)
+                worksheet.write(startrow, 0, h, self.head_fmt)
+                self._add_toc_entry(h, sheetname, startrow)
                 startrow += 1
                 logger.debug(" after heading row is %d", startrow)
             content_.to_excel(self, sheet_name=worksheet.name, startrow=startrow)
@@ -233,7 +244,12 @@ class ExcelWriter(_XlsxWriter):
                             return_size=True, return_dpi=True,
                         )
                         if heading is not None:
-                            worksheet.write(startrow, 0, self.FIG(heading), self.head_fmt)
+                            worksheet.write_url(startrow, 0, 'internal:Contents!A1', self.toc_link_fmt,
+                                                string='<< Back to Table of Contents', )
+                            startrow += 1
+                            h = self.FIG(heading)
+                            worksheet.write(startrow, 0, h, self.head_fmt)
+                            self._add_toc_entry(h, sheetname, startrow)
                             startrow += 1
                             logger.debug(" after heading row is %d", startrow)
                         worksheet.insert_image(startrow, 0, f'image-{sheetname}.png', {'image_data': fp})
