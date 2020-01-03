@@ -28,31 +28,44 @@ def build_directory(directory=None):
 
 class _files:
 
+	def __init__(self, tag=None):
+		if tag is None or tag == 0:
+			self._tag = ''
+		else:
+			self._tag = f'_{tag}'
+
 	@property
 	def shapefile(self):
-		return example_file('exampville_taz.zip', rel=True)
+		return example_file(f'exampville_taz{self._tag}.zip', rel=True)
 
 	@property
 	def employment(self):
-		return example_file('exampville_employment.csv.gz', missing_ok=True, rel=True)
+		return example_file(f'exampville_employment{self._tag}.csv.gz', missing_ok=True, rel=True)
 
 	@property
 	def hh(self):
-		return example_file('exampville_households.csv.gz', missing_ok=True, rel=True)
+		return example_file(f'exampville_households{self._tag}.csv.gz', missing_ok=True, rel=True)
 
 	@property
 	def person(self):
-		return example_file('exampville_persons.csv.gz', missing_ok=True, rel=True)
+		return example_file(f'exampville_persons{self._tag}.csv.gz', missing_ok=True, rel=True)
 
 	@property
 	def tour(self):
-		return example_file('exampville_tours.csv.gz', missing_ok=True, rel=True)
+		return example_file(f'exampville_tours{self._tag}.csv.gz', missing_ok=True, rel=True)
 
 	@property
 	def skims(self):
-		return example_file('exampville_skims.omx', missing_ok=True, rel=True)
+		return example_file(f'exampville_skims{self._tag}.omx', missing_ok=True, rel=True)
+
+	@property
+	def demographics(self):
+		return example_file(f'exampville_demographics{self._tag}.csv.gz', missing_ok=True, rel=True)
+
+
 
 files = _files()
+files_alt = _files(42)
 
 # The builder is abandoned in favor of some fixed pre-built files.
 #
