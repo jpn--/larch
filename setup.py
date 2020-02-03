@@ -78,14 +78,14 @@ elif platform.system() == 'Linux':
 else:
     # if LARCH_COMPILER == 'gcc':
     ## notes : https://github.com/ContinuumIO/anaconda-issues/issues/8803
-    os.environ['CFLAGS'] = '-openmp'
+    # os.environ['CFLAGS'] = '-openmp'
     include_dirs = ['.', numpy.get_include(), ]
     library_dirs = []
     extra_compile_args = [
-        # "-openmp",
+        "-fopenmp",
     ]
     extra_link_args = [
-       # '-openmp',
+       '-fopenmp',
     ]
     libraries = [
         # 'iomp5',
