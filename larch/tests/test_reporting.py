@@ -15,7 +15,11 @@ def test_ch_av_summary_output():
 	pp = pandas.read_csv(larch.exampville.files.person)
 	tour = pandas.read_csv(larch.exampville.files.tour)
 
-	raw = tour.merge(hh, on='HHID').merge(pp, on=('HHID', 'PERSONID'))
+	pp_col = ['PERSONID', 'HHID', 'HHIDX', 'AGE', 'WORKS',
+       'N_WORK_TOURS', 'N_OTHER_TOURS', 'N_TOURS', 'N_TRIPS', 'N_TRIPS_HBW',
+       'N_TRIPS_HBO', 'N_TRIPS_NHB']
+
+	raw = tour.merge(hh, on='HHID').merge(pp[pp_col], on=('HHID', 'PERSONID'))
 	raw["HOMETAZi"] = raw["HOMETAZ"] - 1
 	raw["DTAZi"] = raw["DTAZ"] - 1
 
@@ -102,9 +106,9 @@ def test_ch_av_summary_output():
 	assert numpy.array_equal(q.columns, ['name', 'chosen', 'available'])
 	assert q.index.identical(pandas.Index([1, 2, 3, 4, 5, '< Total All Alternatives >'], dtype='object'))
 	assert numpy.array_equal(q['name'].values, ['DA', 'SR', 'Walk', 'Bike', 'Transit', ''])
-	assert numpy.array_equal(q['chosen'].values, [3984., 570., 114., 47., 237., 4952.])
+	assert numpy.array_equal(q['chosen'].values, [6052.,  810.,  196.,   72.,  434., 7564.])
 	assert numpy.array_equal(q['available'].values,
-							 numpy.array([4952.0, 4952.0, 2789.0, 4952.0, 2651.0, ''], dtype=object))
+							 numpy.array([7564.0, 7564.0, 4179.0, 7564.0, 4199.0, ''], dtype=object))
 
 	# Unreasonable choice and avail data set
 	m.choice_co_code = 'TOURMODE'
@@ -120,49 +124,51 @@ def test_ch_av_summary_output():
 	assert numpy.array_equal(q.columns, ['name', 'chosen', 'available', 'chosen but not available'])
 	assert q.index.identical(pandas.Index([1, 2, 3, 4, 5, '< Total All Alternatives >'], dtype='object'))
 	assert numpy.array_equal(q['name'].values, ['DA', 'SR', 'Walk', 'Bike', 'Transit', ''])
-	assert numpy.array_equal(q['chosen'].values, [3984., 570., 114., 47., 237., 4952.])
+	assert numpy.array_equal(q['chosen'].values, [6052.,  810.,  196.,   72.,  434., 7564.])
 	assert numpy.array_equal(q['available'].values,
-							 numpy.array([4077.0, 4952.0, 2789.0, 4952.0, 2651.0, ''], dtype=object))
-	assert numpy.array_equal(q['chosen but not available'].values, [693.0, 0.0, 0.0, 0.0, 0.0, 693.0])
+							 numpy.array([6376.0, 7564.0, 4179.0, 7564.0, 4199.0, ''], dtype=object))
+	assert numpy.array_equal(q['chosen but not available'].values, [942.0, 0.0, 0.0, 0.0, 0.0, 942.0])
 
 
 
 def test_excel_metadata():
 
 	import larch.util.excel
+	if larch.util.excel.xlsxwriter is not None:
+		from larch.util.excel import _make_excel_writer
 
-	from larch.util.temporaryfile import TemporaryDirectory
+		from larch.util.temporaryfile import TemporaryDirectory
 
-	tempdir = TemporaryDirectory()
-	os.path.join(tempdir, 'larchtest.xlsx')
+		tempdir = TemporaryDirectory()
+		os.path.join(tempdir, 'larchtest.xlsx')
 
-	m = larch.example(1)
-	m.load_data()
-	m.loglike_null()
-	m.maximize_loglike()
+		m = larch.example(1)
+		m.load_data()
+		m.loglike_null()
+		m.maximize_loglike()
 
-	xl = m.to_xlsx(os.path.join(tempdir, 'larchtest.xlsx'))
-	xl.add_metadata('self', m)
-	xl.add_metadata('short', 123)
-	xl.add_metadata('plain', 'text')
-	xl.save()
+		xl = _make_excel_writer(m, os.path.join(tempdir, 'larchtest.xlsx'))
+		xl.add_metadata('self', m)
+		xl.add_metadata('short', 123)
+		xl.add_metadata('plain', 'text')
+		xl.save()
 
-	md = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'))
-	assert len(md) == 3
-	assert isinstance(md['self'], larch.Model)
-	assert md['short'] == 123
-	assert md['plain'] == 'text'
+		md = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'))
+		assert len(md) == 3
+		assert isinstance(md['self'], larch.Model)
+		assert md['short'] == 123
+		assert md['plain'] == 'text'
 
-	md_m = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'self')
-	assert isinstance(md_m, larch.Model)
+		md_m = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'self')
+		assert isinstance(md_m, larch.Model)
 
-	assert larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'short') == 123
+		assert larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'short') == 123
 
-	from numpy import inf
-	assert md_m._get_cached_loglike_values() == approx(
-		{'nil': 0.0, 'null': -7309.600971749679, 'constants_only': 0.0, 'best': -inf})
+		from numpy import inf
+		assert md_m._get_cached_loglike_values() == approx(
+			{'nil': 0.0, 'null': -7309.600971749679, 'constants_only': 0.0, 'best': -inf})
 
-	md_m.estimation_statistics()
+		md_m.estimation_statistics()
 
 
 def test_parameter_summary():
