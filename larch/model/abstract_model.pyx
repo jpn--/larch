@@ -780,7 +780,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		Parameters
 		----------
 		use_cache : bool, default True
-			Use the cached value if available.
+			Use the cached value if available.  Set to -1 to
+			raise an exception if there is no cached value.
 
 		Returns
 		-------
@@ -788,6 +789,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		"""
 		if self._cached_loglike_null != 0 and use_cache:
 			return self._cached_loglike_null
+		elif use_cache == -1:
+			raise ValueError("no cached value")
 		else:
 			current_parameters = self.get_values()
 			self.set_values('null')
