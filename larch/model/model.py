@@ -568,6 +568,20 @@ class Model(_Model5c):
 		result.dataservice = self.dataservice
 		return result
 
+	def remove_unused_parameters(self):
+		"""
+		Remove parameters that are not used in the model.
+		"""
+		old_pf = self.pf.copy()
+		self.pf.drop(self.pf.index, inplace=True)
+		self.unmangle(True)
+		overlay = pandas.merge(self.pf.iloc[:, 0:0], old_pf, left_index=True, right_index=True, how='left')
+		for col in ['value', 'initvalue']:
+			f = ~overlay[col].isna()
+			self.pf.loc[f, col] = overlay.loc[f, col]
+
+
+
 	def data_statistics(self):
 		"""
 		Generate a summary of data statistics.
