@@ -155,6 +155,14 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 				from_df = True
 				recommand.extend(partial)
 			# break
+			elif tokval in df.index.names:
+				# replace NAME tokens with # df.index.get_level_values('NAME').values
+				partial = [
+					(NAME, 'df'), DOT, (NAME, 'index'), DOT, (NAME, 'get_level_values'),
+					OPAR, (STRING, f"'{tokval}'"), CPAR, DOT, (NAME, 'values')
+				]
+				from_df = True
+				recommand.extend(partial)
 			else:
 				# no dat contains this natural name
 				# put the name back in raw, maybe it works cause it's a global, more likely
