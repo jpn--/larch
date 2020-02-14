@@ -147,7 +147,7 @@ def test_excel_metadata():
 		m.loglike_null()
 		m.maximize_loglike()
 
-		xl = _make_excel_writer(m, os.path.join(tempdir, 'larchtest.xlsx'))
+		xl = _make_excel_writer(m, os.path.join(tempdir, 'larchtest.xlsx'), save_now=False)
 		xl.add_metadata('self', m)
 		xl.add_metadata('short', 123)
 		xl.add_metadata('plain', 'text')
