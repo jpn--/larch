@@ -632,25 +632,34 @@ cdef class DataFrames:
 		print(f"  n_alts: {self.n_alts}", file=out)
 		if self.data_ca is not None:
 			if verbose:
+				max_col = max(len(str(k)) for k in self.data_ca.columns)
+				count = self.data_ca.count()
+				dtype = self.data_ca.dtypes
 				print(f"  data_ca:", file=out)
-				for col in self.data_ca.columns:
-					print(f"    - {col}", file=out)
+				for c,col in enumerate(self.data_ca.columns):
+					print(f"    - {col:{max_col}s} ({count.iloc[c]} non-null {dtype.iloc[c]})", file=out)
 			else:
 				print(f"  data_ca: {len(self.data_ca.columns)} variables", file=out)
 		elif self.data_ce is not None:
 			if verbose:
+				max_col = max(len(str(k)) for k in self.data_ce.columns)
+				count = self.data_ce.count()
+				dtype = self.data_ce.dtypes
 				print(f"  data_ce: {len(self.data_ce)} rows", file=out)
-				for col in self.data_ce.columns:
-					print(f"    - {col}", file=out)
+				for c,col in enumerate(self.data_ce.columns):
+					print(f"    - {col:{max_col}s} ({count.iloc[c]} non-null {dtype.iloc[c]})", file=out)
 			else:
 				print(f"  data_ce: {len(self.data_ce.columns)} variables, {len(self.data_ce)} rows", file=out)
 		else:
 			print(f"  data_ca: <not populated>", file=out)
 		if self.data_co is not None:
 			if verbose:
+				max_col = max(len(str(k)) for k in self.data_co.columns)
+				count = self.data_co.count()
+				dtype = self.data_co.dtypes
 				print(f"  data_co:", file=out)
-				for col in self.data_co.columns:
-					print(f"    - {col}", file=out)
+				for c,col in enumerate(self.data_co.columns):
+					print(f"    - {col:{max_col}s} ({count.iloc[c]} non-null {dtype.iloc[c]})", file=out)
 			else:
 				print(f"  data_co: {len(self.data_co.columns)} variables", file=out)
 		else:
