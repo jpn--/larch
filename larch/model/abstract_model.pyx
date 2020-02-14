@@ -735,6 +735,42 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		return result
 
+	def estimate(self, dataservice=None, autoscale_weights=True, **kwargs):
+		"""
+		A convenience method to load data, maximize loglike, and get covariance.
+
+		This runs the following methods in order:
+		- load_data
+		- maximize_loglike
+		- calculate_parameter_covariance
+
+		Parameters
+		----------
+		dataservice : DataService, optional
+			A dataservice from which to load data.  If a dataservice
+			has not been previously defined for this model, this
+			argument is not optional.
+		autoscale_weights : bool, default True
+			If True and data_wt is not None, the loaded dataframes will
+			have the weights automatically scaled such that the average
+			value for data_wt is 1.0.  See `autoscale_weights` for more
+			information.
+		**kwargs
+			All other keyword arguments are passed through to
+			`maximize_loglike`.
+
+		Returns
+		-------
+		dictx
+		"""
+		self.load_data(
+			dataservice=dataservice,
+			autoscale_weights=autoscale_weights
+		)
+		result = self.maximize_loglike(**kwargs)
+		self.calculate_parameter_covariance()
+		return result
+
 	def cross_validate(self, cv=5, *args, **kwargs):
 		"""
 		A simple but well optimized cross-validated log likelihood.
@@ -808,6 +844,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			Values for the parameters.  See :ref:`set_values` for details.
 		use_cache : bool, default True
 			Use the cached value for `loglike_null` if available.
+			Set to -1 to raise an exception if there is no cached value.
 		adj : bool, default False
 			Compute adjusted rho squared, which accounts for the
 			degrees of freedom.
@@ -832,12 +869,20 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		the Null model, but for more complex models this may be
 		different.
 
+		Parameters
+		----------
+		use_cache : bool, default True
+			Use the cached value if available.  Set to -1 to
+			raise an exception if there is no cached value.
+
 		Returns
 		-------
 		float
 		"""
 		if self._cached_loglike_nil != 0 and use_cache:
 			return self._cached_loglike_nil
+		elif use_cache == -1:
+			raise ValueError("no cached loglike_nil")
 		else:
 			from .model import Model
 			nil = Model()
@@ -858,7 +903,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
 			Values for the parameters.  See :ref:`set_values` for details.
 		use_cache : bool, default True
-			Use the cached value for `loglike_null` if available.
+			Use the cached value for `loglike_nil` if available.
+			Set to -1 to raise an exception if there is no cached value.
 		adj : bool, default False
 			Compute adjusted rho squared, which accounts for the
 			degrees of freedom.
