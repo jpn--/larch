@@ -36,12 +36,24 @@ def test_dfs_info():
 
 	assert s.getvalue() == (
 		'larch.DataFrames:  (not computation-ready)\n  n_cases: 5029\n  n_alts: 6\n  data_ce: 22033 rows\n'
-		'    - chose\n    - ivtt\n    - ovtt\n    - tottime\n    - totcost\n    - hhid\n    - perid\n'
-		'    - numalts\n    - dist\n    - wkzone\n    - hmzone\n    - rspopden\n    - rsempden\n'
-		'    - wkpopden\n    - wkempden\n    - vehavdum\n    - femdum\n    - age\n    - drlicdum\n'
-		'    - noncadum\n    - numveh\n    - hhsize\n    - hhinc\n    - famtype\n    - hhowndum\n'
-		'    - numemphh\n    - numadlt\n    - nmlt5\n    - nm5to11\n    - nm12to16\n    - wkccbd\n'
-		'    - wknccbd\n    - corredis\n    - vehbywrk\n    - vocc\n    - wgt\n'
+		'    - chose    (22033 non-null int64)\n    - ivtt     (22033 non-null float64)\n'
+		'    - ovtt     (22033 non-null float64)\n    - tottime  (22033 non-null float64)\n'
+		'    - totcost  (22033 non-null float64)\n    - hhid     (22033 non-null int64)\n'
+		'    - perid    (22033 non-null int64)\n    - numalts  (22033 non-null int64)\n'
+		'    - dist     (22033 non-null float64)\n    - wkzone   (22033 non-null int64)\n'
+		'    - hmzone   (22033 non-null int64)\n    - rspopden (22033 non-null float64)\n'
+		'    - rsempden (22033 non-null float64)\n    - wkpopden (22033 non-null float64)\n'
+		'    - wkempden (22033 non-null float64)\n    - vehavdum (22033 non-null int64)\n'
+		'    - femdum   (22033 non-null int64)\n    - age      (22033 non-null int64)\n'
+		'    - drlicdum (22033 non-null int64)\n    - noncadum (22033 non-null int64)\n'
+		'    - numveh   (22033 non-null int64)\n    - hhsize   (22033 non-null int64)\n'
+		'    - hhinc    (22033 non-null float64)\n    - famtype  (22033 non-null int64)\n'
+		'    - hhowndum (22033 non-null int64)\n    - numemphh (22033 non-null int64)\n'
+		'    - numadlt  (22033 non-null int64)\n    - nmlt5    (22033 non-null int64)\n'
+		'    - nm5to11  (22033 non-null int64)\n    - nm12to16 (22033 non-null int64)\n'
+		'    - wkccbd   (22033 non-null int64)\n    - wknccbd  (22033 non-null int64)\n'
+		'    - corredis (22033 non-null int64)\n    - vehbywrk (22033 non-null float64)\n'
+		'    - vocc     (22033 non-null int64)\n    - wgt      (22033 non-null int64)\n'
 		'  data_co: <not populated>\n  data_av: <populated>\n')
 
 	assert not ds.computational
