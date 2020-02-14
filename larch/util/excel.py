@@ -89,20 +89,25 @@ class ExcelWriter(_XlsxWriter):
             self.add_model(model, data_statistics=data_statistics, nesting=nesting)
 
 
-    def add_model(self, model, data_statistics=True, nesting=True):
+    def add_model(self, model, data_statistics=True, nesting=True, utility_functions=True):
 
         self.add_content_tab(model.parameter_summary('df'), sheetname="Parameters", heading="Parameters" )
 
         if data_statistics:
             from .statistics import statistics_for_dataframe
-            if model.dataframes.data_co is not None:
-                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_co), sheetname="CO Data", heading="CO Data")
-            if model.dataframes.data_ca is not None:
-                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ca), sheetname="CA Data", heading="CA Data")
-            if model.dataframes.data_ce is not None:
-                self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ce), sheetname="CE Data", heading="CE Data")
-            if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
-                self.add_content_tab(model.dataframes.choice_avail_summary(graph=model.graph), sheetname="Choice", heading="Choices")
+            if model.dataframes is not None:
+                if model.dataframes.data_co is not None:
+                    self.add_content_tab(statistics_for_dataframe(model.dataframes.data_co), sheetname="CO Data", heading="CO Data")
+                if model.dataframes.data_ca is not None:
+                    self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ca), sheetname="CA Data", heading="CA Data")
+                if model.dataframes.data_ce is not None:
+                    self.add_content_tab(statistics_for_dataframe(model.dataframes.data_ce), sheetname="CE Data", heading="CE Data")
+                if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
+                    self.add_content_tab(model.dataframes.choice_avail_summary(graph=model.graph), sheetname="Choice", heading="Choices")
+
+        if utility_functions:
+            self.add_content_tab(model._utility_functions_as_frame(), sheetname="Utility", heading="Utility Functions")
+            self.sheets["Utility"].set_column('B:B', None, None, {'hidden': 1})
 
         if nesting and not model.is_mnl():
             self.add_content_tab(model.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
@@ -294,8 +299,28 @@ if xlsxwriter is not None:
     from pandas.io.excel import register_writer
     register_writer(ExcelWriter)
 
-def _make_excel_writer(model, filename, **kwargs):
+def _make_excel_writer(model, filename, save_now=True, **kwargs):
+    """
+    Write the model to an Excel file.
+
+    Parameters
+    ----------
+    model : larch.Model
+    filename : str
+    save_now : bool, default True
+        Save the model immediately.  Set to False if you want to
+        write additional figures or tables to the file before saving.
+    **kwargs
+        Other keyword arguments are passed to the `ExcelWriter`
+        constructor.
+
+    Returns
+    -------
+    larch.util.excel.ExcelWriter
+    """
     xl = ExcelWriter(filename, engine='xlsxwriter_larch', model=model, **kwargs)
+    if save_now:
+        xl.save()
     return xl
 
 if xlsxwriter is not None:

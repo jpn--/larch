@@ -399,6 +399,21 @@ cdef class LinearComponent_C:
 		except AttributeError:
 			return f"<{self.__class__.__name__} {id(self)} with error>"
 
+	def _str_exponentiate(self):
+		try:
+			if self.scale == 1.0:
+				try:
+					data_is_1 = (float(self.data) == 1)
+				except:
+					data_is_1 = False
+				if data_is_1:
+					return f"exp({self.param!r})"
+				else:
+					return f"exp({self.param!r}) * {self.data!r}"
+			return f"exp({self.param!r}) * {self.scale} * {self.data!r}"
+		except AttributeError:
+			return f"<{self.__class__.__name__} {id(self)} with error>"
+
 	def __add__(self, other):
 		if isinstance(self, LinearComponent_C):
 			if other == () or other == 0:

@@ -406,12 +406,23 @@ class Model(_Model5c):
 			# t.elem('caption', text=f"Utility Functions",
 			# 	   style="caption-side:top;text-align:left;font-family:Roboto;font-weight:700;"
 			# 			 "font-style:normal;font-size:100%;padding:0px;color:black;")
+
+			# iterate over all alternatives if a dataframes is attached and lists the alternatives
+			try:
+				if self.dataservice is not None:
+					alts = self.dataservice.alternative_codes()
+				elif self.dataframes is not None:
+					alts = self.dataframes.alternative_codes()
+				else:
+					alts = self.utility_co.keys()
+			except:
+				alts = self.utility_co.keys()
 			t_head = t.elem('thead')
 			tr = t_head.elem('tr')
 			tr.elem('th', text="alt")
 			tr.elem('th', text='formula', attrib={'style':'text-align:left;'})
 			t_body = t.elem('tbody')
-			for j in self.utility_co.keys():
+			for j in alts:
 				if subset is None or j in subset:
 					tr = t_body.elem('tr')
 					tr.elem('td', text=str(j))
@@ -472,6 +483,103 @@ class Model(_Model5c):
 				utilitycell.elem('br', tail=")")
 		return x
 
+	def _utility_functions_as_frame(self, subset=None, resolve_parameters=False):
+		"""
+		Generate an XHTML output of the utility function(s).
+
+		Parameters
+		----------
+		subset : Collection, optional
+			A collection of alternative codes to include. This only has effect if
+			there are separate utility_co functions set by alternative. It is
+			recommended to use this parameter if there are a very large number of
+			alternatives, and the utility functions of most (or all) of them
+			can be effectively communicated by showing only a few.
+		resolve_parameters : bool, default False
+			Whether to resolve the parameters to the current (estimated) value
+			in the output.  Not implemented.
+
+		Returns
+		-------
+		xmle.Elem
+		"""
+		self.unmangle()
+
+		tf = pandas.DataFrame(
+			index=pandas.MultiIndex.from_tuples([], names=['Alt', 'Line']),
+			columns=['Formula'],
+		)
+
+		if len(self.utility_co):
+			# iterate over all alternatives if a dataframes is attached and lists the alternatives
+			try:
+				if self.dataservice is not None:
+					alts = self.dataservice.alternative_codes()
+				elif self.dataframes is not None:
+					alts = self.dataframes.alternative_codes()
+				else:
+					alts = self.utility_co.keys()
+			except:
+				alts = self.utility_co.keys()
+
+			for a in alts:
+				if not (subset is None or a in subset):
+					continue
+				line = 1
+				op = ' '
+				for i in self.utility_ca:
+					tf.loc[(a, line), :] = f"{op} {str(i)}"
+					op = '+'
+					line += 1
+				if a in self.utility_co:
+					for i in self.utility_co[a]:
+						tf.loc[(a, line), :] = f"{op} {str(i)}"
+						op = '+'
+						line += 1
+				if len(self.quantity_ca):
+					if self.quantity_scale:
+						from .linear import ParameterRef_C
+						q = ParameterRef_C(self.quantity_scale)
+						tf.loc[(a, line), :] = f"{op} {str(q)} * log("
+					else:
+						tf.loc[(a, line), :] = f"{op} log("
+					op = ' '
+					line += 1
+					for i in self.quantity_ca:
+						tf.loc[(a, line), :] = f"    {op} {i._str_exponentiate()}"
+						op = '+'
+						line += 1
+					tf.loc[(a, line), :] = f")"
+					op = '+'
+					line += 1
+
+		else:
+			# there is no differentiation by alternatives, just give one formula
+			a = '*'
+			line = 1
+			op = ' '
+			for i in self.utility_ca:
+				tf.loc[(a, line), :] = f"{op} {str(i)}"
+				op = '+'
+				line += 1
+			if len(self.quantity_ca):
+				if self.quantity_scale:
+					from .linear import ParameterRef_C
+					q = ParameterRef_C(self.quantity_scale)
+					tf.loc[(a, line), :] = f"{op} {str(q)} * log("
+				else:
+					tf.loc[(a, line), :] = f"{op} log("
+				op = ' '
+				line += 1
+				for i in self.quantity_ca:
+					tf.loc[(a, line), :] = f"    {op} {i._str_exponentiate()}"
+					op = '+'
+					line += 1
+				tf.loc[(a, line), :] = f")"
+				op = '+'
+				line += 1
+
+		return tf
 
 	def required_data(self):
 		"""
