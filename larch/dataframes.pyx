@@ -2577,6 +2577,66 @@ cdef class DataFrames:
 			raise NotImplementedError
 		return columnize(self._data_co, list(columns), inplace=False, dtype=float_dtype)
 
+	def selector_co(self, co_expr):
+		"""
+		Filter a DataFrames object based on an idco selector expression.
+
+		Parameters
+		----------
+		co_expr : str
+			An epxression to evaluate on the idco data that results in a boolean
+			selection filter.
+
+		Returns
+		-------
+		DataFrames
+			Containing only those cases that meet the selector expression.
+		"""
+		selector = columnize(
+			self.data_co,
+			[co_expr],
+			inplace=False,
+			dtype=bool,
+		).iloc[:,0]
+
+		df_co = None
+		df_ca = None
+		df_av = None
+		df_ch = None
+		df_wt = None
+
+		if self.data_co is not None:
+			df_co = self.data_co[selector]
+
+		if self.data_wt is not None:
+			df_wt = self.data_wt[selector]
+
+		if self.data_ca is not None:
+			df_ca = self.data_ca.unstack()[selector].stack()
+		elif self.data_ce is not None:
+			df_ca = self.data_ce.unstack()[selector].stack()
+
+		if self.data_av is not None:
+			df_av = self.data_av[selector]
+
+		if self.data_ch is not None:
+			df_ch = self.data_ch[selector]
+
+		result = DataFrames(
+			co=df_co,
+			# ce=df_ca, # dynamically set below
+			av=df_av,
+			ch=df_ch,
+			wt=df_wt,
+			alt_codes=self.alternative_codes(),
+			alt_names=self.alternative_names(),
+			sys_alts=self._systematic_alternatives,
+			**{self._data_ca_or_ce_type: df_ca},
+		)
+
+		result._weight_normalization = self._weight_normalization
+		return result
+
 	def make_dataframes(
 			self,
 			req_data,
