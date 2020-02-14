@@ -114,7 +114,8 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(other, DataRef_C):
 				return LinearComponent_C(param=str(self), data=str(other))
 			if isinstance(other, _Number):
-				return LinearComponent_C(param=str(self), data=str("1"), scale=other)
+				return LinearComponent_C(param=str(self), data=str(other))
+				# return LinearComponent_C(param=str(self), data=str("1"), scale=other)
 			if isinstance(other, ParameterRef_C):
 				from .linear_math import ParameterMultiply
 				return ParameterMultiply(self, other)
@@ -122,7 +123,8 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(self, DataRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
 			if isinstance(self, _Number):
-				return LinearComponent_C(param=str(other), data=str("1"), scale=self)
+				return LinearComponent_C(param=str(other), data=str(self))
+				# return LinearComponent_C(param=str(other), data=str("1"), scale=self)
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -598,6 +600,15 @@ cdef class LinearComponent_C:
 	def as_pmath(self):
 		from .linear_math import ParameterNoop, ParameterMultiply
 		if self.data != "1":
+			try:
+				scale = float(self.data) * self.scale
+			except:
+				pass
+			else:
+				if scale == 1:
+					return ParameterNoop(self.param)
+				else:
+					return ParameterMultiply(self.param, scale)
 			raise NotImplementedError('data is not 1')
 		if self.scale == 1:
 			return ParameterNoop(self.param)
@@ -704,6 +715,20 @@ cdef class LinearFunction_C:
 	def __delitem__(self, key):
 		del self._func[key]
 		_try_mangle(self._instance)
+
+	def remove_data(self, data):
+		i = len(self._func)
+		while i > 0:
+			i -= 1
+			if self._func[i].data == data:
+				del self._func[i]
+
+	def remove_param(self, param):
+		i = len(self._func)
+		while i > 0:
+			i -= 1
+			if self._func[i].param == param:
+				del self._func[i]
 
 	def __len__(self):
 		return len(self._func)
