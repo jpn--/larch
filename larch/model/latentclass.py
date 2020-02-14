@@ -26,7 +26,7 @@ def sync_frames(*models):
 		if m._frame is not pf1:
 			in_sync = False
 	if not in_sync:
-		joined = pandas.concat([m._frame for m in models])
+		joined = pandas.concat([m._frame for m in models], sort=False)
 		joined = joined[~joined.index.duplicated(keep='first')]
 		for m in models:
 			m.set_frame(joined)

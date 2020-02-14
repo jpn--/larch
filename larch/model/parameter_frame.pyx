@@ -99,7 +99,11 @@ cdef class ParameterFrame:
 		nameset = set(names)
 		missing_names = nameset - existing_names
 		if missing_names:
-			self._frame = self._frame.append(_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs), verify_integrity=True)
+			self._frame = self._frame.append(
+				_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs),
+				verify_integrity=True,
+				sort=False
+			)
 
 	def _scan_all_ensure_names(self):
 		self._frame.sort_index(inplace=True)

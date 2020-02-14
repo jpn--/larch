@@ -113,7 +113,7 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 		df1 = pandas.concat([
 			columnize_with_joinable_backing(df, _, False, dtype, backing=backing)
 			for _ in datanames
-		], axis=1)
+		], axis=1, sort=False)
 		if inplace:
 			df[datanames] = df1
 			return
@@ -317,6 +317,7 @@ def counts_and_shares(
 			[result1, result2],
 			axis=1,
 			keys=['Counts', 'Shares'],
+			sort=False,
 		)
 		result = result.style.format({
 			**{i: pct_or_thousands for i in result.columns if i[0] == 'Counts'},

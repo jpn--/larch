@@ -460,7 +460,7 @@ def distribution_on_idco_variable(
 		result = pandas.concat({
 			'Modeled Shares': h_pr_share,
 			'Observed Shares': h_ch_share,
-		}, axis=1)
+		}, axis=1, sort=False)
 		result['Count', '*'] = h_pr.sum(1)
 
 		if x_label:
