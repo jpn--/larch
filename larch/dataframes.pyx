@@ -592,6 +592,11 @@ cdef class DataFrames:
 		crack : bool, default False
 			Split `ce` into :ref:`idca` and :ref:`idco` parts.
 		"""
+		if not isinstance(ce.index, pandas.MultiIndex):
+			raise TypeError(f'input data must have case-alt set as a MultiIndex, not {type(ce.index)}')
+		if not len(ce.index.levels) == 2:
+			raise TypeError(f'input data must have 2 level MultiIndex (case,alt), not {len(ce.index.levels)} levels')
+
 		co = None
 		if crack:
 			ce, co = crack_idca(ce, crack)
