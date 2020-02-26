@@ -792,6 +792,20 @@ cdef class Model5c(AbstractChoiceModel):
 
 
 	def logsums(self, x=None, arr=None):
+		"""
+		Returns the model logsums.
+
+		Parameters
+		----------
+		x : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			Values for the parameters.  See :ref:`set_values` for details.
+		arr : ndarray, optional
+			Output array
+
+		Returns
+		-------
+		arr
+		"""
 		self.unmangle()
 		if x is not None:
 			self.set_values(x)
@@ -801,7 +815,10 @@ cdef class Model5c(AbstractChoiceModel):
 		cdef l4_float_t logsum_parameter = 1
 		if self._logsum_parameter is not None:
 			logsum_parameter = self.get_value(self._logsum_parameter)
-		mnl_logsums_from_dataframes_all_rows(self._dataframes, logsum_parameter, arr)
+		if self.is_mnl():
+			mnl_logsums_from_dataframes_all_rows(self._dataframes, logsum_parameter, arr)
+		else:
+			arr[:] = self.loglike(persist=PERSIST_UTILITY).utility[:,-1]
 		return arr
 
 	def exputility(self, x=None, return_dataframe=None):
