@@ -1687,6 +1687,7 @@ cdef class DataFrames:
 			model_utility_co_data    = self.model_utility_co_data.base  ,
 			model_quantity_ca_param  = self.model_quantity_ca_param.base,
 			model_quantity_ca_data   = self.model_quantity_ca_data.base ,
+			model_quantity_scale_param = self.model_quantity_scale_param,
 		)
 
 
