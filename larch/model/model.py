@@ -680,11 +680,12 @@ class Model(_Model5c):
 		"""
 		Remove parameters that are not used in the model.
 		"""
+		self.unmangle(True)
 		old_pf = self.pf.copy()
 		self.pf.drop(self.pf.index, inplace=True)
 		self.unmangle(True)
 		overlay = pandas.merge(self.pf.iloc[:, 0:0], old_pf, left_index=True, right_index=True, how='left')
-		for col in ['value', 'initvalue']:
+		for col in overlay.columns:
 			f = ~overlay[col].isna()
 			self.pf.loc[f, col] = overlay.loc[f, col]
 
