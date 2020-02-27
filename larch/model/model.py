@@ -674,6 +674,7 @@ class Model(_Model5c):
 		import pickle
 		result = pickle.loads(self.dumps())
 		result.dataservice = self.dataservice
+		result.graph.set_touch_callback(result.mangle)
 		return result
 
 	def remove_unused_parameters(self):
