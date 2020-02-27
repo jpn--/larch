@@ -603,6 +603,22 @@ cdef class DBF:
 		return self._load_dataframe(start, stop, preserve_order, strip_whitespace)
 
 	def load_dataframe_iter(self, chunksize=100000, *, return_slice=False):
+		"""
+		Load rows from this DBF file in chunks.
+
+		Parameters
+		----------
+		chunksize : int, default 100000
+		    Number of rows to read in each chunk.
+		return_slice : bool, default False
+		    Instead of yielding loaded dataframes only, also yield
+		    slice objects that indicate the start and stop marks
+		    for the given chunk.
+
+        Yields
+        ------
+        pandas.DataFrame or (pandas.DataFrame, slice)
+		"""
 		start = 0
 		stop = chunksize
 		while start < self._header.nrecs:
