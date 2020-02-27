@@ -4544,8 +4544,7 @@ def test_mangling():
 	assert not m._is_mangled()
 
 def test_logsums():
-	# from larch.examples import MTC
-	# from larch import P, X
+
 	d = MTC()
 
 	m1 = Model(dataservice=d)
@@ -4649,6 +4648,116 @@ def test_logsums():
 	assert m1_ls[-5:] == approx(numpy.array([-0.62660682, -0.10129286, -0.21896445, -0.16411639, -0.52924005]))
 	assert m1_ls.shape == (5029,)
 
+	m2_ls = m2.logsums()
+	assert m2_ls[:5] == approx(numpy.array([-0.24425897, 0.58344008, -0.14846934, 0.22871595, -0.5421539]))
+	assert m2_ls[-5:] == approx(numpy.array([-0.74616062, -0.28635094, -0.32691931, -0.28769199, -0.64213064]))
+	assert m2_ls.shape == (5029,)
+
+
+def test_copy_and_nest():
+
+
+	d = MTC()
+
+	m1 = Model(dataservice=d)
+
+	m1.utility_ca  = (
+			+ P.costbyincome * X('totcost/hhinc')
+			+ P.motorized_time * X('tottime * (altnum <= 4)')
+			+ P.nonmotorized_time * X('tottime * (altnum >= 5)')
+			+ P.motorized_ovtbydist * X('ovtt/dist * (altnum <= 4)')
+	)
+
+	m1.utility_co[2] = (
+			+ P.vehbywrk_SR * X.vehbywrk
+			+ P.wkcbd_SR2 * X('wkccbd+wknccbd')
+			+ P.wkempden_SR2 * X.wkempden
+			+ P.ASC_SR2
+	)
+
+	m1.utility_co[3] = (
+			+ P.vehbywrk_SR * X.vehbywrk
+			+ P.wkcbd_SR3 * X('wkccbd+wknccbd')
+			+ P.wkempden_SR3 * X.wkempden
+			+ P.ASC_SR3
+	)
+
+	m1.utility_co[4] = (
+			+ P('hhinc#4') * X.hhinc
+			+ P.vehbywrk_TRANSIT * X.vehbywrk
+			+ P.wkcbd_TRANSIT * X('wkccbd+wknccbd')
+			+ P.wkempden_TRANSIT * X.wkempden
+			+ P.ASC_TRANSIT
+	)
+
+	m1.utility_co[5] = (
+			+ P('hhinc#5') * X.hhinc
+			+ P.vehbywrk_BIKE * X.vehbywrk
+			+ P.wkcbd_BIKE * X('wkccbd+wknccbd')
+			+ P.wkempden_BIKE * X.wkempden
+			+ P.ASC_BIKE
+	)
+
+	m1.utility_co[6] = (
+			+ P('hhinc#6') * X.hhinc
+			+ P.vehbywrk_WALK * X.vehbywrk
+			+ P.wkcbd_WALK * X('wkccbd+wknccbd')
+			+ P.wkempden_WALK * X.wkempden
+			+ P.ASC_WALK
+	)
+
+	m1.availability_var = '_avail_'
+
+	m1.choice_ca_var = '_choice_'
+
+	p = {
+		'ASC_BIKE': -1.2053455,
+		'ASC_SR2': -1.66877447,
+		'ASC_SR3': -2.82357274,
+		'ASC_TRANSIT': -0.42244182,
+		'ASC_WALK': 0.30160837,
+		'costbyincome': -0.03768988,
+		'hhinc#4': -0.00226831,
+		'hhinc#5': -0.00956847,
+		'hhinc#6': -0.00552034,
+		'motorized_ovtbydist': -0.104803,
+		'motorized_time': -0.011121,
+		'mu_1': 0.5,
+		'mu_car': 0.6,
+		'mu_mot': 0.7,
+		'nonmotorized_time': -0.046541,
+		'vehbywrk_BIKE': -0.663320,
+		'vehbywrk_SR': -0.339254,
+		'vehbywrk_TRANSIT': -0.484590,
+		'vehbywrk_WALK': -0.6873770,
+		'wkcbd_BIKE': 0.4137037,
+		'wkcbd_SR2': 0.3392681,
+		'wkcbd_SR3': 0.9092564,
+		'wkcbd_TRANSIT': 0.7663804,
+		'wkcbd_WALK': 0.13866164,
+		'wkempden_BIKE': 0.001765185,
+		'wkempden_SR2': 0.0017838108,
+		'wkempden_SR3': 0.002294909,
+		'wkempden_TRANSIT': 0.002033251,
+		'wkempden_WALK': 0.002138959,
+	}
+
+	m1.set_values(p)
+	m1.load_data()
+
+	m1_ls = m1.logsums()
+	assert m1_ls[:5] == approx(numpy.array([-0.15017424, 0.87928923, 0.21411689, 0.57679218, -0.26435797]))
+	assert m1_ls[-5:] == approx(numpy.array([-0.62660682, -0.10129286, -0.21896445, -0.16411639, -0.52924005]))
+	assert m1_ls.shape == (5029,)
+
+	m2 = m1.copy()
+	nm = m2.graph.new_node(children=[5, 6], parameter='mu_1')
+	sr = m2.graph.new_node(children=[2, 3], parameter='mu_1')
+	car = m2.graph.new_node(children=[1, sr], parameter='mu_car')
+	mot = m2.graph.new_node(children=[4, car], parameter='mu_mot')
+
+	m2.set_values(p)
+	m2.load_data()
 	m2_ls = m2.logsums()
 	assert m2_ls[:5] == approx(numpy.array([-0.24425897, 0.58344008, -0.14846934, 0.22871595, -0.5421539]))
 	assert m2_ls[-5:] == approx(numpy.array([-0.74616062, -0.28635094, -0.32691931, -0.28769199, -0.64213064]))
