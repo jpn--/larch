@@ -89,7 +89,15 @@ class ExcelWriter(_XlsxWriter):
             self.add_model(model, data_statistics=data_statistics, nesting=nesting)
 
 
-    def add_model(self, model, data_statistics=True, nesting=True, utility_functions=True, on_error='pass'):
+    def add_model(
+            self,
+            model,
+            data_statistics=True,
+            nesting=True,
+            utility_functions=True,
+            on_error='pass',
+            embed=True,
+    ):
 
         try:
             self.add_content_tab(model.parameter_summary('df'), sheetname="Parameters", heading="Parameters" )
@@ -160,6 +168,9 @@ class ExcelWriter(_XlsxWriter):
             except:
                 if on_error == 'raise':
                     raise
+
+        if embed:
+            self.add_metadata('_self_', model)
 
     def add_metadata(self, key, value):
         if not isinstance(key, str):
