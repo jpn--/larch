@@ -94,6 +94,18 @@ class Model(_Model5c):
 		from ..examples import example
 		return example(n)
 
+	@classmethod
+	def load(cls, filename):
+		import os
+		if not os.path.exists(filename):
+			raise FileNotFoundError(filename)
+		_, ext = os.path.splitext(filename)
+		if ext == '.xlsx':
+			from ..util.excel import load_metadata
+			return load_metadata(filename, key='_self_')
+		import pickle
+		return pickle.load(filename)
+
 	def __init__(self,
 				 utility_ca=None,
 				 utility_co=None,
