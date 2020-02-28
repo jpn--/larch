@@ -555,7 +555,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		x = Elem('div') << (self.__xml__())
 		return x.tostring()
 
-	def to_png(self, figsize=None):
+	def to_png(self, figsize=None, filename=None):
 		"""
 		Output the graph visualization as a png.
 
@@ -568,7 +568,14 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		-------
 		xmle.Elem
 		"""
-		return self.__xml__(output='png', use_viz=False, figsize=figsize)
+		result = self.__xml__(output='png', use_viz=False, figsize=figsize)
+		if filename is not None:
+			import base64
+			if result.attrib['src'][:22] != "data:image/png;base64,":
+				raise ValueError("problem decoding png:{}".format(result.attrib['src'][:22]))
+			with open(filename, "wb") as fh:
+				fh.write(base64.decodebytes(result.attrib['src'][22:].encode()))
+		return result
 
 	def partial_figure(self, including_nodes=None, source=None, *, n=None, n_at_level=3, n_expand=1):
 		"""
