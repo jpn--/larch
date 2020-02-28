@@ -355,7 +355,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._successor_slots = {}
 		self.set_touch_callback(None)
 
-	def __xml__(self, use_viz=True, use_dot=True, output='svg', **format):
+	def __xml__(self, use_viz=True, use_dot=True, output='svg', figsize=None, **format):
 		viz = None
 		dot = None
 		if use_viz:
@@ -543,6 +543,8 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
 			elif output == 'png':
 				prog = [P.prog, '-Gdpi=300']
+				if figsize is not None:
+					prog.append(f"-Gsize={figsize[0]},{figsize[1]}\!")
 				e = Elem.from_any(P.create(prog=prog, format=output, **format))
 				e.attrib['dpi'] = (300,300)
 				return e
@@ -552,6 +554,21 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		from xmle import Elem
 		x = Elem('div') << (self.__xml__())
 		return x.tostring()
+
+	def to_png(self, figsize=None):
+		"""
+		Output the graph visualization as a png.
+
+		Parameters
+		----------
+		figsize : 2-tuple, optional
+			The (width, height) in inches.
+
+		Returns
+		-------
+		xmle.Elem
+		"""
+		return self.__xml__(output='png', use_viz=False, figsize=figsize)
 
 	def partial_figure(self, including_nodes=None, source=None, *, n=None, n_at_level=3, n_expand=1):
 		"""
@@ -669,7 +686,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 		return mu, muslots, alpha, up, dn, num, start, val
 
-def graph_to_figure(graph, **format):
+def graph_to_figure(graph, output_format='svg', **format):
 
 	try:
 		import pygraphviz as viz
@@ -734,18 +751,20 @@ def graph_to_figure(graph, **format):
 		up_nodes.add(i)
 	pyg_imgdata = BytesIO()
 	try:
-		G.draw(pyg_imgdata, format='svg', prog='dot')       # write postscript in k5.ps with neato layout
+		G.draw(pyg_imgdata, format=output_format, prog='dot')       # write postscript in k5.ps with neato layout
 	except ValueError as err:
 		if 'in path' in str(err):
 			import warnings
 			warnings.warn(str(err)+"; unable to draw nesting tree in report")
 			raise NotImplementedError()
-	import xml.etree.ElementTree as ET
-	ET.register_namespace("","http://www.w3.org/2000/svg")
-	ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
-	result = ET.fromstring(pyg_imgdata.getvalue().decode())
-
 	from xmle import Elem
+	if output_format == 'svg':
+		import xml.etree.ElementTree as ET
+		ET.register_namespace("","http://www.w3.org/2000/svg")
+		ET.register_namespace("xlink","http://www.w3.org/1999/xlink")
+		result = ET.fromstring(pyg_imgdata.getvalue().decode())
+	else:
+		result = Elem('span', attrib={'style':'color:red'}, text=f"Unable to render output_format '{output_format}'")
 	x = Elem('div') << result
 	return x
 
