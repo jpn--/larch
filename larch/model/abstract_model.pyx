@@ -8,7 +8,7 @@ from ..general_precision cimport l4_float_t
 
 from .parameter_frame cimport ParameterFrame
 from .persist_flags cimport *
-from ..exceptions import MissingDataError
+from ..exceptions import MissingDataError, BHHHSimpleStepFailure
 
 import logging
 from ..log import logger_name
@@ -290,7 +290,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			if steplen < 0.01: break
 		if val <= current_ll:
 			self.set_values(current)
-			raise RuntimeError("simple step bhhh failed")
+			raise BHHHSimpleStepFailure("simple step bhhh failed")
 		if printer is not None:
 			printer("simple step bhhh {} to gain {}".format(steplen, val - current_ll))
 		return val, tolerance
@@ -375,7 +375,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				if steplen < minimum_steplen: break
 			if proposed_ll <= current_ll:
 				self.set_values(current_pvals)
-				raise RuntimeError(f"simple step bhhh failed\ndirection = {str(direction)}")
+				raise BHHHSimpleStepFailure(f"simple step bhhh failed\ndirection = {str(direction)}")
 			if printer is not None:
 				printer("simple step bhhh {} to gain {}".format(steplen, proposed_ll - current_ll))
 			steps.append(steplen)
@@ -583,6 +583,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 	def maximize_loglike(
 			self,
 			method='bhhh',
+			method2=None,
 			quiet=False,
 			screen_update_throttle=2,
 			final_screen_update=True,
@@ -604,7 +605,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		from scipy.optimize import minimize
 		from .. import _doctest_mode_
 		from ..util.rate_limiter import NonBlockingRateLimiter
-		from ..util.display import display_head, display_p
+		from ..util.display import display_head, display_p, display_nothing
 
 		if self.dataframes is None:
 			raise ValueError("you must load data first -- try Model.load_data()")
@@ -635,9 +636,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			else:
 				tag1, tag2, tag3 = reuse_tags
 		else:
-			tag1 = lambda *ax, **kx: None
-			tag2 = lambda *ax, **kx: None
-			tag3 = lambda *ax, **kx: None
+			tag1 = display_nothing()
+			tag2 = display_nothing()
+			tag3 = display_nothing()
 
 		def callback(x, status=None):
 			nonlocal iteration_number, throttle_gate
@@ -652,8 +653,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		if quiet or _doctest_mode_:
 			callback = None
 
-		try:
-			if method=='bhhh':
+		method_used = method
+
+		if method=='bhhh':
+			try:
 				max_iter = options.get('maxiter',100)
 				stopping_tol = options.get('ctol',1e-5)
 
@@ -674,8 +677,19 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					'steps':steps_bhhh,
 					'message':message,
 				}
-			else:
+			except BHHHSimpleStepFailure:
+				tag1.update(f'Iteration {iteration_number:03} [Exception Recovery] {iteration_number_tail}', force=True)
+				tag3.update(self.pf, force=True)
+				if method2 is not None:
+					method_used = f"{method_used}|{method2}"
+					method = method2
+			except:
+				tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
+				tag3.update(self.pf, force=True)
+				raise
 
+		if method != 'bhhh':
+			try:
 				bounds = None
 				if method in ('SLSQP', 'L-BFGS-B', 'TNC', 'trust-constr'):
 					bounds = self.pbounds
@@ -691,10 +705,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					options=options,
 					**kwargs
 				)
-		except:
-			tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
-			tag3.update(self.pf, force=True)
-			raise
+			except:
+				tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
+				tag3.update(self.pf, force=True)
+				raise
 
 		timer.stop()
 
@@ -718,7 +732,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			else:
 				result[k] = v
 		result['elapsed_time'] = timer.elapsed()
-		result['method'] = method
+		result['method'] = method_used
 		result['n_cases'] = self.n_cases
 		result['iteration_number'] = iteration_number
 

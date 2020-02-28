@@ -110,3 +110,18 @@ else:
 
 		def __call__(self, *text, **kwargs):
 			self.update(*text, **kwargs)
+
+
+class display_nothing():
+
+	def __init__(self, *args, **kwargs):
+		pass
+
+	def update(self, *args, **kwargs):
+		pass
+
+	def __call__(self, *text, **kwargs):
+		pass
+
+	def linefeed(self):
+		pass

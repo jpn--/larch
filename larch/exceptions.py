@@ -7,6 +7,8 @@ class MissingDataError(ValueError):
 class DuplicateColumnNames(ValueError):
 	pass
 
+class BHHHSimpleStepFailure(RuntimeError):
+	pass
 
 # Warnings
 
