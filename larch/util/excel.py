@@ -51,6 +51,7 @@ class ExcelWriter(_XlsxWriter):
             numbering=True,
             hide_log=True,
             output_renderer=None,
+            embed_model=True,
             **kwargs,
     ):
 
@@ -86,7 +87,7 @@ class ExcelWriter(_XlsxWriter):
         self.sheet_startrow['_metadata_'] = 1
 
         if model is not None:
-            self.add_model(model, data_statistics=data_statistics, nesting=nesting)
+            self.add_model(model, data_statistics=data_statistics, nesting=nesting, embed=embed_model)
 
 
     def add_model(

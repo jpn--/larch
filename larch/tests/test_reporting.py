@@ -148,18 +148,18 @@ def test_excel_metadata():
 		m.maximize_loglike()
 
 		xl = _make_excel_writer(m, os.path.join(tempdir, 'larchtest.xlsx'), save_now=False)
-		xl.add_metadata('self', m)
+		# xl.add_metadata('self', m) # now automatic
 		xl.add_metadata('short', 123)
 		xl.add_metadata('plain', 'text')
 		xl.save()
 
 		md = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'))
 		assert len(md) == 3
-		assert isinstance(md['self'], larch.Model)
+		assert isinstance(md['_self_'], larch.Model)
 		assert md['short'] == 123
 		assert md['plain'] == 'text'
 
-		md_m = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'self')
+		md_m = larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), '_self_')
 		assert isinstance(md_m, larch.Model)
 
 		assert larch.util.excel.load_metadata(os.path.join(tempdir, 'larchtest.xlsx'), 'short') == 123
