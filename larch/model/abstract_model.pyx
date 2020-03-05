@@ -691,7 +691,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		if method != 'bhhh':
 			try:
 				bounds = None
-				if method in ('SLSQP', 'L-BFGS-B', 'TNC', 'trust-constr'):
+				if isinstance(method,str) and method.lower() in ('slsqp', 'l-bfgs-b', 'tnc', 'trust-constr'):
 					bounds = self.pbounds
 
 				raw_result = minimize(
