@@ -694,6 +694,11 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				if isinstance(method,str) and method.lower() in ('slsqp', 'l-bfgs-b', 'tnc', 'trust-constr'):
 					bounds = self.pbounds
 
+				try:
+					constraints = self._get_constraints(method)
+				except:
+					constraints = None
+
 				raw_result = minimize(
 					self.neg_loglike2,
 					self.pvals,
@@ -703,6 +708,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					bounds=bounds,
 					callback=callback,
 					options=options,
+					constraints=constraints,
 					**kwargs
 				)
 			except:
@@ -1149,6 +1155,17 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		self._matrixes['covariance_matrix'] = covariance_matrix
 		self._matrixes['robust_covariance_matrix'] = robust_covariance_matrix
+
+		# constrained covariance
+		if self.constraints:
+			s = self.covariance_matrix.values.copy()
+			for c in self.constraints:
+				if numpy.absolute(c.fun(self.pf.value)) < 1e-4:
+					b = c.jac(self.pf.value)
+					s = s-(1/(b@s@b))*s@b.reshape(-1,1)@b.reshape(1,-1)@s
+			self._matrixes['constrained_covariance_matrix'] = s
+			self.pf['constrained std err'] = numpy.sqrt(s.diagonal())
+			self.pf['constrained t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['constrained std err']
 
 	@property
 	def possible_overspecification(self):

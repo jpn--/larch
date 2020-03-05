@@ -601,6 +601,15 @@ cdef class ParameterFrame:
 			mat, columns=self._frame.index, index=self._frame.index,
 		)
 
+	@property
+	def constrained_covariance_matrix(self):
+		mat = self._matrixes.get('constrained_covariance_matrix', None)
+		if mat is None:
+			return None
+		return pandas.DataFrame(
+			mat, columns=self._frame.index, index=self._frame.index,
+		)
+
 	def __parameter_table_section(self, pname):
 
 		from xmle import Elem
