@@ -116,6 +116,7 @@ class Model(_Model5c):
 		self.utility_co = utility_co
 		self.utility_ca = utility_ca
 		self.quantity_ca = quantity_ca
+		self.constraints = []
 		super().__init__(**kwargs)
 		self._scan_all_ensure_names()
 		self.mangle()
@@ -144,6 +145,7 @@ class Model(_Model5c):
 			p['quantity_ca'] = LinearFunction_C(self.quantity_ca.copy())
 			p['quantity_scale'] = self.quantity_scale.copy() if self.quantity_scale is not None else None
 			p['graph'] = copy.deepcopy(self.graph)
+			p['constraints'] = copy.deepcopy(self.constraints)
 			p['is_clone'] = True
 		else:
 			p['frame'] = self.pf
@@ -152,6 +154,7 @@ class Model(_Model5c):
 			p['quantity_ca'] = self.quantity_ca
 			p['quantity_scale'] = self.quantity_scale
 			p['graph'] = self.graph
+			p['constraints'] = self.constraints
 			p['is_clone'] = True
 		return p
 
@@ -164,6 +167,7 @@ class Model(_Model5c):
 		self.quantity_ca = kwargs.get('quantity_ca', None)
 		self.quantity_scale = kwargs.get('quantity_scale', None)
 		self.graph = kwargs.get('graph', None)
+		self.constraints = kwargs.get('constraints', [])
 
 
 	def fit(self, X, y, sample_weight=None, **kwargs):
@@ -718,3 +722,15 @@ class Model(_Model5c):
 		"""
 		if self.dataframes is not None:
 			return self.dataframes.statistics(graph=self.graph)
+
+	def _get_constraints(self, method):
+		if method.lower() in ('slsqp', 'cobyla'):
+			constraint_dicts = []
+			for c in self.constraints:
+				constraint_dicts.extend(c.as_constraint_dicts())
+			return constraint_dicts
+		if method.lower() in ('trust-constr'):
+			constraints = []
+			for c in self.constraints:
+				constraints.extend(c.as_linear_constraints())
+			return constraints
