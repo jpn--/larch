@@ -697,7 +697,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				try:
 					constraints = self._get_constraints(method)
 				except:
-					constraints = None
+					constraints = ()
 
 				raw_result = minimize(
 					self.neg_loglike2,
@@ -1116,8 +1116,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		dense_s = len(self.pvals)
 		for i in range(dense_s):
 			ii = self.pnames[i]
-			if self.pf.loc[ii, 'holdfast'] or (self.pf.loc[ii, 'value'] >= self.pf.loc[ii, 'maximum']) or (
-				self.pf.loc[ii, 'value'] <= self.pf.loc[ii, 'minimum']):
+			if self.pf.loc[ii, 'holdfast']:
+				# or (self.pf.loc[ii, 'value'] >= self.pf.loc[ii, 'maximum'])
+				# or (self.pf.loc[ii, 'value'] <= self.pf.loc[ii, 'minimum']):
 				take[i, :] = False
 				take[:, i] = False
 				dense_s -= 1
@@ -1157,15 +1158,28 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		self._matrixes['robust_covariance_matrix'] = robust_covariance_matrix
 
 		# constrained covariance
-		if self.constraints:
-			s = self.covariance_matrix.values.copy()
-			for c in self.constraints:
-				if numpy.absolute(c.fun(self.pf.value)) < 1e-4:
+		constraints = list(self.constraints)
+		try:
+			constraints.extend(self._get_bounds_constraints())
+		except:
+			pass
+
+		if constraints:
+
+			self.pf['unconstrained std err'] = self.pf['std err'].copy()
+			self.pf['unconstrained t stat'] = self.pf['t stat'].copy()
+
+			self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
+			s = self.covariance_matrix.values
+			for c in constraints:
+				if numpy.absolute(c.fun(self.pf.value)) < c.binding_tol:
 					b = c.jac(self.pf.value)
-					s = s-(1/(b@s@b))*s@b.reshape(-1,1)@b.reshape(1,-1)@s
-			self._matrixes['constrained_covariance_matrix'] = s
-			self.pf['constrained std err'] = numpy.sqrt(s.diagonal())
-			self.pf['constrained t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['constrained std err']
+					den = b@s@b
+					if den != 0:
+						s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
+			self._matrixes['covariance_matrix'] = s
+			self.pf['std err'] = numpy.sqrt(s.diagonal())
+			self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std err']
 
 	@property
 	def possible_overspecification(self):

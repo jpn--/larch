@@ -72,9 +72,6 @@ def test_dataframes_mnl5():
 		'tottime': -26556.303,
 	}
 
-	print("+"*60)
-	print(m5.utility_ca)
-
 	assert -4930.3212890625 == approx(ll2.ll)
 
 	for k in q1_dll:

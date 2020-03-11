@@ -6,7 +6,12 @@ from .controller import Model5c as _Model5c
 from ..dataframes import DataFrames, get_dataframe_format
 from .linear import LinearFunction_C, DictOfLinearFunction_C
 from ..general_precision import l4_float_dtype
-from typing import Sequence
+from .constraints import ParametricConstraintList
+from typing import Sequence, Mapping
+from numbers import Number
+import numpy as np
+
+
 
 import logging
 from ..log import logger_name
@@ -89,6 +94,8 @@ class Model(_Model5c):
 
 	"""
 
+	constraints = ParametricConstraintList()
+
 	@classmethod
 	def Example(cls, n=1):
 		from ..examples import example
@@ -110,13 +117,14 @@ class Model(_Model5c):
 				 utility_ca=None,
 				 utility_co=None,
 				 quantity_ca=None,
+				 constraints=None,
 				 **kwargs):
 		import sys
 		self._sklearn_data_format = 'idce'
 		self.utility_co = utility_co
 		self.utility_ca = utility_ca
 		self.quantity_ca = quantity_ca
-		self.constraints = []
+		self.constraints = constraints
 		super().__init__(**kwargs)
 		self._scan_all_ensure_names()
 		self.mangle()
@@ -734,3 +742,69 @@ class Model(_Model5c):
 			for c in self.constraints:
 				constraints.extend(c.as_linear_constraints())
 			return constraints
+		return ()
+
+	def _add_constraint(self, c):
+		"""
+		Add a parametric constraint to the model.
+
+		Parameters
+		----------
+		c : ParametricConstraint
+			The constraint to potentially add.  Constraints are
+			not actually added if they duplicate an existing
+			constraint.
+
+		Returns
+		-------
+		bool
+			Whether this constraint was actually added to the model.
+		"""
+		from .constraints import ParametricConstraint
+		if not isinstance(c, ParametricConstraint):
+			raise TypeError(f"constraint must be ParametricConstraint not {type(c)}")
+		duplicate_constraint = False
+		for i in self.constraints:
+			if i==c:
+				duplicate_constraint = True
+				break
+		if not duplicate_constraint:
+			self.constraints.append(c)
+
+	def _get_bounds_constraints(self, binding_tol=1e-4):
+		"""
+		Convert bounds to parametric constraints on the model.
+
+		Parameters
+		----------
+		binding_tol : Number or Mapping
+			The binding tolerance to use, which determines
+			whether a constraint is considered active or not.
+
+		Returns
+		-------
+		list
+			A list of constraints.
+		"""
+		from .constraints import FixedBound
+		if isinstance(binding_tol, Number):
+			default_binding_tol = binding_tol
+		else:
+			default_binding_tol = 1e-4
+
+		if not isinstance(binding_tol, Mapping):
+			binding_tol = {}
+
+		get_bind_tol = lambda x: binding_tol.get(x, default_binding_tol)
+
+		bounds = []
+		self.unmangle()
+		for pname, pf_row in self.pf.iterrows():
+			if pf_row['holdfast']:
+				# don't create bounds constraints on holdfast parameters
+				continue
+			b = (pf_row['minimum'], pf_row['maximum'])
+			if b[0] != -numpy.inf or b[1] != numpy.inf:
+				bounds.append(FixedBound(pname, *b, model=self, binding_tol=get_bind_tol(pname)))
+
+		return bounds
