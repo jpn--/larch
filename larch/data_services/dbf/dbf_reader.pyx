@@ -635,6 +635,17 @@ cdef class DBF:
 	def filename(self):
 		return self._filename.decode()
 
+	@property
+	def nrecs(self):
+		return self._header.nrecs
+
+	@nrecs.setter
+	def nrecs(self, value):
+		if value != self._header.nrecs:
+			import warnings
+			warnings.warn(f"changing the number of records from {self._header.nrecs} to {value} is dangerous and may cause program instability")
+			self._header.nrecs = int(value)
+
 	def convert_to_hdf5(self, h5filename=None, groupnode=None, show_progress=True, identify=None, **kwargs):
 		from ..h5.h5pod import H5Pod
 		import numpy
