@@ -65,6 +65,9 @@ cdef class DataFrames:
 		object _model_param_names
 		Model5c _model
 
+		object _caseindex_name
+		object _altindex_name
+
 	# cdef void _compute_utility_onecase(
 	# 		self,
 	# 		int c,

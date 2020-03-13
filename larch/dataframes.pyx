@@ -409,6 +409,9 @@ cdef class DataFrames:
 			ch = ch if ch is not None else data_ch
 			wt = wt if wt is not None else data_wt
 
+			self._caseindex_name = '_caseid_'
+			self._altindex_name = '_altid_'
+
 			if len(args) > 1:
 				raise ValueError('DataFrames accepts at most one positional argument')
 			elif len(args) == 1:
@@ -1004,6 +1007,18 @@ cdef class DataFrames:
 			if not isinstance(df, pandas.DataFrame):
 				raise TypeError('data_ca must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
+
+			# Check for 2 level multiindex
+			if not isinstance(df.index, pandas.MultiIndex):
+				raise ValueError('data_ca.index must be pandas.MultiIndex')
+			if df.index.nlevels != 2:
+				raise ValueError(f'data_ca.index must be a 2 level pandas.MultiIndex, not {df.index.nlevels} levels')
+
+			# Change level names if requested
+			caseindex_name = self._caseindex_name or df.index.names[0]
+			altindex_name = self._altindex_name or df.index.names[1]
+			df.index.names = [caseindex_name, altindex_name]
+
 			if self._computational:
 				self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
 				self._array_ca = _df_values(self.data_ca, (self.n_cases, self.n_alts, -1))
@@ -1056,6 +1071,11 @@ cdef class DataFrames:
 			if not isinstance(df, pandas.DataFrame):
 				raise TypeError('data_co must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
+
+			# Change index name if requested
+			caseindex_name = self._caseindex_name or df.index.names[0]
+			df.index.name = caseindex_name
+
 			if self._computational:
 				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
 				self._array_co = _df_values(self.data_co)
@@ -1108,6 +1128,18 @@ cdef class DataFrames:
 			if not isinstance(df, pandas.DataFrame):
 				raise TypeError('data_ce must be a pandas.DataFrame or pandas.Series')
 			_ensure_no_duplicate_column_names(df)
+
+			# Check for 2 level multiindex
+			if not isinstance(df.index, pandas.MultiIndex):
+				raise ValueError('data_ce.index must be pandas.MultiIndex')
+			if df.index.nlevels != 2:
+				raise ValueError('data_ce.index must be a 2 level pandas.MultiIndex')
+
+			# Change level names if requested
+			caseindex_name = self._caseindex_name or df.index.names[0]
+			altindex_name = self._altindex_name or df.index.names[1]
+			df.index.names = [caseindex_name, altindex_name]
+
 			if not df.index.is_monotonic_increasing:
 				df = df.sort_index()
 			if self._computational:
