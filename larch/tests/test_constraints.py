@@ -6,8 +6,6 @@ from larch import P, X
 from larch.model.constraints import RatioBound, OrderingBound
 from pytest import approx
 
-import larch.torch
-
 def test_max_ratio_1():
 
 	#m0 = larch.Model.Example(1)
@@ -136,7 +134,7 @@ def test_lower_bound():
 	# 	options={'ftol': 1e-09},
 	# )
 
-	r1=m1.torch.maximize_loglike(
+	r1=m1.maximize_loglike(
 		method='slsqp',
 		options={'ftol': 1e-09},
 		quiet=True,
@@ -210,7 +208,7 @@ def test_upper_bound():
 	# 	options={'ftol': 1e-09},
 	# )
 
-	r1 = m1.torch.maximize_loglike(
+	r1 = m1.maximize_loglike(
 		method='slsqp',
 		options={'ftol': 1e-09},
 		quiet=True,
@@ -289,7 +287,7 @@ def test_multi_constraints():
 	# 	options={'ftol': 1e-09},
 	# )
 
-	r1 = m1.torch.maximize_loglike(
+	r1 = m1.maximize_loglike(
 		method='slsqp',
 		options={'ftol': 1e-09},
 		quiet=True,
@@ -297,7 +295,7 @@ def test_multi_constraints():
 	assert r1.message == 'Positive directional derivative for linesearch'
 	m1.constraints.rescale(0.1)
 
-	r1 = m1.torch.maximize_loglike(
+	r1 = m1.maximize_loglike(
 		method='slsqp',
 		options={'ftol': 1e-09},
 		quiet=True,
@@ -305,7 +303,7 @@ def test_multi_constraints():
 	assert r1.message == 'Positive directional derivative for linesearch'
 
 	m1.constraints.rescale(0.01)
-	r1 = m1.torch.maximize_loglike(
+	r1 = m1.maximize_loglike(
 		method='slsqp',
 		options={'ftol': 1e-09},
 		quiet=True,
