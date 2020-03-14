@@ -401,7 +401,9 @@ cdef class Model5c(AbstractChoiceModel):
 	def _set_dataframes(self, DataFrames x):
 		x.computational = True
 		self.clear_best_loglike()
-		self.unmangle()
+		#self.unmangle() # don't do a full unmangle here, it will fail if the old data is incomplete
+		if self._mangled:
+			self._scan_all_ensure_names()
 		x._check_data_is_sufficient_for_model(self)
 		self._dataframes = x
 		self._refresh_derived_arrays()
