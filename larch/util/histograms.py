@@ -502,7 +502,10 @@ def sizable_histogram_figure(*args, sizer=1, discrete=None, **kwargs):
 	if discrete is not None:
 		if discrete:
 			kwargs['bins'] = 'discrete'
-	return histogram_figure(*args, **kwargs)
+	try:
+		return histogram_figure(*args, **kwargs)
+	except:
+		return None
 
 def seems_like_discrete_data(arr, dictionary=None, return_uniques=False):
 	if isinstance(arr.dtype, pandas.CategoricalDtype):
