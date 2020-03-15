@@ -122,7 +122,6 @@ cdef void _mnl_probability_from_utility(
 cdef void _mnl_logsum_from_utility(
 		int    n_alts,
 		l4_float_t* utility,     # input
-		l4_float_t* exp_utility, # output
 		l4_float_t* logsum,      # output (scalar)
 ):
 	cdef:
@@ -131,10 +130,8 @@ cdef void _mnl_logsum_from_utility(
 		l4_float_t x
 
 	for i in range(n_alts):
-		if utility[i] < -3.402823e38:
-			exp_utility[i] = 0
-		else:
-			x = exp_utility[i] = exp(utility[i])
+		if utility[i] > -3.402823e38:
+			x = exp(utility[i])
 			sum_expU += x
 
 	if sum_expU == 0:
@@ -146,7 +143,6 @@ cdef void _mnl_logsum_from_utility(
 cdef void _mnl_logsum_from_utility_MU(
 		int    n_alts,
 		l4_float_t* utility,     # input
-		l4_float_t* exp_utility, # output
 		l4_float_t* logsum,      # output (scalar)
 		l4_float_t  mu           # input
 ):
@@ -163,10 +159,8 @@ cdef void _mnl_logsum_from_utility_MU(
 		logsum[0] = sum_expU
 	else:
 		for i in range(n_alts):
-			if utility[i] < -3.402823e38:
-				exp_utility[i] = 0
-			else:
-				x = exp_utility[i] = exp(utility[i]/mu)
+			if utility[i] > -3.402823e38:
+				x = exp(utility[i]/mu)
 				sum_expU += x
 
 		if sum_expU == 0:
@@ -700,10 +694,8 @@ def mnl_logsums_from_dataframes_all_rows(
 		l4_float_t[:] array_ch
 		l4_float_t[:] dLL_case, dLL_total
 		l4_float_t[:] raw_utility
-		l4_float_t[:] exp_utility
 		l4_float_t[:] probability
 		l4_float_t[:,:] dU
-		l4_float_t*     buffer_exp_utility
 		l4_float_t*     buffer_probability
 		l4_float_t      ll = 0
 		l4_float_t*     choice
@@ -717,10 +709,8 @@ def mnl_logsums_from_dataframes_all_rows(
 
 	try:
 		raw_utility = numpy.zeros([n_alts], dtype=l4_float_dtype)
-		exp_utility = numpy.zeros([n_alts], dtype=l4_float_dtype)
 		probability = numpy.zeros([n_alts], dtype=l4_float_dtype)
 
-		buffer_exp_utility = &exp_utility[0]
 		buffer_probability = &probability[0]
 
 		dU = numpy.zeros([n_alts, n_params], dtype=l4_float_dtype)
@@ -729,25 +719,19 @@ def mnl_logsums_from_dataframes_all_rows(
 
 		if logsum_parameter == 1:
 			for c in range(n_cases):
-				array_ch = dfs._get_choice_onecase(c)
-				choice = &array_ch[0]
-				dfs._compute_d_utility_onecase(c,raw_utility,dU,dU.shape[0]) #TODO: don't bother with derivative if not needed
+				dfs._compute_utility_onecase(c,raw_utility,n_alts)
 				_mnl_logsum_from_utility(
 					n_alts,
 					&raw_utility[0],     # input
-					buffer_exp_utility, # output
 					&logsums[c], # output
 				)
 		else:
 
 			for c in range(n_cases):
-				array_ch = dfs._get_choice_onecase(c)
-				choice = &array_ch[0]
-				dfs._compute_d_utility_onecase(c,raw_utility,dU,dU.shape[0]) #TODO: don't bother with derivative if not needed
+				dfs._compute_utility_onecase(c,raw_utility,n_alts)
 				_mnl_logsum_from_utility_MU(
 					n_alts,
 					&raw_utility[0],     # input
-					buffer_exp_utility, # output
 					&logsums[c], # output
 					logsum_parameter,
 				)
@@ -755,7 +739,6 @@ def mnl_logsums_from_dataframes_all_rows(
 	except:
 		logger.error(f'c={c}')
 		logger.error(f'n_cases, n_alts={(n_cases, n_alts)}')
-		logger.error(f'array_ch={array_ch}')
 		logger.exception('error in mnl_logsums_from_dataframes_all_rows')
 		raise
 

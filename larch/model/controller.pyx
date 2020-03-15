@@ -808,9 +808,7 @@ cdef class Model5c(AbstractChoiceModel):
 		-------
 		arr
 		"""
-		self.unmangle()
-		if x is not None:
-			self.set_values(x)
+		self.__prepare_for_compute(x, allow_missing_ch=True)
 		from .mnl import mnl_logsums_from_dataframes_all_rows
 		if arr is None:
 			arr = numpy.zeros([self._dataframes._n_cases()], dtype=l4_float_dtype)
@@ -824,7 +822,7 @@ cdef class Model5c(AbstractChoiceModel):
 		return arr
 
 	def exputility(self, x=None, return_dataframe=None):
-		arr = self.loglike(persist=True).exp_utility
+		arr = self.loglike(persist=PERSIST_EXP_UTILITY).exp_utility
 		if return_dataframe == 'names':
 			return pandas.DataFrame(
 				data=arr,
