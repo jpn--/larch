@@ -160,7 +160,7 @@ def test_lower_bound():
 		'hhinc#6': -0.012146632951225103,
 		'totcost': -0.0048938088864863595,
 		'tottime': -0.059272225511784224,
-	})
+	}, abs=1e-10, rel=1e-2)
 
 	assert dict(m1.pf['std err']) == approx({
 		'ASC_BIKE': 0.30102780156769227,
@@ -175,7 +175,7 @@ def test_lower_bound():
 		'hhinc#6': 0.0030443866859315343,
 		'totcost': 0.00023967125878600402,
 		'tottime': 0.0027703331869058825,
-	})
+	}, abs=1e-10, rel=1e-2)
 
 	assert dict(m1.pf['unconstrained std err']) == approx({
 		'ASC_BIKE': 0.3048352068287236,
@@ -190,7 +190,7 @@ def test_lower_bound():
 		'hhinc#6': 0.0030865953487895412,
 		'totcost': 0.00023967145587986189,
 		'tottime': 0.0032194798668345615,
-	})
+	}, rel=1e-2)
 
 
 def test_upper_bound():
@@ -210,7 +210,7 @@ def test_upper_bound():
 
 	r1 = m1.maximize_loglike(
 		method='slsqp',
-		options={'ftol': 1e-09},
+		options={'ftol': 1e-12},
 		quiet=True,
 	)
 
@@ -222,19 +222,19 @@ def test_upper_bound():
 	assert r1.loglike == approx(-3725.072026618359)
 
 	assert dict(m1.pf['value']) == approx({
-		'ASC_BIKE': -1.8321554435700236,
-		'ASC_SR2': -1.975716749548033,
-		'ASC_SR3P': -3.4820713271093124,
-		'ASC_TRAN': 0.23339260484283975,
-		'ASC_WALK': 1.1107847788929406,
-		'hhinc#2': -0.0022113178715119385,
-		'hhinc#3': 0.0002181973410492235,
-		'hhinc#4': -0.005496049691058452,
-		'hhinc#5': -0.012532676196820506,
-		'hhinc#6': -0.010789794806056898,
-		'totcost': -0.005088177160006318,
+		'ASC_BIKE': -1.832639738018494,
+		'ASC_SR2': -1.975601900695666,
+		'ASC_SR3P': -3.4822938489427426,
+		'ASC_TRAN': 0.23349082549768843,
+		'ASC_WALK': 1.1111842511724719,
+		'hhinc#2': -0.002212546400939385,
+		'hhinc#3': 0.00022218881480540761,
+		'hhinc#4': -0.0054968611164901825,
+		'hhinc#5': -0.012523465955589126,
+		'hhinc#6': -0.010794428135692613,
+		'totcost': -0.005088026048518891,
 		'tottime': -0.1
-	})
+	}, rel=1e-2)
 
 	assert dict(m1.pf['std err']) == approx({
 		'ASC_BIKE': 0.30013608145167614,
@@ -249,7 +249,7 @@ def test_upper_bound():
 		'hhinc#6': 0.003146693697448889,
 		'totcost': 0.00024654869488240555,
 		'tottime': 0
-	}, abs=1e-10)
+	}, abs=1e-10, rel=1e-2)
 
 	assert dict(m1.pf['unconstrained std err']) == approx({
 		'ASC_BIKE': 0.30323766594813406,
@@ -264,7 +264,7 @@ def test_upper_bound():
 		'hhinc#6': 0.0031492030054873824,
 		'totcost': 0.0002472663647304817,
 		'tottime': 0.004377145909550393,
-	})
+	}, rel=1e-2)
 
 def test_multi_constraints():
 	#m0 = larch.Model.Example(1)
@@ -330,7 +330,7 @@ def test_multi_constraints():
 		'hhinc#6': -0.01079425276590098,
 		'totcost': -0.005093387068047046,
 		'tottime': -0.1
-	})
+	}, rel=1e-2)
 
 	assert dict(m1.pf['std err']) == approx({
 		'ASC_BIKE': 0.30013699696981455,
@@ -345,7 +345,7 @@ def test_multi_constraints():
 		'hhinc#6': 0.003146916477051659,
 		'totcost': 0.0002466030726673273,
 		'tottime': 0
-	}, abs=1e-10)
+	}, abs=1e-10, rel=1e-2)
 
 	assert dict(m1.pf['unconstrained std err']) == approx({
 		'ASC_BIKE': 0.3032386370524189,
@@ -360,5 +360,5 @@ def test_multi_constraints():
 		'hhinc#6': 0.0031494462988719317,
 		'totcost': 0.00024742269603570923,
 		'tottime': 0.004377029904009681
-	})
+	}, rel=1e-2)
 
