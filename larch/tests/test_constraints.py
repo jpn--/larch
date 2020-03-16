@@ -346,7 +346,7 @@ def test_multi_constraints():
 		'hhinc#6': 0.003146916477051659,
 		'totcost': 0.0002466030726673273,
 		'tottime': 0
-	}, abs=1e-10, rel=1e-2)
+	}, abs=1e-10, rel=5e-2)
 
 	assert dict(m1.pf['unconstrained std err']) == approx({
 		'ASC_BIKE': 0.3032386370524189,
@@ -361,5 +361,5 @@ def test_multi_constraints():
 		'hhinc#6': 0.0031494462988719317,
 		'totcost': 0.00024742269603570923,
 		'tottime': 0.004377029904009681
-	}, rel=1e-2)
+	}, rel=5e-2)
 
