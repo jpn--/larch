@@ -369,3 +369,71 @@ def test_multi_constraints():
 		'tottime': 0.004377029904009681
 	}, rel=5e-2)
 
+def test_overspec():
+
+	m0 = larch.Model.Example(1)
+	m0.utility_ca = m0.utility_ca + P.failpar * X('1')
+	m0.utility_co[1] = P.ASC_DA
+	m0.lock_value('tottime', -0.1)
+	m0.utility_co[2] = P.ASC_SR2 + P('hhinc#23') * X.hhinc
+	m0.utility_co[3] = P.ASC_SR3P + P('hhinc#23') * X.hhinc
+	m0.remove_unused_parameters()
+	m0.load_data()
+	r0 = m0.maximize_loglike(
+		quiet=True,
+	)
+	m0.calculate_parameter_covariance()
+	possover = m0.possible_overspecification
+	assert possover.data.shape == (7, 2)
+	assert all(
+		possover.data.index.sort_values() == [
+			'ASC_BIKE', 'ASC_DA', 'ASC_SR2', 'ASC_SR3P',
+			'ASC_TRAN', 'ASC_WALK', 'failpar',
+		])
+
+def test_parameter_summary():
+	import larch
+	from larch.model.constraints import RatioBound, OrderingBound, FixedBound
+
+	m0 = larch.Model.Example(1)
+	m0.lock_value('tottime', -0.05)
+	m0.set_value('totcost', maximum=-0.005, minimum=-0.02)
+	m0.constraints.append(OrderingBound("hhinc#3 <= hhinc#2"))
+	m0.load_data()
+
+	r0 = m0.maximize_loglike(
+		method='slsqp',
+		options={'ftol': 1e-09},
+		quiet=True,
+	)
+
+	m0.calculate_parameter_covariance()
+
+	ps = m0.parameter_summary('df')
+
+	assert ps.loc[('LOS', 'totcost'), 'Value'] == "-0.00500"
+	assert ps.loc[('LOS', 'tottime'), 'Value'] == "-0.0500"
+	assert ps.loc[('Income', 'hhinc#2'), 'Value'] == "-0.00159"
+	assert ps.loc[('Income', 'hhinc#3'), 'Value'] == "-0.00159"
+
+	assert ps.loc[('LOS', 'totcost'), 'Std Err'] == "0.00"
+	assert ps.loc[('LOS', 'tottime'), 'Std Err'] == "0.00"
+	assert ps.loc[('Income', 'hhinc#2'), 'Std Err'] == "0.00140"
+	assert ps.loc[('Income', 'hhinc#3'), 'Std Err'] == "0.00140"
+
+	assert ps.loc[('LOS', 'totcost'), 't Stat'] == "NA"
+	assert ps.loc[('LOS', 'tottime'), 't Stat'] == "NA"
+	assert ps.loc[('Income', 'hhinc#2'), 't Stat'] == "-1.14"
+	assert ps.loc[('Income', 'hhinc#3'), 't Stat'] == "-1.14"
+
+	assert ps.loc[('LOS', 'totcost'), 'Signif'] == None
+	assert ps.loc[('LOS', 'tottime'), 'Signif'] == None
+	assert ps.loc[('Income', 'hhinc#2'), 'Signif'] == None
+	assert ps.loc[('Income', 'hhinc#3'), 'Signif'] == None
+
+	assert ps.loc[('LOS', 'totcost'), 'Constrained'] == "totcost <= -0.005"
+	assert ps.loc[('LOS', 'tottime'), 'Constrained'] == "fixed value"
+	assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 <= hhinc#2"
+	assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 <= hhinc#2"
+
+

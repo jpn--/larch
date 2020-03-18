@@ -1166,6 +1166,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		if constraints:
 
+			binding_constraints = list()
+
 			self.pf['unconstrained std err'] = self.pf['std err'].copy()
 			self.pf['unconstrained t stat'] = self.pf['t stat'].copy()
 
@@ -1173,6 +1175,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			s = self.covariance_matrix.values
 			for c in constraints:
 				if numpy.absolute(c.fun(self.pf.value)) < c.binding_tol:
+					binding_constraints.append(c)
 					b = c.jac(self.pf.value)
 					den = b@s@b
 					if den != 0:
@@ -1181,7 +1184,29 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			self.pf['std err'] = numpy.sqrt(s.diagonal())
 			self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std err']
 
+			# Fix numerical issues on some constraints, add constrained notes
+			if binding_constraints or any(self.pf['holdfast']!=0):
+				notes = {}
+				for c in binding_constraints:
+					pa = c.get_parameters()
+					for p in pa:
+						if self.pf.loc[p,'t stat'] > 1e5:
+							self.pf.loc[p,'t stat'] = numpy.inf
+							self.pf.loc[p,'std err'] = 0
+						if self.pf.loc[p,'t stat'] < -1e5:
+							self.pf.loc[p,'t stat'] = -numpy.inf
+							self.pf.loc[p,'std err'] = 0
+						n = notes.get(p,[])
+						n.append(c.get_binding_note(self.pvals))
+						notes[p] = n
+				self.pf['constrained'] = pandas.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
+				self.pf['constrained'].fillna('', inplace=True)
+				self.pf.loc[self.pf['holdfast']!=0, 'constrained'] = 'fixed value'
+
+
 	@property
 	def possible_overspecification(self):
+		from ..util.overspec_viewer import OverspecView
+		if self._possible_overspecification:
+			return OverspecView(self._possible_overspecification)
 		return self._possible_overspecification
-

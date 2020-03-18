@@ -808,15 +808,14 @@ cdef class ParameterFrame:
 				return div
 
 			else:
-				columns = [i for i in ['value','std err','t stat','nullvalue', 'minimum', 'maximum'] if i in pfo.columns]
+				columns = [i for i in ['value','std err','t stat','nullvalue', 'constrained'] if i in pfo.columns]
 				result = pfo[columns].rename(
 					columns={
 						'value':'Value',
 						'std err':'Std Err',
 						't stat':'t Stat',
 						'nullvalue':'Null Value',
-						'minimum': 'Minimum',
-						'maximum': 'Maximum',
+						'constrained': 'Constrained'
 					}
 				)
 				if 't Stat' in result.columns:
@@ -824,9 +823,10 @@ cdef class ParameterFrame:
 					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
 					result.loc[numpy.absolute(result['t Stat']) > 2.5758, 'Signif'] = "**"
 					result.loc[numpy.absolute(result['t Stat']) > 3.2905, 'Signif'] = "***"
-					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if not pandas.isna(x) else "NA")
+					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if numpy.isfinite(x) else "NA")
+					result.loc[result['t Stat'] == 'NA', 'Signif'] = None
 				if 'Std Err' in result.columns:
-					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if not pandas.isna(x) else "NA")
+					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if numpy.isfinite(x) else "NA")
 				if 'Value' in result.columns:
 					result['Value'] = result['Value'].apply(lambda x: f"{x:#.3g}")
 
@@ -834,23 +834,22 @@ cdef class ParameterFrame:
 					pnames = result.index.get_level_values(-1)
 				else:
 					pnames = result.index
-				for i in range(len(result)):
-					pname_str = str(pnames[i])
-
-				if self.pf.loc[pname_str,'holdfast']:
-					j = result.index[i]
-					if 'Std Err' in result.columns:
-						result.loc[j,'Std Err'] = "fixed value"
-						if 't Stat' in result.columns:
-							result.loc[j,'t Stat'] = None
-						if 'Null Value' in result.columns:
-							result.loc[j,'Null Value'] = None
-					elif 't Stat' in result.columns:
-						result.loc[j,'t Stat'] = "fixed value"
-						if 'Null Value' in result.columns:
-							result.loc[j,'Null Value'] = None
-					elif 'Null Value' in result.columns:
-						result.loc[j,'Null Value'] = "fixed value"
+				# for i in range(len(result)):
+				#	pname_str = str(pnames[i])
+				#	if self.pf.loc[pname_str,'holdfast']:
+				#		j = result.index[i]
+				#		if 'Std Err' in result.columns:
+				#			result.loc[j,'Std Err'] = "fixed value"
+				#			if 't Stat' in result.columns:
+				#				result.loc[j,'t Stat'] = None
+				#			if 'Null Value' in result.columns:
+				#				result.loc[j,'Null Value'] = None
+				#		elif 't Stat' in result.columns:
+				#			result.loc[j,'t Stat'] = "fixed value"
+				#			if 'Null Value' in result.columns:
+				#				result.loc[j,'Null Value'] = None
+				#		elif 'Null Value' in result.columns:
+				#			result.loc[j,'Null Value'] = "fixed value"
 
 				return result
 

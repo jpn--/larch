@@ -808,3 +808,36 @@ class Model(_Model5c):
 				bounds.append(FixedBound(pname, *b, model=self, binding_tol=get_bind_tol(pname)))
 
 		return bounds
+
+	def get_all_contraints(self):
+		"""
+		All constraints, including bounds.
+
+		Returns
+		-------
+		list
+		"""
+		constraints = list(self.constraints)
+		try:
+			constraints.extend(self._get_bounds_constraints())
+		except:
+			pass
+		return constraints
+
+
+	def get_all_binding_contraints(self):
+		"""
+		All binding constraints, including min-max bounds.
+
+		Returns
+		-------
+		list
+		"""
+		binding_constraints = list()
+
+		for c in self.get_all_contraints():
+			if np.absolute(c.fun(self.pf.value)) < c.binding_tol:
+				binding_constraints.append(c)
+
+		return binding_constraints
+

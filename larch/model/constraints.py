@@ -8,6 +8,17 @@ class ParametricConstraint(ABC):
     def __init__(self, binding_tol=1e-4):
         self.binding_tol = binding_tol
 
+    def is_binding(self, x):
+        return (np.absolute(self.fun(x)) < self.binding_tol)
+
+    @abstractmethod
+    def get_parameters(self):
+        raise NotImplementedError("abstract base class, use a derived class instead")
+
+    @abstractmethod
+    def get_binding_note(self, x):
+        raise NotImplementedError("abstract base class, use a derived class instead")
+
     @abstractmethod
     def fun(self, x):
         raise NotImplementedError("abstract base class, use a derived class instead")
@@ -97,6 +108,15 @@ class RatioBound(ParametricConstraint):
             j[self.i_den] = self.cmax_den
         return j
 
+    def get_parameters(self):
+        return (self.p_num, self.p_den)
+
+    def get_binding_note(self, x):
+        if self._min_fun(x) < self._max_fun(x):
+            return f"{self.p_num!s} / {self.p_den!s} >= {self.min_ratio}"
+        else:
+            return f"{self.p_num!s} / {self.p_den!s} <= {self.max_ratio}"
+
     def as_linear_constraints(self):
         a = np.zeros([2,self.len], dtype='float64')
         a[0,self.i_num] = self.cmin_num
@@ -158,6 +178,12 @@ class OrderingBound(ParametricConstraint):
         j[self.i_less] = -self.scale
         return j
 
+    def get_parameters(self):
+        return (self.p_less, self.p_more)
+
+    def get_binding_note(self, x):
+        return f"{self.p_less!s} <= {self.p_more!s}"
+
     def as_linear_constraints(self):
         a = np.zeros([1,self.len], dtype='float64')
         a[0,self.i_more] = self.scale
@@ -217,6 +243,15 @@ class FixedBound(ParametricConstraint):
         else:
             j[self.i] = -self.scale
         return j
+
+    def get_parameters(self):
+        return (self.p,)
+
+    def get_binding_note(self, x):
+        if self._min_fun(x) < self._max_fun(x):
+            return f"{self.p!s} >= {self.minimum}"
+        else:
+            return f"{self.p!s} <= {self.maximum}"
 
     def as_linear_constraints(self):
         a = np.zeros([1,self.len], dtype='float64')
