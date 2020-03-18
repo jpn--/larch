@@ -615,9 +615,7 @@ class OMX(_omx_base_class):
 
 			self.flush()
 
-		# if n>5:
-		#				break
-		log("import_datatable({}) complete".format(filepath))
+		if log is not None: log("import_datatable({}) complete".format(filepath))
 
 	def import_datatable_3d(self, filepath, one_based=True, chunksize=10000, default_atom='float32', log=None):
 		"""Import a table in r,c,x,x,x... format into the matrix.
@@ -663,7 +661,6 @@ class OMX(_omx_base_class):
 
 		# self.add_blank_matrix(matrixname, atom=default_atom, shape=self.shape+(len(chunk0.columns)-2,))
 
-		# temp_slug = self.data._v_children[matrixname][:]
 		temp_slug = numpy.zeros(self.shape + (len(chunk0.columns) - 2,), dtype=default_dtype)
 
 		for n, chunk in enumerate(reader):
@@ -676,25 +673,17 @@ class OMX(_omx_base_class):
 			if not numpy.issubdtype(c.dtype, numpy.integer):
 				c = c.astype(int)
 
-			# print("chunk.values",chunk.values.shape)
-			# print("self.data._v_children[matrixname][r]",self.data._v_children[matrixname][r].shape)
-
 			temp_slug[r, c] = chunk.values[:, 2:]
-			# self.data._v_children[matrixname].flush()
 			if log is not None:
 				log("finished processing chunk {} [{}]".format(n, sfr.progress()))
 
 			self.flush()
 
-		# if n>5:
-		#				break
-
 		for cn, colname in enumerate(chunk0.columns[2:]):
 			self.add_blank_matrix(colname, atom=default_atom, shape=self.shape)
 			self.data._v_children[colname][:] = temp_slug[:, :, cn]
 
-		# self.data._v_children[matrixname][:] = temp_slug[:]
-		log("import_datatable({}) complete".format(filepath))
+		if log is not None: log("import_datatable({}) complete".format(filepath))
 
 	@classmethod
 	def import_dbf(cls, dbffile, omxfile, shape, o, d, cols, smallest_zone_number=1):
