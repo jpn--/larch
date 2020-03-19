@@ -43,7 +43,10 @@ Model 24's nesting structure groups shared ride and non-motorized alternatives. 
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
 	-3441.76...
-	
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF +SKIP
+
 	>>> print(m.pfo()[['value']])
 	                                 value
 	Category   Parameter
