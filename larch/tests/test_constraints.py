@@ -431,9 +431,9 @@ def test_parameter_summary():
 	assert ps.loc[('Income', 'hhinc#2'), 'Signif'] == None
 	assert ps.loc[('Income', 'hhinc#3'), 'Signif'] == None
 
-	assert ps.loc[('LOS', 'totcost'), 'Constrained'] == "totcost <= -0.005"
+	assert ps.loc[('LOS', 'totcost'), 'Constrained'] == "totcost ≤ -0.005"
 	assert ps.loc[('LOS', 'tottime'), 'Constrained'] == "fixed value"
-	assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 <= hhinc#2"
-	assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 <= hhinc#2"
+	assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
+	assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
 
 

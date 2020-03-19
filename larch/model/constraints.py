@@ -113,9 +113,9 @@ class RatioBound(ParametricConstraint):
 
     def get_binding_note(self, x):
         if self._min_fun(x) < self._max_fun(x):
-            return f"{self.p_num!s} / {self.p_den!s} >= {self.min_ratio}"
+            return f"{self.p_num!s} / {self.p_den!s} ≥ {self.min_ratio}"
         else:
-            return f"{self.p_num!s} / {self.p_den!s} <= {self.max_ratio}"
+            return f"{self.p_num!s} / {self.p_den!s} ≤ {self.max_ratio}"
 
     def as_linear_constraints(self):
         a = np.zeros([2,self.len], dtype='float64')
@@ -182,7 +182,7 @@ class OrderingBound(ParametricConstraint):
         return (self.p_less, self.p_more)
 
     def get_binding_note(self, x):
-        return f"{self.p_less!s} <= {self.p_more!s}"
+        return f"{self.p_less!s} ≤ {self.p_more!s}"
 
     def as_linear_constraints(self):
         a = np.zeros([1,self.len], dtype='float64')
@@ -249,9 +249,9 @@ class FixedBound(ParametricConstraint):
 
     def get_binding_note(self, x):
         if self._min_fun(x) < self._max_fun(x):
-            return f"{self.p!s} >= {self.minimum}"
+            return f"{self.p!s} ≥ {self.minimum}"
         else:
-            return f"{self.p!s} <= {self.maximum}"
+            return f"{self.p!s} ≤ {self.maximum}"
 
     def as_linear_constraints(self):
         a = np.zeros([1,self.len], dtype='float64')
