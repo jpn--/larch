@@ -1,5 +1,6 @@
 
 from .linear import ParameterRef_C, _what_is
+from numbers import Number
 
 _precedence = {
 	'lambda': 0,
@@ -54,43 +55,83 @@ class _ParameterOp():
 			return self._formatting.format(self.value(m))
 
 	def __add__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterAdd(self, other)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterAdd(self, other.as_pmath())
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __radd__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterAdd(other, self)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterAdd(other.as_pmath(), self)
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(other)} + {_what_is(self)}")
 
 	def __sub__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterSubtract(self, other)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterSubtract(self, other.as_pmath())
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __rsub__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterSubtract(other, self)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterSubtract(other.as_pmath(), self)
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(other)} - {_what_is(self)}")
 
 	def __mul__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterMultiply(self, other)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterMultiply(self, other.as_pmath())
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __rmul__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterMultiply(other, self)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterMultiply(other.as_pmath(), self)
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(other)} * {_what_is(self)}")
 
 	def __truediv__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterDivide(self, other)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterDivide(self, other.as_pmath())
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __rtruediv__(self, other):
-		if isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, (ParameterRef_C, _ParameterOp, Number)):
 			return ParameterDivide(other, self)
+		if hasattr(other, 'as_pmath'):
+			try:
+				return ParameterDivide(other.as_pmath(), self)
+			except:
+				pass
 		raise NotImplementedError(f"{_what_is(other)} / {_what_is(self)}")
 
 

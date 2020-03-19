@@ -8,7 +8,7 @@ import numpy
 import pandas
 
 from ..roles import DictOfStrings
-from .linear import ParameterRef_C
+from .linear import ParameterRef_C, LinearComponent_C, LinearFunction_C
 from .linear_math import ParameterOp
 
 import logging
@@ -221,7 +221,7 @@ cdef class ParameterFrame:
 		self.unmangle()
 		return self._frame.index.values.copy()
 
-	def pvalue(self, parameter_name, apply_formatting=False, default_value=None):
+	def pvalue(self, parameter_name, apply_formatting=False, default_value=None, log_errors=True):
 		"""
 		Get the value of a parameter or a parameter expression.
 
@@ -247,11 +247,20 @@ cdef class ParameterFrame:
 			is not found in the parameter frame.
 		"""
 		from ..roles import _param_math_binaryop
-		from .linear import ParameterRef_C
 		from .linear_math import _ParameterOp
 		from numbers import Number
 		try:
-			if isinstance(parameter_name, _param_math_binaryop):
+			if isinstance(parameter_name, (_ParameterOp, ParameterRef_C)):
+				if apply_formatting:
+					return parameter_name.string(self)
+				else:
+					return parameter_name.value(self)
+			elif hasattr(parameter_name, 'as_pmath'):
+				if apply_formatting:
+					return parameter_name.as_pmath().string(self)
+				else:
+					return parameter_name.as_pmath().value(self)
+			elif isinstance(parameter_name, _param_math_binaryop):
 				if apply_formatting:
 					return parameter_name.strf(self)
 				else:
@@ -259,21 +268,60 @@ cdef class ParameterFrame:
 			elif isinstance(parameter_name, dict):
 				result = type(parameter_name)()
 				for k,v in parameter_name.items():
-					result[k] = self.pvalue(v, apply_formatting=apply_formatting)
+					result[k] = self.pvalue(v, apply_formatting=apply_formatting, default_value=default_value)
 				return result
 			elif isinstance(parameter_name, (set, tuple, list)):
 				result = dict()
 				for k in parameter_name:
-					result[k] = self.pvalue(k) #? apply_formatting=apply_formatting ?
+					result[k] = self.pvalue(k, apply_formatting=apply_formatting, default_value=default_value)
 				return result
 			elif isinstance(parameter_name, Number):
-				return parameter_name
+				if apply_formatting:
+					return str(parameter_name)
+				else:
+					return parameter_name
 			else:
-				return self.pf.loc[parameter_name,'value']
+				if apply_formatting:
+					return str(self.pf.loc[parameter_name,'value'])
+				else:
+					return self.pf.loc[parameter_name,'value']
 		except KeyError:
 			if default_value is not None:
 				return default_value
+			if log_errors:
+				logger.exception("error in ParameterFrame.pvalue")
 			raise
+
+	def pformat(self, parameter_name, apply_formatting=True, default_value='NA'):
+		"""
+		Get the value of a parameter or a parameter expression.
+
+		Parameters
+		----------
+		parameter_name : str or ParameterOp
+			The named parameter, or parameter operation, to evaluate.
+		apply_formatting : bool, default True
+			Whether to string-format the result.
+		default_value : numeric or str, default 'NA'
+			A default value to return if the evaluation fails.
+
+		Returns
+		-------
+		numeric or str
+			Returns a numeric value (when `apply_formatting` is False) or
+			a formatted string.
+
+		Raises
+		------
+		KeyError
+			When the named parameter, or some named part of a ParameterOp,
+			is not found in the parameter frame.
+		"""
+		return self.pvalue(
+			parameter_name,
+			apply_formatting=apply_formatting,
+			default_value=default_value,
+		)
 
 	def set_value(self, name, value=None, **kwargs):
 		"""
@@ -392,9 +440,13 @@ cdef class ParameterFrame:
 	def get_value(self, name, *, default=None):
 		if name is None and default is not None:
 			return default
+		if isinstance(name, dict):
+			return {k:self.get_value(v) for k,v in name.items()}
 		try:
 			if isinstance(name, (ParameterRef_C, ParameterOp)):
 				return name.value(self)
+			if isinstance(name, (LinearComponent_C,LinearFunction_C)):
+				return name.as_pmath().value(self)
 			return self._frame.loc[name,'value']
 		except KeyError:
 			if default is not None:
@@ -444,7 +496,7 @@ cdef class ParameterFrame:
 		try:
 			return self._frame.loc[name,:]
 		except:
-			logger.exception("error in Model5c.__getitem__")
+			logger.exception("error in ParameterFrame.__getitem__")
 			raise
 
 	def set_values(self, values=None, **kwargs):

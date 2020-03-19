@@ -262,3 +262,198 @@ def test_pmath():
 	y = (P.Aaa + P.Bbb + P.Ccc) - P.Aaa
 	assert isinstance(y, larch.model.linear.LinearFunction_C)
 	assert y.value(m) == 12 + 20 + 2 - 12
+
+
+def test_pvalue():
+	m = larch.Model()
+	m.utility_ca = P.Aaa * X.Aaa + P.Bbb * X.Bbb + P.Ccc
+	m.set_values(Aaa=12, Bbb=20, Ccc=2)
+
+	assert P.Aaa.value(m) == 12
+	assert P.Bbb.value(m) == 20
+	assert P.Ccc.value(m) == 2
+
+	with pytest.raises(KeyError):
+		P.Ddd.value(m)
+
+	assert P.Ddd.value(m, {'Ddd': 123}) == 123
+
+	y = P.Ddd / P.Bbb
+	with pytest.raises(KeyError):
+		m.pvalue(y, log_errors=False)
+	assert m.pformat(y) == 'NA'
+
+	y = P.Aaa + P.Bbb
+	assert m.pvalue(y) == 12 + 20
+	assert m.pformat(y) == str(12 + 20)
+
+	y = P.Aaa / P.Bbb
+	assert m.pvalue(y) == 12 / 20
+	assert m.pformat(y) == "0.6"
+
+	y = P.Aaa * 60 / (P.Bbb * 100)
+	y.set_fmt("${:0.2f}/hr")
+	assert m.pvalue(y) == 12 * 60 / (20 * 100)
+	assert m.pformat(y) == '$0.36/hr'
+
+	y = P.Aaa + P.Bbb / P.Ccc
+	assert m.pvalue(y) == 12 + 20 / 2
+	assert m.pformat(y) == '22'
+
+	y = (P.Aaa + P.Bbb) + P.Ccc * P.Aaa
+	assert m.pvalue(y) == (12 + 20) + 2 * 12
+	assert m.pformat(y) == "{:.3g}".format((12 + 20) + 2 * 12)
+
+	y = (P.Aaa + P.Bbb) + P.Ccc / P.Aaa
+	assert m.pvalue(y) == (12 + 20) + 2 / 12
+	assert m.pformat(y) == "{:.3g}".format((12 + 20) + 2 / 12)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) * P.Aaa
+	assert m.pvalue(y) == (12 + 20 + 2) * 12
+	assert m.pformat(y) == "{:.3g}".format((12 + 20 + 2) * 12)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) / P.Aaa
+	assert m.pvalue(y) == (12 + 20 + 2) / 12
+	assert m.pformat(y) == "{:.3g}".format((12 + 20 + 2) / 12)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) - P.Aaa
+	assert m.pvalue(y) == 12 + 20 + 2 - 12
+	assert m.pformat(y) == "{:.3g}".format(12 + 20 + 2 - 12)
+
+	y = (P.Aaa + P.Bbb * 2) + P.Ccc * P.Aaa
+	assert m.pvalue(y) == (12 + 20 * 2) + 2 * 12
+	assert m.pformat(y) == "{:.3g}".format((12 + 20 * 2) + 2 * 12)
+
+	y = (P.Aaa + P.Bbb) + P.Ccc / P.Aaa * 3
+	assert m.pvalue(y) == (12 + 20) + 2 / 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((12 + 20) + 2 / 12 * 3)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) * P.Aaa * 3
+	assert m.pvalue(y) == (12 + 20 + 2) * 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((12 + 20 + 2) * 12 * 3)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) / P.Aaa * 3
+	assert m.pvalue(y) == (12 + 20 + 2) / 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((12 + 20 + 2) / 12 * 3)
+
+	y = (P.Aaa + P.Bbb + P.Ccc) - P.Aaa * 3
+	assert m.pvalue(y) == 12 + 20 + 2 - 12 * 3
+	assert m.pformat(y) == "{:.3g}".format(12 + 20 + 2 - 12 * 3)
+
+	y = (11 + P.Aaa + P.Bbb * 2) + P.Ccc * P.Aaa
+	assert m.pvalue(y) == (11 + 12 + 20 * 2) + 2 * 12
+	assert m.pformat(y) == "{:.3g}".format((11 + 12 + 20 * 2) + 2 * 12)
+
+	y = (11 + P.Aaa + P.Bbb) + P.Ccc / P.Aaa * 3
+	assert m.pvalue(y) == (11 + 12 + 20) + 2 / 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((11 + 12 + 20) + 2 / 12 * 3)
+
+	y = (11 + P.Aaa + P.Bbb + P.Ccc) * P.Aaa * 3
+	assert m.pvalue(y) == (11 + 12 + 20 + 2) * 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((11 + 12 + 20 + 2) * 12 * 3)
+
+	y = (11 + P.Aaa + P.Bbb + P.Ccc) / P.Aaa * 3
+	assert m.pvalue(y) == (11 + 12 + 20 + 2) / 12 * 3
+	assert m.pformat(y) == "{:.3g}".format((11 + 12 + 20 + 2) / 12 * 3)
+
+	y = (11 + P.Aaa + P.Bbb + P.Ccc) - P.Aaa * 3
+	assert m.pvalue(y) == 11 + 12 + 20 + 2 - 12 * 3
+	assert m.pformat(y) == "{:.3g}".format(11 + 12 + 20 + 2 - 12 * 3)
+
+	with pytest.raises(NotImplementedError):
+		P.Aaa * 10 + P.Bbb / 10 * X.Yyy + 2
+
+	y = P.Aaa * 10 + P.Bbb / 10 + 2
+	assert m.pvalue(y) == 12 * 10 + 20 / 10 + 2
+	assert m.pformat(y) == "{:.3g}".format(12 * 10 + 20 / 10 + 2)
+
+	with pytest.raises(Exception):
+		m.utility_ca = P.Aaa + P.Ccc + 5
+
+	yd = {
+		'Yxx': P.Aaa + P.Bbb / P.Ccc,
+		'Yyy': P.Aaa + P.Bbb,
+		'Yzz': P.Aaa * 60 / (P.Bbb * 100),
+	}
+	assert m.pvalue(yd) == {
+		'Yxx': 12 + 20 / 2,
+		'Yyy': 12 + 20,
+		'Yzz': 12 * 60 / (20 * 100),
+	}
+	assert m.pformat(yd) == {
+		'Yxx': "{:.3g}".format(12 + 20 / 2),
+		'Yyy': "{:.3g}".format(12 + 20),
+		'Yzz': "{:.3g}".format(12 * 60 / (20 * 100)),
+	}
+
+
+def test_pmath_in_utility():
+	d = larch.examples.MTC()
+	m0 = larch.Model(dataservice=d)
+
+	m0.utility_co[2] = P("ASC_SR2") * 10 + P("hhinc#2") / 10 * X("hhinc")
+	m0.utility_co[3] = P("ASC_SR3P") * 10 + P("hhinc#3") / 10 * X("hhinc")
+	m0.utility_co[4] = P("ASC_TRAN") * 10 + P("hhinc#4") / 10 * X("hhinc")
+	m0.utility_co[5] = P("ASC_BIKE") * 10 + P("hhinc#5") / 10 * X("hhinc")
+	m0.utility_co[6] = P("ASC_WALK") * 10 + P("hhinc#6") / 10 * X("hhinc")
+
+	m0.utility_ca = (
+			+ P("nonmotorized_time") / 10. * X("(altnum>4) * tottime")
+			+ P("motorized_ovtt") * 10 * X("(altnum <= 4) * ovtt")
+			+ P("motorized_ivtt") * X("(altnum <= 4) * ivtt")
+			+ PX("totcost")
+	)
+	m0.availability_var = '_avail_'
+	m0.choice_ca_var = '_choice_'
+
+	m1 = larch.Model(dataservice=d)
+
+	m1.utility_co[2] = P("ASC_SR2") * X('10') + P("hhinc#2") * X("hhinc/10")
+	m1.utility_co[3] = P("ASC_SR3P") * X('10') + P("hhinc#3") * X("hhinc/10")
+	m1.utility_co[4] = P("ASC_TRAN") * X('10') + P("hhinc#4") * X("hhinc/10")
+	m1.utility_co[5] = P("ASC_BIKE") * X('10') + P("hhinc#5") * X("hhinc/10")
+	m1.utility_co[6] = P("ASC_WALK") * X('10') + P("hhinc#6") * X("hhinc/10")
+
+	m1.utility_ca = (
+			+ P("nonmotorized_time") * X("(altnum>4) * tottime / 10")
+			+ P("motorized_ovtt") * X("(altnum <= 4) * ovtt * 10")
+			+ P("motorized_ivtt") * X("(altnum <= 4) * ivtt")
+			+ PX("totcost")
+	)
+	m1.availability_var = '_avail_'
+	m1.choice_ca_var = '_choice_'
+
+	m0.load_data()
+	m1.load_data()
+
+	r0 = m0.maximize_loglike(quiet=True)
+	r1 = m1.maximize_loglike(quiet=True)
+	assert r0.loglike == pytest.approx(-3587.6430040944942)
+	assert r1.loglike == pytest.approx(-3587.6430040944942)
+
+	m0.calculate_parameter_covariance()
+	m1.calculate_parameter_covariance()
+	t = {
+		'ASC_BIKE': -5.318650574990901,
+		'ASC_SR2': -22.291563439182628,
+		'ASC_SR3P': -22.174552606750527,
+		'ASC_TRAN': -3.293923857045225,
+		'ASC_WALK': 1.6172450189610719,
+		'hhinc#2': -1.4000897138949544,
+		'hhinc#3': 0.12900984170888324,
+		'hhinc#4': -3.0601742475362923,
+		'hhinc#5': -2.333410249527477,
+		'hhinc#6': -3.048442130390144,
+		'motorized_ivtt': -0.4116740527068954,
+		'motorized_ovtt': -12.958446214791113,
+		'nonmotorized_time': -11.789244777056298,
+		'totcost': -20.19350165272386,
+	}
+	assert dict(m0.pf['t stat']) == pytest.approx(t, rel=1e-5)
+	assert dict(m1.pf['t stat']) == pytest.approx(t, rel=1e-5)
+
+	assert (m0.get_value(P.motorized_ivtt) * 60) / (m0.get_value(P.totcost) * 100) == pytest.approx(0.3191492801963062)
+	assert m0.get_value( (P.motorized_ivtt * 60) / (P.totcost * 100) ) == pytest.approx(0.3191492801963062)
+	assert (m1.get_value(P.motorized_ivtt) * 60) / (m1.get_value(P.totcost) * 100) == pytest.approx(0.3191492801963062)
+	assert m1.get_value( (P.motorized_ivtt * 60) / (P.totcost * 100) ) == pytest.approx(0.3191492801963062)
+

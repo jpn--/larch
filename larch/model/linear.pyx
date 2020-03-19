@@ -89,11 +89,17 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return self
 			if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
 				return LinearComponent_C(param=str(self), data="1") + other
+			if isinstance(other, _Number):
+				from .linear_math import ParameterAdd
+				return ParameterAdd(self, other)
 		elif isinstance(other, ParameterRef_C):
 			if self == 0:
 				return other
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self + LinearComponent_C(param=str(other), data="1")
+			if isinstance(self, _Number):
+				from .linear_math import ParameterAdd
+				return ParameterAdd(self, other)
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
@@ -102,11 +108,17 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				return self
 			if isinstance(other, (ParameterRef_C, LinearComponent_C, LinearFunction_C)):
 				return LinearComponent_C(param=str(self), data="1") - other
+			if isinstance(other, _Number):
+				from .linear_math import ParameterSubtract
+				return ParameterSubtract(self, other)
 		elif isinstance(other, ParameterRef_C):
 			if self == 0:
 				return other
 			if isinstance(self, (LinearComponent_C, LinearFunction_C)):
 				return self - LinearComponent_C(param=str(other), data="1")
+			if isinstance(self, _Number):
+				from .linear_math import ParameterSubtract
+				return ParameterSubtract(self, other)
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
@@ -114,8 +126,8 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(other, DataRef_C):
 				return LinearComponent_C(param=str(self), data=str(other))
 			if isinstance(other, _Number):
-				return LinearComponent_C(param=str(self), data=str(other))
-				# return LinearComponent_C(param=str(self), data=str("1"), scale=other)
+				#  return LinearComponent_C(param=str(self), data=str(other))
+				return LinearComponent_C(param=str(self), data=str("1"), scale=other)
 			if isinstance(other, ParameterRef_C):
 				from .linear_math import ParameterMultiply
 				return ParameterMultiply(self, other)
@@ -123,8 +135,8 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(self, DataRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
 			if isinstance(self, _Number):
-				return LinearComponent_C(param=str(other), data=str(self))
-				# return LinearComponent_C(param=str(other), data=str("1"), scale=self)
+				# return LinearComponent_C(param=str(other), data=str(self))
+				return LinearComponent_C(param=str(other), data=str("1"), scale=self)
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -132,6 +144,12 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			if isinstance(other, ParameterRef_C):
 				from .linear_math import ParameterDivide
 				return ParameterDivide(self, other)
+			elif isinstance(other, _Number):
+				return LinearComponent_C(param=str(self), data=str("1"), scale=1/other)
+			elif isinstance(other, DataRef_C):
+				return LinearComponent_C(param=str(self), data=1/other, scale=1)
+		elif isinstance(other, ParameterRef_C):
+			return NotImplemented
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def value(self, *args):
@@ -424,6 +442,11 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *other])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, LinearComponent_C(param=str(other))])
+			else:
+				try:
+					return self.as_pmath() + other
+				except NotImplementedError:
+					pass
 		elif isinstance(other, LinearComponent_C):
 			if self == () or self == 0:
 				return other
@@ -431,6 +454,11 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([LinearComponent_C(param=str(self)), other])
 			elif isinstance(self, LinearFunction_C):
 				return LinearFunction_C([*self, other])
+			else:
+				try:
+					return other + self.as_pmath()
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __sub__(self, other):
@@ -443,6 +471,11 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *(-other)])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, -LinearComponent_C(param=str(other))])
+			else:
+				try:
+					return self.as_pmath() - other
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __mul__(self, other):
@@ -465,6 +498,11 @@ cdef class LinearComponent_C:
 					self.as_pmath(),
 					other.as_pmath(),
 				)
+			else:
+				try:
+					return self.as_pmath() * other
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -487,6 +525,11 @@ cdef class LinearComponent_C:
 					self.as_pmath(),
 					other.as_pmath(),
 				)
+			else:
+				try:
+					return self.as_pmath() / other
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
 
 	def __iter__(self):
@@ -776,11 +819,11 @@ cdef class LinearFunction_C:
 				result.append(other)
 				return result
 			from .linear_math import _ParameterOp, ParameterAdd
-			if isinstance(other, _ParameterOp):
+			if isinstance(other, (_ParameterOp, _Number)):
 				return ParameterAdd(self.as_pmath(), other)
 		if isinstance(other, LinearFunction_C):
 			from .linear_math import _ParameterOp, ParameterAdd
-			if isinstance(self, _ParameterOp):
+			if isinstance(self, (_ParameterOp, _Number)):
 				return ParameterAdd(self, other.as_pmath())
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
@@ -817,19 +860,19 @@ cdef class LinearFunction_C:
 				result.append(-other)
 				return result
 			from .linear_math import _ParameterOp, ParameterSubtract
-			if isinstance(other, _ParameterOp):
+			if isinstance(other, (_ParameterOp, _Number)):
 				return ParameterSubtract(self.as_pmath(), other)
 		if isinstance(other, LinearFunction_C):
 			from .linear_math import _ParameterOp, ParameterSubtract
-			if isinstance(self, _ParameterOp):
+			if isinstance(self, (_ParameterOp, _Number)):
 				return ParameterSubtract(self, other.as_pmath())
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __mul__(self, other):
 		from .linear_math import _ParameterOp, ParameterMultiply
-		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp, _Number)):
 			return ParameterMultiply(self.as_pmath(), other)
-		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp, _Number)):
 			return ParameterMultiply(self, other.as_pmath())
 		try:
 			trial = LinearFunction_C()
@@ -841,9 +884,9 @@ cdef class LinearFunction_C:
 
 	def __truediv__(self, other):
 		from .linear_math import _ParameterOp, ParameterDivide
-		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp)):
+		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp, _Number)):
 			return ParameterDivide(self.as_pmath(), other)
-		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp)):
+		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp, _Number)):
 			return ParameterDivide(self, other.as_pmath())
 		return NotImplemented
 
