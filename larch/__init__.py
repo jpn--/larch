@@ -35,6 +35,7 @@ from .dataframes import DataFrames
 
 from .examples import example
 from .util import figures
+from .util.excel import ExcelWriter
 
 _doctest_mode_ = False
 

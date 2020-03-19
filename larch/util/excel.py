@@ -378,14 +378,15 @@ def _make_excel_writer(model, filename, save_now=True, **kwargs):
     -------
     larch.util.excel.ExcelWriter
     """
+    if xlsxwriter is None:
+        raise RuntimeError('xlsxwriter is not installed')
     xl = ExcelWriter(filename, engine='xlsxwriter_larch', model=model, **kwargs)
     if save_now:
         xl.save()
     return xl
 
-if xlsxwriter is not None:
-    from .. import Model
-    Model.to_xlsx = _make_excel_writer
+from .. import Model
+Model.to_xlsx = _make_excel_writer
 
 def load_metadata(xlsx_filename, key=None):
     import pickle, base64, pandas
