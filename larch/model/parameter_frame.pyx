@@ -706,7 +706,7 @@ cdef class ParameterFrame:
 	# 	f.index = ix
 	# 	return f
 
-	def parameter_summary(self, output='xml'):
+	def parameter_summary(self, output='df'):
 		"""
 		Create an XHTML summary of parameter values.
 
@@ -719,9 +719,16 @@ cdef class ParameterFrame:
 		*	t Statistic (if known)
 		*	Null Value
 
+		Parameters
+		----------
+		output : {'df','xml'}
+			The format of the output.  The default, 'df', creates a
+			pandas DataFrame.  Alternatively, use 'xml' to create
+			a table as a xmle.Elem (this format is no longer preferred).
+
 		Returns
 		-------
-		xmle.Elem
+		pandas.DataFrame or xmle.Elem
 
 		"""
 		try:
@@ -819,12 +826,12 @@ cdef class ParameterFrame:
 					}
 				)
 				if 't Stat' in result.columns:
-					result.insert(result.columns.get_loc('t Stat')+1, 'Signif', None)
+					result.insert(result.columns.get_loc('t Stat')+1, 'Signif', "")
 					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
 					result.loc[numpy.absolute(result['t Stat']) > 2.5758, 'Signif'] = "**"
 					result.loc[numpy.absolute(result['t Stat']) > 3.2905, 'Signif'] = "***"
 					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if numpy.isfinite(x) else "NA")
-					result.loc[result['t Stat'] == 'NA', 'Signif'] = None
+					result.loc[result['t Stat'] == 'NA', 'Signif'] = ""
 				if 'Std Err' in result.columns:
 					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if numpy.isfinite(x) else "NA")
 				if 'Value' in result.columns:

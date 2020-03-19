@@ -191,7 +191,7 @@ def test_parameter_summary():
 		'tottime': -0.05134209452571549,
 	})
 	m.loglike()
-	assert m.parameter_summary().tostring() == (
+	assert m.parameter_summary('xml').tostring() == (
 		'<div><table><thead><tr><th style="text-align: left;">Category</th><th style="text-align: left;">Parameter</th>'
 		'<th>Value</th><th>Null Value</th></tr></thead><tbody><tr><th rowspan="2" style="vertical-align: top; text-alig'
 		'n: left;">LOS</th><th style="vertical-align: top; text-align: left;">totcost</th><td>-0.00492</td><td>0.0</td>'
@@ -208,7 +208,7 @@ def test_parameter_summary():
 		'lign: left;">hhinc#5</th><td>-0.01281</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: lef'
 		't;">hhinc#6</th><td>-0.009686</td><td>0.0</td></tr></tbody></table></div>')
 	m.ordering = ()
-	assert m.parameter_summary().tostring() == (
+	assert m.parameter_summary('xml').tostring() == (
 		'<div><table><thead><tr><th style="text-align: left;">Parameter</th><th>Value</th><th>Null Value</th></tr></the'
 		'ad><tbody><tr><th style="vertical-align: top; text-align: left;">ASC_BIKE</th><td>-2.376</td><td>0.0</td></tr>'
 		'<tr><th style="vertical-align: top; text-align: left;">ASC_SR2</th><td>-2.178</td><td>0.0</td></tr><tr><th sty'
