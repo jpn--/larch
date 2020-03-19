@@ -94,7 +94,7 @@ We can estimate the models and check the results match up with those given by Bi
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
-	>>> m.parameter_summary()
+	>>> m.parameter_summary('xml')
 	Category  Parameter     Value   Std Err  t Stat  Null Value
 	    ASCs    ASC_CAR   -0.1143    0.0407   -2.81         0.0
 	          ASC_TRAIN   -0.7565    0.0528  -14.32         0.0
