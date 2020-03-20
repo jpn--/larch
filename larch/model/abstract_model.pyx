@@ -601,6 +601,24 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			subsample=-1,
 			**kwargs,
 	):
+		"""
+		Maximize the log likelihood.
+
+		Parameters
+		----------
+		method : str, optional
+			The optimization method to use.  See scipy.optimize for
+			most possibilities, or use 'BHHH'. Defaults to SLSQP if
+			there are any constraints or finite parameter bounds,
+			otherwise defaults to BHHH.
+		quiet : bool, default False
+			Whether to suppress the dashboard.
+
+		Returns
+		-------
+		dictx
+
+		"""
 		from ..util.timesize import Timer
 		from scipy.optimize import minimize
 		from .. import _doctest_mode_
@@ -652,6 +670,12 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		if quiet or _doctest_mode_:
 			callback = None
+
+		if method is None:
+			if self.constraints or numpy.isfinite(self.pf['minimum'].max()) or numpy.isfinite(self.pf['maximum'].min()):
+				method = 'slsqp'
+			else:
+				method = 'bhhh'
 
 		method_used = method
 
