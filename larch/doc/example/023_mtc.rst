@@ -42,7 +42,7 @@ Model 23's nesting structure groups private automobiles and non-motorized altern
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
-	>>> m.maximize_loglike()
+	>>> m.maximize_loglike(method='bhhh')
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
 	-3435.357...

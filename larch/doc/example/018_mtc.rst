@@ -41,7 +41,7 @@ Model 18's nesting structure groups all motorized alternatives. (`pp. 176 <http:
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
-	>>> m.maximize_loglike()
+	>>> m.maximize_loglike(method='bhhh')
 	┣ ...Optimization terminated successfully...
 	>>> m.calculate_parameter_covariance()
 	>>> m.loglike()

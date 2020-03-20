@@ -40,7 +40,7 @@ Model 29's nesting structure groups motorized, private auto, and shared ride alt
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
 	>>> m.load_data()
-	>>> m.maximize_loglike()
+	>>> m.maximize_loglike(method='bhhh')
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
 	-3425.158...
