@@ -147,7 +147,7 @@ cdef class ParameterRef_C(UnicodeRef_C):
 			elif isinstance(other, _Number):
 				return LinearComponent_C(param=str(self), data=str("1"), scale=1/other)
 			elif isinstance(other, DataRef_C):
-				return LinearComponent_C(param=str(self), data=1/other, scale=1)
+				return LinearComponent_C(param=str(self), data=str(1/other), scale=1)
 		elif isinstance(other, ParameterRef_C):
 			return NotImplemented
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} / {_what_is(other)}")
