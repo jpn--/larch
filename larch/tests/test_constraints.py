@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 
 from larch import P, X
-from larch.model.constraints import RatioBound, OrderingBound
+from larch.model.constraints import RatioBound, OrderingBound, FixedBound
+from larch.model.constraints import interpret_contraint
 from pytest import approx
 import pytest
 import sys
@@ -436,4 +437,19 @@ def test_parameter_summary():
 	assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
 	assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
 
+
+def test_contraint_interpretation():
+
+	assert interpret_contraint("aaaa > bbbb") == OrderingBound('bbbb', 'aaaa')
+	assert interpret_contraint("aaaa < bbbb") == OrderingBound('aaaa', 'bbbb')
+	assert interpret_contraint("aaaa/bbbb > 3") == RatioBound('aaaa', 'bbbb', min_ratio=3)
+	assert interpret_contraint("aaaa/bbbb < 3") == RatioBound('aaaa', 'bbbb', max_ratio=3)
+	assert interpret_contraint("aaaa / bbbb > 3") == RatioBound('aaaa', 'bbbb', min_ratio=3)
+	assert interpret_contraint("aaaa / bbbb < 3") == RatioBound('aaaa', 'bbbb', max_ratio=3)
+	assert interpret_contraint("aaaa / bbbb >= 3") == RatioBound('aaaa', 'bbbb', min_ratio=3)
+	assert interpret_contraint("aaaa / bbbb <= 3") == RatioBound('aaaa', 'bbbb', max_ratio=3)
+	assert interpret_contraint("3.1 < aaaa / bbbb <= 3.2") == RatioBound('aaaa', 'bbbb', min_ratio=3.1, max_ratio=3.2)
+	assert interpret_contraint("aaaa > 3") == FixedBound('aaaa', minimum=3)
+	assert interpret_contraint("aaaa < 3") == FixedBound('aaaa', maximum=3)
+	assert interpret_contraint("3.1 < aaaa < 3.5") == FixedBound('aaaa', minimum=3.1, maximum=3.5)
 

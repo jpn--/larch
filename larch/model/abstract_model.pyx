@@ -582,7 +582,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 	def maximize_loglike(
 			self,
-			method='bhhh',
+			method=None,
 			method2=None,
 			quiet=False,
 			screen_update_throttle=2,

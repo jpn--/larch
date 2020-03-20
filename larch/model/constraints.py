@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.optimize import LinearConstraint
 from abc import ABC, abstractmethod
+import re
 
 class ParametricConstraint(ABC):
 
@@ -47,6 +48,9 @@ class RatioBound(ParametricConstraint):
         self.max_ratio = max_ratio
         self.scale = 1
         self.link_model(model, scale)
+
+    def __repr__(self):
+        return f"larch.RatioBound({self.p_num},{self.p_den},{self.min_ratio},{self.max_ratio})"
 
     def link_model(self, model, scale=None):
         if scale is not None:
@@ -162,6 +166,9 @@ class OrderingBound(ParametricConstraint):
         else:
             self.len = 0
 
+    def __repr__(self):
+        return f"larch.OrderingBound({self.p_less},{self.p_more})"
+
     def link_model(self, model, scale=None):
         self.i_less = model.pf.index.get_loc(self.p_less)
         self.i_more = model.pf.index.get_loc(self.p_more)
@@ -211,6 +218,9 @@ class FixedBound(ParametricConstraint):
         self.scale = 1
         if model is not None:
             self.link_model(model, scale)
+
+    def __repr__(self):
+        return f"larch.FixedBound({self.p},{self.minimum},{self.maximum})"
 
     def link_model(self, model, scale=None):
         self.i = model.pf.index.get_loc(self.p)
@@ -351,6 +361,8 @@ class ParametricConstraintList(MutableSequence):
         return self._cx[item]
 
     def __setitem__(self, key:int, value):
+        if isinstance(value, str):
+            value = interpret_contraint(value)
         if not isinstance(value, ParametricConstraint):
             raise TypeError('items must be of type ParametricConstraint')
         if self.allow_dupes or not self._is_duplicate(value):
@@ -372,6 +384,8 @@ class ParametricConstraintList(MutableSequence):
         return len(self._cx)
 
     def insert(self, index, value):
+        if isinstance(value, str):
+            value = interpret_contraint(value)
         if not isinstance(value, ParametricConstraint):
             raise TypeError('items must be of type ParametricConstraint')
         if self.allow_dupes or not self._is_duplicate(value):
@@ -404,3 +418,61 @@ class ParametricConstraintList(MutableSequence):
             else:
                 self._cx[index].link_model(self._instance, scale)
 
+
+
+
+def interpret_contraint(c):
+    numbr = r"\s*([-+]?\d*\.?\d*[eE]?[-+]?\d*)\s*"
+    token = r"\s*([\w#:\*&^%\$!@]+)\s*"
+
+    n_2w = f"^{numbr}(<=|<){token}(<=|<){numbr}$"
+    rx = re.match(n_2w, c)
+    if rx:
+        return FixedBound(rx.group(3), minimum=float(rx.group(1)), maximum=float(rx.group(5)))
+
+    le_n = f"^{token}(<=|<){numbr}$"
+    rx = re.match(le_n, c)
+    if rx:
+        return FixedBound(rx.group(1), maximum=float(rx.group(3)))
+
+    ge_n = f"^{token}(>=|>){numbr}$"
+    rx = re.match(ge_n, c)
+    if rx:
+        return FixedBound(rx.group(1), minimum=float(rx.group(3)))
+
+    n_le = f"^{numbr}(<=|<){token}$"
+    rx = re.match(n_le, c)
+    if rx:
+        return FixedBound(rx.group(3), minimum=float(rx.group(1)))
+
+    n_ge = f"^{numbr}(>=|>){token}$"
+    rx = re.match(n_ge, c)
+    if rx:
+        return FixedBound(rx.group(3), maximum=float(rx.group(1)))
+
+    le = f"^{token}(<=|<){token}$"
+    rx = re.match(le, c)
+    if rx:
+        return OrderingBound(rx.group(1), rx.group(3))
+
+    ge = f"^{token}(>=|>){token}$"
+    rx = re.match(ge, c)
+    if rx:
+        return OrderingBound(rx.group(3), rx.group(1))
+
+    r_le = f"^{token}/{token}(<=|<){numbr}$"
+    rx = re.match(r_le, c)
+    if rx:
+        return RatioBound(rx.group(1), rx.group(2), max_ratio=float(rx.group(4)))
+
+    r_ge = f"^{token}/{token}(>=|>){numbr}$"
+    rx = re.match(r_ge, c)
+    if rx:
+        return RatioBound(rx.group(1), rx.group(2), min_ratio=float(rx.group(4)))
+
+    r_2w = f"^{numbr}(<=|<){token}/{token}(<=|<){numbr}$"
+    rx = re.match(r_2w, c)
+    if rx:
+        return RatioBound(rx.group(3), rx.group(4), min_ratio=float(rx.group(1)), max_ratio=float(rx.group(6)))
+
+    raise ValueError(f"cannot interpret '{c}' as a constraint")
