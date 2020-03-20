@@ -425,7 +425,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			start_case=start_case, stop_case=stop_case, step_case=step_case,
 			leave_out=leave_out, keep_only=keep_only, subsample=subsample
 		)
-		return (-result.ll, -result.dll)
+		return (-result.ll, -numpy.asarray(result.dll))
 
 	def neg_loglike3(self, *args, **kwargs):
 		from ..util import dictx
