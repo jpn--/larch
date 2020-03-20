@@ -391,7 +391,10 @@ cdef class DataFrames:
 			ch_as_ce = None,
 
 			sys_alts = None,
-			computational = False
+			computational = False,
+
+			caseindex_name = '_caseid_',
+			altindex_name = '_altid_',
 	):
 
 		try:
@@ -409,8 +412,8 @@ cdef class DataFrames:
 			ch = ch if ch is not None else data_ch
 			wt = wt if wt is not None else data_wt
 
-			self._caseindex_name = '_caseid_'
-			self._altindex_name = '_altid_'
+			self._caseindex_name = caseindex_name
+			self._altindex_name = altindex_name
 
 			if len(args) > 1:
 				raise ValueError('DataFrames accepts at most one positional argument')
@@ -604,6 +607,12 @@ cdef class DataFrames:
 		if crack:
 			ce, co = crack_idca(ce, crack)
 
+		caseindex_name, altindex_name = ce.index.names
+		if caseindex_name is None:
+			caseindex_name = '_caseid_'
+		if altindex_name is None:
+			altindex_name = '_altid_'
+
 		if columns is None:
 			columns = list(ce.columns)
 			if choice is not None and choice in ce.columns:
@@ -612,7 +621,9 @@ cdef class DataFrames:
 			ce = ce[columns],
 			ch = ce[choice].unstack().fillna(0) if choice is not None else None,
 			co = co,
-			ch_name = choice
+			ch_name = choice,
+			caseindex_name=caseindex_name,
+			altindex_name=altindex_name,
 		)
 		if autoscale_weights:
 			result.autoscale_weights()
@@ -2833,6 +2844,8 @@ cdef class DataFrames:
 			alt_names=self.alternative_names(),
 			sys_alts=self._systematic_alternatives,
 			**{self._data_ca_or_ce_type: df_ca},
+			caseindex_name=self._caseindex_name,
+			altindex_name=self._altindex_name,
 		)
 
 
@@ -2919,6 +2932,8 @@ cdef class DataFrames:
 			ch_name = self._data_ch_name,
 			wt_name = self._data_wt_name,
 			av_name = self._data_av_name,
+			caseindex_name=self._caseindex_name,
+			altindex_name=self._altindex_name,
 		)
 		dfs.weight_normalization = self.weight_normalization
 
