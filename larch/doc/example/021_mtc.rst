@@ -42,34 +42,34 @@ Model 21's nesting structure groups the non-motorized alternatives. (`pp. 176 <h
 	┣ ...Optimization terminated successfully...
 	>>> m.loglike()
 	-3443.554...
-	
-	>>> print(m.parameter_summary())
-	                                   Value  Null Value
-	Category   Parameter                                
-	CostbyInc  costbyincome          -0.0519         0.0
-	TravelTime motorized_time        -0.0199         0.0
-	           nonmotorized_time     -0.0454         0.0
-	           motorized_ovtbydist    -0.135         0.0
-	Household  hhinc#4              -0.00534         0.0
-	           hhinc#5              -0.00922         0.0
-	           hhinc#6              -0.00560         0.0
-	           vehbywrk_BIKE          -0.693         0.0
-	           vehbywrk_SR            -0.317         0.0
-	           vehbywrk_TRANSIT       -0.947         0.0
-	           vehbywrk_WALK          -0.714         0.0
-	Zonal      wkcbd_BIKE              0.414         0.0
-	           wkcbd_SR2               0.260         0.0
-	           wkcbd_SR3                1.07         0.0
-	           wkcbd_TRANSIT            1.31         0.0
-	           wkcbd_WALK              0.103         0.0
-	           wkempden_BIKE         0.00219         0.0
-	           wkempden_SR2          0.00158         0.0
-	           wkempden_SR3          0.00226         0.0
-	           wkempden_TRANSIT      0.00313         0.0
-	           wkempden_WALK         0.00279         0.0
-	ASCs       ASC_BIKE                -1.45         0.0
-	           ASC_SR2                 -1.81         0.0
-	           ASC_SR3                 -3.43         0.0
-	           ASC_TRANSIT            -0.682         0.0
-	           ASC_WALK               0.0788         0.0
-	Other      mu                      0.766         1.0
+
+	>>> print(m.pfo()[['value']])
+	                                 value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0519
+	TravelTime motorized_time      -0.0199
+	           nonmotorized_time   -0.0454
+	           motorized_ovtbydist -0.1351
+	Household  hhinc#4             -0.0053
+	           hhinc#5             -0.0092
+	           hhinc#6             -0.0056
+	           vehbywrk_BIKE       -0.6928
+	           vehbywrk_SR         -0.3165
+	           vehbywrk_TRANSIT    -0.9470
+	           vehbywrk_WALK       -0.7141
+	Zonal      wkcbd_BIKE           0.4142
+	           wkcbd_SR2            0.2604
+	           wkcbd_SR3            1.0703
+	           wkcbd_TRANSIT        1.3083
+	           wkcbd_WALK           0.1034
+	           wkempden_BIKE        0.0022
+	           wkempden_SR2         0.0016
+	           wkempden_SR3         0.0023
+	           wkempden_TRANSIT     0.0031
+	           wkempden_WALK        0.0028
+	ASCs       ASC_BIKE            -1.4459
+	           ASC_SR2             -1.8088
+	           ASC_SR3             -3.4350
+	           ASC_TRANSIT         -0.6817
+	           ASC_WALK             0.0791
+	Other      mu                   0.7665
