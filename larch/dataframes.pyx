@@ -332,9 +332,27 @@ cdef class DataFrames:
 		A dataframe containing idco format data, with one row per case.
 		The index contains the caseid's.
 	ca : pandas.DataFrame
-		A dataframe containing idca format data, with one row per alternative.
-		The index should be a two-level multi-index, with the first level
-		containing the caseid's and the second level containing the altid's.
+		A dataframe containing idca format data, with one row per alternative,
+		regardless if that alternative is available or not.  This means the
+		total number of rows in this dataframe must be exactly the number of
+		cases times the number of possible alterntives.  The index should be
+		a two-level multi-index, with the first level containing the caseid's
+		and the second level containing the altid's. This structure may not
+		be efficient from a memory-usage standpoint, but it can be more efficient
+		from a computational speed standpoint, especially if the alternative
+		availability is relatively dense (i.e. most cases have most alternatives).
+		The `ce` array can be used for more memory efficient storage, but only
+		one of `ca` and `ce` should be used at one time.
+	ce : pandas.DataFrame
+		A dataframe containing idca format data, with one row per available
+		alternative.  Unavailable alternatives are omitted.  Otherwise, this
+		dataframe should be formatted the same as `ca` data (see above).
+	av : pandas.DataFrame or True
+		A dataframe containing alternative availability data, with one row
+		per case and one column per alternative.
+		The index contains the caseid's, and the columns contain the alt_codes.
+		If set to `True`, all alternatives are set to be available for all
+		cases.
 	ch : pandas.DataFrame
 		A dataframe containing choice data, with one row per case and one column
 		per alternative.
@@ -346,6 +364,14 @@ cdef class DataFrames:
 		A sequence of alternative names as str.
 	alt_codes : Sequence[int]
 		A sequence of alternative codes.
+	crack : bool, default False
+		Whether to pre-process `ca` or `ce` data, to identify variables that do
+		not vary within cases, and move them to a new `co` dataframe.  This can
+		result in more computationally efficient model estimation, but the cracking
+		process can be slow for large data sets.
+	av_name : str, optional
+		A name to use for the availability variable.  If not given, it is inferred
+		from the `av` argument if possible.
 	ch_name : str, optional
 		A name to use for the choice variable.  If not given, it is inferred from
 		the `ch` argument if possible.  If the `ch` argument is not given but a
