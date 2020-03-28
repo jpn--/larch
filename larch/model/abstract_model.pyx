@@ -1277,6 +1277,12 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					worksheet.merge_range(row, datum_col+1, row, datum_col+2, rsc, cell_format=fixed_4) # "{:.3f}".format(rsc)
 				row += 1
 
+			if mostrecent is not None:
+				if 'message' in mostrecent:
+					catname('Optimization Message')
+					worksheet.write(row, datum_col+1, mostrecent.message)
+					row += 1
+
 			if sheetname not in xlsxwriter._col_widths:
 				xlsxwriter._col_widths[sheetname] = {}
 			current_width = xlsxwriter._col_widths[sheetname].get(start_col, 8)
