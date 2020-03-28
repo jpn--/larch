@@ -5,9 +5,10 @@ from pandas.io.formats.style import Styler
 from xmle import Elem
 import matplotlib.figure
 import io
+import time
 import base64
 from .png import make_png
-
+from .. import __version__
 import logging
 
 logger = logging.getLogger("Larch.Excel")
@@ -58,8 +59,15 @@ class ExcelWriter(_XlsxWriter):
         _engine = 'xlsxwriter_larch'
         kwargs.pop('engine', None)
         super().__init__(*args, engine=_engine, **kwargs)
+        self.book.set_size(1600, 1200)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
+        self.ital_fmt = self.book.add_format({'italic': True, 'font_size':12})
         self.toc_link_fmt = self.book.add_format({'font_size':8})
+
+        self.fixed_precision = {
+            2: "_-0.00;-0.00"
+        }
+
         self.sheet_startrow = {}
         self._col_widths = {}
         if output_renderer is None:
@@ -74,8 +82,12 @@ class ExcelWriter(_XlsxWriter):
             self.FIG = lambda x: x
 
         self.tocsheet = self.add_worksheet('Contents') # first sheet cannot be hidden
-        self.tocsheet.write(0, 0, 'Table of Contents', self.head_fmt)
-        self.sheet_startrow['Contents'] = 3
+        if model is not None:
+            self.tocsheet.write(0, 0, model.title, self.head_fmt)
+        self.tocsheet.write(2, 0, f'   🌳 Larch {__version__}')
+        self.tocsheet.write(3, 0, time.strftime("     %A %d %B %Y, %I:%M:%S %p %Z"))
+        self.tocsheet.write(5, 0, 'Table of Contents', self.head_fmt)
+        self.sheet_startrow['Contents'] = 6
 
         self.logsheet = self.add_worksheet('_log_', hide=hide_log)
         self.log(f"larch.util.excel.ExcelWriter opened: {str(args)}")
@@ -223,7 +235,6 @@ class ExcelWriter(_XlsxWriter):
         self.sheet_startrow['_metadata_'] = row+1
 
     def log(self, message):
-        import time
         t = time.strftime("%Y-%b-%d %H:%M:%S")
         row = self.sheet_startrow.get('_log_',0)
         self.logsheet.write(row, 0, t)
