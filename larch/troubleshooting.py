@@ -44,6 +44,12 @@ def doctor(
 		logger.warning(f'problem: nan-weight ({len(diagnosis)} issues)')
 		problems['nan_weight'] = diagnosis
 
+	logger.info("checking for low-variance-data-co")
+	dfs, diagnosis = low_variance_data_co(dfs, repair=None, verbose=verbose)
+	if diagnosis is not None:
+		logger.warning(f'problem: low-variance-data-co ({len(diagnosis)} issues)')
+		problems['low_variance_data_co'] = diagnosis
+
 	# if repair_asc:
 	# 	x = self.cleanup_asc_problems()
 	# 	if x is not None:
@@ -311,6 +317,55 @@ def nan_weight(dfs, repair=None, verbose=3):
 
 		if repair:
 			dfs.data_wt.fillna(0, inplace=True)
+
+	if m is None:
+		return dfs, diagnosis
+	else:
+		return m, diagnosis
+
+
+
+def low_variance_data_co(dfs, repair=None, verbose=3):
+	"""
+	Check if any data_co columns have very low variance.
+
+	Parameters
+	----------
+	dfs : DataFrames or Model
+		The data to check
+	repair : None
+		Not implemented.
+	verbose : int, default 3
+		The number of example columns to list if
+		there is a problem.
+
+	Returns
+	-------
+	dfs : DataFrames
+		The revised dataframe
+	diagnosis : pandas.DataFrame
+		The number of bad instances, and some example rows.
+
+	"""
+	if isinstance(dfs, Model):
+		m = dfs
+		dfs = m.dataframes
+	else:
+		m = None
+
+	diagnosis = None
+	if dfs.data_co is not None:
+		variance = dfs.data_co.var()
+		if variance.min() < 1e-3:
+			i = numpy.where(variance < 1e-3)[0]
+
+			diagnosis = pandas.DataFrame(
+				data=[[len(i), '']],
+				columns=['n', 'example cols'],
+				index=['low_variance_co'],
+			)
+
+			diagnosis.loc['low_variance_co', 'example cols'] = ", ".join(str(dfs.data_co.columns[j]) for j in i[:verbose])
 
 	if m is None:
 		return dfs, diagnosis
