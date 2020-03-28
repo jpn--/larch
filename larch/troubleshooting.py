@@ -15,6 +15,7 @@ def doctor(
 		repair_ch_zq=None,
 		repair_asc=None,
 		repair_noch_nowt=None,
+		repair_nan_wt=None,
 		verbose=3,
 ):
 	problems = dictx()
@@ -36,6 +37,12 @@ def doctor(
 	if diagnosis is not None:
 		logger.warning(f'problem: nothing-chosen-but-nonzero-weight ({len(diagnosis)} issues)')
 		problems['nothing_chosen_but_nonzero_weight'] = diagnosis
+
+	logger.info("checking for nan-weight")
+	dfs, diagnosis = nan_weight(dfs, repair=repair_nan_wt, verbose=verbose)
+	if diagnosis is not None:
+		logger.warning(f'problem: nan-weight ({len(diagnosis)} issues)')
+		problems['nan_weight'] = diagnosis
 
 	# if repair_asc:
 	# 	x = self.cleanup_asc_problems()
@@ -252,6 +259,59 @@ def nothing_chosen_but_nonzero_weight(dfs, repair=None, verbose=3):
 			elif repair == '*':
 				dfs.array_wt()[nothing_chosen] = 0
 				dfs.autoscale_weights()
+	if m is None:
+		return dfs, diagnosis
+	else:
+		return m, diagnosis
+
+
+def nan_weight(dfs, repair=None, verbose=3):
+	"""
+	Check if some observations are chosen but not available
+
+	Parameters
+	----------
+	dfs : DataFrames or Model
+		The data to check
+	repair : None or bool
+		Whether to repair the data.
+		Any true value will make NaN values in the weight zero.
+		None effects no repair, and simply emits a warning.
+	verbose : int, default 3
+		The number of example rows to list for each problem.
+
+	Returns
+	-------
+	dfs : DataFrames
+		The revised dataframe
+	diagnosis : pandas.DataFrame
+		The number of bad instances, and some example rows.
+
+	"""
+	if isinstance(dfs, Model):
+		m = dfs
+		dfs = m.dataframes
+	else:
+		m = None
+
+	diagnosis = None
+	if dfs.data_wt is not None:
+		nan_wgt = numpy.isnan(dfs.data_wt.iloc[:, 0])
+
+		if nan_wgt.sum():
+			i = numpy.where(nan_wgt)[0]
+
+			diagnosis = pandas.DataFrame(
+				data=[[nan_wgt.sum(), '']],
+				columns=['n', 'example rows'],
+				index=['nan_weight'],
+			)
+
+			diagnosis.loc['nan_weight', 'example rows'] = ", ".join(str(j) for j in i[:verbose])
+
+		if repair:
+			dfs.data_wt.fillna(0, inplace=True)
+
 	if m is None:
 		return dfs, diagnosis
 	else:
