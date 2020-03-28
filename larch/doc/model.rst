@@ -29,6 +29,20 @@ Parameter Manipulation
 
 .. automethod:: Model.lock_value
 
+.. automethod:: Model.set_values
+
+
+Estimation and Application
+--------------------------
+
+.. automethod:: Model.load_data
+
+.. automethod:: Model.maximize_loglike
+
+.. automethod:: Model.calculate_parameter_covariance
+
+.. automethod:: Model.estimate
+
 
 Scikit-Learn Interface
 ----------------------

@@ -509,7 +509,7 @@ class Model(_Model5c):
 
 	def _utility_functions_as_frame(self, subset=None, resolve_parameters=False):
 		"""
-		Generate an XHTML output of the utility function(s).
+		Generate a tabular output of the utility function(s).
 
 		Parameters
 		----------
@@ -670,6 +670,7 @@ class Model(_Model5c):
 			repair_ch_zq=None,
 			repair_asc=None,
 			repair_noch_nowt=None,
+			repair_nan_wt=None,
 			verbose=3,
 	):
 		self.unmangle(True)
@@ -680,6 +681,7 @@ class Model(_Model5c):
 			repair_ch_zq=repair_ch_zq,
 			repair_asc=repair_asc,
 			repair_noch_nowt=repair_noch_nowt,
+			repair_nan_wt=repair_nan_wt,
 			verbose=verbose,
 		)
 

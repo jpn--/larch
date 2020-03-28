@@ -15,6 +15,8 @@ import logging
 from ..log import logger_name
 logger = logging.getLogger(logger_name+'.model')
 
+NBSP = " " # non=breaking space
+
 def _empty_parameter_frame(names, nullvalue=0, initvalue=0, max=None, min=None):
 
 	cdef int len_names = 0 if names is None else len(names)
@@ -325,7 +327,7 @@ cdef class ParameterFrame:
 
 	def set_value(self, name, value=None, **kwargs):
 		"""
-		Set the value for a model parameter.
+		Set the value for a single model parameter.
 
 		This function will set the current value of a parameter.
 		Unless explicitly instructed with an alternate value,
@@ -501,34 +503,46 @@ cdef class ParameterFrame:
 
 	def set_values(self, values=None, **kwargs):
 		"""
-		Set the parameter values.
+		Set the parameter values for one or more parameters.
 
 		Parameters
 		----------
 		values : {'null', 'init', 'best', array-like, dict, scalar}, optional
 			New values to set for the parameters.
-			If 'null' or 'init', the current values are set equal to the null or initial values given in
-			the 'nullvalue' or 'initvalue' column of the parameter frame, respectively.
-			If 'best', the current values are set equal to the values given in the 'best' column of the
-			parameter frame, if that columns exists, otherwise a ValueError exception is raised.
-			If given as array-like, the array must be a vector with length equal to the length of the
-			parameter frame, and the given vector will replace the current values.  If given as a dictionary,
-			the dictionary is used to update `kwargs` before they are processed.
+			If 'null' or 'init', the current values are set
+			equal to the null or initial values given in
+			the 'nullvalue' or 'initvalue' column of the
+			parameter frame, respectively.
+			If 'best', the current values are set equal to
+			the values given in the 'best' column of the
+			parameter frame, if that columns exists,
+			otherwise a ValueError exception is raised.
+			If given as array-like, the array must be a
+			vector with length equal to the length of the
+			parameter frame, and the given vector will replace
+			the current values.  If given as a dictionary,
+			the dictionary is used to update `kwargs` before
+			they are processed.
 		kwargs : dict
-			Any keyword arguments (or if `values` is a dictionary) are used to update the included named parameters
-			only.  A warning will be given if any key of the dictionary is not found among the existing named
-			parameters in the parameter frame, and the value associated with that key is ignored.  Any parameters
+			Any keyword arguments (or if `values` is a
+			dictionary) are used to update the included named
+			parameters only.  A warning will be given if any key of
+			the dictionary is not found among the existing named
+			parameters in the parameter frame, and the value
+			associated with that key is ignored.  Any parameters
 			not named by key in this dictionary are not changed.
 
 		Notes
 		-----
-		Setting parameters both in the `values` argument and through keyword assignment is not explicitly disallowed,
+		Setting parameters both in the `values` argument and
+		through keyword assignment is not explicitly disallowed,
 		although it is not recommended and may be disallowed in the future.
 
 		Raises
 		------
 		ValueError
-			If setting to 'best' but there is no 'best' column in the `pf` parameters DataFrame.
+			If setting to 'best' but there is no 'best' column in
+			the `pf` parameters DataFrame.
 		"""
 
 		if isinstance(values, str):
@@ -760,7 +774,7 @@ cdef class ParameterFrame:
 
 	def parameter_summary(self, output='df'):
 		"""
-		Create an XHTML summary of parameter values.
+		Create a tabular summary of parameter values.
 
 		This will generate a small table of parameters statistics,
 		containing:
@@ -770,6 +784,7 @@ cdef class ParameterFrame:
 		*	Standard Error of the Estimate (if known)
 		*	t Statistic (if known)
 		*	Null Value
+		*	Binding Constraints (if applicable)
 
 		Parameters
 		----------
@@ -877,40 +892,44 @@ cdef class ParameterFrame:
 						'constrained': 'Constrained'
 					}
 				)
+				monospace_cols = []
 				if 't Stat' in result.columns:
 					result.insert(result.columns.get_loc('t Stat')+1, 'Signif', "")
 					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
 					result.loc[numpy.absolute(result['t Stat']) > 2.5758, 'Signif'] = "**"
 					result.loc[numpy.absolute(result['t Stat']) > 3.2905, 'Signif'] = "***"
-					result['t Stat'] = result['t Stat'].apply(lambda x: f"{x:0<4.2f}" if numpy.isfinite(x) else "NA")
-					result.loc[result['t Stat'] == 'NA', 'Signif'] = ""
+					_fmt_t = lambda x: f"{x:0< 4.2f}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
+					result['t Stat'] = result['t Stat'].apply(_fmt_t)
+					result.loc[result['t Stat'] == NBSP+"NA", 'Signif'] = ""
+					monospace_cols.append('t Stat')
+					monospace_cols.append('Signif')
 				if 'Std Err' in result.columns:
-					result['Std Err'] = result['Std Err'].apply(lambda x: f"{x:#.3g}" if numpy.isfinite(x) else "NA")
+					_fmt_s = lambda x: f"{x: #.3g}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
+					result['Std Err'] = result['Std Err'].apply(_fmt_s)
+					monospace_cols.append('Std Err')
 				if 'Value' in result.columns:
-					result['Value'] = result['Value'].apply(lambda x: f"{x:#.3g}")
-
+					result['Value'] = result['Value'].apply(lambda x: f"{x: #.3g}".replace(" ",NBSP))
+					monospace_cols.append('Value')
+				if 'Constrained' in result.columns:
+					result['Constrained'] = result['Constrained'].str.replace("\n","<br>")
+				if 'Null Value' in result.columns:
+					monospace_cols.append('Null Value')
 				if result.index.nlevels > 1:
 					pnames = result.index.get_level_values(-1)
 				else:
 					pnames = result.index
-				# for i in range(len(result)):
-				#	pname_str = str(pnames[i])
-				#	if self.pf.loc[pname_str,'holdfast']:
-				#		j = result.index[i]
-				#		if 'Std Err' in result.columns:
-				#			result.loc[j,'Std Err'] = "fixed value"
-				#			if 't Stat' in result.columns:
-				#				result.loc[j,'t Stat'] = None
-				#			if 'Null Value' in result.columns:
-				#				result.loc[j,'Null Value'] = None
-				#		elif 't Stat' in result.columns:
-				#			result.loc[j,'t Stat'] = "fixed value"
-				#			if 'Null Value' in result.columns:
-				#				result.loc[j,'Null Value'] = None
-				#		elif 'Null Value' in result.columns:
-				#			result.loc[j,'Null Value'] = "fixed value"
+				styles = [
+					dict(selector="th", props=[
+						("vertical-align", "top"),
+						("text-align", "left"),
+					]),
+					dict(selector="td", props=[
+						("vertical-align", "top"),
+						("text-align", "left"),
+					]),
 
-				return result
+				]
+				return result.style.set_table_styles(styles).format({'Null Value':"{: .2f}"}).applymap(lambda x:"font-family:monospace", subset=monospace_cols)
 
 		except Exception as err:
 			logger.exception("error in parameter_summary")

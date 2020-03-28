@@ -431,6 +431,12 @@ cdef class Model5c(AbstractChoiceModel):
 	def load_data(self, dataservice=None, autoscale_weights=True, log_warnings=True):
 		"""Load dataframes as required from the dataservice.
 
+		This method prepares the data for estimation. It is used to
+		pre-process the data, extracting the required values, pre-computing
+		the values of fixed expressions, and assembling the results into
+		contiguous arrays suitable for computing the log likelihood values
+		efficiently.
+
 		Parameters
 		----------
 		dataservice : DataService, optional
@@ -443,9 +449,9 @@ cdef class Model5c(AbstractChoiceModel):
 			value for data_wt is 1.0.  See `autoscale_weights` for more
 			information.
 		log_warnings : bool, default True
-			Emit warnings in the logger if choice, avail, or weight is not included in
-			`req_data` but is set in the dataservice, and thus returned by default even
-			though it was not requested.
+			Emit warnings in the logger if choice, avail, or weight is
+			not included in `req_data` but is set in the dataservice, and
+			thus returned by default even though it was not requested.
 
 		Raises
 		------

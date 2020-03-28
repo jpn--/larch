@@ -604,6 +604,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		"""
 		Maximize the log likelihood.
 
+		The `dataframes` for this model should previously have been
+		prepared using the `load_data` method.
+
 		Parameters
 		----------
 		method : str, optional
@@ -617,6 +620,14 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		Returns
 		-------
 		dictx
+			A dictionary of results, including final log likelihood,
+			elapsed time, and other statistics.  The exact items
+			included in output will vary by estimation method.
+
+		Raises
+		------
+		ValueError
+			If the `dataframes` are not already loaded.
 
 		"""
 		from ..util.timesize import Timer
@@ -1290,6 +1301,18 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 
 	def calculate_parameter_covariance(self, status_widget=None, preserve_hessian=False):
+		"""
+		Compute the parameter covariance matrix.
+
+		This function computes the parameter covariance by
+		taking the inverse of the hessian (2nd derivative
+		of log likelihood with respect to the parameters.)
+
+		It does not return values directly, but rather stores
+		the result in `covariance_matrix`, and computes the
+		standard error of the estimators (i.e. the square root
+		of the diagonal) and stores those values in `pf['std err']`.
+		"""
 		hess = -self.d2_loglike()
 
 		from ..model.possible_overspec import compute_possible_overspecification, PossibleOverspecification
