@@ -410,33 +410,37 @@ def test_parameter_summary():
 
 	m0.calculate_parameter_covariance()
 
-	ps = m0.parameter_summary('df')
+	ps = m0.parameter_summary('df').data
 
-	assert ps.loc[('LOS', 'totcost'), 'Value'] == "-0.00500"
-	assert ps.loc[('LOS', 'tottime'), 'Value'] == "-0.0500"
-	assert ps.loc[('Income', 'hhinc#2'), 'Value'] == "-0.00159"
-	assert ps.loc[('Income', 'hhinc#3'), 'Value'] == "-0.00159"
+	try:
+		assert ps.loc[('LOS', 'totcost'), 'Value'] == "-0.00500"
+		assert ps.loc[('LOS', 'tottime'), 'Value'] == "-0.0500"
+		assert ps.loc[('Income', 'hhinc#2'), 'Value'] == "-0.00159"
+		assert ps.loc[('Income', 'hhinc#3'), 'Value'] == "-0.00159"
 
-	assert ps.loc[('LOS', 'totcost'), 'Std Err'] == "0.00"
-	assert ps.loc[('LOS', 'tottime'), 'Std Err'] == "0.00"
-	assert ps.loc[('Income', 'hhinc#2'), 'Std Err'] == "0.00140"
-	assert ps.loc[('Income', 'hhinc#3'), 'Std Err'] == "0.00140"
+		assert ps.loc[('LOS', 'totcost'), 'Std Err'] == " 0.00"
+		assert ps.loc[('LOS', 'tottime'), 'Std Err'] == " 0.00"
+		assert ps.loc[('Income', 'hhinc#2'), 'Std Err'] == " 0.00140"
+		assert ps.loc[('Income', 'hhinc#3'), 'Std Err'] == " 0.00140"
 
-	assert ps.loc[('LOS', 'totcost'), 't Stat'] == "NA"
-	assert ps.loc[('LOS', 'tottime'), 't Stat'] == "NA"
-	assert ps.loc[('Income', 'hhinc#2'), 't Stat'] == "-1.14"
-	assert ps.loc[('Income', 'hhinc#3'), 't Stat'] == "-1.14"
+		assert ps.loc[('LOS', 'totcost'), 't Stat'] == " NA"
+		assert ps.loc[('LOS', 'tottime'), 't Stat'] == " NA"
+		assert ps.loc[('Income', 'hhinc#2'), 't Stat'] == "-1.14"
+		assert ps.loc[('Income', 'hhinc#3'), 't Stat'] == "-1.14"
 
-	assert ps.loc[('LOS', 'totcost'), 'Signif'] == ""
-	assert ps.loc[('LOS', 'tottime'), 'Signif'] == ""
-	assert ps.loc[('Income', 'hhinc#2'), 'Signif'] == ""
-	assert ps.loc[('Income', 'hhinc#3'), 'Signif'] == ""
+		assert ps.loc[('LOS', 'totcost'), 'Signif'] == ""
+		assert ps.loc[('LOS', 'tottime'), 'Signif'] == ""
+		assert ps.loc[('Income', 'hhinc#2'), 'Signif'] == ""
+		assert ps.loc[('Income', 'hhinc#3'), 'Signif'] == ""
 
-	assert ps.loc[('LOS', 'totcost'), 'Constrained'] == "totcost ≤ -0.005"
-	assert ps.loc[('LOS', 'tottime'), 'Constrained'] == "fixed value"
-	assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
-	assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
-
+		assert ps.loc[('LOS', 'totcost'), 'Constrained'] == "totcost ≤ -0.005"
+		assert ps.loc[('LOS', 'tottime'), 'Constrained'] == "fixed value"
+		assert ps.loc[('Income', 'hhinc#2'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
+		assert ps.loc[('Income', 'hhinc#3'), 'Constrained'] == "hhinc#3 ≤ hhinc#2"
+	except:
+		print(ps.iloc[:,:3])
+		print(ps.iloc[:,3:])
+		raise
 
 def test_contraint_interpretation():
 
@@ -452,4 +456,15 @@ def test_contraint_interpretation():
 	assert interpret_contraint("aaaa > 3") == FixedBound('aaaa', minimum=3)
 	assert interpret_contraint("aaaa < 3") == FixedBound('aaaa', maximum=3)
 	assert interpret_contraint("3.1 < aaaa < 3.5") == FixedBound('aaaa', minimum=3.1, maximum=3.5)
+
+	assert interpret_contraint("aaaa/bbbb > 1/2") == RatioBound('aaaa', 'bbbb', min_ratio=1/2)
+	assert interpret_contraint("aaaa/bbbb < 1/2") == RatioBound('aaaa', 'bbbb', max_ratio=1/2)
+	assert interpret_contraint("aaaa / bbbb > 1/2") == RatioBound('aaaa', 'bbbb', min_ratio=1/2)
+	assert interpret_contraint("aaaa / bbbb < 1/2") == RatioBound('aaaa', 'bbbb', max_ratio=1/2)
+	assert interpret_contraint("aaaa / bbbb >= 1/2") == RatioBound('aaaa', 'bbbb', min_ratio=1/2)
+	assert interpret_contraint("aaaa / bbbb <= 1/2") == RatioBound('aaaa', 'bbbb', max_ratio=1/2)
+	assert interpret_contraint("1/4 < aaaa / bbbb <= 3/4") == RatioBound('aaaa', 'bbbb', min_ratio=1/4, max_ratio=3/4)
+	assert interpret_contraint("aaaa > 3/4") == FixedBound('aaaa', minimum=3/4)
+	assert interpret_contraint("aaaa < 3/4") == FixedBound('aaaa', maximum=3/4)
+	assert interpret_contraint("1/4 < aaaa < 3/4") == FixedBound('aaaa', minimum=1/4, maximum=3/4)
 

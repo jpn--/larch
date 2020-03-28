@@ -61,31 +61,31 @@ class RatioBound(ParametricConstraint):
             self.len = len(model.pf)
             if self.min_ratio is not None:
                 scaling = max(self.min_ratio, 1/self.min_ratio) * self.scale
-                if model.pf.loc[self.p_den, 'minimum'] == 0:
+                if model.pf.loc[self.p_den, 'minimum'] >= 0:
                     # positive denominator
                     self.cmin_num = 1 * scaling
                     self.cmin_den = -self.min_ratio * scaling
-                elif model.pf.loc[self.p_den, 'maximum'] == 0:
+                elif model.pf.loc[self.p_den, 'maximum'] <= 0:
                     # negative denominator
                     self.cmin_num = -1 * scaling
                     self.cmin_den = self.min_ratio * scaling
                 else:
-                    raise ValueError('denominator must be bounded at zero')
+                    raise ValueError('denominator must be bounded to be non-positive or non-negative')
             else:
                 self.cmin_num = 0
                 self.cmin_den = 0
             if self.max_ratio is not None:
                 scaling = max(self.max_ratio, 1/self.max_ratio) * self.scale
-                if model.pf.loc[self.p_den, 'minimum'] == 0:
+                if model.pf.loc[self.p_den, 'minimum'] >= 0:
                     # positive denominator
                     self.cmax_num = -1 * scaling
                     self.cmax_den = self.max_ratio * scaling
-                elif model.pf.loc[self.p_den, 'maximum'] == 0:
+                elif model.pf.loc[self.p_den, 'maximum'] <= 0:
                     # negative denominator
                     self.cmax_num = 1 * scaling
                     self.cmax_den = -self.max_ratio * scaling
                 else:
-                    raise ValueError('denominator must be bounded at zero')
+                    raise ValueError('denominator must be bounded to be non-positive or non-negative')
             else:
                 self.cmax_num = 0
                 self.cmax_den = 0
@@ -419,36 +419,40 @@ class ParametricConstraintList(MutableSequence):
                 self._cx[index].link_model(self._instance, scale)
 
 
-
+def asfloat(x):
+    if "/" in x:
+        x_ = x.split("/")
+        return float(x_[0])/float(x_[1])
+    return float(x)
 
 def interpret_contraint(c):
-    numbr = r"\s*([-+]?\d*\.?\d*[eE]?[-+]?\d*)\s*"
+    numbr = r"\s*([-+]?\d*\.?\d*[eE]?[-+]?\d*|\d+\/\d+)\s*"
     token = r"\s*([\w#:\*&^%\$!@]+)\s*"
 
     n_2w = f"^{numbr}(<=|<){token}(<=|<){numbr}$"
     rx = re.match(n_2w, c)
     if rx:
-        return FixedBound(rx.group(3), minimum=float(rx.group(1)), maximum=float(rx.group(5)))
+        return FixedBound(rx.group(3), minimum=asfloat(rx.group(1)), maximum=asfloat(rx.group(5)))
 
     le_n = f"^{token}(<=|<){numbr}$"
     rx = re.match(le_n, c)
     if rx:
-        return FixedBound(rx.group(1), maximum=float(rx.group(3)))
+        return FixedBound(rx.group(1), maximum=asfloat(rx.group(3)))
 
     ge_n = f"^{token}(>=|>){numbr}$"
     rx = re.match(ge_n, c)
     if rx:
-        return FixedBound(rx.group(1), minimum=float(rx.group(3)))
+        return FixedBound(rx.group(1), minimum=asfloat(rx.group(3)))
 
     n_le = f"^{numbr}(<=|<){token}$"
     rx = re.match(n_le, c)
     if rx:
-        return FixedBound(rx.group(3), minimum=float(rx.group(1)))
+        return FixedBound(rx.group(3), minimum=asfloat(rx.group(1)))
 
     n_ge = f"^{numbr}(>=|>){token}$"
     rx = re.match(n_ge, c)
     if rx:
-        return FixedBound(rx.group(3), maximum=float(rx.group(1)))
+        return FixedBound(rx.group(3), maximum=asfloat(rx.group(1)))
 
     le = f"^{token}(<=|<){token}$"
     rx = re.match(le, c)
@@ -463,16 +467,16 @@ def interpret_contraint(c):
     r_le = f"^{token}/{token}(<=|<){numbr}$"
     rx = re.match(r_le, c)
     if rx:
-        return RatioBound(rx.group(1), rx.group(2), max_ratio=float(rx.group(4)))
+        return RatioBound(rx.group(1), rx.group(2), max_ratio=asfloat(rx.group(4)))
 
     r_ge = f"^{token}/{token}(>=|>){numbr}$"
     rx = re.match(r_ge, c)
     if rx:
-        return RatioBound(rx.group(1), rx.group(2), min_ratio=float(rx.group(4)))
+        return RatioBound(rx.group(1), rx.group(2), min_ratio=asfloat(rx.group(4)))
 
     r_2w = f"^{numbr}(<=|<){token}/{token}(<=|<){numbr}$"
     rx = re.match(r_2w, c)
     if rx:
-        return RatioBound(rx.group(3), rx.group(4), min_ratio=float(rx.group(1)), max_ratio=float(rx.group(6)))
+        return RatioBound(rx.group(3), rx.group(4), min_ratio=asfloat(rx.group(1)), max_ratio=asfloat(rx.group(6)))
 
     raise ValueError(f"cannot interpret '{c}' as a constraint")
