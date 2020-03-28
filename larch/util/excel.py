@@ -100,8 +100,38 @@ class ExcelWriter(_XlsxWriter):
             embed=True,
     ):
 
+        ps_data_index_nlevels = 1
         try:
-            self.add_content_tab(model.parameter_summary('df'), sheetname="Parameters", heading="Parameters" )
+            ps = model.parameter_summary('df')
+            ps_data_index_nlevels = ps.data.index.nlevels
+            if 'Constrained' in ps.data.columns:
+                ps.data['Constrained'] = ps.data['Constrained'].str.replace("<br>",",\n")
+            self.add_content_tab(ps, sheetname="Parameters", heading="Parameters" )
+            if 'Constrained' in ps.data.columns:
+                n = ps.data.index.nlevels + ps.data.columns.get_loc("Constrained")
+                if "Parameters" not in self._col_widths:
+                    self._col_widths["Parameters"] = {}
+                current_width = self._col_widths["Parameters"].get(n, 8)
+                new_width = max(current_width, 50)
+                self._col_widths["Parameters"][n] = new_width
+                wrap = self.book.add_format()
+                wrap.set_text_wrap()
+                self.sheets["Parameters"].set_column(n, n, width=new_width, cell_format=wrap)
+        except:
+            if on_error == 'raise':
+                raise
+
+        try:
+            startrow = self.sheet_startrow.get("Parameters", 0)
+            worksheet = self.sheets["Parameters"]
+            worksheet.write_url(startrow, 0, 'internal:Contents!A1', self.toc_link_fmt, string='<< Back to Table of Contents', )
+            startrow += 1
+            h = self.TAB("Estimation Statistics")
+            worksheet.write(startrow, 0, h, self.head_fmt)
+            self._add_toc_entry(h, "Parameters", startrow)
+            startrow += 1
+            logger.debug(" after heading row is %d", startrow)
+            model._estimation_statistics_excel(self, "Parameters", start_row=startrow, buffer_cols=ps_data_index_nlevels-1)
         except:
             if on_error == 'raise':
                 raise
@@ -230,7 +260,7 @@ class ExcelWriter(_XlsxWriter):
         self.tocsheet.write_url(self.sheet_startrow['Contents'], 0, f"internal:'{target_sheet}'!A{target_row+1}", string=heading)
         self.sheet_startrow['Contents'] += 1
 
-    def add_content_tab(self, content, sheetname, heading=None, startrow=None, blurb=None):
+    def add_content_tab(self, content, sheetname, heading=None, startrow=None, blurb=None, to_excel=None):
 
         if startrow is None:
             startrow = self.sheet_startrow.get(sheetname, 0)
@@ -238,10 +268,13 @@ class ExcelWriter(_XlsxWriter):
 
         content_in = content
         success = False
+        if to_excel is None:
+            to_excel = {}
 
         logger.debug("writing to %s", sheetname)
 
         if isinstance(content, (pd.DataFrame, Styler)):
+            logger.debug("writing as DataFrame (%s)", type(content))
 
             if isinstance(content, Styler):
                 content_, content_data = content, content.data
@@ -256,7 +289,7 @@ class ExcelWriter(_XlsxWriter):
                 self._add_toc_entry(h, sheetname, startrow)
                 startrow += 1
                 logger.debug(" after heading row is %d", startrow)
-            content_.to_excel(self, sheet_name=worksheet.name, startrow=startrow)
+            content_.to_excel(self, sheet_name=worksheet.name, startrow=startrow, **to_excel)
             startrow += len(content_data) + content.columns.nlevels
             if content_data.index.name:
                 startrow += 1
@@ -280,6 +313,7 @@ class ExcelWriter(_XlsxWriter):
 
         # Render matplotlib.Figure into an Elem
         if not success and 'matplotlib' in str(type(content)):
+            logger.debug("writing as matplotlib (%s)", type(content))
             if isinstance(content, matplotlib.figure.Figure):
                 try:
                     content = make_png(content, dpi='figure', compress=True, output='Elem', facecolor='w')
@@ -288,6 +322,7 @@ class ExcelWriter(_XlsxWriter):
 
         # Extract PNG data from Elem if found there
         if not success and isinstance(content, Elem):
+            logger.debug("writing as Elem (%s)", type(content))
             if content.tag == 'img':
                 _v = content
             else:
@@ -321,6 +356,58 @@ class ExcelWriter(_XlsxWriter):
                         startrow += int(np.ceil(img_size[1] / dpi[1] * 72 / 15)) + 3
                         logger.debug(" after image row is %d", startrow)
                         success = True
+
+        if not success and isinstance(content, dict):
+            logger.debug("writing as dict (%s)", type(content))
+            max_row = 0
+            max_col = 0
+            row = -1
+            prev_col = 0
+            cellcontent = []
+            from collections.abc import Iterable
+            def unpacker(i, indent=0):
+                nonlocal row, prev_col, max_row, max_col, cellcontent
+                if isinstance(i, dict):
+                    for k, v in i.items():
+                        unpacker(k, indent)
+                        unpacker(v, indent + 1)
+                elif isinstance(i, pd.Series):
+                    for k, v in dict(i).items():
+                        unpacker(k, indent)
+                        unpacker(v, indent + 1)
+                elif not isinstance(i, str) and isinstance(i, Iterable):
+                    for k in i:
+                        unpacker(k, indent)
+                else:
+                    if prev_col >= indent:
+                        row = row + 1
+                    cellcontent.append((indent, row, i))
+                    max_col = max(max_col, indent)
+                    max_row = max(max_row, row)
+                    prev_col = indent
+            unpacker(content)
+            table_cache = pd.DataFrame(data="", index=pd.RangeIndex(max_row + 1), columns=pd.RangeIndex(max_col + 1))
+            for c in cellcontent:
+                table_cache.iloc[c[1], c[0]] = c[2]
+            self.add_content_tab(
+                table_cache,
+                sheetname=sheetname,
+                heading=heading,
+                startrow=startrow,
+                blurb=blurb,
+                to_excel=dict(
+                    index=False,
+                    header=False,
+                ),
+            )
+            if sheetname not in self._col_widths:
+                self._col_widths[sheetname] = {}
+            for n in range(max_col):
+                current_width = self._col_widths[sheetname].get(n, 8)
+                new_width = max(current_width, 16)
+                self._col_widths[sheetname][n] = new_width
+                worksheet.set_column(n,n,new_width)
+            success = True
 
         if not success:
             import warnings
