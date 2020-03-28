@@ -12,6 +12,7 @@ from ..util.naming import parenthize, valid_identifier_or_parenthized_string
 _ParameterRef_C_repr_txt = "P"
 _DataRef_repr_txt = 'X'
 
+_null_ = '_'
 
 def _what_is(thing):
 	if isinstance(thing, (ParameterRef_C, DataRef_C)):
@@ -129,6 +130,17 @@ cdef class ParameterRef_C(UnicodeRef_C):
 				#  return LinearComponent_C(param=str(self), data=str(other))
 				return LinearComponent_C(param=str(self), data=str("1"), scale=other)
 			if isinstance(other, ParameterRef_C):
+				if self == _null_:
+					return other
+				if other == _null_:
+					return self
+				from .linear_math import ParameterMultiply
+				return ParameterMultiply(self, other)
+			if isinstance(other, LinearComponent_C):
+				if self == _null_:
+					return other
+				if other.param == _null_:
+					return LinearComponent_C(param=str(self), data=str(other.data), scale=other.scale)
 				from .linear_math import ParameterMultiply
 				return ParameterMultiply(self, other)
 		elif isinstance(other, ParameterRef_C):
@@ -273,6 +285,8 @@ cdef class DataRef_C(UnicodeRef_C):
 			if other == "00":
 				return DataRef_C("{}+0".format(parenthize(self), parenthize(other, True)))
 			return DataRef_C("{}+{}".format(parenthize(self), parenthize(other, True)))
+		if isinstance(self, DataRef_C) and isinstance(other, ParameterRef_C):
+			return P(_null_)*self + other
 
 		# Don't return NotImplemented just raise TypeError when adding a DataRef_C and a plain string.
 		# This will disallow the __radd__ method on the plain string.
@@ -286,6 +300,8 @@ cdef class DataRef_C(UnicodeRef_C):
 	def __sub__(self, other):
 		if isinstance(self, (DataRef_C, _Number)) and isinstance(other, (DataRef_C, _Number)):
 			return DataRef_C("{}-{}".format(parenthize(self), parenthize(other, True)))
+		if isinstance(self, DataRef_C) and isinstance(other, ParameterRef_C):
+			return P(_null_)*self - other
 		return NotImplemented # raise NotImplementedError(f"{_what_is(self)} - {_what_is(other)}")
 
 	def __mul__(self, other):
@@ -295,11 +311,13 @@ cdef class DataRef_C(UnicodeRef_C):
 					return other
 				if other == "1" or other == "1.0" or other == 1:
 					return self
+				if isinstance(other, _Number):
+					return P(_null_) * other * self
 				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
 			if isinstance(other, ParameterRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
 			if isinstance(other, LinearComponent_C):
-				return LinearComponent_C(param=str(other.param), data=str(self * other.data) )
+				return LinearComponent_C(param=str(other.param), data=str(self * other.data), scale=other.scale )
 			if isinstance(other, LinearFunction_C):
 				return LinearFunction_C([self * c for c in other] )
 		elif isinstance(other, DataRef_C):
@@ -308,6 +326,8 @@ cdef class DataRef_C(UnicodeRef_C):
 					return other
 				if other == "1" or other == "1.0" or other == 1:
 					return self
+				if isinstance(self, _Number):
+					return P(_null_) * self * other
 				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
 			if isinstance(self, ParameterRef_C):
 				return LinearComponent_C(param=str(self), data=str(other))
@@ -442,6 +462,8 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *other])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, LinearComponent_C(param=str(other))])
+			elif isinstance(other, DataRef_C):
+				return LinearFunction_C([self, LinearComponent_C(param=_null_, data=str(other))])
 			else:
 				try:
 					return self.as_pmath() + other
@@ -452,6 +474,8 @@ cdef class LinearComponent_C:
 				return other
 			elif isinstance(self, ParameterRef_C):
 				return LinearFunction_C([LinearComponent_C(param=str(self)), other])
+			elif isinstance(self, DataRef_C):
+				return LinearFunction_C([LinearComponent_C(param=_null_, data=str(self)), other])
 			elif isinstance(self, LinearFunction_C):
 				return LinearFunction_C([*self, other])
 			else:
@@ -471,6 +495,8 @@ cdef class LinearComponent_C:
 				return LinearFunction_C([self, *(-other)])
 			elif isinstance(other, ParameterRef_C):
 				return LinearFunction_C([self, -LinearComponent_C(param=str(other))])
+			elif isinstance(other, ParameterRef_C):
+				return LinearFunction_C([self, -LinearComponent_C(param=_null_, data=str(other))])
 			else:
 				try:
 					return self.as_pmath() - other
@@ -486,23 +512,49 @@ cdef class LinearComponent_C:
 					data=str(self.data),
 					scale=self.scale * other,
 				)
-			elif isinstance(other, (DataRef_C, )):
+			if isinstance(other, (DataRef_C, )):
 				return self.__class__(
 					param=str(self.param),
 					data=str(self.data * other),
 					scale=self.scale,
 				)
-			elif isinstance(other, (LinearComponent_C, )):
+			if isinstance(other, (LinearComponent_C, )):
+				if self.param == _null_:
+					return self.__class__(
+						param=str(other.param),
+						data=str(self.data * other.data),
+						scale=self.scale * other.scale,
+					)
+				if other.param == _null_:
+					return self.__class__(
+						param=str(self.param),
+						data=str(self.data * other.data),
+						scale=self.scale * other.scale,
+					)
 				from .linear_math import ParameterMultiply
 				return ParameterMultiply(
 					self.as_pmath(),
 					other.as_pmath(),
 				)
-			else:
-				try:
-					return self.as_pmath() * other
-				except NotImplementedError:
-					pass
+			if isinstance(other, (ParameterRef_C, )):
+				if other == _null_:
+					return self
+				elif self.param == _null_:
+					return self.__class__(
+						param=str(other),
+						data=str(self.data),
+						scale=self.scale,
+					)
+			try:
+				return self.as_pmath() * other
+			except NotImplementedError:
+				pass
+		if isinstance(other, LinearComponent_C) and isinstance(self, _Number):
+			return other.__class__(
+				param=str(other.param),
+				data=str(other.data),
+				scale=other.scale * self,
+			)
 		raise NotImplementedError(f"{_what_is(self)} * {_what_is(other)}")
 
 	def __truediv__(self, other):
@@ -870,9 +922,43 @@ cdef class LinearFunction_C:
 
 	def __mul__(self, other):
 		from .linear_math import _ParameterOp, ParameterMultiply
-		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp, _Number)):
+		if isinstance(self, LinearFunction_C) and isinstance(other, _Number):
+			trial = LinearFunction_C()
+			for component in self:
+				trial.append(component * other)
+			return trial
+		if isinstance(self, LinearFunction_C) and isinstance(other, (ParameterRef_C, _ParameterOp)):
+			if isinstance(other, ParameterRef_C):
+				if other == _null_:
+					return self
+				trial = LinearFunction_C()
+				for component in self:
+					if component.param == _null_:
+						trial.append(component * other)
+					else:
+						trial = None
+						break
+				if trial is not None:
+					return trial
 			return ParameterMultiply(self.as_pmath(), other)
-		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp, _Number)):
+		if isinstance(other, LinearFunction_C) and isinstance(self, _Number):
+			trial = LinearFunction_C()
+			for component in other:
+				trial.append(self * component)
+			return trial
+		if isinstance(other, LinearFunction_C) and isinstance(self, (ParameterRef_C, _ParameterOp)):
+			if isinstance(self, ParameterRef_C):
+				if self == _null_:
+					return other
+				trial = LinearFunction_C()
+				for component in other:
+					if component.param == _null_:
+						trial.append(self * component)
+					else:
+						trial = None
+						break
+				if trial is not None:
+					return trial
 			return ParameterMultiply(self, other.as_pmath())
 		try:
 			trial = LinearFunction_C()

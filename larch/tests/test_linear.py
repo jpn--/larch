@@ -1,6 +1,6 @@
 import larch
 import larch.model.linear_math
-from larch.model.linear import ParameterRef_C, DataRef_C, LinearComponent_C, LinearFunction_C
+from larch.model.linear import ParameterRef_C, DataRef_C, LinearComponent_C, LinearFunction_C, _null_
 from larch import P, X, PX
 import keyword
 import pytest
@@ -50,7 +50,7 @@ def test_data_c_math():
 
 	assert X.Aaa + 2 == X("Aaa+2")
 	assert X.Aaa - 2 == X("Aaa-2")
-	assert X.Aaa * 2 == X("Aaa*2")
+	assert X.Aaa * 2 == LinearComponent_C(param=_null_, scale=2, data='Aaa')
 	assert X.Aaa / 2 == X("Aaa/2")
 	assert X.Aaa & 2 == X("Aaa&2")
 	assert X.Aaa | 2 == X("Aaa|2")
@@ -59,7 +59,7 @@ def test_data_c_math():
 
 	assert 2 + X.Aaa == X("2+Aaa")
 	assert 2 - X.Aaa == X("2-Aaa")
-	assert 2 * X.Aaa == X("2*Aaa")
+	assert 2 * X.Aaa == LinearComponent_C(param=_null_, scale=2, data='Aaa')
 	assert 2 / X.Aaa == X("2/Aaa")
 	assert 2 & X.Aaa == X("2&Aaa")
 	assert 2 | X.Aaa == X("2|Aaa")
@@ -127,6 +127,53 @@ def test_linear_func():
 	u += P.Ccc * X.Ccc
 
 	assert u == P.Aaa * X.Aaa + P.Bbb * X.Bbb + P.Ccc * X.Ccc
+
+	assert P.ppp * X.xxx * 1.234 == P.ppp * 1.234 * X.xxx
+	assert P.ppp * X.xxx * 1.234 == X.xxx * P.ppp * 1.234
+	assert P.ppp * X.xxx * 1.234 == X.xxx * 1.234 * P.ppp
+	assert P.ppp * X.xxx * 1.234 == 1.234 * X.xxx * P.ppp
+	assert P.ppp * X.xxx * 1.234 == 1.234 * P.ppp * X.xxx
+
+	assert (P.ppp * X.xxx) * 1.234 == P.ppp * (1.234 * X.xxx)
+	assert (P.ppp * X.xxx) * 1.234 == X.xxx * (P.ppp * 1.234)
+	assert (P.ppp * X.xxx) * 1.234 == X.xxx * (1.234 * P.ppp)
+	assert (P.ppp * X.xxx) * 1.234 == 1.234 * (X.xxx * P.ppp)
+	assert (P.ppp * X.xxx) * 1.234 == 1.234 * (P.ppp * X.xxx)
+
+	assert (P.ppp * X.xxx) * 1.234 == (P.ppp * 1.234) * X.xxx
+	assert (P.ppp * X.xxx) * 1.234 == (X.xxx * P.ppp) * 1.234
+	assert (P.ppp * X.xxx) * 1.234 == (X.xxx * 1.234) * P.ppp
+	assert (P.ppp * X.xxx) * 1.234 == (1.234 * X.xxx) * P.ppp
+	assert (P.ppp * X.xxx) * 1.234 == (1.234 * P.ppp) * X.xxx
+
+	assert (P.ppp * X.xxx * 1.234) == P.ppp * (1.234 * X.xxx)
+	assert (P.ppp * X.xxx * 1.234) == X.xxx * (P.ppp * 1.234)
+	assert (P.ppp * X.xxx * 1.234) == X.xxx * (1.234 * P.ppp)
+	assert (P.ppp * X.xxx * 1.234) == 1.234 * (X.xxx * P.ppp)
+	assert (P.ppp * X.xxx * 1.234) == 1.234 * (P.ppp * X.xxx)
+
+	assert (P.ppp * X.xxx * 1.234) == (P.ppp * 1.234) * X.xxx
+	assert (P.ppp * X.xxx * 1.234) == (X.xxx * P.ppp) * 1.234
+	assert (P.ppp * X.xxx * 1.234) == (X.xxx * 1.234) * P.ppp
+	assert (P.ppp * X.xxx * 1.234) == (1.234 * X.xxx) * P.ppp
+	assert (P.ppp * X.xxx * 1.234) == (1.234 * P.ppp) * X.xxx
+
+	assert P.ppp * (X.xxx * 1.234) == P.ppp * (1.234 * X.xxx)
+	assert P.ppp * (X.xxx * 1.234) == X.xxx * (P.ppp * 1.234)
+	assert P.ppp * (X.xxx * 1.234) == X.xxx * (1.234 * P.ppp)
+	assert P.ppp * (X.xxx * 1.234) == 1.234 * (X.xxx * P.ppp)
+	assert P.ppp * (X.xxx * 1.234) == 1.234 * (P.ppp * X.xxx)
+
+	assert P.ppp * (X.xxx * 1.234) == (P.ppp * 1.234) * X.xxx
+	assert P.ppp * (X.xxx * 1.234) == (X.xxx * P.ppp) * 1.234
+	assert P.ppp * (X.xxx * 1.234) == (X.xxx * 1.234) * P.ppp
+	assert P.ppp * (X.xxx * 1.234) == (1.234 * X.xxx) * P.ppp
+	assert P.ppp * (X.xxx * 1.234) == (1.234 * P.ppp) * X.xxx
+
+	assert (P.ppp * X.xxx) * X.xxx == P.ppp * X('xxx*xxx')
+	assert (P.ppp * X.xxx) * (P("_") * X.xxx) == P.ppp * X('xxx*xxx')
+	assert (P("_") * X.xxx) * (P.ppp * X.xxx) == P.ppp * X('xxx*xxx')
+
 
 def test_piecewise_linear():
 	from larch.util.data_expansion import piecewise_linear
