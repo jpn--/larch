@@ -4,6 +4,7 @@ import re as _re
 import keyword as _keyword
 import numpy as _numpy
 import sys
+import re
 from numbers import Number as _Number
 
 from ..util.naming import parenthize, valid_identifier_or_parenthized_string
@@ -13,6 +14,9 @@ _ParameterRef_C_repr_txt = "P"
 _DataRef_repr_txt = 'X'
 
 _null_ = '_'
+
+_boolmatch = re.compile("^boolean\((.+)==(.+)\)$")
+
 
 def _what_is(thing):
 	if isinstance(thing, (ParameterRef_C, DataRef_C)):
@@ -313,6 +317,18 @@ cdef class DataRef_C(UnicodeRef_C):
 					return self
 				if isinstance(other, _Number):
 					return P(_null_) * other * self
+				if self == other and self[:8] == 'boolean(' and self[-1:]==')':
+					# Squaring a boolean does not change it
+					return self
+				if self[:8] == 'boolean(' and self[-1:]==')' and other[:8] == 'boolean(' and other[-1:]==')':
+					# Check for two mutually exclusive conditions
+					boolmatch1 = _boolmatch.match(self)
+					if boolmatch1:
+						boolmatch2 = _boolmatch.match(other)
+						if boolmatch2:
+							if boolmatch1.group(1) == boolmatch2.group(1):
+								if boolmatch1.group(2) != boolmatch2.group(2):
+									return DataRef_C('0')
 				return DataRef_C("{}*{}".format(parenthize(self), parenthize(other, True)))
 			if isinstance(other, ParameterRef_C):
 				return LinearComponent_C(param=str(other), data=str(self))
@@ -457,13 +473,17 @@ cdef class LinearComponent_C:
 			if other == () or other == 0:
 				return self
 			elif isinstance(other, LinearComponent_C):
+				if other.data == '0' or other.data == '0.0' or other.scale == 0:
+					return self
+				if self.data == '0' or self.data == '0.0' or self.scale == 0:
+					return other
 				return LinearFunction_C([self, other])
 			elif isinstance(other, LinearFunction_C):
 				return LinearFunction_C([self, *other])
 			elif isinstance(other, ParameterRef_C):
-				return LinearFunction_C([self, LinearComponent_C(param=str(other))])
+				return self + LinearComponent_C(param=str(other))
 			elif isinstance(other, DataRef_C):
-				return LinearFunction_C([self, LinearComponent_C(param=_null_, data=str(other))])
+				return self + LinearComponent_C(param=_null_, data=str(other))
 			else:
 				try:
 					return self.as_pmath() + other
@@ -473,11 +493,12 @@ cdef class LinearComponent_C:
 			if self == () or self == 0:
 				return other
 			elif isinstance(self, ParameterRef_C):
-				return LinearFunction_C([LinearComponent_C(param=str(self)), other])
+				#return LinearFunction_C([LinearComponent_C(param=str(self)), other])
+				return LinearComponent_C(param=str(self)) + other
 			elif isinstance(self, DataRef_C):
-				return LinearFunction_C([LinearComponent_C(param=_null_, data=str(self)), other])
+				return LinearComponent_C(param=_null_, data=str(self)) + other
 			elif isinstance(self, LinearFunction_C):
-				return LinearFunction_C([*self, other])
+				return LinearFunction_C([*self, ]) + other
 			else:
 				try:
 					return other + self.as_pmath()
@@ -868,7 +889,8 @@ cdef class LinearFunction_C:
 				other = LinearComponent_C(param=str(other))
 			if isinstance(other, LinearComponent_C):
 				result = self.__class__(self)
-				result.append(other)
+				if not(other.data == '0' or other.data == '0.0' or other.scale==0):
+					result.append(other)
 				return result
 			from .linear_math import _ParameterOp, ParameterAdd
 			if isinstance(other, (_ParameterOp, _Number)):
@@ -941,6 +963,12 @@ cdef class LinearFunction_C:
 				if trial is not None:
 					return trial
 			return ParameterMultiply(self.as_pmath(), other)
+		if isinstance(self, LinearFunction_C) and isinstance(other, LinearFunction_C):
+			return sum(
+				i*j
+				for i in self
+				for j in other
+			)
 		if isinstance(other, LinearFunction_C) and isinstance(self, _Number):
 			trial = LinearFunction_C()
 			for component in other:

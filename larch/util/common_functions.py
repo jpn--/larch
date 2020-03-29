@@ -134,3 +134,20 @@ def normalize(x, std_div=1):
     s *= std_div
     return (x-m)/s
 
+
+def boolean(x):
+    """
+    Make an array boolean.
+
+    Parameters
+    ----------
+    x : array-like
+
+    Returns
+    -------
+    array-like
+    """
+    try:
+        return x.astype(bool)
+    except:
+        return numpy.asarray(x, dtype='bool')

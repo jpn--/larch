@@ -1121,7 +1121,7 @@ class OMX(_omx_base_class):
 		# important globals
 		from .util.aster import inXd
 		from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num, sin, cos, pi
-		from .util.common_functions import piece, normalize
+		from .util.common_functions import piece, normalize, boolean
 		try:
 			if receiver is not None:
 				exec(j)

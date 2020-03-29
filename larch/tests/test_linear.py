@@ -174,6 +174,13 @@ def test_linear_func():
 	assert (P.ppp * X.xxx) * (P("_") * X.xxx) == P.ppp * X('xxx*xxx')
 	assert (P("_") * X.xxx) * (P.ppp * X.xxx) == P.ppp * X('xxx*xxx')
 
+	# Test squaring a boolean
+	assert (P.ppp * X('boolean(xxx)')) * X('boolean(xxx)') == P.ppp * X('boolean(xxx)')
+	assert (P.ppp * X('boolean(xxx)')) * (P("_") * X('boolean(xxx)')) == P.ppp * X('boolean(xxx)')
+
+	assert ((P.p1 * X.x1 + P.p2 * X.x2) * (P('_') * 1.1 * X.x1 + P('_') * 2 * X.x2)) == (
+			P.p1 * 1.1 * X('x1*x1') + P.p1 * 2.0 * X('x1*x2') + P.p2 * 1.1 * X('x2*x1') + P.p2 * 2.0 * X('x2*x2')
+	)
 
 def test_piecewise_linear():
 	from larch.util.data_expansion import piecewise_linear
