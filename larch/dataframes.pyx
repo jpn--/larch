@@ -1608,15 +1608,18 @@ cdef class DataFrames:
 			if model._utility_ca is not None:
 				len_model_utility_ca = len(model._utility_ca)
 				self.model_utility_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
+				self.model_utility_ca_param_scale = numpy.ones([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_utility_ca_param_holdfast=numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				for n,i in enumerate(model._utility_ca):
 					self.model_utility_ca_param[n] = model._frame.index.get_loc(str(i.param))
 					self.model_utility_ca_data [n] = self._data_ca_or_ce.columns.get_loc(str(i.data))
+					self.model_utility_ca_param_scale[n] = i.scale
 			else:
 				len_model_utility_ca = 0
 				self.model_utility_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
+				self.model_utility_ca_param_scale = numpy.ones([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_utility_ca_param_holdfast=numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
@@ -1625,6 +1628,7 @@ cdef class DataFrames:
 				len_co = sum(len(_) for _ in model._utility_co.values())
 				self.model_utility_co_alt         = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_param_value = numpy.zeros([len_co], dtype=l4_float_dtype)
+				self.model_utility_co_param_scale = numpy.ones([len_co], dtype=l4_float_dtype)
 				self.model_utility_co_param_holdfast = numpy.zeros([len_co], dtype=numpy.int8)
 				self.model_utility_co_param       = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_data        = numpy.zeros([len_co], dtype=numpy.int32)
@@ -1635,6 +1639,7 @@ cdef class DataFrames:
 					for i in func:
 						self.model_utility_co_alt  [j] = altindex
 						self.model_utility_co_param[j] = model._frame.index.get_loc(str(i.param))
+						self.model_utility_co_param_scale[j] = i.scale
 						if i.data == '1':
 							self.model_utility_co_data [j] = -1
 						else:
@@ -1644,6 +1649,7 @@ cdef class DataFrames:
 				len_co = 0
 				self.model_utility_co_alt         = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_param_value = numpy.zeros([len_co], dtype=l4_float_dtype)
+				self.model_utility_co_param_scale = numpy.ones([len_co], dtype=l4_float_dtype)
 				self.model_utility_co_param_holdfast = numpy.zeros([len_co], dtype=numpy.int8)
 				self.model_utility_co_param       = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_data        = numpy.zeros([len_co], dtype=numpy.int32)
@@ -1875,6 +1881,7 @@ cdef class DataFrames:
 						_temp = self._array_ce[row, self.model_utility_ca_data[i]]
 					else:
 						_temp = self._array_ca[c, j, self.model_utility_ca_data[i]]
+					_temp *= self.model_utility_ca_param_scale[i]
 					U[j] += _temp * self.model_utility_ca_param_value[i]
 					if not self.model_utility_ca_param_holdfast[i]:
 						dU[j,self.model_utility_ca_param[i]] += _temp
@@ -1885,11 +1892,11 @@ cdef class DataFrames:
 			altindex = self.model_utility_co_alt[i]
 			if self._array_av[c,altindex]:
 				if self.model_utility_co_data[i] == -1:
-					U[altindex] += self.model_utility_co_param_value[i]
+					U[altindex] += self.model_utility_co_param_value[i] * self.model_utility_co_param_scale[i]
 					if not self.model_utility_co_param_holdfast[i]:
-						dU[altindex,self.model_utility_co_param[i]] += 1
+						dU[altindex,self.model_utility_co_param[i]] += self.model_utility_co_param_scale[i]
 				else:
-					_temp = self._array_co[c, self.model_utility_co_data[i]]
+					_temp = self._array_co[c, self.model_utility_co_data[i]] * self.model_utility_co_param_scale[i]
 					U[altindex] += _temp * self.model_utility_co_param_value[i]
 					if not self.model_utility_co_param_holdfast[i]:
 						dU[altindex,self.model_utility_co_param[i]] += _temp
@@ -1964,6 +1971,7 @@ cdef class DataFrames:
 						_temp = self._array_ce[row, self.model_utility_ca_data[i]]
 					else:
 						_temp = self._array_ca[c, j, self.model_utility_ca_data[i]]
+					_temp *= self.model_utility_ca_param_scale[i]
 					U[j] += _temp * self.model_utility_ca_param_value[i]
 			else:
 				U[j] = -INFINITY32
@@ -1972,9 +1980,9 @@ cdef class DataFrames:
 			altindex = self.model_utility_co_alt[i]
 			if self._array_av[c,altindex]:
 				if self.model_utility_co_data[i] == -1:
-					U[altindex] += self.model_utility_co_param_value[i]
+					U[altindex] += self.model_utility_co_param_value[i] * self.model_utility_co_param_scale[i]
 				else:
-					_temp = self._array_co[c, self.model_utility_co_data[i]]
+					_temp = self._array_co[c, self.model_utility_co_data[i]] * self.model_utility_co_param_scale[i]
 					U[altindex] += _temp * self.model_utility_co_param_value[i]
 
 		# Keep exp(U) from generating overflow

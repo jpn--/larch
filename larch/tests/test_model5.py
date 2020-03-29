@@ -5,6 +5,8 @@ import numpy
 import pandas
 from ..model import *
 from ..roles import P, X, PX
+from ..model.persist_flags import PERSIST_UTILITY
+
 
 def test_dataframes_mnl5():
 	d = MTC()
@@ -4767,4 +4769,95 @@ def test_copy_and_nest():
 	assert m2_ls[:5] == approx(numpy.array([-0.24425897, 0.58344008, -0.14846934, 0.22871595, -0.5421539]))
 	assert m2_ls[-5:] == approx(numpy.array([-0.74616062, -0.28635094, -0.32691931, -0.28769199, -0.64213064]))
 	assert m2_ls.shape == (5029,)
+
+def test_linear_component_scale():
+	d = MTC()
+	m = Model(dataservice=d)
+
+	m.utility_co[2] = P("ASC_SR2") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+	m.utility_ca = (
+			+ P("nonmotorized_time") * X("(altnum>4) * tottime")
+			+ P("motorized_ivtt") * (X("(altnum <= 4) * ivtt") + 2.5 * X("(altnum <= 4) * ovtt"))
+			+ PX("totcost")
+	)
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*ivtt.*",),
+		("Income", "hhinc.*",),
+		("ASCs", "ASC.*",),
+	)
+	m.load_data()
+
+	assert m.loglike(persist=PERSIST_UTILITY).utility[0] == approx([0., 0., 0., 0., 0., -numpy.inf])
+
+	m.set_values({
+		'ASC_BIKE': -0.560,
+		'ASC_SR2': -0.663,
+		'ASC_SR3P': -2.223,
+		'ASC_TRAN': -0.096,
+		'ASC_WALK': 0.370,
+		'hhinc#2,3': 0.0005607 * 2,
+		'hhinc#4': -0.0013183,
+		'hhinc#5': -0.0028977,
+		'hhinc#6': -0.0016189,
+		'motorized_ivtt': -0.0080156,
+		'nonmotorized_time': -0.0264778,
+		'totcost': -0.0018316,
+	})
+
+	y2 = m.loglike(persist=PERSIST_UTILITY)
+	assert y2.ll == approx(-4984.606363422106)
+	assert y2.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
+									-0.87603081, -1.80845875, -numpy.inf])
+
+	m.utility_co[2] = P("ASC_SR2") + P("hhinc#2,3") * X("hhinc") * 2
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc") * 2
+	m.set_values({
+		'ASC_BIKE':          -0.560,
+		'ASC_SR2':           -0.663,
+		'ASC_SR3P':          -2.223,
+		'ASC_TRAN':          -0.096,
+		'ASC_WALK':           0.370,
+		'hhinc#2,3':          0.0005607,
+		'hhinc#4':           -0.0013183,
+		'hhinc#5':           -0.0028977,
+		'hhinc#6':           -0.0016189,
+		'motorized_ivtt':    -0.0080156,
+		'nonmotorized_time': -0.0264778,
+		'totcost':           -0.0018316,
+	})
+
+	y3 = m.loglike(persist=PERSIST_UTILITY)
+	assert y3.ll == approx(-4984.606363422106)
+	assert y3.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
+									-0.87603081, -1.80845875, -numpy.inf])
+
+	m.utility_ca = (
+		+ P("nonmotorized_time") * X("(altnum>4) * tottime") * 10
+		+ P("motorized_ivtt") * (X("(altnum <= 4) * ivtt") + 2.5 * X("(altnum <= 4) * ovtt"))
+		+ PX("totcost")
+	)
+	m.set_values({
+		'ASC_BIKE':          -0.560,
+		'ASC_SR2':           -0.663,
+		'ASC_SR3P':          -2.223,
+		'ASC_TRAN':          -0.096,
+		'ASC_WALK':           0.370,
+		'hhinc#2,3':          0.0005607,
+		'hhinc#4':           -0.0013183,
+		'hhinc#5':           -0.0028977,
+		'hhinc#6':           -0.0016189,
+		'motorized_ivtt':    -0.0080156,
+		'nonmotorized_time': -0.0264778/10,
+		'totcost':           -0.0018316,
+	})
+	y4 = m.loglike(persist=PERSIST_UTILITY)
+	assert y4.ll == approx(-4984.606363422106)
+	assert y4.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
+									-0.87603081, -1.80845875, -numpy.inf])
 
