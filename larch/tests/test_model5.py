@@ -4814,6 +4814,20 @@ def test_linear_component_scale():
 	assert y2.ll == approx(-4984.606363422106)
 	assert y2.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
 									-0.87603081, -1.80845875, -numpy.inf])
+	assert dict(m.d_loglike()) == approx({
+		'ASC_BIKE': -145.09465501416926,
+		'ASC_SR2': -841.5591156845669,
+		'ASC_SR3P': -145.63271051594285,
+		'ASC_TRAN': -369.2670455084774,
+		'ASC_WALK': -104.30389406606861,
+		'hhinc#2,3': -60417.43360853777,
+		'hhinc#4': -22107.319954540795,
+		'hhinc#5': -8714.271950684297,
+		'hhinc#6': -6712.7353979224945,
+		'motorized_ivtt': -32485.567329515332,
+		'nonmotorized_time': -10175.227351325999,
+		'totcost': 59215.91013275611
+	})
 
 	m.utility_co[2] = P("ASC_SR2") + P("hhinc#2,3") * X("hhinc") * 2
 	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc") * 2
@@ -4836,6 +4850,20 @@ def test_linear_component_scale():
 	assert y3.ll == approx(-4984.606363422106)
 	assert y3.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
 									-0.87603081, -1.80845875, -numpy.inf])
+	assert dict(m.d_loglike()) == approx({
+		'ASC_BIKE': -145.09465501416926,
+		'ASC_SR2': -841.5591156845669,
+		'ASC_SR3P': -145.63271051594285,
+		'ASC_TRAN': -369.2670455084774,
+		'ASC_WALK': -104.30389406606861,
+		'hhinc#2,3': -120834.86721707555,
+		'hhinc#4': -22107.319954540795,
+		'hhinc#5': -8714.271950684297,
+		'hhinc#6': -6712.7353979224945,
+		'motorized_ivtt': -32485.567329515332,
+		'nonmotorized_time': -10175.227351325999,
+		'totcost': 59215.91013275611
+	})
 
 	m.utility_ca = (
 		+ P("nonmotorized_time") * X("(altnum>4) * tottime") * 10
@@ -4861,3 +4889,17 @@ def test_linear_component_scale():
 	assert y4.utility[0] == approx([-0.27669264, -0.86743734, -2.41573812,
 									-0.87603081, -1.80845875, -numpy.inf])
 
+	assert dict(m.d_loglike()) == approx({
+		'ASC_BIKE': -145.09465501416926,
+		'ASC_SR2': -841.5591156845669,
+		'ASC_SR3P': -145.63271051594282,
+		'ASC_TRAN': -369.2670455084774,
+		'ASC_WALK': -104.30389406606861,
+		'hhinc#2,3': -120834.86721707555,
+		'hhinc#4': -22107.319954540795,
+		'hhinc#5': -8714.271950684297,
+		'hhinc#6': -6712.735397922495,
+		'motorized_ivtt': -32485.567329515332,
+		'nonmotorized_time': -101752.27351325999,
+		'totcost': 59215.91013275611,
+	})
