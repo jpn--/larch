@@ -1953,7 +1953,69 @@ def test_weighted_qnl_bhhh():
 
 	assert numpy.asarray(ll2.dll) == approx(numpy.asarray(ll2.dll_casewise.sum(0)))
 
+	m5.quantity_ca = PX("tottime+100") + PX("totcost+50") * 0.25
+	beta_in2 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+		'MU_motor': 0.8,
+		'MU_nonmotor': 0.6,
+		'MU_car': 0.4,
+		'totcost+50': numpy.log(numpy.exp(2)/0.25)
+	}
+	assert m5.loglike(beta_in2) == approx(-31802.098963182878)
 
+	m5.quantity_ca = PX("tottime+100") * 10 + PX("totcost+50") * 0.25
+	beta_in2 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+		'MU_motor': 0.8,
+		'MU_nonmotor': 0.6,
+		'MU_car': 0.4,
+		'totcost+50': numpy.log(numpy.exp(2)/0.25)
+	}
+	m5.lock_value("tottime+100", numpy.log(0.1))
+	assert m5.loglike(beta_in2) == approx(-31802.098963182878)
+
+	m5.utility_ca = PX("tottime")*3.3 + PX("totcost")*2.2
+	beta_in2 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717/2.2,
+		'tottime': -0.01862990704919887/3.3,
+		'MU_motor': 0.8,
+		'MU_nonmotor': 0.6,
+		'MU_car': 0.4,
+		'totcost+50': numpy.log(numpy.exp(2)/0.25)
+	}
+	assert m5.loglike(beta_in2) == approx(-31802.098963182878)
 
 def test_weighted_qmnl_bhhh():
 

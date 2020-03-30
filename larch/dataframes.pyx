@@ -1587,12 +1587,14 @@ cdef class DataFrames:
 			if model._quantity_ca is not None:
 				len_model_utility_ca = len(model._quantity_ca)
 				self.model_quantity_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
+				self.model_quantity_ca_param_scale = numpy.ones([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_quantity_ca_param_holdfast = numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_quantity_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				for n,i in enumerate(model._quantity_ca):
 					self.model_quantity_ca_param[n] = model._frame.index.get_loc(str(i.param))
 					self.model_quantity_ca_data [n] = self._data_ca_or_ce.columns.get_loc(str(i.data))
+					self.model_quantity_ca_param_scale[n] = i.scale
 				if model._quantity_scale is not None:
 					self.model_quantity_scale_param = model._frame.index.get_loc(str(model._quantity_scale))
 				else:
@@ -1600,6 +1602,7 @@ cdef class DataFrames:
 			else:
 				len_model_utility_ca = 0
 				self.model_quantity_ca_param_value = numpy.zeros([len_model_utility_ca], dtype=l4_float_dtype)
+				self.model_quantity_ca_param_scale = numpy.ones([len_model_utility_ca], dtype=l4_float_dtype)
 				self.model_quantity_ca_param_holdfast = numpy.zeros([len_model_utility_ca], dtype=numpy.int8)
 				self.model_quantity_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_quantity_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
@@ -1859,7 +1862,7 @@ cdef class DataFrames:
 							_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
 						else:
 							_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
-						_temp *= self.model_quantity_ca_param_value[i]
+						_temp *= self.model_quantity_ca_param_value[i] * self.model_quantity_ca_param_scale[i]
 						U[j] += _temp
 						if not self.model_quantity_ca_param_holdfast[i]:
 							dU[j,self.model_quantity_ca_param[i]] += _temp * self.model_quantity_scale_param_value
@@ -1957,7 +1960,7 @@ cdef class DataFrames:
 							_temp = self._array_ce[row, self.model_quantity_ca_data[i]]
 						else:
 							_temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
-						_temp *= self.model_quantity_ca_param_value[i]
+						_temp *= self.model_quantity_ca_param_value[i] * self.model_quantity_ca_param_scale[i]
 						U[j] += _temp
 
 					IF DOUBLE_PRECISION:

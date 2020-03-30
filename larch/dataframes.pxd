@@ -44,6 +44,7 @@ cdef class DataFrames:
 		l4_float_t[:] model_utility_co_param_scale
 		int8_t[:]     model_utility_co_param_holdfast
 		l4_float_t[:] model_quantity_ca_param_value
+		l4_float_t[:] model_quantity_ca_param_scale
 		int8_t[:]     model_quantity_ca_param_holdfast
 		l4_float_t    model_quantity_scale_param_value
 		int8_t        model_quantity_scale_param_holdfast
