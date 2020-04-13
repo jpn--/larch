@@ -423,7 +423,13 @@ cdef class Model5c(AbstractChoiceModel):
 		return self._dataframes.n_cases
 
 	def total_weight(self):
-		"""int : The number of cases in the attached dataframes."""
+		"""
+		The total weight of cases in the attached dataframes.
+
+		Returns
+		-------
+		float
+		"""
 		if self._dataframes is None:
 			raise MissingDataError("no dataframes are set")
 		return self._dataframes.total_weight()
@@ -1014,7 +1020,17 @@ cdef class Model5c(AbstractChoiceModel):
 	@property
 	def availability_co_vars(self):
 		#self.unmangle()
-		return self._availability_co_vars
+		x = self._availability_co_vars
+		if x == 1 or str(x) == '1' or x is True:
+			try:
+				alts = self.dataframes.alternative_codes()
+			except:
+				try:
+					alts = self.dataservice.alternative_codes()
+				except:
+					raise ValueError('must define alternatives to have them be all available from co data')
+			x = {i:1 for i in alts}
+		return x
 
 	@availability_co_vars.setter
 	def availability_co_vars(self, x):
@@ -1036,7 +1052,7 @@ cdef class Model5c(AbstractChoiceModel):
 	def graph(self, x):
 		self._graph = x
 
-	def initialize_graph(self, dataframes=None, alternative_codes=None):
+	def initialize_graph(self, dataframes=None, alternative_codes=None, alternative_names=None, root_id=0):
 		"""
 		Write a nesting tree graph for a MNL model.
 
@@ -1047,6 +1063,11 @@ cdef class Model5c(AbstractChoiceModel):
 		alternative_codes : array-like, optional
 			Explicitly give alternative codes. Ignored if `dataframes` is given
 			or if the model has dataframes or a dataservice already set.
+		alternative_names : array-like, optional
+			Explicitly give alternative names. Ignored if `dataframes` is given
+			or if the model has dataframes or a dataservice already set.
+		root_id : int, default 0
+			The id code of the root node.
 
 		Raises
 		------
@@ -1067,8 +1088,6 @@ cdef class Model5c(AbstractChoiceModel):
 			warnings.warn('alternative_codes are ignored when dataframes are set')
 			alternative_codes = self._dataframes._alternative_codes
 
-		alternative_names = None
-
 		if alternative_codes is None:
 			if self._dataframes is None and self._dataservice is not None:
 				alternative_codes = self._dataservice.alternative_codes()
@@ -1078,7 +1097,7 @@ cdef class Model5c(AbstractChoiceModel):
 				alternative_names = self._dataframes._alternative_names
 
 		from .tree import NestingTree
-		g = NestingTree()
+		g = NestingTree(root_id=root_id)
 		if alternative_names is None:
 			for a in alternative_codes:
 				g.add_node(a)

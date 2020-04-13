@@ -573,8 +573,10 @@ cdef class DataFrames:
 				logger.debug(" DataFrames ~ build av from ce")
 				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
 			if av is True or (isinstance(av, (int, float)) and av==1):
+				if self.n_alts == 0:
+					raise ValueError('cannot declare all alternatives are available without defining alternative codes')
 				logger.debug(" DataFrames ~ initialize av as 1")
-				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes(), index=self.caseindex)
+				self.data_av = pandas.DataFrame(data=1, columns=self.alternative_codes(), index=self.caseindex, dtype=numpy.int8)
 			else:
 				if isinstance(av, pandas.DataFrame) and isinstance(av.index, pandas.MultiIndex) and len(av.index.levels)==2 and av.shape[1]==1:
 					logger.debug(" DataFrames ~ change av to Series")

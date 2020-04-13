@@ -662,7 +662,7 @@ class Model(_Model5c):
 			logger.exception("error in required_data")
 
 	def __contains__(self, item):
-		return (item in self.pf.index) or (item in self.rename_parameters)
+		return (item in self.pf.index) #or (item in self.rename_parameters)
 
 	def doctor(
 			self,

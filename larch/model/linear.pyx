@@ -764,7 +764,7 @@ cdef class LinearFunction_C:
 	def __init__(self, init=None):
 		self._func = list()
 		#self._instance = None
-		if init is not None:
+		if init is not None and init != 0:
 			for i in init:
 				if isinstance(i, LinearComponent_C):
 					self._func.append(i)
@@ -881,7 +881,7 @@ cdef class LinearFunction_C:
 
 	def __add__(self, other):
 		if isinstance(self, LinearFunction_C):
-			if other == ():
+			if other == () or other == 0:
 				return self
 			if isinstance(other, LinearFunction_C):
 				return self.__class__([*list(self), *list(other)])
@@ -894,17 +894,25 @@ cdef class LinearFunction_C:
 				return result
 			from .linear_math import _ParameterOp, ParameterAdd
 			if isinstance(other, (_ParameterOp, _Number)):
-				return ParameterAdd(self.as_pmath(), other)
+				try:
+					return ParameterAdd(self.as_pmath(), other)
+				except NotImplementedError:
+					pass
 		if isinstance(other, LinearFunction_C):
+			if self == () or self == 0:
+				return other
 			from .linear_math import _ParameterOp, ParameterAdd
 			if isinstance(self, (_ParameterOp, _Number)):
-				return ParameterAdd(self, other.as_pmath())
+				try:
+					return ParameterAdd(self, other.as_pmath())
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef_C):
 			other = LinearComponent_C(param=str(other))
-		if other == ():
+		if other == () or other == 0:
 			return self
 		elif isinstance(other, LinearFunction_C):
 			self._func.extend(other)
@@ -923,7 +931,7 @@ cdef class LinearFunction_C:
 
 	def __sub__(self, other):
 		if isinstance(self, LinearFunction_C):
-			if other == ():
+			if other == () or other == 0:
 				return self
 			if isinstance(other, LinearFunction_C):
 				return self.__class__([*list(self), *list(-other)])
@@ -935,11 +943,17 @@ cdef class LinearFunction_C:
 				return result
 			from .linear_math import _ParameterOp, ParameterSubtract
 			if isinstance(other, (_ParameterOp, _Number)):
-				return ParameterSubtract(self.as_pmath(), other)
+				try:
+					return ParameterSubtract(self.as_pmath(), other)
+				except NotImplementedError:
+					pass
 		if isinstance(other, LinearFunction_C):
 			from .linear_math import _ParameterOp, ParameterSubtract
 			if isinstance(self, (_ParameterOp, _Number)):
-				return ParameterSubtract(self, other.as_pmath())
+				try:
+					return ParameterSubtract(self, other.as_pmath())
+				except NotImplementedError:
+					pass
 		raise NotImplementedError(f"{_what_is(self)} + {_what_is(other)}")
 
 	def __mul__(self, other):

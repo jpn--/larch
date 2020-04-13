@@ -5,7 +5,7 @@ import pickle
 import base64
 import io
 import numpy
-from pytest import approx
+from pytest import approx, raises
 
 from ..data_warehouse import example_file
 
@@ -217,3 +217,31 @@ def test_repeated_splitting():
 	d11, d12 = d1.split([50, 50])
 	assert d11.n_cases == 2012
 	assert d12.n_cases == 2012
+
+
+def test_co_only():
+
+	x_co = pandas.DataFrame(
+		numpy.random.random([20, 3]),
+		columns=['Aa', 'Bb', 'Cc'],
+	)
+	x_co.index.name = 'caseid'
+
+	with raises(ValueError):
+		DataFrames(
+			co=x_co,
+			av=True,
+		)
+
+	d = DataFrames(
+		co=x_co,
+		av=True,
+		alt_codes=[1, 2, 3, 4, 5, 6],
+	)
+	assert d.n_alts == 6
+	assert d.n_cases == 20
+	assert d.data_av.shape == (20, 6)
+	all(d.data_av.dtypes == numpy.int8)
+	all(d.data_av == 1)
+
+
