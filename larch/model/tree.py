@@ -40,6 +40,19 @@ class NestingTree(TouchNotify,nx.DiGraph):
 	def root_id(self):
 		return self._root_id
 
+	@root_id.setter
+	def root_id(self, x):
+		top_nests = list(self.successors(self._root_id))
+		top_attrs = [self.edges[self._root_id,t] for t in top_nests]
+		if self._root_id in self.nodes:
+			self.remove_node(self._root_id)
+		self._root_id = x
+		if self._root_id not in self.nodes:
+			self.add_node(self._root_id, name='_root_', root=True)
+		for t,a in zip(top_nests, top_attrs):
+			self.add_edge(self._root_id, t, **a)
+		self._clear_caches()
+
 	def _clear_caches(self):
 		NestingTree.topological_sorted.invalidate(self, 'topological_sorted')
 		NestingTree.topological_sorted_no_elementals.invalidate(self, 'topological_sorted_no_elementals')
@@ -214,6 +227,9 @@ class NestingTree(TouchNotify,nx.DiGraph):
 
 	def node_names(self):
 		return {s:(self.node_name(s) or s) for s in self.standard_sort}
+
+	def elemental_names(self):
+		return {s:(self.node_name(s) or s) for s in self.elementals}
 
 	@lazy
 	def standard_slot_map(self):
