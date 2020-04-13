@@ -438,7 +438,9 @@ class ExcelWriter(_XlsxWriter):
     def save(self, makedirs=True, overwrite=False):
         if makedirs:
             import os
-            os.makedirs(os.path.dirname(self.path), exist_ok=True)
+            dirname = os.path.dirname(self.path)
+            if dirname:
+                os.makedirs(dirname, exist_ok=True)
 
         if not overwrite and not getattr(self, '__file_archived', False): # don't move twice
             from xmle.file_util import archive_existing_file
