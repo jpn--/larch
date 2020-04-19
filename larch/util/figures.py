@@ -55,7 +55,7 @@ def distribution_on_idca_variable(
 		bw_method=None,
 		discrete=None,
 		ax=None,
-		format='figure',
+		format='ax',
 		**kwargs,
 ):
 	"""
@@ -96,9 +96,9 @@ def distribution_on_idca_variable(
 	ax : matplotlib.Axes, optional
 		If given, the figure will be drawn on these axes and they will be returned,
 		otherwise new blank axes are used to draw the figure.
-	format : {'figure','svg'}, default 'figure'
+	format : {'ax', 'figure', 'svg'}, default 'figure'
 		How to return the result if it is a figure. The default is to return
-		the raw matplotlib Figure instance (or the `ax` if given), set to `svg` to get a SVG
+		the raw matplotlib Axes instance.  Change this to `svg` to get a SVG
 		rendering as an xmle.Elem.
 
 	Other Parameters
@@ -168,10 +168,14 @@ def distribution_on_idca_variable(
 			discrete_values = numpy.arange(len(x_discrete_labels))
 			bins = numpy.arange(len(x_discrete_labels)+1)
 			x = x.cat.codes
-		elif isinstance(pct_bins, int):
-			bins = numpy.percentile(x, numpy.linspace(0, 100, pct_bins + 1))
 		else:
-			bins = numpy.percentile(x, pct_bins)
+			x_ = x
+			if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+				x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			if isinstance(pct_bins, int):
+				bins = numpy.percentile(x_, numpy.linspace(0, 100, pct_bins + 1))
+			else:
+				bins = numpy.percentile(x_, pct_bins)
 
 	if probability is None:
 		probability = model.probability()
@@ -180,9 +184,9 @@ def distribution_on_idca_variable(
 	model_choice = model.dataframes.data_ch.values
 	if model.dataframes.data_wt is not None:
 		model_result = model_result.copy()
-		model_result *= model.dataframes.data_wt.values[:,None]
+		model_result *= model.dataframes.data_wt.values.reshape(-1,1)
 		model_choice = model_choice.copy()
-		model_choice *= model.dataframes.data_wt.values[:,None]
+		model_choice *= model.dataframes.data_wt.values.reshape(-1,1)
 
 	if subselector is not None:
 		if isinstance(subselector, str):
@@ -262,7 +266,7 @@ def distribution_on_idca_variable(
 		fig.clf()
 		plt.close(fig)
 	else:
-		result = fig
+		result = ax
 	return result
 
 

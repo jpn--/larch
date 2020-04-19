@@ -86,33 +86,36 @@ def statistics_for_array(
 	else:
 		can_nan = True
 
-	stats.n = scalarize(a.shape[0])
+	a_masked_is_category = None
+
+	if avail is None and can_nan:
+		a_masked = ma.masked_array(a, mask=~numpy.isfinite(a))
+		stats.n = scalarize(numpy.isfinite(a).sum(axis=0))
+	elif avail is not None:
+		a_masked = ma.masked_array(a, mask=~avail)
+		stats.n = scalarize((avail!=0).sum(axis=0))
+	elif isinstance(a, pandas.Series) and isinstance(a.dtype, pandas.CategoricalDtype):
+		a_masked = ma.masked_array(a, mask=pandas.isnull(a))
+		a_masked_is_category = True
+		stats.n = scalarize((~pandas.isnull(a)).sum(axis=0))
+	else:
+		a_masked = a
+		stats.n = scalarize(a.shape[0])
+
 	if can_nan:
-		stats.minimum = scalarize(numpy.nanmin(a, axis=0))
-		stats.maximum = scalarize(numpy.nanmax(a, axis=0))
+		stats.minimum = scalarize(numpy.nanmin(a_masked, axis=0))
+		stats.maximum = scalarize(numpy.nanmax(a_masked, axis=0))
 		with warning.ignore_warnings():
-			stats.median = scalarize(numpy.nanmedian(a, axis=0))
+			stats.median = scalarize(numpy.nanmedian(a_masked, axis=0))
 
 	if ch_weights is not None:
-		a_ch_weighted = ma.masked_array(a, mask=(ch_weights>0))
+		a_ch_weighted = ma.masked_array(a, mask=(ch_weights<=0))
 		stats.n_chosen = scalarize(a_ch_weighted.count(axis=0))
 		if can_nan:
 			stats.minimum_chosen = scalarize(numpy.nanmin(a_ch_weighted, axis=0))
 			stats.maximum_chosen = scalarize(numpy.nanmax(a_ch_weighted, axis=0))
 			with warning.ignore_warnings():
 				stats.median_chosen = scalarize(numpy.nanmedian(a_ch_weighted, axis=0))
-
-	a_masked_is_category = None
-
-	if avail is None and can_nan:
-		a_masked = ma.masked_array(a, mask=~numpy.isfinite(a))
-	elif avail is not None:
-		a_masked = ma.masked_array(a, mask=~avail)
-	elif isinstance(a, pandas.Series) and isinstance(a.dtype, pandas.CategoricalDtype):
-		a_masked = ma.masked_array(a, mask=pandas.isnull(a))
-		a_masked_is_category = True
-	else:
-		a_masked = a
 
 	if ch_weights is not None:
 		if avail is None and can_nan:
