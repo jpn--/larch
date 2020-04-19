@@ -245,3 +245,29 @@ def test_co_only():
 	all(d.data_av == 1)
 
 
+def test_ca_initialization():
+	cax = pandas.DataFrame({
+		'caseid': [1, 1, 1, 2, 2, 2],
+		'altid_bad': ['aa', 'bb', 'cc', 'aa', 'bb', 'cc'],
+		'altid_good': [1, 2, 3, 1, 2, 3],
+		'altid_str': ['1', '2', '3', '1', '2', '3'],
+		'buggers': [1.2, 3.4, 5.6, 7.8, 9.0, 5.5],
+		'baggers': [22, 33, 44, 55, 66, 77],
+	})
+
+	import pytest
+
+	with pytest.raises(ValueError):
+		d = DataFrames(
+			ca=cax.set_index(['caseid', 'altid_bad']),
+		)
+
+	d = DataFrames(
+		ca=cax.set_index(['caseid', 'altid_good']),
+	)
+	assert all(d.alternative_codes() == [1, 2, 3])
+
+	d = DataFrames(
+		ca=cax.set_index(['caseid', 'altid_str']),
+	)
+	assert all(d.alternative_codes() == [1, 2, 3])

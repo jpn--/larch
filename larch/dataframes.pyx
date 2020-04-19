@@ -441,6 +441,17 @@ cdef class DataFrames:
 			self._caseindex_name = caseindex_name
 			self._altindex_name = altindex_name
 
+			if ca is not None:
+				# If ca is given, ensure that it has a two level multi-index,
+				# and both levels are converted to integer data types.
+				if not isinstance(ca.index, pandas.MultiIndex) or ca.index.nlevels!=2:
+					raise ValueError('ca must have two level multi-index')
+				try:
+					ca.index.set_levels(ca.index.levels[0].astype(int), 0, inplace=True)
+					ca.index.set_levels(ca.index.levels[1].astype(int), 1, inplace=True)
+				except Exception as err:
+					raise ValueError('ca multi-index must have integer values') from err
+
 			if len(args) > 1:
 				raise ValueError('DataFrames accepts at most one positional argument')
 			elif len(args) == 1:
