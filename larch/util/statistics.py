@@ -17,6 +17,7 @@ def statistics_for_array(
 		avail=None,
 		dictionary=None,
 		flatten=False,
+		on_error='ignore',
 		**kwargs,
 ):
 	"""
@@ -53,6 +54,8 @@ def statistics_for_array(
 	flatten : bool, default False
 		Indicates if `arr` (and `ch_weights` if given) should be
 		flattened before processing.
+	on_error : {'ignore', 'raise'}
+		How to handle exceptions encountered while generating statistics.
 
 	Other keyword parameters are passed through to
 	:meth:`sizable_histogram_figure`.
@@ -155,6 +158,7 @@ def statistics_for_array(
 					title=None, xlabel=varname, ylabel='Frequency',
 					ch_weights=ch_weightsx,
 					discrete=discrete_,
+					on_error=on_error,
 					**kwargs
 				)
 	if can_nan:

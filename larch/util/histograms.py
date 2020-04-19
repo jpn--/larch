@@ -487,7 +487,7 @@ def histogram_figure(
 		return f
 
 
-def sizable_histogram_figure(*args, sizer=1, discrete=None, **kwargs):
+def sizable_histogram_figure(*args, sizer=1, discrete=None, on_error='ignore', **kwargs):
 	kwargs['figwidth'] = sizer
 	kwargs['figheight'] = sizer / 3.5
 	if sizer >= 2:
@@ -505,7 +505,10 @@ def sizable_histogram_figure(*args, sizer=1, discrete=None, **kwargs):
 	try:
 		return histogram_figure(*args, **kwargs)
 	except:
-		return None
+		if on_error == 'ignore':
+			return None
+		else:
+			raise
 
 def seems_like_discrete_data(arr, dictionary=None, return_uniques=False):
 	if isinstance(arr.dtype, pandas.CategoricalDtype):
