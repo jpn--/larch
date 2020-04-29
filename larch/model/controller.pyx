@@ -884,7 +884,7 @@ cdef class Model5c(AbstractChoiceModel):
 			code columns.  If 'names', the alternative names are used for the columns.
 			If set to False, the results are returned as a numpy array.
 			If 'idca', the resulting dataframe is stacked, such that a single column is included and
-			there is a two-level MultiIndex with caseids and alternative codes, repsectively.
+			there is a two-level MultiIndex with caseids and alternative codes, respectively.
 			If 'idce', the resulting dataframe is stacked and unavailable alternatives are removed.
 		include_nests : bool, default False
 			Whether to include the nests section in a nested model.  This argument is ignored for MNL models
