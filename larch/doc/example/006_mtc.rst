@@ -72,8 +72,8 @@ so we'll decompose `tottime` into `ovtt` and `ivtt` for the motorized alternativ
 	>>> m.loglike()
 	-3588.03...
 	
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                             value  std err   t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                             value  std_err   t stat  robust std_err  robust t stat
 	Category Parameter
 	LOS      totcost           -0.0048   0.0002 -20.2075          0.0003       -16.9960
 	         nonmotorized_time -0.0632   0.0054 -11.7901          0.0054       -11.7418

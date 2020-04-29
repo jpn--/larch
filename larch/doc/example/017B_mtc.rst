@@ -80,8 +80,8 @@ that have more than one car. (`pp. 133 <http://www.caee.utexas.edu/prof/Bhat/COU
 	>>> m.loglike()
 	-2296.667...
 	
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                                 value  std err   t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                                 value  std_err   t stat  robust std_err  robust t stat
 	Category   Parameter
 	CostbyInc  costbyincome        -0.0981   0.0162  -6.0681          0.0192        -5.1151
 	TravelTime motorized_time      -0.0187   0.0051  -3.6414          0.0052        -3.6057

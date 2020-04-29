@@ -1339,7 +1339,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		It does not return values directly, but rather stores
 		the result in `covariance_matrix`, and computes the
 		standard error of the estimators (i.e. the square root
-		of the diagonal) and stores those values in `pf['std err']`.
+		of the diagonal) and stores those values in `pf['std_err']`.
 		"""
 		hess = -self.d2_loglike()
 
@@ -1391,10 +1391,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		else:
 			covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 			robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-		self.pf['std err'] = numpy.sqrt(covariance_matrix.diagonal())
-		self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std err']
-		self.pf['robust std err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
-		self.pf['robust t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust std err']
+		self.pf['std_err'] = numpy.sqrt(covariance_matrix.diagonal())
+		self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+		self.pf['robust std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
+		self.pf['robust t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust std_err']
 
 		if preserve_hessian:
 			self._matrixes['hessian_matrix'] = hess
@@ -1413,7 +1413,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 			binding_constraints = list()
 
-			self.pf['unconstrained std err'] = self.pf['std err'].copy()
+			self.pf['unconstrained std_err'] = self.pf['std_err'].copy()
 			self.pf['unconstrained t stat'] = self.pf['t stat'].copy()
 
 			self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
@@ -1426,8 +1426,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					if den != 0:
 						s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
 			self._matrixes['covariance_matrix'] = s
-			self.pf['std err'] = numpy.sqrt(s.diagonal())
-			self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std err']
+			self.pf['std_err'] = numpy.sqrt(s.diagonal())
+			self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
 
 			# Fix numerical issues on some constraints, add constrained notes
 			if binding_constraints or any(self.pf['holdfast']!=0):
@@ -1437,10 +1437,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					for p in pa:
 						if self.pf.loc[p,'t stat'] > 1e5:
 							self.pf.loc[p,'t stat'] = numpy.inf
-							self.pf.loc[p,'std err'] = numpy.nan
+							self.pf.loc[p,'std_err'] = numpy.nan
 						if self.pf.loc[p,'t stat'] < -1e5:
 							self.pf.loc[p,'t stat'] = -numpy.inf
-							self.pf.loc[p,'std err'] = numpy.nan
+							self.pf.loc[p,'std_err'] = numpy.nan
 						n = notes.get(p,[])
 						n.append(c.get_binding_note(self.pvals))
 						notes[p] = n

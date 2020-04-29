@@ -91,8 +91,8 @@ segment in the dataset is too small, so it is joined with the one car group. (`p
 	>>> m.loglike()
 	-1049.279...
 	
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                                 value  std err   t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                                 value  std_err   t stat  robust std_err  robust t stat
 	Category   Parameter
 	CostbyInc  costbyincome        -0.0227   0.0138  -1.6408          0.0172        -1.3178
 	TravelTime motorized_time      -0.0211   0.0060  -3.4888          0.0063        -3.3546

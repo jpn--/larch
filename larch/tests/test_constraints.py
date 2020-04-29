@@ -42,9 +42,9 @@ def test_max_ratio_1():
 	# m0.calculate_parameter_covariance()
 	m1.calculate_parameter_covariance()
 
-	# assert m0.pf.loc['tottime', 'std err'] == approx(0.000247, rel=5e-3)
-	assert m1.pf.loc['tottime', 'std err'] == approx(0.000247, rel=5e-3)
-	assert m1.pf.loc['totcost', 'std err'] == approx(0.000247, rel=5e-3)
+	# assert m0.pf.loc['tottime', 'std_err'] == approx(0.000247, rel=5e-3)
+	assert m1.pf.loc['tottime', 'std_err'] == approx(0.000247, rel=5e-3)
+	assert m1.pf.loc['totcost', 'std_err'] == approx(0.000247, rel=5e-3)
 
 def test_max_ratio_2():
 
@@ -81,9 +81,9 @@ def test_max_ratio_2():
 	# m0.calculate_parameter_covariance()
 	m1.calculate_parameter_covariance()
 
-	# assert m0.pf.loc['tottime', 'std err'] == approx(0.000248, rel=5e-3)
-	assert m1.pf.loc['tottime', 'std err'] == approx(0.000248*2, rel=5e-3)
-	assert m1.pf.loc['totcost', 'std err'] == approx(0.000248, rel=5e-3)
+	# assert m0.pf.loc['tottime', 'std_err'] == approx(0.000248, rel=5e-3)
+	assert m1.pf.loc['tottime', 'std_err'] == approx(0.000248*2, rel=5e-3)
+	assert m1.pf.loc['totcost', 'std_err'] == approx(0.000248, rel=5e-3)
 
 
 def test_constraint_ordering_1():
@@ -116,9 +116,9 @@ def test_constraint_ordering_1():
 	# m0.calculate_parameter_covariance()
 	m1.calculate_parameter_covariance()
 
-	# assert m0.pf.loc['hhinc#23', 'std err'] == approx(0.001397, rel=5e-3)
-	assert m1.pf.loc['hhinc#2', 'std err'] == approx(0.001397, rel=5e-3)
-	assert m1.pf.loc['hhinc#3', 'std err'] == approx(0.001397, rel=5e-3)
+	# assert m0.pf.loc['hhinc#23', 'std_err'] == approx(0.001397, rel=5e-3)
+	assert m1.pf.loc['hhinc#2', 'std_err'] == approx(0.001397, rel=5e-3)
+	assert m1.pf.loc['hhinc#3', 'std_err'] == approx(0.001397, rel=5e-3)
 
 
 @pytest.mark.skip(reason="constraint tests are unstable across platforms")
@@ -180,9 +180,9 @@ def test_lower_bound():
 		'totcost': 0.00023967125878600402,
 		'tottime': 0.0027703331869058825,
 	}
-	assert dict(m1.pf['std err']) == approx(se_, abs=1e-10, rel=1e-2, nan_ok=True)
+	assert dict(m1.pf['std_err']) == approx(se_, abs=1e-10, rel=1e-2, nan_ok=True)
 
-	assert dict(m1.pf['unconstrained std err']) == approx({
+	assert dict(m1.pf['unconstrained std_err']) == approx({
 		'ASC_BIKE': 0.3048352068287236,
 		'ASC_SR2': 0.10486177423525046,
 		'ASC_SR3P': 0.17846252159720813,
@@ -243,7 +243,7 @@ def test_upper_bound():
 	# }, rel=1e-2)
 	assert m1.pf.loc['tottime', 'value'] == approx(-0.1, rel=1e-3)
 
-	assert dict(m1.pf['std err']) == approx({
+	assert dict(m1.pf['std_err']) == approx({
 		'ASC_BIKE': 0.30013608145167614,
 		'ASC_SR2': 0.10555671986388032,
 		'ASC_SR3P': 0.17980894548116735,
@@ -258,7 +258,7 @@ def test_upper_bound():
 		'tottime': 0
 	}, abs=1e-10, rel=1e-2)
 
-	assert dict(m1.pf['unconstrained std err']) == approx({
+	assert dict(m1.pf['unconstrained std_err']) == approx({
 		'ASC_BIKE': 0.30323766594813406,
 		'ASC_SR2': 0.1069872808913486,
 		'ASC_SR3P': 0.18097129736247558,
@@ -343,7 +343,7 @@ def test_multi_constraints():
 	# Problem: Travis is failing on this test, giving
 	#    tottime as NaN.  Disabling until we find a
 	#    similar problem we can test and diagnose
-	assert dict(m1.pf['std err']) == approx({
+	assert dict(m1.pf['std_err']) == approx({
 		'ASC_BIKE': 0.30013699696981455,
 		'ASC_SR2': 0.09856612504524623,
 		'ASC_SR3P': 0.1250682262709841,
@@ -358,7 +358,7 @@ def test_multi_constraints():
 		'tottime': 0
 	}, abs=1e-10, rel=5e-2)
 
-	assert dict(m1.pf['unconstrained std err']) == approx({
+	assert dict(m1.pf['unconstrained std_err']) == approx({
 		'ASC_BIKE': 0.3032386370524189,
 		'ASC_SR2': 0.10695557451038115,
 		'ASC_SR3P': 0.18033743391454088,

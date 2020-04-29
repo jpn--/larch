@@ -79,8 +79,8 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 	>>> m.loglike()
 	-1889.783...
 	
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                                 value  std err   t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                                 value  std_err   t stat  robust std_err  robust t stat
 	Category   Parameter
 	CostbyInc  costbyincome        -0.0640   0.0147  -4.3596          0.0203        -3.1488
 	TravelTime motorized_time      -0.0195   0.0053  -3.6913          0.0052        -3.7440

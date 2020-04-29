@@ -81,8 +81,8 @@ Model 17D segments the market by gender for females. (`pp. 135 <http://www.caee.
 	
 The parameters can be found in the `pf` DataFrame::
 	
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                                value    std err  t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                                value    std_err  t stat  robust std_err  robust t stat
 	Category   Parameter                                                                   
 	CostbyInc  costbyincome        -0.044  1.486e-02  -2.939       1.723e-02         -2.535
 	TravelTime motorized_time      -0.019  5.592e-03  -3.413       5.865e-03         -3.254

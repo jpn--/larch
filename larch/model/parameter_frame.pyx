@@ -684,7 +684,7 @@ cdef class ParameterFrame:
 		pf = self.pf
 		# if pname in self.rename_parameters:
 		# 	colspan = 0
-		# 	if 'std err' in pf.columns:
+		# 	if 'std_err' in pf.columns:
 		# 		colspan += 1
 		# 	if 't stat' in pf.columns:
 		# 		colspan += 1
@@ -696,7 +696,7 @@ cdef class ParameterFrame:
 		# 	]
 		if pf.loc[pname_str,'holdfast']:
 			colspan = 0
-			if 'std err' in pf.columns:
+			if 'std_err' in pf.columns:
 				colspan += 1
 			if 't stat' in pf.columns:
 				colspan += 1
@@ -734,8 +734,8 @@ cdef class ParameterFrame:
 			]
 		else:
 			result = [ Elem('td', text="{:.4g}".format(pf.loc[pname_str,'value'])) ]
-			if 'std err' in pf.columns:
-				result += [ Elem('td', text="{:#.3g}".format(pf.loc[pname_str, 'std err'])), ]
+			if 'std_err' in pf.columns:
+				result += [ Elem('td', text="{:#.3g}".format(pf.loc[pname_str, 'std_err'])), ]
 			if 't stat' in pf.columns:
 				result += [ Elem('td', text="{:#.2f}".format(pf.loc[pname_str, 't stat'])), ]
 			if 'nullvalue' in pf.columns:
@@ -830,7 +830,7 @@ cdef class ParameterFrame:
 					tr.put('th', text='Parameter', style="text-align: left;")
 
 				tr.put('th', text='Value')
-				if 'std err' in pfo.columns:
+				if 'std_err' in pfo.columns:
 					tr.put('th', text='Std Err')
 				if 't stat' in pfo.columns:
 					tr.put('th', text='t Stat')
@@ -882,11 +882,11 @@ cdef class ParameterFrame:
 				return div
 
 			else:
-				columns = [i for i in ['value','std err','t stat','nullvalue', 'constrained'] if i in pfo.columns]
+				columns = [i for i in ['value','std_err','t stat','nullvalue', 'constrained'] if i in pfo.columns]
 				result = pfo[columns].rename(
 					columns={
 						'value':'Value',
-						'std err':'Std Err',
+						'std_err':'Std Err',
 						't stat':'t Stat',
 						'nullvalue':'Null Value',
 						'constrained': 'Constrained'

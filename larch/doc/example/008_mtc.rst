@@ -69,8 +69,8 @@ In Model 8, the TTR is 2.5. (`pp. 114 <http://www.caee.utexas.edu/prof/Bhat/COUR
 	>>> m.loglike()
 	-3595.232...
 
-	>>> print(m.pfo()[['value','std err','t stat','robust std err','robust t stat']])
-	                             value  std err   t stat  robust std err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
+	                             value  std_err   t stat  robust std_err  robust t stat
 	Category Parameter
 	LOS      totcost           -0.005  2.390e-04 -20.375       2.847e-04        -17.104
 	         nonmotorized_time -0.066  5.298e-03 -12.522       5.340e-03        -12.423
