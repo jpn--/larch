@@ -48,6 +48,7 @@ def distribution_on_idca_variable(
 		bins=None,
 		pct_bins=20,
 		range=None,
+		xlim=None,
 		prob_label="Modeled",
 		obs_label="Observed",
 		subselector=None,
@@ -81,7 +82,7 @@ def distribution_on_idca_variable(
 	bins : int, default 25
 		The number of bins to use, only applicable to histogram style.
 	range : 2-tuple, optional
-		A range to truncate the figure.
+		A range to truncate the figure. (alias `xlim`)
 	prob_label : str, default "Modeled"
 		A label to put in the legend for the modeled probabilities
 	obs_label : str, default "Observed"
@@ -124,6 +125,7 @@ def distribution_on_idca_variable(
 			bins=bins,
 			pct_bins=pct_bins,
 			range=range,
+			xlim=xlim,
 			prob_label=prob_label,
 			obs_label=obs_label,
 			subselector=subselector,
@@ -134,6 +136,9 @@ def distribution_on_idca_variable(
 			format=format,
 			**kwargs,
 		)
+
+	if xlim is not None and range is None:
+		range = xlim
 
 	if isinstance(x, str):
 		x_label = x
@@ -163,8 +168,10 @@ def distribution_on_idca_variable(
 
 	if bins is None:
 		if x_discrete_labels is not None:
+			# Discrete bins using defined labels
 			bins = numpy.arange(len(x_discrete_labels)+1)
 		if isinstance(x.dtype, pandas.CategoricalDtype):
+			# Discrete bins using implied labels
 			discrete_values = numpy.arange(len(x_discrete_labels))
 			bins = numpy.arange(len(x_discrete_labels)+1)
 			x = x.cat.codes
@@ -172,10 +179,31 @@ def distribution_on_idca_variable(
 			x_ = x
 			if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
 				x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			low_pctile = 0
+			high_pctile = 100
+			if range is not None:
+				import scipy.stats
+				if range[0] is not None:
+					low_pctile = scipy.stats.percentileofscore(x_, range[0])
+				if range[1] is not None:
+					high_pctile = scipy.stats.percentileofscore(x_, range[1])
 			if isinstance(pct_bins, int):
-				bins = numpy.percentile(x_, numpy.linspace(0, 100, pct_bins + 1))
+				bins = numpy.percentile(x_, numpy.linspace(low_pctile, high_pctile, pct_bins + 1))
 			else:
 				bins = numpy.percentile(x_, pct_bins)
+	elif isinstance(bins, int) and model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+		# Equal width bin generation using only available alternatives
+		x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+		if range is not None:
+			range_low, range_high = range
+			if range_low is None:
+				range_low = x_.min()
+			if range_high is None:
+				range_high = x_.max()
+		else:
+			range_low = x_.min()
+			range_high = x_.max()
+		bins = numpy.linspace(range_low, range_high, bins + 1)
 
 	if probability is None:
 		probability = model.probability()
@@ -202,7 +230,10 @@ def distribution_on_idca_variable(
 		kernel_choice = scipy.stats.gaussian_kde(x, bw_method=common_bw, weights=model_choice.reshape(-1))
 
 		if range is None:
-			range = (x.min(), x.max())
+			x_ = x
+			if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+				x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			range = (x_.min(), x_.max())
 
 		x_points = numpy.linspace(*range, 250)
 		y_points_1 = kernel_result(x_points)
@@ -222,12 +253,14 @@ def distribution_on_idca_variable(
 			weights=model_result.reshape(-1),
 			bins=bins,
 			range=range,
+			density=True,
 		)
 
 		y_points_2, x2 = numpy.histogram(
 			x,
 			weights=model_choice.reshape(-1),
 			bins=x1,
+			density=True,
 		)
 
 		shift = 0.4 if discrete else 0
@@ -247,6 +280,7 @@ def distribution_on_idca_variable(
 	else:
 		fig = None
 
+	ax.bins = bins
 	ax.plot(x_points, y_points_1, label=prob_label, lw=1.5)
 	ax.fill_between(x_points, y_points_2, label=obs_label, step=None, facecolor='#ffbe4d', edgecolor='#ffa200', lw=1.5)
 	ax.legend()
