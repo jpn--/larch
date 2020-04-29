@@ -166,11 +166,11 @@ def test_lower_bound():
 		'tottime': -0.059272225511784224,
 	}, abs=1e-10, rel=1e-2)
 
-	assert dict(m1.pf['std err']) == approx({
+	se_ = {
 		'ASC_BIKE': 0.30102780156769227,
 		'ASC_SR2': 0.10147191931629226,
 		'ASC_SR3P': 0.17587511190420965,
-		'ASC_TRAN': 0.0,
+		'ASC_TRAN': np.nan,
 		'ASC_WALK': 0.176809227982435,
 		'hhinc#2': 0.0015471476930952455,
 		'hhinc#3': 0.002545194004687296,
@@ -179,7 +179,8 @@ def test_lower_bound():
 		'hhinc#6': 0.0030443866859315343,
 		'totcost': 0.00023967125878600402,
 		'tottime': 0.0027703331869058825,
-	}, abs=1e-10, rel=1e-2)
+	}
+	assert dict(m1.pf['std err']) == approx(se_, abs=1e-10, rel=1e-2, nan_ok=True)
 
 	assert dict(m1.pf['unconstrained std err']) == approx({
 		'ASC_BIKE': 0.3048352068287236,

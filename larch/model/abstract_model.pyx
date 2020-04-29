@@ -1437,10 +1437,10 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					for p in pa:
 						if self.pf.loc[p,'t stat'] > 1e5:
 							self.pf.loc[p,'t stat'] = numpy.inf
-							self.pf.loc[p,'std err'] = 0
+							self.pf.loc[p,'std err'] = numpy.nan
 						if self.pf.loc[p,'t stat'] < -1e5:
 							self.pf.loc[p,'t stat'] = -numpy.inf
-							self.pf.loc[p,'std err'] = 0
+							self.pf.loc[p,'std err'] = numpy.nan
 						n = notes.get(p,[])
 						n.append(c.get_binding_note(self.pvals))
 						notes[p] = n
