@@ -25,7 +25,7 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 			frame=frame,
 			title=title,
 		)
-		self._k_models = models
+		self._k_models = list(models)
 		self._dataservice = dataservice
 		self._dataframes = None
 		self._mangled = True
