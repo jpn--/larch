@@ -1455,3 +1455,45 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		if self._possible_overspecification:
 			return OverspecView(self._possible_overspecification)
 		return self._possible_overspecification
+
+	def likelihood_ratio(self, param=None, ref_value=None, _current_ll=None):
+		"""
+		Compute a likelihood ratio for changing a parameter to its null value.
+
+		Parameters
+		----------
+		param: str, optional
+			The name of the parameter to vary.  If not given, the
+			likelihood ratios will be computed for all parameters
+			(except those with `holdfast` set to True).
+		ref_value: numeric, optional
+			The alternative value to use for the named parameter. If
+			not given, the alternative value used is the parameter's
+			null value.
+
+		Returns
+		-------
+		float:
+			The likelihood ratio (i.e. the difference in the log likelihoods).
+		"""
+		try:
+			if _current_ll is None:
+				_current_ll = self.loglike()
+			if param is None:
+				result = pandas.Series(data=numpy.nan, index=self.pf.index)
+				for p in self.pf.index:
+					if not self.pf.loc[p, 'holdfast']:
+						result[p] = self.likelihood_ratio(p, ref_value=ref_value, _current_ll=_current_ll)
+				return result
+			if ref_value is None:
+				ref_value = self.pf.loc[param, 'nullvalue']
+			current_value = self.pf.loc[param, 'value']
+			self.set_value(param, ref_value)
+			ll_alt = self.loglike()
+			self.set_value(param, current_value)
+			like_ratio = _current_ll - ll_alt
+			self.pf.loc[param, 'likelihood ratio'] = like_ratio
+			return like_ratio
+		except:
+			logger.exception("error in likelihood_ratio")
+			raise

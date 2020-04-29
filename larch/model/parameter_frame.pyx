@@ -903,6 +903,12 @@ cdef class ParameterFrame:
 					result.loc[result['t Stat'] == NBSP+"NA", 'Signif'] = ""
 					monospace_cols.append('t Stat')
 					monospace_cols.append('Signif')
+				if 'likelihood ratio' in pfo:
+					non_finite_t = ~numpy.isfinite(pfo['t stat'])
+					result.loc[numpy.absolute((numpy.isfinite(pfo['likelihood ratio']))&non_finite_t), 'Signif'] = "[]"
+					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 1.9207)&non_finite_t), 'Signif'] = "[*]"
+					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 3.3174)&non_finite_t), 'Signif'] = "[**]"
+					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 5.4138)&non_finite_t), 'Signif'] = "[***]"
 				if 'Std Err' in result.columns:
 					_fmt_s = lambda x: f"{x: #.3g}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
 					result['Std Err'] = result['Std Err'].apply(_fmt_s)
