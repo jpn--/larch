@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from pandas.io.formats.style import Styler
 from xmle import Elem
-import matplotlib.figure
+import matplotlib.figure, matplotlib.axes
 import io
 import time
 import base64
@@ -325,6 +325,8 @@ class ExcelWriter(_XlsxWriter):
         # Render matplotlib.Figure into an Elem
         if not success and 'matplotlib' in str(type(content)):
             logger.debug("writing as matplotlib (%s)", type(content))
+            if isinstance(content, matplotlib.axes.Axes):
+                content = content.get_figure()
             if isinstance(content, matplotlib.figure.Figure):
                 try:
                     content = make_png(content, dpi='figure', compress=True, output='Elem', facecolor='w')
