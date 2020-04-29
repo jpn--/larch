@@ -718,8 +718,11 @@ cdef class LinearComponent_C:
 	def _repr_html_(self):
 		return self.__xml__().tostring()
 
-	def evaluate(self, p_getter, x_namespace=None, **kwargs):
-		return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
+	def evaluate(self, p_getter, x_namespace=None, exp_params=False, **kwargs):
+		if exp_params:
+			return self.scale * _numpy.exp(p_getter(str(self.param))) * self.data.eval(namespace=x_namespace, **kwargs)
+		else:
+			return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
 
 	def __copy__(self):
 		return self.__class__(
@@ -1173,7 +1176,7 @@ cdef class LinearFunction_C:
 		else:
 			return [cls(_.data) for _ in self]
 
-	def evaluate(self, param_source, x_namespace=None, **more_x_namespace):
+	def evaluate(self, param_source, x_namespace=None, exp_params=False, **more_x_namespace):
 		"""
 		Evaluate the linear function in the context of some parameters and data.
 
@@ -1187,6 +1190,9 @@ cdef class LinearFunction_C:
 			The source of the current parameter values.
 		x_namespace : dict, optional
 			A namespace of data values.
+		exp_params : bool, default False
+			Whether to take the exponential of parameters (i.e. for
+			a quantity function).
 		**more_x_namespace : any
 			More data values
 
@@ -1196,7 +1202,7 @@ cdef class LinearFunction_C:
 		"""
 		if hasattr(param_source, 'pvalue') and callable(param_source.pvalue):
 			param_source = param_source.pvalue
-		return sum(j.evaluate(param_source, x_namespace=x_namespace, **more_x_namespace) for j in self)
+		return sum(j.evaluate(param_source, x_namespace=x_namespace, exp_params=exp_params, **more_x_namespace) for j in self)
 
 	def value(self, *args):
 		return self.as_pmath().value(*args)

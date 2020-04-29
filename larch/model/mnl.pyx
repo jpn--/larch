@@ -490,6 +490,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		l4_float_t[:,:] raw_utility
 		l4_float_t[:,:] exp_utility
 		l4_float_t[:,:] probability
+		l4_float_t[:,:] quantity
 		l4_float_t[:,:,:] dU
 		l4_float_t[:,:,:] bhhh_total
 		l4_float_t*     buffer_exp_utility
@@ -511,6 +512,8 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		int             store_number_dLLc
 		int             storage_size_dU
 		int             store_number_dU
+		int             storage_size_Q
+		int             store_number_Q
 
 	if not dfs._is_computational_ready(activate=True):
 		raise ValueError('DataFrames is not computational-ready')
@@ -544,10 +547,15 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 		storage_size_LLc  = n_cases_local if persist & PERSIST_LOGLIKE_CASEWISE   else num_threads
 		storage_size_dLLc = n_cases_local if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
 		storage_size_dU   = n_cases_local if persist & PERSIST_D_UTILITY          else num_threads
+		storage_size_Q    = n_cases_local if persist & PERSIST_QUANTITY           else 0
 
 		raw_utility = numpy.zeros([storage_size_U,   n_alts], dtype=l4_float_dtype)
 		exp_utility = numpy.zeros([storage_size_expU,n_alts], dtype=l4_float_dtype)
 		probability = numpy.zeros([storage_size_P,   n_alts], dtype=l4_float_dtype)
+		if persist & PERSIST_QUANTITY:
+			quantity = numpy.zeros([storage_size_Q,  n_alts], dtype=l4_float_dtype)
+		else:
+			quantity = None
 
 		LL_case  = numpy.zeros([storage_size_LLc,], dtype=l4_float_dtype)
 
@@ -578,6 +586,7 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 				store_number_LLc  = c_local if persist & PERSIST_LOGLIKE_CASEWISE   else thread_number
 				store_number_dLLc = c_local if persist & PERSIST_D_LOGLIKE_CASEWISE else thread_number
 				store_number_dU   = c_local if persist & PERSIST_D_UTILITY          else thread_number
+				store_number_Q    = c_local if persist & PERSIST_QUANTITY           else -1
 
 				buffer_exp_utility = &exp_utility[store_number_expU,0]
 				buffer_probability = &probability[store_number_P,0]
@@ -588,9 +597,15 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 					weight = 1
 
 				if return_dll:
-					dfs._compute_d_utility_onecase(c,raw_utility[store_number_U],dU[store_number_dU],n_alts)
+					if store_number_Q >= 0:
+						dfs._compute_d_utility_onecase(c,raw_utility[store_number_U],dU[store_number_dU],n_alts,quantity[store_number_Q])
+					else:
+						dfs._compute_d_utility_onecase(c,raw_utility[store_number_U],dU[store_number_dU],n_alts)
 				else:
-					dfs._compute_utility_onecase(c,raw_utility[store_number_U],n_alts)
+					if store_number_Q >= 0:
+						dfs._compute_utility_onecase(c,raw_utility[store_number_U],n_alts,quantity[store_number_Q])
+					else:
+						dfs._compute_utility_onecase(c,raw_utility[store_number_U],n_alts)
 
 				_mnl_probability_from_utility(
 					n_alts,
@@ -648,6 +663,8 @@ def mnl_d_log_likelihood_from_dataframes_all_rows(
 			result.exp_utility=exp_utility.base
 		if persist & PERSIST_PROBABILITY:
 			result.probability=probability.base
+		if persist & PERSIST_QUANTITY:
+			result.quantity=quantity.base
 
 		if return_dll:
 			result.dll = pandas.Series(

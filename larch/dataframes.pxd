@@ -83,6 +83,7 @@ cdef class DataFrames:
 			l4_float_t[:] U,
 			l4_float_t[:,:] dU,
 			int n_alts,
+			l4_float_t[:] Q=*,
 	) nogil
 
 	cdef void _compute_utility_onecase(
@@ -90,6 +91,7 @@ cdef class DataFrames:
 			int c,
 			l4_float_t[:] U,
 			int n_alts,
+			l4_float_t[:] Q=*,
 	) nogil
 
 

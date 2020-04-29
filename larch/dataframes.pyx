@@ -1830,6 +1830,7 @@ cdef class DataFrames:
 			l4_float_t[:]   U,
 			l4_float_t[:,:] dU,
 			int n_alts,
+			l4_float_t[:]   Q=None,
 	) nogil:
 		"""
 		Compute utility and d_utility w.r.t. parameters, writing to externally defined `U` and `dU` array.
@@ -1858,6 +1859,8 @@ cdef class DataFrames:
 		#memset(&dU[0,0], 0, sizeof(l4_float_t) * dU.size)
 		U[:] = 0
 		dU[:,:] = 0
+		if Q is not None:
+			Q[:] = 0
 
 		for j in range(n_alts):
 
@@ -1884,6 +1887,8 @@ cdef class DataFrames:
 						if not self.model_quantity_ca_param_holdfast[i]:
 							dU[j,self.model_quantity_ca_param[i]] /= U[j]
 
+					if Q is not None:
+						Q[j] = U[j]
 					IF DOUBLE_PRECISION:
 						_temp = log(U[j])
 					ELSE:
@@ -1934,6 +1939,7 @@ cdef class DataFrames:
 			int c,
 			l4_float_t[:]   U,
 			int n_alts,
+			l4_float_t[:]   Q=None,
 	) nogil:
 		"""
 		Compute d_utility w.r.t. parameters, writing to externally defined `du` array.
@@ -1956,6 +1962,8 @@ cdef class DataFrames:
 
 		U[:] = 0
 		_max_U = 0
+		if Q is not None:
+			Q[:]=0
 
 		for j in range(n_alts):
 
@@ -1976,6 +1984,8 @@ cdef class DataFrames:
 						_temp *= self.model_quantity_ca_param_value[i] * self.model_quantity_ca_param_scale[i]
 						U[j] += _temp
 
+					if Q is not None:
+						Q[j] = U[j]
 					IF DOUBLE_PRECISION:
 						_temp = log(U[j])
 					ELSE:
