@@ -84,7 +84,7 @@ def test_dataframes_mnl5():
 	m5.calculate_parameter_covariance()
 
 	assert numpy.all(m5.pf['std_err'] == 0)
-	assert numpy.all(m5.pf['robust std_err'] == 0)
+	assert numpy.all(m5.pf['robust_std_err'] == 0)
 
 
 def test_dataframes_mnl5_ca():

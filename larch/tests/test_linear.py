@@ -503,8 +503,8 @@ def test_pmath_in_utility():
 		'nonmotorized_time': -11.789244777056298,
 		'totcost': -20.19350165272386,
 	}
-	assert dict(m0.pf['t stat']) == pytest.approx(t, rel=1e-5)
-	assert dict(m1.pf['t stat']) == pytest.approx(t, rel=1e-5)
+	assert dict(m0.pf['t_stat']) == pytest.approx(t, rel=1e-5)
+	assert dict(m1.pf['t_stat']) == pytest.approx(t, rel=1e-5)
 
 	assert (m0.get_value(P.motorized_ivtt) * 60) / (m0.get_value(P.totcost) * 100) == pytest.approx(0.3191492801963062)
 	assert m0.get_value( (P.motorized_ivtt * 60) / (P.totcost * 100) ) == pytest.approx(0.3191492801963062)

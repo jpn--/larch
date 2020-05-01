@@ -79,8 +79,8 @@
 	
 The parameters can be found in the `pf` DataFrame::
 	
-	>>>print(m.pf[['value','std_err','t stat','robust std_err','robust t stat']])
-	                                value    std_err  t stat  robust std_err  robust t stat
+	>>>print(m.pf[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value    std_err  t_stat  robust_std_err  robust_t_stat
 	Category   Parameter                                                                   
 	CostbyInc  costbyincome        -0.052  1.040e-02  -5.038       1.334e-02         -3.929
 	TravelTime motorized_time      -0.020  3.815e-03  -5.292       3.898e-03         -5.178

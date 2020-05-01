@@ -78,8 +78,8 @@ Model 10 considers the number of automobiles in the household. (`pp. 120 <http:/
 	>>> m.loglike()
 	-3501.642...
 
-	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
-	                                value  std_err   t stat  robust std_err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
 	Category  Parameter
 	LOS       totcost             -0.0041   0.0002 -16.9496          0.0003       -15.1707
 	          motorized_time      -0.0378   0.0036 -10.4850          0.0039        -9.7963

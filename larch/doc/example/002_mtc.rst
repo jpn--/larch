@@ -69,8 +69,8 @@ To accomplish this, we give the income parameters for all three alternatives the
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
-	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
-	                      value  std_err   t stat  robust std_err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                      value  std_err   t_stat  robust_std_err  robust_t_stat
 	Category Parameter
 	LOS      totcost    -0.0049   0.0002 -20.5689          0.0003       -17.2879
 	         tottime    -0.0514   0.0031 -16.6075          0.0035       -14.8957

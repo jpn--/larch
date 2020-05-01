@@ -686,7 +686,7 @@ cdef class ParameterFrame:
 		# 	colspan = 0
 		# 	if 'std_err' in pf.columns:
 		# 		colspan += 1
-		# 	if 't stat' in pf.columns:
+		# 	if 't_stat' in pf.columns:
 		# 		colspan += 1
 		# 	if 'nullvalue' in pf.columns:
 		# 		colspan += 1
@@ -698,7 +698,7 @@ cdef class ParameterFrame:
 			colspan = 0
 			if 'std_err' in pf.columns:
 				colspan += 1
-			if 't stat' in pf.columns:
+			if 't_stat' in pf.columns:
 				colspan += 1
 			if 'nullvalue' in pf.columns:
 				colspan += 1
@@ -736,8 +736,8 @@ cdef class ParameterFrame:
 			result = [ Elem('td', text="{:.4g}".format(pf.loc[pname_str,'value'])) ]
 			if 'std_err' in pf.columns:
 				result += [ Elem('td', text="{:#.3g}".format(pf.loc[pname_str, 'std_err'])), ]
-			if 't stat' in pf.columns:
-				result += [ Elem('td', text="{:#.2f}".format(pf.loc[pname_str, 't stat'])), ]
+			if 't_stat' in pf.columns:
+				result += [ Elem('td', text="{:#.2f}".format(pf.loc[pname_str, 't_stat'])), ]
 			if 'nullvalue' in pf.columns:
 				result += [ Elem('td', text="{:#.2g}".format(pf.loc[pname_str, 'nullvalue'])), ]
 			return result
@@ -832,7 +832,7 @@ cdef class ParameterFrame:
 				tr.put('th', text='Value')
 				if 'std_err' in pfo.columns:
 					tr.put('th', text='Std Err')
-				if 't stat' in pfo.columns:
+				if 't_stat' in pfo.columns:
 					tr.put('th', text='t Stat')
 				if 'nullvalue' in pfo.columns:
 					tr.put('th', text='Null Value')
@@ -882,12 +882,12 @@ cdef class ParameterFrame:
 				return div
 
 			else:
-				columns = [i for i in ['value','std_err','t stat','nullvalue', 'constrained'] if i in pfo.columns]
+				columns = [i for i in ['value','std_err','t_stat','nullvalue', 'constrained'] if i in pfo.columns]
 				result = pfo[columns].rename(
 					columns={
 						'value':'Value',
 						'std_err':'Std Err',
-						't stat':'t Stat',
+						't_stat':'t Stat',
 						'nullvalue':'Null Value',
 						'constrained': 'Constrained'
 					}
@@ -904,7 +904,7 @@ cdef class ParameterFrame:
 					monospace_cols.append('t Stat')
 					monospace_cols.append('Signif')
 				if 'likelihood ratio' in pfo:
-					non_finite_t = ~numpy.isfinite(pfo['t stat'])
+					non_finite_t = ~numpy.isfinite(pfo['t_stat'])
 					result.loc[numpy.absolute((numpy.isfinite(pfo['likelihood ratio']))&non_finite_t), 'Signif'] = "[]"
 					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 1.9207)&non_finite_t), 'Signif'] = "[*]"
 					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 3.3174)&non_finite_t), 'Signif'] = "[**]"

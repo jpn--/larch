@@ -66,8 +66,8 @@ We set the terms to zero can be done by omitting the terms altogether.
 	>>> m.loglike()
 	-3627.233...
 	
-	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
-	                     value  std_err   t stat  robust std_err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                     value  std_err   t_stat  robust_std_err  robust_t_stat
 	Category Parameter
 	LOS      totcost   -0.0049   0.0002 -20.6062          0.0003       -17.3891
 	         tottime   -0.0513   0.0031 -16.5594          0.0035       -14.8580

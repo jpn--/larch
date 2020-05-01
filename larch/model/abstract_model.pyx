@@ -1392,9 +1392,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 			robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
 		self.pf['std_err'] = numpy.sqrt(covariance_matrix.diagonal())
-		self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
-		self.pf['robust std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
-		self.pf['robust t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust std_err']
+		self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+		self.pf['robust_std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
+		self.pf['robust_t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust_std_err']
 
 		if preserve_hessian:
 			self._matrixes['hessian_matrix'] = hess
@@ -1414,7 +1414,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			binding_constraints = list()
 
 			self.pf['unconstrained std_err'] = self.pf['std_err'].copy()
-			self.pf['unconstrained t stat'] = self.pf['t stat'].copy()
+			self.pf['unconstrained t_stat'] = self.pf['t_stat'].copy()
 
 			self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
 			s = self.covariance_matrix.values
@@ -1427,7 +1427,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 						s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
 			self._matrixes['covariance_matrix'] = s
 			self.pf['std_err'] = numpy.sqrt(s.diagonal())
-			self.pf['t stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+			self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
 
 			# Fix numerical issues on some constraints, add constrained notes
 			if binding_constraints or any(self.pf['holdfast']!=0):
@@ -1435,11 +1435,11 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				for c in binding_constraints:
 					pa = c.get_parameters()
 					for p in pa:
-						if self.pf.loc[p,'t stat'] > 1e5:
-							self.pf.loc[p,'t stat'] = numpy.inf
+						if self.pf.loc[p,'t_stat'] > 1e5:
+							self.pf.loc[p,'t_stat'] = numpy.inf
 							self.pf.loc[p,'std_err'] = numpy.nan
-						if self.pf.loc[p,'t stat'] < -1e5:
-							self.pf.loc[p,'t stat'] = -numpy.inf
+						if self.pf.loc[p,'t_stat'] < -1e5:
+							self.pf.loc[p,'t_stat'] = -numpy.inf
 							self.pf.loc[p,'std_err'] = numpy.nan
 						n = notes.get(p,[])
 						n.append(c.get_binding_note(self.pvals))

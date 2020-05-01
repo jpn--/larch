@@ -75,8 +75,8 @@ alternative specific employment density variables.
 	>>> m.loglike()
 	-3424.550...
 	
-	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])
-	                                value  std_err   t stat  robust std_err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
 	Category  Parameter
 	LOS       totcost             -0.0024   0.0003  -7.7082          0.0003        -7.4773
 	          motorized_time      -0.0231   0.0039  -5.9240          0.0040        -5.7506

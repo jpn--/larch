@@ -102,8 +102,8 @@ We can estimate the models and check the results match up with those given by Bi
 	-5236.90...
 	>>> m.calculate_parameter_covariance()
 
-	>>> print(m.pfo()[['value','std_err','t stat','robust std_err','robust t stat']])  # parameter frame, ordered
-	                    value    std_err  t stat  robust std_err  robust t stat
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])  # parameter frame, ordered
+	                    value    std_err  t_stat  robust_std_err  robust_t_stat
 	Category Parameter
 	ASCs     ASC_CAR   -0.167  3.714e-02  -4.50...   5.45...e-02       -3.06...
 	         ASC_TRAIN -0.512  4.518e-02 -11.33...   7.91...e-02       -6.47...
