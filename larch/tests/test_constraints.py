@@ -8,6 +8,7 @@ from larch.model.constraints import interpret_contraint
 from pytest import approx
 import pytest
 import sys
+from .stored_dataframes import stable_df
 
 def test_max_ratio_1():
 
@@ -502,8 +503,6 @@ def test_contraint_interpretation():
 	assert interpret_contraint("aaaa > 3/4") == FixedBound('aaaa', minimum=3/4)
 	assert interpret_contraint("aaaa < 3/4") == FixedBound('aaaa', maximum=3/4)
 	assert interpret_contraint("1/4 < aaaa < 3/4") == FixedBound('aaaa', minimum=1/4, maximum=3/4)
-
-from . import stable_df
 
 def test_constraint_parameter_summary_ratios():
 
