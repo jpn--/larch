@@ -1328,7 +1328,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 
 
-	def calculate_parameter_covariance(self, status_widget=None, preserve_hessian=False):
+	def calculate_parameter_covariance(self, status_widget=None, preserve_hessian=False, like_ratio=True):
 		"""
 		Compute the parameter covariance matrix.
 
@@ -1340,6 +1340,11 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		the result in `covariance_matrix`, and computes the
 		standard error of the estimators (i.e. the square root
 		of the diagonal) and stores those values in `pf['std_err']`.
+
+		Parameters
+		----------
+		like_ratio : bool, default True
+			For parameters where the
 		"""
 		hess = -self.d2_loglike()
 
@@ -1413,8 +1418,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 			binding_constraints = list()
 
-			self.pf['unconstrained std_err'] = self.pf['std_err'].copy()
-			self.pf['unconstrained t_stat'] = self.pf['t_stat'].copy()
+			self.pf['unconstrained_std_err'] = self.pf['std_err'].copy()
+			self.pf['unconstrained_t_stat'] = self.pf['t_stat'].copy()
 
 			self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
 			s = self.covariance_matrix.values
@@ -1447,7 +1452,13 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				self.pf['constrained'] = pandas.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
 				self.pf['constrained'].fillna('', inplace=True)
 				self.pf.loc[self.pf['holdfast']!=0, 'constrained'] = 'fixed value'
+				self.pf.loc[self.pf['holdfast']!=0, 'std_err'] = numpy.nan
+				self.pf.loc[self.pf['holdfast']!=0, 't_stat'] = numpy.nan
 
+		if like_ratio:
+			non_finite_t = ~numpy.isfinite(self.pf.t_stat)
+			if numpy.any(non_finite_t):
+				self.likelihood_ratio(self.pf.index[non_finite_t])
 
 	@property
 	def possible_overspecification(self):
@@ -1456,44 +1467,62 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			return OverspecView(self._possible_overspecification)
 		return self._possible_overspecification
 
-	def likelihood_ratio(self, param=None, ref_value=None, _current_ll=None):
+	def likelihood_ratio(self, param=None, ref_value=None, include_holdfast=False, *, _current_ll=None):
 		"""
 		Compute a likelihood ratio for changing a parameter to its null value.
 
 		Parameters
 		----------
-		param: str, optional
-			The name of the parameter to vary.  If not given, the
+		param: str or Iterable[str], optional
+			The name of the parameter[s] to vary.  If not given, the
 			likelihood ratios will be computed for all parameters
 			(except those with `holdfast` set to True).
 		ref_value: numeric, optional
 			The alternative value to use for the named parameter. If
 			not given, the alternative value used is the parameter's
 			null value.
+		include_holdfast: bool, default False
+			Whether to compute likelihood ratios for holdfast parameters.
+			This argument is ignored if only a single parameter name
+			is given as a str in `param`.
 
 		Returns
 		-------
-		float:
+		float or pandas.Series:
 			The likelihood ratio (i.e. the difference in the log likelihoods).
 		"""
 		try:
+			ref_value_orig = ref_value
 			if _current_ll is None:
 				_current_ll = self.loglike()
 			if param is None:
 				result = pandas.Series(data=numpy.nan, index=self.pf.index)
 				for p in self.pf.index:
-					if not self.pf.loc[p, 'holdfast']:
+					if not self.pf.loc[p, 'holdfast'] or include_holdfast:
 						result[p] = self.likelihood_ratio(p, ref_value=ref_value, _current_ll=_current_ll)
 				return result
-			if ref_value is None:
-				ref_value = self.pf.loc[param, 'nullvalue']
-			current_value = self.pf.loc[param, 'value']
-			self.set_value(param, ref_value)
-			ll_alt = self.loglike()
-			self.set_value(param, current_value)
-			like_ratio = _current_ll - ll_alt
-			self.pf.loc[param, 'likelihood ratio'] = like_ratio
-			return like_ratio
+			elif isinstance(param, str):
+				if ref_value is None:
+					ref_value = self.pf.loc[param, 'nullvalue']
+				current_value = self.pf.loc[param, 'value']
+				if ref_value == current_value:
+					if ref_value_orig is None:
+						self.pf.loc[param, 'likelihood_ratio'] = 0
+					return 0
+				else:
+					self.set_value(param, ref_value)
+					ll_alt = self.loglike()
+					self.set_value(param, current_value)
+					like_ratio = _current_ll - ll_alt
+					if ref_value_orig is None:
+						self.pf.loc[param, 'likelihood_ratio'] = like_ratio
+				return like_ratio
+			else:
+				result = pandas.Series(data=numpy.nan, index=list(param))
+				for p in result.index:
+					if not self.pf.loc[p, 'holdfast'] or include_holdfast:
+						result[p] = self.likelihood_ratio(p, ref_value=ref_value, _current_ll=_current_ll)
+				return result
 		except:
 			logger.exception("error in likelihood_ratio")
 			raise

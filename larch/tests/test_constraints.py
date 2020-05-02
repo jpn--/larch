@@ -121,35 +121,35 @@ def test_constraint_ordering_1():
 	assert m1.pf.loc['hhinc#3', 'std_err'] == approx(0.001397, rel=5e-3)
 
 
-@pytest.mark.skip(reason="constraint tests are unstable across platforms")
 def test_lower_bound():
 
-	#m0 = larch.Model.Example(1)
 	m1 = larch.Model.Example(1)
-
-	#m0.lock_value('ASC_TRAN', 0)
 	m1.set_value('ASC_TRAN', minimum=0)
-
-	#m0.load_data()
 	m1.load_data()
 
-	# r0=m0.torch.maximize_loglike(
+	# constraint tests are unstable across platforms
+	# r1=m1.maximize_loglike(
 	# 	method='slsqp',
 	# 	options={'ftol': 1e-09},
+	# 	quiet=True,
 	# )
+	# assert r1.message == 'Optimization terminated successfully.'
+	m1.set_values({'ASC_BIKE': -2.1362348000501323,
+				   'ASC_SR2': -2.041879053530548,
+				   'ASC_SR3P': -3.568789444368573,
+				   'ASC_TRAN': 3.7800630376890545e-12,
+				   'ASC_WALK': 0.2099970488220958,
+				   'hhinc#2': -0.003442043141464587,
+				   'hhinc#3': -0.0010585520966694998,
+				   'hhinc#4': -0.012338038801568696,
+				   'hhinc#5': -0.014560216659416916,
+				   'hhinc#6': -0.012146634316726645,
+				   'totcost': -0.00489380761583881,
+				   'tottime': -0.059272247433483374})
 
-	r1=m1.maximize_loglike(
-		method='slsqp',
-		options={'ftol': 1e-09},
-		quiet=True,
-	)
-
-	assert r1.message == 'Optimization terminated successfully.'
-
-	# m0.calculate_parameter_covariance()
 	m1.calculate_parameter_covariance()
 
-	assert r1.loglike == approx(-3639.0010819576023)
+	assert m1.loglike() == approx(-3639.0010819576023)
 
 	assert dict(m1.pf['value']) == approx({
 		'ASC_BIKE': -2.136234299750425,
@@ -182,7 +182,7 @@ def test_lower_bound():
 	}
 	assert dict(m1.pf['std_err']) == approx(se_, abs=1e-10, rel=1e-2, nan_ok=True)
 
-	assert dict(m1.pf['unconstrained std_err']) == approx({
+	assert dict(m1.pf['unconstrained_std_err']) == approx({
 		'ASC_BIKE': 0.3048352068287236,
 		'ASC_SR2': 0.10486177423525046,
 		'ASC_SR3P': 0.17846252159720813,
@@ -258,7 +258,7 @@ def test_upper_bound():
 		'tottime': 0
 	}, abs=1e-10, rel=1e-2)
 
-	assert dict(m1.pf['unconstrained std_err']) == approx({
+	assert dict(m1.pf['unconstrained_std_err']) == approx({
 		'ASC_BIKE': 0.30323766594813406,
 		'ASC_SR2': 0.1069872808913486,
 		'ASC_SR3P': 0.18097129736247558,
@@ -358,7 +358,7 @@ def test_multi_constraints():
 		'tottime': 0
 	}, abs=1e-10, rel=5e-2)
 
-	assert dict(m1.pf['unconstrained std_err']) == approx({
+	assert dict(m1.pf['unconstrained_std_err']) == approx({
 		'ASC_BIKE': 0.3032386370524189,
 		'ASC_SR2': 0.10695557451038115,
 		'ASC_SR3P': 0.18033743391454088,
@@ -373,7 +373,6 @@ def test_multi_constraints():
 		'tottime': 0.004377029904009681
 	}, rel=5e-2)
 
-@pytest.mark.skip(reason="constraint tests are unstable across platforms")
 def test_overspec():
 
 	m0 = larch.Model.Example(1)
@@ -384,9 +383,25 @@ def test_overspec():
 	m0.utility_co[3] = P.ASC_SR3P + P('hhinc#23') * X.hhinc
 	m0.remove_unused_parameters()
 	m0.load_data()
-	r0 = m0.maximize_loglike(
-		quiet=True,
-	)
+	# constraint tests are unstable across platforms
+	# r0 = m0.maximize_loglike(
+	# 	quiet=True,
+	# )
+	m0.set_values({
+		'ASC_BIKE': -0.8550063261138748,
+		'ASC_DA': 0.9780172816142935,
+		'ASC_SR2': -1.0303087193826583,
+		'ASC_SR3P': -2.394702207497934,
+		'ASC_TRAN': 1.2134607482035888,
+		'ASC_WALK': 2.0885392231767055,
+		'failpar': -1.2138930556454395e-14,
+		'hhinc#23': -0.001647452425832848,
+		'hhinc#4': -0.005545798283823439,
+		'hhinc#5': -0.012530050562373019,
+		'hhinc#6': -0.010792561322141715,
+		'totcost': -0.005093524162084949,
+		'tottime': -0.1,
+	})
 	m0.calculate_parameter_covariance()
 	possover = m0.possible_overspecification
 	assert possover.data.shape == (7, 2)
@@ -396,7 +411,6 @@ def test_overspec():
 			'ASC_TRAN', 'ASC_WALK', 'failpar',
 		])
 
-@pytest.mark.skip(reason="constraint tests are unstable across platforms")
 def test_parameter_summary():
 	import larch
 	from larch.model.constraints import RatioBound, OrderingBound, FixedBound
@@ -407,15 +421,31 @@ def test_parameter_summary():
 	m0.constraints.append(OrderingBound("hhinc#3 <= hhinc#2"))
 	m0.load_data()
 
-	r0 = m0.maximize_loglike(
-		method='slsqp',
-		options={'ftol': 1e-09},
-		quiet=True,
-	)
+	# constraint tests are unstable across platforms
+	# r0 = m0.maximize_loglike(
+	# 	method='slsqp',
+	# 	options={'ftol': 1e-09},
+	# 	quiet=True,
+	# )
+	m0.set_values({
+		'ASC_BIKE': -2.401574701017008,
+		'ASC_SR2': -2.2234574452767037,
+		'ASC_SR3P': -3.630001719635557,
+		'ASC_TRAN': -0.7000998451196682,
+		'ASC_WALK': -0.25495834390295924,
+		'hhinc#2': -0.0015948074747861667,
+		'hhinc#3': -0.0015948074747729564,
+		'hhinc#4': -0.005385664916039662,
+		'hhinc#5': -0.01284021327300144,
+		'hhinc#6': -0.009658848920781143,
+		'totcost': -0.005000000000003634,
+		'tottime': -0.05,
+	})
 
 	m0.calculate_parameter_covariance()
 
 	ps = m0.parameter_summary('df').data
+	stable_df(ps, 'parameter_summary_test')
 
 	try:
 		assert ps.loc[('LOS', 'totcost'), 'Value'] == "-0.00500"
@@ -423,8 +453,8 @@ def test_parameter_summary():
 		assert ps.loc[('Income', 'hhinc#2'), 'Value'] == "-0.00159"
 		assert ps.loc[('Income', 'hhinc#3'), 'Value'] == "-0.00159"
 
-		assert ps.loc[('LOS', 'totcost'), 'Std Err'] == " 0.00"
-		assert ps.loc[('LOS', 'tottime'), 'Std Err'] == " 0.00"
+		assert ps.loc[('LOS', 'totcost'), 'Std Err'] == " NA"
+		assert ps.loc[('LOS', 'tottime'), 'Std Err'] == " NA"
 		assert ps.loc[('Income', 'hhinc#2'), 'Std Err'] == " 0.00140"
 		assert ps.loc[('Income', 'hhinc#3'), 'Std Err'] == " 0.00140"
 
@@ -433,7 +463,7 @@ def test_parameter_summary():
 		assert ps.loc[('Income', 'hhinc#2'), 't Stat'] == "-1.14"
 		assert ps.loc[('Income', 'hhinc#3'), 't Stat'] == "-1.14"
 
-		assert ps.loc[('LOS', 'totcost'), 'Signif'] == ""
+		assert ps.loc[('LOS', 'totcost'), 'Signif'] == "[***]"
 		assert ps.loc[('LOS', 'tottime'), 'Signif'] == ""
 		assert ps.loc[('Income', 'hhinc#2'), 'Signif'] == ""
 		assert ps.loc[('Income', 'hhinc#3'), 'Signif'] == ""
@@ -473,3 +503,29 @@ def test_contraint_interpretation():
 	assert interpret_contraint("aaaa < 3/4") == FixedBound('aaaa', maximum=3/4)
 	assert interpret_contraint("1/4 < aaaa < 3/4") == FixedBound('aaaa', minimum=1/4, maximum=3/4)
 
+from . import stable_df
+
+def test_constraint_parameter_summary_ratios():
+
+	m = larch.Model.Example(1)
+	m.set_value('totcost', minimum=-0.001)
+	m.set_value('hhinc#3', minimum=0.0025)
+	m.set_value('hhinc#5', minimum=-0.008)
+	m.lock_value('hhinc#6', value=-0.009)
+	m.load_data()
+	m.set_values({
+		'ASC_BIKE': -2.203264336154524,
+		'ASC_SR2': -1.8913348121897215,
+		'ASC_SR3P': -3.2288258012739846,
+		'ASC_TRAN': -0.520325914514216,
+		'ASC_WALK': 0.12488474492871472,
+		'hhinc#2': -0.0010437239183118503,
+		'hhinc#3': 0.002500000762078847,
+		'hhinc#4': -0.0017845440559583583,
+		'hhinc#5': -0.007999992934338814,
+		'hhinc#6': -0.009,
+		'totcost': -0.0009999993257563983,
+		'tottime': -0.052413890729296815,
+	})
+	m.calculate_parameter_covariance()
+	stable_df(m.parameter_summary().data, 'like_ratio_test')

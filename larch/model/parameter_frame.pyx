@@ -882,12 +882,13 @@ cdef class ParameterFrame:
 				return div
 
 			else:
-				columns = [i for i in ['value','std_err','t_stat','nullvalue', 'constrained'] if i in pfo.columns]
+				columns = [i for i in ['value','std_err','t_stat','likelihood_ratio','nullvalue', 'constrained'] if i in pfo.columns]
 				result = pfo[columns].rename(
 					columns={
 						'value':'Value',
 						'std_err':'Std Err',
 						't_stat':'t Stat',
+						'likelihood_ratio':'Like Ratio',
 						'nullvalue':'Null Value',
 						'constrained': 'Constrained'
 					}
@@ -903,12 +904,22 @@ cdef class ParameterFrame:
 					result.loc[result['t Stat'] == NBSP+"NA", 'Signif'] = ""
 					monospace_cols.append('t Stat')
 					monospace_cols.append('Signif')
-				if 'likelihood ratio' in pfo:
-					non_finite_t = ~numpy.isfinite(pfo['t_stat'])
-					result.loc[numpy.absolute((numpy.isfinite(pfo['likelihood ratio']))&non_finite_t), 'Signif'] = "[]"
-					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 1.9207)&non_finite_t), 'Signif'] = "[*]"
-					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 3.3174)&non_finite_t), 'Signif'] = "[**]"
-					result.loc[numpy.absolute(((pfo['likelihood ratio']) > 5.4138)&non_finite_t), 'Signif'] = "[***]"
+				if 'Like Ratio' in result.columns:
+					if 'Signif' not in result.columns:
+						result.insert(result.columns.get_loc('Like Ratio')+1, 'Signif', "")
+					if 't_stat' in pfo.columns:
+						non_finite_t = ~numpy.isfinite(pfo['t_stat'])
+					else:
+						non_finite_t = True
+					result.loc[numpy.absolute((numpy.isfinite(result['Like Ratio']))&non_finite_t), 'Signif'] = "[]"
+					result.loc[numpy.absolute(((result['Like Ratio']) > 1.9207)&non_finite_t), 'Signif'] = "[*]"
+					result.loc[numpy.absolute(((result['Like Ratio']) > 3.3174)&non_finite_t), 'Signif'] = "[**]"
+					result.loc[numpy.absolute(((result['Like Ratio']) > 5.4138)&non_finite_t), 'Signif'] = "[***]"
+					_fmt_t = lambda x: f"{x:0< 4.2f}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
+					result['Like Ratio'] = result['Like Ratio'].apply(_fmt_t)
+					monospace_cols.append('Like Ratio')
+					if 'Signif' not in monospace_cols:
+						monospace_cols.append('Signif')
 				if 'Std Err' in result.columns:
 					_fmt_s = lambda x: f"{x: #.3g}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
 					result['Std Err'] = result['Std Err'].apply(_fmt_s)
