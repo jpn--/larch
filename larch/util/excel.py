@@ -58,7 +58,10 @@ class ExcelWriter(_XlsxWriter):
 
         _engine = 'xlsxwriter_larch'
         kwargs.pop('engine', None)
-        super().__init__(*args, engine=_engine, **kwargs)
+        options = kwargs.pop('workbook_options', {})
+        if 'nan_inf_to_errors' not in options:
+            options['nan_inf_to_errors'] = True
+        super().__init__(*args, engine=_engine, options=options, **kwargs)
         self.book.set_size(1600, 1200)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.ital_fmt = self.book.add_format({'italic': True, 'font_size':12})
