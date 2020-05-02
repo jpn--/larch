@@ -765,10 +765,12 @@ def _try_mangle_h(instance_holder):
 cdef class LinearFunction_C:
 
 	def __init__(self, init=None):
-		self._func = list()
-		#self._instance = None
 		if init is not None and init != 0:
-			for i in init:
+			# Copy contents of init, stabilizes functionality of iadd
+			init_ = list(init)
+		self._func = list()
+		if init is not None and init != 0:
+			for i in init_:
 				if isinstance(i, LinearComponent_C):
 					self._func.append(i)
 				else:

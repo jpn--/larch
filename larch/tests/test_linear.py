@@ -511,3 +511,13 @@ def test_pmath_in_utility():
 	assert (m1.get_value(P.motorized_ivtt) * 60) / (m1.get_value(P.totcost) * 100) == pytest.approx(0.3191492801963062)
 	assert m1.get_value( (P.motorized_ivtt * 60) / (P.totcost * 100) ) == pytest.approx(0.3191492801963062)
 
+def test_linear_function_iadd():
+	# Test inplace add on unattached LinearFunction_C
+	lf = P.tottime * X.tottime + P.totcost * X.totcost
+	lf += X("totcost*tottime") * P("fake")
+	assert lf == P.tottime * X.tottime + P.totcost * X.totcost + X("totcost*tottime") * P("fake")
+	# Test inplace add on attached LinearFunction_C
+	m = larch.Model(utility_ca=P.tottime * X.tottime + P.totcost * X.totcost)
+	m.utility_ca += X("totcost*tottime") * P("fake")
+	xx = P.tottime * X.tottime + P.totcost * X.totcost + X("totcost*tottime") * P("fake")
+	assert m.utility_ca == xx
