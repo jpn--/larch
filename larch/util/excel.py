@@ -187,7 +187,10 @@ class ExcelWriter(_XlsxWriter):
                 if model.dataframes.data_ch is not None and model.dataframes.data_av is not None:
                     try:
                         self.add_content_tab(
-                            model.dataframes.choice_avail_summary(graph=model.graph),
+                            model.dataframes.choice_avail_summary(
+                                graph=model.graph,
+                                availability_co_vars=model.availability_co_vars,
+                            ),
                             sheetname="Choice",
                             heading="Choices",
                         )

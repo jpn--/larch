@@ -800,7 +800,7 @@ cdef class DataFrames:
 			result << self.choice_avail_summary(graph=graph)
 		return result
 
-	def choice_avail_summary(self, graph=None):
+	def choice_avail_summary(self, graph=None, availability_co_vars=None):
 		"""
 		Generate a summary of choice and availability statistics.
 
@@ -808,6 +808,8 @@ cdef class DataFrames:
 		----------
 		graph : networkx.DiGraph, optional
 			The nesting graph.
+		availability_co_vars : dict, optional
+			Also attach the definition of the availability conditions.
 
 		Returns
 		-------
@@ -888,6 +890,10 @@ cdef class DataFrames:
 					graph.standard_sort_names,
 					index=graph.standard_sort,
 				)
+
+			if availability_co_vars is not None:
+				od['availability condition'] = availability_co_vars
+
 			result = pandas.DataFrame.from_dict(od)
 			if graph is not None:
 				totals = result.loc[graph.root_id, :]
