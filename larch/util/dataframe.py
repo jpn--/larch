@@ -91,6 +91,15 @@ def columnize_with_joinable_backing(df, name, inplace=True, dtype=None, debug=Fa
 		else:
 			raise
 
+def columnize_with_joinable_backing_2(df, name, dtype=None, debug=False, backing=None):
+	source = df
+	try:
+		out = columnize(df, name, inplace=False, dtype=dtype, debug=debug)
+	except NameError:
+		source = df.join(backing)
+		backing = None
+		out = columnize(source, name, inplace=False, dtype=dtype, debug=debug)
+	return out, source, backing
 
 def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 	"""Add a computed column to a DataFrame."""
@@ -110,10 +119,12 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 				return
 			else:
 				return pandas.DataFrame(index=df.index)
-		df1 = pandas.concat([
-			columnize_with_joinable_backing(df, _, False, dtype, backing=backing)
-			for _ in datanames
-		], axis=1, sort=False)
+		columns = []
+		source = df
+		for dname in datanames:
+			out, source, backing = columnize_with_joinable_backing_2(source, dname, dtype, backing=backing)
+			columns.append(out)
+		df1 = pandas.concat(columns, axis=1, sort=False)
 		if inplace:
 			df[datanames] = df1
 			return
