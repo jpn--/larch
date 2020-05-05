@@ -228,8 +228,16 @@ def test_co_only():
 	x_co.index.name = 'caseid'
 
 	with raises(ValueError):
+		# missing altcodes
 		DataFrames(
 			co=x_co,
+			av=True,
+		)
+
+	with raises(ValueError):
+		# trying to use ca
+		DataFrames(
+			ca=x_co,
 			av=True,
 		)
 
@@ -271,3 +279,131 @@ def test_ca_initialization():
 		ca=cax.set_index(['caseid', 'altid_str']),
 	)
 	assert all(d.alternative_codes() == [1, 2, 3])
+
+
+def test_dfs_init_ca():
+	from larch.data_warehouse import example_file
+
+	df = pandas.read_csv(
+		example_file("MTCwork.csv.gz"),
+		index_col=['casenum', 'altnum']
+	)
+
+	d0 = DataFrames(ca=df, crack=True, ch='chose', wt_name='wgt')
+	assert d0.data_wt is not None
+	assert d0.data_wt.columns == 'wgt'
+	assert d0.data_ch is not None
+	assert d0.data_ch.shape == (5029, 6)
+	assert d0.data_av is not None
+	assert d0.data_av.shape == (5029, 6)
+
+	d1 = DataFrames(ca=df, crack=True)
+	assert d1.data_wt is None
+	assert d1.data_ch is None
+	assert d1.data_av is not None
+	assert d1.data_av.shape == (5029, 6)
+
+	d2 = DataFrames(df)
+	assert d2.data_wt is None
+	assert d2.data_ch is None
+	assert d2.data_av is not None
+	assert d2.data_av.shape == (5029, 6)
+	assert d2.data_co is None
+	assert d2.data_ca is None
+	assert d2.data_ce is not None
+	assert d2.data_ce.shape == (22033, 36)
+
+	d3 = DataFrames(ca=df, crack=True, ch=df.chose, wt_name='wgt')
+	assert d3.data_wt is not None
+	assert d3.data_wt.columns == 'wgt'
+	assert d3.data_ch is not None
+	assert d3.data_ch.shape == (5029, 6)
+	assert d3.data_av is not None
+	assert d3.data_av.shape == (5029, 6)
+	assert pandas.isna(d3.data_ch).sum().sum() == 0
+
+	d4 = DataFrames(ca=df, crack=True, ch=df.chose, wt='wgt')
+	assert d4.data_wt is not None
+	assert d4.data_wt.columns == 'wgt'
+	assert d4.data_ch is not None
+	assert d4.data_ch.shape == (5029, 6)
+	assert d4.data_av is not None
+	assert d4.data_av.shape == (5029, 6)
+
+	d5 = DataFrames(ca=df, crack=True, ch=df.chose, wt=df.wgt)
+	assert d5.data_wt is not None
+	assert d5.data_wt.columns == 'wgt'
+	assert d5.data_ch is not None
+	assert d5.data_ch.shape == (5029, 6)
+	assert d5.data_av is not None
+	assert d5.data_av.shape == (5029, 6)
+	assert d5.data_co.shape == (5029, 31)
+	assert d5.data_ca is None
+	assert d5.data_ce is not None
+	assert d5.data_ce.shape == (22033, 5)
+
+	with raises(ValueError):
+		bad = DataFrames(co=df)
+
+def test_dfs_init_co():
+	from larch.data_warehouse import example_file
+	raw_data = pandas.read_csv(example_file('swissmetro.csv.gz'))
+	keep = raw_data.eval("PURPOSE in (1,3) and CHOICE != 0")
+	selected_data = raw_data[keep]
+
+	d0 = DataFrames(selected_data, alt_codes=[1, 2, 3])
+	assert d0.data_co.shape == (6768, 28)
+	assert d0.data_ca is None
+	assert d0.data_ce is None
+	assert d0.data_ch is None
+	assert d0.data_av is None
+
+	d1 = DataFrames(co=selected_data, alt_codes=[1, 2, 3])
+	assert d1.data_co.shape == (6768, 28)
+	assert d1.data_ca is None
+	assert d1.data_ce is None
+	assert d1.data_ch is None
+	assert d1.data_av is None
+
+	with raises(ValueError):
+		DataFrames(ca=selected_data, alt_codes=[1, 2, 3])
+
+	d2 = DataFrames(co=selected_data, alt_codes=[1, 2, 3], ch='CHOICE')
+	assert d2.data_co.shape == (6768, 28)
+	assert d2.data_ca is None
+	assert d2.data_ce is None
+	assert d2.data_ch is not None
+	assert d2.data_ch.shape == (6768, 3)
+	assert all(d2.data_ch.sum() == [908, 4090, 1770])
+	assert d2.data_av is None
+
+	d2 = DataFrames(co=selected_data, alt_codes=[1, 2, 3], ch=selected_data.CHOICE)
+	assert d2.data_co.shape == (6768, 28)
+	assert d2.data_ca is None
+	assert d2.data_ce is None
+	assert d2.data_ch is not None
+	assert d2.data_ch.shape == (6768, 3)
+	assert all(d2.data_ch.sum() == [908, 4090, 1770])
+	assert d2.data_av is None
+
+	d2 = DataFrames(co=selected_data, alt_codes=[1, 2, 3], ch='CHOICE', wt='GROUP')
+	assert d2.data_co.shape == (6768, 28)
+	assert d2.data_ca is None
+	assert d2.data_ce is None
+	assert d2.data_ch is not None
+	assert d2.data_ch.shape == (6768, 3)
+	assert all(d2.data_ch.sum() == [908, 4090, 1770])
+	assert d2.data_av is None
+	assert d2.data_wt is not None
+	assert d2.data_wt.shape == (6768, 1)
+
+	d2 = DataFrames(co=selected_data, alt_codes=[1, 2, 3], ch='CHOICE', wt=selected_data.GROUP)
+	assert d2.data_co.shape == (6768, 28)
+	assert d2.data_ca is None
+	assert d2.data_ce is None
+	assert d2.data_ch is not None
+	assert d2.data_ch.shape == (6768, 3)
+	assert all(d2.data_ch.sum() == [908, 4090, 1770])
+	assert d2.data_av is None
+	assert d2.data_wt is not None
+	assert d2.data_wt.shape == (6768, 1)

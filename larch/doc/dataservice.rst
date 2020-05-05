@@ -4,6 +4,21 @@
 DataService
 =======================
 
+Larch has two closely related interfaces to manage data: :class:`DataFrames` and
+:class:`DataService`.  The former is a set of related data tables, while the
+latter is an interface that generates instances of the former.  You can think
+of a :class:`DataService` as a place to get data, and :class:`DataFrames` as the
+data you get.
+
+In fact, :class:`DataFrames` is itself a subclass of :class:`DataService`,
+allowing you to pull subsets of the data you have stored, so you can use
+:class:`DataFrames` in both places.
+
+A Larch Model object will generally have a :class:`DataService` attached
+by the user, and then it will use that :class:`DataService` to automatically
+generate, format, and pre-process the particular :class:`DataFrames` it needs
+for analysis.
+
 
 .. py:class:: DataService
 

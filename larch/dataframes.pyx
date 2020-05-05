@@ -52,7 +52,7 @@ def _ensure_dataframe_of_dtype(df, dtype, label, warn_on_convert=True):
 	if df is None:
 		return df
 	if not isinstance(df, pandas.DataFrame):
-		raise TypeError(f'{label} must be a DataFrame')
+		raise TypeError(f'{label} must be a DataFrame, not a {type(df)}')
 	if not all(df.dtypes == dtype):
 		if warn_on_convert:
 			logger.warning(f'converting {label} to {dtype}')
@@ -329,43 +329,45 @@ cdef class DataFrames:
 	Parameters
 	----------
 	co : pandas.DataFrame
-		A dataframe containing idco format data, with one row per case.
+		A dataframe containing |idco| format data, with one row per case.
 		The index contains the caseid's.
 	ca : pandas.DataFrame
-		A dataframe containing idca format data, with one row per alternative,
-		regardless if that alternative is available or not.  This means the
-		total number of rows in this dataframe must be exactly the number of
-		cases times the number of possible alterntives.  The index should be
-		a two-level multi-index, with the first level containing the caseid's
-		and the second level containing the altid's. This structure may not
-		be efficient from a memory-usage standpoint, but it can be more efficient
-		from a computational speed standpoint, especially if the alternative
-		availability is relatively dense (i.e. most cases have most alternatives).
-		The `ce` array can be used for more memory efficient storage, but only
-		one of `ca` and `ce` should be used at one time.
-	ce : pandas.DataFrame
-		A dataframe containing idca format data, with one row per available
-		alternative.  Unavailable alternatives are omitted.  Otherwise, this
-		dataframe should be formatted the same as `ca` data (see above).
-	av : pandas.DataFrame or True
-		A dataframe containing alternative availability data, with one row
-		per case and one column per alternative.
-		The index contains the caseid's, and the columns contain the alt_codes.
-		If set to `True`, all alternatives are set to be available for all
-		cases.
-	ch : pandas.DataFrame
-		A dataframe containing choice data, with one row per case and one column
-		per alternative.
-		The index contains the caseid's, and the columns contain the alt_codes.
-	wt : pandas.DataFrame or pandas.Series, optional
-		A one-column dataframe, or series, containing idco format data, with one
-		row per case, containing the case-weights.
+		A dataframe containing |idca| format data, with one row per alternative.
+		The index should be a two-level multi-index, with the first level
+		containing the caseid's and the second level containing the altid's.
+	av : pandas.DataFrame or pandas.Series or True, optional
+		Alternative availability data.  This can be given as a pandas.DataFrame
+		in |idco| format, with one row per case and one column per alternative,
+		where the index contains the caseid's, and the columns contain the altid's.
+		Or, it can be given as a pandas.Series in |idca| format, with one row
+		per alternative, and an index that is a two-level multi-index, with the
+		first level containing the caseid's and the second level containing the
+		altid's. Or, set to `True` to make all alternatives available for all
+		cases.  If not given, then `data_av` will not be defined unless it can
+		be inferred from missing rows in `ca`.
+	ch : pandas.DataFrame or pandas.Series or str, optional
+		Choice data. This can be given as a pandas.DataFrame
+		in |idco| format, with one row per case and one column per alternative,
+		where the index contains the caseid's, and the columns contain the altid's.
+		Or, it can be given as a pandas.Series in |idca| format, with one row
+		per alternative, and an index that is a two-level multi-index, with the
+		first level containing the caseid's and the second level containing the
+		altid's. Or, if given as a str, then that named column is found in the `ca`
+		dataframe if it appears there and used as the choice.  Otherwise, if
+		the named column is found in the `co` dataframe, then the codes in that column
+		are used to identify the choices.  If not given, `data_ch` is not set.
+	wt : pandas.DataFrame or pandas.Series or str, optional
+		Case weights. This can only be given in |idco| format, either as a
+		pandas.DataFrame with a single column, or as a pandas.Series. Or, if given
+		as a str, then that named column is found in the `co` or `ca`
+		dataframe if it appears there and used as the weight. If not given,
+		`data_wt` is not set.
 	alt_names : Sequence[str]
 		A sequence of alternative names as str.
 	alt_codes : Sequence[int]
 		A sequence of alternative codes.
 	crack : bool, default False
-		Whether to pre-process `ca` or `ce` data, to identify variables that do
+		Whether to pre-process `ca` data to identify variables that do
 		not vary within cases, and move them to a new `co` dataframe.  This can
 		result in more computationally efficient model estimation, but the cracking
 		process can be slow for large data sets.
@@ -374,16 +376,12 @@ cdef class DataFrames:
 		from the `av` argument if possible.
 	ch_name : str, optional
 		A name to use for the choice variable.  If not given, it is inferred from
-		the `ch` argument if possible.  If the `ch` argument is not given but a
-		name is specified, then that named column is found in the `ca` or `ce`
-		arguments if it appears there and used as the choice.  Otherwise, if
-		the named column is found in the `co` argument then the codes in that column
-		are used to identify the choices.
+		the `ch` argument if possible.
 	wt_name : str, optional
 		A name to use for the weight variable.  If not given, it is inferred from
-		the `wt` argument if possible.  If the `wt` argument is not given but a
-		name is specified, then that named column is found in the `co`, `ca`, or `ce`
-		arguments and used as the weight.
+		the `wt` argument if possible.
+	autoscale_weights : bool, default False
+		Call autoscale_weights on the DataFrames after initialization.
 	"""
 
 	def __init__(
@@ -421,6 +419,8 @@ cdef class DataFrames:
 
 			caseindex_name = '_caseid_',
 			altindex_name = '_altid_',
+
+			autoscale_weights=False,
 	):
 
 		try:
@@ -441,6 +441,27 @@ cdef class DataFrames:
 			self._caseindex_name = caseindex_name
 			self._altindex_name = altindex_name
 
+			if co is not None:
+				# If co is given, ensure that it has a one level (single)index,
+				# and that index is converted to integer data type.
+				if co.index.nlevels!=1:
+					raise ValueError('co must have one level index')
+				try:
+					co.index = co.index.astype(int)
+				except Exception as err:
+					raise ValueError('co index must have integer values') from err
+
+			if ce is not None:
+				# If ce is given, ensure that it has a two level multi-index,
+				# and both levels are converted to integer data types.
+				if not isinstance(ce.index, pandas.MultiIndex) or ce.index.nlevels!=2:
+					raise ValueError('ce must have two level multi-index')
+				try:
+					ce.index.set_levels(ce.index.levels[0].astype(int), 0, inplace=True)
+					ce.index.set_levels(ce.index.levels[1].astype(int), 1, inplace=True)
+				except Exception as err:
+					raise ValueError('ce multi-index must have integer values') from err
+
 			if ca is not None:
 				# If ca is given, ensure that it has a two level multi-index,
 				# and both levels are converted to integer data types.
@@ -451,6 +472,14 @@ cdef class DataFrames:
 					ca.index.set_levels(ca.index.levels[1].astype(int), 1, inplace=True)
 				except Exception as err:
 					raise ValueError('ca multi-index must have integer values') from err
+
+			# reassign ca and ce as needed
+			if ca is None and ce is not None:
+				if get_dataframe_format(ce) == 'idca':
+					ca, ce = ce, None
+			elif ca is not None and ce is None:
+				if get_dataframe_format(ca) == 'idce':
+					ca, ce = None, ca
 
 			if len(args) > 1:
 				raise ValueError('DataFrames accepts at most one positional argument')
@@ -470,6 +499,11 @@ cdef class DataFrames:
 					co = args[0]
 
 			self._computational = computational
+
+			if isinstance(ch, str) and ch_name is None:
+				ch, ch_name = None, ch
+			if isinstance(wt, str) and wt_name is None:
+				wt, wt_name = None, wt
 
 			# Infer names from input data is possible
 			if av_name is None:
@@ -540,6 +574,8 @@ cdef class DataFrames:
 
 			if ch is None and ch_name is not None and co is not None and ch_name in co.columns:
 				choicecodes = columnize(co, [ch_name], inplace=False, dtype=int)
+				if self.alternative_codes() is None:
+					self._ensure_consistent_alternative_codes(numpy.unique(choicecodes))
 				_ch_temp = pandas.DataFrame(
 					0,
 					columns=self.alternative_codes(),
@@ -570,7 +606,7 @@ cdef class DataFrames:
 					)
 				else:
 					logger.debug(" DataFrames ~ unstack ch (slow)")
-					ch = ch.unstack()
+					ch = ch.unstack().fillna(0)
 
 			if ch is not None:
 				self._ensure_consistent_alternative_codes(ch.columns)
@@ -579,7 +615,10 @@ cdef class DataFrames:
 
 			logger.debug(" DataFrames ~ assign aux data")
 			self.data_ch = ch
-			self.data_wt = wt
+			try:
+				self.data_wt = wt
+			except ValueError:
+				self.data_wt = force_crack_idca(wt)
 			if av is None and self.data_ce is not None:
 				logger.debug(" DataFrames ~ build av from ce")
 				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
@@ -614,6 +653,9 @@ cdef class DataFrames:
 
 			self._systematic_alternatives = sys_alts
 
+			if autoscale_weights:
+				self.autoscale_weights()
+
 		except:
 			logger.exception('error in constructing DataFrames')
 			raise
@@ -626,16 +668,31 @@ cdef class DataFrames:
 		Parameters
 		----------
 		ce : pandas.DataFrame
-			The data
+			The data to use, in `idce` format, which contains one row
+			for each *available* alternative for each case (also known
+			as "tall" or "idcase-idalt" format data).  This DataFrame
+			must have a two-level MultiIndex, where the first level
+			gives the caseid's and the second level gives the altid's.
 		choice : str, optional
-			The name of the choice column. If not given, data_ch will not be populated.
+			The name of the choice column. If not given, data_ch will
+			not be populated.
 		columns : list, optional
-			Import only these columns.  If not given, will import into data_ce all columns except the choice,
-			which is imported separately.
+			Import only these columns.  If not given, will import into
+			data_ce all columns except the choice, which is imported
+			separately.
 		autoscale_weights : bool, default True
 			Also call autoscale_weights on the result after loading.
 		crack : bool, default False
-			Split `ce` into :ref:`idca` and :ref:`idco` parts.
+			Split `ce` into :ref:`idca` and :ref:`idco` parts, by
+			identifying variables that do not vary within cases, and
+			moving them to a `co` dataframe.  This can result in more
+			computationally efficient model estimation, but the cracking
+			process can be slow for large data sets.
+
+		Raises
+		------
+		TypeError
+			When `ce` does not have a two-level MultiIndex.
 		"""
 		if not isinstance(ce.index, pandas.MultiIndex):
 			raise TypeError(f'input data must have case-alt set as a MultiIndex, not {type(ce.index)}')
@@ -1377,6 +1434,8 @@ cdef class DataFrames:
 
 	@data_wt.setter
 	def data_wt(self, df:pandas.DataFrame):
+		if isinstance(df, pandas.Series):
+			df=pandas.DataFrame(df)
 		self._data_wt = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_wt')
 		self._array_wt = _df_values(self.data_wt, (self.n_cases, ))
 
