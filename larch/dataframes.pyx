@@ -381,7 +381,9 @@ cdef class DataFrames:
 		A name to use for the weight variable.  If not given, it is inferred from
 		the `wt` argument if possible.
 	autoscale_weights : bool, default False
-		Call autoscale_weights on the DataFrames after initialization.
+		Call `autoscale_weights` on the DataFrames after initialization. Note that
+		this will not only scale an explicitly given `wt`, but it will also
+		extract implied weights from the `ch` as well.
 	"""
 
 	def __init__(
@@ -666,7 +668,7 @@ cdef class DataFrames:
 		Create DataFrames from a single `idce` format DataFrame.
 
 		Note: This constructor is deprecated in favor of the plain
-		__init__ consctrutor for DataFrames, which can now automatically
+		__init__ constructor for DataFrames, which can now automatically
 		recognize the difference between `idca` and `idce` data.
 
 		Parameters
