@@ -665,6 +665,10 @@ cdef class DataFrames:
 		"""
 		Create DataFrames from a single `idce` format DataFrame.
 
+		Note: This constructor is deprecated in favor of the plain
+		__init__ consctrutor for DataFrames, which can now automatically
+		recognize the difference between `idca` and `idce` data.
+
 		Parameters
 		----------
 		ce : pandas.DataFrame

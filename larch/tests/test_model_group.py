@@ -8,7 +8,7 @@ def test_simple_model_group():
 
 	df = pd.read_csv(example_file("MTCwork.csv.gz"))
 	df.set_index(['casenum','altnum'], inplace=True)
-	d = larch.DataFrames.from_idce(df, choice='chose', crack=True)
+	d = larch.DataFrames(df, ch='chose', crack=True)
 	d.set_alternative_names({
 		1: 'DA',
 		2: 'SR2',
