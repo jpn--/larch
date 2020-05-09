@@ -75,7 +75,10 @@ def joint_parameter_summary(models, ordering=None, t_stats=True, loglike=True, r
 	)
 
 	for model in models:
-		for param, x in model.parameter_summary('df').iterrows():
+		model_parameter_summary = model.parameter_summary('df')
+		if isinstance(model_parameter_summary, Styler):
+			model_parameter_summary = model_parameter_summary.data
+		for param, x in model_parameter_summary.iterrows():
 			if isinstance(param, tuple):
 				param = param[1]
 			summary.loc[(slice(None), param), (model.title, 'Param')] = x['Value']

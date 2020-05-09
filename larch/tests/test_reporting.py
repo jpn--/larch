@@ -6,7 +6,7 @@ from larch import Model, P, X
 import larch.exampville
 import os
 from pytest import approx
-
+from .stored_dataframes import stable_df
 
 def test_ch_av_summary_output():
 
@@ -222,3 +222,41 @@ def test_parameter_summary():
 		'.009686</td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">totcost</th><td>-0.00492</'
 		'td><td>0.0</td></tr><tr><th style="vertical-align: top; text-align: left;">tottime</th><td>-0.05134</td><td>0.'
 		'0</td></tr></tbody></table></div>')
+
+
+def test_joint_parameter_summary():
+	m = larch.example(1)
+	m.load_data()
+	m.loglike_null()
+	m.set_values(**{
+		'ASC_BIKE': -2.3763275319243244,
+		'ASC_SR2': -2.1780143286612037,
+		'ASC_SR3P': -3.725078388760564,
+		'ASC_TRAN': -0.6708609582690096,
+		'ASC_WALK': -0.20677521181801753,
+		'hhinc#2': -0.0021699381002406883,
+		'hhinc#3': 0.0003577067151217295,
+		'hhinc#4': -0.00528632366072714,
+		'hhinc#5': -0.012807975284603574,
+		'hhinc#6': -0.009686302933787567,
+		'totcost': -0.00492023540098787,
+		'tottime': -0.05134209452571549,
+	})
+	m.loglike()
+	m.maximize_loglike()
+
+	m_c = larch.Model(dataservice=m.dataservice)
+	m_c.choice_ca_var = '_choice_'
+	m_c.availability_var = '_avail_'
+	m_c.utility_co[2] = P("ASC_SR2")
+	m_c.utility_co[3] = P("ASC_SR3P")
+	m_c.utility_co[4] = P("ASC_TRAN")
+	m_c.utility_co[5] = P("ASC_BIKE")
+	m_c.utility_co[6] = P("ASC_WALK")
+	m_c.title = "Constants Only"
+	m_c.load_data()
+	m_c.loglike_null()
+	m_c.maximize_loglike()
+
+	from larch.util.summary import joint_parameter_summary
+	stable_df(joint_parameter_summary([m, m_c], bases=[m_c]), 'joint_parameter_summary')
