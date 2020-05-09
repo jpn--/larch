@@ -1,6 +1,6 @@
 
 import pandas
-
+from pandas.io.formats.style import Styler
 
 def joint_parameter_names(*models):
 	"""Build a set of parameter names across multiple models."""
