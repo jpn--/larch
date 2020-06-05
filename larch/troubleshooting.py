@@ -20,6 +20,9 @@ def doctor(
 ):
 	problems = dictx()
 
+	if isinstance(dfs, Model) and dfs.dataframes is None:
+		raise ValueError('no dataframes loaded, try `.load_data()` first')
+
 	logger.info("checking for chosen-but-zero-quantity")
 	dfs, diagnosis = chosen_but_zero_quantity(dfs, repair=repair_ch_zq, verbose=verbose)
 	if diagnosis is not None:

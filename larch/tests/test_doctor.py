@@ -1,6 +1,6 @@
 import larch, pytest
 from larch import P,X,PX
-from pytest import approx
+from pytest import approx, raises
 import numpy
 import pandas
 
@@ -24,4 +24,9 @@ def test_nan_weight():
 	assert type(m) is larch.Model
 	assert 'nan_weight' not in diagnosis
 	assert len(diagnosis) == 0
+
+def test_doctor_before_load_data():
+
+	with raises(ValueError):
+		larch.Model().doctor()
 
