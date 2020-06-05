@@ -35,7 +35,8 @@
 
 import numpy as np
 import pandas as pd
-from pandas.io.formats.style import Optional, _maybe_numeric_slice, _non_reducing_slice, _mpl, Styler
+from pandas.io.formats.style import _maybe_numeric_slice, _non_reducing_slice, _mpl, Styler
+from typing import Optional
 
 class OverspecView(Styler):
 
