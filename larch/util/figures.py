@@ -469,12 +469,16 @@ def distribution_on_idco_variable(
 	h_pr = pandas.DataFrame(h_pr)
 	h_pr.index = pandas.IntervalIndex.from_breaks(bins) # bins[:-1]
 	h_pr.rename(columns=columns, inplace=True)
-	h_pr_share = (h_pr / h_pr.values.sum(1).reshape(-1, 1))
-
+	_denominator, _ = numpy.histogram(
+		x,
+		weights=numpy.ones_like(pr.iloc[:, -1]) * wt,
+		bins=bins,
+	)
+	h_pr_share = (h_pr / _denominator.reshape(-1, 1))
 	h_ch = pandas.DataFrame(h_ch)
 	h_ch.index = h_pr.index
 	h_ch.rename(columns=columns, inplace=True)
-	h_ch_share = (h_ch / h_ch.values.sum(1).reshape(-1, 1))
+	h_ch_share = (h_ch / _denominator.reshape(-1, 1))
 
 	if discrete:
 		x_placement = numpy.arange(len(bins)-1)
