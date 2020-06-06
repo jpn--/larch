@@ -8,12 +8,12 @@
     :target: https://anaconda.org/conda-forge/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/badge/source-github-yellow.svg
-    :target: https://github.com/jpn--/larch
+.. image:: https://img.shields.io/conda/dn/conda-forge/larch
+    :target: https://anaconda.org/conda-forge/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/pypi/l/larch.svg
-    :target: https://github.com/jpn--/larch/blob/master/LICENSE
+.. image:: https://img.shields.io/badge/source-github-yellow.svg
+    :target: https://github.com/jpn--/larch
     :class: statusbadge
 
 .. image:: https://img.shields.io/appveyor/ci/jpn--/larch.svg?label=windows%20build
@@ -54,7 +54,8 @@ You may also find these links useful:
 For learning Python itself:
 
 * If you are new to Python but have some experience with some other programming language,
-  I recommend `Dive Into Python <https://www.diveinto.org/python3/>`__.
+  there is an online quick introduction `Python for Transportation Modeling <https://pytransport.github.io/>`__,
+  available free online, sponsored by the Florida Department of Transportation.
 * If you are new to programming in general, there are better (slower) guides at
   `Learning Python <http://docs.python-guide.org/en/latest/intro/learning/>`__
 

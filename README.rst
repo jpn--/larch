@@ -1,8 +1,12 @@
 larch
 =====
 
-.. image:: https://img.shields.io/conda/v/jpn/larch.svg
-    :target: https://anaconda.org/jpn/larch
+.. image:: https://img.shields.io/conda/v/conda-forge/larch
+    :target: https://anaconda.org/conda-forge/larch
+    :class: statusbadge
+
+.. image:: https://img.shields.io/conda/dn/conda-forge/larch
+    :target: https://anaconda.org/conda-forge/larch
     :class: statusbadge
 
 .. image:: https://img.shields.io/badge/source-github-yellow.svg
