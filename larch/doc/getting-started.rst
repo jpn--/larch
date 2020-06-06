@@ -17,19 +17,6 @@ like this:
 
     conda create -n arboretum -c conda-forge larch
 
-Alternatively, if you would prefer to run in a container, which is potentially
-a more stable and portable "go anywhere" solution across various machines,
-you can install `Docker <https://www.docker.com/>`_ and run the following
-command:
-
-.. code-block:: console
-
-    docker run -it -p 8857:8857 -v "%cd%":/home/paladin/work wirepaladin/sanfrancisco
-
-This will install a container containing the entire conda package and everything
-needed to run Larch, including JupyterLab.  Once the container is downloaded and
-running, point your browser at `http://localhost:8857 <http://localhost:8857>`_
-to access JupyterLab.
 
 .. _installation:
 
