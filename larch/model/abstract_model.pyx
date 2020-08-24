@@ -998,16 +998,26 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 
 	def loglike_constants_only(self):
-		raise NotImplementedError
-		# try:
-		# 	return self._cached_loglike_constants_only
-		# except AttributeError:
-		# 	mm = self.constants_only_model()
-		# 	from ..warning import ignore_warnings
-		# 	with ignore_warnings():
-		# 		result = mm.maximize_loglike(quiet=True, final_screen_update=False, check_for_overspecification=False)
-		# 	self._cached_loglike_constants_only = result.loglike
-		# 	return self._cached_loglike_constants_only
+		try:
+			if self._cached_loglike_constants_only == 0:
+				raise AttributeError
+			return self._cached_loglike_constants_only
+		except AttributeError:
+			from . import Model
+			constants_only_model = Model(dataservice=self.dataframes)
+			altcodes = constants_only_model.dataservice.alternative_codes()
+			from ..roles import P
+			for j in altcodes[1:]:
+				constants_only_model.utility_co[j] = P(str(j))
+			from ..warning import ignore_warnings
+			with ignore_warnings():
+				constants_only_model.load_data()
+				result = constants_only_model.maximize_loglike(
+					quiet=True, final_screen_update=False,
+					check_for_overspecification=False,
+				)
+			self._cached_loglike_constants_only = result.loglike
+			return self._cached_loglike_constants_only
 
 	def estimation_statistics(self, compute_loglike_null=True):
 		"""
