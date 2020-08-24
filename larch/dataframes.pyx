@@ -1284,6 +1284,19 @@ cdef class DataFrames:
 				self._array_ce_reversemap[c, a] = i
 			#self._array_ce_reversemap[self._array_ce_caseindexes, self._array_ce_altindexes] = numpy.arange(len(self._array_ce_caseindexes), dtype=numpy.int64)
 
+	def data_ce_as_ca(self):
+		"""
+		Reformat any idce data into idca format.
+
+		This function expands the idce data into an idca format DataFrame by adding all-zero value
+		rows for all unavailable alternatives.
+
+		Returns
+		-------
+		pandas.DataFrame
+		"""
+		return self.data_ce.unstack().fillna(0).stack()
+
 	@property
 	def data_av(self):
 		return self._data_av
