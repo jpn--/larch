@@ -17,8 +17,6 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   # Useful for debugging any issues with conda
-#  - conda config --append channels conda-forge
-#  - conda config --append channels jpn
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
@@ -29,7 +27,7 @@ script:
   - mkdir ~/conda-bld
   - conda config --set anaconda_upload no
   - export CONDA_BLD_PATH=~/conda-bld
-  - travis_wait conda build conda-recipe
+  - travis_wait conda build conda-recipe -c conda-forge
 
 after_success:
   - bash conda-recipe/conda_upload.sh
