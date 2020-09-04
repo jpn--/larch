@@ -36,7 +36,7 @@ def test_max_ratio_1():
 	)
 
 	assert r1['loglike'] == approx(-3764.1459333329217, rel=1e-4)
-	assert r1.message == 'Optimization terminated successfully.'
+	assert 'Optimization terminated successfully' in r1.message
 	assert m1['tottime'].value / m1['totcost'].value == approx(1.0, rel=1e-3)
 	assert c1.fun(m1.pf.value) == approx(0, abs=1e-5)
 
@@ -76,7 +76,7 @@ def test_max_ratio_2():
 
 	assert r1['loglike'] == approx(-3730.8942681224476)
 
-	assert r1.message == 'Optimization terminated successfully.'
+	assert 'Optimization terminated successfully' in r1.message
 	assert c1.fun(m1.pf.value) == approx(0, abs=1e-5)
 
 	# m0.calculate_parameter_covariance()
@@ -111,7 +111,7 @@ def test_constraint_ordering_1():
 	)
 
 	assert m1['hhinc#2'].value / m1['hhinc#3'].value == approx(1.0, rel=1e-3)
-	assert r1.message == 'Optimization terminated successfully.'
+	assert 'Optimization terminated successfully' in r1.message
 	assert c3.fun(m1.pf.value) == approx(0, abs=1e-5)
 
 	# m0.calculate_parameter_covariance()
@@ -134,7 +134,7 @@ def test_lower_bound():
 	# 	options={'ftol': 1e-09},
 	# 	quiet=True,
 	# )
-	# assert r1.message == 'Optimization terminated successfully.'
+	# assert 'Optimization terminated successfully' in r1.message
 	m1.set_values({'ASC_BIKE': -2.1362348000501323,
 				   'ASC_SR2': -2.041879053530548,
 				   'ASC_SR3P': -3.568789444368573,
@@ -221,7 +221,7 @@ def test_upper_bound():
 		quiet=True,
 	)
 
-	assert r1.message == 'Optimization terminated successfully.'
+	assert 'Optimization terminated successfully' in r1.message
 
 	#m0.calculate_parameter_covariance()
 	m1.calculate_parameter_covariance()
@@ -320,7 +320,7 @@ def test_multi_constraints():
 
 	assert r1.loglike == approx(-3725.439832484451)
 
-	assert r1.message == 'Optimization terminated successfully.'
+	assert 'Optimization terminated successfully' in r1.message
 
 	#m0.calculate_parameter_covariance()
 
