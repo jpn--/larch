@@ -32,17 +32,39 @@ def sync_frames(*models):
 			m.set_frame(joined)
 
 class LatentClassModel(AbstractChoiceModel):
+	"""
+	A latent class model.
+
+	Parameters
+	----------
+	k_membership : Model
+		The class membership model.
+	k_models : MutableMapping[int,Model]
+		The individual class choice models.
+	dataservice : DataService
+		The dataservice used to populate data for this model.
+	title : str, optional
+		A descriptive title for use in reporting.
+	frame : pandas.DataFrame, optional
+		Initialize the parameterframe with this.
+	"""
 
 	def __init__(
 			self,
 			k_membership,
-			k_models:MutableMapping,
+			k_models,
 			*,
 			dataservice=None,
 			title=None,
 			frame=None,
+			constraints=None,
 	):
+		assert isinstance(k_membership, AbstractChoiceModel)
+		if len(getattr(k_membership, 'utility_ca', [])):
+			raise ValueError("the class membership model cannot include `utility_ca`, only `utility_co`")
+
 		self._k_membership = k_membership
+		self._k_membership._model_does_not_require_choice = True
 		if not isinstance(k_models, MutableMapping):
 			raise ValueError(f'k_models must be a MutableMapping, not {type(k_models)}')
 		self._k_models = k_models
@@ -56,12 +78,13 @@ class LatentClassModel(AbstractChoiceModel):
 					break
 		self._dataframes = None
 		self._mangled = True
-
+		self.constraints = constraints
 		super().__init__(
 			parameters=None,
 			frame=frame,
 			title=title,
 		)
+		self.unmangle()
 
 	def _k_model_names(self):
 		return list(sorted(self._k_models.keys()))
@@ -89,6 +112,18 @@ class LatentClassModel(AbstractChoiceModel):
 		if 'co' in top_req:
 			req['co'] = list(sorted(set(req.get('co', [])) | set(top_req.get('co', []))))
 		return req
+
+	def total_weight(self):
+		"""
+		The total weight of cases in the attached dataframes.
+
+		Returns
+		-------
+		float
+		"""
+		if self._dataframes is None:
+			raise MissingDataError("no dataframes are set")
+		return self._dataframes.total_weight()
 
 	def __prep_for_compute(self, x=None):
 		self.unmangle()
@@ -489,6 +524,13 @@ class LatentClassModel(AbstractChoiceModel):
 	@dataframes.setter
 	def dataframes(self, x):
 		self._dataframes = x
+
+		if self._dataframes.data_co is None and self._dataframes.data_ce is not None:
+			self._dataframes.data_co = pandas.DataFrame(data=None, index=self._dataframes.data_ce.index.levels[0].copy())
+
+		if self._dataframes.data_co is None and self._dataframes.data_ca is not None:
+			self._dataframes.data_co = pandas.DataFrame(data=None, index=self._dataframes.data_ca.index.levels[0].copy())
+
 		top_data = DataFrames(
 			co = x.make_idco(*self._k_membership.required_data().get('co', [])),
 			alt_codes=numpy.arange(1, len(self._k_models)+1),
@@ -499,7 +541,8 @@ class LatentClassModel(AbstractChoiceModel):
 		# TODO: This kludge creates an empty array for the data_ch in the class membership model
 		#     : but it is not needed except to satisfy a data integrity check on that model
 		#     : We should instead just allow no-choice when it is a class membership model.
-		top_data.data_ch = pandas.DataFrame(0, index=top_data.caseindex, columns=self._k_models.keys())
+		# top_data.data_ch = pandas.DataFrame(0, index=top_data.caseindex, columns=self._k_models.keys())
+		self._k_membership._model_does_not_require_choice = True
 
 		self._k_membership.dataframes = top_data
 		for k_name, k_model in self._k_models.items():

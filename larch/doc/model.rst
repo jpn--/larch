@@ -1,7 +1,7 @@
 .. currentmodule:: larch
 
 =======================
-Model
+Models
 =======================
 
 A :class:`Model` is the core object used to represent a discrete choice model.

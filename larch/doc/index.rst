@@ -70,6 +70,7 @@ Contents
     getting-started
     data
     model
+    latentclass
     math
     machine-learning/index
     example/examples

@@ -485,7 +485,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 	if not dfs._is_computational_ready(activate=True):
 		raise ValueError('DataFrames is not computational-ready')
 
-	if dfs._data_ch is None and not probability_only:
+	if dfs._data_ch is None and not probability_only and not model._does_not_require_choice:
 		raise ValueError('DataFrames does not define data_ch')
 
 	if dfs._data_av is None:
@@ -526,7 +526,7 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 
 		array_ch_wide = numpy.zeros([num_threads, tree.n_nodes], dtype=l4_float_dtype)
 		choice_width = dfs._array_ch.shape[1]
-		if not (choice_width == n_alts or choice_width == tree.n_nodes) and not probability_only:
+		if not (choice_width == n_alts or choice_width == tree.n_nodes) and not probability_only and not model._does_not_require_choice:
 			raise ValueError("choice_width ({}) must be n_alts ({}) or n_nodes ({})".format(choice_width, n_alts, tree.n_nodes))
 
 		LL_case =  numpy.zeros([storage_size_LLc, ], dtype=l4_float_dtype)
