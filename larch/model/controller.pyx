@@ -46,6 +46,7 @@ cdef class Model5c(AbstractChoiceModel):
 			title=None,
 	):
 		self._dataframes = None
+		self._does_not_require_choice = False
 
 		if is_clone:
 			self._is_clone = True
@@ -162,6 +163,13 @@ cdef class Model5c(AbstractChoiceModel):
 		# if self._graph is not None:
 		# 	self.graph.set_touch_callback(self.mangle)
 
+	@property
+	def _model_does_not_require_choice(self):
+		return self._does_not_require_choice
+
+	@_model_does_not_require_choice.setter
+	def _model_does_not_require_choice(self, value):
+		self._does_not_require_choice = bool(value)
 
 	@property
 	def n_threads(self):
@@ -726,7 +734,7 @@ cdef class Model5c(AbstractChoiceModel):
 		self.unmangle()
 		self._dataframes._read_in_model_parameters()
 		if self._dataframes._data_ch is None:
-			if allow_missing_ch:
+			if allow_missing_ch or self._does_not_require_choice:
 				missing_ch = True
 			else:
 				raise MissingDataError('model.dataframes does not define data_ch')

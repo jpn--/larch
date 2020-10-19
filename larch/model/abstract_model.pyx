@@ -998,16 +998,26 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 
 	def loglike_constants_only(self):
-		raise NotImplementedError
-		# try:
-		# 	return self._cached_loglike_constants_only
-		# except AttributeError:
-		# 	mm = self.constants_only_model()
-		# 	from ..warning import ignore_warnings
-		# 	with ignore_warnings():
-		# 		result = mm.maximize_loglike(quiet=True, final_screen_update=False, check_for_overspecification=False)
-		# 	self._cached_loglike_constants_only = result.loglike
-		# 	return self._cached_loglike_constants_only
+		try:
+			if self._cached_loglike_constants_only == 0:
+				raise AttributeError
+			return self._cached_loglike_constants_only
+		except AttributeError:
+			from . import Model
+			constants_only_model = Model(dataservice=self.dataframes)
+			altcodes = constants_only_model.dataservice.alternative_codes()
+			from ..roles import P
+			for j in altcodes[1:]:
+				constants_only_model.utility_co[j] = P(str(j))
+			from ..warning import ignore_warnings
+			with ignore_warnings():
+				constants_only_model.load_data()
+				result = constants_only_model.maximize_loglike(
+					quiet=True, final_screen_update=False,
+					check_for_overspecification=False,
+				)
+			self._cached_loglike_constants_only = result.loglike
+			return self._cached_loglike_constants_only
 
 	def estimation_statistics(self, compute_loglike_null=True):
 		"""
@@ -1346,119 +1356,126 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		like_ratio : bool, default True
 			For parameters where the
 		"""
-		hess = -self.d2_loglike()
-
-		from ..model.possible_overspec import compute_possible_overspecification, PossibleOverspecification
-		overspec = compute_possible_overspecification(hess, self.pf.loc[:,'holdfast'])
-		if overspec:
-			import warnings
-			warnings.warn("WARNING: Model is possibly over-specified (hessian is nearly singular).", category=PossibleOverspecification)
-			possible_overspecification = []
-			for eigval, ox, eigenvec in overspec:
-				if eigval == 'LinAlgError':
-					possible_overspecification.append((eigval, [ox, ], ["", ]))
-				else:
-					paramset = list(numpy.asarray(self.pf.index)[ox])
-					possible_overspecification.append((eigval, paramset, eigenvec[ox]))
-			self._possible_overspecification = possible_overspecification
-
-		take = numpy.full_like(hess, True, dtype=bool)
-		dense_s = len(self.pvals)
-		for i in range(dense_s):
-			ii = self.pnames[i]
-			if self.pf.loc[ii, 'holdfast']:
-				# or (self.pf.loc[ii, 'value'] >= self.pf.loc[ii, 'maximum'])
-				# or (self.pf.loc[ii, 'value'] <= self.pf.loc[ii, 'minimum']):
-				take[i, :] = False
-				take[:, i] = False
-				dense_s -= 1
-		if dense_s > 0:
-			hess_taken = hess[take].reshape(dense_s, dense_s)
-			from ..linalg import general_inverse
-			try:
-				invhess = general_inverse(hess_taken)
-			except numpy.linalg.linalg.LinAlgError:
-				invhess = numpy.full_like(hess_taken, numpy.nan, dtype=numpy.float64)
-			covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-			covariance_matrix[take] = invhess.reshape(-1)
-			# robust...
-			try:
-				bhhh_taken = self.bhhh()[take].reshape(dense_s, dense_s)
-			except NotImplementedError:
-				robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-			else:
-				# import scipy.linalg.blas
-				# temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
-				# robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
-				robusto = numpy.dot(numpy.dot(invhess, bhhh_taken), invhess)
-				robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-				robust_covariance_matrix[take] = robusto.reshape(-1)
-		else:
-			covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-			robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-		self.pf['std_err'] = numpy.sqrt(covariance_matrix.diagonal())
-		self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
-		self.pf['robust_std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
-		self.pf['robust_t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust_std_err']
-
-		if preserve_hessian:
-			self._matrixes['hessian_matrix'] = hess
-
-		self._matrixes['covariance_matrix'] = covariance_matrix
-		self._matrixes['robust_covariance_matrix'] = robust_covariance_matrix
-
-		# constrained covariance
-		constraints = list(self.constraints)
 		try:
-			constraints.extend(self._get_bounds_constraints())
-		except:
-			pass
+			hess = -self.d2_loglike()
 
-		if constraints:
+			from ..model.possible_overspec import compute_possible_overspecification, PossibleOverspecification
+			overspec = compute_possible_overspecification(hess, self.pf.loc[:,'holdfast'])
+			if overspec:
+				import warnings
+				warnings.warn("WARNING: Model is possibly over-specified (hessian is nearly singular).", category=PossibleOverspecification)
+				possible_overspecification = []
+				for eigval, ox, eigenvec in overspec:
+					if eigval == 'LinAlgError':
+						possible_overspecification.append((eigval, [ox, ], ["", ]))
+					else:
+						paramset = list(numpy.asarray(self.pf.index)[ox])
+						possible_overspecification.append((eigval, paramset, eigenvec[ox]))
+				self._possible_overspecification = possible_overspecification
 
-			binding_constraints = list()
-
-			self.pf['unconstrained_std_err'] = self.pf['std_err'].copy()
-			self.pf['unconstrained_t_stat'] = self.pf['t_stat'].copy()
-
-			self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
-			s = self.covariance_matrix.values
-			for c in constraints:
-				if numpy.absolute(c.fun(self.pf.value)) < c.binding_tol:
-					binding_constraints.append(c)
-					b = c.jac(self.pf.value)
-					den = b@s@b
-					if den != 0:
-						s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
-			self._matrixes['covariance_matrix'] = s
-			self.pf['std_err'] = numpy.sqrt(s.diagonal())
+			take = numpy.full_like(hess, True, dtype=bool)
+			dense_s = len(self.pvals)
+			for i in range(dense_s):
+				ii = self.pnames[i]
+				if self.pf.loc[ii, 'holdfast']:
+					# or (self.pf.loc[ii, 'value'] >= self.pf.loc[ii, 'maximum'])
+					# or (self.pf.loc[ii, 'value'] <= self.pf.loc[ii, 'minimum']):
+					take[i, :] = False
+					take[:, i] = False
+					dense_s -= 1
+			if dense_s > 0:
+				hess_taken = hess[take].reshape(dense_s, dense_s)
+				from ..linalg import general_inverse
+				try:
+					invhess = general_inverse(hess_taken)
+				except numpy.linalg.linalg.LinAlgError:
+					invhess = numpy.full_like(hess_taken, numpy.nan, dtype=numpy.float64)
+				covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+				covariance_matrix[take] = invhess.reshape(-1)
+				# robust...
+				try:
+					bhhh_taken = self.bhhh()[take].reshape(dense_s, dense_s)
+				except NotImplementedError:
+					robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+				else:
+					# import scipy.linalg.blas
+					# temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
+					# robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
+					robusto = numpy.dot(numpy.dot(invhess, bhhh_taken), invhess)
+					robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+					robust_covariance_matrix[take] = robusto.reshape(-1)
+			else:
+				covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+				robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+			self.pf['std_err'] = numpy.sqrt(covariance_matrix.diagonal())
 			self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+			self.pf['robust_std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
+			self.pf['robust_t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust_std_err']
 
-			# Fix numerical issues on some constraints, add constrained notes
-			if binding_constraints or any(self.pf['holdfast']!=0):
-				notes = {}
-				for c in binding_constraints:
-					pa = c.get_parameters()
-					for p in pa:
-						if self.pf.loc[p,'t_stat'] > 1e5:
-							self.pf.loc[p,'t_stat'] = numpy.inf
-							self.pf.loc[p,'std_err'] = numpy.nan
-						if self.pf.loc[p,'t_stat'] < -1e5:
-							self.pf.loc[p,'t_stat'] = -numpy.inf
-							self.pf.loc[p,'std_err'] = numpy.nan
-						n = notes.get(p,[])
-						n.append(c.get_binding_note(self.pvals))
-						notes[p] = n
-				self.pf['constrained'] = pandas.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
-				self.pf['constrained'].fillna('', inplace=True)
-				self.pf.loc[self.pf['holdfast']!=0, 'constrained'] = 'fixed value'
-				self.pf.loc[self.pf['holdfast']!=0, 'std_err'] = numpy.nan
-				self.pf.loc[self.pf['holdfast']!=0, 't_stat'] = numpy.nan
+			if preserve_hessian:
+				self._matrixes['hessian_matrix'] = hess
 
-		if like_ratio:
-			non_finite_t = ~numpy.isfinite(self.pf.t_stat)
-			if numpy.any(non_finite_t):
-				self.likelihood_ratio(self.pf.index[non_finite_t])
+			self._matrixes['covariance_matrix'] = covariance_matrix
+			self._matrixes['robust_covariance_matrix'] = robust_covariance_matrix
+
+			# constrained covariance
+			if self.constraints:
+				constraints = list(self.constraints)
+			else:
+				constraints = []
+			try:
+				constraints.extend(self._get_bounds_constraints())
+			except:
+				pass
+
+			if constraints:
+
+				binding_constraints = list()
+
+				self.pf['unconstrained_std_err'] = self.pf['std_err'].copy()
+				self.pf['unconstrained_t_stat'] = self.pf['t_stat'].copy()
+
+				self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
+				s = self.covariance_matrix.values
+				for c in constraints:
+					if numpy.absolute(c.fun(self.pf.value)) < c.binding_tol:
+						binding_constraints.append(c)
+						b = c.jac(self.pf.value)
+						den = b@s@b
+						if den != 0:
+							s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
+				self._matrixes['covariance_matrix'] = s
+				self.pf['std_err'] = numpy.sqrt(s.diagonal())
+				self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+
+				# Fix numerical issues on some constraints, add constrained notes
+				if binding_constraints or any(self.pf['holdfast']!=0):
+					notes = {}
+					for c in binding_constraints:
+						pa = c.get_parameters()
+						for p in pa:
+							if self.pf.loc[p,'t_stat'] > 1e5:
+								self.pf.loc[p,'t_stat'] = numpy.inf
+								self.pf.loc[p,'std_err'] = numpy.nan
+							if self.pf.loc[p,'t_stat'] < -1e5:
+								self.pf.loc[p,'t_stat'] = -numpy.inf
+								self.pf.loc[p,'std_err'] = numpy.nan
+							n = notes.get(p,[])
+							n.append(c.get_binding_note(self.pvals))
+							notes[p] = n
+					self.pf['constrained'] = pandas.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
+					self.pf['constrained'].fillna('', inplace=True)
+					self.pf.loc[self.pf['holdfast']!=0, 'constrained'] = 'fixed value'
+					self.pf.loc[self.pf['holdfast']!=0, 'std_err'] = numpy.nan
+					self.pf.loc[self.pf['holdfast']!=0, 't_stat'] = numpy.nan
+
+			if like_ratio:
+				non_finite_t = ~numpy.isfinite(self.pf.t_stat)
+				if numpy.any(non_finite_t):
+					self.likelihood_ratio(self.pf.index[non_finite_t])
+		except:
+			logger.exception("error in calculate_parameter_covariance")
+			raise
 
 	@property
 	def possible_overspecification(self):

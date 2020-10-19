@@ -29,6 +29,7 @@ cdef class Model5c(AbstractChoiceModel):
 		object _availability_co_vars
 
 		bint _is_clone
+		bint _does_not_require_choice
 
 		object _graph
 

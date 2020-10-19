@@ -15,14 +15,14 @@ requirements:
 
   build:
     - {{ compiler('c') }}
-    - conda-forge::llvm-openmp  # [osx]
+    - llvm-openmp  # [osx]
 
   host:
     - python
     - pip
-    - conda-forge::llvm-openmp  # [osx]
-    - conda-forge::cython >=0.29
-    - conda-forge::numpy
+    - llvm-openmp  # [osx]
+    - cython >=0.29
+    - numpy
 
   run:
     - python {{ python }}
