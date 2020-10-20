@@ -1657,8 +1657,17 @@ cdef class DataFrames:
 
 		# check data is well aligned
 		if self._data_ch is not None and model._graph is not None:
-			if not (numpy.all(self._data_ch.columns == model._graph.elementals) or numpy.all(self._data_ch.columns == model._graph.standard_sort)):
-				raise ValueError("data_ch columns not aligned with graph.elementals or graph.standard_sort")
+			try:
+				data_eq_elementals = numpy.all(self._data_ch.columns == model._graph.elementals)
+			except ValueError:
+				data_eq_elementals = False
+			if not data_eq_elementals:
+				try:
+					data_eq_fullgraph = numpy.all(self._data_ch.columns == model._graph.standard_sort)
+				except ValueError:
+					data_eq_fullgraph = False
+				if not data_eq_fullgraph:
+					raise ValueError("data_ch columns not aligned with graph.elementals or graph.standard_sort")
 
 		return 0
 
