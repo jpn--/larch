@@ -1,6 +1,6 @@
 package:
   name: larch
-  version: "5.4.3"
+  version: "5.4.4"
 
 source:
   path: ../
