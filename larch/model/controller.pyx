@@ -842,7 +842,10 @@ cdef class Model5c(AbstractChoiceModel):
 		return arr
 
 	def exputility(self, x=None, return_dataframe=None):
-		arr = self.loglike(persist=PERSIST_EXP_UTILITY).exp_utility
+		try:
+			arr = self.loglike(persist=PERSIST_EXP_UTILITY).exp_utility
+		except KeyError:
+			raise NotImplementedError("exputility is not available for this model structure")
 		if return_dataframe == 'names':
 			return pandas.DataFrame(
 				data=arr,
