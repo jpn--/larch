@@ -69,7 +69,7 @@ test_script:
   - '"%CONDA%\Scripts\activate.bat"'
   - python tools\\gitversion.py
   # Build the package
-  - "%CMD_IN_ENV% conda build conda-recipe"
+  - "%CMD_IN_ENV% conda build conda-recipe -c conda-forge"
 
   # Install the package
   - conda install --use-local %PROJECT_NAME% -c conda-forge
