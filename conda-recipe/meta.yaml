@@ -73,6 +73,7 @@ test:
   requires:
     # Put any additional test requirements here.  For example
     - pytest
+    - pytest-regressions
     - sphinx
     - sphinx_rtd_theme
     - sphinxcontrib
