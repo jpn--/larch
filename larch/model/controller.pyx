@@ -859,7 +859,21 @@ cdef class Model5c(AbstractChoiceModel):
 			return arr
 
 	def utility(self, x=None, return_dataframe=None):
-		return numpy.log(self.exputility(x=x, return_dataframe=return_dataframe))
+		arr = self.loglike(persist=PERSIST_UTILITY).utility
+		if return_dataframe == 'names':
+			return pandas.DataFrame(
+				data=arr,
+				columns=self._dataframes._alternative_names if self.is_mnl() else self.graph.standard_sort_names,
+				index=self._dataframes._data_co.index if self._dataframes._data_co is not None else None,
+			)
+		elif return_dataframe:
+			return pandas.DataFrame(
+				data=arr,
+				columns=self._dataframes._alternative_codes if self.is_mnl() else self.graph.standard_sort,
+				index=self._dataframes._data_co.index if self._dataframes._data_co is not None else None,
+			)
+		else:
+			return arr
 
 	def probability(
 			self,
