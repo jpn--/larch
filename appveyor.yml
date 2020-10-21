@@ -48,7 +48,7 @@ install:
   - '"%CONDA%\Scripts\activate.bat"'
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - conda install conda-build anaconda-client numpy cython conda-verify
+  - conda install conda-build anaconda-client numpy cython conda-verify -c conda-forge
   # Install codecov tool for uploading coverage reports
   - pip install codecov coverage
   - conda config --append channels conda-forge
@@ -72,7 +72,7 @@ test_script:
   - "%CMD_IN_ENV% conda build conda-recipe"
 
   # Install the package
-  - conda install --use-local %PROJECT_NAME%
+  - conda install --use-local %PROJECT_NAME% -c conda-forge
 
   # Run the tests outside the source tree.
   # pushd "%HOMEPATH%" && (pytest %PROJECT_NAME% -v --detailed-errors --with-coverage --cover-package=%PROJECT_NAME% --cover-tests --cover-erase --cover-inclusive --cover-branches --cover-xml & popd)
