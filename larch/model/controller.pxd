@@ -24,9 +24,11 @@ cdef class Model5c(AbstractChoiceModel):
 		str    _choice_ca_var
 		object _choice_co_vars
 		str    _choice_co_code
+		bint   _choice_any
 		str    _weight_co_var
 		str    _availability_var
 		object _availability_co_vars
+		bint   _availability_any
 
 		bint _is_clone
 		bint _does_not_require_choice

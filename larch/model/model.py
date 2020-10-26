@@ -648,6 +648,8 @@ class Model(_Model5c):
 				req_data.choice_co = self.choice_co_vars
 			elif self.choice_co_code:
 				req_data.choice_co_code = self.choice_co_code
+			elif self.choice_any:
+				req_data.choice_any = True
 
 			if self.weight_co_var:
 				req_data.weight_co = self.weight_co_var
@@ -656,6 +658,8 @@ class Model(_Model5c):
 				req_data.avail_ca = self.availability_var
 			elif self.availability_co_vars:
 				req_data.avail_co = self.availability_co_vars
+			elif self.availability_any:
+				req_data.avail_any = True
 
 			return req_data
 		except:

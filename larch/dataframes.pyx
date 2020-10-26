@@ -611,6 +611,11 @@ cdef class DataFrames:
 					ch = ch.unstack().fillna(0)
 
 			if ch is not None:
+				# check if there are missing columns for known alt codes
+				if self._alternative_codes is not None:
+					if len(self._alternative_codes) > len(ch.columns):
+						if set(self._alternative_codes).issuperset(ch.columns):
+							ch = ch.reindex(columns=self._alternative_codes).fillna(0)
 				self._ensure_consistent_alternative_codes(ch.columns)
 			if self._alternative_codes is None:
 				self._alternative_codes = pandas.Index([])
@@ -1014,21 +1019,30 @@ cdef class DataFrames:
 		return self._alternative_codes
 
 	def _ensure_consistent_alternative_codes(self, alt_codes, result='raise'):
-		if alt_codes is None:
+		try:
+			if alt_codes is None:
+				return True
+			alt_codes = pandas.Index(alt_codes)
+			if self._alternative_codes is None:
+				self._alternative_codes = alt_codes
+				return True
+			if alt_codes.shape != self._alternative_codes.shape:
+				if result == 'raise':
+					raise ValueError(f'shape of alt_codes ({alt_codes.shape}) does not match existing ({self._alternative_codes.shape})')
+				return False
+			if numpy.any(alt_codes != self._alternative_codes):
+				if result == 'raise':
+					raise ValueError(f'values of alt_codes does not match existing\nnew:{alt_codes}\nold:{self._alternative_codes}')
+				return False
 			return True
-		alt_codes = pandas.Index(alt_codes)
-		if self._alternative_codes is None:
-			self._alternative_codes = alt_codes
-			return True
-		if alt_codes.shape != self._alternative_codes.shape:
-			if result == 'raise':
-				raise ValueError(f'shape of alt_codes ({alt_codes.shape}) does not match existing ({self._alternative_codes.shape})')
-			return False
-		if numpy.any(alt_codes != self._alternative_codes):
-			if result == 'raise':
-				raise ValueError(f'values of alt_codes does not match existing\nnew:{alt_codes}\nold:{self._alternative_codes}')
-			return False
-		return True
+		except:
+			import logging
+			from .log import logger_name
+			logger = logging.getLogger(logger_name)
+			logger.exception('error in DataFrames._ensure_consistent_alternative_codes')
+			logger.error(f"alt_codes = {alt_codes}")
+			logger.error(f"self._alternative_codes = {self._alternative_codes}")
+			raise
 
 	@property
 	def n_alts(self):
@@ -2855,7 +2869,7 @@ cdef class DataFrames:
 		----------
 		req_data : Dict or str
 			The requested data. The keys for this dictionary may include {'ca', 'co',
-			'choice_ca', 'choice_co', 'choice_co_code', 'weight_co', 'avail_ca',
+			'choice_ca', 'choice_co', 'choice_co_code', 'choice_any', 'weight_co', 'avail_ca',
 			'avail_co', 'standardize'}. Other keys are silently ignored.
 		selector : array-like[bool] or slice, optional
 			If given, the selector filters the cases. This argument can only be given
@@ -2937,6 +2951,10 @@ cdef class DataFrames:
 			)
 			for c in df_ch.columns:
 				df_ch.loc[:,c] = (choicecodes==c).astype(float_dtype)
+		elif 'choice_any' in req_data:
+			if self._data_ch is None:
+				raise MissingDataError('req_data includes "choice_any" but no choice data is set')
+			df_ch = self._data_ch
 		elif self._data_ch is not None and not explicit:
 			if log_warnings:
 				logger.warning('req_data does not request {choice_ca,choice_co,choice_co_code} but '
@@ -2958,7 +2976,10 @@ cdef class DataFrames:
 
 		if df_wt is None and self._data_wt is not None and not explicit:
 			if log_warnings:
-				logger.warning('req_data does not request weight_co but it is set and being provided')
+				logger.warning(
+					'req_data does not request weight_co '
+					'but it is set and being provided'
+				)
 			df_wt = self._data_wt
 			weight_normalization = self._weight_normalization
 
@@ -2980,9 +3001,18 @@ cdef class DataFrames:
 				#df_av = self._data_av
 			else:
 				df_av.columns = alts
+		elif 'avail_any' in req_data:
+			if self._data_av is None:
+				raise MissingDataError(
+					'req_data includes "avail_any" but no availability data is set'
+				)
+			df_av = self._data_av
 		elif self._data_av is not None and not explicit:
 			if log_warnings:
-				logger.warning('req_data does not request avail_ca or avail_co but it is set and being provided')
+				logger.warning(
+					'req_data does not request avail_ca or avail_co '
+					'but it is set and being provided'
+				)
 			df_av = self._data_av
 		else:
 			df_av = None

@@ -100,9 +100,11 @@ cdef class Model5c(AbstractChoiceModel):
 		state["_choice_ca_var                 ".strip()] = (self._choice_ca_var                 )
 		state["_choice_co_vars                ".strip()] = (self._choice_co_vars                )
 		state["_choice_co_code                ".strip()] = (self._choice_co_code                )
+		state["_choice_any                    ".strip()] = (self._choice_any                    )
 		state["_weight_co_var                 ".strip()] = (self._weight_co_var                 )
 		state["_availability_var              ".strip()] = (self._availability_var              )
 		state["_availability_co_vars          ".strip()] = (self._availability_co_vars          )
+		state["_availability_any              ".strip()] = (self._availability_any              )
 		state["_frame                         ".strip()] = (self._frame                         )
 		state["_graph                         ".strip()] = (self._graph                         )
 		state["_display_order                 ".strip()] = (self._display_order                 )
@@ -141,9 +143,11 @@ cdef class Model5c(AbstractChoiceModel):
 		(self._choice_ca_var                 ) = state["_choice_ca_var                 ".strip()]
 		(self._choice_co_vars                ) = state["_choice_co_vars                ".strip()]
 		(self._choice_co_code                ) = state["_choice_co_code                ".strip()]
+		(self._choice_any                    ) = state["_choice_any                    ".strip()]
 		(self._weight_co_var                 ) = state["_weight_co_var                 ".strip()]
 		(self._availability_var              ) = state["_availability_var              ".strip()]
 		(self._availability_co_vars          ) = state["_availability_co_vars          ".strip()]
+		(self._availability_any              ) = state["_availability_any              ".strip()]
 		(self._frame                         ) = state["_frame                         ".strip()]
 		(self._graph                         ) = state["_graph                         ".strip()]
 		(self._display_order                 ) = state["_display_order                 ".strip()]
@@ -962,20 +966,18 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@property
 	def choice_ca_var(self):
-		#self.unmangle()
 		return self._choice_ca_var
 
 	@choice_ca_var.setter
 	def choice_ca_var(self, x):
-		#self.mangle()
 		self._choice_ca_var = x
 		if x is not None:
 			self._choice_co_vars = None
 			self._choice_co_code = None
+			self._choice_any = False
 
 	@property
 	def choice_co_vars(self):
-		#self.unmangle()
 		if self._choice_co_vars:
 			return self._choice_co_vars
 		else:
@@ -988,6 +990,7 @@ cdef class Model5c(AbstractChoiceModel):
 			self._choice_co_vars = x
 			self._choice_ca_var = None
 			self._choice_co_code = None
+			self._choice_any = False
 		elif x is None:
 			self._choice_co_vars = x
 		else:
@@ -1012,6 +1015,7 @@ cdef class Model5c(AbstractChoiceModel):
 			self._choice_co_code = x
 			self._choice_co_vars = None
 			self._choice_ca_var = None
+			self._choice_any = False
 		elif x is None:
 			self._choice_co_code = x
 		else:
@@ -1021,26 +1025,45 @@ cdef class Model5c(AbstractChoiceModel):
 	def choice_co_code(self):
 		self._choice_co_code = None
 
+	@property
+	def choice_any(self):
+		if self._choice_any:
+			return True
+		else:
+			return False
+
+	@choice_any.setter
+	def choice_any(self, x):
+		if x:
+			self._choice_any = True
+			self._choice_co_code = None
+			self._choice_co_vars = None
+			self._choice_ca_var = None
+		else:
+			self._choice_any = False
+
+	@choice_any.deleter
+	def choice_any(self):
+		self._choice_any = False
+
 
 	@property
 	def weight_co_var(self):
-		#self.unmangle()
 		return self._weight_co_var
 
 	@weight_co_var.setter
 	def weight_co_var(self, x):
-		#self.mangle()
 		self._weight_co_var = x
 
 	@property
 	def availability_var(self):
-		#self.unmangle()
 		return self._availability_var
 
 	@availability_var.setter
 	def availability_var(self, x):
-		#self.mangle()
 		self._availability_var = str(x)
+		self._availability_co_vars = None
+		self._availability_any = False
 
 	@property
 	def availability_co_vars(self):
@@ -1059,8 +1082,19 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@availability_co_vars.setter
 	def availability_co_vars(self, x):
-		#self.mangle()
 		self._availability_co_vars = x
+		self._availability_var = None
+		self._availability_any = False
+
+	@property
+	def availability_any(self):
+		return self._availability_any
+
+	@availability_any.setter
+	def availability_any(self, x):
+		self._availability_any = True
+		self._availability_co_vars = None
+		self._availability_var = None
 
 
 	@property
