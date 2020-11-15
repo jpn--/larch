@@ -44,6 +44,7 @@ cdef class Model5c(AbstractChoiceModel):
 			n_threads=-1,
 			is_clone=False,
 			title=None,
+			root_id=0,
 	):
 		self._dataframes = None
 		self._does_not_require_choice = False
@@ -79,6 +80,16 @@ cdef class Model5c(AbstractChoiceModel):
 			frame=frame,
 			title=title,
 		)
+
+		if alts is not None and graph is None:
+			from .tree import NestingTree
+			graph = NestingTree(root_id=root_id)
+			if hasattr(alts, 'items'):
+				for a, name in alts.items():
+					graph.add_node(a, name=name)
+			else:
+				for a in alts:
+					graph.add_node(a)
 
 		self._graph = graph
 		if self._dataservice is not None:

@@ -71,11 +71,14 @@ class LatentClassModel(AbstractChoiceModel):
 		self._dataservice = dataservice
 		if self._dataservice is None:
 			self._dataservice = k_membership.dataservice
-		if self._dataservice is None:
-			for m in self._k_models.values():
+		else:
+			if not(k_membership.dataservice is None or k_membership.dataservice is self._dataservice):
+				raise ValueError("dataservice for all constituent models must be the same")
+		for m in self._k_models.values():
+			if self._dataservice is None:
 				self._dataservice = m.dataservice
-				if self._dataservice is not None:
-					break
+			if not (m.dataservice is None or m.dataservice is self._dataservice):
+				raise ValueError("dataservice for all constituent models must be the same")
 		self._dataframes = None
 		self._mangled = True
 		self.constraints = constraints
