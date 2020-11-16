@@ -7,13 +7,14 @@ import io
 import numpy
 from pytest import approx, raises
 
-from ..data_warehouse import example_file
+from larch.data_warehouse import example_file
 
-from .. import DataFrames
+from larch import DataFrames, DBF, data_warehouse
+
 
 def test_dfs_info():
 
-	from ..data_warehouse import example_file
+	from larch.data_warehouse import example_file
 	df = pandas.read_csv(example_file("MTCwork.csv.gz"))
 	df.set_index(['casenum', 'altnum'], inplace=True)
 
@@ -95,8 +96,6 @@ def test_service_idco():
 
 def test_dbf_reader():
 
-	from .. import DBF
-	from .. import data_warehouse
 
 	q = DBF(data_warehouse.example_file('US-STATES.dbf'))
 

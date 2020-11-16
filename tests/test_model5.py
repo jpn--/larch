@@ -1,11 +1,11 @@
 
-from ..examples import MTC, SWISSMETRO
+from larch.examples import MTC, SWISSMETRO
 from pytest import approx, raises, warns
 import numpy
 import pandas
-from ..model import *
-from ..roles import P, X, PX
-from ..model.persist_flags import PERSIST_UTILITY
+from larch.model import *
+from larch.roles import P, X, PX
+from larch.model.persist_flags import PERSIST_UTILITY
 
 
 def test_dataframes_mnl5():
@@ -4383,7 +4383,7 @@ def test_partial_compute():
 
 def test_pickling():
 
-	from .. import example
+	from larch import example
 	m0 = example(1)
 	ds = m0.dataservice
 	m0.load_data()
@@ -4401,7 +4401,7 @@ def test_pickling():
 
 
 def test_rho_sq():
-	from .. import example
+	from larch import example
 	m = example(102)
 	m.load_data()
 	assert m.dataframes.total_weight() == approx(7612.2)
@@ -4415,7 +4415,7 @@ def test_rho_sq():
 	assert m.rho_sq_nil(adj=True) == approx(0.2479125886583905)
 
 def test_top_k_accuracy():
-	from .. import example
+	from larch import example
 	m = example(102)
 	m.load_data()
 	assert m.loglike([-0.11442241, -0.75669048, -0.01119601, -0.01321288]) == approx(-5931.557687962916)

@@ -1,6 +1,6 @@
-from ..examples import example
-from .. import Model
-from ..roles import PX
+from larch.examples import example
+from larch import Model
+from larch.roles import PX
 from pytest import approx
 
 def test_301():
