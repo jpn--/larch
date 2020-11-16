@@ -63,7 +63,7 @@ test:
   commands:
     # You can put test commands to be run here.  Use this to test that the
     # entry points work.
-    - pytest --pyargs larch
+    - py.test
     - svn export https://github.com/jpn--/larch/trunk/larch/doc --non-interactive --trust-server-cert-failures=unknown-ca  # [not win]
     - sphinx-build -b doctest ./doc ./build/docs   # [not win]
 
