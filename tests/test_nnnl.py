@@ -1,11 +1,11 @@
-from ..model import Model
+from larch.model import Model
 import numpy
 from pytest import approx
 import pandas
-from ..data_services.examples import ITINERARY_RAW
-from ..data_services import H5PodCE
-from .. import DataService, Model
-from ..util.common_functions import fourier_series, piecewise_linear
+from larch.data_services.examples import ITINERARY_RAW
+from larch.data_services import H5PodCE
+from larch import DataService, Model
+from larch.util.common_functions import fourier_series, piecewise_linear
 
 import pytest
 

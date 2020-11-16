@@ -34,7 +34,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		)
 
 	def suggest_elemental_order(self, order):
-		self._suggested_elemental_order = tuple(order)
+		self._suggested_elemental_order = tuple(j for j in order if j in self.nodes)
 
 	@property
 	def root_id(self):

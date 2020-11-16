@@ -1,4 +1,4 @@
-from ..model import Model
+from larch.model import Model
 import numpy
 from pytest import approx
 import pandas
@@ -6,16 +6,16 @@ import pytest
 
 def qmnl_straw_man_model_1():
 
-	from ..roles import P,X
+	from larch.roles import P,X
 
 	altcodes = (1, 2, 3, 4, 5, 6)
-	from ..data_services.examples import MTC
+	from larch.data_services.examples import MTC
 	dt = MTC()
 
 	p = Model(parameters=[], alts=altcodes, dataservice=dt, graph=None)
 
 
-	from ..roles import P,X
+	from larch.roles import P,X
 
 	p.utility_ca = (
 		+ P('tottime') * X('tottime')
