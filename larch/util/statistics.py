@@ -106,7 +106,10 @@ def statistics_for_array(
 		stats.minimum = scalarize(numpy.nanmin(a_masked, axis=0))
 		stats.maximum = scalarize(numpy.nanmax(a_masked, axis=0))
 		with warning.ignore_warnings():
-			stats.median = scalarize(numpy.nanmedian(a_masked, axis=0))
+			if ma.is_masked:
+				stats.median = scalarize(ma.median(a_masked, axis=0))
+			else:
+				stats.median = scalarize(numpy.nanmedian(a_masked, axis=0))
 
 	if ch_weights is not None:
 		a_ch_weighted = ma.masked_array(a, mask=(ch_weights<=0))
@@ -282,6 +285,8 @@ def statistics_for_dataframe(df, histogram=True, ch_weights=None, avail=None, **
 
 	from .dataframe import DataFrameViewer
 	result = DataFrameViewer.from_dict(s, orient='index')
+	if 'nans' in result.columns:
+		result['nans'].fillna(0, inplace=True)
 	try:
 		result = result.drop('description', axis=1)
 	except:
