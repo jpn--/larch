@@ -3,6 +3,8 @@ import numpy
 import pandas
 import os
 import warnings
+from typing import Mapping
+
 from .util import Dict
 from .util.text_manip import truncate_path_for_display
 
@@ -823,13 +825,16 @@ class OMX(_omx_base_class):
 			Must have the same shape as `row_indexes`, unless one of
 			these is just an integer, in which case that value is
 			broadcast to the shape of the other.
-		mat_names : Sequence, optional
+		mat_names : Sequence or Mapping, optional
 			A sequence of matrix names to draw values from.  Each
 			name should be a matrix table that exists in the OMX
 			file. If not given, all matrix arrays from the `data`
-			node in the OMX file will be used.
-		index : array-like, optional
+			node in the OMX file will be used. If given as a mapping,
+			the keys are used to identify the columns to draw values
+			from, and the mapping is then used to rename the columns.
+		index : array-like, or 'rc', optional
 			An array to use as the index on the returned DataFrame.
+			Set to 'rc' to get a row-and-column MultiIndex.
 
 		Returns
 		-------
@@ -837,6 +842,12 @@ class OMX(_omx_base_class):
 		"""
 		if mat_names is None:
 			mat_names = list(self.data._v_children.keys())
+		if isinstance(mat_names, Mapping):
+			_mat_names = mat_names.keys()
+		elif isinstance(mat_names[0], (tuple,list)):
+			_mat_names = [i[0] for i in mat_names]
+		else:
+			_mat_names = mat_names
 
 		if isinstance(row_indexes, int):
 			row_indexes = numpy.full_like(col_indexes, row_indexes)
@@ -845,7 +856,7 @@ class OMX(_omx_base_class):
 
 		data = {
 			mat: self[mat][row_indexes, col_indexes]
-			for mat in mat_names
+			for mat in _mat_names
 		}
 
 		if index is None:
@@ -878,10 +889,12 @@ class OMX(_omx_base_class):
 			data[cols_name] = col_indexes
 
 		result = pandas.DataFrame.from_dict(data)
-		if index is None:
+		if index is None or (isinstance(index, str) and index == 'rc'):
 			result = result.set_index([rows_name, cols_name])
 		else:
 			result.index = index
+		if isinstance(mat_names, Mapping):
+			result = result.rename(columns=mat_names)
 		return result
 
 	def join_rc_dataframe(
@@ -904,11 +917,13 @@ class OMX(_omx_base_class):
 			respectively. Give as a string to name columns in `df`,
 			or as an eval-capable instruction, or give an array
 			explicitly.
-		mat_names : Sequence, optional
+		mat_names : Sequence or Mapping, optional
 			A sequence of matrix names to draw values from.  Each
 			name should be a matrix table that exists in the OMX
 			file. If not given, all matrix arrays from the `data`
-			node in the OMX file will be used.
+			node in the OMX file will be used. If given as a mapping,
+			the keys are used to identify the columns to draw values
+			from, and the mapping is then used to rename the columns.
 		prefix : str, optional
 			Add this prefix to every matrix name used.
 
@@ -916,14 +931,23 @@ class OMX(_omx_base_class):
 		-------
 		pandas.DataFrame
 		"""
-		return df.join(
-			self.get_rc_dataframe(
-				df.eval(rowidx),
-				df.eval(colidx),
-				mat_names,
-				index=df.index,
-			).add_prefix(prefix)
+		if isinstance(rowidx, str):
+			_row = df.eval(rowidx)
+		else:
+			_row = rowidx
+		if isinstance(colidx, str):
+			_col = df.eval(colidx)
+		else:
+			_col = colidx
+		data = self.get_rc_dataframe(
+			_row,
+			_col,
+			mat_names,
+			index=df.index,
 		)
+		if prefix:
+			data = data.add_prefix(prefix)
+		return df.join(data)
 
 	def import_omx(self, otherfile, tablenames, rowslicer=None, colslicer=None):
 		oth = OMX(otherfile, mode='r')
