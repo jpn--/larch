@@ -50,7 +50,7 @@ def plot_as_svg_xhtml(
 	imgbuffer = BytesIO()
 	fig.savefig(
 		imgbuffer, dpi=None, facecolor="none", edgecolor='w',
-		orientation='portrait', papertype=None, format='svg',
+		orientation='portrait', format='svg',
 		transparent=transparent, bbox_inches="tight", pad_inches=pad_inches,
 		bbox_extra_artists=bbox_extra_artists,
 	)
