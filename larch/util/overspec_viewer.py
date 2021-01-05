@@ -35,8 +35,111 @@
 
 import numpy as np
 import pandas as pd
-from pandas.io.formats.style import _maybe_numeric_slice, _non_reducing_slice, _mpl, Styler
+from pandas.io.formats.style import _mpl, Styler
 from typing import Optional
+from pandas.core.dtypes.generic import ABCSeries
+from pandas.core.indexes.api import Index
+from pandas.api.types import is_dict_like, is_list_like
+
+
+# the public IndexSlicerMaker
+class _IndexSlice:
+	"""
+	Create an object to more easily perform multi-index slicing.
+
+	See Also
+	--------
+	MultiIndex.remove_unused_levels : New MultiIndex with no unused levels.
+
+	Notes
+	-----
+	See :ref:`Defined Levels <advanced.shown_levels>`
+	for further info on slicing a MultiIndex.
+
+	Examples
+	--------
+	>>> midx = pd.MultiIndex.from_product([['A0','A1'], ['B0','B1','B2','B3']])
+	>>> columns = ['foo', 'bar']
+	>>> dfmi = pd.DataFrame(np.arange(16).reshape((len(midx), len(columns))),
+							index=midx, columns=columns)
+
+	Using the default slice command:
+
+	>>> dfmi.loc[(slice(None), slice('B0', 'B1')), :]
+			   foo  bar
+		A0 B0    0    1
+		   B1    2    3
+		A1 B0    8    9
+		   B1   10   11
+
+	Using the IndexSlice class for a more intuitive command:
+
+	>>> idx = pd.IndexSlice
+	>>> dfmi.loc[idx[:, 'B0':'B1'], :]
+			   foo  bar
+		A0 B0    0    1
+		   B1    2    3
+		A1 B0    8    9
+		   B1   10   11
+	"""
+
+	def __getitem__(self, arg):
+		return arg
+
+
+IndexSlice = _IndexSlice()
+
+
+def _non_reducing_slice(slice_):
+	"""
+	Ensure that a slice doesn't reduce to a Series or Scalar.
+
+	Any user-passed `subset` should have this called on it
+	to make sure we're always working with DataFrames.
+	"""
+	# default to column slice, like DataFrame
+	# ['A', 'B'] -> IndexSlices[:, ['A', 'B']]
+	kinds = (ABCSeries, np.ndarray, Index, list, str)
+	if isinstance(slice_, kinds):
+		slice_ = IndexSlice[:, slice_]
+
+	def pred(part) -> bool:
+		"""
+		Returns
+		-------
+		bool
+			True if slice does *not* reduce,
+			False if `part` is a tuple.
+		"""
+		# true when slice does *not* reduce, False when part is a tuple,
+		# i.e. MultiIndex slice
+		return (isinstance(part, slice) or is_list_like(part)) and not isinstance(
+			part, tuple
+		)
+
+	if not is_list_like(slice_):
+		if not isinstance(slice_, slice):
+			# a 1-d slice, like df.loc[1]
+			slice_ = [[slice_]]
+		else:
+			# slice(a, b, c)
+			slice_ = [slice_]  # to tuplize later
+	else:
+		slice_ = [part if pred(part) else [part] for part in slice_]
+	return tuple(slice_)
+
+
+def _maybe_numeric_slice(df, slice_, include_bool=False):
+	"""
+	Want nice defaults for background_gradient that don't break
+	with non-numeric data. But if slice_ is passed go with that.
+	"""
+	if slice_ is None:
+		dtypes = [np.number]
+		if include_bool:
+			dtypes.append(bool)
+		slice_ = IndexSlice[:, df.select_dtypes(include=dtypes).columns]
+	return slice_
 
 class OverspecView(Styler):
 

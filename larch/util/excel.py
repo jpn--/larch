@@ -444,21 +444,22 @@ class ExcelWriter(_XlsxWriter):
         return self._output_renderer(content_in)
 
     def save(self, makedirs=True, overwrite=False):
-        if makedirs:
-            import os
-            dirname = os.path.dirname(self.path)
-            if dirname:
-                os.makedirs(dirname, exist_ok=True)
+        if self.path is not None:
+            if makedirs:
+                import os
+                dirname = os.path.dirname(self.path)
+                if dirname:
+                    os.makedirs(dirname, exist_ok=True)
 
-        if not overwrite and not getattr(self, '__file_archived', False): # don't move twice
-            from xmle.file_util import archive_existing_file
-            try:
-                new_name = archive_existing_file(self.path, archive_path=None, tag='creation')
-            except FileNotFoundError:
-                pass
-            else:
-                self.log(f"archived existing file to {new_name}")
-                setattr(self, '__file_archived', new_name)
+            if not overwrite and not getattr(self, '__file_archived', False): # don't move twice
+                from xmle.file_util import archive_existing_file
+                try:
+                    new_name = archive_existing_file(self.path, archive_path=None, tag='creation')
+                except FileNotFoundError:
+                    pass
+                else:
+                    self.log(f"archived existing file to {new_name}")
+                    setattr(self, '__file_archived', new_name)
 
         self.log(f"saving")
         super().save()
