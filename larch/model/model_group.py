@@ -44,6 +44,9 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 	def __len__(self):
 		return len(self._k_models)
 
+	def __contains__(self, x):
+		return (x in self.pf.index)
+
 	def insert(self, i, value):
 		assert isinstance(value, AbstractChoiceModel)
 		self._k_models.insert(i,value)

@@ -217,7 +217,7 @@ def cdap_dataframes(households, values):
     return dfs
 
 
-def cdap_model(households, values, spec1, interaction_coef):
+def cdap_model(households, values, spec1, interaction_coef, coefficients):
     cdap_data = cdap_dataframes(households, values)
     m = {}
     _logger.info(f"building for model 1")
@@ -238,4 +238,7 @@ def cdap_model(households, values, spec1, interaction_coef):
         m[s].choice_any = True
         m[s].availability_any = True
 
-    return ModelGroup(m.values())
+    result = ModelGroup(m.values())
+    from .general import apply_coefficients
+    apply_coefficients(coefficients, result)
+    return result
