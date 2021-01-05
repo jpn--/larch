@@ -362,10 +362,10 @@ cdef class Model5c(AbstractChoiceModel):
 					except:
 						logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self._utility_co[altkey])}")
 						raise
-					while i_d in u_found[altkey]:
+					if i_d in u_found[altkey]:
 						import warnings
 						warnings.warn("found duplicate X.{} in utility_co[{}]".format(i_d,altkey))
-						i_d = i_d + DataRef('00')
+						# i_d = i_d + DataRef('00')
 					u_found[altkey].add(i_d)
 					# if i.param in self._snapped_parameters:
 					# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
@@ -421,13 +421,26 @@ cdef class Model5c(AbstractChoiceModel):
 	def dataframes(self):
 		return self._dataframes
 
-	def _set_dataframes(self, DataFrames x):
+	def set_dataframes(self, DataFrames x, bint check_sufficiency=True):
+		"""
+
+		Parameters
+		----------
+		x : larch.DataFrames
+		check_sufficiency : bool, default True
+			Run a check
+
+		Returns
+		-------
+
+		"""
 		x.computational = True
 		self.clear_best_loglike()
 		#self.unmangle() # don't do a full unmangle here, it will fail if the old data is incomplete
 		if self._mangled:
 			self._scan_all_ensure_names()
-		x._check_data_is_sufficient_for_model(self)
+		if check_sufficiency:
+			x._check_data_is_sufficient_for_model(self)
 		self._dataframes = x
 		self._refresh_derived_arrays()
 		self._dataframes._read_in_model_parameters()
@@ -436,7 +449,7 @@ cdef class Model5c(AbstractChoiceModel):
 	def dataframes(self, x):
 		if isinstance(x, pandas.DataFrame):
 			x = DataFrames(x)
-		self._set_dataframes(x)
+		self.set_dataframes(x)
 
 	@property
 	def n_cases(self):

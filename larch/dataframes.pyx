@@ -135,6 +135,12 @@ def _fast_check_multiindex_equality(i, j):
 			return False
 	return True
 
+def _data_check(x, df, valid_shorts=()):
+	if str(x) in df:
+		return True
+	if str(x) in valid_shorts:
+		return True
+	return False
 
 
 def _to_categorical(y, num_classes=None, dtype='float32'):
@@ -1617,6 +1623,7 @@ cdef class DataFrames:
 			Model5c model,
 	) except -1:
 		"""
+		Check that model probabilities can be found with the attached data.
 
 		Parameters
 		----------
@@ -1624,7 +1631,19 @@ cdef class DataFrames:
 
 		Returns
 		-------
-
+		int
+			If all checks pass, zero is returned.
+			
+		Raises
+		------
+		MissingDataError
+			When some critical data is missing.  This includes
+			not defining `ca` or `co` data when it is needed,
+			or missing particular required variables from these
+			dataframes.  
+		ValueError
+			When the columns of `data_ch` are not aligned with
+			the alternatives given in `model.graph`.
 		"""
 		missing_data = set()
 
@@ -1642,7 +1661,7 @@ cdef class DataFrames:
 				missing(f'idca data missing for utility')
 			else:
 				for i in model._utility_ca:
-					if str(i.data) not in self._data_ca_or_ce:
+					if not _data_check(i.data, self._data_ca_or_ce):
 						missing(f'idca utility variable missing: {i.data}')
 
 		if model._quantity_ca is not None and len(model._quantity_ca):
@@ -1650,7 +1669,7 @@ cdef class DataFrames:
 				missing(f'idca data missing for quantity')
 			else:
 				for i in model._quantity_ca:
-					if str(i.data) not in self._data_ca_or_ce:
+					if not _data_check(i.data, self._data_ca_or_ce):
 						missing(f'idca quantity variable missing: {i.data}')
 
 		if model._utility_co is not None and len(model._utility_co):
@@ -1659,7 +1678,7 @@ cdef class DataFrames:
 			else:
 				for alt, func in model._utility_co.items():
 					for i in func:
-						if str(i.data) not in self._data_co and str(i.data)!= '1':
+						if not _data_check(i.data, self._data_co, {'1'}):
 							missing(f'idco utility variable missing: {i.data}')
 
 		if missing_data:
@@ -1686,6 +1705,24 @@ cdef class DataFrames:
 		return 0
 
 	def check_data_is_sufficient_for_model( self, Model5c model, ):
+		"""
+		Check that probabilities can be found from the attached data.
+
+		Parameters
+		----------
+		model : Model
+
+		Raises
+		------
+		MissingDataError
+			When some critical data is missing.  This includes
+			not defining `ca` or `co` data when it is needed,
+			or missing particular required variables from these
+			dataframes.
+		ValueError
+			When the columns of `data_ch` are not aligned with
+			the alternatives given in `model.graph`.
+		"""
 		self._check_data_is_sufficient_for_model(model)
 
 	cdef void _link_to_model_structure(
@@ -1757,16 +1794,24 @@ cdef class DataFrames:
 				self.model_utility_co_data        = numpy.zeros([len_co], dtype=numpy.int32)
 
 				j = 0
+
+				param_loc = {}
+				for _n,_pname in enumerate(model._frame.index):
+					param_loc[_pname] = _n
+				data_loc = {}
+				for _n,_dname in enumerate(self._data_co.columns):
+					data_loc[_dname] = _n
+
 				for alt, func in model._utility_co.items():
 					altindex = self._alternative_codes.get_loc(alt)
 					for i in func:
 						self.model_utility_co_alt  [j] = altindex
-						self.model_utility_co_param[j] = model._frame.index.get_loc(str(i.param))
+						self.model_utility_co_param[j] = param_loc[str(i.param)] # model._frame.index.get_loc(str(i.param))
 						self.model_utility_co_param_scale[j] = i.scale
 						if i.data == '1':
 							self.model_utility_co_data [j] = -1
 						else:
-							self.model_utility_co_data [j] = self._data_co.columns.get_loc(str(i.data))
+							self.model_utility_co_data [j] = data_loc[str(i.data)] # self._data_co.columns.get_loc(str(i.data))
 						j += 1
 			else:
 				len_co = 0
@@ -2992,15 +3037,17 @@ cdef class DataFrames:
 				df_av = self._data_av
 		elif 'avail_co' in req_data:
 			alts = self.alternative_codes()
-			cols = [req_data['avail_co'].get(a, '0') for a in alts]
+			if len(alts) == 0:
+				raise ValueError("must define alternative_codes to use avail_co")
+			cols = {a:req_data['avail_co'].get(a, '0') for a in alts}
 			try:
-				df_av = columnize(self._data_co, cols, inplace=False, dtype=float_dtype)
+				df_av = columnize(self._data_co, cols, inplace=False, dtype=numpy.int8)
 			except NameError:
 				logger.exception('NameError in avail_co')
 				raise
 				#df_av = self._data_av
-			else:
-				df_av.columns = alts
+			# else:
+			# 	df_av.columns = alts
 		elif 'avail_any' in req_data:
 			if self._data_av is None:
 				raise MissingDataError(

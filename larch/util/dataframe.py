@@ -1,5 +1,9 @@
 import pandas, numpy
 from xmle import Elem
+from joblib import Parallel, delayed, cpu_count
+import platform
+from typing import Mapping
+
 
 class DataFrameViewer(pandas.DataFrame):
 
@@ -82,7 +86,7 @@ def apply_global_background_gradient(df, override_min=None, override_max=None, c
 
 ###################
 
-def columnize_with_joinable_backing(df, name, inplace=True, dtype=None, debug=False, backing=None):
+def columnize_with_joinable_backing(df, name, inplace=False, dtype=None, debug=False, backing=None):
 	try:
 		return columnize(df, name, inplace=inplace, dtype=dtype, debug=debug)
 	except NameError:
@@ -105,13 +109,16 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 	"""Add a computed column to a DataFrame."""
 
 	datanames = None
-
-	from ..roles import LinearFunction
-	if isinstance(name, LinearFunction):
-		datanames = [str(_.data) for _ in name]
-
+	from ..roles import LinearFunction # import here to prevent circular imports
 	if isinstance(name, (list,tuple)):
 		datanames = [str(_) for _ in name]
+		datamap = {i:i for i in datanames}
+	elif isinstance(name, Mapping):
+		datanames = [str(_) for _ in name.values()]
+		datamap = name
+	elif isinstance(name, LinearFunction):
+		datanames = [str(_.data) for _ in name]
+		datamap = {i:i for i in datanames}
 
 	if datanames is not None:
 		if len(datanames) == 0:
@@ -119,17 +126,23 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 				return
 			else:
 				return pandas.DataFrame(index=df.index)
-		columns = []
+		columns = {}
 		source = df
-		for dname in datanames:
+		for dname in set(datanames):
 			out, source, backing = columnize_with_joinable_backing_2(source, dname, dtype, backing=backing)
-			columns.append(out)
-		df1 = pandas.concat(columns, axis=1, sort=False)
+			columns[dname] = out.to_numpy()
+		df1 = pandas.DataFrame({k:columns[v] for (k,v) in datamap.items()}, index=df.index)
 		if inplace:
-			df[datanames] = df1
+			df[datamap.keys()] = df1.values
 			return
 		else:
 			return df1
+
+	# short circuit for natural names
+	try:
+		return df[name]
+	except KeyError:
+		pass
 
 	from tokenize import tokenize, untokenize, NAME, OP, STRING, NUMBER
 	from .aster import asterize

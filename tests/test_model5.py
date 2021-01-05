@@ -4965,3 +4965,21 @@ def test_linear_component_scale():
 		'nonmotorized_time': -101752.27351325999,
 		'totcost': 59215.91013275611,
 	})
+
+
+def test_duplicate_var_co():
+	d = MTC()
+	m = Model(dataservice=d)
+	m.utility_co[2] = P("ASC_SR2") + P("hhinc_SR") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc_SR") * X("hhinc") + P("hhinc#3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+	m.utility_ca = PX("tottime") + PX("totcost")
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	m.title = "MTC Example 1 (Simple MNL)"
+	m.load_data()
+	m.maximize_loglike()
+	assert m.loglike() == approx(-3626.18625551337)
+	numpy.testing.assert_array_equal(m.dataframes.data_co.columns, ['hhinc'])
