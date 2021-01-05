@@ -212,6 +212,28 @@ def fourier_expansion(s, length=4, column=None, inplace=False):
 ### PIECEWISE LINEAR ###
 
 def piece(x, low_bound, high_bound):
+	"""
+	Clip the values in an array.
+
+	This function differs from the usual `numpy.clip`
+	in that the result is shifted by `low_bound` if it is
+	given, so that the valid result range is a contiguous
+	block of non-negative values starting from 0.
+
+	Parameters
+	----------
+	x : array-like
+		Array containing elements to clip
+	low_bound, high_bound : scalar, array-like, or None
+		Minimum and maximum values. If None, clipping is not
+		performed on the corresponding edge. Both may be
+		None, which results in a noop. Both are broadcast
+		against `x`.
+
+	Returns
+	-------
+	clipped_array : array-like
+	"""
 	if low_bound is None:
 		if high_bound is None:
 			return x
@@ -221,7 +243,7 @@ def piece(x, low_bound, high_bound):
 		if high_bound is None:
 			return numpy.maximum(x-low_bound, 0)
 		else:
-			return numpy.maximum(numpy.minimum(x, high_bound)-low_bound, 0)
+			return numpy.clip(x, low_bound, high_bound)-low_bound
 
 
 def parse_piece(s):
