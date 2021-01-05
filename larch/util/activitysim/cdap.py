@@ -85,11 +85,11 @@ def cdap_base_utility_by_person(model, n_persons, spec, alts=None, value_tokens=
     if n_persons == 1:
         for i in spec.index:
             if not pd.isna(spec.loc[i, "M"]):
-                model.utility_co[1] += X(spec.Expression[i]) * P(f"coef_{i:03d}_M")
+                model.utility_co[1] += X(spec.Expression[i]) * P(spec.loc[i, "M"])
             if not pd.isna(spec.loc[i, "N"]):
-                model.utility_co[2] += X(spec.Expression[i]) * P(f"coef_{i:03d}_N")
+                model.utility_co[2] += X(spec.Expression[i]) * P(spec.loc[i, "N"])
             if not pd.isna(spec.loc[i, "H"]):
-                model.utility_co[3] += X(spec.Expression[i]) * P(f"coef_{i:03d}_H")
+                model.utility_co[3] += X(spec.Expression[i]) * P(spec.loc[i, "H"])
     else:
         if alts is None:
             alts = generate_alternatives(n_persons)
@@ -102,7 +102,7 @@ def cdap_base_utility_by_person(model, n_persons, spec, alts=None, value_tokens=
                         x = apply_replacements(
                             spec.Expression[i], f"p{pnum}", value_tokens
                         )
-                        model.utility_co[anum] += X(x) * P(f"coef_{i:03d}_{aname[z]}")
+                        model.utility_co[anum] += X(x) * P(spec.loc[i, aname[z]])
 
 
 def interact_pattern(n_persons, select_persons, tag):
@@ -147,11 +147,12 @@ def cdap_interaction_utility(model, n_persons, alts, interaction_coef):
                 expression = "&".join(
                     f"(p{p}_ptype == {t})"
                     for (p, t) in zip(person_numbers, row.interaction_ptypes)
+                    if t != "*"
                 )
                 if expression:
-                    linear_component = X(expression) * P(f"interaction_{rowindex:03d}_{row.slug}")
+                    linear_component = X(expression) * P(row.coefficient)
                 else:
-                    linear_component = P(f"interaction_{rowindex:03d}_{row.slug}")
+                    linear_component = P(row.coefficient)
                 _logger.debug(
                     f"utility_co[{this_altnum} {this_aname}] += {linear_component}"
                 )
@@ -165,13 +166,12 @@ def cdap_interaction_utility(model, n_persons, alts, interaction_coef):
                             expression = "&".join(
                                 f"(p{p}_ptype == {t})"
                                 for (p, t) in zip(combo, row.interaction_ptypes)
+                                if t != "*"
                             )
                             # interaction terms without ptypes (i.e. with wildcards)
                             # only apply when the household size matches the cardinality
                             if expression != "":
-                                linear_component = X(expression) * P(
-                                    f"interaction_{rowindex:03d}_{row.slug}"
-                                )
+                                linear_component = X(expression) * P(row.coefficient)
                                 _logger.debug(
                                     f"utility_co[{anum} {aname}] += {linear_component}"
                                 )
@@ -226,6 +226,9 @@ def cdap_model(households, values, spec1, interaction_coef):
     m[1].choice_any = True
     m[1].availability_any = True
 
+    # Add cardinality into interaction_coef if not present
+    if 'cardinality' not in interaction_coef:
+        interaction_coef['cardinality'] = interaction_coef['interaction_ptypes'].str.len()
     for s in [2, 3, 4, 5]:
         _logger.info(f"building for model {s}")
         m[s] = Model(dataservice=cdap_data[s])
