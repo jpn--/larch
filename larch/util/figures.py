@@ -562,6 +562,9 @@ def share_figure(
 		style='stacked',
 		discrete=None,
 		xlim=None,
+		xscale=None,
+		xmajorticks=None,
+		xminorticks=None,
 		include_nests=False,
 		exclude_alts=None,
 		format='figure',
@@ -771,6 +774,13 @@ def share_figure(
 		ax0.set_ylim(0, 1)
 		if not discrete:
 			ax0.set_xlim(*xlim)
+			if xscale:
+				ax0.set_xscale(xscale)
+			if xmajorticks is not None:
+				ax0.set_xticks(xmajorticks)
+				ax0.set_xticklabels(xmajorticks)
+			if xminorticks is not None:
+				ax0.set_xticks(xminorticks, minor=True)
 		if x_discrete_labels is not None:
 			ax0.set_xticks(numpy.arange(len(x_discrete_labels)))
 			ax0.set_xticklabels(x_discrete_labels)
@@ -779,6 +789,13 @@ def share_figure(
 		ax1.set_ylim(0, 1)
 		if not discrete:
 			ax1.set_xlim(*xlim)
+			if xscale:
+				ax1.set_xscale(xscale)
+			if xmajorticks is not None:
+				ax1.set_xticks(xmajorticks)
+				ax1.set_xticklabels(xmajorticks)
+			if xminorticks is not None:
+				ax1.set_xticks(xminorticks, minor=True)
 		if x_discrete_labels is not None:
 			ax1.set_xticks(numpy.arange(len(x_discrete_labels)))
 			ax1.set_xticklabels(x_discrete_labels)
@@ -822,6 +839,13 @@ def share_figure(
 			)
 			if not discrete:
 				axes[n].set_xlim(*xlim)
+				if xscale:
+					axes[n].set_xscale(xscale)
+				if xmajorticks is not None:
+					axes[n].set_xticks(xmajorticks)
+					axes[n].set_xticklabels(xmajorticks)
+				if xminorticks is not None:
+					axes[n].set_xticks(xminorticks, minor=True)
 			if x_discrete_labels is not None:
 				axes[n].set_xticks(numpy.arange(len(x_discrete_labels)))
 				axes[n].set_xticklabels(x_discrete_labels)
