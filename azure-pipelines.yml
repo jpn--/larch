@@ -1,5 +1,6 @@
 trigger:
 - master
+- dev-a
 
 jobs:
 - job:
