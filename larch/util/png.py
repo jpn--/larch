@@ -59,7 +59,6 @@ def make_png(
 			_bytes_io,
 			dpi=dpi,
 			orientation='portrait',
-			papertype=None,
 			format='png',
 			bbox_inches='tight',
 			pad_inches=pad_inches,
