@@ -1272,7 +1272,7 @@ class LinearFunction2(MutableSequence):
 		from xmle import Elem
 		x = Elem('div', attrib={'class':'LinearFunc'})
 		for n,i in enumerate(self):
-			ix_ = i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters).getchildren()
+			ix_ = list(i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters))
 			if linebreaks:
 				if n>0 or lineprefix:
 					ix_.insert(0,Elem('br', tail = lineprefix+" + "))
@@ -1865,7 +1865,7 @@ class LinearFunction0(TouchNotify, list):
 		from xmle import Elem
 		x = Elem('div', attrib={'class':'LinearFunc'})
 		for n,i in enumerate(self):
-			ix_ = i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters).getchildren()
+			ix_ = list(i.__xml__(exponentiate_parameter=exponentiate_parameters, resolve_parameters=resolve_parameters))
 			if linebreaks:
 				if n>0 or lineprefix:
 					ix_.insert(0,Elem('br', tail = lineprefix+" + "))

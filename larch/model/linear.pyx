@@ -1149,11 +1149,11 @@ cdef class LinearFunction_C:
 		from xmle import Elem
 		x = Elem('div' if use_tooltips else 'pre', attrib={'class':'LinearFunc'})
 		for n,i in enumerate(self):
-			ix_ = i.__xml__(
+			ix_ = list(i.__xml__(
 				exponentiate_parameter=exponentiate_parameters,
 				resolve_parameters=resolve_parameters,
 				value_in_tooltips=value_in_tooltips,
-			).getchildren()
+			))
 			if linebreaks:
 				if n>0 or lineprefix:
 					ix_.insert(0,Elem('br', tail = lineprefix+" + "))
