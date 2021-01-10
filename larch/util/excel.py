@@ -499,7 +499,7 @@ Model.to_xlsx = _make_excel_writer
 
 def load_metadata(xlsx_filename, key=None):
     import pickle, base64, pandas
-    raw = pandas.read_excel(xlsx_filename, sheet_name='_metadata_', index_col=0)
+    raw = pandas.read_excel(xlsx_filename, sheet_name='_metadata_', index_col=0, engine='openpyxl')
     metadata = {}
     if key is None:
         for key, row in raw.iterrows():

@@ -368,6 +368,8 @@ class H5PodCE(H5Pod):
 				   rename_columns=None, force_natural_names=True,
 				   **kwargs):
 		self = cls(h5filename, h5mode, h5groupnode, inmemory=inmemory, temp=temp, complevel=complevel, complib=complib, ident=ident)
+		if 'engine' not in kwargs:
+			kwargs['engine'] = 'openpyxl'
 		df = pandas.read_excel(*args, **kwargs)
 		if rename_columns:
 			df.columns = [(rename_columns[c] if c in rename_columns else c) for c in df.columns]

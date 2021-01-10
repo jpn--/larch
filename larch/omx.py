@@ -508,7 +508,7 @@ class OMX(_omx_base_class):
 				n_rows = dbf.numrec
 		elif isinstance(filepath, str) and filepath.casefold()[-5:] == '.xlsx':
 			raise NotImplementedError()
-		# reader = pandas.read_excel(sfr, chunksize=chunksize)
+		# reader = pandas.read_excel(sfr, chunksize=chunksize, engine='openpyxl')
 		else:
 			from .util.smartread import SmartFileReader
 			sfr = SmartFileReader(filepath)
@@ -1072,6 +1072,8 @@ class OMX(_omx_base_class):
 		'''
 		if excel_kwarg is None:
 			excel_kwarg = {}
+		if 'engine' not in excel_kwarg:
+			excel_kwarg['engine'] = 'openpyxl'
 		self = cls.FromDataFrame(pandas.read_excel(filename, **excel_kwarg), *arg, **kwarg)
 		return self
 
