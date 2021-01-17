@@ -16,6 +16,7 @@ def doctor(
 		repair_asc=None,
 		repair_noch_nowt=None,
 		repair_nan_wt=None,
+		repair_nan_data_co=None,
 		verbose=3,
 ):
 	problems = dictx()
@@ -46,6 +47,12 @@ def doctor(
 	if diagnosis is not None:
 		logger.warning(f'problem: nan-weight ({len(diagnosis)} issues)')
 		problems['nan_weight'] = diagnosis
+
+	logger.info("checking for nan-data_co")
+	dfs, diagnosis = nan_data_co(dfs, repair=repair_nan_data_co, verbose=verbose)
+	if diagnosis is not None:
+		logger.warning(f'problem: nan-data_co')
+		problems['nan_data_co'] = diagnosis
 
 	logger.info("checking for low-variance-data-co")
 	dfs, diagnosis = low_variance_data_co(dfs, repair=None, verbose=verbose)
@@ -320,6 +327,49 @@ def nan_weight(dfs, repair=None, verbose=3):
 
 		if repair:
 			dfs.data_wt.fillna(0, inplace=True)
+
+	if m is None:
+		return dfs, diagnosis
+	else:
+		return m, diagnosis
+
+
+def nan_data_co(dfs, repair=None, verbose=3):
+	"""
+	Check if some data_co values are NaN.
+
+	Parameters
+	----------
+	dfs : DataFrames or Model
+		The data to check
+	repair : None or bool
+		Whether to repair the data.
+		Any true value will make NaN values in data_co zero.
+		None effects no repair, and simply emits a warning.
+	verbose : int, default 3
+		The number of example columns to list for each problem.
+
+	Returns
+	-------
+	dfs : DataFrames
+		The revised dataframe
+	diagnosis : pandas.DataFrame
+		The number of bad instances, and some example rows.
+
+	"""
+	if isinstance(dfs, Model):
+		m = dfs
+		dfs = m.dataframes
+	else:
+		m = None
+
+	diagnosis = None
+	if dfs.data_co is not None:
+		nan_dat = numpy.isnan(dfs.data_co).sum()
+		if nan_dat.sum():
+			diagnosis = pandas.DataFrame(nan_dat[nan_dat>0].iloc[:verbose])
+		if repair:
+			dfs.data_co.fillna(0, inplace=True)
 
 	if m is None:
 		return dfs, diagnosis

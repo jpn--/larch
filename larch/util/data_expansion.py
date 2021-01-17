@@ -287,21 +287,21 @@ def piecewise_linear(x, p=None, breaks=None):
 
 def piecewise_linear_parameter_names(basename, breaks):
 	from ..roles import P,X
-
-	lex = '②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
-
+	width = 1
+	if len(breaks) > 9:
+		width = 2
 	# first leg
 	b = breaks[0]
-	z = [P(f"{basename} ① up to {b}")]
+	z = [P(f"{basename}[{1:{width}d}]: up to {b}")]
 	# middle legs
 	for i in range(len(breaks) - 1):
 		b0 = breaks[i]
 		b1 = breaks[i + 1]
-		z += [P(f"{basename} {lex[i]} {b0} to {b1}")]
+		z += [P(f"{basename}[{i+2:{width}d}]: {b0} to {b1}")]
 	# last leg
 	i = len(breaks) - 1
 	b0 = breaks[i]
-	z += [P(f"{basename} {lex[i]} over {b0}")]
+	z += [P(f"{basename}[{i+2:{width}d}]: over {b0}")]
 	return z
 
 

@@ -66,16 +66,20 @@ class lazy(object):
         This obviously violates the lazy contract. A subclass of lazy
         may however have a contract where invalidation is appropriate.
         """
-        inst_cls = inst.__class__
-
-        if not hasattr(inst, '__dict__'):
-            raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
-
-        if name.startswith('__') and not name.endswith('__'):
-            name = '_%s%s' % (inst_cls.__name__, name)
-
-        if not isinstance(getattr(inst_cls, name), cls):
-            raise AttributeError("'%s.%s' is not a %s attribute" % (inst_cls.__name__, name, cls.__name__))
+        # These commands from the original are not currently used by larch and
+        # are omitted for speed.  They are left here in case they are needed
+        # for future compatibility.
+        #
+        # inst_cls = inst.__class__
+        #
+        # if not hasattr(inst, '__dict__'):
+        #     raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
+        #
+        # if name.startswith('__') and not name.endswith('__'):
+        #     name = '_%s%s' % (inst_cls.__name__, name)
+        #
+        # if not isinstance(getattr(inst_cls, name), cls):
+        #     raise AttributeError("'%s.%s' is not a %s attribute" % (inst_cls.__name__, name, cls.__name__))
 
         if name in inst.__dict__:
             del inst.__dict__[name]

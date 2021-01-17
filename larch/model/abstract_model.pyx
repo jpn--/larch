@@ -771,7 +771,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			timer.stop()
 
 			if final_screen_update and not quiet and not _doctest_mode_ and raw_result is not None:
-				tag1.update(f'Iteration {iteration_number:03} [Converged] {iteration_number_tail}', force=True)
+				converged = raw_result.get("message", "Converged")
+				tag1.update(f'Iteration {iteration_number:03} [{converged}] {iteration_number_tail}', force=True)
 				tag2.update(f'LL = {self.loglike()}', force=True)
 				tag3.update(self.pf, force=True)
 

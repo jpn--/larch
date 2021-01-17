@@ -178,6 +178,42 @@ cdef class Model5c(AbstractChoiceModel):
 		# if self._graph is not None:
 		# 	self.graph.set_touch_callback(self.mangle)
 
+	def specification_hash(self, digest_size=4):
+		"""
+		Generate a hex hash on the model specification.
+
+		Parameters
+		----------
+		digest_size : int, default 4
+			Size of hash digest, in bytes.  The resulting
+			hex-encoded string is actually double this
+			length.
+
+		Returns
+		-------
+		str
+		"""
+		from hashlib import blake2b
+		h = blake2b(digest_size=digest_size)
+		h.update(repr(self.utility_ca).encode())
+		h.update(repr(self.utility_co).encode())
+		h.update(repr(self.quantity_ca).encode())
+		h.update(repr(self.quantity_scale).encode())
+		h.update(repr(self.logsum_parameter).encode())
+		h.update(repr(self.choice_ca_var).encode())
+		h.update(repr(self.choice_co_vars).encode())
+		h.update(repr(self.choice_co_code).encode())
+		h.update(repr(self.choice_any).encode())
+		h.update(repr(self.weight_co_var).encode())
+		h.update(repr(self.availability_var).encode())
+		h.update(repr(self.availability_co_vars).encode())
+		h.update(repr(self.availability_any).encode())
+		for i in self.graph.nodes:
+			h.update(repr(self.graph.nodes[i]).encode())
+		for i in self.graph.edges:
+			h.update(repr(self.graph.edges[i]).encode())
+		return h.hexdigest()
+
 	@property
 	def _model_does_not_require_choice(self):
 		return self._does_not_require_choice
@@ -238,7 +274,7 @@ cdef class Model5c(AbstractChoiceModel):
 			u_co_dataset = set()
 
 			_utility_co_postprocessed = self._utility_co_postprocess
-			for altcode, linear_function in _utility_co_postprocessed.items():
+			for altcode, linear_function in self._utility_co.items():
 				for component in linear_function:
 					nameset.add(self.__p_rename(component.param))
 					try:
@@ -349,30 +385,41 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@property
 	def _utility_co_postprocess(self):
-		u = DictOfLinearFunction_C()
-		if self._utility_co is not None:
-			keys = list(self._utility_co.keys())
-			u_found = {k:set() for k in keys}
-			for altkey in keys:
-				u[altkey] = LinearFunction_C()
-			for altkey in keys:
-				for n, i in enumerate(self._utility_co[altkey]):
-					try:
-						i_d = i.data
-					except:
-						logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self._utility_co[altkey])}")
-						raise
-					if i_d in u_found[altkey]:
-						import warnings
-						warnings.warn("found duplicate X.{} in utility_co[{}]".format(i_d,altkey))
-						# i_d = i_d + DataRef('00')
-					u_found[altkey].add(i_d)
-					# if i.param in self._snapped_parameters:
-					# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
-					# else:
-					# 	u[altkey] += i.param * i_d * i.scale
-					u[altkey] += i.param * i_d * i.scale
-		return u
+		return self._utility_co
+		# u = DictOfLinearFunction_C()
+		# warning_queue = {}
+		# if self._utility_co is not None:
+		# 	keys = list(self._utility_co.keys())
+		# 	u_found = {k:set() for k in keys}
+		# 	for altkey in keys:
+		# 		u[altkey] = LinearFunction_C()
+		# 	for altkey in keys:
+		# 		for n, i in enumerate(self._utility_co[altkey]):
+		# 			try:
+		# 				i_d = i.data
+		# 			except:
+		# 				logger.error(f"n={n}, altkey={altkey}, len(self.utility_co[altkey])={len(self._utility_co[altkey])}")
+		# 				raise
+		# 			if i_d in u_found[altkey]:
+		# 				if i_d not in warning_queue:
+		# 					warning_queue[i_d] = set()
+		# 				warning_queue[i_d].add(altkey)
+		# 			u_found[altkey].add(i_d)
+		# 			# if i.param in self._snapped_parameters:
+		# 			# 	u[altkey] += self._snapped_parameters[i.param] * i_d * i.scale
+		# 			# else:
+		# 			# 	u[altkey] += i.param * i_d * i.scale
+		# 			u[altkey].append(i.param * i_d * i.scale)
+		# if warning_queue:
+		# 	import warnings
+		# 	for i_d, altkeys in warning_queue.items():
+		# 		if len(altkeys) < 6:
+		# 			k = ','.join(str(j) for j in altkeys)
+		# 		else:
+		# 			k = (','.join(str(j) for j in sorted(altkeys)[:3])
+		# 				+ f", & {len(altkeys)-3} more")
+		# 		warnings.warn(f"found duplicate X({i_d}) in utility_co[{k}]")
+		# return u
 
 	@property
 	def _utility_ca_postprocess(self):

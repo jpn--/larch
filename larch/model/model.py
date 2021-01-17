@@ -675,6 +675,7 @@ class Model(_Model5c):
 			repair_asc=None,
 			repair_noch_nowt=None,
 			repair_nan_wt=None,
+			repair_nan_data_co=None,
 			verbose=3,
 	):
 		self.unmangle(True)
@@ -686,6 +687,7 @@ class Model(_Model5c):
 			repair_asc=repair_asc,
 			repair_noch_nowt=repair_noch_nowt,
 			repair_nan_wt=repair_nan_wt,
+			repair_nan_data_co=repair_nan_data_co,
 			verbose=verbose,
 		)
 

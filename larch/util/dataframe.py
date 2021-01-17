@@ -100,9 +100,12 @@ def columnize_with_joinable_backing_2(df, name, dtype=None, debug=False, backing
 	try:
 		out = columnize(df, name, inplace=False, dtype=dtype, debug=debug)
 	except NameError:
-		source = df.join(backing)
-		backing = None
-		out = columnize(source, name, inplace=False, dtype=dtype, debug=debug)
+		if backing is not None:
+			source = df.join(backing)
+			backing = None
+			out = columnize(source, name, inplace=False, dtype=dtype, debug=debug)
+		else:
+			raise
 	return out, source, backing
 
 def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):

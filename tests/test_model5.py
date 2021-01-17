@@ -4600,8 +4600,7 @@ def test_mangling():
 
 	m.utility_co[2] += P.ParamZ2b * X.DataZ
 	assert m._is_mangled()
-	with warns(UserWarning):
-		m.unmangle()
+	m.unmangle()
 	assert not m._is_mangled()
 
 def test_logsums():

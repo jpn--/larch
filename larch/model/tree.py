@@ -50,7 +50,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		if self._root_id not in self.nodes:
 			self.add_node(self._root_id, name='_root_', root=True)
 		for t,a in zip(top_nests, top_attrs):
-			self.add_edge(self._root_id, t, **a)
+			self.add_edge(self._root_id, t, **a, _clear_caches=False)
 		self._clear_caches()
 
 	def _clear_caches(self):
@@ -65,15 +65,15 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self._successor_slots = {}
 		self.touch()
 
-	def add_edge(self, u, v, implied=False, **kwarg):
+	def add_edge(self, u, v, implied=False, _clear_caches=True, **kwarg):
 		if not implied:
 			drops = []
 			for u_,v_,imp_ in self.in_edges(nbunch=[v], data='implied'):
 				if imp_:
 					drops.append([u_,v_])
 			for d in drops:
-				self._remove_edge_no_implied(*d)
-		self._clear_caches()
+				super().remove_edge(*d)
+		if _clear_caches: self._clear_caches()
 		return super().add_edge(int(u), int(v), implied=implied, **kwarg)
 
 	def _remove_edge_no_implied(self, u, v, *arg, **kwarg):
@@ -84,7 +84,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 	def remove_edge(self, u, v, *arg, **kwarg):
 		result = super().remove_edge(u, v)
 		if self.in_degree(v)==0 and v!=self._root_id:
-			self.add_edge(self._root_id, v, implied=True)
+			self.add_edge(self._root_id, v, implied=True, _clear_caches=False)
 		self._clear_caches()
 		return result
 
@@ -123,15 +123,15 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			raise TypeError("cannot give both parent and parents arguments")
 		super().add_node(code, **kwarg)
 		for child in children:
-			self.add_edge(code, child)
+			self.add_edge(code, child, _clear_caches=False)
 		if parent is not None:
-			self.add_edge(parent, code)
+			self.add_edge(parent, code, _clear_caches=False)
 		elif parents is not None:
 			for p in parents:
-				self.add_edge(p, code)
+				self.add_edge(p, code, _clear_caches=False)
 		else:
 			if self.in_degree(code)==0 and code!=self._root_id:
-				self.add_edge(self._root_id, code, implied=True)
+				self.add_edge(self._root_id, code, implied=True, _clear_caches=False)
 		if phi_parameters is not None:
 			for k, parametername in phi_parameters.items():
 				if (code, k) in self.edges:
@@ -208,11 +208,27 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		# 	if not out_degree:
 		# 		self._topological_sorted_no_elementals.remove(code)
 		# return self._topological_sorted_no_elementals
-		result = self.topological_sorted.copy()
+		try:
+			result = self.topological_sorted.copy()
+		except nx.NetworkXUnfeasible:
+			from networkx.algorithms.cycles import find_cycle
+			try:
+				cycle = find_cycle(self)
+			except:
+				pass
+			else:
+				print("Found graph cycle:")
+				print(list(cycle))
+			raise
+
+		# collect zero out-degree (elemental) codes in a set
+		# to remove them in a batch, which is much faster than
+		# removing them from the list one at a time.
+		to_remove = set()
 		for code, out_degree in self.out_degree:
 			if not out_degree:
-				result.remove(code)
-		return result
+				to_remove.add(code)
+		return [i for i in result if i not in to_remove]
 
 	@lazy
 	def standard_sort(self):

@@ -6,6 +6,7 @@ from ..general_precision import l4_float_dtype
 import sys
 import numpy
 import pandas
+import contextlib
 
 from ..roles import DictOfStrings
 from .linear import ParameterRef_C, LinearComponent_C, LinearFunction_C
@@ -80,6 +81,9 @@ cdef class ParameterFrame:
 		Triggers a call to `frame_values_have_changed` if there is a change to the
 		frame values.
 		"""
+		lock_level = getattr(self, '_batch_update_lock_level', 0)
+		if lock_level > 0:
+			return
 		try:
 			if self._prior_frame_values is None or (
 				not (
@@ -408,7 +412,7 @@ cdef class ParameterFrame:
 		"""
 		if isinstance(name, ParameterRef_C):
 			name = str(name)
-		if value is 'null':
+		if value == 'null':
 			value = self.pf.loc[name, 'nullvalue']
 		self.set_value(name, value, holdfast=1, initvalue=value, nullvalue=value, minimum=value, maximum=value)
 		if note is not None:
@@ -437,6 +441,19 @@ cdef class ParameterFrame:
 			self.lock_value(name, value, note=note, change_check=False)
 		for name, value in kwargs.items():
 			self.lock_value(name, value, note=note, change_check=False)
+		self._check_if_frame_values_changed()
+
+	@contextlib.contextmanager
+	def batch_update(self):
+		"""
+		This context manager suppresses internal updates when editing parameters.
+		"""
+		lock_level = getattr(self, '_batch_update_lock_level', 0)
+		self._batch_update_lock_level = lock_level + 1
+		try:
+			yield
+		finally:
+			self._batch_update_lock_level -= 1
 		self._check_if_frame_values_changed()
 
 	def get_value(self, name, *, default=None):
