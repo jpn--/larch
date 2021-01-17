@@ -690,12 +690,12 @@ class NestingTree(TouchNotify,nx.DiGraph):
 				next_tier.extend(self.successors(i))
 
 	def _get_simple_mu_and_alpha(self, model, holdfast_invalidates=True):
-		alpha = numpy.zeros([len(self), len(self)], dtype=numpy.float64)
+		# alpha = numpy.zeros([len(self), len(self)], dtype=numpy.float64)
 		mu    = numpy.ones ([len(self),          ], dtype=numpy.float64)
 		muslots= numpy.full([len(self),          ], -1, dtype=numpy.int32)
 		for child, childcode in enumerate(self.standard_sort):
-			for parent in self.predecessor_slots(childcode):
-				alpha[parent, child] = 1
+			# for parent in self.predecessor_slots(childcode):
+			# 	alpha[parent, child] = 1
 			pname = self.nodes[childcode].get('parameter', None)
 			mu[child] = model.get_value(pname, default=1.0)
 			muslots[child] = model.get_slot_x(pname, holdfast_invalidates)
@@ -723,7 +723,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		# 		first_visit[n] = 1
 		# 		first_visit_found.add(dn[n])
 
-		return mu, muslots, alpha, up, dn, num, start, val
+		return mu, muslots, up, dn, num, start, val
 
 def graph_to_figure(graph, output_format='svg', **format):
 
