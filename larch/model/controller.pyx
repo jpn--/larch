@@ -218,13 +218,16 @@ cdef class Model5c(AbstractChoiceModel):
 		"""
 		Performance optimization for NL models.
 
+		Warning: do not use this for model parameter estimation!
+
 		This function pre-computes the tree structure arrays.
 		It is useful only in high performance applications with
 		exceptionally large nesting structures.  It should only
-		be called after the nesting tree is fully defined. Editing
-		the nesting tree after calling this function may
-		cause unexpected results including possibly crashing the
-		entire Python instance.
+		be called after the nesting tree and all parameter values
+		are fully defined and fixed. Editing the nesting tree or
+		parameter values after calling this function may cause
+		unexpected results including incorrect results, and it
+		possibly can result in crashing the entire Python instance.
 		"""
 		from .tree_struct import TreeStructure
 		self.unmangle()

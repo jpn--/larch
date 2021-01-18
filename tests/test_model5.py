@@ -513,6 +513,70 @@ def test_dataframes_nl5():
 
 	assert chk.data['similarity'].min() > 4
 
+def test_nl_preloaded_tree_struct():
+	d = MTC()
+	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
+	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	df_av = d.dataframe_idca('_avail_', dtype=bool)
+	df_ch = d.dataframe_idca('_choice_')
+	from larch.dataframes import DataFrames
+	from larch import Model
+	j = DataFrames(
+		co=df_co,
+		ca=df_ca,
+		av=df_av,
+		ch=df_ch,
+	)
+	m5 = Model()
+	from larch.roles import P, X, PX
+	m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+	m5.utility_ca = PX("tottime") + PX("totcost")
+	m5.dataframes = j
+	m5.graph.add_node(9, children=(5, 6), parameter='MU_NonMotorized')
+	beta_in1 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+		'MU_NonMotorized': 0.5,
+	}
+	m5.set_values(beta_in1)
+	m5._preload_tree_structure()
+	ll2b = m5.loglike2(beta_in1, return_series=True)
+	q1_dllb = {
+		'ASC_BIKE': -94.071343,
+		'ASC_SR2': -800.092341,
+		'ASC_SR3P': -129.354567,
+		'ASC_TRAN': -369.808551,
+		'ASC_WALK': -114.786728,
+		'MU_NonMotorized': -34.816070,
+		'hhinc#2': -47089.611079,
+		'hhinc#3': -8505.116916,
+		'hhinc#4': -22071.859018,
+		'hhinc#5': -5844.969336,
+		'hhinc#6': -7168.859044,
+		'totcost': 37322.528282,
+		'tottime': -26479.290942,
+	}
+
+	assert -4897.764630665653 == approx(ll2b.ll)
+	dict_ll2b_dll = dict(ll2b.dll)
+	for k in q1_dllb:
+		assert q1_dllb[k] == approx(dict_ll2b_dll[k], rel=1e-5), f"{k} {q1_dllb[k]} != {dict_ll2b_dll[k]}"
+	chk = m5.check_d_loglike()
+	assert chk.data.loc['MU_NonMotorized', 'finite_diff'] == 0
 
 def test_dataframes_cnl():
 
