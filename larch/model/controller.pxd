@@ -4,7 +4,7 @@ from ..general_precision cimport *
 from ..dataframes cimport DataFrames
 from .linear cimport LinearFunction_C, DictOfLinearFunction_C
 from .abstract_model cimport AbstractChoiceModel
-
+from .tree_struct cimport TreeStructure
 
 cdef class Model5c(AbstractChoiceModel):
 
@@ -34,6 +34,7 @@ cdef class Model5c(AbstractChoiceModel):
 		bint _does_not_require_choice
 
 		object _graph
+		TreeStructure _tree_struct
 
 		int _n_threads
 

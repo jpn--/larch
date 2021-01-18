@@ -515,7 +515,10 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 		storage_size_dLLc = n_cases_local if persist & PERSIST_D_LOGLIKE_CASEWISE else num_threads
 		storage_size_dU   = n_cases_local if persist & PERSIST_D_UTILITY          else num_threads
 
-		tree = TreeStructure(model, model._graph)
+		if model._tree_struct is None:
+			tree = TreeStructure(model, model._graph)
+		else:
+			tree = model._tree_struct
 		_check_for_zero_mu(n_alts, tree.n_nodes, tree.model_mu_param_values)
 
 		scratch             = numpy.zeros([num_threads,n_params], dtype=l4_float_dtype)
