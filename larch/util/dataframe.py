@@ -3,7 +3,10 @@ from xmle import Elem
 from joblib import Parallel, delayed, cpu_count
 import platform
 from typing import Mapping
-
+try:
+	import pyarrow
+except ImportError:
+	pyarrow = None
 
 class DataFrameViewer(pandas.DataFrame):
 
@@ -86,6 +89,21 @@ def apply_global_background_gradient(df, override_min=None, override_max=None, c
 
 ###################
 
+def dataframe_from_dict_of_series(dict_of_series):
+	dict_of_numpy_arrays = {}
+	renaming = {}
+	for k in sorted(dict_of_series.keys()):
+		v = dict_of_series[k]
+		if v in df:
+			dict_of_numpy_arrays[str(k)] = df[v].to_numpy()
+		else:
+			dict_of_numpy_arrays[str(k)] = df.eval(v).to_numpy()
+		renaming[str(k)] = k
+
+	out = pa.table(dict_of_numpy_arrays).to_pandas()
+	out.rename(columns=renaming, inplace=True)
+	return out
+
 def columnize_with_joinable_backing(df, name, inplace=False, dtype=None, debug=False, backing=None):
 	try:
 		return columnize(df, name, inplace=inplace, dtype=dtype, debug=debug)
@@ -134,7 +152,19 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 		for dname in set(datanames):
 			out, source, backing = columnize_with_joinable_backing_2(source, dname, dtype, backing=backing)
 			columns[dname] = out.to_numpy()
-		df1 = pandas.DataFrame({k:columns[v] for (k,v) in datamap.items()}, index=df.index)
+		content = {k: columns[v] for (k, v) in datamap.items()}
+		if pyarrow:
+			# For very large dataframes, this is faster than the default pandas constructor
+			dict_of_numpy_arrays = {}
+			renaming = {}
+			for k in sorted(content.keys()):
+				dict_of_numpy_arrays[str(k)] = content[k]
+				renaming[str(k)] = k
+			df1 = pyarrow.table(dict_of_numpy_arrays).to_pandas()
+			df1.index = df.index
+			df1.rename(columns=renaming, inplace=True)
+		else:
+			df1 = pandas.DataFrame(content, index=df.index)
 		if inplace:
 			df[datamap.keys()] = df1.values
 			return

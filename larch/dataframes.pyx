@@ -657,7 +657,7 @@ cdef class DataFrames:
 						av = av.unstack()
 				self.data_av = av
 
-			self._weight_normalization = 1
+			self._weight_normalization = 1.0
 
 			logger.debug(" DataFrames ~ assign names")
 			self._data_av_name = av_name
@@ -854,6 +854,295 @@ cdef class DataFrames:
 		bool
 		"""
 		return self._is_computational_ready(activate)
+
+	def to_feathers(self, filename, components=None):
+		"""
+		Output data to a collection of Feather files.
+
+		Parameters
+		----------
+		filename : path-like
+			The base filename for the output files.  A collection
+			of like-named files differing by only file extension
+			will be created.
+		components : subset of {'co','ca','ce','wt','av','ch','meta'}
+			Only these data components will be exported.
+
+		"""
+		import pyarrow as pa
+		import pyarrow.feather as pf
+		import pickle
+		try:
+
+			if components is None:
+				components = {'co','ca','ce','wt','av','ch','meta'}
+			else:
+				components = set(components)
+
+			if not self.is_computational_ready(True):
+				self.computational = True
+
+			if 'meta' in components:
+				alt_data = {}
+				altcodes = self.alternative_codes()
+				if altcodes is not None:
+					alt_data['altcodes'] = altcodes
+				altnames = self.alternative_names()
+				if altnames is not None:
+					alt_data['altnames'] = altnames
+				tb = pa.table(alt_data)
+				metadata = tb.schema.metadata or {}
+				caseindex = self.caseindex
+				if caseindex is not None:
+					ci = pickle.dumps(caseindex)
+					metadata[b'CASEINDEX'] = pa.compress(ci, asbytes=True)
+					metadata[b'CASEINDEXBYTES'] = str(len(ci))
+				if self.weight_normalization != 1.0:
+					metadata[b'WGT_NORM'] = self.weight_normalization.hex()
+				new_schema = tb.schema.with_metadata(metadata)
+				tb = tb.cast(new_schema)
+				pf.write_feather(tb, str(filename)+".metadata")
+
+			# core data
+			def segment_out(seg):
+				array_ = getattr(self, f'array_{seg}')()
+				if array_ is not None:
+					if seg == 'ce':
+						pf.write_feather(self.data_ce.reset_index(), str(filename)+f".data_ce")
+					else:
+						if array_.flags['F_CONTIGUOUS']:
+							tb = pa.table([array_.T.reshape(-1)], [f'data_{seg}'])
+							transpose = b'Y'
+						else:
+							tb = pa.table([array_.reshape(-1)], [f'data_{seg}'])
+							transpose = b'N'
+						metadata = tb.schema.metadata or {}
+						metadata[b'T'] = transpose
+						if 'meta' in components:
+							data_ = getattr(self, f'data_{seg}')
+							columns = pickle.dumps(data_.columns)
+							metadata[b'COLUMNS'] = pa.compress(columns, asbytes=True)
+							metadata[b'COLUMNSBYTES'] = str(len(columns))
+						new_schema = tb.schema.with_metadata(metadata)
+						tb = tb.cast(new_schema)
+						pf.write_feather(tb, str(filename)+f".data_{seg}")
+			for seg in components:
+				if seg == 'meta': continue
+				segment_out(seg)
+			# if self.array_co() is not None and 'co' in components:
+			# 	tb = pa.table([self.array_co().T.reshape(-1)], ['data_co'])
+			# 	if 'meta' in components:
+			# 		metadata = tb.schema.metadata or {}
+			# 		columns = pickle.dumps(self.data_co.columns)
+			# 		metadata[b'COLUMNS'] = pa.compress(columns, asbytes=True)
+			# 		metadata[b'COLUMNSBYTES'] = str(len(columns))
+			# 		new_schema = tb.schema.with_metadata(metadata)
+			# 		tb = tb.cast(new_schema)
+			# 	pf.write_feather(tb, str(filename)+".data_co")
+			# if self.array_ca() is not None and 'ca' in components:
+			# 	tb = pa.table([self.array_ca().T.reshape(-1)], ['data_ca'])
+			# 	if 'meta' in components:
+			# 		metadata = tb.schema.metadata or {}
+			# 		columns = pickle.dumps(self.data_ca.columns)
+			# 		metadata[b'COLUMNS'] = pa.compress(columns, asbytes=True)
+			# 		metadata[b'COLUMNSBYTES'] = str(len(columns))
+			# 		new_schema = tb.schema.with_metadata(metadata)
+			# 		tb = tb.cast(new_schema)
+			# 	pf.write_feather(tb, str(filename)+".data_ca")
+			# if self.array_ce() is not None and 'ce' in components:
+			# 	tb = pa.table([self.array_ce().T.reshape(-1)], ['data_ce'])
+			# 	if 'meta' in components:
+			# 		metadata = tb.schema.metadata or {}
+			# 		columns = pickle.dumps(self.data_ce.columns)
+			# 		metadata[b'COLUMNS'] = pa.compress(columns, asbytes=True)
+			# 		metadata[b'COLUMNSBYTES'] = str(len(columns))
+			# 		new_schema = tb.schema.with_metadata(metadata)
+			# 		tb = tb.cast(new_schema)
+			# 	pf.write_feather(tb, str(filename)+".data_ce")
+			# if self.array_av() is not None and 'av' in components:
+			# 	tb = pa.table([self.array_av().T.reshape(-1)], ['data_av'])
+			# 	pf.write_feather(tb, str(filename)+".data_av")
+			# if self.array_ch() is not None and 'ch' in components:
+			# 	tb = pa.table([self.array_ch().T.reshape(-1)], ['data_ch'])
+			# 	pf.write_feather(tb, str(filename)+".data_ch")
+			# if self.array_wt() is not None and 'wt' in components:
+			# 	tb = pa.table([self.array_wt().reshape(-1)], ['data_wt'])
+			# 	pf.write_feather(tb, str(filename)+".data_wt")
+		except:
+			logger.exception("error in to_feathers")
+			raise
+
+	@classmethod
+	def from_feathers(cls, filename, components=None):
+		import pyarrow as pa
+		import pyarrow.feather as pf
+		import pickle
+		import os
+
+		if components is None:
+			components = {'co','ca','ce','wt','av','ch', 'meta'}
+		else:
+			components = set(components)
+
+		def from_metadata(tb, tag):
+			raw_ = tb.schema.metadata.get(tag, None)
+			len_ = int(tb.schema.metadata.get(tag+b'BYTES', 0))
+			if raw_:
+				return pickle.loads(pa.decompress(raw_, len_))
+			else:
+				return None
+
+		filename_meta = str(filename)+".metadata"
+		if not os.path.exists(filename_meta):
+			raise FileNotFoundError(filename_meta)
+		tb = pf.read_table(filename_meta)
+		if 'altcodes' in tb.column_names:
+			altcodes = tb['altcodes'].to_numpy()
+		else:
+			altcodes = None
+		if 'altnames' in tb.column_names:
+			altnames = tb['altnames'].to_numpy()
+		else:
+			altnames = None
+
+		caseindex = from_metadata(tb, b'CASEINDEX')
+		raw_wgtnorm = tb.schema.metadata.get(b'WGT_NORM', None)
+		if raw_wgtnorm:
+			wgtnorm = float.fromhex(raw_wgtnorm)
+		else:
+			wgtnorm = 1.0
+
+		kwargs = {}
+		def segment_in(seg):
+			try:
+				filename_seg = str(filename)+f".data_{seg}"
+				if os.path.exists(filename_seg):
+					if seg == 'ce':
+						df = pf.read_feather(filename_seg)
+						df = df.set_index(list(df.columns[:2]))
+					else:
+						tb = pf.read_table(filename_seg)
+						columns = from_metadata(tb, b'COLUMNS')
+						transpose = tb.schema.metadata.get(b'T', b'N')
+						if transpose == b'Y':
+							arr = tb[f'data_{seg}'].to_numpy().reshape(len(columns), -1).T
+						else:
+							arr = tb[f'data_{seg}'].to_numpy().reshape(-1, len(columns))
+						if seg == 'ca':
+							idx = pandas.MultiIndex.from_product([
+							    caseindex,
+							    altcodes,
+							], names=['_caseid_', '_altid_'])
+						else:
+							idx = caseindex
+						df = pandas.DataFrame(arr, columns=columns, index=idx)
+						if seg in ('ch','wt'):
+							df = df.copy() # these two arrays must be writeable
+					kwargs[seg] = df
+			except Exception as err:
+				raise ValueError(f"error in reading '{seg}'") from err
+		for seg in components:
+			if seg == 'meta': continue
+			segment_in(seg)
+
+		result = cls(
+			alt_codes=altcodes,
+			alt_names=altnames,
+			**kwargs,
+		)
+		result.weight_normalization = wgtnorm
+		return result
+
+	def inject_feathers(self, filename, components=None):
+		"""
+		Read data from a collection of Feather files.
+
+		This method overwrites the existing arrays of data
+		for the given components.  The shape and structure
+		of the imported data must exactly match the existing
+		data, including the number of cases.  This requirement
+		is intended to allow significant speed optimizations.
+		If you need to change any dimension of the data, instead
+		load a new DataFrames object.
+
+		Parameters
+		----------
+		filename : path-like
+			The base filename for the output files.  A collection
+			of like-named files differing by only file extension
+			will be created.
+		components : subset of {'co','ca','ce','wt','av','ch','meta'}
+			Only these data components will be imported.
+
+		"""
+		import pyarrow.feather as pf
+		import os
+
+		if components is None:
+			components = {'co','ca','ce','wt','av','ch'}
+		else:
+			components = set(components)
+
+		# core data
+		array_co = self.array_co()
+		if array_co is not None and 'co' in components:
+			filename_co = str(filename)+".data_co"
+			tb = pf.read_table(filename_co)
+			transpose = tb.schema.metadata.get(b'T', b'N')
+			if transpose == b'Y':
+				arr = tb['data_co'].to_numpy().reshape(array_co.shape[1], array_co.shape[0]).T
+			else:
+				arr = tb['data_co'].to_numpy().reshape(array_co.shape[0], array_co.shape[1])
+			array_co[:] = arr[:]
+
+		array_ca = self.array_ca()
+		if array_ca is not None and 'ca' in components:
+			filename_ca = str(filename)+".data_ca"
+			tb = pf.read_table(filename_ca)
+			transpose = tb.schema.metadata.get(b'T', b'N')
+			if transpose == b'Y':
+				arr = tb['data_ca'].to_numpy().reshape(array_ca.shape[2], array_ca.shape[1], array_ca.shape[0]).T
+			else:
+				arr = tb['data_ca'].to_numpy().reshape(array_ca.shape[0], array_ca.shape[1], array_ca.shape[2])
+			array_ca[:] = arr[:]
+
+		array_ce = self.array_ce()
+		if array_ce is not None and 'ce' in components:
+			filename_ce = str(filename)+".data_ce"
+			df = pf.read_feather(filename_ce)
+			df = df.set_index(list(df.columns[:2]))
+			arr = df.to_numpy().reshape(array_ce.shape[0], array_ce.shape[1])
+			array_ce[:] = arr[:]
+
+		array_av = self.array_av()
+		if array_av is not None and 'av' in components:
+			filename_av = str(filename)+".data_av"
+			tb = pf.read_table(filename_av)
+			transpose = tb.schema.metadata.get(b'T', b'N')
+			if transpose == b'Y':
+				arr = tb['data_av'].to_numpy().reshape(array_av.shape[1], array_av.shape[0]).T
+			else:
+				arr = tb['data_av'].to_numpy().reshape(array_av.shape[0], array_av.shape[1])
+			array_av[:] = arr[:]
+
+		array_ch = self.array_ch()
+		if array_ch is not None and 'ch' in components:
+			filename_ch = str(filename)+".data_ch"
+			tb = pf.read_table(filename_ch)
+			transpose = tb.schema.metadata.get(b'T', b'N')
+			if transpose == b'Y':
+				arr = tb['data_ch'].to_numpy().reshape(array_ch.shape[1], array_ch.shape[0]).T
+			else:
+				arr = tb['data_ch'].to_numpy().reshape(array_ch.shape[0], array_ch.shape[1])
+			array_ch[:] = arr[:]
+
+		array_wt = self.array_wt()
+		if array_wt is not None and 'wt' in components:
+			filename_wt = str(filename)+".data_wt"
+			tb = pf.read_table(filename_wt)
+			arr = tb['data_wt'].to_numpy().reshape(array_wt.shape[0])
+			array_wt[:] = arr[:]
+
 
 	def statistics(self, title="Data Statistics", header_level=2, graph=None):
 		from xmle import Reporter, NumberedCaption
@@ -1122,7 +1411,7 @@ cdef class DataFrames:
 		elif self._data_ce is not None:
 			return self._data_ce.index.levels[0][numpy.unique(self._data_ce.index.codes[0])]
 		else:
-			return 0
+			return None
 
 
 	@property

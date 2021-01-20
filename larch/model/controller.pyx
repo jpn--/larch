@@ -494,8 +494,6 @@ cdef class Model5c(AbstractChoiceModel):
 			self,
 			DataFrames x,
 			bint check_sufficiency=True,
-			direct_injection=False,
-			on_injection_failure='raise',
 	):
 		"""
 
@@ -515,62 +513,6 @@ cdef class Model5c(AbstractChoiceModel):
 		"""
 		x.computational = True
 		self.clear_best_loglike()
-		if direct_injection:
-			try:
-				if x._array_co is not None:
-					if self._dataframes._array_co is None:
-						raise ValueError("cannot direct inject, array_co is missing")
-					elif (x._array_co.shape[0] != self._dataframes._array_co.shape[0]
-						  or x._array_co.shape[1] != self._dataframes._array_co.shape[1]):
-						raise ValueError(f"cannot direct inject, array_co has different shape {x._array_co.shape} vs {self._dataframes._array_co.shape}")
-					else:
-						self._dataframes._array_co[:] = x._array_co[:]
-				if x._array_ca is not None:
-					if self._dataframes._array_ca is None:
-						raise ValueError("cannot direct inject, array_ca is missing")
-					elif (x._array_ca.shape[0] != self._dataframes._array_ca.shape[0]
-					      or x._array_ca.shape[1] != self._dataframes._array_ca.shape[1]
-					      or x._array_ca.shape[2] != self._dataframes._array_ca.shape[2]):
-						raise ValueError(f"cannot direct inject, array_ca has different shape {x._array_ca.shape} vs {self._dataframes._array_ca.shape}")
-					else:
-						self._dataframes._array_ca[:] = x._array_ca[:]
-				if x._array_ce is not None:
-					if self._dataframes._array_ce is None:
-						raise ValueError("cannot direct inject, array_ce is missing")
-					elif (x._array_ce.shape[0] != self._dataframes._array_ce.shape[0]
-					      or x._array_ce.shape[1] != self._dataframes._array_ce.shape[1]):
-						raise ValueError(f"cannot direct inject, array_ce has different shape {x._array_ce.shape} vs {self._dataframes._array_ce.shape}")
-					else:
-						self._dataframes._array_ce[:] = x._array_ce[:]
-				if x._array_av is not None:
-					if self._dataframes._array_av is None:
-						raise ValueError("cannot direct inject, array_av is missing")
-					elif (x._array_av.shape[0] != self._dataframes._array_av.shape[0]
-					      or x._array_av.shape[1] != self._dataframes._array_av.shape[1]):
-						raise ValueError(f"cannot direct inject, array_av has different shape {x._array_av.shape} vs {self._dataframes._array_av.shape}")
-					else:
-						self._dataframes._array_av[:] = x._array_av[:]
-				if x._array_ch is not None:
-					if self._dataframes._array_ch is None:
-						raise ValueError("cannot direct inject, array_ch is missing")
-					elif (x._array_ch.shape[0] != self._dataframes._array_ch.shape[0]
-					      or x._array_ch.shape[1] != self._dataframes._array_ch.shape[1]):
-						raise ValueError(f"cannot direct inject, array_ch has different shape {x._array_ch.shape} vs {self._dataframes._array_ch.shape}")
-					else:
-						self._dataframes._array_ch[:] = x._array_ch[:]
-				if x._array_wt is not None:
-					if self._dataframes._array_wt is None:
-						raise ValueError("cannot direct inject, array_wt is missing")
-					elif x._array_wt.shape[0] != self._dataframes._array_wt.shape[0]:
-						raise ValueError(f"cannot direct inject, array_wt has different shape {x._array_wt.shape} vs {self._dataframes._array_wt.shape}")
-					else:
-						self._dataframes._array_wt[:] = x._array_wt[:]
-			except:
-				if on_injection_failure == 'raise':
-					raise
-				# on_injection_failure is 'fallback', continue on to regular DataFrames assignment
-			else:
-				return
 
 		#self.unmangle() # don't do a full unmangle here, it will fail if the old data is incomplete
 		if self._mangled:

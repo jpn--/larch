@@ -18,13 +18,13 @@ cdef class DataFrames:
 		object _data_ch
 		object _data_wt
 		# Internal array references
-		l4_float_t[:,:]   _array_co
-		l4_float_t[:,:,:] _array_ca
-		l4_float_t[:,:]   _array_ce
+		const l4_float_t[:,:]   _array_co
+		const l4_float_t[:,:,:] _array_ca
+		const l4_float_t[:,:]   _array_ce
 		object            _array_ce_caseindexes
 		object            _array_ce_altindexes
 		int64_t[:,:]      _array_ce_reversemap
-		int8_t    [:,:]   _array_av
+		const int8_t[:,:]   _array_av
 		l4_float_t[:,:]   _array_ch
 		l4_float_t[:]     _array_wt
 		# Model position mappings

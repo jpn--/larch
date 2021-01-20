@@ -9,7 +9,7 @@ from pytest import approx, raises
 
 from larch.data_warehouse import example_file
 
-from larch import DataFrames, DBF, data_warehouse
+from larch import DataFrames, DBF, data_warehouse, example
 
 
 def test_dfs_info():
@@ -406,3 +406,83 @@ def test_dfs_init_co():
 	assert d2.data_av is None
 	assert d2.data_wt is not None
 	assert d2.data_wt.shape == (6768, 1)
+
+def test_dfs_feathers():
+	import tempfile
+	m = example(1)
+	with tempfile.TemporaryDirectory() as td:
+		m.load_data()
+		filename = os.path.join(td, 'dfs')
+		m.dataframes.to_feathers(filename)
+		d_co = m.dataframes.data_co.copy()
+		d_ca = m.dataframes.data_ca.copy()
+		d_ch = m.dataframes.data_ch.copy()
+		d_av = m.dataframes.data_av.copy()
+		m.dataframes.data_co.iloc[:] = 0.0
+		m.dataframes.data_ca.iloc[:] = 0.0
+		m.dataframes.data_ch.iloc[:] = 0.0
+		m.dataframes.data_av.iloc[:] = 0.0
+		assert all(m.dataframes.array_co().reshape(-1) == 0)
+		assert all(m.dataframes.array_ca().reshape(-1) == 0)
+		assert all(m.dataframes.array_ch().reshape(-1) == 0)
+		assert all(m.dataframes.array_av().reshape(-1) == 0)
+		m.dataframes.inject_feathers(filename)
+		pandas.testing.assert_frame_equal(m.dataframes.data_co, d_co)
+		pandas.testing.assert_frame_equal(m.dataframes.data_ca, d_ca)
+		pandas.testing.assert_frame_equal(m.dataframes.data_ch, d_ch)
+		pandas.testing.assert_frame_equal(m.dataframes.data_av, d_av)
+
+		df = pandas.read_csv(example_file("MTCwork.csv.gz"))
+		df.set_index(['casenum', 'altnum'], inplace=True)
+		ds = DataFrames(df)
+		filename2 = os.path.join(td, 'dfs1')
+		ds.to_feathers(filename2)
+		d_ce = ds.data_ce.copy()
+		ds.data_ce.iloc[:] = 0.0
+		assert all(ds.array_ce().reshape(-1) == 0)
+		ds.inject_feathers(filename2)
+		pandas.testing.assert_frame_equal(ds.data_ce, d_ce)
+
+		filename3 = os.path.join(td, 'dfs2')
+		ds.to_feathers(filename3)
+		ds2 = DataFrames.from_feathers(filename3)
+		pandas.testing.assert_index_equal(
+			ds.alternative_codes(),
+			ds2.alternative_codes(),
+			check_names=False,
+		)
+		pandas.testing.assert_frame_equal(
+			ds.data_ce,
+			ds2.data_ce,
+		)
+		pandas.testing.assert_frame_equal(
+			ds.data_av,
+			ds2.data_av,
+		)
+		pandas.testing.assert_index_equal(
+			ds.caseindex,
+			ds2.caseindex,
+		)
+
+		dfs2 = DataFrames.from_feathers(filename)
+		pandas.testing.assert_index_equal(
+			m.dataframes.alternative_codes(),
+			dfs2.alternative_codes(),
+			check_names=False,
+		)
+		pandas.testing.assert_frame_equal(
+			m.dataframes.data_co,
+			dfs2.data_co,
+		)
+		pandas.testing.assert_frame_equal(
+			m.dataframes.data_ca,
+			dfs2.data_ca,
+		)
+		pandas.testing.assert_frame_equal(
+			m.dataframes.data_av,
+			dfs2.data_av,
+		)
+		pandas.testing.assert_index_equal(
+			m.dataframes.caseindex,
+			dfs2.caseindex,
+		)
