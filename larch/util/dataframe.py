@@ -126,6 +126,16 @@ def columnize_with_joinable_backing_2(df, name, dtype=None, debug=False, backing
 			raise
 	return out, source, backing
 
+def _get_str_fallback(d, key):
+	try:
+		return d[key]
+	except KeyError as err:
+		try:
+			return d[str(key)]
+		except:
+			raise err
+
+
 def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 	"""Add a computed column to a DataFrame."""
 
@@ -152,7 +162,7 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 		for dname in set(datanames):
 			out, source, backing = columnize_with_joinable_backing_2(source, dname, dtype, backing=backing)
 			columns[dname] = out.to_numpy()
-		content = {k: columns[v] for (k, v) in datamap.items()}
+		content = {k: _get_str_fallback(columns,v) for (k, v) in datamap.items()}
 		if pyarrow:
 			# For very large dataframes, this is faster than the default pandas constructor
 			dict_of_numpy_arrays = {}
