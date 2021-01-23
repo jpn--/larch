@@ -226,3 +226,27 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 				ll2[key] = list(y[key] for y in ll2_parts)
 		self._check_if_best(ll2.ll)
 		return ll2
+
+	def doctor(
+			self,
+			repair_ch_av=None,
+			repair_ch_zq=None,
+			repair_asc=None,
+			repair_noch_nowt=None,
+			repair_nan_wt=None,
+			repair_nan_data_co=None,
+			verbose=3,
+	):
+		problems = []
+		for k in self._k_models:
+			k.unmangle(True)
+			problems.append(k.doctor(
+				repair_ch_av=repair_ch_av,
+				repair_ch_zq=repair_ch_zq,
+				repair_asc=repair_asc,
+				repair_noch_nowt=repair_noch_nowt,
+				repair_nan_wt=repair_nan_wt,
+				repair_nan_data_co=repair_nan_data_co,
+				verbose=verbose,
+			))
+		return problems

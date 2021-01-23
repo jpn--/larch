@@ -346,3 +346,26 @@ def construct_nesting_tree(alternatives, nesting_settings):
     make_nest(nesting_settings)
 
     return tree
+
+
+def remove_apostrophes(df, from_columns=None):
+    """
+    Remove apostrophes from columns names and from data in given columns.
+
+    This function operates in-place on DataFrames.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    from_columns : Collection, optional
+
+    Returns
+    -------
+    pandas.DataFrame
+    """
+    df.columns = df.columns.str.replace("'", "")
+    if from_columns:
+        for c in from_columns:
+            df[c] = df[c].str.replace("'", "")
+    return df
+
