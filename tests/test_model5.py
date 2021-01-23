@@ -5046,3 +5046,12 @@ def test_duplicate_var_co():
 	m.maximize_loglike()
 	assert m.loglike() == approx(-3626.18625551337)
 	numpy.testing.assert_array_equal(m.dataframes.data_co.columns, ['hhinc'])
+
+def test_model_without_co_data():
+	d = MTC()
+	m = Model(dataservice=d)
+	m.utility_ca = PX("tottime") + PX("totcost")
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+	m.load_data()
+	assert m.loglike() == approx(-7309.600971749625)

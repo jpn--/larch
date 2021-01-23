@@ -2017,7 +2017,7 @@ cdef class DataFrames:
 	cdef void _link_to_model_structure(
 			self,
 			Model5c model,
-	):
+	) except *:
 		cdef:
 			int j,n
 			int len_model_utility_ca
@@ -2073,7 +2073,7 @@ cdef class DataFrames:
 				self.model_utility_ca_param       = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 				self.model_utility_ca_data        = numpy.zeros([len_model_utility_ca], dtype=numpy.int32)
 
-			if model._utility_co is not None:
+			if model._utility_co is not None and len(model._utility_co):
 				len_co = sum(len(_) for _ in model._utility_co.values())
 				self.model_utility_co_alt         = numpy.zeros([len_co], dtype=numpy.int32)
 				self.model_utility_co_param_value = numpy.zeros([len_co], dtype=l4_float_dtype)

@@ -115,7 +115,7 @@ cdef class DataFrames:
 	cdef void _link_to_model_structure(
 			self,
 			Model5c model,
-	)
+	) except *
 
 	cdef int _check_data_is_sufficient_for_model(
 			self,
