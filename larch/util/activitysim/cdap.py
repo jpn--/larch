@@ -342,10 +342,10 @@ def cdap_model(
     interaction_coef = d.interaction_coef
     coefficients = d.coefficients
 
-    cdap_data = cdap_dataframes(households, values)
+    cdap_dfs = cdap_dataframes(households, values)
     m = {}
     _logger.info(f"building for model 1")
-    m[1] = Model(dataservice=cdap_data[1])
+    m[1] = Model(dataservice=cdap_dfs[1])
     cdap_base_utility_by_person(m[1], n_persons=1, spec=spec1)
     m[1].choice_any = True
     m[1].availability_any = True
@@ -355,7 +355,7 @@ def cdap_model(
         interaction_coef['cardinality'] = interaction_coef['interaction_ptypes'].str.len()
     for s in [2, 3, 4, 5]:
         _logger.info(f"building for model {s}")
-        m[s] = Model(dataservice=cdap_data[s])
+        m[s] = Model(dataservice=cdap_dfs[s])
         alts = generate_alternatives(s)
         cdap_base_utility_by_person(m[s], s, spec1, alts, values.columns)
         cdap_interaction_utility(m[s], s, alts, interaction_coef, coefficients)
