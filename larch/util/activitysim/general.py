@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import re
+import os
+import yaml
 import itertools
 from typing import Mapping
 from larch import P, X, DataFrames, Model
@@ -369,3 +371,104 @@ def remove_apostrophes(df, from_columns=None):
             df[c] = df[c].str.replace("'", "")
     return df
 
+
+
+def clean_values(
+        values,
+        alt_names,
+        choice_col='override_choice',
+        alt_names_to_codes=None,
+        choice_code='override_choice_code',
+):
+    """
+
+    Parameters
+    ----------
+    values : pd.DataFrame
+    alt_names : Collection
+    override_choice : str
+        The columns of `values` containing the observed choices.
+    alt_names_to_codes : Mapping, optional
+        If the `override_choice` column contains alternative names,
+        use this mapping to convert the names into alternative code
+        numbers.
+    choice_code : str, default 'override_choice_code'
+        The name of the observed choice code number column that will
+        be added to `values`.
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    values = remove_apostrophes(values)
+    values.fillna(0, inplace=True)
+    # Retain only choosers with valid observed choice
+    values = values[values[choice_col].isin(alt_names)]
+    # Convert choices to code numbers
+    if alt_names_to_codes is not None:
+        values[choice_code] = values[choice_col].map(alt_names_to_codes)
+    else:
+        values[choice_code] = values[choice_col]
+    return values
+
+
+def simple_simulate_data(
+        name="tour_mode_choice",
+        edb_directory="output/estimation_data_bundle/{name}/",
+        coefficients_file="{name}_coefficients.csv",
+        coefficients_template="{name}_coefficients_template.csv",
+        spec_file="{name}_SPEC.csv",
+        settings_file="{name}_model_settings.yaml",
+        chooser_data_file="{name}_values_combined.csv",
+        values_index_col="tour_id",
+):
+    edb_directory = edb_directory.format(name=name)
+    def _read_csv(filename, **kwargs):
+        filename = filename.format(name=name)
+        return pd.read_csv(os.path.join(edb_directory, filename), **kwargs)
+
+    coefficients = _read_csv(
+        coefficients_file,
+        index_col='coefficient_name',
+    )
+
+    try:
+        coef_template = _read_csv(
+            coefficients_template,
+            index_col='coefficient_name',
+        )
+    except FileNotFoundError:
+        coef_template = None
+
+    spec = _read_csv(
+        spec_file,
+    )
+    spec = remove_apostrophes(spec, ['Label'])
+    alt_names = list(spec.columns[3:])
+    alt_codes = np.arange(1, len(alt_names) + 1)
+    alt_names_to_codes = dict(zip(alt_names, alt_codes))
+    alt_codes_to_names = dict(zip(alt_codes, alt_names))
+
+    chooser_data = _read_csv(
+        chooser_data_file,
+        index_col=values_index_col,
+    )
+
+    settings_file = settings_file.format(name=name)
+    with open(os.path.join(edb_directory, settings_file), "r") as yf:
+        settings = yaml.load(
+            yf,
+            Loader=yaml.SafeLoader,
+        )
+
+    return Dict(
+        settings=settings,
+        chooser_data=chooser_data,
+        coefficients=coefficients,
+        coef_template=coef_template,
+        spec=spec,
+        alt_names=alt_names,
+        alt_codes=alt_codes,
+        alt_names_to_codes=alt_names_to_codes,
+        alt_codes_to_names=alt_codes_to_names,
+    )

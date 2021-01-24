@@ -64,7 +64,10 @@ def location_choice_model(
 			yf,
 			Loader=yaml.SafeLoader,
 		)
+	CHOOSER_SEGMENT_COLUMN_NAME = settings['CHOOSER_SEGMENT_COLUMN_NAME']
+	SEGMENT_IDS = settings['SEGMENT_IDS']
 
+	# filter size spec for this location choice only
 	size_spec = size_spec \
 		.query(f"model_selector == '{model_selector}'") \
 		.drop(columns='model_selector') \
@@ -74,35 +77,68 @@ def location_choice_model(
 	size_coef = size_coefficients_from_spec(size_spec)
 
 	# Remove shadow pricing and pre-existing size expression for re-estimation
-	spec = spec \
-		.set_index('Label') \
-		.drop(index=['util_size_variable', 'util_utility_adjustment']) \
-		.reset_index()
+	spec = spec.set_index('Label').drop(index=[
+		'util_size_variable',      # pre-computed size (will be re-estimated)
+		'util_utility_adjustment'  # shadow pricing (ignored in estimation)
+	]).reset_index()
 
 	m = Model()
-	m.utility_ca = linear_utility_from_spec(
-		spec, x_col='Label', p_col='coefficient',
-		ignore_x=('local_dist',),
-	)
+	if len(spec.columns) == 4: # ['Label', 'Description', 'Expression', 'coefficient']
+		m.utility_ca = linear_utility_from_spec(
+			spec,
+			x_col='Label',
+			p_col='coefficient',
+			ignore_x=('local_dist',),
+		)
+	else:
+		m.utility_ca = linear_utility_from_spec(
+			spec,
+			x_col='Label',
+			p_col=SEGMENT_IDS,
+			ignore_x=('local_dist',),
+			segment_id=CHOOSER_SEGMENT_COLUMN_NAME,
+		)
+
 	m.quantity_ca = sum(
-		P(f"{i}_{q}") * X(q) * X(f"income_segment=={settings['SEGMENT_IDS'][i]}")
+		P(f"{i}_{q}") * X(q) * X(f"{CHOOSER_SEGMENT_COLUMN_NAME}=={SEGMENT_IDS[i]}")
 		for i in size_spec.index
 		for q in size_spec.columns
+		if size_spec.loc[i, q] != 0
 	)
 
 	apply_coefficients(coefficients, m)
 	apply_coefficients(size_coef, m, minimum=-6, maximum=6)
 
-	x_co = chooser_data.set_index('person_id')#.rename(columns={'TAZ': 'HOMETAZ'})
+	x_co = chooser_data.set_index('person_id')
 	x_ca = cv_to_ca(
 		alt_values.set_index(['person_id', 'variable'])
 	)
 
-	# Remove choosers with invalid observed choice
-	workplace_tazs = landuse[landuse['TOTEMP'] > 0].index
-	x_co = x_co[x_co['override_choice'].isin(workplace_tazs)]
+	# label segments with names
+	SEGMENT_IDS_REVERSE = {v: k for k, v in SEGMENT_IDS.items()}
+	x_co["_segment_label"] = x_co[CHOOSER_SEGMENT_COLUMN_NAME].apply(lambda x: SEGMENT_IDS_REVERSE[x])
+
+	# compute total size values by segment
+	for segment in size_spec.index:
+		total_size_segment = pd.Series(0, index=landuse.index)
+		x_co["total_size_" + segment] = 0
+		for land_use_field in size_spec.loc[segment].index:
+			total_size_segment += landuse[land_use_field] * size_spec.loc[segment, land_use_field]
+		x_co["total_size_" + segment] = total_size_segment.loc[x_co["override_choice"]].to_numpy()
+
+	# for each chooser, collate the appropriate total size value
+	x_co["total_size_segment"] = 0
+	for segment in size_spec.index:
+		labels = "total_size_" + segment
+		rows = x_co["_segment_label"] == segment
+		x_co.loc[rows, "total_size_segment"] = x_co[labels][rows]
+
+	# Remove choosers with invalid observed choice (appropriate total size value = 0)
+	valid_observed_zone = x_co["total_size_segment"] > 0
+	x_co = x_co[valid_observed_zone]
 	x_ca = x_ca[x_ca.index.get_level_values('person_id').isin(x_co.index)]
 
+	# Merge land use characteristics into CA data
 	x_ca_1 = pd.merge(x_ca, landuse, on='zone_id', how='left')
 	x_ca_1.index = x_ca.index
 
