@@ -4,6 +4,7 @@ import pandas as pd
 import yaml
 from typing import Collection
 from .. import Dict
+from pathlib import Path
 
 from .general import (
 	remove_apostrophes,
@@ -155,6 +156,7 @@ def location_choice_model(
 
 	if return_data:
 		return m, Dict(
+			edb_directory=Path(edb_directory),
 			alt_values=alt_values,
 			chooser_data=chooser_data,
 			coefficients=coefficients,

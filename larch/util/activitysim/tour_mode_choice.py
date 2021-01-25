@@ -4,6 +4,7 @@ import pandas as pd
 import yaml
 from typing import Collection
 from .. import Dict
+from pathlib import Path
 
 from .general import (
 	remove_apostrophes,
@@ -98,6 +99,7 @@ def tour_mode_choice_model(
 
 	if return_data:
 		return mg, Dict(
+			edb_directory=Path(edb_directory),
 			chooser_data=chooser_data,
 			avail=avail,
 			coefficients=coefficients,

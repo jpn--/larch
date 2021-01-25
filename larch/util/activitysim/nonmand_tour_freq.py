@@ -7,6 +7,7 @@ import itertools
 from typing import Mapping
 from larch import P, X, DataFrames, Model
 from larch.util import Dict
+from pathlib import Path
 
 import logging
 from ...log import logger_name
@@ -69,6 +70,7 @@ def interaction_simulate_data(
     alt_def = _read_csv(alt_def_file.format(name=name), index_col=0)
 
     return Dict(
+        edb_directory=Path(edb_directory),
         settings=settings,
         chooser_data=chooser_data,
         coefficients=coefficients,

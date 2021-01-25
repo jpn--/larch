@@ -13,6 +13,7 @@ asim_cdap = importlib.import_module("activitysim.abm.models.util.cdap")
 
 import logging
 from larch.log import logger_name
+from pathlib import Path
 
 from .general import apply_coefficients, explicit_value_parameters
 
@@ -280,33 +281,49 @@ def cdap_dataframes(households, values):
 def cdap_data(
         name="cdap",
         edb_directory="output/estimation_data_bundle/{name}/",
+        coefficients_file="{name}_coefficients.csv",
+        interaction_coeffs_file="{name}_interaction_coefficients.csv",
+        households_file="../../final_households.csv",
+        persons_file="../../final_persons.csv",
+        spec1_file="{name}_INDIV_AND_HHSIZE1_SPEC.csv",
+        settings_file="{name}_model_settings.yaml",
+        chooser_data_file="{name}_values_combined.csv",
 ):
     edb_directory = edb_directory.format(name=name)
     if not os.path.exists(edb_directory):
         raise FileNotFoundError(edb_directory)
 
     def read_csv(filename, **kwargs):
+        filename = filename.format(name=name)
         return pd.read_csv(os.path.join(edb_directory, filename), **kwargs)
 
     def read_yaml(filename, **kwargs):
+        filename = filename.format(name=name)
         with open(os.path.join(edb_directory, filename), 'rt') as f:
             return yaml.load(f, Loader=yaml.SafeLoader, **kwargs)
 
-    settings = read_yaml("cdap_model_settings.yaml")
+    settings = read_yaml(settings_file)
 
-    hhs = pd.read_csv("./data_sf/households.csv")
-    persons = pd.read_csv("./data_sf/persons.csv")
+    try:
+        hhs = read_csv(households_file)
+    except FileNotFoundError:
+        hhs = pd.read_csv(households_file)
+
+    try:
+        persons = read_csv(persons_file)
+    except FileNotFoundError:
+        persons = pd.read_csv(persons_file)
 
     person_rank = asim_cdap.assign_cdap_rank(persons)
 
     coefficients = read_csv(
-        "cdap_coefficients.csv",
+        coefficients_file,
         index_col='coefficient_name',
         comment="#",
     )
 
     interaction_coef = read_csv(
-        "cdap_interaction_coefficients.csv",
+        interaction_coeffs_file,
         dtype={
             'interaction_ptypes': str,
         },
@@ -314,12 +331,13 @@ def cdap_data(
         comment="#",
     )
 
-    spec1 = read_csv("cdap_INDIV_AND_HHSIZE1_SPEC.csv", comment='#')
-    values = read_csv("cdap_values_combined.csv", comment='#')
+    spec1 = read_csv(spec1_file, comment='#')
+    values = read_csv(chooser_data_file, comment='#')
     values['cdap_rank'] = person_rank
 
     return Dict(
-        chooser_data=values,
+        edb_directory=Path(edb_directory),
+        person_data=values,
         spec1=spec1,
         interaction_coef=interaction_coef,
         coefficients=coefficients,
@@ -329,15 +347,29 @@ def cdap_data(
 
 def cdap_model(
         edb_directory="output/estimation_data_bundle/{name}/",
+        coefficients_file="{name}_coefficients.csv",
+        interaction_coeffs_file="{name}_interaction_coefficients.csv",
+        households_file="../../final_households.csv",
+        persons_file="../../final_persons.csv",
+        spec1_file="{name}_INDIV_AND_HHSIZE1_SPEC.csv",
+        settings_file="{name}_model_settings.yaml",
+        chooser_data_file="{name}_values_combined.csv",
         return_data=False,
 ):
     d = cdap_data(
         name="cdap",
         edb_directory=edb_directory,
+        coefficients_file=coefficients_file,
+        interaction_coeffs_file=interaction_coeffs_file,
+        households_file=households_file,
+        persons_file=persons_file,
+        spec1_file=spec1_file,
+        settings_file=settings_file,
+        chooser_data_file=chooser_data_file,
     )
 
     households = d.households
-    values = d.chooser_data
+    values = d.person_data
     spec1 = d.spec1
     interaction_coef = d.interaction_coef
     coefficients = d.coefficients

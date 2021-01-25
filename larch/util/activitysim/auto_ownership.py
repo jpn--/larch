@@ -64,6 +64,7 @@ def auto_ownership_model(
 
 	if return_data:
 		return m, Dict(
+			edb_directory=data.edb_directory,
 			chooser_data=chooser_data,
 			coefficients=coefficients,
 			spec=spec,

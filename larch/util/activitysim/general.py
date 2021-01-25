@@ -9,6 +9,7 @@ from larch import P, X, DataFrames, Model
 from larch.model.abstract_model import AbstractChoiceModel
 from larch.model.tree import NestingTree
 from larch.util import Dict
+from pathlib import Path
 
 import logging
 from ...log import logger_name
@@ -462,6 +463,7 @@ def simple_simulate_data(
         )
 
     return Dict(
+        edb_directory=Path(edb_directory),
         settings=settings,
         chooser_data=chooser_data,
         coefficients=coefficients,
@@ -472,3 +474,10 @@ def simple_simulate_data(
         alt_names_to_codes=alt_names_to_codes,
         alt_codes_to_names=alt_codes_to_names,
     )
+
+
+def update_coefficients(model, data):
+    coefficients = data.coefficients.copy()
+    est_names = [j for j in coefficients.index if j in model.pf.index]
+    coefficients.loc[est_names, 'value'] = model.pf.loc[est_names, 'value']
+    return coefficients
