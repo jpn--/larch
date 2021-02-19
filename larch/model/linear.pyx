@@ -719,10 +719,16 @@ cdef class LinearComponent_C:
 		return self.__xml__().tostring()
 
 	def evaluate(self, p_getter, x_namespace=None, exp_params=False, **kwargs):
-		if exp_params:
-			return self.scale * _numpy.exp(p_getter(str(self.param))) * self.data.eval(namespace=x_namespace, **kwargs)
+		if self.data in x_namespace:
+			x = x_namespace[self.data]
+		elif self.data in kwargs:
+			x = kwargs[self.data]
 		else:
-			return self.scale * p_getter(str(self.param)) * self.data.eval(namespace=x_namespace, **kwargs)
+			x = self.data.eval(namespace=x_namespace, **kwargs)
+		if exp_params:
+			return self.scale * _numpy.exp(p_getter(str(self.param))) * x
+		else:
+			return self.scale * p_getter(str(self.param)) * x
 
 	def __copy__(self):
 		return self.__class__(

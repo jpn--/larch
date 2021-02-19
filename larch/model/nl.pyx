@@ -24,7 +24,7 @@ import logging
 from ..log import logger_name
 logger = logging.getLogger(logger_name)
 
-cdef float INFINITY32 = numpy.float('inf')
+cdef float INFINITY32 = numpy.float64('inf')
 
 cimport cython
 

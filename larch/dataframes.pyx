@@ -25,7 +25,7 @@ from libc.math cimport exp, log
 from .util.dataframe import columnize
 from .util.multiindex import remove_unused_level
 
-cdef float INFINITY32 = numpy.float('inf')
+cdef float INFINITY32 = numpy.float64('inf')
 
 from .exceptions import MissingDataError, DuplicateColumnNames
 
@@ -465,8 +465,8 @@ cdef class DataFrames:
 				if not isinstance(ce.index, pandas.MultiIndex) or ce.index.nlevels!=2:
 					raise ValueError('ce must have two level multi-index')
 				try:
-					ce.index.set_levels(ce.index.levels[0].astype(int), 0, inplace=True)
-					ce.index.set_levels(ce.index.levels[1].astype(int), 1, inplace=True)
+					ce.index = ce.index.set_levels(ce.index.levels[0].astype(int), 0)
+					ce.index = ce.index.set_levels(ce.index.levels[1].astype(int), 1)
 				except Exception as err:
 					raise ValueError('ce multi-index must have integer values') from err
 
@@ -476,8 +476,8 @@ cdef class DataFrames:
 				if not isinstance(ca.index, pandas.MultiIndex) or ca.index.nlevels!=2:
 					raise ValueError('ca must have two level multi-index')
 				try:
-					ca.index.set_levels(ca.index.levels[0].astype(int), 0, inplace=True)
-					ca.index.set_levels(ca.index.levels[1].astype(int), 1, inplace=True)
+					ca.index = ca.index.set_levels(ca.index.levels[0].astype(int), 0)
+					ca.index = ca.index.set_levels(ca.index.levels[1].astype(int), 1)
 				except Exception as err:
 					raise ValueError('ca multi-index must have integer values') from err
 

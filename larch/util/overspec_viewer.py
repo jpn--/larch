@@ -261,6 +261,7 @@ class OverspecView(Styler):
 			# matplotlib colors.Normalize modifies inplace?
 			# https://github.com/matplotlib/matplotlib/issues/5427
 			rgbas = plt.cm.get_cmap(cmap)(norm(np.absolute(s.to_numpy(dtype=float))))
+			rgbas[np.isnan(s),:3] = 1.0
 
 			def relative_luminance(rgba):
 				"""

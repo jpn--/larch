@@ -502,10 +502,6 @@ cdef class Model5c(AbstractChoiceModel):
 		x : larch.DataFrames
 		check_sufficiency : bool, default True
 			Run a check
-		direct_injection : bool, default False
-			Directly inject replacement values into an existing DataFrames that
-			is exactly the same size.
-		on_injection_failure : {'raise', 'fallback'}
 
 		Returns
 		-------
