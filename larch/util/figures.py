@@ -58,6 +58,10 @@ def distribution_figure(
 		ax=None,
 		format='ax',
 		accumulator=False,
+		xscale=None,
+		xmajorticks=None,
+		xminorticks=None,
+		coincidence_ratio=False,
 		**kwargs,
 ):
 	"""
@@ -110,6 +114,8 @@ def distribution_figure(
 	Elem or Axes
 		Returns `ax` if given as an argument, otherwise returns a rendering as an Elem
 	"""
+
+	_coincidence_ratio = None
 
 	if xlabel is None:
 		try:
@@ -216,6 +222,9 @@ def distribution_figure(
 			)
 			x_points, y_points_2 = pseudo_bar_data(x1 - shift, y2, gap=gap)
 
+			if coincidence_ratio:
+				_coincidence_ratio = numpy.minimum(y1, y2).sum() / numpy.maximum(y1, y2).sum()
+
 	if xlabel is False:
 		xlabel = None
 
@@ -235,6 +244,15 @@ def distribution_figure(
 	else:
 		fig = None
 
+	if _coincidence_ratio:
+		ax.text(
+			0.5, 0.98,
+			f'Coincidence Ratio = {_coincidence_ratio:0.4f}',
+			horizontalalignment='center',
+			verticalalignment = 'top',
+			transform = ax.transAxes,
+		)
+
 	ax.bins = bins
 	ax.plot(x_points, y_points_1, label=prob_label, lw=1.5)
 	if model_choice is not None:
@@ -242,6 +260,19 @@ def distribution_figure(
 	ax.legend()
 	if not discrete:
 		ax.set_xlim(x_points[0], x_points[-1])
+		if xscale:
+			if isinstance(xscale, str):
+				ax.set_xscale(xscale)
+			elif isinstance(xscale, dict):
+				ax.set_xscale(**xscale)
+			else:
+				raise ValueError(f"xscale must be str or dict, not {type(xscale)}")
+	if xmajorticks is not None:
+		ax.set_xticks(xmajorticks)
+		ax.set_xticklabels(xmajorticks)
+	if xminorticks is not None:
+		ax.set_xticks(xminorticks, minor=True)
+
 	if x_discrete_labels is not None:
 		ax.set_xticks(numpy.arange(len(x_discrete_labels)))
 		ax.set_xticklabels(x_discrete_labels)
@@ -678,6 +709,27 @@ def share_figure(
 	else:
 		columns = dict(enumerate(columns))
 
+	# check for correct array shapes, raise helpful message if not compatible
+	pr_w_shape = numpy.broadcast_shapes(pr[:, 0].shape, wt.shape)
+	if x.shape != pr_w_shape:
+		raise ValueError(
+			f"incompatible shapes, "
+			f"x.shape={x.shape}, "
+			f"pr.shape={pr.shape}, "
+			f"wt.shape={wt.shape}, "
+			f"(pr[:,i]*wt).shape={pr_w_shape}"
+		)
+	if ch is not None:
+		ch_w_shape = numpy.broadcast_shapes(ch[:, 0].shape, wt.shape)
+		if x.shape != ch_w_shape:
+			raise ValueError(
+				f"incompatible shapes, "
+				f"x.shape={x.shape}, "
+				f"ch.shape={ch.shape}, "
+				f"wt.shape={wt.shape}, "
+				f"(ch[:,i]*wt).shape={ch_w_shape}"
+			)
+
 	for i in range(pr.shape[1]):
 
 		h_pr[i], _ = numpy.histogram(
@@ -775,7 +827,12 @@ def share_figure(
 		if not discrete:
 			ax0.set_xlim(*xlim)
 			if xscale:
-				ax0.set_xscale(xscale)
+				if isinstance(xscale, str):
+					ax0.set_xscale(xscale)
+				elif isinstance(xscale, dict):
+					ax0.set_xscale(**xscale)
+				else:
+					raise ValueError(f"xscale must be str or dict, not {type(xscale)}")
 			if xmajorticks is not None:
 				ax0.set_xticks(xmajorticks)
 				ax0.set_xticklabels(xmajorticks)
@@ -790,7 +847,12 @@ def share_figure(
 		if not discrete:
 			ax1.set_xlim(*xlim)
 			if xscale:
-				ax1.set_xscale(xscale)
+				if isinstance(xscale, str):
+					ax1.set_xscale(xscale)
+				elif isinstance(xscale, dict):
+					ax1.set_xscale(**xscale)
+				else:
+					raise ValueError(f"xscale must be str or dict, not {type(xscale)}")
 			if xmajorticks is not None:
 				ax1.set_xticks(xmajorticks)
 				ax1.set_xticklabels(xmajorticks)
@@ -840,7 +902,12 @@ def share_figure(
 			if not discrete:
 				axes[n].set_xlim(*xlim)
 				if xscale:
-					axes[n].set_xscale(xscale)
+					if isinstance(xscale, str):
+						axes[n].set_xscale(xscale)
+					elif isinstance(xscale, dict):
+						axes[n].set_xscale(**xscale)
+					else:
+						raise ValueError(f"xscale must be str or dict, not {type(xscale)}")
 				if xmajorticks is not None:
 					axes[n].set_xticks(xmajorticks)
 					axes[n].set_xticklabels(xmajorticks)
