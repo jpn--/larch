@@ -70,8 +70,8 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 		"""
 		return sum(k.total_weight() for k in self._k_models)
 
-	def unmangle(self):
-		super().unmangle()
+	def unmangle(self, force=False):
+		super().unmangle(force)
 		for k in self._k_models:
 			for i in k.pf.index:
 				if i not in self._frame.index:

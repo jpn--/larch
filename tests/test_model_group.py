@@ -83,3 +83,9 @@ def test_simple_model_group():
 	mg2.append(m1)
 	mg2.append(m2)
 	assert mg2.loglike() == approx(-3620.697667552756)
+
+	mg3 = ModelGroup([])
+	mg3.append(m1)
+	mg3.append(m2)
+	mg3.doctor()
+	assert mg3.loglike() == approx(-3620.697667552756)
