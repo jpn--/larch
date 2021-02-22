@@ -261,7 +261,9 @@ def crack_idca(df:pandas.DataFrame, caseid_col=True):
 	g_std = g.std()
 	idca_columns = g_std.any()
 	idco_columns = ~idca_columns
-	return df[idca_columns[idca_columns].index], g[idco_columns[idco_columns].index].first()
+	_to_co = idco_columns[idco_columns].index
+	_keep_ca = [c for c in df.columns if c not in _to_co]
+	return df[_keep_ca], g[_to_co].first()
 
 def force_crack_idca(df:pandas.DataFrame, caseid_col=True):
 	"""
@@ -432,6 +434,23 @@ cdef class DataFrames:
 	):
 
 		try:
+			if len(args) > 1:
+				raise ValueError('DataFrames accepts at most one positional argument')
+			elif len(args) == 1:
+				fmt = get_dataframe_format(args[0])
+				if fmt == 'idca':
+					if ca is not None:
+						raise ValueError('cannot give both positional and keyword data_ca')
+					ca = args[0]
+				elif fmt == 'idce':
+					if ce is not None:
+						raise ValueError('cannot give both positional and keyword data_ce')
+					ce = args[0]
+				elif fmt == 'idco':
+					if co is not None:
+						raise ValueError('cannot give both positional and keyword data_co')
+					co = args[0]
+
 			self._data_co = None
 			self._data_ca = None
 			self._data_ce = None
@@ -465,10 +484,18 @@ cdef class DataFrames:
 				if not isinstance(ce.index, pandas.MultiIndex) or ce.index.nlevels!=2:
 					raise ValueError('ce must have two level multi-index')
 				try:
-					ce.index = ce.index.set_levels(ce.index.levels[0].astype(int), 0)
-					ce.index = ce.index.set_levels(ce.index.levels[1].astype(int), 1)
+					ce = ce.set_index(ce.index.set_levels(ce.index.levels[0].astype(int), 0))
 				except Exception as err:
-					raise ValueError('ce multi-index must have integer values') from err
+					raise ValueError('ce multi-index must have integer case values') from err
+				try:
+					ce = ce.set_index(ce.index.set_levels(ce.index.levels[1].astype(int), 1))
+				except Exception as err:
+					if alt_codes is None and alt_names is None:
+						alt_names = list(ce.index.levels[1])
+						alt_codes = numpy.arange(len(alt_names))+1
+						ce = ce.set_index(ce.index.set_levels(alt_codes, 1))
+					else:
+						raise ValueError('ce multi-index must have integer values') from err
 
 			if ca is not None:
 				# If ca is given, ensure that it has a two level multi-index,
@@ -476,10 +503,18 @@ cdef class DataFrames:
 				if not isinstance(ca.index, pandas.MultiIndex) or ca.index.nlevels!=2:
 					raise ValueError('ca must have two level multi-index')
 				try:
-					ca.index = ca.index.set_levels(ca.index.levels[0].astype(int), 0)
-					ca.index = ca.index.set_levels(ca.index.levels[1].astype(int), 1)
+					ca = ca.set_index(ca.index.set_levels(ca.index.levels[0].astype(int), 0))
 				except Exception as err:
 					raise ValueError('ca multi-index must have integer values') from err
+				try:
+					ca = ca.set_index(ca.index.set_levels(ca.index.levels[1].astype(int), 1))
+				except Exception as err:
+					if alt_codes is None and alt_names is None:
+						alt_names = list(ca.index.levels[1])
+						alt_codes = numpy.arange(len(alt_names))+1
+						ca = ca.set_index(ca.index.set_levels(alt_codes, 1))
+					else:
+						raise ValueError('ca multi-index must have integer values') from err
 
 			# reassign ca and ce as needed
 			if ca is None and ce is not None:
@@ -489,22 +524,6 @@ cdef class DataFrames:
 				if get_dataframe_format(ca) == 'idce':
 					ca, ce = None, ca
 
-			if len(args) > 1:
-				raise ValueError('DataFrames accepts at most one positional argument')
-			elif len(args) == 1:
-				fmt = get_dataframe_format(args[0])
-				if fmt == 'idca':
-					if ca is not None:
-						raise ValueError('cannot give both positional and keyword data_ca')
-					ca = args[0]
-				elif fmt == 'idce':
-					if ce is not None:
-						raise ValueError('cannot give both positional and keyword data_ce')
-					ce = args[0]
-				elif fmt == 'idco':
-					if co is not None:
-						raise ValueError('cannot give both positional and keyword data_co')
-					co = args[0]
 
 			self._computational = computational
 
@@ -635,6 +654,22 @@ cdef class DataFrames:
 			if av is None and self.data_ce is not None:
 				logger.debug(" DataFrames ~ build av from ce")
 				av = pandas.DataFrame(data=(self._array_ce_reversemap.base>=0), columns=self.alternative_codes(), index=self.caseindex)
+			if isinstance(av, dict) and self.data_co is not None:
+				_av_temp = pandas.DataFrame(
+					0,
+					columns=self.alternative_codes(),
+					index=self.caseindex,
+					dtype=numpy.int8,
+				)
+				for _altcode, _av_def in av.items():
+					_av_temp.loc[:,_altcode] = columnize(self.data_co, [_av_def], inplace=False, dtype=numpy.int8)
+				av = _av_temp
+			if isinstance(av, str) and self.data_ca is not None:
+				av = pandas.DataFrame(
+					data=columnize(self.data_ca, [av], inplace=False, dtype=numpy.int8).values.reshape(-1, len(self.alternative_codes())),
+					index=self.caseindex,
+					columns=self.alternative_codes(),
+				)
 			if av is True or (isinstance(av, (int, float)) and av==1):
 				if self.n_alts == 0:
 					raise ValueError('cannot declare all alternatives are available without defining alternative codes')
@@ -1445,7 +1480,7 @@ cdef class DataFrames:
 			# Change level names if requested
 			caseindex_name = self._caseindex_name or df.index.names[0]
 			altindex_name = self._altindex_name or df.index.names[1]
-			df.index.names = [caseindex_name, altindex_name]
+			df = df.set_index(df.index.set_names([caseindex_name, altindex_name]))
 
 			if self._computational:
 				self._data_ca = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ca')
@@ -1502,7 +1537,7 @@ cdef class DataFrames:
 
 			# Change index name if requested
 			caseindex_name = self._caseindex_name or df.index.names[0]
-			df.index.name = caseindex_name
+			df = df.set_index(df.index.set_names(caseindex_name))
 
 			if self._computational:
 				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
@@ -1566,7 +1601,7 @@ cdef class DataFrames:
 			# Change level names if requested
 			caseindex_name = self._caseindex_name or df.index.names[0]
 			altindex_name = self._altindex_name or df.index.names[1]
-			df.index.names = [caseindex_name, altindex_name]
+			df = df.set_index(df.index.set_names([caseindex_name, altindex_name]))
 
 			if not df.index.is_monotonic_increasing:
 				df = df.sort_index()

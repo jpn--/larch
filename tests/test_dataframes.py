@@ -220,8 +220,10 @@ def test_repeated_splitting():
 
 def test_co_only():
 
+	y = numpy.random.random([20, 3])
+	y[5,0] = 1.5
 	x_co = pandas.DataFrame(
-		numpy.random.random([20, 3]),
+		y,
 		columns=['Aa', 'Bb', 'Cc'],
 	)
 	x_co.index.name = 'caseid'
@@ -251,10 +253,29 @@ def test_co_only():
 	all(d.data_av.dtypes == numpy.int8)
 	all(d.data_av == 1)
 
+	d = DataFrames(
+		co=x_co,
+		av={
+			1: True,
+			2: 'Aa < 1.1',
+			3: True,
+			4: True,
+			5: True,
+			6: True,
+		},
+		alt_codes=[1, 2, 3, 4, 5, 6],
+	)
+	assert d.n_alts == 6
+	assert d.n_cases == 20
+	assert d.data_av.shape == (20, 6)
+	assert all(d.data_av.dtypes == numpy.int8)
+	assert d.data_av.sum().sum() == 119
+	assert d.data_av.iloc[5].loc[2] == 0
 
 def test_ca_initialization():
 	cax = pandas.DataFrame({
 		'caseid': [1, 1, 1, 2, 2, 2],
+		'caseid_bad': ['x', 'x', 'x', 'y', 'y', 'y'],
 		'altid_bad': ['aa', 'bb', 'cc', 'aa', 'bb', 'cc'],
 		'altid_good': [1, 2, 3, 1, 2, 3],
 		'altid_str': ['1', '2', '3', '1', '2', '3'],
@@ -266,8 +287,14 @@ def test_ca_initialization():
 
 	with pytest.raises(ValueError):
 		d = DataFrames(
-			ca=cax.set_index(['caseid', 'altid_bad']),
+			ca=cax.set_index(['caseid_bad', 'altid_bad']),
 		)
+
+	d = DataFrames(
+		ca=cax.set_index(['caseid', 'altid_bad']),
+	)
+	assert all(d.alternative_codes() == numpy.asarray([1, 2, 3]))
+	assert all(d.alternative_names() == numpy.asarray(['aa','bb','cc']))
 
 	d = DataFrames(
 		ca=cax.set_index(['caseid', 'altid_good']),
@@ -277,6 +304,57 @@ def test_ca_initialization():
 	d = DataFrames(
 		ca=cax.set_index(['caseid', 'altid_str']),
 	)
+	assert all(d.alternative_codes() == [1, 2, 3])
+
+	d = DataFrames(
+		ca=cax.set_index(['caseid', 'altid_good']),
+		av='baggers > 25'
+	)
+	assert all(d.alternative_codes() == [1, 2, 3])
+	av = d.data_av.to_numpy()
+	assert av.shape == (2,3)
+	assert av.ravel() == approx([0,1,1,1,1,1])
+
+
+
+def test_ce_initialization():
+	cax = pandas.DataFrame({
+		'caseid': [1, 1, 1, 2, 2, ],
+		'caseid_bad': ['x', 'x', 'x', 'y', 'y', ],
+		'altid_bad': ['aa', 'bb', 'cc', 'aa', 'bb', ],
+		'altid_good': [1, 2, 3, 1, 2, ],
+		'altid_str': ['1', '2', '3', '1', '2', ],
+		'buggers': [1.2, 3.4, 5.6, 7.8, 9.0, ],
+		'baggers': [22, 33, 44, 55, 66, ],
+	})
+
+	import pytest
+
+	with pytest.raises(ValueError):
+		d = DataFrames(
+			cax.set_index(['caseid_bad', 'altid_bad']),
+		)
+
+	d = DataFrames(
+		cax.set_index(['caseid', 'altid_bad']),
+	)
+	assert len(d.data_ce) == 5
+	assert d.data_ca is None
+	assert all(d.alternative_codes() == numpy.asarray([1, 2, 3]))
+	assert all(d.alternative_names() == numpy.asarray(['aa','bb','cc']))
+
+	d = DataFrames(
+		cax.set_index(['caseid', 'altid_good']),
+	)
+	assert len(d.data_ce) == 5
+	assert d.data_ca is None
+	assert all(d.alternative_codes() == [1, 2, 3])
+
+	d = DataFrames(
+		ca=cax.set_index(['caseid', 'altid_str']),
+	)
+	assert len(d.data_ce) == 5
+	assert d.data_ca is None
 	assert all(d.alternative_codes() == [1, 2, 3])
 
 
