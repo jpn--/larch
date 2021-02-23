@@ -1146,7 +1146,7 @@ cdef class LinearFunction_C:
 
 	def __xml__(
 			self,
-			linebreaks=False,
+			linebreaks=True,
 			lineprefix="",
 			exponentiate_parameters=False,
 			resolve_parameters=None,
@@ -1440,9 +1440,9 @@ cdef class DictOfLinearFunction_C:
 				try:
 					v_ = v.__xml__()
 				except AttributeError:
-					tr.elem('td', text=str(v))
+					tr.elem('td', text=str(v), style="text-align:left;")
 				else:
-					tr.elem('td') << v_
+					tr.elem('td', style="text-align:left;") << v_
 		else:
 			tr = t.elem('tr')
 			tr.elem('td', text="<empty>")

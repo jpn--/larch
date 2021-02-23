@@ -709,7 +709,7 @@ class Model(_Model5c):
 		result.graph.set_touch_callback(result.mangle)
 		return result
 
-	def remove_unused_parameters(self):
+	def remove_unused_parameters(self, verbose=True):
 		"""
 		Remove parameters that are not used in the model.
 		"""
@@ -721,8 +721,14 @@ class Model(_Model5c):
 		for col in overlay.columns:
 			f = ~overlay[col].isna()
 			self.pf.loc[f, col] = overlay.loc[f, col]
-
-
+		if verbose:
+			dropped_params = [p for p in old_pf.index if p not in self.pf.index]
+			if len(dropped_params) == 0:
+				pass
+			elif len(dropped_params) < 4:
+				logger.warning(f"dropped {len(dropped_params)} parameters: {', '.join(dropped_params)}")
+			else:
+				logger.warning(f"dropped {len(dropped_params)} parameters including: {', '.join(dropped_params[:3])}")
 
 	def data_statistics(self):
 		"""
