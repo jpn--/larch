@@ -7,7 +7,7 @@ from .parameter_frame cimport ParameterFrame
 
 cdef class AbstractChoiceModel(ParameterFrame):
 
-	cdef:
+	cdef public:
 
 		object _most_recent_estimation_result
 		object _possible_overspecification

@@ -29,7 +29,7 @@ def _approx_fprime_helper(xk, f, epsilon, args=(), f0=None, *, status_widget=Non
 			f0 = f0_.copy()
 		except AttributeError:
 			f0 = f0_
-	numpy.nan_to_num(f0, copy=False)
+	f0 = numpy.nan_to_num(f0)
 	try:
 		f_shape = f0.shape
 	except AttributeError:

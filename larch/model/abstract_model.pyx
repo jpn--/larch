@@ -419,6 +419,14 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		part['d2ll'] = approx_fprime(self.pvals, lambda y: self.d_loglike(y, **kwargs))
 		return part
 
+	def neg_loglike(self, x=None, start_case=0, stop_case=-1, step_case=1, leave_out=-1, keep_only=-1, subsample=-1):
+		result = self.loglike(
+			x,
+			start_case=start_case, stop_case=stop_case, step_case=step_case,
+			leave_out=leave_out, keep_only=keep_only, subsample=subsample
+		)
+		return -result
+
 	def neg_loglike2(self, x=None, start_case=0, stop_case=-1, step_case=1, leave_out=-1, keep_only=-1, subsample=-1):
 		result = self.loglike2(
 			x=x,
@@ -427,16 +435,27 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		)
 		return (-result.ll, -numpy.asarray(result.dll))
 
+	def neg_d_loglike(self, x=None, start_case=0, stop_case=-1, step_case=1, leave_out=-1, keep_only=-1, subsample=-1):
+		result = self.d_loglike(
+			x,
+			start_case=start_case, stop_case=stop_case, step_case=step_case,
+			leave_out=leave_out, keep_only=keep_only, subsample=subsample
+		)
+		return -numpy.asarray(result)
+
 	def neg_loglike3(self, *args, **kwargs):
 		from ..util import dictx
 		result = dictx()
 		part = self.loglike3(*args, **kwargs)
 		return (-result.ll, -result.dll, -result.d2ll)
 
-	def _check_if_best(self, computed_ll):
+	def _check_if_best(self, computed_ll, pvalues=None):
 		if computed_ll > self._cached_loglike_best:
 			self._cached_loglike_best = computed_ll
-			self._frame['best'] = self._frame['value']
+			if pvalues is None:
+				self._frame['best'] = self._frame['value']
+			else:
+				self._frame['best'] = pvalues
 
 	def loglike(
 			self,
@@ -588,230 +607,216 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 	def maximize_loglike(
 			self,
-			method=None,
-			method2=None,
-			quiet=False,
-			screen_update_throttle=2,
-			final_screen_update=True,
-			check_for_overspecification=True,
-			return_tags=False,
-			reuse_tags=None,
-			iteration_number=0,
-			iteration_number_tail="",
-			options=None,
-			maxiter=None,
-			jumpstart=0,
-			jumpstart_split=5,
-			leave_out=-1,
-			keep_only=-1,
-			subsample=-1,
+			*args,
 			**kwargs,
 	):
-		"""
-		Maximize the log likelihood.
-
-		The `dataframes` for this model should previously have been
-		prepared using the `load_data` method.
-
-		Parameters
-		----------
-		method : str, optional
-			The optimization method to use.  See scipy.optimize for
-			most possibilities, or use 'BHHH'. Defaults to SLSQP if
-			there are any constraints or finite parameter bounds,
-			otherwise defaults to BHHH.
-		quiet : bool, default False
-			Whether to suppress the dashboard.
-
-		Returns
-		-------
-		dictx
-			A dictionary of results, including final log likelihood,
-			elapsed time, and other statistics.  The exact items
-			included in output will vary by estimation method.
-
-		Raises
-		------
-		ValueError
-			If the `dataframes` are not already loaded.
-
-		"""
-		try:
-			from ..util.timesize import Timer
-			from scipy.optimize import minimize
-			from .. import _doctest_mode_
-			from ..util.rate_limiter import NonBlockingRateLimiter
-			from ..util.display import display_head, display_p, display_nothing
-
-			if self.dataframes is None:
-				raise ValueError("you must load data first -- try Model.load_data()")
-
-			if _doctest_mode_:
-				from ..model import Model
-				if type(self) == Model:
-					self.unmangle()
-					self._frame.sort_index(inplace=True)
-					self.unmangle(True)
-
-			if options is None:
-				options = {}
-			if maxiter is not None:
-				options['maxiter'] = maxiter
-
-			timer = Timer()
-			if isinstance(screen_update_throttle, NonBlockingRateLimiter):
-				throttle_gate = screen_update_throttle
-			else:
-				throttle_gate = NonBlockingRateLimiter(screen_update_throttle)
-
-			if throttle_gate and not quiet and not _doctest_mode_:
-				if reuse_tags is None:
-					tag1 = display_head(f'Iteration 000 {iteration_number_tail}', level=3)
-					tag2 = display_p(f'LL = {self.loglike()}')
-					tag3 = display_p('...')
-				else:
-					tag1, tag2, tag3 = reuse_tags
-			else:
-				tag1 = display_nothing()
-				tag2 = display_nothing()
-				tag3 = display_nothing()
-
-			def callback(x, status=None):
-				nonlocal iteration_number, throttle_gate
-				iteration_number += 1
-				if throttle_gate:
-					#clear_output(wait=True)
-					tag1.update(f'Iteration {iteration_number:03} {iteration_number_tail}')
-					tag2.update(f'LL = {self._cached_loglike_best}')
-					tag3.update(self.pf)
-				return False
-
-			if quiet or _doctest_mode_:
-				callback = None
-
-			if method is None:
-				if self.constraints or numpy.isfinite(self.pf['minimum'].max()) or numpy.isfinite(self.pf['maximum'].min()):
-					method = 'slsqp'
-				else:
-					method = 'bhhh'
-
-			if method2 is None and method.lower() == 'bhhh':
-				method2 = 'slsqp'
-
-			method_used = method
-			raw_result = None
-
-			if method.lower()=='bhhh':
-				try:
-					max_iter = options.get('maxiter',100)
-					stopping_tol = options.get('ctol',1e-5)
-
-					current_ll, tolerance, iter_bhhh, steps_bhhh, message = self.simple_fit_bhhh(
-						ctol=stopping_tol,
-						maxiter=max_iter,
-						callback=callback,
-						jumpstart=jumpstart,
-						jumpstart_split=jumpstart_split,
-						leave_out=leave_out,
-						keep_only=keep_only,
-						subsample=subsample,
-					)
-					raw_result = {
-						'loglike':current_ll,
-						'x': self.pvals,
-						'tolerance':tolerance,
-						'steps':steps_bhhh,
-						'message':message,
-					}
-				except NotImplementedError:
-					tag1.update(f'Iteration {iteration_number:03} [BHHH Not Available] {iteration_number_tail}', force=True)
-					tag3.update(self.pf, force=True)
-					if method2 is not None:
-						method_used = f"{method2}"
-						method = method2
-				except BHHHSimpleStepFailure:
-					tag1.update(f'Iteration {iteration_number:03} [Exception Recovery] {iteration_number_tail}', force=True)
-					tag3.update(self.pf, force=True)
-					if method2 is not None:
-						method_used = f"{method_used}|{method2}"
-						method = method2
-				except:
-					tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
-					tag3.update(self.pf, force=True)
-					raise
-
-			if method.lower() != 'bhhh':
-				try:
-					bounds = None
-					if isinstance(method,str) and method.lower() in ('slsqp', 'l-bfgs-b', 'tnc', 'trust-constr'):
-						bounds = self.pbounds
-
-					try:
-						constraints = self._get_constraints(method)
-					except:
-						constraints = ()
-
-					raw_result = minimize(
-						self.neg_loglike2,
-						self.pvals,
-						args=(0, -1, 1, leave_out, keep_only, subsample), # start_case, stop_case, step_case, leave_out, keep_only, subsample
-						method=method,
-						jac=True,
-						bounds=bounds,
-						callback=callback,
-						options=options,
-						constraints=constraints,
-						**kwargs
-					)
-				except:
-					tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
-					tag3.update(self.pf, force=True)
-					raise
-
-			timer.stop()
-
-			if final_screen_update and not quiet and not _doctest_mode_ and raw_result is not None:
-				converged = raw_result.get("message", "Converged")
-				tag1.update(f'Iteration {iteration_number:03} [{converged}] {iteration_number_tail}', force=True)
-				tag2.update(f'LL = {self.loglike()}', force=True)
-				tag3.update(self.pf, force=True)
-
-			if raw_result is None:
-				raw_result = {}
-			#if check_for_overspecification:
-			#	self.check_for_possible_overspecification()
-
-			from ..util import dictx
-			result = dictx()
-			for k,v in raw_result.items():
-				if k == 'fun':
-					result['loglike'] = -v
-				elif k == 'jac':
-					result['d_loglike'] = pandas.Series(-v, index=self.pnames)
-				elif k == 'x':
-					result['x'] = pandas.Series(v, index=self.pnames)
-				else:
-					result[k] = v
-			result['elapsed_time'] = timer.elapsed()
-			result['method'] = method_used
-			result['n_cases'] = self.n_cases
-			result['iteration_number'] = iteration_number
-
-			if 'loglike' in result:
-				result['logloss'] = -result['loglike'] / self.total_weight()
-
-			if _doctest_mode_:
-				result['__verbose_repr__'] = True
-
-			self._most_recent_estimation_result = result
-
-			if return_tags:
-				return result, tag1, tag2, tag3
-
-			return result
-		except:
-			logger.exception("error in maximize_loglike")
-			raise
+		from .optimization import maximize_loglike
+		return maximize_loglike(self, *args, **kwargs)
+		# """
+		# Maximize the log likelihood.
+		#
+		# The `dataframes` for this model should previously have been
+		# prepared using the `load_data` method.
+		#
+		# Parameters
+		# ----------
+		# method : str, optional
+		# 	The optimization method to use.  See scipy.optimize for
+		# 	most possibilities, or use 'BHHH'. Defaults to SLSQP if
+		# 	there are any constraints or finite parameter bounds,
+		# 	otherwise defaults to BHHH.
+		# quiet : bool, default False
+		# 	Whether to suppress the dashboard.
+		#
+		# Returns
+		# -------
+		# dictx
+		# 	A dictionary of results, including final log likelihood,
+		# 	elapsed time, and other statistics.  The exact items
+		# 	included in output will vary by estimation method.
+		#
+		# Raises
+		# ------
+		# ValueError
+		# 	If the `dataframes` are not already loaded.
+		#
+		# """
+		# try:
+		# 	from ..util.timesize import Timer
+		# 	from scipy.optimize import minimize
+		# 	from .. import _doctest_mode_
+		# 	from ..util.rate_limiter import NonBlockingRateLimiter
+		# 	from ..util.display import display_head, display_p, display_nothing
+		#
+		# 	if self.dataframes is None:
+		# 		raise ValueError("you must load data first -- try Model.load_data()")
+		#
+		# 	if _doctest_mode_:
+		# 		from ..model import Model
+		# 		if type(self) == Model:
+		# 			self.unmangle()
+		# 			self._frame.sort_index(inplace=True)
+		# 			self.unmangle(True)
+		#
+		# 	if options is None:
+		# 		options = {}
+		# 	if maxiter is not None:
+		# 		options['maxiter'] = maxiter
+		#
+		# 	timer = Timer()
+		# 	if isinstance(screen_update_throttle, NonBlockingRateLimiter):
+		# 		throttle_gate = screen_update_throttle
+		# 	else:
+		# 		throttle_gate = NonBlockingRateLimiter(screen_update_throttle)
+		#
+		# 	if throttle_gate and not quiet and not _doctest_mode_:
+		# 		if reuse_tags is None:
+		# 			tag1 = display_head(f'Iteration 000 {iteration_number_tail}', level=3)
+		# 			tag2 = display_p(f'LL = {self.loglike()}')
+		# 			tag3 = display_p('...')
+		# 		else:
+		# 			tag1, tag2, tag3 = reuse_tags
+		# 	else:
+		# 		tag1 = display_nothing()
+		# 		tag2 = display_nothing()
+		# 		tag3 = display_nothing()
+		#
+		# 	def callback(x, status=None):
+		# 		nonlocal iteration_number, throttle_gate
+		# 		iteration_number += 1
+		# 		if throttle_gate:
+		# 			#clear_output(wait=True)
+		# 			tag1.update(f'Iteration {iteration_number:03} {iteration_number_tail}')
+		# 			tag2.update(f'LL = {self._cached_loglike_best}')
+		# 			tag3.update(self.pf)
+		# 		return False
+		#
+		# 	if quiet or _doctest_mode_:
+		# 		callback = None
+		#
+		# 	if method is None:
+		# 		if self.constraints or numpy.isfinite(self.pf['minimum'].max()) or numpy.isfinite(self.pf['maximum'].min()):
+		# 			method = 'slsqp'
+		# 		else:
+		# 			method = 'bhhh'
+		#
+		# 	if method2 is None and method.lower() == 'bhhh':
+		# 		method2 = 'slsqp'
+		#
+		# 	method_used = method
+		# 	raw_result = None
+		#
+		# 	if method.lower()=='bhhh':
+		# 		try:
+		# 			max_iter = options.get('maxiter',100)
+		# 			stopping_tol = options.get('ctol',1e-5)
+		#
+		# 			current_ll, tolerance, iter_bhhh, steps_bhhh, message = self.simple_fit_bhhh(
+		# 				ctol=stopping_tol,
+		# 				maxiter=max_iter,
+		# 				callback=callback,
+		# 				jumpstart=jumpstart,
+		# 				jumpstart_split=jumpstart_split,
+		# 				leave_out=leave_out,
+		# 				keep_only=keep_only,
+		# 				subsample=subsample,
+		# 			)
+		# 			raw_result = {
+		# 				'loglike':current_ll,
+		# 				'x': self.pvals,
+		# 				'tolerance':tolerance,
+		# 				'steps':steps_bhhh,
+		# 				'message':message,
+		# 			}
+		# 		except NotImplementedError:
+		# 			tag1.update(f'Iteration {iteration_number:03} [BHHH Not Available] {iteration_number_tail}', force=True)
+		# 			tag3.update(self.pf, force=True)
+		# 			if method2 is not None:
+		# 				method_used = f"{method2}"
+		# 				method = method2
+		# 		except BHHHSimpleStepFailure:
+		# 			tag1.update(f'Iteration {iteration_number:03} [Exception Recovery] {iteration_number_tail}', force=True)
+		# 			tag3.update(self.pf, force=True)
+		# 			if method2 is not None:
+		# 				method_used = f"{method_used}|{method2}"
+		# 				method = method2
+		# 		except:
+		# 			tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
+		# 			tag3.update(self.pf, force=True)
+		# 			raise
+		#
+		# 	if method.lower() != 'bhhh':
+		# 		try:
+		# 			bounds = None
+		# 			if isinstance(method,str) and method.lower() in ('slsqp', 'l-bfgs-b', 'tnc', 'trust-constr'):
+		# 				bounds = self.pbounds
+		#
+		# 			try:
+		# 				constraints = self._get_constraints(method)
+		# 			except:
+		# 				constraints = ()
+		#
+		# 			raw_result = minimize(
+		# 				self.neg_loglike2,
+		# 				self.pvals,
+		# 				args=(0, -1, 1, leave_out, keep_only, subsample), # start_case, stop_case, step_case, leave_out, keep_only, subsample
+		# 				method=method,
+		# 				jac=True,
+		# 				bounds=bounds,
+		# 				callback=callback,
+		# 				options=options,
+		# 				constraints=constraints,
+		# 				**kwargs
+		# 			)
+		# 		except:
+		# 			tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
+		# 			tag3.update(self.pf, force=True)
+		# 			raise
+		#
+		# 	timer.stop()
+		#
+		# 	if final_screen_update and not quiet and not _doctest_mode_ and raw_result is not None:
+		# 		converged = raw_result.get("message", "Converged")
+		# 		tag1.update(f'Iteration {iteration_number:03} [{converged}] {iteration_number_tail}', force=True)
+		# 		tag2.update(f'LL = {self.loglike()}', force=True)
+		# 		tag3.update(self.pf, force=True)
+		#
+		# 	if raw_result is None:
+		# 		raw_result = {}
+		# 	#if check_for_overspecification:
+		# 	#	self.check_for_possible_overspecification()
+		#
+		# 	from ..util import dictx
+		# 	result = dictx()
+		# 	for k,v in raw_result.items():
+		# 		if k == 'fun':
+		# 			result['loglike'] = -v
+		# 		elif k == 'jac':
+		# 			result['d_loglike'] = pandas.Series(-v, index=self.pnames)
+		# 		elif k == 'x':
+		# 			result['x'] = pandas.Series(v, index=self.pnames)
+		# 		else:
+		# 			result[k] = v
+		# 	result['elapsed_time'] = timer.elapsed()
+		# 	result['method'] = method_used
+		# 	result['n_cases'] = self.n_cases
+		# 	result['iteration_number'] = iteration_number
+		#
+		# 	if 'loglike' in result:
+		# 		result['logloss'] = -result['loglike'] / self.total_weight()
+		#
+		# 	if _doctest_mode_:
+		# 		result['__verbose_repr__'] = True
+		#
+		# 	self._most_recent_estimation_result = result
+		#
+		# 	if return_tags:
+		# 		return result, tag1, tag2, tag3
+		#
+		# 	return result
+		# except:
+		# 	logger.exception("error in maximize_loglike")
+		# 	raise
 
 	def estimate(self, dataservice=None, autoscale_weights=True, **kwargs):
 		"""
