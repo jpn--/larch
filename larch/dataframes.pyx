@@ -1491,6 +1491,9 @@ cdef class DataFrames:
 			if self._alternative_codes is None and self._data_ca is not None:
 				self._alternative_codes = self._data_ca.index.levels[1]
 
+			if self._data_ca is not None and self._data_ce is not None:
+				self.data_ce = None
+
 	def data_ca_as_ce(self):
 		"""
 		Reformat any idca data into idce format.
@@ -1628,18 +1631,29 @@ cdef class DataFrames:
 				self._array_ce_reversemap[c, a] = i
 			#self._array_ce_reversemap[self._array_ce_caseindexes, self._array_ce_altindexes] = numpy.arange(len(self._array_ce_caseindexes), dtype=numpy.int64)
 
-	def data_ce_as_ca(self):
+			if self._data_ca is not None and self._data_ce is not None:
+				self.data_ca = None
+
+	def data_ce_as_ca(self, promote=False):
 		"""
 		Reformat any idce data into idca format.
 
 		This function expands the idce data into an idca format DataFrame by adding all-zero value
 		rows for all unavailable alternatives.
 
+		Parameters
+		----------
+		promote : bool, default False
+			Permanently change this data from idce to idca in this DataFrames.
+
 		Returns
 		-------
 		pandas.DataFrame
 		"""
-		return self.data_ce.unstack().fillna(0).stack()
+		result = self.data_ce.unstack().fillna(0).stack().astype(self.data_ce.dtypes)
+		if promote:
+			self.data_ca = result
+		return result
 
 	@property
 	def data_av(self):

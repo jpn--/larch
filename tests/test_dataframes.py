@@ -564,3 +564,17 @@ def test_dfs_feathers():
 			m.dataframes.caseindex,
 			dfs2.caseindex,
 		)
+
+def test_promotion_ce_to_ca():
+	from larch.data_warehouse import example_file
+
+	ca = pandas.read_csv(example_file('MTCwork.csv.gz'), index_col=('casenum', 'altnum'))
+	dfs = DataFrames(ca, ch="chose", crack=True)
+	assert dfs.data_ce is not None
+	assert dfs.data_ca is None
+	assert dfs.data_ce.shape == (22033, 5)
+	dfs.data_ce_as_ca(True)
+	assert dfs.data_ce is None
+	assert dfs.data_ca is not None
+	assert len(dfs.data_ca) == 30174
+
