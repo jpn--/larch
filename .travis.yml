@@ -19,7 +19,7 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
 
-  - export DEPENDS="conda-build anaconda-client numpy cython>=0.29.21 conda-verify"
+  - export DEPENDS="conda-build anaconda-client numpy cython>=0.29.21 numba conda-verify"
   - conda create -q -n larch-build-environment python=$TRAVIS_PYTHON_VERSION $DEPENDS
   - source activate larch-build-environment
 

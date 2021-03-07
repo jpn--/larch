@@ -25,7 +25,7 @@ jobs:
 
   - bash: |
       source activate larch-build-environment
-      conda install --yes --quiet --name larch-build-environment python=$PYTHON_VERSION numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines -c conda-forge
+      conda install --yes --quiet --name larch-build-environment python=$PYTHON_VERSION numpy conda-build anaconda-client cython numba conda-verify pytest pytest-azurepipelines -c conda-forge
     displayName: Install Anaconda packages
   - bash: |
       source activate larch-build-environment
@@ -81,7 +81,7 @@ jobs:
 
   - script: |
       call activate myEnvironment
-      conda install --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines -c conda-forge
+      conda install --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython numba conda-verify pytest pytest-azurepipelines -c conda-forge
     displayName: Install Anaconda packages
 
   - script: |
