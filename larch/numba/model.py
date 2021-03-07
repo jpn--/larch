@@ -72,6 +72,66 @@ def utility_from_data_co(
 
 
 @njit(error_model='numpy', fastmath=True, cache=True)
+def quantity_from_data_ca(
+        model_q_ca_param_scale,         # float input shape=[n_q_ca_features]
+        model_q_ca_param,               # int input shape=[n_q_ca_features]
+        model_q_ca_data,                # int input shape=[n_q_ca_features]
+        model_q_scale_param,            # int input scalar
+        parameter_arr,                  # float input shape=[n_params]
+        holdfast_arr,                   # float input shape=[n_params]
+        array_av,                       # int8 input shape=[n_alts]
+        array_ca,                       # float input shape=[n_alts, n_ca_vars]
+        utility_elem,                   # float output shape=[n_alts]
+        dutility_elem,                  # float output shape=[n_alts, n_params]
+):
+    n_alts = array_ca.shape[0]
+
+    if model_q_scale_param[0] >= 0:
+        scale_param_value = parameter_arr[model_q_scale_param[0]]
+        scale_param_holdfast = holdfast_arr[model_q_scale_param[0]]
+    else:
+        scale_param_value = 1.0
+        scale_param_holdfast = 1
+
+    for j in range(n_alts):
+
+        # if self._array_ce_reversemap is not None:
+        #     if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
+        #         row = -1
+        #     else:
+        #         row = self._array_ce_reversemap[c, j]
+        row = -1
+
+        if array_av[j]: # and row != -1:
+
+            if model_q_ca_param.shape[0]:
+                for i in range(model_q_ca_param.shape[0]):
+                    # if row >= 0:
+                    #     _temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+                    # else:
+                    _temp = (
+                        array_ca[j, model_q_ca_data[i]]
+                        * model_q_ca_param_scale[i]
+                        * np.exp(parameter_arr[model_q_ca_param[i]])
+                    )
+                    utility_elem[j] += _temp
+                    if not holdfast_arr[model_q_ca_param[i]]:
+                        dutility_elem[j, model_q_ca_param[i]] += _temp * scale_param_value
+
+                for i in range(model_q_ca_param.shape[0]):
+                    if not holdfast_arr[model_q_ca_param[i]]:
+                        dutility_elem[j, model_q_ca_param[i]] /= utility_elem[j]
+
+                _tempsize = np.log(utility_elem[j])
+                utility_elem[j] = _tempsize * scale_param_value
+                if (model_q_scale_param[0] >= 0) and not scale_param_holdfast:
+                    dutility_elem[j, model_q_scale_param[0]] += _tempsize
+
+        else:
+            utility_elem[j] = -np.inf
+
+
+@njit(error_model='numpy', fastmath=True, cache=True)
 def utility_from_data_ca(
         model_utility_ca_param_scale,   # int input shape=[n_u_ca_features]
         model_utility_ca_param,         # int input shape=[n_u_ca_features]
@@ -143,6 +203,8 @@ def _type_signature(sig, precision=32):
             result += (f32[:,:],) if precision == 32 else (f64[:,:],)
         elif s == "i":
             result += (i32[:],)
+        elif s == "I":
+            result += (i32[:,:],)
         elif s == "b":
             result += (i8[:],)
         elif s == "S":
@@ -159,17 +221,23 @@ def _type_signatures(sig):
     ]
 
 _master_shape_signature = (
+    '(qca),(qca),(qca),(), '
     '(uca),(uca),(uca), '
     '(uco),(uco),(uco),(uco), '
-    '(edges),(edges),(edges),(edges), '
+    '(edges,four), '
     '(nests),(nests),(nests), '
     '(params),(params), '
     '(nodes),(nodes),(),(vco),(alts,vca), '
-    '(),(),(),()->'
+    '(four)->'
     '(nodes),(nodes),(nodes),(params,params),(params),()'
 )
 
 def _numba_master(
+        model_q_ca_param_scale,  # float input shape=[n_q_ca_features]
+        model_q_ca_param,        # int input shape=[n_q_ca_features]
+        model_q_ca_data,         # int input shape=[n_q_ca_features]
+        model_q_scale_param,     # int input scalar
+
         model_utility_ca_param_scale,  # [0] float input shape=[n_u_ca_features]
         model_utility_ca_param,        # [1] int input shape=[n_u_ca_features]
         model_utility_ca_data,         # [2] int input shape=[n_u_ca_features]
@@ -179,10 +247,11 @@ def _numba_master(
         model_utility_co_param,        # [5] int input shape=[n_co_features]
         model_utility_co_data,         # [6] int input shape=[n_co_features]
 
-        upslots,       # [7] int input shape=[edges]
-        dnslots,       # [8] int input shape=[edges]
-        visit1,        # [9] int input shape=[edges]
-        allocslot,     # [10] int input shape=[edges]
+        edgeslots,     # int input shape=[edges, 4]
+        # upslots,       # [7] int input shape=[edges]
+        # dnslots,       # [8] int input shape=[edges]
+        # visit1,        # [9] int input shape=[edges]
+        # allocslot,     # [10] int input shape=[edges]
 
         mu_slots,      # [11] int input shape=[nests]
         start_slots,   # [12] int input shape=[nests]
@@ -197,10 +266,11 @@ def _numba_master(
         array_co,      # [17] float input shape=[n_co_vars]
         array_ca,      # [18] float input shape=[n_alts, n_ca_vars]
 
-        only_utility,        # [19] int8 input
-        return_probability,  # [20] bool input
-        return_grad,         # [21] bool input
-        return_bhhh,         # [22] bool input
+        return_flags,
+        # only_utility,        # [19] int8 input
+        # return_probability,  # [20] bool input
+        # return_grad,         # [21] bool input
+        # return_bhhh,         # [22] bool input
 
         utility,       # [23] float output shape=[nodes]
         logprob,       # [24] float output shape=[nodes]
@@ -210,8 +280,42 @@ def _numba_master(
         loglike,       # [28] float output shape=[]
 ):
     n_alts = array_ca.shape[0]
+
+    assert edgeslots.shape[1] == 4
+    upslots   = edgeslots[:,0]  # int input shape=[edges]
+    dnslots   = edgeslots[:,1]  # int input shape=[edges]
+    visit1    = edgeslots[:,2]  # int input shape=[edges]
+    allocslot = edgeslots[:,3]  # int input shape=[edges]
+
+    assert return_flags.size == 4
+    only_utility = return_flags[0]          # [19] int8 input
+    return_probability = return_flags[1]    # [20] bool input
+    return_grad = return_flags[2]           # [21] bool input
+    return_bhhh = return_flags[3]           # [22] bool input
+
     utility[:] = 0.0
     dutility = np.zeros((utility.size, parameter_arr.size), dtype=utility.dtype)
+
+    quantity_from_data_ca(
+        model_q_ca_param_scale,         # float input shape=[n_q_ca_features]
+        model_q_ca_param,               # int input shape=[n_q_ca_features]
+        model_q_ca_data,                # int input shape=[n_q_ca_features]
+        model_q_scale_param,            # int input scalar
+        parameter_arr,  # float input shape=[n_params]
+        holdfast_arr,  # float input shape=[n_params]
+        array_av,  # int8 input shape=[n_nodes]
+        array_ca,  # float input shape=[n_alts, n_ca_vars]
+        utility[:n_alts],  # float output shape=[n_alts]
+        dutility[:n_alts],
+    )
+
+    if only_utility == 3:
+        if model_q_scale_param[0] >= 0:
+            scale_param_value = parameter_arr[model_q_scale_param[0]]
+        else:
+            scale_param_value = 1.0
+        utility[:n_alts] = np.exp(utility[:n_alts] / scale_param_value)
+        return
 
     utility_from_data_ca(
         model_utility_ca_param_scale,  # int input shape=[n_u_ca_features]
@@ -407,7 +511,7 @@ def _numba_master(
 
 
 _numba_master_vectorized = guvectorize(
-    _type_signatures("fii ifii iiii iii bf fbffF SBBB fffFff"),
+    _type_signatures("fiii fii ifii I iii bf fbffF b fffFff"),
     _master_shape_signature,
     nopython=True,
     fastmath=True,
@@ -473,6 +577,28 @@ def model_u_ca_slots(dataframes, model, dtype=np.float64):
         model_utility_ca_data,
     )
 
+def model_q_ca_slots(dataframes, model, dtype=np.float64):
+    len_model_q_ca = len(model.quantity_ca)
+    model_q_ca_param_scale = np.ones([len_model_q_ca], dtype=dtype)
+    model_q_ca_param = np.zeros([len_model_q_ca], dtype=np.int32)
+    model_q_ca_data = np.zeros([len_model_q_ca], dtype=np.int32)
+    if model.quantity_scale:
+        model_q_scale_param = model._frame.index.get_loc(str(model.quantity_scale))
+    else:
+        model_q_scale_param = -1
+    for n, i in enumerate(model.quantity_ca):
+        model_q_ca_param[n] = model._frame.index.get_loc(str(i.param))
+        model_q_ca_data[n] = dataframes.data_ca_or_ce.columns.get_loc(str(i.data))
+        model_q_ca_param_scale[n] = i.scale
+    return (
+        model_q_ca_param_scale,
+        model_q_ca_param,
+        model_q_ca_data,
+        model_q_scale_param,
+    )
+
+
+
 from collections import namedtuple
 WorkArrays = namedtuple(
     'WorkArrays',
@@ -515,10 +641,21 @@ class NumbaModel(_BaseModel):
                     model_utility_co_param,
                     model_utility_co_data,
                 ) = model_co_slots(self.dataframes, self, dtype=self.float_dtype)
+                (
+                    model_q_ca_param_scale,
+                    model_q_ca_param,
+                    model_q_ca_data,
+                    model_q_scale_param,
+                ) = model_q_ca_slots(self.dataframes, self, dtype=self.float_dtype)
 
                 node_slot_arrays = self.graph.node_slot_arrays(self)
 
                 self._fixed_arrays = (
+                    model_q_ca_param_scale,
+                    model_q_ca_param,
+                    model_q_ca_data,
+                    model_q_scale_param,
+
                     model_utility_ca_param_scale,
                     model_utility_ca_param,
                     model_utility_ca_data,
@@ -528,7 +665,7 @@ class NumbaModel(_BaseModel):
                     model_utility_co_param,
                     model_utility_co_data,
 
-                    *self.graph.edge_slot_arrays(),
+                    np.stack(self.graph.edge_slot_arrays()).T,
                     node_slot_arrays[0][n_alts:],
                     node_slot_arrays[1][n_alts:],
                     node_slot_arrays[2][n_alts:],
@@ -612,12 +749,12 @@ class NumbaModel(_BaseModel):
             return_bhhh=False,
     ):
         args = self.__prepare_for_compute(x)
-        args_flags = args + (
+        args_flags = args + (np.asarray([
             only_utility,
             return_probability,
             return_gradient,
             return_bhhh,
-        )
+        ], dtype=np.int8),)
         try:
             result_arrays = WorkArrays(*_numba_master_vectorized(
                 *args_flags,
@@ -680,6 +817,10 @@ class NumbaModel(_BaseModel):
 
     def utility(self, x=None, *args, **kwargs):
         result_arrays = self._loglike_runner(x, only_utility=2)
+        return result_arrays.utility
+
+    def quantity(self, x=None, *args, **kwargs):
+        result_arrays = self._loglike_runner(x, only_utility=3)
         return result_arrays.utility
 
     def logsums(self, x=None, *args, **kwargs):

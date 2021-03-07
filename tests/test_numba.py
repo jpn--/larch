@@ -19,6 +19,16 @@ def mtc():
         'choice_ca': 'chose',
     })
 
+@fixture
+def mtcq():
+    d = MTC()
+    return d.make_dataframes({
+        'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', 'altnum+1', 'ivtt+1'),
+        'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+        'avail_ca': '_avail_',
+        'choice_ca': 'chose',
+    })
+
 
 def test_dataframes_mnl5(mtc):
     m5 = NumbaModel()
@@ -790,6 +800,177 @@ def test_weighted_nl_bhhh(mtc2):
     ) * j2.weight_normalization
 
     assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
+
+
+def test_dataframes_mnl5q(mtcq):
+    m5 = NumbaModel()
+
+    from larch.roles import P, X, PX
+    m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+    m5.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+    m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+    m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+    m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+    m5.utility_ca = PX("tottime") + PX("totcost")
+
+    m5.quantity_ca = (
+            + P("FakeSizeAlt") * X('altnum+1')
+            + P("FakeSizeIvtt") * X('ivtt+1')
+    )
+
+    m5.dataframes = mtcq
+
+    beta_in1 = {
+        'ASC_BIKE': -0.8523646111088327,
+        'ASC_SR2': -0.5233769323949348,
+        'ASC_SR3P': -2.3202089848081027,
+        'ASC_TRAN': -0.05615933557609158,
+        'ASC_WALK': 0.050082767550586924,
+        'hhinc#2': -0.001040241396513087,
+        'hhinc#3': 0.0031822969445656542,
+        'hhinc#4': -0.0017162484345735326,
+        'hhinc#5': -0.004071521055900851,
+        'hhinc#6': -0.0021316332241034445,
+        'totcost': -0.001336661560553717,
+        'tottime': -0.01862990704919887,
+        'FakeSizeAlt': 0.123,
+    }
+
+    ll2 = m5.loglike2(beta_in1, return_series=True)
+
+    q1_dll = {
+        'ASC_BIKE': -272.10342,
+        'ASC_SR2': -884.91547,
+        'ASC_SR3P': -181.50142,
+        'ASC_TRAN': -519.74567,
+        'ASC_WALK': -37.595825,
+        'FakeSizeAlt': -104.97095044599027,
+        'FakeSizeIvtt': 104.971085,
+        'hhinc#2': -51884.465,
+        'hhinc#3': -11712.436,
+        'hhinc#4': -30848.334,
+        'hhinc#5': -15970.957,
+        'hhinc#6': -3269.796,
+        'totcost': 59049.66,
+        'tottime': -34646.656,
+    }
+
+    assert ll2.ll == approx(-5598.75244140625, rel=1e-5), f"ll2.ll={ll2.ll}"
+
+    for k in q1_dll:
+        assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
+
+    correct_null_dloglike = {
+        'ASC_SR2': -676.598075,
+        'ASC_SR3P': -1166.26503,
+        'ASC_TRAN': -491.818432,
+        'ASC_BIKE': -443.123432,
+        'ASC_WALK': 3.9709531565833474,
+        'FakeSizeAlt': -86.9414603,
+        'FakeSizeIvtt': 86.94146025657632,
+        'hhinc#2': -40249.0548,
+        'hhinc#3': -67312.464,
+        'hhinc#4': -30693.2152,
+        'hhinc#5': -27236.7637,
+        'hhinc#6': -1389.66274,
+        'totcost': 145788.60324123362,
+        'tottime': -48732.861026938794,
+    }
+
+    ll0 = m5.loglike2('null', return_series=True)
+    assert (ll0.ll == approx(-8486.55377320886))
+    for k in dict(ll0.dll):
+        assert dict(ll0.dll)[k] == approx(
+            correct_null_dloglike[k]), f'{k}  {dict(ll0.dll)[k]} == {(dict(correct_null_dloglike)[k])}'
+
+
+def test_dataframes_mnl5qt(mtcq):
+
+    m5 = NumbaModel()
+
+    from larch.roles import P, X, PX
+    m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+    m5.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+    m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+    m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+    m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+    m5.utility_ca = PX("tottime") + PX("totcost")
+
+    m5.quantity_ca = (
+            + P("FakeSizeAlt") * X('altnum+1')
+            + P("FakeSizeIvtt") * X('ivtt+1')
+    )
+
+    m5.quantity_scale = P.Theta
+
+    m5.dataframes = mtcq
+
+    beta_in1 = {
+        'ASC_BIKE': -0.8523646111088327,
+        'ASC_SR2': -0.5233769323949348,
+        'ASC_SR3P': -2.3202089848081027,
+        'ASC_TRAN': -0.05615933557609158,
+        'ASC_WALK': 0.050082767550586924,
+        'hhinc#2': -0.001040241396513087,
+        'hhinc#3': 0.0031822969445656542,
+        'hhinc#4': -0.0017162484345735326,
+        'hhinc#5': -0.004071521055900851,
+        'hhinc#6': -0.0021316332241034445,
+        'totcost': -0.001336661560553717,
+        'tottime': -0.01862990704919887,
+        'FakeSizeAlt': 0.123,
+        'Theta': 1.0,
+    }
+
+    ll2 = m5.loglike2(beta_in1, return_series=True)
+
+    q1_dll = {
+        'ASC_BIKE': -272.10342,
+        'ASC_SR2': -884.91547,
+        'ASC_SR3P': -181.50142,
+        'ASC_TRAN': -519.74567,
+        'ASC_WALK': -37.595825,
+        'FakeSizeAlt': -104.971085,
+        'FakeSizeIvtt': 104.971085,
+        'hhinc#2': -51884.465,
+        'hhinc#3': -11712.436,
+        'hhinc#4': -30848.334,
+        'hhinc#5': -15970.957,
+        'hhinc#6': -3269.796,
+        'totcost': 59049.66,
+        'tottime': -34646.656,
+        'Theta': -838.5296020507812,
+    }
+
+    assert ll2.ll == approx(-5598.75244140625, rel=1e-5), f"ll2.ll={ll2.ll}"
+
+    for k in q1_dll:
+        assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
+
+    correct_null_dloglike = {
+        'ASC_SR2': -676.598075,
+        'ASC_SR3P': -1166.26503,
+        'ASC_TRAN': -491.818432,
+        'ASC_BIKE': -443.123432,
+        'ASC_WALK': 3.970966339111328,
+        'FakeSizeAlt': -86.9414603,
+        'FakeSizeIvtt': 86.94156646728516,
+        'hhinc#2': -40249.0548,
+        'hhinc#3': -67312.464,
+        'hhinc#4': -30693.2152,
+        'hhinc#5': -27236.7637,
+        'hhinc#6': -1389.66274,
+        'totcost': 145788.421875,
+        'tottime': -48732.99609375,
+        'Theta': -1362.409129,
+    }
+
+    ll0 = m5.loglike2('null', return_series=True)
+    assert (ll0.ll == approx(-8486.55377320886))
+    dict_ll0_dll = dict(ll0.dll)
+    for k in dict_ll0_dll:
+        assert dict_ll0_dll[k] == approx(correct_null_dloglike[k], rel=1e-5), f'{k}  {dict_ll0_dll[k]} == {(correct_null_dloglike[k])}'
+
 
 
 def test_model_22():
