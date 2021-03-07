@@ -586,6 +586,9 @@ cdef class ParameterFrame:
 			if isinstance(values, (int,float)):
 				self._frame.loc[free_parameters, 'value'] = l4_float_dtype(values)
 			else:
+				loading_values = numpy.asanyarray(values)[free_parameters]
+				if numpy.any(numpy.isnan(loading_values)):
+					raise ValueError("cannot set NaN values for parameters")
 				self._frame.loc[free_parameters, 'value'] = numpy.asanyarray(values)[free_parameters]
 		if len(kwargs):
 			if self._mangled:

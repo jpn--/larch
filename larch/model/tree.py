@@ -695,7 +695,16 @@ class NestingTree(TouchNotify, nx.DiGraph):
 			# 	alpha[parent, child] = 1
 			pname = self.nodes[childcode].get('parameter', None)
 			muslots[child] = model.get_slot_x(pname)
-		return (muslots,)
+		num = numpy.zeros(len(self.nodes), dtype=numpy.int32)
+		start = numpy.full(len(self.nodes), -1, dtype=numpy.int32)
+		n = self.n_edges
+		for upcode in reversed(self.standard_sort):
+			upslot = self.standard_slot_map[upcode]
+			for dnslot in reversed(self.successor_slots(upcode)):
+				n -= 1
+				num[upslot] += 1
+				start[upslot] = n
+		return (muslots, start, num, )
 
 	def _get_simple_mu_and_alpha(self, model, holdfast_invalidates=True):
 		# alpha = numpy.zeros([len(self), len(self)], dtype=numpy.float64)

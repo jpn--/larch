@@ -18,6 +18,29 @@ warnings.warn(
     " binaries for your machine, which may take several seconds\n"
 )
 
+@njit
+def minmax(x):
+    maximum = x[0]
+    minimum = x[0]
+    for i in x[1:]:
+        if i > maximum:
+            maximum = i
+        elif i < minimum:
+            minimum = i
+    return (minimum, maximum)
+
+@njit
+def outside_range(x, bottom, top):
+    for i in x[:]:
+        if i == -np.inf:
+            continue
+        if i > top:
+            return True
+        elif i < bottom:
+            return True
+    return False
+
+
 @njit(error_model='numpy', fastmath=True, cache=True)
 def utility_from_data_co(
         model_utility_co_alt,          # int input shape=[n_co_features]
@@ -122,6 +145,8 @@ def _type_signature(sig, precision=32):
             result += (i32[:],)
         elif s == "b":
             result += (i8[:],)
+        elif s == "S":
+            result += (i8,)
         elif s == 'B':
             result += (boolean, )
     return result
@@ -136,21 +161,14 @@ def _type_signatures(sig):
 _master_shape_signature = (
     '(uca),(uca),(uca), '
     '(uco),(uco),(uco),(uco), '
-    '(edges),(edges),(edges),(edges),(nests), '
+    '(edges),(edges),(edges),(edges), '
+    '(nests),(nests),(nests), '
     '(params),(params), '
     '(nodes),(nodes),(),(vco),(alts,vca), '
-    '(),(),()->'
+    '(),(),(),()->'
     '(nodes),(nodes),(nodes),(params,params),(params),()'
 )
 
-@guvectorize(
-    _type_signatures("fii ifii iiiii bf fbffF BBB fffFff"),
-    _master_shape_signature,
-    nopython=True,
-    fastmath=True,
-    target='parallel',
-    cache=True,
-)
 def _numba_master(
         model_utility_ca_param_scale,  # [0] float input shape=[n_u_ca_features]
         model_utility_ca_param,        # [1] int input shape=[n_u_ca_features]
@@ -165,7 +183,10 @@ def _numba_master(
         dnslots,       # [8] int input shape=[edges]
         visit1,        # [9] int input shape=[edges]
         allocslot,     # [10] int input shape=[edges]
+
         mu_slots,      # [11] int input shape=[nests]
+        start_slots,   # [12] int input shape=[nests]
+        len_slots,     # [13] int input shape=[nests]
 
         holdfast_arr,  # [12] int8 input shape=[n_params]
         parameter_arr, # [13] float input shape=[n_params]
@@ -176,16 +197,17 @@ def _numba_master(
         array_co,      # [17] float input shape=[n_co_vars]
         array_ca,      # [18] float input shape=[n_alts, n_ca_vars]
 
-        return_probability,  # [19] bool input
-        return_grad,         # [20] bool input
-        return_bhhh,         # [21] bool input
+        only_utility,        # [19] int8 input
+        return_probability,  # [20] bool input
+        return_grad,         # [21] bool input
+        return_bhhh,         # [22] bool input
 
-        utility,       # [22] float output shape=[nodes]
-        logprob,       # [23] float output shape=[nodes]
-        probability,   # [24] float output shape=[nodes]
-        bhhh,          # [25] float output shape=[n_params, n_params]
-        d_loglike,     # [26] float output shape=[n_params]
-        loglike,       # [27] float output shape=[]
+        utility,       # [23] float output shape=[nodes]
+        logprob,       # [24] float output shape=[nodes]
+        probability,   # [25] float output shape=[nodes]
+        bhhh,          # [26] float output shape=[n_params, n_params]
+        d_loglike,     # [27] float output shape=[n_params]
+        loglike,       # [28] float output shape=[]
 ):
     n_alts = array_ca.shape[0]
     utility[:] = 0.0
@@ -216,34 +238,79 @@ def _numba_master(
         dutility[:n_alts],
     )
 
+    if only_utility == 1: return
+
     #util_nx = np.zeros_like(utility)
     #mu_extra = np.zeros_like(util_nx)
     loglike[0] = 0.0
 
-    for s in range(upslots.size):
-        dn = dnslots[s]
-        up = upslots[s]
-        up_nest = up - n_alts
-        dn_nest = dn - n_alts
-        if mu_slots[up_nest] < 0:
-            mu_up = 1.0
-        else:
-            mu_up = parameter_arr[mu_slots[up_nest]]
-        if visit1[s]>0 and dn>=n_alts:
-            log_dn = np.log(utility[dn])
-            #mu_extra[dn] += log_dn + util_nx[dn]/utility[dn]
-            if mu_slots[dn_nest] < 0:
-                mu_dn = 1.0
+    if True: # outside_range(utility[:n_alts], -0.0, 0.0):
+        for up in range(n_alts, utility.size):
+            up_nest = up - n_alts
+            n_children_for_parent = len_slots[up_nest]
+            shifter = -np.inf
+            shifter_position = -1
+            if mu_slots[up_nest] < 0:
+                mu_up = 1.0
             else:
-                mu_dn = parameter_arr[mu_slots[dn_nest]]
-            utility[dn] = log_dn * mu_dn
-        util_dn = utility[dn]
-        exp_util_dn_mu_up = np.exp(util_dn / mu_up)
-        utility[up] += exp_util_dn_mu_up
-        #util_nx[up] -= util_dn * exp_util_dn_mu_up / mu_up
+                mu_up = parameter_arr[mu_slots[up_nest]]
+            for n in range(n_children_for_parent):
+                edge = start_slots[up_nest] + n
+                dn = dnslots[edge]
+                if utility[dn] > -np.inf:
+                    z = utility[dn] / mu_up
+                    if z > shifter:
+                        shifter = z
+                        shifter_position = dn
+                    # TODO alphas
+                    # if alpha[edge] > 0:
+                    #     z = (logalpha[edge] + utility[child]) / mu[parent]
+                    #     if z > shifter:
+                    #         shifter = z
+                    #         shifter_position = child
+            for n in range(n_children_for_parent):
+                edge = start_slots[up_nest] + n
+                dn = dnslots[edge]
+                if utility[dn] > -np.inf:
+                    if shifter_position == dn:
+                        utility[up] += 1
+                    else:
+                        utility[up] += np.exp((utility[dn] / mu_up) - shifter)
+                    # if alpha[edge] > 0:
+                    #     if shifter_position == child:
+                    #         utility[parent] += 1
+                    #     else:
+                    #         z = ((logalpha[edge] + utility[child]) / mu[parent]) - shifter
+                    #         utility[parent] += exp(z)
+            utility[up] = (np.log(utility[up]) + shifter) * mu_up
+    else:
+        for s in range(upslots.size):
+            dn = dnslots[s]
+            up = upslots[s]
+            up_nest = up - n_alts
+            dn_nest = dn - n_alts
+            if mu_slots[up_nest] < 0:
+                mu_up = 1.0
+            else:
+                mu_up = parameter_arr[mu_slots[up_nest]]
+            if visit1[s]>0 and dn>=n_alts:
+                log_dn = np.log(utility[dn])
+                #mu_extra[dn] += log_dn + util_nx[dn]/utility[dn]
+                if mu_slots[dn_nest] < 0:
+                    mu_dn = 1.0
+                else:
+                    mu_dn = parameter_arr[mu_slots[dn_nest]]
+                utility[dn] = log_dn * mu_dn
+            util_dn = utility[dn]
+            exp_util_dn_mu_up = np.exp(util_dn / mu_up)
+            utility[up] += exp_util_dn_mu_up
+            #util_nx[up] -= util_dn * exp_util_dn_mu_up / mu_up
 
-    #mu_extra[mu_extra.size-1] += np.log(utility[utility.size-1]) + util_nx[-1]/utility[utility.size-1]
-    utility[utility.size-1] = np.log(utility[utility.size-1])
+        #mu_extra[mu_extra.size-1] += np.log(utility[utility.size-1]) + util_nx[-1]/utility[utility.size-1]
+        utility[utility.size-1] = np.log(utility[utility.size-1])
+
+    if only_utility == 2:
+        return
 
     for s in range(upslots.size):
         dn = dnslots[s]
@@ -336,6 +403,20 @@ def _numba_master(
                     d_loglike += tempvalue
                     if return_bhhh:
                         bhhh += np.outer(dLL_temp,dLL_temp) * this_ch * array_wt[0]
+
+
+
+_numba_master_vectorized = guvectorize(
+    _type_signatures("fii ifii iiii iii bf fbffF SBBB fffFff"),
+    _master_shape_signature,
+    nopython=True,
+    fastmath=True,
+    target='parallel',
+    cache=True,
+)(
+    _numba_master,
+)
+
 
 
 def model_co_slots(dataframes, model, dtype=np.float64):
@@ -449,6 +530,8 @@ class NumbaModel(_BaseModel):
 
                     *self.graph.edge_slot_arrays(),
                     node_slot_arrays[0][n_alts:],
+                    node_slot_arrays[1][n_alts:],
+                    node_slot_arrays[2][n_alts:],
                 )
 
                 if self.dataframes.data_ch is not None:
@@ -523,32 +606,43 @@ class NumbaModel(_BaseModel):
     def _loglike_runner(
             self,
             x=None,
+            only_utility=0,
             return_gradient=False,
             return_probability=False,
             return_bhhh=False,
     ):
         args = self.__prepare_for_compute(x)
+        args_flags = args + (
+            only_utility,
+            return_probability,
+            return_gradient,
+            return_bhhh,
+        )
         try:
-            result_arrays = WorkArrays(*_numba_master(
-                *args,
-                return_probability,
-                return_gradient,
-                return_bhhh,
+            result_arrays = WorkArrays(*_numba_master_vectorized(
+                *args_flags,
                 out=tuple(self.work_arrays),
             ))
         except:
             shp = lambda y: getattr(y, 'shape', 'scalar')
-            dtp = lambda y: getattr(y, 'dtype', 'untyped')
+            dtp = lambda y: getattr(y, 'dtype', f'{type(y)} ')
+            import inspect
+            arg_names = list(inspect.signature(_numba_master).parameters)
+            arg_name_width = max(len(j) for j in arg_names)
 
             in_sig, out_sig = _master_shape_signature.split("->")
+            in_sig_shapes = in_sig.split("(")[1:]
+            out_sig_shapes = out_sig.split("(")[1:]
+            print(in_sig_shapes)
+            print(out_sig_shapes)
             print("# Input Arrays")
-            for n, (a, s) in enumerate(zip(args, in_sig.split("(")[1:])):
+            for n, (a, s) in enumerate(zip(args_flags, in_sig_shapes)):
                 s = s.rstrip(" ),")
-                print(f" [{n:2}] {s.strip():9}: {dtp(a)}{shp(a)}")
+                print(f" {arg_names[n]:{arg_name_width}} [{n:2}] {s.strip():9}: {dtp(a)}{shp(a)}")
             print("# Output Arrays")
-            for n, (a, s) in enumerate(zip(self.work_arrays, out_sig.split("(")[1:])):
+            for n, (a, s) in enumerate(zip(self.work_arrays, out_sig_shapes), start=n+1):
                 s = s.rstrip(" ),")
-                print(f" [{n:2}] {s.strip():9}: {dtp(a)}{shp(a)}")
+                print(f" {arg_names[n]:{arg_name_width}} [{n:2}] {s.strip():9}: {dtp(a)}{shp(a)}")
             raise
         return result_arrays
 
@@ -583,6 +677,14 @@ class NumbaModel(_BaseModel):
     def probability(self, x=None, *args, **kwargs):
         result_arrays = self._loglike_runner(x, return_probability=True)
         return result_arrays.probability
+
+    def utility(self, x=None, *args, **kwargs):
+        result_arrays = self._loglike_runner(x, only_utility=2)
+        return result_arrays.utility
+
+    def logsums(self, x=None, *args, **kwargs):
+        result_arrays = self._loglike_runner(x, only_utility=2)
+        return result_arrays.utility[:,-1]
 
     def loglike2(
             self,

@@ -1375,6 +1375,11 @@ cdef class DataFrames:
 			raise
 
 	@property
+	def alternatives(self):
+		"""A list of 2-tuples, each giving the id and name of an alternative"""
+		return [(c,n) for c,n in zip(self._alternative_codes, self._alternative_names)]
+
+	@property
 	def n_alts(self):
 		"""The number of alternatives."""
 		return self._n_alts()

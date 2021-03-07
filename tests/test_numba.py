@@ -12,17 +12,23 @@ from larch.numba.model import NumbaModel
 @fixture
 def mtc():
     d = MTC()
-    df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-    df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-    df_av = d.dataframe_idca('_avail_', dtype=bool)
-    df_ch = d.dataframe_idca('_choice_')
-    from larch.dataframes import DataFrames
-    return DataFrames(
-        co=df_co,
-        ca=df_ca,
-        av=df_av,
-        ch=df_ch,
-    )
+    return d.make_dataframes({
+        'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ),
+        'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+        'avail_ca': '_avail_',
+        'choice_ca': 'chose',
+    })
+    # df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
+    # df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+    # df_av = d.dataframe_idca('_avail_', dtype=bool)
+    # df_ch = d.dataframe_idca('_choice_')
+    # from larch.dataframes import DataFrames
+    # return DataFrames(
+    #     co=df_co,
+    #     ca=df_ca,
+    #     av=df_av,
+    #     ch=df_ch,
+    # )
 
 
 def test_dataframes_mnl5(mtc):
@@ -253,37 +259,36 @@ def test_dataframes_nl5(mtc):
 
     assert chk.data['similarity'].min() > 4
 
+@fixture
+def mtc2():
 
-def test_weighted_bhhh():
     d = MTC()
+    d1 = d.make_dataframes({
+        'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ),
+        'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+        'avail_ca': '_avail_',
+        'choice_ca': 'chose',
+    })
 
-    df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-    df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-    df_av = d.dataframe_idca('_avail_', dtype=bool)
-    df_ch = d.dataframe_idca('_choice_')
-
-    df_co2 = pd.concat([df_co, df_co]).reset_index(drop=True)
-    df_ca2 = pd.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-    df_av2 = pd.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
+    df_co2 = pd.concat([d1.data_co, d1.data_co]).reset_index(drop=True)
+    df_ca2 = pd.concat([d1.data_ca.unstack(), d1.data_ca.unstack()]).reset_index(drop=True).stack()
+    df_av2 = pd.concat([d1.data_av, d1.data_av]).reset_index(drop=True)
     df_chX = pd.DataFrame(
-        np.zeros_like(df_ch.values),
-        index=df_ch.index,
-        columns=df_ch.columns,
+        np.zeros_like(d1.data_ch.values),
+        index=d1.data_ch.index,
+        columns=d1.data_ch.columns,
     )
-    df_chX = df_chX.unstack()
     df_chX.iloc[:, 1] = 2.0
-    df_chX = df_chX.stack()
 
-    df_ch2 = pd.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
+    df_ch2 = pd.concat([d1.data_ch, df_chX]).reset_index(drop=True)
 
     from larch import DataFrames, Model
 
     j1 = DataFrames(
-        co=df_co,
-        ca=df_ca,
-        av=df_av,
-        ch=df_chX + df_ch,
+        co=d1.data_co,
+        ca=d1.data_ca,
+        av=d1.data_av,
+        ch=df_chX + d1.data_ch,
     )
 
     j2 = DataFrames(
@@ -295,6 +300,10 @@ def test_weighted_bhhh():
 
     j1.autoscale_weights()
     j2.autoscale_weights()
+    return j1, j2
+
+def test_weighted_bhhh(mtc2):
+    j1, j2 = mtc2
 
     m5 = NumbaModel()
 
@@ -512,47 +521,8 @@ def test_weighted_bhhh():
     assert m5.check_d_loglike().data.similarity.min() > 4
 
 
-def test_weighted_nl_bhhh():
-    d = MTC()
-
-    df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-    df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-    df_av = d.dataframe_idca('_avail_', dtype=bool)
-    df_ch = d.dataframe_idca('_choice_')
-
-    df_co2 = pd.concat([df_co, df_co]).reset_index(drop=True)
-    df_ca2 = pd.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-    df_av2 = pd.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-    df_chX = pd.DataFrame(
-        np.zeros_like(df_ch.values),
-        index=df_ch.index,
-        columns=df_ch.columns,
-    )
-    df_chX = df_chX.unstack()
-    df_chX.iloc[:, 1] = 2.0
-    df_chX = df_chX.stack()
-
-    df_ch2 = pd.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-    from larch import DataFrames, Model
-
-    j1 = DataFrames(
-        co=df_co,
-        ca=df_ca,
-        av=df_av,
-        ch=df_chX + df_ch,
-    )
-
-    j2 = DataFrames(
-        co=df_co2,
-        ca=df_ca2,
-        av=df_av2,
-        ch=df_ch2,
-    )
-
-    j1.autoscale_weights()
-    j2.autoscale_weights()
+def test_weighted_nl_bhhh(mtc2):
+    j1, j2 = mtc2
 
     m5 = NumbaModel()
 
