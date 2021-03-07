@@ -1643,14 +1643,21 @@ cdef class DataFrames:
 
 		Parameters
 		----------
-		promote : bool, default False
-			Permanently change this data from idce to idca in this DataFrames.
+		promote : str, optional
+			If given, permanently change this data from idce to idca in this DataFrames,
+			and add a column with this name that indicates the availability of alternatives.
 
 		Returns
 		-------
 		pandas.DataFrame
 		"""
-		result = self.data_ce.unstack().fillna(0).stack().astype(self.data_ce.dtypes)
+		if promote:
+			self.data_ce[promote] = numpy.int8(1)
+		result = self.data_ce.unstack().fillna(0).stack()
+		try:
+			result = result.astype(self.data_ce.dtypes)
+		except ValueError:
+			pass
 		if promote:
 			self.data_ca = result
 		return result
