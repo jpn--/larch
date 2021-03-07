@@ -4209,7 +4209,7 @@ def test_intentional_misalignment():
 	d = MTC()
 	df_co = d.make_dataframes({'co': ('age', 'hhinc', 'hhsize', 'numveh==0')}).data_co
 	#df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_ch = d.make_dataframes({'ca': ('chose',)}).data_ca.unstack()
+	df_ch = d.make_dataframes({'ca': ('chose',)}).data_ca.unstack().fillna(0)
 	#df_ch = d.dataframe_idca('_choice_')
 
 	print(df_co)
