@@ -1,3 +1,5 @@
+import pytest
+numba = pytest.importorskip("numba")
 from larch.examples import MTC, SWISSMETRO
 from pytest import approx, raises, warns, fixture
 import numpy as np
