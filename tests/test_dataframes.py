@@ -573,8 +573,8 @@ def test_promotion_ce_to_ca():
 	assert dfs.data_ce is not None
 	assert dfs.data_ca is None
 	assert dfs.data_ce.shape == (22033, 5)
-	dfs.data_ce_as_ca(True)
+	dfs.data_ce_as_ca("_avail_")
 	assert dfs.data_ce is None
 	assert dfs.data_ca is not None
-	assert len(dfs.data_ca) == 30174
+	assert dfs.data_ca.shape == (30174, 6)
 

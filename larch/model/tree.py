@@ -4,7 +4,7 @@ import numpy
 from ..util.touch_notifier import TouchNotify
 from ..util.lazy import lazy
 
-class NestingTree(TouchNotify,nx.DiGraph):
+class NestingTree(TouchNotify, nx.DiGraph):
 
 	node_dict_factory = OrderedDict
 	adjlist_dict_factory = OrderedDict
@@ -372,7 +372,7 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			'elementals',
 			'_predecessor_slots',
 			'_successor_slots',
-			'_TouchNotify__touch_callback',
+			'_touch',
 			'node_dict_factory',
 
 		)
@@ -385,7 +385,6 @@ class NestingTree(TouchNotify,nx.DiGraph):
 		self.__dict__ = state.copy()
 		self._predecessor_slots = {}
 		self._successor_slots = {}
-		self.set_touch_callback(None)
 
 	def __xml__(self, use_viz=True, use_dot=True, output='svg', figsize=None, **format):
 		viz = None
@@ -688,6 +687,15 @@ class NestingTree(TouchNotify,nx.DiGraph):
 			next_tier = list()
 			for i in tier:
 				next_tier.extend(self.successors(i))
+
+	def node_slot_arrays(self, model):
+		muslots= numpy.full([len(self),          ], -1, dtype=numpy.int32)
+		for child, childcode in enumerate(self.standard_sort):
+			# for parent in self.predecessor_slots(childcode):
+			# 	alpha[parent, child] = 1
+			pname = self.nodes[childcode].get('parameter', None)
+			muslots[child] = model.get_slot_x(pname)
+		return (muslots,)
 
 	def _get_simple_mu_and_alpha(self, model, holdfast_invalidates=True):
 		# alpha = numpy.zeros([len(self), len(self)], dtype=numpy.float64)

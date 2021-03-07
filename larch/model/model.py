@@ -7,6 +7,8 @@ from ..dataframes import DataFrames, get_dataframe_format
 from .linear import LinearFunction_C, DictOfLinearFunction_C
 from ..general_precision import l4_float_dtype
 from .constraints import ParametricConstraintList
+from .tree import NestingTree
+from .abstract_model import AbstractChoiceModel
 from typing import Sequence, Mapping
 from numbers import Number
 import numpy as np
@@ -94,6 +96,8 @@ class Model(_Model5c):
 
 	"""
 
+	_graph = NestingTree()
+
 	constraints = ParametricConstraintList()
 
 	@classmethod
@@ -113,19 +117,35 @@ class Model(_Model5c):
 		import pickle
 		return pickle.load(filename)
 
-	def __init__(self,
-				 utility_ca=None,
-				 utility_co=None,
-				 quantity_ca=None,
-				 constraints=None,
-				 **kwargs):
-		import sys
+	def __init__(
+			self,
+			*args,
+			model=None,
+			dataservice=None,
+			utility_ca=None,
+			utility_co=None,
+			quantity_ca=None,
+			constraints=None,
+			**kwargs,
+	):
 		self._sklearn_data_format = 'idce'
+		for a in args:
+			if model is None and isinstance(a, Model):
+				model = a
+			if dataservice is None and isinstance(a, DataFrames):
+				dataservice = a
 		self.utility_co = utility_co
 		self.utility_ca = utility_ca
 		self.quantity_ca = quantity_ca
 		self.constraints = constraints
 		super().__init__(**kwargs)
+		if model is not None:
+			self.__setstate__(model.__getstate__())
+			if dataservice is None:
+				self.dataservice = model.dataservice
+			self.dataframes = model.dataframes
+		if dataservice is not None:
+			self.dataservice = dataservice
 		self._scan_all_ensure_names()
 		self.mangle()
 
@@ -391,7 +411,8 @@ class Model(_Model5c):
 
 
 	def __repr__(self):
-		s = "<larch.Model"
+		s = "<larch."
+		s += self.__class__.__name__
 		if self.is_mnl():
 			s += " (MNL)"
 		else:

@@ -1026,7 +1026,7 @@ def _try_mangle(instance):
 
 class LinearFunction2(MutableSequence):
 
-	def __init__(self, init=None, touch_callback=None):
+	def __init__(self, init=None):
 		self.__func = list()
 		self.__instance = None
 		if init is not None:
@@ -1374,7 +1374,7 @@ from collections.abc import MutableMapping
 
 class DictOfLinearFunction2(MutableMapping):
 
-	def __init__(self, mapping=None, alts_validator=None, touch_callback=None, **kwargs):
+	def __init__(self, mapping=None, alts_validator=None, **kwargs):
 		self.__map = {}
 		if mapping is None:
 			mapping = {}
@@ -1499,7 +1499,6 @@ class LinearComponent0(TouchNotify):
 				self._param = param or args[0]._param
 				self._data = data or args[0]._data
 				self._scale = scale or args[0]._scale
-				self.set_touch_callback(args[0].get_touch_callback())
 			else:
 				raise TypeError('init LinearComponent0 with LinearComponent0 or keyword arguments')
 		super().__init__(**kwargs)
@@ -1538,7 +1537,7 @@ class LinearComponent0(TouchNotify):
 		if other == ():
 			return self
 		elif isinstance(other, (LinearFunction, LinearComponent0)):
-			return (LinearFunction(touch_callback=self.get_touch_callback()) + self) + other
+			return (LinearFunction() + self) + other
 		elif other == 0:
 			return self
 		else:
@@ -1551,17 +1550,17 @@ class LinearComponent0(TouchNotify):
 
 	def __mul__(self, other):
 		if isinstance(other, (int, float, )):
-			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other)
 		elif isinstance(other, (DataRef, )):
-			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale)
 		else:
 			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
 	def __rmul__(self, other):
 		if isinstance(other, (int, float, )):
-			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data, param=self.param, scale=self.scale * other)
 		elif isinstance(other, (DataRef, )):
-			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale, touch_callback=self.get_touch_callback())
+			return LinearComponent0(data=self.data * other, param=self.param, scale=self.scale)
 		else:
 			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
@@ -1574,7 +1573,7 @@ class LinearComponent0(TouchNotify):
 			raise TypeError('unsupported operand type(s) for LinearComponent0: {}'.format(type(other)))
 
 	def __iter__(self):
-		return iter(LinearFunction(touch_callback=self.get_touch_callback()) + self)
+		return iter(LinearFunction() + self)
 
 	def __eq__(self, other):
 		if isinstance(other, LinearFunction) and len(other) == 1:
@@ -1655,28 +1654,27 @@ class LinearComponent0(TouchNotify):
 # ===========================================================================
 
 class LinearFunction0(TouchNotify, list):
-	def __init__(self, *args, touch_callback=None, **kwargs):
+	def __init__(self, *args, **kwargs):
 		if len(args) == 1 and args[0] is None:
 			args = ()
 		super().__init__(*args, **kwargs)
-		self.set_touch_callback(touch_callback)
 
 	def __add__(self, other):
 		if other == ():
 			return self
 		if isinstance(other, LinearFunction0):
-			return type(self)(super().__add__(other), touch_callback=self.get_touch_callback())
+			return type(self)(super().__add__(other))
 		if isinstance(other, ParameterRef):
-			other = LinearComponent0(param=other, touch_callback=self.get_touch_callback())
+			other = LinearComponent0(param=other)
 		if isinstance(other, LinearComponent0):
-			result = type(self)(self, touch_callback=self.get_touch_callback())
+			result = type(self)(self)
 			result.append(other)
 			return result
 		raise TypeError("cannot add type {} to LinearFunction0".format(type(other)))
 
 	def __iadd__(self, other):
 		if isinstance(other, ParameterRef):
-			other = LinearComponent0(param=other, touch_callback=self.get_touch_callback())
+			other = LinearComponent0(param=other)
 		if other == ():
 			return self
 		elif isinstance(other, LinearFunction0):
@@ -1688,19 +1686,19 @@ class LinearFunction0(TouchNotify, list):
 		return self
 
 	def __radd__(self, other):
-		return LinearFunction0(touch_callback=self.get_touch_callback()) + other + self
+		return LinearFunction0() + other + self
 
 	def __pos__(self):
 		return self
 
 	def __mul__(self, other):
-		trial = LinearFunction0(touch_callback=self.get_touch_callback())
+		trial = LinearFunction0()
 		for component in self:
 			trial += component * other
 		return trial
 
 	def __rmul__(self, other):
-		trial = LinearFunction0(touch_callback=self.get_touch_callback())
+		trial = LinearFunction0()
 		for component in self:
 			trial += other * component
 		return trial
@@ -1777,7 +1775,7 @@ class LinearFunction0(TouchNotify, list):
 
 		"""
 		import re
-		r = LinearFunction0(touch_callback=self.get_touch_callback())
+		r = LinearFunction0()
 		for i in self:
 			if pattern is None:
 				param = i.param
@@ -1787,7 +1785,7 @@ class LinearFunction0(TouchNotify, list):
 				param = re.sub(pattern, repl, i.param, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent0(data=i.data, param=container.format(param), touch_callback=self.get_touch_callback())
+			r += LinearComponent0(data=i.data, param=container.format(param))
 		try:
 			r._x_ident = self._x_ident
 		except AttributeError:
@@ -1809,7 +1807,7 @@ class LinearFunction0(TouchNotify, list):
 			to be searched.
 		"""
 		import re
-		r = LinearFunction0(touch_callback=self.get_touch_callback())
+		r = LinearFunction0()
 		for i in self:
 			if pattern is None:
 				data = i.data
@@ -1819,7 +1817,7 @@ class LinearFunction0(TouchNotify, list):
 				data = re.sub(pattern, repl, i.data, **kwargs)
 			if container is None:
 				container = '{}'
-			r += LinearComponent0(data=container.format(data), param=i.param, touch_callback=self.get_touch_callback())
+			r += LinearComponent0(data=container.format(data), param=i.param)
 		try:
 			r._x_ident = self._x_ident
 		except AttributeError:
@@ -2014,11 +2012,10 @@ class DictOfLinearFunction0(TouchNotify, dict):
 		if hasattr(mapping, 'items'):
 			mapping = getattr(mapping, 'items')()
 		return ((k, v) for k, v in chain(mapping, getattr(kwargs, 'items')()))
-	def __init__(self, mapping=(), touch_callback=None, alts_validator=None, **kwargs):
+	def __init__(self, mapping=(), alts_validator=None, **kwargs):
 		if mapping is None:
 			mapping = ()
 		super().__init__(self._process_args(mapping, **kwargs))
-		self.set_touch_callback(touch_callback if callable(touch_callback) else lambda: None)
 		self._alts_validator = alts_validator
 	def set_alts_validator(self, av):
 		self._alts_validator = av
@@ -2027,7 +2024,7 @@ class DictOfLinearFunction0(TouchNotify, dict):
 			return super().__getitem__(k)
 		except KeyError:
 			if self._alts_validator is None or self._alts_validator(k):
-				super().__setitem__(k, LinearFunction0(touch_callback=self.get_touch_callback()))
+				super().__setitem__(k, LinearFunction0())
 				return super().__getitem__(k)
 			else:
 				raise
@@ -2035,13 +2032,13 @@ class DictOfLinearFunction0(TouchNotify, dict):
 		if isinstance(v, ParameterRef):
 			v = v * DataRef('1')
 		if isinstance(v, int) and v==0:
-			v = LinearFunction0(touch_callback=self.get_touch_callback())
+			v = LinearFunction0()
 		elif isinstance(v, LinearComponent0):
-			v = LinearFunction0(touch_callback=self.get_touch_callback()) + v
+			v = LinearFunction0() + v
 		elif isinstance(v, LinearFunction0):
-			v.set_touch_callback(self.get_touch_callback())
+			pass
 		elif isinstance(v, list):
-			v_ = LinearFunction0(touch_callback=self.get_touch_callback())
+			v_ = LinearFunction0()
 			for vv in v:
 				v_ = v_ + vv
 			v = v_
@@ -2052,11 +2049,11 @@ class DictOfLinearFunction0(TouchNotify, dict):
 		return super().__setitem__(k, v)
 	def setdefault(self, k, default=None):
 		if default is None:
-			default = LinearFunction0(touch_callback=self.get_touch_callback())
+			default = LinearFunction0()
 		if isinstance(default, LinearComponent0):
-			default = LinearFunction0(touch_callback=self.get_touch_callback()) + default
+			default = LinearFunction0() + default
 		elif isinstance(default, LinearFunction0):
-			default.set_touch_callback(self.get_touch_callback())
+			pass
 		else:
 			raise TypeError("only accepts LinearFunction0 values")
 		return super().setdefault(k, default)
@@ -2112,11 +2109,10 @@ class DictOfStrings(TouchNotify, dict):
 		if hasattr(mapping, 'items'):
 			mapping = getattr(mapping, 'items')()
 		return ((k, v) for k, v in chain(mapping, getattr(kwargs, 'items')()))
-	def __init__(self, mapping=(), touch_callback=None, **kwargs):
+	def __init__(self, mapping=(), **kwargs):
 		if mapping is None:
 			mapping = ()
 		super().__init__(self._process_args(mapping, **kwargs))
-		self.set_touch_callback(touch_callback if callable(touch_callback) else lambda: None)
 	def __contains__(self, k):
 		return super().__contains__(str(k))
 	def __getitem__(self, k):
@@ -2129,8 +2125,6 @@ class DictOfStrings(TouchNotify, dict):
 		return type(self)(self)
 	def __repr__(self):
 		return '{0}({1})'.format(type(self).__name__, super().__repr__())
-	def set_touch_callback(self, callback):
-		super().set_touch_callback(callback)
 	def __xml__(self):
 		from pprint import pformat
 		from xmle import Elem
@@ -2158,11 +2152,10 @@ class DictOfStringKeys(TouchNotify, dict):
 		if hasattr(mapping, 'items'):
 			mapping = getattr(mapping, 'items')()
 		return ((k, v) for k, v in chain(mapping, getattr(kwargs, 'items')()))
-	def __init__(self, mapping=(), touch_callback=None, **kwargs):
+	def __init__(self, mapping=(), **kwargs):
 		if mapping is None:
 			mapping = ()
 		super().__init__(self._process_args(mapping, **kwargs))
-		self.set_touch_callback(touch_callback if callable(touch_callback) else lambda: None)
 	def __contains__(self, k):
 		return super().__contains__(str(k))
 	def __getitem__(self, k):
@@ -2175,8 +2168,6 @@ class DictOfStringKeys(TouchNotify, dict):
 		return type(self)(self)
 	def __repr__(self):
 		return '{0}({1})'.format(type(self).__name__, super().__repr__())
-	def set_touch_callback(self, callback):
-		super().set_touch_callback(callback)
 	def __xml__(self):
 		from pprint import pformat
 		from xmle import Elem

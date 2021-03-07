@@ -63,7 +63,7 @@ cdef class Model5c(AbstractChoiceModel):
 			else:
 				self._quantity_scale = str(quantity_scale)
 
-		self.rename_parameters = DictOfStrings(touch_callback=self.mangle)
+		self.rename_parameters = DictOfStrings()
 
 		self._cached_loglike_null = 0
 		self._cached_loglike_nil = 0

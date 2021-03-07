@@ -911,6 +911,18 @@ cdef class ParameterFrame:
 					}
 				)
 				monospace_cols = []
+
+				def fixie(x):
+					if numpy.isfinite(x):
+						if x > 1000:
+							return NBSP+"BIG"
+						elif x < -1000:
+							return "-BIG"
+						else:
+							return f"{x:0< 4.2f}".replace(" ",NBSP)
+					else:
+						return NBSP+"NA"
+
 				if 't Stat' in result.columns:
 					result.insert(result.columns.get_loc('t Stat')+1, 'Signif', "")
 					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
