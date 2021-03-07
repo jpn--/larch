@@ -1,29 +1,34 @@
 
 from larch.examples import MTC, SWISSMETRO
-from pytest import approx, raises, warns
+from pytest import approx, raises, warns, fixture
 import numpy
 import pandas
 from larch.model import *
 from larch.roles import P, X, PX
 from larch.model.persist_flags import PERSIST_UTILITY
 
-
-def test_dataframes_mnl5():
+@fixture
+def mtc():
 	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
+	return d.make_dataframes({
+		'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ),
+		'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+		'avail_ca': '_avail_',
+		'choice_ca': 'chose',
+	})
 
-	from larch.dataframes import DataFrames
-	from larch.model import Model
+@fixture
+def mtcq():
+	d = MTC()
+	return d.make_dataframes({
+		'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', 'altnum+1', 'ivtt+1'),
+		'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+		'avail_ca': '_avail_',
+		'choice_ca': 'chose',
+	})
 
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+
+def test_dataframes_mnl5(mtc):
 
 	m5 = Model()
 
@@ -40,7 +45,7 @@ def test_dataframes_mnl5():
 	m5.utility_co[6] = P("ASC_WALK")*X("1") + P("hhinc#6") * X("hhinc")
 	m5.utility_ca = PX("tottime") + PX("totcost")
 
-	m5.dataframes = j
+	m5.dataframes = mtc
 
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -87,29 +92,14 @@ def test_dataframes_mnl5():
 	assert numpy.all(m5.pf['robust_std_err'] == 0)
 
 
-def test_dataframes_mnl5_ca():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_dataframes_mnl5_ca(mtc):
 
 	m5 = Model()
 
 	from larch.roles import P, X, PX
 	m5.utility_ca = PX("tottime") + PX("totcost")
 
-	m5.dataframes = j
+	m5.dataframes = mtc
 
 	beta_in1 = {
 		'totcost': -0.001336661560553717,
@@ -129,22 +119,7 @@ def test_dataframes_mnl5_ca():
 		assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
 
 
-def test_dataframes_mnl5_co():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_dataframes_mnl5_co(mtc):
 
 	m5 = Model()
 
@@ -154,7 +129,7 @@ def test_dataframes_mnl5_co():
 	m5.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
 	m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
 	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
-	m5.dataframes = j
+	m5.dataframes = mtc
 
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -190,23 +165,7 @@ def test_dataframes_mnl5_co():
 		assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
 
 
-def test_dataframes_mnl5q():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'altnum+1', 'ivtt+1')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
-
+def test_dataframes_mnl5q(mtcq):
 	m5 = Model()
 
 	from larch.roles import P, X, PX
@@ -222,7 +181,7 @@ def test_dataframes_mnl5q():
 			+ P("FakeSizeIvtt") * X('ivtt+1')
 	)
 
-	m5.dataframes = j
+	m5.dataframes = mtcq
 
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -288,22 +247,7 @@ def test_dataframes_mnl5q():
 			correct_null_dloglike[k]), f'{k}  {dict(ll0.dll)[k]} == {(dict(correct_null_dloglike)[k])}'
 
 
-def test_dataframes_mnl5qt():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'altnum+1', 'ivtt+1')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_dataframes_mnl5qt(mtcq):
 
 	m5 = Model()
 
@@ -322,7 +266,7 @@ def test_dataframes_mnl5qt():
 
 	m5.quantity_scale = P.Theta
 
-	m5.dataframes = j
+	m5.dataframes = mtcq
 
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -391,22 +335,7 @@ def test_dataframes_mnl5qt():
 		assert dict_ll0_dll[k] == approx(correct_null_dloglike[k], rel=1e-5), f'{k}  {dict_ll0_dll[k]} == {(correct_null_dloglike[k])}'
 
 
-def test_dataframes_nl5():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_dataframes_nl5(mtc):
 
 	m5 = Model()
 
@@ -418,7 +347,7 @@ def test_dataframes_nl5():
 	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
 	m5.utility_ca = PX("tottime") + PX("totcost")
 
-	m5.dataframes = j
+	m5.dataframes = mtc
 
 	m5.graph.add_node(9, children=(5, 6), parameter='MU_NonMotorized')
 
@@ -513,20 +442,7 @@ def test_dataframes_nl5():
 
 	assert chk.data['similarity'].min() > 4
 
-def test_nl_preloaded_tree_struct():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-	from larch.dataframes import DataFrames
-	from larch import Model
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_nl_preloaded_tree_struct(mtc):
 	m5 = Model()
 	from larch.roles import P, X, PX
 	m5.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
@@ -535,7 +451,7 @@ def test_nl_preloaded_tree_struct():
 	m5.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
 	m5.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
 	m5.utility_ca = PX("tottime") + PX("totcost")
-	m5.dataframes = j
+	m5.dataframes = mtc
 	m5.graph.add_node(9, children=(5, 6), parameter='MU_NonMotorized')
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -653,49 +569,53 @@ def test_dataframes_cnl():
 	for k in correct_d_loglike:
 		assert compute_d_loglike[k] == approx(correct_d_loglike[k], rel=1e-5), f"{k}: {compute_d_loglike[k]} != {approx(correct_d_loglike[k])}"
 
-
-def test_weighted_bhhh():
-
+@fixture
+def mtc2():
+	import numpy as np
+	import pandas as pd
 	d = MTC()
+	d1 = d.make_dataframes({
+	    'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ),
+	    'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+	    'avail_ca': '_avail_',
+	    'choice_ca': 'chose',
+	})
 
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
+	df_co2 = pandas.concat([d1.data_co, d1.data_co]).reset_index(drop=True)
+	df_ca2 = pd.concat([d1.data_ca.unstack(), d1.data_ca.unstack()]).reset_index(drop=True).stack()
+	df_av2 = pd.concat([d1.data_av, d1.data_av]).reset_index(drop=True)
+	df_chX = pd.DataFrame(
+	    np.zeros_like(d1.data_ch.values),
+	    index=d1.data_ch.index,
+	    columns=d1.data_ch.columns,
 	)
-	df_chX = df_chX.unstack()
 	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
 
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
+	df_ch2 = pd.concat([d1.data_ch, df_chX]).reset_index(drop=True)
 
 	from larch import DataFrames, Model
 
 	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
+	    co=d1.data_co,
+	    ca=d1.data_ca,
+	    av=d1.data_av,
+	    ch=df_chX + d1.data_ch,
 	)
 
 	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
+	    co=df_co2,
+	    ca=df_ca2,
+	    av=df_av2,
+	    ch=df_ch2,
 	)
 
 	j1.autoscale_weights()
 	j2.autoscale_weights()
+	return j1, j2
+
+def test_weighted_bhhh(mtc2):
+
+	j1, j2 = mtc2
 
 	m5 = Model()
 
@@ -908,49 +828,9 @@ def test_weighted_bhhh():
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
 
-def test_weighted_nl_bhhh():
+def test_weighted_nl_bhhh(mtc2):
 
-	d = MTC()
-
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-
-
-	j1.autoscale_weights()
-	j2.autoscale_weights()
+	j1, j2 = mtc2
 
 	m5 = Model()
 
@@ -1226,48 +1106,9 @@ def test_weighted_nl_bhhh():
 
 
 
-def test_weighted_nl2_bhhh():
-	d = MTC()
+def test_weighted_nl2_bhhh(mtc2):
 
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-
-	j1.autoscale_weights()
-	j2.autoscale_weights()
-
+	j1, j2 = mtc2
 	m5 = Model()
 
 	from larch.roles import P, X, PX
@@ -1587,50 +1428,53 @@ def test_weighted_nl2_bhhh():
 	assert numpy.asarray(ll2.dll) == approx(numpy.asarray(ll2.dll_casewise.sum(0)))
 
 
-def test_weighted_qnl_bhhh():
-
+@fixture
+def mtc2q():
+	import numpy as np
+	import pandas as pd
 	d = MTC()
+	d1 = d.make_dataframes({
+	    'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', 'tottime+100', 'totcost+50'),
+	    'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+	    'avail_ca': '_avail_',
+	    'choice_ca': 'chose',
+	})
 
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'tottime+100', 'totcost+50')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
+	df_co2 = pandas.concat([d1.data_co, d1.data_co]).reset_index(drop=True)
+	df_ca2 = pd.concat([d1.data_ca.unstack(), d1.data_ca.unstack()]).reset_index(drop=True).stack()
+	df_av2 = pd.concat([d1.data_av, d1.data_av]).reset_index(drop=True)
+	df_chX = pd.DataFrame(
+	    np.zeros_like(d1.data_ch.values),
+	    index=d1.data_ch.index,
+	    columns=d1.data_ch.columns,
 	)
-	df_chX = df_chX.unstack()
 	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
 
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
+	df_ch2 = pd.concat([d1.data_ch, df_chX]).reset_index(drop=True)
 
 	from larch import DataFrames, Model
 
 	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
+	    co=d1.data_co,
+	    ca=d1.data_ca,
+	    av=d1.data_av,
+	    ch=df_chX + d1.data_ch,
 	)
 
 	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
+	    co=df_co2,
+	    ca=df_ca2,
+	    av=df_av2,
+	    ch=df_ch2,
 	)
 
 	j1.autoscale_weights()
-
 	j2.autoscale_weights()
+	return j1, j2
 
+
+def test_weighted_qnl_bhhh(mtc2q):
+	j1, j2 = mtc2q
 	m5 = Model()
 
 	from larch.roles import P, X, PX
@@ -2081,48 +1925,8 @@ def test_weighted_qnl_bhhh():
 	}
 	assert m5.loglike(beta_in2) == approx(-31802.098963182878)
 
-def test_weighted_qmnl_bhhh():
-
-	d = MTC()
-
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'tottime+100', 'totcost+50')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-
-	j1.autoscale_weights()
-	j2.autoscale_weights()
+def test_weighted_qmnl_bhhh(mtc2q):
+	j1, j2 = mtc2q
 
 	m5 = Model()
 
@@ -2405,47 +2209,90 @@ def test_weighted_qmnl_bhhh():
 	assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
 
 def test_dataframes_mnl_with_zero_weighteds():
+
+	import numpy as np
+	import pandas as pd
 	d = MTC()
+	d1 = d.make_dataframes({
+	    'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ),
+	    'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+	    'avail_ca': '_avail_',
+	    'choice_ca': 'chose',
+	})
 
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
+	df_co2 = pandas.concat([d1.data_co, d1.data_co]).reset_index(drop=True)
+	df_ca2 = pd.concat([d1.data_ca.unstack(), d1.data_ca.unstack()]).reset_index(drop=True).stack()
+	df_av2 = pd.concat([d1.data_av, d1.data_av]).reset_index(drop=True)
+	df_chX = pd.DataFrame(
+	    np.zeros_like(d1.data_ch.values),
+	    index=d1.data_ch.index,
+	    columns=d1.data_ch.columns,
 	)
-	df_chX = df_chX.unstack()
 	df_chX.iloc[::2, 1] = 3.0
 
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
+	df_ch2 = pd.concat([d1.data_ch, df_chX]).reset_index(drop=True)
 
 	from larch import DataFrames, Model
 
 	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
+	    co=d1.data_co,
+	    ca=d1.data_ca,
+	    av=d1.data_av,
+	    ch=df_chX + d1.data_ch,
 	)
 
 	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
+	    co=df_co2,
+	    ca=df_ca2,
+	    av=df_av2,
+	    ch=df_ch2,
 	)
 
 	j1.autoscale_weights()
 	j2.autoscale_weights()
+
+	# d = MTC()
+	# mtc2
+	#
+	# df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
+	# df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	# df_av = d.dataframe_idca('_avail_', dtype=bool)
+	# df_ch = d.dataframe_idca('_choice_')
+	#
+	# df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
+	# df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
+	# df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
+	#
+	# df_chX = pandas.DataFrame(
+	# 	numpy.zeros_like(df_ch.values),
+	# 	index=df_ch.index,
+	# 	columns=df_ch.columns,
+	# )
+	# df_chX = df_chX.unstack()
+	# df_chX.iloc[::2, 1] = 3.0
+	#
+	# df_chX = df_chX.stack()
+	#
+	# df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
+	#
+	# from larch import DataFrames, Model
+	#
+	# j1 = DataFrames(
+	# 	co=df_co,
+	# 	ca=df_ca,
+	# 	av=df_av,
+	# 	ch=df_chX + df_ch,
+	# )
+	#
+	# j2 = DataFrames(
+	# 	co=df_co2,
+	# 	ca=df_ca2,
+	# 	av=df_av2,
+	# 	ch=df_ch2,
+	# )
+	#
+	# j1.autoscale_weights()
+	# j2.autoscale_weights()
 
 	m5 = Model()
 
@@ -2655,48 +2502,8 @@ def test_dataframes_mnl_with_zero_weighteds():
 
 	assert m5.check_d_loglike().data.similarity.min() > 4
 
-def test_dataframes_holdfast_1():
-
-	d = MTC()
-
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'tottime+100', 'totcost+50')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-
-	j1.autoscale_weights()
-	j2.autoscale_weights()
+def test_dataframes_holdfast_1(mtc2q):
+	j1, j2 = mtc2q
 
 	m5 = Model()
 
@@ -3029,47 +2836,8 @@ def test_dataframes_holdfast_1():
 	assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
 
 
-def test_dataframes_holdfast_2():
-	d = MTC()
-
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'tottime+100', 'totcost+50')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-	j1.autoscale_weights()
-	j2.autoscale_weights()
-
+def test_dataframes_holdfast_2(mtc2q):
+	j1, j2 = mtc2q
 
 	m5 = Model()
 
@@ -3394,47 +3162,8 @@ def test_dataframes_holdfast_2():
 
 
 
-def test_dataframes_nl_holdfasts():
-	d = MTC()
-
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', 'tottime+100', 'totcost+50')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	df_co2 = pandas.concat([df_co, df_co]).reset_index(drop=True)
-	df_ca2 = pandas.concat([df_ca.unstack(), df_ca.unstack()]).reset_index(drop=True).stack()
-	df_av2 = pandas.concat([df_av.unstack(), df_av.unstack()]).reset_index(drop=True).stack()
-
-	df_chX = pandas.DataFrame(
-		numpy.zeros_like(df_ch.values),
-		index=df_ch.index,
-		columns=df_ch.columns,
-	)
-	df_chX = df_chX.unstack()
-	df_chX.iloc[:, 1] = 2.0
-	df_chX = df_chX.stack()
-
-	df_ch2 = pandas.concat([df_ch.unstack(), df_chX.unstack()]).reset_index(drop=True).stack()
-
-	from larch import DataFrames, Model
-
-	j1 = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_chX + df_ch,
-	)
-
-	j2 = DataFrames(
-		co=df_co2,
-		ca=df_ca2,
-		av=df_av2,
-		ch=df_ch2,
-	)
-
-	j1.autoscale_weights()
-	j2.autoscale_weights()
+def test_dataframes_nl_holdfasts(mtc2q):
+	j1, j2 = mtc2q
 
 	m5 = Model()
 	from larch.roles import P, X, PX
@@ -4255,30 +3984,24 @@ def test_probability():
 def test_zero_quant_doctor():
 
 	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', '(altnum+1)*(altnum!=6)',
-							 '(ivtt+1)*(altnum!=6)')
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
+	j = d.make_dataframes({
+		'ca': ('ivtt', 'ovtt', 'totcost', 'chose', 'tottime', '(altnum+1)*(altnum!=6)',
+							 '(ivtt+1)*(altnum!=6)'),
+		'co': ('age', 'hhinc', 'hhsize', 'numveh==0'),
+		'avail_ca': '_avail_',
+		'choice_ca': 'chose',
+	})
 
 	from larch.dataframes import DataFrames
 	from larch import Model
 
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
-
 	jj = DataFrames(
-		co=None,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
+		ca=j.data_ca,
+		av=j.data_av,
+		ch=j.data_ch,
 	)
 
-	numpy.testing.assert_array_equal(jj.caseindex, numpy.arange(5029))
+	numpy.testing.assert_array_equal(jj.caseindex, numpy.arange(1, 5030))
 
 	with raises(ValueError):
 		jj.get_zero_quantity_ca()
@@ -4376,22 +4099,7 @@ def test_zero_quant_doctor():
 			correct_null_dloglike[k]), f'{k}  {dict(ll0.dll)[k]} == {(dict(correct_null_dloglike)[k])}'
 
 
-def test_partial_compute():
-	d = MTC()
-	df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_av = d.dataframe_idca('_avail_', dtype=bool)
-	df_ch = d.dataframe_idca('_choice_')
-
-	from larch.dataframes import DataFrames
-	from larch.model import Model
-
-	j = DataFrames(
-		co=df_co,
-		ca=df_ca,
-		av=df_av,
-		ch=df_ch,
-	)
+def test_partial_compute(mtc):
 
 	m5 = Model()
 
@@ -4408,7 +4116,7 @@ def test_partial_compute():
 	m5.utility_co[6] = P("ASC_WALK") * X("1") + P("hhinc#6") * X("hhinc")
 	m5.utility_ca = PX("tottime") + PX("totcost")
 
-	m5.dataframes = j
+	m5.dataframes = mtc
 
 	beta_in1 = {
 		'ASC_BIKE': -0.8523646111088327,
@@ -4499,10 +4207,17 @@ def test_top_k_accuracy():
 def test_intentional_misalignment():
 
 	d = MTC()
-	df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-	df_ch = d.dataframe_idca('_choice_')
+	df_co = d.make_dataframes({'co': ('age', 'hhinc', 'hhsize', 'numveh==0')}).data_co
+	#df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
+	df_ch = d.make_dataframes({'ca': ('chose',)}).data_ca.unstack()
+	#df_ch = d.dataframe_idca('_choice_')
 
-	df_co['CHOICE'] = numpy.where(df_ch.unstack())[1] + 1
+	print(df_co)
+	print(df_co.info(1))
+	print(df_ch)
+	print(df_ch.info(1))
+
+	df_co['CHOICE'] = numpy.where(df_ch)[1] + 1
 
 	from larch.dataframes import DataFrames
 	from larch.model import Model

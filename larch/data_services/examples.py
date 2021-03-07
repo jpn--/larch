@@ -1,14 +1,28 @@
 import os
 import tables as tb
+import pandas as pd
 
 def MTC():
-	from .service import DataService
-	from .h5 import H5PodCA, H5PodCO
-	warehouse_file = os.path.join( os.path.dirname(__file__), '..', 'data_warehouse', 'MTCwork.h5d')
-	f = tb.open_file(warehouse_file, mode='r')
-	idca = H5PodCA(f.root.larch.idca)
-	idco = H5PodCO(f.root.larch.idco)
-	return DataService(pods=[idca,idco], altids=[1,2,3,4,5,6], altnames=['DA','SR2','SR3','TRANSIT','BIKE','WALK'])
+	from larch.dataframes import DataFrames
+	from larch.data_warehouse import example_file
+	ca = pd.read_csv(example_file('MTCwork.csv.gz'), index_col=('casenum', 'altnum'))
+	ca['altnum'] = ca.index.get_level_values('altnum')
+	dt = DataFrames(
+		ca,
+		ch="chose",
+		crack=True,
+		alt_codes=[1, 2, 3, 4, 5, 6],
+		alt_names=['DA', 'SR2', 'SR3', 'TRANSIT', 'BIKE', 'WALK']
+	)
+	dt.data_ce_as_ca("_avail_")
+	return dt
+	# from .service import DataService
+	# from .h5 import H5PodCA, H5PodCO
+	# warehouse_file = os.path.join( os.path.dirname(__file__), '..', 'data_warehouse', 'MTCwork.h5d')
+	# f = tb.open_file(warehouse_file, mode='r')
+	# idca = H5PodCA(f.root.larch.idca)
+	# idco = H5PodCO(f.root.larch.idco)
+	# return DataService(pods=[idca,idco], altids=[1,2,3,4,5,6], altnames=['DA','SR2','SR3','TRANSIT','BIKE','WALK'])
 
 
 def EXAMPVILLE(model=None):

@@ -77,10 +77,12 @@ def _testcode_parsed(sourcefile):
 	else:
 		raise ValueError('unknown file type')
 
-def _exec_example(sourcefile, d=None, extract='m', echo=False):
+def _exec_example(sourcefile, d=None, extract='m', echo=False, larch=None):
 	_global = {}
 	_local = {}
-	larch = __import__(__name__.split('.')[0])
+	if larch is None:
+		import importlib
+		larch = importlib.import_module(__name__.split('.')[0])
 	_global['larch'] = larch
 	_global['sys'] = sys
 	_global['os'] = os
@@ -124,12 +126,12 @@ def _exec_example(sourcefile, d=None, extract='m', echo=False):
 		return tuple(_local[i] for i in extract)
 
 
-def _exec_example_n(n, *arg, **kwarg):
+def _exec_example_n(n, *arg, larch=None, **kwarg):
 	f = os.path.join(exampledocdir, get_examplefile(n))
-	return _exec_example(f, *arg, **kwarg)
+	return _exec_example(f, *arg, larch=larch, **kwarg)
 
 
-def example(n, extract='m', echo=False, output_file=None):
+def example(n, extract='m', echo=False, output_file=None, larch=None):
 	'''Run an example code section (from the documentation) and give the result.
 
 	Parameters
@@ -152,10 +154,10 @@ def example(n, extract='m', echo=False, output_file=None):
 	if output_file is not None:
 		if os.path.exists(output_file):
 			return output_file
-		_exec_example_n(n, extract=None, echo=echo)
+		_exec_example_n(n, extract=None, echo=echo, larch=larch)
 		if os.path.exists(output_file):
 			return output_file
 		else:
 			raise FileNotFoundError(output_file)
 	else:
-		return _exec_example_n(n, extract=extract, echo=echo)
+		return _exec_example_n(n, extract=extract, echo=echo, larch=larch)

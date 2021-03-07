@@ -18,17 +18,6 @@ def mtc():
         'avail_ca': '_avail_',
         'choice_ca': 'chose',
     })
-    # df_ca = d.dataframe_idca('ivtt', 'ovtt', 'totcost', '_choice_', 'tottime', )
-    # df_co = d.dataframe_idco('age', 'hhinc', 'hhsize', 'numveh==0')
-    # df_av = d.dataframe_idca('_avail_', dtype=bool)
-    # df_ch = d.dataframe_idca('_choice_')
-    # from larch.dataframes import DataFrames
-    # return DataFrames(
-    #     co=df_co,
-    #     ca=df_ca,
-    #     av=df_av,
-    #     ch=df_ch,
-    # )
 
 
 def test_dataframes_mnl5(mtc):
@@ -801,3 +790,80 @@ def test_weighted_nl_bhhh(mtc2):
     ) * j2.weight_normalization
 
     assert dict(ll1.bhhh.unstack()) == approx(dict(corrected_bhhh.unstack()))
+
+
+def test_model_22():
+    from larch.numba import example
+    m = example(22)
+    m.load_data()
+    r = m.maximize_loglike(method='slsqp')
+    assert r.loglike == approx(-3441.6725272438707)
+    pd.testing.assert_series_equal(r.x, pd.Series({
+        'ASC_BIKE': -1.2012310373732333,
+        'ASC_SR2': -1.3250038561262714,
+        'ASC_SR3': -2.5054864667275947,
+        'ASC_TRANSIT': -0.40354559685452035,
+        'ASC_WALK': 0.3454727735472279,
+        'costbyincome': -0.0386136520381923,
+        'hhinc#4': -0.003930708272260587,
+        'hhinc#5': -0.010045850986702437,
+        'hhinc#6': -0.006207577258464865,
+        'motorized_ovtbydist': -0.11379993407252528,
+        'motorized_time': -0.014522787481748456,
+        'mu_motor': 0.7257706349114673,
+        'mu_nonmotor': 0.7689342864775767,
+        'nonmotorized_time': -0.046214820917613225,
+        'vehbywrk_BIKE': -0.7347971764748538,
+        'vehbywrk_SR': -0.22566987698790603,
+        'vehbywrk_TRANSIT': -0.7070498724908102,
+        'vehbywrk_WALK': -0.7638953705360633,
+        'wkcbd_BIKE': 0.4077164148551127,
+        'wkcbd_SR2': 0.19314657849385355,
+        'wkcbd_SR3': 0.7809246637357223,
+        'wkcbd_TRANSIT': 0.921320432352456,
+        'wkcbd_WALK': 0.11413356364384437,
+        'wkempden_BIKE': 0.0016744537328181389,
+        'wkempden_SR2': 0.0011489960830110355,
+        'wkempden_SR3': 0.001637846189507033,
+        'wkempden_TRANSIT': 0.0022365461951523863,
+        'wkempden_WALK': 0.002170371240179858,
+    }))
+
+
+def test_model_28():
+    from larch.numba import example
+    m = example(28)
+    m.load_data()
+    r = m.maximize_loglike(method='slsqp')
+    assert r.loglike == approx(-3439.942474958786)
+    pd.testing.assert_series_equal(r.x, pd.Series({
+        'ASC_BIKE': -1.1942159163387251,
+        'ASC_SR2': -1.2391857604160716,
+        'ASC_SR3': -1.620771918778012,
+        'ASC_TRANSIT': -0.4003509335885874,
+        'ASC_WALK': 0.34676124538556646,
+        'costbyincome': -0.03343119094080686,
+        'hhinc#4': -0.00402453360613972,
+        'hhinc#5': -0.010235829644574493,
+        'hhinc#6': -0.006377107073908984,
+        'motorized_ovtbydist': -0.11480699823857317,
+        'motorized_time': -0.014853736390540277,
+        'mu_moto': 0.7280515190732741,
+        'mu_nonmoto': 0.7659512117500032,
+        'mu_shared': 0.2406148277131086,
+        'nonmotorized_time': -0.046030957303840415,
+        'vehbywrk_BIKE': -0.7353181168398465,
+        'vehbywrk_SR': -0.22501892132307177,
+        'vehbywrk_TRANSIT': -0.7031077310248228,
+        'vehbywrk_WALK': -0.7651747984780118,
+        'wkcbd_BIKE': 0.41540469576807565,
+        'wkcbd_SR2': 0.2930348286321054,
+        'wkcbd_SR3': 0.4723385843973383,
+        'wkcbd_TRANSIT': 0.9306674349956686,
+        'wkcbd_WALK': 0.12317305148649717,
+        'wkempden_BIKE': 0.001750017220629157,
+        'wkempden_SR2': 0.0013695748680185307,
+        'wkempden_SR3': 0.0014013650159884496,
+        'wkempden_TRANSIT': 0.0023099261462597807,
+        'wkempden_WALK': 0.0022363837076832885,
+    }))
