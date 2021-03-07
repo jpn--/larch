@@ -25,7 +25,12 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 			frame=frame,
 			title=title,
 		)
-		self._k_models = list(models)
+		self._k_models = list()
+		for model in models:
+			if isinstance(model, ModelGroup):
+				self._k_models.extend(model._k_models)
+			else:
+				self._k_models.append(model)
 		self._dataservice = dataservice
 		self._dataframes = None
 		self._mangled = True
