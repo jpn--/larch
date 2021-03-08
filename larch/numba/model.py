@@ -220,66 +220,27 @@ def _type_signatures(sig):
         _type_signature(sig, precision=64),
     ]
 
-_master_shape_signature = (
-    '(qca),(qca),(qca),(), '
-    '(uca),(uca),(uca), '
-    '(uco),(uco),(uco),(uco), '
-    '(edges,four), '
-    '(nests),(nests),(nests), '
-    '(params),(params), '
-    '(nodes),(nodes),(),(vco),(alts,vca), '
-    '(four)->'
-    '(nodes),(nodes),(nodes),(params,params),(params),()'
-)
-
-def _numba_master(
-        model_q_ca_param_scale,  # float input shape=[n_q_ca_features]
-        model_q_ca_param,        # int input shape=[n_q_ca_features]
-        model_q_ca_data,         # int input shape=[n_q_ca_features]
-        model_q_scale_param,     # int input scalar
-
-        model_utility_ca_param_scale,  # [0] float input shape=[n_u_ca_features]
-        model_utility_ca_param,        # [1] int input shape=[n_u_ca_features]
-        model_utility_ca_data,         # [2] int input shape=[n_u_ca_features]
-
-        model_utility_co_alt,          # [3] int input shape=[n_co_features]
-        model_utility_co_param_scale,  # [4] float input shape=[n_co_features]
-        model_utility_co_param,        # [5] int input shape=[n_co_features]
-        model_utility_co_data,         # [6] int input shape=[n_co_features]
-
+@njit(error_model='numpy', fastmath=True, cache=True)
+def _numba_utility_to_loglike(
+        n_alts,
         edgeslots,     # int input shape=[edges, 4]
-        # upslots,       # [7] int input shape=[edges]
-        # dnslots,       # [8] int input shape=[edges]
-        # visit1,        # [9] int input shape=[edges]
-        # allocslot,     # [10] int input shape=[edges]
-
-        mu_slots,      # [11] int input shape=[nests]
-        start_slots,   # [12] int input shape=[nests]
-        len_slots,     # [13] int input shape=[nests]
-
-        holdfast_arr,  # [12] int8 input shape=[n_params]
-        parameter_arr, # [13] float input shape=[n_params]
-
-        array_ch,      # [14] float input shape=[nodes]
-        array_av,      # [15] int8 input shape=[nodes]
-        array_wt,      # [16] float input shape=[]
-        array_co,      # [17] float input shape=[n_co_vars]
-        array_ca,      # [18] float input shape=[n_alts, n_ca_vars]
-
-        return_flags,
-        # only_utility,        # [19] int8 input
-        # return_probability,  # [20] bool input
-        # return_grad,         # [21] bool input
-        # return_bhhh,         # [22] bool input
-
-        utility,       # [23] float output shape=[nodes]
-        logprob,       # [24] float output shape=[nodes]
-        probability,   # [25] float output shape=[nodes]
-        bhhh,          # [26] float output shape=[n_params, n_params]
-        d_loglike,     # [27] float output shape=[n_params]
-        loglike,       # [28] float output shape=[]
+        mu_slots,      # int input shape=[nests]
+        start_slots,   # int input shape=[nests]
+        len_slots,     # int input shape=[nests]
+        holdfast_arr,  # int8 input shape=[n_params]
+        parameter_arr, # float input shape=[n_params]
+        array_ch,      # float input shape=[nodes]
+        array_av,      # int8 input shape=[nodes]
+        array_wt,      # float input shape=[]
+        return_flags,  #
+        dutility,      #
+        utility,       # float output shape=[nodes]
+        logprob,       # float output shape=[nodes]
+        probability,   # float output shape=[nodes]
+        bhhh,          # float output shape=[n_params, n_params]
+        d_loglike,     # float output shape=[n_params]
+        loglike,       # float output shape=[]
 ):
-    n_alts = array_ca.shape[0]
 
     assert edgeslots.shape[1] == 4
     upslots   = edgeslots[:,0]  # int input shape=[edges]
@@ -292,57 +253,6 @@ def _numba_master(
     return_probability = return_flags[1]    # [20] bool input
     return_grad = return_flags[2]           # [21] bool input
     return_bhhh = return_flags[3]           # [22] bool input
-
-    utility[:] = 0.0
-    dutility = np.zeros((utility.size, parameter_arr.size), dtype=utility.dtype)
-
-    quantity_from_data_ca(
-        model_q_ca_param_scale,         # float input shape=[n_q_ca_features]
-        model_q_ca_param,               # int input shape=[n_q_ca_features]
-        model_q_ca_data,                # int input shape=[n_q_ca_features]
-        model_q_scale_param,            # int input scalar
-        parameter_arr,  # float input shape=[n_params]
-        holdfast_arr,  # float input shape=[n_params]
-        array_av,  # int8 input shape=[n_nodes]
-        array_ca,  # float input shape=[n_alts, n_ca_vars]
-        utility[:n_alts],  # float output shape=[n_alts]
-        dutility[:n_alts],
-    )
-
-    if only_utility == 3:
-        if model_q_scale_param[0] >= 0:
-            scale_param_value = parameter_arr[model_q_scale_param[0]]
-        else:
-            scale_param_value = 1.0
-        utility[:n_alts] = np.exp(utility[:n_alts] / scale_param_value)
-        return
-
-    utility_from_data_ca(
-        model_utility_ca_param_scale,  # int input shape=[n_u_ca_features]
-        model_utility_ca_param,  # int input shape=[n_u_ca_features]
-        model_utility_ca_data,  # int input shape=[n_u_ca_features]
-        parameter_arr,  # float input shape=[n_params]
-        holdfast_arr,  # float input shape=[n_params]
-        array_av,  # int8 input shape=[n_nodes]
-        array_ca,  # float input shape=[n_alts, n_ca_vars]
-        utility[:n_alts],  # float output shape=[n_alts]
-        dutility[:n_alts],
-    )
-
-    utility_from_data_co(
-        model_utility_co_alt,  # int input shape=[n_co_features]
-        model_utility_co_param_scale,  # float input shape=[n_co_features]
-        model_utility_co_param,  # int input shape=[n_co_features]
-        model_utility_co_data,  # int input shape=[n_co_features]
-        parameter_arr,  # float input shape=[n_params]
-        holdfast_arr,  # float input shape=[n_params]
-        array_av,  # int8 input shape=[n_nodes]
-        array_co,  # float input shape=[n_co_vars]
-        utility[:n_alts],  # float output shape=[n_alts]
-        dutility[:n_alts],
-    )
-
-    if only_utility == 1: return
 
     #util_nx = np.zeros_like(utility)
     #mu_extra = np.zeros_like(util_nx)
@@ -507,6 +417,153 @@ def _numba_master(
                     d_loglike += tempvalue
                     if return_bhhh:
                         bhhh += np.outer(dLL_temp,dLL_temp) * this_ch * array_wt[0]
+
+
+_master_shape_signature = (
+    '(qca),(qca),(qca),(), '
+    '(uca),(uca),(uca), '
+    '(uco),(uco),(uco),(uco), '
+    '(edges,four), '
+    '(nests),(nests),(nests), '
+    '(params),(params), '
+    '(nodes),(nodes),(),(vco),(alts,vca), '
+    '(four)->'
+    '(nodes),(nodes),(nodes),(params,params),(params),()'
+)
+
+
+def _numba_master(
+        model_q_ca_param_scale,  # float input shape=[n_q_ca_features]
+        model_q_ca_param,        # int input shape=[n_q_ca_features]
+        model_q_ca_data,         # int input shape=[n_q_ca_features]
+        model_q_scale_param,     # int input scalar
+
+        model_utility_ca_param_scale,  # [0] float input shape=[n_u_ca_features]
+        model_utility_ca_param,        # [1] int input shape=[n_u_ca_features]
+        model_utility_ca_data,         # [2] int input shape=[n_u_ca_features]
+
+        model_utility_co_alt,          # [3] int input shape=[n_co_features]
+        model_utility_co_param_scale,  # [4] float input shape=[n_co_features]
+        model_utility_co_param,        # [5] int input shape=[n_co_features]
+        model_utility_co_data,         # [6] int input shape=[n_co_features]
+
+        edgeslots,     # int input shape=[edges, 4]
+        # upslots,       # [7] int input shape=[edges]
+        # dnslots,       # [8] int input shape=[edges]
+        # visit1,        # [9] int input shape=[edges]
+        # allocslot,     # [10] int input shape=[edges]
+
+        mu_slots,      # [11] int input shape=[nests]
+        start_slots,   # [12] int input shape=[nests]
+        len_slots,     # [13] int input shape=[nests]
+
+        holdfast_arr,  # [12] int8 input shape=[n_params]
+        parameter_arr, # [13] float input shape=[n_params]
+
+        array_ch,      # [14] float input shape=[nodes]
+        array_av,      # [15] int8 input shape=[nodes]
+        array_wt,      # [16] float input shape=[]
+        array_co,      # [17] float input shape=[n_co_vars]
+        array_ca,      # [18] float input shape=[n_alts, n_ca_vars]
+
+        return_flags,
+        # only_utility,        # [19] int8 input
+        # return_probability,  # [20] bool input
+        # return_grad,         # [21] bool input
+        # return_bhhh,         # [22] bool input
+
+        utility,       # [23] float output shape=[nodes]
+        logprob,       # [24] float output shape=[nodes]
+        probability,   # [25] float output shape=[nodes]
+        bhhh,          # [26] float output shape=[n_params, n_params]
+        d_loglike,     # [27] float output shape=[n_params]
+        loglike,       # [28] float output shape=[]
+):
+    n_alts = array_ca.shape[0]
+
+    # assert edgeslots.shape[1] == 4
+    # upslots   = edgeslots[:,0]  # int input shape=[edges]
+    # dnslots   = edgeslots[:,1]  # int input shape=[edges]
+    # visit1    = edgeslots[:,2]  # int input shape=[edges]
+    # allocslot = edgeslots[:,3]  # int input shape=[edges]
+
+    assert return_flags.size == 4
+    only_utility = return_flags[0]            # int8 input
+    # return_probability = return_flags[1]    # bool input
+    # return_grad = return_flags[2]           # bool input
+    # return_bhhh = return_flags[3]           # bool input
+
+    utility[:] = 0.0
+    dutility = np.zeros((utility.size, parameter_arr.size), dtype=utility.dtype)
+
+    quantity_from_data_ca(
+        model_q_ca_param_scale,  # float input shape=[n_q_ca_features]
+        model_q_ca_param,        # int input shape=[n_q_ca_features]
+        model_q_ca_data,         # int input shape=[n_q_ca_features]
+        model_q_scale_param,     # int input scalar
+        parameter_arr,           # float input shape=[n_params]
+        holdfast_arr,            # float input shape=[n_params]
+        array_av,                # int8 input shape=[n_nodes]
+        array_ca,                # float input shape=[n_alts, n_ca_vars]
+        utility[:n_alts],        # float output shape=[n_alts]
+        dutility[:n_alts],
+    )
+
+    if only_utility == 3:
+        if model_q_scale_param[0] >= 0:
+            scale_param_value = parameter_arr[model_q_scale_param[0]]
+        else:
+            scale_param_value = 1.0
+        utility[:n_alts] = np.exp(utility[:n_alts] / scale_param_value)
+        return
+
+    utility_from_data_ca(
+        model_utility_ca_param_scale,  # int input shape=[n_u_ca_features]
+        model_utility_ca_param,        # int input shape=[n_u_ca_features]
+        model_utility_ca_data,         # int input shape=[n_u_ca_features]
+        parameter_arr,                 # float input shape=[n_params]
+        holdfast_arr,                  # float input shape=[n_params]
+        array_av,                      # int8 input shape=[n_nodes]
+        array_ca,                      # float input shape=[n_alts, n_ca_vars]
+        utility[:n_alts],              # float output shape=[n_alts]
+        dutility[:n_alts],
+    )
+
+    utility_from_data_co(
+        model_utility_co_alt,          # int input shape=[n_co_features]
+        model_utility_co_param_scale,  # float input shape=[n_co_features]
+        model_utility_co_param,        # int input shape=[n_co_features]
+        model_utility_co_data,         # int input shape=[n_co_features]
+        parameter_arr,                 # float input shape=[n_params]
+        holdfast_arr,                  # float input shape=[n_params]
+        array_av,                      # int8 input shape=[n_nodes]
+        array_co,                      # float input shape=[n_co_vars]
+        utility[:n_alts],              # float output shape=[n_alts]
+        dutility[:n_alts],
+    )
+
+    if only_utility == 1: return
+
+    _numba_utility_to_loglike(
+        n_alts,
+        edgeslots,      # int input shape=[edges, 4]
+        mu_slots,       # int input shape=[nests]
+        start_slots,    # int input shape=[nests]
+        len_slots,      # int input shape=[nests]
+        holdfast_arr,   # int8 input shape=[n_params]
+        parameter_arr,  # float input shape=[n_params]
+        array_ch,       # float input shape=[nodes]
+        array_av,       # int8 input shape=[nodes]
+        array_wt,       # float input shape=[]
+        return_flags,
+        dutility,
+        utility,        # float output shape=[nodes]
+        logprob,        # float output shape=[nodes]
+        probability,    # float output shape=[nodes]
+        bhhh,           # float output shape=[n_params, n_params]
+        d_loglike,      # float output shape=[n_params]
+        loglike,        # float output shape=[]
+    )
 
 
 
