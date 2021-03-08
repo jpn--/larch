@@ -21,8 +21,8 @@ Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.ut
 	d = larch.examples.MTC()
 	m = larch.Model(dataservice=d)
 	
-	m.dataservice.selector = "femdum == 0"
-	
+	m.dataservice = m.dataservice.selector_co("femdum == 0")
+
 .. testcode::
 	
 	m.availability_var = '_avail_'

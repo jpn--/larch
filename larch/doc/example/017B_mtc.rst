@@ -22,7 +22,7 @@ that have more than one car. (`pp. 133 <http://www.caee.utexas.edu/prof/Bhat/COU
 	d = larch.examples.MTC()
 	m = larch.Model(dataservice=d)
 	
-	m.dataservice.selector = "numveh >= 2"
+	m.dataservice = m.dataservice.selector_co("numveh >= 2")
 	
 .. testcode::
 	

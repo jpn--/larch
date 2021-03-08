@@ -32,9 +32,9 @@ segment in the dataset is too small, so it is joined with the one car group. (`p
 	
 	d = larch.examples.MTC()
 	m = larch.Model(dataservice=d)
-	
-	m.dataservice.selector = "numveh <= 1"
-	
+
+	m.dataservice = m.dataservice.selector_co("numveh <= 1")
+
 .. testcode::
 	
 	m.availability_var = '_avail_'
