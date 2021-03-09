@@ -1008,7 +1008,7 @@ def test_model_22():
         'wkempden_SR3': 0.001637846189507033,
         'wkempden_TRANSIT': 0.0022365461951523863,
         'wkempden_WALK': 0.002170371240179858,
-    }))
+    }), rtol=1e-3)
 
 
 def test_model_28():
@@ -1047,4 +1047,4 @@ def test_model_28():
         'wkempden_SR3': 0.0014013650159884496,
         'wkempden_TRANSIT': 0.0023099261462597807,
         'wkempden_WALK': 0.0022363837076832885,
-    }))
+    }), rtol=1e-3)

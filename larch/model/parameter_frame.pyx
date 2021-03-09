@@ -588,7 +588,7 @@ cdef class ParameterFrame:
 			else:
 				loading_values = numpy.asanyarray(values)[free_parameters]
 				if numpy.any(numpy.isnan(loading_values)):
-					raise ValueError("cannot set NaN values for parameters")
+					raise ValueError(f"cannot set NaN values for parameters\n{loading_values}")
 				self._frame.loc[free_parameters, 'value'] = numpy.asanyarray(values)[free_parameters]
 		if len(kwargs):
 			if self._mangled:
@@ -600,6 +600,23 @@ cdef class ParameterFrame:
 				else:
 					import warnings
 					warnings.warn(f'{k} not in model', category=ParameterNotInModelWarning)
+		self._check_if_frame_values_changed()
+
+	def set_cap(self, cap=25.0):
+		"""
+		Set the parameter values for one or more parameters.
+
+		Parameters
+		----------
+		cap : numeric, default 25.0
+			Set a global limit on parameters.  The maximum has a ceiling
+			at this value, and the minimum a floor at the negative of this, unless
+			the existing bounds are entirely outside this range.
+		"""
+		minimum = numpy.maximum(self.pf.minimum, -cap)
+		maximum = numpy.minimum(self.pf.maximum, cap)
+		self._frame.loc[:,'minimum'] = numpy.where(minimum <= maximum, minimum, self.pf.minimum)
+		self._frame.loc[:,'maximum'] = numpy.where(minimum <= maximum, maximum, self.pf.maximum)
 		self._check_if_frame_values_changed()
 
 	def get_values(self):

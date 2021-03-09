@@ -11,11 +11,12 @@ from ..exceptions import MissingDataError
 from ..util import dictx
 
 import warnings
-warnings.warn(
+warnings.warn( ### EXPERIMENTAL ### )
     "\n\n"
-    "*** larch.numba is experimental, use at your own risk ***\n"
-    " on first import loading this package will compile optimized\n"
-    " binaries for your machine, which may take several seconds\n"
+    "### larch.numba is experimental, and not feature-complete ###\n"
+    " the first time you import on a new system, this package will\n"
+    " compile optimized binaries for your machine, which may take \n"
+    " a little while, please be patient \n"
 )
 
 @njit
@@ -333,13 +334,17 @@ def _numba_utility_to_loglike(
             mu_up = 1.0
         else:
             mu_up = parameter_arr[mu_slots[up - n_alts]]
-        logprob[dn] = (utility[dn] - utility[up]) / mu_up
+        if np.isinf(utility[up]) and utility[up] < 0:
+            logprob[dn] = -np.inf
+        else:
+            logprob[dn] = (utility[dn] - utility[up]) / mu_up
         if array_ch[dn]:
             loglike[0] += logprob[dn] * array_ch[dn] * array_wt[0]
 
     if return_probability or return_grad or return_bhhh:
 
-        conditional_probability = np.zeros_like(logprob)
+        # logprob becomes conditional_probability
+        conditional_probability = logprob
         for i in range(logprob.size):
             if array_av[i]:
                 conditional_probability[i] = np.exp(logprob[i])
@@ -376,29 +381,52 @@ def _numba_utility_to_loglike(
                     dutility[up, :] += cond_prob * dutility[dn, :]
 
             # d probability
-            scratch = np.zeros_like(parameter_arr)
+            # scratch = np.zeros_like(parameter_arr)
+            # d_probability = np.zeros_like(dutility)
+            # for s in range(upslots.size-1, -1, -1):
+            #     dn = dnslots[s]
+            #     if array_ch[dn]:
+            #         up = upslots[s]
+            #         scratch[:] = dutility[dn] - dutility[up]
+            #         up_mu_slot = mu_slots[up-n_alts]
+            #         if up_mu_slot < 0:
+            #             mu_up = 1.0
+            #         else:
+            #             mu_up = parameter_arr[up_mu_slot]
+            #         if mu_up:
+            #             if up_mu_slot >= 0:
+            #                 scratch[up_mu_slot] += (utility[up] - utility[dn]) / mu_up
+            #                 # FIXME: alpha slots to appear here if cross-nesting is activated
+            #             multiplier = probability[up] / mu_up
+            #         else:
+            #             multiplier = 0
+            #
+            #         scratch[:] *= multiplier
+            #         scratch[:] += d_probability[up, :]
+            #         d_probability[dn, :] += scratch[:] * conditional_probability[dn] # FIXME: for CNL, use edge not dn
+
+            # d probability alternate path slightly lower memory usage and some faster
             d_probability = np.zeros_like(dutility)
             for s in range(upslots.size-1, -1, -1):
                 dn = dnslots[s]
                 if array_ch[dn]:
                     up = upslots[s]
-                    scratch[:] = dutility[dn] - dutility[up]
-                    up_mu_slot = mu_slots[up-n_alts]
+                    up_mu_slot = mu_slots[up - n_alts]
                     if up_mu_slot < 0:
                         mu_up = 1.0
                     else:
                         mu_up = parameter_arr[up_mu_slot]
-                    if mu_up:
-                        if up_mu_slot >= 0:
-                            scratch[up_mu_slot] += (utility[up] - utility[dn]) / mu_up
-                            # FIXME: alpha slots to appear here if cross-nesting is activated
-                        multiplier = probability[up] / mu_up
-                    else:
-                        multiplier = 0
-
-                    scratch[:] *= multiplier
-                    scratch[:] += d_probability[up, :]
-                    d_probability[dn, :] += scratch[:] * conditional_probability[dn] # FIXME: for CNL, use edge not dn
+                    for p in range(parameter_arr.size):
+                        if mu_up:
+                            scratch_ = dutility[dn, p] - dutility[up, p]
+                            if p == up_mu_slot:
+                                scratch_ += (utility[up] - utility[dn]) / mu_up
+                                # FIXME: alpha slots to appear here if cross-nesting is activated
+                            scratch_ *= probability[up] / mu_up
+                        else:
+                            scratch_ = 0
+                        scratch_ += d_probability[up, p]
+                        d_probability[dn, p] += scratch_ * conditional_probability[dn] # FIXME: for CNL, use edge not dn
 
             if return_bhhh:
                 bhhh[:] = 0.0
@@ -409,12 +437,18 @@ def _numba_utility_to_loglike(
                 if this_ch == 0:
                     continue
                 total_probability_a = probability[a]
+                # if total_probability_a > 0:
+                #     tempvalue = d_probability[a, :] / total_probability_a
+                #     if return_bhhh:
+                #         bhhh += np.outer(tempvalue,tempvalue) * this_ch * array_wt[0]
+                #     d_loglike += tempvalue * array_wt[0]
+                #
                 if total_probability_a > 0:
-                    ch_over_pr = this_ch / total_probability_a
-                    tempvalue = d_probability[a, :] * ch_over_pr
+                    if total_probability_a < 1e-250:
+                        total_probability_a = 1e-250
+                    tempvalue = d_probability[a, :] * (this_ch / total_probability_a)
                     dLL_temp = tempvalue / this_ch
-                    tempvalue *= array_wt[0]
-                    d_loglike += tempvalue
+                    d_loglike += tempvalue * array_wt[0]
                     if return_bhhh:
                         bhhh += np.outer(dLL_temp,dLL_temp) * this_ch * array_wt[0]
 
@@ -662,7 +696,22 @@ WorkArrays = namedtuple(
     ['utility', 'logprob', 'probability', 'bhhh', 'd_loglike', 'loglike'],
 )
 
+DataArrays = namedtuple(
+    'DataArrays',
+    ['ch', 'av', 'wt', 'co', 'ca'],
+)
 
+FixedArrays = namedtuple(
+    'FixedArrays',
+    [
+        'qca_scale', 'qca_param_slot', 'qca_data_slot',
+        'qscale_param_slot',
+        'uca_scale', 'uca_param_slot', 'uca_data_slot',
+        'uco_alt_slot', 'uco_scale', 'uco_param_slot', 'uco_data_slot',
+        'edge_slots',
+        'mu_slot', 'start_edges', 'len_edges',
+    ]
+)
 
 class NumbaModel(_BaseModel):
 
@@ -681,7 +730,7 @@ class NumbaModel(_BaseModel):
 
     def unmangle(self, force=False):
         super().unmangle(force=force)
-        if self._fixed_arrays is None:
+        if self._fixed_arrays is None or force:
             n_nodes = len(self.graph)
             n_alts = self.graph.n_elementals()
             n_nests = n_nodes - n_alts
@@ -707,7 +756,7 @@ class NumbaModel(_BaseModel):
 
                 node_slot_arrays = self.graph.node_slot_arrays(self)
 
-                self._fixed_arrays = (
+                self._fixed_arrays = FixedArrays(
                     model_q_ca_param_scale,
                     model_q_ca_param,
                     model_q_ca_data,
@@ -741,7 +790,7 @@ class NumbaModel(_BaseModel):
                 else:
                     _array_wt = self.float_dtype(1.0)
 
-                self._data_arrays = (
+                self._data_arrays = DataArrays(
                     (_array_ch_cascade.astype(self.float_dtype)),
                     (_array_av_cascade),
                     (_array_wt.reshape(-1)),
@@ -840,9 +889,20 @@ class NumbaModel(_BaseModel):
             raise
         return result_arrays
 
-    def loglike(self, x=None, *args, **kwargs):
+    def loglike(
+            self,
+            x=None,
+            *,
+            start_case=0, stop_case=-1, step_case=1,
+            persist=0,
+            leave_out=-1, keep_only=-1, subsample=-1,
+            probability_only=False,
+    ):
         result_arrays = self._loglike_runner(x)
-        return result_arrays.loglike.sum() * self.dataframes.weight_normalization
+        result = result_arrays.loglike.sum() * self.dataframes.weight_normalization
+        if start_case == 0 and stop_case == -1 and step_case == 1:
+            self._check_if_best(result)
+        return result
 
     def d_loglike(self, x=None, *args, return_series=False, **kwargs):
         result_arrays = self._loglike_runner(x, return_gradient=True)
@@ -868,20 +928,79 @@ class NumbaModel(_BaseModel):
             )
         return result
 
-    def probability(self, x=None, *args, **kwargs):
+    def _wrap_as_dataframe(
+            self,
+            arr,
+            return_dataframe,
+            start_case=0,
+            stop_case=-1,
+            step_case=1,
+    ):
+        if return_dataframe:
+            idx = self.dataframes.caseindex
+            if idx is not None:
+                if stop_case == -1:
+                    stop_case = len(idx)
+                idx = idx[start_case:stop_case:step_case]
+            if return_dataframe == 'names':
+                return pd.DataFrame(
+                    data=arr,
+                    columns=self.graph.standard_sort_names[:pr.shape[1]],
+                    index=idx,
+                )
+            result = pd.DataFrame(
+                data=arr,
+                columns=self.graph.standard_sort[:pr.shape[1]],
+                index=idx,
+            )
+            if return_dataframe == 'idce':
+                return result.stack()[self._dataframes._data_av.stack().astype(bool).values]
+            elif return_dataframe == 'idca':
+                return result.stack()
+            else:
+                return result
+        return arr
+
+    def probability(
+            self,
+            x=None,
+            start_case=0,
+            stop_case=-1,
+            step_case=1,
+            return_dataframe=False,
+            include_nests=False,
+    ):
         result_arrays = self._loglike_runner(x, return_probability=True)
-        return result_arrays.probability
+        pr = result_arrays.probability
+        if not include_nests:
+            pr = pr[:, :self.graph.n_elementals()]
+        return self._wrap_as_dataframe(
+            pr,
+            return_dataframe,
+            start_case=start_case,
+            stop_case=stop_case,
+            step_case=step_case,
+        )
 
-    def utility(self, x=None, *args, **kwargs):
+    def utility(self, x=None, return_dataframe=None):
         result_arrays = self._loglike_runner(x, only_utility=2)
-        return result_arrays.utility
+        return self._wrap_as_dataframe(
+            result_arrays.utility,
+            return_dataframe,
+        )
 
-    def quantity(self, x=None, *args, **kwargs):
+    def quantity(self, x=None, return_dataframe=None):
         result_arrays = self._loglike_runner(x, only_utility=3)
-        return result_arrays.utility
+        return self._wrap_as_dataframe(
+            result_arrays.utility,
+            return_dataframe,
+        )
 
-    def logsums(self, x=None, *args, **kwargs):
+    def logsums(self, x=None, arr=None):
         result_arrays = self._loglike_runner(x, only_utility=2)
+        if arr is not None:
+            arr[:] = result_arrays.utility[:,-1]
+            return arr
         return result_arrays.utility[:,-1]
 
     def loglike2(

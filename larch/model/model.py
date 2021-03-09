@@ -701,7 +701,7 @@ class Model(_Model5c):
 	):
 		self.unmangle(True)
 		from ..troubleshooting import doctor
-		return doctor(
+		result = doctor(
 			self,
 			repair_ch_av=repair_ch_av,
 			repair_ch_zq=repair_ch_zq,
@@ -711,6 +711,10 @@ class Model(_Model5c):
 			repair_nan_data_co=repair_nan_data_co,
 			verbose=verbose,
 		)
+		if repair_ch_av or repair_ch_zq or repair_asc or repair_noch_nowt \
+				or repair_nan_wt or repair_nan_data_co:
+			self.mangle()
+		return result
 
 	def copy(self):
 		"""
