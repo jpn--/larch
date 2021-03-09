@@ -42,7 +42,7 @@ Model 10 considers the number of automobiles in the household. (`pp. 120 <http:/
 			+ P("numveh#{}".format(a)) * X("numveh")
 			) 
 			
-	for a,name in m.dataservice.alternatives[1:]:
+	for a,name in m.dataservice.alternative_pairs[1:]:
 		m.utility_co[a] += P("ASC_"+name)
 
 .. testcode::

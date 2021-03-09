@@ -1376,8 +1376,19 @@ cdef class DataFrames:
 
 	@property
 	def alternatives(self):
-		"""A list of 2-tuples, each giving the id and name of an alternative"""
-		return [(c,n) for c,n in zip(self._alternative_codes, self._alternative_names)]
+		"""A dict mapping the id to the name of each alternative"""
+		if self._alternative_names is not None:
+			return dict([(c,n) for c,n in zip(self._alternative_codes, self._alternative_names)])
+		else:
+			return dict([(c,str(c)) for c in self._alternative_codes])
+
+	@property
+	def alternative_pairs(self):
+		"""A dict mapping the id to the name of each alternative"""
+		if self._alternative_names is not None:
+			return [(c,n) for c,n in zip(self._alternative_codes, self._alternative_names)]
+		else:
+			return [(c,str(c)) for c in self._alternative_codes]
 
 	@property
 	def n_alts(self):

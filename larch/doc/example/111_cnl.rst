@@ -82,7 +82,7 @@ alternative codes are for the alternatives in our dataset. To find out, we can d
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
-	>>> m.dataservice.alternatives
+	>>> m.dataservice.alternative_pairs
 	[(1, 'Train'), (2, 'SM'), (3, 'Car')]
 
 

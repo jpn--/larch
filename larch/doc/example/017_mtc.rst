@@ -62,7 +62,7 @@ For example, we can say that vehbywrk_SR2 will be equal to vehbywrk_SR.
 
 .. testcode::
 
-	for a,name in m.dataservice.alternatives[1:3]:
+	for a,name in m.dataservice.alternative_pairs[1:3]:
 		m.utility_co[a] += (
 			+ X("vehbywrk") * P("vehbywrk_SR")
 			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
@@ -70,7 +70,7 @@ For example, we can say that vehbywrk_SR2 will be equal to vehbywrk_SR.
 			+ P("ASC_"+name)
 		)
 
-	for a,name in m.dataservice.alternatives[3:]:
+	for a,name in m.dataservice.alternative_pairs[3:]:
 		m.utility_co[a] += (
 			+ X("vehbywrk") * P("vehbywrk_"+name)
 			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)

@@ -43,7 +43,7 @@ Model 17D segments the market by gender for females. (`pp. 135 <http://www.caee.
 	for a in [4,5,6]:
 		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
 	
-	for a,name in m.dataservice.alternatives[1:3]:
+	for a,name in m.dataservice.alternative_pairs[1:3]:
 		m.utility_co[a] += (
 			+ P("vehbywrk_SR") * X("vehbywrk")
 			+ P("wkcbd_"+name) * X("wkccbd+wknccbd")
@@ -51,7 +51,7 @@ Model 17D segments the market by gender for females. (`pp. 135 <http://www.caee.
 			+ P("ASC_"+name)
 			)
 			
-	for a,name in m.dataservice.alternatives[3:]:	
+	for a,name in m.dataservice.alternative_pairs[3:]:
 		m.utility_co[a] += (
 			+ P("vehbywrk_"+name) * X("vehbywrk")
 			+ P("wkcbd_"+name) * X("wkccbd + wknccbd")

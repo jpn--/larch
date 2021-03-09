@@ -30,7 +30,7 @@ Model 11 considers the number of automobiles per the number of household workers
 	for a in [4,5,6]:
 		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
 			
-	for a,name in m.dataservice.alternatives[1:]:
+	for a,name in m.dataservice.alternative_pairs[1:]:
 		m.utility_co[a] += P("ASC_"+name) + P("vehbywrk_"+name) * X("vehbywrk")
 
 .. testcode::
