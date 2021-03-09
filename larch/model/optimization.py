@@ -173,6 +173,12 @@ def maximize_loglike(
                 bounds = None
                 if isinstance(method ,str) and method.lower() in ('slsqp', 'l-bfgs-b', 'tnc', 'trust-constr'):
                     bounds = model.pbounds
+                    if np.any(np.isinf(model.pf.minimum)) or np.any(np.isinf(model.pf.maximum)):
+                        import warnings
+                        warnings.warn( # infinite bounds # )
+                            f"{method} may not play nicely with unbounded parameters\n"
+                            "if you get poor results, consider setting global bounds with model.set_cap()"
+                        )
 
                 try:
                     constraints = model._get_constraints(method)
