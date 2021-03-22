@@ -1048,3 +1048,41 @@ def test_model_28():
         'wkempden_TRANSIT': 0.0023099261462597807,
         'wkempden_WALK': 0.0022363837076832885,
     }), rtol=1e-3)
+
+
+def test_constrained_optimization():
+    from larch.numba import example
+    m = example(1)
+    from larch.model.constraints import RatioBound, OrderingBound
+    m.set_value("totcost", -0.001, maximum=0)
+    m.set_value("tottime", maximum=0)
+    m.constraints = [
+        RatioBound(P("totcost"), P("tottime"), min_ratio=0.1, max_ratio=1.0, scale=1),
+        OrderingBound(P("ASC_WALK"), P("ASC_BIKE")),
+    ]
+    m.load_data()
+    r = m.maximize_loglike(method='slsqp')
+    assert r.loglike == approx(-3647.76149525901)
+    x = {
+        'ASC_BIKE': -0.8087472748965431,
+        'ASC_SR2': -2.193449976582375,
+        'ASC_SR3P': -3.744188833076006,
+        'ASC_TRAN': -0.7603092451373663,
+        'ASC_WALK': -0.8087472751682576,
+        'hhinc#2': -0.0021699330391421407,
+        'hhinc#3': 0.0003696763687090173,
+        'hhinc#4': -0.00509836274463602,
+        'hhinc#5': -0.0431749907425252,
+        'hhinc#6': -0.002373556571769923,
+        'totcost': -0.004910169034222911,
+        'tottime': -0.04790588175791953,
+    }
+    assert dict(r.x) == approx(x)
+    assert r.iteration_number == 48
+
+    m.set_values("null")
+    m.set_value("totcost", -0.001, maximum=0)
+    r2 = m.maximize_loglike(method='slsqp', bhhh_start=3)
+    assert r2.iteration_number == 24
+    assert r2.loglike == approx(-3647.76149525901)
+    assert dict(r2.x) == approx(x, rel=1e-2)

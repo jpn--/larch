@@ -39,6 +39,12 @@ class ParametricConstraint(ABC):
 class RatioBound(ParametricConstraint):
 
     def __init__(self, p_num, p_den, min_ratio=None, max_ratio=None, model=None, scale=10, binding_tol=1e-4):
+        self.i_num = 0
+        self.i_den = 0
+        self.cmin_num = 0.0
+        self.cmin_den = 0.0
+        self.cmax_num = 0.0
+        self.cmax_den = 0.0
         super().__init__(binding_tol=binding_tol)
         self.cmax_num = 0
         self.cmax_den = 0
@@ -56,16 +62,16 @@ class RatioBound(ParametricConstraint):
         if scale is not None:
             self.scale = scale
         if model is not None:
-            self.i_num = model.pf.index.get_loc(self.p_num)
-            self.i_den = model.pf.index.get_loc(self.p_den)
-            self.len = len(model.pf)
+            self.i_num = model._frame.index.get_loc(self.p_num)
+            self.i_den = model._frame.index.get_loc(self.p_den)
+            self.len = len(model._frame)
             if self.min_ratio is not None:
                 scaling = max(self.min_ratio, 1/self.min_ratio) * self.scale
-                if model.pf.loc[self.p_den, 'minimum'] >= 0:
+                if model._frame.loc[self.p_den, 'minimum'] >= 0:
                     # positive denominator
                     self.cmin_num = 1 * scaling
                     self.cmin_den = -self.min_ratio * scaling
-                elif model.pf.loc[self.p_den, 'maximum'] <= 0:
+                elif model._frame.loc[self.p_den, 'maximum'] <= 0:
                     # negative denominator
                     self.cmin_num = -1 * scaling
                     self.cmin_den = self.min_ratio * scaling
@@ -76,11 +82,11 @@ class RatioBound(ParametricConstraint):
                 self.cmin_den = 0
             if self.max_ratio is not None:
                 scaling = max(self.max_ratio, 1/self.max_ratio) * self.scale
-                if model.pf.loc[self.p_den, 'minimum'] >= 0:
+                if model._frame.loc[self.p_den, 'minimum'] >= 0:
                     # positive denominator
                     self.cmax_num = -1 * scaling
                     self.cmax_den = self.max_ratio * scaling
-                elif model.pf.loc[self.p_den, 'maximum'] <= 0:
+                elif model._frame.loc[self.p_den, 'maximum'] <= 0:
                     # negative denominator
                     self.cmax_num = 1 * scaling
                     self.cmax_den = -self.max_ratio * scaling
@@ -129,6 +135,60 @@ class RatioBound(ParametricConstraint):
         a[1,self.i_den] = self.cmax_den
         return [LinearConstraint(a, 0, np.inf)]
 
+    def as_soft_penalty(self):
+        from numba import njit, float32, float64
+        from ..numba.model import softplus, d_softplus
+        i_num = self.i_num
+        i_den = self.i_den
+        cmin_num = self.cmin_num
+        cmin_den = self.cmin_den
+        cmax_num = self.cmax_num
+        cmax_den = self.cmax_den
+        scale = self.scale
+        @njit([
+            float32(float32[:], float32, float32),
+            float64(float64[:], float64, float64),
+        ])
+        def penalty(x, intensity, sharpness=1.0):
+            _min = x[i_num] * cmin_num + x[i_den] * cmin_den
+            _max = x[i_num] * cmax_num + x[i_den] * cmax_den
+            return -softplus(-np.minimum(_min, _max) * scale * intensity, sharpness)
+        @njit([
+            float32[:](float32[:], float32, float32),
+            float64[:](float64[:], float64, float64),
+        ])
+        def dpenalty(x, intensity, sharpness=1.0):
+            j = np.zeros_like(x)
+            _min = x[i_num] * cmin_num + x[i_den] * cmin_den
+            _max = x[i_num] * cmax_num + x[i_den] * cmax_den
+            partial = d_softplus(-np.minimum(_min, _max), sharpness * scale * intensity) * scale * intensity
+            if _min < _max:
+                j[i_num] = cmin_num * partial
+                j[i_den] = cmin_den * partial
+            else:
+                j[i_num] = cmax_num * partial
+                j[i_den] = cmax_den * partial
+            return j
+        @njit([
+            float32[:](float32[:], float32),
+            float64[:](float64[:], float64),
+        ])
+        def dpenalty_money(x, intensity):
+            j = np.zeros_like(x)
+            _min = x[i_num] * cmin_num + x[i_den] * cmin_den
+            _max = x[i_num] * cmax_num + x[i_den] * cmax_den
+            if np.absolute(_min) < 1e-5:
+                partial = 0.5 * scale * intensity
+                j[i_num] = cmin_num * partial
+                j[i_den] = cmin_den * partial
+            elif np.absolute(_max) < 1e-5:
+                partial = 0.5 * scale * intensity
+                j[i_num] = cmax_num * partial
+                j[i_den] = cmax_den * partial
+            return j
+        return penalty, dpenalty, dpenalty_money
+
+
     def __eq__(self, other):
         if not isinstance(other, RatioBound):
             return False
@@ -145,6 +205,9 @@ class RatioBound(ParametricConstraint):
 class OrderingBound(ParametricConstraint):
 
     def __init__(self, p_less, p_more=None, model=None, scale=10, binding_tol=1e-4):
+        # default initializers
+        self.i_less = 0
+        self.i_more = 0
         if p_more is None:
             if "<=" in p_less:
                 p_less, p_more = [_.strip() for _ in p_less.split("<=",1)]
@@ -161,7 +224,7 @@ class OrderingBound(ParametricConstraint):
         self.p_more = p_more
         self.scale = 1
         if model is not None:
-            self.len = len(model.pf)
+            self.len = len(model._frame)
             self.link_model(model, scale)
         else:
             self.len = 0
@@ -170,9 +233,9 @@ class OrderingBound(ParametricConstraint):
         return f"larch.OrderingBound({self.p_less},{self.p_more})"
 
     def link_model(self, model, scale=None):
-        self.i_less = model.pf.index.get_loc(self.p_less)
-        self.i_more = model.pf.index.get_loc(self.p_more)
-        self.len = len(model.pf)
+        self.i_less = model._frame.index.get_loc(self.p_less)
+        self.i_more = model._frame.index.get_loc(self.p_more)
+        self.len = len(model._frame)
         if scale is not None:
             self.scale = scale
 
@@ -196,6 +259,46 @@ class OrderingBound(ParametricConstraint):
         a[0,self.i_more] = self.scale
         a[0,self.i_less] = -self.scale
         return [LinearConstraint(a, 0, np.inf)]
+
+    def as_soft_penalty(self):
+        from numba import njit, float32, float64
+        from ..numba.model import softplus, d_softplus
+        i_more = self.i_more
+        i_less = self.i_less
+        scale = self.scale
+        @njit([
+            float32(float32[:], float32, float32),
+            float64(float64[:], float64, float64),
+        ])
+        def penalty(x, intensity, sharpness=1.0):
+            return -softplus(-(x[i_more] - x[i_less]) * scale * intensity, sharpness)
+        @njit([
+            float32[:](float32[:], float32, float32),
+            float64[:](float64[:], float64, float64),
+        ])
+        def dpenalty(x, intensity, sharpness=1.0):
+            j = np.zeros_like(x)
+            partial = d_softplus(-(x[i_more] - x[i_less]), sharpness * scale * intensity) * scale * intensity
+            j[i_more] = partial
+            j[i_less] = -partial
+            return j
+        @njit([
+            float32[:](float32[:], float32),
+            float64[:](float64[:], float64),
+        ])
+        def dpenalty_bind(x, intensity):
+            j = np.zeros_like(x)
+            diff = x[i_more] - x[i_less]
+            if (
+                    (x[i_more] + x[i_less]) == 0
+                    or np.absolute(diff / (x[i_more] + x[i_less])) < 5e-3
+                    or np.absolute(diff) < 1e-6
+            ):
+                partial = 0.5 * scale * intensity
+                j[i_more] = partial
+                j[i_less] = -partial
+            return j
+        return penalty, dpenalty, dpenalty_bind
 
     def __eq__(self, other):
         if not isinstance(other, OrderingBound):
@@ -223,8 +326,8 @@ class FixedBound(ParametricConstraint):
         return f"larch.FixedBound({self.p},{self.minimum},{self.maximum})"
 
     def link_model(self, model, scale=None):
-        self.i = model.pf.index.get_loc(self.p)
-        self.len = len(model.pf)
+        self.i = model._frame.index.get_loc(self.p)
+        self.len = len(model._frame)
         if scale is not None:
             self.scale = scale
 

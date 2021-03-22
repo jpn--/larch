@@ -9,6 +9,44 @@ from ..log import logger_name
 logger = logging.getLogger(logger_name)
 
 
+class ModelDashboard:
+    """
+    Current state of the model.
+
+    This dashboard is displayed on creation.
+    """
+
+    def __init__(self, throttle=2, visible=True, *, tags=None):
+        from ..util.display import display_head, display_p, display_nothing
+        from ..util.rate_limiter import NonBlockingRateLimiter
+        self.visible = visible
+        if tags is not None:
+            self.head, self.subhead, self.body = tags
+        else:
+            if visible:
+                self.head = display_head(f'Larch Model Dashboard', level=3)
+                self.subhead = display_p(f'LL = ...')
+                self.body = display_p('...')
+            else:
+                self.head = display_nothing()
+                self.subhead = display_nothing()
+                self.body = display_nothing()
+        if isinstance(throttle, NonBlockingRateLimiter):
+            self.throttle_gate = throttle
+        else:
+            self.throttle_gate = NonBlockingRateLimiter(throttle)
+
+    def update(self, head=None, subhead=None, body=None, force=False):
+        if self.visible:
+            if (self.throttle_gate or force or 1):
+                if head is not None:
+                    self.head.update(head, force=force)
+                if subhead is not None:
+                    self.subhead.update(subhead, force=force)
+                if body is not None:
+                    self.body.update(body, force=force)
+
+
 def maximize_loglike(
         model,
         method=None,
@@ -23,11 +61,15 @@ def maximize_loglike(
         iteration_number_tail="",
         options=None,
         maxiter=None,
+        bhhh_start=0,
         jumpstart=0,
         jumpstart_split=5,
         leave_out=-1,
         keep_only=-1,
         subsample=-1,
+        return_dashboard=False,
+        dashboard=None,
+        prior_result=None,
         **kwargs,
 ):
     """
@@ -70,6 +112,10 @@ def maximize_loglike(
         if isinstance(model, Model5c) and model.dataframes is None:
             raise ValueError("you must load data first -- try Model.load_data()")
 
+        if prior_result is not None:
+            dashboard = dashboard or prior_result.get('dashboard', None)
+            iteration_number = iteration_number or prior_result.get('iteration_number', 0)
+
         if _doctest_mode_:
             from ..model import Model
             if type(model) == Model:
@@ -83,35 +129,37 @@ def maximize_loglike(
             options['maxiter'] = maxiter
 
         timer = Timer()
-        if isinstance(screen_update_throttle, NonBlockingRateLimiter):
-            throttle_gate = screen_update_throttle
-        else:
-            throttle_gate = NonBlockingRateLimiter(screen_update_throttle)
 
-        if throttle_gate and not quiet and not _doctest_mode_:
-            if reuse_tags is None:
-                tag1 = display_head(f'Iteration 000 {iteration_number_tail}', level=3)
-                tag2 = display_p(f'LL = ...')
-                tag3 = display_p('...')
+        _initial_constraint_intensity = getattr(model, 'constraint_intensity', None)
+        _initial_constraint_sharpness = getattr(model, 'constraint_sharpness', None)
+
+        if not quiet and not _doctest_mode_:
+            if isinstance(reuse_tags, tuple) and len(reuse_tags) == 3 and dashboard is None:
+                dashboard = ModelDashboard(screen_update_throttle, tags=reuse_tags)
+            if dashboard is not None:
+                if not isinstance(dashboard, ModelDashboard):
+                    raise ValueError(f"dashboard must be ModelDashboard, not {type(dashboard)}")
             else:
-                tag1, tag2, tag3 = reuse_tags
+                dashboard = ModelDashboard(screen_update_throttle)
         else:
-            tag1 = display_nothing()
-            tag2 = display_nothing()
-            tag3 = display_nothing()
+            dashboard = ModelDashboard(visible=False)
 
         def callback(x, status=None):
-            nonlocal iteration_number, throttle_gate
+            nonlocal iteration_number, dashboard, method
             iteration_number += 1
-            if throttle_gate:
-                # clear_output(wait=True)
-                tag1.update(f'Iteration {iteration_number:03} {iteration_number_tail}')
-                tag2.update(f'Best LL = {model._cached_loglike_best}')
-                tag3.update(model.pf)
+            dashboard.update(
+                f'Iteration {iteration_number:03} {iteration_number_tail}',
+                f'Currently using {method}, Best LL = {model._cached_loglike_best}',
+                model.pf,
+            )
             return False
 
         if quiet or _doctest_mode_:
             callback = None
+
+        if bhhh_start:
+            if method is None or method.lower() == 'bhhh':
+                method = 'slsqp'
 
         if method is None:
             try:
@@ -128,6 +176,37 @@ def maximize_loglike(
 
         method_used = method
         raw_result = None
+
+        if bhhh_start:
+            method_used = f"bhhh({bhhh_start})->{method}"
+            current_ll, tolerance, iter, steps_bhhh, message = model.fit_bhhh(
+                steplen=1.0,
+                momentum=5,
+                logger=None,
+                ctol=1e-4,
+                maxiter=options.get('maxiter' ,100),
+                soft_maxiter=bhhh_start,
+                callback=callback,
+                minimum_steplen=0.0001,
+                maximum_steplen=1.0,
+                leave_out=-1,
+                keep_only=-1,
+                subsample=-1,
+                initial_constraint_intensity=1.0,
+                step_constraint_intensity=1.5,
+                max_constraint_intensity=1e6,
+                initial_constraint_sharpness=1.0,
+                step_constraint_sharpness=1.5,
+                max_constraint_sharpness=1e6,
+            )
+            raw_result = {
+                'loglike': current_ll,
+                'x': model.pvals,
+                'tolerance': tolerance,
+                'steps': steps_bhhh,
+                'message': message,
+            }
+            model.constraint_intensity = 0.0
 
         if method.lower( )=='bhhh':
             try:
@@ -152,20 +231,29 @@ def maximize_loglike(
                     'message' :message,
                 }
             except NotImplementedError:
-                tag1.update(f'Iteration {iteration_number:03} [BHHH Not Available] {iteration_number_tail}', force=True)
-                tag3.update(model.pf, force=True)
+                dashboard.update(
+                    f'Iteration {iteration_number:03} [BHHH Not Available] {iteration_number_tail}',
+                    body=model.pf,
+                    force=True,
+                )
                 if method2 is not None:
                     method_used = f"{method2}"
                     method = method2
             except BHHHSimpleStepFailure:
-                tag1.update(f'Iteration {iteration_number:03} [Exception Recovery] {iteration_number_tail}', force=True)
-                tag3.update(model.pf, force=True)
+                dashboard.update(
+                    f'Iteration {iteration_number:03} [Exception Recovery] {iteration_number_tail}',
+                    body=model.pf,
+                    force=True,
+                )
                 if method2 is not None:
                     method_used = f"{method_used}|{method2}"
                     method = method2
             except:
-                tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
-                tag3.update(model.pf, force=True)
+                dashboard.update(
+                    f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}',
+                    body=model.pf,
+                    force=True,
+                )
                 raise
 
         if method.lower() != 'bhhh':
@@ -185,10 +273,11 @@ def maximize_loglike(
                 except:
                     constraints = ()
 
+                args = getattr(model, '_null_slice', (0,-1,1))
                 raw_result = minimize(
                     model.neg_loglike,
                     model.pvals,
-                    args=(0, -1, 1, leave_out, keep_only, subsample), # start_case, stop_case, step_case, leave_out, keep_only, subsample
+                    args=args+(leave_out, keep_only, subsample), # start_case, stop_case, step_case, leave_out, keep_only, subsample
                     method=method,
                     jac=model.neg_d_loglike,
                     bounds=bounds,
@@ -198,17 +287,23 @@ def maximize_loglike(
                     **kwargs
                 )
             except:
-                tag1.update(f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}', force=True)
-                tag3.update(model.pf, force=True)
+                dashboard.update(
+                    f'Iteration {iteration_number:03} [Exception] {iteration_number_tail}',
+                    body=model.pf,
+                    force=True,
+                )
                 raise
 
         timer.stop()
 
         if final_screen_update and not quiet and not _doctest_mode_ and raw_result is not None:
             converged = raw_result.get("message", "Converged")
-            tag1.update(f'Iteration {iteration_number:03} [{converged}] {iteration_number_tail}', force=True)
-            tag2.update(f'Best LL = {model._cached_loglike_best}', force=True)
-            tag3.update(model.pf, force=True)
+            dashboard.update(
+                f'Iteration {iteration_number:03} [{converged}] {iteration_number_tail}',
+                f'Best LL = {model._cached_loglike_best}',
+                model.pf,
+                force=True,
+            )
 
         if raw_result is None:
             raw_result = {}
@@ -221,7 +316,10 @@ def maximize_loglike(
             if k == 'fun':
                 result['loglike'] = -v
             elif k == 'jac':
-                result['d_loglike'] = pd.Series(-v, index=model.pnames)
+                try:
+                    result['d_loglike'] = pd.Series(-v, index=model.pnames)
+                except TypeError:
+                    result[k] = v
             elif k == 'x':
                 result['x'] = pd.Series(v, index=model.pnames)
             else:
@@ -242,11 +340,130 @@ def maximize_loglike(
 
         model._most_recent_estimation_result = result
 
+        if return_dashboard:
+            result['dashboard'] = dashboard
+
         if return_tags:
-            return result, tag1, tag2, tag3
+            return result, dashboard.head, dashboard.subhead, dashboard.body
+
+        if _initial_constraint_intensity is not None:
+            setattr(model, 'constraint_intensity', _initial_constraint_intensity)
+        if _initial_constraint_sharpness is not None:
+            setattr(model, 'constraint_sharpness', _initial_constraint_sharpness)
 
         return result
 
     except:
         logger.exception("error in maximize_loglike")
         raise
+
+
+
+def propose_direction(bhhh, dloglike, freedoms):
+    direction = np.zeros_like(dloglike)
+    # try:
+    #     direction1 = np.linalg.solve(bhhh[freedoms, :][:, freedoms], dloglike[freedoms])
+    # except np.linalg.LinAlgError:
+    direction1 = np.linalg.lstsq(bhhh[freedoms, :][:, freedoms], dloglike[freedoms])[0]
+    try:
+        direction[freedoms] = direction1
+    except:
+        print("direction", direction.shape)
+        print("direction1", direction1.shape)
+        print("freedoms", freedoms.shape)
+        raise
+    return direction
+
+
+
+def fit_bhhh(
+        model,
+        steplen=1.0,
+        momentum=5,
+        printer=None,
+        ctol=1e-4,
+        maxiter=100,
+        callback=None,
+        jumpstart=0,
+        jumpstart_split=5,
+        minimum_steplen=0.0001,
+        maximum_steplen=1.0,
+        leave_out=-1,
+        keep_only=-1,
+        subsample=-1,
+        initial_constraint_intensity=None,
+        step_constraint_intensity=1.5,
+        initial_constraint_sharpness=None,
+        step_constraint_sharpness=1.2,
+):
+    """
+    Makes a series of steps using the BHHH algorithm.
+
+    Parameters
+    ----------
+    steplen: float
+    printer: callable
+
+    Returns
+    -------
+    loglike, convergence_tolerance, n_iters, steps
+    """
+    current_pvals = model.pvals.copy()
+    iter = 0
+    steps = []
+
+    if initial_constraint_intensity is not None:
+        model.constraint_intensity = initial_constraint_intensity
+    if initial_constraint_sharpness is not None:
+        model.constraint_sharpness = initial_constraint_sharpness
+
+    # if jumpstart:
+    #     model.jumpstart_bhhh(jumpstart=jumpstart, jumpstart_split=jumpstart_split)
+    #     iter += jumpstart
+
+    current_ll, current_dll, current_bhhh = model._loglike2_bhhh_tuple(
+        leave_out=leave_out, keep_only=keep_only, subsample=subsample,
+    )
+
+    def find_direction(current_dll, current_bhhh):
+        freedoms = (model.pf.holdfast == 0).to_numpy()
+        direction = propose_direction(current_bhhh, np.asarray(current_dll), freedoms)
+        tolerance = np.dot(direction, current_dll)
+        return direction, tolerance
+
+    direction, tolerance = find_direction(current_dll, current_bhhh)
+
+    while abs(tolerance) > ctol and iter < maxiter:
+        iter += 1
+        if steps:
+            steplen = min(2.0*sum(steps[-momentum:]) / len(steps[-momentum:]), maximum_steplen)
+        while True:
+            model.set_values(current_pvals + direction * steplen)
+            proposed_ll, proposed_dll, proposed_bhhh = model._loglike2_bhhh_tuple(
+                leave_out=leave_out, keep_only=keep_only, subsample=subsample,
+            )
+            if proposed_ll > current_ll: break
+            steplen *= 0.5
+            if steplen < minimum_steplen: break
+        if proposed_ll <= current_ll:
+            model.set_values(current_pvals)
+            raise BHHHSimpleStepFailure(f"simple step bhhh failed\ndirection = {str(direction)}")
+        if printer is not None:
+            printer("simple step bhhh {} to gain {}".format(steplen, proposed_ll - current_ll))
+        steps.append(steplen)
+
+        current_ll, current_dll, current_bhhh = proposed_ll, proposed_dll, proposed_bhhh
+        current_pvals = model.pvals.copy()
+        if callback is not None:
+            callback(current_pvals)
+
+        model.constraint_intensity *= step_constraint_intensity
+        model.constraint_sharpness *= step_constraint_sharpness
+        direction, tolerance = find_direction(current_dll, current_bhhh)
+
+    if abs(tolerance) <= ctol:
+        message = "Optimization terminated successfully."
+    else:
+        message = f"Optimization terminated after {iter} iterations."
+
+    return current_ll, tolerance, iter, np.asarray(steps), message

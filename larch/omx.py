@@ -134,7 +134,25 @@ class OMX(_omx_base_class):
 		self.__init__(filename, mode, **kwarg)
 		return self
 
+	def keys(self, kind='all'):
+		"""
+		Get the names of data and/or lookup stored in this file.
 
+		Parameters
+		----------
+		kind : {'all', 'data', 'lookup'}
+
+		Returns
+		-------
+		list
+		"""
+		if kind == 'data':
+			return list(self.data._v_children.keys())
+		elif kind == 'lookup':
+			return list(self.lookup._v_children.keys())
+		else:
+			return list(self.data._v_children.keys()) + \
+			       list(self.lookup._v_children.keys())
 
 	@property
 	def shape(self):
