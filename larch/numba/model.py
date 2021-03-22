@@ -1030,7 +1030,7 @@ class NumbaModel(_BaseModel):
             raise ValueError(failure_message)
         under_min = self.pf.value < self.pf.minimum
         if np.any(under_min):
-            failure = np.where(over_max)[0][0]
+            failure = np.where(under_min)[0][0]
             failure_message = (
                 f"{self.pf.index[failure]} under minimum "
                 f"({self.pf.value.iloc[failure]} < {self.pf.minimum.iloc[failure]})"

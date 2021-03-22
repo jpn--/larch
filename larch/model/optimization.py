@@ -178,35 +178,40 @@ def maximize_loglike(
         raw_result = None
 
         if bhhh_start:
-            method_used = f"bhhh({bhhh_start})->{method}"
-            current_ll, tolerance, iter, steps_bhhh, message = model.fit_bhhh(
-                steplen=1.0,
-                momentum=5,
-                logger=None,
-                ctol=1e-4,
-                maxiter=options.get('maxiter' ,100),
-                soft_maxiter=bhhh_start,
-                callback=callback,
-                minimum_steplen=0.0001,
-                maximum_steplen=1.0,
-                leave_out=-1,
-                keep_only=-1,
-                subsample=-1,
-                initial_constraint_intensity=1.0,
-                step_constraint_intensity=1.5,
-                max_constraint_intensity=1e6,
-                initial_constraint_sharpness=1.0,
-                step_constraint_sharpness=1.5,
-                max_constraint_sharpness=1e6,
-            )
-            raw_result = {
-                'loglike': current_ll,
-                'x': model.pvals,
-                'tolerance': tolerance,
-                'steps': steps_bhhh,
-                'message': message,
-            }
-            model.constraint_intensity = 0.0
+            try:
+                _restore_method = method
+                method_used = f"bhhh({bhhh_start})->{method}"
+                method = f"bhhh({bhhh_start})"
+                current_ll, tolerance, iter, steps_bhhh, message = model.fit_bhhh(
+                    steplen=1.0,
+                    momentum=5,
+                    logger=None,
+                    ctol=1e-4,
+                    maxiter=options.get('maxiter' ,100),
+                    soft_maxiter=bhhh_start,
+                    callback=callback,
+                    minimum_steplen=0.0001,
+                    maximum_steplen=1.0,
+                    leave_out=-1,
+                    keep_only=-1,
+                    subsample=-1,
+                    initial_constraint_intensity=1.0,
+                    step_constraint_intensity=1.5,
+                    max_constraint_intensity=1e6,
+                    initial_constraint_sharpness=1.0,
+                    step_constraint_sharpness=1.5,
+                    max_constraint_sharpness=1e6,
+                )
+                raw_result = {
+                    'loglike': current_ll,
+                    'x': model.pvals,
+                    'tolerance': tolerance,
+                    'steps': steps_bhhh,
+                    'message': message,
+                }
+            finally:
+                method = _restore_method
+                model.constraint_intensity = 0.0
 
         if method.lower( )=='bhhh':
             try:
