@@ -59,8 +59,8 @@ alternative codes are for the alternatives in our dataset. To find out, we can d
 .. doctest::
 	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
 
-	>>> m.dataservice.alternatives
-	[(1, 'Train'), (2, 'SM'), (3, 'Car')]
+	>>> dict(m.dataservice.alternatives)
+	{1: 'Train', 2: 'SM', 3: 'Car'}
 
 
 For this example, we want to nest together the Train and Car modes into a "existing" modes nest.
