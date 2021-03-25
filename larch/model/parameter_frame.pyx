@@ -518,7 +518,7 @@ cdef class ParameterFrame:
 			logger.exception("error in ParameterFrame.__getitem__")
 			raise
 
-	def set_values(self, values=None, **kwargs):
+	def set_values(self, values=None, *, respect_holdfast=True, **kwargs):
 		"""
 		Set the parameter values for one or more parameters.
 
@@ -582,7 +582,10 @@ cdef class ParameterFrame:
 				if len(values) != len(self._frame):
 					raise ValueError(f'gave {len(values)} values, needs to be exactly {len(self._frame)} values')
 			# only change parameters that are not holdfast
-			free_parameters= self._frame['holdfast'].values == 0
+			if respect_holdfast:
+				free_parameters = self._frame['holdfast'].values == 0
+			else:
+				free_parameters = numpy.ones(len(self._frame), dtype=numpy.bool)
 			if isinstance(values, (int,float)):
 				self._frame.loc[free_parameters, 'value'] = l4_float_dtype(values)
 			else:

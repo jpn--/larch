@@ -102,6 +102,8 @@ def maximize_loglike(
         If the `dataframes` are not already loaded.
 
     """
+    _initial_constraint_intensity = getattr(model, 'constraint_intensity', None)
+    _initial_constraint_sharpness = getattr(model, 'constraint_sharpness', None)
     try:
         from ..util.timesize import Timer
         from scipy.optimize import minimize
@@ -130,9 +132,6 @@ def maximize_loglike(
 
         timer = Timer()
 
-        _initial_constraint_intensity = getattr(model, 'constraint_intensity', None)
-        _initial_constraint_sharpness = getattr(model, 'constraint_sharpness', None)
-
         if not quiet and not _doctest_mode_:
             if isinstance(reuse_tags, tuple) and len(reuse_tags) == 3 and dashboard is None:
                 dashboard = ModelDashboard(screen_update_throttle, tags=reuse_tags)
@@ -147,11 +146,28 @@ def maximize_loglike(
         def callback(x, status=None):
             nonlocal iteration_number, dashboard, method
             iteration_number += 1
-            dashboard.update(
-                f'Iteration {iteration_number:03} {iteration_number_tail}',
-                f'Currently using {method}, Best LL = {model._cached_loglike_best}',
-                model.pf,
-            )
+            if isinstance(status, dict) and 'penalty' in status:
+                logger.critical(
+                    f'Iteration {iteration_number:03} {iteration_number_tail}: '
+                    f'Currently using {method}, '
+                    f'Total LL = {status["total_loglike"]}, '
+                    f'Constraint Penalty = {status["penalty"]}'
+                )
+                dashboard.update(
+                    f'Iteration {iteration_number:03} {iteration_number_tail}',
+                    (
+                        f'Currently using {method}, '
+                        f'Total LL = {status["total_loglike"]}, '
+                        f'Constraint Penalty = {status["penalty"]}'
+                    ),
+                    model.pf,
+                )
+            else:
+                dashboard.update(
+                    f'Iteration {iteration_number:03} {iteration_number_tail}',
+                    f'Currently using {method}, Best LL = {model._cached_loglike_best}',
+                    model.pf,
+                )
             return False
 
         if quiet or _doctest_mode_:
@@ -218,16 +234,34 @@ def maximize_loglike(
                 max_iter = options.get('maxiter' ,100)
                 stopping_tol = options.get('ctol' ,1e-5)
 
-                current_ll, tolerance, iter_bhhh, steps_bhhh, message = model.simple_fit_bhhh(
-                    ctol=stopping_tol,
-                    maxiter=max_iter,
-                    callback=callback,
-                    jumpstart=jumpstart,
-                    jumpstart_split=jumpstart_split,
-                    leave_out=leave_out,
-                    keep_only=keep_only,
-                    subsample=subsample,
-                )
+                if hasattr(model, 'fit_bhhh'):
+                    current_ll, tolerance, iter_bhhh, steps_bhhh, message = model.fit_bhhh(
+                        # steplen=1.0,
+                        # momentum=5,
+                        ctol=stopping_tol,
+                        maxiter=max_iter,
+                        callback=callback,
+                        leave_out=leave_out,
+                        keep_only=keep_only,
+                        subsample=subsample,
+                        # initial_constraint_intensity=1.0,
+                        # step_constraint_intensity=1.5,
+                        # max_constraint_intensity=1e6,
+                        # initial_constraint_sharpness=1.0,
+                        # step_constraint_sharpness=1.5,
+                        # max_constraint_sharpness=1e6,
+                    )
+                else:
+                    current_ll, tolerance, iter_bhhh, steps_bhhh, message = model.simple_fit_bhhh(
+                        ctol=stopping_tol,
+                        maxiter=max_iter,
+                        callback=callback,
+                        jumpstart=jumpstart,
+                        jumpstart_split=jumpstart_split,
+                        leave_out=leave_out,
+                        keep_only=keep_only,
+                        subsample=subsample,
+                    )
                 raw_result = {
                     'loglike' :current_ll,
                     'x': model.pvals,
@@ -351,17 +385,17 @@ def maximize_loglike(
         if return_tags:
             return result, dashboard.head, dashboard.subhead, dashboard.body
 
-        if _initial_constraint_intensity is not None:
-            setattr(model, 'constraint_intensity', _initial_constraint_intensity)
-        if _initial_constraint_sharpness is not None:
-            setattr(model, 'constraint_sharpness', _initial_constraint_sharpness)
 
         return result
 
     except:
         logger.exception("error in maximize_loglike")
         raise
-
+    finally:
+        if _initial_constraint_intensity is not None:
+            setattr(model, 'constraint_intensity', _initial_constraint_intensity)
+        if _initial_constraint_sharpness is not None:
+            setattr(model, 'constraint_sharpness', _initial_constraint_sharpness)
 
 
 def propose_direction(bhhh, dloglike, freedoms):

@@ -859,6 +859,63 @@ class NumbaModel(_BaseModel):
         self._array_av_cascade = None
         self._constraint_funcs = None
 
+    def _reload_data_arrays(self):
+        """
+        Reload the _data_arrays so they are consistent with the dataframes.
+        """
+        if self.graph is None:
+            self._data_arrays = None
+            return
+
+        n_nodes = len(self.graph)
+        if self.dataframes.data_ch is not None:
+            _array_ch_cascade = data_ch_cascade(self.dataframes, self.graph, dtype=self.float_dtype)
+        else:
+            _array_ch_cascade = np.zeros([self.n_cases, 0], dtype=self.float_dtype)
+        if self.dataframes.data_av is not None:
+            _array_av_cascade = data_av_cascade(self.dataframes, self.graph)
+        else:
+            _array_av_cascade = np.ones([self.n_cases, n_nodes], dtype=np.int8)
+        if self.dataframes.data_wt is not None:
+            _array_wt = self.dataframes.array_wt().astype(self.float_dtype)
+        else:
+            _array_wt = np.ones(self.n_cases, dtype=self.float_dtype)
+
+        _array_co = self.dataframes.array_co(force=True)
+        if _array_co.dtype != self.float_dtype:
+            _array_co = _array_co.astype(self.float_dtype)
+
+        _array_ca = self.dataframes.array_ca(force=True)
+        if _array_ca.dtype != self.float_dtype:
+            _array_ca = _array_ca.astype(self.float_dtype)
+
+        self._data_arrays = DataArrays(
+            (_array_ch_cascade),
+            (_array_av_cascade),
+            (_array_wt.reshape(-1)),
+            (_array_co),
+            (_array_ca),
+        )
+
+    def _rebuild_work_arrays(self, n_cases, n_nodes, n_params):
+        _rebuild_work_arrays = True
+        if self.work_arrays is not None:
+            if (
+                    (self.work_arrays.utility.shape[0] == n_cases)
+                    and (self.work_arrays.utility.shape[1] == n_nodes)
+                    and (self.work_arrays.bhhh.shape[1] == n_params)
+            ):
+                _rebuild_work_arrays = False
+
+        self.work_arrays = WorkArrays(
+            utility=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+            logprob=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+            probability=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+            bhhh=np.zeros([n_cases, n_params, n_params], dtype=self.float_dtype),
+            d_loglike=np.zeros([n_cases, n_params], dtype=self.float_dtype),
+            loglike=np.zeros([n_cases], dtype=self.float_dtype),
+        )
+
     def unmangle(self, force=False):
         super().unmangle(force=force)
         if self._fixed_arrays is None or force:
@@ -908,26 +965,7 @@ class NumbaModel(_BaseModel):
                     node_slot_arrays[2][n_alts:],
                 )
 
-                if self.dataframes.data_ch is not None:
-                    _array_ch_cascade = data_ch_cascade(self.dataframes, self.graph, dtype=self.float_dtype)
-                else:
-                    _array_ch_cascade = np.zeros([self.n_cases, 0], dtype=self.float_dtype)
-                if self.dataframes.data_av is not None:
-                    _array_av_cascade = data_av_cascade(self.dataframes, self.graph)
-                else:
-                    _array_av_cascade = np.ones([self.n_cases, n_nodes], dtype=np.int8)
-                if self.dataframes.data_wt is not None:
-                    _array_wt = self.dataframes.array_wt().astype(self.float_dtype)
-                else:
-                    _array_wt = np.ones(self.n_cases, dtype=self.float_dtype)
-
-                self._data_arrays = DataArrays(
-                    (_array_ch_cascade.astype(self.float_dtype)),
-                    (_array_av_cascade),
-                    (_array_wt.reshape(-1)),
-                    (self.dataframes.array_co(force=True).astype(self.float_dtype)),
-                    (self.dataframes.array_ca(force=True).astype(self.float_dtype)),
-                )
+                self._reload_data_arrays()
             else:
                 self._fixed_arrays = None
                 self._data_arrays = None
@@ -937,14 +975,7 @@ class NumbaModel(_BaseModel):
             except MissingDataError:
                 self.work_arrays = None
             else:
-                self.work_arrays = WorkArrays(
-                    utility=np.zeros([self.n_cases, n_nodes], dtype=self.float_dtype),
-                    logprob=np.zeros([self.n_cases, n_nodes], dtype=self.float_dtype),
-                    probability=np.zeros([self.n_cases, n_nodes], dtype=self.float_dtype),
-                    bhhh=np.zeros([self.n_cases, n_params, n_params], dtype=self.float_dtype),
-                    d_loglike=np.zeros([self.n_cases, n_params], dtype=self.float_dtype),
-                    loglike=np.zeros([self.n_cases], dtype=self.float_dtype),
-                )
+                self._rebuild_work_arrays(n_cases, n_nodes, n_params)
         if self._constraint_funcs is None:
             self._constraint_funcs = [c.as_soft_penalty() for c in self.constraints]
 
@@ -958,13 +989,13 @@ class NumbaModel(_BaseModel):
         if caseslice is None:
             caseslice = slice(caseslice)
         missing_ch, missing_av = False, False
-        if self.dataframes is None:
+        if self._dataframes is None:
             raise MissingDataError('dataframes is not set, maybe you need to call `load_data` first?')
-        if not self.dataframes.is_computational_ready(activate=True):
+        if not self._dataframes.is_computational_ready(activate=True):
             raise ValueError('DataFrames is not computational-ready')
+        self.unmangle()
         if x is not None:
             self.set_values(x)
-        self.unmangle()
         if self.dataframes.data_ch is None:
             if allow_missing_ch:
                 missing_ch = True
@@ -1571,3 +1602,52 @@ class NumbaModel(_BaseModel):
                 j_pvals += direction * steplen
                 logger.debug(f"jump to {j_pvals}")
                 self.set_values(j_pvals)
+
+
+    def set_dataframes(
+            self,
+            x,
+            check_sufficiency=True,
+            *,
+            raw=False,
+    ):
+        """
+
+        Parameters
+        ----------
+        x : larch.DataFrames
+        check_sufficiency : bool, default True
+            Run a check
+
+        Returns
+        -------
+
+        """
+        if raw:
+            return super().set_dataframes(x, check_sufficiency, raw=raw)
+
+        x.computational = True
+        self.clear_best_loglike()
+
+        # self.unmangle() # don't do a full unmangle here, it will fail if the old data is incomplete
+        if self._is_mangled():
+            self._scan_all_ensure_names()
+        if check_sufficiency:
+            x.check_data_is_sufficient_for_model(self)
+        super().set_dataframes(x, check_sufficiency=False, raw=True)
+
+        self._reload_data_arrays()
+        n_cases = x.n_cases
+        if self.graph is None:
+            self.initialize_graph(
+                alternative_codes=x.alternative_codes(),
+                alternative_names=x.alternative_names(),
+            )
+        n_nodes = len(self.graph)
+        n_params = len(self._frame)
+        self._rebuild_work_arrays(n_cases, n_nodes, n_params)
+
+
+    def _frame_values_have_changed(self):
+        pass # nothing to do for numba model
+

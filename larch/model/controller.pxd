@@ -12,11 +12,10 @@ cdef class Model5c(AbstractChoiceModel):
 		DictOfLinearFunction_C _utility_co
 		LinearFunction_C _utility_ca
 		LinearFunction_C _quantity_ca
-
-	cdef:
 		DataFrames _dataframes
 		object _dataservice
 
+	cdef:
 		object _quantity_scale
 		object _logsum_parameter
 		object rename_parameters

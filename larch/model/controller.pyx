@@ -494,6 +494,8 @@ cdef class Model5c(AbstractChoiceModel):
 			self,
 			DataFrames x,
 			bint check_sufficiency=True,
+			*,
+			bint raw=False,
 	):
 		"""
 
@@ -507,6 +509,10 @@ cdef class Model5c(AbstractChoiceModel):
 		-------
 
 		"""
+		if raw:
+			self._dataframes = x
+			return
+
 		x.computational = True
 		self.clear_best_loglike()
 

@@ -181,7 +181,14 @@ def fit_bhhh(
         current_ll, current_dll, current_bhhh = proposed_ll, proposed.dll, proposed.bhhh
         current_pvals = model.pvals.copy()
         if callback is not None:
-            callback(current_pvals)
+            callback(
+                current_pvals,
+                {
+                    'penalty':proposed.penalty * model.n_cases,
+                    'total_loglike':current_ll,
+                    'actual_loglike':current_ll-proposed.penalty,
+                },
+            )
 
         if model.constraint_intensity and (
                 model.constraint_intensity < max_constraint_intensity
