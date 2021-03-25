@@ -89,3 +89,10 @@ jobs:
       conda config --set anaconda_upload no
       conda build conda-recipe -c conda-forge
     displayName: Conda build
+
+  - script: |
+      call activate myEnvironment
+      conda config --set anaconda_upload no
+      python setup.py develop
+      pytest
+    displayName: Develop build and test
