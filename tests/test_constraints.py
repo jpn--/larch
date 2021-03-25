@@ -181,9 +181,10 @@ def test_lower_bound():
 		'totcost': 0.00023967125878600402,
 		'tottime': 0.0027703331869058825,
 	}
-	assert dict(m1.pf['std_err']) == approx(se_, abs=1e-10, rel=1e-2, nan_ok=True)
+	for k in se_:
+		assert dict(m1.pf['std_err'])[k] == approx(se_[k], abs=1e-5, rel=0.02, nan_ok=True), k
 
-	assert dict(m1.pf['unconstrained_std_err']) == approx({
+	seu_ = {
 		'ASC_BIKE': 0.3048352068287236,
 		'ASC_SR2': 0.10486177423525046,
 		'ASC_SR3P': 0.17846252159720813,
@@ -196,7 +197,9 @@ def test_lower_bound():
 		'hhinc#6': 0.0030865953487895412,
 		'totcost': 0.00023967145587986189,
 		'tottime': 0.0032194798668345615,
-	}, rel=1e-2)
+	}
+	for k in seu_:
+		assert dict(m1.pf['unconstrained_std_err'])[k] == approx(seu_[k], rel=1e-2), k
 
 
 @pytest.mark.skip(reason="constraint tests are unstable across platforms")
