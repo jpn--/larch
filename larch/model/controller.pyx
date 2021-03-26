@@ -101,6 +101,11 @@ cdef class Model5c(AbstractChoiceModel):
 		import gzip
 		import base64
 
+		mrer = self._most_recent_estimation_result
+		if 'dashboard' in mrer:
+			del mrer['dashboard']
+
+
 		state = dict()
 		state["utility_ca                     ".strip()] = (self.utility_ca.copy()              )
 		state["utility_co                     ".strip()] = (self.utility_co.copy()              )

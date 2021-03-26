@@ -585,7 +585,7 @@ cdef class ParameterFrame:
 			if respect_holdfast:
 				free_parameters = self._frame['holdfast'].values == 0
 			else:
-				free_parameters = numpy.ones(len(self._frame), dtype=numpy.bool)
+				free_parameters = numpy.ones(len(self._frame), dtype=bool)
 			if isinstance(values, (int,float)):
 				self._frame.loc[free_parameters, 'value'] = l4_float_dtype(values)
 			else:

@@ -69,6 +69,8 @@ class dictx(dict):
 	def _repr_html_(self):
 		return self.__xml__().tostring()
 
+	def copy(self):
+		return dictx(super().copy())
 
 dicta = Dict
 

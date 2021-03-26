@@ -147,17 +147,12 @@ def maximize_loglike(
             nonlocal iteration_number, dashboard, method
             iteration_number += 1
             if isinstance(status, dict) and 'penalty' in status:
-                logger.critical(
-                    f'Iteration {iteration_number:03} {iteration_number_tail}: '
-                    f'Currently using {method}, '
-                    f'Total LL = {status["total_loglike"]}, '
-                    f'Constraint Penalty = {status["penalty"]}'
-                )
                 dashboard.update(
                     f'Iteration {iteration_number:03} {iteration_number_tail}',
                     (
                         f'Currently using {method}, '
-                        f'Total LL = {status["total_loglike"]}, '
+                        f'Best LL = {model._cached_loglike_best}, '
+                        f'Current Total LL = {status["total_loglike"]}, '
                         f'Constraint Penalty = {status["penalty"]}'
                     ),
                     model.pf,
@@ -225,6 +220,12 @@ def maximize_loglike(
                     'steps': steps_bhhh,
                     'message': message,
                 }
+            except BHHHSimpleStepFailure:
+                dashboard.update(
+                    f'Iteration {iteration_number:03} [BHHH Start Failure, Recovering] {iteration_number_tail}',
+                    body=model.pf,
+                    force=True,
+                )
             finally:
                 method = _restore_method
                 model.constraint_intensity = 0.0
@@ -377,7 +378,7 @@ def maximize_loglike(
         if _doctest_mode_:
             result['__verbose_repr__'] = True
 
-        model._most_recent_estimation_result = result
+        model._most_recent_estimation_result = result.copy()
 
         if return_dashboard:
             result['dashboard'] = dashboard
