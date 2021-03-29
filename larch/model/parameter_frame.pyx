@@ -951,8 +951,7 @@ cdef class ParameterFrame:
 					result.loc[numpy.absolute(result['t Stat']) > 1.9600, 'Signif'] = "*"
 					result.loc[numpy.absolute(result['t Stat']) > 2.5758, 'Signif'] = "**"
 					result.loc[numpy.absolute(result['t Stat']) > 3.2905, 'Signif'] = "***"
-					_fmt_t = lambda x: f"{x:0< 4.2f}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
-					result['t Stat'] = result['t Stat'].apply(_fmt_t)
+					result['t Stat'] = result['t Stat'].apply(fixie)
 					result.loc[result['t Stat'] == NBSP+"NA", 'Signif'] = ""
 					monospace_cols.append('t Stat')
 					monospace_cols.append('Signif')
@@ -967,8 +966,7 @@ cdef class ParameterFrame:
 					result.loc[numpy.absolute(((result['Like Ratio']) > 1.9207)&non_finite_t), 'Signif'] = "[*]"
 					result.loc[numpy.absolute(((result['Like Ratio']) > 3.3174)&non_finite_t), 'Signif'] = "[**]"
 					result.loc[numpy.absolute(((result['Like Ratio']) > 5.4138)&non_finite_t), 'Signif'] = "[***]"
-					_fmt_t = lambda x: f"{x:0< 4.2f}".replace(" ",NBSP) if numpy.isfinite(x) else NBSP+"NA"
-					result['Like Ratio'] = result['Like Ratio'].apply(_fmt_t)
+					result['Like Ratio'] = result['Like Ratio'].apply(fixie)
 					monospace_cols.append('Like Ratio')
 					if 'Signif' not in monospace_cols:
 						monospace_cols.append('Signif')
