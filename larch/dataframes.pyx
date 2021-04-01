@@ -503,11 +503,11 @@ cdef class DataFrames:
 				if not isinstance(ca.index, pandas.MultiIndex) or ca.index.nlevels!=2:
 					raise ValueError('ca must have two level multi-index')
 				try:
-					ca = ca.set_index(ca.index.set_levels(ca.index.levels[0].astype(int), 0))
+					ca = ca.set_index(ca.index.set_levels(ca.index.levels[0].astype(numpy.int64), 0))
 				except Exception as err:
 					raise ValueError('ca multi-index must have integer values') from err
 				try:
-					ca = ca.set_index(ca.index.set_levels(ca.index.levels[1].astype(int), 1))
+					ca = ca.set_index(ca.index.set_levels(ca.index.levels[1].astype(numpy.int64), 1))
 				except Exception as err:
 					if alt_codes is None and alt_names is None:
 						alt_names = list(ca.index.levels[1])

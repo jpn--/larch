@@ -102,9 +102,8 @@ cdef class Model5c(AbstractChoiceModel):
 		import base64
 
 		mrer = self._most_recent_estimation_result
-		if 'dashboard' in mrer:
+		if mrer is not None and 'dashboard' in mrer:
 			del mrer['dashboard']
-
 
 		state = dict()
 		state["utility_ca                     ".strip()] = (self.utility_ca.copy()              )
