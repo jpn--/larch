@@ -1086,3 +1086,16 @@ def test_constrained_optimization():
     assert r2.iteration_number == 24
     assert r2.loglike == approx(-3647.76149525901)
     assert dict(r2.x) == approx(x, rel=1e-2)
+
+
+def test_model_pickling():
+    from larch.numba import example
+    m = example(1)
+    m.estimate()
+    import pickle
+    m2 = pickle.loads(pickle.dumps(m))
+    m2.dataservice = m.dataservice
+    m2.load_data()
+    assert m2.loglike() == approx(-3626.1862555138796)
+    pd.testing.assert_frame_equal(m.pf, m2.pf)
+

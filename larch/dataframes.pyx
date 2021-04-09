@@ -339,10 +339,11 @@ cdef class DataFrames:
 	co : pandas.DataFrame
 		A dataframe containing |idco| format data, with one row per case.
 		The index contains the caseid's.
-	ca : pandas.DataFrame
+	ca, ce : pandas.DataFrame
 		A dataframe containing |idca| format data, with one row per alternative.
 		The index should be a two-level multi-index, with the first level
 		containing the caseid's and the second level containing the altid's.
+		Provide either dense `ca` or sparse `ce` data, but not both.
 	av : pandas.DataFrame or pandas.Series or True, optional
 		Alternative availability data.  This can be given as a pandas.DataFrame
 		in |idco| format, with one row per case and one column per alternative,

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from numba import guvectorize, njit, jit
+from numba import guvectorize, njit
 from numba import int8 as i8
 from numba import int32 as i32
 from numba import float32 as f32
@@ -20,7 +20,7 @@ warnings.warn( ### EXPERIMENTAL ### )
     " a little while, please be patient \n"
 )
 
-@njit
+@njit(cache=True)
 def minmax(x):
     maximum = x[0]
     minimum = x[0]
@@ -31,7 +31,7 @@ def minmax(x):
             minimum = i
     return (minimum, maximum)
 
-@njit
+@njit(cache=True)
 def outside_range(x, bottom, top):
     for i in x[:]:
         if i == -np.inf:
@@ -623,7 +623,7 @@ _numba_master_vectorized = guvectorize(
 )
 
 
-@njit
+@njit(cache=True)
 def softplus(i, sharpness=10):
     cut = 10 / sharpness
     if i > cut:
@@ -634,7 +634,7 @@ def softplus(i, sharpness=10):
         return np.log1p(np.exp(i * sharpness)) / sharpness
 
 
-@njit
+@njit(cache=True)
 def d_softplus(i, sharpness=10):
     cut = 1000 / sharpness
     if i > cut:
@@ -837,6 +837,7 @@ FixedArrays = namedtuple(
         'mu_slot', 'start_edges', 'len_edges',
     ]
 )
+
 
 class NumbaModel(_BaseModel):
 
@@ -1447,7 +1448,7 @@ class NumbaModel(_BaseModel):
             ll=result_arrays.loglike.sum() * self.dataframes.weight_normalization,
             dll=result_arrays.d_loglike.sum(0) * self.dataframes.weight_normalization,
         )
-        if start_case == 0 and stop_case == -1 and step_case == 1:
+        if start_case is None and stop_case is None and step_case is None:
             self._check_if_best(result.ll)
         if return_series:
             result['dll'] = pd.Series(result['dll'], index=self._frame.index, )
@@ -1482,7 +1483,7 @@ class NumbaModel(_BaseModel):
             result['ll_casewise'] = result_arrays.loglike * self.dataframes.weight_normalization
         if persist & PERSIST_D_LOGLIKE_CASEWISE:
             result['dll_casewise'] = result_arrays.d_loglike * self.dataframes.weight_normalization
-        if start_case == 0 and stop_case == -1 and step_case == 1:
+        if start_case is None and stop_case is None and step_case is None:
             self._check_if_best(result.ll)
         if return_series:
             result['dll'] = pd.Series(result['dll'], index=self._frame.index, )
@@ -1650,4 +1651,20 @@ class NumbaModel(_BaseModel):
 
     def _frame_values_have_changed(self):
         pass # nothing to do for numba model
+
+    def __getstate__(self):
+        state = dict(
+            float_dtype=self.float_dtype,
+            constraint_intensity=self.constraint_intensity,
+            constraint_sharpness=self.constraint_sharpness,
+            _constraint_funcs=self._constraint_funcs,
+        )
+        return super().__getstate__(), state
+
+    def __setstate__(self, state):
+        self.float_dtype = state[1]['float_dtype']
+        self.constraint_intensity = state[1]['constraint_intensity']
+        self.constraint_sharpness = state[1]['constraint_sharpness']
+        self._constraint_funcs = state[1]['_constraint_funcs']
+        super().__setstate__(state[0])
 
