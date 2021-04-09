@@ -1094,8 +1094,8 @@ def test_model_pickling():
     m.estimate()
     import pickle
     m2 = pickle.loads(pickle.dumps(m))
+    pd.testing.assert_frame_equal(m.pf.drop("best", axis=1), m2.pf)
     m2.dataservice = m.dataservice
     m2.load_data()
     assert m2.loglike() == approx(-3626.1862555138796)
-    pd.testing.assert_frame_equal(m.pf, m2.pf)
 
