@@ -1,6 +1,6 @@
 
-import numpy
-import pandas
+import numpy as np
+import pandas as pd
 
 include "../general_precision.pxi"
 from ..general_precision import l4_float_dtype
@@ -27,7 +27,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		self._cached_loglike_nil = 0
 		self._cached_loglike_null = 0
 		self._cached_loglike_constants_only = 0
-		self._cached_loglike_best = -numpy.inf
+		self._cached_loglike_best = -np.inf
 		self._most_recent_estimation_result = None
 
 		self._dashboard = None
@@ -53,7 +53,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 	def clear_best_loglike(self):
 		if self._frame is not None and 'best' in self._frame.columns:
 			del self._frame['best']
-		self._cached_loglike_best = -numpy.inf
+		self._cached_loglike_best = -np.inf
 
 	def loglike2(
 			self,
@@ -235,7 +235,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 	def _free_slots_inverse_matrix(self, matrix):
 		try:
-			take = numpy.full_like(matrix, True, dtype=bool)
+			take = np.full_like(matrix, True, dtype=bool)
 			dense_s = len(self.pvals)
 			for i in range(dense_s):
 				ii = self.pnames[i]
@@ -248,9 +248,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			from ..linalg import general_inverse
 			try:
 				invhess = general_inverse(hess_taken)
-			except numpy.linalg.linalg.LinAlgError:
-				invhess = numpy.full_like(hess_taken, numpy.nan, dtype=numpy.float64)
-			result = numpy.full_like(matrix, 0, dtype=numpy.float64)
+			except np.linalg.linalg.LinAlgError:
+				invhess = np.full_like(hess_taken, np.nan, dtype=np.float64)
+			result = np.full_like(matrix, 0, dtype=np.float64)
 			result[take] = invhess.reshape(-1)
 			return result
 		except:
@@ -259,7 +259,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 	def _bhhh_simple_direction(self, *args, **kwargs):
 		bhhh_inv = self._free_slots_inverse_matrix(self.bhhh(*args))
-		return numpy.dot(self.d_loglike(*args), bhhh_inv)
+		return np.dot(self.d_loglike(*args), bhhh_inv)
 
 	def simple_step_bhhh(self, steplen=1.0, printer=None, leave_out=-1, keep_only=-1, subsample=-1):
 		"""
@@ -280,8 +280,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 																		  subsample=subsample,
 																		  )
 		bhhh_inv = self._free_slots_inverse_matrix(current_bhhh)
-		direction = numpy.dot(current_dll, bhhh_inv)
-		tolerance = numpy.dot(direction, current_dll)
+		direction = np.dot(current_dll, bhhh_inv)
+		tolerance = np.dot(direction, current_dll)
 		while True:
 			self.set_values(current + direction * steplen)
 			val = self.loglike()
@@ -315,7 +315,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 																			leave_out=leave_out, keep_only=keep_only,
 																			subsample=subsample)
 				bhhh_inv = self._free_slots_inverse_matrix(current_bhhh)
-				direction = numpy.dot(current_dll, bhhh_inv)
+				direction = np.dot(current_dll, bhhh_inv)
 				self.set_values(j_pvals + direction * steplen)
 
 
@@ -359,8 +359,8 @@ cdef class AbstractChoiceModel(ParameterFrame):
 																		  subsample=subsample,
 																		  )
 		bhhh_inv = self._free_slots_inverse_matrix(current_bhhh)
-		direction = numpy.dot(current_dll, bhhh_inv)
-		tolerance = numpy.dot(direction, current_dll)
+		direction = np.dot(current_dll, bhhh_inv)
+		tolerance = np.dot(direction, current_dll)
 
 		while abs(tolerance) > ctol and iter < maxiter:
 			iter += 1
@@ -385,21 +385,21 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			if callback is not None:
 				callback(current_pvals)
 			bhhh_inv = self._free_slots_inverse_matrix(current_bhhh)
-			direction = numpy.dot(current_dll, bhhh_inv)
-			tolerance = numpy.dot(direction, current_dll)
+			direction = np.dot(current_dll, bhhh_inv)
+			tolerance = np.dot(direction, current_dll)
 
 		if abs(tolerance) <= ctol:
 			message = "Optimization terminated successfully."
 		else:
 			message = f"Optimization terminated after {iter} iterations."
 
-		return current_ll, tolerance, iter, numpy.asarray(steps), message
+		return current_ll, tolerance, iter, np.asarray(steps), message
 
 	def _bhhh_direction_and_convergence_tolerance(self, *args):
 		bhhh_inv = self._free_slots_inverse_matrix(self.bhhh(*args))
 		_1 = self.d_loglike(*args)
-		direction = numpy.dot(_1, bhhh_inv)
-		return direction, numpy.dot(direction, _1)
+		direction = np.dot(_1, bhhh_inv)
+		return direction, np.dot(direction, _1)
 
 	def loglike3(self, x=None, **kwargs):
 		"""
@@ -433,7 +433,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			start_case=start_case, stop_case=stop_case, step_case=step_case,
 			leave_out=leave_out, keep_only=keep_only, subsample=subsample
 		)
-		return (-result.ll, -numpy.asarray(result.dll))
+		return (-result.ll, -np.asarray(result.dll))
 
 	def neg_d_loglike(self, x=None, start_case=0, stop_case=-1, step_case=1, leave_out=-1, keep_only=-1, subsample=-1):
 		result = self.d_loglike(
@@ -441,7 +441,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			start_case=start_case, stop_case=stop_case, step_case=step_case,
 			leave_out=leave_out, keep_only=keep_only, subsample=subsample
 		)
-		return -numpy.asarray(result)
+		return -np.asarray(result)
 
 	def neg_loglike3(self, *args, **kwargs):
 		from ..util import dictx
@@ -526,7 +526,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		Returns
 		-------
-		pandas.Series
+		pd.Series
 			First derivatives of log likelihood with respect to the parameters (given as the index for the Series).
 
 		"""
@@ -558,7 +558,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		Returns
 		-------
-		pandas.DataFrame
+		pd.DataFrame
 			First derivatives of log likelihood with respect to the parameters (given as both the columns and
 			index for the DataFrame).
 
@@ -581,11 +581,11 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		Returns
 		-------
-		pandas.DataFrame or Stylized DataFrame
+		pd.DataFrame or Stylized DataFrame
 		"""
 		from ..math.optimize import check_gradient
 		IF DOUBLE_PRECISION:
-			epsilon=numpy.sqrt(numpy.finfo(float).eps)
+			epsilon=np.sqrt(np.finfo(float).eps)
 		ELSE:
 			epsilon=0.0001
 		return check_gradient(self.loglike, self.d_loglike, self.pvals.copy(), names=self.pnames, stylize=stylize, skip_zeros=skip_zeros, epsilon=epsilon)
@@ -695,7 +695,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		# 		callback = None
 		#
 		# 	if method is None:
-		# 		if self.constraints or numpy.isfinite(self.pf['minimum'].max()) or numpy.isfinite(self.pf['maximum'].min()):
+		# 		if self.constraints or np.isfinite(self.pf['minimum'].max()) or np.isfinite(self.pf['maximum'].min()):
 		# 			method = 'slsqp'
 		# 		else:
 		# 			method = 'bhhh'
@@ -792,9 +792,9 @@ cdef class AbstractChoiceModel(ParameterFrame):
 		# 		if k == 'fun':
 		# 			result['loglike'] = -v
 		# 		elif k == 'jac':
-		# 			result['d_loglike'] = pandas.Series(-v, index=self.pnames)
+		# 			result['d_loglike'] = pd.Series(-v, index=self.pnames)
 		# 		elif k == 'x':
-		# 			result['x'] = pandas.Series(v, index=self.pnames)
+		# 			result['x'] = pd.Series(v, index=self.pnames)
 		# 		else:
 		# 			result[k] = v
 		# 	result['elapsed_time'] = timer.elapsed()
@@ -1375,11 +1375,11 @@ cdef class AbstractChoiceModel(ParameterFrame):
 					if eigval == 'LinAlgError':
 						possible_overspecification.append((eigval, [ox, ], ["", ]))
 					else:
-						paramset = list(numpy.asarray(self.pf.index)[ox])
+						paramset = list(np.asarray(self.pf.index)[ox])
 						possible_overspecification.append((eigval, paramset, eigenvec[ox]))
 				self._possible_overspecification = possible_overspecification
 
-			take = numpy.full_like(hess, True, dtype=bool)
+			take = np.full_like(hess, True, dtype=bool)
 			dense_s = len(self.pvals)
 			for i in range(dense_s):
 				ii = self.pnames[i]
@@ -1394,29 +1394,76 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				from ..linalg import general_inverse
 				try:
 					invhess = general_inverse(hess_taken)
-				except numpy.linalg.linalg.LinAlgError:
-					invhess = numpy.full_like(hess_taken, numpy.nan, dtype=numpy.float64)
-				covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+				except np.linalg.linalg.LinAlgError:
+					invhess = np.full_like(hess_taken, np.nan, dtype=np.float64)
+				covariance_matrix = np.full_like(hess, 0, dtype=np.float64)
 				covariance_matrix[take] = invhess.reshape(-1)
 				# robust...
 				try:
 					bhhh_taken = self.bhhh()[take].reshape(dense_s, dense_s)
 				except NotImplementedError:
-					robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+					robust_covariance_matrix = np.full_like(hess, 0, dtype=np.float64)
 				else:
 					# import scipy.linalg.blas
 					# temp_b_times_h = scipy.linalg.blas.dsymm(float(1), invhess, bhhh_taken)
 					# robusto = scipy.linalg.blas.dsymm(float(1), invhess, temp_b_times_h, side=1)
-					robusto = numpy.dot(numpy.dot(invhess, bhhh_taken), invhess)
-					robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
+					robusto = np.dot(np.dot(invhess, bhhh_taken), invhess)
+					robust_covariance_matrix = np.full_like(hess, 0, dtype=np.float64)
 					robust_covariance_matrix[take] = robusto.reshape(-1)
 			else:
-				covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-				robust_covariance_matrix = numpy.full_like(hess, 0, dtype=numpy.float64)
-			self.pf['std_err'] = numpy.sqrt(covariance_matrix.diagonal())
-			self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
-			self.pf['robust_std_err'] = numpy.sqrt(robust_covariance_matrix.diagonal())
-			self.pf['robust_t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust_std_err']
+				covariance_matrix = np.full_like(hess, 0, dtype=np.float64)
+				robust_covariance_matrix = np.full_like(hess, 0, dtype=np.float64)
+
+			covariance_matrix_diagonal = covariance_matrix.diagonal()
+			neg_var_warned = False
+			if covariance_matrix_diagonal.min() < 0:
+				neg_variance_params = self.pf.index[np.where(covariance_matrix_diagonal<0)[0]]
+				import warnings
+				if len(neg_variance_params) > 6:
+					neg_variance_param_names = (
+						"\n".join(f"- {i}" for i in neg_variance_params[:4])
+						+ f"\n- and {len(neg_variance_params)-4} more"
+					)
+				else:
+					neg_variance_param_names = (
+						"\n".join(f"- {i}" for i in neg_variance_params)
+					)
+				warnings.warn(
+					f"WARNING: Model seems to have {len(neg_variance_params)} "
+					f"parameter estimators with negative variance\n"
+					+ neg_variance_param_names,
+					category=PossibleOverspecification,
+				)
+				neg_var_warned = True
+			with np.errstate(invalid='ignore'):
+				self.pf['std_err'] = np.sqrt(covariance_matrix_diagonal)
+				self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
+
+			if not neg_var_warned:
+				covariance_matrix_diagonal = robust_covariance_matrix.diagonal()
+				if covariance_matrix_diagonal.min() < 0:
+					neg_variance_params = self.pf.index[np.where(covariance_matrix_diagonal < 0)[0]]
+					import warnings
+					if len(neg_variance_params) > 6:
+						neg_variance_param_names = (
+								"\n".join(f"- {i}" for i in neg_variance_params[:4])
+								+ f"\n- and {len(neg_variance_params) - 4} more"
+						)
+					else:
+						neg_variance_param_names = (
+							"\n".join(f"- {i}" for i in neg_variance_params)
+						)
+					warnings.warn(
+						f"WARNING: Model seems to have {len(neg_variance_params)} "
+						f"parameter estimators with negative robust variance\n"
+						+ neg_variance_param_names,
+						category=PossibleOverspecification,
+					)
+					neg_var_warned = True
+
+			with np.errstate(invalid='ignore'):
+				self.pf['robust_std_err'] = np.sqrt(robust_covariance_matrix.diagonal())
+				self.pf['robust_t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['robust_std_err']
 
 			if preserve_hessian:
 				self._matrixes['hessian_matrix'] = hess
@@ -1444,14 +1491,14 @@ cdef class AbstractChoiceModel(ParameterFrame):
 				self._matrixes['unconstrained_covariance_matrix'] = self.covariance_matrix.values.copy()
 				s = self.covariance_matrix.values
 				for c in constraints:
-					if numpy.absolute(c.fun(self.pf.value)) < c.binding_tol:
+					if np.absolute(c.fun(self.pf.value)) < c.binding_tol:
 						binding_constraints.append(c)
 						b = c.jac(self.pf.value)
 						den = b@s@b
 						if den != 0:
 							s = s-(1/den)*s@b.reshape(-1,1)@b.reshape(1,-1)@s
 				self._matrixes['covariance_matrix'] = s
-				self.pf['std_err'] = numpy.sqrt(s.diagonal())
+				self.pf['std_err'] = np.sqrt(s.diagonal())
 				self.pf['t_stat'] = (self.pf['value'] - self.pf['nullvalue']) / self.pf['std_err']
 
 				# Fix numerical issues on some constraints, add constrained notes
@@ -1461,23 +1508,23 @@ cdef class AbstractChoiceModel(ParameterFrame):
 						pa = c.get_parameters()
 						for p in pa:
 							if self.pf.loc[p,'t_stat'] > 1e5:
-								self.pf.loc[p,'t_stat'] = numpy.inf
-								self.pf.loc[p,'std_err'] = numpy.nan
+								self.pf.loc[p,'t_stat'] = np.inf
+								self.pf.loc[p,'std_err'] = np.nan
 							if self.pf.loc[p,'t_stat'] < -1e5:
-								self.pf.loc[p,'t_stat'] = -numpy.inf
-								self.pf.loc[p,'std_err'] = numpy.nan
+								self.pf.loc[p,'t_stat'] = -np.inf
+								self.pf.loc[p,'std_err'] = np.nan
 							n = notes.get(p,[])
 							n.append(c.get_binding_note(self.pvals))
 							notes[p] = n
-					self.pf['constrained'] = pandas.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
+					self.pf['constrained'] = pd.Series({k:'\n'.join(v) for k,v in notes.items()}, dtype=object)
 					self.pf['constrained'].fillna('', inplace=True)
 					self.pf.loc[self.pf['holdfast']!=0, 'constrained'] = 'fixed value'
-					self.pf.loc[self.pf['holdfast']!=0, 'std_err'] = numpy.nan
-					self.pf.loc[self.pf['holdfast']!=0, 't_stat'] = numpy.nan
+					self.pf.loc[self.pf['holdfast']!=0, 'std_err'] = np.nan
+					self.pf.loc[self.pf['holdfast']!=0, 't_stat'] = np.nan
 
 			if like_ratio:
-				non_finite_t = ~numpy.isfinite(self.pf.t_stat)
-				if numpy.any(non_finite_t):
+				non_finite_t = ~np.isfinite(self.pf.t_stat)
+				if np.any(non_finite_t):
 					self.likelihood_ratio(self.pf.index[non_finite_t])
 		except:
 			logger.exception("error in calculate_parameter_covariance")
@@ -1511,7 +1558,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 
 		Returns
 		-------
-		float or pandas.Series:
+		float or pd.Series:
 			The likelihood ratio (i.e. the difference in the log likelihoods).
 		"""
 		try:
@@ -1519,7 +1566,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 			if _current_ll is None:
 				_current_ll = self.loglike()
 			if param is None:
-				result = pandas.Series(data=numpy.nan, index=self.pf.index)
+				result = pd.Series(data=np.nan, index=self.pf.index)
 				for p in self.pf.index:
 					if not self.pf.loc[p, 'holdfast'] or include_holdfast:
 						result[p] = self.likelihood_ratio(p, ref_value=ref_value, _current_ll=_current_ll)
@@ -1541,7 +1588,7 @@ cdef class AbstractChoiceModel(ParameterFrame):
 						self.pf.loc[param, 'likelihood_ratio'] = like_ratio
 				return like_ratio
 			else:
-				result = pandas.Series(data=numpy.nan, index=list(param))
+				result = pd.Series(data=np.nan, index=list(param))
 				for p in result.index:
 					if not self.pf.loc[p, 'holdfast'] or include_holdfast:
 						result[p] = self.likelihood_ratio(p, ref_value=ref_value, _current_ll=_current_ll)
