@@ -1,5 +1,6 @@
 
 import numpy
+import numpy as np
 import pandas
 import ast
 import re
@@ -207,6 +208,31 @@ def fourier_expansion(s, length=4, column=None, inplace=False):
 		input[columns] = df
 	else:
 		return df
+
+
+def hard_sigmoid(x, zero_bound, one_bound):
+	"""
+	Apply a piecewise linear sigmoid function.
+
+	Parameters
+	----------
+	x : array-like
+		Array containing elements to clip
+	zero_bound, one_bound : scalar, array-like, or None
+		Inflection points of the piecewise linear sigmoid
+		function.
+
+	Returns
+	-------
+	clipped_array : array-like
+	"""
+	x = np.asarray(x)
+	if zero_bound < one_bound:
+		return np.clip((x-zero_bound) / (one_bound-zero_bound), 0.0, 1.0)
+	elif zero_bound == one_bound:
+		return (x > zero_bound).astype(float)
+	else:
+		return np.clip((zero_bound-x) / (zero_bound-one_bound), 0.0, 1.0)
 
 
 ### PIECEWISE LINEAR ###

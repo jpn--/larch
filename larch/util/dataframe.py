@@ -260,7 +260,7 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 	j = asterize(ret, mode="exec" if inplace else "eval")
 	from .aster import inXd
 	from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logaddexp, fmin, fmax, nan_to_num, sin, cos, pi
-	from ..util.common_functions import piece, normalize, boolean
+	from ..util.common_functions import piece, normalize, boolean, hard_sigmoid
 	try:
 		if inplace:
 			_result = exec(j)
@@ -287,7 +287,7 @@ def columnize(df, name, inplace=True, dtype=None, debug=False, backing=None):
 			badname = str(exc).split("'")[1]
 			goodnames = {
 				'log', 'exp', 'log1p', 'absolute', 'fabs', 'sqrt', 'isnan',
-				'isfinite', 'logaddexp', 'fmin', 'fmax', 'nan_to_num', 'piece', 'normalize',
+				'isfinite', 'logaddexp', 'fmin', 'fmax', 'nan_to_num', 'piece', 'normalize', 'hard_sigmoid',
 			}
 			goodnames |= set(df.columns)
 			if backing is not None:
