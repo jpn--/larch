@@ -8,7 +8,7 @@ from numpy import log, exp, log1p, absolute, fabs, sqrt, isnan, isfinite, logadd
 
 
 # duplicate these here for legacy compatibility
-from .data_expansion import piece, piecewise_linear, parse_piece
+from .data_expansion import piece, piecewise_linear, parse_piece, hard_sigmoid
 
 
 
