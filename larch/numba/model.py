@@ -792,7 +792,7 @@ def model_q_ca_slots(dataframes, model, dtype=np.float64):
     if model.quantity_scale:
         model_q_scale_param = model._frame.index.get_loc(str(model.quantity_scale))
     else:
-        model_q_scale_param = -1
+        model_q_scale_param = np.zeros([1], dtype=np.int32)-1
     for n, i in enumerate(model.quantity_ca):
         model_q_ca_param[n] = model._frame.index.get_loc(str(i.param))
         model_q_ca_data[n] = dataframes.data_ca_or_ce.columns.get_loc(str(i.data))
