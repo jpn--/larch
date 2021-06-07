@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
+import xarray as xr
 from typing import NamedTuple
-
+from .model import NumbaModel
 
 class _case_slice:
 
@@ -57,5 +59,135 @@ def to_dataset(dataframes):
         ds.coords['alt_names'] = DataArray(altnames, dims=(altindex_name,))
     return ds
 
+
 def prepare_data(datashare, request):
-    pass
+    from sharrow import SharedData, Dataset, DataArray
+    model_dataset = Dataset(
+        coords=datashare.coords,
+    )
+    if isinstance(request, NumbaModel):
+        request = request.required_data()
+    shared_data_ca = SharedData(datashare)
+    shared_data_co = SharedData(datashare.drop_dims(
+        [i for i in datashare.dims.keys() if i != "_caseid_"]
+    ))
+    if 'co' in request:
+        model_dataset = _prep_co(model_dataset, shared_data_co, request['co'], tag='co')
+    if 'ca' in request:
+        model_dataset = _prep_ca(model_dataset, shared_data_ca, request['ca'], tag='ca')
+
+    if 'choice_ca' in request:
+        model_dataset = _prep_ca(model_dataset, shared_data_ca, [request['choice_ca']], tag='ch', preserve_vars=False)
+    if 'choice_co_code' in request:
+        choicecodes = datashare[request['choice_co_code']]
+        float_dtype = np.float32
+        da_ch = DataArray(
+            float_dtype(0),
+            dims=['_caseid_', '_altid_'],
+            coords={
+                '_caseid_':model_dataset.coords['_caseid_'],
+                '_altid_': model_dataset.coords['_altid_'],
+            },
+            name='ch',
+        )
+        for i,a in enumerate(model_dataset.coords['_altid_']):
+            da_ch[:, i] = (choicecodes == a)
+        model_dataset = model_dataset.merge(da_ch)
+    if 'choice_co_vars' in request:
+        raise NotImplementedError('choice_co_vars')
+    if 'choice_any' in request:
+        raise NotImplementedError('choice_any')
+
+    if 'weight_co' in request:
+        model_dataset = _prep_co(model_dataset, shared_data_co, [request['weight_co']], tag='wt', preserve_vars=False)
+
+    if 'avail_ca' in request:
+        model_dataset = _prep_ca(model_dataset, shared_data_ca, [request['avail_ca']], tag='av', preserve_vars=False, dtype=np.int8)
+    if 'avail_co' in request:
+        raise NotImplementedError('avail_co')
+    if 'avail_any' in request:
+        raise NotImplementedError('avail_any')
+
+    return model_dataset
+
+
+def _prep_ca(
+        model_dataset,
+        shared_data_ca,
+        vars_ca,
+        tag='ca',
+        preserve_vars=True,
+        dtype=None,
+):
+    from sharrow import Dataset, DataArray
+    if not isinstance(vars_ca, dict):
+        vars_ca = {i:i for i in vars_ca}
+    flow = shared_data_ca.setup_flow(vars_ca)
+    arr = flow.load(dtype=dtype)
+    if preserve_vars or len(vars_ca)>1:
+        arr = arr.reshape(
+            model_dataset.dims.get('_caseid_'),
+            model_dataset.dims.get('_altid_'),
+            -1,
+        )
+        da = DataArray(
+            arr,
+            dims=['_caseid_', '_altid_', f"var_{tag}"],
+            coords={
+                '_caseid_':model_dataset.coords['_caseid_'],
+                '_altid_': model_dataset.coords['_altid_'],
+                f"var_{tag}": list(vars_ca.keys()),
+            },
+            name=tag,
+        )
+    else:
+        arr = arr.reshape(
+            model_dataset.dims.get('_caseid_'),
+            model_dataset.dims.get('_altid_'),
+        )
+        da = DataArray(
+            arr,
+            dims=['_caseid_', '_altid_'],
+            coords={
+                '_caseid_':model_dataset.coords['_caseid_'],
+                '_altid_': model_dataset.coords['_altid_'],
+            },
+            name=tag,
+        )
+    return model_dataset.merge(da)
+
+
+def _prep_co(model_dataset, shared_data_co, vars_co, tag='co', preserve_vars=True, dtype=None):
+    from sharrow import DataArray
+    if not isinstance(vars_co, dict):
+        vars_co = {i: i for i in vars_co}
+    flow = shared_data_co.setup_flow(vars_co)
+    arr = flow.load(dtype=dtype)
+    if preserve_vars or len(vars_co)>1:
+        arr = arr.reshape(
+            model_dataset.dims.get('_caseid_'),
+            -1,
+        )
+        da = DataArray(
+            arr,
+            dims=['_caseid_', f"var_{tag}"],
+            coords={
+                '_caseid_':model_dataset.coords['_caseid_'],
+                f"var_{tag}": list(vars_co.keys()),
+            },
+            name=tag,
+        )
+    else:
+        arr = arr.reshape(
+            model_dataset.dims.get('_caseid_'),
+        )
+        da = DataArray(
+            arr,
+            dims=['_caseid_'],
+            coords={
+                '_caseid_':model_dataset.coords['_caseid_'],
+            },
+            name=tag,
+        )
+    return model_dataset.merge(da)
+
