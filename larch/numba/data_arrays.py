@@ -67,10 +67,16 @@ def prepare_data(datashare, request):
     )
     if isinstance(request, NumbaModel):
         request = request.required_data()
-    shared_data_ca = SharedData(datashare)
-    shared_data_co = SharedData(datashare.drop_dims(
-        [i for i in datashare.dims.keys() if i != "_caseid_"]
-    ))
+
+    if isinstance(datashare, SharedData):
+        shared_data_ca = datashare
+        shared_data_co = datashare.keep_dims("_caseid_")
+    else:
+        shared_data_ca = SharedData(datashare)
+        shared_data_co = SharedData(datashare.drop_dims(
+            [i for i in datashare.dims.keys() if i != "_caseid_"]
+        ))
+
     if 'co' in request:
         model_dataset = _prep_co(model_dataset, shared_data_co, request['co'], tag='co')
     if 'ca' in request:
