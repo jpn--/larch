@@ -44,9 +44,13 @@ class DataArrays(NamedTuple):
 def to_dataset(dataframes):
     caseindex_name = '_caseid_'
     altindex_name = '_altid_'
-    from sharrow import Dataset
+    from ..dataset import Dataset
     from xarray import DataArray
-    ds = Dataset()
+    coords = {
+        '_caseid_': dataframes.caseindex.values,
+        '_altid_': dataframes.alternative_codes(),
+    }
+    ds = Dataset(coords=coords)
     if dataframes.data_co is not None:
         caseindex_name = dataframes.data_co.index.name
         ds.update(Dataset.from_dataframe(dataframes.data_co))
@@ -60,11 +64,26 @@ def to_dataset(dataframes):
     return ds
 
 
-def prepare_data(datashare, request):
-    from sharrow import SharedData, Dataset, DataArray
+def prepare_data(
+        datashare,
+        request,
+        float_dtype=None,
+):
+    from ..dataset import Dataset
+    from sharrow import SharedData, DataArray
+    if float_dtype is None:
+        float_dtype = np.float64
     model_dataset = Dataset(
         coords=datashare.coords,
     )
+
+    # use the caseids on cases where available, pad with -1's
+    # if n_padded_cases is not None and n_padded_cases != model_dataset.coords['_caseid_'].size:
+    #     caseids = -(np.arange(1,n_padded_cases+1, dtype=model_dataset.coords['_caseid_'].dtype))
+    #     cc = min(model_dataset.coords['_caseid_'].size, n_padded_cases)
+    #     caseids[:cc] = model_dataset.coords['_caseid_'].values[:cc]
+    #     model_dataset.coords['_caseid_'] = caseids
+
     if isinstance(request, NumbaModel):
         request = request.required_data()
 
@@ -78,15 +97,33 @@ def prepare_data(datashare, request):
         ))
 
     if 'co' in request:
-        model_dataset = _prep_co(model_dataset, shared_data_co, request['co'], tag='co')
+        model_dataset = _prep_co(
+            model_dataset,
+            shared_data_co,
+            request['co'],
+            tag='co',
+            dtype=float_dtype,
+        )
     if 'ca' in request:
-        model_dataset = _prep_ca(model_dataset, shared_data_ca, request['ca'], tag='ca')
+        model_dataset = _prep_ca(
+            model_dataset,
+            shared_data_ca,
+            request['ca'],
+            tag='ca',
+            dtype=float_dtype,
+        )
 
     if 'choice_ca' in request:
-        model_dataset = _prep_ca(model_dataset, shared_data_ca, [request['choice_ca']], tag='ch', preserve_vars=False)
+        model_dataset = _prep_ca(
+            model_dataset,
+            shared_data_ca,
+            [request['choice_ca']],
+            tag='ch',
+            preserve_vars=False,
+            dtype=float_dtype,
+        )
     if 'choice_co_code' in request:
         choicecodes = datashare[request['choice_co_code']]
-        float_dtype = np.float32
         da_ch = DataArray(
             float_dtype(0),
             dims=['_caseid_', '_altid_'],
@@ -105,12 +142,38 @@ def prepare_data(datashare, request):
         raise NotImplementedError('choice_any')
 
     if 'weight_co' in request:
-        model_dataset = _prep_co(model_dataset, shared_data_co, [request['weight_co']], tag='wt', preserve_vars=False)
+        model_dataset = _prep_co(
+            model_dataset,
+            shared_data_co,
+            [request['weight_co']],
+            tag='wt',
+            preserve_vars=False,
+            dtype=float_dtype,
+        )
 
     if 'avail_ca' in request:
-        model_dataset = _prep_ca(model_dataset, shared_data_ca, [request['avail_ca']], tag='av', preserve_vars=False, dtype=np.int8)
+        model_dataset = _prep_ca(
+            model_dataset,
+            shared_data_ca,
+            [request['avail_ca']],
+            tag='av',
+            preserve_vars=False,
+            dtype=np.int8,
+        )
     if 'avail_co' in request:
-        raise NotImplementedError('avail_co')
+        av_co_expressions = {
+            a: request['avail_co'].get(a, '0')
+            for a in model_dataset.coords['_altid_'].values
+        }
+        model_dataset = _prep_co(
+            model_dataset,
+            shared_data_co,
+            av_co_expressions,
+            tag='av',
+            preserve_vars=False,
+            dtype=np.int8,
+            dim_name='_altid_',
+        )
     if 'avail_any' in request:
         raise NotImplementedError('avail_any')
 
@@ -129,7 +192,7 @@ def _prep_ca(
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
     flow = shared_data_ca.setup_flow(vars_ca)
-    arr = flow.load(dtype=dtype)
+    arr = flow.load(dtype=dtype, min_shape_0=model_dataset.dims.get('_caseid_'))
     if preserve_vars or len(vars_ca)>1:
         arr = arr.reshape(
             model_dataset.dims.get('_caseid_'),
@@ -163,23 +226,33 @@ def _prep_ca(
     return model_dataset.merge(da)
 
 
-def _prep_co(model_dataset, shared_data_co, vars_co, tag='co', preserve_vars=True, dtype=None):
+def _prep_co(
+        model_dataset,
+        shared_data_co,
+        vars_co,
+        tag='co',
+        preserve_vars=True,
+        dtype=None,
+        dim_name=None,
+):
     from sharrow import DataArray
     if not isinstance(vars_co, dict):
         vars_co = {i: i for i in vars_co}
     flow = shared_data_co.setup_flow(vars_co)
-    arr = flow.load(dtype=dtype)
+    arr = flow.load(dtype=dtype, min_shape_0=model_dataset.dims.get('_caseid_'))
     if preserve_vars or len(vars_co)>1:
+        if dim_name is None:
+            dim_name = f"var_{tag}"
         arr = arr.reshape(
             model_dataset.dims.get('_caseid_'),
             -1,
         )
         da = DataArray(
             arr,
-            dims=['_caseid_', f"var_{tag}"],
+            dims=['_caseid_', dim_name],
             coords={
                 '_caseid_':model_dataset.coords['_caseid_'],
-                f"var_{tag}": list(vars_co.keys()),
+                dim_name: list(vars_co.keys()),
             },
             name=tag,
         )
