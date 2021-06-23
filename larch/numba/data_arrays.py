@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
+import logging
 from typing import NamedTuple
-from .model import NumbaModel
 
 class _case_slice:
 
@@ -68,14 +68,25 @@ def prepare_data(
         datashare,
         request,
         float_dtype=None,
+        cache_dir=None,
+        flows=None,
+        pipeline_source=None,
 ):
+    log = logging.getLogger("Larch")
     from ..dataset import Dataset
     from sharrow import SharedData, DataArray
     if float_dtype is None:
         float_dtype = np.float64
-    model_dataset = Dataset(
-        coords=datashare.coords,
-    )
+    if pipeline_source is None:
+        log.debug(f"building dataset from datashare coords: {datashare.coords}")
+        model_dataset = Dataset(
+            coords=datashare.coords,
+        )
+    else:
+        log.debug(f"building dataset from pipeline_source coords: {pipeline_source.coords}")
+        model_dataset = Dataset(
+            coords=pipeline_source.coords,
+        )
 
     # use the caseids on cases where available, pad with -1's
     # if n_padded_cases is not None and n_padded_cases != model_dataset.coords['_caseid_'].size:
@@ -84,46 +95,73 @@ def prepare_data(
     #     caseids[:cc] = model_dataset.coords['_caseid_'].values[:cc]
     #     model_dataset.coords['_caseid_'] = caseids
 
+    from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
+        alts = request.graph.elemental_names()
+        if '_altid_' not in model_dataset.coords:
+            model_dataset.coords['_altid_'] = list(alts.keys())
+        if 'alt_names' not in model_dataset.coords:
+            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=('_altid_',))
         request = request.required_data()
 
+    if flows is None:
+        flows = {}
+
     if isinstance(datashare, SharedData):
+        log.debug(f"adopting existing SharedData")
         shared_data_ca = datashare
         shared_data_co = datashare.keep_dims("_caseid_")
     else:
+        log.debug(f"initializing new SharedData")
         shared_data_ca = SharedData(datashare)
         shared_data_co = SharedData(datashare.drop_dims(
             [i for i in datashare.dims.keys() if i != "_caseid_"]
         ))
 
     if 'co' in request:
-        model_dataset = _prep_co(
+        log.debug(f"requested co data: {request['co']}")
+        model_dataset, flows['co'] = _prep_co(
             model_dataset,
             shared_data_co,
             request['co'],
             tag='co',
             dtype=float_dtype,
+            cache_dir=cache_dir,
+            flow=flows.get('co'),
+            pipeline_source=pipeline_source,
         )
     if 'ca' in request:
-        model_dataset = _prep_ca(
+        log.debug(f"requested ca data: {request['ca']}")
+        model_dataset, flows['ca'] = _prep_ca(
             model_dataset,
             shared_data_ca,
             request['ca'],
             tag='ca',
             dtype=float_dtype,
+            cache_dir=cache_dir,
+            flow=flows.get('ca'),
+            pipeline_source=pipeline_source,
         )
 
     if 'choice_ca' in request:
-        model_dataset = _prep_ca(
+        log.debug(f"requested choice_ca data: {request['choice_ca']}")
+        model_dataset, flows['choice_ca'] = _prep_ca(
             model_dataset,
             shared_data_ca,
             [request['choice_ca']],
             tag='ch',
             preserve_vars=False,
             dtype=float_dtype,
+            cache_dir=cache_dir,
+            flow=flows.get('choice_ca'),
+            pipeline_source=pipeline_source,
         )
     if 'choice_co_code' in request:
-        choicecodes = datashare[request['choice_co_code']]
+        log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
+        if pipeline_source is None:
+            choicecodes = datashare[request['choice_co_code']]
+        else:
+            choicecodes = pipeline_source[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
             dims=['_caseid_', '_altid_'],
@@ -137,35 +175,46 @@ def prepare_data(
             da_ch[:, i] = (choicecodes == a)
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_co_vars' in request:
+        log.debug(f"requested choice_co_vars data: {request['choice_co_vars']}")
         raise NotImplementedError('choice_co_vars')
     if 'choice_any' in request:
+        log.debug(f"requested choice_any data: {request['choice_any']}")
         raise NotImplementedError('choice_any')
 
     if 'weight_co' in request:
-        model_dataset = _prep_co(
+        log.debug(f"requested weight_co data: {request['weight_co']}")
+        model_dataset, flows['weight_co'] = _prep_co(
             model_dataset,
             shared_data_co,
             [request['weight_co']],
             tag='wt',
             preserve_vars=False,
             dtype=float_dtype,
+            cache_dir=cache_dir,
+            flow=flows.get('weight_co'),
+            pipeline_source=pipeline_source,
         )
 
     if 'avail_ca' in request:
-        model_dataset = _prep_ca(
+        log.debug(f"requested avail_ca data: {request['avail_ca']}")
+        model_dataset, flows['avail_ca'] = _prep_ca(
             model_dataset,
             shared_data_ca,
             [request['avail_ca']],
             tag='av',
             preserve_vars=False,
             dtype=np.int8,
+            cache_dir=cache_dir,
+            flow=flows.get('avail_ca'),
+            pipeline_source=pipeline_source,
         )
     if 'avail_co' in request:
+        log.debug(f"requested avail_co data: {request['avail_co']}")
         av_co_expressions = {
             a: request['avail_co'].get(a, '0')
             for a in model_dataset.coords['_altid_'].values
         }
-        model_dataset = _prep_co(
+        model_dataset, flows['avail_co'] = _prep_co(
             model_dataset,
             shared_data_co,
             av_co_expressions,
@@ -173,11 +222,24 @@ def prepare_data(
             preserve_vars=False,
             dtype=np.int8,
             dim_name='_altid_',
+            cache_dir=cache_dir,
+            flow=flows.get('avail_co'),
+            pipeline_source=pipeline_source,
         )
     if 'avail_any' in request:
+        log.debug(f"requested avail_any data: {request['avail_any']}")
         raise NotImplementedError('avail_any')
 
-    return model_dataset
+    return model_dataset, flows
+
+def flownamer(tag, definition_spec):
+    import hashlib, base64
+    defs_hash = hashlib.md5()
+    defs_hash.update(str(tag).encode("utf8"))
+    for k, v in definition_spec.items():
+        defs_hash.update(str(k).encode("utf8"))
+        defs_hash.update(str(v).encode("utf8"))
+    return "pipeline_"+(base64.b32encode(defs_hash.digest())).decode().replace("=","")
 
 
 def _prep_ca(
@@ -187,12 +249,21 @@ def _prep_ca(
         tag='ca',
         preserve_vars=True,
         dtype=None,
+        cache_dir=None,
+        flow=None,
+        pipeline_source=None,
 ):
     from sharrow import Dataset, DataArray
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
-    flow = shared_data_ca.setup_flow(vars_ca)
-    arr = flow.load(dtype=dtype, min_shape_0=model_dataset.dims.get('_caseid_'))
+    flowname = flownamer(tag, vars_ca)
+    if flow is None or flowname != flow.name:
+        flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
+    arr = flow.load(
+        pipeline_source,
+        dtype=dtype,
+        min_shape_0=model_dataset.dims.get('_caseid_'),
+    )
     if preserve_vars or len(vars_ca)>1:
         arr = arr.reshape(
             model_dataset.dims.get('_caseid_'),
@@ -223,7 +294,7 @@ def _prep_ca(
             },
             name=tag,
         )
-    return model_dataset.merge(da)
+    return model_dataset.merge(da), flow
 
 
 def _prep_co(
@@ -234,12 +305,21 @@ def _prep_co(
         preserve_vars=True,
         dtype=None,
         dim_name=None,
+        cache_dir=None,
+        flow=None,
+        pipeline_source=None,
 ):
     from sharrow import DataArray
     if not isinstance(vars_co, dict):
         vars_co = {i: i for i in vars_co}
-    flow = shared_data_co.setup_flow(vars_co)
-    arr = flow.load(dtype=dtype, min_shape_0=model_dataset.dims.get('_caseid_'))
+    flowname = flownamer(tag, vars_co)
+    if flow is None or flowname != flow.name:
+        flow = shared_data_co.setup_flow(vars_co, cache_dir=cache_dir, name=flowname)
+    arr = flow.load(
+        pipeline_source,
+        dtype=dtype,
+        min_shape_0=model_dataset.dims.get('_caseid_'),
+    )
     if preserve_vars or len(vars_co)>1:
         if dim_name is None:
             dim_name = f"var_{tag}"
@@ -268,5 +348,5 @@ def _prep_co(
             },
             name=tag,
         )
-    return model_dataset.merge(da)
+    return model_dataset.merge(da), flow
 

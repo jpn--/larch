@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import pandas as pd
 from numba import guvectorize, njit
@@ -10,6 +12,9 @@ from ..model import Model as _BaseModel
 from ..exceptions import MissingDataError
 from ..util import dictx
 from .cascading import data_av_cascade, data_ch_cascade
+from ..dataframes import DataFrames
+from ..dataset import Dataset
+
 
 import warnings
 warnings.warn( ### EXPERIMENTAL ### )
@@ -730,7 +735,7 @@ _numba_penalty_vectorized = guvectorize(
 
 
 
-def model_co_slots(dataframes, model, dtype=np.float64):
+def model_co_slots(data_provider, model, dtype=np.float64):
     len_co = sum(len(_) for _ in model.utility_co.values())
     model_utility_co_alt = np.zeros([len_co], dtype=np.int32)
     model_utility_co_param_scale = np.ones([len_co], dtype=dtype)
@@ -743,11 +748,18 @@ def model_co_slots(dataframes, model, dtype=np.float64):
     for _n, _pname in enumerate(model._frame.index):
         param_loc[_pname] = _n
     data_loc = {}
-    if dataframes.data_co is not None:
-        for _n, _dname in enumerate(dataframes.data_co.columns):
-            data_loc[_dname] = _n
-
-    alternative_codes = dataframes.alternative_codes()
+    if isinstance(data_provider, DataFrames):
+        if data_provider.data_co is not None:
+            for _n, _dname in enumerate(data_provider.data_co.columns):
+                data_loc[_dname] = _n
+        alternative_codes = data_provider.alternative_codes()
+    elif isinstance(data_provider, Dataset):
+        if 'var_co' in data_provider.indexes is not None:
+            for _n, _dname in enumerate(data_provider.indexes['var_co']):
+                data_loc[_dname] = _n
+        alternative_codes = data_provider.indexes['_altid_']
+    else:
+        raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
 
     for alt, func in model.utility_co.items():
         altindex = alternative_codes.get_loc(alt)
@@ -769,14 +781,20 @@ def model_co_slots(dataframes, model, dtype=np.float64):
     )
 
 
-def model_u_ca_slots(dataframes, model, dtype=np.float64):
+def model_u_ca_slots(data_provider, model, dtype=np.float64):
+    if isinstance(data_provider, DataFrames):
+        looker = lambda tag: data_provider.data_ca_or_ce.columns.get_loc(str(tag))
+    elif isinstance(data_provider, Dataset):
+        looker = lambda tag: data_provider.indexes['var_ca'].get_loc(str(tag))
+    else:
+        raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
     len_model_utility_ca = len(model.utility_ca)
     model_utility_ca_param_scale = np.ones([len_model_utility_ca], dtype=dtype)
     model_utility_ca_param = np.zeros([len_model_utility_ca], dtype=np.int32)
     model_utility_ca_data = np.zeros([len_model_utility_ca], dtype=np.int32)
     for n, i in enumerate(model.utility_ca):
         model_utility_ca_param[n] = model._frame.index.get_loc(str(i.param))
-        model_utility_ca_data[n] = dataframes.data_ca_or_ce.columns.get_loc(str(i.data))
+        model_utility_ca_data[n] = looker(i.data)
         model_utility_ca_param_scale[n] = i.scale
     return (
         model_utility_ca_param_scale,
@@ -784,7 +802,13 @@ def model_u_ca_slots(dataframes, model, dtype=np.float64):
         model_utility_ca_data,
     )
 
-def model_q_ca_slots(dataframes, model, dtype=np.float64):
+def model_q_ca_slots(data_provider, model, dtype=np.float64):
+    if isinstance(data_provider, DataFrames):
+        looker = lambda tag: data_provider.data_ca_or_ce.columns.get_loc(str(tag))
+    elif isinstance(data_provider, Dataset):
+        looker = lambda tag: data_provider.indexes['var_ca'].get_loc(str(tag))
+    else:
+        raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
     len_model_q_ca = len(model.quantity_ca)
     model_q_ca_param_scale = np.ones([len_model_q_ca], dtype=dtype)
     model_q_ca_param = np.zeros([len_model_q_ca], dtype=np.int32)
@@ -795,7 +819,7 @@ def model_q_ca_slots(dataframes, model, dtype=np.float64):
         model_q_scale_param = np.zeros([1], dtype=np.int32)-1
     for n, i in enumerate(model.quantity_ca):
         model_q_ca_param[n] = model._frame.index.get_loc(str(i.param))
-        model_q_ca_data[n] = dataframes.data_ca_or_ce.columns.get_loc(str(i.data))
+        model_q_ca_data[n] = looker(i.data)
         model_q_ca_param_scale[n] = i.scale
     return (
         model_q_ca_param_scale,
@@ -820,11 +844,7 @@ WorkArrays = namedtuple(
 )
 WorkArrays.cs = _case_slice()
 
-DataArrays = namedtuple(
-    'DataArrays',
-    ['ch', 'av', 'wt', 'co', 'ca'],
-)
-DataArrays.cs = _case_slice()
+from .data_arrays import DataArrays
 
 FixedArrays = namedtuple(
     'FixedArrays',
@@ -849,7 +869,7 @@ class NumbaModel(_BaseModel):
         self.work_arrays = None
         self.float_dtype = float_dtype
         self.constraint_intensity = 0.0
-        self.constraint_sharpness = 10.0
+        self.constraint_sharpness = 0.0
         self._constraint_funcs = None
 
     def mangle(self, *args, **kwargs):
@@ -860,7 +880,7 @@ class NumbaModel(_BaseModel):
         self._array_av_cascade = None
         self._constraint_funcs = None
 
-    def _reload_data_arrays(self):
+    def repipe_data_arrays(self, pipeline_source=None):
         """
         Reload the _data_arrays so they are consistent with the dataframes.
         """
@@ -868,54 +888,87 @@ class NumbaModel(_BaseModel):
             self._data_arrays = None
             return
 
-        n_nodes = len(self.graph)
-        if self.dataframes.data_ch is not None:
-            _array_ch_cascade = data_ch_cascade(self.dataframes, self.graph, dtype=self.float_dtype)
-        else:
-            _array_ch_cascade = np.zeros([self.n_cases, 0], dtype=self.float_dtype)
-        if self.dataframes.data_av is not None:
-            _array_av_cascade = data_av_cascade(self.dataframes, self.graph)
-        else:
-            _array_av_cascade = np.ones([self.n_cases, n_nodes], dtype=np.int8)
-        if self.dataframes.data_wt is not None:
-            _array_wt = self.dataframes.array_wt().astype(self.float_dtype)
-        else:
-            _array_wt = np.ones(self.n_cases, dtype=self.float_dtype)
+        data_pipeline = self.data_pipeline
+        if data_pipeline is not None:
+            from .data_arrays import prepare_data
+            self.dataset, self.data_pipeline_flows = prepare_data(
+                datashare=data_pipeline,
+                request=self,
+                float_dtype=self.float_dtype,
+                cache_dir=data_pipeline.cache_dir,
+                flows=getattr(self, 'data_pipeline_flows', None),
+                pipeline_source=pipeline_source,
+            )
+            self._data_arrays = self.dataset.to_arrays(
+                self.graph,
+                float_dtype=self.float_dtype,
+            )
+            if self.work_arrays is not None:
+                self._rebuild_work_arrays()
+                # if (
+                #         (self.n_cases != self.work_arrays.utility.shape[0])
+                #         or (self.work_arrays.utility.dtype != self.float_dtype)
+                # ):
+                #     self.work_arrays = None
 
-        _array_co = self.dataframes.array_co(force=True)
-        if _array_co.dtype != self.float_dtype:
-            _array_co = _array_co.astype(self.float_dtype)
+        elif self.dataframes is not None: # work from old DataFrames
 
-        _array_ca = self.dataframes.array_ca(force=True)
-        if _array_ca.dtype != self.float_dtype:
-            _array_ca = _array_ca.astype(self.float_dtype)
+            n_nodes = len(self.graph)
+            if self.dataframes.data_ch is not None:
+                _array_ch_cascade = data_ch_cascade(self.dataframes, self.graph, dtype=self.float_dtype)
+            else:
+                _array_ch_cascade = np.zeros([self.n_cases, 0], dtype=self.float_dtype)
+            if self.dataframes.data_av is not None:
+                _array_av_cascade = data_av_cascade(self.dataframes, self.graph)
+            else:
+                _array_av_cascade = np.ones([self.n_cases, n_nodes], dtype=np.int8)
+            if self.dataframes.data_wt is not None:
+                _array_wt = self.dataframes.array_wt().astype(self.float_dtype)
+            else:
+                _array_wt = np.ones(self.n_cases, dtype=self.float_dtype)
 
-        self._data_arrays = DataArrays(
-            (_array_ch_cascade),
-            (_array_av_cascade),
-            (_array_wt.reshape(-1)),
-            (_array_co),
-            (_array_ca),
-        )
+            _array_co = self.dataframes.array_co(force=True)
+            if _array_co.dtype != self.float_dtype:
+                _array_co = _array_co.astype(self.float_dtype)
 
-    def _rebuild_work_arrays(self, n_cases, n_nodes, n_params):
-        _rebuild_work_arrays = True
+            _array_ca = self.dataframes.array_ca(force=True)
+            if _array_ca.dtype != self.float_dtype:
+                _array_ca = _array_ca.astype(self.float_dtype)
+
+            self._data_arrays = DataArrays(
+                (_array_ch_cascade),
+                (_array_av_cascade),
+                (_array_wt.reshape(-1)),
+                (_array_co),
+                (_array_ca),
+            )
+
+    def _rebuild_work_arrays(self, n_cases=None, n_nodes=None, n_params=None):
+        if n_cases is None:
+            n_cases = self.n_cases
+        if n_nodes is None:
+            n_nodes = len(self.graph)
+        if n_params is None:
+            n_params = len(self._frame)
+        _need_to_rebuild_work_arrays = True
         if self.work_arrays is not None:
             if (
                     (self.work_arrays.utility.shape[0] == n_cases)
                     and (self.work_arrays.utility.shape[1] == n_nodes)
-                    and (self.work_arrays.bhhh.shape[1] == n_params)
+                    and (self.work_arrays.d_loglike.shape[1] == n_params)
+                    and (self.work_arrays.utility.dtype == self.float_dtype)
             ):
-                _rebuild_work_arrays = False
-
-        self.work_arrays = WorkArrays(
-            utility=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
-            logprob=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
-            probability=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
-            bhhh=np.zeros([n_cases, n_params, n_params], dtype=self.float_dtype),
-            d_loglike=np.zeros([n_cases, n_params], dtype=self.float_dtype),
-            loglike=np.zeros([n_cases], dtype=self.float_dtype),
-        )
+                _need_to_rebuild_work_arrays = False
+        if _need_to_rebuild_work_arrays:
+            logging.getLogger("Larch").debug("rebuilding work arrays")
+            self.work_arrays = WorkArrays(
+                utility=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+                logprob=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+                probability=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
+                bhhh=np.zeros([n_cases, n_params, n_params], dtype=self.float_dtype),
+                d_loglike=np.zeros([n_cases, n_params], dtype=self.float_dtype),
+                loglike=np.zeros([n_cases], dtype=self.float_dtype),
+            )
 
     def unmangle(self, force=False):
         super().unmangle(force=force)
@@ -924,24 +977,27 @@ class NumbaModel(_BaseModel):
             n_alts = self.graph.n_elementals()
             n_nests = n_nodes - n_alts
             n_params = len(self._frame)
-            if self.dataframes is not None:
+            self.repipe_data_arrays(getattr(self, 'data_pipeline_source', None))
+            data_provider = self.data_as_loaded
+
+            if data_provider is not None:
                 (
                     model_utility_ca_param_scale,
                     model_utility_ca_param,
                     model_utility_ca_data,
-                ) = model_u_ca_slots(self.dataframes, self, dtype=self.float_dtype)
+                ) = model_u_ca_slots(data_provider, self, dtype=self.float_dtype)
                 (
                     model_utility_co_alt,
                     model_utility_co_param_scale,
                     model_utility_co_param,
                     model_utility_co_data,
-                ) = model_co_slots(self.dataframes, self, dtype=self.float_dtype)
+                ) = model_co_slots(data_provider, self, dtype=self.float_dtype)
                 (
                     model_q_ca_param_scale,
                     model_q_ca_param,
                     model_q_ca_data,
                     model_q_scale_param,
-                ) = model_q_ca_slots(self.dataframes, self, dtype=self.float_dtype)
+                ) = model_q_ca_slots(data_provider, self, dtype=self.float_dtype)
 
                 node_slot_arrays = self.graph.node_slot_arrays(self)
 
@@ -965,15 +1021,14 @@ class NumbaModel(_BaseModel):
                     node_slot_arrays[1][n_alts:],
                     node_slot_arrays[2][n_alts:],
                 )
-
-                self._reload_data_arrays()
             else:
                 self._fixed_arrays = None
                 self._data_arrays = None
 
             try:
                 n_cases = self.n_cases
-            except MissingDataError:
+            except MissingDataError as err:
+                logging.getLogger("Larch").exception("MissingDataError in unmangle")
                 self.work_arrays = None
             else:
                 self._rebuild_work_arrays(n_cases, n_nodes, n_params)
@@ -990,35 +1045,38 @@ class NumbaModel(_BaseModel):
         if caseslice is None:
             caseslice = slice(caseslice)
         missing_ch, missing_av = False, False
-        if self._dataframes is None:
-            raise MissingDataError('dataframes is not set, maybe you need to call `load_data` first?')
-        if not self._dataframes.is_computational_ready(activate=True):
+        if self._dataframes is None and self.data_pipeline is None:
+            raise MissingDataError('dataframes and data_pipeline are both not set, maybe you need to call `load_data` first?')
+        if self._dataframes is not None and not self._dataframes.is_computational_ready(activate=True):
             raise ValueError('DataFrames is not computational-ready')
         self.unmangle()
         if x is not None:
             self.set_values(x)
-        if self.dataframes.data_ch is None:
-            if allow_missing_ch:
-                missing_ch = True
-                self._data_arrays = DataArrays(
-                    np.zeros(self._data_arrays.av.shape, dtype=self._data_arrays.wt.dtype),
-                    self._data_arrays.av,
-                    self._data_arrays.wt,
-                    self._data_arrays.co,
-                    self._data_arrays.ca,
-                )
-            else:
-                raise MissingDataError('model.dataframes does not define data_ch')
-        if self.dataframes.data_av is None:
-            if allow_missing_av:
-                missing_av = True
-            else:
-                raise MissingDataError('model.dataframes does not define data_av')
+        if self._dataframes is not None:
+            if self.dataframes.data_ch is None:
+                if allow_missing_ch:
+                    missing_ch = True
+                    self._data_arrays = DataArrays(
+                        np.zeros(self._data_arrays.av.shape, dtype=self._data_arrays.wt.dtype),
+                        self._data_arrays.av,
+                        self._data_arrays.wt,
+                        self._data_arrays.co,
+                        self._data_arrays.ca,
+                    )
+                else:
+                    raise MissingDataError('model.dataframes does not define data_ch')
+            if self.dataframes.data_av is None:
+                if allow_missing_av:
+                    missing_av = True
+                else:
+                    raise MissingDataError('model.dataframes does not define data_av')
+        if self.work_arrays is None:
+            self._rebuild_work_arrays()
         return (
             *self._fixed_arrays,
             self._frame.holdfast.to_numpy(),
             self.pvals.astype(self.float_dtype), # float input shape=[n_params]
-            *self._data_arrays.cs[caseslice],
+            *self._data_arrays.cs[caseslice][:5],
         )
 
     def constraint_violation(
@@ -1211,6 +1269,13 @@ class NumbaModel(_BaseModel):
             raise
         return result_arrays, penalty
 
+    @property
+    def weight_normalization(self):
+        try:
+            return self.dataframes.weight_normalization
+        except AttributeError:
+            return 1.0
+
     def loglike(
             self,
             x=None,
@@ -1223,7 +1288,7 @@ class NumbaModel(_BaseModel):
         result_arrays, penalty = self._loglike_runner(
             x, start_case=start_case, stop_case=stop_case, step_case=step_case
         )
-        result = result_arrays.loglike.sum() * self.dataframes.weight_normalization
+        result = result_arrays.loglike.sum() * self.weight_normalization
         if start_case is None and stop_case is None and step_case is None:
             self._check_if_best(result)
         return result
@@ -1243,7 +1308,7 @@ class NumbaModel(_BaseModel):
             step_case=step_case,
             return_gradient=True,
         )
-        result = result_arrays.d_loglike.sum(0) * self.dataframes.weight_normalization
+        result = result_arrays.d_loglike.sum(0) * self.weight_normalization
         if return_series:
             result = pd.Series(result, index=self._frame.index)
         return result
@@ -1261,7 +1326,7 @@ class NumbaModel(_BaseModel):
             stop_case=stop_case,
             step_case=step_case,
         )
-        return result_arrays.loglike * self.dataframes.weight_normalization
+        return result_arrays.loglike * self.weight_normalization
 
     def d_loglike_casewise(
             self,
@@ -1277,7 +1342,7 @@ class NumbaModel(_BaseModel):
             step_case=step_case,
             return_gradient=True,
         )
-        return result_arrays.d_loglike * self.dataframes.weight_normalization
+        return result_arrays.d_loglike * self.weight_normalization
 
     def bhhh(
             self,
@@ -1294,7 +1359,7 @@ class NumbaModel(_BaseModel):
             step_case=step_case,
             return_bhhh=True,
         )
-        result = result_arrays.bhhh.sum(0) * self.dataframes.weight_normalization
+        result = result_arrays.bhhh.sum(0) * self.weight_normalization
         if return_dataframe:
             result = pd.DataFrame(
                 result, columns=self._frame.index, index=self._frame.index
@@ -1445,8 +1510,8 @@ class NumbaModel(_BaseModel):
             return_gradient=True,
         )
         result = dictx(
-            ll=result_arrays.loglike.sum() * self.dataframes.weight_normalization,
-            dll=result_arrays.d_loglike.sum(0) * self.dataframes.weight_normalization,
+            ll=result_arrays.loglike.sum() * self.weight_normalization,
+            dll=result_arrays.d_loglike.sum(0) * self.weight_normalization,
         )
         if start_case is None and stop_case is None and step_case is None:
             self._check_if_best(result.ll)
@@ -1474,15 +1539,15 @@ class NumbaModel(_BaseModel):
             return_bhhh=True,
         )
         result = dictx(
-            ll=result_arrays.loglike.sum() * self.dataframes.weight_normalization,
-            dll=result_arrays.d_loglike.sum(0) * self.dataframes.weight_normalization,
-            bhhh=result_arrays.bhhh.sum(0) * self.dataframes.weight_normalization,
+            ll=result_arrays.loglike.sum() * self.weight_normalization,
+            dll=result_arrays.d_loglike.sum(0) * self.weight_normalization,
+            bhhh=result_arrays.bhhh.sum(0) * self.weight_normalization,
         )
         from ..model.persist_flags import PERSIST_LOGLIKE_CASEWISE, PERSIST_D_LOGLIKE_CASEWISE
         if persist & PERSIST_LOGLIKE_CASEWISE:
-            result['ll_casewise'] = result_arrays.loglike * self.dataframes.weight_normalization
+            result['ll_casewise'] = result_arrays.loglike * self.weight_normalization
         if persist & PERSIST_D_LOGLIKE_CASEWISE:
-            result['dll_casewise'] = result_arrays.d_loglike * self.dataframes.weight_normalization
+            result['dll_casewise'] = result_arrays.d_loglike * self.weight_normalization
         if start_case is None and stop_case is None and step_case is None:
             self._check_if_best(result.ll)
         if return_series:
@@ -1637,7 +1702,7 @@ class NumbaModel(_BaseModel):
             x.check_data_is_sufficient_for_model(self)
         super().set_dataframes(x, check_sufficiency=False, raw=True)
 
-        self._reload_data_arrays()
+        self.repipe_data_arrays()
         n_cases = x.n_cases
         if self.graph is None:
             self.initialize_graph(
@@ -1668,3 +1733,83 @@ class NumbaModel(_BaseModel):
         self._constraint_funcs = state[1]['_constraint_funcs']
         super().__setstate__(state[0])
 
+    @property
+    def n_cases(self):
+        """int : The number of cases in the attached data."""
+        data_as_possible = self.data_as_possible
+        if data_as_possible is None:
+            raise MissingDataError("no data are set")
+        return data_as_possible.n_cases
+
+    def total_weight(self):
+        """
+        The total weight of cases in the loaded data.
+
+        Returns
+        -------
+        float
+        """
+        if self._data_arrays is not None:
+            return self._data_arrays.wt.sum()
+        raise MissingDataError("no data_arrays are set")
+
+    @property
+    def data_pipeline(self):
+        """Dataset : A source for data for the model"""
+        try:
+            return self._data_pipeline
+        except AttributeError:
+            return None
+
+    @data_pipeline.setter
+    def data_pipeline(self, datapipe):
+        from sharrow import SharedData
+        if datapipe is self.data_pipeline:
+            return
+        if isinstance(datapipe, SharedData):
+            self._data_pipeline = datapipe
+            self.mangle()
+        else:
+            raise TypeError(f"data_pipeline must be SharedData not {type(datapipe)}")
+
+    @property
+    def dataset(self):
+        """larch.Dataset : A source for data for the model"""
+        try:
+            return self._dataset
+        except AttributeError:
+            return None
+
+    @dataset.setter
+    def dataset(self, dataset):
+        if dataset is self.dataset:
+            return
+        from xarray import Dataset as _Dataset
+        if isinstance(dataset, Dataset):
+            self._dataset = dataset
+            self._data_arrays = None
+        elif isinstance(dataset, _Dataset):
+            self._dataset = Dataset(dataset)
+            self._data_arrays = None
+        else:
+            raise TypeError(f"dataset must be Dataset not {type(dataset)}")
+
+    @property
+    def data_as_loaded(self):
+        if self.dataset is not None:
+            return self.dataset
+        if self.dataframes is not None:
+            return self.dataframes
+        return None
+
+    @property
+    def data_as_possible(self):
+        if self.dataset is not None:
+            return self.dataset
+        if self.dataframes is not None:
+            return self.dataframes
+        if self.data_pipeline is not None:
+            return self.data_pipeline
+        if self.dataservice is not None:
+            return self.dataservice
+        return None

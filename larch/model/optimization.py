@@ -112,7 +112,8 @@ def maximize_loglike(
         from ..util.display import display_head, display_p, display_nothing
 
         if isinstance(model, Model5c) and model.dataframes is None:
-            raise ValueError("you must load data first -- try Model.load_data()")
+            if getattr(model, 'data_as_loaded', None) is None:
+                raise ValueError("you must load data first -- try Model.load_data()")
 
         if prior_result is not None:
             dashboard = dashboard or prior_result.get('dashboard', None)

@@ -65,3 +65,55 @@ def data_ch_cascade(dataframes, graph, dtype=None):
     ups, dns, _1, _2 = graph.edge_slot_arrays()
     cascade_sum(result, dns, ups)
     return result
+
+def array_av_cascade(arr_av, graph):
+    """
+    Create an extra wide array with availability rolled up to nests.
+
+    This has all the same elemental alternatives as the original
+    `arr_av` array, plus columns for all nests.  For each
+    nest, if any component is available, then the nest is also
+    indicated as available.
+
+    Parameters
+    ----------
+    arr_av : ndarray
+    graph : NestingTree
+
+    Returns
+    -------
+    array
+    """
+    result = np.zeros((arr_av.shape[0], len(graph)), dtype=np.int8)
+    result[: ,:graph.n_elementals()] = arr_av
+    ups, dns, _1, _2 = graph.edge_slot_arrays()
+    cascade_or(result, dns, ups)
+    return result
+
+def array_ch_cascade(arr_ch, graph, dtype=None):
+    """
+    Create an extra wide array with choices rolled up to nests.
+
+    This has all the same elemental alternatives as the original
+    `arr_ch` array, plus columns for all nests.  For each
+    nest, if any component is chosen, then the nest is also
+    indicated as chosen, with a magnitude equal to the sum of its
+    parts.
+
+    Parameters
+    ----------
+    arr_ch : ndarray
+    graph : NestingTree
+
+    Returns
+    -------
+    array
+    """
+    result = np.zeros(
+        (arr_ch.shape[0], len(graph)),
+        dtype=dtype or arr_ch.dtype,
+    )
+    result[: ,:graph.n_elementals()] = arr_ch
+    ups, dns, _1, _2 = graph.edge_slot_arrays()
+    cascade_sum(result, dns, ups)
+    return result
