@@ -7,7 +7,8 @@ import pandas as pd
 from larch.roles import P, X, PX
 from larch.model.persist_flags import PERSIST_UTILITY
 from larch.numba.model import NumbaModel
-
+from larch.numba import DataFrames, Dataset
+from xarray import DataArray
 
 @fixture
 def mtc():
@@ -28,6 +29,20 @@ def mtcq():
         'avail_ca': '_avail_',
         'choice_ca': 'chose',
     })
+
+@fixture
+def mtc_dataset():
+    from larch.data_warehouse import example_file
+    df = pd.read_csv(example_file("MTCwork.csv.gz"), index_col=['casenum', 'altnum'])
+    d = DataFrames(df, ch='chose', crack=True)
+    dataset = Dataset.from_dataframe(d.data_co)
+    dataset = dataset.merge(Dataset.from_dataframe(d.data_ce).fillna(0.0))
+    dataset['avail'] = DataArray(d.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
+    dataset.coords['altnames'] = DataArray(
+        ['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
+        dims=['_altid_'],
+    )
+    return dataset
 
 
 def test_dataframes_mnl5(mtc):
@@ -1099,3 +1114,19 @@ def test_model_pickling():
     m2.load_data()
     assert m2.loglike() == approx(-3626.1862555138796)
 
+def test_mtc_with_dataset(mtc_dataset):
+    m = NumbaModel(alts=mtc_dataset['_altid_'].values)
+    from larch.roles import P, X, PX
+    m.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
+    m.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+    m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+    m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+    m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+    m.utility_ca = PX("tottime") + PX("totcost")
+    m.availability_var = 'avail'
+    m.choice_ca_var = 'chose'
+    m.data_pipeline = mtc_dataset
+    assert m.loglike() == approx(-7309.600971749634)
+    m.set_cap(20)
+    result = m.maximize_loglike(method='slsqp')
+    assert result.loglike == approx(-3626.1862595453385)

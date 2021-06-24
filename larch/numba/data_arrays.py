@@ -110,7 +110,7 @@ def prepare_data(
     if isinstance(datashare, SharedData):
         log.debug(f"adopting existing SharedData")
         shared_data_ca = datashare
-        shared_data_co = datashare.keep_dims("_caseid_")
+        shared_data_co = datashare#.keep_dims("_caseid_")
     else:
         log.debug(f"initializing new SharedData")
         shared_data_ca = SharedData(datashare)
@@ -263,6 +263,7 @@ def _prep_ca(
         pipeline_source,
         dtype=dtype,
         min_shape_0=model_dataset.dims.get('_caseid_'),
+        dim_order=['_caseid_', '_altid_'],
     )
     if preserve_vars or len(vars_ca)>1:
         arr = arr.reshape(
@@ -319,6 +320,7 @@ def _prep_co(
         pipeline_source,
         dtype=dtype,
         min_shape_0=model_dataset.dims.get('_caseid_'),
+        dim_order=['_caseid_'],
     )
     if preserve_vars or len(vars_co)>1:
         if dim_name is None:

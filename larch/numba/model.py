@@ -863,9 +863,10 @@ class NumbaModel(_BaseModel):
 
     _null_slice = (None, None, None)
 
-    def __init__(self, *args, float_dtype = np.float64, **kwargs):
+    def __init__(self, *args, float_dtype=np.float64, **kwargs):
         super().__init__(*args, **kwargs)
         self._fixed_arrays = None
+        self._data_arrays = None
         self.work_arrays = None
         self.float_dtype = float_dtype
         self.constraint_intensity = 0.0
@@ -875,6 +876,7 @@ class NumbaModel(_BaseModel):
     def mangle(self, *args, **kwargs):
         super().mangle(*args, **kwargs)
         self._fixed_arrays = None
+        self._data_arrays = None
         self.work_arrays = None
         self._array_ch_cascade = None
         self._array_av_cascade = None
@@ -944,8 +946,14 @@ class NumbaModel(_BaseModel):
             )
 
     def _rebuild_work_arrays(self, n_cases=None, n_nodes=None, n_params=None):
+        log = logging.getLogger("Larch")
         if n_cases is None:
-            n_cases = self.n_cases
+            try:
+                n_cases = self.n_cases
+            except MissingDataError as err:
+                log.exception("MissingDataError, cannot rebuild work arrays")
+                self.work_arrays = None
+                return
         if n_nodes is None:
             n_nodes = len(self.graph)
         if n_params is None:
@@ -960,7 +968,7 @@ class NumbaModel(_BaseModel):
             ):
                 _need_to_rebuild_work_arrays = False
         if _need_to_rebuild_work_arrays:
-            logging.getLogger("Larch").debug("rebuilding work arrays")
+            log.debug("rebuilding work arrays")
             self.work_arrays = WorkArrays(
                 utility=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
                 logprob=np.zeros([n_cases, n_nodes], dtype=self.float_dtype),
@@ -970,68 +978,58 @@ class NumbaModel(_BaseModel):
                 loglike=np.zeros([n_cases], dtype=self.float_dtype),
             )
 
+    def _rebuild_fixed_arrays(self):
+        data_provider = self.data_as_loaded
+        if data_provider is not None:
+            (
+                model_utility_ca_param_scale,
+                model_utility_ca_param,
+                model_utility_ca_data,
+            ) = model_u_ca_slots(data_provider, self, dtype=self.float_dtype)
+            (
+                model_utility_co_alt,
+                model_utility_co_param_scale,
+                model_utility_co_param,
+                model_utility_co_data,
+            ) = model_co_slots(data_provider, self, dtype=self.float_dtype)
+            (
+                model_q_ca_param_scale,
+                model_q_ca_param,
+                model_q_ca_data,
+                model_q_scale_param,
+            ) = model_q_ca_slots(data_provider, self, dtype=self.float_dtype)
+            node_slot_arrays = self.graph.node_slot_arrays(self)
+            n_alts = self.graph.n_elementals()
+            self._fixed_arrays = FixedArrays(
+                model_q_ca_param_scale,
+                model_q_ca_param,
+                model_q_ca_data,
+                model_q_scale_param,
+
+                model_utility_ca_param_scale,
+                model_utility_ca_param,
+                model_utility_ca_data,
+
+                model_utility_co_alt,
+                model_utility_co_param_scale,
+                model_utility_co_param,
+                model_utility_co_data,
+
+                np.stack(self.graph.edge_slot_arrays()).T,
+                node_slot_arrays[0][n_alts:],
+                node_slot_arrays[1][n_alts:],
+                node_slot_arrays[2][n_alts:],
+            )
+        else:
+            self._fixed_arrays = None
+
+
     def unmangle(self, force=False):
         super().unmangle(force=force)
         if self._fixed_arrays is None or force:
-            n_nodes = len(self.graph)
-            n_alts = self.graph.n_elementals()
-            n_nests = n_nodes - n_alts
-            n_params = len(self._frame)
             self.repipe_data_arrays(getattr(self, 'data_pipeline_source', None))
-            data_provider = self.data_as_loaded
-
-            if data_provider is not None:
-                (
-                    model_utility_ca_param_scale,
-                    model_utility_ca_param,
-                    model_utility_ca_data,
-                ) = model_u_ca_slots(data_provider, self, dtype=self.float_dtype)
-                (
-                    model_utility_co_alt,
-                    model_utility_co_param_scale,
-                    model_utility_co_param,
-                    model_utility_co_data,
-                ) = model_co_slots(data_provider, self, dtype=self.float_dtype)
-                (
-                    model_q_ca_param_scale,
-                    model_q_ca_param,
-                    model_q_ca_data,
-                    model_q_scale_param,
-                ) = model_q_ca_slots(data_provider, self, dtype=self.float_dtype)
-
-                node_slot_arrays = self.graph.node_slot_arrays(self)
-
-                self._fixed_arrays = FixedArrays(
-                    model_q_ca_param_scale,
-                    model_q_ca_param,
-                    model_q_ca_data,
-                    model_q_scale_param,
-
-                    model_utility_ca_param_scale,
-                    model_utility_ca_param,
-                    model_utility_ca_data,
-
-                    model_utility_co_alt,
-                    model_utility_co_param_scale,
-                    model_utility_co_param,
-                    model_utility_co_data,
-
-                    np.stack(self.graph.edge_slot_arrays()).T,
-                    node_slot_arrays[0][n_alts:],
-                    node_slot_arrays[1][n_alts:],
-                    node_slot_arrays[2][n_alts:],
-                )
-            else:
-                self._fixed_arrays = None
-                self._data_arrays = None
-
-            try:
-                n_cases = self.n_cases
-            except MissingDataError as err:
-                logging.getLogger("Larch").exception("MissingDataError in unmangle")
-                self.work_arrays = None
-            else:
-                self._rebuild_work_arrays(n_cases, n_nodes, n_params)
+            self._rebuild_fixed_arrays()
+            self._rebuild_work_arrays()
         if self._constraint_funcs is None:
             self._constraint_funcs = [c.as_soft_penalty() for c in self.constraints]
 
@@ -1770,7 +1768,12 @@ class NumbaModel(_BaseModel):
             self._data_pipeline = datapipe
             self.mangle()
         else:
-            raise TypeError(f"data_pipeline must be SharedData not {type(datapipe)}")
+            try:
+                self._data_pipeline = SharedData(datapipe)
+            except Exception as err:
+                raise TypeError(f"data_pipeline must be SharedData not {type(datapipe)}") from err
+            else:
+                self.mangle()
 
     @property
     def dataset(self):
@@ -1813,3 +1816,16 @@ class NumbaModel(_BaseModel):
         if self.dataservice is not None:
             return self.dataservice
         return None
+
+    @property
+    def float_dtype(self):
+        try:
+            return self._float_dtype
+        except AttributeError:
+            return None
+
+    @float_dtype.setter
+    def float_dtype(self, float_dtype):
+        if self.float_dtype != float_dtype:
+            self.mangle()
+        self._float_dtype = float_dtype
