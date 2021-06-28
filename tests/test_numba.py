@@ -1115,6 +1115,7 @@ def test_model_pickling():
     assert m2.loglike() == approx(-3626.1862555138796)
 
 def test_mtc_with_dataset(mtc_dataset):
+    pytest.importorskip("sharrow_pro")
     m = NumbaModel(alts=mtc_dataset['_altid_'].values)
     from larch.roles import P, X, PX
     m.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
@@ -1125,8 +1126,104 @@ def test_mtc_with_dataset(mtc_dataset):
     m.utility_ca = PX("tottime") + PX("totcost")
     m.availability_var = 'avail'
     m.choice_ca_var = 'chose'
-    m.data_pipeline = mtc_dataset
+    m.datapool = mtc_dataset
     assert m.loglike() == approx(-7309.600971749634)
     m.set_cap(20)
     result = m.maximize_loglike(method='slsqp')
     assert result.loglike == approx(-3626.1862595453385)
+
+def test_eville_mode_with_dataset():
+    pytest.importorskip("sharrow_pro")
+    from larch.examples import EXAMPVILLE
+    pool = EXAMPVILLE('datapool')
+    DA = 1
+    SR = 2
+    Walk = 3
+    Bike = 4
+    Transit = 5
+    m = NumbaModel(
+        alts={
+            DA: 'DA',
+            SR: 'SR',
+            Walk: 'Walk',
+            Bike: 'Bike',
+            Transit: 'Transit',
+        },
+        datapool=pool,
+    )
+    m.title = "Exampville Work Tour Mode Choice v1"
+    m.utility_co[DA] = (
+            + P.InVehTime * X("od.AUTO_TIME + do.AUTO_TIME")
+            + P.Cost * X("od.AUTO_COST + do.AUTO_COST")  # dollars per mile
+    )
+    m.utility_co[SR] = (
+            + P.ASC_SR
+            + P.InVehTime * X("od.AUTO_TIME + do.AUTO_TIME")
+            + P.Cost * X("od.AUTO_COST + do.AUTO_COST") * 0.5  # dollars per mile, half share
+            + P("LogIncome:SR") * X("log(INCOME)")
+    )
+    m.utility_co[Walk] = (
+            + P.ASC_Walk
+            + P.NonMotorTime * X("od.WALK_TIME + do.WALK_TIME")
+            + P("LogIncome:Walk") * X("log(INCOME)")
+    )
+    m.utility_co[Bike] = (
+            + P.ASC_Bike
+            + P.NonMotorTime * X("od.BIKE_TIME + do.BIKE_TIME")
+            + P("LogIncome:Bike") * X("log(INCOME)")
+    )
+    m.utility_co[Transit] = (
+            + P.ASC_Transit
+            + P.InVehTime * X("od.TRANSIT_IVTT + do.TRANSIT_IVTT")
+            + P.OutVehTime * X("od.TRANSIT_OVTT + do.TRANSIT_OVTT")
+            + P.Cost * X("od.TRANSIT_FARE + do.TRANSIT_FARE")
+            + P("LogIncome:Transit") * X('log(INCOME)')
+    )
+    Car = m.graph.new_node(parameter='Mu:Car', children=[DA, SR], name='Car')
+    NonMotor = m.graph.new_node(parameter='Mu:NonMotor', children=[Walk, Bike], name='NonMotor')
+    Motor = m.graph.new_node(parameter='Mu:Motor', children=[Car, Transit], name='Motor')
+    m.choice_co_code = 'TOURMODE'
+    m.availability_co_vars = {
+        DA: 'AGE >= 16',
+        SR: '1',
+        Walk: 'WALK_TIME < 60',
+        Bike: 'BIKE_TIME < 60',
+        Transit: 'TRANSIT_FARE>0',
+    }
+    assert m.loglike() == approx(-28846.81581153095)
+    assert m.dataflows.keys() == {'co', 'avail_co'}
+    assert m.d_loglike() == approx(np.array([
+        -5.02935000e+03, -2.69235000e+03, -1.72110000e+03, -2.21118333e+03,
+        1.67050996e+04, 1.26952101e+05, -5.50687172e+04, -3.03043210e+04,
+        -1.93304978e+04, -2.41203790e+04, 5.82518580e+03, 2.92870835e+02,
+        -3.31973600e+03, -3.47182502e+05, -2.26234434e+05]))
+    m.set_cap(30)
+    r = m.maximize_loglike(method='slsqp')
+    assert dict(r.x) == approx({
+        'ASC_Bike': 1.0207805052947376,
+        'ASC_SR': 2.9895850624870013,
+        'ASC_Transit': 8.508746668124973,
+        'ASC_Walk': 7.473491883981414,
+        'Cost': -0.17750345102327197,
+        'InVehTime': -0.06760741744874971,
+        'LogIncome:Bike': -0.3648653520247778,
+        'LogIncome:SR': -0.4222047281799176,
+        'LogIncome:Transit': -0.6960684260831979,
+        'LogIncome:Walk': -0.4548368480289394,
+        'Mu:Car': 0.5466601043649147,
+        'Mu:Motor': 0.9540629350784797,
+        'Mu:NonMotor': 0.8636508452469879,
+        'NonMotorTime': -0.1268142189962758,
+        'OutVehTime': -0.14752266135040631,
+    }, rel=1e-5)
+    assert r.loglike == approx(-8047.006193851376)
+    worktours = m.datapool.main.query_cases('TOURPURP==1')
+    m.datapool_source = worktours
+    assert m.loglike() == approx(-3527.6797690247113)
+    m.float_dtype = np.float32
+    assert m.loglike() == approx(-3527.68115234375)
+    assert m.n_cases == 7564
+    del m.datapool_source
+    assert m.loglike() == approx(-8047.006193851376)
+    assert m.n_cases == 20739
+

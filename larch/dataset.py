@@ -1,9 +1,35 @@
+import warnings
 import numpy as np
-from sharrow import Dataset as _sharrow_Dataset
+try:
+    from sharrow import Dataset as _sharrow_Dataset, SharedData as _sharrow_SharedData, DataArray
+except ImportError:
+    raise RuntimeError("larch.dataset requires the sharrow library")
+
+
+class DataPool(_sharrow_SharedData):
+
+    @property
+    def n_cases(self):
+        return self.main.dims['_caseid_']
+
 
 class Dataset(_sharrow_Dataset):
 
     __slots__ = ()
+
+    def __new__(cls, *args, caseid=None, **kwargs):
+        import logging
+        logging.getLogger("SHARROW").debug(f"NEW INSTANCE {cls}")
+        obj = super().__new__(cls)
+        super(cls, obj).__init__(*args, **kwargs)
+        if caseid is not None:
+            if caseid not in obj.dims:
+                raise ValueError(f"no dim named '{caseid}' to make into _caseid_")
+            obj = obj.rename_dims({caseid: '_caseid_'})
+        return obj
+
+    def __init__(self, *args, **kwargs):
+        pass # init for superclass happens inside __new__
 
     @property
     def n_cases(self):
@@ -59,3 +85,27 @@ class Dataset(_sharrow_Dataset):
         return DataArrays(
             ch, av, wt, co, ca
         )
+
+    def validate_format(self):
+        error_msgs = []
+        warn_msgs = []
+        if '_caseid_' not in self.dims:
+            error_msgs.append(
+                "- There is no dimensions named `_caseid_`. "
+            )
+        if '_altid_' not in self.dims:
+            warn_msgs.append(
+                "- There is no dimensions named `_altid_`. "
+            )
+        msgs = []
+        if error_msgs:
+            msgs.append("ERRORS:")
+            msgs.extend(error_msgs)
+        if warn_msgs:
+            msgs.append("WARNINGS:")
+            msgs.extend(warn_msgs)
+        return msgs
+
+    def query_cases(self, query):
+        return self.query({'_caseid_': query})
+

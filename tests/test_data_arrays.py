@@ -10,7 +10,7 @@ def test_weighted():
     m.choice_ca_var = 'chose'
     m.weight_co_var = 'hhinc+100'
     ds = lxd.to_dataset(m.dataservice)
-    y = lxd.prepare_data(ds, m)
+    y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
     assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
@@ -28,7 +28,7 @@ def test_choice_code():
         chosen_alt,
         dims=['_caseid_',],
     )
-    y = lxd.prepare_data(ds, m)
+    y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
     assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
@@ -41,8 +41,8 @@ def test_shared_data():
     m.choice_ca_var = 'chose'
     m.weight_co_var = 'hhinc+100'
     ds = lxd.to_dataset(m.dataservice)
-    sd = sh.SharedData(ds)
-    y = lxd.prepare_data(sd, m)
+    pool = lx.DataPool(ds)
+    y, flows = lxd.prepare_data(pool, m)
     assert isinstance(y, sh.Dataset)
     assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']

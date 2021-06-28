@@ -70,22 +70,21 @@ def prepare_data(
         float_dtype=None,
         cache_dir=None,
         flows=None,
-        pipeline_source=None,
+        pool_source=None,
 ):
     log = logging.getLogger("Larch")
-    from ..dataset import Dataset
-    from sharrow import SharedData, DataArray
+    from ..dataset import Dataset, DataPool, DataArray
     if float_dtype is None:
         float_dtype = np.float64
-    if pipeline_source is None:
+    if pool_source is None:
         log.debug(f"building dataset from datashare coords: {datashare.coords}")
         model_dataset = Dataset(
             coords=datashare.coords,
         )
     else:
-        log.debug(f"building dataset from pipeline_source coords: {pipeline_source.coords}")
+        log.debug(f"building dataset from pool_source coords: {pool_source.coords}")
         model_dataset = Dataset(
-            coords=pipeline_source.coords,
+            coords=pool_source.coords,
         )
 
     # use the caseids on cases where available, pad with -1's
@@ -107,14 +106,14 @@ def prepare_data(
     if flows is None:
         flows = {}
 
-    if isinstance(datashare, SharedData):
-        log.debug(f"adopting existing SharedData")
+    if isinstance(datashare, DataPool):
+        log.debug(f"adopting existing DataPool")
         shared_data_ca = datashare
         shared_data_co = datashare#.keep_dims("_caseid_")
     else:
-        log.debug(f"initializing new SharedData")
-        shared_data_ca = SharedData(datashare)
-        shared_data_co = SharedData(datashare.drop_dims(
+        log.debug(f"initializing new DataPool")
+        shared_data_ca = DataPool(datashare)
+        shared_data_co = DataPool(datashare.drop_dims(
             [i for i in datashare.dims.keys() if i != "_caseid_"]
         ))
 
@@ -128,7 +127,7 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('co'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
     if 'ca' in request:
         log.debug(f"requested ca data: {request['ca']}")
@@ -140,7 +139,7 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('ca'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
 
     if 'choice_ca' in request:
@@ -154,14 +153,14 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('choice_ca'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
-        if pipeline_source is None:
+        if pool_source is None:
             choicecodes = datashare[request['choice_co_code']]
         else:
-            choicecodes = pipeline_source[request['choice_co_code']]
+            choicecodes = pool_source[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
             dims=['_caseid_', '_altid_'],
@@ -192,7 +191,7 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('weight_co'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
 
     if 'avail_ca' in request:
@@ -206,7 +205,7 @@ def prepare_data(
             dtype=np.int8,
             cache_dir=cache_dir,
             flow=flows.get('avail_ca'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
     if 'avail_co' in request:
         log.debug(f"requested avail_co data: {request['avail_co']}")
@@ -224,7 +223,7 @@ def prepare_data(
             dim_name='_altid_',
             cache_dir=cache_dir,
             flow=flows.get('avail_co'),
-            pipeline_source=pipeline_source,
+            pool_source=pool_source,
         )
     if 'avail_any' in request:
         log.debug(f"requested avail_any data: {request['avail_any']}")
@@ -251,16 +250,16 @@ def _prep_ca(
         dtype=None,
         cache_dir=None,
         flow=None,
-        pipeline_source=None,
+        pool_source=None,
 ):
-    from sharrow import Dataset, DataArray
+    from ..dataset import Dataset, DataArray
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
     flowname = flownamer(tag, vars_ca)
     if flow is None or flowname != flow.name:
         flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pipeline_source,
+        pool_source,
         dtype=dtype,
         min_shape_0=model_dataset.dims.get('_caseid_'),
         dim_order=['_caseid_', '_altid_'],
@@ -308,16 +307,16 @@ def _prep_co(
         dim_name=None,
         cache_dir=None,
         flow=None,
-        pipeline_source=None,
+        pool_source=None,
 ):
-    from sharrow import DataArray
+    from ..dataset import DataArray
     if not isinstance(vars_co, dict):
         vars_co = {i: i for i in vars_co}
     flowname = flownamer(tag, vars_co)
     if flow is None or flowname != flow.name:
         flow = shared_data_co.setup_flow(vars_co, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pipeline_source,
+        pool_source,
         dtype=dtype,
         min_shape_0=model_dataset.dims.get('_caseid_'),
         dim_order=['_caseid_'],

@@ -863,7 +863,7 @@ class NumbaModel(_BaseModel):
 
     _null_slice = (None, None, None)
 
-    def __init__(self, *args, float_dtype=np.float64, **kwargs):
+    def __init__(self, *args, float_dtype=np.float64, datapool=None, **kwargs):
         super().__init__(*args, **kwargs)
         self._fixed_arrays = None
         self._data_arrays = None
@@ -872,6 +872,7 @@ class NumbaModel(_BaseModel):
         self.constraint_intensity = 0.0
         self.constraint_sharpness = 0.0
         self._constraint_funcs = None
+        self.datapool = datapool
 
     def mangle(self, *args, **kwargs):
         super().mangle(*args, **kwargs)
@@ -882,24 +883,24 @@ class NumbaModel(_BaseModel):
         self._array_av_cascade = None
         self._constraint_funcs = None
 
-    def repipe_data_arrays(self, pipeline_source=None):
+    def reflow_data_arrays(self, pool_source=None):
         """
-        Reload the _data_arrays so they are consistent with the dataframes.
+        Reload the internal data_arrays so they are consistent with the datapool.
         """
         if self.graph is None:
             self._data_arrays = None
             return
 
-        data_pipeline = self.data_pipeline
-        if data_pipeline is not None:
+        datapool = self.datapool
+        if datapool is not None:
             from .data_arrays import prepare_data
-            self.dataset, self.data_pipeline_flows = prepare_data(
-                datashare=data_pipeline,
+            self.dataset, self.dataflows = prepare_data(
+                datashare=datapool,
                 request=self,
                 float_dtype=self.float_dtype,
-                cache_dir=data_pipeline.cache_dir,
-                flows=getattr(self, 'data_pipeline_flows', None),
-                pipeline_source=pipeline_source,
+                cache_dir=datapool.cache_dir,
+                flows=getattr(self, 'dataflows', None),
+                pool_source=pool_source,
             )
             self._data_arrays = self.dataset.to_arrays(
                 self.graph,
@@ -1027,7 +1028,7 @@ class NumbaModel(_BaseModel):
     def unmangle(self, force=False):
         super().unmangle(force=force)
         if self._fixed_arrays is None or force:
-            self.repipe_data_arrays(getattr(self, 'data_pipeline_source', None))
+            self.reflow_data_arrays(getattr(self, 'datapool_source', None))
             self._rebuild_fixed_arrays()
             self._rebuild_work_arrays()
         if self._constraint_funcs is None:
@@ -1043,8 +1044,8 @@ class NumbaModel(_BaseModel):
         if caseslice is None:
             caseslice = slice(caseslice)
         missing_ch, missing_av = False, False
-        if self._dataframes is None and self.data_pipeline is None:
-            raise MissingDataError('dataframes and data_pipeline are both not set, maybe you need to call `load_data` first?')
+        if self._dataframes is None and self.datapool is None:
+            raise MissingDataError('dataframes and datapool are both not set, maybe you need to call `load_data` first?')
         if self._dataframes is not None and not self._dataframes.is_computational_ready(activate=True):
             raise ValueError('DataFrames is not computational-ready')
         self.unmangle()
@@ -1700,7 +1701,7 @@ class NumbaModel(_BaseModel):
             x.check_data_is_sufficient_for_model(self)
         super().set_dataframes(x, check_sufficiency=False, raw=True)
 
-        self.repipe_data_arrays()
+        self.reflow_data_arrays()
         n_cases = x.n_cases
         if self.graph is None:
             self.initialize_graph(
@@ -1752,28 +1753,52 @@ class NumbaModel(_BaseModel):
         raise MissingDataError("no data_arrays are set")
 
     @property
-    def data_pipeline(self):
+    def datapool(self):
         """Dataset : A source for data for the model"""
         try:
             return self._data_pipeline
         except AttributeError:
             return None
 
-    @data_pipeline.setter
-    def data_pipeline(self, datapipe):
-        from sharrow import SharedData
-        if datapipe is self.data_pipeline:
+    @datapool.setter
+    def datapool(self, datapipe):
+        from ..dataset import DataPool
+        if datapipe is self.datapool:
             return
-        if isinstance(datapipe, SharedData):
+        if isinstance(datapipe, DataPool) or datapipe is None:
             self._data_pipeline = datapipe
             self.mangle()
         else:
             try:
-                self._data_pipeline = SharedData(datapipe)
+                self._data_pipeline = DataPool(datapipe)
             except Exception as err:
-                raise TypeError(f"data_pipeline must be SharedData not {type(datapipe)}") from err
+                raise TypeError(f"datapool must be DataPool not {type(datapipe)}") from err
             else:
                 self.mangle()
+
+    @property
+    def datapool_source(self):
+        """Dataset or DataFrame or Table : A source for data for the model"""
+        try:
+            return self._datapool_source
+        except AttributeError:
+            return None
+
+    @datapool_source.setter
+    def datapool_source(self, source):
+        from sharrow import Table as _sh_Table
+        from pyarrow import Table as _pa_Table
+        if source is self.datapool_source:
+            return
+        if isinstance(source, (pd.DataFrame, Dataset, _sh_Table, _pa_Table)) or source is None:
+            self._datapool_source = source
+            self.mangle()
+        else:
+            raise TypeError(f"datapool_source must be table-like not {type(source)}")
+
+    @datapool_source.deleter
+    def datapool_source(self):
+        self.datapool_source = None
 
     @property
     def dataset(self):
@@ -1811,8 +1836,8 @@ class NumbaModel(_BaseModel):
             return self.dataset
         if self.dataframes is not None:
             return self.dataframes
-        if self.data_pipeline is not None:
-            return self.data_pipeline
+        if self.datapool is not None:
+            return self.datapool
         if self.dataservice is not None:
             return self.dataservice
         return None
