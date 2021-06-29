@@ -207,7 +207,7 @@ html_static_path = ['_static']
 
 if True:
     def setup(app):
-        app.add_stylesheet("larch_rtfd.css")
+        app.add_css_file("larch_rtfd.css")
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
