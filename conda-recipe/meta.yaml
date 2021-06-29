@@ -78,6 +78,8 @@ test:
     - sphinxcontrib-websupport
     - nbsphinx
     - geopandas
+    - numba
+    - xarray
 
 about:
   home: https://larch.newman.me
