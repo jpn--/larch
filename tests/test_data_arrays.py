@@ -1,7 +1,7 @@
-from pytest import approx
+from pytest import approx, importorskip
 import numpy as np
+sh = importorskip("sharrow")
 import larch.numba as lx
-import sharrow as sh
 import larch.numba.data_arrays as lxd
 
 
