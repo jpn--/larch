@@ -1,5 +1,6 @@
 import pytest
 numba = pytest.importorskip("numba")
+sharrow = pytest.importorskip("sharrow")
 from larch.examples import MTC, SWISSMETRO
 from pytest import approx, raises, warns, fixture
 import numpy as np

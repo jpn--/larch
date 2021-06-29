@@ -88,18 +88,20 @@ jobs:
   - script: |
       call activate myEnvironment
       conda info
-    displayName: Install Anaconda packages
+      conda list
+    displayName: Report Anaconda packages
 
   - script: |
       call activate myEnvironment
+      conda info
       conda config --set anaconda_upload no
+      conda list
       conda build conda-recipe -c conda-forge
     displayName: Conda build
 
   - script: |
       echo "Hello"
       call activate myEnvironment
-      conda config --set anaconda_upload no
       python setup.py develop
       pytest
     displayName: Develop build and test
