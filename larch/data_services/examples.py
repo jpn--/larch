@@ -33,10 +33,10 @@ def MTC(format='dataframes'):
 		raise ValueError(f"undefined format {format}")
 
 
-def EXAMPVILLE(format='dataframes', model='mode'):
+def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
 	if format == 'datapool' and model == 'mode':
 		from ..examples import example
-		from ..dataset import Dataset, DataPool
+		from ..dataset import Dataset, DataPool, DataArray
 		_hh, _pp, _tour, _skims = example(200, ['hh', 'pp', 'tour', 'skims'])
 		tours = Dataset(
 			_tour.set_index('TOURID'), caseid='TOURID',
@@ -56,6 +56,13 @@ def EXAMPVILLE(format='dataframes', model='mode'):
 				'otaz': '@DTAZ',
 				'dtaz': '@HOMETAZ',
 			}),
+			cache_dir=cache_dir,
+		)
+		pool.main.coords['altid'] = DataArray(
+			[1, 2, 3, 4, 5], dims="_altid_",
+		)
+		pool.main.coords['altname'] = DataArray(
+			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_altid_",
 		)
 		return pool
 	elif format == 'dataframes' and model == 'mode':

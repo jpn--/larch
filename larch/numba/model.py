@@ -883,6 +883,55 @@ class NumbaModel(_BaseModel):
         self._array_av_cascade = None
         self._constraint_funcs = None
 
+    def initialize_graph(self, dataframes=None, alternative_codes=None, alternative_names=None, root_id=0):
+        """
+        Write a nesting tree graph for a MNL model.
+
+        Parameters
+        ----------
+        dataframes : DataFrames, optional
+            Use this to determine the included alternatives.
+        alternative_codes : array-like, optional
+            Explicitly give alternative codes. Ignored if `dataframes` is given
+            or if the model has dataframes or a dataservice already set.
+        alternative_names : array-like, optional
+            Explicitly give alternative names. Ignored if `dataframes` is given
+            or if the model has dataframes or a dataservice already set.
+        root_id : int, default 0
+            The id code of the root node.
+
+        Raises
+        ------
+        ValueError
+            The model is unable to infer the alternative codes to use.  This can
+            be avoided by giving alternative codes explicitly or having previously
+            set dataframes or a dataservice that will give the alternative codes.
+        """
+        if self.datapool is not None:
+
+            def get_coords_array(*names):
+                for name in names:
+                    if name in self.datapool.main.coords:
+                        return self.datapool.main.coords[name].values
+
+            if alternative_codes is None:
+                alternative_codes = get_coords_array(
+                    '_altid_', 'altid', 'alt_id', 'alt_ids',
+                    'alternative_id', 'alternative_ids',
+                )
+            if alternative_names is None:
+                alternative_names = get_coords_array(
+                    'altname', 'altnames', 'alt_name', 'alt_names',
+                    'alternative_name', 'alternative_names',
+                )
+
+        super().initialize_graph(
+            dataframes=dataframes,
+            alternative_codes=alternative_codes,
+            alternative_names=alternative_names,
+            root_id=root_id,
+        )
+
     def reflow_data_arrays(self, pool_source=None):
         """
         Reload the internal data_arrays so they are consistent with the datapool.
@@ -1756,7 +1805,7 @@ class NumbaModel(_BaseModel):
     def datapool(self):
         """Dataset : A source for data for the model"""
         try:
-            return self._data_pipeline
+            return self._data_pool
         except AttributeError:
             return None
 
@@ -1766,11 +1815,11 @@ class NumbaModel(_BaseModel):
         if datapipe is self.datapool:
             return
         if isinstance(datapipe, DataPool) or datapipe is None:
-            self._data_pipeline = datapipe
+            self._data_pool = datapipe
             self.mangle()
         else:
             try:
-                self._data_pipeline = DataPool(datapipe)
+                self._data_pool = DataPool(datapipe)
             except Exception as err:
                 raise TypeError(f"datapool must be DataPool not {type(datapipe)}") from err
             else:
