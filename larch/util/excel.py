@@ -10,6 +10,7 @@ import base64
 from .png import make_png
 from .. import __version__
 import logging
+from ..model.model_group import ModelGroup
 
 logger = logging.getLogger("Larch.Excel")
 
@@ -146,12 +147,18 @@ class ExcelWriter(_XlsxWriter):
             self._add_toc_entry(h, "Parameters", startrow)
             startrow += 1
             logger.debug(" after heading row is %d", startrow)
-            model._estimation_statistics_excel(self, "Parameters", start_row=startrow, buffer_cols=ps_data_index_nlevels-1)
+            startrow = _estimation_statistics_excel(
+                model,
+                self,
+                "Parameters",
+                start_row=startrow,
+                buffer_cols=ps_data_index_nlevels-1,
+            )
         except:
             if on_error == 'raise':
                 raise
 
-        if data_statistics:
+        if data_statistics and not isinstance(model, ModelGroup):
             from .statistics import statistics_for_dataframe
             if model.dataframes is not None:
                 if model.dataframes.data_co is not None and len(model.dataframes.data_co.columns):
@@ -200,13 +207,21 @@ class ExcelWriter(_XlsxWriter):
 
         if utility_functions:
             try:
-                self.add_content_tab(model._utility_functions_as_frame(), sheetname="Utility", heading="Utility Functions")
+                if isinstance(model, ModelGroup):
+                    for m in model:
+                        self.add_content_tab(
+                            m._utility_functions_as_frame(),
+                            sheetname="Utility",
+                            heading=f"Utility Functions {m.title}",
+                        )
+                else:
+                    self.add_content_tab(model._utility_functions_as_frame(), sheetname="Utility", heading="Utility Functions")
                 self.sheets["Utility"].set_column('B:B', None, None, {'hidden': 1})
             except:
                 if on_error == 'raise':
                     raise
 
-        if nesting and not model.is_mnl():
+        if nesting and not isinstance(model, ModelGroup) and not model.is_mnl():
             try:
                 self.add_content_tab(model.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
             except:
@@ -217,6 +232,19 @@ class ExcelWriter(_XlsxWriter):
             except:
                 if on_error == 'raise':
                     raise
+
+        elif nesting and isinstance(model, ModelGroup) and not model.is_mnl():
+            for m in model:
+                try:
+                    self.add_content_tab(m.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
+                except:
+                    if on_error == 'raise':
+                        raise
+                try:
+                    self.add_content_tab(m.graph_descrip('nodes'), sheetname="Nesting", heading="Nesting Node List")
+                except:
+                    if on_error == 'raise':
+                        raise
 
         if embed:
             self.add_metadata('_self_', model)
@@ -474,7 +502,7 @@ def _make_excel_writer(model, filename, save_now=True, **kwargs):
 
     Parameters
     ----------
-    model : larch.Model
+    model : larch.Model or larch.ModelGroup
     filename : str
     save_now : bool, default True
         Save the model immediately.  Set to False if you want to
@@ -511,3 +539,186 @@ def load_metadata(xlsx_filename, key=None):
         v = (row[1:row[0] + 1].str.cat())
         return pickle.loads(base64.standard_b64decode(v.encode()))
 
+
+def _estimation_statistics_excel(
+        model,
+        xlsxwriter,
+        sheetname,
+        start_row=0,
+        start_col=0,
+        buffer_cols=0,
+        compute_loglike_null=True,
+):
+    """
+    Write a tabular summary of estimation statistics to excel.
+
+    This will generate a small table of estimation statistics,
+    containing:
+
+    *	Log Likelihood at Convergence
+    *	Log Likelihood at Null Parameters (if known)
+    *	Log Likelihood with No Model (if known)
+    *	Log Likelihood at Constants Only (if known)
+
+    Additionally, for each included reference value (i.e.
+    everything except log likelihood at convergence) the
+    rho squared with respect to that value is also given.
+
+    Each statistic is reported in aggregate, as well as
+    per case.
+
+    Parameters
+    ----------
+    xlsxwriter : ExcelWriter
+    sheetname : str
+    start_row, start_col : int
+        Zero-based index of upper left cell
+    buffer_cols : int
+        Number of extra columns between statistic label and
+        values.
+    compute_loglike_null : bool, default True
+        If the log likelihood at null values has not already
+        been computed (i.e., if it is not cached) then compute
+        it, cache its value, and include it in the output.
+
+    """
+    try:
+        from ..exceptions import MissingDataError, BHHHSimpleStepFailure
+
+        if start_row is None:
+            start_row = xlsxwriter.sheet_startrow.get(sheetname, 0)
+        worksheet = xlsxwriter.add_worksheet(sheetname)
+
+        row = start_row
+
+        fixed_2 = xlsxwriter.book.add_format({'num_format': '#,##0.00'})
+        fixed_4 = xlsxwriter.book.add_format({'num_format': '0.0000'})
+        comma_0 = xlsxwriter.book.add_format({'num_format': '#,##0'})
+        bold = xlsxwriter.book.add_format({'bold': True})
+        bold_centered = xlsxwriter.book.add_format({'bold': True})
+
+        fixed_2.set_align('center')
+        fixed_4.set_align('center')
+        comma_0.set_align('center')
+        bold_centered.set_align('center')
+        bold.set_border(1)
+        bold_centered.set_border(1)
+
+        datum_col = start_col + buffer_cols
+
+        def catname(j):
+            nonlocal row, start_col, buffer_cols
+            if buffer_cols:
+                worksheet.merge_range(row, start_col, row, start_col + buffer_cols, j, bold)
+            else:
+                worksheet.write(row, start_col, j, bold)
+
+        catname('Statistic')
+        worksheet.write(row, datum_col + 1, 'Aggregate', bold_centered)
+        worksheet.write(row, datum_col + 2, 'Per Case', bold_centered)
+        row += 1
+
+        try:
+            ncases = model.n_cases
+        except MissingDataError:
+            ncases = None
+
+        catname('Number of Cases')
+        if ncases:
+            worksheet.merge_range(row, datum_col + 1, row, datum_col + 2, ncases, cell_format=comma_0)
+        else:
+            worksheet.merge_range(row, datum_col + 1, row, datum_col + 2, "not available")
+        row += 1
+
+        mostrecent = model._most_recent_estimation_result
+        if mostrecent is not None:
+            catname('Log Likelihood at Convergence')
+            worksheet.write(row, datum_col + 1, mostrecent.loglike, fixed_2)  # "{:.2f}".format(mostrecent.loglike)
+            if ncases:
+                worksheet.write(row, datum_col + 2, mostrecent.loglike / ncases,
+                                fixed_4)  # "{:.2f}".format(mostrecent.loglike/ ncases)
+            else:
+                worksheet.write(row, datum_col + 2, "na")
+            row += 1
+
+        ll_z = model._cached_loglike_null
+        if ll_z == 0:
+            if compute_loglike_null:
+                try:
+                    ll_z = model.loglike_null()
+                except MissingDataError:
+                    pass
+                else:
+                    model.loglike()
+            else:
+                ll_z = 0
+        if ll_z != 0:
+            catname('Log Likelihood at Null Parameters')
+            worksheet.write(row, datum_col + 1, ll_z, fixed_2)  # "{:.2f}".format(ll_z)
+            if ncases:
+                worksheet.write(row, datum_col + 2, ll_z / ncases, fixed_4)  # "{:.2f}".format(ll_z/ ncases)
+            else:
+                worksheet.write(row, datum_col + 2, "na")
+            if mostrecent is not None:
+                row += 1
+                catname('Rho Squared w.r.t. Null Parameters')
+                rsz = 1.0 - (mostrecent.loglike / ll_z)
+                worksheet.merge_range(row, datum_col + 1, row, datum_col + 2, rsz,
+                                      cell_format=fixed_4)  # "{:.3f}".format(rsz)
+            row += 1
+
+        ll_nil = model._cached_loglike_nil
+        if ll_nil != 0:
+            catname('Log Likelihood with No Model')
+            worksheet.write(row, datum_col + 1, ll_nil, fixed_2)  # "{:.2f}".format(ll_nil)
+            if ncases:
+                worksheet.write(row, datum_col + 2, ll_nil / ncases, fixed_4)  # "{:.2f}".format(ll_nil/ ncases)
+            else:
+                worksheet.write(row, datum_col + 2, "na")
+            if mostrecent is not None:
+                row += 1
+                catname('Rho Squared w.r.t. No Model')
+                rsz = 1.0 - (mostrecent.loglike / ll_nil)
+                worksheet.merge_range(row, datum_col + 1, row, datum_col + 2, rsz,
+                                      cell_format=fixed_4)  # "{:.3f}".format(rsz)
+            row += 1
+
+        ll_c = model._cached_loglike_constants_only
+        if ll_c != 0:
+            catname('Log Likelihood at Constants Only')
+            worksheet.write(row, datum_col + 1, ll_c, fixed_2)  # "{:.2f}".format(ll_c)
+            if ncases:
+                worksheet.write(row, datum_col + 2, ll_c / ncases, fixed_4)  # "{:.2f}".format(ll_c/ ncases)
+            else:
+                worksheet.write(row, datum_col + 2, "na")
+            if mostrecent is not None:
+                row += 1
+                catname('Rho Squared w.r.t. Constants Only')
+                rsc = 1.0 - (mostrecent.loglike / ll_c)
+                worksheet.merge_range(row, datum_col + 1, row, datum_col + 2, rsc,
+                                      cell_format=fixed_4)  # "{:.3f}".format(rsc)
+            row += 1
+
+        if mostrecent is not None:
+            if 'message' in mostrecent:
+                catname('Optimization Message')
+                worksheet.write(row, datum_col + 1, mostrecent.message)
+                row += 1
+
+        if sheetname not in xlsxwriter._col_widths:
+            xlsxwriter._col_widths[sheetname] = {}
+        current_width = xlsxwriter._col_widths[sheetname].get(start_col, 8)
+        proposed_width = 28
+        if buffer_cols:
+            for b in range(buffer_cols):
+                proposed_width -= xlsxwriter._col_widths[sheetname].get(start_col + 1 + b, 8)
+        new_width = max(current_width, proposed_width)
+        xlsxwriter._col_widths[sheetname][start_col] = new_width
+        worksheet.set_column(start_col, start_col, new_width)
+
+        row += 2  # gap
+        xlsxwriter.sheet_startrow[worksheet.name] = row
+        return row
+    except:
+        logger.exception("error in _estimation_statistics_excel")
+        raise

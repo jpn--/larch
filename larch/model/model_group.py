@@ -255,3 +255,7 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 				verbose=verbose,
 			))
 		return problems
+
+	def to_xlsx(self, filename, save_now=True, **kwargs):
+		from ..util.excel import _make_excel_writer
+		_make_excel_writer(self, filename, save_now=save_now, **kwargs)
