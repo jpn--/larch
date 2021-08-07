@@ -1,11 +1,11 @@
 python:
-  - 3.7
+  - 3.9
 
 c_compiler:
-  - vs2015    # [win]
+  - vs2017    # [win]
 
 numpy: 
-  - 1.15
+  - 1.19
   
 CONDA_BUILD_SYSROOT:
   - /opt/MacOSX10.9.sdk        # [osx]
