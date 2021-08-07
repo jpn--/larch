@@ -1,6 +1,7 @@
 import networkx as nx
 from collections import OrderedDict
 import numpy
+import heapq
 from ..util.touch_notifier import TouchNotify
 from ..util.lazy import lazy
 
@@ -196,18 +197,10 @@ class NestingTree(TouchNotify, nx.DiGraph):
 
 	@lazy
 	def topological_sorted(self):
-		return list(reversed(list(nx.topological_sort(self))))
+		return list(reverse_lexicographical_topological_sort(self))
 
 	@lazy
 	def topological_sorted_no_elementals(self):
-		# if self._topological_sorted_no_elementals is not None:
-		# 	# use cached  if available
-		# 	return self._topological_sorted_no_elementals
-		# self._topological_sorted_no_elementals = self.topological_sorted.copy()
-		# for code, out_degree in self.out_degree:
-		# 	if not out_degree:
-		# 		self._topological_sorted_no_elementals.remove(code)
-		# return self._topological_sorted_no_elementals
 		try:
 			result = self.topological_sorted.copy()
 		except nx.NetworkXUnfeasible:
@@ -825,3 +818,81 @@ def graph_to_figure(graph, output_format='svg', **format):
 	return x
 
 
+def reverse_lexicographical_topological_sort(G, key=None):
+	"""
+	Generator of nodes in reverse lexicographically topologically sorted order.
+
+	A general topological sort is a nonunique permutation of the nodes such that
+	an edge from u to v implies that u appears before v in the topological sort
+	order.
+
+	The lexicographical topological sort breaks ties by ordering according to
+	node labels, so that the sorting becomes unique.
+
+	Parameters
+	----------
+	G : NetworkX digraph
+		A directed acyclic graph (DAG)
+
+	key : function, optional
+		This function maps nodes to keys with which to resolve ambiguities in
+		the sort order.  Defaults to the identity function.
+
+	Returns
+	-------
+	iterable
+		An iterable of node names in lexicographical topological sort order.
+
+	Raises
+	------
+	NetworkXError
+		Topological sort is defined for directed graphs only. If the graph `G`
+		is undirected, a :exc:`NetworkXError` is raised.
+
+	NetworkXUnfeasible
+		If `G` is not a directed acyclic graph (DAG) no topological sort exists
+		and a :exc:`NetworkXUnfeasible` exception is raised.  This can also be
+		raised if `G` is changed while the returned iterator is being processed
+
+	RuntimeError
+		If `G` is changed while the returned iterator is being processed.
+
+	"""
+
+	if not G.is_directed():
+		msg = "Topological sort not defined on undirected graphs."
+		raise nx.NetworkXError(msg)
+
+	if key is None:
+		def key(node):
+			return node
+
+	nodeid_map = {n: i for i, n in enumerate(G)}
+
+	def create_tuple(node):
+		return key(node), nodeid_map[node], node
+
+	outdegree_map = {v: d for v, d in G.out_degree() if d > 0}
+	# These nodes have zero outdegree and ready to be returned.
+	zero_outdegree = [create_tuple(v) for v, d in G.out_degree() if d == 0]
+	heapq.heapify(zero_outdegree)
+
+	while zero_outdegree:
+		_, _, node = heapq.heappop(zero_outdegree)
+
+		if node not in G:
+			raise RuntimeError("Graph changed during iteration")
+		for parent, child in G.in_edges(node):
+			try:
+				outdegree_map[parent] -= 1
+			except KeyError as e:
+				raise RuntimeError("Graph changed during iteration") from e
+			if outdegree_map[parent] == 0:
+				heapq.heappush(zero_outdegree, create_tuple(parent))
+				del outdegree_map[parent]
+
+		yield node
+
+	if zero_outdegree:
+		msg = "Graph contains a cycle or graph changed during iteration"
+		raise nx.NetworkXUnfeasible(msg)
