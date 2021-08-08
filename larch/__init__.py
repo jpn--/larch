@@ -1,5 +1,5 @@
 
-__version__ = '5.5.6'
+__version__ = '5.5.7'
 
 from .util.interface_info import Info, ipython_status
 import sys
