@@ -7,7 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/larch/util" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
-    <orderEntry type="jdk" jdkName="Greenhouse" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (summer21)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
