@@ -62,7 +62,7 @@ class ExcelWriter(_XlsxWriter):
         options = kwargs.pop('workbook_options', {})
         if 'nan_inf_to_errors' not in options:
             options['nan_inf_to_errors'] = True
-        super().__init__(*args, engine=_engine, options=options, **kwargs)
+        super().__init__(*args, engine=_engine, options=options, engine_kwargs=kwargs)
         self.book.set_size(1600, 1200)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.ital_fmt = self.book.add_format({'italic': True, 'font_size':12})
@@ -233,18 +233,19 @@ class ExcelWriter(_XlsxWriter):
                 if on_error == 'raise':
                     raise
 
-        elif nesting and isinstance(model, ModelGroup) and not model.is_mnl():
+        elif nesting and isinstance(model, ModelGroup):
             for m in model:
-                try:
-                    self.add_content_tab(m.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
-                except:
-                    if on_error == 'raise':
-                        raise
-                try:
-                    self.add_content_tab(m.graph_descrip('nodes'), sheetname="Nesting", heading="Nesting Node List")
-                except:
-                    if on_error == 'raise':
-                        raise
+                if not m.is_mnl():
+                    try:
+                        self.add_content_tab(m.graph.__xml__(output='png'), sheetname="Nesting", heading="Nesting Tree")
+                    except:
+                        if on_error == 'raise':
+                            raise
+                    try:
+                        self.add_content_tab(m.graph_descrip('nodes'), sheetname="Nesting", heading="Nesting Node List")
+                    except:
+                        if on_error == 'raise':
+                            raise
 
         if embed:
             self.add_metadata('_self_', model)

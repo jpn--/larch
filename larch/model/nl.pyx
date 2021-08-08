@@ -542,6 +542,9 @@ def nl_d_log_likelihood_from_dataframes_all_rows(
 			dLL_temp  = numpy.zeros([num_threads, n_params], dtype=l4_float_dtype)
 		if return_bhhh:
 			bhhh_total = numpy.zeros([num_threads,n_params,n_params], dtype=l4_float_dtype)
+		else:
+			# dummy placeholder
+			bhhh_total = numpy.zeros([num_threads, 0, 0], dtype=l4_float_dtype)
 
 		with nogil, parallel(num_threads=num_threads):
 			thread_number = threadid()
