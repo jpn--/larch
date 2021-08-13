@@ -957,11 +957,6 @@ class NumbaModel(_BaseModel):
             )
             if self.work_arrays is not None:
                 self._rebuild_work_arrays()
-                # if (
-                #         (self.n_cases != self.work_arrays.utility.shape[0])
-                #         or (self.work_arrays.utility.dtype != self.float_dtype)
-                # ):
-                #     self.work_arrays = None
 
         elif self.dataframes is not None: # work from old DataFrames
 
@@ -995,14 +990,17 @@ class NumbaModel(_BaseModel):
                 (_array_ca),
             )
 
-    def _rebuild_work_arrays(self, n_cases=None, n_nodes=None, n_params=None):
+    def _rebuild_work_arrays(self, n_cases=None, n_nodes=None, n_params=None, on_missing_data='silent'):
         log = logging.getLogger("Larch")
         if n_cases is None:
             try:
                 n_cases = self.n_cases
             except MissingDataError as err:
-                log.exception("MissingDataError, cannot rebuild work arrays")
+                if on_missing_data != 'silent':
+                    log.error("MissingDataError, cannot rebuild work arrays")
                 self.work_arrays = None
+                if on_missing_data == 'raise':
+                    raise
                 return
         if n_nodes is None:
             n_nodes = len(self.graph)
@@ -1119,7 +1117,7 @@ class NumbaModel(_BaseModel):
                 else:
                     raise MissingDataError('model.dataframes does not define data_av')
         if self.work_arrays is None:
-            self._rebuild_work_arrays()
+            self._rebuild_work_arrays(on_missing_data='raise')
         return (
             *self._fixed_arrays,
             self._frame.holdfast.to_numpy(),
