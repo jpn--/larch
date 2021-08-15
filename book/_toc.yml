@@ -1,0 +1,33 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Users Guide
+    maxdepth: 1
+    chapters:
+    - file: installation
+    - file: user-guide/data-fundamentals
+      title: Data Fundamentals
+
+  - caption: API Reference
+    chapters:
+    - file: api/~data
+      sections:
+        - file: api/dataframes
+    - file: api/linear
+    - file: api/~models
+      sections:
+        - file: api/model
+
+  - caption: Examples
+    chapters:
+    - file: example/mtc
+      title: MTC Mode Choice
+    - file: example/swissmetro
+      title: Swissmetro
+    - file: example/exampville
+      title: Exampville
+    - file: example/itinerary
+      title: Itinerary Choice
