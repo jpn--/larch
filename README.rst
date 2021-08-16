@@ -13,7 +13,7 @@ larch
     :target: https://github.com/jpn--/larch
     :class: statusbadge
 
-.. image:: https://img.shields.io/pypi/l/larch.svg
+.. image:: https://img.shields.io/conda/l/conda-forge/larch
     :target: https://github.com/jpn--/larch/blob/master/LICENSE
     :class: statusbadge
 
