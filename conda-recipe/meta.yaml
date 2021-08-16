@@ -14,11 +14,13 @@ build:
 requirements:
 
   build:
+    - python {{ python }}
+    - pip
     - {{ compiler('c') }}
     - llvm-openmp  # [osx]
 
   host:
-    - python
+    - python {{ python }}
     - pip
     - llvm-openmp  # [osx]
     - cython >=0.29

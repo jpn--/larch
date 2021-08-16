@@ -10,6 +10,7 @@ parts:
     - file: installation
     - file: user-guide/data-fundamentals
       title: Data Fundamentals
+    - file: user-guide/linear-funcs
 
   - caption: API Reference
     chapters:

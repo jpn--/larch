@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: ""
+title: "v5.5.8"
 author: Jeffrey Newman
 logo: img/larch-logo.png
 
@@ -11,6 +11,10 @@ execute:
   execute_notebooks: cache
   allow_errors: true
   timeout: 300 # 5 minutes per cell
+
+parse:
+  myst_substitutions:
+    idca: value
 
 # Define the name of the latex output file for PDF builds
 #latex:
