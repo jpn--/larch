@@ -1,6 +1,6 @@
 package:
   name: larch
-  version: "5.5.8"
+  version: "5.5.9"
 
 source:
   path: ../
@@ -24,7 +24,7 @@ requirements:
     - pip
     - llvm-openmp  # [osx]
     - cython >=0.29
-    - numpy
+    - {{ pin_compatible('numpy') }}
 
   run:
     - python {{ python }}
