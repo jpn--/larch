@@ -4770,3 +4770,87 @@ def test_model_without_co_data():
 	m.choice_ca_var = '_choice_'
 	m.load_data()
 	assert m.loglike() == approx(-7309.600971749625)
+
+def test_scrambled_data():
+	mix = lambda x: (x % 10) * 10000 + x
+	d = MTC()
+	ca = d.data_ca[['ivtt', 'ovtt', 'totcost', 'chose', 'tottime', ]]
+	co = d.data_co[['age', 'hhinc', 'hhsize', 'numveh']]
+	ca = ca.sort_index(level=0, key=mix)
+	co = co.sort_index(key=mix)
+	av = d.data_av.sort_index(key=mix)
+	ch = d.data_ch.sort_index(key=mix)
+
+	from larch.dataframes import DataFrames
+	from larch import Model
+
+	dfs = DataFrames(
+		ca=ca,
+		co=co,
+		av=av,
+		ch=ch,
+	)
+
+	m5 = Model()
+
+	# from larch.roles import P, X, PX
+	from larch.model.linear import ParameterRef_C as P
+	from larch.model.linear import DataRef_C as X
+	def PX(i):
+		return P(i) * X(i)
+
+	m5.utility_co[2] = P("ASC_SR2") * X("1") + P("hhinc#2") * X("hhinc")
+	m5.utility_co[3] = P("ASC_SR3P") * X("1") + P("hhinc#3") * X("hhinc")
+	m5.utility_co[4] = P("ASC_TRAN") * X("1") + P("hhinc#4") * X("hhinc")
+	m5.utility_co[5] = P("ASC_BIKE") * X("1") + P("hhinc#5") * X("hhinc")
+	m5.utility_co[6] = P("ASC_WALK") * X("1") + P("hhinc#6") * X("hhinc")
+	m5.utility_ca = PX("tottime") + PX("totcost")
+
+	m5.dataframes = dfs
+
+	beta_in1 = {
+		'ASC_BIKE': -0.8523646111088327,
+		'ASC_SR2': -0.5233769323949348,
+		'ASC_SR3P': -2.3202089848081027,
+		'ASC_TRAN': -0.05615933557609158,
+		'ASC_WALK': 0.050082767550586924,
+		'hhinc#2': -0.001040241396513087,
+		'hhinc#3': 0.0031822969445656542,
+		'hhinc#4': -0.0017162484345735326,
+		'hhinc#5': -0.004071521055900851,
+		'hhinc#6': -0.0021316332241034445,
+		'totcost': -0.001336661560553717,
+		'tottime': -0.01862990704919887,
+	}
+
+	ll2 = m5.loglike2(beta_in1, return_series=True)
+
+	q1_dll = {
+		'ASC_BIKE': -139.43832,
+		'ASC_SR2': -788.00574,
+		'ASC_SR3P': -126.84879,
+		'ASC_TRAN': -357.75186,
+		'ASC_WALK': -116.137886,
+		'hhinc#2': -46416.28,
+		'hhinc#3': -8353.63,
+		'hhinc#4': -21409.012,
+		'hhinc#5': -8299.654,
+		'hhinc#6': -7395.375,
+		'totcost': 39520.043,
+		'tottime': -26556.303,
+	}
+
+	assert -4930.3212890625 == approx(ll2.ll)
+
+	for k in q1_dll:
+		assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
+
+	# Test calculate_parameter_covariance doesn't choke if all holdfasts are on:
+	m5.lock_values(*beta_in1.keys())
+	m5.calculate_parameter_covariance()
+
+	assert numpy.all(m5.pf['std_err'] == 0)
+	assert numpy.all(m5.pf['robust_std_err'] == 0)
+
+
+
