@@ -1566,6 +1566,9 @@ cdef class DataFrames:
 			caseindex_name = self._caseindex_name or df.index.names[0]
 			df = df.set_index(df.index.set_names(caseindex_name))
 
+			if not df.index.is_monotonic_increasing:
+				df = df.sort_index()
+
 			if self._computational:
 				self._data_co = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_co')
 				self._array_co = _df_values(self.data_co)
@@ -1692,6 +1695,8 @@ cdef class DataFrames:
 
 	@data_av.setter
 	def data_av(self, df:pandas.DataFrame):
+		if not df.index.is_monotonic_increasing:
+			df = df.sort_index()
 		self._data_av = _ensure_dataframe_of_dtype(df, numpy.int8, 'data_av', warn_on_convert=False)
 		self._array_av = _df_values(self.data_av, (self.n_cases, self.n_alts))
 
@@ -1754,6 +1759,8 @@ cdef class DataFrames:
 
 	@data_ch.setter
 	def data_ch(self, df:pandas.DataFrame):
+		if not df.index.is_monotonic_increasing:
+			df = df.sort_index()
 		self._data_ch = _ensure_dataframe_of_dtype(df, l4_float_dtype, 'data_ch')
 		self._array_ch = _df_values(self.data_ch, (self.n_cases, self.n_alts))
 
