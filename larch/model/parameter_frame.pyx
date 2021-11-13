@@ -620,6 +620,8 @@ cdef class ParameterFrame:
 		maximum = numpy.minimum(self.pf.maximum, cap)
 		self._frame.loc[:,'minimum'] = numpy.where(minimum <= maximum, minimum, self.pf.minimum)
 		self._frame.loc[:,'maximum'] = numpy.where(minimum <= maximum, maximum, self.pf.maximum)
+		self._frame.loc[:,'minimum'] = self._frame.loc[:,'minimum'].fillna(-cap)
+		self._frame.loc[:,'maximum'] = self._frame.loc[:,'maximum'].fillna(cap)
 		self._check_if_frame_values_changed()
 
 	def get_values(self):
