@@ -12,9 +12,9 @@ def test_weighted():
     ds = lxd.to_dataset(m.dataservice)
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == ['_0_caseid_', 'alt_names', '_1_altid_', 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {'_0_caseid_': 5029, '_1_altid_': 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 
@@ -26,13 +26,13 @@ def test_choice_code():
     ds = lxd.to_dataset(m.dataservice)
     ds['chosen_alt'] = sh.DataArray(
         chosen_alt,
-        dims=['_caseid_',],
+        dims=['_0_caseid_',],
     )
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == ['_0_caseid_', 'alt_names', '_1_altid_', '_var_co', '_var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {'_0_caseid_': 5029, '_1_altid_': 6, '_var_co': 1, '_var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 
@@ -44,9 +44,9 @@ def test_shared_data():
     pool = lx.DataPool(ds)
     y, flows = lxd.prepare_data(pool, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == ['_0_caseid_', 'alt_names', '_1_altid_', 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {'_0_caseid_': 5029, '_1_altid_': 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 

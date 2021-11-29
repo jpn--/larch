@@ -18,10 +18,10 @@ def MTC(format='dataframes'):
 		from ..dataset import Dataset, DataArray, DataPool
 		dataset = Dataset.from_dataframe(dt.data_co)
 		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca()))
-		dataset['avail'] = DataArray(dt.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
+		dataset['avail'] = DataArray(dt.data_av.values, dims=['_0_caseid_', '_1_altid_'], coords=dataset.coords)
 		dataset.coords['altnames'] = DataArray(
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
-			dims=['_altid_'],
+			dims=['_1_altid_'],
 		)
 		if format == 'datapool':
 			return DataPool(dataset)
@@ -59,12 +59,45 @@ def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
 			cache_dir=cache_dir,
 		)
 		pool.main.coords['altid'] = DataArray(
-			[1, 2, 3, 4, 5], dims="_altid_",
+			[1, 2, 3, 4, 5], dims="_1_altid_",
 		)
 		pool.main.coords['altname'] = DataArray(
-			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_altid_",
+			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_1_altid_",
 		)
 		return pool
+	if format == 'datatree' and model == 'mode':
+		from ..examples import example
+		from ..dataset import Dataset, DataPool, DataArray, DataTree
+		_hh, _pp, _tour, _skims = example(200, ['hh', 'pp', 'tour', 'skims'])
+		tours = Dataset(
+			_tour.set_index('TOURID'), caseid='TOURID',
+		)
+		tours.coords['altid'] = DataArray(
+			[1, 2, 3, 4, 5], dims="_1_altid_",
+		)
+		tours.coords['altname'] = DataArray(
+			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_1_altid_",
+		)
+		od_skims = Dataset.from_omx(_skims)
+		hh = Dataset(_hh.set_index('HHID'))
+		pp = Dataset(_pp.set_index('PERSONID'))
+		tree = DataTree(
+			tours=tours,
+			hh=hh,
+			pp=pp,
+			od=od_skims,
+			do=od_skims,
+			root_node_name='tours',
+			relationships=(
+				"tours.HHID @ hh.HHID",
+				"tours.PERSONID @ pp.PERSONID",
+				"hh.HOMETAZ @ od.otaz",
+				"tours.DTAZ @ od.dtaz",
+				"hh.HOMETAZ @ do.dtaz",
+				"tours.DTAZ @ do.otaz",
+			),
+		)
+		return tree
 	elif format == 'dataframes' and model == 'mode':
 		from ..examples import example
 		hh, pp, tour, skims = example(200, ['hh', 'pp', 'tour', 'skims'])
