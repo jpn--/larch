@@ -19,7 +19,7 @@ def MTC(format='dataframes'):
 		dataset = Dataset.from_dataframe(dt.data_co)
 		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca()))
 		dataset['avail'] = DataArray(dt.data_av.values, dims=['_0_caseid_', '_1_altid_'], coords=dataset.coords)
-		dataset.coords['altnames'] = DataArray(
+		dataset.coords['alt_names'] = DataArray(
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
 			dims=['_1_altid_'],
 		)

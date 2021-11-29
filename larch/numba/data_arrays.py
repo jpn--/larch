@@ -58,9 +58,9 @@ def to_dataset(dataframes):
         caseindex_name = dataframes.data_ca.index.names[0]
         altindex_name = dataframes.data_ca.index.names[1]
         ds.update(Dataset.from_dataframe(dataframes.data_ca))
-    altnames = dataframes.alternative_names()
-    if altnames:
-        ds.coords['alt_names'] = DataArray(altnames, dims=(altindex_name,))
+    alt_names = dataframes.alternative_names()
+    if alt_names:
+        ds.coords['alt_names'] = DataArray(alt_names, dims=(altindex_name,))
     return ds
 
 
@@ -216,13 +216,15 @@ def prepare_data(
 
     return model_dataset, flows
 
-def flownamer(tag, definition_spec):
+def flownamer(tag, definition_spec, extra_hash_features=()):
     import hashlib, base64
     defs_hash = hashlib.md5()
     defs_hash.update(str(tag).encode("utf8"))
     for k, v in definition_spec.items():
         defs_hash.update(str(k).encode("utf8"))
         defs_hash.update(str(v).encode("utf8"))
+    for k in extra_hash_features:
+        defs_hash.update(str(k).encode("utf8"))
     return "pipeline_"+(base64.b32encode(defs_hash.digest())).decode().replace("=","")
 
 
@@ -236,10 +238,11 @@ def _prep_ca(
         cache_dir=None,
         flow=None,
 ):
-    from ..dataset import Dataset, DataArray
+    from ..dataset import Dataset, DataArray, DataTree
+    assert isinstance(shared_data_ca, DataTree)
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
-    flowname = flownamer(tag, vars_ca)
+    flowname = flownamer(tag, vars_ca, shared_data_ca._hash_features())
     if flow is None or flowname != flow.name:
         flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
@@ -290,10 +293,11 @@ def _prep_co(
         cache_dir=None,
         flow=None,
 ):
-    from ..dataset import DataArray
+    from ..dataset import DataArray, DataTree
+    assert isinstance(shared_data_co, DataTree)
     if not isinstance(vars_co, dict):
         vars_co = {i: i for i in vars_co}
-    flowname = flownamer(tag, vars_co)
+    flowname = flownamer(tag, vars_co, shared_data_co._hash_features())
     if flow is None or flowname != flow.name:
         flow = shared_data_co.setup_flow(vars_co, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
