@@ -15,7 +15,7 @@ def MTC(format='dataframes'):
 		alt_names=['DA', 'SR2', 'SR3', 'TRANSIT', 'BIKE', 'WALK']
 	)
 	if format in ('dataset', 'datapool'):
-		from ..dataset import Dataset, DataArray, DataPool
+		from ..dataset import Dataset, DataArray
 		dataset = Dataset.from_dataframe(dt.data_co)
 		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca()))
 		dataset['avail'] = DataArray(dt.data_av.values, dims=['_0_caseid_', '_1_altid_'], coords=dataset.coords)
@@ -23,8 +23,6 @@ def MTC(format='dataframes'):
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
 			dims=['_1_altid_'],
 		)
-		if format == 'datapool':
-			return DataPool(dataset)
 		return dataset
 	elif format == 'dataframes':
 		dt.data_ce_as_ca("_avail_")
@@ -34,40 +32,9 @@ def MTC(format='dataframes'):
 
 
 def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
-	if format == 'datapool' and model == 'mode':
-		from ..examples import example
-		from ..dataset import Dataset, DataPool, DataArray
-		_hh, _pp, _tour, _skims = example(200, ['hh', 'pp', 'tour', 'skims'])
-		tours = Dataset(
-			_tour.set_index('TOURID'), caseid='TOURID',
-		)
-		od_skims = Dataset.from_omx(_skims)
-		hh = Dataset(_hh.set_index('HHID'))
-		pp = Dataset(_pp.set_index('PERSONID'))
-		pool = DataPool(
-			tours,
-			hh=hh,
-			pp=pp,
-			od=od_skims.set_match_names({
-				'otaz': '@HOMETAZ',
-				'dtaz': '@DTAZ',
-			}),
-			do=od_skims.set_match_names({
-				'otaz': '@DTAZ',
-				'dtaz': '@HOMETAZ',
-			}),
-			cache_dir=cache_dir,
-		)
-		pool.main.coords['altid'] = DataArray(
-			[1, 2, 3, 4, 5], dims="_1_altid_",
-		)
-		pool.main.coords['altname'] = DataArray(
-			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_1_altid_",
-		)
-		return pool
 	if format == 'datatree' and model == 'mode':
 		from ..examples import example
-		from ..dataset import Dataset, DataPool, DataArray, DataTree
+		from ..dataset import Dataset, DataArray, DataTree
 		_hh, _pp, _tour, _skims = example(200, ['hh', 'pp', 'tour', 'skims'])
 		tours = Dataset(
 			_tour.set_index('TOURID'), caseid='TOURID',

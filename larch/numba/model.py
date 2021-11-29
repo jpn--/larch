@@ -863,8 +863,9 @@ class NumbaModel(_BaseModel):
 
     _null_slice = (None, None, None)
 
-    def __init__(self, *args, float_dtype=np.float64, datapool=None, **kwargs):
+    def __init__(self, *args, float_dtype=np.float64, datatree=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self._dataset = None
         self._fixed_arrays = None
         self._data_arrays = None
         self.work_arrays = None
@@ -872,10 +873,11 @@ class NumbaModel(_BaseModel):
         self.constraint_intensity = 0.0
         self.constraint_sharpness = 0.0
         self._constraint_funcs = None
-        self.datapool = datapool
+        self.datatree = datatree
 
     def mangle(self, *args, **kwargs):
         super().mangle(*args, **kwargs)
+        self._dataset = None
         self._fixed_arrays = None
         self._data_arrays = None
         self.work_arrays = None
@@ -907,19 +909,14 @@ class NumbaModel(_BaseModel):
             be avoided by giving alternative codes explicitly or having previously
             set dataframes or a dataservice that will give the alternative codes.
         """
-        if self.datapool is not None:
+        if self.datatree is not None:
 
-            from ..dataset import DataPool, DataTree
-            if isinstance(self.datapool, DataPool):
-                def get_coords_array(*names):
-                    for name in names:
-                        if name in self.datapool.main.coords:
-                            return self.datapool.main.coords[name].values
-            else:
-                def get_coords_array(*names):
-                    for name in names:
-                        if name in self.datapool.root_node['dataset'].coords:
-                            return self.datapool.root_node['dataset'].coords[name].values
+            from ..dataset import DataTree
+
+            def get_coords_array(*names):
+                for name in names:
+                    if name in self.datatree.root_dataset.coords:
+                        return self.datatree.root_dataset.coords[name].values
 
             if alternative_codes is None:
                 alternative_codes = get_coords_array(
@@ -939,24 +936,23 @@ class NumbaModel(_BaseModel):
             root_id=root_id,
         )
 
-    def reflow_data_arrays(self, pool_source=None):
+    def reflow_data_arrays(self):
         """
-        Reload the internal data_arrays so they are consistent with the datapool.
+        Reload the internal data_arrays so they are consistent with the datatree.
         """
         if self.graph is None:
             self._data_arrays = None
             return
 
-        datapool = self.datapool
-        if datapool is not None:
+        datatree = self.datatree
+        if datatree is not None:
             from .data_arrays import prepare_data
             self.dataset, self.dataflows = prepare_data(
-                datashare=datapool,
+                datashare=datatree,
                 request=self,
                 float_dtype=self.float_dtype,
-                cache_dir=datapool.cache_dir,
+                cache_dir=datatree.cache_dir,
                 flows=getattr(self, 'dataflows', None),
-                pool_source=pool_source,
             )
             self._data_arrays = self.dataset.to_arrays(
                 self.graph,
@@ -1081,8 +1077,9 @@ class NumbaModel(_BaseModel):
 
     def unmangle(self, force=False):
         super().unmangle(force=force)
+        if self._dataset is None or force:
+            self.reflow_data_arrays()
         if self._fixed_arrays is None or force:
-            self.reflow_data_arrays(getattr(self, 'datapool_source', None))
             self._rebuild_fixed_arrays()
             self._rebuild_work_arrays()
         if self._constraint_funcs is None:
@@ -1098,8 +1095,8 @@ class NumbaModel(_BaseModel):
         if caseslice is None:
             caseslice = slice(caseslice)
         missing_ch, missing_av = False, False
-        if self._dataframes is None and self.datapool is None:
-            raise MissingDataError('dataframes and datapool are both not set, maybe you need to call `load_data` first?')
+        if self._dataframes is None and self.datatree is None:
+            raise MissingDataError('dataframes and datatree are both not set, maybe you need to call `load_data` first?')
         if self._dataframes is not None and not self._dataframes.is_computational_ready(activate=True):
             raise ValueError('DataFrames is not computational-ready')
         self.unmangle()
@@ -1807,57 +1804,32 @@ class NumbaModel(_BaseModel):
         raise MissingDataError("no data_arrays are set")
 
     @property
-    def datapool(self):
+    def datatree(self):
         """Dataset : A source for data for the model"""
         try:
-            return self._data_pool
+            return self._datatree
         except AttributeError:
             return None
 
-    @datapool.setter
-    def datapool(self, datapipe):
-        from ..dataset import DataPool, DataTree
-        if datapipe is self.datapool:
+    @datatree.setter
+    def datatree(self, tree):
+        from ..dataset import DataTree
+        if tree is self.datatree:
             return
-        if isinstance(datapipe, DataPool) or datapipe is None:
-            self._data_pool = datapipe
+        if isinstance(tree, DataTree) or tree is None:
+            self._datatree = tree
             self.mangle()
-        elif isinstance(datapipe, DataTree):
-            self._data_pool = datapipe
+        elif isinstance(tree, Dataset):
+            self._datatree = DataTree(main=tree)
             self.mangle()
         else:
             try:
-                self._data_pool = DataTree(main=datapipe)
+                self._datatree = DataTree(main=Dataset.construct(tree))
             except Exception as err:
-                raise TypeError(f"datapool must be DataPool not {type(datapipe)}") from err
+                raise TypeError(f"datatree must be DataTree not {type(tree)}") from err
             else:
                 self.mangle()
 
-
-
-    @property
-    def datapool_source(self):
-        """Dataset or DataFrame or Table : A source for data for the model"""
-        try:
-            return self._datapool_source
-        except AttributeError:
-            return None
-
-    @datapool_source.setter
-    def datapool_source(self, source):
-        from sharrow import Table as _sh_Table
-        from pyarrow import Table as _pa_Table
-        if source is self.datapool_source:
-            return
-        if isinstance(source, (pd.DataFrame, Dataset, _sh_Table, _pa_Table)) or source is None:
-            self._datapool_source = source
-            self.mangle()
-        else:
-            raise TypeError(f"datapool_source must be table-like not {type(source)}")
-
-    @datapool_source.deleter
-    def datapool_source(self):
-        self.datapool_source = None
 
     @property
     def dataset(self):
@@ -1881,6 +1853,11 @@ class NumbaModel(_BaseModel):
         else:
             raise TypeError(f"dataset must be Dataset not {type(dataset)}")
 
+    @dataset.deleter
+    def dataset(self):
+        self._dataset = None
+        self._data_arrays = None
+
     @property
     def data_as_loaded(self):
         if self.dataset is not None:
@@ -1895,8 +1872,8 @@ class NumbaModel(_BaseModel):
             return self.dataset
         if self.dataframes is not None:
             return self.dataframes
-        if self.datapool is not None:
-            return self.datapool
+        if self.datatree is not None:
+            return self.datatree
         if self.dataservice is not None:
             return self.dataservice
         return None

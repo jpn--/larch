@@ -1127,7 +1127,7 @@ def test_mtc_with_dataset(mtc_dataset):
     m.utility_ca = PX("tottime") + PX("totcost")
     m.availability_var = 'avail'
     m.choice_ca_var = 'chose'
-    m.datapool = mtc_dataset
+    m.datatree = mtc_dataset
     assert m.loglike() == approx(-7309.600971749634)
     m.set_cap(20)
     result = m.maximize_loglike(method='slsqp')
@@ -1136,7 +1136,7 @@ def test_mtc_with_dataset(mtc_dataset):
 def test_eville_mode_with_dataset():
     pytest.importorskip("sharrow_pro")
     from larch.examples import EXAMPVILLE
-    pool = EXAMPVILLE('datapool')
+    tree = EXAMPVILLE('datatree')
     DA = 1
     SR = 2
     Walk = 3
@@ -1150,7 +1150,7 @@ def test_eville_mode_with_dataset():
             Bike: 'Bike',
             Transit: 'Transit',
         },
-        datapool=pool,
+        datatree=tree,
     )
     m.title = "Exampville Work Tour Mode Choice v1"
     m.utility_co[DA] = (
@@ -1218,13 +1218,13 @@ def test_eville_mode_with_dataset():
         'OutVehTime': -0.14752266135040631,
     }, rel=1e-5)
     assert r.loglike == approx(-8047.006193851376)
-    worktours = m.datapool.main.query_cases('TOURPURP==1')
-    m.datapool_source = worktours
+    worktours = tree.query_cases('TOURPURP==1')
+    m.datatree = worktours
     assert m.loglike() == approx(-3527.6797690247113)
     m.float_dtype = np.float32
     assert m.loglike() == approx(-3527.68115234375)
     assert m.n_cases == 7564
-    del m.datapool_source
+    m.datatree = tree
     assert m.loglike() == approx(-8047.006193851376)
     assert m.n_cases == 20739
 

@@ -70,22 +70,15 @@ def prepare_data(
         float_dtype=None,
         cache_dir=None,
         flows=None,
-        pool_source=None,
 ):
     log = logging.getLogger("Larch")
-    from ..dataset import Dataset, DataPool, DataArray, DataTree
+    from ..dataset import Dataset, DataArray, DataTree
     if float_dtype is None:
         float_dtype = np.float64
-    if pool_source is None:
-        log.debug(f"building dataset from datashare coords: {datashare.coords}")
-        model_dataset = Dataset(
-            coords=datashare.coords,
-        )
-    else:
-        log.debug(f"building dataset from pool_source coords: {pool_source.coords}")
-        model_dataset = Dataset(
-            coords=pool_source.coords,
-        )
+    log.debug(f"building dataset from datashare coords: {datashare.coords}")
+    model_dataset = Dataset(
+        coords=datashare.coords,
+    )
 
     # use the caseids on cases where available, pad with -1's
     # if n_padded_cases is not None and n_padded_cases != model_dataset.coords['_0_caseid_'].size:
@@ -106,22 +99,17 @@ def prepare_data(
     if flows is None:
         flows = {}
 
-    if isinstance(datashare, (DataPool, DataTree)):
-        log.debug(f"adopting existing DataPool")
+    if isinstance(datashare, (DataTree, )):
+        log.debug(f"adopting existing DataTree")
         if not datashare.relationships_are_digitized:
             datashare.digitize_relationships(inplace=True)
         shared_data_ca = datashare
         shared_data_co = datashare.drop_dims("_1_altid_")
     else:
-        log.debug(f"initializing new DataPool")
+        log.debug(f"initializing new DataTree")
         shared_data_ca = DataTree(main=datashare)
         shared_data_ca.digitize_relationships(inplace=True)
-        shared_data_co = DataPool(datashare.drop_dims(
-            [i for i in datashare.dims.keys() if i != "_0_caseid_"]
-        ))
-
-    if not shared_data_ca.relationships_are_digitized:
-        shared_data_ca.digitize_relationships(inplace=True)
+        shared_data_co = shared_data_ca.drop_dims("_1_altid_")
 
     if 'co' in request:
         log.debug(f"requested co data: {request['co']}")
@@ -133,7 +121,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('co'),
-            pool_source=pool_source,
         )
     if 'ca' in request:
         log.debug(f"requested ca data: {request['ca']}")
@@ -145,7 +132,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('ca'),
-            pool_source=pool_source,
         )
 
     if 'choice_ca' in request:
@@ -159,14 +145,10 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('choice_ca'),
-            pool_source=pool_source,
         )
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
-        if pool_source is None:
-            choicecodes = datashare[request['choice_co_code']]
-        else:
-            choicecodes = pool_source[request['choice_co_code']]
+        choicecodes = datashare[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
             dims=['_0_caseid_', '_1_altid_'],
@@ -197,7 +179,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('weight_co'),
-            pool_source=pool_source,
         )
 
     if 'avail_ca' in request:
@@ -211,7 +192,6 @@ def prepare_data(
             dtype=np.int8,
             cache_dir=cache_dir,
             flow=flows.get('avail_ca'),
-            pool_source=pool_source,
         )
     if 'avail_co' in request:
         log.debug(f"requested avail_co data: {request['avail_co']}")
@@ -229,7 +209,6 @@ def prepare_data(
             dim_name='_1_altid_',
             cache_dir=cache_dir,
             flow=flows.get('avail_co'),
-            pool_source=pool_source,
         )
     if 'avail_any' in request:
         log.debug(f"requested avail_any data: {request['avail_any']}")
@@ -256,7 +235,6 @@ def _prep_ca(
         dtype=None,
         cache_dir=None,
         flow=None,
-        pool_source=None,
 ):
     from ..dataset import Dataset, DataArray
     if not isinstance(vars_ca, dict):
@@ -265,7 +243,7 @@ def _prep_ca(
     if flow is None or flowname != flow.name:
         flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pool_source,
+        shared_data_ca,
         dtype=dtype,
     )
     if preserve_vars or len(vars_ca)>1:
@@ -311,7 +289,6 @@ def _prep_co(
         dim_name=None,
         cache_dir=None,
         flow=None,
-        pool_source=None,
 ):
     from ..dataset import DataArray
     if not isinstance(vars_co, dict):
@@ -320,7 +297,7 @@ def _prep_co(
     if flow is None or flowname != flow.name:
         flow = shared_data_co.setup_flow(vars_co, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pool_source,
+        shared_data_co,
         dtype=dtype,
     )
     if preserve_vars or len(vars_co)>1:

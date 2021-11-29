@@ -9,13 +9,6 @@ except ImportError:
     raise RuntimeError("larch.dataset requires the sharrow library")
 
 
-class DataPool(_sharrow_SharedData):
-
-    @property
-    def n_cases(self):
-        return self.main.dims['_0_caseid_']
-
-
 class DataTree(_sharrow_DataTree):
 
     @property

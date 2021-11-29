@@ -41,7 +41,7 @@ def test_shared_data():
     m.choice_ca_var = 'chose'
     m.weight_co_var = 'hhinc+100'
     ds = lxd.to_dataset(m.dataservice)
-    pool = lx.DataPool(ds)
+    pool = lx.DataTree(ds)
     y, flows = lxd.prepare_data(pool, m)
     assert isinstance(y, sh.Dataset)
     assert list(y.coords.keys()) == ['_0_caseid_', 'alt_names', '_1_altid_', 'var_co', 'var_ca']

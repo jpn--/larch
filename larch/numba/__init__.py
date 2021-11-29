@@ -2,7 +2,7 @@ from .model import NumbaModel as Model
 from .. import DataFrames, P, X, PX, OMX, DBF, Reporter, NumberedCaption, read_metadata, examples, util
 from ..examples import example as _example
 try:
-    from ..dataset import Dataset, DataPool, DataArray
+    from ..dataset import Dataset, DataArray, DataTree
 except RuntimeError:
     pass
 
