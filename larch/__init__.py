@@ -65,6 +65,7 @@ from .data_services.dbf.dbf_reader import DBF
 
 from .model import Model
 from .dataframes import DataFrames
+from .dataset import Dataset, DataTree
 
 from .examples import example
 from .util import figures

@@ -84,6 +84,7 @@ def _exec_example(sourcefile, d=None, extract='m', echo=False, larch=None):
 		import importlib
 		larch = importlib.import_module(__name__.split('.')[0])
 	_global['larch'] = larch
+	_global['lx'] = larch
 	_global['sys'] = sys
 	_global['os'] = os
 	from ..roles import P, X, PX

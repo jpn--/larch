@@ -2,23 +2,12 @@ import warnings
 import numpy as np
 import pandas as pd
 import xarray as xr
+from collections.abc import Mapping
 try:
     from sharrow import Dataset as _sharrow_Dataset, SharedData as _sharrow_SharedData, DataArray
     from sharrow import DataTree as _sharrow_DataTree
 except ImportError:
     raise RuntimeError("larch.dataset requires the sharrow library")
-
-
-class DataTree(_sharrow_DataTree):
-
-    @property
-    def n_cases(self):
-        return self.root_dataset.dims['_0_caseid_']
-
-    def query_cases(self, query):
-        obj = self.copy()
-        obj.root_dataset = obj.root_dataset.query_cases(query)
-        return obj
 
 
 class Dataset(_sharrow_Dataset):
@@ -94,16 +83,51 @@ class Dataset(_sharrow_Dataset):
 
     __slots__ = ()
 
-    def __new__(cls, *args, caseid=None, **kwargs):
+    def __new__(cls, *args, caseid=None, alts=None, **kwargs):
         import logging
         logging.getLogger("sharrow").debug(f"NEW INSTANCE {cls}")
         obj = super().__new__(cls)
         super(cls, obj).__init__(*args, **kwargs)
+        return cls.__initialize_for_larch(obj, caseid, alts)
+
+    @staticmethod
+    def __initialize_for_larch(obj, caseid=None, alts=None):
         if caseid is not None:
             if caseid not in obj.dims:
                 raise ValueError(f"no dim named '{caseid}' to make into _0_caseid_")
-            obj = obj.rename_dims({caseid: '_0_caseid_'})
+            obj = obj.rename({caseid: '_0_caseid_'})
+        if isinstance(alts, Mapping):
+            alts_k = DataArray(
+                list(alts.keys()), dims="_1_altid_",
+            )
+            alts_v = DataArray(
+                list(alts.values()), dims="_1_altid_",
+            )
+        elif isinstance(alts, pd.Series):
+            alts_k = DataArray(
+                alts.index, dims="_1_altid_",
+            )
+            alts_v = DataArray(
+                alts.values, dims="_1_altid_",
+            )
+        else:
+            alts_k = alts_v = None
+        if alts_k is not None:
+            if np.issubdtype(alts_v, np.integer) and not np.issubdtype(alts_k, np.integer):
+                obj.coords['_1_altid_'] = alts_v
+                obj.coords['alt_names'] = alts_k
+            else:
+                obj.coords['_1_altid_'] = alts_k
+                obj.coords['alt_names'] = alts_v
         return obj
+
+    @classmethod
+    def construct(cls, source, caseid=None, alts=None):
+        if isinstance(source, pd.DataFrame):
+            source = cls.from_dataframe(source)
+        else:
+            source = super().construct(source)
+        return cls.__initialize_for_larch(source, caseid, alts)
 
     def __init__(self, *args, **kwargs):
         pass # init for superclass happens inside __new__
@@ -210,7 +234,7 @@ class Dataset(_sharrow_Dataset):
                     obj[k] = obj[k].min(dim=dim)
         return obj
 
-    def set_dtypes(self, dtypes, inplace=False):
+    def set_dtypes(self, dtypes, inplace=False, on_error='warn'):
         if isinstance(dtypes, pd.DataFrame):
             dtypes = dtypes.dtypes
         if inplace:
@@ -218,5 +242,60 @@ class Dataset(_sharrow_Dataset):
         else:
             obj = self.copy()
         for k in obj:
-            obj[k] = obj[k].astype(dtypes[k])
+            try:
+                obj[k] = obj[k].astype(dtypes[k])
+            except Exception as err:
+                if on_error == 'warn':
+                    warnings.warn(f"{err!s} on converting {k}")
+                elif on_error == 'raise':
+                    raise
         return obj
+
+    @classmethod
+    def from_idca(cls, df, crack=True, alts=None):
+        if df.index.nlevels != 2:
+            raise ValueError("source idca dataframe must have a two "
+                             "level MultiIndex giving case and alt id's")
+        caseidname, altidname = df.index.names
+        ds = cls.construct(df, alts=alts)
+        if crack:
+            ds = ds.dissolve_zero_variance(altidname)
+        ds = ds.set_dtypes(df)
+        renames = {}
+        if caseidname is not None:
+            renames[caseidname] = '_0_caseid_'
+        if altidname is not None:
+            renames[altidname] = '_1_altid_'
+        ds = ds.rename(renames)
+        return ds
+
+    @classmethod
+    def from_idco(cls, df, alts=None):
+        if df.index.nlevels != 1:
+            raise ValueError("source idco dataframe must have a one "
+                             "level Index giving case id's")
+        caseidname = df.index.name
+        ds = cls.construct(df, alts=alts)
+        ds = ds.set_dtypes(df)
+        if caseidname is not None:
+            ds = ds.rename({caseidname: '_0_caseid_'})
+        return ds
+
+
+    def setup_flow(self, *args, **kwargs):
+        return DataTree(main=self).setup_flow(*args, **kwargs)
+
+
+class DataTree(_sharrow_DataTree):
+
+    DatasetType = Dataset
+
+    @property
+    def n_cases(self):
+        return self.root_dataset.dims['_0_caseid_']
+
+    def query_cases(self, query):
+        obj = self.copy()
+        obj.root_dataset = obj.root_dataset.query_cases(query)
+        return obj
+
