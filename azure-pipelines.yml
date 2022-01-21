@@ -12,10 +12,12 @@ jobs:
     matrix:
       # Python37:
       #   python.version: '3.7'
-      Python38:
-        python.version: '3.8'
+      # Python38:
+      #   python.version: '3.8'
       Python39:
         python.version: '3.9'
+      Python310:
+        python.version: '3.10'
 
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
@@ -70,6 +72,8 @@ jobs:
     matrix:
       Python39:
         python.version: '3.9'
+      Python310:
+        python.version: '3.10'
   variables:
     CONDA_BLD_PATH: D:\\bld\\
 
