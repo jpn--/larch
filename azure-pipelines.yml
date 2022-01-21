@@ -1,7 +1,6 @@
 trigger:
 - master
-- dev-a
-- data-arrays
+- develop
 
 jobs:
 - job:
