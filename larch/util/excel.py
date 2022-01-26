@@ -121,7 +121,7 @@ class ExcelWriter(_XlsxWriter):
             ps = model.parameter_summary('df')
             ps_data_index_nlevels = ps.data.index.nlevels
             if 'Constrained' in ps.data.columns:
-                ps.data['Constrained'] = ps.data['Constrained'].str.replace("<br>",",\n")
+                ps.data['Constrained'] = ps.data['Constrained'].str.replace("<br/>",",\n")
             self.add_content_tab(ps, sheetname="Parameters", heading="Parameters" )
             if 'Constrained' in ps.data.columns:
                 n = ps.data.index.nlevels + ps.data.columns.get_loc("Constrained")

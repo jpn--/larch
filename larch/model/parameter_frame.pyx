@@ -983,7 +983,7 @@ cdef class ParameterFrame:
 					result['Value'] = result['Value'].apply(lambda x: f"{x: #.3g}".replace(" ",NBSP))
 					monospace_cols.append('Value')
 				if 'Constrained' in result.columns:
-					result['Constrained'] = result['Constrained'].str.replace("\n","<br>")
+					result['Constrained'] = result['Constrained'].str.replace("\n","<br/>")
 				if 'Null Value' in result.columns:
 					monospace_cols.append('Null Value')
 				if result.index.nlevels > 1:
