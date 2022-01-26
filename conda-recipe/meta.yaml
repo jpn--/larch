@@ -9,7 +9,8 @@ build:
   number: 1
   skip: True  # [py<37]
   script:
-    - "{{ PYTHON }} -m pip install . --no-deps -vv"
+    - "{{ PYTHON }} -m pip install . --no-deps -vv"   # [not osx]
+    - "export SDKROOT=$(xcrun --sdk macosx --show-sdk-path) && export LDFLAGS=-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib && {{ PYTHON }} -m pip install . --no-deps -vv"  # [osx]
 
 requirements:
 

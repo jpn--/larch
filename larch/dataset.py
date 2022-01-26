@@ -4,11 +4,17 @@ import pandas as pd
 import xarray as xr
 from collections.abc import Mapping
 try:
-    from sharrow import Dataset as _sharrow_Dataset, SharedData as _sharrow_SharedData, DataArray
+    from sharrow import Dataset as _sharrow_Dataset, DataArray
     from sharrow import DataTree as _sharrow_DataTree
 except ImportError:
-    raise RuntimeError("larch.dataset requires the sharrow library")
+    warnings.warn("larch.dataset requires the sharrow library")
+    class _noclass:
+        pass
+    _sharrow_Dataset = _noclass
+    DataArray = xr.DataArray
+    _sharrow_DataTree = _noclass
 
+from .dim_names import CASEID as _CASEID, ALTID as _ALTID
 
 class Dataset(_sharrow_Dataset):
     """
@@ -23,10 +29,10 @@ class Dataset(_sharrow_Dataset):
     One dimensional variables with name equal to their dimension are
     index coordinates used for label based indexing.
 
-    For Larch, one dimension of each Dataset must be named '_0_caseid_',
+    For Larch, one dimension of each Dataset must typiccally be named '_caseid_',
     and this dimension is used to identify the individual discrete choice
     observations or simulations in the data. The `caseid` argument can be
-    used to set an existing dimension as '_0_caseid_' on Dataset construction.
+    used to set an existing dimension as '_caseid_' on Dataset construction.
 
     Parameters
     ----------
@@ -77,10 +83,12 @@ class Dataset(_sharrow_Dataset):
         Global attributes to save on this dataset.
 
     caseid : str, optional, keyword only
-        This named dimension will be converted into the '_0_caseid_'
+        This named dimension will be converted into the '_caseid_'
         dimension, by renaming it in the created object.
     """
 
+    CASEID = _CASEID
+    ALTID = _ALTID
     __slots__ = ()
 
     def __new__(cls, *args, caseid=None, alts=None, **kwargs):
@@ -90,34 +98,34 @@ class Dataset(_sharrow_Dataset):
         super(cls, obj).__init__(*args, **kwargs)
         return cls.__initialize_for_larch(obj, caseid, alts)
 
-    @staticmethod
-    def __initialize_for_larch(obj, caseid=None, alts=None):
+    @classmethod
+    def __initialize_for_larch(cls, obj, caseid=None, alts=None):
         if caseid is not None:
             if caseid not in obj.dims:
-                raise ValueError(f"no dim named '{caseid}' to make into _0_caseid_")
-            obj = obj.rename({caseid: '_0_caseid_'})
+                raise ValueError(f"no dim named '{caseid}' to make into {cls.CASEID}")
+            obj = obj.rename({caseid: cls.CASEID})
         if isinstance(alts, Mapping):
             alts_k = DataArray(
-                list(alts.keys()), dims="_1_altid_",
+                list(alts.keys()), dims=cls.ALTID,
             )
             alts_v = DataArray(
-                list(alts.values()), dims="_1_altid_",
+                list(alts.values()), dims=cls.ALTID,
             )
         elif isinstance(alts, pd.Series):
             alts_k = DataArray(
-                alts.index, dims="_1_altid_",
+                alts.index, dims=cls.ALTID,
             )
             alts_v = DataArray(
-                alts.values, dims="_1_altid_",
+                alts.values, dims=cls.ALTID,
             )
         else:
             alts_k = alts_v = None
         if alts_k is not None:
             if np.issubdtype(alts_v, np.integer) and not np.issubdtype(alts_k, np.integer):
-                obj.coords['_1_altid_'] = alts_v
+                obj.coords[cls.ALTID] = alts_v
                 obj.coords['alt_names'] = alts_k
             else:
-                obj.coords['_1_altid_'] = alts_k
+                obj.coords[cls.ALTID] = alts_k
                 obj.coords['alt_names'] = alts_v
         return obj
 
@@ -134,12 +142,12 @@ class Dataset(_sharrow_Dataset):
 
     @property
     def n_cases(self):
-        return self.dims['_0_caseid_']
+        return self.dims[self.CASEID]
 
     @property
     def n_alts(self):
-        if '_1_altid_' in self.dims:
-            return self.dims['_1_altid_']
+        if self.ALTID in self.dims:
+            return self.dims[self.ALTID]
         if 'n_alts' in self.attrs:
             return self.attrs['n_alts']
         raise ValueError('no n_alts set')
@@ -190,13 +198,13 @@ class Dataset(_sharrow_Dataset):
     def validate_format(self):
         error_msgs = []
         warn_msgs = []
-        if '_0_caseid_' not in self.dims:
+        if self.CASEID not in self.dims:
             error_msgs.append(
-                f"- There is no dimensions named `_0_caseid_`. "
+                f"- There is no dimensions named `{self.CASEID}`. "
             )
-        if '_1_altid_' not in self.dims:
+        if self.ALTID not in self.dims:
             warn_msgs.append(
-                f"- There is no dimensions named `_1_altid_`. "
+                f"- There is no dimensions named `_altid_`. "
             )
         msgs = []
         if error_msgs:
@@ -208,7 +216,7 @@ class Dataset(_sharrow_Dataset):
         return msgs
 
     def query_cases(self, query):
-        return self.query({'_0_caseid_': query})
+        return self.query({self.CASEID: query})
 
     def dissolve_coords(self, dim, others=None):
         d = self.reset_index(dim)
@@ -263,9 +271,9 @@ class Dataset(_sharrow_Dataset):
         ds = ds.set_dtypes(df)
         renames = {}
         if caseidname is not None:
-            renames[caseidname] = '_0_caseid_'
+            renames[caseidname] = cls.CASEID
         if altidname is not None:
-            renames[altidname] = '_1_altid_'
+            renames[altidname] = cls.ALTID
         ds = ds.rename(renames)
         return ds
 
@@ -278,7 +286,7 @@ class Dataset(_sharrow_Dataset):
         ds = cls.construct(df, alts=alts)
         ds = ds.set_dtypes(df)
         if caseidname is not None:
-            ds = ds.rename({caseidname: '_0_caseid_'})
+            ds = ds.rename({caseidname: cls.CASEID})
         return ds
 
 
@@ -289,10 +297,35 @@ class Dataset(_sharrow_Dataset):
 class DataTree(_sharrow_DataTree):
 
     DatasetType = Dataset
+    CASEID = _CASEID
+    ALTID = _ALTID
+
+    def __init__(
+        self,
+        graph=None,
+        root_node_name=None,
+        extra_funcs=(),
+        extra_vars=None,
+        cache_dir=None,
+        relationships=(),
+        force_digitization=False,
+        **kwargs,
+    ):
+        super().__init__(
+            graph=graph,
+            root_node_name=root_node_name,
+            extra_funcs=extra_funcs,
+            extra_vars=extra_vars,
+            cache_dir=cache_dir,
+            relationships=relationships,
+            force_digitization=force_digitization,
+            dim_order=(self.CASEID, self.ALTID),
+            **kwargs,
+        )
 
     @property
     def n_cases(self):
-        return self.root_dataset.dims['_0_caseid_']
+        return self.root_dataset.dims[self.CASEID]
 
     def query_cases(self, query):
         obj = self.copy()

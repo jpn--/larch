@@ -1,4 +1,5 @@
 # cython: language_level=3, embedsignature=True
+import pandas as pd
 
 include "../general_precision.pxi"
 from ..general_precision import l4_float_dtype
@@ -105,10 +106,12 @@ cdef class ParameterFrame:
 		nameset = set(names)
 		missing_names = nameset - existing_names
 		if missing_names:
-			self._frame = self._frame.append(
-				_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs),
+			self._frame = pd.concat(
+				[
+					self._frame,
+					_empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs),
+				],
 				verify_integrity=True,
-				sort=False
 			)
 
 	def _scan_all_ensure_names(self):

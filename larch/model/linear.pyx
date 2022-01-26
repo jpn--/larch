@@ -859,18 +859,48 @@ cdef class LinearFunction_C:
 		_try_mangle(self._instance)
 
 	def remove_data(self, data):
+		"""
+		Remove all terms from this linear function with the given data.
+
+		This operation mutates this linear function in-place.
+
+		Parameters
+		----------
+		data : str
+			Name of data to remove, which must match exactly.
+
+		Returns
+		-------
+		self : LinearFunction_C
+		"""
 		i = len(self._func)
 		while i > 0:
 			i -= 1
 			if self._func[i].data == data:
 				del self._func[i]
+		return self
 
 	def remove_param(self, param):
+		"""
+		Remove all terms from this linear function with the given parameter.
+
+		This operation mutates this linear function in-place.
+
+		Parameters
+		----------
+		param : str
+			Name of parameter to remove
+
+		Returns
+		-------
+		self : LinearFunction_C
+		"""
 		i = len(self._func)
 		while i > 0:
 			i -= 1
 			if self._func[i].param == param:
 				del self._func[i]
+		return self
 
 	def __len__(self):
 		return len(self._func)

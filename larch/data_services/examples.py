@@ -18,10 +18,10 @@ def MTC(format='dataframes'):
 		from ..dataset import Dataset, DataArray
 		dataset = Dataset.from_dataframe(dt.data_co)
 		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca()))
-		dataset['avail'] = DataArray(dt.data_av.values, dims=['_0_caseid_', '_1_altid_'], coords=dataset.coords)
+		dataset['avail'] = DataArray(dt.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
 		dataset.coords['alt_names'] = DataArray(
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
-			dims=['_1_altid_'],
+			dims=['_altid_'],
 		)
 		return dataset
 	elif format == 'dataframes':
@@ -40,10 +40,10 @@ def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
 			_tour.set_index('TOURID'), caseid='TOURID',
 		)
 		tours.coords['altid'] = DataArray(
-			[1, 2, 3, 4, 5], dims="_1_altid_",
+			[1, 2, 3, 4, 5], dims="_altid_",
 		)
 		tours.coords['altname'] = DataArray(
-			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_1_altid_",
+			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_altid_",
 		)
 		od_skims = Dataset.from_omx(_skims)
 		hh = Dataset(_hh.set_index('HHID'))

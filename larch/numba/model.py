@@ -754,10 +754,10 @@ def model_co_slots(data_provider, model, dtype=np.float64):
                 data_loc[_dname] = _n
         alternative_codes = data_provider.alternative_codes()
     elif isinstance(data_provider, Dataset):
-        if '_var_co' in data_provider.indexes:
-            for _n, _dname in enumerate(data_provider.indexes['_var_co']):
+        if 'var_co' in data_provider.indexes:
+            for _n, _dname in enumerate(data_provider.indexes['var_co']):
                 data_loc[_dname] = _n
-        alternative_codes = data_provider.indexes['_1_altid_']
+        alternative_codes = data_provider.indexes['_altid_']
     else:
         raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
 
@@ -785,7 +785,7 @@ def model_u_ca_slots(data_provider, model, dtype=np.float64):
     if isinstance(data_provider, DataFrames):
         looker = lambda tag: data_provider.data_ca_or_ce.columns.get_loc(str(tag))
     elif isinstance(data_provider, Dataset):
-        looker = lambda tag: data_provider.indexes['_var_ca'].get_loc(str(tag))
+        looker = lambda tag: data_provider.indexes['var_ca'].get_loc(str(tag))
     else:
         raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
     len_model_utility_ca = len(model.utility_ca)
@@ -806,7 +806,7 @@ def model_q_ca_slots(data_provider, model, dtype=np.float64):
     if isinstance(data_provider, DataFrames):
         looker = lambda tag: data_provider.data_ca_or_ce.columns.get_loc(str(tag))
     elif isinstance(data_provider, Dataset):
-        looker = lambda tag: data_provider.indexes['_var_ca'].get_loc(str(tag))
+        looker = lambda tag: data_provider.indexes['var_ca'].get_loc(str(tag))
     else:
         raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
     len_model_q_ca = len(model.quantity_ca)
@@ -920,7 +920,7 @@ class NumbaModel(_BaseModel):
 
             if alternative_codes is None:
                 alternative_codes = get_coords_array(
-                    '_1_altid_', 'altid', 'alt_id', 'alt_ids',
+                    '_altid_', 'altid', 'alt_id', 'alt_ids',
                     'alternative_id', 'alternative_ids',
                 )
             if alternative_names is None:

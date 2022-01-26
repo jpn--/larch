@@ -431,8 +431,8 @@ cdef class DataFrames:
 			sys_alts = None,
 			computational = False,
 
-			caseindex_name = '_0_caseid_',
-			altindex_name = '_1_altid_',
+			caseindex_name = '_caseid_',
+			altindex_name = '_altid_',
 
 			autoscale_weights=False,
 	):
@@ -768,9 +768,9 @@ cdef class DataFrames:
 
 		caseindex_name, altindex_name = ce.index.names
 		if caseindex_name is None:
-			caseindex_name = '_0_caseid_'
+			caseindex_name = '_caseid_'
 		if altindex_name is None:
-			altindex_name = '_1_altid_'
+			altindex_name = '_altid_'
 
 		if columns is None:
 			columns = list(ce.columns)
@@ -1078,7 +1078,7 @@ cdef class DataFrames:
 							idx = pandas.MultiIndex.from_product([
 							    caseindex,
 							    altcodes,
-							], names=['_0_caseid_', '_1_altid_'])
+							], names=['_caseid_', '_altid_'])
 						else:
 							idx = caseindex
 						df = pandas.DataFrame(arr, columns=columns, index=idx)
@@ -3515,7 +3515,8 @@ cdef class DataFrames:
 
 		caseindex = self.data_ce.index.names[0]
 		if caseindex is None:
-			caseindex = "_0_caseid_"
+			caseindex = "_caseid_"
+
 
 		df1, sa1 = new_alternative_codes(
 			self.data_ce,

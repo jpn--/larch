@@ -38,10 +38,10 @@ def mtc_dataset():
     d = DataFrames(df, ch='chose', crack=True)
     dataset = Dataset.from_dataframe(d.data_co)
     dataset = dataset.merge(Dataset.from_dataframe(d.data_ce).fillna(0.0))
-    dataset['avail'] = DataArray(d.data_av.values, dims=['_0_caseid_', '_1_altid_'], coords=dataset.coords)
+    dataset['avail'] = DataArray(d.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
     dataset.coords['alt_names'] = DataArray(
         ['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
-        dims=['_1_altid_'],
+        dims=['_altid_'],
     )
     return dataset
 
@@ -1116,8 +1116,8 @@ def test_model_pickling():
     assert m2.loglike() == approx(-3626.1862555138796)
 
 def test_mtc_with_dataset(mtc_dataset):
-    pytest.importorskip("sharrow_pro")
-    m = NumbaModel(alts=mtc_dataset['_1_altid_'].values)
+    pytest.importorskip("sharrow")
+    m = NumbaModel(alts=mtc_dataset['_altid_'].values)
     from larch.roles import P, X, PX
     m.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
     m.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
@@ -1134,7 +1134,7 @@ def test_mtc_with_dataset(mtc_dataset):
     assert result.loglike == approx(-3626.1862595453385)
 
 def test_eville_mode_with_dataset():
-    pytest.importorskip("sharrow_pro")
+    pytest.importorskip("sharrow")
     from larch.examples import EXAMPVILLE
     tree = EXAMPVILLE('datatree')
     DA = 1
