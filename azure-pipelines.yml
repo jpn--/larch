@@ -18,20 +18,26 @@ jobs:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  - bash: conda create --yes --quiet --name larch-build-environment
-    displayName: Create Anaconda environment
+  # Install mamba to manage dependencies faster
+  - bash: conda install --yes mamba -c conda-forge
+    displayName: Install Mamba package manager
+
+  - bash: mamba create --yes --quiet --name larch-build-environment
+    displayName: Create conda environment
 
   - bash: |
       source activate larch-build-environment
-      conda install --yes --quiet --name larch-build-environment python=$PYTHON_VERSION numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines -c conda-forge
-    displayName: Install Anaconda packages
+      mamba install --yes --quiet --name larch-build-environment python=$PYTHON_VERSION numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
+    displayName: Install basic conda packages
+
   - bash: |
       source activate larch-build-environment
       mkdir ~/conda-bld
       conda config --set anaconda_upload no
       export CONDA_BLD_PATH=~/conda-bld
-      conda build conda-recipe -c conda-forge
-    displayName: Conda build
+      conda mambabuild conda-recipe -c conda-forge
+    displayName: Conda Build with mambabuild
+
 # - job:
 #   displayName: macOS-10.13
 #   pool:
@@ -77,12 +83,16 @@ jobs:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: Add conda to PATH
 
-  - script: conda create --yes --quiet --name myEnvironment
+  # Install mamba to manage dependencies faster
+  - script: conda install --yes mamba -c conda-forge
+    displayName: Install Mamba package manager
+
+  - script: mamba create --yes --quiet --name myEnvironment
     displayName: Create Anaconda environment
 
   - script: |
       call activate myEnvironment
-      conda install --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines -c conda-forge
+      mamba install --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
     displayName: Install Anaconda packages
 
   - script: |
@@ -97,6 +107,6 @@ jobs:
 
   - script: |
       call activate myEnvironment
-      conda build conda-recipe -c conda-forge
+      conda mambabuild conda-recipe -c conda-forge
     displayName: Conda build
 
