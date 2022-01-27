@@ -87,13 +87,10 @@ jobs:
   - script: conda install --yes mamba -c conda-forge
     displayName: Install Mamba package manager
 
-  - script: mamba create --yes --quiet --name myEnvironment python=%PYTHON_VERSION%
-    displayName: Create Anaconda environment
-
   - script: |
-      call activate myEnvironment
-      mamba install --yes --quiet --name myEnvironment numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
-    displayName: Install Anaconda packages
+      conda update -n base -c defaults conda
+      conda create --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
+    displayName: Create Anaconda environment
 
   - script: |
       call activate myEnvironment
