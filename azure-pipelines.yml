@@ -11,8 +11,8 @@ jobs:
     matrix:
       Python39:
         python.version: '3.9'
-      Python310:
-        python.version: '3.10'
+#      Python310:
+#        python.version: '3.10'
 
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
@@ -22,12 +22,12 @@ jobs:
   - bash: conda install --yes mamba -c conda-forge
     displayName: Install Mamba package manager
 
-  - bash: mamba create --yes --quiet --name larch-build-environment
+  - bash: mamba create --yes --quiet --name larch-build-environment "python=$PYTHON_VERSION" -c conda-forge -c nodefaults
     displayName: Create conda environment
 
   - bash: |
       source activate larch-build-environment
-      mamba install --yes --quiet --name larch-build-environment python=$PYTHON_VERSION numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
+      mamba install --yes --quiet --name larch-build-environment numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
     displayName: Install basic conda packages
 
   - bash: |
@@ -74,8 +74,8 @@ jobs:
     matrix:
       Python39:
         python.version: '3.9'
-      Python310:
-        python.version: '3.10'
+#      Python310:
+#        python.version: '3.10'
   variables:
     CONDA_BLD_PATH: D:\\bld\\
 
@@ -87,12 +87,12 @@ jobs:
   - script: conda install --yes mamba -c conda-forge
     displayName: Install Mamba package manager
 
-  - script: mamba create --yes --quiet --name myEnvironment
+  - script: mamba create --yes --quiet --name myEnvironment python=%PYTHON_VERSION%
     displayName: Create Anaconda environment
 
   - script: |
       call activate myEnvironment
-      mamba install --yes --quiet --name myEnvironment python=%PYTHON_VERSION% numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
+      mamba install --yes --quiet --name myEnvironment numpy conda-build anaconda-client cython conda-verify pytest pytest-azurepipelines boa -c conda-forge
     displayName: Install Anaconda packages
 
   - script: |
