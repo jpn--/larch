@@ -1,4 +1,5 @@
-
+import numpy as np
+import pandas as pd
 
 from .abstract_model import AbstractChoiceModel
 from . import persist_flags
@@ -78,11 +79,80 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 	def unmangle(self, force=False):
 		super().unmangle(force)
 		for k in self._k_models:
-			for i in k.pf.index:
-				if i not in self._frame.index:
-					self._frame.loc[i] = k.pf.loc[i]
+			rows_to_import = [i for i in k.pf.index if i not in self._frame.index]
+			if len(rows_to_import):
+				new_frame = pd.concat([
+					self._frame, k.pf.loc[rows_to_import]
+				]).astype(self._frame.dtypes)
+
+				if not (
+					np.array_equal(new_frame['value'].values, self._frame['value'].values)
+					and np.array_equal(new_frame.index, self._frame.index)
+				):
+					frame_values_have_changed = True
+				else:
+					frame_values_have_changed = False
+
+				self._frame = new_frame
+				if frame_values_have_changed:
+					self._frame_values_have_changed()
+
+			k.unmangle(force)
+
+	def set_values(self, values=None, *, respect_holdfast=True, **kwargs):
+		"""
+		Set the parameter values for one or more parameters.
+
+		Parameters
+		----------
+		values : {'null', 'init', 'best', array-like, dict, scalar}, optional
+			New values to set for the parameters.
+			If 'null' or 'init', the current values are set
+			equal to the null or initial values given in
+			the 'nullvalue' or 'initvalue' column of the
+			parameter frame, respectively.
+			If 'best', the current values are set equal to
+			the values given in the 'best' column of the
+			parameter frame, if that columns exists,
+			otherwise a ValueError exception is raised.
+			If given as array-like, the array must be a
+			vector with length equal to the length of the
+			parameter frame, and the given vector will replace
+			the current values.  If given as a dictionary,
+			the dictionary is used to update `kwargs` before
+			they are processed.
+		kwargs : dict
+			Any keyword arguments (or if `values` is a
+			dictionary) are used to update the included named
+			parameters only.  A warning will be given if any key of
+			the dictionary is not found among the existing named
+			parameters in the parameter frame, and the value
+			associated with that key is ignored.  Any parameters
+			not named by key in this dictionary are not changed.
+
+		Notes
+		-----
+		Setting parameters both in the `values` argument and
+		through keyword assignment is not explicitly disallowed,
+		although it is not recommended and may be disallowed in the future.
+
+		Raises
+		------
+		ValueError
+			If setting to 'best' but there is no 'best' column in
+			the `pf` parameters DataFrame.
+		"""
+		super().set_values(values=values, respect_holdfast=respect_holdfast, **kwargs)
+		self._frame_values_have_changed()
 
 	def _frame_values_have_changed(self):
+		vals = self.pf.value.copy()
+		import warnings
+		with warnings.catch_warnings():
+			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+			for k in self._k_models:
+				k.set_values(**vals)
+				k._frame = k._frame.copy()
 		for k in self._k_models:
 			k._frame_values_have_changed()
 
@@ -90,7 +160,7 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 		self.unmangle()
 		if x is not None:
 			self.set_values(x)
-		vals = self.pf.value
+		vals = self.pf.value.copy()
 		import warnings
 		with warnings.catch_warnings():
 			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
