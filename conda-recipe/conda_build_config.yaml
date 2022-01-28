@@ -1,9 +1,6 @@
 python:
-  - 3.9
+  - 3.9   # [not win]
   - 3.10
-
-#c_compiler:
-#  - vs2017    # [win]
 
 numpy:
   - 1.21.4
