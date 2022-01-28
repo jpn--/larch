@@ -13,7 +13,9 @@ from ..exceptions import MissingDataError
 from ..util import dictx
 from .cascading import data_av_cascade, data_ch_cascade
 from ..dataframes import DataFrames
-from ..dataset import Dataset
+from ..dataset import Dataset, DataTree
+from collections import namedtuple
+from .data_arrays import DataArrays
 
 
 import warnings
@@ -837,14 +839,12 @@ class _case_slice:
         return type(self.parent)(**{k: getattr(self.parent, k)[idx] for k in self.parent._fields})
 
 
-from collections import namedtuple
 WorkArrays = namedtuple(
     'WorkArrays',
     ['utility', 'logprob', 'probability', 'bhhh', 'd_loglike', 'loglike'],
 )
 WorkArrays.cs = _case_slice()
 
-from .data_arrays import DataArrays
 
 FixedArrays = namedtuple(
     'FixedArrays',
@@ -864,6 +864,9 @@ class NumbaModel(_BaseModel):
     _null_slice = (None, None, None)
 
     def __init__(self, *args, float_dtype=np.float64, datatree=None, **kwargs):
+        for a in args:
+            if datatree is None and isinstance(a, (DataTree, Dataset)):
+                datatree = a
         super().__init__(*args, **kwargs)
         self._dataset = None
         self._fixed_arrays = None

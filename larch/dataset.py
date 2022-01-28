@@ -280,12 +280,16 @@ class Dataset(_sharrow_Dataset):
             d[other] = xr.apply_ufunc(mapper_f, d[other])
         return d
 
-    def dissolve_zero_variance(self, dim, inplace=False):
+    def dissolve_zero_variance(self, dim='<ALTID>', inplace=False):
+        if dim == '<ALTID>':
+            dim = self.ALTID
         if inplace:
             obj = self
         else:
             obj = self.copy()
         for k in obj.variables:
+            if obj[k].dtype.kind in {'U', 'S'}:
+                continue
             if dim in obj[k].dims:
                 if obj[k].std(dim=dim).max() < 1e-10:
                     obj[k] = obj[k].min(dim=dim)
@@ -308,22 +312,52 @@ class Dataset(_sharrow_Dataset):
                     raise
         return obj
 
+    def set_altnames(self, altnames, inplace=False):
+        """
+        Set the alternative names for this Dataset.
+
+        Parameters
+        ----------
+        altnames : Mapping or array-like
+            A mapping of (integer) codes to names, or an array or names
+            of the same length and order as the alternatives already
+            defined in this Dataset.
+
+        Returns
+        -------
+        Dataset
+        """
+        if inplace:
+            obj = self
+        else:
+            obj = self.copy()
+        if isinstance(altnames, Mapping):
+            names = xr.DataArray(
+                [altnames.get(i, None) for i in obj[obj.ALTID].values],
+                dims=obj.ALTID,
+            )
+        elif isinstance(altnames, DataArray):
+            names = altnames
+        else:
+            names = xr.DataArray(
+                np.asarray(altnames),
+                dims=obj.ALTID,
+            )
+        obj.coords['altnames'] = names
+        return obj
+
     @classmethod
-    def from_idca(cls, df, crack=True, alts=None):
+    def from_idca(cls, df, crack=True, altnames=None):
         if df.index.nlevels != 2:
             raise ValueError("source idca dataframe must have a two "
                              "level MultiIndex giving case and alt id's")
         caseidname, altidname = df.index.names
-        ds = cls.construct(df, alts=alts)
+        ds = cls.construct(df, caseid=caseidname, alts=altidname)
         if crack:
-            ds = ds.dissolve_zero_variance(altidname)
+            ds = ds.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
-        renames = {}
-        if caseidname is not None:
-            renames[caseidname] = _CASEID
-        if altidname is not None:
-            renames[altidname] = _ALTID
-        ds = ds.rename(renames)
+        if altnames is not None:
+            ds = ds.set_altnames(altnames)
         return ds
 
     @classmethod

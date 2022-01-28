@@ -16,13 +16,15 @@ def MTC(format='dataframes'):
 	)
 	if format in ('dataset', 'datapool'):
 		from ..dataset import Dataset, DataArray
-		dataset = Dataset.from_dataframe(dt.data_co)
-		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca()))
-		dataset['avail'] = DataArray(dt.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
+		dataset = Dataset.from_dataframe(dt.data_co.rename_axis(index='caseid'))
+		dataset = dataset.merge(Dataset.from_dataframe(dt.data_ce_as_ca().rename_axis(index=('caseid', 'altid'))))
+		dataset['avail'] = DataArray(dt.data_av.values, dims=['caseid', 'altid'], coords=dataset.coords)
 		dataset.coords['alt_names'] = DataArray(
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
-			dims=['_altid_'],
+			dims=['altid'],
 		)
+		dataset.CASEID = 'caseid'
+		dataset.ALTID = 'altid'
 		return dataset
 	elif format == 'dataframes':
 		dt.data_ce_as_ca("_avail_")
