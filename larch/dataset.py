@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 from collections.abc import Mapping
+from xarray.core import dtypes
+
 try:
     from sharrow import Dataset as _sharrow_Dataset, DataArray
     from sharrow import DataTree as _sharrow_DataTree
@@ -86,9 +88,10 @@ class Dataset(_sharrow_Dataset):
     caseid : str, optional, keyword only
         This named dimension will be marked as the '_caseid_' dimension.
 
-    alts : str or Mapping, keyword only
+    alts : str or Mapping or array-like, keyword only
         If given as a str, this named dimension will be marked as the
-        '_altid_' dimension.  Otherwise, give a Mapping
+        '_altid_' dimension.  Otherwise, give a Mapping that defines
+        alternative names and (integer) codes or an array of codes.
     """
 
     __slots__ = ()
@@ -396,3 +399,92 @@ class DataTree(_sharrow_DataTree):
         obj.root_dataset = obj.root_dataset.query_cases(query)
         return obj
 
+
+def merge(
+        objects,
+        compat= "no_conflicts",
+        join= "outer",
+        fill_value = dtypes.NA,
+        combine_attrs = "override",
+        *,
+        caseid=None,
+        alts=None,
+):
+    """
+    Merge any number of xarray objects into a single larch.Dataset as variables.
+
+    Parameters
+    ----------
+    objects : iterable of Dataset or iterable of DataArray or iterable of dict-like
+        Merge together all variables from these objects. If any of them are
+        DataArray objects, they must have a name.
+
+    compat : {"identical", "equals", "broadcast_equals", "no_conflicts", "override"}, optional
+        String indicating how to compare variables of the same name for
+        potential conflicts:
+        - "broadcast_equals": all values must be equal when variables are
+          broadcast against each other to ensure common dimensions.
+        - "equals": all values and dimensions must be the same.
+        - "identical": all values, dimensions and attributes must be the
+          same.
+        - "no_conflicts": only values which are not null in both datasets
+          must be equal. The returned dataset then contains the combination
+          of all non-null values.
+        - "override": skip comparing and pick variable from first dataset
+
+    join : {"outer", "inner", "left", "right", "exact"}, optional
+        String indicating how to combine differing indexes in objects.
+        - "outer": use the union of object indexes
+        - "inner": use the intersection of object indexes
+        - "left": use indexes from the first object with each dimension
+        - "right": use indexes from the last object with each dimension
+        - "exact": instead of aligning, raise `ValueError` when indexes to be
+          aligned are not equal
+        - "override": if indexes are of same size, rewrite indexes to be
+          those of the first object with that dimension. Indexes for the same
+          dimension must have the same size in all objects.
+
+    fill_value : scalar or dict-like, optional
+        Value to use for newly missing values. If a dict-like, maps
+        variable names to fill values. Use a data array's name to
+        refer to its values.
+
+    combine_attrs : {"drop", "identical", "no_conflicts", "drop_conflicts", \
+                    "override"} or callable, default: "override"
+        A callable or a string indicating how to combine attrs of the objects being
+        merged:
+        - "drop": empty attrs on returned Dataset.
+        - "identical": all attrs must be the same on every object.
+        - "no_conflicts": attrs from all objects are combined, any that have
+          the same name must also have the same value.
+        - "drop_conflicts": attrs from all objects are combined, any that have
+          the same name but different values are dropped.
+        - "override": skip comparing and copy attrs from the first dataset to
+          the result.
+        If a callable, it must expect a sequence of ``attrs`` dicts and a context object
+        as its only parameters.
+
+    caseid : str, optional, keyword only
+        This named dimension will be marked as the '_caseid_' dimension.
+
+    alts : str or Mapping or array-like, keyword only
+        If given as a str, this named dimension will be marked as the
+        '_altid_' dimension.  Otherwise, give a Mapping that defines
+        alternative names and (integer) codes or an array of codes.
+
+    Returns
+    -------
+    Dataset
+        Dataset with combined variables from each object.
+    """
+    return Dataset(
+        xr.merge(
+            objects,
+            compat="no_conflicts",
+            join="outer",
+            fill_value=dtypes.NA,
+            combine_attrs="override",
+        ),
+        caseid=caseid,
+        alts=alts,
+    )
