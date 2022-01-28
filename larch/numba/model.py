@@ -757,7 +757,7 @@ def model_co_slots(data_provider, model, dtype=np.float64):
         if 'var_co' in data_provider.indexes:
             for _n, _dname in enumerate(data_provider.indexes['var_co']):
                 data_loc[_dname] = _n
-        alternative_codes = data_provider.indexes['_altid_']
+        alternative_codes = data_provider.indexes[data_provider.ALTID]
     else:
         raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
 
@@ -920,6 +920,7 @@ class NumbaModel(_BaseModel):
 
             if alternative_codes is None:
                 alternative_codes = get_coords_array(
+                    self.datatree.ALTID,
                     '_altid_', 'altid', 'alt_id', 'alt_ids',
                     'alternative_id', 'alternative_ids',
                 )

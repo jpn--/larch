@@ -407,8 +407,12 @@ def distribution_on_idca_variable(
 		x_label = x
 		if model.dataframes and model.dataframes.data_ca_or_ce is not None and x in model.dataframes.data_ca_or_ce:
 			x = model.dataframes.data_ca_or_ce[x].values.reshape(-1)
-		else:
+		elif model.dataservice is not None:
 			x = model.dataservice.make_dataframes({'ca': [x]}, explicit=True).array_ca().reshape(-1)
+		elif getattr(model, 'datatree', None) is not None:
+			x = model.datatree.get_expr(x).values
+		else:
+			raise ValueError("model is missing data source")
 	else:
 		try:
 			x_label = x.name
@@ -440,8 +444,12 @@ def distribution_on_idca_variable(
 			x = x.cat.codes
 		else:
 			x_ = x
-			if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
-				x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			if model.dataframes is not None:
+				if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+					x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			elif getattr(model, 'datatree', None) is not None:
+				if model.availability_var or model.availability_co_vars:
+					raise NotImplementedError
 			low_pctile = 0
 			high_pctile = 100
 			if range is not None:
@@ -454,7 +462,7 @@ def distribution_on_idca_variable(
 				bins = numpy.percentile(x_, numpy.linspace(low_pctile, high_pctile, pct_bins + 1))
 			else:
 				bins = numpy.percentile(x_, pct_bins)
-	elif isinstance(bins, int) and model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+	elif isinstance(bins, int) and model.dataframes is not None and model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
 		# Equal width bin generation using only available alternatives
 		x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
 		if range is not None:
@@ -471,31 +479,53 @@ def distribution_on_idca_variable(
 	if probability is None:
 		probability = model.probability()
 
-	model_result = probability[:, :model.dataframes.n_alts]
-	model_choice = model.dataframes.data_ch.values
-	if model.dataframes.data_wt is not None:
+	if model.dataframes is not None:
+		n_alts = model.dataframes.n_alts
+	elif getattr(model, 'datatree', None) is not None:
+		n_alts = model.datatree.n_alts
+	else:
+		raise ValueError("model is missing data source")
+	model_result = probability[:, :n_alts]
+	if model.dataframes is not None:
+		model_choice = model.dataframes.data_ch.values
+		model_wt = model.dataframes.data_wt
+	else:
+		model_choice = model.data_as_loaded['ch'].values
+		if 'wt' in model.data_as_loaded:
+			model_wt = model.data_as_loaded['wt']
+		else:
+			model_wt = None
+
+	if model_wt is not None:
 		model_result = model_result.copy()
-		model_result *= model.dataframes.data_wt.values.reshape(-1,1)
+		model_result *= model_wt.values.reshape(-1,1)
 		model_choice = model_choice.copy()
-		model_choice *= model.dataframes.data_wt.values.reshape(-1,1)
+		model_choice *= model_wt.values.reshape(-1,1)
 
 	if subselector is not None:
 		if isinstance(subselector, str):
-			subselector = model.dataservice.make_dataframes({'co': [subselector]}, explicit=True).array_co(dtype=bool).reshape(-1)
+			if model.dataservice is not None:
+				subselector = model.dataservice.make_dataframes({'co': [subselector]}, explicit=True).array_co(dtype=bool).reshape(-1)
+			elif getattr(model, 'datatree', None) is not None:
+				subselector = model.datatree.get_expr(subselector).values.astype(bool)
 		x = numpy.asarray(x).reshape(*model_result.shape)[subselector].reshape(-1)
 		model_result = model_result[subselector]
 		model_choice = model_choice[subselector]
 
 	if style == 'kde':
 		import scipy.stats
-		kernel_result = scipy.stats.gaussian_kde(x, bw_method=bw_method, weights=model_result.reshape(-1))
+		kernel_result = scipy.stats.gaussian_kde(x.reshape(-1), bw_method=bw_method, weights=model_result.reshape(-1))
 		common_bw = kernel_result.covariance_factor()
-		kernel_choice = scipy.stats.gaussian_kde(x, bw_method=common_bw, weights=model_choice.reshape(-1))
+		kernel_choice = scipy.stats.gaussian_kde(x.reshape(-1), bw_method=common_bw, weights=model_choice.reshape(-1))
 
 		if range is None:
 			x_ = x
-			if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
-				x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+			if model.dataframes is not None:
+				if model.dataframes.data_av is not None and model.dataframes.data_ca is not None:
+					x_ = x[model.dataframes.data_av.values.reshape(-1) != 0]
+				elif getattr(model, 'datatree', None) is not None:
+					if model.availability_var or model.availability_co_vars:
+						raise NotImplementedError
 			range = (x_.min(), x_.max())
 
 		x_points = numpy.linspace(*range, 250)
@@ -513,7 +543,7 @@ def distribution_on_idca_variable(
 
 		y_points_1, x1 = numpy.histogram(
 			x,
-			weights=model_result.reshape(-1),
+			weights=model_result.reshape(x.shape),
 			bins=bins,
 			range=range,
 			density=True,
@@ -521,7 +551,7 @@ def distribution_on_idca_variable(
 
 		y_points_2, x2 = numpy.histogram(
 			x,
-			weights=model_choice.reshape(-1),
+			weights=model_choice.reshape(x.shape),
 			bins=x1,
 			density=True,
 		)

@@ -1,3 +1,4 @@
+import logging
 import warnings
 import numpy as np
 import pandas as pd
@@ -83,12 +84,13 @@ class Dataset(_sharrow_Dataset):
         Global attributes to save on this dataset.
 
     caseid : str, optional, keyword only
-        This named dimension will be converted into the '_caseid_'
-        dimension, by renaming it in the created object.
+        This named dimension will be marked as the '_caseid_' dimension.
+
+    alts : str or Mapping, keyword only
+        If given as a str, this named dimension will be marked as the
+        '_altid_' dimension.  Otherwise, give a Mapping
     """
 
-    CASEID = _CASEID
-    ALTID = _ALTID
     __slots__ = ()
 
     def __new__(cls, *args, caseid=None, alts=None, **kwargs):
@@ -102,31 +104,45 @@ class Dataset(_sharrow_Dataset):
     def __initialize_for_larch(cls, obj, caseid=None, alts=None):
         if caseid is not None:
             if caseid not in obj.dims:
-                raise ValueError(f"no dim named '{caseid}' to make into {cls.CASEID}")
-            obj = obj.rename({caseid: cls.CASEID})
-        if isinstance(alts, Mapping):
+                raise ValueError(f"no dim named '{caseid}' to make into {_CASEID}")
+            obj.attrs[_CASEID] = caseid
+        if isinstance(alts, pd.Series):
+            alts_dim_name = alts.name or alts.index.name or '_altid_'
             alts_k = DataArray(
-                list(alts.keys()), dims=cls.ALTID,
+                alts.index, dims=alts_dim_name,
             )
             alts_v = DataArray(
-                list(alts.values()), dims=cls.ALTID,
+                alts.values, dims=alts_dim_name,
             )
-        elif isinstance(alts, pd.Series):
+        elif isinstance(alts, Mapping):
+            alts_dim_name = '_altid_'
             alts_k = DataArray(
-                alts.index, dims=cls.ALTID,
+                list(alts.keys()), dims=alts_dim_name,
             )
             alts_v = DataArray(
-                alts.values, dims=cls.ALTID,
+                list(alts.values()), dims=alts_dim_name,
             )
-        else:
+        elif isinstance(alts, str):
+            alts_dim_name = alts
             alts_k = alts_v = None
+        elif alts is None:
+            alts_dim_name = None
+            alts_k = alts_v = None
+        else:
+            alts_dim_name = getattr(alts, 'name', '_altid_')
+            alts_v = np.asarray(alts).reshape(-1)
+            alts_k = None
+        if alts_dim_name:
+            obj.attrs[_ALTID] = alts_dim_name
         if alts_k is not None:
             if np.issubdtype(alts_v, np.integer) and not np.issubdtype(alts_k, np.integer):
-                obj.coords[cls.ALTID] = alts_v
+                obj.coords[alts_dim_name] = alts_v
                 obj.coords['alt_names'] = alts_k
             else:
-                obj.coords[cls.ALTID] = alts_k
+                obj.coords[alts_dim_name] = alts_k
                 obj.coords['alt_names'] = alts_v
+        elif alts_v is not None:
+            obj.coords[alts_dim_name] = alts_v
         return obj
 
     @classmethod
@@ -141,8 +157,38 @@ class Dataset(_sharrow_Dataset):
         pass # init for superclass happens inside __new__
 
     @property
+    def CASEID(self):
+        result = self.attrs.get(_CASEID, None)
+        if result is None:
+            warnings.warn("no defined CASEID")
+            return _CASEID
+        return result
+
+    @CASEID.setter
+    def CASEID(self, dim_name):
+        if dim_name not in self.dims:
+            raise ValueError(f"{dim_name} not in dims")
+        self.attrs[_CASEID] = dim_name
+
+    @property
+    def ALTID(self):
+        result = self.attrs.get(_ALTID, None)
+        if result is None:
+            warnings.warn("no defined ALTID")
+            return _ALTID
+        return result
+
+    @ALTID.setter
+    def ALTID(self, dim_name):
+        self.attrs[_ALTID] = dim_name
+
+    @property
     def n_cases(self):
-        return self.dims[self.CASEID]
+        try:
+            return self.dims[self.CASEID]
+        except KeyError:
+            logging.getLogger().error(f"missing {self.CASEID!r} among dims {self.dims}")
+            raise
 
     @property
     def n_alts(self):
@@ -271,9 +317,9 @@ class Dataset(_sharrow_Dataset):
         ds = ds.set_dtypes(df)
         renames = {}
         if caseidname is not None:
-            renames[caseidname] = cls.CASEID
+            renames[caseidname] = _CASEID
         if altidname is not None:
-            renames[altidname] = cls.ALTID
+            renames[altidname] = _ALTID
         ds = ds.rename(renames)
         return ds
 
@@ -286,7 +332,7 @@ class Dataset(_sharrow_Dataset):
         ds = cls.construct(df, alts=alts)
         ds = ds.set_dtypes(df)
         if caseidname is not None:
-            ds = ds.rename({caseidname: cls.CASEID})
+            ds = ds.rename({caseidname: _CASEID})
         return ds
 
 
@@ -297,8 +343,6 @@ class Dataset(_sharrow_Dataset):
 class DataTree(_sharrow_DataTree):
 
     DatasetType = Dataset
-    CASEID = _CASEID
-    ALTID = _ALTID
 
     def __init__(
         self,
@@ -319,13 +363,33 @@ class DataTree(_sharrow_DataTree):
             cache_dir=cache_dir,
             relationships=relationships,
             force_digitization=force_digitization,
-            dim_order=(self.CASEID, self.ALTID),
             **kwargs,
         )
+        self.dim_order = (self.CASEID, self.ALTID)
+
+    @property
+    def CASEID(self):
+        result = self.root_dataset.attrs.get(_CASEID, None)
+        if result is None:
+            warnings.warn("no defined CASEID")
+            return _CASEID
+        return result
+
+    @property
+    def ALTID(self):
+        result = self.root_dataset.attrs.get(_ALTID, None)
+        if result is None:
+            warnings.warn("no defined ALTID")
+            return _ALTID
+        return result
 
     @property
     def n_cases(self):
         return self.root_dataset.dims[self.CASEID]
+
+    @property
+    def n_alts(self):
+        return self.root_dataset.dims[self.ALTID]
 
     def query_cases(self, query):
         obj = self.copy()
