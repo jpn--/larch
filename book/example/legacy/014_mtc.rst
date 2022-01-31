@@ -1,0 +1,102 @@
+.. currentmodule:: larch
+
+================================================
+14: MTC MNL Mode Choice, Work Zone Density
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',3)
+	larch._doctest_mode_ = True
+
+Model 14 adds the alternative specific employment density variables for
+different workplace destinations.
+(`pp. 122 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	for a in [2,3]:
+		m.utility_co[a] = P("hhinc#2,3") * X("hhinc")
+
+	for a in [4,5,6]:
+		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
+
+	for a,name in m.dataservice.alternative_pairs[1:]:
+		m.utility_co[a] += (
+			+ P("ASC_"+name)
+			+ P("vehbywrk_"+name) * X("vehbywrk")
+			+ P("wkempden_"+name) * X("wkempden")
+			)
+
+.. testcode::
+
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "vehbywrk.*"),
+		("Zonal", "wkempden.*"),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3460.678...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                              value    std_err   t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       totcost             -0.003  3.081e-04  -9.368       3.279e-04         -8.800
+	          motorized_time      -0.030  3.759e-03  -7.963       3.974e-03         -7.532
+	          nonmotorized_time   -0.046  5.689e-03  -8.065       5.594e-03         -8.202
+	          motorized_ovtbydist -0.157  1.902e-02  -8.279       2.407e-02         -6.543
+	Income    hhinc#2,3           -0.002  1.393e-03  -1.274       1.470e-03         -1.208
+	          hhinc#4             -0.007  2.046e-03  -3.457       2.089e-03         -3.387
+	          hhinc#5             -0.011  5.282e-03  -2.117       6.286e-03         -1.779
+	          hhinc#6             -0.008  3.227e-03  -2.449       3.623e-03         -2.181
+	Ownership vehbywrk_BIKE       -0.713  2.585e-01  -2.760       3.091e-01         -2.308
+	          vehbywrk_SR2        -0.407  7.642e-02  -5.325       8.888e-02         -4.579
+	          vehbywrk_SR3        -0.237  1.126e-01  -2.108       1.171e-01         -2.027
+	          vehbywrk_TRANSIT    -0.995  1.190e-01  -8.357       1.401e-01         -7.102
+	          vehbywrk_WALK       -0.681  1.671e-01  -4.076       1.979e-01         -3.443
+	Zonal     wkempden_BIKE        0.001  1.097e-03   0.958       1.058e-03          0.993
+	          wkempden_SR2         0.001  3.663e-04   3.103       3.863e-04          2.942
+	          wkempden_SR3         0.002  4.333e-04   5.113       4.390e-04          5.046
+	          wkempden_TRANSIT     0.003  3.858e-04   6.955       3.940e-04          6.810
+	          wkempden_WALK        0.002  6.970e-04   2.167       6.729e-04          2.245
+	ASCs      ASC_BIKE            -1.598  4.169e-01  -3.832       4.696e-01         -3.402
+	          ASC_SR2             -1.605  1.330e-01 -12.063       1.441e-01        -11.136
+	          ASC_SR3             -3.212  1.890e-01 -16.996       1.898e-01        -16.928
+	          ASC_TRANSIT          0.419  2.090e-01   2.005       2.258e-01          1.856
+	          ASC_WALK            -0.041  3.442e-01  -0.119       3.443e-01         -0.119

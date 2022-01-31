@@ -1130,7 +1130,7 @@ class NumbaModel(_BaseModel):
             *self._fixed_arrays,
             self._frame.holdfast.to_numpy(),
             self.pvals.astype(self.float_dtype), # float input shape=[n_params]
-            *self._data_arrays.cs[caseslice][:5],
+            *self._data_arrays.cs[caseslice][:5], # TODO fix when not using named tuple
         )
 
     def constraint_violation(
@@ -1429,7 +1429,7 @@ class NumbaModel(_BaseModel):
             step_case=None,
     ):
         if return_dataframe:
-            idx = self.dataframes.caseindex
+            idx = self.datatree.caseids()
             if idx is not None:
                 idx = idx[start_case:stop_case:step_case]
             if return_dataframe == 'names':

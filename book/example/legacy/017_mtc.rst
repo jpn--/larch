@@ -1,0 +1,151 @@
+.. currentmodule:: larch
+
+=================================
+17: MTC Expanded MNL Mode Choice
+=================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+For this example, we're going to re-create model 17 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_. (pp. 128)
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+We will use the usual choice and availability variables.
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	from larch.roles import P, X
+
+	m.utility_ca = (
+		+ X("totcost/hhinc") * P("costbyincome")
+		+ X("tottime * (altnum <= 4)") * P("motorized_time")
+		+ X("tottime * (altnum >= 5)") * P("nonmotorized_time")
+		+ X("ovtt/dist * (altnum <= 4)") * P("motorized_ovtbydist")
+	)
+
+The "totcost/hhinc" data is computed once as a new variable when loading the model data.
+The same applies for tottime filtered by motorized modes (we harness the convenient fact
+that all the motorized modes have identifying numbers 4 or less), and "ovtt/dist".
+
+.. testcode::
+
+	for a in [4,5,6]:
+		m.utility_co[a] += X("hhinc") * P("hhinc#{}".format(a))
+
+Since the model we want to create groups together DA, SR2 and SR3+ jointly as
+reference alternatives with respect to income, we can simply omit all of these alternatives
+from the block that applies to **hhinc**.
+
+For vehicles per worker, the preferred model include a joint parameter on SR2 and SR3+,
+but not including DA and not fixed at zero.  Here we might use a shadow_parameter (also
+called an alias in some places), which allows
+us to specify one or more parameters that are simply a fixed proportion of another parameter.
+For example, we can say that vehbywrk_SR2 will be equal to vehbywrk_SR.
+
+
+.. testcode::
+
+	for a,name in m.dataservice.alternative_pairs[1:3]:
+		m.utility_co[a] += (
+			+ X("vehbywrk") * P("vehbywrk_SR")
+			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
+			+ X("wkempden") * P("wkempden_"+name)
+			+ P("ASC_"+name)
+		)
+
+	for a,name in m.dataservice.alternative_pairs[3:]:
+		m.utility_co[a] += (
+			+ X("vehbywrk") * P("vehbywrk_"+name)
+			+ X("wkccbd+wknccbd") * P("wkcbd_"+name)
+			+ X("wkempden") * P("wkempden_"+name)
+			+ P("ASC_"+name)
+		)
+
+
+We didn't explicitly define our parameters first, which is fine; Larch will
+find them in the utility functions (or elsewhere in more complex models).
+But they may be found in a weird order that is hard to read in reports.
+We can define an ordering scheme by assigning to the parameter_groups attribute,
+like this:
+
+.. testcode::
+
+	m.ordering = (
+		('LOS', ".*cost.*", ".*time.*", ".*dist.*",),
+		('Zonal', "wkcbd.*", "wkempden.*",),
+		('Household', "hhinc.*", "vehbywrk.*",),
+		('ASCs', "ASC.*",),
+	)
+
+Each item in parameter_ordering is a tuple, with a label and one or more regular expressions,
+which will be compared against
+all the parameter names.  Any names that match will be pulled out and put into the
+reporting order sequentially.  Thus if a parameter name would match more than one
+regex, it will appear in the ordering only for the first match.
+
+
+Having created this model, we can then estimate it:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3444.1...
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                               value    std_err  t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       costbyincome        -0.052  1.040e-02  -5.036       1.334e-02         -3.927
+	          motorized_time      -0.020  3.815e-03  -5.292       3.898e-03         -5.178
+	          nonmotorized_time   -0.045  5.768e-03  -7.878       5.760e-03         -7.890
+	          motorized_ovtbydist -0.133  1.964e-02  -6.763       2.410e-02         -5.513
+	Zonal     wkcbd_BIKE           0.489  3.611e-01   1.355       3.665e-01          1.335
+	          wkcbd_SR2            0.260  1.234e-01   2.107       1.234e-01          2.106
+	          wkcbd_SR3            1.069  1.913e-01   5.590       1.899e-01          5.630
+	          wkcbd_TRANSIT        1.309  1.657e-01   7.899       1.585e-01          8.259
+	          wkcbd_WALK           0.102  2.521e-01   0.404       2.588e-01          0.393
+	          wkempden_BIKE        0.002  1.215e-03   1.586       1.176e-03          1.640
+	          wkempden_SR2         0.002  3.903e-04   4.042       4.128e-04          3.822
+	          wkempden_SR3         0.002  4.520e-04   4.994       4.537e-04          4.975
+	          wkempden_TRANSIT     0.003  3.607e-04   8.684       3.831e-04          8.178
+	          wkempden_WALK        0.003  7.421e-04   3.895       7.107e-04          4.067
+	Household hhinc#4             -0.005  1.977e-03  -2.692       2.047e-03         -2.600
+	          hhinc#5             -0.009  5.154e-03  -1.677       5.967e-03         -1.449
+	          hhinc#6             -0.006  3.149e-03  -1.905       3.431e-03         -1.748
+	          vehbywrk_BIKE       -0.702  2.583e-01  -2.718       3.094e-01         -2.270
+	          vehbywrk_SR         -0.317  6.663e-02  -4.752       7.560e-02         -4.188
+	          vehbywrk_TRANSIT    -0.946  1.183e-01  -7.999       1.370e-01         -6.907
+	          vehbywrk_WALK       -0.722  1.694e-01  -4.261       2.032e-01         -3.552
+	ASCs      ASC_BIKE            -1.629  4.274e-01  -3.811       4.861e-01         -3.351
+	          ASC_SR2             -1.808  1.061e-01 -17.035       1.170e-01        -15.451
+	          ASC_SR3             -3.434  1.519e-01 -22.610       1.557e-01        -22.048
+	          ASC_TRANSIT         -0.685  2.478e-01  -2.764       2.690e-01         -2.547
+	          ASC_WALK             0.068  3.480e-01   0.196       3.493e-01          0.195
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.example(17)

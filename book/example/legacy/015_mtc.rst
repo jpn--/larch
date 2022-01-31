@@ -1,0 +1,108 @@
+.. currentmodule:: larch
+
+==================================================
+15: MTC MNL Mode Choice, CBD and Work Zone Density
+==================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+Model 15 adds both the alternative specific CBD dummy variables and the
+alternative specific employment density variables.
+(`pp. 122 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	for a in [2,3]:
+		m.utility_co[a] = P("hhinc#2,3") * X("hhinc")
+
+	for a in [4,5,6]:
+		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
+
+	for a,name in m.dataservice.alternative_pairs[1:]:
+		m.utility_co[a] += (
+			+ P("ASC_"+name)
+			+ P("vehbywrk_"+name) * X("vehbywrk")
+			+ P("wkcbd_"+name) * X("wkccbd + wknccbd")
+			+ P("wkempden_"+name) * X("wkempden")
+			)
+
+.. testcode::
+
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "vehbywrk.*", ),
+		("Zonal", "wkcbd.*", "wkempden.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3424.550...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       totcost             -0.0024   0.0003  -7.7082          0.0003        -7.4773
+	          motorized_time      -0.0231   0.0039  -5.9240          0.0040        -5.7506
+	          nonmotorized_time   -0.0467   0.0058  -8.1003          0.0057        -8.1505
+	          motorized_ovtbydist -0.1324   0.0197  -6.7043          0.0243        -5.4433
+	Income    hhinc#2,3           -0.0018   0.0014  -1.2841          0.0015        -1.2226
+	          hhinc#4             -0.0071   0.0021  -3.4306          0.0021        -3.3586
+	          hhinc#5             -0.0109   0.0053  -2.0643          0.0062        -1.7471
+	          hhinc#6             -0.0081   0.0032  -2.5355          0.0036        -2.2698
+	Ownership vehbywrk_BIKE       -0.7149   0.2590  -2.7601          0.3116        -2.2945
+	          vehbywrk_SR2        -0.4011   0.0769  -5.2153          0.0897        -4.4727
+	          vehbywrk_SR3        -0.1830   0.1104  -1.6583          0.1119        -1.6353
+	          vehbywrk_TRANSIT    -0.9295   0.1179  -7.8832          0.1370        -6.7827
+	          vehbywrk_WALK       -0.7274   0.1694  -4.2953          0.2023        -3.5953
+	Zonal     wkcbd_BIKE           0.4617   0.3601   1.2822          0.3646         1.2664
+	          wkcbd_SR2            0.2037   0.1246   1.6353          0.1255         1.6240
+	          wkcbd_SR3            1.0180   0.1926   5.2870          0.1894         5.3737
+	          wkcbd_TRANSIT        1.2045   0.1678   7.1767          0.1599         7.5310
+	          wkcbd_WALK           0.1084   0.2508   0.4323          0.2563         0.4231
+	          wkempden_BIKE        0.0008   0.0012   0.6800          0.0012         0.7097
+	          wkempden_SR2         0.0010   0.0004   2.4804          0.0004         2.3803
+	          wkempden_SR3         0.0013   0.0005   2.7055          0.0005         2.6928
+	          wkempden_TRANSIT     0.0021   0.0004   5.4625          0.0004         5.4653
+	          wkempden_WALK        0.0018   0.0008   2.3833          0.0007         2.5290
+	ASCs      ASC_BIKE            -1.5151   0.4296  -3.5272          0.4911        -3.0849
+	          ASC_SR2             -1.6396   0.1363 -12.0258          0.1470       -11.1533
+	          ASC_SR3             -3.5498   0.2042 -17.3807          0.1998       -17.7648
+	          ASC_TRANSIT         -0.4714   0.2511  -1.8773          0.2672        -1.7644
+	          ASC_WALK             0.2103   0.3483   0.6037          0.3492         0.6022

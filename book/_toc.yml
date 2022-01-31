@@ -29,7 +29,21 @@ parts:
       title: MTC Mode Choice
     - file: example/swissmetro
       title: Swissmetro
+      sections:
+        - glob: example/1*
     - file: example/exampville
       title: Exampville
     - file: example/itinerary
       title: Itinerary Choice
+    - file: example/legacy
+      title: Deprecated Examples
+      sections:
+        - file: example/legacy/mtc
+          sections:
+            - glob: example/legacy/0*
+        - file: example/legacy/swissmetro
+          sections:
+            - glob: example/legacy/1*
+        - file: example/legacy/itinerary
+          sections:
+            - glob: example/legacy/3*

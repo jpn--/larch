@@ -1,0 +1,81 @@
+.. currentmodule:: larch
+
+============================================
+3: MTC MNL Mode Choice, Zeroed Shared
+============================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+Model 3 posits the effect of income on all the automobile modes (drive alone, shared ride 2, and shared ride 3+)
+is the same, but the effect is different for the other modes. We include this
+constraint by setting the income coefficients in the utilities of the automobile modes to be equal.
+In this case, we set them to zero since drive alone is the reference mode. (`pp. 108 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+We set the terms to zero can be done by omitting the terms altogether.
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")
+	m.utility_co[3] = P("ASC_SR3P")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+.. testcode::
+
+	m.utility_ca = PX("tottime") + PX("totcost")
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", "totcost", "tottime", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. testcode::
+
+	m.title = "MTC Example 3, Zeroed Shared"
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3627.233...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                     value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost   -0.0049   0.0002 -20.6062          0.0003       -17.3891
+	         tottime   -0.0513   0.0031 -16.5594          0.0035       -14.8580
+	Income   hhinc#4   -0.0049   0.0018  -2.7295          0.0018        -2.7644
+	         hhinc#5   -0.0125   0.0053  -2.3451          0.0065        -1.9014
+	         hhinc#6   -0.0093   0.0030  -3.0977          0.0032        -2.9143
+	ASCs     ASC_BIKE  -2.3981   0.3038  -7.8934          0.3600        -6.6622
+	         ASC_SR2   -2.3043   0.0547 -42.1387          0.0574       -40.1180
+	         ASC_SR3P  -3.7036   0.0930 -39.8127          0.0950       -38.9751
+	         ASC_TRAN  -0.6975   0.1304  -5.3504          0.1277        -5.4600
+	         ASC_WALK  -0.2292   0.1933  -1.1857          0.2057        -1.1141

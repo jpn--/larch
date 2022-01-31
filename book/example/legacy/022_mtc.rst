@@ -1,0 +1,83 @@
+.. currentmodule:: larch
+
+======================================================
+22: MTC Motorized and Non-Motorized Nested Mode Choice
+======================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+For this example, we're going to re-create model 22 from the
+`Self Instructing Manual <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_. (pp. 179)
+
+This model is a nested logit model using the same utility function as model 17, so
+we can start with that model and just add the nesting structure.
+
+.. testcode::
+
+	m = larch.example(17)
+
+We will create seperate nests for the motorized and non-motorized alternatives.
+
+.. testcode::
+
+	motorized = m.graph.new_node(parameter='mu_motor', children=[1,2,3,4], name='Motorized')
+	nonmotorized = m.graph.new_node(parameter='mu_nonmotor', children=[5,6], name='Nonmotorized')
+
+That's it! We're basically ready to estimate.
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-3441.67...
+
+	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
+	                               value  initvalue  nullvalue  minimum  maximum  holdfast
+	Category  Parameter
+	LOS       costbyincome        -0.039        0.0        0.0     -inf      inf         0
+	          motorized_time      -0.015        0.0        0.0     -inf      inf         0
+	          nonmotorized_time   -0.046        0.0        0.0     -inf      inf         0
+	          motorized_ovtbydist -0.114        0.0        0.0     -inf      inf         0
+	Zonal     wkcbd_BIKE           0.408        0.0        0.0     -inf      inf         0
+	          wkcbd_SR2            0.193        0.0        0.0     -inf      inf         0
+	          wkcbd_SR3            0.781        0.0        0.0     -inf      inf         0
+	          wkcbd_TRANSIT        0.921        0.0        0.0     -inf      inf         0
+	          wkcbd_WALK           0.114        0.0        0.0     -inf      inf         0
+	          wkempden_BIKE        0.002        0.0        0.0     -inf      inf         0
+	          wkempden_SR2         0.001        0.0        0.0     -inf      inf         0
+	          wkempden_SR3         0.002        0.0        0.0     -inf      inf         0
+	          wkempden_TRANSIT     0.002        0.0        0.0     -inf      inf         0
+	          wkempden_WALK        0.002        0.0        0.0     -inf      inf         0
+	Household hhinc#4             -0.004        0.0        0.0     -inf      inf         0
+	          hhinc#5             -0.010        0.0        0.0     -inf      inf         0
+	          hhinc#6             -0.006        0.0        0.0     -inf      inf         0
+	          vehbywrk_BIKE       -0.735        0.0        0.0     -inf      inf         0
+	          vehbywrk_SR         -0.226        0.0        0.0     -inf      inf         0
+	          vehbywrk_TRANSIT    -0.707        0.0        0.0     -inf      inf         0
+	          vehbywrk_WALK       -0.764        0.0        0.0     -inf      inf         0
+	ASCs      ASC_BIKE            -1.201        0.0        0.0     -inf      inf         0
+	          ASC_SR2             -1.325        0.0        0.0     -inf      inf         0
+	          ASC_SR3             -2.506        0.0        0.0     -inf      inf         0
+	          ASC_TRANSIT         -0.404        0.0        0.0     -inf      inf         0
+	          ASC_WALK             0.345        0.0        0.0     -inf      inf         0
+	Other     mu_motor             0.726        1.0        1.0    0.001      1.0         0
+	          mu_nonmotor          0.769        1.0        1.0    0.001      1.0         0
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.example(22)

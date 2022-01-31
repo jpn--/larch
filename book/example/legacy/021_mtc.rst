@@ -1,0 +1,75 @@
+.. currentmodule:: larch
+
+===========================================================
+21: MTC Non-Motorized Nested Mode Choice
+===========================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+.. testcode::
+
+	m = larch.example(17)
+
+Model 21's nesting structure groups the non-motorized alternatives. (`pp. 176 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	nonmotorized = m.graph.new_node(parameter='mu', children=[5,6], name='Nonmotorized')
+
+.. testcode::
+
+	m.ordering = (
+		("CostbyInc","costbyincome", ),
+		("TravelTime",".*time.*",".*dist.*", ),
+		("Household","hhinc.*","vehbywrk.*", ),
+		("Zonal","wkcbd.*","wkempden.*", ),
+		("ASCs","ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='bhhh')
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-3443.554...
+
+	>>> print(m.pfo()[['value']])
+	                                 value
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0519
+	TravelTime motorized_time      -0.0199
+	           nonmotorized_time   -0.0454
+	           motorized_ovtbydist -0.1351
+	Household  hhinc#4             -0.0053
+	           hhinc#5             -0.0092
+	           hhinc#6             -0.0056
+	           vehbywrk_BIKE       -0.6928
+	           vehbywrk_SR         -0.3165
+	           vehbywrk_TRANSIT    -0.9470
+	           vehbywrk_WALK       -0.7141
+	Zonal      wkcbd_BIKE           0.4142
+	           wkcbd_SR2            0.2604
+	           wkcbd_SR3            1.0703
+	           wkcbd_TRANSIT        1.3083
+	           wkcbd_WALK           0.1034
+	           wkempden_BIKE        0.0022
+	           wkempden_SR2         0.0016
+	           wkempden_SR3         0.0023
+	           wkempden_TRANSIT     0.0031
+	           wkempden_WALK        0.0028
+	ASCs       ASC_BIKE            -1.4459
+	           ASC_SR2             -1.8088
+	           ASC_SR3             -3.4350
+	           ASC_TRANSIT         -0.6817
+	           ASC_WALK             0.0791
+	Other      mu                   0.7665

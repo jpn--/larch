@@ -1,0 +1,90 @@
+.. currentmodule:: larch
+
+================================================
+6: MTC MNL Mode Choice, Motorized Times
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+Model 6 relaxes the travel time constraint further than Model 5 by disaggregating the
+travel time for motorized modes into distinct components for in-vehicle travel time (IVT)
+and out-of-vehicle travel time (OVT). This specification allows the two components of
+travel time for motorized travel to have different effects on utility with the
+expectation that travelers are more sensitive to out-of-vehicle time than in-vehicle time.
+(`pp. 111 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+People may value time differently depending on what mode they're in,
+so we'll decompose `tottime` into `ovtt` and `ivtt` for the motorized alternatives.
+
+
+.. testcode::
+
+	m.utility_ca = (
+		 + P("nonmotorized_time") * X("(altnum>4) * tottime")
+		 + P("motorized_ovtt") * X("(altnum <= 4) * ovtt")
+		 + P("motorized_ivtt") * X("(altnum <= 4) * ivtt")
+		 + PX("totcost")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", "totcost", "nonmotorized_time", "motorized_ivtt", "motorized_ovtt", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3588.03...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                             value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost           -0.0048   0.0002 -20.2075          0.0003       -16.9960
+	         nonmotorized_time -0.0632   0.0054 -11.7901          0.0054       -11.7418
+	         motorized_ivtt    -0.0025   0.0062  -0.4100          0.0062        -0.4093
+	         motorized_ovtt    -0.0759   0.0059 -12.9577          0.0064       -11.8360
+	Income   hhinc#2,3         -0.0016   0.0014  -1.1355          0.0015        -1.0516
+	         hhinc#4           -0.0057   0.0019  -3.0748          0.0018        -3.2086
+	         hhinc#5           -0.0122   0.0052  -2.3326          0.0063        -1.9450
+	         hhinc#6           -0.0093   0.0031  -3.0464          0.0032        -2.8821
+	ASCs     ASC_BIKE          -1.7193   0.3231  -5.3208          0.3679        -4.6734
+	         ASC_SR2           -2.4300   0.1006 -24.1431          0.1090       -22.2938
+	         ASC_SR3P          -3.8834   0.1271 -30.5425          0.1337       -29.0426
+	         ASC_TRAN          -0.4899   0.1491  -3.2865          0.1482        -3.3046
+	         ASC_WALK           0.4091   0.2533   1.6151          0.2588         1.5807

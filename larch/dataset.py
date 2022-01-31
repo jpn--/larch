@@ -338,7 +338,7 @@ class Dataset(_sharrow_Dataset):
             ca = np.empty( (self.n_cases, self.n_alts, 0), dtype=float_dtype)
 
         if 'wt' in self:
-            wt = self['wt'].astype(float_dtype)
+            wt = self['wt'].values.astype(float_dtype)
         else:
             wt = np.ones(self.n_cases, dtype=float_dtype)
 
@@ -459,7 +459,7 @@ class Dataset(_sharrow_Dataset):
         return obj
 
     @classmethod
-    def from_idca(cls, df, crack=True, altnames=None):
+    def from_idca(cls, df, crack=True, altnames=None, avail='_avail_', fill_unavail=None):
         """
         Construct a Dataset from an idco-format DataFrame.
 
@@ -476,6 +476,13 @@ class Dataset(_sharrow_Dataset):
             If given as a mapping, links alternative codes to names.
             An array or list of strings gives names for the alternatives,
             sorted in the same order as the codes.
+        avail : str, default '_avail_'
+            When the imported data is in idce format (i.e. sparse) then
+            an availability indicator is computed and given this name.
+        fill_unavail : scalar or Mapping, optional
+            Fill values to use for missing values when imported data is
+            in idce format (i.e. sparse).  Give a single value to use
+            globally, or a mapping of {variable: value} or {dtype: value}.
 
         Returns
         -------
@@ -491,6 +498,23 @@ class Dataset(_sharrow_Dataset):
         ds = ds.set_dtypes(df)
         if altnames is not None:
             ds = ds.set_altnames(altnames)
+        if avail not in ds and len(df) < ds.n_cases * ds.n_alts:
+            av = DataArray.from_series(pd.Series(1, index=df.index)).fillna(0).astype(np.int8)
+            ds[avail] = av
+            if fill_unavail is not None:
+                if isinstance(fill_unavail, Mapping):
+                    for k, i in ds.items():
+                        if ds.ALTID not in i.dims:
+                            continue
+                        if k not in fill_unavail and i.dtype not in fill_unavail:
+                            continue
+                        filler = fill_unavail.get(k, fill_unavail[i.dtype])
+                        ds[k] = i.where(ds['_avail_']!=0, filler)
+                else:
+                    for k, i in ds.items():
+                        if ds.ALTID not in i.dims:
+                            continue
+                        ds[k] = i.where(ds['_avail_']!=0, fill_unavail)
         return ds
 
     @classmethod
