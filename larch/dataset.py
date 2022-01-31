@@ -15,8 +15,8 @@ except ImportError:
     warnings.warn("larch.dataset requires the sharrow library")
     class _noclass:
         pass
-    _sharrow_Dataset = _noclass
-    DataArray = xr.DataArray
+    _sharrow_Dataset = xr.Dataset
+    _sharrow_DataArray = xr.DataArray
     _sharrow_DataTree = _noclass
 
 from .dim_names import CASEID as _CASEID, ALTID as _ALTID
