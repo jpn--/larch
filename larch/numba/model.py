@@ -1894,3 +1894,20 @@ class NumbaModel(_BaseModel):
         if self.float_dtype != float_dtype:
             self.mangle()
         self._float_dtype = float_dtype
+
+    def choice_avail_summary(self):
+        """
+        Generate a summary of choice and availability statistics.
+
+        Returns
+        -------
+        pandas.DataFrame
+        """
+        from ..dataset import choice_avail_summary
+        self.unmangle()
+        graph = None if self.is_mnl() else self.graph
+        return choice_avail_summary(
+            self.dataset,
+            graph,
+            self.availability_co_vars,
+        )

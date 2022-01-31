@@ -84,6 +84,8 @@ def array_av_cascade(arr_av, graph):
     -------
     array
     """
+    if arr_av is None:
+        return None
     result = np.zeros((arr_av.shape[0], len(graph)), dtype=np.int8)
     result[: ,:graph.n_elementals()] = arr_av
     ups, dns, _1, _2 = graph.edge_slot_arrays()
@@ -109,6 +111,8 @@ def array_ch_cascade(arr_ch, graph, dtype=None):
     -------
     array
     """
+    if arr_ch is None:
+        return None
     result = np.zeros(
         (arr_ch.shape[0], len(graph)),
         dtype=dtype or arr_ch.dtype,

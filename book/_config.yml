@@ -73,3 +73,5 @@ sphinx:
     conda:
       - "https://docs.conda.io/projects/conda/en/latest/"
       - null
+  config:
+    bibtex_reference_style: author_year

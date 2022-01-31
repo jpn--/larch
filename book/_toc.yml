@@ -11,6 +11,7 @@ parts:
     - file: user-guide/data-fundamentals
       title: Data Fundamentals
     - file: user-guide/linear-funcs
+    - file: bibliography
 
   - caption: API Reference
     chapters:

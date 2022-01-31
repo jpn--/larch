@@ -3,11 +3,13 @@ import warnings
 import numpy as np
 import pandas as pd
 import xarray as xr
+import pathlib
 from collections.abc import Mapping
 from xarray.core import dtypes
 
 try:
-    from sharrow import Dataset as _sharrow_Dataset, DataArray
+    from sharrow import Dataset as _sharrow_Dataset
+    from sharrow import DataArray as _sharrow_DataArray
     from sharrow import DataTree as _sharrow_DataTree
 except ImportError:
     warnings.warn("larch.dataset requires the sharrow library")
@@ -18,6 +20,98 @@ except ImportError:
     _sharrow_DataTree = _noclass
 
 from .dim_names import CASEID as _CASEID, ALTID as _ALTID
+
+
+class DataArray(_sharrow_DataArray):
+
+    __slots__ = ()
+
+    @classmethod
+    def zeros(cls, *coords, dtype=np.float64, name=None, attrs=None):
+        """
+        Construct a dataset filled with zeros.
+
+        Parameters
+        ----------
+        coords : Tuple[array-like]
+            A sequence of coordinate vectors.  Ideally each should have a
+            `name` attribute that names a dimension, otherwise placeholder
+            names are used.
+        dtype : dtype, default np.float64
+            dtype of the new array. If omitted, it defaults to np.float64.
+        name : str or None, optional
+            Name of this array.
+        attrs : dict_like or None, optional
+            Attributes to assign to the new instance. By default, an empty
+            attribute dictionary is initialized.
+
+        Returns
+        -------
+        DataArray
+        """
+        dims = []
+        shape = []
+        coo = {}
+        for n, c in enumerate(coords):
+            i = getattr(c, "name", f"dim_{n}")
+            dims.append(i)
+            shape.append(len(c))
+            coo[i] = c
+        return cls(
+            data=np.zeros(shape, dtype=dtype),
+            coords=coo,
+            dims=dims,
+            name=name,
+            attrs=attrs,
+        )
+
+    def to_zarr(self, store=None, *args, **kwargs):
+        """
+        Write DataArray contents to a zarr store.
+
+        All parameters are passed directly to :py:meth:`xarray.Dataset.to_zarr`.
+
+        Notes
+        -----
+        Only xarray.Dataset objects can be written to netCDF files, so
+        the xarray.DataArray is converted to a xarray.Dataset object
+        containing a single variable. If the DataArray has no name, or if the
+        name is the same as a coordinate name, then it is given the name
+        ``"__xarray_dataarray_variable__"``.
+
+        See Also
+        --------
+        Dataset.to_zarr
+        """
+        from xarray.backends.api import DATAARRAY_VARIABLE
+
+        if self.name is None:
+            # If no name is set then use a generic xarray name
+            dataset = self.to_dataset(name=DATAARRAY_VARIABLE)
+        else:
+            # No problems with the name - so we're fine!
+            dataset = self.to_dataset()
+
+        if isinstance(store, (str, pathlib.Path)) and len(args)==0:
+            if str(store).endswith('.zip'):
+                import zarr
+                with zarr.ZipStore(store, mode='w') as zstore:
+                    dataset.to_zarr(zstore, **kwargs)
+                return
+
+        return dataset.to_zarr(*args, **kwargs)
+
+    @classmethod
+    def from_zarr(cls, *args, name=None, **kwargs):
+        dataset = xr.open_zarr(*args, **kwargs)
+        if name is None:
+            names = set(dataset.variables) - set(dataset.coords)
+            if len(names) == 1:
+                name = names.pop()
+            else:
+                raise ValueError("cannot infer name to load")
+        return cls(dataset[name])
+
 
 class Dataset(_sharrow_Dataset):
     """
@@ -105,6 +199,24 @@ class Dataset(_sharrow_Dataset):
 
     @classmethod
     def __initialize_for_larch(cls, obj, caseid=None, alts=None):
+        """
+
+        Parameters
+        ----------
+        obj : Dataset
+            The dataaset being initialized.
+        caseid : str, optional
+            The name of a dimension referencing cases.
+        alts : Mapping or str or array-like, optional
+            If given as a mapping, links alternative codes to names.
+            A string names a dimension that defines the alternatives.
+            An array or list of integers gives codes for the alternatives,
+            which are otherwise unnamed.
+
+        Returns
+        -------
+        Dataset
+        """
         if caseid is not None:
             if caseid not in obj.dims:
                 raise ValueError(f"no dim named '{caseid}' to make into {_CASEID}")
@@ -348,6 +460,27 @@ class Dataset(_sharrow_Dataset):
 
     @classmethod
     def from_idca(cls, df, crack=True, altnames=None):
+        """
+        Construct a Dataset from an idco-format DataFrame.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The input data should be an idca-format or idce-format DataFrame,
+            with the caseid's and altid's in a two-level pandas MultiIndex.
+        crack : bool, default True
+            If True, the `dissolve_zero_variance` method is applied before
+            repairing dtypes, to ensure that missing value are handled
+            properly.
+        altnames : Mapping, optional
+            If given as a mapping, links alternative codes to names.
+            An array or list of strings gives names for the alternatives,
+            sorted in the same order as the codes.
+
+        Returns
+        -------
+        Dataset
+        """
         if df.index.nlevels != 2:
             raise ValueError("source idca dataframe must have a two "
                              "level MultiIndex giving case and alt id's")
@@ -362,19 +495,43 @@ class Dataset(_sharrow_Dataset):
 
     @classmethod
     def from_idco(cls, df, alts=None):
+        """
+        Construct a Dataset from an idco-format DataFrame.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The input data should be an idco-format DataFrame, with
+            the caseid's in a single-level index,
+        alts : Mapping or array-like, optional
+            If given as a mapping, links alternative codes to names.
+            An array or list of integers gives codes for the alternatives,
+            which are otherwise unnamed.
+
+        Returns
+        -------
+        Dataset
+        """
         if df.index.nlevels != 1:
             raise ValueError("source idco dataframe must have a one "
                              "level Index giving case id's")
         caseidname = df.index.name
-        ds = cls.construct(df, alts=alts)
+        ds = cls.construct(df, caseid=caseidname, alts=alts)
         ds = ds.set_dtypes(df)
-        if caseidname is not None:
-            ds = ds.rename({caseidname: _CASEID})
         return ds
-
 
     def setup_flow(self, *args, **kwargs):
         return DataTree(main=self).setup_flow(*args, **kwargs)
+
+    def caseids(self):
+        """
+        Access the caseids coordinates as an index.
+
+        Returns
+        -------
+        pd.Index
+        """
+        return self.indexes[self.CASEID]
 
 
 class DataTree(_sharrow_DataTree):
@@ -432,6 +589,16 @@ class DataTree(_sharrow_DataTree):
         obj = self.copy()
         obj.root_dataset = obj.root_dataset.query_cases(query)
         return obj
+
+    def caseids(self):
+        """
+        Access the caseids coordinates as an index.
+
+        Returns
+        -------
+        pd.Index
+        """
+        return self.root_dataset.indexes[self.CASEID]
 
 
 def merge(
@@ -522,3 +689,146 @@ def merge(
         caseid=caseid,
         alts=alts,
     )
+
+
+def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
+    """
+    Generate a summary of choice and availability statistics.
+
+    Parameters
+    ----------
+    dataset : Dataset
+        The loaded dataset to summarize, which should have
+        `ch` and `av` variables.
+    graph : NestingTree, optional
+        The nesting graph.
+    availability_co_vars : dict, optional
+        Also attach the definition of the availability conditions.
+
+    Returns
+    -------
+    pandas.DataFrame
+    """
+    if graph is None:
+        if 'ch' in dataset:
+            ch_ = dataset['ch'].copy()
+        else:
+            ch_ = None
+        av_ = dataset.get('av')
+    else:
+        from .numba.cascading import array_av_cascade, array_ch_cascade
+
+        ch_ = array_ch_cascade(dataset.get('ch'), graph)
+        av_ = array_av_cascade(dataset.get('av'), graph)
+
+    if ch_ is not None:
+        ch = ch_.sum(0)
+    else:
+        ch = None
+
+    if av_ is not None:
+        av = av_.sum(0)
+    else:
+        av = None
+
+    arr_wt = dataset.get('wt')
+    if arr_wt is not None:
+        if ch_ is not None:
+            ch_w = pd.Series((ch_ * arr_wt.values).sum(0))
+        else:
+            ch_w = None
+        if av_ is not None:
+            av_w = pd.Series((av_ * arr_wt.values).sum(0))
+        else:
+            av_w = None
+        show_wt = np.any(ch != ch_w)
+    else:
+        ch_w = ch
+        av_w = av
+        show_wt = False
+
+    if av_ is not None:
+        ch_[av_ > 0] = 0
+    if ch_ is not None and ch_.sum() > 0:
+        ch_but_not_av = ch_.sum(0)
+        if arr_wt is not None:
+            ch_but_not_av_w = pd.Series((ch_ * arr_wt.values).sum(0), index=ch_.columns)
+        else:
+            ch_but_not_av_w = ch_but_not_av
+    else:
+        ch_but_not_av = None
+        ch_but_not_av_w = None
+
+    from collections import OrderedDict
+    od = OrderedDict()
+
+    if graph is not None:
+        od['name'] = pd.Series(graph.standard_sort_names, index=graph.standard_sort)
+    else:
+        od['name'] = dataset.get('alt_names')
+
+    if show_wt:
+        od['chosen weighted'] = ch_w
+        od['chosen unweighted'] = ch
+        od['available weighted'] = av_w
+        od['available unweighted'] = av
+    else:
+        od['chosen'] = ch
+        od['available'] = av
+    if ch_but_not_av is not None:
+        if show_wt:
+            od['chosen but not available weighted'] = ch_but_not_av_w
+            od['chosen but not available unweighted'] = ch_but_not_av
+        else:
+            od['chosen but not available'] = ch_but_not_av
+
+    if availability_co_vars is not None:
+        od['availability condition'] = pd.Series(
+            availability_co_vars.values(),
+            index=availability_co_vars.keys(),
+        )
+
+    result = pd.DataFrame.from_dict(od)
+    if graph is not None:
+        totals = result.loc[graph.root_id, :]
+        result.drop(index=graph.root_id, inplace=True)
+    else:
+        totals = result.sum()
+
+    for tot in (
+            'chosen',
+            'chosen weighted',
+            'chosen unweighted',
+            'chosen but not available',
+            'chosen but not available weighted',
+            'chosen but not available unweighted',
+            'chosen thus available',
+            'not available so not chosen'
+    ):
+        if tot in totals:
+            result.loc['< Total All Alternatives >', tot] = totals[tot]
+
+    result.loc['< Total All Alternatives >', pd.isnull(result.loc['< Total All Alternatives >', :])] = ""
+    result.drop('_root_', errors='ignore', inplace=True)
+
+    if 'availability condition' in result:
+        result['availability condition'] = result['availability condition'].fillna('')
+
+    for i in (
+            'chosen',
+            'chosen but not available',
+            'chosen thus available',
+            'not available so not chosen',
+    ):
+        if i in result.columns and all(result[i] == result[i].astype(int)):
+            result[i] = result[i].astype(int)
+
+    for i in (
+            'available',
+    ):
+        if i in result.columns:
+            j = result.columns.get_loc(i)
+            if all(result.iloc[:-1,j] == result.iloc[:-1,j].astype(int)):
+                result.iloc[:-1,j] = result.iloc[:-1,j].astype(int)
+
+    return result
