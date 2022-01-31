@@ -576,7 +576,7 @@ class LatentClassModel(AbstractChoiceModel):
 
 		if self.dataframes is not None and self.dataframes.data_wt is not None:
 			wt = self.dataframes.data_wt.iloc[start_case:stop_case_:step_case]
-		elif self._k_membership.data_as_loaded is not None and 'wt' in self._k_membership.data_as_loaded:
+		elif getattr(self._k_membership, 'data_as_loaded', None) is not None and 'wt' in self._k_membership.data_as_loaded:
 			wt = self._k_membership.data_as_loaded['wt'].values[start_case:stop_case_:step_case]
 		else:
 			wt = None
