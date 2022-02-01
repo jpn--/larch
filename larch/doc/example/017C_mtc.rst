@@ -11,7 +11,7 @@
 	import pandas
 	pandas.set_option('display.max_columns',999)
 	pandas.set_option('expand_frame_repr',False)
-	pandas.set_option('precision',4)
+	pandas.set_option('display.precision',4)
 	larch._doctest_mode_ = True
 
 Model 17C segments the market by gender for males. (`pp. 135 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)

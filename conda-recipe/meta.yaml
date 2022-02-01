@@ -1,6 +1,6 @@
 package:
   name: larch
-  version: "5.5.9"
+  version: "5.5.10"
 
 source:
   path: ../
@@ -9,7 +9,8 @@ build:
   number: 1
   skip: True  # [py<37]
   script:
-    - "{{ PYTHON }} -m pip install . --no-deps -vv"
+    - "{{ PYTHON }} -m pip install . --no-deps -vv"   # [not osx]
+    - "export SDKROOT=$(xcrun --sdk macosx --show-sdk-path) && export LDFLAGS=-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib && {{ PYTHON }} -m pip install . --no-deps -vv"  # [osx]
 
 requirements:
 
@@ -34,7 +35,7 @@ requirements:
     - scipy >=1.1
     - pandas >=0.24
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
-    - blosc >=1.14.3 
+    - blosc >=1.14.3
     - matplotlib >=3.0
     - networkx >=2.4
     - tqdm >=4.28.1
@@ -63,9 +64,7 @@ test:
   imports:
     - larch
   commands:
-    - pytest ./tests
-    - svn export https://github.com/jpn--/larch/trunk/larch/doc --non-interactive --trust-server-cert-failures=unknown-ca  # [not win]
-    - sphinx-build -b doctest ./doc ./build/docs   # [not win]
+    - pytest
 
   # You can also put a file called run_test.py in the recipe that will be run
   # at test time.
@@ -82,6 +81,7 @@ test:
     - geopandas
     - numba
     - xarray
+    - nbmake
 
 about:
   home: https://larch.newman.me

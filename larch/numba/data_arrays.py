@@ -4,6 +4,8 @@ import xarray as xr
 import logging
 from typing import NamedTuple
 
+from ..dim_names import CASEID as _CASEID, ALTID as _ALTID
+
 class _case_slice:
 
     def __get__(self, obj, objtype=None):
@@ -42,13 +44,13 @@ class DataArrays(NamedTuple):
 
 
 def to_dataset(dataframes):
-    caseindex_name = '_caseid_'
-    altindex_name = '_altid_'
+    caseindex_name = _CASEID
+    altindex_name = _ALTID
     from ..dataset import Dataset
     from xarray import DataArray
     coords = {
-        '_caseid_': dataframes.caseindex.values,
-        '_altid_': dataframes.alternative_codes(),
+        caseindex_name: dataframes.caseindex.values,
+        altindex_name: dataframes.alternative_codes(),
     }
     ds = Dataset(coords=coords)
     if dataframes.data_co is not None:
@@ -58,9 +60,9 @@ def to_dataset(dataframes):
         caseindex_name = dataframes.data_ca.index.names[0]
         altindex_name = dataframes.data_ca.index.names[1]
         ds.update(Dataset.from_dataframe(dataframes.data_ca))
-    altnames = dataframes.alternative_names()
-    if altnames:
-        ds.coords['alt_names'] = DataArray(altnames, dims=(altindex_name,))
+    alt_names = dataframes.alternative_names()
+    if alt_names:
+        ds.coords['alt_names'] = DataArray(alt_names, dims=(altindex_name,))
     return ds
 
 
@@ -70,52 +72,55 @@ def prepare_data(
         float_dtype=None,
         cache_dir=None,
         flows=None,
-        pool_source=None,
 ):
+    """
+
+    Parameters
+    ----------
+    datashare : DataTree
+    request
+    float_dtype
+    cache_dir
+    flows
+
+    Returns
+    -------
+
+    """
     log = logging.getLogger("Larch")
-    from ..dataset import Dataset, DataPool, DataArray
+    from ..dataset import Dataset, DataArray, DataTree
     if float_dtype is None:
         float_dtype = np.float64
-    if pool_source is None:
-        log.debug(f"building dataset from datashare coords: {datashare.coords}")
-        model_dataset = Dataset(
-            coords=datashare.coords,
-        )
-    else:
-        log.debug(f"building dataset from pool_source coords: {pool_source.coords}")
-        model_dataset = Dataset(
-            coords=pool_source.coords,
-        )
-
-    # use the caseids on cases where available, pad with -1's
-    # if n_padded_cases is not None and n_padded_cases != model_dataset.coords['_caseid_'].size:
-    #     caseids = -(np.arange(1,n_padded_cases+1, dtype=model_dataset.coords['_caseid_'].dtype))
-    #     cc = min(model_dataset.coords['_caseid_'].size, n_padded_cases)
-    #     caseids[:cc] = model_dataset.coords['_caseid_'].values[:cc]
-    #     model_dataset.coords['_caseid_'] = caseids
+    log.debug(f"building dataset from datashare coords: {datashare.coords}")
+    model_dataset = Dataset(
+        coords=datashare.coords,
+    )
+    model_dataset.CASEID = datashare.CASEID
+    model_dataset.ALTID = datashare.ALTID
 
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
         alts = request.graph.elemental_names()
-        if '_altid_' not in model_dataset.coords:
-            model_dataset.coords['_altid_'] = list(alts.keys())
+        if model_dataset.ALTID not in model_dataset.coords:
+            model_dataset.coords[model_dataset.ALTID] = list(alts.keys())
         if 'alt_names' not in model_dataset.coords:
-            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=('_altid_',))
+            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(model_dataset.ALTID,))
         request = request.required_data()
 
     if flows is None:
         flows = {}
 
-    if isinstance(datashare, DataPool):
-        log.debug(f"adopting existing DataPool")
+    if isinstance(datashare, (DataTree, )):
+        log.debug(f"adopting existing DataTree")
+        if not datashare.relationships_are_digitized:
+            datashare.digitize_relationships(inplace=True)
         shared_data_ca = datashare
-        shared_data_co = datashare#.keep_dims("_caseid_")
+        shared_data_co = datashare.drop_dims(datashare.ALTID, ignore_missing_dims=True)
     else:
-        log.debug(f"initializing new DataPool")
-        shared_data_ca = DataPool(datashare)
-        shared_data_co = DataPool(datashare.drop_dims(
-            [i for i in datashare.dims.keys() if i != "_caseid_"]
-        ))
+        log.debug(f"initializing new DataTree")
+        shared_data_ca = DataTree(main=datashare)
+        shared_data_ca.digitize_relationships(inplace=True)
+        shared_data_co = shared_data_ca.drop_dims(shared_data_ca.ALTID, ignore_missing_dims=True)
 
     if 'co' in request:
         log.debug(f"requested co data: {request['co']}")
@@ -127,7 +132,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('co'),
-            pool_source=pool_source,
         )
     if 'ca' in request:
         log.debug(f"requested ca data: {request['ca']}")
@@ -139,7 +143,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('ca'),
-            pool_source=pool_source,
         )
 
     if 'choice_ca' in request:
@@ -153,24 +156,20 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('choice_ca'),
-            pool_source=pool_source,
         )
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
-        if pool_source is None:
-            choicecodes = datashare[request['choice_co_code']]
-        else:
-            choicecodes = pool_source[request['choice_co_code']]
+        choicecodes = datashare[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
-            dims=['_caseid_', '_altid_'],
+            dims=[shared_data_ca.CASEID, shared_data_ca.ALTID],
             coords={
-                '_caseid_':model_dataset.coords['_caseid_'],
-                '_altid_': model_dataset.coords['_altid_'],
+                shared_data_ca.CASEID: model_dataset.coords[shared_data_ca.CASEID],
+                shared_data_ca.ALTID: model_dataset.coords[shared_data_ca.ALTID],
             },
             name='ch',
         )
-        for i,a in enumerate(model_dataset.coords['_altid_']):
+        for i,a in enumerate(model_dataset.coords[shared_data_ca.ALTID]):
             da_ch[:, i] = (choicecodes == a)
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_co_vars' in request:
@@ -191,7 +190,6 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('weight_co'),
-            pool_source=pool_source,
         )
 
     if 'avail_ca' in request:
@@ -205,13 +203,12 @@ def prepare_data(
             dtype=np.int8,
             cache_dir=cache_dir,
             flow=flows.get('avail_ca'),
-            pool_source=pool_source,
         )
     if 'avail_co' in request:
         log.debug(f"requested avail_co data: {request['avail_co']}")
         av_co_expressions = {
             a: request['avail_co'].get(a, '0')
-            for a in model_dataset.coords['_altid_'].values
+            for a in model_dataset.coords[shared_data_ca.ALTID].values
         }
         model_dataset, flows['avail_co'] = _prep_co(
             model_dataset,
@@ -220,10 +217,9 @@ def prepare_data(
             tag='av',
             preserve_vars=False,
             dtype=np.int8,
-            dim_name='_altid_',
+            dim_name=shared_data_ca.ALTID,
             cache_dir=cache_dir,
             flow=flows.get('avail_co'),
-            pool_source=pool_source,
         )
     if 'avail_any' in request:
         log.debug(f"requested avail_any data: {request['avail_any']}")
@@ -231,13 +227,15 @@ def prepare_data(
 
     return model_dataset, flows
 
-def flownamer(tag, definition_spec):
+def flownamer(tag, definition_spec, extra_hash_features=()):
     import hashlib, base64
     defs_hash = hashlib.md5()
     defs_hash.update(str(tag).encode("utf8"))
     for k, v in definition_spec.items():
         defs_hash.update(str(k).encode("utf8"))
         defs_hash.update(str(v).encode("utf8"))
+    for k in extra_hash_features:
+        defs_hash.update(str(k).encode("utf8"))
     return "pipeline_"+(base64.b32encode(defs_hash.digest())).decode().replace("=","")
 
 
@@ -250,47 +248,47 @@ def _prep_ca(
         dtype=None,
         cache_dir=None,
         flow=None,
-        pool_source=None,
 ):
-    from ..dataset import Dataset, DataArray
+    from ..dataset import Dataset, DataArray, DataTree
+    assert isinstance(shared_data_ca, DataTree)
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
-    flowname = flownamer(tag, vars_ca)
+    flowname = flownamer(tag, vars_ca, shared_data_ca._hash_features())
     if flow is None or flowname != flow.name:
         flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pool_source,
+        shared_data_ca,
         dtype=dtype,
-        min_shape_0=model_dataset.dims.get('_caseid_'),
-        dim_order=['_caseid_', '_altid_'],
     )
+    caseid_dim = shared_data_ca.CASEID
+    altid_dim = shared_data_ca.ALTID
     if preserve_vars or len(vars_ca)>1:
         arr = arr.reshape(
-            model_dataset.dims.get('_caseid_'),
-            model_dataset.dims.get('_altid_'),
+            model_dataset.dims.get(caseid_dim),
+            model_dataset.dims.get(altid_dim),
             -1,
         )
         da = DataArray(
             arr,
-            dims=['_caseid_', '_altid_', f"var_{tag}"],
+            dims=[caseid_dim, altid_dim, f"var_{tag}"],
             coords={
-                '_caseid_':model_dataset.coords['_caseid_'],
-                '_altid_': model_dataset.coords['_altid_'],
+                caseid_dim: model_dataset.coords[caseid_dim],
+                altid_dim: model_dataset.coords[altid_dim],
                 f"var_{tag}": list(vars_ca.keys()),
             },
             name=tag,
         )
     else:
         arr = arr.reshape(
-            model_dataset.dims.get('_caseid_'),
-            model_dataset.dims.get('_altid_'),
+            model_dataset.dims.get(caseid_dim),
+            model_dataset.dims.get(altid_dim),
         )
         da = DataArray(
             arr,
-            dims=['_caseid_', '_altid_'],
+            dims=[caseid_dim, altid_dim],
             coords={
-                '_caseid_':model_dataset.coords['_caseid_'],
-                '_altid_': model_dataset.coords['_altid_'],
+                caseid_dim: model_dataset.coords[caseid_dim],
+                altid_dim: model_dataset.coords[altid_dim],
             },
             name=tag,
         )
@@ -307,45 +305,44 @@ def _prep_co(
         dim_name=None,
         cache_dir=None,
         flow=None,
-        pool_source=None,
 ):
-    from ..dataset import DataArray
+    from ..dataset import DataArray, DataTree
+    assert isinstance(shared_data_co, DataTree)
     if not isinstance(vars_co, dict):
         vars_co = {i: i for i in vars_co}
-    flowname = flownamer(tag, vars_co)
+    flowname = flownamer(tag, vars_co, shared_data_co._hash_features())
     if flow is None or flowname != flow.name:
         flow = shared_data_co.setup_flow(vars_co, cache_dir=cache_dir, name=flowname)
     arr = flow.load(
-        pool_source,
+        shared_data_co,
         dtype=dtype,
-        min_shape_0=model_dataset.dims.get('_caseid_'),
-        dim_order=['_caseid_'],
     )
+    caseid_dim = shared_data_co.CASEID
     if preserve_vars or len(vars_co)>1:
         if dim_name is None:
             dim_name = f"var_{tag}"
         arr = arr.reshape(
-            model_dataset.dims.get('_caseid_'),
+            model_dataset.dims.get(caseid_dim),
             -1,
         )
         da = DataArray(
             arr,
-            dims=['_caseid_', dim_name],
+            dims=[caseid_dim, dim_name],
             coords={
-                '_caseid_':model_dataset.coords['_caseid_'],
+                caseid_dim: model_dataset.coords[caseid_dim],
                 dim_name: list(vars_co.keys()),
             },
             name=tag,
         )
     else:
         arr = arr.reshape(
-            model_dataset.dims.get('_caseid_'),
+            model_dataset.dims.get(caseid_dim),
         )
         da = DataArray(
             arr,
-            dims=['_caseid_'],
+            dims=[caseid_dim],
             coords={
-                '_caseid_':model_dataset.coords['_caseid_'],
+                caseid_dim: model_dataset.coords[caseid_dim],
             },
             name=tag,
         )

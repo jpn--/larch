@@ -1,0 +1,151 @@
+.. currentmodule:: larch
+
+==========================
+1: MTC MNL Mode Choice
+==========================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+This example is a mode choice model built using the MTC example dataset.
+First we create the DB and Model objects:
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+Then we can build up the utility function.  We'll use some :ref:`idco` data first, using
+the `Model.utility.co` attribute.  This attribute is a dict-like object, to which
+we can assign :class:`LinearFunction` objects for each alternative code.
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+Next we'll use some idca data, with the `utility_ca` attribute. This attribute
+is only a single :class:`LinearFunction` that is applied across all alternatives
+using :ref:`idca` data.  Because the data is structured to vary across alternatives,
+the parameters (and thus the structure of the :class:`LinearFunction`) does not need
+to vary across alternatives.
+
+.. testcode::
+
+	m.utility_ca = PX("tottime") + PX("totcost")
+
+Lastly, we need to identify :ref:`idca` data that gives the availability for each
+alternative, as well as the number of times each alternative is chosen. (In traditional
+discrete choice analysis, this is often 0 or 1, but it need not be binary, or even integral.)
+
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+
+
+And let's give our model a descriptive title.
+
+.. testcode::
+
+	m.title = "MTC Example 1 (Simple MNL)"
+
+
+Having created this model, we can then estimate it:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3626.18...
+
+Then the parameters can be found in the `pf` DataFrame::
+
+	>>> print(m.pf[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	              value    std_err  t_stat  robust_std_err  robust_t_stat
+	hhinc#5  -1.281e-02  5.324e-03  -2.406       6.565e-03         -1.951
+	hhinc#4  -5.287e-03  1.829e-03  -2.891       1.769e-03         -2.988
+	ASC_BIKE -2.376e+00  3.045e-01  -7.804       3.607e-01         -6.588
+	hhinc#6  -9.686e-03  3.033e-03  -3.193       3.229e-03         -3.000
+	hhinc#3   3.583e-04  2.538e-03   0.141       2.806e-03          0.128
+	ASC_SR3P -3.725e+00  1.777e-01 -20.964       1.929e-01        -19.312
+	tottime  -5.134e-02  3.099e-03 -16.565       3.455e-03        -14.860
+	hhinc#2  -2.170e-03  1.553e-03  -1.397       1.647e-03         -1.318
+	totcost  -4.920e-03  2.389e-04 -20.597       2.833e-04        -17.368
+	ASC_WALK -2.068e-01  1.941e-01  -1.066       2.067e-01         -1.001
+	ASC_SR2  -2.178e+00  1.046e-01 -20.815       1.119e-01        -19.461
+	ASC_TRAN -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.215
+
+
+It is a little tough to read this report because the parameters can show up in pretty much any order, as they are not sorted
+when they are automatically discovered by Larch.
+We can use the reorder method to fix this:
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", "totcost", "tottime", ),
+		("ASCs", "ASC.*", ),
+		("Income", "hhinc.*", ),
+	)
+
+
+Then the report will look more reasonable (although ultimately the content is the same):
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                        value    std_err  t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost   -4.920e-03  2.389e-04 -20.596       2.833e-04        -17.368
+	         tottime   -5.134e-02  3.099e-03 -16.565       3.455e-03        -14.860
+	ASCs     ASC_BIKE  -2.376e+00  3.045e-01  -7.804       3.607e-01         -6.588
+	         ASC_SR2   -2.178e+00  1.046e-01 -20.815       1.119e-01        -19.461
+	         ASC_SR3P  -3.725e+00  1.777e-01 -20.964       1.929e-01        -19.312
+	         ASC_TRAN  -6.709e-01  1.326e-01  -5.060       1.287e-01         -5.214
+	         ASC_WALK  -2.068e-01  1.941e-01  -1.065       2.067e-01         -1.001
+	Income   hhinc#2   -2.170e-03  1.553e-03  -1.397       1.647e-03         -1.318
+	         hhinc#3    3.577e-04  2.538e-03   0.141       2.806e-03          0.127
+	         hhinc#4   -5.286e-03  1.829e-03  -2.891       1.769e-03         -2.988
+	         hhinc#5   -1.281e-02  5.324e-03  -2.406       6.565e-03         -1.951
+	         hhinc#6   -9.686e-03  3.033e-03  -3.194       3.229e-03         -3.000
+
+
+You can then access individual parameters from the model's parameter frame
+(it's just a pandas.DataFrame) with the usual pandas methods.
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.pf.loc['ASC_BIKE'].value
+	-2.3763...
+
+	>>> m.pf.loc['totcost', 'std_err']
+	0.00023889...
+
+
+The :func:`len` function on the parameter DataFrame retrieves the number of parameters.
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> len(m.pf)
+	12

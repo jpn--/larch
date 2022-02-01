@@ -155,43 +155,81 @@ class LatentClassModel(AbstractChoiceModel):
 	def probability(self, x=None, start_case=0, stop_case=-1, step_case=1, return_dataframe=False,):
 		self.__prep_for_compute(x)
 
-		if start_case >= self.dataframes.n_cases:
-			raise IndexError("start_case >= n_cases")
+		if self.dataframes is not None:
+			if start_case >= self.dataframes.n_cases:
+				raise IndexError("start_case >= n_cases")
 
-		if stop_case == -1:
-			stop_case = self.dataframes.n_cases
+			if stop_case == -1:
+				stop_case = self.dataframes.n_cases
 
-		if start_case > stop_case:
-			raise IndexError("start_case > stop_case")
+			if start_case > stop_case:
+				raise IndexError("start_case > stop_case")
 
-		if step_case <= 0:
-			raise IndexError("non-positive step_case")
+			if step_case <= 0:
+				raise IndexError("non-positive step_case")
 
-		n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+			n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
 
-		p = numpy.zeros([n_rows, self.dataframes.n_alts])
+			p = numpy.zeros([n_rows, self.dataframes.n_alts])
 
-		import warnings
-		with warnings.catch_warnings():
-			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
-			k_membership_probability = self.class_membership_probability(
-				start_case=start_case, stop_case=stop_case, step_case=step_case,
-			)
-			for k_name, k_model in self._k_models.items():
-				k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
-				p += (
-						numpy.asarray( k_pr[:,:self.dataframes.n_alts] )
-						* k_membership_probability.loc[:,k_name].values[:, None]
+			import warnings
+			with warnings.catch_warnings():
+				warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+				k_membership_probability = self.class_membership_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
 				)
+				for k_name, k_model in self._k_models.items():
+					k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					p += (
+							numpy.asarray( k_pr[:,:self.dataframes.n_alts] )
+							* k_membership_probability.loc[:,k_name].values[:, None]
+					)
 
-		if return_dataframe:
-			return pandas.DataFrame(
-				p,
-				index=self._dataframes.caseindex[start_case:stop_case:step_case],
-				columns=self._dataframes.alternative_codes(),
-			)
-		return p
+			if return_dataframe:
+				return pandas.DataFrame(
+					p,
+					index=self._dataframes.caseindex[start_case:stop_case:step_case],
+					columns=self._dataframes.alternative_codes(),
+				)
+			return p
+		else:
+			if start_case >= self._k_membership.data_as_loaded.n_cases:
+				raise IndexError("start_case >= n_cases")
 
+			if stop_case == -1:
+				stop_case = self._k_membership.data_as_loaded.n_cases
+
+			if start_case > stop_case:
+				raise IndexError("start_case > stop_case")
+
+			if step_case <= 0:
+				raise IndexError("non-positive step_case")
+
+			n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+			n_alts = self._k_membership.data_as_loaded.n_alts
+
+			p = numpy.zeros([n_rows, n_alts])
+
+			import warnings
+			with warnings.catch_warnings():
+				warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+				k_membership_probability = self.class_membership_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
+				)
+				for k_name, k_model in self._k_models.items():
+					k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					p += (
+							numpy.asarray(k_pr[:, :n_alts])
+							* k_membership_probability.loc[:, k_name].values[:, None]
+					)
+
+			# if return_dataframe:
+			# 	return pandas.DataFrame(
+			# 		p,
+			# 		index=self._dataframes.caseindex[start_case:stop_case:step_case],
+			# 		columns=self._dataframes.alternative_codes(),
+			# 	)
+			return p
 
 	def d_probability(self, x=None, start_case=0, stop_case=-1, step_case=1,):
 		"""
@@ -214,45 +252,85 @@ class LatentClassModel(AbstractChoiceModel):
 		"""
 		self.__prep_for_compute(x)
 
-		if start_case >= self.dataframes.n_cases:
-			raise IndexError("start_case >= n_cases")
+		if self.dataframes is not None:
 
-		if stop_case == -1:
-			stop_case = self.dataframes.n_cases
+			if start_case >= self.dataframes.n_cases:
+				raise IndexError("start_case >= n_cases")
 
-		if start_case > stop_case:
-			raise IndexError("start_case > stop_case")
+			if stop_case == -1:
+				stop_case = self.dataframes.n_cases
 
-		if step_case <= 0:
-			raise IndexError("non-positive step_case")
+			if start_case > stop_case:
+				raise IndexError("start_case > stop_case")
 
-		n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+			if step_case <= 0:
+				raise IndexError("non-positive step_case")
 
-		p = numpy.zeros([n_rows, self.dataframes.n_alts, len(self.pf)])
+			n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
 
-		import warnings
-		with warnings.catch_warnings():
-			warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
-			k_membership_probability = self.class_membership_probability(
-				start_case=start_case, stop_case=stop_case, step_case=step_case,
-			)
-			k_membership_d_probability = self.class_membership_d_probability(
-				start_case=start_case, stop_case=stop_case, step_case=step_case,
-			)
-			for k_name, k_model in self._k_models.items():
-				k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
-				k_d_pr = k_model.d_probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
-				p += (
-						numpy.asarray( k_d_pr[:,:self.dataframes.n_alts,:] )
-						* k_membership_probability.loc[:,k_name].values[:, None, None]
+			p = numpy.zeros([n_rows, self.dataframes.n_alts, len(self.pf)])
+
+			import warnings
+			with warnings.catch_warnings():
+				warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+				k_membership_probability = self.class_membership_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
 				)
-				k_position = k_membership_probability.columns.get_loc(k_name)
-				p += (
-						numpy.asarray( k_pr[:,:self.dataframes.n_alts, None] )
-						* k_membership_d_probability[:,k_position,:][:,None,:]
+				k_membership_d_probability = self.class_membership_d_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
 				)
-		return p
+				for k_name, k_model in self._k_models.items():
+					k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					k_d_pr = k_model.d_probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					p += (
+							numpy.asarray( k_d_pr[:,:self.dataframes.n_alts,:] )
+							* k_membership_probability.loc[:,k_name].values[:, None, None]
+					)
+					k_position = k_membership_probability.columns.get_loc(k_name)
+					p += (
+							numpy.asarray( k_pr[:,:self.dataframes.n_alts, None] )
+							* k_membership_d_probability[:,k_position,:][:,None,:]
+					)
+			return p
+		else:
+			if start_case >= self._k_membership.data_as_loaded.n_cases:
+				raise IndexError("start_case >= n_cases")
 
+			if stop_case == -1:
+				stop_case = self._k_membership.data_as_loaded.n_cases
+
+			if start_case > stop_case:
+				raise IndexError("start_case > stop_case")
+
+			if step_case <= 0:
+				raise IndexError("non-positive step_case")
+
+			n_rows = ((stop_case - start_case) // step_case) + (1 if (stop_case - start_case) % step_case else 0)
+			n_alts = self._k_membership.data_as_loaded.n_alts
+			p = numpy.zeros([n_rows, n_alts, len(self.pf)])
+
+			import warnings
+			with warnings.catch_warnings():
+				warnings.simplefilter("ignore", category=ParameterNotInModelWarning)
+				k_membership_probability = self.class_membership_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
+				)
+				k_membership_d_probability = self.class_membership_d_probability(
+					start_case=start_case, stop_case=stop_case, step_case=step_case,
+				)
+				for k_name, k_model in self._k_models.items():
+					k_pr = k_model.probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					k_d_pr = k_model.d_probability(start_case=start_case, stop_case=stop_case, step_case=step_case)
+					p += (
+							numpy.asarray(k_d_pr[:, :n_alts, :])
+							* k_membership_probability.loc[:, k_name].values[:, None, None]
+					)
+					k_position = k_membership_probability.columns.get_loc(k_name)
+					p += (
+							numpy.asarray(k_pr[:, :n_alts, None])
+							* k_membership_d_probability[:, k_position, :][:, None, :]
+					)
+			return p
 
 	def loglike2(
 			self,
@@ -496,16 +574,27 @@ class LatentClassModel(AbstractChoiceModel):
 		else:
 			stop_case_ = stop_case
 
-		if self.dataframes.data_wt is not None:
+		if self.dataframes is not None and self.dataframes.data_wt is not None:
 			wt = self.dataframes.data_wt.iloc[start_case:stop_case_:step_case]
+		elif getattr(self._k_membership, 'data_as_loaded', None) is not None and 'wt' in self._k_membership.data_as_loaded:
+			wt = self._k_membership.data_as_loaded['wt'].values[start_case:stop_case_:step_case]
 		else:
 			wt = None
+
+		a_model = self._k_models[self._k_model_names()[0]]
+
+		if self.dataframes is not None:
+			ch = self.dataframes.array_ch()
+		elif a_model.data_as_loaded is not None and 'ch' in a_model.data_as_loaded:
+			ch = a_model.data_as_loaded['ch'].values
+		else:
+			ch = None
 
 		from ..util import dictx
 		y = dictx()
 		y.ll = loglike_from_probability(
 			pr,
-			self.dataframes.array_ch()[start_case:stop_case_:step_case],
+			ch[start_case:stop_case_:step_case],
 			wt
 		)
 
@@ -630,9 +719,5 @@ class LatentClassModel(AbstractChoiceModel):
 
 	@property
 	def n_cases(self):
-		"""int : The number of cases in the attached dataframes."""
-		if self._dataframes is None:
-			raise MissingDataError("no dataframes are set")
+		"""int : The number of cases in the attached data."""
 		return self._k_membership.n_cases
-
-

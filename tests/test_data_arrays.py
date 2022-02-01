@@ -3,7 +3,7 @@ import numpy as np
 sh = importorskip("sharrow")
 import larch.numba as lx
 import larch.numba.data_arrays as lxd
-
+from larch.dim_names import CASEID, ALTID
 
 def test_weighted():
     m = lx.example(1)
@@ -12,9 +12,9 @@ def test_weighted():
     ds = lxd.to_dataset(m.dataservice)
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 
@@ -30,9 +30,9 @@ def test_choice_code():
     )
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 
@@ -41,12 +41,12 @@ def test_shared_data():
     m.choice_ca_var = 'chose'
     m.weight_co_var = 'hhinc+100'
     ds = lxd.to_dataset(m.dataservice)
-    pool = lx.DataPool(ds)
+    pool = lx.DataTree(base=ds)
     y, flows = lxd.prepare_data(pool, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == ['_caseid_', 'alt_names', '_altid_', 'var_co', 'var_ca']
+    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
-    assert y.dims == {'_caseid_': 5029, '_altid_': 6, 'var_co': 1, 'var_ca': 2}
+    assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
 
 

@@ -112,6 +112,8 @@ def maximize_loglike(
         from ..util.display import display_head, display_p, display_nothing
 
         if isinstance(model, Model5c) and model.dataframes is None:
+            if getattr(model, 'data_as_loaded', None) is None and getattr(model, 'datatree', None) is not None:
+                model.unmangle()
             if getattr(model, 'data_as_loaded', None) is None:
                 raise ValueError("you must load data first -- try Model.load_data()")
 

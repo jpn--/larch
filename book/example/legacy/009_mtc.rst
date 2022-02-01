@@ -1,0 +1,78 @@
+.. currentmodule:: larch
+
+================================================
+9: MTC MNL Mode Choice, TTR = 4.0
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+Model 9 is formulated the same way as Model 8, only with the TTR set to 4. (`pp. 114 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+.. testcode::
+
+	m.utility_ca = (
+		 + P("nonmotorized_time") * X("(altnum>4) * tottime")
+		 + P("motorized_time") * (X("(altnum <= 4) * ivtt")
+		 + 4 * X("(altnum <= 4) * ovtt")) + PX("totcost")
+		 )
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*ivtt.*", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3590.916...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                             value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost           -0.0048   0.0002 -20.3016          0.0003       -17.0773
+	         motorized_time    -0.0173   0.0013 -13.6780          0.0014       -12.2046
+	         nonmotorized_time -0.0652   0.0053 -12.3235          0.0053       -12.2437
+	Income   hhinc#2,3         -0.0016   0.0014  -1.1304          0.0015        -1.0462
+	         hhinc#4           -0.0056   0.0018  -3.0211          0.0018        -3.1421
+	         hhinc#5           -0.0123   0.0052  -2.3445          0.0063        -1.9483
+	         hhinc#6           -0.0094   0.0031  -3.0885          0.0032        -2.9163
+	ASCs     ASC_BIKE          -1.7748   0.3232  -5.4910          0.3693        -4.8052
+	         ASC_SR2           -2.3642   0.0969 -24.4032          0.1055       -22.4135
+	         ASC_SR3P          -3.7992   0.1222 -31.0899          0.1276       -29.7836
+	         ASC_TRAN          -0.5270   0.1479  -3.5636          0.1469        -3.5866
+	         ASC_WALK           0.4292   0.2526   1.6989          0.2583         1.6613

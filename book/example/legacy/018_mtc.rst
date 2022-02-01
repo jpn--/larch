@@ -1,0 +1,82 @@
+.. currentmodule:: larch
+
+===========================================================
+18: MTC Motorized Nested Mode Choice
+===========================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',3)
+	larch._doctest_mode_ = True
+
+Model 18 and those that follow are all nested logit models. There will be no more
+adjustments made to the utility function, so we'll import the best we were able to find Model 17 and proceed onto nesting.
+
+.. testcode::
+
+	m = larch.example(17)
+
+Model 18's nesting structure groups all motorized alternatives. (`pp. 176 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	motorized = m.graph.new_node(parameter='mu', children=[1,2,3,4], name='Motorized')
+
+.. testcode::
+
+	m.ordering = (
+	("CostbyInc","costbyincome",),
+	("TravelTime",".*time.*",".*dist.*", ),
+	("Household","hhinc.*","vehbywrk.*",),
+	("Zonal","wkcbd.*","wkempden.*",),
+	("ASCs","ASC.*",),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='bhhh')
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3442.315...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value    std_err  t_stat  robust_std_err  robust_t_stat
+	Category   Parameter
+	CostbyInc  costbyincome        -0.039  1.048e-02  -3.702       1.263e-02         -3.071
+	TravelTime motorized_time      -0.015  3.919e-03  -3.733       4.172e-03         -3.506
+	           nonmotorized_time   -0.046  5.650e-03  -8.183       5.533e-03         -8.357
+	           motorized_ovtbydist -0.112  2.086e-02  -5.374       2.484e-02         -4.513
+	Household  hhinc#4             -0.004  1.610e-03  -2.428       1.725e-03         -2.267
+	           hhinc#5             -0.010  5.211e-03  -1.826       6.151e-03         -1.547
+	           hhinc#6             -0.007  3.139e-03  -2.102       3.394e-03         -1.944
+	           vehbywrk_BIKE       -0.742  2.636e-01  -2.815       3.229e-01         -2.297
+	           vehbywrk_SR         -0.225  6.524e-02  -3.451       7.172e-02         -3.139
+	           vehbywrk_TRANSIT    -0.705  1.506e-01  -4.678       1.600e-01         -4.404
+	           vehbywrk_WALK       -0.772  1.704e-01  -4.531       2.063e-01         -3.742
+	Zonal      wkcbd_BIKE           0.478  3.583e-01   1.333       3.652e-01          1.308
+	           wkcbd_SR2            0.192  9.603e-02   2.002       9.592e-02          2.004
+	           wkcbd_SR3            0.778  2.004e-01   3.882       2.065e-01          3.769
+	           wkcbd_TRANSIT        0.919  2.231e-01   4.119       2.332e-01          3.940
+	           wkcbd_WALK           0.113  2.449e-01   0.462       2.480e-01          0.456
+	           wkempden_BIKE        0.001  1.214e-03   1.183       1.154e-03          1.244
+	           wkempden_SR2         0.001  3.544e-04   3.227       3.781e-04          3.024
+	           wkempden_SR3         0.002  4.492e-04   3.627       4.626e-04          3.522
+	           wkempden_TRANSIT     0.002  5.099e-04   4.371       5.376e-04          4.146
+	           wkempden_WALK        0.002  7.711e-04   2.933       7.089e-04          3.191
+	ASCs       ASC_BIKE            -1.382  4.486e-01  -3.082       5.226e-01         -2.645
+	           ASC_SR2             -1.321  2.567e-01  -5.144       2.754e-01         -4.795
+	           ASC_SR3             -2.498  4.791e-01  -5.213       5.092e-01         -4.904
+	           ASC_TRANSIT         -0.404  2.215e-01  -1.826       2.365e-01         -1.710
+	           ASC_WALK             0.334  3.686e-01   0.907       3.715e-01          0.900
+	Other      mu                   0.724  1.363e-01  -2.028       1.452e-01         -1.903
+
+Note that the "null" value for the logsum parameters is 1.0, so the t-statistic is negative
+even though the parameter is positive, as it is less than the null value.

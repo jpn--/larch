@@ -1,0 +1,175 @@
+.. currentmodule:: larch
+
+==============================================
+111: Swissmetro Cross-Nested Logit Mode Choice
+==============================================
+
+.. testsetup:: *
+
+	import larch
+	import os
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+This example is a mode choice model built using the Swissmetro example dataset.
+First we create the DB and Model objects.  When we create the DB object, we will
+redefine the weight value:
+
+.. testcode::
+
+	d = larch.examples.SWISSMETRO()
+	m = larch.Model(dataservice=d)
+
+We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.
+
+.. testcode::
+
+	m.title = "swissmetro example 11 (cross nested logit)"
+
+We need to identify the availability and choice variables. These have been conveniently
+set up in the data.
+
+.. testcode::
+
+	m.availability_var = 'avail'
+	m.choice_ca_var = 'choice'
+
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+
+.. testcode::
+
+	from larch.roles import P,X
+	m.utility_co[1] = ( P.ASC_TRAIN
+	                  + P.B_TIME * X.TRAIN_TT
+	                  + P.B_COST * X("TRAIN_CO*(GA==0)") )
+	m.utility_co[2] = ( P.B_TIME * X.SM_TT
+	                  + P.B_COST * X("SM_CO*(GA==0)") )
+	m.utility_co[3] = ( P.ASC_CAR
+	                  + P.B_TIME * X.CAR_TT
+	                  + P.B_COST * X("CAR_CO") )
+
+
+For this example, we want to nest together the Train and Car modes into a "existing" modes nest,
+and we want to nest Train and SM together into a "public" modes nest. This creates a structure
+different from a traditional nested logit model, because the Train mode
+is "cross-nested": it appears in more than one nest.  The desired nesting structure then looks
+like this:
+
+.. digraph:: Desired_Nesting_Structure
+
+	bgcolor="transparent"
+	root [label="Root", shape="oval"]
+	train [label="Train", shape=box, style="rounded", penwidth=2]
+	sm [label="SM", shape=box, style="rounded", penwidth=2]
+	car [label="Car", shape=box, style="rounded", penwidth=2]
+	public [label="Public", shape=oval]
+	exist [label="Existing", shape=oval]
+	exist -> train
+	public -> train
+	public -> sm
+	exist -> car
+	root -> exist
+	root -> public
+
+
+To create nests, we can use the new_node command, although we'll need to know what the
+alternative codes are for the alternatives in our dataset. To find out, we can do:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> dict(m.dataservice.alternatives)
+	{1: 'Train', 2: 'SM', 3: 'Car'}
+
+
+For this example, we want to nest together the Train and Car modes into a "existing" modes nest,
+and we want to nest together the Train and SM modes into a "public" modes nest.
+We can use the new_nest command like this:
+
+.. testcode::
+
+	m.graph.new_node(
+		parameter="existing",
+		parent=m.graph.root_id,
+		children=[1,3],
+		name='Existing',
+		phi_parameters={1:'PHI'},
+	)
+	m.graph.new_node(
+		parameter="public",
+		parent=m.graph.root_id,
+		children=[1,2],
+		name='Public',
+	)
+
+
+For a cross-nested model, we need to assign an allocation level to each graph link
+for all entering links of any node that has more than one predecessor.  In this case,
+that applies only to the "Train" node.
+
+Larch employs a logit-type function to manage this allocation, instead of specifying
+the allocation directly as a parameter.  So, the allocation on the link Public->Train (PT)
+is given by
+
+.. math::
+	\alpha_{PT} = \frac{\exp ( \phi_{PT} )}{\exp ( \phi_{PT} ) + \exp ( \phi_{ET} )},
+
+where :math:`\phi_{PT}` is a parameter associated with the
+link PT, :math:`\phi_{ET}` is a similar parameter for the link Public->Existing (ET).
+
+We can attach parameters to each link using the `phi_parameters` argument to new_node.
+
+Larch will find all the parameters in the model, but we'd like to output them in
+a rational order.  We can use the ordering method to do this:
+
+.. testcode::
+
+	m.ordering = [
+		("ASCs", 'ASC.*',),
+		("LOS", 'B_.*',),
+		("LogSums", 'Existing', 'Public', ),
+	]
+
+The swissmetro example models exclude some observations.  We will use the selector
+to identify the observations we would like to keep.  There are two selector criteria,
+and only cases that evaluate `True` for both are selected.
+
+.. testcode::
+
+	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+
+We can estimate the models and check the results match up with those given by Biogeme:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='slsqp')
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-5214.063...
+	>>> m.calculate_parameter_covariance()
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF +SKIP
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])  # parameter frame, ordered
+	                    value    std_err  t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	ASCs     ASC_CAR   -0.238  3.606e-02  -6.606       4.883e-02         -4.878
+	         ASC_TRAIN  0.092  4.513e-02   2.047       6.503e-02          1.421
+	LOS      B_COST    -0.008  4.247e-04 -19.335       5.493e-04        -14.949
+	         B_TIME    -0.008  5.376e-04 -14.497       9.715e-04         -8.022
+	Other    existing   0.399  2.711e-02 -22.186       3.937e-02        -15.277
+	         public     0.246  3.035e-02 -24.853       2.068e-02        -36.463
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.example(111)

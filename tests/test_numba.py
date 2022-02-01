@@ -39,7 +39,7 @@ def mtc_dataset():
     dataset = Dataset.from_dataframe(d.data_co)
     dataset = dataset.merge(Dataset.from_dataframe(d.data_ce).fillna(0.0))
     dataset['avail'] = DataArray(d.data_av.values, dims=['_caseid_', '_altid_'], coords=dataset.coords)
-    dataset.coords['altnames'] = DataArray(
+    dataset.coords['alt_names'] = DataArray(
         ['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
         dims=['_altid_'],
     )
@@ -1116,7 +1116,7 @@ def test_model_pickling():
     assert m2.loglike() == approx(-3626.1862555138796)
 
 def test_mtc_with_dataset(mtc_dataset):
-    pytest.importorskip("sharrow_pro")
+    pytest.importorskip("sharrow")
     m = NumbaModel(alts=mtc_dataset['_altid_'].values)
     from larch.roles import P, X, PX
     m.utility_co[2] = P("ASC_SR2") + P("hhinc#2") * X("hhinc")
@@ -1127,16 +1127,16 @@ def test_mtc_with_dataset(mtc_dataset):
     m.utility_ca = PX("tottime") + PX("totcost")
     m.availability_var = 'avail'
     m.choice_ca_var = 'chose'
-    m.datapool = mtc_dataset
+    m.datatree = mtc_dataset
     assert m.loglike() == approx(-7309.600971749634)
     m.set_cap(20)
     result = m.maximize_loglike(method='slsqp')
     assert result.loglike == approx(-3626.1862595453385)
 
 def test_eville_mode_with_dataset():
-    pytest.importorskip("sharrow_pro")
+    pytest.importorskip("sharrow")
     from larch.examples import EXAMPVILLE
-    pool = EXAMPVILLE('datapool')
+    tree = EXAMPVILLE('datatree')
     DA = 1
     SR = 2
     Walk = 3
@@ -1150,7 +1150,7 @@ def test_eville_mode_with_dataset():
             Bike: 'Bike',
             Transit: 'Transit',
         },
-        datapool=pool,
+        datatree=tree,
     )
     m.title = "Exampville Work Tour Mode Choice v1"
     m.utility_co[DA] = (
@@ -1218,13 +1218,13 @@ def test_eville_mode_with_dataset():
         'OutVehTime': -0.14752266135040631,
     }, rel=1e-5)
     assert r.loglike == approx(-8047.006193851376)
-    worktours = m.datapool.main.query_cases('TOURPURP==1')
-    m.datapool_source = worktours
+    worktours = tree.query_cases('TOURPURP==1')
+    m.datatree = worktours
     assert m.loglike() == approx(-3527.6797690247113)
     m.float_dtype = np.float32
     assert m.loglike() == approx(-3527.68115234375)
     assert m.n_cases == 7564
-    del m.datapool_source
+    m.datatree = tree
     assert m.loglike() == approx(-8047.006193851376)
     assert m.n_cases == 20739
 

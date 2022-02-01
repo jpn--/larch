@@ -1,5 +1,5 @@
 
-__version__ = '5.5.9'
+__version__ = '5.5.10'
 
 from .util.interface_info import Info, ipython_status
 import sys
@@ -65,6 +65,7 @@ from .data_services.dbf.dbf_reader import DBF
 
 from .model import Model
 from .dataframes import DataFrames
+from .dataset import Dataset, DataTree
 
 from .examples import example
 from .util import figures

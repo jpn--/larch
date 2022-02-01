@@ -3517,6 +3517,7 @@ cdef class DataFrames:
 		if caseindex is None:
 			caseindex = "_caseid_"
 
+
 		df1, sa1 = new_alternative_codes(
 			self.data_ce,
 			groupby=groupby,

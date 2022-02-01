@@ -1,8 +1,10 @@
 from .model import NumbaModel as Model
-from .. import DataFrames, P, X, PX, OMX, DBF, Reporter, NumberedCaption, read_metadata, examples, util
+from .. import DataFrames, P, X, PX, OMX, DBF, Reporter, NumberedCaption, read_metadata, examples, util, __version__
 from ..examples import example as _example
+from ..data_warehouse import example_file
+
 try:
-    from ..dataset import Dataset, DataPool, DataArray
+    from ..dataset import Dataset, DataArray, DataTree, merge
 except RuntimeError:
     pass
 

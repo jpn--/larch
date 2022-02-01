@@ -1,0 +1,114 @@
+.. currentmodule:: larch
+
+================================================
+13: MTC MNL Mode Choice, CBD
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+The models considered to this point include variables that describe the attributes of
+alternatives, modes, and the characteristics of decision-makers (the work commuters).
+The mode choice decision also is influenced by variables that describe the context in
+which the trip is made.
+
+For example, a work trip to the regional central business district (CBD) is more
+likely to be made by transit than an otherwise similar trip to a suburban work place
+because the CBD is generally well-served by transit, has more opportunities to make
+additional stops by walking and is less auto friendly due to congestion and limited
+and expensive parking. This suggests that the model specification can be enhanced by
+including variables related to the context of the trip, such as destination zone location.
+
+Model 13 adds the alternative specific CBD dummy variable which indicates whether the
+destination zone (workplace) is located in the CBD.
+(`pp. 122 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	for a in [2,3]:
+		m.utility_co[a] = P("hhinc#2,3") * X("hhinc")
+
+	for a in [4,5,6]:
+		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
+
+	for a,name in m.dataservice.alternative_pairs[1:]:
+		m.utility_co[a] += (
+			+ P("ASC_"+name)
+			+ P("vehbywrk_"+name) * X("vehbywrk")
+			+ P("wkcbd_"+name) * X("wkccbd + wknccbd")
+			)
+
+.. testcode::
+
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "vehbywrk.*"),
+		("Zonal", "wkcbd.*"),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3440.643...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       totcost             -0.0033   0.0003 -13.0282          0.0003       -12.3221
+	          motorized_time      -0.0286   0.0038  -7.5888          0.0039        -7.3694
+	          nonmotorized_time   -0.0464   0.0057  -8.1131          0.0056        -8.2325
+	          motorized_ovtbydist -0.1501   0.0197  -7.6061          0.0248        -6.0547
+	Income    hhinc#2,3           -0.0017   0.0014  -1.2468          0.0015        -1.1809
+	          hhinc#4             -0.0061   0.0020  -3.0863          0.0020        -3.0882
+	          hhinc#5             -0.0111   0.0052  -2.1197          0.0062        -1.7811
+	          hhinc#6             -0.0078   0.0032  -2.4542          0.0035        -2.2159
+	Ownership vehbywrk_BIKE       -0.6980   0.2561  -2.7252          0.3098        -2.2528
+	          vehbywrk_SR2        -0.4155   0.0770  -5.3979          0.0898        -4.6256
+	          vehbywrk_SR3        -0.2121   0.1106  -1.9172          0.1133        -1.8718
+	          vehbywrk_TRANSIT    -0.9109   0.1148  -7.9315          0.1321        -6.8957
+	          vehbywrk_WALK       -0.7194   0.1682  -4.2785          0.2012        -3.5756
+	Zonal     wkcbd_BIKE           0.3760   0.3214   1.1696          0.3277         1.1473
+	          wkcbd_SR2            0.2559   0.1100   2.3269          0.1097         2.3322
+	          wkcbd_SR3            1.0573   0.1723   6.1370          0.1718         6.1532
+	          wkcbd_TRANSIT        1.3562   0.1613   8.4079          0.1520         8.9197
+	          wkcbd_WALK           0.1747   0.2252   0.7756          0.2272         0.7688
+	ASCs      ASC_BIKE            -1.6509   0.4283  -3.8543          0.4926        -3.3511
+	          ASC_SR2             -1.6343   0.1364 -11.9850          0.1474       -11.0914
+	          ASC_SR3             -3.5369   0.2039 -17.3471          0.1998       -17.7039
+	          ASC_TRANSIT         -0.2018   0.2426  -0.8320          0.2548        -0.7922
+	          ASC_WALK             0.0838   0.3476   0.2410          0.3479         0.2408
