@@ -1,6 +1,6 @@
 package:
   name: larch
-  version: "5.5.9"
+  version: "5.5.10"
 
 source:
   path: ../
@@ -35,7 +35,7 @@ requirements:
     - scipy >=1.1
     - pandas >=0.24
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
-    - blosc >=1.14.3 
+    - blosc >=1.14.3
     - matplotlib >=3.0
     - networkx >=2.4
     - tqdm >=4.28.1
