@@ -17,6 +17,8 @@ parts:
     chapters:
     - file: api/~data
       sections:
+        - file: api/dataset
+        - file: api/datatree
         - file: api/dataframes
     - file: api/linear
     - file: api/~models

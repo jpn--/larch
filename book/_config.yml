@@ -47,6 +47,7 @@ sphinx:
     - 'sphinx.ext.intersphinx'
     - 'sphinx.ext.doctest'
     - 'sphinx.ext.graphviz'
+    - 'sphinx.ext.viewcode'
   mathjax_config:
     TeX:
       Macros:
@@ -73,5 +74,31 @@ sphinx:
     conda:
       - "https://docs.conda.io/projects/conda/en/latest/"
       - null
+    xarray:
+      - "https://xarray.pydata.org/en/stable/"
+      - null
   config:
     bibtex_reference_style: author_year
+    autosummary_generate: True
+    autodoc_default_options:
+      show-inheritance: True
+    add_module_names: False
+    html_theme_options:
+      home_page_in_toc: false
+      search_bar_text: Search these docs...
+      repository_url: https://github.com/jpn--/larch
+      use_repository_button: true
+      use_issues_button: true
+      repository_branch: master
+      path_to_docs: docs
+      extra_navbar:
+      favicons:
+      - rel: icon
+        sizes: 32x32
+        href: img/larch_favicon.png
+      switcher:
+        json_url: "https://larch.newman.me/_static/switcher.json"
+        url_template: "https://larch.newman.me/v{version}/"
+        version_match: "5.5.10"
+      navbar_end:
+      - version-switcher

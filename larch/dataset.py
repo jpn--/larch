@@ -262,6 +262,28 @@ class Dataset(_sharrow_Dataset):
 
     @classmethod
     def construct(cls, source, caseid=None, alts=None):
+        """
+        A generic constructor for creating Datasets from various similar objects.
+
+        Parameters
+        ----------
+        source : pandas.DataFrame, pyarrow.Table, xarray.Dataset, or Sequence[str]
+            The source from which to create a Dataset.  DataFrames and Tables
+            are converted to Datasets that have one dimension (the rows) and
+            seperate variables for each of the columns.  A list of strings
+            creates a dataset with those named empty variables.
+        caseid : str, optional
+            The name of a dimension referencing cases.
+        alts : Mapping or str or array-like, optional
+            If given as a mapping, links alternative codes to names.
+            A string names a dimension that defines the alternatives.
+            An array or list of integers gives codes for the alternatives,
+            which are otherwise unnamed.
+
+        Returns
+        -------
+        Dataset
+        """
         if isinstance(source, pd.DataFrame):
             source = cls.from_dataframe(source)
         else:
@@ -376,8 +398,44 @@ class Dataset(_sharrow_Dataset):
             msgs.extend(warn_msgs)
         return msgs
 
-    def query_cases(self, query):
-        return self.query({self.CASEID: query})
+    def query_cases(self, query, parser="pandas", engine=None):
+        """
+        Return a new dataset with each array indexed along the CASEID dimension.
+
+        The indexers are given as strings containing Python expressions to be
+        evaluated against the data variables in the dataset.
+
+        Parameters
+        ----------
+        query : str
+            Python expressions to be evaluated against the data variables
+            in the dataset. The expressions will be evaluated using the pandas
+            eval() function, and can contain any valid Python expressions but cannot
+            contain any Python statements.
+        parser : {"pandas", "python"}, default: "pandas"
+            The parser to use to construct the syntax tree from the expression.
+            The default of 'pandas' parses code slightly different than standard
+            Python. Alternatively, you can parse an expression using the 'python'
+            parser to retain strict Python semantics.
+        engine : {"python", "numexpr", None}, default: None
+            The engine used to evaluate the expression. Supported engines are:
+
+            - None: tries to use numexpr, falls back to python
+            - "numexpr": evaluates expressions using numexpr
+            - "python": performs operations as if you had eval’d in top level python
+
+        Returns
+        -------
+        obj : Dataset
+            A new Dataset with the same contents as this dataset, except each
+            array is indexed by the results of the query on the CASEID dimension.
+
+        See Also
+        --------
+        Dataset.isel
+        pandas.eval
+        """
+        return self.query({self.CASEID: query}, parser=parser, engine=engine)
 
     def dissolve_coords(self, dim, others=None):
         d = self.reset_index(dim)
@@ -408,6 +466,22 @@ class Dataset(_sharrow_Dataset):
         return obj
 
     def set_dtypes(self, dtypes, inplace=False, on_error='warn'):
+        """
+        Set the dtypes for the variables in this Dataset.
+        Parameters
+        ----------
+        dtypes : Mapping or DataFrame
+            Mapping of names to dtypes, or a DataFrame to infer such a
+            mapping.
+        inplace : bool, default False
+            Whether to convert dtypes inplace.
+        on_error : {'warn', 'raise', 'ignore'}
+            What to do when a type conversion triggers an error.
+
+        Returns
+        -------
+        Dataset
+        """
         if isinstance(dtypes, pd.DataFrame):
             dtypes = dtypes.dtypes
         if inplace:

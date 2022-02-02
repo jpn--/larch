@@ -1,3 +1,4 @@
+(deprecated-examples)=
 # Deprecated Example Models
 
 Future development of Larch will be on version that sits on numba, xarray, and sharrow,
