@@ -849,7 +849,7 @@ def exp(x):
 
 class CombinedRef(metaclass=Role):
 	def __new__(cls, s):
-		return LinearComponent(data=DataRef(s), param=ParameterRef(s))
+		return LinearComponent(data=str(s), param=str(s))
 
 # +++
 
@@ -1175,10 +1175,10 @@ class LinearFunction2(MutableSequence):
 		>>> f = P.InVehTime * X.IVTT + P.OutOfVehTime * X.OVTT
 		>>> f1 = f.reformat_param('{}_Suffix')
 		>>> str(f1)
-		'(P.InVehTime_Suffix * X.IVTT) + (P.OutOfVehTime_Suffix * X.OVTT)'
+		'P.InVehTime_Suffix * X.IVTT + P.OutOfVehTime_Suffix * X.OVTT'
 		>>> f2 = f.reformat_param(pattern='(Veh)', repl='Vehicle')
 		>>> str(f2)
-		'(P.InVehicleTime * X.IVTT) + (P.OutOfVehicleTime * X.OVTT)'
+		'P.InVehicleTime * X.IVTT + P.OutOfVehicleTime * X.OVTT'
 
 		"""
 		import re
@@ -1768,10 +1768,10 @@ class LinearFunction0(TouchNotify, list):
 		>>> f = P.InVehTime * X.IVTT + P.OutOfVehTime * X.OVTT
 		>>> f1 = f.reformat_param('{}_Suffix')
 		>>> str(f1)
-		'(P.InVehTime_Suffix * X.IVTT) + (P.OutOfVehTime_Suffix * X.OVTT)'
+		'P.InVehTime_Suffix * X.IVTT + P.OutOfVehTime_Suffix * X.OVTT'
 		>>> f2 = f.reformat_param(pattern='(Veh)', repl='Vehicle')
 		>>> str(f2)
-		'(P.InVehicleTime * X.IVTT) + (P.OutOfVehicleTime * X.OVTT)'
+		'P.InVehicleTime * X.IVTT + P.OutOfVehicleTime * X.OVTT'
 
 		"""
 		import re

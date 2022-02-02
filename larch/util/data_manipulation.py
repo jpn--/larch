@@ -97,7 +97,7 @@ def periodize(
 	21    OP
 	22    OP
 	dtype: category
-	Categories (3, object): [AM, OP, PM]
+	Categories (3, object): ['AM', 'OP', 'PM']
 	"""
 	if mapping is None:
 		mapping = []
@@ -133,4 +133,3 @@ def periodize(
 		x = x.astype('category')
 
 	return x
-
