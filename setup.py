@@ -18,6 +18,10 @@ import io
 # For macOS 10.15 Catalina:
 #  https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15
 
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tools"))
+from rip_examples import rip
+rip()
 
 def read(path, encoding='utf-8'):
     path = os.path.join(os.path.dirname(__file__), path)
@@ -168,5 +172,3 @@ setup(
     zip_safe=False,
 
 )
-
-

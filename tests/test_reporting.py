@@ -142,7 +142,7 @@ def test_excel_metadata():
 		tempdir = TemporaryDirectory()
 		os.path.join(tempdir, 'larchtest.xlsx')
 
-		m = larch.example(1)
+		m = larch.example(1, legacy=True)
 		m.load_data()
 		m.loglike_null()
 		m.maximize_loglike()
@@ -173,7 +173,7 @@ def test_excel_metadata():
 
 def test_parameter_summary():
 
-	m = larch.example(1)
+	m = larch.example(1, legacy=True)
 	m.load_data()
 	m.loglike_null()
 	m.set_values(**{
@@ -225,7 +225,7 @@ def test_parameter_summary():
 
 
 def test_joint_parameter_summary():
-	m = larch.example(1)
+	m = larch.example(1, legacy=True)
 	m.load_data()
 	m.loglike_null()
 	m.set_values(**{

@@ -11,6 +11,7 @@ parts:
     - file: user-guide/data-fundamentals
       title: Data Fundamentals
     - file: user-guide/linear-funcs
+    - file: user-guide/machine-learning
     - file: bibliography
 
   - caption: API Reference
@@ -38,7 +39,7 @@ parts:
     - file: example/itinerary
       title: Itinerary Choice
     - file: example/legacy
-      title: Deprecated Examples
+      title: Legacy Examples
       sections:
         - file: example/legacy/mtc
           sections:

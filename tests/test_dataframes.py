@@ -487,7 +487,7 @@ def test_dfs_init_co():
 
 def test_dfs_feathers():
 	import tempfile
-	m = example(1)
+	m = example(1, legacy=True)
 	with tempfile.TemporaryDirectory() as td:
 		m.load_data()
 		filename = os.path.join(td, 'dfs')
@@ -577,4 +577,3 @@ def test_promotion_ce_to_ca():
 	assert dfs.data_ce is None
 	assert dfs.data_ca is not None
 	assert dfs.data_ca.shape == (30174, 6)
-

@@ -75,7 +75,6 @@ def maximize_loglike(
     """
     Maximize the log likelihood.
 
-
     Parameters
     ----------
     model : AbstractChoiceModel

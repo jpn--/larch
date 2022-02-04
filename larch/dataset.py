@@ -26,6 +26,13 @@ class DataArray(_sharrow_DataArray):
 
     __slots__ = ()
 
+    def __init__(self, *args, caseid=None, altid=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if caseid is not None and caseid in self.dims:
+            self.CASEID = caseid
+        if altid is not None and altid in self.dims:
+            self.ALTID = altid
+
     @classmethod
     def zeros(cls, *coords, dtype=np.float64, name=None, attrs=None):
         """
@@ -111,6 +118,44 @@ class DataArray(_sharrow_DataArray):
             else:
                 raise ValueError("cannot infer name to load")
         return cls(dataset[name])
+
+    @property
+    def CASEID(self):
+        result = self.attrs.get(_CASEID, None)
+        if result is None:
+            warnings.warn("no defined CASEID")
+            return _CASEID
+        return result
+
+    @CASEID.setter
+    def CASEID(self, dim_name):
+        if dim_name not in self.dims:
+            raise ValueError(f"{dim_name} not in dims")
+        self.attrs[_CASEID] = dim_name
+
+    @property
+    def ALTID(self):
+        result = self.attrs.get(_ALTID, None)
+        if result is None:
+            warnings.warn("no defined ALTID")
+            return _ALTID
+        return result
+
+    @ALTID.setter
+    def ALTID(self, dim_name):
+        self.attrs[_ALTID] = dim_name
+
+    def _repr_html_(self):
+        html = super()._repr_html_()
+        html = html.replace("sharrow.DataArray", "larch.DataArray")
+        html = html.replace("xarray.DataArray", "larch.DataArray")
+        return html
+
+    def __repr__(self):
+        r = super().__repr__()
+        r = r.replace("sharrow.DataArray", "larch.DataArray")
+        r = r.replace("xarray.DataArray", "larch.DataArray")
+        return r
 
 
 class Dataset(_sharrow_Dataset):
@@ -345,6 +390,24 @@ class Dataset(_sharrow_Dataset):
         r = r.replace("sharrow.Dataset", "larch.Dataset")
         return r
 
+    def __getattr__(self, name):
+        # change attrs from xr.DataArray to larch.DataArray
+        result = super().__getattr__(name)
+        if isinstance(result, xr.DataArray) and not isinstance(result, DataArray):
+            c = self.attrs.get(_CASEID, None)
+            a = self.attrs.get(_ALTID, None)
+            result = DataArray(result, caseid=c, altid=a)
+        return result
+
+    def __getitem__(self, name):
+        # change items from xr.DataArray to larch.DataArray
+        result = super().__getitem__(name)
+        if isinstance(result, xr.DataArray) and not isinstance(result, DataArray):
+            c = self.attrs.get(_CASEID, None)
+            a = self.attrs.get(_ALTID, None)
+            result = DataArray(result, caseid=c, altid=a)
+        return result
+
     def to_arrays(self, graph, float_dtype=np.float64):
         from .numba.data_arrays import DataArrays
         from .numba.cascading import array_av_cascade, array_ch_cascade
@@ -451,6 +514,24 @@ class Dataset(_sharrow_Dataset):
         return d
 
     def dissolve_zero_variance(self, dim='<ALTID>', inplace=False):
+        """
+        Dissolve dimension on variables where it has no variance.
+
+        This method is convenient to convert variables that have
+        been loaded as |idca| format into |idco| format where
+        appropriate.
+
+        Parameters
+        ----------
+        dim : str, optional
+            The name of the dimension to potentially dissolve.
+        inplace : bool, default False
+            Whether to dissolve variables in-place.
+
+        Returns
+        -------
+        Dataset
+        """
         if dim == '<ALTID>':
             dim = self.ALTID
         if inplace:
@@ -468,6 +549,7 @@ class Dataset(_sharrow_Dataset):
     def set_dtypes(self, dtypes, inplace=False, on_error='warn'):
         """
         Set the dtypes for the variables in this Dataset.
+
         Parameters
         ----------
         dtypes : Mapping or DataFrame
@@ -619,6 +701,17 @@ class Dataset(_sharrow_Dataset):
         return ds
 
     def setup_flow(self, *args, **kwargs):
+        """
+        Set up a new Flow for analysis using the structure of this DataTree.
+
+        This method creates a new `DataTree` with only this Dataset as
+        the root Dataset labeled `main`.  All other arguments are passed
+        through to `DataTree.setup_flow`.
+
+        Returns
+        -------
+        Flow
+        """
         return DataTree(main=self).setup_flow(*args, **kwargs)
 
     def caseids(self):
@@ -661,6 +754,7 @@ class DataTree(_sharrow_DataTree):
 
     @property
     def CASEID(self):
+        """str : The _caseid_ dimension of the root Dataset."""
         result = self.root_dataset.attrs.get(_CASEID, None)
         if result is None:
             warnings.warn("no defined CASEID")
@@ -669,6 +763,7 @@ class DataTree(_sharrow_DataTree):
 
     @property
     def ALTID(self):
+        """str : The _altid_ dimension of the root Dataset."""
         result = self.root_dataset.attrs.get(_ALTID, None)
         if result is None:
             warnings.warn("no defined ALTID")
@@ -677,15 +772,50 @@ class DataTree(_sharrow_DataTree):
 
     @property
     def n_cases(self):
+        """int : The size of the _caseid_ dimension of the root Dataset."""
         return self.root_dataset.dims[self.CASEID]
 
     @property
     def n_alts(self):
+        """int : The size of the _altid_ dimension of the root Dataset."""
         return self.root_dataset.dims[self.ALTID]
 
-    def query_cases(self, query):
+    def query_cases(self, *args, **kwargs):
+        """
+        Return a new DataTree, with a query filter applied to the root Dataset.
+
+        Parameters
+        ----------
+        query : str
+            Python expressions to be evaluated against the data variables
+            in the root dataset. The expressions will be evaluated using the pandas
+            eval() function, and can contain any valid Python expressions but cannot
+            contain any Python statements.
+        parser : {"pandas", "python"}, default: "pandas"
+            The parser to use to construct the syntax tree from the expression.
+            The default of 'pandas' parses code slightly different than standard
+            Python. Alternatively, you can parse an expression using the 'python'
+            parser to retain strict Python semantics.
+        engine : {"python", "numexpr", None}, default: None
+            The engine used to evaluate the expression. Supported engines are:
+
+            - None: tries to use numexpr, falls back to python
+            - "numexpr": evaluates expressions using numexpr
+            - "python": performs operations as if you had eval’d in top level python
+
+        Returns
+        -------
+        DataTree
+            A new DataTree with the same contents as this DataTree, except each
+            array of the root Dataset is indexed by the results of the query on
+            the CASEID dimension.
+
+        See Also
+        --------
+        Dataset.query_cases
+        """
         obj = self.copy()
-        obj.root_dataset = obj.root_dataset.query_cases(query)
+        obj.root_dataset = obj.root_dataset.query_cases(*args, **kwargs)
         return obj
 
     def caseids(self):

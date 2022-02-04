@@ -7,9 +7,11 @@
 🏆︁ Winner of the [AGIFORS 56th Annual Symposium Best Innovation award](http://agifors.org/Symposium).
 
 This documentation is for the Python interface for Larch. If this is your first go
-with Larch, or the first go on a new computer, you might want to start with [installation](installation).
+with Larch, or the first go on a new computer, you might want to start with
+[installation](larch-installation).
 
-Larch is undergoing a transformation, with a new computational architecture
+**Are you ready for something shiny, new, and *fast*?** Larch is undergoing
+a transformation, with a new computational architecture
 that can significantly improve performance when working with large datasets.
 The old version of Larch used a carefully customized `DataFrames` object to
 organize several different aspects of discrete choice data.
@@ -20,10 +22,13 @@ interface for data, and relies on [numba](https://numba.pydata.org/),
 of choice models.  Many (but not yet all) of the core features of Larch have been moved
 over to this new platform.
 
-*You can still use the old version of Larch as normal.* If you want to try out the new version,
-just import `larch.numba` instead of larch itself.  All of the compatible examples in this
-documentation are being migrated over to the new platform, but the old examples remain
-available for now under the [Deprecated Examples](deprecated-examples) section.
+If you want to try out the new version, just import `larch.numba` instead of `larch`
+itself.  These docs adopt the convention of `import larch.numba as lx`.  All of the
+compatible examples in this documentation are being migrated over to the new platform,
+but the old examples remain available under the [Legacy Examples](deprecated-examples)
+section. If you're not ready for all this awesomeness, or if you need to use some
+features of Larch that are not yet in the new version,
+**you can still use the legacy (i.e. "old") version of Larch as normal.**
 
 :::{note}
 This project is very much under development.  There are plenty of undocumented functions

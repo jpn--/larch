@@ -1335,10 +1335,37 @@ class NumbaModel(_BaseModel):
             x=None,
             *,
             start_case=None, stop_case=None, step_case=None,
-            persist=0,
-            leave_out=-1, keep_only=-1, subsample=-1,
-            probability_only=False,
+            **kwargs
     ):
+        """
+        Compute the log likelihood of the model.
+
+        Parameters
+        ----------
+        x : array-like or dict, optional
+            New values to set for the parameters before evaluating
+            the log likelihood.  If given as array-like, the array must
+            be a vector with length equal to the length of the
+            parameter frame, and the given vector will replace
+            the current values.  If given as a dictionary,
+            the dictionary is used to update the parameters.
+        start_case : int, default 0
+            The first case to include in the log likelihood computation.
+            To include all cases, start from 0 (the default).
+        stop_case : int, default -1
+            One past the last case to include in the log likelihood
+            computation.  This is processed as usual for Python slicing
+            and iterating, and negative values count backward from the
+            end.  To include all cases, end at -1 (the default).
+        step_case : int, default 1
+            The step size of the case iterator to use in likelihood
+            calculation.  This is processed as usual for Python slicing
+            and iterating.  To include all cases, step by 1 (the default).
+
+        Returns
+        -------
+        float
+        """
         result_arrays, penalty = self._loglike_runner(
             x, start_case=start_case, stop_case=stop_case, step_case=step_case
         )
@@ -1809,7 +1836,7 @@ class NumbaModel(_BaseModel):
 
     @property
     def datatree(self):
-        """Dataset : A source for data for the model"""
+        """DataTree : A source for data for the model"""
         try:
             return self._datatree
         except AttributeError:

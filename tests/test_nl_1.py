@@ -5,7 +5,7 @@ from .test_regressions import *
 
 @pytest.fixture(scope="module")
 def simple_nl():
-	m = larch.example(1)
+	m = larch.example(1, legacy=True)
 	mot = m.graph.new_node(parameter="MuSR", children=[2, 3])
 	m.set_values(**{
 		'ASC_BIKE': -2.369583417234141,

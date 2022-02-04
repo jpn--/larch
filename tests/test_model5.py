@@ -4156,7 +4156,7 @@ def test_partial_compute(mtc):
 def test_pickling():
 
 	from larch import example
-	m0 = example(1)
+	m0 = example(1, legacy=True)
 	ds = m0.dataservice
 	m0.load_data()
 	m0.maximize_loglike()
@@ -4174,7 +4174,7 @@ def test_pickling():
 
 def test_rho_sq():
 	from larch import example
-	m = example(102)
+	m = example(102, legacy=True)
 	m.load_data()
 	assert m.dataframes.total_weight() == approx(7612.2)
 	assert m.dataframes.n_cases == 6768
@@ -4188,7 +4188,7 @@ def test_rho_sq():
 
 def test_top_k_accuracy():
 	from larch import example
-	m = example(102)
+	m = example(102, legacy=True)
 	m.load_data()
 	assert m.loglike([-0.11442241, -0.75669048, -0.01119601, -0.01321288]) == approx(-5931.557687962916)
 	assert m.top_k_accuracy(1) == approx(0.6819579096713172)
@@ -4247,7 +4247,7 @@ def test_intentional_misalignment():
 def test_wide_choice():
 
 	from larch import example
-	m = example(1)
+	m = example(1, legacy=True)
 	m.graph.new_node(parameter='mu_SR', children=[2,3], name='SR_any')
 	m.load_data()
 	ll0 = m.loglike2()
@@ -4851,6 +4851,3 @@ def test_scrambled_data():
 
 	assert numpy.all(m5.pf['std_err'] == 0)
 	assert numpy.all(m5.pf['robust_std_err'] == 0)
-
-
-

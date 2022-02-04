@@ -2,7 +2,10 @@
 import sys, os, os.path, glob
 
 from ..data_services.examples import MTC, EXAMPVILLE, SWISSMETRO
-
+try:
+	from .generated import ex
+except ImportError:
+	ex = {}
 
 exampledir = os.path.dirname(__file__)
 
@@ -127,12 +130,14 @@ def _exec_example(sourcefile, d=None, extract='m', echo=False, larch=None):
 		return tuple(_local[i] for i in extract)
 
 
-def _exec_example_n(n, *arg, larch=None, **kwarg):
+def _exec_example_n(n, *arg, echo=False, larch=None, legacy=False, **kwarg):
+	if not legacy and n in ex:
+		return ex[n](*arg, **kwarg)
 	f = os.path.join(exampledocdir, get_examplefile(n))
-	return _exec_example(f, *arg, larch=larch, **kwarg)
+	return _exec_example(f, *arg, echo=echo, larch=larch, **kwarg)
 
 
-def example(n, extract='m', echo=False, output_file=None, larch=None):
+def example(n, extract='m', echo=False, output_file=None, larch=None, legacy=False):
 	'''Run an example code section (from the documentation) and give the result.
 
 	Parameters
@@ -155,10 +160,10 @@ def example(n, extract='m', echo=False, output_file=None, larch=None):
 	if output_file is not None:
 		if os.path.exists(output_file):
 			return output_file
-		_exec_example_n(n, extract=None, echo=echo, larch=larch)
+		_exec_example_n(n, extract=None, echo=echo, larch=larch, legacy=legacy)
 		if os.path.exists(output_file):
 			return output_file
 		else:
 			raise FileNotFoundError(output_file)
 	else:
-		return _exec_example_n(n, extract=extract, echo=echo, larch=larch)
+		return _exec_example_n(n, extract=extract, echo=echo, larch=larch, legacy=legacy)

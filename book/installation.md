@@ -1,4 +1,4 @@
-(installation)= 
+(larch-installation)=
 # Installing Larch
 
 
@@ -8,7 +8,7 @@ To install larch without building from source yourself, you'll need to use the
 **conda** package manager. If you already have conda installed, you can use that,
 otherwise you can download and install a [free version](https://github.com/conda-forge/miniforge).
 
-Once you have conda installed, you can install Larch from the conda-forge 
+Once you have conda installed, you can install Larch from the conda-forge
 repository in a new environment called `arboretum` like this:
 
 ```shell
@@ -18,9 +18,9 @@ conda create -n arboretum -c conda-forge larch
 
 ## Installing Conda and Python
 
-To install larch without building from source yourself, you'll 
-need to use the **conda** package manager. If you already have 
-conda installed, you can use that, otherwise you can download 
+To install larch without building from source yourself, you'll
+need to use the **conda** package manager. If you already have
+conda installed, you can use that, otherwise you can download
 and install a [free version](https://github.com/conda-forge/miniforge).
 
 You should usually install conda for the local user,
@@ -39,9 +39,9 @@ and let the installer add the conda installation of Python
 to your PATH environment variable. There is no need to set the
 PYTHONPATH environment variable.
 
-Once conda is installed, on Windows it can be accessed from a 
+Once conda is installed, on Windows it can be accessed from a
 preconfigured prompt (called "Anaconda Prompt", "Miniforge Prompt",
-or something similar) that will be installed in the Start menu. 
+or something similar) that will be installed in the Start menu.
 On linux and macOS, just use the regular terminal.
 
 ## Managing Environments
@@ -121,5 +121,3 @@ jupyter lab
 ```
 
 JupyterLab will open automatically in your browser.
-
-

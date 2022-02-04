@@ -13,7 +13,7 @@ from .stored_dataframes import stable_df
 def test_max_ratio_1():
 
 	#m0 = larch.Model.Example(1)
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 
 	#m0.utility_ca = P.tottime * X.tottime + P.tottime * X.totcost
 	#m0.remove_unused_parameters()
@@ -50,7 +50,7 @@ def test_max_ratio_1():
 def test_max_ratio_2():
 
 	# m0 = larch.Model.Example(1)
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 
 	# m0.utility_ca = P.tottime * (X.tottime * 2) + P.tottime * X.totcost
 	# m0.remove_unused_parameters()
@@ -89,7 +89,7 @@ def test_max_ratio_2():
 
 def test_constraint_ordering_1():
 	#m0 = larch.Model.Example(1)
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 
 	# m0.utility_co[2] = P.ASC_SR2 + P('hhinc#23') * X.hhinc
 	# m0.utility_co[3] = P.ASC_SR3P + P('hhinc#23') * X.hhinc
@@ -124,7 +124,7 @@ def test_constraint_ordering_1():
 
 def test_lower_bound():
 
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 	m1.set_value('ASC_TRAN', minimum=0)
 	m1.load_data()
 
@@ -207,7 +207,7 @@ def test_lower_bound():
 @pytest.mark.skip(reason="constraint tests are unstable across platforms")
 def test_upper_bound():
 	#m0 = larch.Model.Example(1)
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 
 	#m0.lock_value('tottime', -0.1)
 	m1.set_value('tottime', maximum=-0.1)
@@ -282,7 +282,7 @@ def test_upper_bound():
 @pytest.mark.skip(reason="constraint tests are unstable across platforms")
 def test_multi_constraints():
 	#m0 = larch.Model.Example(1)
-	m1 = larch.Model.Example(1)
+	m1 = larch.Model.Example(1, legacy=True)
 
 	#m0.lock_value('tottime', -0.1)
 	m1.set_value('tottime', maximum=-0.1)
@@ -381,7 +381,7 @@ def test_multi_constraints():
 
 def test_overspec():
 
-	m0 = larch.Model.Example(1)
+	m0 = larch.Model.Example(1, legacy=True)
 	m0.utility_ca = m0.utility_ca + P.failpar * X('1')
 	m0.utility_co[1] = P.ASC_DA
 	m0.lock_value('tottime', -0.1)
@@ -421,7 +421,7 @@ def test_parameter_summary():
 	import larch
 	from larch.model.constraints import RatioBound, OrderingBound, FixedBound
 
-	m0 = larch.Model.Example(1)
+	m0 = larch.Model.Example(1, legacy=True)
 	m0.lock_value('tottime', -0.05)
 	m0.set_value('totcost', maximum=-0.005, minimum=-0.02)
 	m0.constraints.append(OrderingBound("hhinc#3 <= hhinc#2"))
@@ -511,7 +511,7 @@ def test_contraint_interpretation():
 
 def test_constraint_parameter_summary_ratios():
 
-	m = larch.Model.Example(1)
+	m = larch.Model.Example(1, legacy=True)
 	m.set_value('totcost', minimum=-0.001)
 	m.set_value('hhinc#3', minimum=0.0025)
 	m.set_value('hhinc#5', minimum=-0.008)

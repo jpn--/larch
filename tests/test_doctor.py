@@ -5,7 +5,7 @@ import numpy
 import pandas
 
 def test_nan_weight():
-	m = larch.Model.Example(1)
+	m = larch.Model.Example(1, legacy=True)
 	m.weight_co_var = 'hhowndum'
 	m.load_data()
 	m.dataframes.data_wt = m.dataframes.data_wt.div(m.dataframes.data_wt)
@@ -29,4 +29,3 @@ def test_doctor_before_load_data():
 
 	with raises(ValueError):
 		larch.Model().doctor()
-

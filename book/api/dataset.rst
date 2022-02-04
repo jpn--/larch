@@ -14,6 +14,12 @@ Constructors
     Dataset.from_idca
     Dataset.from_idco
     Dataset.construct
+    Dataset.from_table
+    Dataset.from_omx
+    Dataset.from_omx_3d
+    Dataset.from_zarr
+    Dataset.from_named_objects
+
 
 Attributes
 ----------

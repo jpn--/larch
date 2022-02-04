@@ -10,7 +10,13 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-v --nbmake --disable-warnings --doctest-modules --ignore=larch/util/visual_processing.py"
+addopts = """\
+    -v --nbmake --disable-warnings \
+    --doctest-modules \
+    --ignore=sandbox.py \
+    --ignore=larch/util/visual_processing.py \
+    --ignore-glob=book/_build/* \
+"""
 testpaths = [
     "tests",
     "book/example",

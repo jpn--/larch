@@ -51,7 +51,7 @@ class Model(_Model5c):
 
 	utility_co = DictOfLinearFunction_C()
 	"""DictOfLinearFunction_C : The portion of the utility function computed from idco data.
-	
+
 	The keys of this mapping are alternative codes for the applicable elemental
 	alteratives, and the values are linear functions to compute for the indicated
 	alternative.  Each alternative that has any idco utility components must have
@@ -60,34 +60,34 @@ class Model(_Model5c):
 
 	utility_ca = LinearFunction_C()
 	"""LinearFunction_C : The portion of the utility function computed from idca data.
-	
+
 	Examples
 	--------
-		
+
 	>>> from larch import Model, P, X
 	>>> m = Model()
 	>>> m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
 	>>> print(m.utility_ca)
 	P.Param1 * X.Data1 + P.Param2 * X.Data2
-	
+
 	"""
 
 	quantity_ca = LinearFunction_C()
 	"""LinearFunction_C : The portion of the quantity function computed from idca data.
-	
+
 	Note that for the quantity function, the actual computed linear function
-	uses the exponential of the parameter value(s), not the raw values. Thus, 
+	uses the exponential of the parameter value(s), not the raw values. Thus,
 	if the quantity function is given as `P.Param1 * X.Data1 + P.Param2 * X.Data2`,
 	the computed values will actually be `exp(P.Param1) * X.Data1 + exp(P.Param2) * X.Data2`.
-	This transformation ensures that the outcome from the quantity function is 
+	This transformation ensures that the outcome from the quantity function is
 	always positive, so long as at all of the data terms in the function are
 	positive.  The `LinearFunction_C` class itself is not intrinsically aware
-	of this implementation detail, but the `Model.utility_functions()` method is, 
+	of this implementation detail, but the `Model.utility_functions()` method is,
 	and will render the complete utility function in a mathematically correct form.
-	
+
 	Examples
 	--------
-		
+
 	>>> from larch import Model, P, X
 	>>> m = Model()
 	>>> m.quantity_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
@@ -101,9 +101,9 @@ class Model(_Model5c):
 	constraints = ParametricConstraintList()
 
 	@classmethod
-	def Example(cls, n=1):
+	def Example(cls, n=1, legacy=False):
 		from ..examples import example
-		return example(n)
+		return example(n, legacy=legacy)
 
 	@classmethod
 	def load(cls, filename):
@@ -879,4 +879,3 @@ class Model(_Model5c):
 				binding_constraints.append(c)
 
 		return binding_constraints
-

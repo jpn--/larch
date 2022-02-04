@@ -93,7 +93,7 @@ class Prelearner():
 		self.input_co_columns = co_columns
 
 		self.eval_set_names = fit.pop('eval_set_names', [])
-		
+
 		if isinstance(fit, MutableMapping):
 			if 'validation_percent' in fit and validation_dataframes is None:
 				vpct = fit.pop('validation_percent')
@@ -301,7 +301,7 @@ class XGBoostHardPrelearner(Prelearner):
 			max_depth=11,
 			learning_rate=0.01,
 			n_estimators=500,
-			silent=True,
+			# silent=True,
 			objective='binary:logistic',
 			booster='gbtree',
 			n_jobs=-1,
@@ -348,7 +348,7 @@ class XGBoostSoftPrelearner(Prelearner):
 			max_depth=11,
 			learning_rate=0.01,
 			n_estimators=500,
-			silent=True,
+			# silent=True,
 			objective='reg:logistic',
 			booster='gbtree',
 			n_jobs=-1,
@@ -402,7 +402,7 @@ class XGBoostPrelearner(Prelearner):
 			max_depth=11,
 			learning_rate=0.01,
 			n_estimators=500,
-			silent=True,
+			# silent=True,
 			objective='reg:logistic' if use_soft else 'binary:logistic',
 			booster='gbtree',
 			n_jobs=-1,
@@ -435,7 +435,7 @@ class XGBoostPrelearner(Prelearner):
 
 	def evals_result(self):
 		j = [
-			pandas.DataFrame({mk:numpy.asarray(mv) for mk, mv in ev.items()}) 
+			pandas.DataFrame({mk:numpy.asarray(mv) for mk, mv in ev.items()})
 			for ek, ev in self.clf.evals_result_.items()
 		]
 		k = [
