@@ -6,6 +6,26 @@ import xarray as xr
 import pathlib
 from collections.abc import Mapping
 from xarray.core import dtypes
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Collection,
+    DefaultDict,
+    Dict,
+    Hashable,
+    Iterable,
+    Iterator,
+    List,
+    MutableMapping,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+    Union,
+    cast,
+    overload,
+)
 
 try:
     from sharrow import Dataset as _sharrow_Dataset
@@ -345,6 +365,49 @@ class Dataset(_sharrow_Dataset):
             source = super().construct(source)
         return cls.__initialize_for_larch(source, caseid, alts)
 
+    def _set_sparse_data_from_dataframe_gcxs(
+        self, idx: pd.Index, arrays: List[Tuple[Hashable, np.ndarray]], dims: tuple
+    ) -> None:
+        from sparse import COO, GCXS
+
+        if isinstance(idx, pd.MultiIndex):
+            coords = np.stack([np.asarray(code) for code in idx.codes], axis=0)
+            is_sorted = idx.is_monotonic_increasing
+            shape = tuple(lev.size for lev in idx.levels)
+        else:
+            coords = np.arange(idx.size).reshape(1, -1)
+            is_sorted = True
+            shape = (idx.size,)
+
+        if not is_sorted:
+            raise ValueError("index must be sorted")
+
+        template_data = COO(
+            coords,
+            np.zeros(len(idx)),
+            shape,
+            has_duplicates=False,
+            sorted=is_sorted,
+            fill_value=np.nan,
+        )
+        template_gcxs = GCXS(template_data, compressed_axes=(0,))
+
+        for name, values in arrays:
+            # In virtually all real use cases, the sparse array will now have
+            # missing values and needs a fill_value. For consistency, don't
+            # special case the rare exceptions (e.g., dtype=int without a
+            # MultiIndex).
+            dtype, fill_value = dtypes.maybe_promote(values.dtype)
+            values = np.asarray(values, dtype=dtype)
+
+            data = GCXS(
+                (values, template_gcxs.indices, template_gcxs.indptr),
+                shape=template_gcxs.shape,
+                compressed_axes=(0,),
+                prune=False,
+            )
+            self[name] = (dims, data)
+
     def __init__(self, *args, **kwargs):
         pass # init for superclass happens inside __new__
 
@@ -415,7 +478,11 @@ class Dataset(_sharrow_Dataset):
         if isinstance(result, xr.DataArray) and not isinstance(result, DataArray):
             c = self.attrs.get(_CASEID, None)
             a = self.attrs.get(_ALTID, None)
-            result = DataArray(result, caseid=c, altid=a)
+            if c is not None:
+                result.attrs[_CASEID] = c
+            if a is not None:
+                result.attrs[_ALTID] = a
+            result.__class__ = DataArray
         return result
 
     def __getitem__(self, name):
@@ -424,7 +491,11 @@ class Dataset(_sharrow_Dataset):
         if isinstance(result, xr.DataArray) and not isinstance(result, DataArray):
             c = self.attrs.get(_CASEID, None)
             a = self.attrs.get(_ALTID, None)
-            result = DataArray(result, caseid=c, altid=a)
+            if c is not None:
+                result.attrs[_CASEID] = c
+            if a is not None:
+                result.attrs[_ALTID] = a
+            result.__class__ = DataArray
         return result
 
     def get_expr(self, expression):
@@ -442,11 +513,16 @@ class Dataset(_sharrow_Dataset):
         try:
             result = self[expression]
         except (KeyError, IndexError):
-            if expression in self._flow_library:
-                flow = self._flow_library[expression]
-            else:
+            try:
+                self._flow_library
+            except AttributeError:
                 flow = self.setup_flow({expression: expression})
-                self._flow_library[expression] = flow
+            else:
+                if expression in self._flow_library:
+                    flow = self._flow_library[expression]
+                else:
+                    flow = self.setup_flow({expression: expression})
+                    self._flow_library[expression] = flow
             if not flow.tree.root_dataset is self:
                 flow.tree = DataTree(main=self)
             result = flow.load_dataarray().isel(expressions=0)
@@ -587,8 +663,13 @@ class Dataset(_sharrow_Dataset):
             if obj[k].dtype.kind in {'U', 'S', 'O'}:
                 continue
             if dim in obj[k].dims:
-                if obj[k].std(dim=dim).max() < 1e-10:
-                    obj[k] = obj[k].min(dim=dim)
+                try:
+                    dissolve = (obj[k].std(dim=dim).max() < 1e-10)
+                except TypeError:
+                    pass
+                else:
+                    if dissolve:
+                        obj[k] = obj[k].min(dim=dim)
         return obj
 
     def set_dtypes(self, dtypes, inplace=False, on_error='warn'):
@@ -616,11 +697,13 @@ class Dataset(_sharrow_Dataset):
         else:
             obj = self.copy()
         for k in obj:
+            if k not in dtypes:
+                continue
             try:
                 obj[k] = obj[k].astype(dtypes[k])
             except Exception as err:
                 if on_error == 'warn':
-                    warnings.warn(f"{err!s} on converting {k}")
+                    warnings.warn(f"{err!r} on converting {k}")
                 elif on_error == 'raise':
                     raise
         return obj
@@ -716,6 +799,53 @@ class Dataset(_sharrow_Dataset):
                         if ds.ALTID not in i.dims:
                             continue
                         ds[k] = i.where(ds['_avail_']!=0, fill_unavail)
+        return ds
+
+    @classmethod
+    def from_idce(cls, df, crack=False, altnames=None, index_name='_casealt_'):
+        """
+        Construct a Dataset from an idco-format DataFrame.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The input data should be an idca-format or idce-format DataFrame,
+            with the caseid's and altid's in a two-level pandas MultiIndex.
+        crack : bool, default False
+            If True, the `dissolve_zero_variance` method is applied before
+            repairing dtypes, to ensure that missing value are handled
+            properly.
+        altnames : Mapping, optional
+            If given as a mapping, links alternative codes to names.
+            An array or list of strings gives names for the alternatives,
+            sorted in the same order as the codes.
+        index_name : str, default '_casealt_'
+            Name to apply to the sparse index.
+
+        Returns
+        -------
+        Dataset
+        """
+        if df.index.nlevels != 2:
+            raise ValueError("source idce dataframe must have a two "
+                             "level MultiIndex giving case and alt id's")
+        caseidname, altidname = df.index.names
+        caseidname = caseidname or _CASEID
+        altidname = altidname or _ALTID
+        ds = cls.from_dataframe(df.reset_index(drop=True).rename_axis(index=index_name))
+        ds.coords[caseidname] = xr.DataArray(df.index.get_level_values(0), dims=index_name, coords=ds.coords)
+        ds.coords[altidname] = xr.DataArray(df.index.get_level_values(1), dims=index_name, coords=ds.coords)
+        ds.coords['case_idx'] = xr.DataArray(df.index.codes[0], dims=index_name)
+        ds.coords['alt_idx'] = xr.DataArray(df.index.codes[1], dims=index_name)
+        ds.coords['case_ptr'] = xr.DataArray(
+            np.where(np.diff(ds.coords['case_idx'], prepend=np.nan, append=np.nan))[0],
+            dims='case_ptr',
+        )
+        if crack:
+            ds = ds.dissolve_zero_variance()
+        ds = ds.set_dtypes(df)
+        if altnames is not None:
+            ds = ds.set_altnames(altnames)
         return ds
 
     @classmethod

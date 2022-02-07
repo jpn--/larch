@@ -149,58 +149,51 @@ def utility_from_data_ca(
         holdfast_arr,                   # float input shape=[n_params]
         array_av,                       # int8 input shape=[n_alts]
         array_ca,                       # float input shape=[n_alts, n_ca_vars]
+        array_ce_data,                  # float input shape=[n_casealts, n_ca_vars]
+        array_ce_indices,               # int input shape=[n_casealts]
+        array_ce_ptr,                   # int input shape=[2]
         utility_elem,                   # float output shape=[n_alts]
         dutility_elem,                  # float output shape=[n_alts, n_params]
 ):
     n_alts = array_ca.shape[0]
-    for j in range(n_alts):
 
-        # if self._array_ce_reversemap is not None:
-        #     if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
-        #         row = -1
-        #     else:
-        #         row = self._array_ce_reversemap[c, j]
-        row = -1
-
-        if array_av[j]: # and row != -1:
-
-            #     if self.model_quantity_ca_param.shape[0]:
-            #         for i in range(self.model_quantity_ca_param.shape[0]):
-            #             if row >= 0:
-            #                 _temp = self._array_ce[row, self.model_quantity_ca_data[i]]
-            #             else:
-            #                 _temp = self._array_ca[c, j, self.model_quantity_ca_data[i]]
-            #             _temp *= self.model_quantity_ca_param_value[i] * self.model_quantity_ca_param_scale[i]
-            #             U[j] += _temp
-            #             if not self.model_quantity_ca_param_holdfast[i]:
-            #                 dU[j, self.model_quantity_ca_param[i]] += _temp * self.model_quantity_scale_param_value
-            #
-            #         for i in range(self.model_quantity_ca_param.shape[0]):
-            #             if not self.model_quantity_ca_param_holdfast[i]:
-            #                 dU[j, self.model_quantity_ca_param[i]] /= U[j]
-            #
-            #         if Q is not None:
-            #             Q[j] = U[j]
-            #         IF
-            #         DOUBLE_PRECISION:
-            #         _temp = log(U[j])
-            #     ELSE:
-            #     _temp = logf(U[j])
-            # U[j] = _temp * self.model_quantity_scale_param_value
-            # if (self.model_quantity_scale_param >= 0) and not self.model_quantity_scale_param_holdfast:
-            #     dU[j, self.model_quantity_scale_param] += _temp
-
+    if array_ce_data.shape[0] > 0:
+        j = 0
+        for row in range(array_ce_ptr[0], array_ce_ptr[1]):
+            while array_ce_indices[row] > j:
+                # skipped alts are unavail
+                utility_elem[j] = -np.inf
+                j += 1
+            j = array_ce_indices[row]
             for i in range(model_utility_ca_param.shape[0]):
-                if row >= 0:
-                    _temp = 0.0 #_temp = self._array_ce[row, self.model_utility_ca_data[i]]
-                else:
-                    _temp = array_ca[j, model_utility_ca_data[i]]
+                _temp = array_ce_data[row, model_utility_ca_data[i]]
                 _temp *= model_utility_ca_param_scale[i]
                 utility_elem[j] += _temp * parameter_arr[model_utility_ca_param[i]]
                 if not holdfast_arr[model_utility_ca_param[i]]:
                     dutility_elem[j, model_utility_ca_param[i]] += _temp
-        else:
+        while n_alts > j:
+            # skipped alts are unavail
             utility_elem[j] = -np.inf
+            j += 1
+    else:
+
+        for j in range(n_alts):
+
+            row = -1
+
+            if array_av[j]:
+
+                for i in range(model_utility_ca_param.shape[0]):
+                    if row >= 0:
+                        _temp = 0.0 #_temp = self._array_ce[row, self.model_utility_ca_data[i]]
+                    else:
+                        _temp = array_ca[j, model_utility_ca_data[i]]
+                    _temp *= model_utility_ca_param_scale[i]
+                    utility_elem[j] += _temp * parameter_arr[model_utility_ca_param[i]]
+                    if not holdfast_arr[model_utility_ca_param[i]]:
+                        dutility_elem[j, model_utility_ca_param[i]] += _temp
+            else:
+                utility_elem[j] = -np.inf
 
 
 def _type_signature(sig, precision=32):
@@ -478,44 +471,45 @@ _master_shape_signature = (
     '(nests),(nests),(nests), '
     '(params),(params), '
     '(nodes),(nodes),(),(vco),(alts,vca), '
+    '(ces,vce),(ces),(two),  '
     '(four)->'
     '(nodes),(nodes),(nodes),(params,params),(params),()'
 )
 
 
 def _numba_master(
-        model_q_ca_param_scale,  # float input shape=[n_q_ca_features]
-        model_q_ca_param,        # int input shape=[n_q_ca_features]
-        model_q_ca_data,         # int input shape=[n_q_ca_features]
-        model_q_scale_param,     # int input scalar
+        model_q_ca_param_scale,  # [0] float input shape=[n_q_ca_features]
+        model_q_ca_param,        # [1] int input shape=[n_q_ca_features]
+        model_q_ca_data,         # [2] int input shape=[n_q_ca_features]
+        model_q_scale_param,     # [3] int input scalar
 
-        model_utility_ca_param_scale,  # [0] float input shape=[n_u_ca_features]
-        model_utility_ca_param,        # [1] int input shape=[n_u_ca_features]
-        model_utility_ca_data,         # [2] int input shape=[n_u_ca_features]
+        model_utility_ca_param_scale,  # [4] float input shape=[n_u_ca_features]
+        model_utility_ca_param,        # [5] int input shape=[n_u_ca_features]
+        model_utility_ca_data,         # [6] int input shape=[n_u_ca_features]
 
-        model_utility_co_alt,          # [3] int input shape=[n_co_features]
-        model_utility_co_param_scale,  # [4] float input shape=[n_co_features]
-        model_utility_co_param,        # [5] int input shape=[n_co_features]
-        model_utility_co_data,         # [6] int input shape=[n_co_features]
+        model_utility_co_alt,          # [ 7] int input shape=[n_co_features]
+        model_utility_co_param_scale,  # [ 8] float input shape=[n_co_features]
+        model_utility_co_param,        # [ 9] int input shape=[n_co_features]
+        model_utility_co_data,         # [10] int input shape=[n_co_features]
 
-        edgeslots,     # int input shape=[edges, 4]
-        # upslots,       # [7] int input shape=[edges]
-        # dnslots,       # [8] int input shape=[edges]
-        # visit1,        # [9] int input shape=[edges]
-        # allocslot,     # [10] int input shape=[edges]
+        edgeslots,     # [11] int input shape=[edges, 4]
 
-        mu_slots,      # [11] int input shape=[nests]
-        start_slots,   # [12] int input shape=[nests]
-        len_slots,     # [13] int input shape=[nests]
+        mu_slots,      # [12] int input shape=[nests]
+        start_slots,   # [13] int input shape=[nests]
+        len_slots,     # [14] int input shape=[nests]
 
-        holdfast_arr,  # [12] int8 input shape=[n_params]
-        parameter_arr, # [13] float input shape=[n_params]
+        holdfast_arr,  # [15] int8 input shape=[n_params]
+        parameter_arr, # [16] float input shape=[n_params]
 
-        array_ch,      # [14] float input shape=[nodes]
-        array_av,      # [15] int8 input shape=[nodes]
-        array_wt,      # [16] float input shape=[]
-        array_co,      # [17] float input shape=[n_co_vars]
-        array_ca,      # [18] float input shape=[n_alts, n_ca_vars]
+        array_ch,      # [17] float input shape=[nodes]
+        array_av,      # [18] int8 input shape=[nodes]
+        array_wt,      # [19] float input shape=[]
+        array_co,      # [20] float input shape=[n_co_vars]
+        array_ca,      # [21] float input shape=[n_alts, n_ca_vars]
+
+        array_ce_data,     # [22] float input shape=[n_casealts, n_ca_vars]
+        array_ce_indices,  # [23] int input shape=[n_casealts]
+        array_ce_ptr,      # [24] int input shape=[2]
 
         return_flags,
         # only_utility,        # [19] int8 input
@@ -576,6 +570,9 @@ def _numba_master(
         holdfast_arr,                  # float input shape=[n_params]
         array_av,                      # int8 input shape=[n_nodes]
         array_ca,                      # float input shape=[n_alts, n_ca_vars]
+        array_ce_data,                 # float input shape=[n_casealts, n_ca_vars]
+        array_ce_indices,              # int input shape=[n_casealts]
+        array_ce_ptr,                  # int input shape=[2]
         utility[:n_alts],              # float output shape=[n_alts]
         dutility[:n_alts],
     )
@@ -619,7 +616,7 @@ def _numba_master(
 
 
 _numba_master_vectorized = guvectorize(
-    _type_signatures("fiii fii ifii I iii bf fbffF b fffFff"),
+    _type_signatures("fiii fii ifii I iii bf fbffF Fii b fffFff"),
     _master_shape_signature,
     nopython=True,
     fastmath=True,
@@ -1134,6 +1131,9 @@ class NumbaModel(_BaseModel):
             self._frame.holdfast.to_numpy(),
             self.pvals.astype(self.float_dtype), # float input shape=[n_params]
             *self._data_arrays.cs[caseslice][:5], # TODO fix when not using named tuple
+            np.zeros([0,self._data_arrays.ca.shape[-1]], dtype=self.float_dtype),  # ce-data
+            np.zeros([0], dtype=np.int16),  # ce-indicies
+            np.zeros([1], dtype=np.int16),   # ce-indptr
         )
 
     def constraint_violation(
