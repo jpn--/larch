@@ -1074,10 +1074,15 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@property
 	def choice_ca_var(self):
+		"""str : An |idca| variable giving the choices as indicator values."""
 		return self._choice_ca_var
 
 	@choice_ca_var.setter
 	def choice_ca_var(self, x):
+		if x is not None:
+			x = str(x)
+		if self._choice_ca_var != x:
+			self.mangle()
 		self._choice_ca_var = x
 		if x is not None:
 			self._choice_co_vars = None
@@ -1086,6 +1091,12 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@property
 	def choice_co_vars(self):
+		"""Dict[int,str] : A mapping giving |idco| expressions that evaluate to indicator values.
+
+		Each key represents an alternative code number, and the associated expression
+		gives the name of an |idco| variable or some function of |idco| variables that
+		indicates whether that alternative was chosen.
+		"""
 		if self._choice_co_vars:
 			return self._choice_co_vars
 		else:
@@ -1093,13 +1104,16 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@choice_co_vars.setter
 	def choice_co_vars(self, x):
-		#self.mangle()
 		if isinstance(x, dict):
+			if self._choice_co_vars != x:
+				self.mangle()
 			self._choice_co_vars = x
 			self._choice_ca_var = None
 			self._choice_co_code = None
 			self._choice_any = False
 		elif x is None:
+			if self._choice_co_vars != x:
+				self.mangle()
 			self._choice_co_vars = x
 		else:
 			raise TypeError('choice_co_vars must be a dictionary')
@@ -1110,7 +1124,7 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@property
 	def choice_co_code(self):
-		#self.unmangle()
+		"""str : An |idco| variable giving the choices as alternative id's."""
 		if self._choice_co_code:
 			return self._choice_co_code
 		else:
@@ -1118,19 +1132,24 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@choice_co_code.setter
 	def choice_co_code(self, x):
-		#self.mangle()
 		if isinstance(x, str):
+			if self._choice_co_code != x:
+				self.mangle()
 			self._choice_co_code = x
 			self._choice_co_vars = None
 			self._choice_ca_var = None
 			self._choice_any = False
 		elif x is None:
+			if self._choice_co_code != x:
+				self.mangle()
 			self._choice_co_code = x
 		else:
 			raise TypeError('choice_co_vars must be a str')
 
 	@choice_co_code.deleter
 	def choice_co_code(self):
+		if self._choice_co_code is not None:
+			self.mangle()
 		self._choice_co_code = None
 
 	@property
@@ -1164,18 +1183,46 @@ cdef class Model5c(AbstractChoiceModel):
 		self._weight_co_var = x
 
 	@property
+	def availability_ca_var(self):
+		"""str : An |idca| variable or expression indicating if alternatives are available."""
+		return self._availability_var
+
+	@availability_ca_var.setter
+	def availability_ca_var(self, x):
+		if x is not None:
+			x = str(x)
+		if self._availability_var != x:
+			self.mangle()
+		self._availability_var = x
+		self._availability_co_vars = None
+		self._availability_any = False
+
+	@property
 	def availability_var(self):
+		"""str : An |idca| variable or expression indicating if alternatives are available.
+
+		Deprecated, prefer `availability_ca_var` for clarity.
+		"""
 		return self._availability_var
 
 	@availability_var.setter
 	def availability_var(self, x):
-		self._availability_var = str(x)
+		if x is not None:
+			x = str(x)
+		if self._availability_var != x:
+			self.mangle()
+		self._availability_var = x
 		self._availability_co_vars = None
 		self._availability_any = False
 
 	@property
 	def availability_co_vars(self):
-		#self.unmangle()
+		"""Dict[int,str] : A mapping giving |idco| expressions that evaluate to availability indicators.
+
+		Each key represents an alternative code number, and the associated expression
+		gives the name of an |idco| variable or some function of |idco| variables that
+		indicates whether that alternative is available.
+		"""
 		x = self._availability_co_vars
 		if x == 1 or str(x) == '1' or x is True:
 			try:
@@ -1190,12 +1237,22 @@ cdef class Model5c(AbstractChoiceModel):
 
 	@availability_co_vars.setter
 	def availability_co_vars(self, x):
+		from typing import Mapping
+		if not isinstance(x, Mapping):
+			raise TypeError(f'availability_co_vars must be dict not {type(x)}')
+		if self._availability_co_vars != x:
+			self.mangle()
 		self._availability_co_vars = x
 		self._availability_var = None
 		self._availability_any = False
 
 	@property
 	def availability_any(self):
+		"""bool : A flag indicating whether availability should be inferred from the data.
+
+		This only applies to DataFrames-based models, as the Dataset interface does
+		not include a mechanism for the data to self-describe an availability feature.
+		"""
 		return self._availability_any
 
 	@availability_any.setter
@@ -1370,4 +1427,3 @@ cdef class Model5c(AbstractChoiceModel):
 		Logloss is the average per-case (per unit weight for weighted data) negative log likelihood.
 		"""
 		return -self.loglike(x=x) / self._dataframes.total_weight()
-

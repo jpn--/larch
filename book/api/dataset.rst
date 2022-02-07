@@ -31,6 +31,7 @@ Attributes
     Dataset.n_alts
     Dataset.CASEID
     Dataset.ALTID
+    Dataset.alts_mapping
     Dataset.dims
     Dataset.sizes
     Dataset.data_vars
@@ -54,3 +55,4 @@ Methods
     Dataset.set_altnames
     Dataset.set_dtypes
     Dataset.setup_flow
+    Dataset.get_expr

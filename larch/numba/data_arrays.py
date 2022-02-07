@@ -172,9 +172,21 @@ def prepare_data(
         for i,a in enumerate(model_dataset.coords[shared_data_ca.ALTID]):
             da_ch[:, i] = (choicecodes == a)
         model_dataset = model_dataset.merge(da_ch)
-    if 'choice_co_vars' in request:
-        log.debug(f"requested choice_co_vars data: {request['choice_co_vars']}")
-        raise NotImplementedError('choice_co_vars')
+    if 'choice_co' in request:
+        log.debug(f"requested choice_co_vars data: {request['choice_co']}")
+        da_ch = DataArray(
+            float_dtype(0),
+            dims=[shared_data_ca.CASEID, shared_data_ca.ALTID],
+            coords={
+                shared_data_ca.CASEID: model_dataset.coords[shared_data_ca.CASEID],
+                shared_data_ca.ALTID: model_dataset.coords[shared_data_ca.ALTID],
+            },
+            name='ch',
+        )
+        for i,a in enumerate(model_dataset.alts_mapping):
+            choice_expr = request['choice_co'][a]
+            da_ch[:, i] = shared_data_co.get_expr(choice_expr).values
+        model_dataset = model_dataset.merge(da_ch)
     if 'choice_any' in request:
         log.debug(f"requested choice_any data: {request['choice_any']}")
         raise NotImplementedError('choice_any')
@@ -347,4 +359,3 @@ def _prep_co(
             name=tag,
         )
     return model_dataset.merge(da), flow
-

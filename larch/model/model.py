@@ -50,16 +50,32 @@ class Model(_Model5c):
 	"""
 
 	utility_co = DictOfLinearFunction_C()
-	"""DictOfLinearFunction_C : The portion of the utility function computed from idco data.
+	"""DictOfLinearFunction_C : The portion of the utility function computed from |idco| data.
 
 	The keys of this mapping are alternative codes for the applicable elemental
 	alteratives, and the values are linear functions to compute for the indicated
 	alternative.  Each alternative that has any idco utility components must have
 	a unique linear function given.
+
+	Examples
+	--------
+
+	>>> from larch import Model, P, X
+	>>> m = Model()
+	>>> m.utility_co = {
+	... 	1: P.ParamA1 * X.DataA,
+	... 	2: P.ParamA2 * X.DataA + P.ParamASC2,
+	... }
+	>>> print(m.utility_co)
+	DictOfLinearFunction_C({1: P.ParamA1 * X.DataA, 2: P.ParamA2 * X.DataA + P.ParamASC2})
 	"""
 
 	utility_ca = LinearFunction_C()
-	"""LinearFunction_C : The portion of the utility function computed from idca data.
+	"""LinearFunction_C : The portion of the utility function computed from |idca| data.
+
+	Data expressions in this utility function can actually reference both |idca|
+	and |idco| format variables. Except in unusual model designs, every complete data
+	expression should have at least one |idca| component.
 
 	Examples
 	--------
@@ -69,11 +85,17 @@ class Model(_Model5c):
 	>>> m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
 	>>> print(m.utility_ca)
 	P.Param1 * X.Data1 + P.Param2 * X.Data2
-
+	>>> m.utility_ca += P.Param3 * X.Data3 / X.DataCO4
+	>>> print(m.utility_ca)
+	P.Param1 * X.Data1 + P.Param2 * X.Data2 + P.Param3 * X('Data3/DataCO4')
 	"""
 
 	quantity_ca = LinearFunction_C()
-	"""LinearFunction_C : The portion of the quantity function computed from idca data.
+	"""LinearFunction_C : The portion of the quantity function computed from |idca| data.
+
+	Data expressions in this utility function can actually reference both |idca|
+	and |idco| format variables. Except in unusual model designs, every complete data
+	expression should have at least one |idca| component.
 
 	Note that for the quantity function, the actual computed linear function
 	uses the exponential of the parameter value(s), not the raw values. Thus,
@@ -93,7 +115,9 @@ class Model(_Model5c):
 	>>> m.quantity_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2
 	>>> print(m.quantity_ca)
 	P.Param1 * X.Data1 + P.Param2 * X.Data2
-
+	>>> m.quantity_ca += P.Param3 * X.Data3 / X.DataCO4
+	>>> print(m.quantity_ca)
+	P.Param1 * X.Data1 + P.Param2 * X.Data2 + P.Param3 * X('Data3/DataCO4')
 	"""
 
 	_graph = NestingTree()

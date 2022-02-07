@@ -12,7 +12,42 @@ Model
 
 
 Attributes
-----------
+==========
+
+Data Connection
+---------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.datatree
+    Model.dataset
+    Model.n_cases
+
+
+Choice Definition
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.choice_ca_var
+    Model.choice_co_vars
+    Model.choice_co_code
+
+
+Alternative Availability
+------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.availability_ca_var
+    Model.availability_co_vars
+
+
+Utility Definition
+------------------
 
 .. autosummary::
     :toctree: generated/
@@ -20,15 +55,20 @@ Attributes
     Model.utility_ca
     Model.utility_co
     Model.quantity_ca
-    Model.dataset
-    Model.datatree
-    Model.n_cases
-    Model.possible_overspecification
+
+
+Estimation Results
+------------------
+
+.. autosummary::
+    :toctree: generated/
+
     Model.most_recent_estimation_result
+    Model.possible_overspecification
 
 
 Methods
--------
+=======
 
 .. autosummary::
     :toctree: generated/
@@ -50,4 +90,5 @@ Methods
     Model.rho_sq_null
     Model.set_values
     Model.total_weight
+    Model.to_xlsx
     Model.utility

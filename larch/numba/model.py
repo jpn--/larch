@@ -13,7 +13,7 @@ from ..exceptions import MissingDataError
 from ..util import dictx
 from .cascading import data_av_cascade, data_ch_cascade
 from ..dataframes import DataFrames
-from ..dataset import Dataset, DataTree
+from ..dataset import Dataset, DataTree, DataArray
 from collections import namedtuple
 from .data_arrays import DataArrays
 
@@ -1124,6 +1124,9 @@ class NumbaModel(_BaseModel):
                     missing_av = True
                 else:
                     raise MissingDataError('model.dataframes does not define data_av')
+        elif self.dataset is not None:
+            if 'ch' not in self.dataset and not allow_missing_ch:
+                raise MissingDataError('model.dataset does not include `ch`')
         if self.work_arrays is None:
             self._rebuild_work_arrays(on_missing_data='raise')
         return (
@@ -1465,6 +1468,16 @@ class NumbaModel(_BaseModel):
                     columns=self.graph.standard_sort_names[:arr.shape[1]],
                     index=idx,
                 )
+            if return_dataframe == 'dataarray':
+                return DataArray(
+                    arr,
+                    coords={
+                        self.datatree.CASEID: idx,
+                        'nodeid': np.asarray(self.graph.standard_sort),
+                        'node_name': DataArray(np.asarray(self.graph.standard_sort_names), dims='nodeid'),
+                    },
+                    dims=(self.datatree.CASEID, 'nodeid'),
+                )
             result = pd.DataFrame(
                 data=arr,
                 columns=self.graph.standard_sort[:arr.shape[1]],
@@ -1513,8 +1526,43 @@ class NumbaModel(_BaseModel):
             start_case=None,
             stop_case=None,
             step_case=None,
-            return_dataframe=None,
+            return_format=None,
     ):
+        """
+        Compute values for the utility function contained in the model.
+
+        Parameters
+        ----------
+        x : array-like or dict, optional
+            New values to set for the parameters before evaluating
+            the log likelihood.  If given as array-like, the array must
+            be a vector with length equal to the length of the
+            parameter frame, and the given vector will replace
+            the current values.  If given as a dictionary,
+            the dictionary is used to update the parameters.
+        start_case : int, default 0
+            The first case to include in the log likelihood computation.
+            To include all cases, start from 0 (the default).
+        stop_case : int, default -1
+            One past the last case to include in the log likelihood
+            computation.  This is processed as usual for Python slicing
+            and iterating, and negative values count backward from the
+            end.  To include all cases, end at -1 (the default).
+        step_case : int, default 1
+            The step size of the case iterator to use in likelihood
+            calculation.  This is processed as usual for Python slicing
+            and iterating.  To include all cases, step by 1 (the default).
+        return_format : {None, 'idco', 'dataarray'}, default None
+            Return the result in the indicated format.
+              - 'idco' gives a pandas DataFrame indexed by cases and with
+                alternatives as columns.
+              - 'idca' gives a pandas Series with a two-level multi-index.
+              - 'dataarray' gives a two-dimension larch DataArray.
+
+        Returns
+        -------
+        array or DataFrame or DataArray
+        """
         result_arrays, penalty = self._loglike_runner(
             x,
             start_case=start_case,
@@ -1524,7 +1572,10 @@ class NumbaModel(_BaseModel):
         )
         return self._wrap_as_dataframe(
             result_arrays.utility,
-            return_dataframe,
+            return_format,
+            start_case=start_case,
+            stop_case=stop_case,
+            step_case=step_case,
         )
 
     def quantity(
@@ -1865,6 +1916,9 @@ class NumbaModel(_BaseModel):
     @property
     def dataset(self):
         """larch.Dataset : A source for data for the model"""
+        super().unmangle()
+        if self._dataset is None:
+            self.reflow_data_arrays()
         try:
             return self._dataset
         except AttributeError:
@@ -1872,7 +1926,7 @@ class NumbaModel(_BaseModel):
 
     @dataset.setter
     def dataset(self, dataset):
-        if dataset is self.dataset:
+        if dataset is self._dataset:
             return
         from xarray import Dataset as _Dataset
         if isinstance(dataset, Dataset):
@@ -1899,8 +1953,8 @@ class NumbaModel(_BaseModel):
 
     @property
     def data_as_possible(self):
-        if self.dataset is not None:
-            return self.dataset
+        if self._dataset is not None:
+            return self._dataset
         if self.dataframes is not None:
             return self.dataframes
         if self.datatree is not None:

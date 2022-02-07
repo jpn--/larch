@@ -12,10 +12,6 @@ execute:
   allow_errors: true
   timeout: 300 # 5 minutes per cell
 
-parse:
-  myst_substitutions:
-    idca: value
-
 # Define the name of the latex output file for PDF builds
 #latex:
 #  latex_documents:
@@ -83,6 +79,10 @@ sphinx:
     autodoc_default_options:
       show-inheritance: True
     add_module_names: False
+    napoleon_use_rtype: False
+    rst_epilog: |
+      .. |idca| replace:: :ref:`idca <idca>`
+      .. |idco| replace:: :ref:`idco <idco>`
     html_theme_options:
       home_page_in_toc: false
       search_bar_text: Search these docs...

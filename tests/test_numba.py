@@ -9,6 +9,7 @@ from larch.roles import P, X, PX
 from larch.model.persist_flags import PERSIST_UTILITY
 from larch.numba.model import NumbaModel
 from larch.numba import DataFrames, Dataset
+from larch.exceptions import MissingDataError
 from xarray import DataArray
 
 @fixture
@@ -75,6 +76,8 @@ def test_dataframes_mnl5(mtc):
         'tottime': -0.01862990704919887,
     }
 
+    m5.choice_ca_var = 'chose'
+    m5.availability_var = '_avail_'
     ll2 = m5.loglike2(beta_in1, return_series=True)
 
     q1_dll = {
@@ -92,7 +95,7 @@ def test_dataframes_mnl5(mtc):
         'tottime': -26556.303,
     }
 
-    assert -4930.3212890625 == approx(ll2.ll)
+    assert ll2.ll == approx(-4930.3212890625)
 
     for k in q1_dll:
         assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"
@@ -170,7 +173,7 @@ def test_dataframes_mnl5_co(mtc):
         'hhinc#6': -13866.567,
     }
 
-    assert -5594.70654296875 == approx(ll2.ll, rel=1e-5)
+    assert ll2.ll == approx(-5594.70654296875, rel=1e-5)
 
     for k in q1_dll:
         assert q1_dll[k] == approx(dict(ll2.dll)[k], rel=1e-5), f"{k} {q1_dll[k]} != {dict(ll2.dll)[k]}"

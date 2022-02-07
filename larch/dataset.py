@@ -145,6 +145,15 @@ class DataArray(_sharrow_DataArray):
     def ALTID(self, dim_name):
         self.attrs[_ALTID] = dim_name
 
+    @property
+    def alts_mapping(self):
+        """Dict[int,str] : Mapping of alternative codes to names"""
+        a = self.coords[self.ALTID]
+        if 'alt_names' in a.coords:
+            return dict(zip(a.values, a.coords['alt_names'].values))
+        else:
+            return dict(zip(a.values, a.values))
+
     def _repr_html_(self):
         html = super()._repr_html_()
         html = html.replace("sharrow.DataArray", "larch.DataArray")
@@ -233,7 +242,7 @@ class Dataset(_sharrow_Dataset):
         alternative names and (integer) codes or an array of codes.
     """
 
-    __slots__ = ()
+    __slots__ = ('_flow_library')
 
     def __new__(cls, *args, caseid=None, alts=None, **kwargs):
         import logging
@@ -262,6 +271,7 @@ class Dataset(_sharrow_Dataset):
         -------
         Dataset
         """
+        obj._flow_library = {}
         if caseid is not None:
             if caseid not in obj.dims:
                 raise ValueError(f"no dim named '{caseid}' to make into {_CASEID}")
@@ -365,6 +375,15 @@ class Dataset(_sharrow_Dataset):
         self.attrs[_ALTID] = dim_name
 
     @property
+    def alts_mapping(self):
+        """Dict[int,str] : Mapping of alternative codes to names"""
+        a = self.coords[self.ALTID]
+        if 'alt_names' in a.coords:
+            return dict(zip(a.values, a.coords['alt_names'].values))
+        else:
+            return dict(zip(a.values, a.values))
+
+    @property
     def n_cases(self):
         try:
             return self.dims[self.CASEID]
@@ -407,6 +426,32 @@ class Dataset(_sharrow_Dataset):
             a = self.attrs.get(_ALTID, None)
             result = DataArray(result, caseid=c, altid=a)
         return result
+
+    def get_expr(self, expression):
+        """
+        Access or evaluate an expression.
+
+        Parameters
+        ----------
+        expression : str
+
+        Returns
+        -------
+        DataArray
+        """
+        try:
+            result = self[expression]
+        except (KeyError, IndexError):
+            if expression in self._flow_library:
+                flow = self._flow_library[expression]
+            else:
+                flow = self.setup_flow({expression: expression})
+                self._flow_library[expression] = flow
+            if not flow.tree.root_dataset is self:
+                flow.tree = DataTree(main=self)
+            result = flow.load_dataarray().isel(expressions=0)
+        return result
+
 
     def to_arrays(self, graph, float_dtype=np.float64):
         from .numba.data_arrays import DataArrays
@@ -539,7 +584,7 @@ class Dataset(_sharrow_Dataset):
         else:
             obj = self.copy()
         for k in obj.variables:
-            if obj[k].dtype.kind in {'U', 'S'}:
+            if obj[k].dtype.kind in {'U', 'S', 'O'}:
                 continue
             if dim in obj[k].dims:
                 if obj[k].std(dim=dim).max() < 1e-10:

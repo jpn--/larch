@@ -54,6 +54,7 @@ class ExcelWriter(_XlsxWriter):
             hide_log=True,
             output_renderer=None,
             embed_model=True,
+            engine_kwargs=None,
             **kwargs,
     ):
 
@@ -62,7 +63,8 @@ class ExcelWriter(_XlsxWriter):
         options = kwargs.pop('workbook_options', {})
         if 'nan_inf_to_errors' not in options:
             options['nan_inf_to_errors'] = True
-        super().__init__(*args, engine=_engine, options=options, engine_kwargs=kwargs)
+        kwargs['options'] = options
+        super().__init__(*args, engine=_engine, engine_kwargs=kwargs)
         self.book.set_size(1600, 1200)
         self.head_fmt = self.book.add_format({'bold': True, 'font_size':14})
         self.ital_fmt = self.book.add_format({'italic': True, 'font_size':12})
