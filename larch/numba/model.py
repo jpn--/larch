@@ -1915,7 +1915,7 @@ class NumbaModel(_BaseModel):
 
     @property
     def dataset(self):
-        """larch.Dataset : A source for data for the model"""
+        """larch.Dataset : Data arrays as loaded for model computation."""
         super().unmangle()
         if self._dataset is None:
             self.reflow_data_arrays()
