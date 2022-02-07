@@ -8,12 +8,12 @@ parts:
     maxdepth: 1
     chapters:
     - file: installation
-    - file: user-guide/data-fundamentals
-      title: Data Fundamentals
     - file: user-guide/choice-models
       sections:
+        - file: user-guide/data-fundamentals
+          title: Data Fundamentals
         - file: user-guide/linear-funcs
-    - file: user-guide/machine-learning
+        - file: user-guide/machine-learning
     - file: bibliography
 
   - caption: API Reference
