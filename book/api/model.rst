@@ -57,6 +57,14 @@ Utility Definition
     Model.quantity_ca
 
 
+Parameters
+----------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.pf
+
 Estimation Results
 ------------------
 
@@ -70,6 +78,53 @@ Estimation Results
 Methods
 =======
 
+Setting Parameters
+------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.set_values
+    Model.lock_value
+    Model.set_cap
+
+
+Parameter Estimation
+--------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.maximize_loglike
+    Model.calculate_parameter_covariance
+
+
+Model Fitness
+-------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.loglike_nil
+    Model.loglike_null
+    Model.rho_sq_nil
+    Model.rho_sq_null
+
+
+Reporting
+---------
+
+.. autosummary::
+    :toctree: generated/
+
+    Model.parameter_summary
+    Model.estimation_statistics
+    Model.to_xlsx
+
+
+Ancillary Computation
+---------------------
+
 .. autosummary::
     :toctree: generated/
 
@@ -77,18 +132,10 @@ Methods
     Model.check_d_loglike
     Model.d_loglike
     Model.d_loglike_casewise
-    Model.estimation_statistics
     Model.loglike
     Model.loglike_casewise
-    Model.loglike_nil
-    Model.loglike_null
     Model.logsums
-    Model.maximize_loglike
     Model.probability
     Model.quantity
-    Model.rho_sq_nil
-    Model.rho_sq_null
-    Model.set_values
     Model.total_weight
-    Model.to_xlsx
     Model.utility
