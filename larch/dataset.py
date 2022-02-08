@@ -543,6 +543,21 @@ class Dataset(_sharrow_Dataset):
         else:
             ca = np.empty( (self.n_cases, self.n_alts, 0), dtype=float_dtype)
 
+        if 'ce_data' in self:
+            ce_data = self['ce_data'].values.astype(float_dtype)
+        else:
+            ce_data = None
+
+        if 'ce_altidx' in self:
+            ce_altidx = self['ce_altidx'].values
+        else:
+            ce_altidx = None
+
+        if 'ce_caseptr' in self:
+            ce_caseptr = self['ce_caseptr'].values
+        else:
+            ce_caseptr = None
+
         if 'wt' in self:
             wt = self['wt'].values.astype(float_dtype)
         else:
@@ -559,7 +574,7 @@ class Dataset(_sharrow_Dataset):
             av = np.ones([self.n_cases, len(graph)], dtype=np.int8)
 
         return DataArrays(
-            ch, av, wt, co, ca
+            ch, av, wt, co, ca, ce_data, ce_altidx, ce_caseptr
         )
 
     def validate_format(self):

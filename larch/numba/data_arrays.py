@@ -15,7 +15,7 @@ class _case_slice:
     def __getitem__(self, idx):
         return type(self.parent)(
             **{
-                k: getattr(self.parent, k)[idx] if len(k)==2 else getattr(self.parent, k)
+                k: getattr(self.parent, k)[idx] if (len(k)==2 or k=='ce_caseptr') else getattr(self.parent, k)
                 for k in self.parent._fields
             }
         )
@@ -28,13 +28,11 @@ class DataArrays(NamedTuple):
     co: np.ndarray
     ca: np.ndarray
     ce_data: np.ndarray = None
-    ce_ind: np.ndarray = None
-    ce_ptr: np.ndarray = None
-    # alt_codes: np.ndarray = None
-    # alt_names: np.ndarray = None
-    #
-    # cs = _case_slice()
-    #
+    ce_altidx: np.ndarray = None
+    ce_caseptr: np.ndarray = None
+
+    cs = _case_slice()
+
     # @property
     # def alternatives(self):
     #     if self.alt_codes is not None:
