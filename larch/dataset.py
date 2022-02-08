@@ -524,7 +524,7 @@ class Dataset(_sharrow_Dataset):
                     flow = self.setup_flow({expression: expression})
                     self._flow_library[expression] = flow
             if not flow.tree.root_dataset is self:
-                flow.tree = DataTree(main=self)
+                flow.tree = self.as_tree()
             result = flow.load_dataarray().isel(expressions=0)
         return result
 
@@ -856,6 +856,7 @@ class Dataset(_sharrow_Dataset):
             np.where(np.diff(ds.coords['case_idx'], prepend=np.nan, append=np.nan))[0],
             dims='case_ptr',
         )
+        ds.attrs['EXCLUDE_DIMS'] = ('case_ptr',)
         if crack:
             ds = ds.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
@@ -890,6 +891,29 @@ class Dataset(_sharrow_Dataset):
         ds = ds.set_dtypes(df)
         return ds
 
+    def as_tree(self, label='main', exclude_dims=()):
+        """
+        Convert this Dataset to a single-node DataTree.
+
+        Parameters
+        ----------
+        label : str, default 'main'
+            Name to use for the root node in the tree.
+        exclude_dims : Tuple[str], optional
+            Exclude these dimensions, in addition to any
+            dimensions listed in the `EXCLUDE_DIMS` attribute.
+
+        Returns
+        -------
+        DataTree
+        """
+        exclude = tuple(exclude_dims) + tuple(self.attrs.get('EXCLUDE_DIMS', ()))
+        if exclude:
+            obj = self.drop_dims([i for i in exclude if i in self.dims])
+        else:
+            obj = self
+        return DataTree(**{label: obj})
+
     def setup_flow(self, *args, **kwargs):
         """
         Set up a new Flow for analysis using the structure of this DataTree.
@@ -902,7 +926,7 @@ class Dataset(_sharrow_Dataset):
         -------
         Flow
         """
-        return DataTree(main=self).setup_flow(*args, **kwargs)
+        return self.as_tree().setup_flow(*args, **kwargs)
 
     def caseids(self):
         """
@@ -940,7 +964,14 @@ class DataTree(_sharrow_DataTree):
             force_digitization=force_digitization,
             **kwargs,
         )
-        self.dim_order = (self.CASEID, self.ALTID)
+        dim_order = []
+        c = self.root_dataset.attrs.get(_CASEID, None)
+        if c is not None:
+            dim_order.append(c)
+        a = self.root_dataset.attrs.get(_ALTID, None)
+        if a is not None:
+            dim_order.append(a)
+        self.dim_order = tuple(dim_order)
 
     @property
     def CASEID(self):
