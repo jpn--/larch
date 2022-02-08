@@ -16,7 +16,7 @@ def rip():
     os.makedirs(generator_dest, exist_ok=True)
     print(f"{generator_dest=}")
 
-    with open(os.path.join(generator_dest, ".gitignore"), 'wt') as f:
+    with open(os.path.join(generator_dest, ".gitignore"), 'wt', encoding="utf8") as f:
         f.write(".gitignore\n*.py")
 
     import_stmts = []
@@ -28,9 +28,9 @@ def rip():
             example = os.path.basename(examplefile).replace(".ipynb", "")
             example = example.replace("-","_")
             print(f"  {example=}")
-            with open(os.path.join(generator_dest, f"_{example}.py"), 'wt') as f:
+            with open(os.path.join(generator_dest, f"_{example}.py"), 'wt', encoding="utf8") as f:
                 f.write("def example(extract='m', estimate=False):\n")
-                with open(examplefile) as s:
+                with open(examplefile, encoding="utf8") as s:
                     sourcefilecontent = s.read()
                 y = json.loads(sourcefilecontent)
                 source1 = []
@@ -80,7 +80,7 @@ def rip():
             import_stmts.append(f"from ._{example} import example as _{example}")
             assign_stmts.append(f"ex[{ex_n!r}] = _{example}")
 
-    with open(os.path.join(generator_dest, "__init__.py"), 'wt') as gen:
+    with open(os.path.join(generator_dest, "__init__.py"), 'wt', encoding="utf8") as gen:
         gen.write(textwrap.dedent("""
         # Example code extracted automatically from Larch documentation.
         # Do not edit these files manually.
