@@ -19,6 +19,7 @@ requirements:
     - pip
     - {{ compiler('c') }}
     - llvm-openmp  # [osx]
+    - numba
 
   host:
     - python {{ python }}
