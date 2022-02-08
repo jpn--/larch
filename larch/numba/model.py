@@ -949,7 +949,7 @@ class NumbaModel(_BaseModel):
         if datatree is not None:
             from .data_arrays import prepare_data
             self.dataset, self.dataflows = prepare_data(
-                datashare=datatree,
+                datasource=datatree,
                 request=self,
                 float_dtype=self.float_dtype,
                 cache_dir=datatree.cache_dir,

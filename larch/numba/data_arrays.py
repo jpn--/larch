@@ -68,7 +68,7 @@ def to_dataset(dataframes):
 
 
 def prepare_data(
-        datashare,
+        datasource,
         request,
         float_dtype=None,
         cache_dir=None,
@@ -78,8 +78,8 @@ def prepare_data(
 
     Parameters
     ----------
-    datashare : DataTree
-    request
+    datasource : DataTree or Dataset
+    request : Mapping or Model
     float_dtype
     cache_dir
     flows
@@ -92,12 +92,12 @@ def prepare_data(
     from ..dataset import Dataset, DataArray, DataTree
     if float_dtype is None:
         float_dtype = np.float64
-    log.debug(f"building dataset from datashare coords: {datashare.coords}")
+    log.debug(f"building dataset from datashare coords: {datasource.coords}")
     model_dataset = Dataset(
-        coords=datashare.coords,
+        coords=datasource.coords,
     )
-    model_dataset.CASEID = datashare.CASEID
-    model_dataset.ALTID = datashare.ALTID
+    model_dataset.CASEID = datasource.CASEID
+    model_dataset.ALTID = datasource.ALTID
 
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
@@ -111,23 +111,28 @@ def prepare_data(
     if flows is None:
         flows = {}
 
-    if isinstance(datashare, (DataTree, )):
+    if isinstance(datasource, (DataTree,)):
         log.debug(f"adopting existing DataTree")
-        if not datashare.relationships_are_digitized:
-            datashare.digitize_relationships(inplace=True)
-        shared_data_ca = datashare
-        shared_data_co = datashare.drop_dims(datashare.ALTID, ignore_missing_dims=True)
+        if not datasource.relationships_are_digitized:
+            datasource.digitize_relationships(inplace=True)
+        datatree = datasource
+        datatree_co = datatree.drop_dims(datasource.ALTID, ignore_missing_dims=True)
+    elif isinstance(datasource, Dataset):
+        datatree = datasource.as_tree()
+        if not datatree.relationships_are_digitized:
+            datatree.digitize_relationships(inplace=True)
+        datatree_co = datatree.drop_dims(datasource.ALTID, ignore_missing_dims=True)
     else:
         log.debug(f"initializing new DataTree")
-        shared_data_ca = DataTree(main=datashare)
-        shared_data_ca.digitize_relationships(inplace=True)
-        shared_data_co = shared_data_ca.drop_dims(shared_data_ca.ALTID, ignore_missing_dims=True)
+        datatree = DataTree(main=datasource)
+        datatree.digitize_relationships(inplace=True)
+        datatree_co = datatree.drop_dims(datatree.ALTID, ignore_missing_dims=True)
 
     if 'co' in request:
         log.debug(f"requested co data: {request['co']}")
         model_dataset, flows['co'] = _prep_co(
             model_dataset,
-            shared_data_co,
+            datatree_co,
             request['co'],
             tag='co',
             dtype=float_dtype,
@@ -138,7 +143,7 @@ def prepare_data(
         log.debug(f"requested ca data: {request['ca']}")
         model_dataset, flows['ca'] = _prep_ca(
             model_dataset,
-            shared_data_ca,
+            datatree,
             request['ca'],
             tag='ca',
             dtype=float_dtype,
@@ -150,7 +155,7 @@ def prepare_data(
         log.debug(f"requested choice_ca data: {request['choice_ca']}")
         model_dataset, flows['choice_ca'] = _prep_ca(
             model_dataset,
-            shared_data_ca,
+            datatree,
             [request['choice_ca']],
             tag='ch',
             preserve_vars=False,
@@ -160,33 +165,33 @@ def prepare_data(
         )
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
-        choicecodes = datashare[request['choice_co_code']]
+        choicecodes = datasource[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
-            dims=[shared_data_ca.CASEID, shared_data_ca.ALTID],
+            dims=[datatree.CASEID, datatree.ALTID],
             coords={
-                shared_data_ca.CASEID: model_dataset.coords[shared_data_ca.CASEID],
-                shared_data_ca.ALTID: model_dataset.coords[shared_data_ca.ALTID],
+                datatree.CASEID: model_dataset.coords[datatree.CASEID],
+                datatree.ALTID: model_dataset.coords[datatree.ALTID],
             },
             name='ch',
         )
-        for i,a in enumerate(model_dataset.coords[shared_data_ca.ALTID]):
+        for i,a in enumerate(model_dataset.coords[datatree.ALTID]):
             da_ch[:, i] = (choicecodes == a)
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_co' in request:
         log.debug(f"requested choice_co_vars data: {request['choice_co']}")
         da_ch = DataArray(
             float_dtype(0),
-            dims=[shared_data_ca.CASEID, shared_data_ca.ALTID],
+            dims=[datatree.CASEID, datatree.ALTID],
             coords={
-                shared_data_ca.CASEID: model_dataset.coords[shared_data_ca.CASEID],
-                shared_data_ca.ALTID: model_dataset.coords[shared_data_ca.ALTID],
+                datatree.CASEID: model_dataset.coords[datatree.CASEID],
+                datatree.ALTID: model_dataset.coords[datatree.ALTID],
             },
             name='ch',
         )
         for i,a in enumerate(model_dataset.alts_mapping):
             choice_expr = request['choice_co'][a]
-            da_ch[:, i] = shared_data_co.get_expr(choice_expr).values
+            da_ch[:, i] = datatree_co.get_expr(choice_expr).values
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_any' in request:
         log.debug(f"requested choice_any data: {request['choice_any']}")
@@ -196,7 +201,7 @@ def prepare_data(
         log.debug(f"requested weight_co data: {request['weight_co']}")
         model_dataset, flows['weight_co'] = _prep_co(
             model_dataset,
-            shared_data_co,
+            datatree_co,
             [request['weight_co']],
             tag='wt',
             preserve_vars=False,
@@ -209,7 +214,7 @@ def prepare_data(
         log.debug(f"requested avail_ca data: {request['avail_ca']}")
         model_dataset, flows['avail_ca'] = _prep_ca(
             model_dataset,
-            shared_data_ca,
+            datatree,
             [request['avail_ca']],
             tag='av',
             preserve_vars=False,
@@ -221,16 +226,16 @@ def prepare_data(
         log.debug(f"requested avail_co data: {request['avail_co']}")
         av_co_expressions = {
             a: request['avail_co'].get(a, '0')
-            for a in model_dataset.coords[shared_data_ca.ALTID].values
+            for a in model_dataset.coords[datatree.ALTID].values
         }
         model_dataset, flows['avail_co'] = _prep_co(
             model_dataset,
-            shared_data_co,
+            datatree_co,
             av_co_expressions,
             tag='av',
             preserve_vars=False,
             dtype=np.int8,
-            dim_name=shared_data_ca.ALTID,
+            dim_name=datatree.ALTID,
             cache_dir=cache_dir,
             flow=flows.get('avail_co'),
         )
