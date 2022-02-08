@@ -19,19 +19,20 @@ requirements:
     - pip
     - {{ compiler('c') }}
     - llvm-openmp  # [osx]
+    - {{ pin_compatible('numpy', upper_bound='1.22') }}
 
   host:
     - python {{ python }}
     - pip
     - llvm-openmp  # [osx]
     - cython >=0.29
-    - {{ pin_compatible('numpy') }}
+    - {{ pin_compatible('numpy', upper_bound='1.22') }}
 
   run:
     - python {{ python }}
     - ipython >=7.1
     - llvm-openmp  # [osx]
-    - {{ pin_compatible('numpy') }}
+    - {{ pin_compatible('numpy', upper_bound='1.22') }}
     - scipy >=1.1
     - pandas >=0.24
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
