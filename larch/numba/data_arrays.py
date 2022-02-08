@@ -27,20 +27,23 @@ class DataArrays(NamedTuple):
     wt: np.ndarray
     co: np.ndarray
     ca: np.ndarray
-    alt_codes: np.ndarray = None
-    alt_names: np.ndarray = None
-
-    cs = _case_slice()
-
-    @property
-    def alternatives(self):
-        if self.alt_codes is not None:
-            if self.alt_names is not None:
-                return dict(zip(self.alt_codes, self.alt_names))
-            else:
-                return {i:str(i) for i in self.alt_codes}
-        else:
-            raise ValueError("alt_codes not defined")
+    ce_data: np.ndarray = None
+    ce_ind: np.ndarray = None
+    ce_ptr: np.ndarray = None
+    # alt_codes: np.ndarray = None
+    # alt_names: np.ndarray = None
+    #
+    # cs = _case_slice()
+    #
+    # @property
+    # def alternatives(self):
+    #     if self.alt_codes is not None:
+    #         if self.alt_names is not None:
+    #             return dict(zip(self.alt_codes, self.alt_names))
+    #         else:
+    #             return {i:str(i) for i in self.alt_codes}
+    #     else:
+    #         raise ValueError("alt_codes not defined")
 
 
 def to_dataset(dataframes):
