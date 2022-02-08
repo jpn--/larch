@@ -35,7 +35,7 @@ jobs:
       mkdir ~/conda-bld
       conda config --set anaconda_upload no
       export CONDA_BLD_PATH=~/conda-bld
-      conda mambabuild conda-recipe -c conda-forge
+      conda mambabuild conda-recipe -c conda-forge -c nodefaults
     displayName: Conda Build with mambabuild
 
 # - job:
@@ -104,6 +104,5 @@ jobs:
 
   - script: |
       call activate myEnvironment
-      conda mambabuild conda-recipe -c conda-forge
+      conda mambabuild conda-recipe -c conda-forge -c nodefaults
     displayName: Conda build
-

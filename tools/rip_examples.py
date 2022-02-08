@@ -1,7 +1,7 @@
 
 import os
 import glob
-import yaml
+import json
 import textwrap
 
 def rip():
@@ -32,7 +32,7 @@ def rip():
                 f.write("def example(extract='m', estimate=False):\n")
                 with open(examplefile) as s:
                     sourcefilecontent = s.read()
-                y = yaml.safe_load(sourcefilecontent)
+                y = json.loads(sourcefilecontent)
                 source1 = []
                 source2 = []
                 trip = False
@@ -52,18 +52,6 @@ def rip():
                             source1.append(s)
                 sourcecode1 = "\n\n".join(source1)
                 sourcecode2 = "\n\n".join(source2)
-                # sourcecode = "\n\n".join(
-                #     [
-                #         "".join(i['source'])
-                #         for i in y['cells']
-                #         if (
-                #             i['cell_type'] == 'code'
-                #             and not i['metadata'].get('doc_only', False)
-                #             and not i['metadata'].get('remove_cell', False)
-                #             and 'remove_cell' not in i.get('metadata', {}).get('tags', [])
-                #         )
-                #     ]
-                # )
                 f.write(textwrap.indent(sourcecode1, "    "))
                 mid = """
                 if not estimate:

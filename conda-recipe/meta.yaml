@@ -57,6 +57,8 @@ requirements:
     - openpyxl
     - pydot
     - pyarrow
+    - numba
+    - xarray
 
 test:
   source_files:
@@ -79,8 +81,6 @@ test:
     - sphinxcontrib-websupport
     - nbsphinx
     - geopandas
-    - numba
-    - xarray
     - nbmake
 
 about:
