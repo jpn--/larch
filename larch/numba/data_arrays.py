@@ -173,6 +173,7 @@ def prepare_data(
         log.debug(f"requested choice_ca data: {request['choice_ca']}")
         casealt_dim = datatree.root_dataset.attrs.get(_CASEALT)
         if casealt_dim is None:
+            log.debug(f"  loading choice_ca data from idca")
             model_dataset, flows['choice_ca'] = _prep_ca(
                 model_dataset,
                 datatree,
@@ -184,6 +185,7 @@ def prepare_data(
                 flow=flows.get('choice_ca'),
             )
         else:
+            log.debug(f"  loading choice_ca data from idce")
             model_dataset, flows['choice_ce'] = _prep_ce(
                 model_dataset,
                 datatree,
