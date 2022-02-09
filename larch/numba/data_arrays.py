@@ -3,8 +3,9 @@ import pandas as pd
 import xarray as xr
 import logging
 from typing import NamedTuple
+import numba as nb
 
-from ..dim_names import CASEID as _CASEID, ALTID as _ALTID
+from ..dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
 
 class _case_slice:
 
@@ -13,12 +14,14 @@ class _case_slice:
         return self
 
     def __getitem__(self, idx):
-        return type(self.parent)(
-            **{
-                k: getattr(self.parent, k)[idx] if (len(k)==2 or k=='ce_caseptr') else getattr(self.parent, k)
-                for k in self.parent._fields
-            }
-        )
+        kwds = {}
+        for k in self.parent._fields:
+            attribute = getattr(self.parent, k)
+            if attribute is not None and (len(k) == 2 or k == 'ce_caseptr'):
+                kwds[k] = attribute[idx]
+            else:
+                kwds[k] = attribute
+        return type(self.parent)(**kwds)
 
 
 class DataArrays(NamedTuple):
@@ -75,18 +78,23 @@ def prepare_data(
         flows=None,
 ):
     """
+    Load data from a DataTree into a computationally-formatted Dataset.
 
     Parameters
     ----------
     datasource : DataTree or Dataset
     request : Mapping or Model
-    float_dtype
-    cache_dir
-    flows
+    float_dtype : dtype, optional
+    cache_dir : Path-like, optional
+        Directory to cache sharrow flows.
+    flows : dict, optional
+        Collection of previously prepared flows.
 
     Returns
     -------
-
+    model_dataset : Dataset
+        Ready for computation.
+    flows : dict
     """
     log = logging.getLogger("Larch")
     from ..dataset import Dataset, DataArray, DataTree
@@ -141,28 +149,69 @@ def prepare_data(
         )
     if 'ca' in request:
         log.debug(f"requested ca data: {request['ca']}")
-        model_dataset, flows['ca'] = _prep_ca(
-            model_dataset,
-            datatree,
-            request['ca'],
-            tag='ca',
-            dtype=float_dtype,
-            cache_dir=cache_dir,
-            flow=flows.get('ca'),
-        )
-
+        casealt_dim = datatree.root_dataset.attrs.get(_CASEALT)
+        if casealt_dim is None:
+            model_dataset, flows['ca'] = _prep_ca(
+                model_dataset,
+                datatree,
+                request['ca'],
+                tag='ca',
+                dtype=float_dtype,
+                cache_dir=cache_dir,
+                flow=flows.get('ca'),
+            )
+        else:
+            model_dataset, flows['ce'] = _prep_ce(
+                model_dataset,
+                datatree,
+                request['ca'],
+                dtype=float_dtype,
+                cache_dir=cache_dir,
+                flow=flows.get('ce'),
+            )
     if 'choice_ca' in request:
         log.debug(f"requested choice_ca data: {request['choice_ca']}")
-        model_dataset, flows['choice_ca'] = _prep_ca(
-            model_dataset,
-            datatree,
-            [request['choice_ca']],
-            tag='ch',
-            preserve_vars=False,
-            dtype=float_dtype,
-            cache_dir=cache_dir,
-            flow=flows.get('choice_ca'),
-        )
+        casealt_dim = datatree.root_dataset.attrs.get(_CASEALT)
+        if casealt_dim is None:
+            model_dataset, flows['choice_ca'] = _prep_ca(
+                model_dataset,
+                datatree,
+                [request['choice_ca']],
+                tag='ch',
+                preserve_vars=False,
+                dtype=float_dtype,
+                cache_dir=cache_dir,
+                flow=flows.get('choice_ca'),
+            )
+        else:
+            model_dataset, flows['choice_ce'] = _prep_ce(
+                model_dataset,
+                datatree,
+                [request['choice_ca']],
+                v_tag='choice_ca',
+                s_tag='choice_ce',
+                preserve_vars=False,
+                dtype=float_dtype,
+                cache_dir=cache_dir,
+                flow=flows.get('choice_ce'),
+                attach_indexes=False,
+            )
+            da_ch = DataArray(
+                ce_to_dense(
+                    model_dataset['choice_ce_data'].values,
+                    model_dataset[model_dataset.ALTIDX].values,
+                    model_dataset[model_dataset.CASEPTR].values,
+                    datatree.n_alts
+                ),
+                dims=[datatree.CASEID, datatree.ALTID],
+                coords={
+                    datatree.CASEID: model_dataset.coords[datatree.CASEID],
+                    datatree.ALTID: model_dataset.coords[datatree.ALTID],
+                },
+                name='ch',
+            )
+            model_dataset = model_dataset.drop_vars(['choice_ce_data'])
+            model_dataset['ch'] = da_ch
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
         choicecodes = datasource[request['choice_co_code']]
@@ -212,16 +261,62 @@ def prepare_data(
 
     if 'avail_ca' in request:
         log.debug(f"requested avail_ca data: {request['avail_ca']}")
-        model_dataset, flows['avail_ca'] = _prep_ca(
-            model_dataset,
-            datatree,
-            [request['avail_ca']],
-            tag='av',
-            preserve_vars=False,
-            dtype=np.int8,
-            cache_dir=cache_dir,
-            flow=flows.get('avail_ca'),
-        )
+        casealt_dim = datatree.root_dataset.attrs.get(_CASEALT)
+        if casealt_dim is None:
+            model_dataset, flows['avail_ca'] = _prep_ca(
+                model_dataset,
+                datatree,
+                [request['avail_ca']],
+                tag='av',
+                preserve_vars=False,
+                dtype=np.int8,
+                cache_dir=cache_dir,
+                flow=flows.get('avail_ca'),
+            )
+        else:
+            if request['avail_ca'] in {'1', 'True', '1.0'} and model_dataset.CASEPTR is not None and model_dataset.ALTIDX is not None:
+                da_av = DataArray(
+                    ce_bool_to_dense(
+                        model_dataset[model_dataset.ALTIDX].values,
+                        model_dataset[model_dataset.CASEPTR].values,
+                        datatree.n_alts,
+                    ),
+                    dims=[datatree.CASEID, datatree.ALTID],
+                    coords={
+                        datatree.CASEID: model_dataset.coords[datatree.CASEID],
+                        datatree.ALTID: model_dataset.coords[datatree.ALTID],
+                    },
+                    name='av',
+                )
+            else:
+                model_dataset, flows['avail_ce'] = _prep_ce(
+                    model_dataset,
+                    datatree,
+                    [request['avail_ca']],
+                    v_tag='avail_ca',
+                    s_tag='avail_ce',
+                    preserve_vars=False,
+                    dtype=np.int8,
+                    cache_dir=cache_dir,
+                    flow=flows.get('avail_ce'),
+                    attach_indexes=False,
+                )
+                da_av = DataArray(
+                    ce_to_dense(
+                        model_dataset['avail_ce_data'].values,
+                        model_dataset[model_dataset.ALTIDX].values,
+                        model_dataset[model_dataset.CASEPTR].values,
+                        datatree.n_alts,
+                    ),
+                    dims=[datatree.CASEID, datatree.ALTID],
+                    coords={
+                        datatree.CASEID: model_dataset.coords[datatree.CASEID],
+                        datatree.ALTID: model_dataset.coords[datatree.ALTID],
+                    },
+                    name='av',
+                )
+                model_dataset = model_dataset.drop_vars(['avail_ce_data'])
+            model_dataset['av'] = da_av
     if 'avail_co' in request:
         log.debug(f"requested avail_co data: {request['avail_co']}")
         av_co_expressions = {
@@ -312,6 +407,80 @@ def _prep_ca(
         )
     return model_dataset.merge(da), flow
 
+def _prep_ce(
+        model_dataset,
+        datatree,
+        vars_ca,
+        v_tag='ca',
+        s_tag='ce',
+        preserve_vars=True,
+        dtype=None,
+        cache_dir=None,
+        flow=None,
+        attach_indexes=True,
+):
+    from ..dataset import Dataset, DataArray, DataTree
+    assert isinstance(datatree, DataTree)
+    if not isinstance(vars_ca, dict):
+        vars_ca = {i:i for i in vars_ca}
+    flowname = flownamer(s_tag, vars_ca, datatree._hash_features())
+    if flow is None or flowname != flow.name:
+        flow = datatree.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
+    arr = flow.load(
+        datatree,
+        dtype=dtype,
+    )
+    casealt_dim = datatree.CASEALT
+    if preserve_vars or len(vars_ca)>1:
+        arr = arr.reshape(
+            model_dataset.dims.get(casealt_dim),
+            -1,
+        )
+        da = DataArray(
+            arr,
+            dims=[casealt_dim, f"var_{v_tag}"],
+            coords={
+                casealt_dim: model_dataset.coords[casealt_dim],
+                f"var_{v_tag}": list(vars_ca.keys()),
+            },
+            name=f"{s_tag}_data",
+        )
+    else:
+        arr = arr.reshape(-1)
+        da = DataArray(
+            arr,
+            dims=[casealt_dim],
+            coords={
+                casealt_dim: model_dataset.coords[casealt_dim],
+            },
+            name=f"{s_tag}_data",
+        )
+    model_dataset = model_dataset.merge(da)
+
+    if attach_indexes:
+        altidx = datatree.root_dataset.coords[datatree.ALTIDX]
+        altidx = altidx.drop_vars(list(altidx.coords))
+        model_dataset[f'{s_tag}_altidx'] = altidx
+        model_dataset.ALTIDX = f'{s_tag}_altidx'
+        model_dataset[f'{s_tag}_caseptr'] = DataArray(
+            np.lib.stride_tricks.sliding_window_view(datatree.root_dataset[datatree.CASEPTR], 2),
+            dims=(datatree.CASEID, "_two_"),
+        )
+        model_dataset.CASEPTR = f'{s_tag}_caseptr'
+        model_dataset = model_dataset.assign_coords({
+            datatree.CASEID: DataArray(
+                datatree.root_dataset.caseids(),
+                dims=(datatree.CASEID),
+            ),
+            datatree.ALTID: DataArray(
+                datatree.root_dataset.altids(),
+                dims=(datatree.ALTID),
+            ),
+        })
+    model_dataset.CASEID = datatree.CASEID
+    model_dataset.ALTID = datatree.ALTID
+    return model_dataset, flow
+
 
 def _prep_co(
         model_dataset,
@@ -365,3 +534,36 @@ def _prep_co(
             name=tag,
         )
     return model_dataset.merge(da), flow
+
+
+@nb.njit
+def ce_to_dense(ce_data, ce_altidx, ce_caseptr, n_alts):
+    if ce_caseptr.ndim == 2:
+        ce_caseptr1 = ce_caseptr[:,-1]
+    else:
+        ce_caseptr1 = ce_caseptr[1:]
+    shape = (ce_caseptr1.shape[0], n_alts, *ce_data.shape[1:])
+    out = np.zeros(shape, dtype=ce_data.dtype)
+    c = 0
+    for row in range(ce_data.shape[0]):
+        if row == ce_caseptr1[c]:
+            c += 1
+        a = ce_altidx[row]
+        out[c,a,...] = ce_data[row,...]
+    return out
+
+@nb.njit
+def ce_bool_to_dense(ce_altidx, ce_caseptr, n_alts):
+    if ce_caseptr.ndim == 2:
+        ce_caseptr1 = ce_caseptr[:,-1]
+    else:
+        ce_caseptr1 = ce_caseptr[1:]
+    shape = (ce_caseptr1.shape[0], n_alts)
+    out = np.zeros(shape, dtype=np.int8)
+    c = 0
+    for row in range(ce_altidx.shape[0]):
+        if row == ce_caseptr1[c]:
+            c += 1
+        a = ce_altidx[row]
+        out[c,a,...] = 1
+    return out

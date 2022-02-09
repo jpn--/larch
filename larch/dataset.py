@@ -39,7 +39,7 @@ except ImportError:
     _sharrow_DataArray = xr.DataArray
     _sharrow_DataTree = _noclass
 
-from .dim_names import CASEID as _CASEID, ALTID as _ALTID
+from .dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
 
 
 class DataArray(_sharrow_DataArray):
@@ -462,6 +462,36 @@ class Dataset(_sharrow_Dataset):
             return self.attrs['n_alts']
         raise ValueError('no n_alts set')
 
+    @property
+    def CASEALT(self):
+        """str : The _casealt_ dimension of this Dataset, if defined."""
+        result = self.attrs.get(_CASEALT, None)
+        return result
+
+    @CASEALT.setter
+    def CASEALT(self, dim_name):
+        self.attrs[_CASEALT] = dim_name
+
+    @property
+    def ALTIDX(self):
+        """str : The _alt_idx_ dimension of this Dataset, if defined."""
+        result = self.attrs.get(_ALTIDX, None)
+        return result
+
+    @ALTIDX.setter
+    def ALTIDX(self, dim_name):
+        self.attrs[_ALTIDX] = dim_name
+
+    @property
+    def CASEPTR(self):
+        """str : The _caseptr_ dimension of this Dataset, if defined."""
+        result = self.attrs.get(_CASEPTR, None)
+        return result
+
+    @CASEPTR.setter
+    def CASEPTR(self, dim_name):
+        self.attrs[_CASEPTR] = dim_name
+
     def _repr_html_(self):
         html = super()._repr_html_()
         html = html.replace("sharrow.Dataset", "larch.Dataset")
@@ -817,9 +847,9 @@ class Dataset(_sharrow_Dataset):
         return ds
 
     @classmethod
-    def from_idce(cls, df, crack=False, altnames=None, index_name='_casealt_'):
+    def from_idce(cls, df, crack=False, altnames=None, index_name=None, alt_index='alt_idx', case_index=None, case_pointer=None):
         """
-        Construct a Dataset from an idco-format DataFrame.
+        Construct a Dataset from a sparse idca-format DataFrame.
 
         Parameters
         ----------
@@ -834,8 +864,19 @@ class Dataset(_sharrow_Dataset):
             If given as a mapping, links alternative codes to names.
             An array or list of strings gives names for the alternatives,
             sorted in the same order as the codes.
-        index_name : str, default '_casealt_'
+        index_name : str, optional
             Name to apply to the sparse index.
+        alt_index : str, default 'alt_idx'
+            Add the alt index (position) for each sparse data row as a
+            coords array with this name.
+        case_index : str, optional
+            Add the case index (position) for each sparse data row as a
+            coords array with this name. If not given, this array is not
+            stored but it can still be reconstructed later from the case
+            pointers.
+        case_pointer : str, optional
+            Use this name for the case_ptr dimension, overriding the
+            default.
 
         Returns
         -------
@@ -847,16 +888,26 @@ class Dataset(_sharrow_Dataset):
         caseidname, altidname = df.index.names
         caseidname = caseidname or _CASEID
         altidname = altidname or _ALTID
+        index_name = index_name or _CASEALT
+        case_pointer = case_pointer or _CASEPTR
         ds = cls.from_dataframe(df.reset_index(drop=True).rename_axis(index=index_name))
-        ds.coords[caseidname] = xr.DataArray(df.index.get_level_values(0), dims=index_name, coords=ds.coords)
-        ds.coords[altidname] = xr.DataArray(df.index.get_level_values(1), dims=index_name, coords=ds.coords)
-        ds.coords['case_idx'] = xr.DataArray(df.index.codes[0], dims=index_name)
-        ds.coords['alt_idx'] = xr.DataArray(df.index.codes[1], dims=index_name)
-        ds.coords['case_ptr'] = xr.DataArray(
-            np.where(np.diff(ds.coords['case_idx'], prepend=np.nan, append=np.nan))[0],
-            dims='case_ptr',
+        ds.coords[caseidname] = xr.DataArray(df.index.levels[0], dims=caseidname)
+        ds.coords[altidname] = xr.DataArray(df.index.levels[1], dims=altidname)
+        if case_index is not None:
+            ds.coords[case_index] = xr.DataArray(df.index.codes[0], dims=index_name)
+        if alt_index is None:
+            raise ValueError('alt_index cannot be None')
+        ds.coords[alt_index] = xr.DataArray(df.index.codes[1], dims=index_name)
+        ds.coords[case_pointer] = xr.DataArray(
+            np.where(np.diff(df.index.codes[0], prepend=np.nan, append=np.nan))[0],
+            dims=case_pointer,
         )
-        ds.attrs['EXCLUDE_DIMS'] = ('case_ptr',)
+        ds.attrs['_exclude_dims_'] = (caseidname, altidname, case_pointer)
+        ds.attrs[_CASEID] = caseidname
+        ds.attrs[_ALTID] = altidname
+        ds.attrs[_CASEALT] = index_name
+        ds.attrs[_ALTIDX] = alt_index
+        ds.attrs[_CASEPTR] = case_pointer
         if crack:
             ds = ds.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
@@ -901,18 +952,19 @@ class Dataset(_sharrow_Dataset):
             Name to use for the root node in the tree.
         exclude_dims : Tuple[str], optional
             Exclude these dimensions, in addition to any
-            dimensions listed in the `EXCLUDE_DIMS` attribute.
+            dimensions listed in the `_exclude_dims_` attribute.
 
         Returns
         -------
         DataTree
         """
-        exclude = tuple(exclude_dims) + tuple(self.attrs.get('EXCLUDE_DIMS', ()))
-        if exclude:
-            obj = self.drop_dims([i for i in exclude if i in self.dims])
-        else:
-            obj = self
-        return DataTree(**{label: obj})
+        # exclude = tuple(exclude_dims) + tuple(self.attrs.get('_exclude_dims_', ()))
+        # if exclude:
+        #     obj = self.drop_dims([i for i in exclude if i in self.dims])
+        # else:
+        #     obj = self
+        tree = DataTree(**{label: self})
+        return tree
 
     def setup_flow(self, *args, **kwargs):
         """
@@ -937,6 +989,16 @@ class Dataset(_sharrow_Dataset):
         pd.Index
         """
         return self.indexes[self.CASEID]
+
+    def altids(self):
+        """
+        Access the altids coordinates as an index.
+
+        Returns
+        -------
+        pd.Index
+        """
+        return self.indexes[self.ALTID]
 
 
 class DataTree(_sharrow_DataTree):
@@ -989,6 +1051,24 @@ class DataTree(_sharrow_DataTree):
         if result is None:
             warnings.warn("no defined ALTID")
             return _ALTID
+        return result
+
+    @property
+    def CASEALT(self):
+        """str : The _casealt_ dimension of the root Dataset, if defined."""
+        result = self.root_dataset.attrs.get(_CASEALT, None)
+        return result
+
+    @property
+    def ALTIDX(self):
+        """str : The _alt_idx_ dimension of the root Dataset, if defined."""
+        result = self.root_dataset.attrs.get(_ALTIDX, None)
+        return result
+
+    @property
+    def CASEPTR(self):
+        """str : The _caseptr_ dimension of the root Dataset, if defined."""
+        result = self.root_dataset.attrs.get(_CASEPTR, None)
         return result
 
     @property
@@ -1048,6 +1128,85 @@ class DataTree(_sharrow_DataTree):
         pd.Index
         """
         return self.root_dataset.indexes[self.CASEID]
+
+    def altids(self):
+        """
+        Access the altids coordinates as an index.
+
+        Returns
+        -------
+        pd.Index
+        """
+        return self.root_dataset.indexes[self.ALTID]
+
+    def setup_flow(self, *args, **kwargs):
+        """
+        Set up a new Flow for analysis using the structure of this DataTree.
+
+        Parameters
+        ----------
+        definition_spec : Dict[str,str]
+            Gives the names and expressions that define the variables to
+            create in this new `Flow`.
+        cache_dir : Path-like, optional
+            A location to write out generated python and numba code. If not
+            provided, a unique temporary directory is created.
+        name : str, optional
+            The name of this Flow used for writing out cached files. If not
+            provided, a unique name is generated. If `cache_dir` is given,
+            be sure to avoid name conflicts with other flow's in the same
+            directory.
+        dtype : str, default "float32"
+            The name of the numpy dtype that will be used for the output.
+        boundscheck : bool, default False
+            If True, boundscheck enables bounds checking for array indices, and
+            out of bounds accesses will raise IndexError. The default is to not
+            do bounds checking, which is faster but can produce garbage results
+            or segfaults if there are problems, so try turning this on for
+            debugging if you are getting unexplained errors or crashes.
+        error_model : {'numpy', 'python'}, default 'numpy'
+            The error_model option controls the divide-by-zero behavior. Setting
+            it to ‘python’ causes divide-by-zero to raise exception like
+            CPython. Setting it to ‘numpy’ causes divide-by-zero to set the
+            result to +/-inf or nan.
+        nopython : bool, default True
+            Compile using numba's `nopython` mode.  Provided for debugging only,
+            as there's little point in turning this off for production code, as
+            all the speed benefits of sharrow will be lost.
+        fastmath : bool, default True
+            If true, fastmath enables the use of "fast" floating point transforms,
+            which can improve performance but can result in tiny distortions in
+            results.  See numba docs for details.
+        parallel : bool, default True
+            Enable or disable parallel computation for certain functions.
+        readme : str, optional
+            A string to inject as a comment at the top of the flow Python file.
+        flow_library : Mapping[str,Flow], optional
+            An in-memory cache of precompiled Flow objects.  Using this can result
+            in performance improvements when repeatedly using the same definitions.
+        extra_hash_data : Tuple[Hashable], optional
+            Additional data used for generating the flow hash.  Useful to prevent
+            conflicts when using a flow_library with multiple similar flows.
+        write_hash_audit : bool, default True
+            Writes a hash audit log into a comment in the flow Python file, for
+            debugging purposes.
+        hashing_level : int, default 1
+            Level of detail to write into flow hashes.  Increase detail to avoid
+            hash conflicts for similar flows.  Level 2 adds information about
+            names used in expressions and digital encodings to the flow hash,
+            which prevents conflicts but requires more pre-computation to generate
+            the hash.
+        dim_exclude : Collection[str], optional
+            Exclude these root dataset dimensions from this flow.
+
+        Returns
+        -------
+        Flow
+        """
+        if 'dim_exclude' not in kwargs:
+            if '_exclude_dims_' in self.root_dataset.attrs:
+                kwargs['dim_exclude'] = self.root_dataset.attrs['_exclude_dims_']
+        return super().setup_flow(*args, **kwargs)
 
 
 def merge(
