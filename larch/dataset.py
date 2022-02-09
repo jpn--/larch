@@ -576,19 +576,19 @@ class Dataset(_sharrow_Dataset):
         if 'ce_data' in self:
             ce_data = self['ce_data'].values.astype(float_dtype)
         else:
-            ce_data = None
+            ce_data = np.empty( (0, 0), dtype=float_dtype)
 
         if self.ALTIDX is not None:
             ce_altidx = self[self.ALTIDX].values
         else:
-            ce_altidx = None
+            ce_altidx = np.empty( (0), dtype=np.int16)
 
         if self.CASEPTR is not None:
             ce_caseptr = np.lib.stride_tricks.sliding_window_view(
                 self[self.CASEPTR].values, 2
             )
         else:
-            ce_caseptr = None
+            ce_caseptr = np.empty( (self.n_cases, 0), dtype=np.int16)
 
         if 'wt' in self:
             wt = self['wt'].values.astype(float_dtype)

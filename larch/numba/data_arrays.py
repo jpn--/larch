@@ -30,9 +30,9 @@ class DataArrays(NamedTuple):
     wt: np.ndarray
     co: np.ndarray
     ca: np.ndarray
-    ce_data: np.ndarray = None
-    ce_altidx: np.ndarray = None
-    ce_caseptr: np.ndarray = None
+    ce_data: np.ndarray
+    ce_altidx: np.ndarray
+    ce_caseptr: np.ndarray
 
     cs = _case_slice()
 

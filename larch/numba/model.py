@@ -5,6 +5,7 @@ import pandas as pd
 from numba import guvectorize, njit
 from numba import int8 as i8
 from numba import int32 as i32
+from numba import int64 as i64
 from numba import float32 as f32
 from numba import float64 as f64
 from numba import boolean
@@ -164,13 +165,14 @@ def utility_from_data_ca(
                 # skipped alts are unavail
                 utility_elem[j] = -np.inf
                 j += 1
-            j = array_ce_indices[row]
+            # j = array_ce_indices[row] # happens naturally
             for i in range(model_utility_ca_param.shape[0]):
                 _temp = array_ce_data[row, model_utility_ca_data[i]]
                 _temp *= model_utility_ca_param_scale[i]
                 utility_elem[j] += _temp * parameter_arr[model_utility_ca_param[i]]
                 if not holdfast_arr[model_utility_ca_param[i]]:
                     dutility_elem[j, model_utility_ca_param[i]] += _temp
+            j += 1
         while n_alts > j:
             # skipped alts are unavail
             utility_elem[j] = -np.inf
@@ -207,6 +209,8 @@ def _type_signature(sig, precision=32):
             result += (f32,) if precision == 32 else (f64,)
         elif s == "i":
             result += (i32[:],)
+        elif s == "j":
+            result += (i64[:],)
         elif s == "I":
             result += (i32[:,:],)
         elif s == "b":
@@ -616,7 +620,7 @@ def _numba_master(
 
 
 _numba_master_vectorized = guvectorize(
-    _type_signatures("fiii fii ifii I iii bf fbffF Fii b fffFff"),
+    _type_signatures("fiii fii ifii I iii bf fbffF Fij b fffFff"),
     _master_shape_signature,
     nopython=True,
     fastmath=True,
@@ -992,6 +996,9 @@ class NumbaModel(_BaseModel):
                 (_array_wt.reshape(-1)),
                 (_array_co),
                 (_array_ca),
+                np.zeros([0,_array_ca.shape[-1]], dtype=self.float_dtype),  # ce-data
+                np.zeros([0], dtype=np.int16),  # ce-indicies
+                np.zeros([1], dtype=np.int16),   # ce-indptr
             )
 
     def _rebuild_work_arrays(self, n_cases=None, n_nodes=None, n_params=None, on_missing_data='silent'):
@@ -1113,6 +1120,9 @@ class NumbaModel(_BaseModel):
                         self._data_arrays.wt,
                         self._data_arrays.co,
                         self._data_arrays.ca,
+                        np.zeros([0, self._data_arrays.ca.shape[-1]], dtype=self.float_dtype),  # ce-data
+                        np.zeros([0], dtype=np.int16),  # ce-indicies
+                        np.zeros([1], dtype=np.int16),  # ce-indptr
                     )
                 else:
                     raise MissingDataError('model.dataframes does not define data_ch')
@@ -1130,10 +1140,7 @@ class NumbaModel(_BaseModel):
             *self._fixed_arrays,
             self._frame.holdfast.to_numpy(),
             self.pvals.astype(self.float_dtype), # float input shape=[n_params]
-            *self._data_arrays.cs[caseslice][:5], # TODO fix when not using named tuple
-            np.zeros([0,self._data_arrays.ca.shape[-1]], dtype=self.float_dtype),  # ce-data
-            np.zeros([0], dtype=np.int16),  # ce-indicies
-            np.zeros([1], dtype=np.int16),   # ce-indptr
+            *self._data_arrays.cs[caseslice], # TODO fix when not using named tuple
         )
 
     def constraint_violation(
