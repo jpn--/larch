@@ -578,13 +578,15 @@ class Dataset(_sharrow_Dataset):
         else:
             ce_data = None
 
-        if 'ce_altidx' in self:
-            ce_altidx = self['ce_altidx'].values
+        if self.ALTIDX is not None:
+            ce_altidx = self[self.ALTIDX].values
         else:
             ce_altidx = None
 
-        if 'ce_caseptr' in self:
-            ce_caseptr = self['ce_caseptr'].values
+        if self.CASEPTR is not None:
+            ce_caseptr = np.lib.stride_tricks.sliding_window_view(
+                self[self.CASEPTR].values, 2
+            )
         else:
             ce_caseptr = None
 

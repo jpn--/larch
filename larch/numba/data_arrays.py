@@ -460,13 +460,12 @@ def _prep_ce(
     if attach_indexes:
         altidx = datatree.root_dataset.coords[datatree.ALTIDX]
         altidx = altidx.drop_vars(list(altidx.coords))
-        model_dataset[f'{s_tag}_altidx'] = altidx
-        model_dataset.ALTIDX = f'{s_tag}_altidx'
-        model_dataset[f'{s_tag}_caseptr'] = DataArray(
-            np.lib.stride_tricks.sliding_window_view(datatree.root_dataset[datatree.CASEPTR], 2),
-            dims=(datatree.CASEID, "_two_"),
-        )
-        model_dataset.CASEPTR = f'{s_tag}_caseptr'
+        model_dataset[datatree.ALTIDX] = altidx
+        model_dataset.ALTIDX = datatree.ALTIDX
+        caseptr = datatree.root_dataset[datatree.CASEPTR]
+        caseptr = caseptr.drop_vars(list(caseptr.coords))
+        model_dataset[datatree.CASEPTR] = caseptr
+        model_dataset.CASEPTR = datatree.CASEPTR
         model_dataset = model_dataset.assign_coords({
             datatree.CASEID: DataArray(
                 datatree.root_dataset.caseids(),
