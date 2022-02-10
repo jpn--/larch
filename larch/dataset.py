@@ -982,9 +982,14 @@ class Dataset(_sharrow_Dataset):
             case_index = case_ptr_to_indexes(self.dims[self.CASEALT], self[self.CASEPTR].values)
             obj = self.assign({'_case_index_': DataArray(case_index, dims=(self.CASEALT))})
             tree = DataTree(**{label: obj.drop_dims(self.CASEID)})
+            ds = obj.keep_dims(self.CASEID)
+            ds.attrs.pop('_exclude_dims_', None)
+            ds.attrs.pop('_caseptr_', None)
+            ds.attrs.pop('_casealt_', None)
+            ds.attrs.pop('_alt_idx_', None)
             tree.add_dataset(
                 'idcoVars',
-                obj.keep_dims(self.CASEID).assign_attrs({'_exclude_dims_':()}),
+                ds,
                 relationships=(
                     f"{label}._case_index_ -> idcoVars.{self.CASEID}"
                 )
@@ -1061,6 +1066,11 @@ class DataTree(_sharrow_DataTree):
         if a is not None:
             dim_order.append(a)
         self.dim_order = tuple(dim_order)
+
+    def idco_subtree(self):
+        if 'idcoVars' in self.subspaces:
+            return self.subspaces['idcoVars'].as_tree()
+        return self.drop_dims(self.ALTID, ignore_missing_dims=True)
 
     @property
     def CASEID(self):
@@ -1154,7 +1164,13 @@ class DataTree(_sharrow_DataTree):
         -------
         pd.Index
         """
-        return self.root_dataset.indexes[self.CASEID]
+        try:
+            return self.root_dataset.indexes[self.CASEID]
+        except KeyError:
+            for k, v in self.subspaces.items():
+                if self.CASEID in v.indexes:
+                    return v.indexes[self.CASEID]
+            raise
 
     def altids(self):
         """
@@ -1164,7 +1180,13 @@ class DataTree(_sharrow_DataTree):
         -------
         pd.Index
         """
-        return self.root_dataset.indexes[self.ALTID]
+        try:
+            return self.root_dataset.indexes[self.ALTID]
+        except KeyError:
+            for k, v in self.subspaces.items():
+                if self.ALTID in v.indexes:
+                    return v.indexes[self.ALTID]
+            raise
 
     def setup_flow(self, *args, **kwargs):
         """

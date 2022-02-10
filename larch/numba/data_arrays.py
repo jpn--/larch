@@ -104,6 +104,11 @@ def prepare_data(
     model_dataset = Dataset(
         coords=datasource.coords,
     )
+    try:
+        if 'idcoVars' in datasource.subspaces:
+            model_dataset.coords.update(datasource.subspaces['idcoVars'].coords)
+    except AttributeError:
+        pass
     model_dataset.CASEID = datasource.CASEID
     model_dataset.ALTID = datasource.ALTID
 
@@ -124,17 +129,17 @@ def prepare_data(
         if not datasource.relationships_are_digitized:
             datasource.digitize_relationships(inplace=True)
         datatree = datasource
-        datatree_co = datatree.drop_dims(datasource.ALTID, ignore_missing_dims=True)
+        datatree_co = datatree.idco_subtree()
     elif isinstance(datasource, Dataset):
         datatree = datasource.as_tree()
         if not datatree.relationships_are_digitized:
             datatree.digitize_relationships(inplace=True)
-        datatree_co = datatree.drop_dims(datasource.ALTID, ignore_missing_dims=True)
+        datatree_co = datatree.idco_subtree()
     else:
         log.debug(f"initializing new DataTree")
         datatree = DataTree(main=datasource)
         datatree.digitize_relationships(inplace=True)
-        datatree_co = datatree.drop_dims(datatree.ALTID, ignore_missing_dims=True)
+        datatree_co = datatree.idco_subtree()
 
     if 'co' in request:
         log.debug(f"requested co data: {request['co']}")
@@ -488,11 +493,11 @@ def _prep_ce(
         model_dataset.CASEPTR = datatree.CASEPTR
         model_dataset = model_dataset.assign_coords({
             datatree.CASEID: DataArray(
-                datatree.root_dataset.caseids(),
+                datatree.caseids(),
                 dims=(datatree.CASEID),
             ),
             datatree.ALTID: DataArray(
-                datatree.root_dataset.altids(),
+                datatree.altids(),
                 dims=(datatree.ALTID),
             ),
         })
