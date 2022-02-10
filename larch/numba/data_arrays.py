@@ -177,7 +177,7 @@ def prepare_data(
             model_dataset, flows['choice_ca'] = _prep_ca(
                 model_dataset,
                 datatree,
-                [request['choice_ca']],
+                request['choice_ca'],
                 tag='ch',
                 preserve_vars=False,
                 dtype=float_dtype,
@@ -189,7 +189,7 @@ def prepare_data(
             model_dataset, flows['choice_ce'] = _prep_ce(
                 model_dataset,
                 datatree,
-                [request['choice_ca']],
+                request['choice_ca'],
                 v_tag='choice_ca',
                 s_tag='choice_ce',
                 preserve_vars=False,
@@ -268,7 +268,7 @@ def prepare_data(
             model_dataset, flows['avail_ca'] = _prep_ca(
                 model_dataset,
                 datatree,
-                [request['avail_ca']],
+                request['avail_ca'],
                 tag='av',
                 preserve_vars=False,
                 dtype=np.int8,
@@ -294,7 +294,7 @@ def prepare_data(
                 model_dataset, flows['avail_ce'] = _prep_ce(
                     model_dataset,
                     datatree,
-                    [request['avail_ca']],
+                    request['avail_ca'],
                     v_tag='avail_ca',
                     s_tag='avail_ce',
                     preserve_vars=False,
@@ -366,11 +366,21 @@ def _prep_ca(
 ):
     from ..dataset import Dataset, DataArray, DataTree
     assert isinstance(shared_data_ca, DataTree)
+    if isinstance(vars_ca, str):
+        if not preserve_vars and vars_ca in shared_data_ca.root_dataset:
+            proposal = shared_data_ca.root_dataset[vars_ca]
+            if shared_data_ca.CASEID in proposal.dims and shared_data_ca.ALTID in proposal.dims:
+                proposal = proposal.drop(list(proposal.coords)).rename(tag)
+                return model_dataset.merge(proposal), flow
+    if isinstance(vars_ca, str):
+        vars_ca = {vars_ca: vars_ca}
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
     flowname = flownamer(tag, vars_ca, shared_data_ca._hash_features())
     if flow is None or flowname != flow.name:
         flow = shared_data_ca.setup_flow(vars_ca, cache_dir=cache_dir, name=flowname)
+    else:
+        logging
     arr = flow.load(
         shared_data_ca,
         dtype=dtype,
@@ -423,6 +433,14 @@ def _prep_ce(
 ):
     from ..dataset import Dataset, DataArray, DataTree
     assert isinstance(datatree, DataTree)
+    if isinstance(vars_ca, str):
+        if not preserve_vars and vars_ca in datatree.root_dataset:
+            proposal = datatree.root_dataset[vars_ca]
+            if datatree.CASEALT in proposal.dims:
+                proposal = proposal.drop(list(proposal.coords)).rename(f"{s_tag}_data")
+                return model_dataset.merge(proposal), flow
+    if isinstance(vars_ca, str):
+        vars_ca = {vars_ca: vars_ca}
     if not isinstance(vars_ca, dict):
         vars_ca = {i:i for i in vars_ca}
     flowname = flownamer(s_tag, vars_ca, datatree._hash_features())

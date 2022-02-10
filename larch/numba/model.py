@@ -1909,7 +1909,7 @@ class NumbaModel(_BaseModel):
             self._datatree = tree
             self.mangle()
         elif isinstance(tree, Dataset):
-            self._datatree = DataTree(main=tree)
+            self._datatree = tree.as_tree()
             self.mangle()
         else:
             try:

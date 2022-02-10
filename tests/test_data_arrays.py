@@ -12,7 +12,7 @@ def test_weighted():
     ds = lxd.to_dataset(m.dataservice)
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
+    assert sorted(y.coords.keys()) == sorted([CASEID, 'alt_names', ALTID, 'var_co', 'var_ca'])
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
     assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
@@ -30,7 +30,7 @@ def test_choice_code():
     )
     y, flows = lxd.prepare_data(ds, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
+    assert sorted(y.coords.keys()) == sorted([CASEID, 'alt_names', ALTID, 'var_co', 'var_ca'])
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
     assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))
@@ -44,7 +44,7 @@ def test_shared_data():
     pool = lx.DataTree(base=ds)
     y, flows = lxd.prepare_data(pool, m)
     assert isinstance(y, sh.Dataset)
-    assert list(y.coords.keys()) == [CASEID, 'alt_names', ALTID, 'var_co', 'var_ca']
+    assert sorted(y.coords.keys()) == sorted([CASEID, 'alt_names', ALTID, 'var_co', 'var_ca'])
     assert list(y.keys()) == ['co', 'ca', 'ch', 'wt', 'av']
     assert y.dims == {CASEID: 5029, ALTID: 6, 'var_co': 1, 'var_ca': 2}
     assert y.wt.values[:3] == approx(np.array([142.5, 117.5, 112.5], dtype=np.float32))

@@ -3,6 +3,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import xarray as xr
+import numba as nb
 import pathlib
 from collections.abc import Mapping
 from xarray.core import dtypes
@@ -40,7 +41,6 @@ except ImportError:
     _sharrow_DataTree = _noclass
 
 from .dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
-
 
 class DataArray(_sharrow_DataArray):
 
@@ -686,7 +686,7 @@ class Dataset(_sharrow_Dataset):
         Dissolve dimension on variables where it has no variance.
 
         This method is convenient to convert variables that have
-        been loaded as |idca| format into |idco| format where
+        been loaded as |idca| or |idce| format into |idco| format where
         appropriate.
 
         Parameters
@@ -717,6 +717,10 @@ class Dataset(_sharrow_Dataset):
                 else:
                     if dissolve:
                         obj[k] = obj[k].min(dim=dim)
+            elif obj[k].dims == (self.CASEALT,):
+                proposal, flag = ce_dissolve_zero_variance(obj[k].values, obj[obj.CASEPTR].values)
+                if flag == 0:
+                    obj = obj.assign({k: DataArray(proposal, dims=(obj.CASEID))})
         return obj
 
     def set_dtypes(self, dtypes, inplace=False, on_error='warn'):
@@ -1442,3 +1446,42 @@ def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
                 result.iloc[:-1,j] = result.iloc[:-1,j].astype(int)
 
     return result
+
+
+
+@nb.njit
+def ce_dissolve_zero_variance(ce_data, ce_caseptr):
+    """
+
+    Parameters
+    ----------
+    ce_data : array-like, shape [n_casealts] one-dim only
+    ce_altidx
+    ce_caseptr
+    n_alts
+
+    Returns
+    -------
+    out : ndarray
+    flag : int
+        1 if variance was detected, 0 if no variance was found and
+        the `out` array is valid.
+    """
+    failed = 0
+    if ce_caseptr.ndim == 2:
+        ce_caseptr1 = ce_caseptr[:,-1]
+    else:
+        ce_caseptr1 = ce_caseptr[1:]
+    shape = (ce_caseptr1.shape[0], )
+    out = np.zeros(shape, dtype=ce_data.dtype)
+    c = 0
+    out[0] = ce_data[0]
+    for row in range(ce_data.shape[0]):
+        if row == ce_caseptr1[c]:
+            c += 1
+            out[c] = ce_data[row]
+        else:
+            if out[c] != ce_data[row]:
+                failed = 1
+                break
+    return out, failed
