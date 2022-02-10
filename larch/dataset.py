@@ -863,7 +863,7 @@ class Dataset(_sharrow_Dataset):
         return ds
 
     @classmethod
-    def from_idce(cls, df, crack=False, altnames=None, index_name=None, alt_index='alt_idx', case_index=None, case_pointer=None):
+    def from_idce(cls, df, crack=True, altnames=None, dim_name=None, alt_index='alt_idx', case_index=None, case_pointer=None):
         """
         Construct a Dataset from a sparse idca-format DataFrame.
 
@@ -880,8 +880,8 @@ class Dataset(_sharrow_Dataset):
             If given as a mapping, links alternative codes to names.
             An array or list of strings gives names for the alternatives,
             sorted in the same order as the codes.
-        index_name : str, optional
-            Name to apply to the sparse index.
+        dim_name : str, optional
+            Name to apply to the sparse index dimension.
         alt_index : str, default 'alt_idx'
             Add the alt index (position) for each sparse data row as a
             coords array with this name.
@@ -904,16 +904,16 @@ class Dataset(_sharrow_Dataset):
         caseidname, altidname = df.index.names
         caseidname = caseidname or _CASEID
         altidname = altidname or _ALTID
-        index_name = index_name or _CASEALT
+        dim_name = dim_name or _CASEALT
         case_pointer = case_pointer or _CASEPTR
-        ds = cls.from_dataframe(df.reset_index(drop=True).rename_axis(index=index_name))
+        ds = cls.from_dataframe(df.reset_index(drop=True).rename_axis(index=dim_name))
         ds.coords[caseidname] = xr.DataArray(df.index.levels[0], dims=caseidname)
         ds.coords[altidname] = xr.DataArray(df.index.levels[1], dims=altidname)
         if case_index is not None:
-            ds.coords[case_index] = xr.DataArray(df.index.codes[0], dims=index_name)
+            ds.coords[case_index] = xr.DataArray(df.index.codes[0], dims=dim_name)
         if alt_index is None:
             raise ValueError('alt_index cannot be None')
-        ds.coords[alt_index] = xr.DataArray(df.index.codes[1], dims=index_name)
+        ds.coords[alt_index] = xr.DataArray(df.index.codes[1], dims=dim_name)
         ds.coords[case_pointer] = xr.DataArray(
             np.where(np.diff(df.index.codes[0], prepend=np.nan, append=np.nan))[0],
             dims=case_pointer,
@@ -921,9 +921,10 @@ class Dataset(_sharrow_Dataset):
         ds.attrs['_exclude_dims_'] = (caseidname, altidname, case_pointer)
         ds.attrs[_CASEID] = caseidname
         ds.attrs[_ALTID] = altidname
-        ds.attrs[_CASEALT] = index_name
+        ds.attrs[_CASEALT] = dim_name
         ds.attrs[_ALTIDX] = alt_index
         ds.attrs[_CASEPTR] = case_pointer
+        ds = ds.drop_vars(dim_name)
         if crack:
             ds = ds.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
@@ -960,7 +961,10 @@ class Dataset(_sharrow_Dataset):
 
     def as_tree(self, label='main', exclude_dims=()):
         """
-        Convert this Dataset to a single-node DataTree.
+        Convert this Dataset to a DataTree.
+
+        For |idco| and |idca| datasets, the result will generally be a
+        single-node tree.  For |idce| data, there will be
 
         Parameters
         ----------
@@ -974,12 +978,19 @@ class Dataset(_sharrow_Dataset):
         -------
         DataTree
         """
-        # exclude = tuple(exclude_dims) + tuple(self.attrs.get('_exclude_dims_', ()))
-        # if exclude:
-        #     obj = self.drop_dims([i for i in exclude if i in self.dims])
-        # else:
-        #     obj = self
-        tree = DataTree(**{label: self})
+        if self.CASEPTR is not None:
+            case_index = case_ptr_to_indexes(self.dims[self.CASEALT], self[self.CASEPTR].values)
+            obj = self.assign({'_case_index_': DataArray(case_index, dims=(self.CASEALT))})
+            tree = DataTree(**{label: obj.drop_dims(self.CASEID)})
+            tree.add_dataset(
+                'idcoVars',
+                obj.keep_dims(self.CASEID).assign_attrs({'_exclude_dims_':()}),
+                relationships=(
+                    f"{label}._case_index_ -> idcoVars.{self.CASEID}"
+                )
+            )
+        else:
+            tree = DataTree(**{label: self})
         return tree
 
     def setup_flow(self, *args, **kwargs):
@@ -1495,3 +1506,11 @@ def ce_dissolve_zero_variance(ce_data, ce_caseptr):
                 failed = 1
                 break
     return out, failed
+
+
+@nb.njit
+def case_ptr_to_indexes(n_casealts, case_ptrs):
+    case_index = np.zeros(n_casealts, dtype=np.int64)
+    for c in range(case_ptrs.shape[0]-1):
+        case_index[case_ptrs[c]:case_ptrs[c + 1]] = c
+    return case_index
