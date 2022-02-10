@@ -1,3 +1,4 @@
+import io
 import os.path
 from glob import glob
 
@@ -33,8 +34,9 @@ for ipath in notebooks:
                     touch = True
         if len(cell_tags) > 0:
             cell["metadata"]["tags"] = cell_tags
-    if touch:
+    if 1:
         print(f"hiding test cells in {ipath}")
-        nbf.write(ntbk, ipath)
+        with io.open(ipath, 'w', encoding='utf-8') as f:
+            nbf.write(ntbk, f)
     else:
         print(f"no changes in {ipath}")

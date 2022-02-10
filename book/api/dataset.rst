@@ -12,6 +12,7 @@ Constructors
 
     Dataset
     Dataset.from_idca
+    Dataset.from_idce
     Dataset.from_idco
     Dataset.construct
     Dataset.from_table
