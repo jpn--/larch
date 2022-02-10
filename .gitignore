@@ -68,3 +68,5 @@ book/_build
 book/api/generated
 book/example/_sharrow_cache_
 latent-class-example-report.html
+doc/build
+sandbox.py

@@ -794,9 +794,11 @@ class Dataset(_sharrow_Dataset):
         return obj
 
     @classmethod
-    def from_idca(cls, df, crack=True, altnames=None, avail='_avail_', fill_unavail=None):
+    def from_idca(cls, df, crack=True, altnames=None, avail='_avail_', fill_missing=None):
         """
-        Construct a Dataset from an idco-format DataFrame.
+        Construct a Dataset from an idca-format DataFrame.
+
+        This method loads the data as dense arrays.
 
         Parameters
         ----------
@@ -814,7 +816,7 @@ class Dataset(_sharrow_Dataset):
         avail : str, default '_avail_'
             When the imported data is in idce format (i.e. sparse) then
             an availability indicator is computed and given this name.
-        fill_unavail : scalar or Mapping, optional
+        fill_missing : scalar or Mapping, optional
             Fill values to use for missing values when imported data is
             in idce format (i.e. sparse).  Give a single value to use
             globally, or a mapping of {variable: value} or {dtype: value}.
@@ -822,6 +824,11 @@ class Dataset(_sharrow_Dataset):
         Returns
         -------
         Dataset
+
+        See Also
+        --------
+        Dataset.from_idce : Construct a Dataset from a sparse idca-format DataFrame.
+
         """
         if df.index.nlevels != 2:
             raise ValueError("source idca dataframe must have a two "
@@ -846,20 +853,20 @@ class Dataset(_sharrow_Dataset):
         if avail not in ds and len(df) < ds.n_cases * ds.n_alts:
             av = DataArray.from_series(pd.Series(1, index=df.index)).fillna(0).astype(np.int8)
             ds[avail] = av
-            if fill_unavail is not None:
-                if isinstance(fill_unavail, Mapping):
+            if fill_missing is not None:
+                if isinstance(fill_missing, Mapping):
                     for k, i in ds.items():
                         if ds.ALTID not in i.dims:
                             continue
-                        if k not in fill_unavail and i.dtype not in fill_unavail:
+                        if k not in fill_missing and i.dtype not in fill_missing:
                             continue
-                        filler = fill_unavail.get(k, fill_unavail[i.dtype])
+                        filler = fill_missing.get(k, fill_missing[i.dtype])
                         ds[k] = i.where(ds['_avail_']!=0, filler)
                 else:
                     for k, i in ds.items():
                         if ds.ALTID not in i.dims:
                             continue
-                        ds[k] = i.where(ds['_avail_']!=0, fill_unavail)
+                        ds[k] = i.where(ds['_avail_']!=0, fill_missing)
         return ds
 
     @classmethod
@@ -897,6 +904,10 @@ class Dataset(_sharrow_Dataset):
         Returns
         -------
         Dataset
+
+        See Also
+        --------
+        Dataset.from_idca : Construct a dense Dataset from a idca-format DataFrame.
         """
         if df.index.nlevels != 2:
             raise ValueError("source idce dataframe must have a two "
