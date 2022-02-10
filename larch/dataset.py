@@ -827,6 +827,16 @@ class Dataset(_sharrow_Dataset):
             raise ValueError("source idca dataframe must have a two "
                              "level MultiIndex giving case and alt id's")
         caseidname, altidname = df.index.names
+
+        # check altids are integers, if they are not then fix it
+        if df.index.levels[1].dtype.kind != 'i':
+            if altnames is None:
+                altnames = df.index.levels[1]
+                df.index = df.index.set_levels(np.arange(1, len(altnames) + 1), level=1)
+            else:
+                new_index = df.index.get_level_values(1).astype(pd.CategoricalDtype(altnames))
+                df.index = df.index.set_codes(new_index.codes, level=1).set_levels(np.arange(1, len(altnames) + 1), level=1)
+
         ds = cls.construct(df, caseid=caseidname, alts=altidname)
         if crack:
             ds = ds.dissolve_zero_variance()
