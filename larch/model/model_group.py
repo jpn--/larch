@@ -63,12 +63,12 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 
 	@property
 	def n_cases(self):
-		"""int : Total number of cases in the attached dataframes of all grouped models."""
+		"""int : Total number of cases in the attached data of all grouped models."""
 		return sum(k.n_cases for k in self._k_models)
 
 	def total_weight(self):
 		"""
-		The total weight of cases in the attached dataframes of all grouped models.
+		The total weight of cases in the attached data of all grouped models.
 
 		Returns
 		-------
@@ -190,7 +190,7 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 			probability_only=False,
 	):
 		"""
-		Compute a log likelihood value and it first derivative.
+		Compute a log likelihood value.
 
 		Parameters
 		----------
@@ -255,7 +255,7 @@ class ModelGroup(AbstractChoiceModel, MutableSequence):
 
 	):
 		"""
-		Compute a log likelihood value and it first derivative.
+		Compute a log likelihood value and its first derivative.
 
 		Parameters
 		----------

@@ -29,6 +29,7 @@ parts:
         - file: api/model
         - file: api/linear
         - file: api/nesting
+        - file: api/modelgroup
 
   - caption: Examples
     chapters:
