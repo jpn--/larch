@@ -5,10 +5,67 @@ import heapq
 from ..util.touch_notifier import TouchNotify
 from ..util.lazy import lazy
 
-class NestingTree(TouchNotify, nx.DiGraph):
+class NestingTree(nx.DiGraph):
 
 	node_dict_factory = OrderedDict
 	adjlist_dict_factory = OrderedDict
+
+	def __get__(self, instance, owner):
+		# self : SubkeyStore
+		# instance : instance of parent class that has `self` as a member, or None
+		# owner : class of `instance`
+		if instance is None:
+			pass # print("GRR: no instance")
+			return self
+		newself = getattr(instance, self.private_name, None)
+		if newself is None:
+			pass # print(f"GRR No Current: {instance=} {owner=}")
+			try:
+				instance.initialize_graph()
+			except ValueError:
+				pass
+			newself = getattr(instance, self.private_name, None)
+		if newself is not None:
+			newself._instance = instance
+		pass # print(f"GRR: get {instance=} {newself=}")
+		return newself
+
+	def __set__(self, instance, value):
+		# self : NestingTree object
+		# instance : instance of parent class that has `self` as a member
+		# value : the new value that is trying to be assigned
+		assert isinstance(value, NestingTree)
+		t = value.copy()
+		t._instance = instance
+		setattr(instance, self.private_name, t)
+		try:
+			t._instance.mangle()
+		except AttributeError as err:
+			pass # print(f"GRR: {err}")
+		else:
+			pass # print(f"GRR Mangle: {instance}")
+
+	def __delete__(self, instance):
+		setattr(instance, self.private_name, None)
+		try:
+			instance.mangle()
+		except AttributeError as err:
+			pass # print(f"GRR: {err}")
+		else:
+			pass # print(f"GRR Mangle: {instance}")
+
+	def __set_name__(self, owner, name):
+		self.name = name
+		self.private_name = "_private_"+name
+
+	def touch(self):
+		try:
+			self._instance.mangle()
+		except AttributeError:
+			pass # print("GRR: mangle failure")
+		else:
+			pass # print("GRR: mangle ok")
+
 
 	def __init__(self, *arg, root_id=0, suggested_elemental_order=(), **kwarg):
 		if len(arg) and isinstance(arg[0], NestingTree):
@@ -39,6 +96,7 @@ class NestingTree(TouchNotify, nx.DiGraph):
 
 	@property
 	def root_id(self):
+		"""int : The code for the root node."""
 		return self._root_id
 
 	@root_id.setter
@@ -67,6 +125,28 @@ class NestingTree(TouchNotify, nx.DiGraph):
 		self.touch()
 
 	def add_edge(self, u, v, implied=False, _clear_caches=True, **kwarg):
+		"""
+		Add an edge between u and v.
+
+		The nodes u and v will be automatically added if they are
+		not already in the graph.
+
+		Edge attributes can be specified with keywords.
+
+		Parameters
+		----------
+		u, v : int
+			Nodes should be integer codes. The upstream node `u` is
+			a nest or the root node.  Downsteam node `v` can be
+			a nest or elemental alternative.
+		implied : bool, default False
+			Implied edges are for connection of otherwise unconnected
+			nests to the root node.
+		_clear_caches : bool, default True
+		kwarg : keyword arguments, optional
+			Edge data (or labels or objects) can be assigned using
+			keyword arguments.
+		"""
 		if not implied:
 			drops = []
 			for u_,v_,imp_ in self.in_edges(nbunch=[v], data='implied'):
@@ -83,6 +163,19 @@ class NestingTree(TouchNotify, nx.DiGraph):
 		return result
 
 	def remove_edge(self, u, v, *arg, **kwarg):
+		"""
+		Remove the edge between u and v.
+
+		Parameters
+		----------
+		u, v : int
+			Remove the edge between nodes u and v.
+
+		Raises
+		------
+		NetworkXError
+			If there is not an edge between u and v.
+		"""
 		result = super().remove_edge(u, v)
 		if self.in_degree(v)==0 and v!=self._root_id:
 			self.add_edge(self._root_id, v, implied=True, _clear_caches=False)
@@ -194,6 +287,30 @@ class NestingTree(TouchNotify, nx.DiGraph):
 	def add_nodes(self, codes, *arg, parent=None, **kwarg):
 		for code in codes:
 			self.add_node(code, *arg, parent=parent, **kwarg)
+
+	def remove_node(self, n):
+		"""
+		Remove node n.
+
+		Removes the node n, reconnecting all outedges to the head node
+		of all inedges. Attempting to remove a non-existent node will
+		raise an exception.
+
+		Parameters
+		----------
+		n : int
+			A node in the graph
+		"""
+		replace_edges = {
+			k: self.edges[k].copy()
+			for k in self.edges(n)
+		}
+		replace_heads = [k for k, _ in self.in_edges(n)]
+		super(NestingTree, self).remove_node(n)
+		for k, attrs in replace_edges.items():
+			for h in replace_heads:
+				super().add_edge(h, k[1], **attrs)
+		self._clear_caches()
 
 	@lazy
 	def topological_sorted(self):
@@ -367,7 +484,7 @@ class NestingTree(TouchNotify, nx.DiGraph):
 			'_successor_slots',
 			'_touch',
 			'node_dict_factory',
-
+			'_instance',
 		)
 		for k,v in self.__dict__.items():
 			if k not in no_pickle:

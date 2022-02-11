@@ -186,6 +186,21 @@ class DataArray(_sharrow_DataArray):
         r = r.replace("xarray.DataArray", "larch.DataArray")
         return r
 
+    def value_counts(self, index_name='index'):
+        """
+        Count the number of times each unique value appears in the array.
+
+        Parameters
+        ----------
+        index_name : str, default 'index'
+            Name of index dimension in result.
+
+        Returns
+        -------
+        DataArray
+        """
+        values, freqs = np.unique(self, return_counts=True)
+        return self.__class__(freqs, dims=index_name, coords={index_name:values})
 
 class Dataset(_sharrow_Dataset):
     """
@@ -1379,10 +1394,10 @@ def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
     """
     if graph is None:
         if 'ch' in dataset:
-            ch_ = dataset['ch'].copy()
+            ch_ = np.asarray(dataset['ch'].copy())
         else:
             ch_ = None
-        av_ = dataset.get('av')
+        av_ = np.asarray(dataset.get('av'))
     else:
         from .numba.cascading import array_av_cascade, array_ch_cascade
 
@@ -1431,24 +1446,27 @@ def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
     od = OrderedDict()
 
     if graph is not None:
-        od['name'] = pd.Series(graph.standard_sort_names, index=graph.standard_sort)
+        idx = graph.standard_sort
+        od['name'] = pd.Series(graph.standard_sort_names, index=idx)
     else:
-        od['name'] = dataset.get('alt_names')
+        idx = dataset.altids()
+        if dataset.get('alt_names') is not None:
+            od['name'] = pd.Series(dataset.get('alt_names'), index=idx)
 
     if show_wt:
-        od['chosen weighted'] = ch_w
-        od['chosen unweighted'] = ch
-        od['available weighted'] = av_w
-        od['available unweighted'] = av
+        od['chosen weighted'] = pd.Series(ch_w, index=idx)
+        od['chosen unweighted'] = pd.Series(ch, index=idx)
+        od['available weighted'] = pd.Series(av_w, index=idx)
+        od['available unweighted'] = pd.Series(av, index=idx)
     else:
-        od['chosen'] = ch
-        od['available'] = av
+        od['chosen'] = pd.Series(ch, index=idx)
+        od['available'] = pd.Series(av, index=idx)
     if ch_but_not_av is not None:
         if show_wt:
-            od['chosen but not available weighted'] = ch_but_not_av_w
-            od['chosen but not available unweighted'] = ch_but_not_av
+            od['chosen but not available weighted'] = pd.Series(ch_but_not_av_w, index=idx)
+            od['chosen but not available unweighted'] = pd.Series(ch_but_not_av, index=idx)
         else:
-            od['chosen but not available'] = ch_but_not_av
+            od['chosen but not available'] = pd.Series(ch_but_not_av, index=idx)
 
     if availability_co_vars is not None:
         od['availability condition'] = pd.Series(

@@ -24,10 +24,11 @@ parts:
         - file: api/dataset
         - file: api/datatree
         - file: api/dataframes
-    - file: api/linear
     - file: api/~models
       sections:
         - file: api/model
+        - file: api/linear
+        - file: api/nesting
 
   - caption: Examples
     chapters:

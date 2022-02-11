@@ -889,6 +889,35 @@ class NumbaModel(_BaseModel):
         self._array_av_cascade = None
         self._constraint_funcs = None
 
+    @property
+    def graph(self):
+        if self._graph is None:
+            try:
+                self.initialize_graph()
+            except ValueError:
+                import warnings
+                warnings.warn('cannot initialize graph, must define alternatives somehow')
+                raise RuntimeError('cannot initialize graph, must define alternatives somehow')
+        return self._graph
+
+    @graph.setter
+    def graph(self, x):
+        self._graph = x
+
+    def is_mnl(self):
+        """
+        Check if this model is a MNL model
+
+        Returns
+        -------
+        bool
+        """
+        if self._graph is None:
+            return True
+        if len(self._graph) - len(self._graph.elementals) == 1:
+            return True
+        return False
+
     def initialize_graph(self, dataframes=None, alternative_codes=None, alternative_names=None, root_id=0):
         """
         Write a nesting tree graph for a MNL model.
@@ -1092,6 +1121,39 @@ class NumbaModel(_BaseModel):
             self._rebuild_work_arrays()
         if self._constraint_funcs is None:
             self._constraint_funcs = [c.as_soft_penalty() for c in self.constraints]
+
+    def _scan_logsums_ensure_names(self):
+        nameset = set()
+        try:
+            g = self._graph
+        except ValueError:
+            pass
+        else:
+            if g is not None:
+                for nodecode in g.topological_sorted_no_elementals:
+                    if nodecode != g._root_id:
+                        param_name = str(g.nodes[nodecode]['parameter'])
+                        nameset.add(str(param_name))
+        if self.quantity_ca is not None and len(self.quantity_ca) > 0:
+            if self.quantity_scale is not None:
+                nameset.add(str(self.quantity_scale))
+        if self.logsum_parameter is not None:
+            nameset.add(str(self.logsum_parameter))
+        self._ensure_names(nameset, nullvalue=1, initvalue=1, min=0.001, max=1)
+
+    def _ensure_names(self, names, **kwargs):
+        from ..model.parameter_frame import _empty_parameter_frame
+        existing_names = set(self._frame.index)
+        nameset = set(names)
+        missing_names = nameset - existing_names
+        if missing_names:
+            self._frame = pd.concat(
+                [
+                    self._frame,
+                    _empty_parameter_frame([n for n in names if (n in missing_names)], **kwargs),
+                ],
+                verify_integrity=True,
+            )
 
     def __prepare_for_compute(
             self,
@@ -1862,6 +1924,7 @@ class NumbaModel(_BaseModel):
             constraint_intensity=self.constraint_intensity,
             constraint_sharpness=self.constraint_sharpness,
             _constraint_funcs=self._constraint_funcs,
+            _private__graph=self._private__graph,
         )
         return super().__getstate__(), state
 
@@ -1870,6 +1933,7 @@ class NumbaModel(_BaseModel):
         self.constraint_intensity = state[1]['constraint_intensity']
         self.constraint_sharpness = state[1]['constraint_sharpness']
         self._constraint_funcs = state[1]['_constraint_funcs']
+        self._private__graph = state[1]["_private__graph"]
         super().__setstate__(state[0])
 
     @property
