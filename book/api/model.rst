@@ -87,6 +87,7 @@ Setting Parameters
     Model.set_values
     Model.lock_value
     Model.set_cap
+    Model.remove_unused_parameters
 
 
 Parameter Estimation

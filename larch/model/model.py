@@ -761,6 +761,11 @@ class Model(_Model5c):
 	def remove_unused_parameters(self, verbose=True):
 		"""
 		Remove parameters that are not used in the model.
+
+		Parameters
+		----------
+		verbose : bool, default True
+			Generate log messages about how many parameters were dropped.
 		"""
 		self.unmangle(True)
 		old_pf = self.pf.copy()

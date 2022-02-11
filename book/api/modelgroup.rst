@@ -2,7 +2,7 @@
 ModelGroup
 ===========
 
-.. currentmodule:: larch.model.modelgroup
+.. currentmodule:: larch.model.model_group
 
 
 .. autosummary::
