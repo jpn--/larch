@@ -166,6 +166,23 @@ class DataArray(_sharrow_DataArray):
         self.attrs[_ALTID] = dim_name
 
     @property
+    def n_cases(self):
+        try:
+            i = self.dims.index(self.CASEID)
+        except ValueError:
+            logging.getLogger().error(f"missing {self.CASEID!r} among dims {self.dims}")
+            raise
+        return self.shape[i]
+
+    @property
+    def n_alts(self):
+        if self.ALTID in self.dims:
+            return self.shape[self.dims.index(self.ALTID)]
+        if 'n_alts' in self.attrs:
+            return self.attrs['n_alts']
+        raise ValueError('no n_alts set')
+
+    @property
     def alts_mapping(self):
         """Dict[int,str] : Mapping of alternative codes to names"""
         a = self.coords[self.ALTID]
