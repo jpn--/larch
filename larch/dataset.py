@@ -219,6 +219,22 @@ class DataArray(_sharrow_DataArray):
         values, freqs = np.unique(self, return_counts=True)
         return self.__class__(freqs, dims=index_name, coords={index_name:values})
 
+    def clip(self, *args, **kwargs):
+        """
+        Return an array whose values are limited to ``[min, max]``.
+        At least one of max or min must be given.
+
+        Refer to `numpy.clip` for full documentation.
+
+        See Also
+        --------
+        numpy.clip : equivalent function
+        """
+        out = super().clip(*args, **kwargs)
+        out.__class__ = self.__class__
+        return out
+
+
 class Dataset(_sharrow_Dataset):
     """
     A xarray.Dataset extended interface for use with Larch.
