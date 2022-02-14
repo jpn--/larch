@@ -54,7 +54,7 @@ def silverman_factor(self, n, d=1):
     return np.power(n * (d + 2.0) / 4.0, -1.0 / (d + 4))
 
 
-
+_GENERIC = "< All Alternatives >"
 
 def idca_statistics_data(
     var,
@@ -125,6 +125,8 @@ def idca_statistics_data(
         kde[k] = BoundedKDE(v, bw_method=kde_overall, weights=data_av[k] * wgt)(
             x
         )
+    kde[_GENERIC] = kde_overall(x)
+
     if choice is not None:
         for k, v in data.items():
             hist_ch[k] = np.append(
@@ -139,6 +141,14 @@ def idca_statistics_data(
             if scale_ch:
                 y = y * (data_ch[k] * wgt).sum() / (data_av[k] * wgt).sum()
             kde_ch[k] = y
+        y = BoundedKDE(
+            var.values.astype(np.float32),
+            bw_method=kde_overall,
+            weights=(choice.values * avail.values * wgt[:, np.newaxis])
+        )(x)
+        if scale_ch:
+            y = y * (choice.values * wgt[:, np.newaxis]).sum() / (avail.values * wgt[:, np.newaxis]).sum()
+        kde_ch[_GENERIC] = y
         plot_data = pd.concat(
             [pd.DataFrame(hist), pd.DataFrame(hist_ch), pd.DataFrame(kde), pd.DataFrame(kde_ch)],
             axis=1,
@@ -196,6 +206,9 @@ def idca_statistics(
 
     frequency = (
         ax.mark_line(interpolate="step",)
+        .transform_filter(
+            {'not': alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC)}
+        )
         .encode(
             x=name,
             y="Frequency",
@@ -219,6 +232,39 @@ def idca_statistics(
         .add_selection(selection2)
         .transform_filter(selection2)
     )
+    generic_density = (
+        ax.mark_line()
+            .encode(
+            x=name,
+            y=alt.Y("Density", title="Density"),
+            color=alt.ColorValue('black'),
+        )
+        .transform_filter(
+            {'and': [
+                alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
+                selection,
+            ]}
+        )
+    )
+    density = density + generic_density
+
+    annotation = ax.mark_text(
+        align='right',
+        baseline='top',
+        # fontSize=20,
+        # dx=7
+    ).encode(
+        text='Alternative',
+        x=alt.X(field=name, aggregate='max', type='quantitative'),
+        y=alt.Y(field='Density', aggregate='max', type='quantitative'),
+    ).transform_filter(
+        {'and': [
+            alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
+            selection,
+        ]}
+    )
+    density = density + annotation
+
     if choice is not None:
         f_areas = (
             ax.mark_area(interpolate="step",)
@@ -229,7 +275,7 @@ def idca_statistics(
                 # strokeDash="Alternative",
                 # tooltip="Alternative",
                 opacity=alt.condition(
-                    selection2, alt.value(0.75), alt.value(0.0)
+                    selection2, alt.value(0.5), alt.value(0.0)
                 ),
             )
             .transform_filter(selection2)
@@ -244,12 +290,28 @@ def idca_statistics(
                 # strokeDash="Alternative",
                 # tooltip="Alternative",
                 opacity=alt.condition(
-                    selection2, alt.value(1 if scale_ch else 0.75), alt.value(0.0)
+                    selection2, alt.value(1 if scale_ch else 0.5), alt.value(0.0)
                 ),
             )
             .transform_filter(selection2)
         )
         density = density + d_areas
+        generic_d_area = (
+            ax.mark_area()
+            .encode(
+                x=name,
+                y=alt.Y("DensityChosen", title="Density"),
+                opacity=alt.value(0.5),
+                color=alt.ColorValue('black'),
+            )
+            .transform_filter(
+                {'and': [
+                    alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
+                    selection,
+                ]}
+            )
+        )
+        density = density + generic_d_area
 
     chart = (
         frequency.properties(height=160)
