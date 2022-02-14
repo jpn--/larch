@@ -7,7 +7,7 @@ import xmle
 from scipy.stats import gaussian_kde
 
 from .dataset import DataArray, Dataset
-from .util.bounded_kde import bounded_gaussian_kde, BoundedKDE, weighted_sample_std
+from .util.bounded_kde import BoundedKDE, bounded_gaussian_kde, weighted_sample_std
 
 
 def fair_range(x, buffering=0.1):
@@ -56,6 +56,7 @@ def silverman_factor(self, n, d=1):
 
 _GENERIC = "< All Alternatives >"
 
+
 def idca_statistics_data(
     var,
     bw_method="scott",
@@ -87,24 +88,23 @@ def idca_statistics_data(
     data = {}
     data_ch = {}
     data_av = {}
+    stats_std = {}
     for k in range(n_alts):
-        if stats["std"][k] > 0:
-            if "alt_names" in var.coords:
-                key = str(var.coords["alt_names"][k].data)
-            elif var.ALTID in var.coords:
-                key = str(var.coords[var.ALTID][k].data)
-            else:
-                key = str(k)
-            data[key] = var.isel({var.ALTID: k}).values
-            if choice is not None:
-                data_ch[key] = choice.isel({choice.ALTID: k}).values
-            data_av[key] = avail.isel({avail.ALTID: k}).values
+        if "alt_names" in var.coords:
+            key = str(var.coords["alt_names"][k].data)
+        elif var.ALTID in var.coords:
+            key = str(var.coords[var.ALTID][k].data)
+        else:
+            key = str(k)
+        stats_std[key] = stats["std"][k]
+        data[key] = var.isel({var.ALTID: k}).values
+        if choice is not None:
+            data_ch[key] = choice.isel({choice.ALTID: k}).values
+        data_av[key] = avail.isel({avail.ALTID: k}).values
     hist_overall, bins = np.histogram(
         var.data, bins=bins, weights=avail.data * wgt[:, None]
     )
-    kde_overall = BoundedKDE(
-        var.data, weights=avail.data * wgt[:, np.newaxis]
-    )
+    kde_overall = BoundedKDE(var.data, weights=avail.data * wgt[:, np.newaxis])
     # eff_wgts = avail.data * wgt[:, np.newaxis]
     # bandwidth = (
     #         weighted_sample_std(var.data.reshape(-1), eff_wgts.reshape(-1), ddof=1.0)
@@ -122,35 +122,47 @@ def idca_statistics_data(
             ),
             0,
         )
-        kde[k] = BoundedKDE(v, bw_method=kde_overall, weights=data_av[k] * wgt)(
-            x
-        )
+        if stats_std[k] > 0:
+            kde[k] = BoundedKDE(v, bw_method=kde_overall, weights=data_av[k] * wgt)(x)
     kde[_GENERIC] = kde_overall(x)
 
     if choice is not None:
         for k, v in data.items():
             hist_ch[k] = np.append(
                 np.repeat(
-                    np.histogram(v, bins=bins, weights=data_ch[k] * data_av[k] * wgt)[0], resolution
+                    np.histogram(v, bins=bins, weights=data_ch[k] * data_av[k] * wgt)[
+                        0
+                    ],
+                    resolution,
                 ),
                 0,
             )
-            y = BoundedKDE(
-                v, bw_method=kde_overall, weights=data_ch[k] * data_av[k] * wgt
-            )(x)
-            if scale_ch:
-                y = y * (data_ch[k] * wgt).sum() / (data_av[k] * wgt).sum()
-            kde_ch[k] = y
+            if stats_std[k] > 0:
+                y = BoundedKDE(
+                    v, bw_method=kde_overall, weights=data_ch[k] * data_av[k] * wgt
+                )(x)
+                if scale_ch:
+                    y = y * (data_ch[k] * wgt).sum() / (data_av[k] * wgt).sum()
+                kde_ch[k] = y
         y = BoundedKDE(
             var.values.astype(np.float32),
             bw_method=kde_overall,
-            weights=(choice.values * avail.values * wgt[:, np.newaxis])
+            weights=(choice.values * avail.values * wgt[:, np.newaxis]),
         )(x)
         if scale_ch:
-            y = y * (choice.values * wgt[:, np.newaxis]).sum() / (avail.values * wgt[:, np.newaxis]).sum()
+            y = (
+                y
+                * (choice.values * wgt[:, np.newaxis]).sum()
+                / (avail.values * wgt[:, np.newaxis]).sum()
+            )
         kde_ch[_GENERIC] = y
         plot_data = pd.concat(
-            [pd.DataFrame(hist), pd.DataFrame(hist_ch), pd.DataFrame(kde), pd.DataFrame(kde_ch)],
+            [
+                pd.DataFrame(hist),
+                pd.DataFrame(hist_ch),
+                pd.DataFrame(kde),
+                pd.DataFrame(kde_ch),
+            ],
             axis=1,
             keys=["Frequency", "FrequencyChosen", "Density", "DensityChosen"],
         )
@@ -198,7 +210,7 @@ def idca_statistics(
         fields=["Alternative"], bind="legend", empty="none"
     )
     ax = alt.Chart(plot_data)
-
+    alt_names = list(str(i.data) for i in var["alt_names"])
     # A dropdown filter
     # options = [None] + list(str(i.data) for i in var['alt_names'])
     # options_dropdown = alt.binding_select(options=options)
@@ -207,12 +219,16 @@ def idca_statistics(
     frequency = (
         ax.mark_line(interpolate="step",)
         .transform_filter(
-            {'not': alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC)}
+            {"not": alt.FieldEqualPredicate(field="Alternative", equal=_GENERIC)}
         )
         .encode(
             x=name,
             y="Frequency",
-            color=alt.Color("Alternative", legend=alt.Legend(title="Alternative", orient="left")),
+            color=alt.Color(
+                "Alternative",
+                sort=alt_names,
+                legend=alt.Legend(title="Alternative", orient="left"),
+            ),
             # strokeDash="Alternative",
             # tooltip="Alternative",
             opacity=alt.condition(selection, alt.value(1), alt.value(0.0)),
@@ -224,7 +240,7 @@ def idca_statistics(
         .encode(
             x=name,
             y=alt.Y("Density", title="Density"),
-            color=alt.Color("Alternative", legend=None),
+            color=alt.Color("Alternative", legend=None, sort=alt_names),
             # strokeDash=alt.Color("Alternative", legend=None),
             # tooltip="Alternative",
             opacity=alt.condition(selection2, alt.value(1), alt.value(0.0)),
@@ -234,34 +250,40 @@ def idca_statistics(
     )
     generic_density = (
         ax.mark_line()
-            .encode(
-            x=name,
-            y=alt.Y("Density", title="Density"),
-            color=alt.ColorValue('black'),
+        .encode(
+            x=name, y=alt.Y("Density", title="Density"), color=alt.ColorValue("black"),
         )
         .transform_filter(
-            {'and': [
-                alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
-                selection,
-            ]}
+            {
+                "and": [
+                    alt.FieldEqualPredicate(field="Alternative", equal=_GENERIC),
+                    selection,
+                ]
+            }
         )
     )
     density = density + generic_density
 
-    annotation = ax.mark_text(
-        align='right',
-        baseline='top',
-        # fontSize=20,
-        # dx=7
-    ).encode(
-        text='Alternative',
-        x=alt.X(field=name, aggregate='max', type='quantitative'),
-        y=alt.Y(field='Density', aggregate='max', type='quantitative'),
-    ).transform_filter(
-        {'and': [
-            alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
-            selection,
-        ]}
+    annotation = (
+        ax.mark_text(
+            align="right",
+            baseline="top",
+            # fontSize=20,
+            # dx=7
+        )
+        .encode(
+            text="Alternative",
+            x=alt.X(field=name, aggregate="max", type="quantitative", title=name),
+            y=alt.Y(field="Density", aggregate="max", type="quantitative"),
+        )
+        .transform_filter(
+            {
+                "and": [
+                    alt.FieldEqualPredicate(field="Alternative", equal=_GENERIC),
+                    selection,
+                ]
+            }
+        )
     )
     density = density + annotation
 
@@ -270,13 +292,11 @@ def idca_statistics(
             ax.mark_area(interpolate="step",)
             .encode(
                 x=name,
-                y=alt.Y('FrequencyChosen', title="Frequency"),
-                color=alt.Color("Alternative", legend=None),
+                y=alt.Y("FrequencyChosen", title="Frequency"),
+                color=alt.Color("Alternative", legend=None, sort=alt_names),
                 # strokeDash="Alternative",
                 # tooltip="Alternative",
-                opacity=alt.condition(
-                    selection2, alt.value(0.5), alt.value(0.0)
-                ),
+                opacity=alt.condition(selection2, alt.value(0.5), alt.value(0.0)),
             )
             .transform_filter(selection2)
         )
@@ -285,8 +305,8 @@ def idca_statistics(
             ax.mark_area()
             .encode(
                 x=name,
-                y=alt.Y('DensityChosen', title="Density"),
-                color=alt.Color("Alternative", legend=None),
+                y=alt.Y("DensityChosen", title="Density"),
+                color=alt.Color("Alternative", legend=None, sort=alt_names),
                 # strokeDash="Alternative",
                 # tooltip="Alternative",
                 opacity=alt.condition(
@@ -302,20 +322,37 @@ def idca_statistics(
                 x=name,
                 y=alt.Y("DensityChosen", title="Density"),
                 opacity=alt.value(0.5),
-                color=alt.ColorValue('black'),
+                color=alt.ColorValue("black"),
             )
             .transform_filter(
-                {'and': [
-                    alt.FieldEqualPredicate(field='Alternative', equal=_GENERIC),
-                    selection,
-                ]}
+                {
+                    "and": [
+                        alt.FieldEqualPredicate(field="Alternative", equal=_GENERIC),
+                        selection,
+                    ]
+                }
             )
         )
         density = density + generic_d_area
 
-    chart = (
-        frequency.properties(height=160)
-        & density.properties(height=90)
+    chart = frequency.properties(height=160, width=400) & density.properties(
+        height=90, width=400
     )
 
-    return chart, stats
+    table_data = stats.to_dataframe().reset_index().reset_index()
+    table_data["mean"] = table_data["mean"].apply(lambda x: f"{x:.4g}")
+    table_data["std"] = table_data["std"].apply(lambda x: f"{x:.4g}")
+    tab = alt.Chart(table_data)
+
+    def make_col(colname, title):
+        return (
+            tab.mark_text()
+            .encode(y=alt.Y("index:O", axis=None), text=colname, size=alt.value(10),)
+            .properties(title=alt.TitleParams(text=title, align="center", fontSize=10),)
+        )
+
+    col1 = make_col("alt_names", "Alternative")
+    col2 = make_col("mean", "Mean")
+    col3 = make_col("std", "Std Dev")
+
+    return (chart & (col1 | col2 | col3)).configure_view(strokeWidth=0), stats
