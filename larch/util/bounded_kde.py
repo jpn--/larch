@@ -1,6 +1,9 @@
 
+import numpy as np
+from scipy.stats import gaussian_kde
+from sklearn.neighbors import KernelDensity
 
-# based on ReflectionBoundedKDE from
+# partly based on ReflectionBoundedKDE from
 # https://git.ligo.org/lscsoft/pesummary/-/blob/master/pesummary/core/plots/bounded_1d_kde.py
 #
 # MIT License
@@ -21,8 +24,70 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np
-from scipy.stats import gaussian_kde
+
+def weighted_sample_std(values, weights, ddof=1.0):
+    """
+    Weighted sample standard deviation.
+    """
+    average = np.average(values, weights=weights)
+    variance = np.average((values - average) ** 2, weights=weights)
+    variance = variance * sum(weights) / (sum(weights) - ddof)
+    return np.sqrt(variance)
+
+
+class BoundedKDE:
+
+    def __init__(self, x, weights=None, bw_method='scott', lb='min', ub='max'):
+        if lb is None:
+            self.lower_bound = None
+        else:
+            self.lower_bound = lb if lb != 'min' else np.nanmin(x)
+        if ub is None:
+            self.upper_bound = None
+        else:
+            self.upper_bound = ub if ub != 'max' else np.nanmax(x)
+        if x.ndim > 1:
+            x = x.ravel()
+            if weights is not None:
+                weights = weights.ravel()
+        if weights is not None:
+            x = x[weights>0]
+            weights = weights[weights>0]
+        if bw_method == 'scott':
+            if weights is None:
+                bw = x.std(ddof=1) * np.power(x.size, -1.0 / 5)
+            else:
+                bw = weighted_sample_std(x, weights, ddof=1.0) * np.power(weights.sum(), -1.0 / 5)
+        elif getattr(bw_method, 'bandwidth', None) is not None:
+            bw = getattr(bw_method, 'bandwidth')
+        elif np.isscalar(bw_method) and not isinstance(bw_method, str):
+            bw = bw_method
+        else:
+            raise NotImplementedError(f"{bw_method=}")
+        self.bandwidth = bw
+        self.kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        self.kde.fit(x[:, np.newaxis], sample_weight=weights)
+
+    def evaluate(self, x):
+        if x.ndim > 1:
+            x = x.ravel()
+        pdf = np.exp(self.kde.score_samples(x[:, np.newaxis]))
+        if self.lower_bound is not None:
+            pdf += np.exp(self.kde.score_samples((2 * self.lower_bound - x)[:, np.newaxis]))
+        if self.upper_bound is not None:
+            pdf += np.exp(self.kde.score_samples((2 * self.upper_bound - x)[:, np.newaxis]))
+        return pdf
+
+    def __call__(self, x):
+        if x.ndim > 1:
+            x = x.ravel()
+        results = self.evaluate(x)
+        if self.lower_bound is not None:
+            results[x < self.lower_bound] = 0.0
+        if self.upper_bound is not None:
+            results[x > self.upper_bound] = 0.0
+        return results
+
 
 class bounded_gaussian_kde(gaussian_kde):
 
