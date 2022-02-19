@@ -1,0 +1,81 @@
+.. currentmodule:: larch
+
+===========================================================
+27: MTC Shared Ride - Private Auto Nested Mode Choice
+===========================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+.. testcode::
+
+	m = larch.example(17)
+
+Model 27's nesting structure groups private auto and shared ride alternatives. (`pp. 182 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	shared = m.graph.new_node(parameter='mu_shared', children=[2,3], name='Shared')
+	private_auto = m.graph.new_node(parameter='mu_auto', children=[1,shared], name='Private_Auto')
+
+	m.unmangle(True)
+	m.set_value('mu_auto',maximum=2.0)
+
+.. testcode::
+
+	m.ordering = (
+		("CostbyInc","costbyincome",),
+		("TravelTime",".*time.*",".*dist.*", ),
+		("Household","hhinc.*","vehbywrk.*",),
+		("Zonal","wkcbd.*","wkempden.*",),
+		("ASCs","ASC.*",),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+	:skipif: True
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='slsqp')
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-3433.909...
+
+	>>> print(m.pfo()[['value','initvalue','nullvalue','minimum','maximum','holdfast']])
+	                                 value  initvalue  nullvalue  minimum  maximum  holdfast
+	Category   Parameter
+	CostbyInc  costbyincome        -0.0528        0.0        0.0     -inf      inf         0
+	TravelTime motorized_time      -0.0209        0.0        0.0     -inf      inf         0
+	           nonmotorized_time   -0.0460        0.0        0.0     -inf      inf         0
+	           motorized_ovtbydist -0.1370        0.0        0.0     -inf      inf         0
+	Household  hhinc#4             -0.0046        0.0        0.0     -inf      inf         0
+	           hhinc#5             -0.0077        0.0        0.0     -inf      inf         0
+	           hhinc#6             -0.0053        0.0        0.0     -inf      inf         0
+	           vehbywrk_BIKE       -0.6109        0.0        0.0     -inf      inf         0
+	           vehbywrk_SR         -0.5145        0.0        0.0     -inf      inf         0
+	           vehbywrk_TRANSIT    -0.8608        0.0        0.0     -inf      inf         0
+	           vehbywrk_WALK       -0.6157        0.0        0.0     -inf      inf         0
+	Zonal      wkcbd_BIKE           0.5378        0.0        0.0     -inf      inf         0
+	           wkcbd_SR2            0.6186        0.0        0.0     -inf      inf         0
+	           wkcbd_SR3            0.8921        0.0        0.0     -inf      inf         0
+	           wkcbd_TRANSIT        1.3753        0.0        0.0     -inf      inf         0
+	           wkcbd_WALK           0.1327        0.0        0.0     -inf      inf         0
+	           wkempden_BIKE        0.0024        0.0        0.0     -inf      inf         0
+	           wkempden_SR2         0.0030        0.0        0.0     -inf      inf         0
+	           wkempden_SR3         0.0030        0.0        0.0     -inf      inf         0
+	           wkempden_TRANSIT     0.0036        0.0        0.0     -inf      inf         0
+	           wkempden_WALK        0.0034        0.0        0.0     -inf      inf         0
+	ASCs       ASC_BIKE            -1.8147        0.0        0.0     -inf      inf         0
+	           ASC_SR2             -2.3805        0.0        0.0     -inf      inf         0
+	           ASC_SR3             -2.9696        0.0        0.0     -inf      inf         0
+	           ASC_TRANSIT         -0.8359        0.0        0.0     -inf      inf         0
+	           ASC_WALK            -0.1139        0.0        0.0     -inf      inf         0
+	Other      mu_auto              1.4750        1.0        1.0    0.001      2.0         0
+	           mu_shared            0.3685        1.0        1.0    0.001      1.0         0

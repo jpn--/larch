@@ -1,0 +1,2415 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>101: Swissmetro MNL Mode Choice &#8212; v5.5.10</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/larch-book.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/larch_favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="102: Swissmetro Weighted MNL Mode Choice" href="102-swissmetro-weighted.html" />
+    <link rel="prev" title="Swissmetro Examples" href="swissmetro.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+      
+      <link rel="icon" sizes="32x32" href="../_static/img/larch_favicon.png">
+      
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/larch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search these docs..." aria-label="Search these docs..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Users Guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installing Larch
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../user-guide/choice-models.html">
+   Choice Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../user-guide/data-fundamentals.html">
+     Data Fundamentals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../user-guide/linear-funcs.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../user-guide/machine-learning.html">
+     Machine Learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../bibliography.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api/~data.html">
+   Data
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/dataset.html">
+     Dataset
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.html">
+       larch.Dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_idca.html">
+       larch.Dataset.from_idca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_idce.html">
+       larch.Dataset.from_idce
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_idco.html">
+       larch.Dataset.from_idco
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
+       larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.n_cases.html">
+       larch.Dataset.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.n_alts.html">
+       larch.Dataset.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.CASEID.html">
+       larch.Dataset.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.ALTID.html">
+       larch.Dataset.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.alts_mapping.html">
+       larch.Dataset.alts_mapping
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.dims.html">
+       larch.Dataset.dims
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.sizes.html">
+       larch.Dataset.sizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.data_vars.html">
+       larch.Dataset.data_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.coords.html">
+       larch.Dataset.coords
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.attrs.html">
+       larch.Dataset.attrs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.encoding.html">
+       larch.Dataset.encoding
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.indexes.html">
+       larch.Dataset.indexes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.chunks.html">
+       larch.Dataset.chunks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.chunksizes.html">
+       larch.Dataset.chunksizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.nbytes.html">
+       larch.Dataset.nbytes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.caseids.html">
+       larch.Dataset.caseids
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.dissolve_zero_variance.html">
+       larch.Dataset.dissolve_zero_variance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.query_cases.html">
+       larch.Dataset.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.set_altnames.html">
+       larch.Dataset.set_altnames
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.set_dtypes.html">
+       larch.Dataset.set_dtypes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.setup_flow.html">
+       larch.Dataset.setup_flow
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.get_expr.html">
+       larch.Dataset.get_expr
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/datatree.html">
+     DataTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.html">
+       larch.DataTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
+       larch.DataTree.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.n_alts.html">
+       larch.DataTree.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.CASEID.html">
+       larch.DataTree.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.ALTID.html">
+       larch.DataTree.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
+       larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.setup_flow.html">
+       larch.DataTree.setup_flow
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/dataframes.html">
+     DataFrames
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataFrames.html">
+       larch.DataFrames
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api/~models.html">
+   Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/model.html">
+     Model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.html">
+       larch.numba.Model
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.datatree.html">
+       larch.numba.Model.datatree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.dataset.html">
+       larch.numba.Model.dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.n_cases.html">
+       larch.numba.Model.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_ca_var.html">
+       larch.numba.Model.choice_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_vars.html">
+       larch.numba.Model.choice_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_code.html">
+       larch.numba.Model.choice_co_code
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_ca_var.html">
+       larch.numba.Model.availability_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_co_vars.html">
+       larch.numba.Model.availability_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_ca.html">
+       larch.numba.Model.utility_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_co.html">
+       larch.numba.Model.utility_co
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity_ca.html">
+       larch.numba.Model.quantity_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.pf.html">
+       larch.numba.Model.pf
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.most_recent_estimation_result.html">
+       larch.numba.Model.most_recent_estimation_result
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.possible_overspecification.html">
+       larch.numba.Model.possible_overspecification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.set_values.html">
+       larch.numba.Model.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.lock_value.html">
+       larch.numba.Model.lock_value
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.set_cap.html">
+       larch.numba.Model.set_cap
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.remove_unused_parameters.html">
+       larch.numba.Model.remove_unused_parameters
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.maximize_loglike.html">
+       larch.numba.Model.maximize_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.calculate_parameter_covariance.html">
+       larch.numba.Model.calculate_parameter_covariance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_nil.html">
+       larch.numba.Model.loglike_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_null.html">
+       larch.numba.Model.loglike_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_nil.html">
+       larch.numba.Model.rho_sq_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_null.html">
+       larch.numba.Model.rho_sq_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.parameter_summary.html">
+       larch.numba.Model.parameter_summary
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.estimation_statistics.html">
+       larch.numba.Model.estimation_statistics
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.to_xlsx.html">
+       larch.numba.Model.to_xlsx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.bhhh.html">
+       larch.numba.Model.bhhh
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.check_d_loglike.html">
+       larch.numba.Model.check_d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike.html">
+       larch.numba.Model.d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike_casewise.html">
+       larch.numba.Model.d_loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike.html">
+       larch.numba.Model.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_casewise.html">
+       larch.numba.Model.loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.logsums.html">
+       larch.numba.Model.logsums
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.probability.html">
+       larch.numba.Model.probability
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity.html">
+       larch.numba.Model.quantity
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.total_weight.html">
+       larch.numba.Model.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.numba.Model.utility.html">
+       larch.numba.Model.utility
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/linear.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/nesting.html">
+     NestingTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.html">
+       larch.model.tree.NestingTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.new_node.html">
+       larch.model.tree.NestingTree.new_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.add_node.html">
+       larch.model.tree.NestingTree.add_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.remove_node.html">
+       larch.model.tree.NestingTree.remove_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.add_edge.html">
+       larch.model.tree.NestingTree.add_edge
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.tree.NestingTree.remove_edge.html">
+       larch.model.tree.NestingTree.remove_edge
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/modelgroup.html">
+     ModelGroup
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.html">
+       larch.model.model_group.ModelGroup
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.n_cases.html">
+       larch.model.model_group.ModelGroup.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.set_values.html">
+       larch.model.model_group.ModelGroup.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.total_weight.html">
+       larch.model.model_group.ModelGroup.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.loglike.html">
+       larch.model.model_group.ModelGroup.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.loglike2.html">
+       larch.model.model_group.ModelGroup.loglike2
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.model.model_group.ModelGroup.to_xlsx.html">
+       larch.model.model_group.ModelGroup.to_xlsx
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="mtc.html">
+   MTC Mode Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="000_mtc_data.html">
+     MTC Work Mode Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="001_mnl.html">
+     1: MTC MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="002_mtc.html">
+     2: MTC MNL Mode Choice, Motorized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="017A_mnl_segmented.html">
+     17a: Market Segmentatation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="017_mnl_final.html">
+     17: MTC Expanded MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="022-nl.html">
+     22: MTC Motorized and Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="028-nl.html">
+     28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="swissmetro.html">
+   Swissmetro
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     101: Swissmetro MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="102-swissmetro-weighted.html">
+     102: Swissmetro Weighted MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="109-swissmetro-nl.html">
+     109: Swissmetro Nested Logit Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="exampville.html">
+   Exampville
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+  <label for="toctree-checkbox-12">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="200_exampville.html">
+     200: Exampville Simulated Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="201_exville_mode_choice.html">
+     201: Exampville Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="202_exville_mc_logsums.html">
+     202: Exampville Mode Choice Logsums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="203_exville_dest.html">
+     203: Exampville Destination Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="itinerary.html">
+   Itinerary Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+  <label for="toctree-checkbox-13">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="300_itinerary.html">
+     300: Itinerary Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="301_itin_mnl.html">
+     301: Itinerary Choice using MNL
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="legacy.html">
+   Legacy Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+  <label for="toctree-checkbox-14">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="legacy/mtc.html">
+     MTC Mode Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/000_mtc_data.html">
+       MTC Work Mode Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/001.mtc.html">
+       1: MTC MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/002_mtc.html">
+       2: MTC MNL Mode Choice, Motorized
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/003_mtc.html">
+       3: MTC MNL Mode Choice, Zeroed Shared
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/005_mtc.html">
+       5: MTC MNL Mode Choice, Motorized Travel Time
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/006_mtc.html">
+       6: MTC MNL Mode Choice, Motorized Times
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/007_mtc.html">
+       7: MTC MNL Mode Choice, Diminishing OVTT by Distance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/008_mtc.html">
+       8: MTC MNL Mode Choice, TTR = 2.5
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/009_mtc.html">
+       9: MTC MNL Mode Choice, TTR = 4.0
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/010_mtc.html">
+       10: MTC MNL Mode Choice, Autos per Household
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/011_mtc.html">
+       11: MTC MNL Mode Choice, Vehicle by Worker
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/012_mtc.html">
+       12: MTC MNL Mode Choice, Autos per Adult
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/013_mtc.html">
+       13: MTC MNL Mode Choice, CBD
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/014_mtc.html">
+       14: MTC MNL Mode Choice, Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/015_mtc.html">
+       15: MTC MNL Mode Choice, CBD and Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/016_mtc.html">
+       16: MTC MNL Mode Choice, Cost by Income
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/017A_mtc.html">
+       17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/017B_mtc.html">
+       17B: MTC MNL Mode Choice, Segmented for 2 or more cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/017C_mtc.html">
+       17C: MTC MNL Mode Choice, Segmented for Males
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/017D_mtc.html">
+       17D: MTC MNL Mode Choice, Segmented for Females
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/017_mtc.html">
+       17: MTC Expanded MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/018_mtc.html">
+       18: MTC Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/019_mtc.html">
+       19: MTC Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/020_mtc.html">
+       20: MTC Shared Ride Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/021_mtc.html">
+       21: MTC Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/022_mtc.html">
+       22: MTC Motorized and Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/023_mtc.html">
+       23W: MTC Private Auto - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/024_mtc.html">
+       23W: MTC Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/025_mtc.html">
+       25: MTC Private Auto - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/026_mtc.html">
+       26: MTC Shared Ride - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/027_mtc.html">
+       27: MTC Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/028_mtc.html">
+       28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/029_mtc.html">
+       29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="legacy/swissmetro.html">
+     Swissmetro Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
+    <label for="toctree-checkbox-16">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/101_mnl.html">
+       101: Swissmetro MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/102_mnl_weighted.html">
+       102: Swissmetro Weighted MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/107_latent_class.html">
+       107: Latent Class Models
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/109_nl.html">
+       109: Swissmetro Nested Logit Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/111_cnl.html">
+       111: Swissmetro Cross-Nested Logit Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="legacy/itinerary.html">
+     Itinerary Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
+    <label for="toctree-checkbox-17">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/300L_itinerary.html">
+       300L: Itinerary Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/301_itin_mnl.html">
+       301: Itinerary Choice using MNL
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="legacy/302_itin_nl.html">
+       302: Itinerary Choice using Simple Nested Logit
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/example/101_swissmetro_mnl.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/jpn--/larch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2Fexample/101_swissmetro_mnl.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>101: Swissmetro MNL Mode Choice</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="swissmetro-mnl-mode-choice">
+<h1>101: Swissmetro MNL Mode Choice<a class="headerlink" href="#swissmetro-mnl-mode-choice" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">larch.numba</span> <span class="k">as</span> <span class="nn">lx</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This example is a mode choice model built using the Swissmetro example dataset.
+First we can create a Model object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;swissmetro example 01 (simple logit)&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We need to identify the availability and choice variables.
+The Swissmetro dataset, as with all Biogeme data, is only
+in <code class="docutils literal notranslate"><span class="pre">co</span></code> format, so we must define alternative
+availability as an expression for each alternative, using a
+dictionary to map alternative codes and expressions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_co_vars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;TRAIN_AV * (SP!=0)&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;SM_AV&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;CAR_AV * (SP!=0)&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the Swissmetro example dataset, as in many discrete choice
+modeling applications, there is one and only one chosen
+alternative for each case, so the choices can be described
+as a single expression that evaluates to the code of the
+chosen alternative.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">choice_co_code</span> <span class="o">=</span> <span class="s1">&#39;CHOICE&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will also write utility functions for each alternative.
+Since the data is only in <code class="docutils literal notranslate"><span class="pre">co</span></code> format, we must use only the
+<code class="docutils literal notranslate"><span class="pre">utility_co</span></code> form for the utility functions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span><span class="n">X</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_TRAIN&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_CAR&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;TRAIN_TT&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_TIME&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;SM_TT&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_TIME&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;CAR_TT&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_TIME&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;TRAIN_CO*(GA==0)&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_COST&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;SM_CO*(GA==0)&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_COST&quot;</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;CAR_CO&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;B_COST&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Larch will find all the parameters in the model, but we’d like to output them in
+a rational order.  We can use the ordering method to do this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;ASCs&quot;</span><span class="p">,</span> <span class="s1">&#39;ASC.*&#39;</span><span class="p">,),</span>
+    <span class="p">(</span><span class="s2">&quot;LOS&quot;</span><span class="p">,</span> <span class="s1">&#39;B_.*&#39;</span><span class="p">,),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can prepare the data, which is available in the data warehouse that
+comes with Larch.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">raw_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">lx</span><span class="o">.</span><span class="n">example_file</span><span class="p">(</span><span class="s1">&#39;swissmetro.csv.gz&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;CASEID&#39;</span><span class="p">)</span>
+<span class="n">raw_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GROUP</th>
+      <th>SURVEY</th>
+      <th>SP</th>
+      <th>ID</th>
+      <th>PURPOSE</th>
+      <th>FIRST</th>
+      <th>TICKET</th>
+      <th>WHO</th>
+      <th>LUGGAGE</th>
+      <th>AGE</th>
+      <th>MALE</th>
+      <th>INCOME</th>
+      <th>GA</th>
+      <th>ORIGIN</th>
+      <th>DEST</th>
+      <th>TRAIN_AV</th>
+      <th>CAR_AV</th>
+      <th>SM_AV</th>
+      <th>TRAIN_TT</th>
+      <th>TRAIN_CO</th>
+      <th>TRAIN_HE</th>
+      <th>SM_TT</th>
+      <th>SM_CO</th>
+      <th>SM_HE</th>
+      <th>SM_SEATS</th>
+      <th>CAR_TT</th>
+      <th>CAR_CO</th>
+      <th>CHOICE</th>
+    </tr>
+    <tr>
+      <th>CASEID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>112</td>
+      <td>48</td>
+      <td>120</td>
+      <td>63</td>
+      <td>52</td>
+      <td>20</td>
+      <td>0</td>
+      <td>117</td>
+      <td>65</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>103</td>
+      <td>48</td>
+      <td>30</td>
+      <td>60</td>
+      <td>49</td>
+      <td>10</td>
+      <td>0</td>
+      <td>117</td>
+      <td>84</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>130</td>
+      <td>48</td>
+      <td>60</td>
+      <td>67</td>
+      <td>58</td>
+      <td>30</td>
+      <td>0</td>
+      <td>117</td>
+      <td>52</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>103</td>
+      <td>40</td>
+      <td>30</td>
+      <td>63</td>
+      <td>52</td>
+      <td>20</td>
+      <td>0</td>
+      <td>72</td>
+      <td>52</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>130</td>
+      <td>36</td>
+      <td>60</td>
+      <td>63</td>
+      <td>42</td>
+      <td>20</td>
+      <td>0</td>
+      <td>90</td>
+      <td>84</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The swissmetro example models exclude some observations.  We can use pandas
+to identify the observations we would like to keep.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">keep</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="s2">&quot;PURPOSE in (1,3) and CHOICE != 0&quot;</span><span class="p">)</span>
+<span class="n">selected_data</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When you’ve created the data you need, you can pass the dataframe to
+the larch.DataFrames constructor.  Since the <em>swissmetro</em> data is in
+<code class="docutils literal notranslate"><span class="pre">idco</span></code> format, we’ll need to explicitly identify the alternative
+codes as well.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_idco</span><span class="p">(</span><span class="n">selected_data</span><span class="p">,</span> <span class="n">alts</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Train&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;SM&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;Car&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
+Dimensions:    (CASEID: 6768, _altid_: 3)
+Coordinates:
+  * CASEID     (CASEID) int64 0 1 2 3 4 5 6 ... 8445 8446 8447 8448 8449 8450
+  * _altid_    (_altid_) int64 1 2 3
+    alt_names  (_altid_) &lt;U5 &#x27;Train&#x27; &#x27;SM&#x27; &#x27;Car&#x27;
+Data variables: (12/28)
+    GROUP      (CASEID) int64 2 2 2 2 2 2 2 2 2 2 2 2 ... 3 3 3 3 3 3 3 3 3 3 3
+    SURVEY     (CASEID) int64 0 0 0 0 0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1 1 1 1
+    SP         (CASEID) int64 1 1 1 1 1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1 1 1 1
+    ID         (CASEID) int64 1 1 1 1 1 1 1 1 ... 939 939 939 939 939 939 939
+    PURPOSE    (CASEID) int64 1 1 1 1 1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3 3 3 3
+    FIRST      (CASEID) int64 0 0 0 0 0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1 1 1 1
+    ...         ...
+    SM_CO      (CASEID) int64 52 49 58 52 42 49 58 43 ... 21 21 17 16 16 17 21
+    SM_HE      (CASEID) int64 20 10 30 20 20 10 10 30 ... 20 30 30 10 20 30 30
+    SM_SEATS   (CASEID) int64 0 0 0 0 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0 0 0 0
+    CAR_TT     (CASEID) int64 117 117 117 72 90 90 72 ... 80 130 80 80 80 100
+    CAR_CO     (CASEID) int64 65 84 52 52 84 52 65 65 ... 80 104 64 80 64 104 80
+    CHOICE     (CASEID) int64 2 2 2 2 2 2 2 1 2 2 2 2 ... 2 2 1 1 1 1 1 1 1 1 1
+Attributes:
+    _caseid_:  CASEID
+    _altid_:   _altid_</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-b9c529e9-b779-4f20-8d9a-36a04078747c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-b9c529e9-b779-4f20-8d9a-36a04078747c' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>CASEID</span>: 6768</li><li><span class='xr-has-index'>_altid_</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-0fc6f77a-41b8-4898-9d7d-19b34188db6c' class='xr-section-summary-in' type='checkbox'  checked><label for='section-0fc6f77a-41b8-4898-9d7d-19b34188db6c' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>CASEID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 ... 8447 8448 8449 8450</div><input id='attrs-b80d7e8a-9778-41c5-81df-b2b72c59d378' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b80d7e8a-9778-41c5-81df-b2b72c59d378' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9d083305-f4b5-4144-aa41-5cb93803fa6b' class='xr-var-data-in' type='checkbox'><label for='data-9d083305-f4b5-4144-aa41-5cb93803fa6b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([   0,    1,    2, ..., 8448, 8449, 8450])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>_altid_</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3</div><input id='attrs-067e513c-1b31-45d0-aa67-44a6eaf2cbd3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-067e513c-1b31-45d0-aa67-44a6eaf2cbd3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d86d0f51-330c-4cbc-9dca-1c5afad51261' class='xr-var-data-in' type='checkbox'><label for='data-d86d0f51-330c-4cbc-9dca-1c5afad51261' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>alt_names</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>&lt;U5</div><div class='xr-var-preview xr-preview'>&#x27;Train&#x27; &#x27;SM&#x27; &#x27;Car&#x27;</div><input id='attrs-040bd3c5-fa33-4a30-a468-dd308c225644' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-040bd3c5-fa33-4a30-a468-dd308c225644' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6bf79efa-7bb2-4375-a91c-812a14fd0182' class='xr-var-data-in' type='checkbox'><label for='data-6bf79efa-7bb2-4375-a91c-812a14fd0182' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;Train&#x27;, &#x27;SM&#x27;, &#x27;Car&#x27;], dtype=&#x27;&lt;U5&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-441156f4-44d2-4c8b-972b-edac7602550a' class='xr-section-summary-in' type='checkbox'  ><label for='section-441156f4-44d2-4c8b-972b-edac7602550a' class='xr-section-summary' >Data variables: <span>(28)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>GROUP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 3 3 3 3 3 3 3 3</div><input id='attrs-c25b7e86-db49-460b-9c2f-fae69a3492f6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c25b7e86-db49-460b-9c2f-fae69a3492f6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7eab64ba-006b-45f8-87db-e22d2cc2d2bf' class='xr-var-data-in' type='checkbox'><label for='data-7eab64ba-006b-45f8-87db-e22d2cc2d2bf' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SURVEY</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-1df10377-f487-48fd-bab1-8ab96357427f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-1df10377-f487-48fd-bab1-8ab96357427f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-290684d7-93b8-4a10-ae10-49ea515c05e4' class='xr-var-data-in' type='checkbox'><label for='data-290684d7-93b8-4a10-ae10-49ea515c05e4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-c3cf1ebf-c43c-415e-bbeb-8e44d0b8b147' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c3cf1ebf-c43c-415e-bbeb-8e44d0b8b147' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0c387bdc-07e6-41bd-ba9d-66e5893f88ed' class='xr-var-data-in' type='checkbox'><label for='data-0c387bdc-07e6-41bd-ba9d-66e5893f88ed' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 ... 939 939 939 939 939</div><input id='attrs-4509a006-4109-41bd-8c12-18143697e5ce' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-4509a006-4109-41bd-8c12-18143697e5ce' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9f52e44a-c0bc-4ee6-8845-ce71b7f7bf4c' class='xr-var-data-in' type='checkbox'><label for='data-9f52e44a-c0bc-4ee6-8845-ce71b7f7bf4c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([  1,   1,   1, ..., 939, 939, 939])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>PURPOSE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-43c1d053-ac9e-4947-ac0d-16d41c9db497' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-43c1d053-ac9e-4947-ac0d-16d41c9db497' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-736409ef-c22c-4c24-8d8f-0721eac71af5' class='xr-var-data-in' type='checkbox'><label for='data-736409ef-c22c-4c24-8d8f-0721eac71af5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>FIRST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-d1d4e98c-0ea9-4f3f-912a-ea29e7090329' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d1d4e98c-0ea9-4f3f-912a-ea29e7090329' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-4b3871f8-7a83-4ccc-ad65-f038cb182b13' class='xr-var-data-in' type='checkbox'><label for='data-4b3871f8-7a83-4ccc-ad65-f038cb182b13' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TICKET</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 7 7 7 7 7 7 7 7</div><input id='attrs-5dc416c9-ca60-4093-8410-2a55af0700f4' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5dc416c9-ca60-4093-8410-2a55af0700f4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6a6e916c-0512-4ebc-a79b-42f0fa0a65e4' class='xr-var-data-in' type='checkbox'><label for='data-6a6e916c-0512-4ebc-a79b-42f0fa0a65e4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 7, 7, 7])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>WHO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-583a9283-0c53-4ec0-8e63-03273ec20978' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-583a9283-0c53-4ec0-8e63-03273ec20978' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ad5df853-5464-4d14-9056-3055457a7ece' class='xr-var-data-in' type='checkbox'><label for='data-ad5df853-5464-4d14-9056-3055457a7ece' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>LUGGAGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-969e04a9-9518-46c0-9fbe-c6a787f6d49d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-969e04a9-9518-46c0-9fbe-c6a787f6d49d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-70b04b5d-c459-4760-a1a3-8d117328b489' class='xr-var-data-in' type='checkbox'><label for='data-70b04b5d-c459-4760-a1a3-8d117328b489' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>AGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>3 3 3 3 3 3 3 3 ... 5 5 5 5 5 5 5 5</div><input id='attrs-92c5d979-6c33-4b9d-853d-286d77b35859' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-92c5d979-6c33-4b9d-853d-286d77b35859' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a119f5d7-7314-4b10-96ca-08e6beaa0d2e' class='xr-var-data-in' type='checkbox'><label for='data-a119f5d7-7314-4b10-96ca-08e6beaa0d2e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([3, 3, 3, ..., 5, 5, 5])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>MALE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-d17e1a23-2834-4d4d-9f51-68ae2a259796' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d17e1a23-2834-4d4d-9f51-68ae2a259796' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-76c1a33d-e934-4e0f-8d51-b84b3fa0ecfb' class='xr-var-data-in' type='checkbox'><label for='data-76c1a33d-e934-4e0f-8d51-b84b3fa0ecfb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>INCOME</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 2 2 2 2 2 2 2 2</div><input id='attrs-f98118b2-cd70-480f-94f5-74fc4433391d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-f98118b2-cd70-480f-94f5-74fc4433391d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b2fa0d39-cff9-47a1-bc66-b86c6e22e8e5' class='xr-var-data-in' type='checkbox'><label for='data-b2fa0d39-cff9-47a1-bc66-b86c6e22e8e5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>GA</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-bb510377-77e1-4890-91f4-e1463ca9e987' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bb510377-77e1-4890-91f4-e1463ca9e987' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-19a39f9c-153b-47f4-bba3-ade4f2c0eadb' class='xr-var-data-in' type='checkbox'><label for='data-19a39f9c-153b-47f4-bba3-ade4f2c0eadb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ORIGIN</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 1 1 1 1 1 1 1 1</div><input id='attrs-030df3f2-51aa-4aa2-bb5e-c1ba19e9e702' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-030df3f2-51aa-4aa2-bb5e-c1ba19e9e702' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bda95c83-ec65-47db-82b4-558f1a731261' class='xr-var-data-in' type='checkbox'><label for='data-bda95c83-ec65-47db-82b4-558f1a731261' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>DEST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 2 2 2 2 2 2 2 2</div><input id='attrs-ee8b8168-322a-4017-bc29-0e6733d9047a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ee8b8168-322a-4017-bc29-0e6733d9047a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7f55064e-b160-4212-84d4-c6c286e3dbd2' class='xr-var-data-in' type='checkbox'><label for='data-7f55064e-b160-4212-84d4-c6c286e3dbd2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-c23a89dc-2b97-44a9-bee6-c058849fc4fe' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c23a89dc-2b97-44a9-bee6-c058849fc4fe' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-67618280-034c-4250-a202-0bdd54ea7c6b' class='xr-var-data-in' type='checkbox'><label for='data-67618280-034c-4250-a202-0bdd54ea7c6b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-696fd63b-8d96-432d-a875-085df11d67ca' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-696fd63b-8d96-432d-a875-085df11d67ca' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9b08f81a-1292-40c1-bd4c-20983a29c739' class='xr-var-data-in' type='checkbox'><label for='data-9b08f81a-1292-40c1-bd4c-20983a29c739' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-43fb19e2-a9c2-44fc-b6f5-39daae596593' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-43fb19e2-a9c2-44fc-b6f5-39daae596593' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-75a37a78-15cd-48b8-a44a-1efe586774b2' class='xr-var-data-in' type='checkbox'><label for='data-75a37a78-15cd-48b8-a44a-1efe586774b2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>112 103 130 103 ... 108 108 128 108</div><input id='attrs-b09f7c1c-e71e-435a-93bd-eeb05352971b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b09f7c1c-e71e-435a-93bd-eeb05352971b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5a6b6292-6425-43d9-aaa2-b8729ff552d0' class='xr-var-data-in' type='checkbox'><label for='data-5a6b6292-6425-43d9-aaa2-b8729ff552d0' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([112, 103, 130, ..., 108, 128, 108])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>48 48 48 40 36 ... 13 12 16 16 13</div><input id='attrs-bc830877-51cc-4acd-a2ec-23ff77253fed' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bc830877-51cc-4acd-a2ec-23ff77253fed' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-855781b2-e51b-4e37-a805-b658c79c1474' class='xr-var-data-in' type='checkbox'><label for='data-855781b2-e51b-4e37-a805-b658c79c1474' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([48, 48, 48, ..., 16, 16, 13])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>120 30 60 30 60 ... 30 30 60 30 60</div><input id='attrs-75518ce7-e62b-42c4-8a4b-e2421d925b2a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-75518ce7-e62b-42c4-8a4b-e2421d925b2a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fd8a88c1-e08d-4a49-bf4c-8eb211fca9f9' class='xr-var-data-in' type='checkbox'><label for='data-fd8a88c1-e08d-4a49-bf4c-8eb211fca9f9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([120,  30,  60, ...,  60,  30,  60])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>63 60 67 63 63 ... 50 53 50 53 53</div><input id='attrs-d5d24715-45ac-495a-8a8b-466443f99e4f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d5d24715-45ac-495a-8a8b-466443f99e4f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3cc634f8-29f7-4ad7-8330-7301b2f1c1f9' class='xr-var-data-in' type='checkbox'><label for='data-3cc634f8-29f7-4ad7-8330-7301b2f1c1f9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([63, 60, 67, ..., 50, 53, 53])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>52 49 58 52 42 ... 17 16 16 17 21</div><input id='attrs-ea423371-238f-47f5-aaa1-67660a138540' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ea423371-238f-47f5-aaa1-67660a138540' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f559db71-49d1-4b66-aa76-dc678908ed97' class='xr-var-data-in' type='checkbox'><label for='data-f559db71-49d1-4b66-aa76-dc678908ed97' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([52, 49, 58, ..., 16, 17, 21])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>20 10 30 20 20 ... 30 10 20 30 30</div><input id='attrs-11764364-1a9e-461a-9a0c-34990111e666' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-11764364-1a9e-461a-9a0c-34990111e666' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d289bb44-6903-4096-ab3b-fc6a23e7f03d' class='xr-var-data-in' type='checkbox'><label for='data-d289bb44-6903-4096-ab3b-fc6a23e7f03d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([20, 10, 30, ..., 20, 30, 30])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_SEATS</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-a0fb1f14-9842-425c-a5ed-b2fd15beb371' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a0fb1f14-9842-425c-a5ed-b2fd15beb371' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1f759598-e1e3-45ad-ad8e-f1a170950fa9' class='xr-var-data-in' type='checkbox'><label for='data-1f759598-e1e3-45ad-ad8e-f1a170950fa9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>117 117 117 72 90 ... 80 80 80 100</div><input id='attrs-3d1fe512-5137-4fc3-a4c7-463397721261' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3d1fe512-5137-4fc3-a4c7-463397721261' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d97990c0-6a57-4135-9489-5c742d4baa40' class='xr-var-data-in' type='checkbox'><label for='data-d97990c0-6a57-4135-9489-5c742d4baa40' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([117, 117, 117, ...,  80,  80, 100])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>65 84 52 52 84 ... 64 80 64 104 80</div><input id='attrs-d07bf8b0-d965-4af9-921e-c36666107678' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d07bf8b0-d965-4af9-921e-c36666107678' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bfeae161-b036-4573-943b-d123b5894dc3' class='xr-var-data-in' type='checkbox'><label for='data-bfeae161-b036-4573-943b-d123b5894dc3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([ 65,  84,  52, ...,  64, 104,  80])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CHOICE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-62bf273b-9925-45a4-a64a-c5ea80870c47' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-62bf273b-9925-45a4-a64a-c5ea80870c47' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-53a41f0f-13fe-483e-8f5a-127c52af26a1' class='xr-var-data-in' type='checkbox'><label for='data-53a41f0f-13fe-483e-8f5a-127c52af26a1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a0a3f29b-e86b-4822-befe-b433f91531d4' class='xr-section-summary-in' type='checkbox'  checked><label for='section-a0a3f29b-e86b-4822-befe-b433f91531d4' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div></li></ul></div></div></div></div>
+</div>
+<p>You might notice we have not carefully constructed this object to
+include only the relevant data or the various simple transformations
+used in the utility definition above.  Larch can do this itself, if
+you assign this DataFrames not as the actual set of data used in model
+estimation, but rather as the <code class="docutils literal notranslate"><span class="pre">dataservice</span></code> that can be used as the
+source to create these computational arrays.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">ds</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">ds</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1976,</span> in <span class="ni">NumbaModel.datatree</span><span class="nt">(self, tree)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1974</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1975</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1976</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_datatree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">as_tree</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1977</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1978</span> <span class="k">else</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/dataset.py:1057,</span> in <span class="ni">Dataset.as_tree</span><span class="nt">(self, label, exclude_dims)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1049</span>     <span class="n">tree</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1050</span>         <span class="s1">&#39;idcoVars&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1051</span>         <span class="n">ds</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1054</span>         <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1055</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1056</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1057</span>     <span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="bp">self</span><span class="p">})</span>
+<span class="g g-Whitespace">   </span><span class="mi">1058</span> <span class="k">return</span> <span class="n">tree</span>
+
+<span class="nn">File ~/work/larch/larch/larch/dataset.py:1110,</span> in <span class="ni">DataTree.__init__</span><span class="nt">(self, graph, root_node_name, extra_funcs, extra_vars, cache_dir, relationships, force_digitization, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1099</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1100</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1101</span>     <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1108</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1109</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1110</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1111</span>         <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1112</span>         <span class="n">root_node_name</span><span class="o">=</span><span class="n">root_node_name</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1113</span>         <span class="n">extra_funcs</span><span class="o">=</span><span class="n">extra_funcs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1114</span>         <span class="n">extra_vars</span><span class="o">=</span><span class="n">extra_vars</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1115</span>         <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span>         <span class="n">relationships</span><span class="o">=</span><span class="n">relationships</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span>         <span class="n">force_digitization</span><span class="o">=</span><span class="n">force_digitization</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1118</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="n">dim_order</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1121</span>     <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_CASEID</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: object.__init__() takes exactly one argument (the instance to initialize)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can estimate the models and check the results match up with those given by Biogeme:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">set_cap</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/larch/larch/larch/numba/model.py:899: UserWarning: cannot initialize graph, must define alternatives somehow
+  warnings.warn(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">set_cap</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:622,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.set_cap</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in calculate_parameter_covariance
+Traceback (most recent call last):
+  File &quot;larch/model/abstract_model.pyx&quot;, line 1065, in larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1773, in d2_loglike
+    return super().d2_loglike(
+  File &quot;larch/model/abstract_model.pyx&quot;, line 566, in larch.model.abstract_model.AbstractChoiceModel.d2_loglike
+  File &quot;larch/model/abstract_model.pyx&quot;, line 417, in larch.model.abstract_model.AbstractChoiceModel.loglike3
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1706, in loglike2
+    result_arrays, penalty = self._loglike_runner(
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1339, in _loglike_runner
+    args = self.__prepare_for_compute(
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1169, in __prepare_for_compute
+    raise MissingDataError(&#39;dataframes and datatree are both not set, maybe you need to call `load_data` first?&#39;)
+larch.exceptions.MissingDataError: dataframes and datatree are both not set, maybe you need to call `load_data` first?
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">MissingDataError</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:1230,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:1065,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1773,</span> in <span class="ni">NumbaModel.d2_loglike</span><span class="nt">(self, x, start_case, stop_case, step_case, leave_out, keep_only, subsample)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1762</span> <span class="k">def</span> <span class="nf">d2_loglike</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1763</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1764</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="n">subsample</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1772</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1773</span>     <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">d2_loglike</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1774</span>         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1775</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1776</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1777</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1778</span>         <span class="n">leave_out</span><span class="o">=</span><span class="n">leave_out</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1779</span>         <span class="n">keep_only</span><span class="o">=</span><span class="n">keep_only</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1780</span>         <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1781</span>     <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:566,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.d2_loglike</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:417,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.loglike3</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1706,</span> in <span class="ni">NumbaModel.loglike2</span><span class="nt">(self, x, start_case, stop_case, step_case, persist, leave_out, keep_only, subsample, return_series, probability_only)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1692</span> <span class="k">def</span> <span class="nf">loglike2</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1693</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1694</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1704</span>         <span class="n">probability_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1705</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1706</span>     <span class="n">result_arrays</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loglike_runner</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1707</span>         <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1708</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1709</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1710</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1711</span>         <span class="n">return_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1712</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1713</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1714</span>         <span class="n">ll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1715</span>         <span class="n">dll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">d_loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1716</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1717</span>     <span class="k">if</span> <span class="n">start_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stop_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">step_case</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1339,</span> in <span class="ni">NumbaModel._loglike_runner</span><span class="nt">(self, x, only_utility, return_gradient, return_probability, return_bhhh, start_case, stop_case, step_case)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1327</span> <span class="k">def</span> <span class="nf">_loglike_runner</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1328</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1329</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1336</span>         <span class="n">step_case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1337</span> <span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1338</span>     <span class="n">caseslice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start_case</span><span class="p">,</span> <span class="n">stop_case</span><span class="p">,</span> <span class="n">step_case</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1339</span>     <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepare_for_compute</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1340</span>         <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1341</span>         <span class="n">allow_missing_ch</span><span class="o">=</span><span class="n">return_probability</span> <span class="ow">or</span> <span class="p">(</span><span class="n">only_utility</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1342</span>         <span class="n">caseslice</span><span class="o">=</span><span class="n">caseslice</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1343</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1344</span>     <span class="n">args_flags</span> <span class="o">=</span> <span class="n">args</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span>
+<span class="g g-Whitespace">   </span><span class="mi">1345</span>         <span class="n">only_utility</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1346</span>         <span class="n">return_probability</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1347</span>         <span class="n">return_gradient</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1348</span>         <span class="n">return_bhhh</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1349</span>     <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1350</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1169,</span> in <span class="ni">NumbaModel.__prepare_for_compute</span><span class="nt">(self, x, allow_missing_ch, allow_missing_av, caseslice)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="n">missing_ch</span><span class="p">,</span> <span class="n">missing_av</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1169</span>     <span class="k">raise</span> <span class="n">MissingDataError</span><span class="p">(</span><span class="s1">&#39;dataframes and datatree are both not set, maybe you need to call `load_data` first?&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1170</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span><span class="o">.</span><span class="n">is_computational_ready</span><span class="p">(</span><span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DataFrames is not computational-ready&#39;</span><span class="p">)</span>
+
+<span class="ne">MissingDataError</span>: dataframes and datatree are both not set, maybe you need to call `load_data` first?
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
+Traceback (most recent call last):
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 896, in graph
+    self.initialize_graph()
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
+    super().initialize_graph(
+  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
+ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 662, in larch.model.parameter_frame.ParameterFrame.pfo
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
+    self.reflow_data_arrays()
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
+    if self.graph is None:
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 900, in graph
+    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+RuntimeError: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:662,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">|                       |   Value |   Std Err |   t Stat | Signif   |   Null Value |</span>
+<span class="s2">|:----------------------|--------:|----------:|---------:|:---------|-------------:|</span>
+<span class="s2">| (&#39;ASCs&#39;, &#39;ASC_CAR&#39;)   | -0.155  |  0.0432   |    -3.58 | ***      |            0 |</span>
+<span class="s2">| (&#39;ASCs&#39;, &#39;ASC_TRAIN&#39;) | -0.701  |  0.0549   |   -12.78 | ***      |            0 |</span>
+<span class="s2">| (&#39;LOS&#39;, &#39;B_COST&#39;)     | -0.0108 |  0.000518 |   -20.91 | ***      |            0 |</span>
+<span class="s2">| (&#39;LOS&#39;, &#39;B_TIME&#39;)     | -0.0128 |  0.000569 |   -22.46 | ***      |            0 |</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
+Traceback (most recent call last):
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 896, in graph
+    self.initialize_graph()
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
+    super().initialize_graph(
+  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
+ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 662, in larch.model.parameter_frame.ParameterFrame.pfo
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
+    self.reflow_data_arrays()
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
+    if self.graph is None:
+  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 900, in graph
+    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+RuntimeError: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">assert</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="s2"> |                       |   Value |   Std Err |   t Stat | Signif   |   Null Value |</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="s2"> |:----------------------|--------:|----------:|---------:|:---------|-------------:|</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="s2"> | (&#39;ASCs&#39;, &#39;ASC_CAR&#39;)   | -0.155  |  0.0432   |    -3.58 | ***      |            0 |</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="s2"> | (&#39;ASCs&#39;, &#39;ASC_TRAIN&#39;) | -0.701  |  0.0549   |   -12.78 | ***      |            0 |</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span><span class="s2"> | (&#39;LOS&#39;, &#39;B_COST&#39;)     | -0.0108 |  0.000518 |   -20.91 | ***      |            0 |</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span><span class="s2"> | (&#39;LOS&#39;, &#39;B_TIME&#39;)     | -0.0128 |  0.000569 |   -22.46 | ***      |            0 |</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span><span class="s2"> &quot;&quot;&quot;</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:662,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./example"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="swissmetro.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Swissmetro Examples</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="102-swissmetro-weighted.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">102: Swissmetro Weighted MNL Mode Choice</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Jeffrey Newman<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

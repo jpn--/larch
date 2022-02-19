@@ -1,0 +1,120 @@
+.. currentmodule:: larch
+
+========================================
+109: Swissmetro Nested Logit Mode Choice
+========================================
+
+.. testsetup:: *
+
+	import larch
+	import os
+	import pandas
+	pandas.set_option("display.max_columns", 999)
+	pandas.set_option('expand_frame_repr', False)
+	pandas.set_option('precision', 3)
+	larch._doctest_mode_ = True
+
+This example is a mode choice model built using the Swissmetro example dataset.
+First we create the DB and Model objects.  When we create the DB object, we will
+redefine the weight value:
+
+.. testcode::
+
+	d = larch.examples.SWISSMETRO()
+	m = larch.Model(dataservice=d)
+
+We can attach a title to the model. The title does not affect the calculations
+as all; it is merely used in various output report styles.
+
+.. testcode::
+
+	m.title = "swissmetro example 09 (nested logit)"
+
+We need to identify the availability and choice variables. These have been conveniently
+set up in the data.
+
+.. testcode::
+
+	m.availability_var = 'avail'
+	m.choice_ca_var = 'choice'
+
+The swissmetro dataset, as with all Biogeme data, is only in `co` format.
+
+.. testcode::
+
+	from larch.roles import P,X
+	m.utility_co[1] = ( P.ASC_TRAIN
+	                  + P.B_TIME * X.TRAIN_TT
+	                  + P.B_COST * X("TRAIN_CO*(GA==0)") )
+	m.utility_co[2] = ( P.B_TIME * X.SM_TT
+	                  + P.B_COST * X("SM_CO*(GA==0)") )
+	m.utility_co[3] = ( P.ASC_CAR
+	                  + P.B_TIME * X.CAR_TT
+	                  + P.B_COST * X("CAR_CO") )
+
+
+To create a new nest, we can use the new_nest command, although we'll need to know what the
+alternative codes are for the alternatives in our dataset. To find out, we can do:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> dict(m.dataservice.alternatives)
+	{1: 'Train', 2: 'SM', 3: 'Car'}
+
+
+For this example, we want to nest together the Train and Car modes into a "existing" modes nest.
+It looks like those are modes 1 and 3, so we can use the new_nest command like this:
+
+.. testcode::
+
+	m.graph.new_node(parameter="existing", parent=m.graph.root_id, children=[1,3], name='Existing')
+
+
+Larch will find all the parameters in the model, but we'd like to output them in
+a rational order.  We can use the ordering method to do this:
+
+.. testcode::
+
+	m.ordering = [
+		("ASCs", 'ASC.*',),
+		("LOS", 'B_.*',),
+		("LogSums", 'existing'),
+	]
+
+The swissmetro example models exclude some observations.  We will use the selector
+to identify the observations we would like to keep.  There are two selector criteria,
+and only cases that evaluate `True` for both are selected.
+
+.. testcode::
+
+	m.dataservice.selector = ["PURPOSE in (1,3)", "CHOICE != 0"]
+
+We can estimate the models and check the results match up with those given by Biogeme:
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike(method='slsqp')
+	┣ ...Optimization terminated successfully...
+	>>> m.loglike()
+	-5236.90...
+	>>> m.calculate_parameter_covariance()
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])  # parameter frame, ordered
+	                    value    std_err  t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	ASCs     ASC_CAR   -0.167  3.714e-02  -4.50...   5.45...e-02       -3.06...
+	         ASC_TRAIN -0.512  4.518e-02 -11.33...   7.91...e-02       -6.47...
+	LOS      B_COST    -0.009  4.627e-04 -18.51...   6.00...e-04      -14.26...
+	         B_TIME    -0.009  5.699e-04 -15.76...   1.07...e-03       -8.39...
+	LogSums  existing   0.487  2.790e-02 -18.39...   3.89...e-02      -13.18...
+
+
+.. tip::
+
+	If you want access to the model in this example without worrying about assembling all the code blocks
+	together on your own, you can load a read-to-estimate copy like this::
+
+		m = larch.example(109)

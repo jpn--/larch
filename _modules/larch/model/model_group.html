@@ -1,0 +1,1503 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>larch.model.model_group &#8212; v5.5.10</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/larch-book.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <link rel="shortcut icon" href="../../../_static/larch_favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+      
+      <link rel="icon" sizes="32x32" href="../../../_static/img/larch_favicon.png">
+      
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/larch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search these docs..." aria-label="Search these docs..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Users Guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installing Larch
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../user-guide/choice-models.html">
+   Choice Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/data-fundamentals.html">
+     Data Fundamentals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/linear-funcs.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/machine-learning.html">
+     Machine Learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../bibliography.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api/~data.html">
+   Data
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/dataset.html">
+     Dataset
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.html">
+       larch.Dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idca.html">
+       larch.Dataset.from_idca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idce.html">
+       larch.Dataset.from_idce
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idco.html">
+       larch.Dataset.from_idco
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.construct.html">
+       larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.n_cases.html">
+       larch.Dataset.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.n_alts.html">
+       larch.Dataset.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.CASEID.html">
+       larch.Dataset.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.ALTID.html">
+       larch.Dataset.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.alts_mapping.html">
+       larch.Dataset.alts_mapping
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.dims.html">
+       larch.Dataset.dims
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.sizes.html">
+       larch.Dataset.sizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.data_vars.html">
+       larch.Dataset.data_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.coords.html">
+       larch.Dataset.coords
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.attrs.html">
+       larch.Dataset.attrs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.encoding.html">
+       larch.Dataset.encoding
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.indexes.html">
+       larch.Dataset.indexes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.chunks.html">
+       larch.Dataset.chunks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.chunksizes.html">
+       larch.Dataset.chunksizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.nbytes.html">
+       larch.Dataset.nbytes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.caseids.html">
+       larch.Dataset.caseids
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.dissolve_zero_variance.html">
+       larch.Dataset.dissolve_zero_variance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.query_cases.html">
+       larch.Dataset.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.set_altnames.html">
+       larch.Dataset.set_altnames
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.set_dtypes.html">
+       larch.Dataset.set_dtypes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.setup_flow.html">
+       larch.Dataset.setup_flow
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.get_expr.html">
+       larch.Dataset.get_expr
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/datatree.html">
+     DataTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.html">
+       larch.DataTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.n_cases.html">
+       larch.DataTree.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.n_alts.html">
+       larch.DataTree.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.CASEID.html">
+       larch.DataTree.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.ALTID.html">
+       larch.DataTree.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.query_cases.html">
+       larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.setup_flow.html">
+       larch.DataTree.setup_flow
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/dataframes.html">
+     DataFrames
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataFrames.html">
+       larch.DataFrames
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api/~models.html">
+   Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/model.html">
+     Model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.html">
+       larch.numba.Model
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.datatree.html">
+       larch.numba.Model.datatree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.dataset.html">
+       larch.numba.Model.dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.n_cases.html">
+       larch.numba.Model.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_ca_var.html">
+       larch.numba.Model.choice_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_co_vars.html">
+       larch.numba.Model.choice_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_co_code.html">
+       larch.numba.Model.choice_co_code
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.availability_ca_var.html">
+       larch.numba.Model.availability_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.availability_co_vars.html">
+       larch.numba.Model.availability_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility_ca.html">
+       larch.numba.Model.utility_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility_co.html">
+       larch.numba.Model.utility_co
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.quantity_ca.html">
+       larch.numba.Model.quantity_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.pf.html">
+       larch.numba.Model.pf
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.most_recent_estimation_result.html">
+       larch.numba.Model.most_recent_estimation_result
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.possible_overspecification.html">
+       larch.numba.Model.possible_overspecification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.set_values.html">
+       larch.numba.Model.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.lock_value.html">
+       larch.numba.Model.lock_value
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.set_cap.html">
+       larch.numba.Model.set_cap
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.remove_unused_parameters.html">
+       larch.numba.Model.remove_unused_parameters
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.maximize_loglike.html">
+       larch.numba.Model.maximize_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.calculate_parameter_covariance.html">
+       larch.numba.Model.calculate_parameter_covariance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_nil.html">
+       larch.numba.Model.loglike_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_null.html">
+       larch.numba.Model.loglike_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.rho_sq_nil.html">
+       larch.numba.Model.rho_sq_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.rho_sq_null.html">
+       larch.numba.Model.rho_sq_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.parameter_summary.html">
+       larch.numba.Model.parameter_summary
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.estimation_statistics.html">
+       larch.numba.Model.estimation_statistics
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.to_xlsx.html">
+       larch.numba.Model.to_xlsx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.bhhh.html">
+       larch.numba.Model.bhhh
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.check_d_loglike.html">
+       larch.numba.Model.check_d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.d_loglike.html">
+       larch.numba.Model.d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.d_loglike_casewise.html">
+       larch.numba.Model.d_loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike.html">
+       larch.numba.Model.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_casewise.html">
+       larch.numba.Model.loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.logsums.html">
+       larch.numba.Model.logsums
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.probability.html">
+       larch.numba.Model.probability
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.quantity.html">
+       larch.numba.Model.quantity
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.total_weight.html">
+       larch.numba.Model.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility.html">
+       larch.numba.Model.utility
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/linear.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/nesting.html">
+     NestingTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.html">
+       larch.model.tree.NestingTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.new_node.html">
+       larch.model.tree.NestingTree.new_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.add_node.html">
+       larch.model.tree.NestingTree.add_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.remove_node.html">
+       larch.model.tree.NestingTree.remove_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.add_edge.html">
+       larch.model.tree.NestingTree.add_edge
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.remove_edge.html">
+       larch.model.tree.NestingTree.remove_edge
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/modelgroup.html">
+     ModelGroup
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.html">
+       larch.model.model_group.ModelGroup
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.n_cases.html">
+       larch.model.model_group.ModelGroup.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.set_values.html">
+       larch.model.model_group.ModelGroup.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.total_weight.html">
+       larch.model.model_group.ModelGroup.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike.html">
+       larch.model.model_group.ModelGroup.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike2.html">
+       larch.model.model_group.ModelGroup.loglike2
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.to_xlsx.html">
+       larch.model.model_group.ModelGroup.to_xlsx
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/mtc.html">
+   MTC Mode Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/000_mtc_data.html">
+     MTC Work Mode Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/001_mnl.html">
+     1: MTC MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/002_mtc.html">
+     2: MTC MNL Mode Choice, Motorized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/017A_mnl_segmented.html">
+     17a: Market Segmentatation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/017_mnl_final.html">
+     17: MTC Expanded MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/022-nl.html">
+     22: MTC Motorized and Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/028-nl.html">
+     28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/swissmetro.html">
+   Swissmetro
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/101_swissmetro_mnl.html">
+     101: Swissmetro MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/102-swissmetro-weighted.html">
+     102: Swissmetro Weighted MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/109-swissmetro-nl.html">
+     109: Swissmetro Nested Logit Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/exampville.html">
+   Exampville
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+  <label for="toctree-checkbox-12">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/200_exampville.html">
+     200: Exampville Simulated Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/201_exville_mode_choice.html">
+     201: Exampville Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/202_exville_mc_logsums.html">
+     202: Exampville Mode Choice Logsums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/203_exville_dest.html">
+     203: Exampville Destination Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/itinerary.html">
+   Itinerary Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+  <label for="toctree-checkbox-13">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/300_itinerary.html">
+     300: Itinerary Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/301_itin_mnl.html">
+     301: Itinerary Choice using MNL
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/legacy.html">
+   Legacy Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+  <label for="toctree-checkbox-14">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/mtc.html">
+     MTC Mode Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/000_mtc_data.html">
+       MTC Work Mode Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/001.mtc.html">
+       1: MTC MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/002_mtc.html">
+       2: MTC MNL Mode Choice, Motorized
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/003_mtc.html">
+       3: MTC MNL Mode Choice, Zeroed Shared
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/005_mtc.html">
+       5: MTC MNL Mode Choice, Motorized Travel Time
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/006_mtc.html">
+       6: MTC MNL Mode Choice, Motorized Times
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/007_mtc.html">
+       7: MTC MNL Mode Choice, Diminishing OVTT by Distance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/008_mtc.html">
+       8: MTC MNL Mode Choice, TTR = 2.5
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/009_mtc.html">
+       9: MTC MNL Mode Choice, TTR = 4.0
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/010_mtc.html">
+       10: MTC MNL Mode Choice, Autos per Household
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/011_mtc.html">
+       11: MTC MNL Mode Choice, Vehicle by Worker
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/012_mtc.html">
+       12: MTC MNL Mode Choice, Autos per Adult
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/013_mtc.html">
+       13: MTC MNL Mode Choice, CBD
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/014_mtc.html">
+       14: MTC MNL Mode Choice, Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/015_mtc.html">
+       15: MTC MNL Mode Choice, CBD and Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/016_mtc.html">
+       16: MTC MNL Mode Choice, Cost by Income
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017A_mtc.html">
+       17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017B_mtc.html">
+       17B: MTC MNL Mode Choice, Segmented for 2 or more cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017C_mtc.html">
+       17C: MTC MNL Mode Choice, Segmented for Males
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017D_mtc.html">
+       17D: MTC MNL Mode Choice, Segmented for Females
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017_mtc.html">
+       17: MTC Expanded MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/018_mtc.html">
+       18: MTC Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/019_mtc.html">
+       19: MTC Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/020_mtc.html">
+       20: MTC Shared Ride Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/021_mtc.html">
+       21: MTC Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/022_mtc.html">
+       22: MTC Motorized and Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/023_mtc.html">
+       23W: MTC Private Auto - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/024_mtc.html">
+       23W: MTC Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/025_mtc.html">
+       25: MTC Private Auto - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/026_mtc.html">
+       26: MTC Shared Ride - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/027_mtc.html">
+       27: MTC Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/028_mtc.html">
+       28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/029_mtc.html">
+       29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/swissmetro.html">
+     Swissmetro Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
+    <label for="toctree-checkbox-16">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/101_mnl.html">
+       101: Swissmetro MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/102_mnl_weighted.html">
+       102: Swissmetro Weighted MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/107_latent_class.html">
+       107: Latent Class Models
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/109_nl.html">
+       109: Swissmetro Nested Logit Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/111_cnl.html">
+       111: Swissmetro Cross-Nested Logit Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/itinerary.html">
+     Itinerary Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
+    <label for="toctree-checkbox-17">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/300L_itinerary.html">
+       300L: Itinerary Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/301_itin_mnl.html">
+       301: Itinerary Choice using MNL
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/302_itin_nl.html">
+       302: Itinerary Choice using Simple Nested Logit
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/jpn--/larch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2F_modules/larch/model/model_group.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <h1>Source code for larch.model.model_group</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.abstract_model</span> <span class="kn">import</span> <span class="n">AbstractChoiceModel</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">persist_flags</span>
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">ParameterNotInModelWarning</span>
+<span class="kn">from</span> <span class="nn">.constraints</span> <span class="kn">import</span> <span class="n">ParametricConstraintList</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">MutableSequence</span>
+
+<div class="viewcode-block" id="ModelGroup"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.html#larch.model.model_group.ModelGroup">[docs]</a><span class="k">class</span> <span class="nc">ModelGroup</span><span class="p">(</span><span class="n">AbstractChoiceModel</span><span class="p">,</span> <span class="n">MutableSequence</span><span class="p">):</span>
+
+	<span class="n">constraints</span> <span class="o">=</span> <span class="n">ParametricConstraintList</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ModelGroup.__init__"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.html#larch.model.model_group.ModelGroup.__init__">[docs]</a>	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">models</span><span class="p">,</span>
+			<span class="o">*</span><span class="p">,</span>
+			<span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">frame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">dataservice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">constraints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+	<span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+			<span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+			<span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+			<span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+		<span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ModelGroup</span><span class="p">):</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_k_models</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_dataservice</span> <span class="o">=</span> <span class="n">dataservice</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_mangled</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="n">constraints</span></div>
+
+	<span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+	<span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+		<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">AbstractChoiceModel</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+	<span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+		<span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+	<span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+		<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">AbstractChoiceModel</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">dataframes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s1">&#39;access dataframes of group members individually&#39;</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">n_cases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;int : Total number of cases in the attached data of all grouped models.&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">n_cases</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ModelGroup.total_weight"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.total_weight.html#larch.model.model_group.ModelGroup.total_weight">[docs]</a>	<span class="k">def</span> <span class="nf">total_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The total weight of cases in the attached data of all grouped models.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		float</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">total_weight</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="nf">unmangle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+			<span class="n">rows_to_import</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows_to_import</span><span class="p">):</span>
+				<span class="n">new_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rows_to_import</span><span class="p">]</span>
+				<span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+
+				<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+					<span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">new_frame</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+					<span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">new_frame</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+				<span class="p">):</span>
+					<span class="n">frame_values_have_changed</span> <span class="o">=</span> <span class="kc">True</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">frame_values_have_changed</span> <span class="o">=</span> <span class="kc">False</span>
+
+				<span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">new_frame</span>
+				<span class="k">if</span> <span class="n">frame_values_have_changed</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_frame_values_have_changed</span><span class="p">()</span>
+
+			<span class="n">k</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ModelGroup.set_values"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.set_values.html#larch.model.model_group.ModelGroup.set_values">[docs]</a>	<span class="k">def</span> <span class="nf">set_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">respect_holdfast</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Set the parameter values for one or more parameters.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		values : {&#39;null&#39;, &#39;init&#39;, &#39;best&#39;, array-like, dict, scalar}, optional</span>
+<span class="sd">			New values to set for the parameters.</span>
+<span class="sd">			If &#39;null&#39; or &#39;init&#39;, the current values are set</span>
+<span class="sd">			equal to the null or initial values given in</span>
+<span class="sd">			the &#39;nullvalue&#39; or &#39;initvalue&#39; column of the</span>
+<span class="sd">			parameter frame, respectively.</span>
+<span class="sd">			If &#39;best&#39;, the current values are set equal to</span>
+<span class="sd">			the values given in the &#39;best&#39; column of the</span>
+<span class="sd">			parameter frame, if that columns exists,</span>
+<span class="sd">			otherwise a ValueError exception is raised.</span>
+<span class="sd">			If given as array-like, the array must be a</span>
+<span class="sd">			vector with length equal to the length of the</span>
+<span class="sd">			parameter frame, and the given vector will replace</span>
+<span class="sd">			the current values.  If given as a dictionary,</span>
+<span class="sd">			the dictionary is used to update `kwargs` before</span>
+<span class="sd">			they are processed.</span>
+<span class="sd">		kwargs : dict</span>
+<span class="sd">			Any keyword arguments (or if `values` is a</span>
+<span class="sd">			dictionary) are used to update the included named</span>
+<span class="sd">			parameters only.  A warning will be given if any key of</span>
+<span class="sd">			the dictionary is not found among the existing named</span>
+<span class="sd">			parameters in the parameter frame, and the value</span>
+<span class="sd">			associated with that key is ignored.  Any parameters</span>
+<span class="sd">			not named by key in this dictionary are not changed.</span>
+
+<span class="sd">		Notes</span>
+<span class="sd">		-----</span>
+<span class="sd">		Setting parameters both in the `values` argument and</span>
+<span class="sd">		through keyword assignment is not explicitly disallowed,</span>
+<span class="sd">		although it is not recommended and may be disallowed in the future.</span>
+
+<span class="sd">		Raises</span>
+<span class="sd">		------</span>
+<span class="sd">		ValueError</span>
+<span class="sd">			If setting to &#39;best&#39; but there is no &#39;best&#39; column in</span>
+<span class="sd">			the `pf` parameters DataFrame.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span> <span class="n">respect_holdfast</span><span class="o">=</span><span class="n">respect_holdfast</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_frame_values_have_changed</span><span class="p">()</span></div>
+
+	<span class="k">def</span> <span class="nf">_frame_values_have_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="kn">import</span> <span class="nn">warnings</span>
+		<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+			<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ParameterNotInModelWarning</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+				<span class="n">k</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="o">**</span><span class="n">vals</span><span class="p">)</span>
+				<span class="n">k</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+			<span class="n">k</span><span class="o">.</span><span class="n">_frame_values_have_changed</span><span class="p">()</span>
+
+	<span class="k">def</span> <span class="nf">__prep_for_compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="kn">import</span> <span class="nn">warnings</span>
+		<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+			<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ParameterNotInModelWarning</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+				<span class="n">k</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="o">**</span><span class="n">vals</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataservice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autoscale_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+			<span class="n">k</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span>
+				<span class="n">dataservice</span><span class="o">=</span><span class="n">dataservice</span><span class="p">,</span>
+				<span class="n">autoscale_weights</span><span class="o">=</span><span class="n">autoscale_weights</span><span class="p">,</span>
+				<span class="n">log_warnings</span><span class="o">=</span><span class="n">log_warnings</span><span class="p">,</span>
+			<span class="p">)</span>
+
+<div class="viewcode-block" id="ModelGroup.loglike"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike.html#larch.model.model_group.ModelGroup.loglike">[docs]</a>	<span class="k">def</span> <span class="nf">loglike</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="o">*</span><span class="p">,</span>
+			<span class="n">start_case</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="n">stop_case</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">step_case</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">persist</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="n">leave_out</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">keep_only</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">subsample</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">return_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+			<span class="n">probability_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+	<span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Compute a log likelihood value.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		x : {&#39;null&#39;, &#39;init&#39;, &#39;best&#39;, array-like, dict, scalar}, optional</span>
+<span class="sd">			Values for the parameters.  See :ref:`set_values` for details.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		dictx</span>
+<span class="sd">			The log likelihood is given by key &#39;ll&#39; and the first derivative by key &#39;dll&#39;.</span>
+<span class="sd">			Other arrays are also included if `persist` is set to True.</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">if</span> <span class="n">start_case</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;start_case != 0&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">stop_case</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;stop_case != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">step_case</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;step_case != 1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">leave_out</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;leave_out != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">keep_only</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;keep_only != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">subsample</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;subsample != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">probability_only</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;probability_only != False&#39;</span><span class="p">)</span>
+
+		<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">dictx</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__prep_for_compute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">ll2_parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">(</span><span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">]</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">persist</span><span class="p">:</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ll2_parts</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_check_if_best</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">result</span>
+		<span class="n">ll2</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">(</span>
+			<span class="n">ll</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">ll</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">),</span>
+		<span class="p">)</span>
+		<span class="k">if</span> <span class="n">persist</span> <span class="o">&amp;</span> <span class="n">persist_flags</span><span class="o">.</span><span class="n">PERSIST_PARTS</span><span class="p">:</span>
+			<span class="n">ll2</span><span class="o">.</span><span class="n">ll_parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="o">.</span><span class="n">ll</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;ll&#39;</span><span class="p">:</span>
+				<span class="n">ll2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_check_if_best</span><span class="p">(</span><span class="n">ll2</span><span class="o">.</span><span class="n">ll</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">ll2</span></div>
+
+
+<div class="viewcode-block" id="ModelGroup.loglike2"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike2.html#larch.model.model_group.ModelGroup.loglike2">[docs]</a>	<span class="k">def</span> <span class="nf">loglike2</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="o">*</span><span class="p">,</span>
+			<span class="n">start_case</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="n">stop_case</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">step_case</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">persist</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+			<span class="n">leave_out</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">keep_only</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">subsample</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+			<span class="n">return_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+			<span class="n">probability_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+
+	<span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Compute a log likelihood value and its first derivative.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		x : {&#39;null&#39;, &#39;init&#39;, &#39;best&#39;, array-like, dict, scalar}, optional</span>
+<span class="sd">			Values for the parameters.  See :ref:`set_values` for details.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		dictx</span>
+<span class="sd">			The log likelihood is given by key &#39;ll&#39; and the first derivative by key &#39;dll&#39;.</span>
+<span class="sd">			Other arrays are also included if `persist` is set to True.</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">if</span> <span class="n">start_case</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;start_case != 0&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">stop_case</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;stop_case != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">step_case</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;step_case != 1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">leave_out</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;leave_out != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">keep_only</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;keep_only != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">subsample</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;subsample != -1&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">probability_only</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;probability_only != False&#39;</span><span class="p">)</span>
+
+		<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">dictx</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">__prep_for_compute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">ll2_parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">loglike2</span><span class="p">(</span><span class="n">persist</span><span class="o">=</span><span class="n">persist</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">]</span>
+		<span class="n">dll</span> <span class="o">=</span> <span class="n">ll2_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dll</span>
+		<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+			<span class="n">dll</span> <span class="o">=</span> <span class="n">dll</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dll</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="n">dll</span> <span class="o">=</span> <span class="n">dll</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+		<span class="n">ll2</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">(</span>
+			<span class="n">ll</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">ll</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">),</span>
+			<span class="n">dll</span><span class="o">=</span><span class="n">dll</span><span class="p">,</span>
+		<span class="p">)</span>
+		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span><span class="s1">&#39;dll&#39;</span><span class="p">}:</span>
+				<span class="n">ll2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ll2_parts</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_check_if_best</span><span class="p">(</span><span class="n">ll2</span><span class="o">.</span><span class="n">ll</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">ll2</span></div>
+
+	<span class="k">def</span> <span class="nf">doctor</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">repair_ch_av</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_ch_zq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_asc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_noch_nowt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_nan_wt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_nan_data_co</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+	<span class="p">):</span>
+		<span class="n">problems</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k_models</span><span class="p">:</span>
+			<span class="n">k</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+			<span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">doctor</span><span class="p">(</span>
+				<span class="n">repair_ch_av</span><span class="o">=</span><span class="n">repair_ch_av</span><span class="p">,</span>
+				<span class="n">repair_ch_zq</span><span class="o">=</span><span class="n">repair_ch_zq</span><span class="p">,</span>
+				<span class="n">repair_asc</span><span class="o">=</span><span class="n">repair_asc</span><span class="p">,</span>
+				<span class="n">repair_noch_nowt</span><span class="o">=</span><span class="n">repair_noch_nowt</span><span class="p">,</span>
+				<span class="n">repair_nan_wt</span><span class="o">=</span><span class="n">repair_nan_wt</span><span class="p">,</span>
+				<span class="n">repair_nan_data_co</span><span class="o">=</span><span class="n">repair_nan_data_co</span><span class="p">,</span>
+				<span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+			<span class="p">))</span>
+		<span class="k">return</span> <span class="n">problems</span>
+
+<div class="viewcode-block" id="ModelGroup.to_xlsx"><a class="viewcode-back" href="../../../api/generated/larch.model.model_group.ModelGroup.to_xlsx.html#larch.model.model_group.ModelGroup.to_xlsx">[docs]</a>	<span class="k">def</span> <span class="nf">to_xlsx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">save_now</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="kn">from</span> <span class="nn">..util.excel</span> <span class="kn">import</span> <span class="n">_make_excel_writer</span>
+		<span class="n">_make_excel_writer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">save_now</span><span class="o">=</span><span class="n">save_now</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Jeffrey Newman<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

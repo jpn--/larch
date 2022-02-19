@@ -1,0 +1,101 @@
+.. currentmodule:: larch
+
+================================================
+10: MTC MNL Mode Choice, Autos per Household
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+There are strong theoretical and empirical reasons to expect that a variety of
+decision maker related variables such as income, car availability, residential
+location, number of workers in the household and others, influence workers’ choice of
+travel mode.
+
+Model 10 considers the number of automobiles in the household. (`pp. 120 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	for a in [2,3]:
+		m.utility_co[a] = (
+			+ P("hhinc#2,3") * X("hhinc")
+			+ P("numveh#{}".format(a)) * X("numveh")
+			)
+
+	for a in [4,5,6]:
+		m.utility_co[a] = (
+			+ P("hhinc#{}".format(a)) * X("hhinc")
+			+ P("numveh#{}".format(a)) * X("numveh")
+			)
+
+	for a,name in m.dataservice.alternative_pairs[1:]:
+		m.utility_co[a] += P("ASC_"+name)
+
+.. testcode::
+
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "numveh.*"),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3501.642...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       totcost             -0.0041   0.0002 -16.9496          0.0003       -15.1707
+	          motorized_time      -0.0378   0.0036 -10.4850          0.0039        -9.7963
+	          nonmotorized_time   -0.0475   0.0057  -8.3873          0.0055        -8.6859
+	          motorized_ovtbydist -0.1785   0.0185  -9.6329          0.0238        -7.5159
+	Income    hhinc#2,3           -0.0020   0.0014  -1.3649          0.0015        -1.2771
+	          hhinc#4             -0.0013   0.0020  -0.6512          0.0019        -0.6828
+	          hhinc#5             -0.0095   0.0054  -1.7495          0.0060        -1.5848
+	          hhinc#6             -0.0042   0.0034  -1.2370          0.0037        -1.1142
+	Ownership numveh#2            -0.0353   0.0391  -0.9022          0.0411        -0.8573
+	          numveh#3             0.0723   0.0570   1.2669          0.0646         1.1191
+	          numveh#4            -0.5545   0.0690  -8.0405          0.0790        -7.0167
+	          numveh#5            -0.2292   0.1316  -1.7421          0.1651        -1.3885
+	          numveh#6            -0.3656   0.0995  -3.6729          0.1160        -3.1508
+	ASCs      ASC_BIKE            -2.2203   0.3807  -5.8323          0.4709        -4.7152
+	          ASC_SR2             -2.0540   0.1212 -16.9445          0.1274       -16.1230
+	          ASC_SR3             -3.6431   0.1798 -20.2644          0.1964       -18.5539
+	          ASC_TRANSIT          0.5738   0.1807   3.1751          0.1953         2.9381
+	          ASC_WALK            -0.4403   0.3315  -1.3281          0.3305        -1.3322

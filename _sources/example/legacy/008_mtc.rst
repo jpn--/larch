@@ -1,0 +1,89 @@
+.. currentmodule:: larch
+
+================================================
+8: MTC MNL Mode Choice, TTR = 2.5
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('precision',3)
+	larch._doctest_mode_ = True
+
+Model 8 takes an alternative approach in valuing the different times by imposing a
+constraint on the relative importance of OVT and IVT. This is achieved by replacing
+the travel time variables in the modal utility equations with a weighted travel time (WTT)
+variable defined as in-vehicle time plus the appropriate travel time importance ratio (TIR)
+times out-of-vehicle time (IVT + TIR×OVT). The parameter for out-of-vehicle time is equal
+to the parameter for in-vehicle time multiplied by the selected travel time ratio (TTR).
+
+In Model 8, the TTR is 2.5. (`pp. 114 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+.. testcode::
+
+	m.utility_ca = (
+		 + P("nonmotorized_time") * X("(altnum>4) * tottime")
+		 + P("motorized_ivtt") * (X("(altnum <= 4) * ivtt") + 2.5 * X("(altnum <= 4) * ovtt"))
+		 + PX("totcost")
+		 )
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*ivtt.*", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3595.232...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                             value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost           -0.005  2.390e-04 -20.375       2.847e-04        -17.104
+	         nonmotorized_time -0.066  5.298e-03 -12.522       5.340e-03        -12.423
+	         motorized_ivtt    -0.025  1.886e-03 -13.449       2.111e-03        -12.018
+	Income   hhinc#2,3         -0.002  1.396e-03  -1.125       1.508e-03         -1.041
+	         hhinc#4           -0.006  1.842e-03  -2.997       1.773e-03         -3.114
+	         hhinc#5           -0.012  5.250e-03  -2.351       6.332e-03         -1.949
+	         hhinc#6           -0.009  3.056e-03  -3.105       3.241e-03         -2.928
+	ASCs     ASC_BIKE          -1.802  3.239e-01  -5.563       3.711e-01         -4.856
+	         ASC_SR2           -2.330  9.717e-02 -23.975       1.060e-01        -21.979
+	         ASC_SR3P          -3.756  1.226e-01 -30.627       1.283e-01        -29.274
+	         ASC_TRAN          -0.582  1.464e-01  -3.975       1.452e-01         -4.008
+	         ASC_WALK           0.442  2.524e-01   1.751       2.584e-01          1.711
+
+The value of motorized_ovtt is the TTR * motorized_ivtt. In this instance, it is
+2.5 * (-0.0254) = -0.0635.

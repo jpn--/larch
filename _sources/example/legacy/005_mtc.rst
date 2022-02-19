@@ -1,0 +1,84 @@
+.. currentmodule:: larch
+
+================================================
+5: MTC MNL Mode Choice, Motorized Travel Time
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+Model 5 relaxes the time constraints in Model 1 by specifying distinct time variables
+for the motorized and non-motorized modes based on our expectation that travelers are
+likely to be more sensitive to travel time by non-motorized modes. (`pp. 111 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	m.utility_co[2] = P("ASC_SR2")  + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[3] = P("ASC_SR3P") + P("hhinc#2,3") * X("hhinc")
+	m.utility_co[4] = P("ASC_TRAN") + P("hhinc#4") * X("hhinc")
+	m.utility_co[5] = P("ASC_BIKE") + P("hhinc#5") * X("hhinc")
+	m.utility_co[6] = P("ASC_WALK") + P("hhinc#6") * X("hhinc")
+
+To only use the proper parameter for Motorized and Nonmotorized,
+we can take advantage of all motorized options being alternatives 1 through 4,
+and nonmotorized being 5 and 6.
+
+.. testcode::
+
+	m.utility_ca = (
+		+ (P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum >4) * tottime")
+		+ PX("totcost"))
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", "totcost", "motorized_time", "nonmotorized_time", ),
+		("Income", "hhinc.*", ),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3616.893...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                             value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category Parameter
+	LOS      totcost           -0.0050   0.0002 -20.6810          0.0003       -17.0869
+	         motorized_time    -0.0431   0.0035 -12.2883          0.0039       -11.1694
+	         nonmotorized_time -0.0687   0.0053 -12.9009          0.0054       -12.7348
+	Income   hhinc#2,3         -0.0015   0.0014  -1.1026          0.0015        -1.0211
+	         hhinc#4           -0.0054   0.0018  -2.9747          0.0018        -3.0814
+	         hhinc#5           -0.0125   0.0053  -2.3659          0.0064        -1.9487
+	         hhinc#6           -0.0095   0.0031  -3.1135          0.0033        -2.9229
+	ASCs     ASC_BIKE          -1.8444   0.3258  -5.6616          0.3759        -4.9067
+	         ASC_SR2           -2.2619   0.0982 -23.0253          0.1076       -21.0307
+	         ASC_SR3P          -3.6768   0.1242 -29.6087          0.1307       -28.1274
+	         ASC_TRAN          -0.8522   0.1393  -6.1198          0.1368        -6.2296
+	         ASC_WALK           0.4768   0.2522   1.8906          0.2593         1.8385

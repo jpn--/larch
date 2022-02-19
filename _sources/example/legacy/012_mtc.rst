@@ -1,0 +1,90 @@
+.. currentmodule:: larch
+
+================================================
+12: MTC MNL Mode Choice, Autos per Adult
+================================================
+
+.. testsetup:: *
+
+	import larch
+	import larch.examples
+	import pandas
+	pandas.set_option('display.max_columns',999)
+	pandas.set_option('expand_frame_repr',False)
+	pandas.set_option('display.precision',4)
+	larch._doctest_mode_ = True
+
+Model 12 considers the number of autos divided by the number of persons
+of driving age in the household. (`pp. 120 <http://www.caee.utexas.edu/prof/Bhat/COURSES/LM_Draft_060131Final-060630.pdf>`_)
+
+.. testcode::
+
+	d = larch.examples.MTC()
+	m = larch.Model(dataservice=d)
+
+.. testcode::
+
+	from larch.roles import P, X, PX
+	for a in [2,3]:
+		m.utility_co[a] = P("hhinc#2,3") * X("hhinc")
+
+	for a in [4,5,6]:
+		m.utility_co[a] = P("hhinc#{}".format(a)) * X("hhinc")
+
+	for a,name in m.dataservice.alternative_pairs[1:]:
+		m.utility_co[a] += P("ASC_"+name) + P("vehbyadlt_"+name) * X("numveh/numadlt")
+
+.. testcode::
+
+	m.utility_ca= (
+	 	+ PX("totcost")
+	 	+ P("motorized_time") * X("(altnum <= 4) * tottime")
+		+ P("nonmotorized_time") * X("(altnum > 4) * tottime")
+		+ P("motorized_ovtbydist") * X("(altnum <= 4) * ovtt/dist")
+		)
+
+.. testcode::
+
+	m.availability_var = '_avail_'
+	m.choice_ca_var = '_choice_'
+
+.. testcode::
+
+	m.ordering = (
+		("LOS", ".*cost.*", ".*time.*", ".*dist.*", ),
+		("Income", "hhinc.*", ),
+		("Ownership", "vehbyadlt.*"),
+		("ASCs", "ASC.*", ),
+	)
+
+.. doctest::
+	:options: +ELLIPSIS, +NORMALIZE_WHITESPACE, +REPORT_NDIFF
+
+	>>> m.load_data()
+	>>> m.maximize_loglike()
+	┣ ...Optimization terminated successfully...
+	>>> m.calculate_parameter_covariance()
+	>>> m.loglike()
+	-3490.357...
+
+	>>> print(m.pfo()[['value','std_err','t_stat','robust_std_err','robust_t_stat']])
+	                                value  std_err   t_stat  robust_std_err  robust_t_stat
+	Category  Parameter
+	LOS       totcost             -0.0042   0.0002 -17.2171          0.0003       -15.2243
+	          motorized_time      -0.0380   0.0036 -10.5816          0.0039        -9.7654
+	          nonmotorized_time   -0.0466   0.0056  -8.3214          0.0054        -8.5841
+	          motorized_ovtbydist -0.1849   0.0187  -9.9133          0.0242        -7.6380
+	Income    hhinc#2,3           -0.0013   0.0014  -0.9487          0.0015        -0.8911
+	          hhinc#4             -0.0046   0.0020  -2.3242          0.0020        -2.3185
+	          hhinc#5             -0.0117   0.0053  -2.2023          0.0064        -1.8306
+	          hhinc#6             -0.0076   0.0033  -2.3386          0.0037        -2.0531
+	Ownership vehbyadlt_BIKE      -0.6418   0.3027  -2.1207          0.4087        -1.5703
+	          vehbyadlt_SR2       -0.5945   0.1088  -5.4624          0.1353        -4.3924
+	          vehbyadlt_SR3       -0.4474   0.1659  -2.6967          0.1976        -2.2646
+	          vehbyadlt_TRANSIT   -1.4092   0.1546  -9.1130          0.1958        -7.1967
+	          vehbyadlt_WALK      -0.7936   0.2082  -3.8123          0.2855        -2.7797
+	ASCs      ASC_BIKE            -1.9628   0.4158  -4.7201          0.4959        -3.9582
+	          ASC_SR2             -1.5369   0.1409 -10.9101          0.1616        -9.5112
+	          ASC_SR3             -3.0235   0.2041 -14.8119          0.2273       -13.3017
+	          ASC_TRANSIT          1.0496   0.1976   5.3125          0.2191         4.7907
+	          ASC_WALK            -0.2173   0.3453  -0.6292          0.3603        -0.6031

@@ -1,0 +1,2082 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>larch.model.model &#8212; v5.5.10</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/larch-book.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <link rel="shortcut icon" href="../../../_static/larch_favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+      
+      <link rel="icon" sizes="32x32" href="../../../_static/img/larch_favicon.png">
+      
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../../_static/larch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search these docs..." aria-label="Search these docs..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Users Guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installing Larch
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../user-guide/choice-models.html">
+   Choice Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/data-fundamentals.html">
+     Data Fundamentals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/linear-funcs.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../user-guide/machine-learning.html">
+     Machine Learning
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../bibliography.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api/~data.html">
+   Data
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/dataset.html">
+     Dataset
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.html">
+       larch.Dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idca.html">
+       larch.Dataset.from_idca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idce.html">
+       larch.Dataset.from_idce
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.from_idco.html">
+       larch.Dataset.from_idco
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.construct.html">
+       larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.n_cases.html">
+       larch.Dataset.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.n_alts.html">
+       larch.Dataset.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.CASEID.html">
+       larch.Dataset.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.ALTID.html">
+       larch.Dataset.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.alts_mapping.html">
+       larch.Dataset.alts_mapping
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.dims.html">
+       larch.Dataset.dims
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.sizes.html">
+       larch.Dataset.sizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.data_vars.html">
+       larch.Dataset.data_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.coords.html">
+       larch.Dataset.coords
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.attrs.html">
+       larch.Dataset.attrs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.encoding.html">
+       larch.Dataset.encoding
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.indexes.html">
+       larch.Dataset.indexes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.chunks.html">
+       larch.Dataset.chunks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.chunksizes.html">
+       larch.Dataset.chunksizes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.nbytes.html">
+       larch.Dataset.nbytes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.caseids.html">
+       larch.Dataset.caseids
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.dissolve_zero_variance.html">
+       larch.Dataset.dissolve_zero_variance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.query_cases.html">
+       larch.Dataset.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.set_altnames.html">
+       larch.Dataset.set_altnames
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.set_dtypes.html">
+       larch.Dataset.set_dtypes
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.setup_flow.html">
+       larch.Dataset.setup_flow
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.Dataset.get_expr.html">
+       larch.Dataset.get_expr
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/datatree.html">
+     DataTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.html">
+       larch.DataTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.n_cases.html">
+       larch.DataTree.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.n_alts.html">
+       larch.DataTree.n_alts
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.CASEID.html">
+       larch.DataTree.CASEID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.ALTID.html">
+       larch.DataTree.ALTID
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.query_cases.html">
+       larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataTree.setup_flow.html">
+       larch.DataTree.setup_flow
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/dataframes.html">
+     DataFrames
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.DataFrames.html">
+       larch.DataFrames
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api/~models.html">
+   Models
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/model.html">
+     Model
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.html">
+       larch.numba.Model
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.datatree.html">
+       larch.numba.Model.datatree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.dataset.html">
+       larch.numba.Model.dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.n_cases.html">
+       larch.numba.Model.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_ca_var.html">
+       larch.numba.Model.choice_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_co_vars.html">
+       larch.numba.Model.choice_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.choice_co_code.html">
+       larch.numba.Model.choice_co_code
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.availability_ca_var.html">
+       larch.numba.Model.availability_ca_var
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.availability_co_vars.html">
+       larch.numba.Model.availability_co_vars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility_ca.html">
+       larch.numba.Model.utility_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility_co.html">
+       larch.numba.Model.utility_co
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.quantity_ca.html">
+       larch.numba.Model.quantity_ca
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.pf.html">
+       larch.numba.Model.pf
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.most_recent_estimation_result.html">
+       larch.numba.Model.most_recent_estimation_result
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.possible_overspecification.html">
+       larch.numba.Model.possible_overspecification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.set_values.html">
+       larch.numba.Model.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.lock_value.html">
+       larch.numba.Model.lock_value
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.set_cap.html">
+       larch.numba.Model.set_cap
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.remove_unused_parameters.html">
+       larch.numba.Model.remove_unused_parameters
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.maximize_loglike.html">
+       larch.numba.Model.maximize_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.calculate_parameter_covariance.html">
+       larch.numba.Model.calculate_parameter_covariance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_nil.html">
+       larch.numba.Model.loglike_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_null.html">
+       larch.numba.Model.loglike_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.rho_sq_nil.html">
+       larch.numba.Model.rho_sq_nil
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.rho_sq_null.html">
+       larch.numba.Model.rho_sq_null
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.parameter_summary.html">
+       larch.numba.Model.parameter_summary
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.estimation_statistics.html">
+       larch.numba.Model.estimation_statistics
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.to_xlsx.html">
+       larch.numba.Model.to_xlsx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.bhhh.html">
+       larch.numba.Model.bhhh
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.check_d_loglike.html">
+       larch.numba.Model.check_d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.d_loglike.html">
+       larch.numba.Model.d_loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.d_loglike_casewise.html">
+       larch.numba.Model.d_loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike.html">
+       larch.numba.Model.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.loglike_casewise.html">
+       larch.numba.Model.loglike_casewise
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.logsums.html">
+       larch.numba.Model.logsums
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.probability.html">
+       larch.numba.Model.probability
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.quantity.html">
+       larch.numba.Model.quantity
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.total_weight.html">
+       larch.numba.Model.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.numba.Model.utility.html">
+       larch.numba.Model.utility
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/linear.html">
+     Linear Functions
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/nesting.html">
+     NestingTree
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.html">
+       larch.model.tree.NestingTree
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.new_node.html">
+       larch.model.tree.NestingTree.new_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.add_node.html">
+       larch.model.tree.NestingTree.add_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.remove_node.html">
+       larch.model.tree.NestingTree.remove_node
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.add_edge.html">
+       larch.model.tree.NestingTree.add_edge
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.tree.NestingTree.remove_edge.html">
+       larch.model.tree.NestingTree.remove_edge
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../api/modelgroup.html">
+     ModelGroup
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.html">
+       larch.model.model_group.ModelGroup
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.n_cases.html">
+       larch.model.model_group.ModelGroup.n_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.set_values.html">
+       larch.model.model_group.ModelGroup.set_values
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.total_weight.html">
+       larch.model.model_group.ModelGroup.total_weight
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike.html">
+       larch.model.model_group.ModelGroup.loglike
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.loglike2.html">
+       larch.model.model_group.ModelGroup.loglike2
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/generated/larch.model.model_group.ModelGroup.to_xlsx.html">
+       larch.model.model_group.ModelGroup.to_xlsx
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/mtc.html">
+   MTC Mode Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/000_mtc_data.html">
+     MTC Work Mode Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/001_mnl.html">
+     1: MTC MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/002_mtc.html">
+     2: MTC MNL Mode Choice, Motorized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/017A_mnl_segmented.html">
+     17a: Market Segmentatation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/017_mnl_final.html">
+     17: MTC Expanded MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/022-nl.html">
+     22: MTC Motorized and Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/028-nl.html">
+     28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/swissmetro.html">
+   Swissmetro
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/101_swissmetro_mnl.html">
+     101: Swissmetro MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/102-swissmetro-weighted.html">
+     102: Swissmetro Weighted MNL Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/109-swissmetro-nl.html">
+     109: Swissmetro Nested Logit Mode Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/exampville.html">
+   Exampville
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+  <label for="toctree-checkbox-12">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/200_exampville.html">
+     200: Exampville Simulated Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/201_exville_mode_choice.html">
+     201: Exampville Mode Choice
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/202_exville_mc_logsums.html">
+     202: Exampville Mode Choice Logsums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/203_exville_dest.html">
+     203: Exampville Destination Choice
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/itinerary.html">
+   Itinerary Choice
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+  <label for="toctree-checkbox-13">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/300_itinerary.html">
+     300: Itinerary Choice Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../example/301_itin_mnl.html">
+     301: Itinerary Choice using MNL
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../example/legacy.html">
+   Legacy Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+  <label for="toctree-checkbox-14">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/mtc.html">
+     MTC Mode Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/000_mtc_data.html">
+       MTC Work Mode Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/001.mtc.html">
+       1: MTC MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/002_mtc.html">
+       2: MTC MNL Mode Choice, Motorized
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/003_mtc.html">
+       3: MTC MNL Mode Choice, Zeroed Shared
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/005_mtc.html">
+       5: MTC MNL Mode Choice, Motorized Travel Time
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/006_mtc.html">
+       6: MTC MNL Mode Choice, Motorized Times
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/007_mtc.html">
+       7: MTC MNL Mode Choice, Diminishing OVTT by Distance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/008_mtc.html">
+       8: MTC MNL Mode Choice, TTR = 2.5
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/009_mtc.html">
+       9: MTC MNL Mode Choice, TTR = 4.0
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/010_mtc.html">
+       10: MTC MNL Mode Choice, Autos per Household
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/011_mtc.html">
+       11: MTC MNL Mode Choice, Vehicle by Worker
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/012_mtc.html">
+       12: MTC MNL Mode Choice, Autos per Adult
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/013_mtc.html">
+       13: MTC MNL Mode Choice, CBD
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/014_mtc.html">
+       14: MTC MNL Mode Choice, Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/015_mtc.html">
+       15: MTC MNL Mode Choice, CBD and Work Zone Density
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/016_mtc.html">
+       16: MTC MNL Mode Choice, Cost by Income
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017A_mtc.html">
+       17A: MTC MNL Mode Choice, Segmented for 1 or fewer cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017B_mtc.html">
+       17B: MTC MNL Mode Choice, Segmented for 2 or more cars
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017C_mtc.html">
+       17C: MTC MNL Mode Choice, Segmented for Males
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017D_mtc.html">
+       17D: MTC MNL Mode Choice, Segmented for Females
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/017_mtc.html">
+       17: MTC Expanded MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/018_mtc.html">
+       18: MTC Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/019_mtc.html">
+       19: MTC Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/020_mtc.html">
+       20: MTC Shared Ride Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/021_mtc.html">
+       21: MTC Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/022_mtc.html">
+       22: MTC Motorized and Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/023_mtc.html">
+       23W: MTC Private Auto - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/024_mtc.html">
+       23W: MTC Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/025_mtc.html">
+       25: MTC Private Auto - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/026_mtc.html">
+       26: MTC Shared Ride - Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/027_mtc.html">
+       27: MTC Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/028_mtc.html">
+       28: MTC Motorized - Shared Ride - Non-Motorized Nested Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/029_mtc.html">
+       29: MTC Motorized - Shared Ride - Private Auto Nested Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/swissmetro.html">
+     Swissmetro Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
+    <label for="toctree-checkbox-16">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/101_mnl.html">
+       101: Swissmetro MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/102_mnl_weighted.html">
+       102: Swissmetro Weighted MNL Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/107_latent_class.html">
+       107: Latent Class Models
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/109_nl.html">
+       109: Swissmetro Nested Logit Mode Choice
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/111_cnl.html">
+       111: Swissmetro Cross-Nested Logit Mode Choice
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../example/legacy/itinerary.html">
+     Itinerary Choice Examples
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
+    <label for="toctree-checkbox-17">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/300L_itinerary.html">
+       300L: Itinerary Choice Data
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/301_itin_mnl.html">
+       301: Itinerary Choice using MNL
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../example/legacy/302_itin_nl.html">
+       302: Itinerary Choice using Simple Nested Logit
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/jpn--/larch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2F_modules/larch/model/model.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <h1>Source code for larch.model.model</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">.controller</span> <span class="kn">import</span> <span class="n">Model5c</span> <span class="k">as</span> <span class="n">_Model5c</span>
+<span class="kn">from</span> <span class="nn">..dataframes</span> <span class="kn">import</span> <span class="n">DataFrames</span><span class="p">,</span> <span class="n">get_dataframe_format</span>
+<span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">LinearFunction_C</span><span class="p">,</span> <span class="n">DictOfLinearFunction_C</span>
+<span class="kn">from</span> <span class="nn">..general_precision</span> <span class="kn">import</span> <span class="n">l4_float_dtype</span>
+<span class="kn">from</span> <span class="nn">.constraints</span> <span class="kn">import</span> <span class="n">ParametricConstraintList</span>
+<span class="kn">from</span> <span class="nn">.tree</span> <span class="kn">import</span> <span class="n">NestingTree</span>
+<span class="kn">from</span> <span class="nn">.abstract_model</span> <span class="kn">import</span> <span class="n">AbstractChoiceModel</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">..log</span> <span class="kn">import</span> <span class="n">logger_name</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">logger_name</span><span class="o">+</span><span class="s1">&#39;.model&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">_Model5c</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;A discrete choice model.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	parameters : Sequence, optional</span>
+<span class="sd">		The names of parameters used in this model.  It is generally not</span>
+<span class="sd">		necessary to define parameter names at initialization, as the names</span>
+<span class="sd">		can (and will) be collected from the utility function and nesting</span>
+<span class="sd">		components later.</span>
+<span class="sd">	utility_ca : LinearFunction_C, optional</span>
+<span class="sd">		The utility_ca function, which represents the qualitative portion of</span>
+<span class="sd">		utility for attributes that vary by alternative.</span>
+<span class="sd">	utility_co : DictOfLinearFunction, optional</span>
+<span class="sd">		The utility_co function, which represents the qualitative portion of</span>
+<span class="sd">		utility for attributes that vary by decision maker but not by alternative.</span>
+<span class="sd">	quantity_ca : LinearFunction_C, optional</span>
+<span class="sd">		The quantity_ca function, which represents the quantitative portion of</span>
+<span class="sd">		utility for attributes that vary by alternative.</span>
+<span class="sd">	quantity_scale : str, optional</span>
+<span class="sd">		The name of the parameter used to scale the quantitative portion of</span>
+<span class="sd">		utility.</span>
+<span class="sd">	graph : NestingTree, optional</span>
+<span class="sd">		The nesting tree for this choice model.</span>
+<span class="sd">	dataservice : DataService, optional</span>
+<span class="sd">		An object that can act as a DataService to generate the data needed for</span>
+<span class="sd">		this model.</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">utility_co</span> <span class="o">=</span> <span class="n">DictOfLinearFunction_C</span><span class="p">()</span>
+	<span class="sd">&quot;&quot;&quot;DictOfLinearFunction_C : The portion of the utility function computed from |idco| data.</span>
+
+<span class="sd">	The keys of this mapping are alternative codes for the applicable elemental</span>
+<span class="sd">	alteratives, and the values are linear functions to compute for the indicated</span>
+<span class="sd">	alternative.  Each alternative that has any idco utility components must have</span>
+<span class="sd">	a unique linear function given.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+
+<span class="sd">	&gt;&gt;&gt; from larch import Model, P, X</span>
+<span class="sd">	&gt;&gt;&gt; m = Model()</span>
+<span class="sd">	&gt;&gt;&gt; m.utility_co = {</span>
+<span class="sd">	... 	1: P.ParamA1 * X.DataA,</span>
+<span class="sd">	... 	2: P.ParamA2 * X.DataA + P.ParamASC2,</span>
+<span class="sd">	... }</span>
+<span class="sd">	&gt;&gt;&gt; print(m.utility_co)</span>
+<span class="sd">	DictOfLinearFunction_C({1: P.ParamA1 * X.DataA, 2: P.ParamA2 * X.DataA + P.ParamASC2})</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">utility_ca</span> <span class="o">=</span> <span class="n">LinearFunction_C</span><span class="p">()</span>
+	<span class="sd">&quot;&quot;&quot;LinearFunction_C : The portion of the utility function computed from |idca| data.</span>
+
+<span class="sd">	Data expressions in this utility function can actually reference both |idca|</span>
+<span class="sd">	and |idco| format variables. Except in unusual model designs, every complete data</span>
+<span class="sd">	expression should have at least one |idca| component.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+
+<span class="sd">	&gt;&gt;&gt; from larch import Model, P, X</span>
+<span class="sd">	&gt;&gt;&gt; m = Model()</span>
+<span class="sd">	&gt;&gt;&gt; m.utility_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+<span class="sd">	&gt;&gt;&gt; print(m.utility_ca)</span>
+<span class="sd">	P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+<span class="sd">	&gt;&gt;&gt; m.utility_ca += P.Param3 * X.Data3 / X.DataCO4</span>
+<span class="sd">	&gt;&gt;&gt; print(m.utility_ca)</span>
+<span class="sd">	P.Param1 * X.Data1 + P.Param2 * X.Data2 + P.Param3 * X(&#39;Data3/DataCO4&#39;)</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">quantity_ca</span> <span class="o">=</span> <span class="n">LinearFunction_C</span><span class="p">()</span>
+	<span class="sd">&quot;&quot;&quot;LinearFunction_C : The portion of the quantity function computed from |idca| data.</span>
+
+<span class="sd">	Data expressions in this utility function can actually reference both |idca|</span>
+<span class="sd">	and |idco| format variables. Except in unusual model designs, every complete data</span>
+<span class="sd">	expression should have at least one |idca| component.</span>
+
+<span class="sd">	Note that for the quantity function, the actual computed linear function</span>
+<span class="sd">	uses the exponential of the parameter value(s), not the raw values. Thus,</span>
+<span class="sd">	if the quantity function is given as `P.Param1 * X.Data1 + P.Param2 * X.Data2`,</span>
+<span class="sd">	the computed values will actually be `exp(P.Param1) * X.Data1 + exp(P.Param2) * X.Data2`.</span>
+<span class="sd">	This transformation ensures that the outcome from the quantity function is</span>
+<span class="sd">	always positive, so long as at all of the data terms in the function are</span>
+<span class="sd">	positive.  The `LinearFunction_C` class itself is not intrinsically aware</span>
+<span class="sd">	of this implementation detail, but the `Model.utility_functions()` method is,</span>
+<span class="sd">	and will render the complete utility function in a mathematically correct form.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+
+<span class="sd">	&gt;&gt;&gt; from larch import Model, P, X</span>
+<span class="sd">	&gt;&gt;&gt; m = Model()</span>
+<span class="sd">	&gt;&gt;&gt; m.quantity_ca = P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+<span class="sd">	&gt;&gt;&gt; print(m.quantity_ca)</span>
+<span class="sd">	P.Param1 * X.Data1 + P.Param2 * X.Data2</span>
+<span class="sd">	&gt;&gt;&gt; m.quantity_ca += P.Param3 * X.Data3 / X.DataCO4</span>
+<span class="sd">	&gt;&gt;&gt; print(m.quantity_ca)</span>
+<span class="sd">	P.Param1 * X.Data1 + P.Param2 * X.Data2 + P.Param3 * X(&#39;Data3/DataCO4&#39;)</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">_graph</span> <span class="o">=</span> <span class="n">NestingTree</span><span class="p">()</span>
+
+	<span class="n">constraints</span> <span class="o">=</span> <span class="n">ParametricConstraintList</span><span class="p">()</span>
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">Example</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">legacy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="kn">from</span> <span class="nn">..examples</span> <span class="kn">import</span> <span class="n">example</span>
+		<span class="k">return</span> <span class="n">example</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">legacy</span><span class="o">=</span><span class="n">legacy</span><span class="p">)</span>
+
+	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+		<span class="kn">import</span> <span class="nn">os</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+		<span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.xlsx&#39;</span><span class="p">:</span>
+			<span class="kn">from</span> <span class="nn">..util.excel</span> <span class="kn">import</span> <span class="n">load_metadata</span>
+			<span class="k">return</span> <span class="n">load_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_self_&#39;</span><span class="p">)</span>
+		<span class="kn">import</span> <span class="nn">pickle</span>
+		<span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="o">*</span><span class="n">args</span><span class="p">,</span>
+			<span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">dataservice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">utility_ca</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">utility_co</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">quantity_ca</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">constraints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+	<span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">=</span> <span class="s1">&#39;idce&#39;</span>
+		<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+				<span class="n">model</span> <span class="o">=</span> <span class="n">a</span>
+			<span class="k">if</span> <span class="n">dataservice</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">DataFrames</span><span class="p">):</span>
+				<span class="n">dataservice</span> <span class="o">=</span> <span class="n">a</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span> <span class="o">=</span> <span class="n">utility_co</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">utility_ca</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span> <span class="o">=</span> <span class="n">quantity_ca</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="n">constraints</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">())</span>
+			<span class="k">if</span> <span class="n">dataservice</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dataservice</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dataframes</span>
+		<span class="k">if</span> <span class="n">dataservice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span> <span class="o">=</span> <span class="n">dataservice</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_scan_all_ensure_names</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
+
+	<span class="k">def</span> <span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Use pickle to dump the contents of this Model to a bytestring.</span>
+
+<span class="sd">		Any associated data (dataframes and dataservice) are not included.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		bytes</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="kn">import</span> <span class="nn">pickle</span>
+		<span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+
+	<span class="k">def</span> <span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">deep</span><span class="p">:</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;utility_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LinearFunction_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;utility_co&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">copy_without_touch_callback</span><span class="p">()</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;quantity_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LinearFunction_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;quantity_scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;constraints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;is_clone&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;utility_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;utility_co&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;quantity_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;quantity_scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;constraints&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span>
+			<span class="n">p</span><span class="p">[</span><span class="s1">&#39;is_clone&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="k">return</span> <span class="n">p</span>
+
+	<span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">if</span> <span class="s1">&#39;frame&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;utility_ca&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;utility_co&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantity_ca&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quantity_scale&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;constraints&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+
+	<span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Estimate the parameters of this model from the training set (X, y).</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		X : pandas.DataFrame</span>
+<span class="sd">			This DataFrame can be in idca, idce, or idco formats.</span>
+<span class="sd">			If given in idce format, this is a DataFrame with *n_casealts* rows, and</span>
+<span class="sd">			a two-level MultiIndex.</span>
+<span class="sd">		y : array-like or str</span>
+<span class="sd">			The target choice values.  If given as a ``str``, use that named column of `X`.</span>
+<span class="sd">		sample_weight : array-like, shape = [n_cases] or [n_casealts], or None</span>
+<span class="sd">			Sample weights. If None, then samples are equally weighted. If shape is *n_casealts*,</span>
+<span class="sd">			the array is collapsed to *n_cases* by taking only the first weight in each case.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		self : Model</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;must fit on an </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="si">}</span><span class="s1"> dataframe&#39;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;sample_weight not implemented&#39;</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">=</span> <span class="n">get_dataframe_format</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">==</span> <span class="s1">&#39;idce&#39;</span><span class="p">:</span>
+
+			<span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+					<span class="n">sample_weight</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">sample_weight</span><span class="p">]</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">)</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+					<span class="n">sample_weight</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+				<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>
+				<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">y</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+			<span class="kn">from</span> <span class="nn">..dataframes</span> <span class="kn">import</span> <span class="n">_check_dataframe_of_dtype</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">_check_dataframe_of_dtype</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">l4_float_dtype</span><span class="p">):</span>
+					<span class="c1"># when the dataframe is an array of the correct type,</span>
+					<span class="c1"># it is efficient to use it directly</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span>
+						<span class="n">ce</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span>
+						<span class="n">ch</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span>
+						<span class="n">wt</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="p">,</span>
+					<span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="c1"># when the dataframe is not an array of the correct type,</span>
+					<span class="c1"># it is efficient to only manipulate needed columns</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span>
+						<span class="n">ce</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">ca</span><span class="p">],</span>
+						<span class="n">ch</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span>
+						<span class="n">wt</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="p">,</span>
+					<span class="p">)</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="c1"># not all keys were available in natural form, try computing them</span>
+				<span class="n">dfs1</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span> <span class="n">ce</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="p">)</span>
+				<span class="n">dfs</span> <span class="o">=</span> <span class="n">dfs1</span><span class="o">.</span><span class="n">make_dataframes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">())</span>
+				<span class="n">dfs</span><span class="o">.</span><span class="n">data_ch</span> <span class="o">=</span> <span class="n">y</span>
+				<span class="n">dfs</span><span class="o">.</span><span class="n">data_wt</span> <span class="o">=</span> <span class="n">sample_weight</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">dfs</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="bp">self</span>
+
+	<span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Predict choices for X.</span>
+
+<span class="sd">		This method returns the index of the maximum probability choice, not the probability.</span>
+<span class="sd">		To recover the probability, which is probably what you want (pun intended), see</span>
+<span class="sd">		:meth:`predict_proba`.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		X : pandas.DataFrame</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		y : array of shape = [n_cases]</span>
+<span class="sd">			The predicted choices.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;X must be a pandas.DataFrame&quot;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;idce&#39;</span><span class="p">,</span> <span class="s1">&#39;idca&#39;</span><span class="p">):</span>
+			<span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+			<span class="n">pr</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;idco&#39;</span><span class="p">,):</span>
+			<span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="p">)</span>
+
+		<span class="n">result</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;idce&#39;</span><span class="p">,</span> <span class="s1">&#39;idca&#39;</span><span class="p">):</span>
+			<span class="n">pr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">numpy</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="n">pr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">result</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Predict probability for X.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		X : pandas.DataFrame</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		y : array of shape = [n_cases, n_alts]</span>
+<span class="sd">			The predicted probabilities.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;predict_proba requires an </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="si">}</span><span class="s1"> dataframe&#39;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">==</span> <span class="s1">&#39;idce&#39;</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span>
+					<span class="n">ce</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">ca</span><span class="p">],</span>
+				<span class="p">)</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="c1"># not all keys were available in natural form, try computing them</span>
+				<span class="n">dfs1</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span> <span class="n">ce</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="p">)</span>
+				<span class="n">dfs</span> <span class="o">=</span> <span class="n">dfs1</span><span class="o">.</span><span class="n">make_dataframes</span><span class="p">({</span><span class="s1">&#39;ca&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">ca</span><span class="p">})</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">dfs</span>
+
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">==</span> <span class="s1">&#39;idca&#39;</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span>
+					<span class="n">ca</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">ca</span><span class="p">],</span>
+				<span class="p">)</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="c1"># not all keys were available in natural form, try computing them</span>
+				<span class="n">dfs1</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span> <span class="n">ca</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="p">)</span>
+				<span class="n">dfs</span> <span class="o">=</span> <span class="n">dfs1</span><span class="o">.</span><span class="n">make_dataframes</span><span class="p">({</span><span class="s1">&#39;ca&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">ca</span><span class="p">})</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">dfs</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span> <span class="o">==</span> <span class="s1">&#39;idco&#39;</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span>
+					<span class="n">co</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">co</span><span class="p">],</span>
+				<span class="p">)</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="c1"># not all keys were available in natural form, try computing them</span>
+				<span class="n">dfs1</span> <span class="o">=</span> <span class="n">DataFrames</span><span class="p">(</span><span class="n">co</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="p">)</span>
+				<span class="n">dfs</span> <span class="o">=</span> <span class="n">dfs1</span><span class="o">.</span><span class="n">make_dataframes</span><span class="p">({</span><span class="s1">&#39;co&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_data</span><span class="p">()</span><span class="o">.</span><span class="n">co</span><span class="p">})</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="o">=</span> <span class="n">dfs</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="p">)</span>
+
+		<span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">(</span><span class="n">return_dataframe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sklearn_data_format</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Returns the mean negative log loss on the given test data and labels.</span>
+
+<span class="sd">		Note that the log loss is defined as the negative of the log likelihood,</span>
+<span class="sd">		and thus the mean negative log loss is also just mean log likelihood.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		X : pandas.DataFrame</span>
+<span class="sd">			If given in idce format, a dataFrame with *n_casealts* rows.</span>
+<span class="sd">		y : array-like or str</span>
+<span class="sd">			The target choice values.  If given as a ``str``, use that named column of `X`.</span>
+<span class="sd">		sample_weight : array-like, shape = [n_casealts], or None</span>
+<span class="sd">			Sample weights. If None, then samples are equally weighted.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		score : float</span>
+<span class="sd">			Mean negative log loss of self.predict_proba(X) wrt. y.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+			<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">)):</span>
+			<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+		<span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+		<span class="n">weight_adjust</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">n_cases</span>
+
+		<span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">sample_weight</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">weight_adjust</span>
+
+		<span class="n">pr</span> <span class="o">=</span> <span class="n">pr</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+
+		<span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="n">weight_adjust</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">n_cases</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">sample_weight</span><span class="p">)</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">)</span>
+
+
+
+
+
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&lt;larch.&quot;</span>
+		<span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_mnl</span><span class="p">():</span>
+			<span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; (MNL)&quot;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; (GEV)&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">!=</span> <span class="s2">&quot;Untitled&quot;</span><span class="p">:</span>
+			<span class="n">s</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+		<span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span>
+		<span class="k">return</span> <span class="n">s</span>
+
+
+	<span class="k">def</span> <span class="nf">utility_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generate an XHTML output of the utility function(s).</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		subset : Collection, optional</span>
+<span class="sd">			A collection of alternative codes to include. This only has effect if</span>
+<span class="sd">			there are separate utility_co functions set by alternative. It is</span>
+<span class="sd">			recommended to use this parameter if there are a very large number of</span>
+<span class="sd">			alternatives, and the utility functions of most (or all) of them</span>
+<span class="sd">			can be effectively communicated by showing only a few.</span>
+<span class="sd">		resolve_parameters : bool, default False</span>
+<span class="sd">			Whether to resolve the parameters to the current (estimated) value</span>
+<span class="sd">			in the output.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		xmle.Elem</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+		<span class="kn">from</span> <span class="nn">xmle</span> <span class="kn">import</span> <span class="n">Elem</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">Elem</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+		<span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;margin-top:1px;&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span><span class="s1">&#39;floatinghead&#39;</span><span class="p">})</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">):</span>
+			<span class="c1"># t.elem(&#39;caption&#39;, text=f&quot;Utility Functions&quot;,</span>
+			<span class="c1"># 	   style=&quot;caption-side:top;text-align:left;font-family:Roboto;font-weight:700;&quot;</span>
+			<span class="c1"># 			 &quot;font-style:normal;font-size:100%;padding:0px;color:black;&quot;)</span>
+
+			<span class="c1"># iterate over all alternatives if a dataframes is attached and lists the alternatives</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternative_codes</span><span class="p">()</span>
+				<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">alternative_codes</span><span class="p">()</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+			<span class="n">t_head</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;thead&#39;</span><span class="p">)</span>
+			<span class="n">tr</span> <span class="o">=</span> <span class="n">t_head</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">)</span>
+			<span class="n">tr</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;th&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;alt&quot;</span><span class="p">)</span>
+			<span class="n">tr</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;th&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;formula&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;style&#39;</span><span class="p">:</span><span class="s1">&#39;text-align:left;&#39;</span><span class="p">})</span>
+			<span class="n">t_body</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;tbody&#39;</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">alts</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">subset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+					<span class="n">tr</span> <span class="o">=</span> <span class="n">t_body</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">)</span>
+					<span class="n">tr</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+					<span class="n">utilitycell</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;style&#39;</span><span class="p">:</span><span class="s1">&#39;text-align:left;&#39;</span><span class="p">})</span>
+					<span class="n">utilitycell</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+					<span class="n">anything</span> <span class="o">=</span> <span class="kc">False</span>
+					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">):</span>
+						<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + &quot;</span>
+						<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">linebreaks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">))</span>
+						<span class="n">anything</span> <span class="o">=</span> <span class="kc">True</span>
+					<span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">:</span>
+						<span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+						<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+							<span class="k">if</span> <span class="n">anything</span><span class="p">:</span>
+								<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="n">Elem</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">)</span>
+							<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + &quot;</span>
+							<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">linebreaks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">))</span>
+							<span class="n">anything</span> <span class="o">=</span> <span class="kc">True</span>
+					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">):</span>
+						<span class="k">if</span> <span class="n">anything</span><span class="p">:</span>
+							<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="n">Elem</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">)</span>
+						<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">:</span>
+							<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + &quot;</span>
+							<span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">ParameterRef_C</span>
+							<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterRef_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">)</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">))</span>
+							<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; * log(&quot;</span>
+						<span class="k">else</span><span class="p">:</span>
+							<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + log(&quot;</span>
+						<span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">linebreaks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lineprefix</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">,</span>
+														   <span class="n">exponentiate_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">)</span>
+						<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+						<span class="n">utilitycell</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># there is no differentiation by alternatives, just give one formula</span>
+			<span class="c1"># t.elem(&#39;caption&#39;, text=f&quot;Utility Function&quot;,</span>
+			<span class="c1"># 	   style=&quot;caption-side:top;text-align:left;font-family:Roboto;font-weight:700;&quot;</span>
+			<span class="c1"># 			 &quot;font-style:normal;font-size:100%;padding:0px;color:black;&quot;)</span>
+			<span class="n">tr</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">)</span>
+			<span class="n">utilitycell</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;td&#39;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;style&#39;</span><span class="p">:</span><span class="s1">&#39;text-align:left;&#39;</span><span class="p">})</span>
+			<span class="n">utilitycell</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+			<span class="n">anything</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">):</span>
+				<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + &quot;</span>
+				<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">linebreaks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">))</span>
+				<span class="n">anything</span> <span class="o">=</span> <span class="kc">True</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">anything</span><span class="p">:</span>
+					<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="n">Elem</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">)</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">:</span>
+					<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + &quot;</span>
+					<span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">ParameterRef_C</span>
+					<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">ParameterRef_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">)</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">))</span>
+					<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; * log(&quot;</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="o">=</span> <span class="p">(</span><span class="n">utilitycell</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; + log(&quot;</span>
+				<span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="o">.</span><span class="n">__xml__</span><span class="p">(</span><span class="n">linebreaks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lineprefix</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="n">exponentiate_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_in_tooltips</span><span class="o">=</span><span class="ow">not</span> <span class="n">resolve_parameters</span><span class="p">)</span>
+				<span class="n">utilitycell</span> <span class="o">&lt;&lt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+				<span class="n">utilitycell</span><span class="o">.</span><span class="n">elem</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">x</span>
+
+	<span class="k">def</span> <span class="nf">_utility_functions_as_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generate a tabular output of the utility function(s).</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		subset : Collection, optional</span>
+<span class="sd">			A collection of alternative codes to include. This only has effect if</span>
+<span class="sd">			there are separate utility_co functions set by alternative. It is</span>
+<span class="sd">			recommended to use this parameter if there are a very large number of</span>
+<span class="sd">			alternatives, and the utility functions of most (or all) of them</span>
+<span class="sd">			can be effectively communicated by showing only a few.</span>
+<span class="sd">		resolve_parameters : bool, default False</span>
+<span class="sd">			Whether to resolve the parameters to the current (estimated) value</span>
+<span class="sd">			in the output.  Not implemented.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		xmle.Elem</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+
+		<span class="n">tf</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+			<span class="n">index</span><span class="o">=</span><span class="n">pandas</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">([],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Alt&#39;</span><span class="p">,</span> <span class="s1">&#39;Line&#39;</span><span class="p">]),</span>
+			<span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Formula&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">):</span>
+			<span class="c1"># iterate over all alternatives if a dataframes is attached and lists the alternatives</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span><span class="o">.</span><span class="n">alternative_codes</span><span class="p">()</span>
+				<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">alternative_codes</span><span class="p">()</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="n">alts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+			<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">alts</span><span class="p">:</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">subset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">):</span>
+					<span class="k">continue</span>
+				<span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
+				<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">:</span>
+					<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+					<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+					<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+				<span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]:</span>
+						<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+						<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+						<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">):</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">:</span>
+						<span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">ParameterRef_C</span>
+						<span class="n">q</span> <span class="o">=</span> <span class="n">ParameterRef_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">)</span>
+						<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="si">}</span><span class="s2"> * log(&quot;</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> log(&quot;</span>
+					<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+					<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">:</span>
+						<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">i</span><span class="o">.</span><span class="n">_str_exponentiate</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+						<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+						<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;)&quot;</span>
+					<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+					<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># there is no differentiation by alternatives, just give one formula</span>
+			<span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+			<span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">:</span>
+				<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+				<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+				<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">):</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">:</span>
+					<span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">ParameterRef_C</span>
+					<span class="n">q</span> <span class="o">=</span> <span class="n">ParameterRef_C</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_scale</span><span class="p">)</span>
+					<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="si">}</span><span class="s2"> * log(&quot;</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> log(&quot;</span>
+				<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+				<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">:</span>
+					<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">i</span><span class="o">.</span><span class="n">_str_exponentiate</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+					<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+					<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+				<span class="n">tf</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;)&quot;</span>
+				<span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+				<span class="n">line</span> <span class="o">+=</span> <span class="mi">1</span>
+
+		<span class="k">return</span> <span class="n">tf</span>
+
+	<span class="k">def</span> <span class="nf">required_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		What data is required in DataFrames for this model to be used.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		dictx</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">dictx</span>
+			<span class="n">req_data</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">()</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">):</span>
+				<span class="k">if</span> <span class="s1">&#39;ca&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">req_data</span><span class="p">:</span>
+					<span class="n">req_data</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_ca</span><span class="p">:</span>
+					<span class="n">req_data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">):</span>
+				<span class="k">if</span> <span class="s1">&#39;ca&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">req_data</span><span class="p">:</span>
+					<span class="n">req_data</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+				<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_ca</span><span class="p">:</span>
+					<span class="n">req_data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="p">):</span>
+				<span class="k">if</span> <span class="s1">&#39;co&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">req_data</span><span class="p">:</span>
+					<span class="n">req_data</span><span class="o">.</span><span class="n">co</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+				<span class="k">for</span> <span class="n">alt</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">utility_co</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+					<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">func</span><span class="p">:</span>
+						<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">!=</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+							<span class="n">req_data</span><span class="o">.</span><span class="n">co</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="s1">&#39;ca&#39;</span> <span class="ow">in</span> <span class="n">req_data</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">req_data</span><span class="o">.</span><span class="n">ca</span><span class="p">))</span>
+			<span class="k">if</span> <span class="s1">&#39;co&#39;</span> <span class="ow">in</span> <span class="n">req_data</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">co</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">req_data</span><span class="o">.</span><span class="n">co</span><span class="p">))</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_ca_var</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">choice_ca</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_ca_var</span>
+			<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_co_vars</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">choice_co</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_co_vars</span>
+			<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_co_code</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">choice_co_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_co_code</span>
+			<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice_any</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">choice_any</span> <span class="o">=</span> <span class="kc">True</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_co_var</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">weight_co</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_co_var</span>
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">availability_var</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">avail_ca</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availability_var</span>
+			<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">availability_co_vars</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">avail_co</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availability_co_vars</span>
+			<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">availability_any</span><span class="p">:</span>
+				<span class="n">req_data</span><span class="o">.</span><span class="n">avail_any</span> <span class="o">=</span> <span class="kc">True</span>
+
+			<span class="k">return</span> <span class="n">req_data</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;error in required_data&quot;</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="c1">#or (item in self.rename_parameters)</span>
+
+	<span class="k">def</span> <span class="nf">doctor</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">repair_ch_av</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_ch_zq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_asc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_noch_nowt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_nan_wt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">repair_nan_data_co</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+			<span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+	<span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+		<span class="kn">from</span> <span class="nn">..troubleshooting</span> <span class="kn">import</span> <span class="n">doctor</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">doctor</span><span class="p">(</span>
+			<span class="bp">self</span><span class="p">,</span>
+			<span class="n">repair_ch_av</span><span class="o">=</span><span class="n">repair_ch_av</span><span class="p">,</span>
+			<span class="n">repair_ch_zq</span><span class="o">=</span><span class="n">repair_ch_zq</span><span class="p">,</span>
+			<span class="n">repair_asc</span><span class="o">=</span><span class="n">repair_asc</span><span class="p">,</span>
+			<span class="n">repair_noch_nowt</span><span class="o">=</span><span class="n">repair_noch_nowt</span><span class="p">,</span>
+			<span class="n">repair_nan_wt</span><span class="o">=</span><span class="n">repair_nan_wt</span><span class="p">,</span>
+			<span class="n">repair_nan_data_co</span><span class="o">=</span><span class="n">repair_nan_data_co</span><span class="p">,</span>
+			<span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+		<span class="p">)</span>
+		<span class="k">if</span> <span class="n">repair_ch_av</span> <span class="ow">or</span> <span class="n">repair_ch_zq</span> <span class="ow">or</span> <span class="n">repair_asc</span> <span class="ow">or</span> <span class="n">repair_noch_nowt</span> \
+				<span class="ow">or</span> <span class="n">repair_nan_wt</span> <span class="ow">or</span> <span class="n">repair_nan_data_co</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+	<span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Create a copy of the Model.</span>
+
+<span class="sd">		The copy shares the same DataService, but does not</span>
+<span class="sd">		share or copy any loaded DataFrames, which must be</span>
+<span class="sd">		reloaded if desired.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		Model</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="kn">import</span> <span class="nn">pickle</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dumps</span><span class="p">())</span>
+		<span class="n">result</span><span class="o">.</span><span class="n">dataservice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataservice</span>
+		<span class="n">result</span><span class="o">.</span><span class="n">_graph</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span>
+		<span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Model.remove_unused_parameters"><a class="viewcode-back" href="../../../api/generated/larch.numba.Model.remove_unused_parameters.html#larch.numba.Model.remove_unused_parameters">[docs]</a>	<span class="k">def</span> <span class="nf">remove_unused_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Remove parameters that are not used in the model.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		verbose : bool, default True</span>
+<span class="sd">			Generate log messages about how many parameters were dropped.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">old_pf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">overlay</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">],</span> <span class="n">old_pf</span><span class="p">,</span> <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">overlay</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+			<span class="n">f</span> <span class="o">=</span> <span class="o">~</span><span class="n">overlay</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">overlay</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+			<span class="n">dropped_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">old_pf</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="k">pass</span>
+			<span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+				<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dropped </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">)</span><span class="si">}</span><span class="s2"> parameters: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dropped </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">)</span><span class="si">}</span><span class="s2"> parameters including: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dropped_params</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+	<span class="k">def</span> <span class="nf">data_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Generate a summary of data statistics.</span>
+
+<span class="sd">		This summary includes several sections, including</span>
+<span class="sd">		statistics on idco and idca data as appropriate, as well as</span>
+<span class="sd">		choice and availability statistics.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		xmle.Elem</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_get_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;slsqp&#39;</span><span class="p">,</span> <span class="s1">&#39;cobyla&#39;</span><span class="p">):</span>
+			<span class="n">constraint_dicts</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+				<span class="n">constraint_dicts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">as_constraint_dicts</span><span class="p">())</span>
+			<span class="k">return</span> <span class="n">constraint_dicts</span>
+		<span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;trust-constr&#39;</span><span class="p">):</span>
+			<span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+				<span class="n">constraints</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">as_linear_constraints</span><span class="p">())</span>
+			<span class="k">return</span> <span class="n">constraints</span>
+		<span class="k">return</span> <span class="p">()</span>
+
+	<span class="k">def</span> <span class="nf">_add_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Add a parametric constraint to the model.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		c : ParametricConstraint</span>
+<span class="sd">			The constraint to potentially add.  Constraints are</span>
+<span class="sd">			not actually added if they duplicate an existing</span>
+<span class="sd">			constraint.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		bool</span>
+<span class="sd">			Whether this constraint was actually added to the model.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="kn">from</span> <span class="nn">.constraints</span> <span class="kn">import</span> <span class="n">ParametricConstraint</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ParametricConstraint</span><span class="p">):</span>
+			<span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;constraint must be ParametricConstraint not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+		<span class="n">duplicate_constraint</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">c</span><span class="p">:</span>
+				<span class="n">duplicate_constraint</span> <span class="o">=</span> <span class="kc">True</span>
+				<span class="k">break</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">duplicate_constraint</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">_get_bounds_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Convert bounds to parametric constraints on the model.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		binding_tol : Number or Mapping</span>
+<span class="sd">			The binding tolerance to use, which determines</span>
+<span class="sd">			whether a constraint is considered active or not.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		list</span>
+<span class="sd">			A list of constraints.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="kn">from</span> <span class="nn">.constraints</span> <span class="kn">import</span> <span class="n">FixedBound</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_tol</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+			<span class="n">default_binding_tol</span> <span class="o">=</span> <span class="n">binding_tol</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">default_binding_tol</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_tol</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+			<span class="n">binding_tol</span> <span class="o">=</span> <span class="p">{}</span>
+
+		<span class="n">get_bind_tol</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">binding_tol</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">default_binding_tol</span><span class="p">)</span>
+
+		<span class="n">bounds</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+		<span class="k">for</span> <span class="n">pname</span><span class="p">,</span> <span class="n">pf_row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">pf_row</span><span class="p">[</span><span class="s1">&#39;holdfast&#39;</span><span class="p">]:</span>
+				<span class="c1"># don&#39;t create bounds constraints on holdfast parameters</span>
+				<span class="k">continue</span>
+			<span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">pf_row</span><span class="p">[</span><span class="s1">&#39;minimum&#39;</span><span class="p">],</span> <span class="n">pf_row</span><span class="p">[</span><span class="s1">&#39;maximum&#39;</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span> <span class="ow">or</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+				<span class="n">bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FixedBound</span><span class="p">(</span><span class="n">pname</span><span class="p">,</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_tol</span><span class="o">=</span><span class="n">get_bind_tol</span><span class="p">(</span><span class="n">pname</span><span class="p">)))</span>
+
+		<span class="k">return</span> <span class="n">bounds</span>
+
+	<span class="k">def</span> <span class="nf">get_all_contraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		All constraints, including bounds.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		list</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">constraints</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">constraints</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_bounds_constraints</span><span class="p">())</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="k">pass</span>
+		<span class="k">return</span> <span class="n">constraints</span>
+
+
+	<span class="k">def</span> <span class="nf">get_all_binding_contraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		All binding constraints, including min-max bounds.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		list</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">binding_constraints</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+		<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_contraints</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="o">.</span><span class="n">value</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">.</span><span class="n">binding_tol</span><span class="p">:</span>
+				<span class="n">binding_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="n">binding_constraints</span>
+</pre></div>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Jeffrey Newman<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
