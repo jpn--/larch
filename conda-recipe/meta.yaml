@@ -78,8 +78,6 @@ test:
     - pytest-regressions
     - sphinx
     - sphinx_rtd_theme
-    - sphinxcontrib
-    - sphinxcontrib-websupport
     - nbsphinx
     - geopandas
     - nbmake
