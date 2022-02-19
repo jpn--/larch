@@ -15,6 +15,7 @@ dependencies:
   - cloudpickle >=0.6.1
   - docutils >=0.13.1
   - geopandas
+  - gh
   - jinja2 >=2.10
   - joblib
   - jupyter-book
@@ -31,7 +32,6 @@ dependencies:
   - pyarrow
   - pydot
   - pytables >=3.4.4
-  - pytest
   - pytest >=4.0
   - pytest-regressions
   - pyyaml

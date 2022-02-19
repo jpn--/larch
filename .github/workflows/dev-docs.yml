@@ -29,6 +29,11 @@ jobs:
         activate-environment: development
         auto-activate-base: false
         auto-update-conda: false
+    - name: Install sharrow
+      run: |
+        gh repo clone ActivitySim/sharrow
+        cd sharrow
+        python -m pip install --no-deps -e .
     - name: Install larch
       run: |
         python -m pip install --no-deps -e .
@@ -39,6 +44,7 @@ jobs:
     - name: Build the docs
       run: |
         python book/_scripts/hide_test_cells.py
+        python book/_scripts/developer_doc_title.py
         jb build book
     - name: Push to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3.5.9
