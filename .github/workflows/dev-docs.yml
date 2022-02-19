@@ -24,9 +24,9 @@ jobs:
         miniforge-variant: Mambaforge
         miniforge-version: latest
         use-mamba: true
-        environment-file: envs/testing.yml
+        environment-file: environments/development.yml
         python-version: 3.9
-        activate-environment: testing-env
+        activate-environment: development
         auto-activate-base: false
         auto-update-conda: false
     - name: Install larch
@@ -45,7 +45,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         # Token is created automatically by Github Actions, no other config needed
-        publish_dir: ./docs/_build/html
+        publish_dir: ./book/_build/html
     # now send to PyPI
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
