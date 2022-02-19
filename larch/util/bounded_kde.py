@@ -37,7 +37,7 @@ def weighted_sample_std(values, weights, ddof=1.0):
 
 class BoundedKDE:
 
-    def __init__(self, x, weights=None, bw_method='scott', lb='min', ub='max'):
+    def __init__(self, x, weights=None, bw_method='scott', lb='min', ub='max', kernel='gaussian'):
         if lb is None:
             self.lower_bound = None
         else:
@@ -53,6 +53,11 @@ class BoundedKDE:
         if weights is not None:
             x = x[weights>0]
             weights = weights[weights>0]
+        if kernel is None:
+            if x.size > 1000:
+                kernel = 'tophat'
+            else:
+                kernel = 'gaussian'
         if bw_method == 'scott':
             if weights is None:
                 bw = x.std(ddof=1) * np.power(x.size, -1.0 / 5)
@@ -65,7 +70,8 @@ class BoundedKDE:
         else:
             raise NotImplementedError(f"{bw_method=}")
         self.bandwidth = bw
-        self.kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        self.kernel = kernel
+        self.kde = KernelDensity(bandwidth=bw, kernel=self.kernel)
         self.kde.fit(x[:, np.newaxis], sample_weight=weights)
 
     def evaluate(self, x):
