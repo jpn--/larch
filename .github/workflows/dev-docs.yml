@@ -1,0 +1,54 @@
+name: dev-docs
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    environment: developer
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniforge-variant: Mambaforge
+        miniforge-version: latest
+        use-mamba: true
+        environment-file: envs/testing.yml
+        python-version: 3.9
+        activate-environment: testing-env
+        auto-activate-base: false
+        auto-update-conda: false
+    - name: Install larch
+      run: |
+        python -m pip install --no-deps -e .
+    - name: Conda checkup
+      run: |
+        conda info -a
+        conda list
+    - name: Build the docs
+      run: |
+        python book/_scripts/hide_test_cells.py
+        jb build book
+    - name: Push to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3.5.9
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        # Token is created automatically by Github Actions, no other config needed
+        publish_dir: ./docs/_build/html
+    # now send to PyPI
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
