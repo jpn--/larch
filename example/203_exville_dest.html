@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>203: Exampville Destination Choice &#8212; book/_scripts/developer_doc_title.py</title>
+    <title>203: Exampville Destination Choice &#8212; 5.5.11.dev57+g96db8ef</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">book/_scripts/developer_doc_title.py</h1>
+      <h1 class="site-logo" id="site-title">5.5.11.dev57+g96db8ef</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -1337,26 +1337,26 @@ as a string and ensure manually that the file exists before loading it.</p>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">logsums_file</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">202</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s1">&#39;/tmp/logsums.zarr.zip&#39;</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">logsums</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="o">.</span><span class="n">from_zarr</span><span class="p">(</span><span class="s1">&#39;/tmp/logsums.zarr.zip&#39;</span><span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/numba/__init__.py:15,</span> in <span class="ni">example</span><span class="nt">(*args, **kwargs)</span>
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/__init__.py:15,</span> in <span class="ni">example</span><span class="nt">(*args, **kwargs)</span>
 <span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;larch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="ne">---&gt; </span><span class="mi">15</span> <span class="k">return</span> <span class="n">_example</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/examples/__init__.py:163,</span> in <span class="ni">example</span><span class="nt">(n, extract, echo, output_file, larch, legacy)</span>
+<span class="nn">File ~/work/larch/larch/larch/larch/examples/__init__.py:163,</span> in <span class="ni">example</span><span class="nt">(n, extract, echo, output_file, larch, legacy)</span>
 <span class="g g-Whitespace">    </span><span class="mi">161</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_file</span><span class="p">):</span>
 <span class="g g-Whitespace">    </span><span class="mi">162</span> 	<span class="k">return</span> <span class="n">output_file</span>
 <span class="ne">--&gt; </span><span class="mi">163</span> <span class="n">_exec_example_n</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">extract</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">,</span> <span class="n">larch</span><span class="o">=</span><span class="n">larch</span><span class="p">,</span> <span class="n">legacy</span><span class="o">=</span><span class="n">legacy</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">164</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_file</span><span class="p">):</span>
 <span class="g g-Whitespace">    </span><span class="mi">165</span> 	<span class="k">return</span> <span class="n">output_file</span>
 
-<span class="nn">File ~/work/larch/larch/larch/examples/__init__.py:135,</span> in <span class="ni">_exec_example_n</span><span class="nt">(n, echo, larch, legacy, *arg, **kwarg)</span>
+<span class="nn">File ~/work/larch/larch/larch/larch/examples/__init__.py:135,</span> in <span class="ni">_exec_example_n</span><span class="nt">(n, echo, larch, legacy, *arg, **kwarg)</span>
 <span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">def</span> <span class="nf">_exec_example_n</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">larch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legacy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">):</span>
 <span class="g g-Whitespace">    </span><span class="mi">134</span> 	<span class="k">if</span> <span class="ow">not</span> <span class="n">legacy</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ex</span><span class="p">:</span>
 <span class="ne">--&gt; </span><span class="mi">135</span> 		<span class="k">return</span> <span class="n">ex</span><span class="p">[</span><span class="n">n</span><span class="p">](</span><span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">136</span> 	<span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exampledocdir</span><span class="p">,</span> <span class="n">get_examplefile</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 <span class="g g-Whitespace">    </span><span class="mi">137</span> 	<span class="k">return</span> <span class="n">_exec_example</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">,</span> <span class="n">larch</span><span class="o">=</span><span class="n">larch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/examples/generated/_202_exville_mc_logsums.py:5,</span> in <span class="ni">example</span><span class="nt">(extract, estimate)</span>
+<span class="nn">File ~/work/larch/larch/larch/larch/examples/generated/_202_exville_mc_logsums.py:5,</span> in <span class="ni">example</span><span class="nt">(extract, estimate)</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 <span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">addicty</span> <span class="kn">import</span> <span class="n">Dict</span>
