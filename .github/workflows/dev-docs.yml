@@ -16,6 +16,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+        path: larch
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
@@ -26,15 +27,15 @@ jobs:
         miniforge-variant: Mambaforge
         miniforge-version: latest
         use-mamba: true
-        environment-file: environments/development.yml
+        environment-file: larch/environments/development.yml
         python-version: 3.9
         activate-environment: development
         auto-activate-base: false
         auto-update-conda: false
     - name: Infer larch version
       run: |
-        python tools/get_version.py
-        echo "LARCH_VERSION=$LARCH_VERSION" >> $GITHUB_ENV
+        python larch/tools/get_version.py LARCH_VERSION.txt
+        cat LARCH_VERSION.txt >> $GITHUB_ENV
     - name: Install sharrow
       run: |
         git clone https://github.com/ActivitySim/sharrow.git
@@ -42,6 +43,7 @@ jobs:
         python -m pip install --no-deps -e .
     - name: Install larch
       run: |
+        cd larch
         python -m pip install --no-deps -e .
     - name: Conda checkup
       run: |
@@ -49,19 +51,19 @@ jobs:
         conda list
     - name: Build the docs
       run: |
-        python book/_scripts/hide_test_cells.py
-        python book/_scripts/developer_doc_title.py ${{ env.LARCH_VERSION }}
-        jb build book
+        python larch/book/_scripts/hide_test_cells.py
+        python larch/book/_scripts/developer_doc_title.py ${{ env.LARCH_VERSION }}
+        jb build larch/book
     - name: Push to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3.5.9
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         # Token is created automatically by Github Actions, no other config needed
-        publish_dir: ./book/_build/html
+        publish_dir: larch/book/_build/html
     - name: Push to External GitHub Pages
       uses: peaceiris/actions-gh-pages@v3.8.0
       with:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
-        publish_dir: ./book/_build/html
+        publish_dir: larch/book/_build/html
         external_repository: jpndashdash/larch-dev-docs
         destination_dir: v${{ env.LARCH_VERSION }}
