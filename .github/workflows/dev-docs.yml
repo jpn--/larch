@@ -53,7 +53,7 @@ jobs:
         # Token is created automatically by Github Actions, no other config needed
         publish_dir: ./book/_build/html
     - name: Push to External GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3.5.9
+      uses: peaceiris/actions-gh-pages@v3.8.0
       with:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_dir: ./book/_build/html
